@@ -3,6 +3,7 @@ package org.allaymc.server.world.service;
 import io.netty.util.internal.PlatformDependent;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityStatus;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
 import org.allaymc.api.world.service.EntityService;
@@ -50,9 +51,7 @@ public class AllayEntityService implements EntityService {
         entityPhysicsService.removeEntity(entity);
         entity.despawnFromAll();
 
-        var baseComponent = ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent());
-        baseComponent.setWillBeDespawnedNextTick(false);
-        baseComponent.setSpawned(false);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.DESPAWNED);
     }
 
     private void addEntityImmediately(Entity entity) {
@@ -67,9 +66,7 @@ public class AllayEntityService implements EntityService {
         entityPhysicsService.addEntity(entity);
         entity.spawnTo(unsafeChunk.getPlayerChunkLoaders());
 
-        var baseComponent = ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent());
-        baseComponent.setWillBeSpawnedNextTick(false);
-        baseComponent.setSpawned(true);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.ALIVE);
     }
 
     @Override
@@ -79,19 +76,16 @@ public class AllayEntityService implements EntityService {
             return;
         }
 
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeSpawnedNextTick(true);
-        entityUpdateOperationQueue.add(new EntityUpdateOperation(entity, EntityUpdateType.ADD, callback));
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.SPAWNED_NEXT_TICK)) {
+            entityUpdateOperationQueue.add(new EntityUpdateOperation(entity, EntityUpdateType.ADD, callback));
+        }
     }
 
     @Override
     public void removeEntity(Entity entity, Runnable callback) {
-        if (entity.willBeDespawnedNextTick()) {
-            log.warn("Trying to remove an entity twice! Entity: {}", entity);
-            return;
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.DESPAWNED_NEXT_TICK)) {
+            entityUpdateOperationQueue.add(new EntityUpdateOperation(entity, EntityUpdateType.REMOVE, callback));
         }
-
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeDespawnedNextTick(true);
-        entityUpdateOperationQueue.add(new EntityUpdateOperation(entity, EntityUpdateType.REMOVE, callback));
     }
 
     protected enum EntityUpdateType {

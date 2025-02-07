@@ -80,6 +80,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
                 processBlockProperties(blockState, placeBlockPos, placementInfo),
                 placementInfo
         );
+
         return true;
     }
 
@@ -120,7 +121,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (!isDroppable(blockState, usedItem, entity)) return;
+        if (!isDroppable(blockState, usedItem, entity)) {
+            return;
+        }
 
         var dropPos = MathUtils.center(blockState.pos());
         var dimension = blockState.pos().dimension();
@@ -138,7 +141,10 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return false;
+        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) {
+            return false;
+        }
+
         return !blockState.blockState().getBlockStateData().requiresCorrectToolForDrops() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 

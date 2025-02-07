@@ -8,6 +8,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityStatus;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
@@ -116,15 +117,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected Vector3d lastMotion = new Vector3d();
     @Getter
     protected boolean onGround = true;
-    @Setter
-    protected boolean willBeDespawnedNextTick = false;
-    @Setter
-    protected boolean willBeSpawnedNextTick = false;
     @Getter
-    @Setter
-    protected boolean spawned;
-    @Getter
-    protected boolean dead;
+    protected EntityStatus status = EntityStatus.DESPAWNED;
     protected int deadTimer;
     @Getter
     protected double fallDistance;
@@ -237,20 +231,23 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void checkDead() {
         // TODO: move these code to EntityAttributeComponentImpl
-        if (attributeComponent == null || !attributeComponent.supportAttribute(AttributeType.HEALTH)) return;
-        if (attributeComponent.getHealth() == 0 && !dead) {
+        if (attributeComponent == null || !attributeComponent.supportAttribute(AttributeType.HEALTH)) {
+            return;
+        }
+
+        if (attributeComponent.getHealth() == 0 && !isDead()) {
             onDie();
         }
-        if (dead) {
+        if (isDead()) {
             if (hasDeadTimer()) {
                 if (deadTimer > 0) deadTimer--;
                 if (deadTimer == 0) {
                     // Spawn dead particle
                     spawnDeadParticle();
-                    getDimension().getEntityService().removeEntity(thisEntity, () -> dead = false);
+                    getDimension().getEntityService().removeEntity(thisEntity);
                 }
             } else {
-                getDimension().getEntityService().removeEntity(thisEntity, () -> dead = false);
+                getDimension().getEntityService().removeEntity(thisEntity);
             }
         }
     }
@@ -263,7 +260,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         new EntityDieEvent(thisEntity).call();
 
         manager.callEvent(CEntityDieEvent.INSTANCE);
-        dead = true;
+        setStatus(EntityStatus.DEAD);
         if (hasDeadTimer()) {
             deadTimer = DEFAULT_DEAD_TIMER;
         }
@@ -289,6 +286,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (!canBeSpawnedIgnoreLocation()) {
             throw new IllegalStateException("Trying to set location of an entity which cannot being spawned!");
         }
+
         setLocation(location, false);
     }
 
@@ -343,9 +341,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         getDimension().getEntityService().removeEntity(thisEntity);
     }
 
-    @Override
-    public boolean willBeDespawnedNextTick() {
-        return willBeDespawnedNextTick;
+    public synchronized boolean setStatus(EntityStatus status) {
+        if (!status.getPreviousStatuses().isEmpty() && !status.getPreviousStatuses().contains(this.status)) {
+            log.warn("Trying to set status of entity {} to {} but the current status is {}", thisEntity, status, this.status);
+            return false;
+        }
+
+        this.status = status;
+        return true;
     }
 
     @Override
@@ -358,12 +361,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected boolean canBeSpawnedIgnoreLocation() {
-        return !spawned && !willBeSpawnedNextTick;
-    }
-
-    @Override
-    public boolean willBeSpawnedNextTick() {
-        return willBeSpawnedNextTick;
+        return status == EntityStatus.DESPAWNED;
     }
 
     public boolean setLocationAndCheckChunk(Location3dc newLoc) {
@@ -426,7 +424,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        if (!this.spawned) {
+        if (!this.isSpawned()) {
             log.warn("Trying to teleport an entity which is not spawned! Entity: {}", thisEntity);
             return;
         }

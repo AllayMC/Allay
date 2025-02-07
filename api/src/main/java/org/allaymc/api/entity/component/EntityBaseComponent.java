@@ -6,6 +6,7 @@ import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityStatus;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.type.EffectTypes;
@@ -137,32 +138,47 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Get the status of the entity.
+     *
+     * @return the status of the entity.
+     */
+    EntityStatus getStatus();
+
+    /**
      * Check if the entity will be spawned in the next tick.
      *
      * @return {@code true} if the entity will be spawned in the next tick.
      */
-    boolean willBeSpawnedNextTick();
+    default boolean willBeSpawnedNextTick() {
+        return getStatus() == EntityStatus.SPAWNED_NEXT_TICK;
+    }
 
     /**
      * Check if the entity will be despawned in the next tick.
      *
      * @return {@code true} if the entity will be despawned in the next tick.
      */
-    boolean willBeDespawnedNextTick();
+    default boolean willBeDespawnedNextTick() {
+        return getStatus() == EntityStatus.DESPAWNED_NEXT_TICK;
+    }
 
     /**
      * Check if the entity is dead.
      *
      * @return {@code true} if the entity is dead.
      */
-    boolean isDead();
+    default boolean isDead() {
+        return getStatus() == EntityStatus.DEAD;
+    }
 
     /**
      * Check if the entity is spawned.
      *
      * @return {@code true} if the entity is spawned.
      */
-    boolean isSpawned();
+    default boolean isSpawned() {
+        return getStatus().isSpawned();
+    }
 
     /**
      * Check if the entity is alive.
@@ -170,7 +186,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity is alive.
      */
     default boolean isAlive() {
-        return isSpawned() && !isDead();
+        return getStatus() == EntityStatus.ALIVE;
     }
 
     /**

@@ -17,7 +17,7 @@ public enum ClientStatus {
     IN_GAME(LOGGED_IN);
 
     /**
-     * The previous status of the client.
+     * The previous status of the client. Can be {@code null} if previous status is not exist.
      */
     @Getter
     private final ClientStatus previousStatus;

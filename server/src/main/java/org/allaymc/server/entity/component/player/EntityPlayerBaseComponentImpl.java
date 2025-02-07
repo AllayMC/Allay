@@ -279,7 +279,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     protected void tryPickUpItems() {
-        if (dead || !spawned || willBeDespawnedNextTick) return;
+        if (isDead() || !isSpawned() || willBeDespawnedNextTick()) {
+            return;
+        }
 
         var dimension = location.dimension();
         // pick up items
@@ -654,7 +656,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public boolean isLoaderActive() {
-        return spawned;
+        return status.isSpawned();
     }
 
     @Override

@@ -57,6 +57,7 @@ public final class PacketProcessorHolder {
             }
             return false;
         }
+
         this.lastClientStatus = this.clientStatus;
         this.clientStatus = clientStatus;
         return true;
