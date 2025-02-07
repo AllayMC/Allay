@@ -678,6 +678,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         if (entities.containsKey(entity.getRuntimeId())) {
             throw new IllegalArgumentException("Entity " + entity.getRuntimeId() + " is already added!");
         }
+
         entities.put(entity.getRuntimeId(), entity);
         entityAABBTree.add(entity);
     }
@@ -686,7 +687,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Please call it before run tick()!
      */
     public void removeEntity(Entity entity) {
-        if (!entities.containsKey(entity.getRuntimeId())) return;
+        if (!entities.containsKey(entity.getRuntimeId())) {
+            return;
+        }
+
         entities.remove(entity.getRuntimeId());
         entityAABBTree.remove(entity);
         entityCollisionCache.remove(entity.getRuntimeId());
@@ -723,9 +727,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     @Override
     public List<Entity> getCachedEntityCollidingResult(Entity entity, boolean ignoreEntityHasCollision) {
-        if (!entity.hasEntityCollision()) return Collections.emptyList();
+        if (!entity.hasEntityCollision()) {
+            return Collections.emptyList();
+        }
+
         var result = entityCollisionCache.getOrDefault(entity.getRuntimeId(), Collections.emptyList());
-        if (!ignoreEntityHasCollision) result.removeIf(e -> !e.hasEntityCollision());
+        if (!ignoreEntityHasCollision) {
+            result.removeIf(e -> !e.hasEntityCollision());
+        }
         return result;
     }
 
