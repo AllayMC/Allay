@@ -66,7 +66,9 @@ public final class AllayWorldData implements WorldData {
         timeOfDay = rollbackTimeOfDay(timeOfDay);
 
         var event = new TimeChangeEvent(this.world, this.timeOfDay, timeOfDay);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         this.timeOfDay = event.getNewTime();
         sendTimeOfDay(this.world.getPlayers());

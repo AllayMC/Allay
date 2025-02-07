@@ -225,12 +225,16 @@ public class AllayWorld implements World {
     }
 
     protected void tickTime(long currentTick) {
-        if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
-            return;
-        }
 
         if (currentTick >= nextTimeSendTick) {
-            worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
+            if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
+                // Client will always keep time flowing, so we still need to send the
+                // same time uninterruptedly if the daylight cycle is disabled
+                worldData.sendTimeOfDay(getPlayers());
+                return;
+            } else {
+                worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
+            }
             nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
         }
     }

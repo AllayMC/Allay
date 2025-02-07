@@ -81,6 +81,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug caused by incorrect initial value of runtime id counter. The initial value should be 1 instead of 0.
 - Fixed the bug that `/alwaysday` command actually do the opposite thing.
 - Several bugs in physics engine, including wrong collision detection and wrong movement calculation are fixed.
+- Gamerule `doDaylightCycle` now works correctly.
 
 ### Removed
 
