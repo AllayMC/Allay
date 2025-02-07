@@ -32,6 +32,7 @@ import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.impl.ingame.PlayerAuthInputPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
+import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -44,7 +45,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.data.BlockStateData.DEFAULT_FRICTION;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
-import static org.allaymc.api.math.MathUtils.isInRange;
 
 /**
  * Special thanks to <a href="https://www.mcpk.wiki">MCPK Wiki</a>
@@ -410,9 +410,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      */
     private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, int axis) {
         if (motion == 0) return motion;
-        if (axis < X || axis > Z) {
-            throw new IllegalArgumentException("Invalid axis: " + axis);
-        }
+        checkAxis(axis);
 
         var resultAABB = new AABBd(aabb);
         var resultPos = new Vector3d(pos);
@@ -449,42 +447,47 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      *
      * @throws IllegalArgumentException if an invalid axis is provided.
      */
-    private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, int axis) {
+    private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, @Range(from = X, to = Z) int axis) {
         if (motion == 0) {
             return EMPTY_FLOAT_BOOLEAN_PAIR;
         }
+        checkAxis(axis);
 
-        var extendAxis = new AABBd(aabb);
+        // `extAABBInAxis` is the extended aabb in the axis which is used to check for block collision,
+        // and the direction of the axis is determined by the sign of `motion`
+        var extAABBInAxis = new AABBd(aabb);
 
         // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
         var shouldTowardsNegative = motion < 0;
         switch (axis) {
             case X -> {
-                var lengthX = extendAxis.lengthX();
-                extendAxis.minX += shouldTowardsNegative ? motion : lengthX;
-                extendAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
+                var lengthX = extAABBInAxis.lengthX();
+                extAABBInAxis.minX += shouldTowardsNegative ? motion : lengthX;
+                extAABBInAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
             }
             case Y -> {
-                var lengthY = extendAxis.lengthY();
-                extendAxis.minY += shouldTowardsNegative ? motion : lengthY;
-                extendAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
+                var lengthY = extAABBInAxis.lengthY();
+                extAABBInAxis.minY += shouldTowardsNegative ? motion : lengthY;
+                extAABBInAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
             }
             case Z -> {
-                var lengthZ = extendAxis.lengthZ();
-                extendAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
-                extendAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
+                var lengthZ = extAABBInAxis.lengthZ();
+                extAABBInAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
+                extAABBInAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
             }
             default -> throw new IllegalArgumentException("Invalid axis provided");
         }
 
-        if (notValidEntityArea(extendAxis)) {
+        // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
+        if (notValidEntityArea(extAABBInAxis)) {
             return EMPTY_FLOAT_BOOLEAN_PAIR;
         }
 
+        // `deltaInAxis` is the actual movement distance along the axis direction, and if there is no collision, this distance is equal to `motion`
         var deltaInAxis = motion;
         var collision = false;
 
-        var blocks = dimension.getCollidingBlockStates(extendAxis);
+        var blocks = dimension.getCollidingBlockStates(extAABBInAxis);
         if (blocks != null) {
             // There is a collision if `blocks` is not null
             if (axis == Y) {
@@ -494,29 +497,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 collision = true;
             }
 
-            var minInAxis = floor(extendAxis.getMin(axis));
-            var maxInAxis = computeMax(minInAxis, axis, blocks);
-            // Calculate the ray axis starting coordinate
-            var coordinate = shouldTowardsNegative ? aabb.getMin(axis) : aabb.getMax(axis);
-            if (isInRange(minInAxis, coordinate, maxInAxis)) {
-                // Entity is stuck into blocks
+            var extAABBStartCoordinate = shouldTowardsNegative ? extAABBInAxis.getMax(axis) : extAABBInAxis.getMin(axis);
+            var collisionCoordinate = computeCollisionCoordinate(aabb, extAABBInAxis, blocks, axis, shouldTowardsNegative);
+            deltaInAxis = abs(extAABBStartCoordinate - collisionCoordinate);
+
+            // Make a certain distance (FAT_AABB_MARGIN) between the entity and the blocks
+            if (deltaInAxis < FAT_AABB_MARGIN) {
                 deltaInAxis = 0;
             } else {
-                deltaInAxis = min(abs(coordinate - minInAxis), abs(coordinate - maxInAxis));
-                if (shouldTowardsNegative) {
-                    deltaInAxis = -deltaInAxis;
-                }
+                deltaInAxis -= FAT_AABB_MARGIN;
             }
 
-            if (deltaInAxis != 0) {
-                // Make a certain distance (FAT_AABB_MARGIN) between the entity and the block
-                var signum = signum(deltaInAxis);
-                var deltaInAxisWithFAM = deltaInAxis + (signum > 0 ? -FAT_AABB_MARGIN : FAT_AABB_MARGIN);
-                if (signum != signum(deltaInAxisWithFAM)) {
-                    deltaInAxis = 0;
-                } else {
-                    deltaInAxis = deltaInAxisWithFAM;
-                }
+            // The actual movement distance should be negative if the entity moves towards the negative axis direction
+            if (shouldTowardsNegative) {
+                deltaInAxis = -deltaInAxis;
             }
 
             motion = 0;
@@ -536,7 +530,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return new DoubleBooleanImmutablePair(motion, collision);
     }
 
-    // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
+    private void checkAxis(int axis) {
+        if (axis < X || axis > Z) {
+            throw new IllegalArgumentException("Invalid axis: " + axis);
+        }
+    }
+
     protected boolean notValidEntityArea(AABBd extendAABB) {
         return !(extendAABB.minY >= dimension.getDimensionInfo().minHeight()) &&
                !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
@@ -558,33 +557,51 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected double computeMax(double start, int axis, BlockState[][][] blocks) {
-        double max = start;
-        for (int ox = 0, blocksLength = blocks.length; ox < blocksLength; ox++) {
-            BlockState[][] sub1 = blocks[ox];
-            for (int oy = 0, sub1Length = sub1.length; oy < sub1Length; oy++) {
-                BlockState[] sub2 = sub1[oy];
-                for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
-                    BlockState blockState = sub2[oz];
+    protected double computeCollisionCoordinate(AABBdc entityAABB, AABBdc extAABBInAxis, BlockState[][][] blocks, @Range(from = X, to = Z) int axis, boolean shouldTowardNegative) {
+        checkAxis(axis);
+        double coordinate = shouldTowardNegative ? -Double.MAX_VALUE : Double.MAX_VALUE;
+
+        for (int ox = 0; ox < blocks.length; ox++) {
+            var sub1 = blocks[ox];
+            for (int oy = 0; oy < sub1.length; oy++) {
+                var sub2 = sub1[oy];
+                for (int oz = 0; oz < sub2.length; oz++) {
+                    var blockState = sub2[oz];
                     if (blockState == null) {
                         continue;
                     }
 
-                    double current;
-                    var unionAABB = blockState.getBlockStateData().collisionShape().unionAABB();
-                    switch (axis) {
-                        case X -> current = unionAABB.lengthX() + start + ox;
-                        case Y -> current = unionAABB.lengthY() + start + oy;
-                        case Z -> current = unionAABB.lengthZ() + start + oz;
-                        default -> throw new IllegalArgumentException("Invalid axis provided");
+                    var shape = blockState.getBlockStateData().computeOffsetCollisionShape(floor(extAABBInAxis.minX()) + ox, floor(extAABBInAxis.minY()) + oy, floor(extAABBInAxis.minZ()) + oz);
+                    if (shape.intersectsAABB(entityAABB)) {
+                        // Ignore the blocks that collided with the entity
+                        continue;
                     }
-                    if (current > max) {
-                        max = current;
+
+                    var solids = shape.getSolids();
+                    for (var solid : solids) {
+                        if (!solid.intersectsAABB(extAABBInAxis)) {
+                            // This solid part is not intersected with `extAABBInAxis`, ignore it
+                            continue;
+                        }
+
+                        double current;
+                        if (shouldTowardNegative) {
+                            current = solid.getMax(axis);
+                            if (current > coordinate) {
+                                coordinate = current;
+                            }
+                        } else {
+                            current = solid.getMin(axis);
+                            if (current < coordinate) {
+                                coordinate = current;
+                            }
+                        }
                     }
                 }
             }
         }
-        return max;
+
+        return coordinate;
     }
 
     protected void handleClientMoveQueue() {
