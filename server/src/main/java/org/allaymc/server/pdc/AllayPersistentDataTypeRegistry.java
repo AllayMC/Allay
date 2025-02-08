@@ -26,18 +26,10 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void registerAdapters() {
-        this.createAdapter(Byte.class, Byte.class, v -> v, v -> v);
-        this.createAdapter(Short.class, Short.class, v -> v, v -> v);
-        this.createAdapter(Integer.class, Integer.class, v -> v, v -> v);
-        this.createAdapter(Long.class, Long.class, v -> v, v -> v);
-        this.createAdapter(Float.class, Float.class, v -> v, v -> v);
-        this.createAdapter(Double.class, Double.class, v -> v, v -> v);
-        this.createAdapter(String.class, String.class, v -> v, v -> v);
-
-        this.createAdapter(byte[].class, byte[].class, v -> v, v -> v);
-        this.createAdapter(int[].class, int[].class, v -> v, v -> v);
-        this.createAdapter(long[].class, long[].class, v -> v, v -> v);
-
+        this.registerPrimitiveAdapters(
+                Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, String.class,
+                byte[].class, int[].class, long[].class
+        );
 
         this.createAdapter(List.class, NbtList.class, (dataType, list) -> {
             if (dataType instanceof ListPersistentDataType listDataType) {
@@ -98,6 +90,13 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
             }
             return containers.toArray(new AllayPersistentDataContainer[0]);
         });
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void registerPrimitiveAdapters(Class... primitiveTypes) {
+        for (Class primitiveType : primitiveTypes) {
+            this.createAdapter(primitiveType, primitiveType, v -> v, v -> v);
+        }
     }
 
     public <T, Z> TagAdapter<T, Z> createAdapter(
