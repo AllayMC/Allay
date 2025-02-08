@@ -32,6 +32,15 @@ import static org.allaymc.api.item.type.ItemTypes.SHEARS;
  * @author daoge_cmd
  */
 public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
+    // The following tag is in extra tag.
+    String TAG_DAMAGE = "Damage";
+    String TAG_DISPLAY = "display";
+    String TAG_NAME = "Name";
+    String TAG_LORE = "Lore";
+    String TAG_ENCHANTMENT = "ench";
+    String TAG_BLOCK_ENTITY = "BlockEntityTag";
+    String TAG_LOCK_MODE = "minecraft:item_lock";
+    String TAG_CUSTOM_NBT = "CustomNBT";
 
     int EMPTY_STACK_NETWORK_ID = 0;
 

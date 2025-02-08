@@ -59,16 +59,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
-    // The following tag is in extra tag.
-    protected static final String TAG_DAMAGE = "Damage";
-    protected static final String TAG_DISPLAY = "display";
-    protected static final String TAG_NAME = "Name";
-    protected static final String TAG_LORE = "Lore";
-    protected static final String TAG_ENCHANTMENT = "ench";
-    protected static final String TAG_BLOCK_ENTITY = "BlockEntityTag";
-    protected static final String TAG_LOCK_MODE = "minecraft:item_lock";
-    protected static final String TAG_CUSTOM_NBT = "CustomNBT";
-
     private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
 
     @Dependency
@@ -99,6 +89,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Setter
     protected ItemLockMode lockMode = ItemLockMode.NONE;
     @Getter
+    @Setter
     protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PDC_REGISTRY);
 
     @Getter

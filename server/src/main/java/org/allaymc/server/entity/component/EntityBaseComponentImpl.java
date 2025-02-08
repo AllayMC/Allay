@@ -26,6 +26,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
@@ -36,6 +37,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
+import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -79,16 +81,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
 
-    protected static final String TAG_IDENTIFIER = "identifier";
-    protected static final String TAG_ON_GROUND = "OnGround";
-    // This tag is also used in EntityPlayerNetworkComponentImpl, so make it public for reuse
-    public static final String TAG_POS = "Pos";
-    protected static final String TAG_MOTION = "Motion";
-    protected static final String TAG_ROTATION = "Rotation";
-    protected static final String TAG_TAGS = "Tags";
-    protected static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
-    protected static final String TAG_UNIQUE_ID = "UniqueID";
-
     private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
 
     @Getter
@@ -126,6 +118,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Setter
     protected String displayName;
     protected Set<String> tags = new HashSet<>();
+    @Getter
+    @Setter
+    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PDC_REGISTRY);
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -453,7 +448,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void teleportInDimension(Location3dc target) {
-        // This method should always return true because we have loaded the chunk
+        // This method should always return true because we've loaded the chunk
         setLocationAndCheckChunk(target, false);
         broadcastMoveToViewers(target, true);
     }
@@ -685,6 +680,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (!effects.isEmpty()) {
             builder.putList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
         }
+        if (!persistentDataContainer.isEmpty()) {
+            builder.put(TAG_CUSTOM_NBT, persistentDataContainer.toCompoundTag());
+        }
         saveUniqueId(builder);
         var event = new CEntitySaveNBTEvent(builder);
         manager.callEvent(event);
@@ -720,6 +718,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 var effectInstance = EffectInstance.fromNBT(activeEffect);
                 addEffect(effectInstance);
             }
+        });
+        nbt.listenForCompound(TAG_CUSTOM_NBT, customNbt -> {
+            this.persistentDataContainer.clear();
+            this.persistentDataContainer.putAll(customNbt);
         });
 
         loadUniqueId(nbt);

@@ -5,6 +5,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -18,7 +19,15 @@ import java.util.Objects;
 /**
  * @author daoge_cmd
  */
-public interface BlockEntityBaseComponent extends BlockEntityComponent {
+public interface BlockEntityBaseComponent extends BlockEntityComponent, PersistentDataHolder {
+    String TAG_ID = "id";
+    String TAG_X = "x";
+    String TAG_Y = "y";
+    String TAG_Z = "z";
+    String TAG_IS_MOVABLE = "isMovable";
+    String TAG_CUSTOM_NAME = "CustomName";
+    String TAG_CUSTOM_NBT = "CustomNBT";
+
 
     /**
      * Gets the type of block entity.
