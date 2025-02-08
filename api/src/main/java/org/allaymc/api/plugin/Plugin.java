@@ -45,9 +45,11 @@ public abstract class Plugin implements TaskCreator {
      * Reload the plugin.
      */
     public void reload() {
-        if (!isReloadable()) throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
-        else
+        if (!isReloadable()) {
+            throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
+        } else {
             log.warn("Plugin {} is marked as reloadable but do nothing in reload() method!", pluginContainer.descriptor().getName());
+        }
     }
 
     /**
