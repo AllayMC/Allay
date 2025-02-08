@@ -3,6 +3,7 @@ package org.allaymc.server.pdc;
 import lombok.RequiredArgsConstructor;
 import org.allaymc.api.pdc.PersistentDataAdapterContext;
 import org.allaymc.api.pdc.PersistentDataContainer;
+import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 
 /**
  * @author IWareQ

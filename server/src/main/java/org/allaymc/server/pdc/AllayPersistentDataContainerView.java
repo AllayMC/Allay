@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.pdc.PersistentDataAdapterContext;
 import org.allaymc.api.pdc.PersistentDataContainerView;
 import org.allaymc.api.pdc.PersistentDataType;
+import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 

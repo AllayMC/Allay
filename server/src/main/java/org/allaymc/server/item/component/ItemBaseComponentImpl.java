@@ -28,6 +28,7 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -36,7 +37,6 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
-import org.allaymc.server.pdc.PersistentDataTypeRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -71,8 +71,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
 
-    private static final PersistentDataTypeRegistry DATA_TYPE_REGISTRY = new PersistentDataTypeRegistry();
-
     @Dependency
     protected ItemDataComponent itemDataComponent;
 
@@ -101,7 +99,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Setter
     protected ItemLockMode lockMode = ItemLockMode.NONE;
     @Getter
-    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(DATA_TYPE_REGISTRY);
+    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PDC_REGISTRY);
 
     @Getter
     @Setter
