@@ -35,6 +35,8 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
+import org.allaymc.server.pdc.AllayPersistentDataContainer;
+import org.allaymc.server.pdc.PersistentDataTypeRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -69,6 +71,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
 
+    private static final PersistentDataTypeRegistry DATA_TYPE_REGISTRY = new PersistentDataTypeRegistry();
+
     @Dependency
     protected ItemDataComponent itemDataComponent;
 
@@ -96,10 +100,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Getter
     @Setter
     protected ItemLockMode lockMode = ItemLockMode.NONE;
-    // TODO: replace custom nbt content with pdc
     @Getter
-    @Setter
-    protected NbtMap customNBTContent = NbtMap.EMPTY;
+    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(DATA_TYPE_REGISTRY);
+
     @Getter
     @Setter
     protected NbtMap blockEntityNBT;
@@ -146,7 +149,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         extraTag.listenForByte(TAG_LOCK_MODE, lockMode -> this.lockMode = ItemLockMode.values()[lockMode]);
 
-        extraTag.listenForCompound(TAG_CUSTOM_NBT, customNbt -> this.customNBTContent = customNbt);
+        extraTag.listenForCompound(TAG_CUSTOM_NBT, customNbt -> {
+            this.persistentDataContainer.clear();
+            this.persistentDataContainer.putAll(customNbt);
+        });
 
         var event = new CItemLoadExtraTagEvent(extraTag);
         manager.callEvent(event);
@@ -185,9 +191,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             nbtBuilder.putByte(TAG_LOCK_MODE, (byte) lockMode.ordinal());
         }
 
-        // Custom NBT content
-        if (!customNBTContent.isEmpty()) {
-            nbtBuilder.put(TAG_CUSTOM_NBT, customNBTContent);
+        if (!persistentDataContainer.isEmpty()) {
+            nbtBuilder.put(TAG_CUSTOM_NBT, persistentDataContainer.toCompoundTag());
         }
 
         var event = new CItemSaveExtraTagEvent(nbtBuilder);

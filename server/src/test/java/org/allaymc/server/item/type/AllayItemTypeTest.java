@@ -2,8 +2,9 @@ package org.allaymc.server.item.type;
 
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.pdc.PersistentDataType;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.testutils.AllayTestExtension;
-import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -24,7 +25,7 @@ public class AllayItemTypeTest {
         assertEquals(0, itemStack.getMeta());
         assertEquals(0, itemStack.getDurability());
         assertEquals("", itemStack.getCustomName());
-        assertEquals(NbtMap.EMPTY, itemStack.getCustomNBTContent());
+        assertTrue(itemStack.getPersistentDataContainer().isEmpty());
         assertEquals(List.of(), itemStack.getLore());
         assertEquals(DIAMOND, itemStack.getItemType());
     }
@@ -52,15 +53,12 @@ public class AllayItemTypeTest {
         assertEquals("TestCustomName", diamond.getCustomName());
 
         // Custom NBT Content
-        diamond.setCustomNBTContent(
-                NbtMap.builder()
-                        .putString("testKey", "testValue")
-                        .build()
-        );
+        var key = new Identifier("allay", "testKey");
+        diamond.getPersistentDataContainer().set(key, PersistentDataType.STRING, "testValue");
         var savedItemStackNBT = diamond.saveNBT();
         var customNBT = savedItemStackNBT.getCompound("tag").getCompound("CustomNBT");
-        assertTrue(customNBT.containsKey("testKey"));
-        assertEquals("testValue", customNBT.getString("testKey"));
+        assertTrue(customNBT.containsKey(key.toString()));
+        assertEquals("testValue", customNBT.getString(key.toString()));
     }
 
     @Test
