@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
@@ -39,8 +38,6 @@ import java.util.List;
  * @author daoge_cmd
  */
 public class GameTestCommand extends SimpleCommand {
-
-    protected final BossBar bossBar = BossBar.create();
 
     public GameTestCommand() {
         super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
