@@ -56,9 +56,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected double stopBreakingTime;
 
     private static boolean isInvalidGameType(EntityPlayer player) {
-        return player.getGameType() == GameType.CREATIVE ||
-               // TODO: implement canBreak & canPlace feature
-               player.getGameType() == GameType.ADVENTURE ||
+        // Creative mode player can break blocks just like they are in
+        // survival mode if "delayed block breaking" option is enabled
+        // TODO: implement canBreak & canPlace feature
+        return player.getGameType() == GameType.ADVENTURE ||
                player.getGameType() == GameType.SPECTATOR;
     }
 
