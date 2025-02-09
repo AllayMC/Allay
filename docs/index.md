@@ -25,7 +25,7 @@ reliable, fast and feature-rich.
 
     Discover the wide range of plugins available for allay.
 
-    [**:octicons-arrow-right-24: Tutorials**](plugins)
+    [**:octicons-arrow-right-24: Plugins**](plugins)
 
 -   **Write your first plugin**
 
@@ -41,6 +41,6 @@ reliable, fast and feature-rich.
 
     Already proficient in basic plugin development? Dive into more advanced topics!
 
-    [**:octicons-arrow-right-24: Tutorials**](changelog)
+    [**:octicons-arrow-right-24: Advanced**](advanced/use-color-codes)
 
 </div>
