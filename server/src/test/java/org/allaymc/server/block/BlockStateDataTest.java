@@ -27,12 +27,14 @@ class BlockStateDataTest {
                     "burnOdds": 0,
                     "canContainLiquidSource": false,
                     "collisionShape": [
-                        0.0005,
-                        0.0005,
-                        0.0005,
-                        0.9995,
-                        0.1825,
-                        0.9995
+                        [
+                            0.0005,
+                            0.0005,
+                            0.0005,
+                            0.9995,
+                            0.1825,
+                            0.9995
+                        ]
                     ],
                     "hardness": 1.25,
                     "explosionResistance": 1.25,

@@ -36,16 +36,35 @@ public class BlockStateData {
     protected static Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var array = json.getAsJsonArray();
-                var minX = array.get(0).getAsDouble();
-                var minY = array.get(1).getAsDouble();
-                var minZ = array.get(2).getAsDouble();
-                var maxX = array.get(3).getAsDouble();
-                var maxY = array.get(4).getAsDouble();
-                var maxZ = array.get(5).getAsDouble();
-                if (minX == 0 && minY == 0 && minZ == 0 && maxX == 0 && maxY == 0 && maxZ == 0) {
-                    return VoxelShape.EMPTY;
+                if (array.isEmpty() || array.get(0).isJsonArray()) {
+                    // collisionShape field is a list of AABBs, and can be an empty array
+                    var builder = VoxelShape.builder();
+                    array.forEach(e -> {
+                        var a = e.getAsJsonArray();
+                        var minX = a.get(0).getAsDouble();
+                        var minY = a.get(1).getAsDouble();
+                        var minZ = a.get(2).getAsDouble();
+                        var maxX = a.get(3).getAsDouble();
+                        var maxY = a.get(4).getAsDouble();
+                        var maxZ = a.get(5).getAsDouble();
+
+                        builder.solid(minX, minY, minZ, maxX, maxY, maxZ);
+                    });
+                    return builder.build();
+                } else {
+                    var minX = array.get(0).getAsDouble();
+                    var minY = array.get(1).getAsDouble();
+                    var minZ = array.get(2).getAsDouble();
+                    var maxX = array.get(3).getAsDouble();
+                    var maxY = array.get(4).getAsDouble();
+                    var maxZ = array.get(5).getAsDouble();
+
+                    if (minX == 0 && minY == 0 && minZ == 0 && maxX == 0 && maxY == 0 && maxZ == 0) {
+                        return VoxelShape.EMPTY;
+                    }
+
+                    return VoxelShape.builder().solid(new AABBd(minX, minY, minZ, maxX, maxY, maxZ)).build();
                 }
-                return VoxelShape.builder().solid(new AABBd(minX, minY, minZ, maxX, maxY, maxZ)).build();
             })
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 // Example: #4c4c4cff

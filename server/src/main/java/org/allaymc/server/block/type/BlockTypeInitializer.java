@@ -494,8 +494,7 @@ public final class BlockTypeInitializer {
         return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(id)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape));
+                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION);
     }
 
     public static void initSlab() {

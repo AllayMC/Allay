@@ -34,7 +34,7 @@ public class BlockStateDataProcessor {
         public int burnOdds = 0;
         public boolean canContainLiquidSource;
         public String liquidReactionOnTouch;
-        public float[] collisionShape;
+        public float[][] collisionShape;
         public float[] liquidClipShape;
         public float[] outlineShape;
         public float[] uiShape;
@@ -59,7 +59,7 @@ public class BlockStateDataProcessor {
         public int burnOdds = 0;
         public boolean canContainLiquidSource;
         public String liquidReactionOnTouch;
-        public float[] collisionShape;
+        public float[][] collisionShape;
         public float[] shape;
         public float hardness;
         public float explosionResistance;
@@ -97,32 +97,44 @@ public class BlockStateDataProcessor {
             data.name = raw.name;
             data.blockStateHash = raw.blockStateHash;
 
-            if (isEmptyShape(raw.collisionShape)) {
+            if (raw.collisionShape.length == 0) {
                 data.shape = clampShape(raw.outlineShape);
             } else {
-                data.shape = data.collisionShape;
+                data.shape = unionShapes(data.collisionShape);
             }
 
             return data;
         }
 
-        public static boolean isEmptyShape(float[] shape) {
-            for (var f : shape) {
-                if (f != 0) {
-                    return false;
-                }
+        public static float[][] clampShape(float[][] shapes) {
+            for (var shape : shapes) {
+                clampShape(shape);
             }
-            return true;
+
+            return shapes;
         }
 
-        public static float[] clampShape(float[] shape) {
+        private static float[] clampShape(float[] shape) {
             for (var i = 0; i < shape.length; i++) {
-                // Clamp the value between 0 and 1
-                // because bigger than 1 is not allowed
-                // in allay
+                // Clamp the value between 0 and 1 because bigger than 1 is not allowed in allay
                 shape[i] = Math.max(0, Math.min(1, shape[i]));
             }
+
             return shape;
+        }
+
+        public static float[] unionShapes(float[][] shapes) {
+            var unionShape = new float[6];
+            for (var shape : shapes) {
+                for (var i = 0; i < 3; i++) {
+                    unionShape[i] = Math.min(unionShape[i], shape[i]);
+                }
+                for (var i = 3; i < 6; i++) {
+                    unionShape[i] = Math.max(unionShape[i], shape[i]);
+                }
+            }
+
+            return unionShape;
         }
     }
 }
