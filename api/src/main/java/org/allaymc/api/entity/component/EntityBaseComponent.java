@@ -57,7 +57,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     String TAG_TAGS = "Tags";
     String TAG_ACTIVE_EFFECTS = "ActiveEffects";
     String TAG_UNIQUE_ID = "UniqueID";
-    String TAG_CUSTOM_NBT = "CustomNBT";
+    String TAG_PDC = "PDC";
 
     double SPRINTING_MOVEMENT_FACTOR = 1.3;
     double WALKING_MOVEMENT_FACTOR = 1;

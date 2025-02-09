@@ -26,7 +26,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     String TAG_Z = "z";
     String TAG_IS_MOVABLE = "isMovable";
     String TAG_CUSTOM_NAME = "CustomName";
-    String TAG_CUSTOM_NBT = "CustomNBT";
+    String TAG_PDC = "CustomNBT";
 
 
     /**

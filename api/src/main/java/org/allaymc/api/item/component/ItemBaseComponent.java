@@ -40,7 +40,7 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     String TAG_ENCHANTMENT = "ench";
     String TAG_BLOCK_ENTITY = "BlockEntityTag";
     String TAG_LOCK_MODE = "minecraft:item_lock";
-    String TAG_CUSTOM_NBT = "CustomNBT";
+    String TAG_PDC = "PDC";
 
     int EMPTY_STACK_NETWORK_ID = 0;
 

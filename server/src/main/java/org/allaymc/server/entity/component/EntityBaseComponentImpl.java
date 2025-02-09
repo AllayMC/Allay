@@ -681,7 +681,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             builder.putList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
         }
         if (!persistentDataContainer.isEmpty()) {
-            builder.put(TAG_CUSTOM_NBT, persistentDataContainer.toCompoundTag());
+            builder.put(TAG_PDC, persistentDataContainer.toCompoundTag());
         }
         saveUniqueId(builder);
         var event = new CEntitySaveNBTEvent(builder);
@@ -719,7 +719,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 addEffect(effectInstance);
             }
         });
-        nbt.listenForCompound(TAG_CUSTOM_NBT, customNbt -> {
+        nbt.listenForCompound(TAG_PDC, customNbt -> {
             this.persistentDataContainer.clear();
             this.persistentDataContainer.putAll(customNbt);
         });

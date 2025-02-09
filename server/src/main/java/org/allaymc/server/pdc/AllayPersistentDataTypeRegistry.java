@@ -17,6 +17,9 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 
+/**
+ * @author IWareQ
+ */
 public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegistry {
     private final Map<Class<?>, TagAdapter<?, ?>> adapters = new ConcurrentHashMap<>();
 

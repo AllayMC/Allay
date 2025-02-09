@@ -67,7 +67,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
             builder.putString(TAG_CUSTOM_NAME, customName);
         }
         if (!persistentDataContainer.isEmpty()) {
-            builder.put(TAG_CUSTOM_NBT, persistentDataContainer.toCompoundTag());
+            builder.put(TAG_PDC, persistentDataContainer.toCompoundTag());
         }
         var event = new CBlockEntitySaveNBTEvent(builder);
         manager.callEvent(event);
@@ -84,7 +84,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         pos.z = nbt.getInt(TAG_Z, position.z());
         position = pos;
 
-        nbt.listenForCompound(TAG_CUSTOM_NBT, customNbt -> {
+        nbt.listenForCompound(TAG_PDC, customNbt -> {
             this.persistentDataContainer.clear();
             this.persistentDataContainer.putAll(customNbt);
         });

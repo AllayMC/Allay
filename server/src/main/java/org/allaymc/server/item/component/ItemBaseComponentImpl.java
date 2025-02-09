@@ -138,7 +138,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         extraTag.listenForByte(TAG_LOCK_MODE, lockMode -> this.lockMode = ItemLockMode.values()[lockMode]);
 
-        extraTag.listenForCompound(TAG_CUSTOM_NBT, customNbt -> {
+        extraTag.listenForCompound(TAG_PDC, customNbt -> {
             this.persistentDataContainer.clear();
             this.persistentDataContainer.putAll(customNbt);
         });
@@ -181,7 +181,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
 
         if (!persistentDataContainer.isEmpty()) {
-            nbtBuilder.put(TAG_CUSTOM_NBT, persistentDataContainer.toCompoundTag());
+            nbtBuilder.put(TAG_PDC, persistentDataContainer.toCompoundTag());
         }
 
         var event = new CItemSaveExtraTagEvent(nbtBuilder);
