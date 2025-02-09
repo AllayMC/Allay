@@ -1,15 +1,13 @@
 package org.allaymc.server.pdc;
 
 import com.google.common.base.Preconditions;
-import org.allaymc.api.pdc.ListPersistentDataType;
-import org.allaymc.api.pdc.PersistentDataContainer;
-import org.allaymc.api.pdc.PersistentDataType;
-import org.allaymc.api.pdc.PersistentDataTypeRegistry;
+import org.allaymc.api.pdc.*;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,28 +68,25 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
             return value instanceof NbtList;
         });
 
-        var dataContainerAdapter = this.createAdapter(AllayPersistentDataContainer.class, NbtMap.class, AllayPersistentDataContainer::toCompoundTag, tag -> {
+        this.createAdapter(PersistentDataContainer.class, NbtMap.class, PersistentDataContainer::toNbt, tag -> {
             var container = new AllayPersistentDataContainer(this);
             container.putAll(tag);
             return container;
         });
-        this.adapters.put(PersistentDataContainer.class, dataContainerAdapter);
 
-        this.createAdapter(PersistentDataContainer[].class, List.class, containers -> {
-            List<NbtMap> tags = new ArrayList<>();
-            for (var container : containers) {
-                tags.add(((AllayPersistentDataContainer) container).toCompoundTag());
-            }
-            return tags;
-        }, tags -> {
-            List<AllayPersistentDataContainer> containers = new ArrayList<>(tags.size());
-            for (var tag : tags) {
-                var container = new AllayPersistentDataContainer(this);
-                container.putAll((NbtMap) tag);
-                containers.add(container);
-            }
-            return containers.toArray(new AllayPersistentDataContainer[0]);
-        });
+        this.createAdapter(
+                PersistentDataContainer[].class, List.class,
+                containers -> Arrays.stream(containers).map(PersistentDataContainerView::toNbt).toList(),
+                tags -> {
+                    List<AllayPersistentDataContainer> containers = new ArrayList<>(tags.size());
+                    for (var tag : tags) {
+                        var container = new AllayPersistentDataContainer(this);
+                        container.putAll((NbtMap) tag);
+                        containers.add(container);
+                    }
+                    return containers.toArray(new AllayPersistentDataContainer[0]);
+                }
+        );
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

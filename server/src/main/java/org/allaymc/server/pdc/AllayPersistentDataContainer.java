@@ -5,10 +5,7 @@ import org.allaymc.api.pdc.PersistentDataType;
 import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,14 +31,13 @@ public class AllayPersistentDataContainer extends AllayPersistentDataContainerVi
     }
 
     @Override
-    public void readFromBytes(byte[] bytes, boolean clear) throws IOException {
-        if (clear) {
-            this.clear();
-        }
+    public void putAll(Map<String, Object> map) {
+        this.customDataTags.putAll(map);
+    }
 
-        try (var reader = NbtUtils.createReader(new ByteArrayInputStream(bytes))) {
-            this.customDataTags.putAll((NbtMap) reader.readTag());
-        }
+    @Override
+    public void clear() {
+        this.customDataTags.clear();
     }
 
     @Override
@@ -50,20 +46,13 @@ public class AllayPersistentDataContainer extends AllayPersistentDataContainerVi
     }
 
     @Override
-    public NbtMap toCompoundTag() {
+    public boolean isEmpty() {
+        return customDataTags.isEmpty();
+    }
+
+    @Override
+    public NbtMap toNbt() {
         return NbtMap.fromMap(this.customDataTags);
-    }
-
-    public void clear() {
-        this.customDataTags.clear();
-    }
-
-    public void put(String key, Object value) {
-        this.customDataTags.put(key, value);
-    }
-
-    public void putAll(Map<String, Object> map) {
-        this.customDataTags.putAll(map);
     }
 
     public Map<String, Object> getRaw() {

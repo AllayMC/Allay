@@ -8,6 +8,7 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
@@ -49,7 +50,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     protected String customName;
     @Getter
     @Setter
-    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+    protected PersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
 
     public BlockEntityBaseComponentImpl(BlockEntityInitInfo initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
@@ -75,7 +76,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
             builder.putString(TAG_CUSTOM_NAME, customName);
         }
         if (!persistentDataContainer.isEmpty()) {
-            builder.put(TAG_PDC, persistentDataContainer.toCompoundTag());
+            builder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
         var event = new CBlockEntitySaveNBTEvent(builder);
         manager.callEvent(event);

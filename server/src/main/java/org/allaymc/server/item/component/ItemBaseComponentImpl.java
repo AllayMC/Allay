@@ -28,6 +28,7 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -106,7 +107,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected ItemLockMode lockMode = ItemLockMode.NONE;
     @Getter
     @Setter
-    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+    protected PersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
 
     @Getter
     @Setter
@@ -197,7 +198,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
 
         if (!persistentDataContainer.isEmpty()) {
-            nbtBuilder.put(TAG_PDC, persistentDataContainer.toCompoundTag());
+            nbtBuilder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
 
         var event = new CItemSaveExtraTagEvent(nbtBuilder);

@@ -6,7 +6,6 @@ import org.allaymc.api.pdc.PersistentDataContainerView;
 import org.allaymc.api.pdc.PersistentDataType;
 import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.utils.Identifier;
-import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,8 +24,6 @@ public abstract class AllayPersistentDataContainerView implements PersistentData
     }
 
     public abstract Object getRawValue(String key);
-
-    public abstract NbtMap toCompoundTag();
 
     @Override
     public <P, C> boolean has(Identifier key, PersistentDataType<P, C> type) {
@@ -61,12 +58,7 @@ public abstract class AllayPersistentDataContainerView implements PersistentData
 
     @Override
     public Set<Identifier> getKeys() {
-        var names = this.toCompoundTag().keySet();
+        var names = this.toNbt().keySet();
         return names.stream().map(Identifier::new).collect(Collectors.toUnmodifiableSet());
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.toCompoundTag().isEmpty();
     }
 }

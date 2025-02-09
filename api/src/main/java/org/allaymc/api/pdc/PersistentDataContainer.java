@@ -2,7 +2,7 @@ package org.allaymc.api.pdc;
 
 import org.allaymc.api.utils.Identifier;
 
-import java.io.IOException;
+import java.util.Map;
 
 /**
  * Represents a modifiable persistent data container capable of storing custom tags.
@@ -74,6 +74,13 @@ public interface PersistentDataContainer extends PersistentDataContainerView {
     <P, C> void set(Identifier key, PersistentDataType<P, C> type, C value);
 
     /**
+     * Stores all entries from the provided map in the container.
+     *
+     * @param map a map of keys and values to store
+     */
+    void putAll(Map<String, Object> map);
+
+    /**
      * Removes a value stored under the given key.
      *
      * @param key the key to remove
@@ -83,23 +90,7 @@ public interface PersistentDataContainer extends PersistentDataContainerView {
     void remove(Identifier key);
 
     /**
-     * Deserializes data from a byte array into this container.
-     *
-     * <p>
-     * If {@code clear} is {@code true}, the container is cleared before reading the new data.
-     * </p>
-     *
-     * @param bytes the byte array containing serialized data
-     * @param clear whether to clear existing data before reading
-     *
-     * @throws IOException if the byte array has an invalid format
+     * Clears all entries in the container.
      */
-    void readFromBytes(byte[] bytes, boolean clear) throws IOException;
-
-    /**
-     * @see #readFromBytes(byte[], boolean)
-     */
-    default void readFromBytes(byte[] bytes) throws IOException {
-        readFromBytes(bytes, true);
-    }
+    void clear();
 }

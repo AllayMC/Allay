@@ -1,6 +1,7 @@
 package org.allaymc.api.pdc;
 
 import org.allaymc.api.utils.Identifier;
+import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Set;
 
@@ -118,4 +119,11 @@ public interface PersistentDataContainerView {
      * @return the {@link PersistentDataAdapterContext} used by this container
      */
     PersistentDataAdapterContext getAdapterContext();
+
+    /**
+     * Converts the data container to a {@link NbtMap}.
+     *
+     * @return a nbt representing the container
+     */
+    NbtMap toNbt();
 }

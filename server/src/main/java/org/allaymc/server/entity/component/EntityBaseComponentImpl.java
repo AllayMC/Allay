@@ -24,6 +24,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.registry.Registries;
@@ -76,11 +77,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
-
-    protected static final String TAG_IDENTIFIER = "identifier";
-    protected static final String TAG_ON_GROUND = "OnGround";
     // This tag is also used in EntityPlayerNetworkComponentImpl, so make it public for reuse
     public static final String TAG_POS = "Pos";
+    protected static final String TAG_IDENTIFIER = "identifier";
+    protected static final String TAG_ON_GROUND = "OnGround";
     protected static final String TAG_MOTION = "Motion";
     protected static final String TAG_ROTATION = "Rotation";
     protected static final String TAG_TAGS = "Tags";
@@ -131,7 +131,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected Set<String> tags = new HashSet<>();
     @Getter
     @Setter
-    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+    protected PersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -692,7 +692,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             builder.putList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
         }
         if (!persistentDataContainer.isEmpty()) {
-            builder.put(TAG_PDC, persistentDataContainer.toCompoundTag());
+            builder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
         saveUniqueId(builder);
         var event = new CEntitySaveNBTEvent(builder);
