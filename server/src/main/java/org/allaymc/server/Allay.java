@@ -242,7 +242,7 @@ public final class Allay {
         Registries.COMMANDS = new AllayCommandRegistry();
 
         // Persistent Data Container (PDC)
-        Registries.PDC_REGISTRY = new AllayPersistentDataTypeRegistry();
+        Registries.PERSISTENT_DATA_TYPES = new AllayPersistentDataTypeRegistry();
     }
 
     @VisibleForTesting

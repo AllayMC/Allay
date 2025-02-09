@@ -106,7 +106,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected ItemLockMode lockMode = ItemLockMode.NONE;
     @Getter
     @Setter
-    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PDC_REGISTRY);
+    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
 
     @Getter
     @Setter

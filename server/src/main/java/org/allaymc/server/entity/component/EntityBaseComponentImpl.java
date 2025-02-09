@@ -131,7 +131,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected Set<String> tags = new HashSet<>();
     @Getter
     @Setter
-    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PDC_REGISTRY);
+    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());

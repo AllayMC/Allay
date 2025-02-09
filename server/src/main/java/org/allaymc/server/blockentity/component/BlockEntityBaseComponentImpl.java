@@ -49,7 +49,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     protected String customName;
     @Getter
     @Setter
-    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PDC_REGISTRY);
+    protected AllayPersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
 
     public BlockEntityBaseComponentImpl(BlockEntityInitInfo initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();

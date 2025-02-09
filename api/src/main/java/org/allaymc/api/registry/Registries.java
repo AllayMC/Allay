@@ -64,5 +64,5 @@ public final class Registries {
     public static CommandRegistry COMMANDS;
 
     // Persistent Data Container (PDC)
-    public static PersistentDataTypeRegistry PDC_REGISTRY;
+    public static PersistentDataTypeRegistry PERSISTENT_DATA_TYPES;
 }
