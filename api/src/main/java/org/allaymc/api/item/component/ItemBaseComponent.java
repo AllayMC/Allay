@@ -32,15 +32,6 @@ import static org.allaymc.api.item.type.ItemTypes.SHEARS;
  * @author daoge_cmd
  */
 public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
-    // The following tag is in extra tag.
-    String TAG_DAMAGE = "Damage";
-    String TAG_DISPLAY = "display";
-    String TAG_NAME = "Name";
-    String TAG_LORE = "Lore";
-    String TAG_ENCHANTMENT = "ench";
-    String TAG_BLOCK_ENTITY = "BlockEntityTag";
-    String TAG_LOCK_MODE = "minecraft:item_lock";
-    String TAG_PDC = "PDC";
 
     int EMPTY_STACK_NETWORK_ID = 0;
 
@@ -354,27 +345,7 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @return The NBT.
      */
-    default NbtMap saveNBT() {
-        var builder = NbtMap.builder()
-                .putByte("Count", (byte) getCount())
-                .putShort("Damage", (short) getMeta())
-                .putString("Name", getItemType().getIdentifier().toString());
-
-        var extraTag = saveExtraTag();
-        if (extraTag != null) {
-            builder.putCompound("tag", extraTag);
-        }
-
-        var blockState = toBlockState();
-        if (blockState != null) {
-            builder.put("Block", blockState.getBlockStateTag());
-        }
-
-        // TODO: CanDestroy
-        // TODO: CanPlaceOn
-
-        return builder.build();
-    }
+    NbtMap saveNBT();
 
     /**
      * Calculate the attack damage.

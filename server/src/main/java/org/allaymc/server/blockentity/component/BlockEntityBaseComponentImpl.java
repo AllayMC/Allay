@@ -29,6 +29,14 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
+    protected static final String TAG_ID = "id";
+    protected static final String TAG_X = "x";
+    protected static final String TAG_Y = "y";
+    protected static final String TAG_Z = "z";
+    protected static final String TAG_IS_MOVABLE = "isMovable";
+    protected static final String TAG_CUSTOM_NAME = "CustomName";
+    protected static final String TAG_PDC = "PDC";
+
     @Manager
     protected ComponentManager manager;
 

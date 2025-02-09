@@ -49,15 +49,6 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder {
-    String TAG_IDENTIFIER = "identifier";
-    String TAG_ON_GROUND = "OnGround";
-    String TAG_POS = "Pos";
-    String TAG_MOTION = "Motion";
-    String TAG_ROTATION = "Rotation";
-    String TAG_TAGS = "Tags";
-    String TAG_ACTIVE_EFFECTS = "ActiveEffects";
-    String TAG_UNIQUE_ID = "UniqueID";
-    String TAG_PDC = "PDC";
 
     double SPRINTING_MOVEMENT_FACTOR = 1.3;
     double WALKING_MOVEMENT_FACTOR = 1;

@@ -20,14 +20,6 @@ import java.util.Objects;
  * @author daoge_cmd
  */
 public interface BlockEntityBaseComponent extends BlockEntityComponent, PersistentDataHolder {
-    String TAG_ID = "id";
-    String TAG_X = "x";
-    String TAG_Y = "y";
-    String TAG_Z = "z";
-    String TAG_IS_MOVABLE = "isMovable";
-    String TAG_CUSTOM_NAME = "CustomName";
-    String TAG_PDC = "CustomNBT";
-
 
     /**
      * Gets the type of block entity.

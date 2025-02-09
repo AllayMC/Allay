@@ -77,6 +77,17 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
+    protected static final String TAG_IDENTIFIER = "identifier";
+    protected static final String TAG_ON_GROUND = "OnGround";
+    // This tag is also used in EntityPlayerNetworkComponentImpl, so make it public for reuse
+    public static final String TAG_POS = "Pos";
+    protected static final String TAG_MOTION = "Motion";
+    protected static final String TAG_ROTATION = "Rotation";
+    protected static final String TAG_TAGS = "Tags";
+    protected static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
+    protected static final String TAG_UNIQUE_ID = "UniqueID";
+    protected static final String TAG_PDC = "PDC";
+
     protected static final int DEFAULT_DEAD_TIMER = 20;
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
