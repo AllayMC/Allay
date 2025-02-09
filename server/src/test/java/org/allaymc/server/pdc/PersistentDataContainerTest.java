@@ -1,9 +1,9 @@
 package org.allaymc.server.pdc;
 
-import org.allaymc.api.pdc.ListPersistentDataType;
-import org.allaymc.api.pdc.PersistentDataType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.pdc.ListPersistentDataType;
+import org.allaymc.api.pdc.PersistentDataType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -154,7 +154,7 @@ public class PersistentDataContainerTest {
                                 .putString("Name", "Item Display Name")
                                 .build()
                         )
-                        .putCompound("CustomNBT", NbtMap.builder()
+                        .putCompound("PDC", NbtMap.builder()
                                 .putByteArray("test-plugin:custom-byte-array", new byte[]{0, 1, 2, 10})
                                 .putCompound("test-plugin:custom-inner-compound", NbtMap.builder()
                                         .putLong("test:validkey", 5L)
