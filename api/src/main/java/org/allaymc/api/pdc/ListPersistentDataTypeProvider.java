@@ -9,8 +9,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 /**
- * A provider for list persistent data types that represent the known primitive
- * types exposed by {@link PersistentDataType}.
+ * Provides shared instances of {@link ListPersistentDataType} for the known primitive types supported by {@link PersistentDataType}.
+ *
+ * @author IWareQ | Bukkit
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 public final class ListPersistentDataTypeProvider {
@@ -27,166 +28,148 @@ public final class ListPersistentDataTypeProvider {
     private static final ListPersistentDataType<int[], int[]> INTEGER_ARRAY = new ListPersistentDataTypeImpl<>(PersistentDataType.INTEGER_ARRAY);
     private static final ListPersistentDataType<long[], long[]> LONG_ARRAY = new ListPersistentDataTypeImpl<>(PersistentDataType.LONG_ARRAY);
 
-    private static final ListPersistentDataType<PersistentDataContainer, PersistentDataContainer> DATA_CONTAINER = new ListPersistentDataTypeImpl<>(
-            PersistentDataType.TAG_CONTAINER
-    );
+    private static final ListPersistentDataType<PersistentDataContainer, PersistentDataContainer> DATA_CONTAINER =
+            new ListPersistentDataTypeImpl<>(PersistentDataType.TAG_CONTAINER);
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of bytes.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of bytes.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of bytes
      */
     public ListPersistentDataType<Byte, Byte> bytes() {
         return BYTE;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of shorts.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of shorts.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of shorts
      */
     public ListPersistentDataType<Short, Short> shorts() {
         return SHORT;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of integers.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of integers.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of integers
      */
     public ListPersistentDataType<Integer, Integer> integers() {
         return INTEGER;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of longs.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of longs.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of longs
      */
     public ListPersistentDataType<Long, Long> longs() {
         return LONG;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of floats.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of floats.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of floats
      */
     public ListPersistentDataType<Float, Float> floats() {
         return FLOAT;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of doubles.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of doubles.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of doubles
      */
     public ListPersistentDataType<Double, Double> doubles() {
         return DOUBLE;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of booleans.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of booleans.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of booleans
      */
     public ListPersistentDataType<Byte, Boolean> booleans() {
         return BOOLEAN;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of strings.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of strings.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of strings
      */
     public ListPersistentDataType<String, String> strings() {
         return STRING;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of byte arrays.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of byte arrays.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of byte arrays
      */
     public ListPersistentDataType<byte[], byte[]> byteArrays() {
         return BYTE_ARRAY;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of int arrays.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of int arrays.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of int arrays
      */
     public ListPersistentDataType<int[], int[]> integerArrays() {
         return INTEGER_ARRAY;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * storing lists of long arrays.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of long arrays.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of long arrays
      */
     public ListPersistentDataType<long[], long[]> longArrays() {
         return LONG_ARRAY;
     }
 
     /**
-     * Provides a shared {@link ListPersistentDataType} that is capable of
-     * persistent data containers.
+     * Returns a shared {@link ListPersistentDataType} for storing lists of persistent data containers.
      *
-     * @return the persistent data type.
+     * @return the persistent data type for lists of persistent data containers
      */
     public ListPersistentDataType<PersistentDataContainer, PersistentDataContainer> dataContainers() {
         return DATA_CONTAINER;
     }
 
     /**
-     * Constructs a new list persistent data type given any persistent data type
-     * for its elements.
+     * Creates a new {@link ListPersistentDataType} for a given element type.
      *
-     * @param elementType the persistent data type that is capable of
-     *                    writing/reading the elements of the list.
-     * @param <P>         the generic type of the primitives stored in the list.
-     * @param <C>         the generic type of the complex values yielded back by the
-     *                    persistent data types.
+     * @param elementType the persistent data type for list elements
+     * @param <P>         the primitive type of the list elements
+     * @param <C>         the complex type of the list elements
      *
-     * @return the created list persistent data type.
+     * @return a new list persistent data type for the given element type
      */
     public <P, C> ListPersistentDataType<P, C> listTypeFrom(PersistentDataType<P, C> elementType) {
         return new ListPersistentDataTypeImpl<>(elementType);
     }
 
     /**
-     * A private implementation of the {@link ListPersistentDataType} that uses
-     * {@link Collections2} for conversion from/to the primitive list.
+     * Private implementation of {@link ListPersistentDataType} that
+     * converts between primitive and complex list types using {@link Collections2}.
      *
-     * @param <P> the generic type of the primitives stored in the list.
-     * @param <C> the generic type of the complex values yielded back by the
-     *            persistent data types.
+     * @param <P> the primitive type of the list elements
+     * @param <C> the complex type of the list elements
      */
+    @SuppressWarnings("unchecked")
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     private static final class ListPersistentDataTypeImpl<P, C> implements ListPersistentDataType<P, C> {
         private final PersistentDataType<P, C> innerType;
 
         @Override
-        @SuppressWarnings("unchecked")
         public Class<List<P>> getPrimitiveType() {
             return (Class<List<P>>) (Object) List.class;
         }
 
         @Override
-        @SuppressWarnings("unchecked")
         public Class<List<C>> getComplexType() {
             return (Class<List<C>>) (Object) List.class;
         }

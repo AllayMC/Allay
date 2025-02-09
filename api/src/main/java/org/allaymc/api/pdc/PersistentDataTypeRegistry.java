@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 
+/**
+ * @author IWareQ | Bukkit
+ */
 public interface PersistentDataTypeRegistry {
     /**
      * Creates a tag adapter that maps a primitive type to a tag representation with additional type matching validation.

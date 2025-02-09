@@ -5,7 +5,13 @@ import org.allaymc.api.utils.Identifier;
 import java.io.IOException;
 
 /**
- * This interface represents a map like object, capable of storing custom tags in it.
+ * Represents a modifiable persistent data container capable of storing custom tags.
+ *
+ * <p>
+ * This interface extends {@link PersistentDataContainerView}, adding mutation operations.
+ * </p>
+ *
+ * @author IWareQ | Bukkit
  */
 public interface PersistentDataContainer extends PersistentDataContainerView {
     /**
@@ -16,62 +22,75 @@ public interface PersistentDataContainer extends PersistentDataContainerView {
     }
 
     /**
-     * Returns if the persistent metadata provider has metadata registered matching the provided parameters.
-     * <p>
-     * This method will only return true if the found value has the same primitive data type as the provided key.
-     * <p>
-     * Storing a value using a custom {@link PersistentDataType} implementation will not store the complex data type.
-     * Therefore, storing a UUID (by storing a byte[]) will match has(key, {@link PersistentDataType#BYTE_ARRAY}).
-     * Likewise, a stored byte[] will always match your UUID {@link PersistentDataType} even if it is not 16 bytes long.
-     * <p>
-     * This method is only usable for custom object keys.
-     * Overwriting existing tags, like the display name, will not work as the values are stored using your namespace.
+     * Checks if a value exists under the given key and matches the specified primitive data type.
      *
-     * @param key  the key the value is stored under
-     * @param type the type the primitive stored value has to match
-     * @param <P>  the generic type of the stored primitive
-     * @param <C>  the generic type of the eventually created complex object
+     * <p>
+     * This method returns {@code true} only if the stored value has the same primitive
+     * type as the provided {@link PersistentDataType}.
+     * </p>
      *
-     * @return if a value with the provided key and type exists
+     * <p>
+     * Since custom {@link PersistentDataType} implementations store only primitive
+     * representations, complex types aren't checked.
+     * For example, storing a UUID as a byte array will match {@link PersistentDataType#BYTE_ARRAY},
+     * and vice versa, even if the byte array doesn't contain a valid UUID.
+     * </p>
      *
-     * @throws IllegalArgumentException if the key to look up is null
-     * @throws IllegalArgumentException if the type to cast the found object to is null
+     * <p>
+     * This method applies only to custom object keys. Overwriting standard tags,
+     * such as display names, will not work as those are stored using a namespace.
+     * </p>
+     *
+     * @param key  the key under which the value is stored
+     * @param type the expected primitive data type
+     * @param <P>  the primitive type stored in the container
+     * @param <C>  the complex type returned by the {@link PersistentDataType}
+     *
+     * @return {@code true} if a value with the given key and type exists; otherwise, {@code false}
+     *
+     * @throws IllegalArgumentException if {@code key} or {@code type} is {@code null}
      */
     <P, C> boolean has(Identifier key, PersistentDataType<P, C> type);
 
     /**
-     * Stores a metadata value on the {@link PersistentDataHolder} instance.
+     * Stores a metadata value under the given key.
+     *
      * <p>
-     * This API cannot be used to manipulate minecraft data, as the values will be stored using your namespace.
-     * This method will override any existing value the {@link PersistentDataHolder} may have stored under the provided key.
+     * This API doesn't modify Minecraft’s built-in data, as all values are stored
+     * under your namespace.
+     * Calling this method overwrites any existing value associated with the given key.
+     * </p>
      *
-     * @param key   the key this value will be stored under
-     * @param type  the type this tag uses
-     * @param value the value to store in the tag
-     * @param <P>   the generic java type of the tag value
-     * @param <C>   the generic type of the object to store
+     * @param key   the key under which the value will be stored
+     * @param type  the data type of the stored value
+     * @param value the value to store
+     * @param <P>   the primitive type stored in the container
+     * @param <C>   the complex type returned by the {@link PersistentDataType}
      *
-     * @throws IllegalArgumentException if the key is null
-     * @throws IllegalArgumentException if the type is null
-     * @throws IllegalArgumentException if the value is null. Removing a tag should be done using {@link #remove(Identifier)}
-     * @throws IllegalArgumentException if no suitable adapter was found for the {@link PersistentDataType#getPrimitiveType()}
+     * @throws IllegalArgumentException if {@code key}, {@code type}, or {@code value} is {@code null}
+     * @throws IllegalArgumentException if no suitable adapter is found for {@link PersistentDataType#getPrimitiveType()}
+     * @see #remove(Identifier) for removing a stored value
      */
     <P, C> void set(Identifier key, PersistentDataType<P, C> type, C value);
 
     /**
-     * Removes a custom key from the {@link PersistentDataHolder} instance.
+     * Removes a value stored under the given key.
      *
      * @param key the key to remove
      *
-     * @throws IllegalArgumentException if the provided key is null
+     * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     void remove(Identifier key);
 
     /**
-     * Read values from a serialized byte array into this {@link PersistentDataContainer} instance.
+     * Deserializes data from a byte array into this container.
      *
-     * @param bytes the byte array to read from
-     * @param clear if true, this {@link PersistentDataContainer} instance will be cleared before reading
+     * <p>
+     * If {@code clear} is {@code true}, the container is cleared before reading the new data.
+     * </p>
+     *
+     * @param bytes the byte array containing serialized data
+     * @param clear whether to clear existing data before reading
      *
      * @throws IOException if the byte array has an invalid format
      */
@@ -81,6 +100,6 @@ public interface PersistentDataContainer extends PersistentDataContainerView {
      * @see #readFromBytes(byte[], boolean)
      */
     default void readFromBytes(byte[] bytes) throws IOException {
-        this.readFromBytes(bytes, true);
+        readFromBytes(bytes, true);
     }
 }

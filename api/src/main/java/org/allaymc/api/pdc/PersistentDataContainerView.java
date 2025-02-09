@@ -5,133 +5,117 @@ import org.allaymc.api.utils.Identifier;
 import java.util.Set;
 
 /**
- * This represents a view of a persistent data container. No
- * methods on this interface mutate the container.
+ * Represents a read-only view of a {@link PersistentDataContainer}.
+ * No methods in this interface modify the container.
  *
+ * @author IWareQ | Bukkit
  * @see PersistentDataContainer
  */
 public interface PersistentDataContainerView {
     /**
-     * Returns if the persistent metadata provider has metadata registered
-     * matching the provided parameters.
-     * <p>
-     * This method will only return true if the found value has the same primitive
-     * data type as the provided key.
-     * <p>
-     * Storing a value using a custom {@link PersistentDataType} implementation
-     * will not store the complex data type. Therefore storing a UUID (by
-     * storing a byte[]) will match has("key" ,
-     * {@link PersistentDataType#BYTE_ARRAY}). Likewise a stored byte[] will
-     * always match your UUID {@link PersistentDataType} even if it is not 16
-     * bytes long.
-     * <p>
-     * This method is only usable for custom object keys. Overwriting existing
-     * tags, like the display name, will not work as the values are stored
-     * using your namespace.
+     * Checks if the container has a value stored under the given key
+     * and if it matches the specified primitive data type.
      *
-     * @param key  the key the value is stored under
-     * @param type the type the primative stored value has to match
-     * @param <P>  the generic type of the stored primitive
-     * @param <C>  the generic type of the eventually created complex object
+     * <p>
+     * This method returns {@code true} only if the stored value has the same
+     * primitive type as the provided {@link PersistentDataType}.
+     * </p>
      *
-     * @return if a value with the provided key and type exists
+     * <p>
+     * Since custom {@link PersistentDataType} implementations store only primitive
+     * representations, complex types aren't checked.
+     * For example, storing a UUID as a byte array will match {@link PersistentDataType#BYTE_ARRAY},
+     * and vice versa, even if the byte array doesn't contain a valid UUID.
+     * </p>
      *
-     * @throws IllegalArgumentException if the key to look up is null
-     * @throws IllegalArgumentException if the type to cast the found object to is
-     *                                  null
+     * <p>
+     * This method applies only to custom object keys.
+     * Overwriting standard tags, such as display names, will not work as those are stored using a namespace.
+     * </p>
+     *
+     * @param key  the key under which the value is stored
+     * @param type the expected primitive data type
+     * @param <P>  the primitive type stored in the container
+     * @param <C>  the complex type returned by the {@link PersistentDataType}
+     *
+     * @return {@code true} if a value with the given key and type exists; otherwise, {@code false}
+     *
+     * @throws IllegalArgumentException if {@code key} or {@code type} is {@code null}
      */
     <P, C> boolean has(Identifier key, PersistentDataType<P, C> type);
 
     /**
-     * Returns if the persistent metadata provider has metadata registered matching
-     * the provided parameters.
-     * <p>
-     * This method will return true as long as a value with the given key exists,
+     * Checks if the container has a value stored under the given key,
      * regardless of its type.
+     *
      * <p>
-     * This method is only usable for custom object keys. Overwriting existing tags,
-     * like the display name, will not work as the values are stored using your
-     * namespace.
+     * This method applies only to custom object keys.
+     * Overwriting standard tags, such as display names, will not work as those are stored using a namespace.
+     * </p>
      *
-     * @param key the key the value is stored under
+     * @param key the key under which the value is stored
      *
-     * @return if a value with the provided key exists
+     * @return {@code true} if a value with the given key exists; otherwise, {@code false}
      *
-     * @throws IllegalArgumentException if the key to look up is null
+     * @throws IllegalArgumentException if {@code key} is {@code null}
      */
     boolean has(Identifier key);
 
     /**
-     * Returns the metadata value that is stored on the
-     * {@link PersistentDataHolder} instance.
+     * Retrieves the value stored under the given key.
      *
-     * @param key  the key to look up in the custom tag map
-     * @param type the type the value must have and will be casted to
-     * @param <P>  the generic type of the stored primitive
-     * @param <C>  the generic type of the eventually created complex object
+     * @param key  the key under which the value is stored
+     * @param type the expected data type
+     * @param <P>  the primitive type stored in the container
+     * @param <C>  the complex type returned by the {@link PersistentDataType}
      *
-     * @return the value or {@code null} if no value was mapped under the given
-     * value
+     * @return the stored value or {@code null} if no matching value exists
      *
-     * @throws IllegalArgumentException if the key to look up is null
-     * @throws IllegalArgumentException if the type to cast the found object to is
-     *                                  null
-     * @throws IllegalArgumentException if a value exists under the given key,
-     *                                  but cannot be accessed using the given type
-     * @throws IllegalArgumentException if no suitable adapter was found for
-     *                                  the {@link
-     *                                  PersistentDataType#getPrimitiveType()}
+     * @throws IllegalArgumentException if {@code key} or {@code type} is {@code null}
+     * @throws IllegalArgumentException if a value exists but can't be accessed with the given type
+     * @throws IllegalArgumentException if no suitable adapter is found for {@link PersistentDataType#getPrimitiveType()}
      */
     <P, C> C get(Identifier key, PersistentDataType<P, C> type);
 
     /**
-     * Returns the metadata value that is stored on the
-     * {@link PersistentDataHolder} instance. If the value does not exist in the
-     * container, the default value provided is returned.
+     * Retrieves the value stored under the given key, or returns a default value
+     * if no such value exists.
      *
-     * @param key          the key to look up in the custom tag map
-     * @param type         the type the value must have and will be casted to
-     * @param defaultValue the default value to return if no value was found for
-     *                     the provided key
-     * @param <P>          the generic type of the stored primitive
-     * @param <C>          the generic type of the eventually created complex object
+     * @param key          the key under which the value is stored
+     * @param type         the expected data type
+     * @param defaultValue the value to return if no stored value exists
+     * @param <P>          the primitive type stored in the container
+     * @param <C>          the complex type returned by the {@link PersistentDataType}
      *
-     * @return the value or the default value if no value was mapped under the
-     * given key
+     * @return the stored value or {@code defaultValue} if no matching value exists
      *
-     * @throws IllegalArgumentException if the key to look up is null
-     * @throws IllegalArgumentException if the type to cast the found object to is
-     *                                  null
-     * @throws IllegalArgumentException if a value exists under the given key,
-     *                                  but cannot be accessed using the given type
-     * @throws IllegalArgumentException if no suitable adapter was found for
-     *                                  the {@link PersistentDataType#getPrimitiveType()}
+     * @throws IllegalArgumentException if {@code key} or {@code type} is {@code null}
+     * @throws IllegalArgumentException if a value exists but can't be accessed with the given type
+     * @throws IllegalArgumentException if no suitable adapter is found for {@link PersistentDataType#getPrimitiveType()}
      */
     <P, C> C getOrDefault(Identifier key, PersistentDataType<P, C> type, C defaultValue);
 
     /**
-     * Get the set of keys present on this {@link PersistentDataContainer}
-     * instance.
+     * Returns the set of all keys present in this container.
      * <p>
-     * Any changes made to the returned set will not be reflected on the
-     * instance.
+     * Modifications to the returned set don't affect the underlying container.
+     * </p>
      *
-     * @return the key set
+     * @return a set of keys stored in this container
      */
     Set<Identifier> getKeys();
 
     /**
-     * Returns if the container instance is empty, therefore has no entries
-     * inside it.
+     * Checks whether the container is empty.
      *
-     * @return the boolean
+     * @return {@code true} if the container has no stored entries; otherwise, {@code false}
      */
     boolean isEmpty();
 
     /**
-     * Returns the adapter context this tag container uses.
+     * Returns the adapter context associated with this container.
      *
-     * @return the tag context
+     * @return the {@link PersistentDataAdapterContext} used by this container
      */
     PersistentDataAdapterContext getAdapterContext();
 }

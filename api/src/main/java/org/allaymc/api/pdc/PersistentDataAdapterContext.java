@@ -1,14 +1,15 @@
 package org.allaymc.api.pdc;
 
 /**
- * This interface represents the context in which the {@link PersistentDataType} can
- * serialize and deserialize the passed values.
+ * Represents the context in which a {@link PersistentDataType} can serialize and deserialize values.
+ *
+ * @author IWareQ | Bukkit
  */
 public interface PersistentDataAdapterContext {
     /**
-     * Creates a new and empty meta container instance.
+     * Creates a new, empty {@link PersistentDataContainer} instance.
      *
-     * @return the fresh container instance
+     * @return a fresh {@link PersistentDataContainer} instance
      */
     PersistentDataContainer newPersistentDataContainer();
 }

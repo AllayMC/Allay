@@ -70,7 +70,6 @@ public class AllayPersistentDataTypeRegistry implements PersistentDataTypeRegist
             return value instanceof NbtList;
         });
 
-
         var dataContainerAdapter = this.createAdapter(AllayPersistentDataContainer.class, NbtMap.class, AllayPersistentDataContainer::toCompoundTag, tag -> {
             var container = new AllayPersistentDataContainer(this);
             container.putAll(tag);

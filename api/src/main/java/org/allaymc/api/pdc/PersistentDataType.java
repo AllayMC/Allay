@@ -3,53 +3,59 @@ package org.allaymc.api.pdc;
 import lombok.RequiredArgsConstructor;
 
 /**
- * This class represents an enum with a generic content type. It defines the
- * types a custom tag can have.
+ * Represents a data type used for persistent tags, allowing for serialization and deserialization between
+ * primitive types and their corresponding complex object representations.
+ *
  * <p>
- * This interface can be used to create your own custom
- * {@link PersistentDataType} with different complex types. This may be useful
- * for the likes of a UUIDTagType:
+ * This interface can be used to create custom {@link PersistentDataType}s for complex types.
+ * For example, the {@code UUIDTagType} would implement this interface to handle UUID serialization:
+ * </p>
+ *
  * <pre>
  * {@code
  * public class UUIDTagType implements PersistentDataType<byte[], UUID> {
- *         @Override
- *         public Class<byte[]> getPrimitiveType() {
- *             return byte[].class;
- *         }
- *
- *         @Override
- *         public Class<UUID> getComplexType() {
- *             return UUID.class;
- *         }
- *
- *         @Override
- *         public byte[] toPrimitive(UUID complex, PersistentDataAdapterContext context) {
- *             var buffer = ByteBuffer.wrap(new byte[16]);
- *             buffer.putLong(complex.getMostSignificantBits());
- *             buffer.putLong(complex.getLeastSignificantBits());
- *             return buffer.array();
- *         }
- *
- *         @Override
- *         public UUID fromPrimitive(byte[] primitive, PersistentDataAdapterContext context) {
- *             var buffer = ByteBuffer.wrap(primitive);
- *             var firstLong = buffer.getLong();
- *             var secondLong = buffer.getLong();
- *             return new UUID(firstLong, secondLong);
- *         }
+ *     @Override
+ *     public Class<byte[]> getPrimitiveType() {
+ *         return byte[].class;
  *     }
- * }</pre>
- * <p>
- * Any plugin owned implementation of this interface is required to define one
- * of the existing primitive types found in this interface. Notably
- * {@link #BOOLEAN} is not a primitive type but a convenience type.
  *
- * @param <P> the primary object type that is stored in the given tag
- * @param <C> the retrieved object type when applying this tag type
+ *     @Override
+ *     public Class<UUID> getComplexType() {
+ *         return UUID.class;
+ *     }
+ *
+ *     @Override
+ *     public byte[] toPrimitive(UUID complex, PersistentDataAdapterContext context) {
+ *         var buffer = ByteBuffer.wrap(new byte[16]);
+ *         buffer.putLong(complex.getMostSignificantBits());
+ *         buffer.putLong(complex.getLeastSignificantBits());
+ *         return buffer.array();
+ *     }
+ *
+ *     @Override
+ *     public UUID fromPrimitive(byte[] primitive, PersistentDataAdapterContext context) {
+ *         var buffer = ByteBuffer.wrap(primitive);
+ *         var mostSigBits = buffer.getLong();
+ *         var leastSigBits = buffer.getLong();
+ *         return new UUID(mostSigBits, leastSigBits);
+ *     }
+ * }
+ * }
+ * </pre>
+ *
+ * <p>
+ * Custom implementations of this interface must define one of the existing primitive types.
+ * Specifically, {@link #BOOLEAN} is not a primitive type, but rather a convenience implementation for boolean values.
+ * </p>
+ *
+ * @param <P> the primitive type stored in the tag
+ * @param <C> the complex object type derived from the primitive
+ *
+ * @author IWareQ | Bukkit
  */
 public interface PersistentDataType<P, C> {
 
-    /*The primitive one value types.*/
+    /* Primitive types */
     PersistentDataType<Byte, Byte> BYTE = new Primitive<>(Byte.class);
     PersistentDataType<Short, Short> SHORT = new Primitive<>(Short.class);
     PersistentDataType<Integer, Integer> INTEGER = new Primitive<>(Integer.class);
@@ -58,15 +64,14 @@ public interface PersistentDataType<P, C> {
     PersistentDataType<Double, Double> DOUBLE = new Primitive<>(Double.class);
 
     /**
-     * A convenience implementation to convert between Byte and Boolean as there is
-     * no native implementation for booleans. <br>
-     * Any byte value not equal to 0 is considered to be true.
+     * A convenience implementation to handle conversion between Byte and Boolean.
+     * Any byte value not equal to 0 is considered true.
      */
     PersistentDataType<Byte, java.lang.Boolean> BOOLEAN = new Boolean();
 
     PersistentDataType<String, String> STRING = new Primitive<>(String.class);
 
-    /*Primitive Arrays*/
+    /* Arrays of primitives */
     PersistentDataType<byte[], byte[]> BYTE_ARRAY = new Primitive<>(byte[].class);
     PersistentDataType<int[], int[]> INTEGER_ARRAY = new Primitive<>(int[].class);
     PersistentDataType<long[], long[]> LONG_ARRAY = new Primitive<>(long[].class);
@@ -74,65 +79,56 @@ public interface PersistentDataType<P, C> {
     PersistentDataType<PersistentDataContainer, PersistentDataContainer> TAG_CONTAINER = new Primitive<>(PersistentDataContainer.class);
 
     /**
-     * A data type provider type that itself cannot be used as a
-     * {@link PersistentDataType}.
+     * A data type provider that handles lists of other data types.
+     *
      * <p>
-     * {@link ListPersistentDataTypeProvider} exposes shared persistent data
-     * types for storing lists of other data types, however.
-     * <p>
-     * Its existence in the {@link PersistentDataType} interface does not permit
-     * {@link java.util.List} as a primitive type in combination with a plain
-     * {@link PersistentDataType}. {@link java.util.List}s are only valid
-     * primitive types when used via a {@link ListPersistentDataType}.
+     * Lists can't be directly used as primitive types
+     * but can be stored through a {@link ListPersistentDataTypeProvider}.
+     * </p>
      *
      * @see ListPersistentDataTypeProvider
      */
     ListPersistentDataTypeProvider LIST = new ListPersistentDataTypeProvider();
 
     /**
-     * Returns the primitive data type of this tag.
+     * Returns the class representing the primitive type of this tag.
      *
-     * @return the class
+     * @return the class of the primitive type
      */
     Class<P> getPrimitiveType();
 
     /**
-     * Returns the complex object type the primitive value resembles.
+     * Returns the class representing the complex object type corresponding to the primitive type.
      *
-     * @return the class type
+     * @return the class of the complex type
      */
     Class<C> getComplexType();
 
     /**
-     * Returns the primitive data that resembles the complex object passed to
-     * this method.
+     * Converts a complex object into its primitive representation.
      *
-     * @param complex the complex object instance
-     * @param context the context this operation is running in
+     * @param complex the complex object to convert
+     * @param context the context of the conversion
      *
-     * @return the primitive value
+     * @return the primitive representation of the complex object
      */
     P toPrimitive(C complex, PersistentDataAdapterContext context);
 
     /**
-     * Creates a complex object based of the passed primitive value
+     * Converts a primitive value into its corresponding complex object.
      *
-     * @param primitive the primitive value
-     * @param context   the context this operation is running in
+     * @param primitive the primitive value to convert
+     * @param context   the context of the conversion
      *
-     * @return the complex object instance
+     * @return the complex object corresponding to the primitive value
      */
-
     C fromPrimitive(P primitive, PersistentDataAdapterContext context);
 
     /**
-     * A default implementation that simply exists to pass on the retrieved or
-     * inserted value to the next layer.
-     * <p>
-     * This implementation does not add any kind of logic, but is used to
-     * provide default implementations for the primitive types.
+     * A default implementation of {@link PersistentDataType} for primitive types where no conversion is needed.
+     * The value is passed as is without transformation.
      *
-     * @param <P> the generic type of the primitive objects
+     * @param <P> the type of the primitive object
      */
     @RequiredArgsConstructor
     class Primitive<P> implements PersistentDataType<P, P> {
@@ -160,9 +156,8 @@ public interface PersistentDataType<P, C> {
     }
 
     /**
-     * A convenience implementation to convert between Byte and Boolean as there is
-     * no native implementation for booleans. <br>
-     * Any byte value not equal to 0 is considered to be true.
+     * A special implementation to convert between Byte and Boolean, as there is no native implementation for booleans.
+     * Any byte value not equal to 0 is considered true.
      */
     class Boolean implements PersistentDataType<Byte, java.lang.Boolean> {
         @Override
