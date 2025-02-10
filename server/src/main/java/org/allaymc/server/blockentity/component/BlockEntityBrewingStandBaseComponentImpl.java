@@ -60,7 +60,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             container.addOnSlotChangeListener(finalI, item -> {
                 var currentBlockState = getDimension().getBlockState(position);
                 var values = currentBlockState.getBlockType().getProperties().values();
-                currentBlockState = currentBlockState.setProperty(values.toArray(new BlockPropertyType[0])[finalI - 1], item != ItemAirStack.AIR_STACK);
+                currentBlockState = currentBlockState.setPropertyValue(values.toArray(new BlockPropertyType[0])[finalI - 1], item != ItemAirStack.AIR_STACK);
                 getDimension().setBlockState(
                         position, currentBlockState,
                         0, true, true, false

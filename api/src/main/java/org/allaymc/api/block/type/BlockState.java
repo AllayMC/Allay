@@ -71,7 +71,7 @@ public interface BlockState {
      *
      * @throws IllegalArgumentException if the property value is not supported by this block type.
      */
-    BlockState setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
+    BlockState setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
 
     /**
      * Set a specific property type's value.
@@ -83,7 +83,7 @@ public interface BlockState {
      *
      * @throws IllegalArgumentException if the property type or value is not supported by this block type
      */
-    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setProperty(PROPERTY property, DATATYPE value);
+    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setPropertyValue(PROPERTY property, DATATYPE value);
 
     /**
      * Set multiple property values at once.
@@ -94,7 +94,7 @@ public interface BlockState {
      *
      * @throws IllegalArgumentException if the property values are not supported by this block type.
      */
-    BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
+    BlockState setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     long unsignedBlockStateHash();
 

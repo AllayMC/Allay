@@ -64,7 +64,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
-        blockState = blockState.setProperty(DIRECTION_4, DOOR_DIRECTION.get(face));
+        blockState = blockState.setPropertyValue(DIRECTION_4, DOOR_DIRECTION.get(face));
 
         var leftBlockState = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos));
         var rightBlockState = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos));
@@ -72,18 +72,18 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         var hingeOnLeft = leftBlockState.getBlockType() == getBlockType() ||
                           (!rightBlockState.getBlockStateData().isTransparent() && leftBlockState.getBlockStateData().isTransparent());
         if (hingeOnLeft) { // Door hinge
-            blockState = blockState.setProperty(DOOR_HINGE_BIT, true);
+            blockState = blockState.setPropertyValue(DOOR_HINGE_BIT, true);
         }
 
         dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
-                blockState.setProperty(UPPER_BLOCK_BIT, false),
+                blockState.setPropertyValue(UPPER_BLOCK_BIT, false),
                 placementInfo
         ); //Bottom
 
         dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(),
-                blockState.setProperty(UPPER_BLOCK_BIT, true),
+                blockState.setPropertyValue(UPPER_BLOCK_BIT, true),
                 placementInfo
         ); //Top
 

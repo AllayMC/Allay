@@ -23,21 +23,21 @@ public final class BlockPlaceHelper {
         if (abs(player.getLocation().x() - placeBlockPos.x()) < 2 && abs(player.getLocation().z() - placeBlockPos.z()) < 2) {
             var y = player.getLocation().y() + player.getEyeHeight();
             if (y - placeBlockPos.y() > 2) {
-                blockState = blockState.setProperty(FACING_DIRECTION, BlockFace.UP.ordinal());
+                blockState = blockState.setPropertyValue(FACING_DIRECTION, BlockFace.UP.ordinal());
             } else if (placeBlockPos.y() - y > 0) {
-                blockState = blockState.setProperty(FACING_DIRECTION, BlockFace.DOWN.ordinal());
+                blockState = blockState.setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal());
             } else {
-                blockState = blockState.setProperty(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
+                blockState = blockState.setPropertyValue(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
             }
         } else {
-            blockState = blockState.setProperty(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
+            blockState = blockState.setPropertyValue(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
         }
         return blockState;
     }
 
     public static BlockState processPillarAxisProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) return blockState;
-        return blockState.setProperty(PILLAR_AXIS, switch (placementInfo.blockFace()) {
+        return blockState.setPropertyValue(PILLAR_AXIS, switch (placementInfo.blockFace()) {
             case EAST, WEST -> PillarAxis.X;
             case DOWN, UP -> PillarAxis.Y;
             case NORTH, SOUTH -> PillarAxis.Z;
@@ -46,7 +46,7 @@ public final class BlockPlaceHelper {
 
     public static BlockState processGroundSignDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) return blockState;
-        blockState = blockState.setProperty(BlockPropertyTypes.GROUND_SIGN_DIRECTION.createValue(
+        blockState = blockState.setPropertyValue(BlockPropertyTypes.GROUND_SIGN_DIRECTION.createValue(
                 CompassRoseDirection.getClosestFromYaw(placementInfo.player().getLocation().yaw()).getIndex()
         ));
         return blockState;
@@ -54,7 +54,7 @@ public final class BlockPlaceHelper {
 
     public static BlockState processMinecraftCardinalDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) return blockState;
-        blockState = blockState.setProperty(
+        blockState = blockState.setPropertyValue(
                 MINECRAFT_CARDINAL_DIRECTION,
                 placementInfo.player().getHorizontalFace().opposite().toMinecraftCardinalDirection()
         );

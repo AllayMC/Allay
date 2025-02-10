@@ -62,6 +62,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved inner class `ItemArmorBaseComponent#ArmorType` to package `org.allaymc.api.item.data`.
 - (API) Changed the default value of `ServerSettings#GenericSettings#defaultPermission` to `PlayerPermission.MEMBER`.
 - (API) `VoxelShape` have being refactored. Now it doesn't allow using `vacancy`, this change is required by physics engine to fix some bugs.
+- (API) Renamed `BlockState#setProperty` and `BlockState#setProperties` to `BlockState#setPropertyValue` and `BlockState#setPropertyValues` to match the getter methods.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
 - Server won't crash if failed to create world generator. Void world generator will be used instead.

@@ -49,9 +49,9 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
 
         var targetBlock = dimension.getBlockState(placementInfo.clickedBlockPos());
         if (targetBlock.getBlockStateData().isSolid()) {
-            blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
+            blockState = blockState.setPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
         } else {
-            blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
+            blockState = blockState.setPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
             var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
             if (!downBlock.getBlockStateData().isSolid()) return false;
         }

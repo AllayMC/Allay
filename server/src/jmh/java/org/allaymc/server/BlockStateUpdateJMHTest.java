@@ -30,12 +30,12 @@ public class BlockStateUpdateJMHTest {
 
     @Benchmark
     public void test1() {
-        observer = observer.setProperty(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
+        observer = observer.setPropertyValue(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
     }
 
     @Benchmark
     public void test2() {
-        observer = observer.setProperty(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
-        observer = observer.setProperty(BlockPropertyTypes.POWERED_BIT, true);
+        observer = observer.setPropertyValue(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
+        observer = observer.setPropertyValue(BlockPropertyTypes.POWERED_BIT, true);
     }
 }

@@ -37,7 +37,7 @@ public class BlockRodBaseComponentImpl extends BlockBaseComponentImpl {
             face = face.opposite();
         }
 
-        blockState = blockState.setProperty(FACING_DIRECTION, face.ordinal());
+        blockState = blockState.setPropertyValue(FACING_DIRECTION, face.ordinal());
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
