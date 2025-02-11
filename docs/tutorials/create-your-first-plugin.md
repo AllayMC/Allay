@@ -59,3 +59,10 @@ gradlew shadowJar
 And this command will produce a file named `MyPlugin-1.0.0-shaded.jar` in the `build/libs` directory.
 Copying this file to the `plugins` directory of your Allay server, and start the server
 to check if your plugin loads and operates as expected.
+
+You can also use the gradle task `runServer` to start the server and test your plugin if your plugin is using `JavaPluginTemplate`.
+This task will download server jar file, build your plugin and move the built plugin to the `plugins` directory and then start the server:
+
+```shell
+gradlew runServer
+```
