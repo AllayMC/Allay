@@ -92,7 +92,7 @@ public class AllayWorldGenerator implements WorldGenerator {
     }
 
     public void startTick() {
-        Thread.ofPlatform().name("Population Queue Processing Thread").start(() -> {
+        Thread.ofPlatform().name("Population Queue Processing Thread - " + dimension.getWorld().getWorldData().getDisplayName()).start(() -> {
             while (dimension.getWorld().isRunning()) {
                 processPopulationQueue();
             }
@@ -123,19 +123,20 @@ public class AllayWorldGenerator implements WorldGenerator {
             }
 
             var chunkFuture = entry.chunkFuture();
+            var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
             noiseFuture.thenAcceptAsync($ -> {
                 statusNoisedToPopulated(chunk);
                 releasePopulationLock(chunk.getX(), chunk.getZ());
                 statusPopulatedToFinished(chunk);
-                var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
                 // Remove recorded futures
-                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setChunkSetCallback(success -> {
+                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setChunkSetCallback(() -> {
                     // The stored futures should always being removed
                     chunkNoiseFutures.remove(chunkHash);
                     chunkFutures.remove(chunkHash);
                 });
                 chunkFuture.complete(chunk);
             }, computeThreadPool).exceptionally(e -> {
+                // TODO: unsafe here, locks should be released
                 log.error("Error while processing population queue! Chunk {}, {}", chunk.getX(), chunk.getZ(), e);
                 chunkFuture.complete(AllayUnsafeChunk.builder().newChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
                 return null;

@@ -52,8 +52,11 @@ public final class AllayChunkService implements ChunkService {
     @Setter
     private int removeUnneededChunkCycle;
 
-    private final Map<Long, Chunk> loadedChunks;
-    private final Map<Long, CompletableFuture<Chunk>> loadingChunks;
+    /**
+     * A map which holds the loading and loaded chunks. The status of {@code CompletableFuture}
+     * represents the status of the chunk (loading or loaded).
+     */
+    private final Map<Long, CompletableFuture<Chunk>> chunks;
     private final Set<Long> keepLoadingChunks;
     private final Map<Long, Integer> unusedChunkClearCountDown;
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers;
@@ -68,8 +71,7 @@ public final class AllayChunkService implements ChunkService {
         this.worldGenerator = worldGenerator;
         this.worldStorage = worldStorage;
         this.removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
-        this.loadedChunks = new NonBlockingHashMapLong<>();
-        this.loadingChunks = new NonBlockingHashMapLong<>();
+        this.chunks = new NonBlockingHashMapLong<>();
         this.keepLoadingChunks = new NonBlockingHashSet<>();
         this.unusedChunkClearCountDown = new NonBlockingHashMapLong<>();
         this.chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
@@ -89,7 +91,13 @@ public final class AllayChunkService implements ChunkService {
     }
 
     private void tickChunks(long currentTick) {
-        for (Chunk chunk : loadedChunks.values()) {
+        for (var future : chunks.values()) {
+            if (!future.isDone()) {
+                continue;
+            }
+
+            var chunk = future.resultNow();
+
             if (!shouldTickChunk(chunk)) {
                 continue;
             }
@@ -119,7 +127,7 @@ public final class AllayChunkService implements ChunkService {
     }
 
     public void sendChunkPackets() {
-        loadedChunks.values().forEach(chunk -> ((AllayUnsafeChunk) chunk.toUnsafeChunk()).sendChunkPackets());
+        forEachLoadedChunks(chunk -> ((AllayUnsafeChunk) chunk.toUnsafeChunk()).sendChunkPackets());
     }
 
     private void tickChunkLoaders() {
@@ -161,48 +169,32 @@ public final class AllayChunkService implements ChunkService {
         });
 
         // Add unused chunk to the clear countdown map
-        loadedChunks.forEach((chunkHash, loadedChunk) -> {
-            if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
+        forEachLoadedChunks(chunk -> {
+            var chunkHash = chunk.computeChunkHash();
+            if (chunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
                 unusedChunkClearCountDown.put(chunkHash, removeUnneededChunkCycle);
             }
         });
     }
 
-    private void setChunk(int x, int z, Chunk chunk) {
-        var chunkHash = HashUtils.hashXZ(x, z);
-        if (loadedChunks.putIfAbsent(chunkHash, chunk) != null) {
-            throw new IllegalStateException("Trying to set a chunk (" + x + "," + z + ") which is already loaded");
-        }
-    }
-
     @Override
     public Chunk getChunk(int x, int z) {
-        return loadedChunks.get(HashUtils.hashXZ(x, z));
+        return getChunk(HashUtils.hashXZ(x, z));
     }
 
     @Override
     public Chunk getChunk(long chunkHash) {
-        return loadedChunks.get(chunkHash);
-    }
-
-    @Override
-    public CompletableFuture<Chunk> getChunkLoadingFuture(int x, int z) {
-        return loadingChunks.get(HashUtils.hashXZ(x, z));
-    }
-
-    @Override
-    public Chunk getOrLoadChunkSync(int x, int z) {
-        return getOrLoadChunk(x, z).join();
-    }
-
-    @Override
-    public CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
-        var chunk = getChunk(x, z);
-        if (chunk != null) {
-            return CompletableFuture.completedFuture(chunk);
+        var future = chunks.get(chunkHash);
+        if (future != null && future.isDone()) {
+            return future.resultNow();
         }
 
-        return loadChunk(x, z);
+        return null;
+    }
+
+    @Override
+    public CompletableFuture<Chunk> getChunkFuture(int x, int z) {
+        return chunks.get(HashUtils.hashXZ(x, z));
     }
 
     @Override
@@ -228,18 +220,16 @@ public final class AllayChunkService implements ChunkService {
     }
 
     @Override
-    public CompletableFuture<Chunk> loadChunk(int x, int z) {
-        var hashXZ = HashUtils.hashXZ(x, z);
-        if (isChunkLoaded(hashXZ)) {
-            // This is possible when multi threads try to load the same chunk
-            // and the chunk loading speed is very quick that the chunk is loaded
-            // when some threads even haven't check if the chunk is loaded
-            return CompletableFuture.completedFuture(getChunk(hashXZ));
-        }
+    public Chunk getOrLoadChunkSync(int x, int z) {
+        return getOrLoadChunk(x, z).join();
+    }
 
+    @Override
+    public synchronized CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
+        var hashXZ = HashUtils.hashXZ(x, z);
         var future = new CompletableFuture<Chunk>();
-        // Only one thread can successfully put future into loadingChunks, other threads will get the successfully written thread's future
-        var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
+        // Only one thread can successfully put future into chunks, other threads will get the successfully written thread's future
+        var presentValue = chunks.putIfAbsent(hashXZ, future);
         if (presentValue != null) {
             return presentValue;
         }
@@ -259,55 +249,36 @@ public final class AllayChunkService implements ChunkService {
             log.error("Error while generating chunk ({},{}) !", x, z, t);
             return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }).thenAccept(preparedChunk -> {
-            boolean success = true;
             try {
-                ((AllayUnsafeChunk) preparedChunk.toUnsafeChunk()).beforeSetChunk(dimension);
-                setChunk(x, z, preparedChunk);
+                ((AllayUnsafeChunk) preparedChunk.toUnsafeChunk()).onChunkLoad(dimension);
             } catch (Throwable t) {
-                log.error("Error while setting chunk ({},{}) !", x, z, t);
-                success = false;
-            } finally {
-                loadingChunks.remove(hashXZ);
-                ((AllayUnsafeChunk) preparedChunk.toUnsafeChunk()).afterSetChunk(dimension, success);
-                if (success) {
-                    future.complete(preparedChunk);
-                    new ChunkLoadEvent(dimension, preparedChunk).call();
-                } else {
-                    future.complete(null);
-                }
+                log.error("Error while calling onChunkLoad() at chunk ({},{}) !", x, z, t);
+                chunks.remove(hashXZ);
+                future.completeExceptionally(t);
+                return;
             }
+
+            future.complete(preparedChunk);
+            new ChunkLoadEvent(dimension, preparedChunk).call();
         });
         return future;
     }
 
     @Override
-    public boolean isChunkLoaded(int x, int z) {
-        return loadedChunks.containsKey(HashUtils.hashXZ(x, z));
-    }
-
-    @Override
     public boolean isChunkLoaded(long hashXZ) {
-        return loadedChunks.containsKey(hashXZ);
-    }
-
-    @Override
-    public boolean isChunkLoading(int x, int z) {
-        return loadingChunks.containsKey(HashUtils.hashXZ(x, z));
+        var future = chunks.get(hashXZ);
+        return future != null && future.isDone();
     }
 
     @Override
     public boolean isChunkLoading(long hashXZ) {
-        return loadingChunks.containsKey(hashXZ);
-    }
-
-    @Override
-    public boolean isChunkUnloaded(int x, int z) {
-        return isChunkUnloaded(HashUtils.hashXZ(x, z));
+        var future = chunks.get(hashXZ);
+        return future != null && !future.isDone();
     }
 
     @Override
     public boolean isChunkUnloaded(long hashXZ) {
-        return !isChunkLoading(hashXZ) && !isChunkLoaded(hashXZ);
+        return !chunks.containsKey(hashXZ);
     }
 
     @Override
@@ -345,54 +316,56 @@ public final class AllayChunkService implements ChunkService {
 
     @Override
     public void forEachLoadedChunks(Consumer<Chunk> consumer) {
-        loadedChunks.values().forEach(consumer);
+        for (var future : chunks.values()) {
+            if (future.isDone()) {
+                consumer.accept(future.resultNow());
+            }
+        }
     }
 
     @Override
     @UnmodifiableView
     public Collection<Chunk> getLoadedChunks() {
-        return Collections.unmodifiableCollection(loadedChunks.values());
+        return chunks.values().stream().filter(CompletableFuture::isDone).map(CompletableFuture::resultNow).toList();
     }
 
     @Override
     @UnmodifiableView
     public Collection<CompletableFuture<Chunk>> getLoadingChunks() {
-        return Collections.unmodifiableCollection(loadingChunks.values());
+        return chunks.values().stream().filter(future -> !future.isDone()).toList();
     }
 
     @Override
-    public CompletableFuture<Boolean> unloadChunk(int x, int z) {
-        return unloadChunk(HashUtils.hashXZ(x, z));
-    }
+    public synchronized CompletableFuture<Boolean> unloadChunk(long chunkHash) {
+        var future = chunks.get(chunkHash);
+        if (future == null || !future.isDone()) {
+            return CompletableFuture.completedFuture(false);
+        }
 
-    @Override
-    public CompletableFuture<Boolean> unloadChunk(long chunkHash) {
-        var chunk = getChunk(chunkHash);
-        if (chunk == null) return CompletableFuture.completedFuture(false);
+        var event = new ChunkUnloadEvent(dimension, future.resultNow());
+        if (!event.call()) {
+            return CompletableFuture.completedFuture(false);
+        }
 
-        var event = new ChunkUnloadEvent(dimension, chunk);
-        if (!event.call()) return CompletableFuture.completedFuture(false);
+        chunks.remove(chunkHash);
 
-        loadedChunks.remove(chunkHash);
-        chunk.getEntities().forEach((runtimeId, entity) -> {
-            entity.despawnFromAll();
-            ((AllayEntityPhysicsService) dimension.getEntityPhysicsService()).removeEntity(entity);
-        });
-        ((AllayLightService) dimension.getLightService()).onChunkUnload(chunk);
+        var chunk = future.resultNow();
+        var futureReturned = new CompletableFuture<Boolean>();
 
-        var future = new CompletableFuture<Boolean>();
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).onChunkUnload(dimension);
         worldStorage.writeChunk(chunk)
                 .exceptionally(t -> {
-                    future.complete(false);
+                    futureReturned.complete(false);
                     return null;
                 })
-                .thenRun(() -> future.complete(true));
-        return future;
+                .thenRun(() -> futureReturned.complete(true));
+
+        return futureReturned;
     }
 
     @Override
     public CompletableFuture<Void> unloadAllChunks() {
-        return CompletableFuture.allOf(loadedChunks.keySet().stream().map(this::unloadChunk).toArray(CompletableFuture[]::new));
+        return CompletableFuture.allOf(chunks.keySet().stream().map(this::unloadChunk).toArray(CompletableFuture[]::new));
     }
 
     private final class ChunkLoaderManager {
@@ -519,7 +492,7 @@ public final class AllayChunkService implements ChunkService {
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
                     if (isChunkUnloaded(chunkHash)) {
-                        loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
+                        getOrLoadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
                     }
                     chunkSendingQueue.enqueue(chunkHash);
                     continue;

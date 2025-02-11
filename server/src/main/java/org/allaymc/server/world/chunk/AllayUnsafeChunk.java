@@ -32,6 +32,7 @@ import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -47,7 +48,6 @@ import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -88,10 +88,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final Queue<ChunkPacketEntry> chunkPacketQueue;
     protected final AllayChunk safeChunk;
 
-    // The callback to be called when the chunk is loaded into the world
-    // The provided boolean value indicated whether the chunk is set successfully
     @Setter
-    protected Consumer<Boolean> chunkSetCallback;
+    protected Runnable chunkSetCallback;
     @Setter
     protected BlockChangeCallback blockChangeCallback;
     @Getter
@@ -239,11 +237,25 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return (this.updateLCG = (this.updateLCG * 3) ^ LCG_CONSTANT);
     }
 
-    public void beforeSetChunk(Dimension dimension) {
+    public void onChunkLoad(Dimension dimension) {
+        if (chunkSetCallback != null) {
+            chunkSetCallback.run();
+        }
+
         if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
             for (var nbt : blockEntityNbtList) {
-                var blockEntity = BlockEntityHelper.fromNBT(dimension, nbt);
-                if (blockEntity == null) continue;
+                BlockEntity blockEntity;
+                try {
+                    blockEntity = BlockEntityHelper.fromNBT(dimension, nbt);
+                } catch (Throwable t) {
+                    log.error("Error while loading block entity from NBT", t);
+                    continue;
+                }
+
+                if (blockEntity == null) {
+                    // blockEntity will be null if the entity type is unknown
+                    continue;
+                }
 
                 var position = blockEntity.getPosition();
                 var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
@@ -252,20 +264,22 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
             blockEntityNbtList = null;
         }
-    }
-
-    public void afterSetChunk(Dimension dimension, boolean success) {
-        if (chunkSetCallback != null) {
-            chunkSetCallback.accept(success);
-        }
-        if (!success) {
-            return;
-        }
 
         if (entityNbtList != null && !entityNbtList.isEmpty()) {
             for (var nbt : entityNbtList) {
-                var entity = EntityHelper.fromNBT(dimension, nbt);
-                if (entity == null) continue;
+                Entity entity;
+                try {
+                    entity = EntityHelper.fromNBT(dimension, nbt);
+                } catch (Throwable t) {
+                    log.error("Error while loading entity from NBT", t);
+                    continue;
+                }
+
+                if (entity == null) {
+                    // entity will be null if the entity type is unknown
+                    continue;
+                }
+
                 dimension.getEntityService().addEntity(entity);
             }
             entityNbtList = null;
@@ -279,6 +293,15 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         });
 
         loaded = true;
+    }
+
+    public void onChunkUnload(Dimension dimension) {
+        entities.forEach((runtimeId, entity) -> {
+            // NOTICE: shouldn't use despawn() method here, because entities should be kept in the chunk so that they will be saved
+            entity.despawnFromAll();
+            ((AllayEntityPhysicsService) dimension.getEntityPhysicsService()).removeEntity(entity);
+        });
+        ((AllayLightService) dimension.getLightService()).onChunkUnload(safeChunk);
     }
 
     @Override
