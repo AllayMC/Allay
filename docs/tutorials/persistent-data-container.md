@@ -30,7 +30,7 @@ To store data in the PDC, there are a few things you need first. The first is a 
 the data. The second is a `PersistentDataContainer`, which is the object you want to store the data on. The third is the
 data itself.
 
-```java linenums="1" hl_lines="7 11"
+```java linenums="1" hl_lines="8 12"
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataType;
 import org.allaymc.api.utils.Identifier;
@@ -50,8 +50,10 @@ public class Example {
 !!! tip
 
     It is considered good practice to reuse `Identifier` objects. They can be constructed with either:
+
     - A `Plugin` instance and a `String` identifier
     - A `String` namespace and a `String` identifier
+
     The first option is often preferred as it will automatically use the plugin's namespace.
     However, the second option can be used if you want to use a different namespace or access the data from another plugin.
 
@@ -59,7 +61,7 @@ public class Example {
 
 To get data from the PDC, you need to know the `Identifier` and the `PersistentDataType` of the data.
 
-```java linenums="1" hl_lines="12-13"
+```java linenums="1" hl_lines="13-14"
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataType;
 import org.allaymc.api.utils.Identifier;
@@ -120,9 +122,12 @@ The PDC supports a wide range of data types, such as:
   List<String> strings = container.get(key, PersistentDataType.LIST.strings());
   ```
 
-!!! tip Boolean `PersistentDataType`
+!!! tip
+
+    ## Boolean `PersistentDataType`
 
     The `Boolean` PDC type exists for convenience
+
     - you cannot make more complex types distill to a `Boolean`.
 
 ## Custom data types
@@ -181,7 +186,7 @@ public class UUIDDataType implements PersistentDataType<byte[], UUID> {
 
 !!! caution
 
-    Data is **not** copied across holders for you, and needs to be ****manually**** copied if 'moving' between `PersistentDataHolders`.
+    Data is **not** copied across holders for you, and needs to be **manually** copied if 'moving' between `PersistentDataHolders`.
     
     
     E.g. Placing an ItemStack as a Block (with a BlockEntity) **does not** copy over PDC data.
