@@ -119,4 +119,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityEnderChestBaseComponentImpl::new, BlockEntityEnderChestBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initFlowerPot() {
+        BlockEntityTypes.FLOWER_POT = AllayBlockEntityType
+                .builder(BlockEntityFlowerPotImpl.class)
+                .name(BlockEntityId.FLOWER_POT)
+                .addComponent(BlockEntityFlowerPotBaseComponentImpl::new, BlockEntityFlowerPotBaseComponentImpl.class)
+                .build();
+    }
 }
