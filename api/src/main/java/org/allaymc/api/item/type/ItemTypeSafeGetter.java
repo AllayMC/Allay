@@ -3,6 +3,7 @@ package org.allaymc.api.item.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.updater.item.ItemStateUpdater_1_21_50;
 import org.allaymc.updater.item.ItemStateUpdaters;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -71,7 +72,7 @@ public class ItemTypeSafeGetter {
          * @return The item type.
          */
         public ItemType<?> itemType() {
-            var updatedNbt = ItemStateUpdaters.updateItemState(nbtMapBuilder.build(), ItemStateUpdaters.LATEST_VERSION);
+            var updatedNbt = ItemStateUpdaters.updateItemState(nbtMapBuilder.build(), ItemStateUpdater_1_21_50.INSTANCE.getVersion());
             var itemType = Registries.ITEMS.get(new Identifier(updatedNbt.getString("Name")));
             if (itemType == null) {
                 throw new IllegalArgumentException("Unknown item type " + updatedNbt.getString("Name"));
