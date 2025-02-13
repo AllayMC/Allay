@@ -8,6 +8,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFlowerPot;
+import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
@@ -60,7 +61,7 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
         var plant = flowerPot.getPlantItem();
         if (plant != null && itemStack.getItemType() == ItemTypes.AIR) {
             flowerPot.clearPlant();
-            player.dropItemInPlayerPos(plant);
+            player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(plant);
             return true;
         } else if (plant == null && flowerPot.setPlantItem(itemStack)) {
             player.tryConsumeItemInHand();
