@@ -13,6 +13,7 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.type.AbstractEnchantmentProtectionType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -30,7 +31,7 @@ import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 /**
  * @author daoge_cmd
  */
-public interface ItemBaseComponent extends ItemComponent {
+public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
     int EMPTY_STACK_NETWORK_ID = 0;
 
@@ -243,23 +244,6 @@ public interface ItemBaseComponent extends ItemComponent {
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * Get the custom NBT content.
-     * <p>
-     * Custom nbt content is stored in the item extra tag, which
-     * plugin can store some custom data in it.
-     *
-     * @return The custom NBT content.
-     */
-    NbtMap getCustomNBTContent();
-
-    /**
-     * Set the custom NBT content.
-     *
-     * @param customNBTContent The custom NBT content.
-     */
-    void setCustomNBTContent(NbtMap customNBTContent);
-
-    /**
      * Called when player right-click a block no matter the return value of {@code player.isUsingItemOnBlock()}.
      *
      * @param dimension     The dimension the player is in.
@@ -361,27 +345,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @return The NBT.
      */
-    default NbtMap saveNBT() {
-        var builder = NbtMap.builder()
-                .putByte("Count", (byte) getCount())
-                .putShort("Damage", (short) getMeta())
-                .putString("Name", getItemType().getIdentifier().toString());
-
-        var extraTag = saveExtraTag();
-        if (extraTag != null) {
-            builder.putCompound("tag", extraTag);
-        }
-
-        var blockState = toBlockState();
-        if (blockState != null) {
-            builder.put("Block", blockState.getBlockStateTag());
-        }
-
-        // TODO: CanDestroy
-        // TODO: CanPlaceOn
-
-        return builder.build();
-    }
+    NbtMap saveNBT();
 
     /**
      * Calculate the attack damage.

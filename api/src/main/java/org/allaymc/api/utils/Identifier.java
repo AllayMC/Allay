@@ -1,9 +1,12 @@
 package org.allaymc.api.utils;
 
+import org.allaymc.api.plugin.Plugin;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Objects;
 
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 import static org.allaymc.api.utils.IdentifierUtils.isNamespaceValid;
@@ -15,6 +18,10 @@ import static org.allaymc.api.utils.IdentifierUtils.isPathValid;
 public record Identifier(String namespace, String path) implements Cloneable {
     public static final String NAMESPACE_SEPARATOR = ":";
     public static final String DEFAULT_NAMESPACE = "minecraft";
+
+    public Identifier(Plugin plugin, String path) {
+        this(plugin.getPluginContainer().descriptor().getName(), path);
+    }
 
     public Identifier(String[] id) {
         this(id[0], id[1]);
@@ -39,18 +46,18 @@ public record Identifier(String namespace, String path) implements Cloneable {
         return this.namespace + NAMESPACE_SEPARATOR + this.path;
     }
 
+    @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
+        if (!(o instanceof Identifier(String namespace1, String path1))) {
+            return false;
         }
-        if (o instanceof Identifier(String namespace1, String path1)) {
-            return this.namespace.equals(namespace1) && this.path.equals(path1);
-        }
-        return false;
+
+        return Objects.equals(path, path1) && Objects.equals(namespace, namespace1);
     }
 
+    @Override
     public int hashCode() {
-        return 31 * this.namespace.hashCode() + this.path.hashCode();
+        return Objects.hash(namespace, path);
     }
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")

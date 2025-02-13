@@ -7,11 +7,14 @@ import org.allaymc.api.eventbus.event.world.DifficultyChangeEvent;
 import org.allaymc.api.eventbus.event.world.GameRuleChangeEvent;
 import org.allaymc.api.eventbus.event.world.SpawnPointChangeEvent;
 import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
+import org.allaymc.api.pdc.PersistentDataContainer;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3i;
@@ -42,6 +45,10 @@ public final class AllayWorldData implements WorldData {
     @Getter
     @Builder.Default
     private long worldStartCount = 0;
+    @Getter
+    @Setter
+    @Builder.Default
+    private PersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
 
     public void setWorld(World world) {
         this.world = world;

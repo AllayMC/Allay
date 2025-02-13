@@ -27,7 +27,6 @@ public class AllayChunk implements Chunk {
     AllayChunk(AllayUnsafeChunk unsafeChunk) {
         this.unsafeChunk = unsafeChunk;
 
-        // Init locks
         var dimensionInfo = unsafeChunk.getDimensionInfo();
         this.blockLocks = new ChunkSectionLocks(dimensionInfo);
         this.biomeLocks = new ChunkSectionLocks(dimensionInfo);

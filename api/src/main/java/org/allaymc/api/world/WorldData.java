@@ -1,6 +1,7 @@
 package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -14,7 +15,7 @@ import java.util.Collection;
  *
  * @author daoge_cmd
  */
-public interface WorldData {
+public interface WorldData extends PersistentDataHolder {
 
     String DEFAULT_WORLD_DISPLAY_NAME = "Bedrock level";
 
