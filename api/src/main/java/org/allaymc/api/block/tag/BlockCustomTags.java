@@ -22,6 +22,8 @@ public interface BlockCustomTags {
 
     BlockTag LEAVES = create("allay:leaves");
 
+    BlockTag POTTABLE_PLANT = create("allay:pottable_plant");
+
     BlockTag WATER = create("allay:water");
 
     BlockTag LEAVES_SUPPORTER = create("allay:leaves_supporter");

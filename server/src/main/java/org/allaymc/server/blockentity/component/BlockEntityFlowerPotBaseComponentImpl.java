@@ -2,6 +2,7 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockStateSafeGetter;
 import org.allaymc.api.blockentity.component.BlockEntityFlowerPotBaseComponent;
@@ -37,8 +38,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     private boolean isValidPlant(BlockState block) {
-        // TODO: FlowerPot::isValidPlant
-        return true;
+        return block.getBlockType().hasBlockTag(BlockCustomTags.POTTABLE_PLANT);
     }
 
     @Override
