@@ -7,9 +7,9 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockStateSafeGetter;
 import org.allaymc.api.blockentity.component.BlockEntityFlowerPotBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.joml.Vector3d;
 
 /**
  * @author Cdm2883
@@ -47,20 +47,18 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
 
         var position = event.getCurrentBlockState().pos();
         var dimension = position.dimension();
-        dimension.dropItem(plantBlock.toItemStack(), new Vector3d(
-                position.x() + 0.5,
-                position.y() + 0.5,
-                position.z() + 0.5
-        ));
+        dimension.dropItem(plantBlock.toItemStack(), MathUtils.center(position));
         plantBlock = null;
     }
 
     @Override
     public NbtMap saveNBT() {
-        var builder = super.saveNBT().toBuilder();
-        if (plantBlock != null) builder.putCompound(TAG_PLANT_BLOCK, this.plantBlock.getBlockStateTag());
-        else builder.remove(TAG_PLANT_BLOCK);
-        return builder.build();
+        var savedNbt = super.saveNBT();
+        if (plantBlock != null) savedNbt = savedNbt
+                .toBuilder()
+                .putCompound(TAG_PLANT_BLOCK, this.plantBlock.getBlockStateTag())
+                .build();
+        return savedNbt;
     }
 
     @Override
