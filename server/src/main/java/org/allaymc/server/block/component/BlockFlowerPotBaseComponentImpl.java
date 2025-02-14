@@ -5,6 +5,7 @@ import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFlowerPot;
@@ -49,7 +50,8 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean isValidWeighBlock(BlockState block) {
-        return block.getBlockStateData().isSolid();  // TODO: more vanilla
+        return block.getBlockStateData().collisionShape().isCenterFull(BlockFace.UP)
+               && !block.getBlockType().hasBlockTag(BlockTags.TRAPDOORS);
     }
 
     @Override
