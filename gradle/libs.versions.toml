@@ -3,13 +3,13 @@ log4j = "2.24.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"
-netty = "4.1.117.Final"
+netty = "4.1.118.Final"
 
 [libraries]
 # NBT
 nbt = { group = "org.allaymc", name = "NBT", version = "3.0.10" }
 # Network protocol
-network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta5-SNAPSHOT" }
+network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta6-SNAPSHOT" }
 # State Updater
 stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.50" }
 # Collections
@@ -67,7 +67,7 @@ joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version.ref = "netty" }
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version.ref = "netty" }
 # Configulation lib
-okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.5" }
+okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.6" }
 # Native Operating System and Hardware Information
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.6" }
 # GUI
@@ -82,7 +82,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.1.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.2.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
