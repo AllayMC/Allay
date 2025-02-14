@@ -16,6 +16,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3ic;
@@ -180,6 +181,19 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @return The network item data.
      */
     ItemData toNetworkItemData();
+
+    /**
+     * Get the creative item data.
+     *
+     * @return The creative item data.
+     */
+    default CreativeItemData toCreativeItemData() {
+        var netItem = toNetworkItemData();
+        return CreativeItemData.builder()
+                .item(netItem)
+                .netId(netItem.getNetId())
+                .build();
+    }
 
     /**
      * Check if the item has a stack network id.
