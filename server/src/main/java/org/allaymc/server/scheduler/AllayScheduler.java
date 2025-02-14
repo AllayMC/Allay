@@ -38,8 +38,11 @@ public class AllayScheduler implements Scheduler {
             }
 
             // 2. Run it
-            if (taskInfo.isAsync()) asyncTaskExecutor.submit(() -> runTask(taskInfo));
-            else runTask(taskInfo);
+            if (taskInfo.isAsync()) {
+                asyncTaskExecutor.submit(() -> runTask(taskInfo));
+            } else {
+                runTask(taskInfo);
+            }
         }
     }
 
@@ -73,20 +76,28 @@ public class AllayScheduler implements Scheduler {
         var task = info.getTask();
         try {
             info.setRunning(true);
-            if (!task.onRun()) cancelTask(info);
+            if (!task.onRun()) {
+                cancelTask(info);
+            }
         } catch (Exception exception) {
             task.onError(exception);
             cancelTask(info);
         } finally {
             info.setRunning(false);
             // Run only once
-            if (!info.isRepeating()) cancelTask(info);
-            else addTask(info, false);
+            if (!info.isRepeating()) {
+                cancelTask(info);
+            } else {
+                addTask(info, false);
+            }
         }
     }
 
     protected void cancelTask(RunningTaskInfo info) {
-        if (info.isCancelled()) return;
+        if (info.isCancelled()) {
+            return;
+        }
+
         info.setCancelled(true);
         info.getTask().onCancel();
         taskCount.decrementAndGet();
@@ -99,6 +110,8 @@ public class AllayScheduler implements Scheduler {
     protected void addTask(RunningTaskInfo taskInfo, boolean firstTime) {
         taskInfo.setNextRunTick(tickCounter + (taskInfo.isRepeating() ? taskInfo.getPeriod() : taskInfo.getDelay()));
         queue.offer(taskInfo);
-        if (firstTime) taskCount.incrementAndGet();
+        if (firstTime) {
+            taskCount.incrementAndGet();
+        }
     }
 }

@@ -149,7 +149,10 @@ public class AllayWorld implements World {
             int count = 0;
             do {
                 // The first entry can be null, for why we do that see the callers
-                if (entry == null) continue;
+                if (entry == null) {
+                    continue;
+                }
+
                 if (entry.player.getWorld() != this) {
                     log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getDisplayName(), entry.player.getOriginName());
                 }
@@ -163,7 +166,6 @@ public class AllayWorld implements World {
                 var networkComponent = (EntityPlayerNetworkComponentImpl) playerImpl.getPlayerNetworkComponent();
                 networkComponent.handleDataPacket(entry.packet(), entry.time());
                 count++;
-
             } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);
         } catch (Throwable throwable) {
             log.error("Error while handling sync packet in world {}", this.getWorldData().getDisplayName(), throwable);
@@ -225,7 +227,6 @@ public class AllayWorld implements World {
     }
 
     protected void tickTime(long currentTick) {
-
         if (currentTick >= nextTimeSendTick) {
             if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
                 // Client will always keep time flowing, so we still need to send the
@@ -370,9 +371,7 @@ public class AllayWorld implements World {
 
     @Override
     public Set<Weather> getWeathers() {
-        return effectiveWeathers.isEmpty() ?
-                Set.of(Weather.CLEAR) :
-                Collections.unmodifiableSet(effectiveWeathers);
+        return effectiveWeathers.isEmpty() ? Set.of(Weather.CLEAR) : Collections.unmodifiableSet(effectiveWeathers);
     }
 
     @Override
@@ -387,7 +386,9 @@ public class AllayWorld implements World {
         var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
         newEffectiveWeathers.add(weather);
         var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         effectiveWeathers.add(weather);
         onWeatherUpdate(Set.of(), Set.of(weather));

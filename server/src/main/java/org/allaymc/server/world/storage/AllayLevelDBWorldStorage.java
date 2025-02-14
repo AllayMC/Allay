@@ -25,9 +25,11 @@ import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
+import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.*;
 import org.allaymc.server.world.gamerule.AllayGameRules;
+import org.allaymc.updater.block.BlockStateUpdater_1_21_40;
 import org.allaymc.updater.block.BlockStateUpdaters;
 import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
@@ -74,10 +76,11 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final String TAG_TOTAL_TIME = "Time";
     private static final String TAG_TIME_OF_DAY = "TimeOfDay";
     private static final String TAG_WORLD_START_COUNT = "WorldStartCount";
+    private static final String TAG_PDC = "PDC";
 
     // The following keys are only used in this class.
     // Some of them are written to make the vanilla client
-    // load the world correctly, they are not used in other places
+    // load the world correctly, they aren't used in other places
     private static final String TAG_GENERATOR = "Generator";
     private static final String TAG_RANDOM_SEED = "RandomSeed";
     private static final String TAG_STORAGE_VERSION = "StorageVersion";
@@ -288,6 +291,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             throw new WorldStorageException("LevelDB world storage network version " + networkVersion + " is currently unsupported");
         }
 
+        var pdc = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+        nbt.listenForCompound(TAG_PDC, pdc::putAll);
+
         return AllayWorldData.builder()
                 .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, Server.SETTINGS.genericSettings().defaultDifficulty().ordinal())))
                 .gameType(GameType.from(nbt.getInt(TAG_GAME_TYPE, Server.SETTINGS.genericSettings().defaultGameType().ordinal())))
@@ -296,11 +302,12 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))
                 .timeOfDay(nbt.getInt(TAG_TIME_OF_DAY, WorldData.TIME_SUNRISE))
                 .worldStartCount(nbt.getLong(TAG_WORLD_START_COUNT, 0))
+                .persistentDataContainer(pdc)
                 .gameRules(AllayGameRules.readFromNBT(nbt))
                 .build();
     }
 
-    private static NbtMap writeWorldDataToNBT(AllayWorldData worldData) {
+    private NbtMap writeWorldDataToNBT(AllayWorldData worldData) {
         var builder = NbtMap.builder();
 
         builder.putInt(TAG_DIFFICULTY, worldData.getDifficulty().ordinal());
@@ -312,6 +319,11 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         builder.putLong(TAG_TOTAL_TIME, worldData.getTotalTime());
         builder.putInt(TAG_TIME_OF_DAY, worldData.getTimeOfDay());
         builder.putLong(TAG_WORLD_START_COUNT, worldData.getWorldStartCount());
+
+        var pdc = worldData.getPersistentDataContainer();
+        if (!pdc.isEmpty()) {
+            builder.put(TAG_PDC, pdc.toNbt());
+        }
 
         // NOTICE: the following values are written to let
         // the vanilla client load the world more easily
@@ -422,7 +434,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             blockStateHash = PaletteUtils.fastReadBlockStateHash(input, buffer);
             if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
                 var oldNbtMap = (NbtMap) nbtInputStream.readTag();
-                var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, BlockStateUpdaters.LATEST_VERSION);
+                var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, BlockStateUpdater_1_21_40.INSTANCE.getVersion());
                 // Make sure that tree map is used
                 // If the map inside states nbt is not tree map
                 // the block state hash will be wrong!
@@ -458,11 +470,12 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return sections;
     }
 
-    /*
-     * Bedrock Edition 3d-data saves the height map starting from index 0, so adjustments are made here to accommodate the world's minimum height. For details, see:
-     * See https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
+    /**
+     * Bedrock Edition 3d-data saves the height map starting from index 0,
+     * so adjustments are made here to accommodate the world's minimum height.
+     *
+     * @see <a href="https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115">Biome 3d</a>
      */
-
     private static void serializeHeightAndBiome(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try {

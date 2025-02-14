@@ -133,6 +133,7 @@ nav:
 
   - Tutorials:
       - Create Your First Plugin: tutorials/create-your-first-plugin.md
+      - Persistent Data Container: tutorials/persistent-data-container.md
       - Register Commands: tutorials/register-commands.md
       - Register Event Handlers: tutorials/register-event-listeners.md
       - Schedule Tasks: tutorials/schedule-tasks.md

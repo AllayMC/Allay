@@ -39,6 +39,7 @@ import org.allaymc.server.extension.ExtensionManager;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
+import org.allaymc.server.pdc.AllayPersistentDataTypeRegistry;
 import org.allaymc.server.permission.tree.AllayPermissionTree;
 import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.InternalRegistries;
@@ -239,6 +240,9 @@ public final class Allay {
 
         // Command
         Registries.COMMANDS = new AllayCommandRegistry();
+
+        // Persistent Data Container (PDC)
+        Registries.PERSISTENT_DATA_TYPES = new AllayPersistentDataTypeRegistry();
     }
 
     @VisibleForTesting

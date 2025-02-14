@@ -507,7 +507,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
                 .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId());
-        AllayNbtUtils.writeVector3i(builder, TAG_POS, spawnPoint);
+        AllayNbtUtils.writeVector3i(builder, EntityBaseComponentImpl.TAG_POS, spawnPoint);
         return builder.build();
     }
 
@@ -547,7 +547,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
             return;
         }
-        var pos = AllayNbtUtils.readVector3i(nbt, TAG_POS);
+        var pos = AllayNbtUtils.readVector3i(nbt, EntityBaseComponentImpl.TAG_POS);
         spawnPoint = new Location3i(pos, 0, 0, 0, dimension);
     }
 

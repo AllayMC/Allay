@@ -21,6 +21,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
@@ -47,7 +48,7 @@ import java.util.Set;
 /**
  * @author daoge_cmd
  */
-public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId {
+public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder {
 
     double SPRINTING_MOVEMENT_FACTOR = 1.3;
     double WALKING_MOVEMENT_FACTOR = 1;
