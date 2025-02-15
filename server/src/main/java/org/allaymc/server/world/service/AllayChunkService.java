@@ -249,7 +249,6 @@ public final class AllayChunkService implements ChunkService {
                 ((AllayUnsafeChunk) preparedChunk.toUnsafeChunk()).onChunkLoad(dimension);
             } catch (Throwable t) {
                 log.error("Error while calling onChunkLoad() at chunk ({},{}) !", x, z, t);
-                chunks.remove(hashXZ);
                 return AllayUnsafeChunk.builder().voidChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
             }
 
@@ -363,6 +362,7 @@ public final class AllayChunkService implements ChunkService {
 
     @Override
     public CompletableFuture<Void> unloadAllChunks() {
+        // TODO: shutdown()
         return CompletableFuture.allOf(chunks.keySet().stream().map(this::unloadChunk).toArray(CompletableFuture[]::new));
     }
 
