@@ -28,6 +28,8 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.pdc.PersistentDataContainer;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -35,6 +37,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
+import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -57,15 +60,21 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
-    // The following tag is in extra tag.
+    protected static final String TAG_COUNT = "Count";
     protected static final String TAG_DAMAGE = "Damage";
-    protected static final String TAG_DISPLAY = "display";
     protected static final String TAG_NAME = "Name";
+    protected static final String TAG_EXTRA_TAG = "tag";
+    protected static final String TAG_BLOCK = "Block";
+
+    // The following tag is in extra tag.
+    protected static final String TAG_DURABILITY = "Damage";
+    protected static final String TAG_DISPLAY = "display";
+    protected static final String TAG_CUSTOM_NAME = "Name";
     protected static final String TAG_LORE = "Lore";
     protected static final String TAG_ENCHANTMENT = "ench";
     protected static final String TAG_BLOCK_ENTITY = "BlockEntityTag";
     protected static final String TAG_LOCK_MODE = "minecraft:item_lock";
-    protected static final String TAG_CUSTOM_NBT = "CustomNBT";
+    protected static final String TAG_PDC = "PDC";
 
     private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
 
@@ -96,10 +105,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Getter
     @Setter
     protected ItemLockMode lockMode = ItemLockMode.NONE;
-    // TODO: replace custom nbt content with pdc
     @Getter
     @Setter
-    protected NbtMap customNBTContent = NbtMap.EMPTY;
+    protected PersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+
     @Getter
     @Setter
     protected NbtMap blockEntityNBT;
@@ -131,9 +140,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void loadExtraTag(NbtMap extraTag) {
-        this.durability = extraTag.getInt(TAG_DAMAGE, 0);
+        this.durability = extraTag.getInt(TAG_DURABILITY, 0);
         extraTag.listenForCompound(TAG_DISPLAY, displayNbt -> {
-            this.customName = displayNbt.getString(TAG_NAME);
+            this.customName = displayNbt.getString(TAG_CUSTOM_NAME);
             this.lore = displayNbt.getList(TAG_LORE, NbtType.STRING);
         });
 
@@ -146,7 +155,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         extraTag.listenForByte(TAG_LOCK_MODE, lockMode -> this.lockMode = ItemLockMode.values()[lockMode]);
 
-        extraTag.listenForCompound(TAG_CUSTOM_NBT, customNbt -> this.customNBTContent = customNbt);
+        extraTag.listenForCompound(TAG_PDC, customNbt -> {
+            this.persistentDataContainer.clear();
+            this.persistentDataContainer.putAll(customNbt);
+        });
 
         var event = new CItemLoadExtraTagEvent(extraTag);
         manager.callEvent(event);
@@ -156,12 +168,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public NbtMap saveExtraTag() {
         var nbtBuilder = NbtMap.builder();
         if (durability != 0) {
-            nbtBuilder.putInt(TAG_DAMAGE, durability);
+            nbtBuilder.putInt(TAG_DURABILITY, durability);
         }
 
         var displayBuilder = NbtMap.builder();
         if (!this.customName.isEmpty()) {
-            displayBuilder.put(TAG_NAME, this.customName);
+            displayBuilder.put(TAG_CUSTOM_NAME, this.customName);
         }
         if (!this.lore.isEmpty()) {
             displayBuilder.putList(TAG_LORE, NbtType.STRING, this.lore);
@@ -185,15 +197,37 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             nbtBuilder.putByte(TAG_LOCK_MODE, (byte) lockMode.ordinal());
         }
 
-        // Custom NBT content
-        if (!customNBTContent.isEmpty()) {
-            nbtBuilder.put(TAG_CUSTOM_NBT, customNBTContent);
+        if (!persistentDataContainer.isEmpty()) {
+            nbtBuilder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
 
         var event = new CItemSaveExtraTagEvent(nbtBuilder);
         manager.callEvent(event);
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
+    }
+
+    @Override
+    public NbtMap saveNBT() {
+        var builder = NbtMap.builder()
+                .putByte(TAG_COUNT, (byte) getCount())
+                .putShort(TAG_DAMAGE, (short) getMeta())
+                .putString(TAG_NAME, getItemType().getIdentifier().toString());
+
+        var extraTag = saveExtraTag();
+        if (extraTag != null) {
+            builder.putCompound(TAG_EXTRA_TAG, extraTag);
+        }
+
+        var blockState = toBlockState();
+        if (blockState != null) {
+            builder.put(TAG_BLOCK, blockState.getBlockStateTag());
+        }
+
+        // TODO: CanDestroy
+        // TODO: CanPlaceOn
+
+        return builder.build();
     }
 
     @Override

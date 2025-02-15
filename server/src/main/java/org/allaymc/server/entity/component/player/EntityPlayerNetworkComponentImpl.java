@@ -48,7 +48,6 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
@@ -465,7 +464,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 CREATIVE_CONTENT_PACKET = new CreativeContentPacket();
                 // We should sort it first!
                 var map = new TreeMap<>(Registries.CREATIVE_ITEMS.getContent());
-                CREATIVE_CONTENT_PACKET.setContents(map.values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new));
+                CREATIVE_CONTENT_PACKET.getContents().addAll(map.values().stream().map(ItemStack::toCreativeItemData).toList());
             }
             return CREATIVE_CONTENT_PACKET;
         }

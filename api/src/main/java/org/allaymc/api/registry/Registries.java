@@ -13,6 +13,7 @@ import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
 import org.allaymc.api.item.recipe.impl.PotionMixRecipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
+import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -61,4 +62,7 @@ public final class Registries {
 
     // Command
     public static CommandRegistry COMMANDS;
+
+    // Persistent Data Container (PDC)
+    public static PersistentDataTypeRegistry PERSISTENT_DATA_TYPES;
 }
