@@ -92,7 +92,7 @@ public class AllayWorldGenerator implements WorldGenerator {
     }
 
     public void startTick() {
-        Thread.ofPlatform().name("Population Queue Processing Thread - " + dimension.getWorld().getWorldData().getDisplayName()).start(() -> {
+        Thread.ofVirtual().name("Population Queue Processing Thread - " + dimension.getWorld().getWorldData().getDisplayName()).start(() -> {
             while (dimension.getWorld().isRunning()) {
                 processPopulationQueue();
             }

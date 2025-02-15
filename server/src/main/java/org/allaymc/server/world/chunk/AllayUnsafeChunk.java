@@ -100,11 +100,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     /**
      * Create a new {@link AllayUnsafeChunk}.
      *
-     * @param x                  the x.
-     * @param z                  the z.
+     * @param x                  the x coordinate of the chunk.
+     * @param z                  the z coordinate of the chunk.
      * @param dimensionInfo      the dimension info.
      * @param sections           the sections.
      * @param heightMap          the height map.
+     * @param scheduledUpdates   the scheduled updates.
      * @param state              the state.
      * @param entityNbtList      the entity nbt list, can be {@code null}.
      * @param blockEntityNbtList the block entity nbt list, can be {@code null}
