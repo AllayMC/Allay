@@ -323,7 +323,7 @@ public interface Dimension {
     }
 
     /**
-     * Set the block state at the specified pos.
+     * Set the block state at the specified pos. This method will have no effect if the chunk is not loaded.
      *
      * @param x                 the x coordinate of the block.
      * @param y                 the y coordinate of the block.
@@ -417,14 +417,18 @@ public interface Dimension {
      * @param z     the z coordinate of the block.
      * @param layer the layer which contains the block.
      *
-     * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found.
+     * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found or the chunk is not loaded.
      */
     default BlockState getBlockState(int x, int y, int z, int layer) {
-        if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
+        if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
             return AIR.getDefaultState();
+        }
 
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
-        if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        if (chunk == null) {
+            return AIR.getDefaultState();
+        }
+
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
@@ -467,7 +471,7 @@ public interface Dimension {
     }
 
     /**
-     * For-each the block states at the specified region.
+     * For-each the block states at the specified region. Blocks in unloaded chunks won't be iterated.
      *
      * @param x                  the start x coordinate of the region.
      * @param y                  the start y coordinate of the region.
@@ -501,7 +505,12 @@ public interface Dimension {
                 var localStartZ = Math.max(z - cZ, 0);
                 var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
-                var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
+                var chunk = getChunkService().getChunk(chunkX, chunkZ);
+                if (chunk == null) {
+                    // Chunk is not loaded.
+                    continue;
+                }
+
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
                     if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
                         continue;
@@ -530,7 +539,7 @@ public interface Dimension {
     }
 
     /**
-     * Set the block states at the specified region.
+     * Set the block states at the specified region. Blocks in unloaded chunks won't be set.
      *
      * @param x                  the start x coordinate of the region.
      * @param y                  the start y coordinate of the region.
@@ -565,7 +574,12 @@ public interface Dimension {
                 var localStartZ = Math.max(z - cZ, 0);
                 var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
-                var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
+                var chunk = getChunkService().getChunk(chunkX, chunkZ);
+                if (chunk == null) {
+                    // Chunk is not loaded
+                    continue;
+                }
+
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
                     if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
                         continue;
@@ -621,14 +635,18 @@ public interface Dimension {
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, int layer) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
-        if (chunk == null) return;
+        if (chunk == null) {
+            return;
+        }
 
         var xIndex = x & 15;
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
         var newBlockState = oldBlockState.setPropertyValue(propertyType, value);
-        if (oldBlockState == newBlockState) return;
+        if (oldBlockState == newBlockState) {
+            return;
+        }
 
         chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
     }
@@ -936,11 +954,14 @@ public interface Dimension {
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
      *
-     * @return the block entity at the specified pos, or {@code null} if not found.
+     * @return the block entity at the specified pos. {@code null} will be returned if block entity is not found or the chunk is not loaded.
      */
     default BlockEntity getBlockEntity(int x, int y, int z) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
-        if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        if (chunk == null) {
+            return null;
+        }
+
         return chunk.getBlockEntity(x & 15, y, z & 15);
     }
 
@@ -1255,8 +1276,7 @@ public interface Dimension {
 
     /**
      * Get the height of the highest non-air block at the specified x and z coordinates.
-     * <p>
-     * Please note that this method will load the chunk if it's not loaded.
+     * If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
      *
      * @param x the x coordinate.
      * @param z the z coordinate.
@@ -1265,7 +1285,10 @@ public interface Dimension {
      */
     default int getHeight(int x, int z) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
-        if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        if (chunk == null) {
+            return getDimensionInfo().minHeight();
+        }
+
         return chunk.getHeight(x & 15, z & 15);
     }
 
@@ -1345,7 +1368,7 @@ public interface Dimension {
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
      *
-     * @return the biome at the specified pos.
+     * @return the biome at the specified pos.{@code BiomeId.PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded.
      */
     default BiomeType getBiome(int x, int y, int z) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
@@ -1353,7 +1376,7 @@ public interface Dimension {
 
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+            return BiomeId.PLAINS;
         }
 
         return chunk.getBiome(x & 15, y, z & 15);
@@ -1367,7 +1390,7 @@ public interface Dimension {
     }
 
     /**
-     * Set the biome at the specified pos.
+     * Set the biome at the specified pos. This method will have no effect if the chunk is not loaded.
      *
      * @param x     the x coordinate of the pos.
      * @param y     the y coordinate of the pos.
@@ -1377,7 +1400,7 @@ public interface Dimension {
     default void setBiome(int x, int y, int z, BiomeType biome) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+            return;
         }
 
         chunk.setBiome(x & 15, y, z & 15, biome);

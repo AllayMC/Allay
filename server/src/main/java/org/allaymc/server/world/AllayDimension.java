@@ -69,6 +69,7 @@ public class AllayDimension implements Dimension {
         // There may be new chunk packets during sleeping, let's send them first
         this.chunkService.sendChunkPackets();
 
+        // Ticking
         this.entityService.tick();
         this.chunkService.tick(currentTick);
         this.entityPhysicsService.tick();
@@ -118,7 +119,7 @@ public class AllayDimension implements Dimension {
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+            return;
         }
 
         var xIndex = x & 15;

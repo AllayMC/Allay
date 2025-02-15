@@ -85,7 +85,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that `/alwaysday` command actually do the opposite thing.
 - Several bugs in physics engine, including wrong collision detection and wrong movement calculation are fixed.
 - Gamerule `doDaylightCycle` now works correctly.
-- Fixed touch-mode player (phone player usually) block breaking with "delayed block breaking" option enabled
+- Fixed touch-mode player (phone player usually) block breaking with "delayed block breaking" option enabled.
+- A series of getter/setter method in `Dimension` class now won't load the chunk. This behavior causes a lot of deadlock in the past.
 
 ### Removed
 
