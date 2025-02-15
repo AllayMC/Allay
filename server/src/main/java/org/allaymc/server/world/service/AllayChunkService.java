@@ -227,19 +227,15 @@ public final class AllayChunkService implements ChunkService {
     @Override
     public synchronized CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
         var hashXZ = HashUtils.hashXZ(x, z);
-        var future = new CompletableFuture<Chunk>();
-        // Only one thread can successfully put future into chunks, other threads will get the successfully written thread's future
-        var presentValue = chunks.putIfAbsent(hashXZ, future);
+
+        var presentValue = chunks.get(hashXZ);
         if (presentValue != null) {
             return presentValue;
         }
 
         new ChunkPreLoadEvent(dimension, x, z).call();
 
-        worldStorage.readChunk(x, z, dimension.getDimensionInfo()).exceptionally(t -> {
-            log.error("Error while reading chunk ({},{}) !", x, z, t);
-            return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        }).thenCompose(chunk -> {
+        var future = worldStorage.readChunk(x, z, dimension.getDimensionInfo()).thenCompose(chunk -> {
             if (chunk.getState() != FINISHED) {
                 // Re-generate chunk if it's not fully loaded
                 return getWorldGenerator().generateChunk(x, z);
@@ -247,20 +243,22 @@ public final class AllayChunkService implements ChunkService {
             return CompletableFuture.completedFuture(chunk);
         }).exceptionally(t -> {
             log.error("Error while generating chunk ({},{}) !", x, z, t);
-            return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        }).thenAccept(preparedChunk -> {
+            return AllayUnsafeChunk.builder().voidChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+        }).thenApply(preparedChunk -> {
             try {
                 ((AllayUnsafeChunk) preparedChunk.toUnsafeChunk()).onChunkLoad(dimension);
             } catch (Throwable t) {
                 log.error("Error while calling onChunkLoad() at chunk ({},{}) !", x, z, t);
                 chunks.remove(hashXZ);
-                future.completeExceptionally(t);
-                return;
+                return AllayUnsafeChunk.builder().voidChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
             }
 
-            future.complete(preparedChunk);
             new ChunkLoadEvent(dimension, preparedChunk).call();
+
+            return preparedChunk;
         });
+
+        chunks.put(hashXZ, future);
         return future;
     }
 

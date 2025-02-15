@@ -138,7 +138,7 @@ public class AllayWorldGenerator implements WorldGenerator {
             }, computeThreadPool).exceptionally(e -> {
                 // TODO: unsafe here, locks should be released
                 log.error("Error while processing population queue! Chunk {}, {}", chunk.getX(), chunk.getZ(), e);
-                chunkFuture.complete(AllayUnsafeChunk.builder().newChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
+                chunkFuture.complete(AllayUnsafeChunk.builder().voidChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
                 return null;
             });
         }
@@ -222,10 +222,10 @@ public class AllayWorldGenerator implements WorldGenerator {
      */
     public CompletableFuture<Chunk> generateNoisedChunk(int x, int z) {
         var chunk = AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        return CompletableFuture.supplyAsync(() -> statusEmptyToNoised(chunk), computeThreadPool);
+        return CompletableFuture.supplyAsync(() -> statusNewToNoised(chunk), computeThreadPool);
     }
 
-    private Chunk statusEmptyToNoised(Chunk chunk) {
+    private Chunk statusNewToNoised(Chunk chunk) {
         // Basic terrain
         var generateContext = new NoiseContext(chunk.toUnsafeChunk());
         for (var noiser : noisers) {

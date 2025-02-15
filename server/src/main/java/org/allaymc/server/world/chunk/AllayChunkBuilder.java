@@ -110,4 +110,14 @@ public class AllayChunkBuilder {
                 ChunkState.NEW, null, null
         );
     }
+
+    public AllayUnsafeChunk voidChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        return new AllayUnsafeChunk(
+                chunkX, chunkZ, dimensionInfo,
+                createEmptySections(dimensionInfo),
+                new HeightMap((short) dimensionInfo.minHeight()),
+                new NonBlockingHashMap<>(),
+                ChunkState.FINISHED, null, null
+        );
+    }
 }

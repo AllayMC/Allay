@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @ExtendWith(AllayTestExtension.class)
 class AllayChunkTest {
-    final Chunk chunk = AllayUnsafeChunk.builder().newChunk(0, 0, DimensionInfo.OVERWORLD).toSafeChunk();
+    final Chunk chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD).toSafeChunk();
 
     @Test
     void testInvalidGetBlockStateMethodCall() {
