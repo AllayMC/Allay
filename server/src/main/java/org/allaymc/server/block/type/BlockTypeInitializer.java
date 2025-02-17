@@ -1347,4 +1347,14 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockCactusBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initFlowerPot() {
+        BlockTypes.FLOWER_POT = AllayBlockType
+                .builder(BlockFlowerPotBehaviorImpl.class)
+                .vanillaBlock(BlockId.FLOWER_POT)
+                .setProperties(BlockPropertyTypes.UPDATE_BIT)
+                .bindBlockEntity(BlockEntityTypes.FLOWER_POT)
+                .setBaseComponentSupplier(BlockFlowerPotBaseComponentImpl::new)
+                .build();
+    }
 }
