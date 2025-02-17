@@ -24,6 +24,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -139,16 +140,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return new AllayChunkBuilder();
     }
 
-    private static void checkXZ(int x, int z) {
+    public static void checkXZ(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
-    private void checkY(int y) {
+    public void checkY(int y) {
         Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
     }
 
-    private void checkXYZ(int x, int y, int z) {
+    public void checkSectionY(int sectionY) {
+        Preconditions.checkArgument(sectionY >= dimensionInfo.minSectionY() && sectionY <= dimensionInfo.maxSectionY());
+    }
+
+    public void checkXYZ(int x, int y, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         checkY(y);
         Preconditions.checkArgument(z >= 0 && z <= 15);
@@ -301,7 +306,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public AllayChunkSection getSection(int sectionY) {
-        Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
+        checkSectionY(sectionY);
         return sections[sectionY - this.getDimensionInfo().minSectionY()];
     }
 
@@ -312,7 +317,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
-        Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
+        checkSectionY(sectionY);
         return getBlockEntities().values().stream()
                 .filter(blockEntity -> blockEntity.getPosition().y() >> 4 == sectionY)
                 .collect(Collectors.toUnmodifiableSet());
@@ -327,6 +332,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z) {
+        checkXYZ(x, y, z);
         var scheduledUpdateInfo = scheduledUpdates.get(HashUtils.hashChunkXYZ(x, y, z));
         return scheduledUpdateInfo != null;
     }
@@ -485,7 +491,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public BiomeType getBiome(int x, int y, int z) {
-        checkXYZ(x, y, z);
+        if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
+            return BiomeId.PLAINS;
+        }
+
+        AllayUnsafeChunk.checkXZ(x, z);
         return this.getSection(y >> 4).getBiomeType(x, y & 0xf, z);
     }
 
@@ -518,12 +528,14 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public BlockEntity removeBlockEntity(int x, int y, int z) {
+        checkXYZ(x, y, z);
         var key = HashUtils.hashChunkXYZ(x, y, z);
         return blockEntities.remove(key);
     }
 
     @Override
     public BlockEntity getBlockEntity(int x, int y, int z) {
+        checkXYZ(x, y, z);
         return blockEntities.get(HashUtils.hashChunkXYZ(x, y, z));
     }
 

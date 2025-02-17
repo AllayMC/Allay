@@ -3,9 +3,11 @@ package org.allaymc.server.world.chunk;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -40,6 +42,7 @@ public class AllayChunk implements Chunk {
 
     @Override
     public short getHeight(int x, int z) {
+        AllayUnsafeChunk.checkXZ(x, z);
         short[] height = new short[1];
         applyOperation(chunk -> height[0] = chunk.getHeight(x, z), OperationType.READ, OperationType.NONE);
         return height[0];
@@ -47,6 +50,11 @@ public class AllayChunk implements Chunk {
 
     @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
+        if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
+            return BlockTypes.AIR.getDefaultState();
+        }
+
+        AllayUnsafeChunk.checkXZ(x, z);
         var sectionY = y >> 4;
         blockLocks.lockReadLockAt(sectionY);
         try {
@@ -58,6 +66,8 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
+        unsafeChunk.checkXYZ(x, y, z);
+
         var sectionY = y >> 4;
         blockLocks.lockWriteLockAt(sectionY);
         try {
@@ -69,6 +79,11 @@ public class AllayChunk implements Chunk {
 
     @Override
     public BiomeType getBiome(int x, int y, int z) {
+        if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
+            return BiomeId.PLAINS;
+        }
+
+        AllayUnsafeChunk.checkXZ(x, z);
         var sectionY = y >> 4;
         biomeLocks.lockReadLockAt(sectionY);
         try {
@@ -80,6 +95,8 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void setBiome(int x, int y, int z, BiomeType biomeType) {
+        unsafeChunk.checkXYZ(x, y, z);
+
         var sectionY = y >> 4;
         biomeLocks.lockWriteLockAt(sectionY);
         try {
@@ -103,6 +120,7 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void applyOperationInSection(int sectionY, Consumer<ChunkSection> operation, OperationType block, OperationType biome) {
+        unsafeChunk.checkSectionY(sectionY);
         tryLockSection(sectionY, block, blockLocks);
         tryLockSection(sectionY, biome, biomeLocks);
         try {

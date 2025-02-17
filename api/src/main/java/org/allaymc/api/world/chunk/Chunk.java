@@ -36,6 +36,8 @@ public interface Chunk extends UnsafeChunk {
      * @param operation the operation to be applied in the chunk section.
      * @param block     the operation type of block.
      * @param biome     the operation type of biome.
+     *
+     * @throws IllegalArgumentException if section y is out of range.
      */
     void applyOperationInSection(int sectionY, Consumer<ChunkSection> operation, OperationType block, OperationType biome);
 

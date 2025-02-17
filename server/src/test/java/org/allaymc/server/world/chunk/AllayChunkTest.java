@@ -22,8 +22,46 @@ class AllayChunkTest {
     final Chunk chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD).toSafeChunk();
 
     @Test
-    void testInvalidGetBlockStateMethodCall() {
+    void testInvalidGetXXXMethodCall() {
         assertEquals(AIR.getDefaultState(), chunk.getBlockState(0, -10000, 0));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getBlockState(-1, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getBlockState(16, 0, 16));
+
+        assertEquals(BiomeId.PLAINS, chunk.getBiome(0, -10000, 0));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getBiome(-1, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getBiome(16, 0, 16));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.getBlockEntity(0, -10000, 0));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getBlockEntity(-1, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getBlockEntity(16, 0, 16));
+    }
+
+    @Test
+    void testInvalidSetXXXMethodCall() {
+        assertThrows(IllegalArgumentException.class, () -> chunk.removeBlockEntity(0, -10000, 0));
+        assertThrows(IllegalArgumentException.class, () -> chunk.removeBlockEntity(-1, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.removeBlockEntity(16, 0, 16));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.addScheduledUpdate(0, -10000, 0, 5));
+        assertThrows(IllegalArgumentException.class, () -> chunk.addScheduledUpdate(-1, 0, -1, 5));
+        assertThrows(IllegalArgumentException.class, () -> chunk.addScheduledUpdate(16, 0, 16, 5));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.hasScheduledUpdate(0, -10000, 0));
+        assertThrows(IllegalArgumentException.class, () -> chunk.hasScheduledUpdate(-1, 0, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.hasScheduledUpdate(16, 0, 16));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBlockState(0, -10000, 0, AIR.getDefaultState()));
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBlockState(-1, 0, -1, AIR.getDefaultState()));
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBlockState(16, 0, 16, AIR.getDefaultState()));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.getHeight(-1, -1));
+        assertThrows(IllegalArgumentException.class, () -> chunk.getHeight(16, 16));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(0, -10000, 0, BiomeId.PLAINS));
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(-1, 0, -1, BiomeId.PLAINS));
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(16, 0, 16, BiomeId.PLAINS));
+
+        assertThrows(IllegalArgumentException.class, () -> chunk.getSection(114514));
     }
 
     @Test

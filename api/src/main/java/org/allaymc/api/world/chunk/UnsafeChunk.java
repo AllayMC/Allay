@@ -188,6 +188,8 @@ public interface UnsafeChunk {
      * @param z the z coordinate of the block entity.
      *
      * @return the removed block entity, or {@code null} if not found.
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range.
      */
     BlockEntity removeBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
@@ -199,6 +201,8 @@ public interface UnsafeChunk {
      * @param z the z coordinate of the block entity.
      *
      * @return the block entity in this chunk, or {@code null} if not found.
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range.
      */
     BlockEntity getBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
@@ -222,7 +226,7 @@ public interface UnsafeChunk {
      * <p>
      * Since the array index starts at 0, the maximum value is 59
      *
-     * @param sectionY the y
+     * @param sectionY the y value of the section.
      *
      * @return the section
      */
@@ -236,6 +240,8 @@ public interface UnsafeChunk {
      * @param y    the y coordinate of the pos.
      * @param z    the z coordinate of the pos.
      * @param time the scheduled time of the scheduled update.
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range.
      */
     void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, long time);
 
@@ -247,6 +253,8 @@ public interface UnsafeChunk {
      * @param z     the z coordinate of the pos.
      *
      * @return {@code true} if the pos has a scheduled update, otherwise {@code false}.
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range.
      */
     boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
@@ -258,6 +266,8 @@ public interface UnsafeChunk {
      * @param z          the z coordinate of the block.
      * @param blockState the block state to set.
      * @param layer      the layer of the block.
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range.
      */
     void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer, boolean send);
 
@@ -283,7 +293,9 @@ public interface UnsafeChunk {
      * @param z     the z coordinate of the block.
      * @param layer the layer of the block.
      *
-     * @return the block state in this chunk.
+     * @return the block state in this chunk, or {@code BlockTypes.AIR.getDefaultState()} if y is out of range.
+     *
+     * @throws IllegalArgumentException if x or z is out of range.
      */
     BlockState getBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer);
 
@@ -301,6 +313,8 @@ public interface UnsafeChunk {
      * @param z the z coordinate of the position.
      *
      * @return the height.
+     *
+     * @throws IllegalArgumentException if x or z is out of range.
      */
     short getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 
@@ -311,6 +325,8 @@ public interface UnsafeChunk {
      * @param y         the y coordinate of the position.
      * @param z         the z coordinate of the position.
      * @param biomeType the biome type.
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range.
      */
     void setBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
 
@@ -321,7 +337,9 @@ public interface UnsafeChunk {
      * @param y the y coordinate of the position.
      * @param z the z coordinate of the position.
      *
-     * @return the biome type.
+     * @return the biome type, or {@link org.allaymc.api.world.biome.BiomeId#PLAINS} if y is out of range.
+     *
+     * @throws IllegalArgumentException if x or z is out of range.
      */
     BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
@@ -330,7 +348,9 @@ public interface UnsafeChunk {
      *
      * @param sectionY the sectionY of the chunk section.
      *
-     * @return the section, should never be {@code null}
+     * @return the section, should never be {@code null}.
+     *
+     * @throws IllegalArgumentException if section y is out of range.
      */
     ChunkSection getSection(int sectionY);
 
