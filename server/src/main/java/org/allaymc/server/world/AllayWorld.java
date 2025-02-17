@@ -82,6 +82,7 @@ public class AllayWorld implements World {
     public AllayWorld(String name, WorldStorage worldStorage) {
         this.name = name;
         this.worldStorage = worldStorage;
+        this.worldStorage.setWorld(this);
         this.worldData = (AllayWorldData) worldStorage.readWorldData();
         this.worldData.setWorld(this);
         this.worldData.increaseWorldStartCount();
