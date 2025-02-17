@@ -31,8 +31,9 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
-        if (face == BlockFace.DOWN && !isValidWeighBlock(neighbor.blockState()))
+        if (face == BlockFace.DOWN && !isValidWeighBlock(neighbor.blockState())) {
             current.pos().dimension().breakBlock(current.pos());
+        }
     }
 
     @Override
@@ -43,23 +44,29 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-        if (!isValidWeighBlock(downBlock)) return false;
+        if (!isValidWeighBlock(downBlock)) {
+            return false;
+        }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
 
     private boolean isValidWeighBlock(BlockState block) {
-        return block.getBlockStateData().collisionShape().isCenterFull(BlockFace.UP)
-               && !block.getBlockType().hasBlockTag(BlockTags.TRAPDOORS);
+        return block.getBlockStateData().collisionShape().isCenterFull(BlockFace.UP) &&
+               !block.getBlockType().hasBlockTag(BlockTags.TRAPDOORS);
     }
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        if (super.onInteract(itemStack, dimension, interactInfo)) return true;
+        if (super.onInteract(itemStack, dimension, interactInfo)) {
+            return true;
+        }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) return false;
+        if (player.isSneaking()) {
+            return false;
+        }
 
         var position = new Position3i(interactInfo.clickedBlockPos(), dimension);
         var flowerPot = blockEntityHolderComponent.getBlockEntity(position);

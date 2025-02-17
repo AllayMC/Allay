@@ -27,7 +27,10 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
 
     @Override
     public boolean trySetPlantBlock(BlockState block) {
-        if (block != null && !isValidPlant(block)) return false;
+        if (block != null && !isValidPlant(block)) {
+            return false;
+        }
+
         plantBlock = block;
 
         var position = getPosition();
@@ -43,7 +46,9 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
 
     @Override
     public void onReplace(CBlockOnReplaceEvent event) {
-        if (plantBlock == null) return;
+        if (plantBlock == null) {
+            return;
+        }
 
         var position = event.getCurrentBlockState().pos();
         var dimension = position.dimension();
@@ -54,11 +59,14 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
     @Override
     public NbtMap saveNBT() {
         var savedNbt = super.saveNBT();
-        if (plantBlock != null) savedNbt = savedNbt
+        if (plantBlock == null) {
+            return savedNbt;
+        }
+
+        return savedNbt
                 .toBuilder()
                 .putCompound(TAG_PLANT_BLOCK, this.plantBlock.getBlockStateTag())
                 .build();
-        return savedNbt;
     }
 
     @Override

@@ -31,7 +31,10 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
      */
     default ItemStack getPlantItem() {
         var block = getPlantBlock();
-        if (block == null) return null;
+        if (block == null) {
+            return null;
+        }
+
         return block.toItemStack();
     }
 
@@ -43,7 +46,10 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
      * @return {@code true} if it set successfully, otherwise {@code false}.
      */
     default boolean setPlantItem(ItemStack item) {
-        if (item == null) return trySetPlantBlock(null);
+        if (item == null) {
+            return trySetPlantBlock(null);
+        }
+
         return trySetPlantBlock(item.toBlockState());
     }
 
