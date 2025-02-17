@@ -26,7 +26,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @Override
-    public boolean setPlantBlock(BlockState block) {
+    public boolean trySetPlantBlock(BlockState block) {
         if (block != null && !isValidPlant(block)) return false;
         plantBlock = block;
 

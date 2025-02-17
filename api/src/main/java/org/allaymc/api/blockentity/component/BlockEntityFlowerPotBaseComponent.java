@@ -22,7 +22,7 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
      *
      * @return {@code true} if it set successfully, otherwise {@code false}.
      */
-    boolean setPlantBlock(BlockState block);
+    boolean trySetPlantBlock(BlockState block);
 
     /**
      * Get the plant as item inside the flower pot.
@@ -43,8 +43,8 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
      * @return {@code true} if it set successfully, otherwise {@code false}.
      */
     default boolean setPlantItem(ItemStack item) {
-        if (item == null) return setPlantBlock(null);
-        return setPlantBlock(item.toBlockState());
+        if (item == null) return trySetPlantBlock(null);
+        return trySetPlantBlock(item.toBlockState());
     }
 
     /**
@@ -60,6 +60,6 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
      * Clear the flower pot as empty.
      */
     default void clearPlant() {
-        setPlantBlock(null);
+        trySetPlantBlock(null);
     }
 }
