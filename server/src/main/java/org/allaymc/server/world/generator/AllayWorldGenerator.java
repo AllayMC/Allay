@@ -12,12 +12,12 @@ import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorType;
-import org.allaymc.api.world.generator.context.EntitySpawnContext;
 import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.context.PopulateContext;
-import org.allaymc.api.world.generator.function.EntitySpawner;
+import org.allaymc.api.world.generator.context.PostProcessContext;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
+import org.allaymc.api.world.generator.function.PostProcessor;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -46,7 +46,7 @@ public class AllayWorldGenerator implements WorldGenerator {
     private final String preset;
     private final List<Noiser> noisers;
     private final List<Populator> populators;
-    private final List<EntitySpawner> entitySpawners;
+    private final List<PostProcessor> postProcessors;
     private final Consumer<Dimension> onDimensionSet;
     private final Map<Long, CompletableFuture<Chunk>> chunkNoiseFutures = new NonBlockingHashMapLong<>();
     private final Map<Long, CompletableFuture<Chunk>> chunkFutures = new NonBlockingHashMapLong<>();
@@ -63,7 +63,7 @@ public class AllayWorldGenerator implements WorldGenerator {
             String preset,
             List<Noiser> noisers,
             List<Populator> populators,
-            List<EntitySpawner> entitySpawners,
+            List<PostProcessor> postProcessors,
             Consumer<Dimension> onDimensionSet
     ) {
         this.name = name;
@@ -71,11 +71,11 @@ public class AllayWorldGenerator implements WorldGenerator {
         this.preset = preset;
         this.noisers = noisers;
         this.populators = populators;
-        this.entitySpawners = entitySpawners;
+        this.postProcessors = postProcessors;
         this.onDimensionSet = onDimensionSet;
         this.noisers.forEach(noiser -> noiser.init(this));
         this.populators.forEach(populator -> populator.init(this));
-        this.entitySpawners.forEach(entitySpawner -> entitySpawner.init(this));
+        this.postProcessors.forEach(postProcessor -> postProcessor.init(this));
     }
 
     public static WorldGeneratorBuilder builder() {
@@ -92,7 +92,7 @@ public class AllayWorldGenerator implements WorldGenerator {
     }
 
     public void startTick() {
-        Thread.ofPlatform().name("Population Queue Processing Thread").start(() -> {
+        Thread.ofVirtual().name("Population Queue Processing Thread - " + dimension.getWorld().getWorldData().getDisplayName()).start(() -> {
             while (dimension.getWorld().isRunning()) {
                 processPopulationQueue();
             }
@@ -123,21 +123,22 @@ public class AllayWorldGenerator implements WorldGenerator {
             }
 
             var chunkFuture = entry.chunkFuture();
+            var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
             noiseFuture.thenAcceptAsync($ -> {
                 statusNoisedToPopulated(chunk);
                 releasePopulationLock(chunk.getX(), chunk.getZ());
                 statusPopulatedToFinished(chunk);
-                var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
                 // Remove recorded futures
-                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setChunkSetCallback(success -> {
+                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setChunkSetCallback(() -> {
                     // The stored futures should always being removed
                     chunkNoiseFutures.remove(chunkHash);
                     chunkFutures.remove(chunkHash);
                 });
                 chunkFuture.complete(chunk);
             }, computeThreadPool).exceptionally(e -> {
+                // TODO: unsafe here, locks should be released
                 log.error("Error while processing population queue! Chunk {}, {}", chunk.getX(), chunk.getZ(), e);
-                chunkFuture.complete(AllayUnsafeChunk.builder().newChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
+                chunkFuture.complete(AllayUnsafeChunk.builder().voidChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
                 return null;
             });
         }
@@ -221,10 +222,10 @@ public class AllayWorldGenerator implements WorldGenerator {
      */
     public CompletableFuture<Chunk> generateNoisedChunk(int x, int z) {
         var chunk = AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        return CompletableFuture.supplyAsync(() -> statusEmptyToNoised(chunk), computeThreadPool);
+        return CompletableFuture.supplyAsync(() -> statusNewToNoised(chunk), computeThreadPool);
     }
 
-    private Chunk statusEmptyToNoised(Chunk chunk) {
+    private Chunk statusNewToNoised(Chunk chunk) {
         // Basic terrain
         var generateContext = new NoiseContext(chunk.toUnsafeChunk());
         for (var noiser : noisers) {
@@ -255,18 +256,18 @@ public class AllayWorldGenerator implements WorldGenerator {
 
     private void statusPopulatedToFinished(Chunk chunk) {
         // Spawn entities
-        var entitySpawnContext = new EntitySpawnContext(chunk.toUnsafeChunk());
-        for (var entitySpawner : entitySpawners) {
+        var postProcessContext = new PostProcessContext(chunk.toUnsafeChunk());
+        for (var postProcessor : postProcessors) {
             try {
-                if (!entitySpawner.apply(entitySpawnContext)) {
-                    log.error("Failed to spawn entity in chunk {} with entity spawner {}", chunk, entitySpawner.getName());
+                if (!postProcessor.apply(postProcessContext)) {
+                    log.error("Failed to post process in chunk {} with post processor {}", chunk, postProcessor.getName());
                 }
             } catch (Throwable t) {
-                log.error("Error while spawning entity in chunk {} with entity spawner {}", chunk, entitySpawner.getName());
+                log.error("Error while post processing in chunk {} with post processor {}", chunk, postProcessor.getName());
             }
         }
 
-        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.ENTITY_SPAWNED);
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.POST_PROCESSED);
         ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.FINISHED);
     }
 
@@ -277,7 +278,7 @@ public class AllayWorldGenerator implements WorldGenerator {
         private String preset = "";
         private List<Noiser> noisers = List.of();
         private List<Populator> populators = List.of();
-        private List<EntitySpawner> entitySpawners = List.of();
+        private List<PostProcessor> postProcessors = List.of();
         private Consumer<Dimension> onDimensionSet = dimension -> {};
 
         public AllayWorldGeneratorBuilder name(String name) {
@@ -305,8 +306,8 @@ public class AllayWorldGenerator implements WorldGenerator {
             return this;
         }
 
-        public AllayWorldGeneratorBuilder entitySpawners(EntitySpawner... entitySpawners) {
-            this.entitySpawners = List.of(entitySpawners);
+        public AllayWorldGeneratorBuilder postProcessors(PostProcessor... postProcessors) {
+            this.postProcessors = List.of(postProcessors);
             return this;
         }
 
@@ -319,7 +320,7 @@ public class AllayWorldGenerator implements WorldGenerator {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name cannot be null or blank");
             }
-            return new AllayWorldGenerator(name, type, preset, noisers, populators, entitySpawners, onDimensionSet);
+            return new AllayWorldGenerator(name, type, preset, noisers, populators, postProcessors, onDimensionSet);
         }
     }
 

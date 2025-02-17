@@ -34,7 +34,7 @@ public class LightServiceJMHTest {
                         AllayUnsafeChunk
                                 .builder()
                                 // Use end dimension to disable skylight
-                                .newChunk(x, z, DimensionInfo.THE_END)
+                                .voidChunk(x, z, DimensionInfo.THE_END)
                                 .toSafeChunk()
                 );
             }

@@ -8,7 +8,6 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.testutils.AllayTestExtension;
@@ -92,9 +91,7 @@ class LevelDBWorldStorageTest {
     @Test
     @Order(3)
     void testSaveChunk() {
-        AllayUnsafeChunk allayUnsafeChunk = AllayUnsafeChunk.builder().newChunk(0, 0, DimensionInfo.OVERWORLD);
-        // So that the chunk can be written
-        allayUnsafeChunk.setState(ChunkState.FINISHED);
+        AllayUnsafeChunk allayUnsafeChunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD);
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {

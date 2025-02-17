@@ -123,8 +123,8 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {
         return CompletableFuture
                 .supplyAsync(() -> readChunkSync(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool())
-                .exceptionally(e -> {
-                    log.error("Failed to read chunk {}, {}", x, z, e);
+                .exceptionally(t -> {
+                    log.error("Failed to read chunk {}, {}", x, z, t);
                     return AllayUnsafeChunk.builder().newChunk(x, z, dimensionInfo).toSafeChunk();
                 });
     }

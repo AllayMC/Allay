@@ -1,6 +1,7 @@
 package org.allaymc.api.world.service;
 
 import org.allaymc.api.server.ServerSettings;
+import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.chunk.ChunkSource;
@@ -27,14 +28,16 @@ public interface ChunkService extends ChunkSource {
     WorldGenerator getWorldGenerator();
 
     /**
-     * Get the chunk loading future of the specified chunk.
+     * Get the chunk future of the specified chunk. The return value of method {@link CompletableFuture#isDone}
+     * represents the chunk status: {@code true} if the chunk is loaded, {@code false} if the chunk is still loading.
+     * This method will return {@code null} if chunk is neither loading nor already loaded.
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
      *
-     * @return the chunk loading future, or {@code null} if chunk is not loading or already loaded.
+     * @return the chunk future.
      */
-    CompletableFuture<Chunk> getChunkLoadingFuture(int x, int z);
+    CompletableFuture<Chunk> getChunkFuture(int x, int z);
 
     /**
      * Get the specified chunk or load it if it is not loaded.
@@ -42,7 +45,7 @@ public interface ChunkService extends ChunkSource {
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
      *
-     * @return the chunk future.
+     * @return the chunk future. The result of the future will become {@code true} once the chunk is loaded.
      */
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
 
@@ -58,16 +61,6 @@ public interface ChunkService extends ChunkSource {
     CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range);
 
     /**
-     * Load the specified chunk.
-     *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
-     *
-     * @return the chunk future.
-     */
-    CompletableFuture<Chunk> loadChunk(int x, int z);
-
-    /**
      * Get the specified chunk, or load the specified chunk in current thread.
      * <p>
      * This method will block the current thread until the chunk is loaded if it is not loaded.
@@ -81,21 +74,20 @@ public interface ChunkService extends ChunkSource {
     Chunk getOrLoadChunkSync(int x, int z);
 
     /**
-     * Unload the specified chunk.
-     *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
-     *
-     * @return a future to represent the result of unloading. {@code true} if the chunk is unloaded successfully, otherwise {@code false}.
+     * @see #unloadChunk(long)
      */
-    CompletableFuture<Boolean> unloadChunk(int x, int z);
+    default CompletableFuture<Boolean> unloadChunk(int x, int z) {
+        return unloadChunk(HashUtils.hashXZ(x, z));
+    }
 
     /**
      * Unload the specified chunk.
      *
      * @param chunkHash the hash of the chunk.
      *
-     * @return a future to represent the result of unloading. {@code true} if the chunk is unloaded successfully, otherwise {@code false}.
+     * @return a future to represent the result of unloading. The future will be completed when the chunk is unloaded and saved,
+     * and the result of the future indicates whether the chunk is unloaded successfully. Specifically, a future with {@code false}
+     * result will be returned immediately if the chunk is not loaded.
      */
     CompletableFuture<Boolean> unloadChunk(long chunkHash);
 
@@ -107,14 +99,11 @@ public interface ChunkService extends ChunkSource {
     CompletableFuture<Void> unloadAllChunks();
 
     /**
-     * Check if the specified chunk is loaded.
-     *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
-     *
-     * @return {@code true} if the chunk is loaded, otherwise {@code false}.
+     * @see #isChunkLoaded(long)
      */
-    boolean isChunkLoaded(int x, int z);
+    default boolean isChunkLoaded(int x, int z) {
+        return isChunkLoaded(HashUtils.hashXZ(x, z));
+    }
 
     /**
      * Check if the specified chunk is loaded.
@@ -126,14 +115,11 @@ public interface ChunkService extends ChunkSource {
     boolean isChunkLoaded(long hashXZ);
 
     /**
-     * Check if the specified chunk is loading.
-     *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
-     *
-     * @return {@code true} if the chunk is loading, otherwise {@code false}.
+     * @see #isChunkLoading(long)
      */
-    boolean isChunkLoading(int x, int z);
+    default boolean isChunkLoading(int x, int z) {
+        return isChunkLoading(HashUtils.hashXZ(x, z));
+    }
 
     /**
      * Check if the specified chunk is loading.
@@ -145,14 +131,11 @@ public interface ChunkService extends ChunkSource {
     boolean isChunkLoading(long hashXZ);
 
     /**
-     * Check if the specified chunk is unloaded.
-     *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
-     *
-     * @return {@code true} if the chunk is unloaded, otherwise {@code false}.
+     * @see #isChunkUnloaded(long)
      */
-    boolean isChunkUnloaded(int x, int z);
+    default boolean isChunkUnloaded(int x, int z) {
+        return isChunkUnloaded(HashUtils.hashXZ(x, z));
+    }
 
     /**
      * Check if the specified chunk is unloaded.

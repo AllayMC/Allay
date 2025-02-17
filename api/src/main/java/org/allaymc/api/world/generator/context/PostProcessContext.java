@@ -5,8 +5,8 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
 /**
  * @author daoge_cmd
  */
-public class EntitySpawnContext extends Context {
-    public EntitySpawnContext(UnsafeChunk currentChunk) {
+public class PostProcessContext extends Context {
+    public PostProcessContext(UnsafeChunk currentChunk) {
         super(currentChunk);
     }
 }

@@ -295,7 +295,7 @@ public interface UnsafeChunk {
     }
 
     /**
-     * Get height of the specified position.
+     * Get height of the specified position. If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
      *
      * @param x the x coordinate of the position.
      * @param z the z coordinate of the position.

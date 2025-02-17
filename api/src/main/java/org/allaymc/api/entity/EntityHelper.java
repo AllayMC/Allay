@@ -20,7 +20,7 @@ public final class EntityHelper {
      * @param dimension The dimension the entity is in.
      * @param nbt       The NBT map to create the entity from.
      *
-     * @return The new entity.
+     * @return The new entity, or {@code null} if the provided entity type is unknown.
      */
     public static Entity fromNBT(Dimension dimension, NbtMap nbt) {
         var identifier = new Identifier(nbt.getString("identifier"));

@@ -7,8 +7,11 @@ package org.allaymc.api.world.chunk;
  */
 public enum ChunkState {
     NEW,
+    NOISING,
     NOISED,
+    POPULATING,
     POPULATED,
-    ENTITY_SPAWNED,
+    POST_PROCESSING,
+    POST_PROCESSED,
     FINISHED
 }
