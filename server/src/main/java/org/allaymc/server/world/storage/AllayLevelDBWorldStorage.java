@@ -1,5 +1,6 @@
 package org.allaymc.server.world.storage;
 
+import com.google.common.base.Preconditions;
 import io.netty.buffer.*;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
@@ -14,6 +15,7 @@ import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
@@ -31,7 +33,10 @@ import org.allaymc.server.world.chunk.*;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.allaymc.updater.block.BlockStateUpdater_1_21_40;
 import org.allaymc.updater.block.BlockStateUpdaters;
-import org.cloudburstmc.nbt.*;
+import org.cloudburstmc.nbt.NBTInputStream;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.iq80.leveldb.CompressionType;
@@ -67,6 +72,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final int CURRENT_STORAGE_VERSION = StorageVersion.LEVEL_DATA_STRICT_SIZE.ordinal();
     private static final int CURRENT_CHUNK_VERSION = ChunkVersion.V1_21_40.ordinal();
 
+    // Keys used in world data
     private static final String TAG_DIFFICULTY = "Difficulty";
     private static final String TAG_GAME_TYPE = "GameType";
     private static final String TAG_DISPLAY_NAME = "LevelName";
@@ -78,8 +84,11 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final String TAG_WORLD_START_COUNT = "WorldStartCount";
     private static final String TAG_PDC = "PDC";
 
-    // The following keys are only used in this class.
-    // Some of them are written to make the vanilla client
+    // Keys used in scheduled updates
+    private static final String TAG_CURRENT_TICK = "currentTick";
+    private static final String TAG_TICK_LIST = "tickList";
+
+    // The following keys are written to make the vanilla client
     // load the world correctly, they aren't used in other places
     private static final String TAG_GENERATOR = "Generator";
     private static final String TAG_RANDOM_SEED = "RandomSeed";
@@ -95,6 +104,8 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private final Path path;
     private final String worldName;
     private final DB db;
+
+    private World world;
 
     public AllayLevelDBWorldStorage(Path path) {
         this(path, new Options().createIfMissing(true).compressionType(CompressionType.ZLIB_RAW).blockSize(64 * 1024));
@@ -117,6 +128,12 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         } catch (IOException e) {
             throw new WorldStorageException(e);
         }
+    }
+
+    @Override
+    public void setWorld(World world) {
+        Preconditions.checkState(this.world == null, "World has already been set");
+        this.world = world;
     }
 
     @Override
@@ -194,7 +211,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 serializeSections(writeBatch, allayUnsafeChunk);
                 serializeHeightAndBiome(writeBatch, allayUnsafeChunk);
                 serializeEntitiesAndBlockEntities(writeBatch, allayUnsafeChunk);
-                serializeScheduledUpdates(writeBatch, allayUnsafeChunk);
+                serializeScheduledUpdates(writeBatch, allayUnsafeChunk, world);
             }, OperationType.READ, OperationType.READ);
             this.db.write(writeBatch);
         } catch (IOException e) {
@@ -215,7 +232,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     public void writeWorldData(WorldData worldData) {
         var allayWorldData = (AllayWorldData) worldData;
         var levelDat = path.resolve(FILE_LEVEL_DAT).toFile();
-        try (var output = new FileOutputStream(levelDat)) {
+        try (var output = new FileOutputStream(levelDat);
+             var byteArrayOutputStream = new ByteArrayOutputStream();
+             var nbtOutputStream = NbtUtils.createWriterLE(byteArrayOutputStream)) {
             if (levelDat.exists()) {
                 Files.copy(path.resolve(FILE_LEVEL_DAT), path.resolve(FILE_LEVEL_DAT_OLD), StandardCopyOption.REPLACE_EXISTING);
             }
@@ -223,11 +242,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             // 1.Current version
             output.write(int2ByteArrayLE(CURRENT_STORAGE_VERSION));
 
-            var byteArrayOutputStream = new ByteArrayOutputStream();
-            var nbtOutputStream = NbtUtils.createWriterLE(byteArrayOutputStream);
             nbtOutputStream.writeTag(writeWorldDataToNBT(allayWorldData));
-
             var data = byteArrayOutputStream.toByteArray();
+
             // 2.Data length
             output.write(int2ByteArrayLE(data.length));
 
@@ -241,7 +258,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     @Override
     public WorldData readWorldData() {
         var levelDat = path.resolve(FILE_LEVEL_DAT).toFile();
-        if (!levelDat.exists()) return createWorldData(worldName);
+        if (!levelDat.exists()) {
+            return createWorldData(worldName);
+        }
+
         try (var input = new FileInputStream(levelDat)) {
             // current_version + data length
             // noinspection ResultOfMethodCallIgnored
@@ -563,9 +583,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             writeBatch.delete(blockEntitiesKey);
         } else {
             ByteBuf blockEntitiesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
-            try (var bufStream = new ByteBufOutputStream(blockEntitiesBuffer)) {
+            try (var bufStream = new ByteBufOutputStream(blockEntitiesBuffer);
+                 var writerLE = NbtUtils.createWriterLE(bufStream)) {
                 for (BlockEntity blockEntity : blockEntities) {
-                    NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
                     writerLE.writeTag(blockEntity.saveNBT());
                 }
                 writeBatch.put(blockEntitiesKey, Utils.convertByteBuf2Array(blockEntitiesBuffer));
@@ -585,12 +605,15 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
 
         ByteBuf entitiesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
-        try (var bufStream = new ByteBufOutputStream(entitiesBuffer)) {
+        try (var bufStream = new ByteBufOutputStream(entitiesBuffer);
+             var writerLE = NbtUtils.createWriterLE(bufStream)) {
             for (Entity e : entities) {
                 // Player entity won't be saved to chunk
                 // As we will save player data through player storage
-                if (e instanceof EntityPlayer) continue;
-                NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
+                if (e instanceof EntityPlayer) {
+                    continue;
+                }
+
                 writerLE.writeTag(e.saveNBT());
             }
             writeBatch.put(entitiesKey, Utils.convertByteBuf2Array(entitiesBuffer));
@@ -615,9 +638,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static List<NbtMap> deserializeNbtTagsFromBytes(byte[] bytes) {
         List<NbtMap> tags = new ArrayList<>();
-        try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(bytes))) {
+        try (var stream = new BufferedInputStream(new ByteArrayInputStream(bytes));
+             var readerLE = NbtUtils.createReaderLE(stream)) {
             while (stream.available() > 0) {
-                tags.add((NbtMap) NbtUtils.createReaderLE(stream).readTag());
+                tags.add((NbtMap) readerLE.readTag());
             }
         } catch (IOException e) {
             throw new WorldStorageException(e);
@@ -625,20 +649,31 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return tags;
     }
 
-    private static void serializeScheduledUpdates(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
+    private static NbtMap deserializeSingleNbtTagFromBytes(byte[] bytes) {
+        try (var stream = new BufferedInputStream(new ByteArrayInputStream(bytes));
+             var readerLE = NbtUtils.createReaderLE(stream)) {
+            return (NbtMap) readerLE.readTag();
+        } catch (IOException e) {
+            throw new WorldStorageException(e);
+        }
+    }
+
+    private static void serializeScheduledUpdates(WriteBatch writeBatch, AllayUnsafeChunk chunk, World world) {
         var scheduledUpdates = chunk.getScheduledUpdates().values();
-        byte[] key = LevelDBKey.ALLAY_SCHEDULED_UPDATES.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
+        byte[] key = LevelDBKey.PENDING_TICKS.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
         if (scheduledUpdates.isEmpty()) {
             writeBatch.delete(key);
             return;
         }
 
         ByteBuf scheduledUpdatesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
-        try (var bufStream = new ByteBufOutputStream(scheduledUpdatesBuffer)) {
-            for (var e : scheduledUpdates) {
-                NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
-                writerLE.writeTag(e.toNBT());
-            }
+        try (var bufStream = new ByteBufOutputStream(scheduledUpdatesBuffer);
+             var writerLE = NbtUtils.createWriterLE(bufStream)) {
+            var nbt = NbtMap.builder()
+                    .putInt(TAG_CURRENT_TICK, (int) world.getTick())
+                    .putList(TAG_TICK_LIST, NbtType.COMPOUND, scheduledUpdates.stream().map(ScheduledUpdateInfo::toNBT).toList())
+                    .build();
+            writerLE.writeTag(nbt);
             writeBatch.put(key, Utils.convertByteBuf2Array(scheduledUpdatesBuffer));
         } catch (IOException e) {
             throw new WorldStorageException(e);
@@ -649,15 +684,20 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static void deserializeScheduledUpdates(DB db, AllayChunkBuilder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
-        var scheduledUpdatesBytes = db.get(LevelDBKey.ALLAY_SCHEDULED_UPDATES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
-        if (scheduledUpdatesBytes == null) return;
-
-        var nbtMaps = deserializeNbtTagsFromBytes(scheduledUpdatesBytes);
-        var scheduledUpdates = new NonBlockingHashMap<Integer, ScheduledUpdateInfo>(nbtMaps.size());
-        for (var nbtMap : nbtMaps) {
-            var scheduledUpdateInfo = ScheduledUpdateInfo.fromNBT(nbtMap);
-            scheduledUpdates.put(scheduledUpdateInfo.getChunkXYZ(), scheduledUpdateInfo);
+        var scheduledUpdatesBytes = db.get(LevelDBKey.PENDING_TICKS.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
+        if (scheduledUpdatesBytes == null) {
+            return;
         }
+
+        var nbt = deserializeSingleNbtTagFromBytes(scheduledUpdatesBytes);
+        var tickList = nbt.getList(TAG_TICK_LIST, NbtType.COMPOUND);
+        var scheduledUpdates = new NonBlockingHashMap<Integer, ScheduledUpdateInfo>(tickList.size());
+        for (var entry : tickList) {
+            var info = ScheduledUpdateInfo.fromNBT(entry);
+            var pos = info.getPos();
+            scheduledUpdates.put(HashUtils.hashChunkXYZ(pos.x() & 15, pos.y(), pos.z() & 15), info);
+        }
+
         builder.scheduledUpdates(scheduledUpdates);
     }
 

@@ -13,69 +13,48 @@ import java.time.Duration;
 public interface BlockUpdateService {
 
     /**
-     * @see #scheduleBlockUpdate(Vector3ic, int, int)
+     * @see #scheduleBlockUpdate(Vector3ic, long)
      */
-    default void scheduleBlockUpdate(Vector3ic pos, int delay) {
-        scheduleBlockUpdate(pos, delay, 0);
+    default void scheduleBlockUpdateInDelay(Vector3ic pos, Duration delay) {
+        scheduleBlockUpdateInDelay(pos, delay.toNanos() / 50_000_000);
     }
 
     /**
-     * @see #scheduleBlockUpdate(Vector3ic, int, int)
+     * Schedule a block update at the specified position. Different from {@link #scheduleBlockUpdate(Vector3ic, long)},
+     * this method will set the time of the scheduled update to the current world time plus the delay.
+     *
+     * @param pos   The position of the block to update.
+     * @param delay The delay of the block update, in ticks.
      */
-    default void scheduleBlockUpdate(Vector3ic pos, Duration delay) {
-        scheduleBlockUpdate(pos, delay, 0);
-    }
-
-    /**
-     * @see #scheduleBlockUpdate(Vector3ic, int, int)
-     */
-    default void scheduleBlockUpdate(Vector3ic pos, Duration delay, int layer) {
-        scheduleBlockUpdate(pos, (int) (delay.toNanos() / 50_000_000), layer);
-    }
+    void scheduleBlockUpdateInDelay(Vector3ic pos, long delay);
 
     /**
      * Schedule a block update at the specified position.
      *
-     * @param pos   The position of the block to update.
-     * @param delay The delay of the block update, in ticks.
-     * @param layer The layer of the block update.
+     * @param pos  The position of the block to update.
+     * @param time The time that the block update will be executed, in ticks.
      */
-    void scheduleBlockUpdate(Vector3ic pos, int delay, int layer);
+    void scheduleBlockUpdate(Vector3ic pos, long time);
 
     /**
-     * @see #scheduleRandomBlockUpdate(Vector3ic, int, int)
+     * @see #scheduleRandomBlockUpdateInDelay(Vector3ic, long)
      */
-    default void scheduleRandomBlockUpdate(Vector3ic pos, int delay) {
-        scheduleRandomBlockUpdate(pos, delay, 0);
-    }
-
-    /**
-     * @see #scheduleRandomBlockUpdate(Vector3ic, int, int)
-     */
-    default void scheduleRandomBlockUpdate(Vector3ic pos, Duration delay) {
-        scheduleRandomBlockUpdate(pos, delay, 0);
-    }
-
-    /**
-     * @see #scheduleRandomBlockUpdate(Vector3ic, int, int)
-     */
-    default void scheduleRandomBlockUpdate(Vector3ic pos, Duration delay, int layer) {
-        scheduleRandomBlockUpdate(pos, (int) (delay.toNanos() / 50_000_000), layer);
+    default void scheduleRandomBlockUpdateInDelay(Vector3ic pos, Duration delay) {
+        scheduleRandomBlockUpdateInDelay(pos, (int) (delay.toNanos() / 50_000_000));
     }
 
     /**
      * Schedule a random block update at the specified position. Calling this method is considered
      * equivalent to {@code scheduleBlockUpdate(pos, (int) ((float) delay / (float) randomTickSpeed), layer)}.
      * <p>
-     * Unlike {@link #scheduleBlockUpdate(Vector3ic, int, int)}, in this method the delay will also
+     * Unlike {@link #scheduleBlockUpdateInDelay(Vector3ic, long)}, in this method the delay will also
      * be divided by the random tick speed of the current world. For example, this method is used
      * by fire, so changing the random tick speed will also change the speed of fire spreading.
      *
      * @param pos   The position of the block to update.
      * @param delay The delay of the block update, in ticks.
-     * @param layer The layer of the block update.
      */
-    void scheduleRandomBlockUpdate(Vector3ic pos, int delay, int layer);
+    void scheduleRandomBlockUpdateInDelay(Vector3ic pos, long delay);
 
     /**
      * Check if a block update is scheduled at the specified position.
@@ -84,19 +63,7 @@ public interface BlockUpdateService {
      *
      * @return Whether a block update is scheduled at the specified position.
      */
-    default boolean hasScheduledBlockUpdate(Vector3ic pos) {
-        return hasScheduledBlockUpdate(pos, 0);
-    }
-
-    /**
-     * Check if a block update is scheduled at the specified position.
-     *
-     * @param pos   The position of the block to check.
-     * @param layer The layer of the block update.
-     *
-     * @return Whether a block update is scheduled at the specified position.
-     */
-    boolean hasScheduledBlockUpdate(Vector3ic pos, int layer);
+    boolean hasScheduledBlockUpdate(Vector3ic pos);
 
     /**
      * Add a neighbor block update at the specified position.

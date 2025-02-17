@@ -1,6 +1,7 @@
 package org.allaymc.api.world.storage;
 
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.jetbrains.annotations.ApiStatus;
@@ -8,8 +9,8 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * WorldStorage represents the storage of a world,
- * which is responsible for reading and writing chunks and world data.
+ * WorldStorage represents the storage of a world, which is responsible for reading and writing chunks and world data.
+ * The instance of WorldStorage will be created for each world and won't be shared between worlds.
  *
  * @author daoge_cmd | Cool_Loong
  */
@@ -21,6 +22,16 @@ public interface WorldStorage {
      */
     @ApiStatus.OverrideOnly
     default void tick(long currentTick) {}
+
+    /**
+     * This method will be called before the first tick of the world. The implementation can decide
+     * whether to hold the world object (if the implementation needs the world object during runtime).
+     * Note that user is not allowed to call this method.
+     *
+     * @param world the world object.
+     */
+    @ApiStatus.OverrideOnly
+    default void setWorld(World world) {}
 
     /**
      * Shutdown the storage.

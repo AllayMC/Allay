@@ -6,7 +6,10 @@ import java.util.function.Consumer;
 /**
  * Chunk represents a 16x16 area in a world.
  * <p>
- * All methods in this class are thread-safe. However, frequent calls to methods in this class
+ * All methods in this class are thread-safe. However, there is no thread-safe guarantee to the methods in the return value
+ * of these methods, and an example is {@link Chunk#getSection(int)}.
+ * <p>
+ * Frequent calls to methods in this class
  * result in huge lock overhead. If you are sure that the instance won't be accessed by multiple threads,
  * you can operate on unsafe chunk directly. To get the unsafe chunk, use {@link #toUnsafeChunk()}.
  * <p>

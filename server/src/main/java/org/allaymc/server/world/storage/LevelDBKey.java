@@ -73,7 +73,7 @@ public enum LevelDBKey {
     BLENDING_DATA(64),
     ACTOR_DIGEST_VERSION(65),
     LEGACY_VERSION(118),
-    AABB_VOLUMES(119),
+    AABB_VOLUMES(119);
 
     /*
      * NOTICE: The following keys are only used in allay,
@@ -83,10 +83,7 @@ public enum LevelDBKey {
      * avoid conflicts with original keys.
      */
 
-    /**
-     * Used to store the scheduled update list for a chunk
-     */
-    ALLAY_SCHEDULED_UPDATES(-128);
+    // Noop
 
     private final byte encoded;
 

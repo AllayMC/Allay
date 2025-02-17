@@ -66,8 +66,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
     protected void tryScheduleLiquidUpdate(BlockStateWithPos current) {
         var blockUpdateService = current.dimension().getBlockUpdateService();
-        if (!blockUpdateService.hasScheduledBlockUpdate(current.pos(), current.layer())) {
-            blockUpdateService.scheduleBlockUpdate(current.pos(), getFlowSpeed(current.dimension().getDimensionInfo()), current.layer());
+        if (!blockUpdateService.hasScheduledBlockUpdate(current.pos())) {
+            blockUpdateService.scheduleBlockUpdateInDelay(current.pos(), getFlowSpeed(current.dimension().getDimensionInfo()));
         }
     }
 

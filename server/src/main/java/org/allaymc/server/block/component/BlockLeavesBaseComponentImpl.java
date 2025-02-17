@@ -68,7 +68,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             var sideBlockState = pos.dimension().getBlockState(offsetPos);
             if (sideBlockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
                 if (!sideBlockState.getPropertyValue(BlockPropertyTypes.UPDATE_BIT)) {
-                    pos.dimension().getBlockUpdateService().scheduleBlockUpdate(offsetPos, 2);
+                    pos.dimension().getBlockUpdateService().scheduleBlockUpdateInDelay(offsetPos, 2);
                 }
             }
         }

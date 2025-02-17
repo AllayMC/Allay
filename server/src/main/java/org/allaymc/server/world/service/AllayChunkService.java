@@ -25,6 +25,7 @@ import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -516,10 +517,15 @@ public final class AllayChunkService implements ChunkService {
                     // Priority is given to sending chunks that are close to the chunk loader
                     var lcpStream = chunkReadyToSend.values().stream();
                     lcpStream.sorted(chunkDistanceComparator).forEachOrdered(chunk -> {
-                        var lcp = useSubChunkSendingSystem ?
-                                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createSubChunkLevelChunkPacket() :
-                                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createFullLevelChunkPacketChunk();
-                        chunkLoader.sendPacket(lcp);
+                        final LevelChunkPacket[] lcp = new LevelChunkPacket[1];
+
+                        if (useSubChunkSendingSystem) {
+                            lcp[0] = ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createSubChunkLevelChunkPacket();
+                        } else {
+                            chunk.applyOperation(unsafeChunk -> lcp[0] = ((AllayUnsafeChunk) unsafeChunk).createFullLevelChunkPacketChunk(), OperationType.READ, OperationType.READ);
+                        }
+
+                        chunkLoader.sendPacket(lcp[0]);
                         chunkLoader.onChunkInRangeSend(chunk);
                     });
                 }

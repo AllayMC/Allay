@@ -71,6 +71,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Server won't crash if failed to create world generator. Void world generator will be used instead.
 - It is not allowed to reset the dimension of player back to null now, and doing such thing will result in an exception.
 - Changed `PlayerAuthInputPacketProcessor#TELEPORT_ACK_DIFF_TOLERANCE` from `public` to `protected`.
+- Scheduled block updates are saved in vanilla format instead of our custom format now. This should improve the compatibility with vanilla map.
 
 ### Fixed
 

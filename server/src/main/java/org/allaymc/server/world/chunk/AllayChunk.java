@@ -3,14 +3,20 @@ package org.allaymc.server.world.chunk;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.ChunkSection;
-import org.allaymc.api.world.chunk.OperationType;
-import org.allaymc.api.world.chunk.UnsafeChunk;
+import org.allaymc.api.world.chunk.*;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * @author Cool_Loong | daoge_cmd
@@ -18,7 +24,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class AllayChunk implements Chunk {
 
-    @Delegate(types = UnsafeChunk.class)
+    @Delegate(types = ThreadSafeMethods.class)
     protected final AllayUnsafeChunk unsafeChunk;
 
     protected final ChunkSectionLocks blockLocks;
@@ -152,5 +158,55 @@ public class AllayChunk implements Chunk {
     @Override
     public UnsafeChunk toUnsafeChunk() {
         return unsafeChunk;
+    }
+
+    private interface ThreadSafeMethods {
+        boolean isLoaded();
+
+        Set<ChunkLoader> getChunkLoaders();
+
+        void addChunkLoader(ChunkLoader chunkLoader);
+
+        void removeChunkLoader(ChunkLoader chunkLoader);
+
+        void addChunkPacket(BedrockPacket packet);
+
+        void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
+
+        void sendChunkPacket(BedrockPacket packet);
+
+        void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
+
+        ChunkState getState();
+
+        DimensionInfo getDimensionInfo();
+
+        int getX();
+
+        int getZ();
+
+        Entity getEntity(long runtimeId);
+
+        Map<Long, Entity> getEntities();
+
+        BlockEntity removeBlockEntity(int x, int y, int z);
+
+        BlockEntity getBlockEntity(int x, int y, int z);
+
+        Map<Integer, BlockEntity> getBlockEntities();
+
+        void addBlockEntity(BlockEntity blockEntity);
+
+        Collection<BlockEntity> getSectionBlockEntities(int sectionY);
+
+        void addScheduledUpdate(int x, int y, int z, long time);
+
+        boolean hasScheduledUpdate(int x, int y, int z);
+
+        ChunkSection getSection(int sectionY);
+
+        List<ChunkSection> getSections();
+
+        Chunk toSafeChunk();
     }
 }

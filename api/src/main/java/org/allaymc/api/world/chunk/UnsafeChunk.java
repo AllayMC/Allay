@@ -81,7 +81,9 @@ public interface UnsafeChunk {
      *
      * @return the number of chunk loaders
      */
-    int getChunkLoaderCount();
+    default int getChunkLoaderCount() {
+        return getChunkLoaders().size();
+    }
 
     /**
      * Add a chunk packet to the chunk.
@@ -230,13 +232,12 @@ public interface UnsafeChunk {
     /**
      * Add a scheduled update to a pos in the chunk.
      *
-     * @param x     the x coordinate of the pos.
-     * @param y     the y coordinate of the pos.
-     * @param z     the z coordinate of the pos.
-     * @param delay the delay of the scheduled update.
-     * @param layer the layer of the scheduled update.
+     * @param x    the x coordinate of the pos.
+     * @param y    the y coordinate of the pos.
+     * @param z    the z coordinate of the pos.
+     * @param time the scheduled time of the scheduled update.
      */
-    void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int delay, int layer);
+    void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, long time);
 
     /**
      * Check if a pos in the chunk has a scheduled update.
@@ -244,11 +245,10 @@ public interface UnsafeChunk {
      * @param x     the x coordinate of the pos.
      * @param y     the y coordinate of the pos.
      * @param z     the z coordinate of the pos.
-     * @param layer the layer of the pos.
      *
      * @return {@code true} if the pos has a scheduled update, otherwise {@code false}.
      */
-    boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer);
+    boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
      * Set block state in this chunk.

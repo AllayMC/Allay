@@ -31,29 +31,34 @@ public class AllayBlockUpdateService implements BlockUpdateService {
     }
 
     @Override
-    public void scheduleBlockUpdate(Vector3ic pos, int delay, int layer) {
+    public void scheduleBlockUpdateInDelay(Vector3ic pos, long delay) {
+        scheduleBlockUpdate(pos, dimension.getWorld().getTick() + delay);
+    }
+
+    @Override
+    public void scheduleBlockUpdate(Vector3ic pos, long time) {
         var chunk = dimension.getChunkService().getChunkByDimensionPos(pos.x(), pos.z());
         if (chunk == null) {
             log.warn("Failed to schedule block update at {} because chunk is not loaded", pos);
             return;
         }
 
-        chunk.addScheduledUpdate(pos.x() & 15, pos.y(), pos.z() & 15, delay, layer);
+        chunk.addScheduledUpdate(pos.x() & 15, pos.y(), pos.z() & 15, time);
     }
 
     @Override
-    public void scheduleRandomBlockUpdate(Vector3ic pos, int delay, int layer) {
-        scheduleBlockUpdate(pos, (int) ((float) delay / (float) dimension.getWorld().getWorldData().<Integer>getGameRuleValue(GameRule.RANDOM_TICK_SPEED)), layer);
+    public void scheduleRandomBlockUpdateInDelay(Vector3ic pos, long delay) {
+        scheduleBlockUpdateInDelay(pos, (long) ((float) delay / (float) dimension.getWorld().getWorldData().<Integer>getGameRuleValue(GameRule.RANDOM_TICK_SPEED)));
     }
 
     @Override
-    public boolean hasScheduledBlockUpdate(Vector3ic pos, int layer) {
+    public boolean hasScheduledBlockUpdate(Vector3ic pos) {
         var chunk = dimension.getChunkService().getChunkByDimensionPos(pos.x(), pos.z());
         if (chunk == null) {
             return false;
         }
 
-        return chunk.hasScheduledUpdate(pos.x() & 15, pos.y(), pos.z() & 15, layer);
+        return chunk.hasScheduledUpdate(pos.x() & 15, pos.y(), pos.z() & 15);
     }
 
     @Override

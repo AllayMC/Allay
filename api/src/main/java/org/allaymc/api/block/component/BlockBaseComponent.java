@@ -187,7 +187,7 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a block receives a scheduled update.
      *
-     * @param blockStateWithPos the block that received the scheduled update.
+     * @param blockStateWithPos the block that received the scheduled update. Notes that the layer will always be zero.
      */
     @ApiStatus.OverrideOnly
     default void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {}

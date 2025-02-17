@@ -157,7 +157,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     public void tick(long currentTick, Dimension dimension) {
         blockEntities.values().forEach(blockEntity -> ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).tick(currentTick));
         entities.values().forEach(entity -> ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick));
-        tickScheduledUpdates(dimension);
+        tickScheduledUpdates(currentTick, dimension);
         tickRandomUpdates(dimension);
     }
 
@@ -169,26 +169,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
     }
 
-    protected void tickScheduledUpdates(Dimension dimension) {
-        List<ScheduledUpdateInfo> positions = new ArrayList<>(scheduledUpdates.size() / 4);
+    protected void tickScheduledUpdates(long currentTick, Dimension dimension) {
+        List<ScheduledUpdateInfo> positions = new ArrayList<>(scheduledUpdates.size());
         for (var entry : scheduledUpdates.entrySet()) {
-            if (entry.getValue().getDelay() <= 0) {
+            if (entry.getValue().getTime() <= currentTick) {
                 positions.add(entry.getValue());
                 scheduledUpdates.remove(entry.getKey());
-            } else {
-                entry.getValue().decreaseDelay();
             }
         }
 
         positions.forEach(info -> {
-            var chunkXYZ = info.getChunkXYZ();
-            var localX = HashUtils.getXFromHashChunkXYZ(chunkXYZ);
-            var y = HashUtils.getYFromHashChunkXYZ(chunkXYZ);
-            var localZ = HashUtils.getZFromHashChunkXYZ(chunkXYZ);
-            var layer = info.getLayer();
+            var pos = info.getPos();
+            var blockState = getBlockState(pos.x() & 15, pos.y(), pos.z() & 15);
 
-            var blockState = getBlockState(localX, y, localZ, layer);
-            var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (this.x << 4), y, localZ + (this.z << 4), dimension), layer);
+            var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(pos, dimension));
             if (!new BlockScheduleUpdateEvent(blockStateWithPos).call()) {
                 return;
             }
@@ -325,16 +319,16 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int delay, int layer) {
+    public void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, long time) {
         checkXYZ(x, y, z);
         var key = HashUtils.hashChunkXYZ(x, y, z);
-        scheduledUpdates.put(key, new ScheduledUpdateInfo(key, layer, delay));
+        scheduledUpdates.put(key, new ScheduledUpdateInfo(new org.joml.Vector3i((this.x << 4) + x, y, (this.z << 4) + z), time));
     }
 
     @Override
-    public boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer) {
+    public boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z) {
         var scheduledUpdateInfo = scheduledUpdates.get(HashUtils.hashChunkXYZ(x, y, z));
-        return scheduledUpdateInfo != null && scheduledUpdateInfo.getLayer() == layer;
+        return scheduledUpdateInfo != null;
     }
 
     @Override
@@ -596,11 +590,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public void removeChunkLoader(ChunkLoader chunkLoader) {
         chunkLoaders.remove(chunkLoader);
-    }
-
-    @Override
-    public int getChunkLoaderCount() {
-        return chunkLoaders.size();
     }
 
     @Override
