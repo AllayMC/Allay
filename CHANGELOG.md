@@ -41,12 +41,14 @@ Unless otherwise specified, any version comparison below is the comparison of se
   such as `spawned`, `dead`, `willBeSpawnedNextTick` and provide better stability and extensibility.
 - (API) Added `ClientConnectEvent#setDisconnectReason` and `PlayerLoginEvent#setDisconnectReason` methods to set the disconnect reason
   that will be shown to the client when cancelling these events.
+- (API) Implemented flower pot, and add custom block tag `allay:pottable_plant` which mark thant the plant can be potted.
+- (API) Introduced PDC (Persistent Data Container) system. The PDC is a way to store custom data on a whole range of objects, such as
+  items, entities, block entities and world. More PDC types will be added in the future.
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
   using `/fill` command to fill a large area).
 - Introduced `ChunkSectionLocks`, which replaced the old `StampedLock` in `Chunk`. Instead of locking the whole chunk when reading/writing
   blocks/biomes, only the related chunk section will be locked now. This should improve the performance of chunk reading/writing.
-- (API) Implemented flower pot, and add custom block tag `allay:pottable_plant` which mark thant the plant can be potted.
 
 ### Changed
 
