@@ -73,7 +73,7 @@ public interface Dimension {
     private static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
         var updateBlockPacket = new UpdateBlockPacket();
         updateBlockPacket.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.from(x, y, z));
-        updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinitionRuntime());
+        updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinition());
         updateBlockPacket.setDataLayer(layer);
         updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
         return updateBlockPacket;

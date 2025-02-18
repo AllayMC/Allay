@@ -101,6 +101,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed `Registries#BLOCK_STATE_DATA`. This registry is moved to `InternalRegistries`.
 - (API) Removed `Registries#ITEM_DATA`. This registry is moved to `InternalRegistries`.
 - (API) Removed `VoxelShapes#buildStairShape` method, we now have accurate collision shape data dumped from BDS.
+- (API) Removed the old `BlockState#toNetworkBlockDefinition` method, and `BlockState#toNetworkBlockDefinitionRuntime` was renamed without `Runtime` suffix.
 - Removed `Extension#afterServerStarted` method.
 - Removed `org.allaymc.server.datastruct.collections.nb.*`, we now use the implementations provided by JCTools. Consider using `NonBlockingHashMap`
   and `NonBlockingHashMapLong` if your plugins use these classes.

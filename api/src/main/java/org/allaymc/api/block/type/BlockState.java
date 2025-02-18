@@ -6,7 +6,6 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleBlockDefinition;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -112,24 +111,12 @@ public interface BlockState {
      */
     ItemStack toItemStack();
 
-    // TODO: Confirm if only BlockDefinition::getRuntimeId() needs to be implemented.
-    //       The current implementation is complex and inefficient.
-    default SimpleBlockDefinition toNetworkBlockDefinition() {
-        var statesBuilder = NbtMap.builder();
-        for (var propertyValue : getPropertyValues().values()) {
-            statesBuilder.put(
-                    propertyValue.getPropertyType().getName(),
-                    propertyValue.getSerializedValue()
-            );
-        }
-        return new SimpleBlockDefinition(
-                getBlockType().getIdentifier().toString(),
-                blockStateHash(),
-                statesBuilder.build()
-        );
-    }
-
-    default BlockDefinition toNetworkBlockDefinitionRuntime() {
+    /**
+     * Get the network block definition of this block state.
+     *
+     * @return the network block definition of this block state.
+     */
+    default BlockDefinition toNetworkBlockDefinition() {
         return this::blockStateHash;
     }
 

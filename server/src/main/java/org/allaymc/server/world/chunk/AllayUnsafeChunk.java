@@ -365,7 +365,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             // updateFlags is a combination of flags that specify the way the block is updated client-side. It is a
             // combination of the flags above, but typically sending only the BLOCK_UPDATE_NETWORK flag is sufficient.
             var changeEntry = new BlockChangeEntry(
-                    Vector3i.from((this.x << 4) + x, y, (this.z << 4) + z), blockState.toNetworkBlockDefinitionRuntime(),
+                    Vector3i.from((this.x << 4) + x, y, (this.z << 4) + z), blockState.toNetworkBlockDefinition(),
                     BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
             );
             switch (layer) {
