@@ -37,7 +37,7 @@ scratch codebase allows us to re-examine performance critical points and solve p
 in your deployment. 
 - **Developer-friendly**: Our api is seperated from the implementation and is well-documented. No more wasting time looking at the implementation.
 - **Feature-rich**: One of our goal is to be feature-rich. Thanks to the architecture of Allay, adding new features is very easy for us.
-- **Cross-platform:**: Benefit from JVM, allay can run on almost any platform.
+- **Cross-platform**: Benefit from JVM, allay can run on almost any platform.
 
 ## 🛠️ Getting Started
 
