@@ -44,7 +44,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         var itemStackArray = armorContainer.getItemStackArray();
         for (int slot = 0; slot < itemStackArray.length; slot++) {
             var item = itemStackArray[slot];
-            if (!item.getItemData().isDamageable()) {
+            if (!item.getItemType().getItemData().isDamageable()) {
                 continue;
             }
             item.tryReduceDurability(durabilityIncreased);
@@ -63,10 +63,12 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         var enchantmentProtectionFactor = 0;
 
         for (var item : armorContainer.getItemStacks()) {
-            if (item == ItemAirStack.AIR_STACK) continue;
+            if (item == ItemAirStack.AIR_STACK) {
+                continue;
+            }
 
-            totalArmorValue += item.getItemData().armorValue();
-            totalToughnessValue += item.getItemData().toughnessValue();
+            totalArmorValue += item.getItemType().getItemData().armorValue();
+            totalToughnessValue += item.getItemType().getItemData().toughnessValue();
             enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
         }
         enchantmentProtectionFactor = Math.min(20, enchantmentProtectionFactor);

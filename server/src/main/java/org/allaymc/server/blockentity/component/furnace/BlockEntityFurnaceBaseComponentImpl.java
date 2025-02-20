@@ -207,7 +207,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         // Calculate the amount of experience to grant
         // Round the experience down to the nearest integer, and the remaining
         // XP is a chance to be granted an additional experience point
-        var xp = output.getItemData().furnaceXPMultiplier();
+        var xp = output.getItemType().getItemData().furnaceXPMultiplier();
         int earned = (int) Math.floor(xp);
         var chance = xp - earned;
         if (chance > 0 && ThreadLocalRandom.current().nextFloat() < chance) {
@@ -289,7 +289,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             }
         }
 
-        burnDuration = (int) fuel.getItemData().furnaceBurnDuration();
+        burnDuration = (int) fuel.getItemType().getItemData().furnaceBurnDuration();
         burnTime = burnDuration;
 
         return true;
@@ -309,6 +309,6 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     protected boolean isFuel(ItemStack itemStack) {
-        return itemStack.getItemData().furnaceBurnDuration() > 0;
+        return itemStack.getItemType().getItemData().furnaceBurnDuration() > 0;
     }
 }

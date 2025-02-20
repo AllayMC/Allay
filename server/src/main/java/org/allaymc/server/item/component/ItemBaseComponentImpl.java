@@ -18,7 +18,6 @@ import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
-import org.allaymc.api.item.component.data.ItemDataComponent;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -33,7 +32,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
@@ -77,9 +75,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected static final String TAG_PDC = "PDC";
 
     private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
-
-    @Dependency
-    protected ItemDataComponent itemDataComponent;
 
     @ComponentObject
     protected ItemStack thisItemStack;
@@ -245,7 +240,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean isFull() {
-        return count == itemDataComponent.getItemData().maxStackSize();
+        return count == itemType.getItemData().maxStackSize();
     }
 
     @Override
@@ -263,7 +258,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void setDurability(int durability) {
-        if (!itemDataComponent.getItemData().isDamageable()) {
+        if (!itemType.getItemData().isDamageable()) {
             log.warn("Item {} does not support durability!", itemType.getIdentifier());
             return;
         }
@@ -427,14 +422,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
         return itemStack.getItemType() == getItemType() &&
                itemStack.getMeta() == getMeta() &&
-               (ignoreCount || count + itemStack.getCount() <= itemDataComponent.getItemData().maxStackSize()) &&
+               (ignoreCount || count + itemStack.getCount() <= itemType.getItemData().maxStackSize()) &&
                extraTag1.equals(extraTag2) &&
                itemStack.toBlockState() == toBlockState();
     }
 
     @Override
     public float calculateAttackDamage() {
-        return itemDataComponent.getItemData().attackDamage();
+        return itemType.getItemData().attackDamage();
     }
 
     @Override
@@ -485,10 +480,11 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean isBroken() {
-        if (!itemDataComponent.getItemData().isDamageable()) {
+        if (!itemType.getItemData().isDamageable()) {
             return false;
         }
-        var maxDamage = itemDataComponent.getItemData().maxDamage();
+
+        var maxDamage = itemType.getItemData().maxDamage();
         // This item does not support durability
         if (maxDamage == 0) {
             return false;

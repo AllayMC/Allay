@@ -34,7 +34,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         }
 
         var item = block.toItemStack();
-        item.setCount(item.getItemData().maxStackSize());
+        item.setCount(item.getItemType().getItemData().maxStackSize());
 
         var event = new PlayerBlockPickEvent(player, new BlockStateWithPos(block, new Position3i(blockPos, player.getDimension()), 0), packet.isAddUserData(), item);
         if (!event.call()) {
@@ -62,7 +62,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
 
             var hotBarItem = inventory.getItemStack(slot);
             if (hotBarItem.canMerge(item)) {
-                hotBarItem.setCount(hotBarItem.getItemData().maxStackSize());
+                hotBarItem.setCount(hotBarItem.getItemType().getItemData().maxStackSize());
                 inventory.notifySlotChange(slot);
                 success = true;
             }

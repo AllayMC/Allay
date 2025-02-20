@@ -21,12 +21,12 @@ public class SetCountFunction implements Function {
     @Override
     public void apply(ItemStack itemStack) {
         if (min == max) {
-            itemStack.setCount(Math.min(itemStack.getItemData().maxStackSize(), min));
+            itemStack.setCount(Math.min(itemStack.getItemType().getItemData().maxStackSize(), min));
             return;
         }
 
         var rand = min + ThreadLocalRandom.current().nextInt(max - min + 1);
-        itemStack.setCount(Math.min(itemStack.getItemData().maxStackSize(), rand));
+        itemStack.setCount(Math.min(itemStack.getItemType().getItemData().maxStackSize(), rand));
     }
 
     public static class Deserializer implements FunctionDeserializer {

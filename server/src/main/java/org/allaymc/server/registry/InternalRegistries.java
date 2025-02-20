@@ -2,8 +2,8 @@ package org.allaymc.server.registry;
 
 import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.item.component.data.ItemData;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.item.type.ItemData;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 
 import java.util.Map;

@@ -142,7 +142,7 @@ public enum ApplicableType {
     DAMAGEABLE {
         @Override
         public boolean canBeAppliedTo(ItemType<?> itemType) {
-            return itemType.createItemStack().getItemData().isDamageable();
+            return itemType.getItemData().isDamageable();
         }
     },
     /**

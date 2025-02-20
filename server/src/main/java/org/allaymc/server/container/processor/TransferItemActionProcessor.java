@@ -62,7 +62,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return error();
         }
 
-        if (destItem.getCount() + count > destItem.getItemData().maxStackSize()) {
+        if (destItem.getCount() + count > destItem.getItemType().getItemData().maxStackSize()) {
             log.warn("destination stack size bigger than the max stack size!");
             return error();
         }

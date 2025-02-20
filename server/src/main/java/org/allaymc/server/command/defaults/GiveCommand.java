@@ -49,7 +49,7 @@ public class GiveCommand extends SimpleCommand {
                     }
 
                     for (var player : players) {
-                        var maxStackSize = itemType.createItemStack().getItemData().maxStackSize();
+                        var maxStackSize = itemType.getItemData().maxStackSize();
                         while (amount != 0) {
                             int currentAmount;
                             if (amount > maxStackSize) {

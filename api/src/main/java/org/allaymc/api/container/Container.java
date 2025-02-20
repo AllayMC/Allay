@@ -325,14 +325,14 @@ public interface Container {
         for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
             var content = itemStacks[index];
             if (!content.isFull() && content.canMerge(itemStack, true)) {
-                if (content.getCount() + itemStack.getCount() <= content.getItemData().maxStackSize()) {
+                if (content.getCount() + itemStack.getCount() <= content.getItemType().getItemData().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
                     itemStack.setCount(0);
                 } else {
                     int count = itemStack.getCount();
-                    int completion = content.getItemData().maxStackSize() - content.getCount();
+                    int completion = content.getItemType().getItemData().maxStackSize() - content.getCount();
                     itemStack.setCount(count - completion);
-                    content.setCount(content.getItemData().maxStackSize());
+                    content.setCount(content.getItemType().getItemData().maxStackSize());
                 }
                 notifySlotChange(index);
                 if (itemStack.getCount() == 0) {

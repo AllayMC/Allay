@@ -10,13 +10,13 @@ import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.item.type.ItemData;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
-import org.allaymc.server.item.component.ItemDataComponentImpl;
 import org.allaymc.server.registry.InternalRegistries;
 
 import java.util.*;
@@ -35,6 +35,9 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final int runtimeId;
     @Getter
     private final Set<ItemTag> itemTags;
+    @Getter
+    private final ItemData itemData;
+
     private final Function<ItemStackInitInfo, T> instanceCreator;
 
     private BlockType<?> blockTypeCache;
@@ -42,15 +45,14 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     @SneakyThrows
     private AllayItemType(
-            Function<ItemStackInitInfo, T> instanceCreator,
-            Identifier identifier,
-            int runtimeId,
-            Set<ItemTag> itemTags
+            Function<ItemStackInitInfo, T> instanceCreator, Identifier identifier,
+            int runtimeId, Set<ItemTag> itemTags, ItemData itemData
     ) {
         this.instanceCreator = instanceCreator;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
         this.itemTags = itemTags;
+        this.itemData = itemData;
     }
 
     public static <T extends ItemStack> Builder builder(Class<T> clazz) {
@@ -87,6 +89,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected Identifier identifier;
         protected int runtimeId = Integer.MAX_VALUE;
         protected Set<ItemTag> itemTags = Set.of();
+        protected ItemData itemData = ItemData.DEFAULT;
 
         public Builder(Class<?> clazz) {
             if (clazz == null)
@@ -107,17 +110,21 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             this.identifier = itemId.getIdentifier();
             this.runtimeId = itemId.getRuntimeId();
 
-            // Attributes for vanilla item
-            var itemData = InternalRegistries.ITEM_DATA.get(itemId);
-            if (itemData == null)
-                throw new ItemTypeBuildException("Cannot find vanilla item data component for " + itemId + " from vanilla item attribute registry!");
+            // Item data for vanilla item
+            this.itemData = InternalRegistries.ITEM_DATA.get(itemId);
+            if (itemData == null) {
+                throw new ItemTypeBuildException("Cannot find item data for vanilla item " + itemId + " in registry!");
+            }
 
-            var attributeComponent = new ItemDataComponentImpl(itemData);
-            componentProviders.put(ItemDataComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
+//            var attributeComponent = new ItemDataComponentImpl(itemData);
+//            componentProviders.put(ItemDataComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
 
             // Tags for vanilla item
             var tags = InternalItemTypeData.getItemTags(itemId);
-            if (tags.length != 0) setItemTags(tags);
+            if (tags.length != 0) {
+                setItemTags(tags);
+            }
+
             return this;
         }
 
@@ -168,9 +175,9 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER)) {
                 addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
             }
-            if (!componentProviders.containsKey(ItemDataComponentImpl.IDENTIFIER)) {
-                addComponent($ -> ItemDataComponentImpl.ofDefault(), ItemDataComponentImpl.class);
-            }
+//            if (!componentProviders.containsKey(ItemDataComponentImpl.IDENTIFIER)) {
+//                addComponent($ -> ItemDataComponentImpl.ofDefault(), ItemDataComponentImpl.class);
+//            }
 
             if (identifier == null) {
                 throw new ItemTypeBuildException("identifier cannot be null!");
@@ -194,7 +201,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("Failed to create item type!", e);
             }
 
-            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags);
+            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags, itemData);
             Registries.ITEMS.register(identifier, type);
             return type;
         }

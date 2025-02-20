@@ -102,4 +102,11 @@ public interface ItemType<T extends ItemStack> extends Identified {
     default boolean hasItemTag(ItemTag itemTag) {
         return getItemTags().contains(itemTag);
     }
+
+    /**
+     * Get the data of this item.
+     *
+     * @return The data of this item.
+     */
+    ItemData getItemData();
 }

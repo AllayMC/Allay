@@ -44,6 +44,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented flower pot, and add custom block tag `allay:pottable_plant` which mark thant the plant can be potted.
 - (API) Introduced PDC (Persistent Data Container) system. The PDC is a way to store custom data on a whole range of objects, such as
   items, entities, block entities and world. More PDC types will be added in the future.
+- (API) Added `ItemType#getItemData` method which replaces the old `ItemDataComponent`.
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
   using `/fill` command to fill a large area).
@@ -102,6 +103,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed `Registries#ITEM_DATA`. This registry is moved to `InternalRegistries`.
 - (API) Removed `VoxelShapes#buildStairShape` method, we now have accurate collision shape data dumped from BDS.
 - (API) Removed the old `BlockState#toNetworkBlockDefinition` method, and `BlockState#toNetworkBlockDefinitionRuntime` was renamed without `Runtime` suffix.
+- (API) Removed `ItemDataComponent`. `ItemData` is now located in `ItemType<?>`.
 - Removed `Extension#afterServerStarted` method.
 - Removed `org.allaymc.server.datastruct.collections.nb.*`, we now use the implementations provided by JCTools. Consider using `NonBlockingHashMap`
   and `NonBlockingHashMapLong` if your plugins use these classes.

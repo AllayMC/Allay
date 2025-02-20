@@ -21,7 +21,7 @@ public class SetDamageFunction implements Function {
     @Override
     public void apply(ItemStack itemStack) {
         var rand = (int) ThreadLocalRandom.current().nextFloat(min, max);
-        itemStack.setDurability(itemStack.getItemData().maxDamage() * rand);
+        itemStack.setDurability(itemStack.getItemType().getItemData().maxDamage() * rand);
     }
 
     public static class Deserializer implements FunctionDeserializer {

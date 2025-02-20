@@ -50,7 +50,7 @@ public final class EnchantmentOptionGenerator {
     );
 
     public static List<EnchantOptionData> generateEnchantOptions(Position3ic enchantTablePos, ItemStack input, int seed) {
-        if (input == null || input.hasEnchantment() || input.getItemData().enchantValue() == 0) {
+        if (input == null || input.hasEnchantment() || input.getItemType().getItemData().enchantValue() == 0) {
             return Collections.emptyList();
         }
 
@@ -73,7 +73,7 @@ public final class EnchantmentOptionGenerator {
     private static EnchantOptionData createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredLapisLazuliCount, int requiredXpLevel) {
         int modifiedLevel = requiredXpLevel;
 
-        int enchantValue = inputItem.getItemData().enchantValue();
+        int enchantValue = inputItem.getItemType().getItemData().enchantValue();
         modifiedLevel = modifiedLevel + random.nextInt(enchantValue / 4) + random.nextInt(enchantValue / 2) + 1;
 
         // Random bonus for enchanting power between 0.85 and 1.15
