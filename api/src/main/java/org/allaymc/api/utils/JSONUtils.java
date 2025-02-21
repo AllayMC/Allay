@@ -228,7 +228,7 @@ public class JSONUtils {
      * @return the list.
      */
     public static <V> List<V> fromList(String json, Class<V> type) {
-        TypeToken<List<V>> typeToken = (TypeToken<List<V>>) com.google.gson.reflect.TypeToken.getParameterized(ArrayList.class, type);
+        TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
         return GSON.fromJson(json, typeToken.getType());
     }
 
@@ -283,7 +283,7 @@ public class JSONUtils {
     public static <V> List<V> fromListLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
         reader.setLenient(true);
-        TypeToken<List<V>> typeToken = (TypeToken<List<V>>) com.google.gson.reflect.TypeToken.getParameterized(ArrayList.class, type);
+        TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
         return GSON.fromJson(reader, typeToken.getType());
     }
 
@@ -317,7 +317,7 @@ public class JSONUtils {
         try {
             JsonReader reader = new JsonReader(new FileReader(file));
             reader.setLenient(true);
-            TypeToken<List<V>> typeToken = (TypeToken<List<V>>) com.google.gson.reflect.TypeToken.getParameterized(ArrayList.class, type);
+            TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
             return GSON.fromJson(reader, typeToken.getType());
         } catch (FileNotFoundException e) {
             throw new GsonException("gson lenient from error, file path: {}, type: {}", file.getPath(), type, e);
@@ -389,7 +389,7 @@ public class JSONUtils {
         }
         JsonReader reader = new JsonReader(new StringReader(json));
         reader.setLenient(true);
-        TypeToken<List<V>> typeToken = (TypeToken<List<V>>) com.google.gson.reflect.TypeToken.getParameterized(ArrayList.class, type);
+        TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
         return GSON.fromJson(reader, typeToken.getType());
     }
 
@@ -668,7 +668,7 @@ public class JSONUtils {
         }
         try {
             JsonArray jsonArray = jsonByKey.getAsJsonArray();
-            TypeToken<List<V>> typeToken = (TypeToken<List<V>>) com.google.gson.reflect.TypeToken.getParameterized(ArrayList.class, type);
+            TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
             return from(jsonArray.toString(), typeToken);
         } catch (Exception e) {
             throw new GsonException("gson get list error, json: {}, key: {}, type: {}", json, key, type, e);

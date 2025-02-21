@@ -250,7 +250,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.onDie();
 
         var respawnPacket = new RespawnPacket();
-        respawnPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.ZERO);
+        respawnPacket.setPosition(Vector3f.ZERO);
         respawnPacket.setState(RespawnPacket.State.SERVER_SEARCHING);
         networkComponent.sendPacket(respawnPacket);
     }
@@ -405,9 +405,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         packet.setUuid(networkComponent.getLoginData().getUuid());
         packet.setUsername(networkComponent.getOriginName());
         packet.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().deviceId());
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y(), location.z()));
-        packet.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
-        packet.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
+        packet.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
+        packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
+        packet.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         packet.setGameType(gameType);
         packet.getMetadata().putAll(metadata.getEntityDataMap());
         packet.setDeviceId(networkComponent.getLoginData().getDeviceInfo().deviceId());

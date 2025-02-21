@@ -176,7 +176,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         metadata.set(EntityDataTypes.HITBOX, buildAABBTag());
         var aabb = getAABB();
         metadata.set(EntityDataTypes.COLLISION_BOX,
-                org.cloudburstmc.math.vector.Vector3f.from(
+                Vector3f.from(
                         aabb.maxX() - aabb.minX(),
                         aabb.maxY() - aabb.minY(),
                         aabb.maxZ() - aabb.minZ())
@@ -577,8 +577,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         addEntityPacket.setRuntimeEntityId(runtimeId);
         addEntityPacket.setUniqueEntityId(runtimeId);
         addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
-        addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getNetworkOffset(), location.z()));
-        addEntityPacket.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
+        addEntityPacket.setPosition(Vector3f.from(location.x(), location.y() + getNetworkOffset(), location.z()));
+        addEntityPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
         addEntityPacket.getMetadata().putAll(metadata.getEntityDataMap());
         return addEntityPacket;
@@ -617,8 +617,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected BedrockPacket createAbsoluteMovePacket(Location3dc newLoc, boolean teleporting) {
         var pk = new MoveEntityAbsolutePacket();
         pk.setRuntimeEntityId(getRuntimeId());
-        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y() + getNetworkOffset(), newLoc.z()));
-        pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(newLoc.pitch(), newLoc.yaw(), newLoc.headYaw()));
+        pk.setPosition(Vector3f.from(newLoc.x(), newLoc.y() + getNetworkOffset(), newLoc.z()));
+        pk.setRotation(Vector3f.from(newLoc.pitch(), newLoc.yaw(), newLoc.headYaw()));
         pk.setOnGround(onGround);
         pk.setTeleported(teleporting);
         return pk;

@@ -47,8 +47,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.allaymc.api.item.ItemHelper.*;
-
 /**
  * @author daoge_cmd
  */
@@ -524,23 +522,23 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                    blockType.hasBlockTag(BlockTags.IS_SHEARS_ITEM_DESTRUCTIBLE);
         }
 
-        if (isPickaxe(itemType)) {
+        if (ItemHelper.isPickaxe(itemType)) {
             return blockType.hasBlockTag(BlockTags.IS_PICKAXE_ITEM_DESTRUCTIBLE);
         }
 
-        if (isAxe(itemType)) {
+        if (ItemHelper.isAxe(itemType)) {
             return blockType.hasBlockTag(BlockTags.IS_AXE_ITEM_DESTRUCTIBLE);
         }
 
-        if (isShovel(itemType)) {
+        if (ItemHelper.isShovel(itemType)) {
             return blockType.hasBlockTag(BlockTags.IS_SHOVEL_ITEM_DESTRUCTIBLE);
         }
 
-        if (isHoe(itemType)) {
+        if (ItemHelper.isHoe(itemType)) {
             return blockType.hasBlockTag(BlockTags.IS_HOE_ITEM_DESTRUCTIBLE);
         }
 
-        if (isSword(itemType)) {
+        if (ItemHelper.isSword(itemType)) {
             if (
                     blockType == BlockTypes.BAMBOO ||
                     blockType == BlockTypes.BAMBOO_SAPLING ||
