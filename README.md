@@ -17,6 +17,8 @@ The next-generation Minecraft: Bedrock Edition server software aims to be reliab
 <a href="https://discord.gg/ngkkE4hPTU"><img src="https://img.shields.io/discord/1147136608290750526?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
 <a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-1.21.50%20(Bedrock)-green" /></a>
 [![GitHub License](https://img.shields.io/github/license/allaymc/allay)](LICENSE)
+[![Ko-Fi](https://img.shields.io/badge/Buy_Me_a_Coffee-f37574?logo=kofi&logoColor=white)](https://ko-fi.com/AllayMC)
+
 </div>
 
 ## 📖 Introduction
