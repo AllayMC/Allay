@@ -4,6 +4,8 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,6 +40,21 @@ class AllayNbtUtilsTest {
     void testBase64ToNbtLE() {
         var nbtMap = AllayNbtUtils.base64ToNbtLE(NBT_BASE64_LE);
         assertTrue(nbtMap.getBoolean("testFlag"));
+    }
+
+    @Test
+    void testBytesAndNbtListConverter() {
+        var nbtList = List.of(
+                NbtMap.builder().putBoolean("testFlag1", true).build(),
+                NbtMap.builder().putBoolean("testFlag2", true).build()
+        );
+        assertEquals(nbtList, AllayNbtUtils.bytesToNbtListLE(AllayNbtUtils.nbtListToBytesLE(nbtList)));
+    }
+
+    @Test
+    void testBytesAndNbtConverter() {
+        var nbt = NbtMap.builder().putBoolean("testFlag", true).build();
+        assertEquals(nbt, AllayNbtUtils.bytesToNbtLE(AllayNbtUtils.nbtToBytesLE(nbt)));
     }
 
     @Test

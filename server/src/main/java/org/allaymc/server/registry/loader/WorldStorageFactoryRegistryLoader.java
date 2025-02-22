@@ -2,7 +2,7 @@ package org.allaymc.server.registry.loader;
 
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.allaymc.server.world.storage.AllayLevelDBWorldStorage;
+import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 
 import java.nio.file.Path;
 import java.util.HashMap;

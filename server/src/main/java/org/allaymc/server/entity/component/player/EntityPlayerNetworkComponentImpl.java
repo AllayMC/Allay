@@ -328,7 +328,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         clientSession.getPeer().getCodecHelper().setItemDefinitions(
                 SimpleDefinitionRegistry
                         .<ItemDefinition>builder()
-                        .addAll(startGamePacket.getItemDefinitions())
+                        .addAll(DeferredData.getItemDefinitions())
                         .build()
         );
 
