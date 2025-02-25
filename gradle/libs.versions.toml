@@ -90,7 +90,7 @@ jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
-junit = ["junit-jupiter", "junit-platform-launcher", "mockito-junit-jupiter"]
+junit = ["junit-jupiter", "mockito-junit-jupiter"]
 fastutil = [
     "fastutil-object-int-maps", "fastutil-object-reference-maps", "fastutil-object-object-maps", "fastutil-int-short-maps",
     "fastutil-int-int-maps", "fastutil-int-object-maps", "fastutil-int-reference-maps", "fastutil-long-object-maps",
