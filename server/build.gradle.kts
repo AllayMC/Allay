@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.jctools)
 
     testImplementation(libs.bundles.junit)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testAnnotationProcessor(libs.lombok)
 }
 
