@@ -75,6 +75,8 @@ flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.4" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.12.0" }
+# IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.0" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.15.2" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
@@ -88,7 +90,7 @@ jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
-junit = ["junit-jupiter", "mockito-junit-jupiter"]
+junit = ["junit-jupiter", "junit-platform-launcher", "mockito-junit-jupiter"]
 fastutil = [
     "fastutil-object-int-maps", "fastutil-object-reference-maps", "fastutil-object-object-maps", "fastutil-int-short-maps",
     "fastutil-int-int-maps", "fastutil-int-object-maps", "fastutil-int-reference-maps", "fastutil-long-object-maps",
