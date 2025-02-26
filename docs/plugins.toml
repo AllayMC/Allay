@@ -40,3 +40,8 @@ github = "https://github.com/MineBuilders/allaymc-kts-host"
 description = "Scala standard library and scala toolkit packages for allay."
 authors = ["scala"]
 github = "https://github.com/ScAllay/AllayScalaLibrary"
+
+[DiscordRelay]
+description = "A Simple Minecraft to Discord Relay for the AllayMC Server Software!"
+authors = ["Acktar"]
+github = "https://github.com/acktarbadulla/DiscordRelay-AllayMC"
