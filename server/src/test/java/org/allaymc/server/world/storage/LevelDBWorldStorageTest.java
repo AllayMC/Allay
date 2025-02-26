@@ -10,6 +10,7 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.allaymc.server.world.storage.leveldb.AllayLevelDBWorldStorage;
 import org.allaymc.testutils.AllayTestExtension;
 import org.apache.commons.io.FileUtils;
 import org.joml.Vector3i;

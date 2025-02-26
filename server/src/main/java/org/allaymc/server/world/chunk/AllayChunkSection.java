@@ -6,7 +6,7 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.ChunkSection;
 import org.allaymc.server.datastruct.palette.Palette;
-import org.allaymc.server.world.storage.ChunkSectionVersion;
+import org.allaymc.server.world.storage.leveldb.ChunkSectionVersion;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
