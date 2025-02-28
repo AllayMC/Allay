@@ -576,12 +576,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public CommandOriginData getCommandOriginData() {
         if (commandOriginData == null) {
-            commandOriginData = new CommandOriginData(
-                    CommandOriginType.PLAYER,
-                    networkComponent.getLoginData().getUuid(),
-                    "",
-                    -1
-            );
+            commandOriginData = new CommandOriginData(CommandOriginType.PLAYER, networkComponent.getLoginData().getUuid(), "", -1);
         }
         return commandOriginData;
     }
@@ -594,6 +589,68 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void sendPopup(String message) {
         sendSimpleMessage(message, TextPacket.Type.POPUP);
+    }
+
+    @Override
+    public void sendToast(String title, String content) {
+        ToastRequestPacket pk = new ToastRequestPacket();
+        pk.setTitle(title);
+        pk.setContent(content);
+        this.sendPacket(pk);
+    }
+
+    @Override
+    public void sendTitle(String title) {
+        var pk = new SetTitlePacket();
+        pk.setText(title);
+        pk.setType(SetTitlePacket.Type.TITLE);
+        pk.setXuid("");
+        pk.setPlatformOnlineId("");
+        this.sendPacket(pk);
+    }
+
+    @Override
+    public void sendSubtitle(String subtitle) {
+        var pk = new SetTitlePacket();
+        pk.setText(subtitle);
+        pk.setType(SetTitlePacket.Type.SUBTITLE);
+        pk.setXuid("");
+        pk.setPlatformOnlineId("");
+        this.sendPacket(pk);
+    }
+
+    @Override
+    public void sendActionBar(String actionBar) {
+        var pk = new SetTitlePacket();
+        pk.setText(actionBar);
+        pk.setType(SetTitlePacket.Type.ACTIONBAR);
+        pk.setXuid("");
+        pk.setPlatformOnlineId("");
+        this.sendPacket(pk);
+    }
+
+    @Override
+    public void setTitleSettings(int fadeInTime, int duration, int fadeOutTime) {
+        var pk = new SetTitlePacket();
+        pk.setType(SetTitlePacket.Type.TIMES);
+        pk.setFadeInTime(fadeInTime);
+        pk.setFadeOutTime(fadeOutTime);
+        pk.setStayTime(duration);
+        this.sendPacket(pk);
+    }
+
+    @Override
+    public void resetTitleSettings() {
+        var pk = new SetTitlePacket();
+        pk.setType(SetTitlePacket.Type.RESET);
+        this.sendPacket(pk);
+    }
+
+    @Override
+    public void clearTitle() {
+        var pk = new SetTitlePacket();
+        pk.setType(SetTitlePacket.Type.CLEAR);
+        this.sendPacket(pk);
     }
 
     @Override

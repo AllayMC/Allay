@@ -74,6 +74,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new HelpCommand());
         register(new StructureCommand());
         register(new FillCommand());
+        register(new TitleCommand());
         if (AllayAPI.getInstance().isDevBuild()) {
             register(new GameTestCommand());
         }

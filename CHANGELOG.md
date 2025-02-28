@@ -50,6 +50,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   history for more details.
 - (API) Introduced `WorldStorage#readEntities`, `WorldStorage#writeEntities` and their correspond sync methods. These methods are used
   to read and write entities in a specified chunk area.
+- (API) Introduced a variety of methods for sending toast, title, subtitle and actionbar text to player, and new command `/title` is added.
 - Add support for the new entity storage format used in 1.18.30+. Now entities in newer vanilla maps can be loaded correctly.
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
