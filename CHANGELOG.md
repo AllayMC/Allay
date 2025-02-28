@@ -57,6 +57,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   using `/fill` command to fill a large area).
 - Introduced `ChunkSectionLocks`, which replaced the old `StampedLock` in `Chunk`. Instead of locking the whole chunk when reading/writing
   blocks/biomes, only the related chunk section will be locked now. This should improve the performance of chunk reading/writing.
+- Added `PluginDisableEvent` and `PluginEnableEvent` events.
 
 ### Changed
 
