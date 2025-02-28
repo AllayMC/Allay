@@ -406,7 +406,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                 placePos.y(),
                 placePos.z()
         );
-        return !dimension.getEntityPhysicsService().computeCollidingEntities(blockAABB).isEmpty();
+        return !dimension.getEntityService().getPhysicsService().computeCollidingEntities(blockAABB).isEmpty();
     }
 
     @Override

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.network.ProtocolInfo;
@@ -246,10 +247,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         var map = new Long2ObjectOpenHashMap<Entity>();
         var idsBuf = Unpooled.wrappedBuffer(ids);
         for (var i = 0; i < ids.length; i += 8) {
-            var id = idsBuf.readUnsignedIntLE();
+            var id = idsBuf.readLongLE();
             var nbt = this.db.get(LevelDBKey.indexEntity(id));
             if (nbt == null) {
-                log.error("Entity nbt for existing entity id {} is missing!", id);
+                log.error("Data for existing entity unique id {} is missing!", id);
                 continue;
             }
 
@@ -287,22 +288,33 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     @Override
     public CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities) {
-        return CompletableFuture
-                .runAsync(() -> writeEntitiesSync(chunkX, chunkZ, dimensionInfo, entities), Server.getInstance().getVirtualThreadPool())
-                .exceptionally(t -> {
-                    log.error("Failed to write entities in chunk {}, {}", chunkX, chunkZ);
-                    return null;
-                });
+        return writeEntities0(chunkX, chunkZ, dimensionInfo, entities, true);
     }
 
     @Override
     public void writeEntitiesSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities) {
-        if (entities.isEmpty()) {
-            return;
-        }
+        writeEntities0(chunkX, chunkZ, dimensionInfo, entities, false);
+    }
 
+    protected CompletableFuture<Void> writeEntities0(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities, boolean asyncWrite) {
         var idsBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         try (var writeBatch = this.db.createWriteBatch()) {
+            var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionInfo);
+
+            // Delete the old entities in this chunk
+            var oldIds = this.db.get(idsKey);
+            if (oldIds != null) {
+                var oldIdsBuf = Unpooled.wrappedBuffer(oldIds);
+                for (var i = 0; i < oldIds.length; i += 8) {
+                    writeBatch.delete(LevelDBKey.indexEntity(oldIdsBuf.readLongLE()));
+                }
+            }
+
+            if (entities.isEmpty()) {
+                return handleEntitiesWriteBatch(chunkX, chunkZ, writeBatch, asyncWrite);
+            }
+
+            // Write the new entities
             for (var entry : entities.entrySet()) {
                 if (!entry.getValue().willBeSaved()) {
                     continue;
@@ -312,12 +324,26 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 writeBatch.put(LevelDBKey.indexEntity(entry.getKey()), AllayNbtUtils.nbtToBytesLE(entry.getValue().saveNBT()));
             }
 
-            writeBatch.put(LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionInfo), Utils.convertByteBuf2Array(idsBuf));
-            this.db.write(writeBatch);
+            writeBatch.put(idsKey, Utils.convertByteBuf2Array(idsBuf));
+            return handleEntitiesWriteBatch(chunkX, chunkZ, writeBatch, asyncWrite);
         } catch (IOException e) {
             throw new WorldStorageException(e);
         } finally {
             idsBuf.release();
+        }
+    }
+
+    protected CompletableFuture<Void> handleEntitiesWriteBatch(int chunkX, int chunkZ, WriteBatch writeBatch, boolean asyncWrite) {
+        if (asyncWrite) {
+            return CompletableFuture
+                    .runAsync(() -> this.db.write(writeBatch), Server.getInstance().getVirtualThreadPool())
+                    .exceptionally(t -> {
+                        log.error("Failed to write entities in chunk {}, {}", chunkX, chunkZ);
+                        return null;
+                    });
+        } else {
+            this.db.write(writeBatch);
+            return null;
         }
     }
 
@@ -677,7 +703,6 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 }
             }
         }
-
     }
 
     private static void serializeBlockEntities(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
@@ -701,11 +726,33 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
-    private static void deserializeBlockEntities(DB db, AllayChunkBuilder builder) {
+    private void deserializeBlockEntities(DB db, AllayChunkBuilder builder) {
         byte[] tileBytes = db.get(LevelDBKey.BLOCK_ENTITIES.createKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
-        if (tileBytes != null) {
-            builder.blockEntities(AllayNbtUtils.bytesToNbtListLE(tileBytes));
+        if (tileBytes == null) {
+            return;
         }
+
+        var blockEntities = new NonBlockingHashMap<Integer, BlockEntity>();
+        for (var nbt : AllayNbtUtils.bytesToNbtListLE(tileBytes)) {
+            BlockEntity blockEntity;
+            try {
+                blockEntity = BlockEntityHelper.fromNBT(world.getDimension(builder.getDimensionInfo().dimensionId()), nbt);
+            } catch (Throwable t) {
+                log.error("Error while loading block entity from NBT", t);
+                continue;
+            }
+
+            if (blockEntity == null) {
+                // blockEntity will be null if the entity type is unknown
+                continue;
+            }
+
+            var position = blockEntity.getPosition();
+            var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
+            blockEntities.put(key, blockEntity);
+        }
+
+        builder.blockEntities(blockEntities);
     }
 
     private static void serializeScheduledUpdates(WriteBatch writeBatch, AllayUnsafeChunk chunk, World world) {

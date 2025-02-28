@@ -2,7 +2,6 @@ package org.allaymc.server.world.service;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.world.chunk.Chunk;
@@ -42,12 +41,6 @@ public class TestChunkLoader implements ChunkLoader {
 
     @Override
     public void onChunkInRangeSend(Chunk chunk) {}
-
-    @Override
-    public void spawnEntity(Entity entity) {}
-
-    @Override
-    public void despawnEntity(Entity entity) {}
 
     @Override
     public void onChunkOutOfRange(Set<Long> chunkHashes) {}

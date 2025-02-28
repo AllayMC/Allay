@@ -29,6 +29,8 @@ public class AllayChunkServiceTest {
         Mockito.when(mockDimension.getDimensionInfo()).thenReturn(DimensionInfo.OVERWORLD);
         var testLightService = new TestLightService();
         Mockito.when(mockDimension.getLightService()).thenReturn(testLightService);
+        var testEntityService = new TestEntityService();
+        Mockito.when(mockDimension.getEntityService()).thenReturn(testEntityService);
         Mockito.when(mockDimension.getWorld()).thenReturn(mockWorld);
         var defaultWorldData = AllayWorldData.builder().build();
         Mockito.when(mockWorld.getWorldData()).thenReturn(defaultWorldData);

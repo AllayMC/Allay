@@ -21,7 +21,7 @@ public class EntityPickRequestPacketProcessor extends PacketProcessor<EntityPick
         }
 
         var dimension = player.getDimension();
-        var entity = dimension.getEntityByRuntimeId(packet.getRuntimeEntityId());
+        var entity = dimension.getEntityService().getEntity(packet.getRuntimeEntityId());
         if (entity == null) {
             log.warn("Player {} tried to pick an entity that doesn't exist", player.getOriginName());
             return PacketSignal.UNHANDLED;

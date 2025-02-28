@@ -997,7 +997,12 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * If you don't want the entity to be saved, or you want to save the entity by yourself, you can
      * override this method and return {@code false}.
      * <p>
-     * For example, {@link EntityPlayer} is handled by {@link org.allaymc.api.client.storage.PlayerStorage}.
+     * When return {@code false}, the entity will always be loaded, and {@link org.allaymc.api.world.service.EntityService}
+     * will not remove and save the entity even if the entity is in unloaded chunk. The entity can only be removed
+     * manually in this case.
+     * <p>
+     * For example, {@link EntityPlayer} is handled by {@link org.allaymc.api.client.storage.PlayerStorage},
+     * and this method is override to return {@code false} in {@link EntityPlayer}.
      *
      * @return {@code true} if the entity will be saved, otherwise {@code false}.
      */

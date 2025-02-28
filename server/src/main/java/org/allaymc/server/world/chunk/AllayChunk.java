@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
@@ -202,10 +201,6 @@ public class AllayChunk implements Chunk {
         int getX();
 
         int getZ();
-
-        Entity getEntity(long runtimeId);
-
-        Map<Long, Entity> getEntities();
 
         BlockEntity removeBlockEntity(int x, int y, int z);
 

@@ -3,7 +3,6 @@ package org.allaymc.api.world;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
 import it.unimi.dsi.fastutil.ints.IntObjectPair;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
@@ -24,7 +23,10 @@ import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.OperationType;
-import org.allaymc.api.world.service.*;
+import org.allaymc.api.world.service.BlockUpdateService;
+import org.allaymc.api.world.service.ChunkService;
+import org.allaymc.api.world.service.EntityService;
+import org.allaymc.api.world.service.LightService;
 import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
@@ -39,7 +41,9 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBdc;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
@@ -87,13 +91,6 @@ public interface Dimension {
     ChunkService getChunkService();
 
     /**
-     * Get the entity physics service of this dimension.
-     *
-     * @return the block base component.
-     */
-    EntityPhysicsService getEntityPhysicsService();
-
-    /**
      * Get the block update service of this dimension.
      *
      * @return the block update service.
@@ -135,9 +132,7 @@ public interface Dimension {
      */
     @Unmodifiable
     default Map<Long, Entity> getEntities() {
-        var entities = new Long2ObjectOpenHashMap<Entity>();
-        getChunkService().forEachLoadedChunks(chunk -> entities.putAll(chunk.getEntities()));
-        return Collections.unmodifiableMap(entities);
+        return getEntityService().getEntities();
     }
 
     /**
@@ -146,22 +141,7 @@ public interface Dimension {
      * @return the entity count of this dimension.
      */
     default int getEntityCount() {
-        return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getEntities().size()).sum();
-    }
-
-    /**
-     * Get the entity by its runtime id.
-     *
-     * @param runtimeId the runtime id of the entity.
-     *
-     * @return the entity with the specified runtime id, or {@code null} if not found.
-     */
-    default Entity getEntityByRuntimeId(long runtimeId) {
-        return getChunkService().getLoadedChunks().stream()
-                .map(chunk -> chunk.getEntities().get(runtimeId))
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null);
+        return getEntities().size();
     }
 
     /**

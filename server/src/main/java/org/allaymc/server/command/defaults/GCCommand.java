@@ -25,6 +25,7 @@ public class GCCommand extends SimpleCommand {
                     for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
                         for (var dimension : world.getDimensions().values()) {
                             dimension.getChunkService().removeUnusedChunksImmediately();
+                            dimension.getEntityService().checkAutoSaveImmediately();
                         }
                     }
                     var freedMemory = memory - getCurrentMemoryUsage();

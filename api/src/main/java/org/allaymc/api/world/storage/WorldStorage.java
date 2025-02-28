@@ -13,6 +13,8 @@ import java.util.concurrent.CompletableFuture;
 /**
  * WorldStorage represents the storage of a world, which is responsible for reading and writing chunks and world data.
  * The instance of WorldStorage will be created for each world and won't be shared between worlds.
+ * <p>
+ * The implementation of these methods should all be thread-safe.
  *
  * @author daoge_cmd | Cool_Loong
  */
@@ -92,7 +94,8 @@ public interface WorldStorage {
      * @param chunkX        the x coordinate of the chunk.
      * @param chunkZ        the z coordinate of the chunk.
      * @param dimensionInfo the dimension info of the chunk.
-     * @param entities      the entities to write.
+     * @param entities      the entities to write. Note that the key is the unique id of the entity, not the runtime id.
+     *                      If an empty map is passed, all existing entities in the chunk will be removed.
      *
      * @return a future which will be completed when the entities are written.
      */
