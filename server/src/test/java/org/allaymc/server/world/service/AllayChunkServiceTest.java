@@ -26,15 +26,17 @@ public class AllayChunkServiceTest {
 
     @BeforeAll
     static void init() {
-        Mockito.when(mockDimension.getDimensionInfo()).thenReturn(DimensionInfo.OVERWORLD);
         var testLightService = new TestLightService();
+        var testWorldStorage = new TestWorldStorage();
+        var testEntityService = new TestEntityService(mockDimension, testWorldStorage);
+        var defaultWorldData = AllayWorldData.builder().build();
+        chunkService = new AllayChunkService(mockDimension, AllayWorldGenerator.builder().name("TEST").build(), testWorldStorage);
+
+        Mockito.when(mockDimension.getDimensionInfo()).thenReturn(DimensionInfo.OVERWORLD);
         Mockito.when(mockDimension.getLightService()).thenReturn(testLightService);
-        var testEntityService = new TestEntityService();
         Mockito.when(mockDimension.getEntityService()).thenReturn(testEntityService);
         Mockito.when(mockDimension.getWorld()).thenReturn(mockWorld);
-        var defaultWorldData = AllayWorldData.builder().build();
         Mockito.when(mockWorld.getWorldData()).thenReturn(defaultWorldData);
-        chunkService = new AllayChunkService(mockDimension, AllayWorldGenerator.builder().name("TEST").build(), new TestWorldStorage());
     }
 
     static void tick() {

@@ -1,8 +1,9 @@
 package org.allaymc.server.world.service;
 
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.api.world.service.EntityService;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -11,7 +12,11 @@ import java.util.function.Consumer;
 /**
  * @author daoge_cmd
  */
-public class TestEntityService implements EntityService {
+public class TestEntityService extends AllayEntityService {
+    public TestEntityService(Dimension dimension, WorldStorage worldStorage) {
+        super(dimension, worldStorage);
+    }
+
     @Override
     public void addEntity(Entity entity, Runnable callback) {}
 
@@ -29,4 +34,7 @@ public class TestEntityService implements EntityService {
 
     @Override
     public EntityPhysicsService getPhysicsService() {return null;}
+
+    @Override
+    public void checkAutoSaveImmediately() {}
 }
