@@ -2,6 +2,8 @@ package org.allaymc.server.plugin;
 
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.eventbus.event.plugin.PluginDisableEvent;
+import org.allaymc.api.eventbus.event.plugin.PluginEnableEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
@@ -261,6 +263,7 @@ public class AllayPluginManager implements PluginManager {
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
+                new PluginEnableEvent(plugin).call();
                 plugin.onEnable();
             } catch (Throwable t) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName(), t.getMessage() != null ? t.getMessage() : ""), t);
@@ -283,6 +286,7 @@ public class AllayPluginManager implements PluginManager {
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
+                new PluginDisableEvent(plugin).call();
                 plugin.onDisable();
             } catch (Throwable t) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), t);
