@@ -1548,11 +1548,6 @@ public interface TrKeys {
     String M_AUTOSAVE_INFO_GENERAL = "minecraft:autosave.info.general";
 
     /**
-     * When you see this icon, we are saving your game. Do not turn off your Nintendo Switch while this icon is on screen.
-     */
-    String M_AUTOSAVE_INFO_NX = "minecraft:autosave.info.nx";
-
-    /**
      * When you see this icon, we are saving your game. Do not turn off your Xbox while this icon is on screen.
      */
     String M_AUTOSAVE_INFO_XBOX = "minecraft:autosave.info.xbox";
@@ -2616,6 +2611,11 @@ public interface TrKeys {
      * Applied aim assist settings to the following players: %s
      */
     String M_COMMANDS_AIMASSIST_SUCCESS = "minecraft:commands.aimassist.success";
+
+    /**
+     * Target player's camera type does not support aim assist: %s
+     */
+    String M_COMMANDS_AIMASSIST_UNSUPPORTEDCAMERATYPE = "minecraft:commands.aimassist.unsupportedCameraType";
 
     /**
      * Could not add %1#s to the allowlist
@@ -4038,6 +4038,11 @@ public interface TrKeys {
     String M_COMMANDS_GENERIC_VERSION_MISSING = "minecraft:commands.generic.version.missing";
 
     /**
+     * Active camera has to be a free camera to target an entity
+     */
+    String M_COMMANDS_GENERIC_WRONGTARGETCAMERA = "minecraft:commands.generic.wrongTargetCamera";
+
+    /**
      * Gets pixels for a specific chunk.
      */
     String M_COMMANDS_GETCHUNKDATA_DESCRIPTION = "minecraft:commands.getchunkdata.description";
@@ -4126,6 +4131,11 @@ public interface TrKeys {
      * Sets or gets the paused state of the game for all players.
      */
     String M_COMMANDS_GLOBALPAUSE_DESCRIPTION = "minecraft:commands.globalpause.description";
+
+    /**
+     * Invalid conditions for setting pause state
+     */
+    String M_COMMANDS_GLOBALPAUSE_ERROR = "minecraft:commands.globalpause.error";
 
     /**
      * Set or got pause state
@@ -4738,12 +4748,12 @@ public interface TrKeys {
     String M_COMMANDS_PERMISSIONS_SET_SUCCESS = "minecraft:commands.permissions.set.success";
 
     /**
-     * Jigsaw structure generation failed. Not all chunks are loaded.
+     * Feature placement failed. Not all chunks are loaded.
      */
     String M_COMMANDS_PLACE_CHUNKNOTLOADED_ERROR = "minecraft:commands.place.chunknotloaded.error";
 
     /**
-     * Places a jigsaw structure in the world.
+     * Places a jigsaw structure, feature, or feature rule in the world.
      */
     String M_COMMANDS_PLACE_DESCRIPTION = "minecraft:commands.place.description";
 
@@ -4756,6 +4766,21 @@ public interface TrKeys {
      * Jigsaw structure generation failed.
      */
     String M_COMMANDS_PLACE_GENERATION_ERROR = "minecraft:commands.place.generation.error";
+
+    /**
+     * Invalid feature name.
+     */
+    String M_COMMANDS_PLACE_INVALIDFEATURE_ERROR = "minecraft:commands.place.invalidfeature.error";
+
+    /**
+     * Invalid feature rule name.
+     */
+    String M_COMMANDS_PLACE_INVALIDFEATURERULE_ERROR = "minecraft:commands.place.invalidfeaturerule.error";
+
+    /**
+     * Feature could not be placed at this location.
+     */
+    String M_COMMANDS_PLACE_INVALIDPOSITION_ERROR = "minecraft:commands.place.invalidposition.error";
 
     /**
      * Invalid structure name.
@@ -6718,6 +6743,11 @@ public interface TrKeys {
     String M_COMMANDS_WSSERVER_REQUEST_FAILED = "minecraft:commands.wsserver.request.failed";
 
     /**
+     * Websocket server request rejected, go to Settings to enable.
+     */
+    String M_COMMANDS_WSSERVER_REQUEST_FAILED_DISABLED = "minecraft:commands.wsserver.request.failed.disabled";
+
+    /**
      * Connection established to server: %1#s
      */
     String M_COMMANDS_WSSERVER_SUCCESS = "minecraft:commands.wsserver.success";
@@ -7261,6 +7291,16 @@ public interface TrKeys {
      * Yesterday at %s
      */
     String M_DATE_FORMATTEDSPECIFIC_YESTERDAY = "minecraft:date.formattedSpecific.yesterday";
+
+    /**
+     * %1#s:%2#sam
+     */
+    String M_DATE_FORMATTEDTIMEAM = "minecraft:date.formattedTimeAM";
+
+    /**
+     * %1#s:%2#spm
+     */
+    String M_DATE_FORMATTEDTIMEPM = "minecraft:date.formattedTimePm";
 
     /**
      * %d %s %d
@@ -8553,6 +8593,11 @@ public interface TrKeys {
     String M_DR_CATEGORIES_CAPES = "minecraft:dr.categories.capes";
 
     /**
+     * Emotes
+     */
+    String M_DR_CATEGORIES_EMOTES = "minecraft:dr.categories.emotes";
+
+    /**
      * Eyes
      */
     String M_DR_CATEGORIES_EYES = "minecraft:dr.categories.eyes";
@@ -9446,6 +9491,11 @@ public interface TrKeys {
      * Preview Appearance
      */
     String M_DR_HEADER_PREVIEWAPPEARANCE = "minecraft:dr.header.previewAppearance";
+
+    /**
+     * Dressing Room Search
+     */
+    String M_DR_HEADER_SEARCH_HOME = "minecraft:dr.header.search.home";
 
     /**
      * Iris
@@ -20378,6 +20428,31 @@ public interface TrKeys {
     String M_PATCHNOTES_UNLOCK = "minecraft:patchNotes.unlock";
 
     /**
+     * Play
+     */
+    String M_PAUSENOTIFICATION_PLAYBUTTON = "minecraft:pauseNotification.playButton";
+
+    /**
+     * Watch out, game is no longer paused!
+     */
+    String M_PAUSENOTIFICATION_SUBTITLE_GAMEUNPAUSED = "minecraft:pauseNotification.subtitle.gameUnpaused";
+
+    /**
+     * Multiple people joined your game!
+     */
+    String M_PAUSENOTIFICATION_TITLE_MORETHANTWOPLAYERS = "minecraft:pauseNotification.title.moreThanTwoPlayers";
+
+    /**
+     * %s joined your game!
+     */
+    String M_PAUSENOTIFICATION_TITLE_ONEPLAYER = "minecraft:pauseNotification.title.onePlayer";
+
+    /**
+     * %s and %s joined your game!
+     */
+    String M_PAUSENOTIFICATION_TITLE_TWOPLAYERS = "minecraft:pauseNotification.title.twoPlayers";
+
+    /**
      * Back to Game
      */
     String M_PAUSESCREEN_BACK = "minecraft:pauseScreen.back";
@@ -20423,6 +20498,11 @@ public interface TrKeys {
     String M_PAUSESCREEN_FEED = "minecraft:pauseScreen.feed";
 
     /**
+     * Game is paused
+     */
+    String M_PAUSESCREEN_GAMEISPAUSED = "minecraft:pauseScreen.gameIsPaused";
+
+    /**
      * Game Menu
      */
     String M_PAUSESCREEN_HEADER = "minecraft:pauseScreen.header";
@@ -20451,6 +20531,11 @@ public interface TrKeys {
      * Options
      */
     String M_PAUSESCREEN_OPTIONS = "minecraft:pauseScreen.options";
+
+    /**
+     * Players in %s
+     */
+    String M_PAUSESCREEN_PLAYERSTITLE = "minecraft:pauseScreen.playersTitle";
 
     /**
      * Save & Quit
@@ -21448,6 +21533,16 @@ public interface TrKeys {
      * To view terms and conditions, please visit https://minecraft.net/terms in any web browser.
      */
     String M_TERMS_AND_CONDITIONS_VIEWTERMSANDCONDITIONS = "minecraft:terms_and_conditions.viewTermsAndConditions";
+
+    /**
+     * TAP
+     */
+    String M_TEXTTOICON_TOUCH_ASSIGMENT_ATTACK = "minecraft:textToIcon.touch.assigment.attack";
+
+    /**
+     * LONG TAP
+     */
+    String M_TEXTTOICON_TOUCH_ASSIGMENT_USE = "minecraft:textToIcon.touch.assigment.use";
 
     /**
      * Acacia Fence

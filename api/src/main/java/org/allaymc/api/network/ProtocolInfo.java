@@ -3,7 +3,7 @@ package org.allaymc.api.network;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.utils.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
+import org.cloudburstmc.protocol.bedrock.codec.v776.Bedrock_v776;
 
 /**
  * This class contains information about the current protocol version.
@@ -16,12 +16,12 @@ public final class ProtocolInfo {
     /**
      * The current used packet codec.
      */
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v766.CODEC;
+    public static final BedrockCodec PACKET_CODEC = Bedrock_v776.CODEC;
 
     /**
      * The current minecraft version.
      */
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 50, 0, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 60, 0, 0);
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
@@ -29,7 +29,7 @@ public final class ProtocolInfo {
      * This is not the same as current game version. It should match the nearest version
      * that has block state changes.
      */
-    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 40, 1, 0);
+    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 60, 33, 0);
 
     /**
      * The encoded version number of the block state version (without revision).

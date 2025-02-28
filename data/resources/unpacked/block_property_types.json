@@ -363,6 +363,15 @@
         true
       ]
     },
+    "creaking_heart_state": {
+      "serializationName": "creaking_heart_state",
+      "valueType": "ENUM",
+      "values": [
+        "uprooted",
+        "dormant",
+        "awake"
+      ]
+    },
     "dead_bit": {
       "serializationName": "dead_bit",
       "valueType": "BOOLEAN",
@@ -1393,23 +1402,11 @@
     }
   },
   "specialBlockTypes": {
-    "minecraft:acacia_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:acacia_fence_gate": {
-      "direction": "direction_4"
-    },
     "minecraft:acacia_trapdoor": {
       "direction": "direction_4"
     },
     "minecraft:activator_rail": {
       "rail_direction": "rail_direction_6"
-    },
-    "minecraft:bamboo_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:bamboo_fence_gate": {
-      "direction": "direction_4"
     },
     "minecraft:bamboo_trapdoor": {
       "direction": "direction_4"
@@ -1426,12 +1423,6 @@
     "minecraft:bell": {
       "direction": "direction_4"
     },
-    "minecraft:birch_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:birch_fence_gate": {
-      "direction": "direction_4"
-    },
     "minecraft:birch_trapdoor": {
       "direction": "direction_4"
     },
@@ -1440,12 +1431,6 @@
     },
     "minecraft:chalkboard": {
       "direction": "direction_16"
-    },
-    "minecraft:cherry_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:cherry_fence_gate": {
-      "direction": "direction_4"
     },
     "minecraft:cherry_trapdoor": {
       "direction": "direction_4"
@@ -1463,25 +1448,10 @@
     "minecraft:compound_creator": {
       "direction": "direction_4"
     },
-    "minecraft:copper_door": {
-      "direction": "direction_4"
-    },
     "minecraft:copper_trapdoor": {
       "direction": "direction_4"
     },
-    "minecraft:crimson_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:crimson_fence_gate": {
-      "direction": "direction_4"
-    },
     "minecraft:crimson_trapdoor": {
-      "direction": "direction_4"
-    },
-    "minecraft:dark_oak_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:dark_oak_fence_gate": {
       "direction": "direction_4"
     },
     "minecraft:dark_oak_trapdoor": {
@@ -1496,13 +1466,7 @@
     "minecraft:element_constructor": {
       "direction": "direction_4"
     },
-    "minecraft:exposed_copper_door": {
-      "direction": "direction_4"
-    },
     "minecraft:exposed_copper_trapdoor": {
-      "direction": "direction_4"
-    },
-    "minecraft:fence_gate": {
       "direction": "direction_4"
     },
     "minecraft:fire": {
@@ -1517,16 +1481,7 @@
     "minecraft:grindstone": {
       "direction": "direction_4"
     },
-    "minecraft:iron_door": {
-      "direction": "direction_4"
-    },
     "minecraft:iron_trapdoor": {
-      "direction": "direction_4"
-    },
-    "minecraft:jungle_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:jungle_fence_gate": {
       "direction": "direction_4"
     },
     "minecraft:jungle_trapdoor": {
@@ -1538,12 +1493,6 @@
     "minecraft:loom": {
       "direction": "direction_4"
     },
-    "minecraft:mangrove_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:mangrove_fence_gate": {
-      "direction": "direction_4"
-    },
     "minecraft:mangrove_trapdoor": {
       "direction": "direction_4"
     },
@@ -1553,16 +1502,7 @@
     "minecraft:nether_wart": {
       "age": "age_4"
     },
-    "minecraft:oxidized_copper_door": {
-      "direction": "direction_4"
-    },
     "minecraft:oxidized_copper_trapdoor": {
-      "direction": "direction_4"
-    },
-    "minecraft:pale_oak_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:pale_oak_fence_gate": {
       "direction": "direction_4"
     },
     "minecraft:pale_oak_trapdoor": {
@@ -1577,12 +1517,6 @@
     "minecraft:soul_fire": {
       "age": "age_16"
     },
-    "minecraft:spruce_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:spruce_fence_gate": {
-      "direction": "direction_4"
-    },
     "minecraft:spruce_trapdoor": {
       "direction": "direction_4"
     },
@@ -1592,46 +1526,22 @@
     "minecraft:tripwire_hook": {
       "direction": "direction_4"
     },
-    "minecraft:warped_door": {
-      "direction": "direction_4"
-    },
-    "minecraft:warped_fence_gate": {
-      "direction": "direction_4"
-    },
     "minecraft:warped_trapdoor": {
-      "direction": "direction_4"
-    },
-    "minecraft:waxed_copper_door": {
       "direction": "direction_4"
     },
     "minecraft:waxed_copper_trapdoor": {
       "direction": "direction_4"
     },
-    "minecraft:waxed_exposed_copper_door": {
-      "direction": "direction_4"
-    },
     "minecraft:waxed_exposed_copper_trapdoor": {
-      "direction": "direction_4"
-    },
-    "minecraft:waxed_oxidized_copper_door": {
       "direction": "direction_4"
     },
     "minecraft:waxed_oxidized_copper_trapdoor": {
       "direction": "direction_4"
     },
-    "minecraft:waxed_weathered_copper_door": {
-      "direction": "direction_4"
-    },
     "minecraft:waxed_weathered_copper_trapdoor": {
       "direction": "direction_4"
     },
-    "minecraft:weathered_copper_door": {
-      "direction": "direction_4"
-    },
     "minecraft:weathered_copper_trapdoor": {
-      "direction": "direction_4"
-    },
-    "minecraft:wooden_door": {
       "direction": "direction_4"
     }
   }

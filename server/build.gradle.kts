@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream
  * This is not the same as the version of allay-api.
  * Please note that they are two things.
  */
-version = "0.1.4" + if (rootProject.ext.get("isDevBuild") as Boolean) "-dev" else ""
+version = "0.2.0" + if (rootProject.ext.get("isDevBuild") as Boolean) "-dev" else ""
 
 plugins {
     id("jacoco")

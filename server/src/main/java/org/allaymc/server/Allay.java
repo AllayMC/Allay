@@ -39,6 +39,7 @@ import org.allaymc.server.extension.ExtensionManager;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
+import org.allaymc.server.item.creative.AllayCreativeItemRegistry;
 import org.allaymc.server.pdc.AllayPersistentDataTypeRegistry;
 import org.allaymc.server.permission.tree.AllayPermissionTree;
 import org.allaymc.server.registry.AllayCommandRegistry;
@@ -188,6 +189,7 @@ public final class Allay {
                 new EnchantmentTypeRegistryPopulator()
         );
         InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataLoader());
+        InternalRegistries.ITEM_COMPONENT_DATA = SimpleMappedRegistry.create(new ItemComponentRegistryLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
                 r -> Registries.ITEMS = r,
@@ -228,7 +230,7 @@ public final class Allay {
         Registries.WORLD_GENERATOR_FACTORIES = SimpleMappedRegistry.create(new WorldGeneratorFactoryRegistryLoader());
 
         // Creative Item
-        Registries.CREATIVE_ITEMS = IntMappedRegistry.create(new CreativeItemRegistryLoader());
+        Registries.CREATIVE_ITEMS = new AllayCreativeItemRegistry();
 
         // Recipe
         Registries.RECIPES = IntMappedRegistry.create(new RecipeRegistryLoader());

@@ -1,7 +1,6 @@
 package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
@@ -15,7 +14,6 @@ import org.cloudburstmc.protocol.bedrock.packet.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -28,7 +26,6 @@ import java.util.function.Supplier;
 public final class DeferredData {
 
     public static final Supplier<CraftingDataPacket> CRAFTING_DATA_PACKET = Suppliers.memoize(DeferredData::encodeCraftingDataPacket);
-    public static final Supplier<CreativeContentPacket> CREATIVE_CONTENT_PACKET = Suppliers.memoize(DeferredData::encodeCreativeContentPacket);
     public static final Supplier<List<ItemDefinition>> ITEM_DEFINITIONS = Suppliers.memoize(DeferredData::encodeItemDefinitions);
     public static final Supplier<List<BlockDefinition>> BLOCK_DEFINITIONS = Suppliers.memoize(DeferredData::encodeBlockDefinitions);
     public static final Supplier<AvailableEntityIdentifiersPacket> AVAILABLE_ENTITY_IDENTIFIERS_PACKET = Suppliers.memoize(DeferredData::encodeAvailableEntityIdentifiersPacket);
@@ -56,14 +53,6 @@ public final class DeferredData {
         // TODO: packet.getContainerMixData().addAll();
         // TODO: packet.getMaterialReducers().addAll();
         pk.setCleanRecipes(true);
-        return pk;
-    }
-
-    private static CreativeContentPacket encodeCreativeContentPacket() {
-        var pk = new CreativeContentPacket();
-        // We should sort it first!
-        var map = new TreeMap<>(Registries.CREATIVE_ITEMS.getContent());
-        pk.getContents().addAll(map.values().stream().map(ItemStack::toCreativeItemData).toList());
         return pk;
     }
 

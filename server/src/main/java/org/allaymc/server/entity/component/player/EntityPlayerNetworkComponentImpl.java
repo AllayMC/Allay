@@ -318,23 +318,17 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var startGamePacket = encodeStartGamePacket(dimension.getWorld(), playerData, dimension);
         sendPacket(startGamePacket);
 
-        clientSession.getPeer().getCodecHelper().setItemDefinitions(
-                SimpleDefinitionRegistry
-                        .<ItemDefinition>builder()
-                        .addAll(DeferredData.ITEM_DEFINITIONS.get())
-                        .build()
-        );
+        clientSession.getPeer().getCodecHelper().setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(DeferredData.ITEM_DEFINITIONS.get()).build());
+        clientSession.getPeer().getCodecHelper().setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(DeferredData.BLOCK_DEFINITIONS.get()).build());
 
-        clientSession.getPeer().getCodecHelper().setBlockDefinitions(
-                SimpleDefinitionRegistry
-                        .<BlockDefinition>builder()
-                        .addAll(DeferredData.BLOCK_DEFINITIONS.get())
-                        .build()
-        );
+        var itemComponentPacket = new ItemComponentPacket();
+        itemComponentPacket.getItems().addAll(DeferredData.ITEM_DEFINITIONS.get());
+        sendPacket(itemComponentPacket);
+
+        sendPacket(Registries.CREATIVE_ITEMS.encodeCreativeContentPacketFor(thisPlayer.getLangCode()));
 
         sendPacket(DeferredData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(DeferredData.BIOME_DEFINITION_LIST_PACKET.get());
-        sendPacket(DeferredData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(DeferredData.CRAFTING_DATA_PACKET.get());
     }
 
@@ -363,8 +357,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setVanillaVersion("*");
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(true);
-        // TODO: remove this when updating to 1.21.60
-        startGamePacket.setItemDefinitions(DeferredData.ITEM_DEFINITIONS.get());
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         startGamePacket.setServerAuthoritativeBlockBreaking(true);
         startGamePacket.setCommandsEnabled(true);
@@ -409,7 +401,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(playStatusPacket);
 
         ((AllayServer) Server.getInstance()).onLoggedIn(thisPlayer);
-        // TODO: plugin event
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         sendPacket(DeferredData.RESOURCE_PACKS_INFO_PACKET.get());
     }

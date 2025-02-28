@@ -6,7 +6,6 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.utils.Identified;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Set;
@@ -80,9 +79,7 @@ public interface ItemType<T extends ItemStack> extends Identified {
      *
      * @return The network definition of the item.
      */
-    default ItemDefinition toNetworkDefinition() {
-        return new SimpleItemDefinition(getIdentifier().toString(), getRuntimeId(), false);
-    }
+    ItemDefinition toNetworkDefinition();
 
     /**
      * Get the item tags of the item.

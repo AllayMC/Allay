@@ -1,7 +1,5 @@
 package org.allaymc.server.block.component.door;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
@@ -27,14 +25,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * @author Dhaiven
  */
 public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
-    protected static final BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
-
-    static {
-        DOOR_DIRECTION.put(BlockFace.EAST, 0);
-        DOOR_DIRECTION.put(BlockFace.SOUTH, 1);
-        DOOR_DIRECTION.put(BlockFace.WEST, 2);
-        DOOR_DIRECTION.put(BlockFace.NORTH, 3);
-    }
 
     public BlockDoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -64,7 +54,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
-        blockState = blockState.setPropertyValue(DIRECTION_4, DOOR_DIRECTION.get(face));
+        blockState = blockState.setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, face.rotateYCCW().toMinecraftCardinalDirection());
 
         var leftBlockState = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos));
         var rightBlockState = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos));

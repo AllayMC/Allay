@@ -21,7 +21,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.ACACIA_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.ACACIA_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.ACACIA_DOUBLE_SLAB == null) {
@@ -41,7 +41,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.ACACIA_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.ACACIA_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.ACACIA_HANGING_SIGN == null) {
@@ -263,7 +263,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.BAMBOO_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.BAMBOO_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.BAMBOO_DOUBLE_SLAB == null) {
@@ -283,7 +283,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.BAMBOO_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.BAMBOO_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.BAMBOO_HANGING_SIGN == null) {
@@ -461,7 +461,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.BIRCH_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.BIRCH_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.BIRCH_DOUBLE_SLAB == null) {
@@ -481,7 +481,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.BIRCH_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.BIRCH_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.BIRCH_HANGING_SIGN == null) {
@@ -1106,7 +1106,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.CHERRY_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.CHERRY_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.CHERRY_DOUBLE_SLAB == null) {
@@ -1126,7 +1126,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.CHERRY_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.CHERRY_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.CHERRY_HANGING_SIGN == null) {
@@ -1489,7 +1489,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.COPPER_GRATE == null) {
@@ -1564,7 +1564,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.CREAKING_HEART = AllayBlockType
                     .builder(BlockCreakingHeartBehaviorImpl.class)
                     .vanillaBlock(BlockId.CREAKING_HEART)
-                    .setProperties(BlockPropertyTypes.ACTIVE, BlockPropertyTypes.NATURAL, BlockPropertyTypes.PILLAR_AXIS)
+                    .setProperties(BlockPropertyTypes.CREAKING_HEART_STATE, BlockPropertyTypes.NATURAL, BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.CREEPER_HEAD == null) {
@@ -1585,7 +1585,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.CRIMSON_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.CRIMSON_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.CRIMSON_DOUBLE_SLAB == null) {
@@ -1605,7 +1605,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.CRIMSON_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.CRIMSON_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.CRIMSON_FUNGUS == null) {
@@ -1854,7 +1854,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.DARK_OAK_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.DARK_OAK_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.DARK_OAK_DOUBLE_SLAB == null) {
@@ -1874,7 +1874,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.DARK_OAK_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.DARK_OAK_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.DARK_OAK_HANGING_SIGN == null) {
@@ -3240,7 +3240,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.EXPOSED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.EXPOSED_COPPER_GRATE == null) {
@@ -3294,7 +3294,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.FERN == null) {
@@ -4020,7 +4020,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.IRON_DOOR = AllayBlockType
                     .builder(BlockIronDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.IRON_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.IRON_ORE == null) {
@@ -4060,7 +4060,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.JUNGLE_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.JUNGLE_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.JUNGLE_DOUBLE_SLAB == null) {
@@ -4080,7 +4080,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.JUNGLE_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.JUNGLE_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.JUNGLE_HANGING_SIGN == null) {
@@ -4709,7 +4709,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.MANGROVE_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.MANGROVE_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.MANGROVE_DOUBLE_SLAB == null) {
@@ -4729,7 +4729,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.MANGROVE_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.MANGROVE_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.MANGROVE_HANGING_SIGN == null) {
@@ -5308,7 +5308,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.OXIDIZED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.OXIDIZED_COPPER_GRATE == null) {
@@ -5394,7 +5394,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.PALE_OAK_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.PALE_OAK_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.PALE_OAK_DOUBLE_SLAB == null) {
@@ -5414,7 +5414,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.PALE_OAK_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.PALE_OAK_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.PALE_OAK_HANGING_SIGN == null) {
@@ -6826,7 +6826,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.SPRUCE_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.SPRUCE_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.SPRUCE_DOUBLE_SLAB == null) {
@@ -6846,7 +6846,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.SPRUCE_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.SPRUCE_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.SPRUCE_HANGING_SIGN == null) {
@@ -7518,7 +7518,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WARPED_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.WARPED_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.WARPED_DOUBLE_SLAB == null) {
@@ -7538,7 +7538,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WARPED_FENCE_GATE = AllayBlockType
                     .builder(BlockFenceGateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WARPED_FENCE_GATE)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
+                    .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                     .build();
         }
         if (BlockTypes.WARPED_FUNGUS == null) {
@@ -7670,7 +7670,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WAXED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.WAXED_COPPER_GRATE == null) {
@@ -7736,7 +7736,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WAXED_EXPOSED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_GRATE == null) {
@@ -7802,7 +7802,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WAXED_OXIDIZED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_GRATE == null) {
@@ -7868,7 +7868,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WAXED_WEATHERED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_GRATE == null) {
@@ -7934,7 +7934,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WEATHERED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.WEATHERED_COPPER_GRATE == null) {
@@ -8102,7 +8102,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WOODEN_DOOR = AllayBlockType
                     .builder(BlockDoorBehaviorImpl.class)
                     .vanillaBlock(BlockId.WOODEN_DOOR)
-                    .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                    .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.WOODEN_PRESSURE_PLATE == null) {

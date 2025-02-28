@@ -60,14 +60,6 @@ Firstly, obtain the original language files from BDS and copy them to the `unpac
 Then, run `LangBuilder` under `data`. Finally, run `TrKeysGen` under `codegen`. With this, the language file update is
 complete.
 
-[//]: # (### Generate `item_meta_block_state_bimap.nbt`)
-
-[//]: # ()
-
-[//]: # (**Run `ItemMetaToBlockStateMappingsGenerator` under `data`**. This script will generate)
-
-[//]: # (item_meta_block_state_bimap.nbt based on creative_items.nbt. Remember to delete the old files before running!)
-
 ## Code Generation
 
 Allay completes most repetitive work through code generation. Next, we'll focus on `codegen`.

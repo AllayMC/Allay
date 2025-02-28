@@ -21,9 +21,9 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
         if (player.getGameType() != GameType.CREATIVE && player.getGameType() != GameType.SPECTATOR)
             return error();
 
-        var item = Registries.CREATIVE_ITEMS.get(action.getCreativeItemNetworkId() - 1);
+        var item = Registries.CREATIVE_ITEMS.getItemStackByIndex(action.getCreativeItemNetworkId());
         if (item == null) {
-            log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId() - 1);
+            log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId());
             return error();
         }
 
