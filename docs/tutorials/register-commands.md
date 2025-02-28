@@ -53,7 +53,7 @@ import org.allaymc.api.server.Server;
 public class HelloCommand extends SimpleCommand {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
-        getPermissions().forEach(DefaultPermissions.MEMBER::addPerm); /*(1)!*/
+        getPermissions().forEach(DefaultPermissions.MEMBER::addPermission); /*(1)!*/
     }
 }
 ```
