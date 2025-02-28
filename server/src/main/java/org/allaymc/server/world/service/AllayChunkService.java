@@ -363,7 +363,6 @@ public final class AllayChunkService implements ChunkService {
 
     @Override
     public CompletableFuture<Void> unloadAllChunks() {
-        // TODO: shutdown()
         return CompletableFuture.allOf(chunks.keySet().stream().map(this::unloadChunk).toArray(CompletableFuture[]::new));
     }
 

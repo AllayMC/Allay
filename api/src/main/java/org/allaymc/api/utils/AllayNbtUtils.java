@@ -2,15 +2,15 @@ package org.allaymc.api.utils;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.cloudburstmc.nbt.NBTOutputStream;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtMapBuilder;
-import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.nbt.*;
 import org.joml.*;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 /**
  * @author daoge_cmd
@@ -75,6 +75,75 @@ public final class AllayNbtUtils {
     @SneakyThrows
     public static NbtMap base64ToNbt(String base64) {
         return (NbtMap) org.cloudburstmc.nbt.NbtUtils.createReader(new ByteArrayInputStream(Base64.getDecoder().decode(base64))).readTag();
+    }
+
+    /**
+     * Convert bytes to nbt list.
+     *
+     * @param bytes the bytes.
+     *
+     * @return the nbt list.
+     */
+    @SneakyThrows
+    public static List<NbtMap> bytesToNbtListLE(byte[] bytes) {
+        List<NbtMap> tags = new ArrayList<>();
+        try (var stream = new BufferedInputStream(new ByteArrayInputStream(bytes));
+             var readerLE = NbtUtils.createReaderLE(stream)) {
+            while (stream.available() > 0) {
+                tags.add((NbtMap) readerLE.readTag());
+            }
+        }
+
+        return tags;
+    }
+
+    /**
+     * Convert nbt list to bytes.
+     *
+     * @param tags the nbt list.
+     *
+     * @return the bytes.
+     */
+    @SneakyThrows
+    public static byte[] nbtListToBytesLE(List<NbtMap> tags) {
+        try (var stream = new ByteArrayOutputStream();
+             var writerLE = NbtUtils.createWriterLE(stream)) {
+            for (NbtMap tag : tags) {
+                writerLE.writeTag(tag);
+            }
+            return stream.toByteArray();
+        }
+    }
+
+    /**
+     * Convert bytes to nbt.
+     *
+     * @param bytes the bytes.
+     *
+     * @return the nbt.
+     */
+    @SneakyThrows
+    public static NbtMap bytesToNbtLE(byte[] bytes) {
+        try (var stream = new BufferedInputStream(new ByteArrayInputStream(bytes));
+             var readerLE = NbtUtils.createReaderLE(stream)) {
+            return (NbtMap) readerLE.readTag();
+        }
+    }
+
+    /**
+     * Convert nbt to bytes.
+     *
+     * @param nbt the nbt.
+     *
+     * @return the bytes.
+     */
+    @SneakyThrows
+    public static byte[] nbtToBytesLE(NbtMap nbt) {
+        try (var stream = new ByteArrayOutputStream();
+             var writerLE = NbtUtils.createWriterLE(stream)) {
+            writerLE.writeTag(nbt);
+            return stream.toByteArray();
+        }
     }
 
     /**

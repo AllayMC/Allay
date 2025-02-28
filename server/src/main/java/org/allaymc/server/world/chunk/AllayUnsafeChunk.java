@@ -14,9 +14,6 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.BlockEntityHelper;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
@@ -31,19 +28,15 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
-import org.allaymc.server.entity.component.EntityBaseComponentImpl;
-import org.allaymc.server.entity.impl.EntityImpl;
-import org.allaymc.server.world.service.AllayEntityPhysicsService;
+import org.allaymc.server.world.service.AllayEntityService;
 import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3i;
-import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.BlockChangeEntry;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateSubChunkBlocksPacket;
 import org.jctools.maps.NonBlockingHashMap;
-import org.jctools.maps.NonBlockingHashMapLong;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -77,12 +70,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
     @Setter
     protected volatile ChunkState state;
-    protected List<NbtMap> entityNbtList;
-    protected List<NbtMap> blockEntityNbtList;
+    protected final NonBlockingHashMap<Integer, BlockEntity> blockEntities;
 
     protected final ChunkBitMap heightMapDirtyFlags;
-    protected final NonBlockingHashMapLong<Entity> entities;
-    protected final NonBlockingHashMap<Integer, BlockEntity> blockEntities;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<BlockChangeEntry> blockChangeEntries;
     protected final Queue<BlockChangeEntry> extraBlockChangeEntries;
@@ -101,22 +91,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     /**
      * Create a new {@link AllayUnsafeChunk}.
      *
-     * @param x                  the x coordinate of the chunk.
-     * @param z                  the z coordinate of the chunk.
-     * @param dimensionInfo      the dimension info.
-     * @param sections           the sections.
-     * @param heightMap          the height map.
-     * @param scheduledUpdates   the scheduled updates.
-     * @param state              the state.
-     * @param entityNbtList      the entity nbt list, can be {@code null}.
-     * @param blockEntityNbtList the block entity nbt list, can be {@code null}
+     * @param x                the x coordinate of the chunk.
+     * @param z                the z coordinate of the chunk.
+     * @param dimensionInfo    the dimension info.
+     * @param sections         the sections.
+     * @param heightMap        the height map.
+     * @param scheduledUpdates the scheduled updates.
+     * @param state            the state.
+     * @param blockEntities    the block entities in the chunk.
      */
     AllayUnsafeChunk(
             int x, int z, DimensionInfo dimensionInfo,
             AllayChunkSection[] sections, HeightMap heightMap,
             NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates,
-            ChunkState state, List<NbtMap> entityNbtList,
-            List<NbtMap> blockEntityNbtList) {
+            ChunkState state, NonBlockingHashMap<Integer, BlockEntity> blockEntities) {
         this.x = x;
         this.z = z;
         this.dimensionInfo = dimensionInfo;
@@ -124,11 +112,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.heightMap = heightMap;
         this.scheduledUpdates = scheduledUpdates;
         this.state = state;
-        this.entityNbtList = entityNbtList;
-        this.blockEntityNbtList = blockEntityNbtList;
+        this.blockEntities = blockEntities;
         this.heightMapDirtyFlags = new ChunkBitMap();
-        this.entities = new NonBlockingHashMapLong<>();
-        this.blockEntities = new NonBlockingHashMap<>();
         this.chunkLoaders = Sets.newConcurrentHashSet();
         this.blockChangeEntries = PlatformDependent.newMpscQueue();
         this.extraBlockChangeEntries = PlatformDependent.newMpscQueue();
@@ -161,7 +146,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public void tick(long currentTick, Dimension dimension) {
         blockEntities.values().forEach(blockEntity -> ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).tick(currentTick));
-        entities.values().forEach(entity -> ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick));
         tickScheduledUpdates(currentTick, dimension);
         tickRandomUpdates(dimension);
     }
@@ -242,66 +226,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             chunkSetCallback.run();
         }
 
-        if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
-            for (var nbt : blockEntityNbtList) {
-                BlockEntity blockEntity;
-                try {
-                    blockEntity = BlockEntityHelper.fromNBT(dimension, nbt);
-                } catch (Throwable t) {
-                    log.error("Error while loading block entity from NBT", t);
-                    continue;
-                }
-
-                if (blockEntity == null) {
-                    // blockEntity will be null if the entity type is unknown
-                    continue;
-                }
-
-                var position = blockEntity.getPosition();
-                var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
-                this.blockEntities.put(key, blockEntity);
-            }
-
-            blockEntityNbtList = null;
-        }
-
-        if (entityNbtList != null && !entityNbtList.isEmpty()) {
-            for (var nbt : entityNbtList) {
-                Entity entity;
-                try {
-                    entity = EntityHelper.fromNBT(dimension, nbt);
-                } catch (Throwable t) {
-                    log.error("Error while loading entity from NBT", t);
-                    continue;
-                }
-
-                if (entity == null) {
-                    // entity will be null if the entity type is unknown
-                    continue;
-                }
-
-                dimension.getEntityService().addEntity(entity);
-            }
-            entityNbtList = null;
-        }
-
         ((AllayLightService) dimension.getLightService()).onChunkLoad(toSafeChunk());
         setBlockChangeCallback((x, y, z, blockState, layer) -> {
             if (layer == 0) {
                 ((AllayLightService) dimension.getLightService()).onBlockChange(x + (this.x << 4), y, z + (this.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
             }
         });
+        ((AllayEntityService) dimension.getEntityService()).onChunkLoad(this.x, this.z);
 
         loaded = true;
     }
 
     public void onChunkUnload(Dimension dimension) {
-        entities.forEach((runtimeId, entity) -> {
-            // NOTICE: shouldn't use despawn() method here, because entities should be kept in the chunk so that they will be saved
-            entity.despawnFromAll();
-            ((AllayEntityPhysicsService) dimension.getEntityPhysicsService()).removeEntity(entity);
-        });
         ((AllayLightService) dimension.getLightService()).onChunkUnload(safeChunk);
+        blockChangeCallback = null;
     }
 
     @Override
@@ -497,25 +435,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
         AllayUnsafeChunk.checkXZ(x, z);
         return this.getSection(y >> 4).getBiomeType(x, y & 0xf, z);
-    }
-
-    public void addEntity(Entity entity) {
-        Preconditions.checkNotNull(entity);
-        entities.put(entity.getRuntimeId(), entity);
-    }
-
-    public Entity removeEntity(long runtimeId) {
-        return entities.remove(runtimeId);
-    }
-
-    @Override
-    public Entity getEntity(long runtimeId) {
-        return entities.get(runtimeId);
-    }
-
-    @Override
-    public Map<Long, Entity> getEntities() {
-        return Collections.unmodifiableMap(entities);
     }
 
     @Override

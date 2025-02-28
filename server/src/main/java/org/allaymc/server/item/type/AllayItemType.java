@@ -1,5 +1,6 @@
 package org.allaymc.server.item.type;
 
+import com.google.common.base.Suppliers;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -29,6 +30,8 @@ import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
  * @author daoge_cmd
  */
 public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
+
+    private final Function<ItemStackInitInfo, T> instanceCreator;
     @Getter
     private final Identifier identifier;
     @Getter
@@ -37,11 +40,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final Set<ItemTag> itemTags;
     @Getter
     private final ItemData itemData;
-
-    private final Function<ItemStackInitInfo, T> instanceCreator;
-
-    private BlockType<?> blockTypeCache;
-    private boolean haveTriedInitBlockTypeCache;
+    private final Supplier<BlockType<?>> blockType;
 
     @SneakyThrows
     private AllayItemType(
@@ -53,6 +52,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         this.runtimeId = runtimeId;
         this.itemTags = itemTags;
         this.itemData = itemData;
+        this.blockType = Suppliers.memoize(() -> Registries.BLOCKS.get(BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier)));
     }
 
     public static <T extends ItemStack> Builder builder(Class<T> clazz) {
@@ -69,14 +69,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     @Override
     public BlockType<?> getBlockType() {
-        if (!haveTriedInitBlockTypeCache) {
-            // Try to find out if this item type has a corresponding block type
-            var blockIdentifier = BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier);
-            // Note that the block type still may be null
-            blockTypeCache = Registries.BLOCKS.get(blockIdentifier);
-            haveTriedInitBlockTypeCache = true;
-        }
-        return blockTypeCache;
+        return blockType.get();
     }
 
     @ToString
@@ -115,9 +108,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (itemData == null) {
                 throw new ItemTypeBuildException("Cannot find item data for vanilla item " + itemId + " in registry!");
             }
-
-//            var attributeComponent = new ItemDataComponentImpl(itemData);
-//            componentProviders.put(ItemDataComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
 
             // Tags for vanilla item
             var tags = InternalItemTypeData.getItemTags(itemId);

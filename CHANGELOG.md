@@ -10,7 +10,7 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.1.4 (API 0.5.0) - Unreleased
+## 0.2.0 (API 0.5.0) - Unreleased
 
 <small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...HEAD)</small>
 
@@ -45,6 +45,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced PDC (Persistent Data Container) system. The PDC is a way to store custom data on a whole range of objects, such as
   items, entities, block entities and world. More PDC types will be added in the future.
 - (API) Added `ItemType#getItemData` method which replaces the old `ItemDataComponent`.
+- (API) Introduced new option `entity-auto-save-cycle` in `ServerSettings` to control the interval of entity auto save.
+- (API) Entities are now held by `EntityService` directly, and a variety of new methods are added into `EntityService`. See the commit
+  history for more details.
+- (API) Introduced `WorldStorage#readEntities`, `WorldStorage#writeEntities` and their correspond sync methods. These methods are used
+  to read and write entities in a specified chunk area.
+- Add support for the new entity storage format used in 1.18.30+. Now entities in newer vanilla maps can be loaded correctly.
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
   using `/fill` command to fill a large area).
@@ -104,6 +110,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed `VoxelShapes#buildStairShape` method, we now have accurate collision shape data dumped from BDS.
 - (API) Removed the old `BlockState#toNetworkBlockDefinition` method, and `BlockState#toNetworkBlockDefinitionRuntime` was renamed without `Runtime` suffix.
 - (API) Removed `ItemDataComponent`. `ItemData` is now located in `ItemType<?>`.
+- (API) Removed `Dimension#getEntityByRuntimeId`. This method is replaced by `EntityService#getEntityByRuntimeId`.
+- (API) Removed `Dimension#getEntityPhysicsService`. This method is replaced by `EntityService#getPhysicsService`.
+- (API) Removed `ChunkLoader#spawnEntity` and `ChunkLoader#despawnEntity` methods.
+- (API) Removed `UnsafeChunk#getEntity`, `UnsafeChunk#getEntities`, `UnsafeChunk#spawnEntitiesTo` and
+ `UnsafeChunk#despawnEntitiesFrom` methods. Because entity is not held by chunk now.
 - Removed `Extension#afterServerStarted` method.
 - Removed `org.allaymc.server.datastruct.collections.nb.*`, we now use the implementations provided by JCTools. Consider using `NonBlockingHashMap`
   and `NonBlockingHashMapLong` if your plugins use these classes.

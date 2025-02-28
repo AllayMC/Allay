@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.world.WeatherChangeEvent;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
@@ -474,12 +473,6 @@ public class AllayWorld implements World {
 
         @Override
         public void onChunkInRangeSend(Chunk chunk) {}
-
-        @Override
-        public void spawnEntity(Entity entity) {}
-
-        @Override
-        public void despawnEntity(Entity entity) {}
 
         @Override
         public void onChunkOutOfRange(Set<Long> chunkHashes) {}

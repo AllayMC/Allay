@@ -2,12 +2,10 @@ package org.allaymc.server.world.chunk;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.ChunkState;
-import org.cloudburstmc.nbt.NbtMap;
 import org.jctools.maps.NonBlockingHashMap;
-
-import java.util.List;
 
 /**
  * @author daoge_cmd
@@ -21,8 +19,7 @@ public class AllayChunkBuilder {
     private DimensionInfo dimensionInfo;
     private AllayChunkSection[] sections;
     private HeightMap heightMap;
-    private List<NbtMap> entitiyList;
-    private List<NbtMap> blockEntitiyList;
+    private NonBlockingHashMap<Integer, BlockEntity> blockEntities;
     private NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
 
     private static AllayChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
@@ -31,6 +28,12 @@ public class AllayChunkBuilder {
             sections[i] = new AllayChunkSection((byte) (i + dimensionInfo.minSectionY()));
         }
         return sections;
+    }
+
+    public AllayChunkBuilder() {
+        this.state = ChunkState.FINISHED;
+        this.blockEntities = new NonBlockingHashMap<>();
+        this.scheduledUpdates = new NonBlockingHashMap<>();
     }
 
     public AllayChunkBuilder chunkX(int chunkX) {
@@ -71,13 +74,8 @@ public class AllayChunkBuilder {
         return this;
     }
 
-    public AllayChunkBuilder entities(List<NbtMap> entities) {
-        this.entitiyList = entities;
-        return this;
-    }
-
-    public AllayChunkBuilder blockEntities(List<NbtMap> blockEntities) {
-        this.blockEntitiyList = blockEntities;
+    public AllayChunkBuilder blockEntities(NonBlockingHashMap<Integer, BlockEntity> blockEntities) {
+        this.blockEntities = blockEntities;
         return this;
     }
 
@@ -89,15 +87,13 @@ public class AllayChunkBuilder {
     public AllayUnsafeChunk build() {
         Preconditions.checkNotNull(dimensionInfo);
 
-        if (state == null) state = ChunkState.FINISHED;
         if (sections == null) sections = createEmptySections(dimensionInfo);
         if (heightMap == null) heightMap = new HeightMap((short) dimensionInfo.minHeight());
-        if (scheduledUpdates == null) scheduledUpdates = new NonBlockingHashMap<>();
 
         return new AllayUnsafeChunk(
                 chunkX, chunkZ, dimensionInfo,
                 sections, heightMap, scheduledUpdates,
-                state, entitiyList, blockEntitiyList
+                state, blockEntities
         );
     }
 
@@ -107,7 +103,7 @@ public class AllayChunkBuilder {
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
                 new NonBlockingHashMap<>(),
-                ChunkState.NEW, null, null
+                ChunkState.NEW, new NonBlockingHashMap<>()
         );
     }
 
@@ -117,7 +113,7 @@ public class AllayChunkBuilder {
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
                 new NonBlockingHashMap<>(),
-                ChunkState.FINISHED, null, null
+                ChunkState.FINISHED, new NonBlockingHashMap<>()
         );
     }
 }

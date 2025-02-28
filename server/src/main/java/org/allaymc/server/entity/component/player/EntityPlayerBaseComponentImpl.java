@@ -14,7 +14,6 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -41,6 +40,7 @@ import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
@@ -293,7 +293,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 location.y + 1.425,
                 location.z + 1.425
         );
-        var entityItems = dimension.getEntityPhysicsService().computeCollidingEntities(pickUpArea, true)
+        var entityItems = dimension.getEntityService().getPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
                 .filter(EntityItem.class::isInstance)
                 .map(EntityItem.class::cast)
@@ -681,7 +681,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (awaitingDimensionChangeACK) {
             sendDimensionChangeSuccess();
         }
-        chunk.spawnEntitiesTo(thisPlayer);
+        getDimension().getEntityService().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
         ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSent();
     }
 
@@ -696,21 +696,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void spawnEntity(Entity entity) {
-        entity.spawnTo(thisPlayer);
-    }
-
-    @Override
-    public void despawnEntity(Entity entity) {
-        entity.despawnFrom(thisPlayer);
-    }
-
-    @Override
     public void onChunkOutOfRange(Set<Long> chunkHashes) {
-        chunkHashes.stream()
-                .map(location.dimension().getChunkService()::getChunk)
-                .filter(Objects::nonNull)
-                .forEach(chunk -> chunk.despawnEntitiesFrom(thisPlayer));
+        for (var hash : chunkHashes) {
+            getDimension().getEntityService().forEachEntitiesInChunk(HashUtils.getXFromHashXZ(hash), HashUtils.getZFromHashXZ(hash), entity -> entity.despawnFrom(thisPlayer));
+        }
     }
 
     @Override

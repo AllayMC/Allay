@@ -253,6 +253,11 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("chunk-auto-save-cycle")
         @Comment("Determines the cycle of chunk auto saving")
         private int chunkAutoSaveCycle = 20 * 60 * 5;
+
+        @CustomKey("entity-auto-save-cycle")
+        @Comment("Determines the cycle of entity auto saving. When entity auto saving is triggered, the")
+        @Comment("entity service will find all savable entities in unloaded chunks and save them")
+        private int entityAutoSaveCycle = 20 * 60;
     }
 
     @Getter

@@ -14,7 +14,10 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.world.service.*;
+import org.allaymc.server.world.service.AllayBlockUpdateService;
+import org.allaymc.server.world.service.AllayChunkService;
+import org.allaymc.server.world.service.AllayEntityService;
+import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
@@ -36,7 +39,6 @@ public class AllayDimension implements Dimension {
     protected final AllayWorld world;
     protected final DimensionInfo dimensionInfo;
     protected final AllayChunkService chunkService;
-    protected final AllayEntityPhysicsService entityPhysicsService;
     protected final AllayEntityService entityService;
     protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayLightService lightService;
@@ -47,8 +49,7 @@ public class AllayDimension implements Dimension {
         this.dimensionInfo = dimensionInfo;
         worldGenerator.setDimension(this);
         this.chunkService = new AllayChunkService(this, worldGenerator, world.getWorldStorage());
-        this.entityPhysicsService = new AllayEntityPhysicsService(this);
-        this.entityService = new AllayEntityService(entityPhysicsService);
+        this.entityService = new AllayEntityService(this, world.getWorldStorage());
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.lightService = new AllayLightService(this);
         this.players = new NonBlockingHashSet<>();
@@ -70,9 +71,8 @@ public class AllayDimension implements Dimension {
         this.chunkService.sendChunkPackets();
 
         // Ticking
-        this.entityService.tick();
+        this.entityService.tick(currentTick);
         this.chunkService.tick(currentTick);
-        this.entityPhysicsService.tick();
         this.blockUpdateService.tick();
         if (!Server.SETTINGS.worldSettings().calculateLightAsync()) {
             this.lightService.tick();
@@ -84,6 +84,7 @@ public class AllayDimension implements Dimension {
 
     public void shutdown() {
         chunkService.unloadAllChunks().join();
+        entityService.shutdown();
     }
 
     @Override

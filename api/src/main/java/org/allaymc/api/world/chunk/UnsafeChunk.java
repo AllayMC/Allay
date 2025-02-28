@@ -2,7 +2,6 @@ package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.DimensionInfo;
@@ -146,41 +145,6 @@ public interface UnsafeChunk {
     int getZ();
 
     /**
-     * Get the entity in the chunk by its runtime id.
-     *
-     * @param runtimeId the runtime id of the entity.
-     *
-     * @return the entity in the chunk, or {@code null} if not found.
-     */
-    Entity getEntity(long runtimeId);
-
-    /**
-     * Get all entities in the chunk.
-     *
-     * @return all entities in the chunk.
-     */
-    @UnmodifiableView
-    Map<Long, Entity> getEntities();
-
-    /**
-     * Spawn entities in this chunk to the specified player.
-     *
-     * @param player the player to spawn entities to
-     */
-    default void spawnEntitiesTo(EntityPlayer player) {
-        getEntities().values().forEach(player::spawnEntity);
-    }
-
-    /**
-     * Despawn entities in this chunk from the specified player.
-     *
-     * @param player the player to despawn entities from
-     */
-    default void despawnEntitiesFrom(EntityPlayer player) {
-        getEntities().values().forEach(player::despawnEntity);
-    }
-
-    /**
      * Remove the block entity in this chunk.
      *
      * @param x the x coordinate of the block entity.
@@ -248,9 +212,9 @@ public interface UnsafeChunk {
     /**
      * Check if a pos in the chunk has a scheduled update.
      *
-     * @param x     the x coordinate of the pos.
-     * @param y     the y coordinate of the pos.
-     * @param z     the z coordinate of the pos.
+     * @param x the x coordinate of the pos.
+     * @param y the y coordinate of the pos.
+     * @param z the z coordinate of the pos.
      *
      * @return {@code true} if the pos has a scheduled update, otherwise {@code false}.
      *

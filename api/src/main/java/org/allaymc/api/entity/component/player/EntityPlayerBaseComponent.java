@@ -473,4 +473,12 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     default void regenerateEnchantmentSeed() {
         setEnchantmentSeed(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    default boolean willBeSaved() {
+        return false;
+    }
 }

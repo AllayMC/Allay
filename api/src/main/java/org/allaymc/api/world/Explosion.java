@@ -185,7 +185,7 @@ public class Explosion {
         MathUtils.grow(aabb, 2);
 
         if (affectEntities) {
-            var affectedEntities = dimension.getEntityPhysicsService().computeCollidingEntities(aabb);
+            var affectedEntities = dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb);
             // Skip the entity that caused the explosion
             affectedEntities.remove(entity);
             var impactMap = affectedEntities.parallelStream()

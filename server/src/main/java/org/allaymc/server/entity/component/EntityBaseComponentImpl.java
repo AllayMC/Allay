@@ -32,14 +32,12 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
-import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -392,24 +390,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-        if (newChunk == null) {
-            // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
-            // moving to an unloaded chunk will result in the loss of the entity
-            log.debug("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
-            return false;
-        }
+        var oldChunk = this.location.dimension() != null ? this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ) : null;
 
-        Chunk oldChunk = null;
-        if (this.location.dimension() != null) {
-            oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-            // It is possible that the oldChunk is null
-            // For example, when spawning an entity, the entity's old location is meaningless
-            if (oldChunk != null) {
-                ((AllayUnsafeChunk) oldChunk.toUnsafeChunk()).removeEntity(runtimeId);
-            }
-        }
-
-        ((AllayUnsafeChunk) newChunk.toUnsafeChunk()).addEntity(thisEntity);
         Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
         Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
         samePlayers.retainAll(oldChunkPlayers);
