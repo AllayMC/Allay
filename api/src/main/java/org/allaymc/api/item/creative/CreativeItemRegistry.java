@@ -3,6 +3,9 @@ package org.allaymc.api.item.creative;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.item.ItemStack;
 import org.cloudburstmc.protocol.bedrock.packet.CreativeContentPacket;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Map;
 
 /**
  * Represents the registry for creative items. Plugin can modify the creative items through the methods inside.
@@ -46,6 +49,14 @@ public interface CreativeItemRegistry {
      * @return the creative item, or {@code null} if not found.
      */
     ItemStack getItemStackByIndex(int index);
+
+    /**
+     * Get all registered creative items.
+     *
+     * @return the registered creative items.
+     */
+    @UnmodifiableView
+    Map<Integer, ItemStack> getItems();
 
     /**
      * Encode the creative content packet in the specified language code.

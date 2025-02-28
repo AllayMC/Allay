@@ -22,13 +22,11 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.cloudburstmc.protocol.bedrock.packet.CreativeContentPacket;
+import org.jetbrains.annotations.UnmodifiableView;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author daoge_cmd
@@ -127,6 +125,11 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
     @Override
     public ItemStack getItemStackByIndex(int index) {
         return items.get(index);
+    }
+
+    @Override
+    public @UnmodifiableView Map<Integer, ItemStack> getItems() {
+        return Collections.unmodifiableMap(items);
     }
 
     @Override
