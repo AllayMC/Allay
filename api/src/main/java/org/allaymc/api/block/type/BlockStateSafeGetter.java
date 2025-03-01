@@ -7,7 +7,7 @@ import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.updater.block.BlockStateUpdater_1_21_40;
+import org.allaymc.updater.block.BlockStateUpdater_1_21_60;
 import org.allaymc.updater.block.BlockStateUpdaters;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -43,7 +43,7 @@ public final class BlockStateSafeGetter {
         }
 
         if (version < ProtocolInfo.BLOCK_STATE_VERSION_NUM) {
-            nbt = BlockStateUpdaters.updateBlockState(nbt, BlockStateUpdaters.LATEST_VERSION);
+            nbt = BlockStateUpdaters.updateBlockState(nbt, BlockStateUpdater_1_21_60.INSTANCE.getVersion());
         }
 
         // Make sure that tree map is used
@@ -135,7 +135,8 @@ public final class BlockStateSafeGetter {
             }
 
             // Get block type
-            var updatedNbt = BlockStateUpdaters.updateBlockState(nbtBuilder.build(), BlockStateUpdater_1_21_40.INSTANCE.getVersion());
+            var updatedNbt = BlockStateUpdaters.updateBlockState(nbtBuilder.build(), BlockStateUpdater_1_21_60.INSTANCE.getVersion());
+
             var blockType = Registries.BLOCKS.get(new Identifier(updatedNbt.getString("name")));
             if (blockType == null) {
                 throw new IllegalArgumentException("Unknown block type " + updatedNbt.getString("name"));
