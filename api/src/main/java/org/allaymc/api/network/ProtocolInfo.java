@@ -2,6 +2,8 @@ package org.allaymc.api.network;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.utils.SemVersion;
+import org.allaymc.updater.block.BlockStateUpdater;
+import org.allaymc.updater.block.BlockStateUpdater_1_21_60;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v776.Bedrock_v776;
 
@@ -30,6 +32,11 @@ public final class ProtocolInfo {
      * that has block state changes.
      */
     public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 60, 33, 0);
+
+    /**
+     * The currently used block state updater instance.
+     */
+    public static final BlockStateUpdater BLOCK_STATE_UPDATER = BlockStateUpdater_1_21_60.INSTANCE;
 
     /**
      * The encoded version number of the block state version (without revision).

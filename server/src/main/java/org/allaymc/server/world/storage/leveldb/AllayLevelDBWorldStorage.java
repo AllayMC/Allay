@@ -34,7 +34,6 @@ import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.*;
 import org.allaymc.server.world.gamerule.AllayGameRules;
-import org.allaymc.updater.block.BlockStateUpdater_1_21_60;
 import org.allaymc.updater.block.BlockStateUpdaters;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
@@ -582,7 +581,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             blockStateHash = PaletteUtils.fastReadBlockStateHash(input, buffer);
             if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
                 var oldNbtMap = (NbtMap) nbtInputStream.readTag();
-                var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, BlockStateUpdater_1_21_60.INSTANCE.getVersion());
+                var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, ProtocolInfo.BLOCK_STATE_UPDATER.getVersion());
                 // Make sure that tree map is used
                 // If the map inside states nbt is not tree map
                 // the block state hash will be wrong!
