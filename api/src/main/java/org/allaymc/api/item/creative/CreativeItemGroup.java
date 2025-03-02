@@ -6,8 +6,15 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Represents a single creative item group, which can contain multiple items.
- * It is collapsed by default, but can be expanded by clicking.
+ * Represents a single creative item group, which can contain multiple items. There
+ * are two types of group: named and unnamed.
+ * <p>
+ * Named group's name is not empty. It is folded by default and can be expanded by
+ * clicking. When the group is folded, the icon will be shown above the group.
+ * <p>
+ * Unnamed group's name is empty. The items are flatten and cannot be folded. Multiple
+ * unnamed groups is allowed and can between two named groups to separate them. The icon
+ * of unnamed group can only be air since it will never be shown.
  *
  * @author daoge_cmd
  */
@@ -58,4 +65,13 @@ public interface CreativeItemGroup {
      * @return the category of this group.
      */
     CreativeItemCategory getCategory();
+
+    /**
+     * Check if this group is an unnamed group
+     *
+     * @return {@code true} if this group is an unnamed group, {@code false} otherwise.
+     */
+    default boolean isUnnamedGroup() {
+        return getName().isEmpty();
+    }
 }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Represents a category of creative items. A category in a collection of groups and some ungrouped items.
+ * Represents a category of creative items. A category is a collection of named and unnamed groups.
  * Currently, there are only four visible categories in the creative inventory, and they are {@code Construction},
  * {@code Nature}, {@code Equipment}, and {@code Items}.
  *
@@ -15,17 +15,17 @@ import java.util.Map;
  */
 public interface CreativeItemCategory {
     /**
-     * Get a specific group by name in this category.
+     * Get a specific group by index in this category.
      *
-     * @param name the name of the group. If an empty string is passed, the default group will be returned.
-     *             Translation key is supported here.
+     * @param index the index of the group.
      *
-     * @return the group with the specified name, or the default group if the name is empty. {@code null} will be returned if the group does not exist.
+     * @return the group with the specified index. {@code null} will be returned if the group does not exist.
      */
-    CreativeItemGroup getGroup(@MayContainTrKey String name);
+    CreativeItemGroup getGroup(int index);
 
     /**
-     * Register a new group in this category.
+     * Register a new named group in the category. See docs in {@link CreativeItemGroup} for more details
+     * about the difference between named and unnamed groups.
      *
      * @param name the name of the group, empty string is not allowed here. Translation key is supported.
      * @param icon the icon of the group.
@@ -35,13 +35,12 @@ public interface CreativeItemCategory {
     CreativeItemGroup registerGroup(@MayContainTrKey String name, ItemStack icon);
 
     /**
-     * Get the default group in this category.
+     * Register a new unnamed group in the category. See docs in {@link CreativeItemGroup} for more details
+     * about the difference between named and unnamed groups.
      *
-     * @return the default group.
+     * @return the registered group.
      */
-    default CreativeItemGroup getDefaultGroup() {
-        return getGroup("");
-    }
+    CreativeItemGroup registerUnnamedGroup();
 
     /**
      * Get all groups in this category.
@@ -49,7 +48,7 @@ public interface CreativeItemCategory {
      * @return a map of all groups in this category.
      */
     @UnmodifiableView
-    Map<String, CreativeItemGroup> getGroups();
+    Map<Integer, CreativeItemGroup> getGroups();
 
     /**
      * Get the type of this category.

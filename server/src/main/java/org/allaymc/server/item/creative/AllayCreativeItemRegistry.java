@@ -11,7 +11,6 @@ import org.allaymc.api.item.creative.CreativeItemEntry;
 import org.allaymc.api.item.creative.CreativeItemGroup;
 import org.allaymc.api.item.creative.CreativeItemRegistry;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
@@ -59,18 +58,15 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
                 var group = entry.getAsJsonObject();
                 var category = getCategory(CreativeItemCategory.valueOf(group.get("category").getAsString().toUpperCase()));
-
-                ItemStack iconItemStack;
-                if (group.has("icon")) {
+                var name = group.get("name").getAsString();
+                if (name.isEmpty()) {
+                    category.registerUnnamedGroup();
+                } else {
                     var iconItemTypeName = new Identifier(group.get("icon").getAsString());
                     var iconItemType = Registries.ITEMS.get(iconItemTypeName);
                     Objects.requireNonNull(iconItemType, "Unknown icon item type: " + iconItemTypeName);
-                    iconItemStack = iconItemType.createItemStack();
-                } else {
-                    iconItemStack = ItemTypes.AIR.createItemStack();
+                    category.registerGroup(name, iconItemType.createItemStack());
                 }
-
-                category.registerGroup(group.get("name").getAsString(), iconItemStack);
             });
         }
 
@@ -89,12 +85,13 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                                 .extraTag(item.getCompound("tag", NbtMap.builder().build()))
                                 .autoAssignStackNetworkId(false).build()
                 );
-                var groupName = item.getString("group");
-                var group = category.getGroup(groupName);
+                int groupIndex = (int) item.getLong("groupIndex");
+                var group = category.getGroup(groupIndex);
                 if (group == null) {
-                    log.warn("Unknown group {} for item {} in category {}!", groupName, itemTypeName, category.getType());
-                    group = category.getDefaultGroup();
+                    log.warn("Unknown group index {} for item {} in category {}!", groupIndex, itemTypeName, category.getType());
+                    continue;
                 }
+
                 group.registerItem(itemStack);
             }
         }
