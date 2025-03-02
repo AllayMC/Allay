@@ -28,7 +28,7 @@ public class ItemComponentRegistryLoader implements RegistryLoader<Void, Map<Ite
                 var tag = (NbtMap) t;
                 var data = new ItemComponentData(
                         tag.getBoolean("isComponentBased"),
-                        tag.getCompound("components"),
+                        NbtMap.builder().putCompound("components", tag.getCompound("components")).build(),
                         ItemVersion.from(tag.getInt("version"))
                 );
                 map.put(ItemId.fromIdentifier(new Identifier(itemId)), data);
