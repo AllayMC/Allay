@@ -52,9 +52,9 @@ public interface CreativeItemCategory {
     Map<String, CreativeItemGroup> getGroups();
 
     /**
-     * Get the network type of this category.
+     * Get the type of this category.
      *
-     * @return the network type of this category.
+     * @return the type of this category.
      */
-    org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory getNetworkType();
+    org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory getType();
 }

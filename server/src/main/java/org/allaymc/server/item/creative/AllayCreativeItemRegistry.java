@@ -1,7 +1,6 @@
 package org.allaymc.server.item.creative;
 
 import com.google.gson.JsonParser;
-import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
@@ -33,24 +32,18 @@ import java.util.*;
  */
 @Slf4j
 public class AllayCreativeItemRegistry implements CreativeItemRegistry {
-    @Getter
-    protected final AllayCreativeItemCategory constructionCategory;
-    @Getter
-    protected final AllayCreativeItemCategory natureCategory;
-    @Getter
-    protected final AllayCreativeItemCategory equipmentCategory;
-    @Getter
-    protected final AllayCreativeItemCategory itemsCategory;
 
+    protected final Map<CreativeItemCategory, AllayCreativeItemCategory> categories;
     protected final List<CreativeItemEntry> entries;
     protected final List<CreativeItemGroup> groups;
     protected final Map<LangCode, CreativeContentPacket> cachedPackets;
 
     public AllayCreativeItemRegistry() {
-        this.constructionCategory = new AllayCreativeItemCategory(this, CreativeItemCategory.CONSTRUCTION);
-        this.natureCategory = new AllayCreativeItemCategory(this, CreativeItemCategory.NATURE);
-        this.equipmentCategory = new AllayCreativeItemCategory(this, CreativeItemCategory.EQUIPMENT);
-        this.itemsCategory = new AllayCreativeItemCategory(this, CreativeItemCategory.ITEMS);
+        this.categories = new EnumMap<>(CreativeItemCategory.class);
+        this.categories.put(CreativeItemCategory.CONSTRUCTION, new AllayCreativeItemCategory(this, CreativeItemCategory.CONSTRUCTION));
+        this.categories.put(CreativeItemCategory.NATURE, new AllayCreativeItemCategory(this, CreativeItemCategory.NATURE));
+        this.categories.put(CreativeItemCategory.EQUIPMENT, new AllayCreativeItemCategory(this, CreativeItemCategory.EQUIPMENT));
+        this.categories.put(CreativeItemCategory.ITEMS, new AllayCreativeItemCategory(this, CreativeItemCategory.ITEMS));
         this.entries = new ArrayList<>();
         this.groups = new ArrayList<>();
         this.cachedPackets = new EnumMap<>(LangCode.class);
@@ -65,15 +58,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("creative_groups.json")))) {
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
                 var group = entry.getAsJsonObject();
-
-                var categoryName = group.get("category").getAsString();
-                var category = switch (categoryName) {
-                    case "Construction" -> constructionCategory;
-                    case "Nature" -> natureCategory;
-                    case "Equipment" -> equipmentCategory;
-                    case "Items" -> itemsCategory;
-                    default -> throw new IllegalArgumentException("Unknown category: " + categoryName);
-                };
+                var category = getCategory(CreativeItemCategory.valueOf(group.get("category").getAsString().toUpperCase()));
 
                 ItemStack iconItemStack;
                 if (group.has("icon")) {
@@ -97,15 +82,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                 var itemType = Registries.ITEMS.get(itemTypeName);
                 Objects.requireNonNull(itemType, "Unknown item type: " + itemTypeName);
 
-                var categoryName = item.getString("category");
-                var category = switch (categoryName) {
-                    case "Construction" -> constructionCategory;
-                    case "Nature" -> natureCategory;
-                    case "Equipment" -> equipmentCategory;
-                    case "Items" -> itemsCategory;
-                    default -> throw new IllegalArgumentException("Unknown category: " + categoryName);
-                };
-
+                var category = getCategory(CreativeItemCategory.valueOf(item.getString("category").toUpperCase()));
                 var itemStack = itemType.createItemStack(
                         ItemStackInitInfo
                                 .builder().count(1).meta(item.getShort("damage"))
@@ -115,7 +92,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                 var groupName = item.getString("group");
                 var group = category.getGroup(groupName);
                 if (group == null) {
-                    log.warn("Unknown group {} for item {} in category {}!", groupName, itemTypeName, categoryName);
+                    log.warn("Unknown group {} for item {} in category {}!", groupName, itemTypeName, category.getType());
                     group = category.getDefaultGroup();
                 }
                 group.registerItem(itemStack);
@@ -123,6 +100,11 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
         }
 
         log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADED));
+    }
+
+    @Override
+    public org.allaymc.api.item.creative.CreativeItemCategory getCategory(CreativeItemCategory type) {
+        return categories.get(type);
     }
 
     @Override
@@ -149,7 +131,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
         var encodedGroups = new ArrayList<org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup>();
         for (var group : groups) {
             encodedGroups.add(new org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup(
-                    group.getCategory().getNetworkType(), I18n.get().tr(langCode, group.getName()),
+                    group.getCategory().getType(), I18n.get().tr(langCode, group.getName()),
                     group.getIcon().toNetworkItemData()
             ));
         }

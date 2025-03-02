@@ -17,28 +17,45 @@ public interface CreativeItemRegistry {
      *
      * @return the construction category.
      */
-    CreativeItemCategory getConstructionCategory();
+    default CreativeItemCategory getConstructionCategory() {
+        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.CONSTRUCTION);
+    }
 
     /**
      * Get the decoration category.
      *
      * @return the decoration category.
      */
-    CreativeItemCategory getNatureCategory();
+    default CreativeItemCategory getNatureCategory() {
+        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.NATURE);
+    }
 
     /**
      * Get the equipment category.
      *
      * @return the equipment category.
      */
-    CreativeItemCategory getEquipmentCategory();
+    default CreativeItemCategory getEquipmentCategory() {
+        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.EQUIPMENT);
+    }
 
     /**
      * Get the items category.
      *
      * @return the items category.
      */
-    CreativeItemCategory getItemsCategory();
+    default CreativeItemCategory getItemsCategory() {
+        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.ITEMS);
+    }
+
+    /**
+     * Get the specified category.
+     *
+     * @param type the type of the category.
+     *
+     * @return the specified category.
+     */
+    CreativeItemCategory getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory type);
 
     /**
      * Get the creative item by index.
