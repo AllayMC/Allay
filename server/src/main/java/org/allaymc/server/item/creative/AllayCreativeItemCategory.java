@@ -1,6 +1,7 @@
 package org.allaymc.server.item.creative;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.creative.CreativeItemCategory;
 import org.allaymc.api.item.creative.CreativeItemGroup;
@@ -13,10 +14,14 @@ import java.util.Map;
  */
 public class AllayCreativeItemCategory implements CreativeItemCategory {
     protected final AllayCreativeItemRegistry registry;
+    @Getter
+    protected final org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory networkType;
+
     protected Map<String, CreativeItemGroup> groups;
 
-    public AllayCreativeItemCategory(AllayCreativeItemRegistry registry) {
+    public AllayCreativeItemCategory(AllayCreativeItemRegistry registry, org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory networkType) {
         this.registry = registry;
+        this.networkType = networkType;
         this.groups = new Object2ObjectOpenHashMap<>();
     }
 
@@ -27,7 +32,7 @@ public class AllayCreativeItemCategory implements CreativeItemCategory {
 
     @Override
     public CreativeItemGroup registerGroup(String name, ItemStack icon) {
-        var group = new AllayCreativeItemGroup(registry, name, icon);
+        var group = new AllayCreativeItemGroup(registry, this, name, icon);
         groups.put(name, group);
         return group;
     }

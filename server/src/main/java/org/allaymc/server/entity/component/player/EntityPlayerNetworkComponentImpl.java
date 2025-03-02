@@ -173,7 +173,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         });
     }
 
-    public void onChunkInRangeSent() {
+    public void onChunkInRangeSend() {
         if (fullyJoinChunkThreshold.get() > 0 && fullyJoinChunkThreshold.decrementAndGet() == 0) {
             onFullyJoin();
         }
@@ -325,7 +325,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         itemComponentPacket.getItems().addAll(DeferredData.ITEM_DEFINITIONS.get());
         sendPacket(itemComponentPacket);
 
-        sendPacket(Registries.CREATIVE_ITEMS.encodeCreativeContentPacketFor(thisPlayer.getLangCode()));
+        sendPacket(Registries.CREATIVE_ITEMS.getCreativeContentPacketFor(thisPlayer.getLangCode()));
 
         sendPacket(DeferredData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(DeferredData.BIOME_DEFINITION_LIST_PACKET.get());

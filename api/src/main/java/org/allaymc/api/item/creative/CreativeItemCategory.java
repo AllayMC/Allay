@@ -28,6 +28,7 @@ public interface CreativeItemCategory {
      * Register a new group in this category.
      *
      * @param name the name of the group, empty string is not allowed here. Translation key is supported.
+     * @param icon the icon of the group.
      *
      * @return the registered group.
      */
@@ -49,4 +50,11 @@ public interface CreativeItemCategory {
      */
     @UnmodifiableView
     Map<String, CreativeItemGroup> getGroups();
+
+    /**
+     * Get the network type of this category.
+     *
+     * @return the network type of this category.
+     */
+    org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory getNetworkType();
 }

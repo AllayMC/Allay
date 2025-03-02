@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class CreativeItemRegistryTest {
     @Test
     void testCreativeItemRegistry() {
-        assertFalse(Registries.CREATIVE_ITEMS.getItems().isEmpty());
-        for (var itemStack : Registries.CREATIVE_ITEMS.getItems().values()) {
-            assertEquals(1, itemStack.getCount());
+        assertFalse(Registries.CREATIVE_ITEMS.getEntries().isEmpty());
+        for (var entry : Registries.CREATIVE_ITEMS.getEntries()) {
+            assertEquals(1, entry.itemStack().getCount());
         }
     }
 }

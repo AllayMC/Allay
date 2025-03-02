@@ -739,7 +739,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             sendDimensionChangeSuccess();
         }
         getDimension().getEntityService().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
-        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSent();
+        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSend();
     }
 
     public void sendDimensionChangeSuccess() {
