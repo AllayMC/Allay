@@ -270,6 +270,15 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
+     * Set the vertical fly speed of the player.
+     *
+     * @param verticalFlySpeed The vertical fly speed to set.
+     */
+    default void setVerticalFlySpeed(float verticalFlySpeed) {
+        getAbilities().setVerticalFlySpeed(verticalFlySpeed);
+    }
+
+    /**
      * Set whether the player is flying.
      *
      * @param flying Whether the player is flying.

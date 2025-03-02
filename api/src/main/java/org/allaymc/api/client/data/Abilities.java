@@ -26,6 +26,7 @@ public final class Abilities {
 
     public static final float DEFAULT_WALK_SPEED = 0.1f;
     public static final float DEFAULT_FLY_SPEED = 0.05f;
+    public static final float DEFAULT_VERTICAL_FLY_SPEED = 1.0f;
 
     private final Set<Ability> abilities = EnumSet.noneOf(Ability.class);
 
@@ -33,6 +34,7 @@ public final class Abilities {
 
     private float walkSpeed = DEFAULT_WALK_SPEED;
     private float flySpeed = DEFAULT_FLY_SPEED;
+    private float verticalFlySpeed = DEFAULT_VERTICAL_FLY_SPEED;
 
     private boolean dirty = false;
 
@@ -93,6 +95,11 @@ public final class Abilities {
         dirty = true;
     }
 
+    public void setVerticalFlySpeed(float verticalFlySpeed) {
+        this.verticalFlySpeed = verticalFlySpeed;
+        dirty = true;
+    }
+
     public void setFlying(boolean flying) {
         set(Ability.FLYING, flying);
     }
@@ -110,6 +117,7 @@ public final class Abilities {
         abilityLayer.getAbilityValues().add(Ability.FLY_SPEED);
         abilityLayer.setWalkSpeed(this.walkSpeed);
         abilityLayer.setFlySpeed(this.flySpeed);
+        abilityLayer.setVerticalFlySpeed(this.verticalFlySpeed);
 
         updateAbilitiesPacket.getAbilityLayers().add(abilityLayer);
 
