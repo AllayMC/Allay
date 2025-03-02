@@ -6,7 +6,7 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.creative.CreativeItemRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
@@ -48,7 +48,7 @@ public final class Registries {
     public static SimpleMappedRegistry<String, Function<String, WorldGenerator>> WORLD_GENERATOR_FACTORIES;
 
     // Creative Item
-    public static IntMappedRegistry<ItemStack> CREATIVE_ITEMS;
+    public static CreativeItemRegistry CREATIVE_ITEMS;
 
     // Recipe
     public static IntMappedRegistry<NetworkRecipe> RECIPES;

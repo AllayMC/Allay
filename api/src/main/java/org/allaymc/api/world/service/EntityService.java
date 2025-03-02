@@ -74,12 +74,23 @@ public interface EntityService {
     Map<Long, Entity> getEntities();
 
     /**
-     * For-each all entities in specified chunk.
+     * For-each all entities in specified chunk. Note that the consumer will be called
+     * the next tick on the main thread instead of the caller's thread immediately, so
+     * that this method is safe to be called in any thread.
      *
      * @param chunkX the x coordinate of the chunk.
      * @param chunkZ the z coordinate of the chunk.
      */
     void forEachEntitiesInChunk(int chunkX, int chunkZ, Consumer<Entity> consumer);
+
+    /**
+     * For-each all entities in specified chunk. Different from {@link #forEachEntitiesInChunk(int, int, Consumer)},
+     * this method will call the consumer immediately, so it is not safe to be called in any thread.
+     *
+     * @param chunkX the x coordinate of the chunk.
+     * @param chunkZ the z coordinate of the chunk.
+     */
+    void forEachEntitiesInChunkImmediately(int chunkX, int chunkZ, Consumer<Entity> consumer);
 
     /**
      * Get all entities in specified chunk.

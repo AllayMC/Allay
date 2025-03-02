@@ -33,6 +33,9 @@ public class TestEntityService extends AllayEntityService {
     public void forEachEntitiesInChunk(int chunkX, int chunkZ, Consumer<Entity> consumer) {}
 
     @Override
+    public void forEachEntitiesInChunkImmediately(int chunkX, int chunkZ, Consumer<Entity> consumer) {}
+
+    @Override
     public EntityPhysicsService getPhysicsService() {return null;}
 
     @Override

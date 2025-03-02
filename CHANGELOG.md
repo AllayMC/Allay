@@ -51,6 +51,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `WorldStorage#readEntities`, `WorldStorage#writeEntities` and their correspond sync methods. These methods are used
   to read and write entities in a specified chunk area.
 - (API) Introduced a variety of methods for sending toast, title, subtitle and actionbar text to player, and new command `/title` is added.
+- Add support for bedrock 1.21.60.
 - Add support for the new entity storage format used in 1.18.30+. Now entities in newer vanilla maps can be loaded correctly.
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
@@ -75,6 +76,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Changed the default value of `ServerSettings#GenericSettings#defaultPermission` to `PlayerPermission.MEMBER`.
 - (API) `VoxelShape` have being refactored. Now it doesn't allow using `vacancy`, this change is required by physics engine to fix some bugs.
 - (API) Renamed `BlockState#setProperty` and `BlockState#setProperties` to `BlockState#setPropertyValue` and `BlockState#setPropertyValues` to match the getter methods.
+- (API) Refactored the creative item registry and related classes & methods, which allow plugin to customize item groups.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
 - Server won't crash if failed to create world generator. Void world generator will be used instead.

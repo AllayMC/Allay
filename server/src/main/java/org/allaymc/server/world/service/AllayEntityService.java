@@ -192,6 +192,11 @@ public class AllayEntityService implements EntityService {
 
     @Override
     public void forEachEntitiesInChunk(int chunkX, int chunkZ, Consumer<Entity> consumer) {
+        queue.add(() -> forEachEntitiesInChunkImmediately(chunkX, chunkZ, consumer));
+    }
+
+    @Override
+    public void forEachEntitiesInChunkImmediately(int chunkX, int chunkZ, Consumer<Entity> consumer) {
         for (var entry : entities.long2ObjectEntrySet()) {
             var entity = entry.getValue();
             var loc = entity.getLocation();

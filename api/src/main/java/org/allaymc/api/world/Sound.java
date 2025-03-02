@@ -72,6 +72,8 @@ public interface Sound {
 
     String FALL_NYLIUM = "fall.nylium";
 
+    String BLOCK_WEEPING_VINES_BREAK = "block.weeping_vines.break";
+
     String MOB_SQUID_AMBIENT = "mob.squid.ambient";
 
     String RANDOM_POTION_BREWED = "random.potion.brewed";
@@ -81,6 +83,8 @@ public interface Sound {
     String MOB_TURTLE_BABY_STEP = "mob.turtle_baby.step";
 
     String AMBIENT_NETHER_WASTES_LOOP = "ambient.nether_wastes.loop";
+
+    String BLOCK_WEEPING_VINES_USE = "block.weeping_vines.use";
 
     String LAND_BONE_BLOCK = "land.bone_block";
 
@@ -282,6 +286,8 @@ public interface Sound {
 
     String DIG_ROOTS = "dig.roots";
 
+    String HIT_IRON = "hit.iron";
+
     String JUMP_BASALT = "jump.basalt";
 
     String MOB_ARMOR_STAND_BREAK = "mob.armor_stand.break";
@@ -316,6 +322,8 @@ public interface Sound {
 
     String MOB_OCELOT_DEATH = "mob.ocelot.death";
 
+    String BLOCK_WEEPING_VINES_PLACE = "block.weeping_vines.place";
+
     String CHARGE_SCULK = "charge.sculk";
 
     String CLOSE_BAMBOO_WOOD_DOOR = "close.bamboo_wood_door";
@@ -343,6 +351,8 @@ public interface Sound {
     String MOB_ARMADILLO_UNROLL_FINISH = "mob.armadillo.unroll_finish";
 
     String MOB_FROG_STEP = "mob.frog.step";
+
+    String BLOCK_WEEPING_VINES_LAND = "block.weeping_vines.land";
 
     String USE_DIRT_WITH_ROOTS = "use.dirt_with_roots";
 
@@ -978,6 +988,8 @@ public interface Sound {
 
     String LAND_DEEPSLATE = "land.deepslate";
 
+    String BLOCK_CAVE_VINES_PLACE = "block.cave_vines.place";
+
     String MOB_BREEZE_IDLE_AIR = "mob.breeze.idle_air";
 
     String MOB_VILLAGER_IDLE = "mob.villager.idle";
@@ -1352,6 +1364,8 @@ public interface Sound {
 
     String AMBIENT_CRIMSON_FOREST_LOOP = "ambient.crimson_forest.loop";
 
+    String STEP_IRON = "step.iron";
+
     String BREAK_DECORATED_POT = "break.decorated_pot";
 
     String FALL_AZALEA_LEAVES = "fall.azalea_leaves";
@@ -1456,6 +1470,8 @@ public interface Sound {
 
     String BLOCK_LANTERN_STEP = "block.lantern.step";
 
+    String PLACE_IRON = "place.iron";
+
     String BRUSH_SUSPICIOUS_GRAVEL = "brush.suspicious_gravel";
 
     String UI_CARTOGRAPHY_TABLE_TAKE_RESULT = "ui.cartography_table.take_result";
@@ -1473,6 +1489,8 @@ public interface Sound {
     String FALL_POWDER_SNOW = "fall.powder_snow";
 
     String JUMP_NETHERRACK = "jump.netherrack";
+
+    String BLOCK_WEEPING_VINES_STEP = "block.weeping_vines.step";
 
     String MOB_VILLAGER_DEATH = "mob.villager.death";
 
@@ -1631,6 +1649,8 @@ public interface Sound {
     String MOB_DOLPHIN_ATTACK = "mob.dolphin.attack";
 
     String BLOCK_RESIN_BRICK_FALL = "block.resin_brick.fall";
+
+    String BLOCK_WEEPING_VINES_FALL = "block.weeping_vines.fall";
 
     String MOB_WARDEN_ATTACK = "mob.warden.attack";
 
@@ -2282,6 +2302,8 @@ public interface Sound {
 
     String MACE_SMASH_AIR = "mace.smash_air";
 
+    String BLOCK_WEEPING_VINES_HIT = "block.weeping_vines.hit";
+
     String FALL_SOUL_SOIL = "fall.soul_soil";
 
     String JUMP_SOUL_SAND = "jump.soul_sand";
@@ -2397,6 +2419,8 @@ public interface Sound {
     String USE_CANDLE = "use.candle";
 
     String MOB_SILVERFISH_STEP = "mob.silverfish.step";
+
+    String BREAK_IRON = "break.iron";
 
     String FALL_CAVE_VINES = "fall.cave_vines";
 
@@ -2791,6 +2815,8 @@ public interface Sound {
     String MOB_PHANTOM_FLAP = "mob.phantom.flap";
 
     String MUSIC_OVERWORLD_DESERT = "music.overworld.desert";
+
+    String BLOCK_WEEPING_VINES_JUMP = "block.weeping_vines.jump";
 
     String MOB_PHANTOM_SWOOP = "mob.phantom.swoop";
 
