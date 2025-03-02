@@ -738,6 +738,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (awaitingDimensionChangeACK) {
             sendDimensionChangeSuccess();
         }
+        // This method will be called in non-ticking thread if async chunk sending is enabled. Let's
+        // send the entities in this chunk to the player next tick in the main thread: use forEachEntitiesInChunk()
+        // instead of forEachEntitiesInChunkImmediately()
         getDimension().getEntityService().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
         ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSend();
     }
