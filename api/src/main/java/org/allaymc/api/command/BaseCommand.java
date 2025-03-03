@@ -34,7 +34,7 @@ public abstract class BaseCommand implements Command {
     private CommandOverloadData[] networkOverloadsData = null;
 
     public BaseCommand(String name, @MayContainTrKey String description) {
-        this(name, description, Lists.newArrayList(COMMAND_PERM_PREFIX + name));
+        this(name, description, Lists.newArrayList(COMMAND_PERMISSION_PREFIX + name));
     }
 
     public BaseCommand(String name, @MayContainTrKey String description, List<String> permissions) {
@@ -94,31 +94,31 @@ public abstract class BaseCommand implements Command {
             var builder = new StringBuilder();
             builder.append("- /").append(this.getName());
             for (var commandParameter : commandParameters) {
-                    if (commandParameter.getEnumData() == null) {
-                        builder.append(!commandParameter.isOptional()?" <":" [")
-                                .append(commandParameter.getName())
-                                .append(": ")
-                                .append(commandParameter.getType().getParamType().name().toLowerCase(Locale.ENGLISH))
-                                .append(!commandParameter.isOptional()?">":"]");
+                if (commandParameter.getEnumData() == null) {
+                    builder.append(!commandParameter.isOptional() ? " <" : " [")
+                            .append(commandParameter.getName())
+                            .append(": ")
+                            .append(commandParameter.getType().getParamType().name().toLowerCase(Locale.ENGLISH))
+                            .append(!commandParameter.isOptional() ? ">" : "]");
+                } else {
+                    var enums = commandParameter.getEnumData().getValues()
+                            .keySet().stream().toList();
+                    if (enums.size() == 1 && !commandParameter.isOptional()) {
+                        builder.append(" ").append(enums.getFirst());
                     } else {
-                        var enums = commandParameter.getEnumData().getValues()
-                                .keySet().stream().toList();
-                        if (enums.size() == 1 && !commandParameter.isOptional()) {
-                            builder.append(" ").append(enums.getFirst());
-                        } else {
-                            builder.append(!commandParameter.isOptional() ? " <" : " [")
-                                    .append(
-                                            enums.isEmpty() ?
-                                                    commandParameter.getName() + ": " + commandParameter.getEnumData().getName() :
-                                                    String.join("|",
-                                                            enums
-                                                                    .subList(0, Math.min(commandParameter.getEnumData().getValues().size(), 10))
-                                                    )
-                                    )
-                                    .append(commandParameter.getEnumData().getValues().size() > 10 ? "|..." : "")
-                                    .append(!commandParameter.isOptional() ? ">" : "]");
-                        }
+                        builder.append(!commandParameter.isOptional() ? " <" : " [")
+                                .append(
+                                        enums.isEmpty() ?
+                                                commandParameter.getName() + ": " + commandParameter.getEnumData().getName() :
+                                                String.join("|",
+                                                        enums
+                                                                .subList(0, Math.min(commandParameter.getEnumData().getValues().size(), 10))
+                                                )
+                                )
+                                .append(commandParameter.getEnumData().getValues().size() > 10 ? "|..." : "")
+                                .append(!commandParameter.isOptional() ? ">" : "]");
                     }
+                }
             }
             return builder.toString();
         }).toList();

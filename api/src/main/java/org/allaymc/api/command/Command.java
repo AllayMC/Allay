@@ -17,7 +17,7 @@ public interface Command {
     /**
      * Prefix for command permissions.
      */
-    String COMMAND_PERM_PREFIX = "command.";
+    String COMMAND_PERMISSION_PREFIX = "command.";
 
     /**
      * Executes this command with the given sender and arguments.
