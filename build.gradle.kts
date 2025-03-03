@@ -10,7 +10,7 @@ ext {
      * This value should be changed to false before release the next stable version,
      * and after releasing, change it back to true.
      */
-    set("isDevBuild", false)
+    set("isDevBuild", true)
 }
 
 tasks.jar {

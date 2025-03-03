@@ -1,7 +1,7 @@
 /**
  * The current version of allay-api
  */
-version = "0.5.0" + if (rootProject.ext.get("isDevBuild") as Boolean) "-dev" else ""
+version = "0.6.0" + if (rootProject.ext.get("isDevBuild") as Boolean) "-dev" else ""
 
 dependencies {
     api(libs.network) {
