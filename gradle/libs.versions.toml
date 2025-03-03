@@ -3,7 +3,7 @@ log4j = "2.24.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"
-netty = "4.1.118.Final"
+netty = "4.1.119.Final"
 
 [libraries]
 # NBT
@@ -51,7 +51,7 @@ caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version
 leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version.ref = "leveldb" }
 leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version.ref = "leveldb" }
 # Logging dependencies
-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.16" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.17" }
 log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 # CLI dependencie
@@ -69,7 +69,7 @@ netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", ve
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.6" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.6" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.7.0" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.4" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
@@ -84,7 +84,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.2.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.3.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
