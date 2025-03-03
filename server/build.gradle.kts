@@ -7,7 +7,8 @@ import java.io.ByteArrayOutputStream
  * This is not the same as the version of allay-api.
  * Please note that they are two things.
  */
-version = "0.2.1" + if (rootProject.ext.get("isDevBuild") as Boolean) "-dev" else ""
+version = rootProject.property("server.version").toString() +
+        if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
 
 plugins {
     id("jacoco")
@@ -47,7 +48,7 @@ gitProperties {
     gitPropertiesName = "git.properties"
     gitPropertiesResourceDir.set(file("${rootProject.projectDir}/data/resources"))
     gitProperties {
-        customProperty("git.build.is_dev_build", rootProject.ext.get("isDevBuild") as Boolean)
+        customProperty("git.build.is_dev_build", rootProject.property("allay.is-dev-build").toString().toBoolean())
         /**
          * The version of allay-api.
          *
