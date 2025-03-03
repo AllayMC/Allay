@@ -160,8 +160,9 @@ public class AllayPermissionTree implements PermissionTree {
     @Override
     public List<PermissionNode> getLeaves(boolean includeParent) {
         var leaves = new ArrayList<PermissionNode>();
-        if (!root.getLeaves().isEmpty())
+        if (!root.getLeaves().isEmpty()) {
             findLeaf(root, leaves);
+        }
         if (parent != null && includeParent) {
             leaves.addAll(parent.getLeaves(true));
         }

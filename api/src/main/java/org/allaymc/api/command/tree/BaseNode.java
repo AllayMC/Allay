@@ -9,10 +9,7 @@ import org.allaymc.api.command.SenderType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,7 +38,8 @@ public abstract class BaseNode implements CommandNode {
     @Getter
     @Setter
     protected int maxArgCostBranch;
-    protected Set<CommandParamOption> paramOptions = EnumSet.noneOf(CommandParamOption.class);
+    protected Set<CommandParamOption> paramOptions;
+    protected List<String> permissions;
 
     public BaseNode(String name, CommandNode parent) {
         this(name, parent, null);
@@ -51,6 +49,8 @@ public abstract class BaseNode implements CommandNode {
         this.name = name;
         this.parent = parent;
         this.defaultValue = defaultValue;
+        this.paramOptions = EnumSet.noneOf(CommandParamOption.class);
+        this.permissions = new ArrayList<>();
     }
 
     @Override
@@ -72,11 +72,19 @@ public abstract class BaseNode implements CommandNode {
     @Override
     public CommandNode optional() {
         // No need to set again if already optional
-        if (optional) return this;
+        if (optional) {
+            return this;
+        }
+
         // A node can only have one optional leaf
         if (parent.getOptionalLeaf() != null) {
-            throw new IllegalArgumentException("A node can only have one optional leaf node");
+            throw new IllegalArgumentException("A node can only have one optional leaf node!");
         }
+
+        if (!this.permissions.isEmpty()) {
+            throw new IllegalArgumentException("Adding permissions to optional node is not allowed!");
+        }
+
         this.optional = true;
         parent.setOptionalLeaf(this);
         // If the node is optional, minimum argument cost is 0, otherwise it's 1
@@ -120,10 +128,13 @@ public abstract class BaseNode implements CommandNode {
         if (isLeaf()) {
             return null;
         }
+
         if (context.haveUnhandledArg()) {
             var leftArgCount = context.getLeftArgCount();
             for (var leaf : leaves) {
-                if (leftArgCount >= leaf.getMinArgCostBranch() && leftArgCount <= leaf.getMaxArgCostBranch() && leaf.match(context)) {
+                if (leftArgCount >= leaf.getMinArgCostBranch() &&
+                    leftArgCount <= leaf.getMaxArgCostBranch() &&
+                    leaf.match(context)) {
                     return leaf;
                 }
             }
@@ -135,6 +146,7 @@ public abstract class BaseNode implements CommandNode {
                 return optionalLeaf;
             }
         }
+
         return null;
     }
 
@@ -226,6 +238,21 @@ public abstract class BaseNode implements CommandNode {
     public CommandNode addParamOption(CommandParamOption option) {
         paramOptions.add(option);
         return this;
+    }
+
+    @Override
+    public CommandNode permission(String permission) {
+        if (this.optional) {
+            throw new IllegalArgumentException("Adding permissions to optional node is not allowed!");
+        }
+
+        this.permissions.add(permission);
+        return this;
+    }
+
+    @Override
+    public List<String> getPermissions() {
+        return Collections.unmodifiableList(this.permissions);
     }
 
     @Override

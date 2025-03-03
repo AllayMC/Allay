@@ -48,7 +48,8 @@ public class GameModeCommand extends SimpleCommand {
                     }
 
                     for (var player : players) {
-                        var gameTypeName = I18n.get().tr(player.getLangCode(), CommonEnums.getGameTypeTrKey(gameType));
+                        // Let client translate the game mode name as nesting translate key is not supported currently
+                        var gameTypeName = "%" + I18n.get().toClientFriendlyStyle(CommonEnums.getGameTypeTrKey(gameType));
                         player.setGameType(gameType);
 
                         if (player == context.getSender()) {

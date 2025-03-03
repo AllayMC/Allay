@@ -45,18 +45,20 @@ public abstract class BaseCommand implements Command {
         flags.add(NOT_CHEAT);
     }
 
+    @UnmodifiableView
     @Override
-    public @UnmodifiableView List<String> getAliases() {
+    public List<String> getAliases() {
         return Collections.unmodifiableList(aliases);
     }
 
+    @UnmodifiableView
     @Override
-    public @UnmodifiableView List<CommandParamData[]> getCommandOverloads() {
+    public List<CommandParamData[]> getCommandOverloads() {
         return Collections.unmodifiableList(overloads);
     }
 
     @Override
-    public @UnmodifiableView Set<CommandData.Flag> getFlags() {
+    public Set<CommandData.Flag> getFlags() {
         return Collections.unmodifiableSet(flags);
     }
 
@@ -84,13 +86,14 @@ public abstract class BaseCommand implements Command {
 
     @Override
     public CommandData buildNetworkDataFor(EntityPlayer player) {
-        if (!networkDataPrepared) prepareNetworkData();
+        if (!networkDataPrepared) {
+            prepareNetworkData();
+        }
         return new CommandData(name, I18n.get().tr(player.getLangCode(), description), flags, CommandPermission.ANY, networkAliasesData, List.of(), networkOverloadsData);
     }
 
     public List<String> getCommandFormatTips() {
-        return overloads.stream().map(commandParameters ->
-        {
+        return overloads.stream().map(commandParameters -> {
             var builder = new StringBuilder();
             builder.append("- /").append(this.getName());
             for (var commandParameter : commandParameters) {
@@ -101,8 +104,7 @@ public abstract class BaseCommand implements Command {
                             .append(commandParameter.getType().getParamType().name().toLowerCase(Locale.ENGLISH))
                             .append(!commandParameter.isOptional() ? ">" : "]");
                 } else {
-                    var enums = commandParameter.getEnumData().getValues()
-                            .keySet().stream().toList();
+                    var enums = commandParameter.getEnumData().getValues().keySet().stream().toList();
                     if (enums.size() == 1 && !commandParameter.isOptional()) {
                         builder.append(" ").append(enums.getFirst());
                     } else {
@@ -110,10 +112,7 @@ public abstract class BaseCommand implements Command {
                                 .append(
                                         enums.isEmpty() ?
                                                 commandParameter.getName() + ": " + commandParameter.getEnumData().getName() :
-                                                String.join("|",
-                                                        enums
-                                                                .subList(0, Math.min(commandParameter.getEnumData().getValues().size(), 10))
-                                                )
+                                                String.join("|", enums.subList(0, Math.min(commandParameter.getEnumData().getValues().size(), 10)))
                                 )
                                 .append(commandParameter.getEnumData().getValues().size() > 10 ? "|..." : "")
                                 .append(!commandParameter.isOptional() ? ">" : "]");

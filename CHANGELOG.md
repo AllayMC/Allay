@@ -51,6 +51,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `WorldStorage#readEntities`, `WorldStorage#writeEntities` and their correspond sync methods. These methods are used
   to read and write entities in a specified chunk area.
 - (API) Introduced a variety of methods for sending toast, title, subtitle and actionbar text to player, and new command `/title` is added.
+- (API) Introduced `CommandNode#permission` method which can be used to set the permission requirement for accessing a specified command node.
+  This is useful for setting permission for sub commands.
 - Add support for bedrock 1.21.60.
 - Add support for the new entity storage format used in 1.18.30+. Now entities in newer vanilla maps can be loaded correctly.
 - Implemented reeds (also called sugar cane) and cactus.

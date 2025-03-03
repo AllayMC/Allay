@@ -180,7 +180,8 @@ public interface PermissionTree {
     }
 
     /**
-     * Extend this permission tree from the given parent.
+     * Extend this permission tree from the given parent. New changes to the parent
+     * permission tree will also be reflected in this permission tree.
      *
      * @param parent       the parent to extend from.
      * @param callListener whether to call the permission listener.
@@ -190,7 +191,9 @@ public interface PermissionTree {
     PermissionTree extendFrom(PermissionTree parent, boolean callListener);
 
     /**
-     * Copy permissions from the given parent.
+     * Copy permissions from the given parent. Different from {@link #extendFrom(PermissionTree)}, this
+     * method will copy all permissions from the given parent, and new changes to the parent permission
+     * tree will not be reflected in this permission tree.
      *
      * @param parent the parent to copy from.
      *

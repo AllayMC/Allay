@@ -119,10 +119,11 @@ public interface I18n {
      * Translation key in allay is in the format of 'namespace:path'. Namespace "minecraft"
      * will be used for vanilla translation key, and "allay" will be used for allay translation key.
      * <p>
-     * However, the translation key in vanilla (client) does not have namespace, so if we want to translate the
+     * However, the translation key in vanilla client does not have namespace, so if we want to translate the
      * text client-side, we need to remove the namespace.
      * <p>
-     * This method will find and remove the namespace in the translation key, itself does not translate the text.
+     * This method will find and remove "minecraft" namespace in the translation key, and does not translate
+     * these text. Only translation key that does not in "minecraft" namespace will be translated.
      *
      * @param langCode the lang code.
      * @param tr       the translation key.

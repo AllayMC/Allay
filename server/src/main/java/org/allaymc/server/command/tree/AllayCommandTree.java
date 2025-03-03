@@ -7,6 +7,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.server.command.tree.node.RootNode;
 
 import java.util.ArrayList;
@@ -70,6 +71,11 @@ public class AllayCommandTree implements CommandTree {
         if (nextNode == null) {
             context.addSyntaxError();
             return context.fail();
-        } else return parse0(nextNode, context);
+        } else if (!nextNode.checkPermissions(context.getSender())) {
+            context.addError("%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, context.queryArg(context.getCurrentArgIndex() - 1));
+            return context.fail();
+        } else {
+            return parse0(nextNode, context);
+        }
     }
 }

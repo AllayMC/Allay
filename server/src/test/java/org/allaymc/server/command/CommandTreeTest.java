@@ -89,6 +89,13 @@ public class CommandTreeTest {
     }
 
     @Test
+    void testAddPermissionToOptionalParam() {
+        var tree = AllayCommandTree.create(mockCmd);
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").optional().permission("xxx"));
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").permission("xxx").optional());
+    }
+
+    @Test
     void testNormalParamWithOptionalParamParse() {
         var tree = AllayCommandTree.create(mockCmd);
         tree.getRoot()

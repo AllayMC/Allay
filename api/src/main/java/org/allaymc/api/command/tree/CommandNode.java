@@ -16,6 +16,7 @@ import org.allaymc.api.world.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
+import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3fc;
 
 import java.util.List;
@@ -175,7 +176,8 @@ public interface CommandNode {
     }
 
     /**
-     * Checks if this node matches the current command context.
+     * Checks if this node matches the current command context. Notes that permission
+     * will not be checked in this method.
      *
      * @param context the command context.
      *
@@ -184,7 +186,8 @@ public interface CommandNode {
     boolean match(CommandContext context);
 
     /**
-     * Retrieves the next node in the command tree based on the current context.
+     * Retrieves the next accessible node in the command tree based on the current context.
+     * Notes that permission will not be checked in this method.
      *
      * @param context the command context.
      *
@@ -247,6 +250,36 @@ public interface CommandNode {
      * @return the root node.
      */
     CommandNode redirect(Consumer<CommandContext> onRedirect);
+
+    /**
+     * Add a permission requirement for this node. If the command sender does not have the required
+     * permission, it will not be able to access this command node. In other words, the sub commands
+     * under this node will not be executable for the command sender.
+     *
+     * @param permission the permissions to check.
+     *
+     * @return the {@code CommandNode}.
+     */
+    CommandNode permission(String permission);
+
+    /**
+     * Get the permissions required to access this node.
+     *
+     * @return the permissions.
+     */
+    @UnmodifiableView
+    List<String> getPermissions();
+
+    /**
+     * Check if the command sender has all the required permissions for accessing this node.
+     *
+     * @param sender the command sender.
+     *
+     * @return {@code true} if the sender has all permissions, {@code false} otherwise.
+     */
+    default boolean checkPermissions(CommandSender sender) {
+        return getPermissions().stream().allMatch(sender::hasPermission);
+    }
 
     /**
      * Get the executor of this node.

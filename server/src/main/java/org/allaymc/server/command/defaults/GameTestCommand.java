@@ -49,6 +49,7 @@ public class GameTestCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .key("gb")
+                .permission("aaa")
                 .intNum("blockStateHash")
                 .exec((context, player) -> {
                     int blockStateHash = context.getResult(1);
