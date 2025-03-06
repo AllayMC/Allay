@@ -260,7 +260,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             log.warn("Item {} does not support durability!", itemType.getIdentifier());
             return;
         }
-        Preconditions.checkArgument(durability > 0, "Durability must be greater than 0");
+        Preconditions.checkArgument(durability >= 0, "Durability must be greater or equal to 0");
         this.durability = durability;
     }
 

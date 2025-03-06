@@ -116,6 +116,15 @@ public abstract class EnchantmentType {
     }
 
     /**
+     * Check if the enchantment is cursed.
+     *
+     * @return {@code true} if the enchantment is cursed, {@code false} otherwise.
+     */
+    public boolean isCursed() {
+        return false;
+    }
+
+    /**
      * Check if the enchantment can be applied to an item type.
      *
      * @param itemType The item type.

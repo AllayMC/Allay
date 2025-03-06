@@ -16,7 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- (API) Implemented stonecutter behavior.
+- (API) Implemented stonecutter and grindstone behaviors.
 
 ## 0.2.0 (API 0.5.0) - 2025-3-3
 

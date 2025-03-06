@@ -18,8 +18,9 @@ import java.util.Map;
 public class CraftCreativeActionProcessor implements ContainerActionProcessor<CraftCreativeAction> {
     @Override
     public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        if (player.getGameType() != GameType.CREATIVE && player.getGameType() != GameType.SPECTATOR)
+        if (player.getGameType() != GameType.CREATIVE && player.getGameType() != GameType.SPECTATOR) {
             return error();
+        }
 
         // NOTICE: 0 is not indexed by the client for items
         var item = Registries.CREATIVE_ITEMS.getEntryByIndex(action.getCreativeItemNetworkId() - 1).itemStack();
@@ -30,7 +31,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
 
         item = item.copy(true);
         item.setCount(item.getItemType().getItemData().maxStackSize());
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, item);
+        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(item);
         // Taking items from the creative inventory does not require a response
         return null;
     }

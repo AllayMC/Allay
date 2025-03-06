@@ -27,6 +27,7 @@ public final class ContainerActionProcessorHolder {
         registerProcessor(new CraftResultDeprecatedActionProcessor());
         registerProcessor(new MineBlockActionProcessor());
         registerProcessor(new BeaconPaymentActionProcessor());
+        registerProcessor(new CraftGrindstoneActionProcessor());
     }
 
     public <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type) {

@@ -1366,4 +1366,13 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockStonecutterBlockBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initGrindstone() {
+        BlockTypes.GRINDSTONE = AllayBlockType
+                .builder(BlockGrindstoneBehaviorImpl.class)
+                .vanillaBlock(BlockId.GRINDSTONE)
+                .setProperties(BlockPropertyTypes.ATTACHMENT, BlockPropertyTypes.DIRECTION_4)
+                .setBaseComponentSupplier(BlockGrindstoneBaseComponentImpl::new)
+                .build();
+    }
 }
