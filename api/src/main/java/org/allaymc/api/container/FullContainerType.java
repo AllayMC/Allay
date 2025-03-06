@@ -93,25 +93,25 @@ public record FullContainerType<T extends Container>(
     public static final FullContainerType<FurnaceContainer> FURNACE = builder()
             .id(ContainerType.FURNACE)
             .size(3)
-            .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
-            .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
             .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.FURNACE_INGREDIENT)
+            .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
+            .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
             .build();
 
     public static final FullContainerType<FurnaceContainer> BLAST_FURNACE = builder()
             .id(ContainerType.BLAST_FURNACE)
             .size(3)
-            .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
-            .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
             .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.BLAST_FURNACE_INGREDIENT)
+            .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
+            .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
             .build();
 
     public static final FullContainerType<FurnaceContainer> SMOKER = builder()
             .id(ContainerType.SMOKER)
             .size(3)
-            .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
-            .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
             .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.SMOKER_INGREDIENT)
+            .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
+            .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
             .build();
 
     public static final FullContainerType<EnchantTableContainer> ENCHANT_TABLE = builder()
@@ -141,6 +141,32 @@ public record FullContainerType<T extends Container>(
             .id(ContainerType.CONTAINER)
             .size(27)
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
+    public static final FullContainerType<AnvilContainer> ANVIL = builder()
+            .id(ContainerType.ANVIL)
+            .size(3)
+            .mapSlotToType(AnvilContainer.INPUT_SLOT, ContainerSlotType.ANVIL_INPUT)
+            .mapSlotToType(AnvilContainer.MATERIAL_SLOT, ContainerSlotType.ANVIL_MATERIAL)
+            .mapSlotToType(AnvilContainer.RESULT_SLOT, ContainerSlotType.ANVIL_RESULT)
+            .mapRangedNetworkSlotIndex(1, 3, 0)
+            .build();
+
+    public static final FullContainerType<StonecutterContainer> STONECUTTER = builder()
+            .id(ContainerType.STONECUTTER)
+            .size(3)
+            .mapSlotToType(StonecutterContainer.INPUT_SLOT, ContainerSlotType.STONECUTTER_INPUT)
+            .mapSlotToType(StonecutterContainer.RESULT_SLOT, ContainerSlotType.STONECUTTER_RESULT)
+            .mapRangedNetworkSlotIndex(3, 4, 0)
+            .build();
+
+    public static final FullContainerType<GrindstoneContainer> GRINDSTONE = builder()
+            .id(ContainerType.GRINDSTONE)
+            .size(3)
+            .mapSlotToType(GrindstoneContainer.INPUT_SLOT, ContainerSlotType.GRINDSTONE_INPUT)
+            .mapSlotToType(GrindstoneContainer.ADDITIONAL_SLOT, ContainerSlotType.GRINDSTONE_ADDITIONAL)
+            .mapSlotToType(GrindstoneContainer.RESULT_SLOT, ContainerSlotType.GRINDSTONE_RESULT)
+            .mapRangedNetworkSlotIndex(16, 18, 0)
             .build();
 
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
