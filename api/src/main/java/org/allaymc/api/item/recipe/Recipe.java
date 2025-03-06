@@ -1,7 +1,7 @@
 package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.recipe.input.Input;
+import org.allaymc.api.item.recipe.input.RecipeInput;
 
 /**
  * Represents a recipe.
@@ -16,7 +16,7 @@ public interface Recipe<T> {
      *
      * @return {@code true} if the input matches the recipe, {@code false} otherwise.
      */
-    boolean match(Input input);
+    boolean match(RecipeInput input);
 
     /**
      * Get the outputs of this recipe.

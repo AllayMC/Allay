@@ -7,6 +7,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.recipe.impl.CraftingRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
@@ -33,7 +34,72 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         if (recipeNetworkId >= EnchantmentOptionGenerator.NETWORK_ID_COUNTER_INITIAL_VALUE) {
             return handleEnchantTableRecipe(player, recipeNetworkId);
         } else {
-            return handleCraftingRecipe(action, player, currentActionIndex, actions, dataPool, recipeNetworkId);
+            var recipe = Registries.RECIPES.get(recipeNetworkId);
+            var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
+
+            if (recipe instanceof CraftingRecipe craftingRecipe) {
+                var tag = craftingRecipe.getTag();
+
+                if (tag.equalsIgnoreCase("crafting_table")) {
+                    CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
+                    if (craftingContainer == null) {
+                        // The player is not opening a crafting table, using crafting grid instead
+                        craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
+                    }
+
+                    // Validate item type
+                    var input = craftingContainer.createCraftingInput();
+                    var matched = recipe.match(input);
+                    if (!matched) {
+                        log.warn("Mismatched recipe! Network id: {}", recipe.getNetworkId());
+                        return error();
+                    }
+
+                    // Validate if the player has provided enough ingredients
+                    var itemStackArray = craftingContainer.getItemStackArray();
+                    for (int slot = 0; slot < itemStackArray.length; slot++) {
+                        var ingredient = itemStackArray[slot];
+                        // Skip empty slot because we have checked item type above
+                        if (ingredient == ItemAirStack.AIR_STACK) {
+                            continue;
+                        }
+
+                        if (ingredient.getCount() < numberOfRequestedCrafts) {
+                            log.warn("Not enough ingredients in slot {}! Expected: {}, Actual: {}", slot, numberOfRequestedCrafts, ingredient.getCount());
+                            return error();
+                        }
+                    }
+
+                    // Validate the consume action count which client sent
+                    // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
+                    var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
+                    var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemSlotCount();
+                    if (consumeActions.size() != consumeActionCountNeeded) {
+                        log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
+                        return error();
+                    }
+                }
+
+                if (craftingRecipe.getOutputs().length == 1) {
+                    // If the recipe outputs a single item, the client will not send a CreateAction,
+                    // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
+                    var output = craftingRecipe.getOutputs()[0].copy(false);
+                    output.setCount(output.getCount() * numberOfRequestedCrafts);
+                    player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(output);
+                } else {
+                    if (numberOfRequestedCrafts != 1) {
+                        log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
+                        return error();
+                    }
+                    // If the recipe outputs multiple items, the client will send a CreateAction, so we will set the output in CREATED_OUTPUT in CreateActionProcessor
+                    // Put recipe to data pool so that CreateActionProcessor can get it
+                    dataPool.put(RECIPE_DATA_KEY, craftingRecipe);
+                }
+
+                return null;
+            }
+
+            return error();
         }
     }
 
@@ -58,6 +124,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         if (!event.call()) {
             return error();
         }
+
         enchantments = event.getEnchantments();
         requiredLapisLazuliCount = event.getRequiredLapisLazuliCount();
 
@@ -80,72 +147,10 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         enchantedItem.addEnchantments(enchantments);
         // Copy the enchanted item to CREATED_OUTPUT, and client will send a PlaceAction
         // to move the enchanted item back to the input slot of the enchant table container
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, enchantedItem);
+        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(enchantedItem);
         player.regenerateEnchantmentSeed();
 
         return null;
-    }
-
-    protected ActionResponse handleCraftingRecipe(CraftRecipeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool, int recipeNetworkId) {
-        CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
-        if (craftingContainer == null) {
-            // The player is not opening a crafting table, using crafting grid instead
-            craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
-        }
-        var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
-
-        // Validate item type
-        var recipe = Registries.RECIPES.get(recipeNetworkId);
-        var input = craftingContainer.createCraftingInput();
-        var matched = recipe.match(input);
-        if (!matched) {
-            log.warn("Mismatched recipe! Network id: {}", recipe.getNetworkId());
-            return error();
-        }
-
-        // Validate if the player has provided enough ingredients
-        var itemStackArray = craftingContainer.getItemStackArray();
-        for (int slot = 0; slot < itemStackArray.length; slot++) {
-            var ingredient = itemStackArray[slot];
-            // Skip empty slot because we have checked item type above
-            if (ingredient == ItemAirStack.AIR_STACK) continue;
-            if (ingredient.getCount() < numberOfRequestedCrafts) {
-                log.warn("Not enough ingredients in slot {}! Expected: {}, Actual: {}", slot, numberOfRequestedCrafts, ingredient.getCount());
-                return error();
-            }
-        }
-
-        // Validate the consume action count which client sent
-        // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
-        var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
-        var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemSlotCount();
-        if (consumeActions.size() != consumeActionCountNeeded) {
-            log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
-            return error();
-        }
-
-        if (recipe.getOutputs().length == 1) {
-            // If the recipe outputs a single item, the client will not send a CreateAction,
-            // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
-            var output = recipe.getOutputs()[0].copy(false);
-            output.setCount(output.getCount() * numberOfRequestedCrafts);
-            player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, output);
-        } else {
-            if (numberOfRequestedCrafts != 1) {
-                log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
-                return error();
-            }
-            // If the recipe outputs multiple items, the client will send a CreateAction, so we will set the output in CREATED_OUTPUT in CreateActionProcessor
-            // Put recipe to data pool so that CreateActionProcessor can get it
-            dataPool.put(RECIPE_DATA_KEY, recipe);
-        }
-
-        return null;
-    }
-
-    @Override
-    public ItemStackRequestActionType getType() {
-        return ItemStackRequestActionType.CRAFT_RECIPE;
     }
 
     protected List<ConsumeAction> findAllConsumeActions(ItemStackRequestAction[] actions, int startIndex) {
@@ -153,5 +158,10 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                 .filter(action -> action instanceof ConsumeAction)
                 .map(action -> (ConsumeAction) action)
                 .toList();
+    }
+
+    @Override
+    public ItemStackRequestActionType getType() {
+        return ItemStackRequestActionType.CRAFT_RECIPE;
     }
 }

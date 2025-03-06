@@ -1357,4 +1357,13 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockFlowerPotBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initStonecutterBlock() {
+        BlockTypes.STONECUTTER_BLOCK = AllayBlockType
+                .builder(BlockStonecutterBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.STONECUTTER_BLOCK)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockStonecutterBlockBaseComponentImpl::new)
+                .build();
+    }
 }

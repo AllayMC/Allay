@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Represents a crafting recipe.
- *
  * @author daoge_cmd
  */
 @Getter
@@ -28,9 +26,13 @@ public abstract class CraftingRecipe implements BaseRecipe, TaggedRecipe, Unique
     protected String tag;
     protected int networkId;
     protected UUID uuid;
-    // Recipe priority: when multiple matching recipes are available, the client decides which one to use based on this priority
-    // This parameter is not required for server-side implementation but is necessary for clients
+    /**
+     * When multiple matching recipes are available, the client decides which one to use based on this priority.
+     * <p>
+     * This parameter is not required for server-side implementation but is necessary for clients.
+     */
     protected int priority;
+
     @Getter(AccessLevel.NONE)
     protected RecipeData networkRecipeDataCache;
 

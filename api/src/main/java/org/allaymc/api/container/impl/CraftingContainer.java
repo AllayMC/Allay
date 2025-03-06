@@ -4,7 +4,7 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.input.CraftingInput;
+import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 
 /**
  * @author daoge_cmd
@@ -21,7 +21,7 @@ public abstract class CraftingContainer extends BlockContainer {
         return copy;
     }
 
-    public abstract CraftingInput createCraftingInput();
+    public abstract CraftingRecipeInput createCraftingInput();
 
     public abstract int calculateShouldConsumedItemSlotCount();
 }

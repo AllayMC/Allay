@@ -2,7 +2,7 @@ package org.allaymc.api.container.impl;
 
 import lombok.Getter;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.item.recipe.input.CraftingInput;
+import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.math.position.Position3ic;
 
 /**
@@ -24,8 +24,8 @@ public class CraftingGridContainer extends CraftingContainer {
     }
 
     @Override
-    public CraftingInput createCraftingInput() {
-        return new CraftingInput(
+    public CraftingRecipeInput createCraftingInput() {
+        return new CraftingRecipeInput(
                 pickOne(0), pickOne(1),
                 pickOne(2), pickOne(3)
         );

@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.recipe.input.CraftingInput;
-import org.allaymc.api.item.recipe.input.Input;
+import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
+import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
@@ -20,8 +20,6 @@ import java.util.UUID;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * Represents a shapeless recipe.
- *
  * @author daoge_cmd
  */
 public class ShapelessRecipe extends CraftingRecipe {
@@ -29,18 +27,22 @@ public class ShapelessRecipe extends CraftingRecipe {
     protected ItemDescriptor[] ingredients;
 
     @Builder
-    protected ShapelessRecipe(ItemDescriptor[] ingredients, Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
+    protected ShapelessRecipe(Identifier identifier, ItemDescriptor[] ingredients, ItemStack[] outputs, String tag, UUID uuid, int priority) {
         super(identifier, outputs, tag, uuid, priority);
         this.ingredients = ingredients;
         this.networkRecipeDataCache = buildNetworkRecipeData();
     }
 
     @Override
-    public boolean match(Input input) {
-        if (!(input instanceof CraftingInput craftingInput)) return false;
+    public boolean match(RecipeInput input) {
+        if (!(input instanceof CraftingRecipeInput craftingRecipeInput)) {
+            return false;
+        }
 
-        var inputItems = collectNonAirItems(craftingInput.getFlattenItems());
-        if (inputItems.size() != ingredients.length) return false;
+        var inputItems = collectNonAirItems(craftingRecipeInput.getFlattenItems());
+        if (inputItems.size() != ingredients.length) {
+            return false;
+        }
 
         var itemPool = new ArrayList<>(inputItems);
 

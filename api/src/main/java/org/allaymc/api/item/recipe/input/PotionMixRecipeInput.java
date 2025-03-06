@@ -9,7 +9,7 @@ import org.allaymc.api.item.ItemStack;
  */
 @Getter
 @AllArgsConstructor
-public class PotionMixInput implements Input {
+public class PotionMixRecipeInput implements RecipeInput {
     private final ItemStack ingredient;
     private final ItemStack reagent;
 }
