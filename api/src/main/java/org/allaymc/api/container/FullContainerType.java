@@ -154,7 +154,7 @@ public record FullContainerType<T extends Container>(
 
     public static final FullContainerType<StonecutterContainer> STONECUTTER = builder()
             .id(ContainerType.STONECUTTER)
-            .size(3)
+            .size(2)
             .mapSlotToType(StonecutterContainer.INPUT_SLOT, ContainerSlotType.STONECUTTER_INPUT)
             .mapSlotToType(StonecutterContainer.RESULT_SLOT, ContainerSlotType.STONECUTTER_RESULT)
             .mapRangedNetworkSlotIndex(3, 4, 0)
