@@ -1375,4 +1375,25 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockGrindstoneBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initAnvil() {
+        BlockTypes.ANVIL = AllayBlockType
+                .builder(BlockAnvilBehaviorImpl.class)
+                .vanillaBlock(BlockId.ANVIL)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
+                .build();
+        BlockTypes.CHIPPED_ANVIL = AllayBlockType
+                .builder(BlockAnvilBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHIPPED_ANVIL)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
+                .build();
+        BlockTypes.DAMAGED_ANVIL = AllayBlockType
+                .builder(BlockAnvilBehaviorImpl.class)
+                .vanillaBlock(BlockId.DAMAGED_ANVIL)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
+                .build();
+    }
 }

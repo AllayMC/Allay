@@ -23,7 +23,7 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
      *
      * @return the response to the action.
      */
-    ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool);
+    ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool);
 
     ItemStackRequestActionType getType();
 

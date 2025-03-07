@@ -12,7 +12,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public final class ContainerActionProcessorHolder {
-    private static final EnumMap<ItemStackRequestActionType, ContainerActionProcessor<?>> PROCESSORS = new EnumMap<>(ItemStackRequestActionType.class);
+    private static final Map<ItemStackRequestActionType, ContainerActionProcessor<?>> PROCESSORS = new EnumMap<>(ItemStackRequestActionType.class);
 
     public ContainerActionProcessorHolder() {
         registerProcessor(new CraftCreativeActionProcessor());
@@ -28,6 +28,7 @@ public final class ContainerActionProcessorHolder {
         registerProcessor(new MineBlockActionProcessor());
         registerProcessor(new BeaconPaymentActionProcessor());
         registerProcessor(new CraftGrindstoneActionProcessor());
+        registerProcessor(new CraftRecipeOptionalActionProcessor());
     }
 
     public <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type) {

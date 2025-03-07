@@ -22,7 +22,7 @@ import java.util.Map;
 @Slf4j
 public class BeaconPaymentActionProcessor implements ContainerActionProcessor<BeaconPaymentAction> {
     @Override
-    public ActionResponse handle(BeaconPaymentAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(BeaconPaymentAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getContainer(FullContainerType.BEACON);
         var itemType = container.getBeaconPayment().getItemType();
         if (!itemType.hasItemTag(ItemCustomTags.BEACON_PAYMENT)) {

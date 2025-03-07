@@ -13,6 +13,7 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.type.AbstractEnchantmentProtectionType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -619,4 +620,8 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @param lockMode The lock mode of the item.
      */
     void setLockMode(ItemLockMode lockMode);
+
+    default boolean isAir() {
+        return getItemType() == ItemTypes.AIR || getCount() == 0;
+    }
 }

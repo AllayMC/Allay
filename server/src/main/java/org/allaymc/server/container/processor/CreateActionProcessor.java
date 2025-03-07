@@ -18,8 +18,8 @@ import static org.allaymc.server.container.processor.CraftRecipeActionProcessor.
 @Slf4j
 public class CreateActionProcessor implements ContainerActionProcessor<CreateAction> {
     @Override
-    public ActionResponse handle(CreateAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        var recipe = (Recipe) dataPool.get(RECIPE_DATA_KEY);
+    public ActionResponse handle(CreateAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+        var recipe = (Recipe<?>) dataPool.get(RECIPE_DATA_KEY);
         if (recipe == null) {
             log.warn("Recipe not found in data pool!");
             return error();

@@ -17,7 +17,7 @@ import java.util.Map;
 @Slf4j
 public class CraftCreativeActionProcessor implements ContainerActionProcessor<CraftCreativeAction> {
     @Override
-    public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         if (player.getGameType() != GameType.CREATIVE && player.getGameType() != GameType.SPECTATOR) {
             return error();
         }

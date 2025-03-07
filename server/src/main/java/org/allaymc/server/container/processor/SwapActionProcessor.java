@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
-    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
 

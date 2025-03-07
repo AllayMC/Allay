@@ -24,7 +24,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var source = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var destination = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
 

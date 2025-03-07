@@ -20,17 +20,21 @@ import java.util.stream.Stream;
 @Slf4j
 public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<CraftGrindstoneAction> {
     @Override
-    public ActionResponse handle(CraftGrindstoneAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(CraftGrindstoneAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getOpenedContainer(FullContainerType.GRINDSTONE);
-
-        var input = container.getInput();
-        var additional = container.getAdditional();
-        if (input.getItemType() == ItemTypes.AIR && additional.getItemType() == ItemTypes.AIR) {
-            log.warn("Input items are empty");
+        if (container == null) {
+            log.warn("Received a CraftGrindstoneAction without an opened container!");
             return error();
         }
 
-        var resultItem = input.getItemType() != ItemTypes.AIR ? input.copy() : additional.copy();
+        var input = container.getInput();
+        var additional = container.getAdditional();
+        if (input.isAir() && additional.isAir()) {
+            log.warn("Input and additional item is empty");
+            return error();
+        }
+
+        var resultItem = !input.isAir() ? input.copy() : additional.copy();
 
         // Way 1: Enchanted book
         if (resultItem.getItemType() == ItemTypes.ENCHANTED_BOOK) {

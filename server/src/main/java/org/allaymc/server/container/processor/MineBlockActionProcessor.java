@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class MineBlockActionProcessor implements ContainerActionProcessor<MineBlockAction> {
     @Override
-    public ActionResponse handle(MineBlockAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(MineBlockAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
         int handSlot = player.getHandSlot();
         if (handSlot != action.getHotbarSlot()) {

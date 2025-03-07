@@ -16,7 +16,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- (API) Implemented stonecutter and grindstone behaviors.
+- (API) Added `ANVIL`, `STONECUTTER`, `GRINDSTONE`, `CARTOGRAPHY_TABLE`, `LOOM` and `SMITHING_TABLE` containers type.
+- (API) Implemented `Stonecutter` and `Grindstone` behaviors.
+- (API) Added `ItemStack#isAir()` method.
+- (API) Added `BlockPlaceHelper#processDirection4Property()` method.
 
 ## 0.2.0 (API 0.5.0) - 2025-3-3
 
