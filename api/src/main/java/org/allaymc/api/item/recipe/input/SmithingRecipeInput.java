@@ -9,7 +9,7 @@ import org.allaymc.api.item.ItemStack;
  */
 @Getter
 @AllArgsConstructor
-public class SmithingTransformRecipeInput implements RecipeInput {
+public class SmithingRecipeInput implements RecipeInput {
     private final ItemStack template;
     private final ItemStack base;
     private final ItemStack addition;

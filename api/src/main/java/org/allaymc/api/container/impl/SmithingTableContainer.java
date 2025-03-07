@@ -4,7 +4,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.RecipeContainer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.input.RecipeInput;
-import org.allaymc.api.item.recipe.input.SmithingTransformRecipeInput;
+import org.allaymc.api.item.recipe.input.SmithingRecipeInput;
 
 /**
  * @author IWareQ
@@ -53,6 +53,6 @@ public class SmithingTableContainer extends BlockContainer implements RecipeCont
 
     @Override
     public RecipeInput createRecipeInput() {
-        return new SmithingTransformRecipeInput(getTemplate(), getInput(), getMaterial());
+        return new SmithingRecipeInput(getTemplate(), getInput(), getMaterial());
     }
 }

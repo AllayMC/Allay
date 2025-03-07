@@ -32,6 +32,7 @@ public final class DeferredData {
     public static final Supplier<BiomeDefinitionListPacket> BIOME_DEFINITION_LIST_PACKET = Suppliers.memoize(DeferredData::encodeBiomeDefinitionListPacket);
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(DeferredData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(DeferredData::encodeResourcesPackStackPacket);
+    public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(DeferredData::encodeTrimDataPacket);
 
     private static CraftingDataPacket encodeCraftingDataPacket() {
         var pk = new CraftingDataPacket();
@@ -134,5 +135,11 @@ public final class DeferredData {
         }
 
         return pk;
+    }
+
+    public static TrimDataPacket encodeTrimDataPacket() {
+        var packet = new TrimDataPacket();
+        // TODO
+        return packet;
     }
 }

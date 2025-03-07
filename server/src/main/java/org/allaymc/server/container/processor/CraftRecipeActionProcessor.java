@@ -83,7 +83,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                     }
                 }
 
-                if (craftingRecipe.getOutputs().length == 1) {
+                if (craftingRecipe.getOutputs() != null && craftingRecipe.getOutputs().length == 1) {
                     // If the recipe outputs a single item, the client will not send a CreateAction,
                     // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
                     var output = craftingRecipe.getOutputs()[0].copy(false);
