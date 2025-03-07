@@ -2,6 +2,7 @@ package org.allaymc.api.container.impl;
 
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
+import org.allaymc.api.item.recipe.input.RecipeInput;
 
 import java.util.stream.IntStream;
 
@@ -14,7 +15,7 @@ public class CraftingTableContainer extends CraftingContainer {
     }
 
     @Override
-    public CraftingRecipeInput createCraftingInput() {
+    public RecipeInput createRecipeInput() {
         return new CraftingRecipeInput(
                 pickOne(0), pickOne(1), pickOne(2),
                 pickOne(3), pickOne(4), pickOne(5),

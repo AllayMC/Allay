@@ -3,6 +3,7 @@ package org.allaymc.api.container.impl;
 import lombok.Getter;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
+import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.math.position.Position3ic;
 
 /**
@@ -15,20 +16,20 @@ public class CraftingGridContainer extends CraftingContainer {
     }
 
     @Override
+    public RecipeInput createRecipeInput() {
+        return new CraftingRecipeInput(
+                pickOne(0), pickOne(1),
+                pickOne(2), pickOne(3)
+        );
+    }
+
+    @Override
     public int calculateShouldConsumedItemSlotCount() {
         var count = 0;
         for (var i = 0; i < 4; i++) {
             if (!isEmpty(i)) count++;
         }
         return count;
-    }
-
-    @Override
-    public CraftingRecipeInput createCraftingInput() {
-        return new CraftingRecipeInput(
-                pickOne(0), pickOne(1),
-                pickOne(2), pickOne(3)
-        );
     }
 
     @Override

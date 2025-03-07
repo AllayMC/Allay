@@ -1,12 +1,15 @@
 package org.allaymc.api.container.impl;
 
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.RecipeContainer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.recipe.input.RecipeInput;
+import org.allaymc.api.item.recipe.input.SmithingTransformRecipeInput;
 
 /**
  * @author IWareQ
  */
-public class SmithingTableContainer extends BlockContainer {
+public class SmithingTableContainer extends BlockContainer implements RecipeContainer {
     public static final int INPUT_SLOT = 0;
     public static final int MATERIAL_SLOT = 1;
     public static final int TEMPLATE_SLOT = 2;
@@ -46,5 +49,10 @@ public class SmithingTableContainer extends BlockContainer {
 
     public void setResult(ItemStack itemStack) {
         setItemStack(RESULT_SLOT, itemStack);
+    }
+
+    @Override
+    public RecipeInput createRecipeInput() {
+        return new SmithingTransformRecipeInput(getTemplate(), getInput(), getMaterial());
     }
 }

@@ -1,7 +1,9 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.RecipeContainer;
 import org.allaymc.api.container.impl.CraftingContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
@@ -38,21 +40,22 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
 
             if (recipe instanceof CraftingRecipe craftingRecipe) {
-                var tag = craftingRecipe.getTag();
+                var openedContainer = player.getIdToContainerMap().values().toArray(new Container[0])[0];
+                if (openedContainer instanceof RecipeContainer recipeContainer) {
+                    var recipeInput = recipeContainer.createRecipeInput();
+                    if (!recipe.match(recipeInput)) {
+                        log.warn("Mismatched recipe! Network id: {}", recipe.getNetworkId());
+                        return error();
+                    }
+                }
 
+                // Special case
+                var tag = craftingRecipe.getTag();
                 if (tag.equalsIgnoreCase("crafting_table")) {
                     CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
                     if (craftingContainer == null) {
                         // The player is not opening a crafting table, using crafting grid instead
                         craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
-                    }
-
-                    // Validate item type
-                    var input = craftingContainer.createCraftingInput();
-                    var matched = recipe.match(input);
-                    if (!matched) {
-                        log.warn("Mismatched recipe! Network id: {}", recipe.getNetworkId());
-                        return error();
                     }
 
                     // Validate if the player has provided enough ingredients

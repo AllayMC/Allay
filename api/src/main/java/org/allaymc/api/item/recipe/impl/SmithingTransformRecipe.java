@@ -34,9 +34,9 @@ public class SmithingTransformRecipe extends CraftingRecipe {
     @Override
     public boolean match(RecipeInput input) {
         if (input instanceof SmithingTransformRecipeInput recipeInput) {
-            return recipeInput.getTemplate().equals(template) &&
-                   recipeInput.getBase().equals(base) &&
-                   recipeInput.getAddition().equals(addition);
+            return template.match(recipeInput.getTemplate()) &&
+                   base.match(recipeInput.getBase()) &&
+                   addition.match(recipeInput.getAddition());
         }
 
         return false;
