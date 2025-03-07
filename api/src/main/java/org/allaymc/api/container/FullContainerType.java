@@ -169,6 +169,35 @@ public record FullContainerType<T extends Container>(
             .mapRangedNetworkSlotIndex(16, 18, 0)
             .build();
 
+    public static final FullContainerType<CartographyTableContainer> CARTOGRAPHY_TABLE = builder()
+            .id(ContainerType.CARTOGRAPHY)
+            .size(3)
+            .mapSlotToType(CartographyTableContainer.INPUT_SLOT, ContainerSlotType.CARTOGRAPHY_INPUT)
+            .mapSlotToType(CartographyTableContainer.ADDITIONAL_SLOT, ContainerSlotType.CARTOGRAPHY_ADDITIONAL)
+            .mapSlotToType(CartographyTableContainer.RESULT_SLOT, ContainerSlotType.CARTOGRAPHY_RESULT)
+            .mapRangedNetworkSlotIndex(12, 14, 0)
+            .build();
+
+    public static final FullContainerType<LoomContainer> LOOM = builder()
+            .id(ContainerType.LOOM)
+            .size(4)
+            .mapSlotToType(LoomContainer.INPUT_SLOT, ContainerSlotType.LOOM_INPUT)
+            .mapSlotToType(LoomContainer.DYE_SLOT, ContainerSlotType.LOOM_DYE)
+            .mapSlotToType(LoomContainer.MATERIAL_SLOT, ContainerSlotType.LOOM_MATERIAL)
+            .mapSlotToType(LoomContainer.RESULT_SLOT, ContainerSlotType.LOOM_RESULT)
+            .mapRangedNetworkSlotIndex(9, 12, 0)
+            .build();
+
+    public static final FullContainerType<SmithingTableContainer> SMITHING_TABLE = builder()
+            .id(ContainerType.SMITHING_TABLE)
+            .size(4)
+            .mapSlotToType(SmithingTableContainer.INPUT_SLOT, ContainerSlotType.SMITHING_TABLE_INPUT)
+            .mapSlotToType(SmithingTableContainer.MATERIAL_SLOT, ContainerSlotType.SMITHING_TABLE_MATERIAL)
+            .mapSlotToType(SmithingTableContainer.TEMPLATE_SLOT, ContainerSlotType.SMITHING_TABLE_TEMPLATE)
+            .mapSlotToType(SmithingTableContainer.RESULT_SLOT, ContainerSlotType.SMITHING_TABLE_RESULT)
+            .mapRangedNetworkSlotIndex(51, 54, 0)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
