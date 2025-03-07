@@ -12,7 +12,7 @@ public class CartographyTableContainer extends BlockContainer {
     public static final int RESULT_SLOT = 2;
 
     public CartographyTableContainer() {
-        super(FullContainerType.GRINDSTONE);
+        super(FullContainerType.CARTOGRAPHY_TABLE);
     }
 
     public ItemStack getInput() {

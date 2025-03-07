@@ -13,7 +13,7 @@ public class LoomContainer extends BlockContainer {
     public static final int RESULT_SLOT = 3;
 
     public LoomContainer() {
-        super(FullContainerType.GRINDSTONE);
+        super(FullContainerType.LOOM);
     }
 
     public ItemStack getInput() {

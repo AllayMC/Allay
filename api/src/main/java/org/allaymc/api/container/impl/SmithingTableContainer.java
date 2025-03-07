@@ -13,7 +13,7 @@ public class SmithingTableContainer extends BlockContainer {
     public static final int RESULT_SLOT = 3;
 
     public SmithingTableContainer() {
-        super(FullContainerType.GRINDSTONE);
+        super(FullContainerType.SMITHING_TABLE);
     }
 
     public ItemStack getInput() {

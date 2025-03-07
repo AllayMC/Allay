@@ -1396,4 +1396,12 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initSmithingTable() {
+        BlockTypes.SMITHING_TABLE = AllayBlockType
+                .builder(BlockSmithingTableBehaviorImpl.class)
+                .vanillaBlock(BlockId.SMITHING_TABLE)
+                .setBaseComponentSupplier(BlockSmithingTableBaseComponentImpl::new)
+                .build();
+    }
 }

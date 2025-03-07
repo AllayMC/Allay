@@ -25,4 +25,8 @@ public interface ItemDescriptor {
      * @return The network descriptor.
      */
     org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork();
+
+    default org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount() {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(toNetwork(), 1);
+    }
 }
