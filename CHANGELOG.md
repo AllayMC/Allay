@@ -16,15 +16,23 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- (API) Added `ANVIL`, `STONECUTTER`, `GRINDSTONE`, `CARTOGRAPHY_TABLE`, `LOOM` and `SMITHING_TABLE` containers type.
+- (API) Added `ANVIL`, `STONECUTTER`, `GRINDSTONE`, `CARTOGRAPHY_TABLE`, `LOOM` and `SMITHING_TABLE` container types.
 - (API) Implemented `Stonecutter`, `Grindstone` and `Smithing Table` behaviors.
 - (API) Added `ItemStack#isAir()` method.
 - (API) Added `BlockPlaceHelper#processDirection4Property()` method.
 - (API) Added `RecipeContainer` interface for validating crafting packet.
 
+### Changed
+
+### Fixed
+
+- Fixed skin display issue in 1.21.60.
+
+### Removed
+
 ## 0.2.0 (API 0.5.0) - 2025-3-3
 
-<small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...HEAD)</small>
+<small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...0.2.0)</small>
 
 ### Added
 
