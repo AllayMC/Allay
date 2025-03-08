@@ -104,6 +104,10 @@ public class LoginData {
             this.skin.setGeometryData(new String(Base64.getDecoder().decode(skinMap.get("SkinGeometryData").getAsString()), StandardCharsets.UTF_8));
         }
 
+        if (skinMap.has("SkinGeometryDataEngineVersion")) {
+            this.skin.setGeometryDataEngineVersion(new String(Base64.getDecoder().decode(skinMap.get("SkinGeometryDataEngineVersion").getAsString()), StandardCharsets.UTF_8));
+        }
+
         if (skinMap.has("AnimationData")) {
             this.skin.setAnimationData(new String(Base64.getDecoder().decode(skinMap.get("AnimationData").getAsString()), StandardCharsets.UTF_8));
         }
