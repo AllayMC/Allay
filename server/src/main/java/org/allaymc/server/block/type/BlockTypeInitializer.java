@@ -1381,19 +1381,19 @@ public final class BlockTypeInitializer {
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
+                .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.CHIPPED_ANVIL))
                 .build();
         BlockTypes.CHIPPED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHIPPED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
+                .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.DAMAGED_ANVIL))
                 .build();
         BlockTypes.DAMAGED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.DAMAGED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
+                .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.AIR))
                 .build();
     }
 

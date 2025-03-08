@@ -1,17 +1,21 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.BlockAnvilBaseComponent;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.world.Sound;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author IWareQ
@@ -23,6 +27,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
     private static final float ANVIL_MATERIAL_REPAIR_MULTIPLIER = 0.25f;
     private static final float ANVIL_ITEM_REPAIR_MULTIPLIER = 0.12f;
 
+    private static final float ANVIL_DAMAGE_CHANCE = 0.12f;
     private static final int ANVIL_COST_LIMIT = 39;
 
     @Override
@@ -88,7 +93,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 var remainingDurabilityInput = maxDamage - inputItem.getDurability();
                 var remainingDurabilityMaterial = maxDamage - material.getDurability();
 
-                var totalRemainingDurability = (int) (remainingDurabilityInput + remainingDurabilityMaterial + (maxDamage *ANVIL_ITEM_REPAIR_MULTIPLIER));
+                var totalRemainingDurability = (int) (remainingDurabilityInput + remainingDurabilityMaterial + (maxDamage * ANVIL_ITEM_REPAIR_MULTIPLIER));
                 var finalDurability = Math.min(totalRemainingDurability, maxDamage);
                 resultItem.setDurability(maxDamage - finalDurability);
             }
@@ -130,7 +135,19 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 return error();
             }
 
-            // TODO: Implement anvil damage
+            var anvilPos = container.getBlockPos();
+            if (ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE) {
+                var anvilState = player.getDimension().getBlockState(anvilPos);
+                if (anvilState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
+                    anvilState = anvilComponent.damage(anvilState);
+                    if (anvilState.getBlockType() == BlockTypes.AIR) {
+                        player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_BREAK);
+                    }
+                    player.getDimension().setBlockState(anvilPos, anvilState);
+                }
+            }
+
+            player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_USE);
 
             player.setExperienceLevel(player.getExperienceLevel() - totalCost);
         }
