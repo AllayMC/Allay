@@ -196,6 +196,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
 
         var result = input.copy();
         if (!(result instanceof ItemTrimComponent trimComponent)) {
+            log.warn("Input item is not a trimble item");
             return error();
         }
 
