@@ -36,14 +36,14 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
 
         var resultItem = !input.isEmptyOrAir() ? input.copy() : additional.copy();
 
-        // Way 1: Enchanted book
+        // Case 1: Enchanted book
         if (resultItem.getItemType() == ItemTypes.ENCHANTED_BOOK) {
             var hasCurse = resultItem.getEnchantments().stream().anyMatch(ench -> ench.getType().isCursed());
             if (!hasCurse) {
                 resultItem = ItemTypes.BOOK.createItemStack();
             }
         } else if (input.getItemType() == additional.getItemType()) {
-            // Way 2: Merge items. input > additional
+            // Case 2: Merge items. input > additional
             // Step 1: Merge NBT
             var inputNbt = input.saveNBT();
             var additionalNbt = additional.saveNBT();
@@ -64,8 +64,7 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
             resultItem.setDurability(maxDurability - finalDurability);
         }
 
-        // Way 3: Just remove enchantments
-        // Step 3: Remove enchantments (except curses)
+        // Case 3: Just remove enchantments (except curses)
         resultItem.removeAllEnchantments();
         for (var ench : Stream.concat(input.getEnchantments().stream(), additional.getEnchantments().stream()).toList()) {
             if (ench.getType().isCursed()) {

@@ -51,10 +51,10 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
 
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);
-            sourceContainer.notifySlotChange(slot);
+            sourceContainer.notifySlotChange(slot, false);
         } else {
             item = ItemAirStack.AIR_STACK;
-            sourceContainer.clearSlot(slot);
+            sourceContainer.clearSlot(slot, false);
         }
 
         return new ActionResponse(

@@ -161,30 +161,45 @@ public interface Container {
      */
     List<ItemData> toNetworkItemData();
 
+
+    /**
+     * @see #setItemStack(int, ItemStack, boolean)
+     */
     default void setItemStack(int slot, ItemStack itemStack) {
         setItemStack(slot, itemStack, true);
     }
 
     /**
-     * Set the item stack of the slot.
+     * Sets the item stack at the specified slot.
      *
-     * @param slot      the slot.
-     * @param itemStack the item stack. If it is {@link ItemAirStack#AIR_STACK}, the slot will be cleared.
-     *                  Passing {@code null} value will result in an exception.
+     * @param slot      the slot index.
+     * @param itemStack the {@link ItemStack} to set.
+     *                  If {@link ItemAirStack#AIR_STACK}, clears the slot.
+     * @param send      whether to send an update packet to viewers.
+     *
+     * @throws NullPointerException if {@code itemStack} is {@code null}.
      */
     void setItemStack(int slot, ItemStack itemStack, boolean send);
 
     /**
-     * Clear the slot.
-     *
-     * @param slot the slot.
+     * @see #clearSlot(int, boolean)
      */
     default void clearSlot(int slot) {
-        setItemStack(slot, ItemAirStack.AIR_STACK);
+        clearSlot(slot, true);
     }
 
     /**
-     * Clear all slots.
+     * Clears the specified slot by setting it to {@link ItemAirStack#AIR_STACK}.
+     *
+     * @param slot the slot index.
+     * @param send whether to send an update packet to viewers.
+     */
+    default void clearSlot(int slot, boolean send) {
+        setItemStack(slot, ItemAirStack.AIR_STACK, send);
+    }
+
+    /**
+     * Clears all slots in the container.
      */
     default void clearAllSlots() {
         for (int slot = 0; slot < getItemStackArray().length; slot++) {
@@ -193,52 +208,56 @@ public interface Container {
     }
 
     /**
-     * Add a viewer.
+     * Adds a viewer to this container.
      *
-     * @param viewer the viewer.
+     * @param viewer the {@link ContainerViewer} to add
      */
     void addViewer(ContainerViewer viewer);
 
     /**
-     * Remove a viewer.
+     * Removes a viewer from this container.
      *
-     * @param viewer the viewer.
+     * @param viewer the {@link ContainerViewer} to remove
      */
     void removeViewer(ContainerViewer viewer);
 
     /**
-     * Remove a viewer by the viewer id.
+     * Removes a viewer by their ID and returns the removed viewer.
      *
-     * @param viewerId the viewer id.
+     * @param viewerId the ID of the viewer to remove
+     *
+     * @return the removed {@link ContainerViewer}, or {@code null} if not found
      */
     ContainerViewer removeViewer(byte viewerId);
 
     /**
-     * Remove all viewers.
+     * Removes all viewers from this container.
      */
     default void removeAllViewers() {
         getViewers().values().forEach(this::removeViewer);
     }
 
+    /**
+     * @see #notifySlotChange(int, boolean)
+     */
     default void notifySlotChange(int slot) {
         notifySlotChange(slot, true);
     }
 
     /**
-     * Notify the viewers that item in the slot is changed.
+     * Notifies viewers that the item in the specified slot has changed.
      * <p>
-     * This method should be called if you modified the item in a slot,
-     * and you want to send update packet to the viewers.
+     * This method should be called after modifying a slot's item to ensure viewers are updated.
      *
-     * @param slot the slot.
+     * @param slot the slot index
+     * @param send whether to send an update packet to viewers
      */
     void notifySlotChange(int slot, boolean send);
 
     /**
-     * Notify the viewers that all slots are changed.
+     * Notifies viewers that all slots have changed.
      * <p>
-     * This method should be called if you modified the items in all slots,
-     * and you want to send update packet to the viewers.
+     * This method should be called after modifying all slots to ensure viewers are updated.
      */
     default void notifyAllSlotsChange() {
         for (int slot = 0; slot < getItemStackArray().length; slot++) {
