@@ -64,6 +64,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     // The following tag is in extra tag.
     protected static final String TAG_DURABILITY = "Damage";
+    protected static final String TAG_REPAIR_COST = "RepairCost";
     protected static final String TAG_DISPLAY = "display";
     protected static final String TAG_CUSTOM_NAME = "Name";
     protected static final String TAG_LORE = "Lore";
@@ -88,6 +89,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected int meta;
     @Getter
     protected int durability;
+    @Getter
+    protected int repairCost;
     @Getter
     @Setter
     protected String customName = "";
@@ -134,6 +137,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Override
     public void loadExtraTag(NbtMap extraTag) {
         this.durability = extraTag.getInt(TAG_DURABILITY, 0);
+        this.repairCost = extraTag.getInt(TAG_REPAIR_COST, 0);
         extraTag.listenForCompound(TAG_DISPLAY, displayNbt -> {
             this.customName = displayNbt.getString(TAG_CUSTOM_NAME);
             this.lore = displayNbt.getList(TAG_LORE, NbtType.STRING);
@@ -162,6 +166,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         var nbtBuilder = NbtMap.builder();
         if (durability != 0) {
             nbtBuilder.putInt(TAG_DURABILITY, durability);
+        }
+
+        if (repairCost > 0) {
+            nbtBuilder.putInt(TAG_REPAIR_COST, repairCost);
         }
 
         var displayBuilder = NbtMap.builder();
@@ -262,6 +270,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
         Preconditions.checkArgument(durability >= 0, "Durability must be greater or equal to 0");
         this.durability = durability;
+    }
+
+    @Override
+    public void setRepairCost(int repairCost) {
+        Preconditions.checkArgument(repairCost >= 0, "RepairCost must be greater or equal to 0");
+        this.repairCost = repairCost;
     }
 
     @Override

@@ -38,8 +38,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
             return error();
         }
 
-        sourceContainer.setItemStack(sourceSlot, destinationItem);
-        destinationContainer.setItemStack(destinationSlot, sourceItem);
+        sourceContainer.setItemStack(sourceSlot, destinationItem, false);
+        destinationContainer.setItemStack(destinationSlot, sourceItem, false);
         return new ActionResponse(
                 true,
                 List.of(

@@ -98,6 +98,10 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      */
     void setMeta(int meta);
 
+    default int getMaxDurability() {
+        return getItemType().getItemData().maxDamage();
+    }
+
     /**
      * Get the item durability.
      *
@@ -125,6 +129,10 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @return {@code true} if the item durability is reduced, {@code false} if reduction is ignored.
      */
     boolean tryReduceDurability(int reduction);
+
+    int getRepairCost();
+
+    void setRepairCost(int repairCost);
 
     /**
      * Check if the item is broken.

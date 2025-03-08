@@ -161,6 +161,10 @@ public interface Container {
      */
     List<ItemData> toNetworkItemData();
 
+    default void setItemStack(int slot, ItemStack itemStack) {
+        setItemStack(slot, itemStack, true);
+    }
+
     /**
      * Set the item stack of the slot.
      *
@@ -168,7 +172,7 @@ public interface Container {
      * @param itemStack the item stack. If it is {@link ItemAirStack#AIR_STACK}, the slot will be cleared.
      *                  Passing {@code null} value will result in an exception.
      */
-    void setItemStack(int slot, ItemStack itemStack);
+    void setItemStack(int slot, ItemStack itemStack, boolean send);
 
     /**
      * Clear the slot.
@@ -216,6 +220,10 @@ public interface Container {
         getViewers().values().forEach(this::removeViewer);
     }
 
+    default void notifySlotChange(int slot) {
+        notifySlotChange(slot, true);
+    }
+
     /**
      * Notify the viewers that item in the slot is changed.
      * <p>
@@ -224,7 +232,7 @@ public interface Container {
      *
      * @param slot the slot.
      */
-    void notifySlotChange(int slot);
+    void notifySlotChange(int slot, boolean send);
 
     /**
      * Notify the viewers that all slots are changed.

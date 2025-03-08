@@ -9,6 +9,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents an enchantment type.
@@ -167,5 +168,19 @@ public abstract class EnchantmentType {
      */
     public boolean isIncompatibleWith(EnchantmentType other) {
         return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof EnchantmentType that)) {
+            return false;
+        }
+
+        return id == that.id && Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier, id);
     }
 }
