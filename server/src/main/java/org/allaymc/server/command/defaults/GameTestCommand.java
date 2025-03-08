@@ -12,6 +12,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.item.component.ItemTrimComponent;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.math.MathUtils;
@@ -300,6 +301,20 @@ public class GameTestCommand extends SimpleCommand {
                 .exec(context -> {
                     throw new RuntimeException("Triggered exception");
                 })
+                .root()
+                .key("itemtrim")
+                .exec((context, player) -> {
+                    var item = player.getItemInHand();
+                    if (item instanceof ItemTrimComponent trimComponent) {
+                        trimComponent.trim(
+                                Registries.TRIM_PATTERNS.get("minecraft:sentry_armor_trim_smithing_template"),
+                                Registries.TRIM_MATERIALS.get("minecraft:amethyst_shard")
+                        );
+                    }
+
+                    player.setItemInHand(item);
+                    return context.success();
+                }, SenderType.PLAYER)
                 .root()
                 .key("explode")
                 .pos("pos").optional()

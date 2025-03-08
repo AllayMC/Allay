@@ -9791,7 +9791,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.TURTLE_HELMET == null) {
             ItemTypes.TURTLE_HELMET = AllayItemType
-                    .builder(ItemHelmetStackImpl.class)
+                    .builder(ItemTurtleHelmetStackImpl.class)
                     .vanillaItem(ItemId.TURTLE_HELMET)
                     .build();
         }

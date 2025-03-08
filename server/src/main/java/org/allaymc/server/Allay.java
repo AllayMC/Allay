@@ -237,6 +237,10 @@ public final class Allay {
         Registries.FURNACE_RECIPES = SimpleMappedRegistry.create(new FurnaceRecipeRegistryLoader());
         Registries.POTION_MIX_RECIPES = SimpleMappedRegistry.create(new PotionMixRecipeRegistryLoader());
 
+        // Trim Data
+        Registries.TRIM_PATTERNS = SimpleMappedRegistry.create(new TrimPatternRegistryLoader());
+        Registries.TRIM_MATERIALS = SimpleMappedRegistry.create(new TrimMaterialRegistryLoader());
+
         // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());
 

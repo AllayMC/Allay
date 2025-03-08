@@ -7,9 +7,11 @@ import org.allaymc.api.container.RecipeContainer;
 import org.allaymc.api.container.impl.CraftingContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
+import org.allaymc.api.item.component.ItemTrimComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.impl.CraftingRecipe;
+import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
@@ -49,38 +51,17 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                     }
                 }
 
-                // Special case
+                // Special cases
+                ActionResponse error = null;
                 var tag = craftingRecipe.getTag();
                 if (tag.equalsIgnoreCase("crafting_table")) {
-                    CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
-                    if (craftingContainer == null) {
-                        // The player is not opening a crafting table, using crafting grid instead
-                        craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
-                    }
+                    error = handleCraftingTable(player, numberOfRequestedCrafts, currentActionIndex, actions);
+                } else if (craftingRecipe instanceof SmithingTrimRecipe) {
+                    error = handleSmithingTableTrim(player);
+                }
 
-                    // Validate if the player has provided enough ingredients
-                    var itemStackArray = craftingContainer.getItemStackArray();
-                    for (int slot = 0; slot < itemStackArray.length; slot++) {
-                        var ingredient = itemStackArray[slot];
-                        // Skip empty slot because we have checked item type above
-                        if (ingredient == ItemAirStack.AIR_STACK) {
-                            continue;
-                        }
-
-                        if (ingredient.getCount() < numberOfRequestedCrafts) {
-                            log.warn("Not enough ingredients in slot {}! Expected: {}, Actual: {}", slot, numberOfRequestedCrafts, ingredient.getCount());
-                            return error();
-                        }
-                    }
-
-                    // Validate the consume action count which client sent
-                    // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
-                    var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
-                    var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemSlotCount();
-                    if (consumeActions.size() != consumeActionCountNeeded) {
-                        log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
-                        return error();
-                    }
+                if (error != null) {
+                    return error;
                 }
 
                 if (craftingRecipe.getOutputs() != null && craftingRecipe.getOutputs().length == 1) {
@@ -153,6 +134,73 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(enchantedItem);
         player.regenerateEnchantmentSeed();
 
+        return null;
+    }
+
+    protected ActionResponse handleCraftingTable(EntityPlayer player, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
+        CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
+        if (craftingContainer == null) {
+            // The player is not opening a crafting table, using crafting grid instead
+            craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
+        }
+
+        // Validate if the player has provided enough ingredients
+        var itemStackArray = craftingContainer.getItemStackArray();
+        for (int slot = 0; slot < itemStackArray.length; slot++) {
+            var ingredient = itemStackArray[slot];
+            // Skip empty slot because we have checked item type above
+            if (ingredient == ItemAirStack.AIR_STACK) {
+                continue;
+            }
+
+            if (ingredient.getCount() < numberOfRequestedCrafts) {
+                log.warn("Not enough ingredients in slot {}! Expected: {}, Actual: {}", slot, numberOfRequestedCrafts, ingredient.getCount());
+                return error();
+            }
+        }
+
+        // Validate the consume action count which client sent
+        // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
+        var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
+        var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemSlotCount();
+        if (consumeActions.size() != consumeActionCountNeeded) {
+            log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
+            return error();
+        }
+
+        return null;
+    }
+
+    protected ActionResponse handleSmithingTableTrim(EntityPlayer player) {
+        var container = player.getOpenedContainer(FullContainerType.SMITHING_TABLE);
+        if (container == null) {
+            log.warn("Received a CraftRecipeActionProcessor without an opened container!");
+            return error();
+        }
+
+        var template = container.getTemplate();
+        var input = container.getInput();
+        var material = container.getMaterial();
+        if (template.isEmptyOrAir() || input.isEmptyOrAir() || material.isEmptyOrAir()) {
+            log.warn("One of input items is empty");
+            return error();
+        }
+
+        var trimPattern = Registries.TRIM_PATTERNS.get(template.getItemType().getIdentifier().toString());
+        var trimMaterial = Registries.TRIM_MATERIALS.get(material.getItemType().getIdentifier().toString());
+
+        if (trimPattern == null || trimMaterial == null) {
+            log.warn("Trim pattern or material not found");
+            return error();
+        }
+
+        var result = input.copy();
+        if (!(result instanceof ItemTrimComponent trimComponent)) {
+            return error();
+        }
+
+        trimComponent.trim(trimPattern, trimMaterial);
+        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(result);
         return null;
     }
 
