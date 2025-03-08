@@ -139,7 +139,8 @@ public final class DeferredData {
 
     public static TrimDataPacket encodeTrimDataPacket() {
         var packet = new TrimDataPacket();
-        // TODO
+        packet.getPatterns().addAll(Registries.TRIM_PATTERNS.getContent().values());
+        packet.getMaterials().addAll(Registries.TRIM_MATERIALS.getContent().values());
         return packet;
     }
 }
