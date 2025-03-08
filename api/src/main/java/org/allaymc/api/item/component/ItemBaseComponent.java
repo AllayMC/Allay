@@ -621,7 +621,12 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      */
     void setLockMode(ItemLockMode lockMode);
 
-    default boolean isAir() {
+    /**
+     * Check if this item stack is empty (count is zero) or is air.
+     *
+     * @return {@code true} if this item stack is empty or is air, {@code false} otherwise.
+     */
+    default boolean isEmptyOrAir() {
         return getItemType() == ItemTypes.AIR || getCount() == 0;
     }
 }

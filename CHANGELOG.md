@@ -18,7 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added `ANVIL`, `STONECUTTER`, `GRINDSTONE`, `CARTOGRAPHY_TABLE`, `LOOM` and `SMITHING_TABLE` container types.
 - (API) Implemented `Stonecutter`, `Grindstone` and `Smithing Table` behaviors.
-- (API) Added `ItemStack#isAir()` method.
+- (API) Added `ItemStack#isEmptyOrAir()` method.
 - (API) Added `BlockPlaceHelper#processDirection4Property()` method.
 - (API) Added `RecipeContainer` interface for validating crafting packet.
 

@@ -29,12 +29,12 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
 
         var input = container.getInput();
         var additional = container.getAdditional();
-        if (input.isAir() && additional.isAir()) {
+        if (input.isEmptyOrAir() && additional.isEmptyOrAir()) {
             log.warn("Input and additional item is empty");
             return error();
         }
 
-        var resultItem = !input.isAir() ? input.copy() : additional.copy();
+        var resultItem = !input.isEmptyOrAir() ? input.copy() : additional.copy();
 
         // Way 1: Enchanted book
         if (resultItem.getItemType() == ItemTypes.ENCHANTED_BOOK) {

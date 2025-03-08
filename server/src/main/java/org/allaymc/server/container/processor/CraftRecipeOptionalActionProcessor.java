@@ -36,7 +36,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         }
 
         var inputItem = container.getInput();
-        if (inputItem.isAir()) {
+        if (inputItem.isEmptyOrAir()) {
             log.warn("Input item is empty");
             return error();
         }
