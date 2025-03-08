@@ -36,6 +36,7 @@ public class Skin {
     private String resourcePatch = legacyGeometryName("geometry.humanoid.custom");
     private String geometryName = "";
     private String geometryData = "";
+    private String geometryDataEngineVersion = "";
     private String animationData = "";
     private String capeId = "";
     private String fullSkinId = UUID.randomUUID().toString();
@@ -71,6 +72,7 @@ public class Skin {
         skin.setSkinAnimations(skinAnimations);
         skin.setCapeData(new Image(serializedSkin.getCapeData().getWidth(), serializedSkin.getCapeData().getHeight(), serializedSkin.getCapeData().getImage()));
         skin.setGeometryData(serializedSkin.getGeometryData());
+        skin.setGeometryDataEngineVersion(serializedSkin.getGeometryDataEngineVersion());
         skin.setAnimationData(serializedSkin.getAnimationData());
         skin.setPremium(serializedSkin.isPremium());
         skin.setPersona(serializedSkin.isPersona());
@@ -214,6 +216,7 @@ public class Skin {
                 .animations(animationDataList)
                 .capeData(ImageData.of(this.capeData.width(), this.capeData.height(), this.capeData.data()))
                 .geometryData(this.geometryData)
+                .geometryDataEngineVersion(this.geometryDataEngineVersion)
                 .animationData(this.animationData)
                 .premium(this.premium)
                 .persona(this.persona)
