@@ -601,7 +601,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLACK_GLAZED_TERRACOTTA == null) {
             BlockTypes.BLACK_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.BLACK_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -711,7 +711,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLUE_GLAZED_TERRACOTTA == null) {
             BlockTypes.BLUE_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.BLUE_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -879,7 +879,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BROWN_GLAZED_TERRACOTTA == null) {
             BlockTypes.BROWN_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.BROWN_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -1795,7 +1795,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CYAN_GLAZED_TERRACOTTA == null) {
             BlockTypes.CYAN_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.CYAN_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -3545,7 +3545,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GRAY_GLAZED_TERRACOTTA == null) {
             BlockTypes.GRAY_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.GRAY_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -3614,7 +3614,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GREEN_GLAZED_TERRACOTTA == null) {
             BlockTypes.GREEN_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.GREEN_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -4371,7 +4371,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA == null) {
             BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.LIGHT_BLUE_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -4529,7 +4529,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIME_GLAZED_TERRACOTTA == null) {
             BlockTypes.LIME_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.LIME_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -4657,7 +4657,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MAGENTA_GLAZED_TERRACOTTA == null) {
             BlockTypes.MAGENTA_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.MAGENTA_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -5238,7 +5238,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ORANGE_GLAZED_TERRACOTTA == null) {
             BlockTypes.ORANGE_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.ORANGE_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -5569,7 +5569,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PINK_GLAZED_TERRACOTTA == null) {
             BlockTypes.PINK_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.PINK_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -6052,7 +6052,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PURPLE_GLAZED_TERRACOTTA == null) {
             BlockTypes.PURPLE_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.PURPLE_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -6228,7 +6228,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_GLAZED_TERRACOTTA == null) {
             BlockTypes.RED_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.RED_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -6590,7 +6590,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SILVER_GLAZED_TERRACOTTA == null) {
             BlockTypes.SILVER_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.SILVER_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -8037,7 +8037,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WHITE_GLAZED_TERRACOTTA == null) {
             BlockTypes.WHITE_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.WHITE_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
@@ -8146,7 +8146,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.YELLOW_GLAZED_TERRACOTTA == null) {
             BlockTypes.YELLOW_GLAZED_TERRACOTTA = AllayBlockType
-                    .builder(BlockTerracottaBehaviorImpl.class)
+                    .builder(BlockGlazedTerracottaBehaviorImpl.class)
                     .vanillaBlock(BlockId.YELLOW_GLAZED_TERRACOTTA)
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
