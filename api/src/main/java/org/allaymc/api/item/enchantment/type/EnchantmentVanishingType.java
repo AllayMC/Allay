@@ -19,6 +19,11 @@ public class EnchantmentVanishingType extends EnchantmentType {
     }
 
     @Override
+    public boolean isCursed() {
+        return true;
+    }
+
+    @Override
     public int getMinModifiedLevel(int level) {
         return 25;
     }

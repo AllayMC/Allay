@@ -80,10 +80,10 @@ public class BaseContainer implements Container {
     }
 
     @Override
-    public void setItemStack(int slot, ItemStack itemStack) {
+    public void setItemStack(int slot, ItemStack itemStack, boolean send) {
         Preconditions.checkNotNull(itemStack, "Passing null value to Container#setItemStack is not allowed!");
         content[slot] = itemStack;
-        notifySlotChange(slot);
+        notifySlotChange(slot, send);
     }
 
     @Override
@@ -123,12 +123,18 @@ public class BaseContainer implements Container {
     }
 
     @Override
-    public void notifySlotChange(int slot) {
-        for (var viewer : viewers.values()) {
-            viewer.notifySlotChange(this, slot);
+    public void notifySlotChange(int slot, boolean send) {
+        if (send) {
+            for (var viewer : viewers.values()) {
+                viewer.notifySlotChange(this, slot);
+            }
         }
+
         var listeners = onSlotChangeListeners.get(slot);
-        if (listeners == null || listeners.isEmpty()) return;
+        if (listeners == null || listeners.isEmpty()) {
+            return;
+        }
+
         for (var listener : listeners) {
             listener.accept(content[slot]);
         }

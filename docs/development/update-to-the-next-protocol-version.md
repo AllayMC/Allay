@@ -31,6 +31,8 @@ Allay's resource files are stored in `data/resources` directory.
 - `block_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `item_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `recipes.json`
+- `trim_data.json`: this file is manually maintained. It is small and do isn't changed frequently. To update
+  it, use [CloudburstMC/ProxyPass](https://github.com/CloudburstMC/ProxyPass).
 
 ### Update the files under the `unpacked` directory
 

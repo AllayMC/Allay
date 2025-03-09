@@ -11,18 +11,27 @@ import org.allaymc.api.item.ItemStack;
  */
 public interface ItemDescriptor {
     /**
-     * Check if the given {@link ItemStack} matches this descriptor.
+     * Checks if an item stack matches this descriptor.
      *
-     * @param itemStack The {@link ItemStack} to check.
+     * @param itemStack the {@link ItemStack} to check
      *
-     * @return {@code true} if the {@link ItemStack} matches this descriptor, {@code false} otherwise.
+     * @return {@code true} if matched, {@code false} otherwise
      */
     boolean match(ItemStack itemStack);
 
     /**
-     * Convert this descriptor to a network descriptor.
+     * Converts to a network descriptor.
      *
-     * @return The network descriptor.
+     * @return the {@link org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor}
      */
     org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork();
+
+    /**
+     * Converts to a network descriptor with count.
+     *
+     * @return the {@link org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount} with count 1
+     */
+    default org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount() {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(toNetwork(), 1);
+    }
 }

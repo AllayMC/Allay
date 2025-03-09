@@ -22,6 +22,8 @@ import org.cloudburstmc.protocol.bedrock.packet.ItemStackResponsePacket;
 
 import java.util.*;
 
+import static org.allaymc.server.container.processor.CraftRecipeOptionalActionProcessor.FILTER_STRINGS_DATA_KEY;
+
 /**
  * @author Cool_Loong
  */
@@ -35,12 +37,15 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
         label:
         for (var request : packet.getRequests()) {
             // It is possible to have two same type actions in one request!
-            var responses = new LinkedList<ActionResponse>();
+            List<ActionResponse> responses = new LinkedList<>();
             // Indicate that subsequent destroy action do not return a response
             // For more details, see inventory_stack_packet.md
             var noResponseForDestroyAction = false;
             var actions = request.getActions();
-            var dataPool = new HashMap<>();
+
+            Map<String, Object> dataPool = new HashMap<>();
+            dataPool.put(FILTER_STRINGS_DATA_KEY, request.getFilterStrings());
+
             for (int index = 0; index < actions.length; index++) {
                 var action = actions[index];
                 if (action.getType() == ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED) {
@@ -49,12 +54,14 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
 
                 ContainerActionProcessor<ItemStackRequestAction> processor = processorHolder.getProcessor(action.getType());
                 if (processor == null) {
-                    log.warn("Unhandled inventory action type {}", action.getType());
+                    log.warn("Not found handler for action type {}", action.getType());
                     continue;
                 }
 
                 var response = processor.handle(action, player, index, actions, dataPool);
-                if (response == null) continue;
+                if (response == null) {
+                    continue;
+                }
 
                 if (!response.ok()) {
                     encodedResponses.add(new ItemStackResponse(ItemStackResponseStatus.ERROR, request.getRequestId(), null));

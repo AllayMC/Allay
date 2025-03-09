@@ -19,120 +19,129 @@ import java.util.Map;
 public interface BlockState {
 
     /**
-     * Get the block type of this block state.
+     * Gets the block type of this block state.
      *
-     * @return the block type.
+     * @return the associated {@link BlockType}
      */
     BlockType<?> getBlockType();
 
     /**
-     * Get the block state's hash.
+     * Gets the hash of this block state.
      *
-     * @return block state's hash.
+     * @return the hash value as an integer
      */
     int blockStateHash();
 
     /**
-     * Get the special value of this block state.
+     * Gets the special value identifying this state.
      * <p>
      * For all states of a block type, the states have unique special values from one state to another,
      * and the special value can be computed through the state's property values
      *
-     * @return the special value.
+     * @return the special value as a long
      */
     long specialValue();
 
     /**
-     * Get the property value of this block state.
+     * Gets the property values of this state.
      *
-     * @return the property value of this block state.
+     * @return unmodifiable map of {@link BlockPropertyType} to {@link BlockPropertyType.BlockPropertyValue}
      */
     @UnmodifiableView
     Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues();
 
     /**
-     * Get the value of a specific property type.
+     * Creates a new state with updated property values.
      *
-     * @param property the specific property type.
+     * @param propertyValues list of {@link BlockPropertyType.BlockPropertyValue} to set
      *
-     * @return the value of the specific property type.
+     * @return new {@link BlockState} with applied values
      *
-     * @throws IllegalArgumentException if the property type is not supported by this block type.
+     * @throws IllegalArgumentException if any value is unsupported by this block type
+     */
+    BlockState setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
+
+    /**
+     * Gets the value of a specific property.
+     *
+     * @param property   the {@link BlockPropertyType} to query
+     * @param <DATATYPE> property value type
+     * @param <PROPERTY> property type subtype
+     *
+     * @return the property value
+     *
+     * @throws IllegalArgumentException if property is unsupported by this block type
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY property);
 
     /**
-     * Apply a specific property value on this block state.
+     * Creates a new state with an updated property value.
      *
-     * @param propertyValue the specific property value.
+     * @param propertyValue the {@link BlockPropertyType.BlockPropertyValue} to apply
      *
-     * @return the new block state.
+     * @return new {@link BlockState} with the updated value
      *
-     * @throws IllegalArgumentException if the property value is not supported by this block type.
+     * @throws IllegalArgumentException if value is unsupported by this block type
      */
     BlockState setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
 
     /**
-     * Set a specific property type's value.
+     * Creates a new state with a specific property value set.
      *
-     * @param property the specific property type.
-     * @param value    the value you want to be set.
+     * @param property   the {@link BlockPropertyType} to modify
+     * @param value      the value to set
+     * @param <DATATYPE> property value type
+     * @param <PROPERTY> property type subtype
      *
-     * @return the new block state.
+     * @return new {@link BlockState} with the updated value
      *
-     * @throws IllegalArgumentException if the property type or value is not supported by this block type
+     * @throws IllegalArgumentException if property or value is unsupported by this block type
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setPropertyValue(PROPERTY property, DATATYPE value);
 
     /**
-     * Set multiple property values at once.
+     * Gets the unsigned hash of this block state.
      *
-     * @param propertyValues the property values.
-     *
-     * @return the new block state.
-     *
-     * @throws IllegalArgumentException if the property values are not supported by this block type.
+     * @return the hash value as an unsigned long
      */
-    BlockState setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
-
     long unsignedBlockStateHash();
 
     /**
-     * Get the nbt display format of this block state.
+     * Gets the NBT representation of this state.
      *
-     * @return block state's nbt format.
+     * @return {@link NbtMap} of this block state
      */
     NbtMap getBlockStateTag();
 
     /**
-     * Get the <b>really used</b> item form of this block state.
+     * Converts this state to its item form.
      *
-     * @return the <b>really used</b> item form of this block state.
+     * @return {@link ItemStack} representing this state
      */
     ItemStack toItemStack();
 
     /**
-     * Get the network block definition of this block state.
+     * Converts this state to a network block definition.
      *
-     * @return the network block definition of this block state.
+     * @return {@link BlockDefinition} for network use
      */
     default BlockDefinition toNetworkBlockDefinition() {
         return this::blockStateHash;
     }
 
     /**
-     * Get the block state's behavior.
+     * Gets the behavior of this block state.
      *
-     * @return the block state's behavior.
+     * @return the {@link BlockBehavior} instance
      */
     default BlockBehavior getBehavior() {
         return getBlockType().getBlockBehavior();
     }
 
     /**
-     * Get the data of this block state.
+     * Gets the data for this block state.
      *
-     * @return the data of this block state.
+     * @return the {@link BlockStateData} instance
      */
     default BlockStateData getBlockStateData() {
         return getBehavior().getBlockStateData(this);

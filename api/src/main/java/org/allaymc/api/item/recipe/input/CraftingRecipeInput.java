@@ -11,12 +11,12 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
  * @author daoge_cmd
  */
 @Getter
-public class CraftingInput implements Input {
+public class CraftingRecipeInput implements RecipeInput {
     // We define the top-left item index as [0][0], with the coordinate system as [row][column]
     protected ItemStack[][] items;
 
     // 3x3
-    public CraftingInput(
+    public CraftingRecipeInput(
             ItemStack item00, ItemStack item01, ItemStack item02,
             ItemStack item10, ItemStack item11, ItemStack item12,
             ItemStack item20, ItemStack item21, ItemStack item22
@@ -30,7 +30,7 @@ public class CraftingInput implements Input {
     }
 
     // 2x2
-    public CraftingInput(
+    public CraftingRecipeInput(
             ItemStack item00, ItemStack item01,
             ItemStack item10, ItemStack item11
     ) {

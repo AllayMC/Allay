@@ -77,7 +77,7 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
             case CHAIN -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_CHAIN);
             case GOLD -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_GOLD);
             case DIAMOND, NETHERITE -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_DIAMOND);
-            default -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_GENERIC);
+            case null, default -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_GENERIC);
         }
     }
 

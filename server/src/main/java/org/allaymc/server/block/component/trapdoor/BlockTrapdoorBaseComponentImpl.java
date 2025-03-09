@@ -1,8 +1,7 @@
 package org.allaymc.server.block.component.trapdoor;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.BlockPlaceHelper;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -15,22 +14,12 @@ import org.allaymc.api.world.Sound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.DIRECTION_4;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.OPEN_BIT;
 
 /**
  * @author harry-xi
  */
 public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
-    protected static final BiMap<BlockFace, Integer> TRAPDOOR_DIRECTION = HashBiMap.create(4);
-
-    static {
-        TRAPDOOR_DIRECTION.put(BlockFace.WEST, 0);
-        TRAPDOOR_DIRECTION.put(BlockFace.EAST, 1);
-        TRAPDOOR_DIRECTION.put(BlockFace.NORTH, 2);
-        TRAPDOOR_DIRECTION.put(BlockFace.SOUTH, 3);
-    }
-
     public BlockTrapdoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -42,8 +31,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        var face = placementInfo.player().getHorizontalFace();
-        blockState = blockState.setPropertyValue(DIRECTION_4, TRAPDOOR_DIRECTION.get(face));
+        blockState = BlockPlaceHelper.processDirection4Property(blockState, placeBlockPos, placementInfo);
 
         var blockFace = placementInfo.blockFace();
         if ((placementInfo.clickedPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {

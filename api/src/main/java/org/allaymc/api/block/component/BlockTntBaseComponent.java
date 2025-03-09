@@ -15,10 +15,10 @@ public interface BlockTntBaseComponent extends BlockBaseComponent {
     }
 
     /**
-     * Prime the TNT at specified pos.
+     * Primes the TNT with a custom fuse duration.
      *
-     * @param blockStateWithPos the tnt to prime.
-     * @param fuse              the fuse of the tnt.
+     * @param blockStateWithPos the {@link BlockStateWithPos} to prime
+     * @param fuse              the fuse duration in ticks
      */
     void prime(BlockStateWithPos blockStateWithPos, int fuse);
 }

@@ -11,12 +11,13 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Rarity {
-    COMMON(10),
-    UNCOMMON(5),
-    RARE(2),
-    VERY_RARE(1);
+    COMMON(10, 1),
+    UNCOMMON(5, 2),
+    RARE(2, 4),
+    VERY_RARE(1, 8);
 
     private final int weight;
+    private final int anvilCost;
 
     /**
      * Converts the weight to the closest rarity using floor semantic.

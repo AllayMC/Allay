@@ -3268,7 +3268,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemTurtleEggStack> TURTLE_EGG;
 
-    public static ItemType<ItemHelmetStack> TURTLE_HELMET;
+    public static ItemType<ItemTurtleHelmetStack> TURTLE_HELMET;
 
     public static ItemType<ItemTurtleScuteStack> TURTLE_SCUTE;
 
