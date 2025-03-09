@@ -5,9 +5,7 @@ import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.tag.ItemTags;
-import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.world.Sound;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
@@ -64,12 +62,13 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         if (!materialItem.isEmptyOrAir()) {
             anvilCost += materialItem.getRepairCost();
 
-            var repairMaterial = getRepairMaterial(inputItem.getItemType());
-
             var maxDamage = resultItem.getMaxDurability();
 
             // Case 1: Repair by repairing materials
-            if (repairMaterial != null && repairMaterial == materialItem.getItemType()) {
+            if (
+                    inputItem instanceof ItemRepairableComponent repairableComponent &&
+                    repairableComponent.canBeRepairedBy(materialItem.getItemType())
+            ) {
                 var delta = (int) Math.min(resultItem.getDurability(), maxDamage * ANVIL_MATERIAL_REPAIR_MULTIPLIER);
                 if (delta <= 0) {
                     log.warn("Input item is already fully repaired");
@@ -160,25 +159,6 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         resultItem.setRepairCost(newRepairCost);
 
         player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(resultItem);
-        return null;
-    }
-
-    // TODO: Replace this with a better method (maybe component?)
-    protected ItemType<?> getRepairMaterial(ItemType<?> itemType) {
-        if (itemType.hasItemTag(ItemTags.WOODEN_TIER)) {
-            return ItemTypes.PLANKS;
-        } else if (itemType.hasItemTag(ItemTags.STONE_TIER)) {
-            return ItemTypes.COBBLESTONE;
-        } else if (itemType.hasItemTag(ItemTags.IRON_TIER)) {
-            return ItemTypes.IRON_INGOT;
-        } else if (itemType.hasItemTag(ItemTags.GOLDEN_TIER)) {
-            return ItemTypes.GOLD_INGOT;
-        } else if (itemType.hasItemTag(ItemTags.DIAMOND_TIER)) {
-            return ItemTypes.DIAMOND;
-        } else if (itemType.hasItemTag(ItemTags.NETHERITE_TIER)) {
-            return ItemTypes.NETHERITE_INGOT;
-        }
-
         return null;
     }
 

@@ -6,7 +6,7 @@ import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 /**
  * @author IWareQ
  */
-public interface ItemTrimComponent extends ItemComponent {
+public interface ItemTrimmableComponent extends ItemComponent {
     /**
      * Applies a trim pattern and material to the item.
      *

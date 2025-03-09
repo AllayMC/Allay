@@ -491,180 +491,121 @@ public final class ItemTypeInitializer {
     }
 
     public static void initSword() {
-        ItemTypes.DIAMOND_SWORD = buildSword(ItemId.DIAMOND_SWORD);
-        ItemTypes.GOLDEN_SWORD = buildSword(ItemId.GOLDEN_SWORD);
-        ItemTypes.IRON_SWORD = buildSword(ItemId.IRON_SWORD);
-        ItemTypes.NETHERITE_SWORD = buildSword(ItemId.NETHERITE_SWORD);
-        ItemTypes.STONE_SWORD = buildSword(ItemId.STONE_SWORD);
-        ItemTypes.WOODEN_SWORD = buildSword(ItemId.WOODEN_SWORD);
+        ItemTypes.DIAMOND_SWORD = buildSword(ItemId.DIAMOND_SWORD, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_SWORD = buildSword(ItemId.GOLDEN_SWORD, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_SWORD = buildSword(ItemId.IRON_SWORD, ItemId.IRON_INGOT);
+        ItemTypes.NETHERITE_SWORD = buildSword(ItemId.NETHERITE_SWORD, ItemId.NETHERITE_INGOT);
+        ItemTypes.STONE_SWORD = buildSword(ItemId.STONE_SWORD, ItemId.COBBLESTONE);
+        ItemTypes.WOODEN_SWORD = buildSword(ItemId.WOODEN_SWORD, ItemId.PLANKS);
     }
 
-    private static ItemType<ItemSwordStack> buildSword(ItemId itemId) {
+    private static ItemType<ItemSwordStack> buildSword(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemSwordStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initPickaxe() {
-        ItemTypes.DIAMOND_PICKAXE = buildPickaxe(ItemId.DIAMOND_PICKAXE);
-        ItemTypes.GOLDEN_PICKAXE = buildPickaxe(ItemId.GOLDEN_PICKAXE);
-        ItemTypes.IRON_PICKAXE = buildPickaxe(ItemId.IRON_PICKAXE);
-        ItemTypes.NETHERITE_PICKAXE = buildPickaxe(ItemId.NETHERITE_PICKAXE);
-        ItemTypes.STONE_PICKAXE = buildPickaxe(ItemId.STONE_PICKAXE);
-        ItemTypes.WOODEN_PICKAXE = buildPickaxe(ItemId.WOODEN_PICKAXE);
+        ItemTypes.DIAMOND_PICKAXE = buildPickaxe(ItemId.DIAMOND_PICKAXE, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_PICKAXE = buildPickaxe(ItemId.GOLDEN_PICKAXE, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_PICKAXE = buildPickaxe(ItemId.IRON_PICKAXE, ItemId.IRON_INGOT);
+        ItemTypes.NETHERITE_PICKAXE = buildPickaxe(ItemId.NETHERITE_PICKAXE, ItemId.NETHERITE_INGOT);
+        ItemTypes.STONE_PICKAXE = buildPickaxe(ItemId.STONE_PICKAXE, ItemId.COBBLESTONE);
+        ItemTypes.WOODEN_PICKAXE = buildPickaxe(ItemId.WOODEN_PICKAXE, ItemId.PLANKS);
     }
 
-    private static ItemType<ItemPickaxeStack> buildPickaxe(ItemId itemId) {
+    private static ItemType<ItemPickaxeStack> buildPickaxe(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initAxe() {
-        ItemTypes.DIAMOND_AXE = buildAxe(ItemId.DIAMOND_AXE);
-        ItemTypes.GOLDEN_AXE = buildAxe(ItemId.GOLDEN_AXE);
-        ItemTypes.IRON_AXE = buildAxe(ItemId.IRON_AXE);
-        ItemTypes.NETHERITE_AXE = buildAxe(ItemId.NETHERITE_AXE);
-        ItemTypes.STONE_AXE = buildAxe(ItemId.STONE_AXE);
-        ItemTypes.WOODEN_AXE = buildAxe(ItemId.WOODEN_AXE);
+        ItemTypes.DIAMOND_AXE = buildAxe(ItemId.DIAMOND_AXE, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_AXE = buildAxe(ItemId.GOLDEN_AXE, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_AXE = buildAxe(ItemId.IRON_AXE, ItemId.IRON_INGOT);
+        ItemTypes.NETHERITE_AXE = buildAxe(ItemId.NETHERITE_AXE, ItemId.NETHERITE_INGOT);
+        ItemTypes.STONE_AXE = buildAxe(ItemId.STONE_AXE, ItemId.COBBLESTONE);
+        ItemTypes.WOODEN_AXE = buildAxe(ItemId.WOODEN_AXE, ItemId.PLANKS);
     }
 
-    private static ItemType<ItemAxeStack> buildAxe(ItemId itemId) {
+    private static ItemType<ItemAxeStack> buildAxe(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemAxeStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(ItemAxeBaseComponentImpl::new, ItemAxeBaseComponentImpl.class)
                 .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initShovel() {
-        ItemTypes.DIAMOND_SHOVEL = buildShovel(ItemId.DIAMOND_SHOVEL);
-        ItemTypes.GOLDEN_SHOVEL = buildShovel(ItemId.GOLDEN_SHOVEL);
-        ItemTypes.IRON_SHOVEL = buildShovel(ItemId.IRON_SHOVEL);
-        ItemTypes.NETHERITE_SHOVEL = buildShovel(ItemId.NETHERITE_SHOVEL);
-        ItemTypes.STONE_SHOVEL = buildShovel(ItemId.STONE_SHOVEL);
-        ItemTypes.WOODEN_SHOVEL = buildShovel(ItemId.WOODEN_SHOVEL);
+        ItemTypes.DIAMOND_SHOVEL = buildShovel(ItemId.DIAMOND_SHOVEL, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_SHOVEL = buildShovel(ItemId.GOLDEN_SHOVEL, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_SHOVEL = buildShovel(ItemId.IRON_SHOVEL, ItemId.IRON_INGOT);
+        ItemTypes.NETHERITE_SHOVEL = buildShovel(ItemId.NETHERITE_SHOVEL, ItemId.NETHERITE_INGOT);
+        ItemTypes.STONE_SHOVEL = buildShovel(ItemId.STONE_SHOVEL, ItemId.COBBLESTONE);
+        ItemTypes.WOODEN_SHOVEL = buildShovel(ItemId.WOODEN_SHOVEL, ItemId.PLANKS);
     }
 
-    private static ItemType<ItemShovelStack> buildShovel(ItemId itemId) {
+    private static ItemType<ItemShovelStack> buildShovel(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemShovelStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initHoe() {
-        ItemTypes.DIAMOND_HOE = buildHoe(ItemId.DIAMOND_HOE);
-        ItemTypes.GOLDEN_HOE = buildHoe(ItemId.GOLDEN_HOE);
-        ItemTypes.IRON_HOE = buildHoe(ItemId.IRON_HOE);
-        ItemTypes.NETHERITE_HOE = buildHoe(ItemId.NETHERITE_HOE);
-        ItemTypes.STONE_HOE = buildHoe(ItemId.STONE_HOE);
-        ItemTypes.WOODEN_HOE = buildHoe(ItemId.WOODEN_HOE);
+        ItemTypes.DIAMOND_HOE = buildHoe(ItemId.DIAMOND_HOE, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_HOE = buildHoe(ItemId.GOLDEN_HOE, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_HOE = buildHoe(ItemId.IRON_HOE, ItemId.IRON_INGOT);
+        ItemTypes.NETHERITE_HOE = buildHoe(ItemId.NETHERITE_HOE, ItemId.NETHERITE_INGOT);
+        ItemTypes.STONE_HOE = buildHoe(ItemId.STONE_HOE, ItemId.COBBLESTONE);
+        ItemTypes.WOODEN_HOE = buildHoe(ItemId.WOODEN_HOE, ItemId.PLANKS);
     }
 
-    private static ItemType<ItemHoeStack> buildHoe(ItemId itemId) {
+    private static ItemType<ItemHoeStack> buildHoe(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemHoeStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(ItemHoeComponentImpl::new, ItemHoeComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initShulkerBox() {
-        ItemTypes.BLACK_SHULKER_BOX = AllayItemType
+        ItemTypes.BLACK_SHULKER_BOX = buildShulkerBox(ItemId.BLACK_SHULKER_BOX);
+        ItemTypes.BLUE_SHULKER_BOX = buildShulkerBox(ItemId.BLUE_SHULKER_BOX);
+        ItemTypes.BROWN_SHULKER_BOX = buildShulkerBox(ItemId.BROWN_SHULKER_BOX);
+        ItemTypes.CYAN_SHULKER_BOX = buildShulkerBox(ItemId.CYAN_SHULKER_BOX);
+        ItemTypes.GRAY_SHULKER_BOX = buildShulkerBox(ItemId.GRAY_SHULKER_BOX);
+        ItemTypes.GREEN_SHULKER_BOX = buildShulkerBox(ItemId.GREEN_SHULKER_BOX);
+        ItemTypes.LIGHT_BLUE_SHULKER_BOX = buildShulkerBox(ItemId.LIGHT_BLUE_SHULKER_BOX);
+        ItemTypes.LIGHT_GRAY_SHULKER_BOX = buildShulkerBox(ItemId.LIGHT_GRAY_SHULKER_BOX);
+        ItemTypes.LIME_SHULKER_BOX = buildShulkerBox(ItemId.LIME_SHULKER_BOX);
+        ItemTypes.MAGENTA_SHULKER_BOX = buildShulkerBox(ItemId.MAGENTA_SHULKER_BOX);
+        ItemTypes.ORANGE_SHULKER_BOX = buildShulkerBox(ItemId.ORANGE_SHULKER_BOX);
+        ItemTypes.PINK_SHULKER_BOX = buildShulkerBox(ItemId.PINK_SHULKER_BOX);
+        ItemTypes.PURPLE_SHULKER_BOX = buildShulkerBox(ItemId.PURPLE_SHULKER_BOX);
+        ItemTypes.RED_SHULKER_BOX = buildShulkerBox(ItemId.RED_SHULKER_BOX);
+        ItemTypes.SHULKER_BOX = buildShulkerBox(ItemId.SHULKER_BOX);
+        ItemTypes.UNDYED_SHULKER_BOX = buildShulkerBox(ItemId.UNDYED_SHULKER_BOX);
+        ItemTypes.WHITE_SHULKER_BOX = buildShulkerBox(ItemId.WHITE_SHULKER_BOX);
+        ItemTypes.YELLOW_SHULKER_BOX = buildShulkerBox(ItemId.YELLOW_SHULKER_BOX);
+    }
+
+    private static ItemType<ItemShulkerBoxStack> buildShulkerBox(ItemId itemId) {
+        return AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.BLACK_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.BLUE_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.BLUE_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.BROWN_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.BROWN_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.CYAN_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.CYAN_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.GRAY_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.GRAY_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.GREEN_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.GREEN_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.LIGHT_BLUE_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.LIGHT_BLUE_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.LIGHT_GRAY_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.LIGHT_GRAY_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.LIME_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.LIME_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.MAGENTA_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.MAGENTA_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.ORANGE_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.ORANGE_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.PINK_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.PINK_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.PURPLE_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.PURPLE_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.RED_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.RED_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.UNDYED_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.UNDYED_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.WHITE_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.WHITE_SHULKER_BOX)
-                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
-                .build();
-        ItemTypes.YELLOW_SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.YELLOW_SHULKER_BOX)
+                .vanillaItem(itemId)
                 .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
     }
@@ -678,84 +619,90 @@ public final class ItemTypeInitializer {
     }
 
     public static void initHelmets() {
-        ItemTypes.CHAINMAIL_HELMET = buildHelmet(ItemId.CHAINMAIL_HELMET);
-        ItemTypes.DIAMOND_HELMET = buildHelmet(ItemId.DIAMOND_HELMET);
-        ItemTypes.GOLDEN_HELMET = buildHelmet(ItemId.GOLDEN_HELMET);
-        ItemTypes.IRON_HELMET = buildHelmet(ItemId.IRON_HELMET);
-        ItemTypes.LEATHER_HELMET = buildHelmet(ItemId.LEATHER_HELMET);
-        ItemTypes.NETHERITE_HELMET = buildHelmet(ItemId.NETHERITE_HELMET);
+        ItemTypes.CHAINMAIL_HELMET = buildHelmet(ItemId.CHAINMAIL_HELMET, ItemId.IRON_INGOT);
+        ItemTypes.DIAMOND_HELMET = buildHelmet(ItemId.DIAMOND_HELMET, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_HELMET = buildHelmet(ItemId.GOLDEN_HELMET, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_HELMET = buildHelmet(ItemId.IRON_HELMET, ItemId.IRON_INGOT);
+        ItemTypes.LEATHER_HELMET = buildHelmet(ItemId.LEATHER_HELMET, ItemId.LEATHER);
+        ItemTypes.NETHERITE_HELMET = buildHelmet(ItemId.NETHERITE_HELMET, ItemId.NETHERITE_INGOT);
         ItemTypes.TURTLE_HELMET = AllayItemType
                 .builder(ItemTurtleHelmetStackImpl.class)
                 .vanillaItem(ItemId.TURTLE_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.TURTLE_SCUTE), ItemRepairableComponentImpl.class)
                 .build();
     }
 
-    private static ItemType<ItemHelmetStack> buildHelmet(ItemId itemId) {
+    private static ItemType<ItemHelmetStack> buildHelmet(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
-                .addComponent(ItemTrimComponentImpl::new, ItemTrimComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initChestplates() {
-        ItemTypes.CHAINMAIL_CHESTPLATE = buildChestplate(ItemId.CHAINMAIL_CHESTPLATE);
-        ItemTypes.DIAMOND_CHESTPLATE = buildChestplate(ItemId.DIAMOND_CHESTPLATE);
-        ItemTypes.GOLDEN_CHESTPLATE = buildChestplate(ItemId.GOLDEN_CHESTPLATE);
-        ItemTypes.IRON_CHESTPLATE = buildChestplate(ItemId.IRON_CHESTPLATE);
-        ItemTypes.LEATHER_CHESTPLATE = buildChestplate(ItemId.LEATHER_CHESTPLATE);
-        ItemTypes.NETHERITE_CHESTPLATE = buildChestplate(ItemId.NETHERITE_CHESTPLATE);
+        ItemTypes.CHAINMAIL_CHESTPLATE = buildChestplate(ItemId.CHAINMAIL_CHESTPLATE, ItemId.IRON_INGOT);
+        ItemTypes.DIAMOND_CHESTPLATE = buildChestplate(ItemId.DIAMOND_CHESTPLATE, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_CHESTPLATE = buildChestplate(ItemId.GOLDEN_CHESTPLATE, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_CHESTPLATE = buildChestplate(ItemId.IRON_CHESTPLATE, ItemId.IRON_INGOT);
+        ItemTypes.LEATHER_CHESTPLATE = buildChestplate(ItemId.LEATHER_CHESTPLATE, ItemId.LEATHER);
+        ItemTypes.NETHERITE_CHESTPLATE = buildChestplate(ItemId.NETHERITE_CHESTPLATE, ItemId.NETHERITE_INGOT);
         ItemTypes.ELYTRA = AllayItemType
                 .builder(ItemElytraStackImpl.class)
                 .vanillaItem(ItemId.ELYTRA)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.PHANTOM_MEMBRANE), ItemRepairableComponentImpl.class)
                 .build();
     }
 
-    private static ItemType<ItemChestplateStack> buildChestplate(ItemId itemId) {
+    private static ItemType<ItemChestplateStack> buildChestplate(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemChestplateStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
-                .addComponent(ItemTrimComponentImpl::new, ItemTrimComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initLeggings() {
-        ItemTypes.CHAINMAIL_LEGGINGS = buildLeggings(ItemId.CHAINMAIL_LEGGINGS);
-        ItemTypes.DIAMOND_LEGGINGS = buildLeggings(ItemId.DIAMOND_LEGGINGS);
-        ItemTypes.GOLDEN_LEGGINGS = buildLeggings(ItemId.GOLDEN_LEGGINGS);
-        ItemTypes.IRON_LEGGINGS = buildLeggings(ItemId.IRON_LEGGINGS);
-        ItemTypes.LEATHER_LEGGINGS = buildLeggings(ItemId.LEATHER_LEGGINGS);
-        ItemTypes.NETHERITE_LEGGINGS = buildLeggings(ItemId.NETHERITE_LEGGINGS);
+        ItemTypes.CHAINMAIL_LEGGINGS = buildLeggings(ItemId.CHAINMAIL_LEGGINGS, ItemId.IRON_INGOT);
+        ItemTypes.DIAMOND_LEGGINGS = buildLeggings(ItemId.DIAMOND_LEGGINGS, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_LEGGINGS = buildLeggings(ItemId.GOLDEN_LEGGINGS, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_LEGGINGS = buildLeggings(ItemId.IRON_LEGGINGS, ItemId.IRON_INGOT);
+        ItemTypes.LEATHER_LEGGINGS = buildLeggings(ItemId.LEATHER_LEGGINGS, ItemId.LEATHER);
+        ItemTypes.NETHERITE_LEGGINGS = buildLeggings(ItemId.NETHERITE_LEGGINGS, ItemId.NETHERITE_INGOT);
     }
 
-    private static ItemType<ItemLeggingsStack> buildLeggings(ItemId itemId) {
+    private static ItemType<ItemLeggingsStack> buildLeggings(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemLeggingsStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
-                .addComponent(ItemTrimComponentImpl::new, ItemTrimComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 
     public static void initBoots() {
-        ItemTypes.CHAINMAIL_BOOTS = buildBoots(ItemId.CHAINMAIL_BOOTS);
-        ItemTypes.DIAMOND_BOOTS = buildBoots(ItemId.DIAMOND_BOOTS);
-        ItemTypes.GOLDEN_BOOTS = buildBoots(ItemId.GOLDEN_BOOTS);
-        ItemTypes.IRON_BOOTS = buildBoots(ItemId.IRON_BOOTS);
-        ItemTypes.LEATHER_BOOTS = buildBoots(ItemId.LEATHER_BOOTS);
-        ItemTypes.NETHERITE_BOOTS = buildBoots(ItemId.NETHERITE_BOOTS);
+        ItemTypes.CHAINMAIL_BOOTS = buildBoots(ItemId.CHAINMAIL_BOOTS, ItemId.IRON_INGOT);
+        ItemTypes.DIAMOND_BOOTS = buildBoots(ItemId.DIAMOND_BOOTS, ItemId.DIAMOND);
+        ItemTypes.GOLDEN_BOOTS = buildBoots(ItemId.GOLDEN_BOOTS, ItemId.GOLD_INGOT);
+        ItemTypes.IRON_BOOTS = buildBoots(ItemId.IRON_BOOTS, ItemId.IRON_INGOT);
+        ItemTypes.LEATHER_BOOTS = buildBoots(ItemId.LEATHER_BOOTS, ItemId.LEATHER);
+        ItemTypes.NETHERITE_BOOTS = buildBoots(ItemId.NETHERITE_BOOTS, ItemId.NETHERITE_INGOT);
     }
 
-    private static ItemType<ItemBootsStack> buildBoots(ItemId itemId) {
+    private static ItemType<ItemBootsStack> buildBoots(ItemId itemId, ItemId repairItemId) {
         return AllayItemType
                 .builder(ItemBootsStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
-                .addComponent(ItemTrimComponentImpl::new, ItemTrimComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 

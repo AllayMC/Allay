@@ -2,7 +2,8 @@ package org.allaymc.server.item.component;
 
 import lombok.Getter;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.item.component.ItemTrimComponent;
+import org.allaymc.api.item.component.ItemTrimmableComponent;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.component.event.CItemLoadExtraTagEvent;
 import org.allaymc.server.item.component.event.CItemSaveExtraTagEvent;
 import org.allaymc.server.registry.InternalRegistries;
@@ -14,7 +15,10 @@ import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
  * @author IWareQ
  */
 @Getter
-public class ItemTrimComponentImpl implements ItemTrimComponent {
+public class ItemTrimmableComponentImpl implements ItemTrimmableComponent {
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_trimmable_component");
+
     protected TrimPattern pattern;
     protected TrimMaterial material;
 

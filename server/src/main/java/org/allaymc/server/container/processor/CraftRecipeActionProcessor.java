@@ -7,7 +7,7 @@ import org.allaymc.api.container.RecipeContainer;
 import org.allaymc.api.container.impl.CraftingContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
-import org.allaymc.api.item.component.ItemTrimComponent;
+import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.impl.CraftingRecipe;
@@ -200,7 +200,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         }
 
         var result = inputItem.copy();
-        if (!(result instanceof ItemTrimComponent trimComponent)) {
+        if (!(result instanceof ItemTrimmableComponent trimComponent)) {
             log.warn("Input item is not a trimble item");
             return error();
         }
