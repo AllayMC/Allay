@@ -24,7 +24,14 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     protected static final String TAG_FOOD_TICK_TIMER = "foodTickTimer";
 
-    @Dependency(soft = true)
+    private static final int FOOD_TICK_THRESHOLD = 80;
+    /**
+     * To reduce network traffic, we only update food data every 10 blocks of movement
+     */
+    private static final int MOVEMENT_THRESHOLD = 10;
+    private static final int MIN_FOOD_EXHAUSTION = 4;
+
+    @Dependency(optional = true)
     protected EntityPlayerNetworkComponent networkComponent;
 
     protected float swimDistance = 0;
@@ -52,13 +59,14 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     protected void tickFood() {
         foodTickTimer++;
-        if (foodTickTimer >= 80) foodTickTimer = 0;
+        if (foodTickTimer >= FOOD_TICK_THRESHOLD) {
+            foodTickTimer = 0;
+        }
 
         var currentFoodLevel = getFoodLevel();
         var difficulty = thisPlayer.getWorld().getWorldData().getDifficulty();
         if (difficulty == Difficulty.PEACEFUL && foodTickTimer % 10 == 0) {
             setFoodLevel(currentFoodLevel + 1);
-
             if (foodTickTimer % 20 == 0) {
                 regenerate(false);
             }
@@ -84,10 +92,14 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     }
 
     protected void regenerate(boolean exhaust) {
-        if (thisPlayer.getHealth() == thisPlayer.getMaxHealth()) return;
+        if (thisPlayer.getHealth() == thisPlayer.getMaxHealth()) {
+            return;
+        }
 
         thisPlayer.setHealth(thisPlayer.getHealth() + 1);
-        if (exhaust) thisPlayer.exhaust(6);
+        if (exhaust) {
+            thisPlayer.exhaust(6);
+        }
     }
 
     @Override
@@ -105,7 +117,9 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public void setExperienceLevel(int value) {
         var event = new PlayerExperienceLevelChangeEvent(thisPlayer, (int) getAttributeValue(AttributeType.PLAYER_EXPERIENCE_LEVEL), value);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         setAttributeValue(AttributeType.PLAYER_EXPERIENCE_LEVEL, event.getNewExperienceLevel());
     }
@@ -118,19 +132,24 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public void setExperienceProgress(float value) {
         var event = new PlayerExperienceProgressChangeEvent(thisPlayer, getAttributeValue(AttributeType.PLAYER_EXPERIENCE_PROGRESS), value);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         setAttributeValue(AttributeType.PLAYER_EXPERIENCE_PROGRESS, event.getNewExperienceProgress());
     }
 
     @Override
     public void setFoodLevel(int value) {
-        value = Math.max(0, Math.min(value, (int) AttributeType.PLAYER_HUNGER.getMaxValue()));
+        var maxHunger = (int) AttributeType.PLAYER_HUNGER.getMaxValue();
+        value = Math.max(0, Math.min(value, maxHunger));
 
         var event = new PlayerFoodLevelChangeEvent(thisPlayer, getFoodLevel(), value);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
-        setAttributeValue(AttributeType.PLAYER_HUNGER, value);
+        setAttributeValue(AttributeType.PLAYER_HUNGER, event.getNewFoodLevel());
     }
 
     @Override
@@ -140,39 +159,35 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void exhaust(float level) {
-        if (thisPlayer.getGameType() == GameType.CREATIVE) return;
+        if (thisPlayer.getGameType() == GameType.CREATIVE) {
+            return;
+        }
 
-        var currentFoodExhaustionLevel = getFoodExhaustionLevel();
-        var currentFoodSaturationLevel = getFoodSaturationLevel();
-        var currentFoodLevel = getFoodLevel();
+        var exhaustionLevel = getFoodExhaustionLevel() + level;
+        var saturationLevel = getFoodSaturationLevel();
+        var foodLevel = getFoodLevel();
 
-        currentFoodExhaustionLevel += level;
-        while (currentFoodExhaustionLevel >= 4) {
-            currentFoodExhaustionLevel -= 4;
+        while (exhaustionLevel >= MIN_FOOD_EXHAUSTION) {
+            exhaustionLevel -= MIN_FOOD_EXHAUSTION;
 
-            if (currentFoodSaturationLevel > 0) {
-                currentFoodSaturationLevel = Math.max(currentFoodSaturationLevel - 1, 0);
+            if (saturationLevel > 0) {
+                saturationLevel = Math.max(saturationLevel - 1, 0);
             } else {
-                currentFoodLevel -= 1;
+                foodLevel--;
             }
         }
 
-        setFoodExhaustionLevel(currentFoodExhaustionLevel);
-        setFoodSaturationLevel(currentFoodSaturationLevel);
-        setFoodLevel(currentFoodLevel);
+        setFoodExhaustionLevel(exhaustionLevel);
+        setFoodSaturationLevel(saturationLevel);
+        setFoodLevel(foodLevel);
     }
 
     @Override
     public void saturate(int food, float saturation) {
         setFoodLevel(getFoodLevel() + food);
 
-        var currentFoodSaturationLevel = getFoodSaturationLevel();
-        currentFoodSaturationLevel += saturation;
-        if (currentFoodSaturationLevel > getFoodLevel()) {
-            currentFoodSaturationLevel = getFoodLevel();
-        }
-
-        setFoodSaturationLevel(currentFoodSaturationLevel);
+        var newSaturation = Math.min(getFoodSaturationLevel() + saturation, getFoodLevel());
+        setFoodSaturationLevel(newSaturation);
     }
 
     @Override
@@ -215,20 +230,22 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @EventHandler
     protected void onMove(CPlayerMoveEvent event) {
-        var distance = thisPlayer.getLocation().distance(event.getNewLoc());
+        var distance = (float) thisPlayer.getLocation().distance(event.getNewLoc());
 
-        if (thisPlayer.isSwimming()) swimDistance += distance;
-        if (thisPlayer.isSprinting()) sprintDistance += distance;
-
-        // To reduce network traffic, we only update food data
-        // every 10 blocks of movement
-        if (swimDistance >= 10) {
-            exhaust(0.01f * swimDistance);
-            swimDistance = 0;
+        if (thisPlayer.isSwimming()) {
+            swimDistance += distance;
+            if (swimDistance >= MOVEMENT_THRESHOLD) {
+                exhaust(0.01f * swimDistance);
+                swimDistance = 0;
+            }
         }
-        if (sprintDistance >= 10) {
-            exhaust(0.1f * sprintDistance);
-            sprintDistance = 0;
+
+        if (thisPlayer.isSprinting()) {
+            sprintDistance += distance;
+            if (sprintDistance >= MOVEMENT_THRESHOLD) {
+                exhaust(0.1f * sprintDistance);
+                sprintDistance = 0;
+            }
         }
     }
 

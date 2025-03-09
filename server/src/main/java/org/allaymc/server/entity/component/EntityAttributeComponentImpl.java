@@ -58,6 +58,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         for (AttributeType attributeType : attributeTypes) {
             addAttribute(attributeType);
         }
+
         for (Attribute attribute : attributes) {
             this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
         }
@@ -77,11 +78,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @EventHandler
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
-        event.getNbt().putList(
-                TAG_ATTRIBUTES,
-                NbtType.COMPOUND,
-                saveAttributes()
-        );
+        event.getNbt().putList(TAG_ATTRIBUTES, NbtType.COMPOUND, saveAttributes());
     }
 
     @Override
@@ -105,6 +102,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         if (attribute == null) {
             throw unsupportedAttributeTypeException(attributeType);
         }
+
         attribute.setCurrentValue(value);
         manager.callEvent(CEntityAttributeChangeEvent.INSTANCE);
     }
@@ -115,6 +113,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         if (!this.attributes.containsKey(attributeType)) {
             throw unsupportedAttributeTypeException(attributeType);
         }
+
         this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
         manager.callEvent(CEntityAttributeChangeEvent.INSTANCE);
     }
@@ -125,16 +124,16 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         if (attribute == null) {
             throw unsupportedAttributeTypeException(attributeType);
         }
+
         return attribute.getCurrentValue();
     }
 
     @Override
     public void setHealth(float value) {
         if (!supportAttribute(AttributeType.HEALTH)) {
-            // Check if health is supported by the entity here
-            // To make sure that if health is not supported, event won't be called
             throw unsupportedAttributeTypeException(AttributeType.HEALTH);
         }
+
         if (value > 0 && value < 1) {
             // Client will think he is dead if the health is less than 1
             // But server doesn't think so, which would causes bug
@@ -145,7 +144,9 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         }
 
         var event = new EntityHealthChangeEvent(thisEntity, getHealth(), value);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         setAttributeValue(AttributeType.HEALTH, event.getNewHealth());
     }

@@ -8,12 +8,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation is used to declare other components that one component depends on.
+ * Declares a dependency on another component for injection into a field.
+ *
  * <p>
- * This annotation needs to be marked on a field of the component's implementation class.
- * When building an object, the injector checks the field list of each component implementation class instance and checks whether the fields are marked by this annotation.
- * If so, the injector will try to find the corresponding component instance through inheritance relationships (if identifier is empty) or through identifier (if identifier is not empty), and inject it into the field.
- * The scope of dependency lookup is limited by the list of components provided to the injector, and if the dependency is not found, will throw {@link ComponentInjectException}
+ * Marks a field in a component implementation class to indicate a required dependency.
+ * During object construction, the injector scans fields for this annotation and attempts to
+ * resolve the dependency either by inheritance (if {@code identifier} is empty) or by the
+ * specified {@code identifier}. The dependency must exist within the provided component list,
+ * or a {@link ComponentInjectException} is thrown unless {@code optional} is {@code true}.
+ * </p>
  *
  * @author daoge_cmd
  */
@@ -21,9 +24,26 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Dependency {
     /**
-     * This value is used to specify the identifier of the component that needs to be dependent
+     * Specifies the identifier of the required component.
+     *
+     * <p>
+     * If left empty, the dependency is resolved by inheritance.
+     * Otherwise, it is matched against the component's explicit identifier.
+     * </p>
+     *
+     * @return the component identifier, or an empty string for inheritance-based resolution
      */
     String identifier() default "";
 
-    boolean soft() default false;
+    /**
+     * Indicates whether the dependency is optional.
+     *
+     * <p>
+     * If {@code true}, the injector does not throw an exception if the dependency is missing.
+     * Otherwise, a {@link ComponentInjectException} is thrown when the dependency is not found.
+     * </p>
+     *
+     * @return {@code true} if the dependency is optional, {@code false} otherwise
+     */
+    boolean optional() default false;
 }

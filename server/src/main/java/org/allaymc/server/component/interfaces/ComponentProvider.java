@@ -2,7 +2,6 @@ package org.allaymc.server.component.interfaces;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.utils.Identifier;
@@ -32,45 +31,67 @@ public interface ComponentProvider<T extends Component> {
     }
 
     static <P extends Component> Map<Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
-        var map = new HashMap<Identifier, ComponentProvider<? extends P>>();
-        componentProviders.forEach(componentProvider -> {
-            var id = componentProvider.findComponentIdentifier();
-            if (map.containsKey(id)) {
+        Map<Identifier, ComponentProvider<? extends P>> map = new HashMap<>(componentProviders.size());
+        for (var provider : componentProviders) {
+            var id = provider.findComponentIdentifier();
+            if (map.putIfAbsent(id, provider) != null) {
                 throw new IllegalArgumentException("Duplicate component: " + id);
             }
+        }
 
-            map.put(id, componentProvider);
-        });
         return map;
     }
 
-    @SneakyThrows
     static Identifier findComponentIdentifier(Class<?> clazz) {
-        Identifier identifier = null;
-        while (identifier == null) {
-            identifier = findComponentIdentifierInCertainClass(clazz);
-            if (identifier == null) clazz = clazz.getSuperclass();
-            if (clazz == null) break;
-        }
-        return identifier;
-    }
-
-    @SneakyThrows
-    static Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
-        for (var field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(Identifier.Component.class) && Identifier.class == field.getType() && isStatic(field.getModifiers())) {
-                field.setAccessible(true);
-                return (Identifier) field.get(null);
+        var current = clazz;
+        while (current != null) {
+            var id = findComponentIdentifierInClass(current);
+            if (id != null) {
+                return id;
             }
+
+            current = current.getSuperclass();
         }
+
         return null;
     }
 
+    static Identifier findComponentIdentifierInClass(Class<?> clazz) {
+        try {
+            for (var field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(Identifier.Component.class) && Identifier.class == field.getType() && isStatic(field.getModifiers())) {
+                    field.setAccessible(true);
+                    return (Identifier) field.get(null);
+                }
+            }
+
+            return null;
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to access component identifier field in " + clazz.getName(), e);
+        }
+    }
+
+    /**
+     * Provides a component instance using the given initialization info.
+     *
+     * @param info the component initialization information
+     *
+     * @return the created component instance
+     */
     T provide(ComponentInitInfo info);
 
+    /**
+     * Gets the class of the component provided by this provider.
+     *
+     * @return the component class
+     */
     Class<?> getComponentClass();
 
-    @SneakyThrows
+    /**
+     * Finds the identifier for the component.
+     *
+     * @return the component identifier, or {@code null} if not found
+     */
     default Identifier findComponentIdentifier() {
         return findComponentIdentifier(getComponentClass());
     }

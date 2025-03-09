@@ -47,7 +47,6 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.Ignore;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
@@ -763,13 +762,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    @Ignore
     public void sendPacket(BedrockPacket packet) {
         networkComponent.sendPacket(packet);
     }
 
     @Override
-    @Ignore
     public void sendPacketImmediately(BedrockPacket packet) {
         networkComponent.sendPacketImmediately(packet);
     }

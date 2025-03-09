@@ -158,7 +158,7 @@ public abstract class ComponentClass {
                 List<Component> dependencies = new ArrayList<>(components);
                 var count = Integer.MAX_VALUE;
                 var requireCompId = annotation.identifier();
-                var soft = annotation.soft();
+                var optional = annotation.optional();
                 // Try to find dependencies through inheritance
                 // Try to match by namespace ID
                 if (!requireCompId.isBlank())
@@ -172,7 +172,7 @@ public abstract class ComponentClass {
                 }
                 // No dependencies available
                 if (count == 0) {
-                    if (!soft) {
+                    if (!optional) {
                         throw new ComponentInjectException("Cannot find dependency " + type.getName() + " for " + component.getClass().getName());
                     } else continue;
                 }
