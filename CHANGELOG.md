@@ -23,7 +23,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `RecipeContainer` interface for validating crafting packets.
 - (API) Added `ItemRepairableComponent` to check if an item can be repaired with a specific material.
 - (API) Added `ItemTrimmableComponent` for trimming armor.
-- (API) Added `AnvilDamageEvent` and `AnvilTakeResultEvent` for plugins.
+- (API) Added `AnvilDamageEvent`, `AnvilTakeResultEvent` and `GrindstoneTakeResultEvent` for plugins.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
 ### Changed

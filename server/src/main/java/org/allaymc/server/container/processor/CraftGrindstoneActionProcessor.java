@@ -3,6 +3,7 @@ package org.allaymc.server.container.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.container.GrindstoneTakeResultEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftGrindstoneAction;
@@ -75,6 +76,13 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
         var xp = calculateExperienceFromEnchantments(input);
         xp += calculateExperienceFromEnchantments(additional);
 
+        var event = new GrindstoneTakeResultEvent(player, container, resultItem, xp);
+        if (!event.call()) {
+            return error();
+        }
+
+        xp = event.getExperienceAmount();
+
         if (xp > 0) {
             var blockPos = container.getBlockPos();
             player.getDimension().dropXpOrb(new Vector3d(
@@ -84,7 +92,7 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
             ), xp);
         }
 
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(resultItem);
+        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(event.getResultItem());
         return null;
     }
 
