@@ -28,7 +28,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
-- (Performance) Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
+- Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
 
 ### Fixed
 
