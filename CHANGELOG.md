@@ -17,12 +17,17 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added `ANVIL`, `STONECUTTER`, `GRINDSTONE`, `CARTOGRAPHY_TABLE`, `LOOM` and `SMITHING_TABLE` container types.
-- (API) Implemented `Stonecutter`, `Grindstone` and `Smithing Table` behaviors.
+- (API) Implemented all behaviors for `Stonecutter`, `Grindstone`, `Smithing Table` and `Anvil`.
 - (API) Added `ItemStack#isEmptyOrAir()` method.
 - (API) Added `BlockPlaceHelper#processDirection4Property()` method.
-- (API) Added `RecipeContainer` interface for validating crafting packet.
+- (API) Added `RecipeContainer` interface for validating crafting packets.
+- (API) Added `ItemRepairableComponent` to check if an item can be repaired with a specific material.
+- (API) Added `ItemTrimmableComponent` for trimming armor.
+- Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
 ### Changed
+
+- (Performance) Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
 
 ### Fixed
 
