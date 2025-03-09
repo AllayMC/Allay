@@ -15,6 +15,7 @@ import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
+import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
@@ -178,23 +179,27 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var template = container.getTemplate();
-        var input = container.getInput();
-        var material = container.getMaterial();
-        if (template.isEmptyOrAir() || input.isEmptyOrAir() || material.isEmptyOrAir()) {
+        var templateItem = container.getTemplate();
+        var inputItem = container.getInput();
+        var materialItem = container.getMaterial();
+        if (templateItem.isEmptyOrAir() || inputItem.isEmptyOrAir() || materialItem.isEmptyOrAir()) {
             log.warn("One of input items is empty");
             return error();
         }
 
-        var trimPattern = Registries.TRIM_PATTERNS.get(template.getItemType().getIdentifier().toString());
-        var trimMaterial = Registries.TRIM_MATERIALS.get(material.getItemType().getIdentifier().toString());
+        var trimPattern = InternalRegistries.TRIM_PATTERNS.getContent().stream().filter(pattern ->
+                pattern.getItemName().equals(templateItem.getItemType().getIdentifier().toString())
+        ).findFirst().orElse(null);
+        var trimMaterial = InternalRegistries.TRIM_MATERIALS.getContent().stream().filter(material ->
+                material.getItemName().equals(materialItem.getItemType().getIdentifier().toString())
+        ).findFirst().orElse(null);
 
         if (trimPattern == null || trimMaterial == null) {
             log.warn("Trim pattern or material not found");
             return error();
         }
 
-        var result = input.copy();
+        var result = inputItem.copy();
         if (!(result instanceof ItemTrimComponent trimComponent)) {
             log.warn("Input item is not a trimble item");
             return error();

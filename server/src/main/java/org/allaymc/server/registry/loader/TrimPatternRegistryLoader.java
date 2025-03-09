@@ -7,24 +7,23 @@ import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author IWareQ
  */
 @Slf4j
-public class TrimPatternRegistryLoader implements RegistryLoader<Void, Map<String, TrimPattern>> {
+public class TrimPatternRegistryLoader implements RegistryLoader<Void, Set<TrimPattern>> {
     @Override
-    public Map<String, TrimPattern> load(Void unused) {
+    public Set<TrimPattern> load(Void unused) {
         try (var stream = Utils.getResource("trim_data.json")) {
-            Map<String, TrimPattern> result = new HashMap<>();
+            Set<TrimPattern> result = new HashSet<>();
 
             var root = JSONUtils.from(stream, JsonObject.class);
             for (var element : root.getAsJsonArray("patterns").asList()) {
                 var pattern = element.getAsJsonObject();
-                var itemName = pattern.get("itemName").getAsString();
-                result.put(itemName, new TrimPattern(itemName, pattern.get("patternId").getAsString()));
+                result.add(new TrimPattern(pattern.get("itemName").getAsString(), pattern.get("patternId").getAsString()));
             }
 
             return result;

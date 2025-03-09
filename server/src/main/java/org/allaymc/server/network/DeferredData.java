@@ -6,6 +6,7 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
@@ -139,8 +140,8 @@ public final class DeferredData {
 
     public static TrimDataPacket encodeTrimDataPacket() {
         var packet = new TrimDataPacket();
-        packet.getPatterns().addAll(Registries.TRIM_PATTERNS.getContent().values());
-        packet.getMaterials().addAll(Registries.TRIM_MATERIALS.getContent().values());
+        packet.getPatterns().addAll(InternalRegistries.TRIM_PATTERNS.getContent());
+        packet.getMaterials().addAll(InternalRegistries.TRIM_MATERIALS.getContent());
         return packet;
     }
 }

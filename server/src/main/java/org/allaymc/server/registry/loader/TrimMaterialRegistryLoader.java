@@ -7,27 +7,26 @@ import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author IWareQ
  */
 @Slf4j
-public class TrimMaterialRegistryLoader implements RegistryLoader<Void, Map<String, TrimMaterial>> {
+public class TrimMaterialRegistryLoader implements RegistryLoader<Void, Set<TrimMaterial>> {
     @Override
-    public Map<String, TrimMaterial> load(Void unused) {
+    public Set<TrimMaterial> load(Void unused) {
         try (var stream = Utils.getResource("trim_data.json")) {
-            Map<String, TrimMaterial> result = new HashMap<>();
+            Set<TrimMaterial> result = new HashSet<>();
 
             var root = JSONUtils.from(stream, JsonObject.class);
             for (var element : root.getAsJsonArray("materials").asList()) {
                 var material = element.getAsJsonObject();
-                var itemName = material.get("itemName").getAsString();
-                result.put(itemName, new TrimMaterial(
+                result.add(new TrimMaterial(
                         material.get("materialId").getAsString(),
                         material.get("color").getAsString(),
-                        itemName
+                        material.get("itemName").getAsString()
                 ));
             }
 

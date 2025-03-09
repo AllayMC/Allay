@@ -17,8 +17,6 @@ import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
-import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 
 import java.nio.file.Path;
 import java.util.UUID;
@@ -58,10 +56,6 @@ public final class Registries {
     public static SimpleMappedRegistry<Identifier, PotionMixRecipe> POTION_MIX_RECIPES;
     // TODO: ContainerMixData
     // TODO: MaterialReducer
-
-    // Trim Data
-    public static SimpleMappedRegistry<String, TrimPattern> TRIM_PATTERNS;
-    public static SimpleMappedRegistry<String, TrimMaterial> TRIM_MATERIALS;
 
     // Pack
     public static SimpleMappedRegistry<UUID, Pack> PACKS;

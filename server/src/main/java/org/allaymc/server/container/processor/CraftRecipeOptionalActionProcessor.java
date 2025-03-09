@@ -50,8 +50,8 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         }
 
         var inputItem = container.getInput();
-        var material = container.getMaterial();
-        if (inputItem.isEmptyOrAir() && material.isEmptyOrAir()) {
+        var materialItem = container.getMaterial();
+        if (inputItem.isEmptyOrAir() && materialItem.isEmptyOrAir()) {
             log.warn("Input and material item is empty");
             return error();
         }
@@ -61,15 +61,15 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         var anvilCost = inputItem.getRepairCost();
         var actionCost = 0;
 
-        if (!material.isEmptyOrAir()) {
-            anvilCost += material.getRepairCost();
+        if (!materialItem.isEmptyOrAir()) {
+            anvilCost += materialItem.getRepairCost();
 
             var repairMaterial = getRepairMaterial(inputItem.getItemType());
 
             var maxDamage = resultItem.getMaxDurability();
 
             // Case 1: Repair by repairing materials
-            if (repairMaterial != null && repairMaterial == material.getItemType()) {
+            if (repairMaterial != null && repairMaterial == materialItem.getItemType()) {
                 var delta = (int) Math.min(resultItem.getDurability(), maxDamage * ANVIL_MATERIAL_REPAIR_MULTIPLIER);
                 if (delta <= 0) {
                     log.warn("Input item is already fully repaired");
@@ -77,7 +77,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 }
 
                 var newDamage = resultItem.getDurability();
-                for (int i = 0; i < material.getCount() && delta > 0; i++) {
+                for (int i = 0; i < materialItem.getCount() && delta > 0; i++) {
                     actionCost++;
 
                     newDamage = Math.max(0, newDamage - delta);
@@ -85,13 +85,13 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 }
 
                 resultItem.setDurability(newDamage);
-            } else if (inputItem.getItemType() == material.getItemType()) {
+            } else if (inputItem.getItemType() == materialItem.getItemType()) {
                 // Case 2: Merge equal items
                 // TODO: Enchantments merging
                 actionCost += 2;
 
                 var remainingDurabilityInput = maxDamage - inputItem.getDurability();
-                var remainingDurabilityMaterial = maxDamage - material.getDurability();
+                var remainingDurabilityMaterial = maxDamage - materialItem.getDurability();
 
                 var totalRemainingDurability = (int) (remainingDurabilityInput + remainingDurabilityMaterial + (maxDamage * ANVIL_ITEM_REPAIR_MULTIPLIER));
                 var finalDurability = Math.min(totalRemainingDurability, maxDamage);
@@ -152,7 +152,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             player.setExperienceLevel(player.getExperienceLevel() - totalCost);
         }
 
-        var newRepairCost = Math.max(inputItem.getRepairCost(), material.getRepairCost());
+        var newRepairCost = Math.max(inputItem.getRepairCost(), materialItem.getRepairCost());
         if (actionCost > 1 || !renamed) {
             newRepairCost = newRepairCost * 2 + 1;
         }
