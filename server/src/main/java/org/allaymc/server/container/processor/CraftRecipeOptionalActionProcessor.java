@@ -6,6 +6,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.component.ItemRepairableComponent;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Sound;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
@@ -84,17 +85,77 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 }
 
                 resultItem.setDurability(newDamage);
-            } else if (inputItem.getItemType() == materialItem.getItemType()) {
+            } else {
                 // Case 2: Merge equal items
-                // TODO: Enchantments merging
-                actionCost += 2;
+                var isEnchantedBook = materialItem.getItemType() == ItemTypes.ENCHANTED_BOOK;
 
-                var remainingDurabilityInput = maxDamage - inputItem.getDurability();
-                var remainingDurabilityMaterial = maxDamage - materialItem.getDurability();
+                // Step 1: Merge durability
+                if (!isEnchantedBook && inputItem.getItemType() == materialItem.getItemType()) {
+                    actionCost += 2;
 
-                var totalRemainingDurability = (int) (remainingDurabilityInput + remainingDurabilityMaterial + (maxDamage * ANVIL_ITEM_REPAIR_MULTIPLIER));
-                var finalDurability = Math.min(totalRemainingDurability, maxDamage);
-                resultItem.setDurability(maxDamage - finalDurability);
+                    var remainingDurabilityInput = maxDamage - inputItem.getDurability();
+                    var remainingDurabilityMaterial = maxDamage - materialItem.getDurability();
+
+                    var totalRemainingDurability = (int) (remainingDurabilityInput + remainingDurabilityMaterial + (maxDamage * ANVIL_ITEM_REPAIR_MULTIPLIER));
+                    var finalDurability = Math.min(totalRemainingDurability, maxDamage);
+                    resultItem.setDurability(maxDamage - finalDurability);
+                }
+
+                // Step 2: Merge enchantments
+                boolean hasIncompatible = false;
+                boolean hasCompatible = false;
+                for (var materialEnchantment : materialItem.getEnchantments()) {
+                    var materialEnchantmentType = materialEnchantment.getType();
+                    var isApplicable = materialEnchantmentType.canBeAppliedTo(inputItem.getItemType());
+                    if (inputItem.getItemType() == ItemTypes.ENCHANTED_BOOK) {
+                        isApplicable = true;
+                    }
+
+                    for (var inputEnchantment : inputItem.getEnchantments()) {
+                        if (
+                                !materialEnchantment.equals(inputEnchantment) &&
+                                (materialEnchantmentType.isIncompatibleWith(inputEnchantment.getType()) ||
+                                 inputEnchantment.getType().isIncompatibleWith(materialEnchantmentType))
+                        ) {
+                            isApplicable = false;
+                            actionCost++;
+                        }
+                    }
+
+                    if (!isApplicable) {
+                        hasIncompatible = true;
+                        continue;
+                    }
+                    hasCompatible = true;
+
+                    var resultLevel = materialEnchantment.getLevel();
+                    var levelCost = resultLevel;
+
+                    var existingEnchantLevel = inputItem.getEnchantmentLevel(materialEnchantmentType);
+                    if (existingEnchantLevel != 0) {
+                        if (existingEnchantLevel > resultLevel || (existingEnchantLevel == resultLevel && resultLevel == materialEnchantmentType.getMaxLevel())) {
+                            hasIncompatible = true;
+                            continue;
+                        } else if (existingEnchantLevel == resultLevel) {
+                            resultLevel++;
+                        }
+
+                        levelCost = resultLevel - existingEnchantLevel;
+                    }
+
+                    var rarityCost = materialEnchantmentType.getRarity().getAnvilCost();
+                    if (isEnchantedBook) {
+                        rarityCost = Math.max(1, rarityCost / 2);
+                    }
+
+                    resultItem.addEnchantment(materialEnchantmentType, resultLevel);
+                    actionCost += rarityCost * levelCost;
+                }
+
+                if (hasIncompatible && !hasCompatible) {
+                    log.warn("No compatible enchantments but have incompatible ones");
+                    return error();
+                }
             }
         }
 
