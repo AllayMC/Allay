@@ -50,7 +50,7 @@ public final class EnchantmentOptionGenerator {
     );
 
     public static List<EnchantOptionData> generateEnchantOptions(Position3ic enchantTablePos, ItemStack input, int seed) {
-        if (input == null || input.hasEnchantment() || input.getItemType().getItemData().enchantValue() == 0) {
+        if (input == null || input.hasEnchantments() || input.getItemType().getItemData().enchantValue() == 0) {
             return Collections.emptyList();
         }
 

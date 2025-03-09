@@ -52,7 +52,9 @@ public class DefaultDescriptor implements ItemDescriptor {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof DefaultDescriptor that)) return false;
+        if (!(o instanceof DefaultDescriptor that)) {
+            return false;
+        }
         return meta == that.meta && Objects.equals(itemType, that.itemType);
     }
 

@@ -7,11 +7,11 @@ import org.allaymc.api.item.type.ItemType;
  */
 public interface ItemRepairableComponent extends ItemComponent {
     /**
-     * Determines if this item can be repaired using the specified item type.
+     * Checks if this item can be repaired with a given item type.
      *
-     * @param itemType the {@link ItemType} to check for repair compatibility
+     * @param itemType the {@link ItemType} to check
      *
-     * @return {@code true} if the item can be repaired by the given {@link ItemType}, {@code false} otherwise
+     * @return {@code true} if repairable, {@code false} otherwise
      */
     boolean canBeRepairedBy(ItemType<?> itemType);
 }
