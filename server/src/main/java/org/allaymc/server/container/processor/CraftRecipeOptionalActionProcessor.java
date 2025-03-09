@@ -2,9 +2,12 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.block.AnvilDamageEvent;
+import org.allaymc.api.eventbus.event.container.AnvilTakeResultEvent;
 import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Sound;
@@ -199,11 +202,15 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             if (ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE) {
                 var anvilState = player.getDimension().getBlockState(anvilPos);
                 if (anvilState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
-                    anvilState = anvilComponent.damage(anvilState);
-                    if (anvilState.getBlockType() == BlockTypes.AIR) {
-                        player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_BREAK);
+                    var newAnvilState = anvilComponent.damage(anvilState);
+                    var event = new AnvilDamageEvent(new BlockStateWithPos(anvilState, anvilPos), newAnvilState);
+                    if (event.call()) {
+                        if (newAnvilState.getBlockType() == BlockTypes.AIR) {
+                            player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_BREAK);
+                        }
+
+                        player.getDimension().setBlockState(anvilPos, event.getNewState());
                     }
-                    player.getDimension().setBlockState(anvilPos, anvilState);
                 }
             }
 
@@ -219,7 +226,12 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
 
         resultItem.setRepairCost(newRepairCost);
 
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(resultItem);
+        var event = new AnvilTakeResultEvent(player, container, resultItem);
+        if (!event.call()) {
+            return error();
+        }
+
+        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(event.getResultItem());
         return null;
     }
 
