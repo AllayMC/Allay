@@ -57,7 +57,7 @@ jobs:
         run: ./gradlew jacocoTestReport
 
       - name: Upload Coverage Reports to Codecov
-        uses: codecov/codecov-action@v5.3.1
+        uses: codecov/codecov-action@v5.4.0
         if: success()
         with:
           directory: .jacoco/test/
