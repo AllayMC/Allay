@@ -9,11 +9,11 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
-public class FurnaceInput implements Input {
+public class FurnaceRecipeInput implements RecipeInput {
     protected ItemStack ingredient;
     protected String tag;
 
-    public FurnaceInput(ItemStack ingredient, String tag) {
+    public FurnaceRecipeInput(ItemStack ingredient, String tag) {
         this.ingredient = ingredient;
         this.tag = tag;
     }

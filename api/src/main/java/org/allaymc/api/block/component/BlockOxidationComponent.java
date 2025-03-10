@@ -8,43 +8,43 @@ import org.allaymc.api.block.type.BlockType;
  */
 public interface BlockOxidationComponent extends BlockComponent {
     /**
-     * Retrieves the block with the specified oxidation level.
+     * Gets the block with the specified oxidation level.
      *
-     * @param oxidationLevel the oxidation level
+     * @param oxidationLevel the {@link OxidationLevel}
      *
-     * @return the block with the specified oxidation level
+     * @return the corresponding {@link BlockType}
      */
     BlockType<?> getBlockWithOxidationLevel(OxidationLevel oxidationLevel);
 
     /**
-     * Checks if the block can be oxidated.
+     * Checks if the block can oxidize further.
      *
-     * @return {@code true} if the block can be oxidated, {@code false} otherwise
+     * @return {@code true} if oxidizable, {@code false} otherwise
      */
     default boolean canOxidate() {
         return this.getOxidationLevel() != OxidationLevel.OXIDIZED && !this.isWaxed();
     }
 
     /**
-     * Retrieves the current oxidation level of the block.
+     * Gets the current oxidation level of the block.
      *
-     * @return the current oxidation level of the block
+     * @return the current {@link OxidationLevel}
      */
     OxidationLevel getOxidationLevel();
 
     /**
      * Checks if the block is waxed.
      *
-     * @return {@code true} if the block is waxed, {@code false} otherwise
+     * @return {@code true} if waxed, {@code false} otherwise
      */
     boolean isWaxed();
 
     /**
-     * Retrieves the block with the specified waxed state.
+     * Gets the block with the specified waxed state.
      *
      * @param waxed the waxed state
      *
-     * @return the block with the specified waxed state
+     * @return the corresponding {@link BlockType}
      */
     BlockType<?> getBlockWithWaxed(boolean waxed);
 }

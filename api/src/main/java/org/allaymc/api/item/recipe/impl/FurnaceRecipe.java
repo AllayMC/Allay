@@ -6,8 +6,8 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.recipe.IdentifiedRecipe;
 import org.allaymc.api.item.recipe.TaggedRecipe;
-import org.allaymc.api.item.recipe.input.FurnaceInput;
-import org.allaymc.api.item.recipe.input.Input;
+import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
+import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
@@ -49,10 +49,10 @@ public class FurnaceRecipe implements BaseRecipe, TaggedRecipe, IdentifiedRecipe
     }
 
     @Override
-    public boolean match(Input input) {
-        if (!(input instanceof FurnaceInput furnaceInput)) return false;
-        if (!isFurnaceTypeSuitable(furnaceInput)) return false;
-        return ingredient.match(furnaceInput.getIngredient());
+    public boolean match(RecipeInput input) {
+        if (!(input instanceof FurnaceRecipeInput furnaceRecipeInput)) return false;
+        if (!isFurnaceTypeSuitable(furnaceRecipeInput)) return false;
+        return ingredient.match(furnaceRecipeInput.getIngredient());
     }
 
     @Override
@@ -64,11 +64,11 @@ public class FurnaceRecipe implements BaseRecipe, TaggedRecipe, IdentifiedRecipe
         return output;
     }
 
-    public boolean isFurnaceTypeMostSuitable(FurnaceInput input) {
+    public boolean isFurnaceTypeMostSuitable(FurnaceRecipeInput input) {
         return tag.equals(input.getTag());
     }
 
-    public boolean isFurnaceTypeSuitable(FurnaceInput input) {
+    public boolean isFurnaceTypeSuitable(FurnaceRecipeInput input) {
         return tag.equals(FURNACE_TAG) || tag.equals(input.getTag());
     }
 

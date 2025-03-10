@@ -12,6 +12,8 @@ import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.recipe.impl.ShapedRecipe;
 import org.allaymc.api.item.recipe.impl.ShapelessRecipe;
+import org.allaymc.api.item.recipe.impl.SmithingTransformRecipe;
+import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
@@ -31,23 +33,60 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
         var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
 
         var obj = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
-        var shapedRecipes = obj.getAsJsonArray("shaped");
-        var shapelessRecipes = obj.getAsJsonArray("shapeless");
 
-        // Shaped recipe
+        var shapedRecipes = obj.getAsJsonArray("shaped");
         for (var shapedRecipe : shapedRecipes) {
             var recipe = parseShaped(shapedRecipe.getAsJsonObject());
             recipes.put(recipe.getNetworkId(), recipe);
         }
 
-        // Shapeless recipe
+        var shapelessRecipes = obj.getAsJsonArray("shapeless");
         for (var shapelessRecipe : shapelessRecipes) {
             var recipe = parseShapeless(shapelessRecipe.getAsJsonObject());
             recipes.put(recipe.getNetworkId(), recipe);
         }
 
+        var smithingTransformRecipes = obj.getAsJsonArray("smithingTransform");
+        for (var smithingTransformRecipe : smithingTransformRecipes) {
+            var recipe = parseSmithingTransform(smithingTransformRecipe.getAsJsonObject());
+            recipes.put(recipe.getNetworkId(), recipe);
+        }
+
+        var smithingTrimRecipes = obj.getAsJsonArray("smithingTrim");
+        for (var smithingTrimRecipe : smithingTrimRecipes) {
+            var recipe = parseSmithingTrim(smithingTrimRecipe.getAsJsonObject());
+            recipes.put(recipe.getNetworkId(), recipe);
+        }
+
         log.info(I18n.get().tr(TrKeys.A_RECIPE_LOADED, recipes.size()));
         return recipes;
+    }
+
+    protected SmithingTrimRecipe parseSmithingTrim(JsonObject obj) {
+        return SmithingTrimRecipe
+                .builder()
+                .identifier(new Identifier(obj.get("id").getAsString()))
+                .template(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("template")))
+                .base(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("base")))
+                .addition(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("addition")))
+                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
+                .tag(obj.get("tag").getAsString())
+                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
+                .build();
+    }
+
+    protected SmithingTransformRecipe parseSmithingTransform(JsonObject obj) {
+        return SmithingTransformRecipe
+                .builder()
+                .identifier(new Identifier(obj.get("id").getAsString()))
+                .template(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("template")))
+                .base(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("base")))
+                .addition(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("addition")))
+                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
+                .outputs(RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new))
+                .tag(obj.get("tag").getAsString())
+                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
+                .build();
     }
 
     protected ShapelessRecipe parseShapeless(JsonObject obj) {

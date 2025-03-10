@@ -7,9 +7,9 @@ import org.allaymc.api.block.type.BlockType;
  */
 public interface BlockSlabBaseComponent extends BlockBaseComponent {
     /**
-     * Get the double slab block type.
+     * Gets the double slab block type.
      *
-     * @return the double slab block type.
+     * @return the corresponding {@link BlockType}
      */
     BlockType<?> getDoubleSlabBlockType();
 }

@@ -301,6 +301,14 @@ public class GameTestCommand extends SimpleCommand {
                     throw new RuntimeException("Triggered exception");
                 })
                 .root()
+                .key("itemdamage")
+                .exec((context, player) -> {
+                    var item = player.getItemInHand();
+                    item.setDurability(item.getMaxDurability() / 2);
+                    player.setItemInHand(item);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
                 .key("explode")
                 .pos("pos").optional()
                 .floatNum("size", 4).optional()

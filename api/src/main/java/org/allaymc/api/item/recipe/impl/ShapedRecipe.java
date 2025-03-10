@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.recipe.input.CraftingInput;
-import org.allaymc.api.item.recipe.input.Input;
+import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
+import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
@@ -72,10 +72,10 @@ public class ShapedRecipe extends CraftingRecipe {
     }
 
     @Override
-    public boolean match(Input input) {
-        if (!(input instanceof CraftingInput craftingInput)) return false;
+    public boolean match(RecipeInput input) {
+        if (!(input instanceof CraftingRecipeInput craftingRecipeInput)) return false;
 
-        var inputs = removeUselessRowAndColumn(craftingInput.getItems());
+        var inputs = removeUselessRowAndColumn(craftingRecipeInput.getItems());
         // Empty input not allowed
         if (inputs.length == 0) return false;
         if (inputs.length > pattern.length) return false;
