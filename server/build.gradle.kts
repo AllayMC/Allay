@@ -45,8 +45,7 @@ dependencies {
 }
 
 gitProperties {
-    gitPropertiesName = "git.properties"
-    gitPropertiesResourceDir.set(file("${rootProject.projectDir}/data/resources"))
+    dotGitDirectory = project.rootProject.layout.projectDirectory.dir(".git")
     gitProperties {
         customProperty("git.build.is_dev_build", rootProject.property("allay.is-dev-build").toString().toBoolean())
         /**

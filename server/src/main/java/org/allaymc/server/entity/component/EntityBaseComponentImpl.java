@@ -106,7 +106,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected ComponentManager manager;
     @ComponentObject
     protected Entity thisEntity;
-    @Dependency(soft = true)
+    @Dependency(optional = true)
     protected EntityAttributeComponent attributeComponent;
     @Getter
     protected EntityType<? extends Entity> entityType;

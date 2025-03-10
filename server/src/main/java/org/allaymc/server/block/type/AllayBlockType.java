@@ -38,7 +38,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.allaymc.server.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
+import static org.allaymc.server.component.interfaces.ComponentProvider.findComponentIdentifierInClass;
 
 /**
  * @author daoge_cmd | Cool_Loong
@@ -414,7 +414,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         public Builder addComponent(BlockComponent component) {
-            this.components.put(findComponentIdentifierInCertainClass(component.getClass()), component);
+            this.components.put(findComponentIdentifierInClass(component.getClass()), component);
             return this;
         }
 
@@ -429,7 +429,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         private Map<Identifier, BlockComponent> listComponentToMap(List<BlockComponent> components) {
             var map = new HashMap<Identifier, BlockComponent>();
             components.forEach(component -> {
-                var id = findComponentIdentifierInCertainClass(component.getClass());
+                var id = findComponentIdentifierInClass(component.getClass());
                 if (map.containsKey(id))
                     throw new IllegalArgumentException("Duplicate component: " + id);
                 map.put(id, component);

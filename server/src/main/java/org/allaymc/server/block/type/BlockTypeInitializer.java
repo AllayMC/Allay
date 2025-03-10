@@ -1358,6 +1358,33 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initGlazedTerracotta() {
+        BlockTypes.BLACK_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.BLACK_GLAZED_TERRACOTTA);
+        BlockTypes.BLUE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.BLUE_GLAZED_TERRACOTTA);
+        BlockTypes.BROWN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.BROWN_GLAZED_TERRACOTTA);
+        BlockTypes.CYAN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.CYAN_GLAZED_TERRACOTTA);
+        BlockTypes.GRAY_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.GRAY_GLAZED_TERRACOTTA);
+        BlockTypes.GREEN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.GREEN_GLAZED_TERRACOTTA);
+        BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.LIGHT_BLUE_GLAZED_TERRACOTTA);
+        BlockTypes.LIME_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.LIME_GLAZED_TERRACOTTA);
+        BlockTypes.MAGENTA_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.MAGENTA_GLAZED_TERRACOTTA);
+        BlockTypes.ORANGE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.ORANGE_GLAZED_TERRACOTTA);
+        BlockTypes.PINK_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.PINK_GLAZED_TERRACOTTA);
+        BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.PURPLE_GLAZED_TERRACOTTA);
+        BlockTypes.RED_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.RED_GLAZED_TERRACOTTA);
+        BlockTypes.SILVER_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.SILVER_GLAZED_TERRACOTTA);
+        BlockTypes.WHITE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.WHITE_GLAZED_TERRACOTTA);
+        BlockTypes.YELLOW_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockId.YELLOW_GLAZED_TERRACOTTA);
+    }
+
+    public static BlockType<BlockGlazedTerracottaBehavior> buildGlazedTerracotta(BlockId blockId) {
+        return AllayBlockType.builder(BlockGlazedTerracottaBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                .setBaseComponentSupplier(BlockGlazedTerracottaBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initStonecutterBlock() {
         BlockTypes.STONECUTTER_BLOCK = AllayBlockType
                 .builder(BlockStonecutterBlockBehaviorImpl.class)

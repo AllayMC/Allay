@@ -182,7 +182,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> BLACK_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> BLACK_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> BLACK_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> BLACK_SHULKER_BOX;
 
@@ -216,7 +216,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> BLUE_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> BLUE_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> BLUE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockBlueIceBehavior> BLUE_ICE;
 
@@ -268,7 +268,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> BROWN_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> BROWN_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> BROWN_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockBrownMushroomBehavior> BROWN_MUSHROOM;
 
@@ -546,7 +546,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> CYAN_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> CYAN_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> CYAN_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> CYAN_SHULKER_BOX;
 
@@ -1100,7 +1100,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> GRAY_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> GRAY_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> GRAY_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> GRAY_SHULKER_BOX;
 
@@ -1122,7 +1122,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> GREEN_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> GREEN_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> GREEN_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> GREEN_SHULKER_BOX;
 
@@ -1362,7 +1362,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> LIGHT_BLUE_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> LIGHT_BLUE_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> LIGHT_BLUE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> LIGHT_BLUE_SHULKER_BOX;
 
@@ -1412,7 +1412,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> LIME_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> LIME_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> LIME_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> LIME_SHULKER_BOX;
 
@@ -1452,7 +1452,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> MAGENTA_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> MAGENTA_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> MAGENTA_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> MAGENTA_SHULKER_BOX;
 
@@ -1628,7 +1628,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> ORANGE_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> ORANGE_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> ORANGE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> ORANGE_SHULKER_BOX;
 
@@ -1728,7 +1728,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> PINK_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> PINK_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> PINK_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockPinkPetalsBehavior> PINK_PETALS;
 
@@ -1872,7 +1872,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> PURPLE_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> PURPLE_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> PURPLE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> PURPLE_SHULKER_BOX;
 
@@ -1926,7 +1926,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> RED_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> RED_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> RED_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockRedMushroomBehavior> RED_MUSHROOM;
 
@@ -2036,7 +2036,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockShroomlightBehavior> SHROOMLIGHT;
 
-    public static BlockType<BlockTerracottaBehavior> SILVER_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> SILVER_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockHeadBehavior> SKELETON_SKULL;
 
@@ -2466,7 +2466,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> WHITE_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> WHITE_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> WHITE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> WHITE_SHULKER_BOX;
 
@@ -2500,7 +2500,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConcretePowderBehavior> YELLOW_CONCRETE_POWDER;
 
-    public static BlockType<BlockTerracottaBehavior> YELLOW_GLAZED_TERRACOTTA;
+    public static BlockType<BlockGlazedTerracottaBehavior> YELLOW_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> YELLOW_SHULKER_BOX;
 

@@ -1,12 +1,13 @@
 package org.allaymc.api.component.interfaces;
 
 /**
- * ComponentInitInfo describes an object that contains data for initializing a component object.
- * This is only a semantic interface that doesn't contain any methods.
+ * Represents an initialization data holder for a component.
  * <p>
- * The type of initialization object required by the component object is agreed upon by the user.
- * In other words, before instantiating a component class, the user should know what type of
- * initialization object the class requires.
+ * This is a semantic interface with no defined methods. Implementing classes serve as
+ * markers to indicate that they contain data required for initializing a component.
+ * The specific structure and requirements of the initialization data are determined
+ * by the implementing class and must be known by the user before instantiation.
+ * </p>
  *
  * @author daoge_cmd
  */
