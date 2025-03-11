@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+import org.gradle.kotlin.dsl.support.serviceOf
 import java.io.ByteArrayOutputStream
 
 /**
@@ -101,7 +102,7 @@ jacoco {
     reportsDirectory = layout.buildDirectory.dir("${rootProject.projectDir}/.jacoco")
 }
 
-tasks.create("cleanWorkingDir") {
+tasks.register("cleanWorkingDir") {
     description = "Clean all files in `.run` directory except `Allay.run.xml` file"
     group = "application"
     doLast {
@@ -116,8 +117,10 @@ fun getShadedJarName(): String {
 }
 
 fun getShortGitHash(): String {
+    val execOperations = project.serviceOf<ExecOperations>()
+
     val stdout = ByteArrayOutputStream()
-    exec {
+    execOperations.exec {
         commandLine = mutableListOf("git", "rev-parse", "--short", "HEAD")
         standardOutput = stdout
     }
