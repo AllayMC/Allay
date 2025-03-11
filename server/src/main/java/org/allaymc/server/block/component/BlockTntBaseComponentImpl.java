@@ -40,7 +40,7 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
         }
 
         if (itemStack.hasEnchantment(EnchantmentTypes.FIRE_ASPECT)) {
-            itemStack.tryReduceDurability(1);
+            itemStack.tryIncreaseDamage(1);
             prime(blockStateWithPos);
             return true;
         }

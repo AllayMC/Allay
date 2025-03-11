@@ -304,7 +304,7 @@ public class GameTestCommand extends SimpleCommand {
                 .key("itemdamage")
                 .exec((context, player) -> {
                     var item = player.getItemInHand();
-                    item.setDurability(item.getMaxDurability() / 2);
+                    item.setDamage(item.getMaxDamage() / 2);
                     player.setItemInHand(item);
                     return context.success();
                 }, SenderType.PLAYER)

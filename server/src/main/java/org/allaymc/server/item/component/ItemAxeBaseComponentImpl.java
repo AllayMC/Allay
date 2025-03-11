@@ -92,7 +92,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         if (event.call()) {
             dimension.setBlockState(clickedBlockPos, event.getNewBlockState());
             if (interactInfo.player().getGameType() != GameType.CREATIVE) {
-                tryReduceDurability(1);
+                tryIncreaseDamage(1);
             }
             postBlockPlace.run();
         }

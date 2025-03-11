@@ -29,6 +29,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
+- Renamed `ItemBaseComponent` methods:
+  - `getDurability()` -> `getDamage()`
+  - `setDurability()` -> `setDamage()`
+  - `tryReduceDurability()` -> `tryIncreaseDamage()`
 
 ### Fixed
 

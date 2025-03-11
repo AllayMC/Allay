@@ -123,7 +123,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 resultDestItem.getCount(),
                                 resultDestItem.getStackNetworkId(),
                                 resultDestItem.getCustomName(),
-                                resultDestItem.getDurability(),
+                                resultDestItem.getDamage(),
                                 ""
                         )
                 ),
@@ -146,7 +146,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                         resultSourItem.getCount(),
                                         resultSourItem.getStackNetworkId(),
                                         resultSourItem.getCustomName(),
-                                        resultSourItem.getDurability(),
+                                        resultSourItem.getDamage(),
                                         ""
                                 )
                         ),

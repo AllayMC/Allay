@@ -88,7 +88,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Getter
     protected int meta;
     @Getter
-    protected int durability;
+    protected int damage;
     @Getter
     protected int repairCost;
     @Getter
@@ -136,7 +136,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void loadExtraTag(NbtMap extraTag) {
-        this.durability = extraTag.getInt(TAG_DURABILITY, 0);
+        this.damage = extraTag.getInt(TAG_DURABILITY, 0);
         this.repairCost = extraTag.getInt(TAG_REPAIR_COST, 0);
         extraTag.listenForCompound(TAG_DISPLAY, displayNbt -> {
             this.customName = displayNbt.getString(TAG_CUSTOM_NAME);
@@ -164,8 +164,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Override
     public NbtMap saveExtraTag() {
         var nbtBuilder = NbtMap.builder();
-        if (durability != 0) {
-            nbtBuilder.putInt(TAG_DURABILITY, durability);
+        if (damage != 0) {
+            nbtBuilder.putInt(TAG_DURABILITY, damage);
         }
 
         if (repairCost > 0) {
@@ -263,13 +263,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void setDurability(int durability) {
+    public void setDamage(int damage) {
         if (!itemType.getItemData().isDamageable()) {
             log.warn("Item {} does not support durability!", itemType.getIdentifier());
             return;
         }
-        Preconditions.checkArgument(durability >= 0, "Durability must be greater or equal to 0");
-        this.durability = durability;
+
+        Preconditions.checkArgument(damage >= 0, "Damage must be greater or equal to 0");
+        this.damage = damage;
     }
 
     @Override
@@ -502,15 +503,15 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             return false;
         }
 
-        return durability >= maxDamage;
+        return damage >= maxDamage;
     }
 
     @Override
-    public boolean tryReduceDurability(int reduction) {
+    public boolean tryIncreaseDamage(int increase) {
         if (!canBeDamagedThisTime()) {
             return false;
         }
-        setDurability(getDurability() + reduction);
+        setDamage(getDamage() + increase);
         return true;
     }
 

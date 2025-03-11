@@ -97,40 +97,40 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     void setMeta(int meta);
 
     /**
-     * Gets the maximum durability of the item.
+     * Gets the maximum damage of the item.
      *
-     * @return the max durability
+     * @return the max damage
      */
-    default int getMaxDurability() {
+    default int getMaxDamage() {
         return getItemType().getItemData().maxDamage();
     }
 
     /**
-     * Gets the current durability.
+     * Gets the current damage.
      *
-     * @return the durability value
+     * @return the damage value
      */
-    int getDurability();
+    int getDamage();
 
     /**
-     * Sets the durability.
+     * Sets the damage.
      * <p>
      * Higher values indicate more damage.
      *
-     * @param durability the new durability value
+     * @param damage the new damage value
      */
-    void setDurability(int durability);
+    void setDamage(int damage);
 
     /**
-     * Attempts to reduce durability.
+     * Attempts to increase the damage.
      * <p>
      * May be ignored based on unbreaking enchantment.
      *
-     * @param reduction the amount to reduce
+     * @param increase the amount to increase
      *
-     * @return {@code true} if reduced, {@code false} if ignored
+     * @return {@code true} if increased, {@code false} if ignored
      */
-    boolean tryReduceDurability(int reduction);
+    boolean tryIncreaseDamage(int increase);
 
     /**
      * Gets the repair cost.

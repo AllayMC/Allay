@@ -24,11 +24,11 @@ public class ItemSwordComponentImpl implements ItemToolComponent {
         var hardness = event.getBlock().getBlockStateData().hardness();
         if (hardness == 0) return;
 
-        baseComponent.tryReduceDurability(2);
+        baseComponent.tryIncreaseDamage(2);
     }
 
     @EventHandler
     protected void onAttackEntity(CItemAttackEntityEvent event) {
-        baseComponent.tryReduceDurability(1);
+        baseComponent.tryIncreaseDamage(1);
     }
 }

@@ -28,53 +28,51 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
             return error();
         }
 
-        var input = container.getInput();
-        var additional = container.getAdditional();
-        if (input.isEmptyOrAir() && additional.isEmptyOrAir()) {
+        var inputItem = container.getInput();
+        var additionalItem = container.getAdditional();
+        if (inputItem.isEmptyOrAir() && additionalItem.isEmptyOrAir()) {
             log.warn("Input and additional item is empty");
             return error();
         }
 
-        var resultItem = !input.isEmptyOrAir() ? input.copy() : additional.copy();
+        var resultItem = !inputItem.isEmptyOrAir() ? inputItem.copy() : additionalItem.copy();
 
         // Case 1: Enchanted book
         if (resultItem.getItemType() == ItemTypes.ENCHANTED_BOOK) {
-            var hasCurse = resultItem.getEnchantments().stream().anyMatch(ench -> ench.getType().isCursed());
+            var hasCurse = resultItem.getEnchantments().stream().anyMatch(enchantment ->
+                    enchantment.getType().isCursed()
+            );
             if (!hasCurse) {
                 resultItem = ItemTypes.BOOK.createItemStack();
             }
-        } else if (input.getItemType() == additional.getItemType()) {
-            // Case 2: Merge items. input > additional
+        } else if (inputItem.getItemType() == additionalItem.getItemType()) {
+            // Case 2: Merge items. inputItem > additionalItem
             // Step 1: Merge NBT
-            var inputNbt = input.saveNBT();
-            var additionalNbt = additional.saveNBT();
+            var inputNbt = inputItem.saveNBT();
+            var additionalNbt = additionalItem.saveNBT();
 
             var mergedNbt = additionalNbt.toBuilder();
             mergedNbt.putAll(inputNbt);
             resultItem.loadExtraTag(mergedNbt.build());
 
             // Step 2: Merge durability at 5%
-            var maxDurability = input.getItemType().getItemData().maxDamage();
+            var maxDamage = resultItem.getMaxDamage();
+            var bonusDamage = maxDamage * 5 / 100;
 
-            var remainingDurabilityInput = maxDurability - input.getDurability();
-            var remainingDurabilityAdditional = maxDurability - additional.getDurability();
-
-            var totalRemainingDurability = remainingDurabilityInput + remainingDurabilityAdditional + (maxDurability * 5 / 100);
-
-            var finalDurability = Math.min(totalRemainingDurability, maxDurability);
-            resultItem.setDurability(maxDurability - finalDurability);
+            var mergedDamage = inputItem.getDamage() + additionalItem.getDamage() - bonusDamage;
+            resultItem.setDamage(Math.max(0, mergedDamage - maxDamage));
         }
 
         // Case 3: Just remove enchantments (except curses)
         resultItem.removeAllEnchantments();
-        for (var ench : Stream.concat(input.getEnchantments().stream(), additional.getEnchantments().stream()).toList()) {
-            if (ench.getType().isCursed()) {
-                resultItem.addEnchantment(ench.getType(), ench.getLevel());
+        for (var enchantment : Stream.concat(inputItem.getEnchantments().stream(), additionalItem.getEnchantments().stream()).toList()) {
+            if (enchantment.getType().isCursed()) {
+                resultItem.addEnchantment(enchantment.getType(), enchantment.getLevel());
             }
         }
 
-        var xp = calculateExperienceFromEnchantments(input);
-        xp += calculateExperienceFromEnchantments(additional);
+        var xp = calculateExperienceFromEnchantments(inputItem);
+        xp += calculateExperienceFromEnchantments(additionalItem);
 
         var event = new GrindstoneTakeResultEvent(player, container, resultItem, xp);
         if (!event.call()) {

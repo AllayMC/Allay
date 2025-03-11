@@ -26,8 +26,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CraftRecipeOptionalActionProcessor implements ContainerActionProcessor<CraftRecipeOptionalAction> {
     public static final String FILTER_STRINGS_DATA_KEY = "filterStrings";
 
-    private static final float ANVIL_MATERIAL_REPAIR_MULTIPLIER = 0.25f;
-    private static final float ANVIL_ITEM_REPAIR_MULTIPLIER = 0.12f;
+    private static final int ANVIL_MATERIAL_REPAIR_MULTIPLIER = 25;
+    private static final int ANVIL_ITEM_REPAIR_MULTIPLIER = 12;
 
     private static final float ANVIL_DAMAGE_CHANCE = 0.12f;
     private static final int ANVIL_COST_LIMIT = 39;
@@ -66,28 +66,28 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
         if (!materialItem.isEmptyOrAir()) {
             anvilCost += materialItem.getRepairCost();
 
-            var maxDamage = resultItem.getMaxDurability();
+            var maxDamage = resultItem.getMaxDamage();
 
             // Case 1: Repair by repairing materials
             if (
                     inputItem instanceof ItemRepairableComponent repairableComponent &&
                     repairableComponent.canBeRepairedBy(materialItem.getItemType())
             ) {
-                var delta = (int) Math.min(resultItem.getDurability(), maxDamage * ANVIL_MATERIAL_REPAIR_MULTIPLIER);
+                var delta = Math.min(resultItem.getDamage(), maxDamage * ANVIL_MATERIAL_REPAIR_MULTIPLIER / 100);
                 if (delta <= 0) {
                     log.warn("Input item is already fully repaired");
                     return error();
                 }
 
-                var newDamage = resultItem.getDurability();
+                var newDamage = resultItem.getDamage();
                 for (int i = 0; i < materialItem.getCount() && delta > 0; i++) {
                     actionCost++;
 
                     newDamage = Math.max(0, newDamage - delta);
-                    delta = (int) Math.min(newDamage, maxDamage * ANVIL_MATERIAL_REPAIR_MULTIPLIER);
+                    delta = Math.min(newDamage, maxDamage * ANVIL_MATERIAL_REPAIR_MULTIPLIER / 100);
                 }
 
-                resultItem.setDurability(newDamage);
+                resultItem.setDamage(newDamage);
             } else {
                 // Case 2: Merge equal items
                 var isEnchantedBook = materialItem.getItemType() == ItemTypes.ENCHANTED_BOOK;
@@ -96,12 +96,9 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 if (!isEnchantedBook && inputItem.getItemType() == materialItem.getItemType()) {
                     actionCost += 2;
 
-                    var remainingDurabilityInput = maxDamage - inputItem.getDurability();
-                    var remainingDurabilityMaterial = maxDamage - materialItem.getDurability();
-
-                    var totalRemainingDurability = (int) (remainingDurabilityInput + remainingDurabilityMaterial + (maxDamage * ANVIL_ITEM_REPAIR_MULTIPLIER));
-                    var finalDurability = Math.min(totalRemainingDurability, maxDamage);
-                    resultItem.setDurability(maxDamage - finalDurability);
+                    var bonusDamage = maxDamage * ANVIL_ITEM_REPAIR_MULTIPLIER / 100;
+                    var mergedDamage = inputItem.getDamage() + materialItem.getDamage() - bonusDamage;
+                    resultItem.setDamage(Math.max(0, mergedDamage - maxDamage));
                 }
 
                 // Step 2: Merge enchantments

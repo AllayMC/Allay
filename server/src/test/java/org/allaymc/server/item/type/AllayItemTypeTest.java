@@ -21,7 +21,7 @@ public class AllayItemTypeTest {
         var itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().count(1).build());
         assertEquals(1, itemStack.getCount());
         assertEquals(0, itemStack.getMeta());
-        assertEquals(0, itemStack.getDurability());
+        assertEquals(0, itemStack.getDamage());
         assertEquals("", itemStack.getCustomName());
         assertTrue(itemStack.getPersistentDataContainer().isEmpty());
         assertEquals(List.of(), itemStack.getLore());
@@ -57,12 +57,12 @@ public class AllayItemTypeTest {
         var axe = ItemTypes.DIAMOND_AXE.createItemStack(1);
 
         // Diamond doesn't support durability
-        diamond.setDurability(1);
-        assertEquals(0, diamond.getDurability());
+        diamond.setDamage(1);
+        assertEquals(0, diamond.getDamage());
 
         // Instead, diamond axe supports durability
-        axe.setDurability(1);
-        assertEquals(1, axe.getDurability());
-        assertThrows(IllegalArgumentException.class, () -> axe.setDurability(-1));
+        axe.setDamage(1);
+        assertEquals(1, axe.getDamage());
+        assertThrows(IllegalArgumentException.class, () -> axe.setDamage(-1));
     }
 }
