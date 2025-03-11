@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed skin display issue in 1.21.60.
+- Fixed safe spawn point finder.
 
 ## 0.2.0 (API 0.5.0) - 2025-3-3
 
