@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -19,9 +18,7 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
-import org.allaymc.server.block.type.BlockLootTable;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.loottable.context.BreakBlockContext;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 
@@ -57,15 +54,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
-        if (vanillaBlockId != null) {
-            var lootTable = BlockLootTable.getLootTable(vanillaBlockId);
-            if (lootTable != null) {
-                var context = new BreakBlockContext(entity, usedItem);
-                return lootTable.loot(context);
-            }
-        }
-
         if (getBlockType().getItemType() != null) {
             return Set.of(getSilkTouchDrop(blockState));
         }

@@ -21,14 +21,12 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Explosion;
-import org.allaymc.server.block.type.BlockLootTable;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -187,23 +185,6 @@ public class GameTestCommand extends SimpleCommand {
                     boolean value = context.getResult(2);
                     context.getSender().setPermission(perm, value);
                     context.addOutput("Perm " + perm + " was set to " + value);
-                    return context.success();
-                })
-                .root()
-                .key("reloadblockloottable")
-                .exec(context -> {
-                    try {
-                        var path = Path.of("../data/resources/loot_tables/blocks.json");
-                        if (!Files.exists(path)) {
-                            context.addError("This command can only be used in local environment!");
-                            return context.fail();
-                        }
-                        BlockLootTable.readFrom(new InputStreamReader(Files.newInputStream(path)));
-                        context.addOutput("Block loot tables have been reloaded!");
-                    } catch (IOException e) {
-                        context.addError(e.toString());
-                        return context.fail();
-                    }
                     return context.success();
                 })
                 .root()

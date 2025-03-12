@@ -41,6 +41,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
+- Removed loot table api.
+
 ## 0.2.0 (API 0.5.0) - 2025-3-3
 
 <small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...0.2.0)</small>

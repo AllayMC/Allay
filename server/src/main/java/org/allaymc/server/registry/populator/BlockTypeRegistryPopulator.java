@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.server.block.type.BlockLootTable;
 import org.allaymc.server.block.type.BlockTypeDefaultInitializer;
 import org.allaymc.server.block.type.BlockTypeInitializer;
 import org.allaymc.server.block.type.InternalBlockTypeData;
@@ -20,7 +19,6 @@ public class BlockTypeRegistryPopulator implements Runnable {
     public void run() {
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
         InternalBlockTypeData.init();
-        BlockLootTable.init();
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
         BlockTypeDefaultInitializer.init();
