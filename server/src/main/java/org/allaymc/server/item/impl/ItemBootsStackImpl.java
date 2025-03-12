@@ -12,11 +12,15 @@ import java.util.List;
 
 public class ItemBootsStackImpl extends ItemStackImpl implements ItemBootsStack {
     @Delegate
-    protected ItemArmorBaseComponent armorBaseComponent;
-    @Delegate
     protected ItemTrimmableComponent trimComponent;
 
     public ItemBootsStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
+    }
+
+    @Delegate
+    @Override
+    protected ItemArmorBaseComponent getBaseComponent() {
+        return (ItemArmorBaseComponent) super.getBaseComponent();
     }
 }

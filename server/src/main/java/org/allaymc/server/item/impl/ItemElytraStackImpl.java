@@ -12,11 +12,15 @@ import java.util.List;
 
 public class ItemElytraStackImpl extends ItemStackImpl implements ItemElytraStack {
     @Delegate
-    protected ItemArmorBaseComponent armorBaseComponent;
-    @Delegate
     protected ItemRepairableComponent repairableComponent;
 
     public ItemElytraStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
+    }
+
+    @Delegate
+    @Override
+    protected ItemArmorBaseComponent getBaseComponent() {
+        return (ItemArmorBaseComponent) super.getBaseComponent();
     }
 }
