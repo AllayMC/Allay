@@ -57,13 +57,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
     protected static final String TAG_COUNT = "Count";
-    protected static final String TAG_DAMAGE = "Damage";
+    protected static final String TAG_META = "Damage";
     protected static final String TAG_NAME = "Name";
     protected static final String TAG_EXTRA_TAG = "tag";
     protected static final String TAG_BLOCK = "Block";
 
     // The following tag is in extra tag.
-    protected static final String TAG_DURABILITY = "Damage";
+    protected static final String TAG_DAMAGE = "Damage";
     protected static final String TAG_REPAIR_COST = "RepairCost";
     protected static final String TAG_DISPLAY = "display";
     protected static final String TAG_CUSTOM_NAME = "Name";
@@ -136,7 +136,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void loadExtraTag(NbtMap extraTag) {
-        this.damage = extraTag.getInt(TAG_DURABILITY, 0);
+        this.damage = extraTag.getInt(TAG_DAMAGE, 0);
         this.repairCost = extraTag.getInt(TAG_REPAIR_COST, 0);
         extraTag.listenForCompound(TAG_DISPLAY, displayNbt -> {
             this.customName = displayNbt.getString(TAG_CUSTOM_NAME);
@@ -165,7 +165,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public NbtMap saveExtraTag() {
         var nbtBuilder = NbtMap.builder();
         if (damage != 0) {
-            nbtBuilder.putInt(TAG_DURABILITY, damage);
+            nbtBuilder.putInt(TAG_DAMAGE, damage);
         }
 
         if (repairCost > 0) {
@@ -212,7 +212,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public NbtMap saveNBT() {
         var builder = NbtMap.builder()
                 .putByte(TAG_COUNT, (byte) getCount())
-                .putShort(TAG_DAMAGE, (short) getMeta())
+                .putShort(TAG_META, (short) getMeta())
                 .putString(TAG_NAME, getItemType().getIdentifier().toString());
 
         var extraTag = saveExtraTag();
