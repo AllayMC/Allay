@@ -209,7 +209,7 @@ public class BlockStateData {
     }
 
     public boolean isTransparent() {
-        return translucency() != 1.0f;
+        return translucency() > 0;
     }
 
     /**

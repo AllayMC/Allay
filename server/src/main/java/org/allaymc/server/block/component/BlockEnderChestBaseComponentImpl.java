@@ -1,12 +1,18 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+
+import java.util.Set;
 
 /**
  * @author IWareQ
@@ -27,10 +33,20 @@ public class BlockEnderChestBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
+        var upperBlock = dimension.getBlockState(BlockFace.UP.offsetPos(interactInfo.clickedBlockPos()));
+        if (!upperBlock.getBlockStateData().isTransparent()) {
+            return false;
+        }
+
         var enderChestContainer = player.getContainer(FullContainerType.ENDER_CHEST);
         enderChestContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         enderChestContainer.addViewer(player);
         enderChestContainer.sendContents(player);
         return true;
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        return Set.of(ItemTypes.OBSIDIAN.createItemStack(8));
     }
 }
