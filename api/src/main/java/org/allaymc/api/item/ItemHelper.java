@@ -9,9 +9,9 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.tag.ItemCustomTags;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.updater.item.ItemStateUpdater_1_21_50;
 import org.allaymc.updater.item.ItemStateUpdaters;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -36,7 +36,7 @@ public final class ItemHelper {
      */
     public static ItemStack fromNBT(NbtMap nbt) {
         try {
-            nbt = ItemStateUpdaters.updateItemState(nbt, ItemStateUpdater_1_21_50.INSTANCE.getVersion());
+            nbt = ItemStateUpdaters.updateItemState(nbt, ProtocolInfo.ITEM_STATE_UPDATER.getVersion());
             int count = nbt.getByte("Count", (byte) 1);
             int meta = nbt.getShort("Damage");
             var name = nbt.getString("Name");

@@ -24,6 +24,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `ItemRepairableComponent` to check if an item can be repaired with a specific material.
 - (API) Added `ItemTrimmableComponent` for trimming armor.
 - (API) Added `AnvilDamageEvent`, `AnvilTakeResultEvent` and `GrindstoneTakeResultEvent` for plugins.
+- (API) Added `ProtocolInfo.ITEM_STATE_UPDATER` which corresponds to `ProtocolInfo.BLOCK_STATE_UPDATER`.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
 ### Changed
