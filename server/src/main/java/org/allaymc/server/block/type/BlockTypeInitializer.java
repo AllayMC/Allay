@@ -909,13 +909,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockEndRodBehaviorImpl.class)
                 .vanillaBlock(BlockId.END_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockRodBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockEndRodBaseComponentImpl::new)
                 .build();
         BlockTypes.LIGHTNING_ROD = AllayBlockType
                 .builder(BlockLightningRodBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHTNING_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockRodBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockLightningRodBaseComponentImpl::new)
                 .build();
     }
 

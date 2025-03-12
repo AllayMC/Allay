@@ -23,10 +23,11 @@ public class BlockWetSpongeBaseComponentImpl extends BlockBaseComponentImpl {
     public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlockState, newBlockState, placementInfo);
 
-        if (oldBlockState.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
-            oldBlockState.dimension().setBlockState(oldBlockState.pos(), BlockTypes.SPONGE.getDefaultState());
-            oldBlockState.dimension().addLevelSoundEvent(MathUtils.center(oldBlockState.pos()), SoundEvent.FIZZ);
-            oldBlockState.dimension().addParticle(MathUtils.center(oldBlockState.pos()), ParticleType.EXPLODE);
+        var dimension = oldBlockState.dimension();
+        if (dimension.getDimensionInfo() == DimensionInfo.NETHER) {
+            dimension.setBlockState(oldBlockState.pos(), BlockTypes.SPONGE.getDefaultState());
+            dimension.addLevelSoundEvent(MathUtils.center(oldBlockState.pos()), SoundEvent.FIZZ);
+            dimension.addParticle(MathUtils.center(oldBlockState.pos()), ParticleType.EXPLODE);
         }
     }
 }

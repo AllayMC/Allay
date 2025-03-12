@@ -38,8 +38,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed skin display issue in 1.21.60.
-- Fixed `BlockStateData#isTransparent()` method.
+- (API) Fixed `BlockStateData#isTransparent()` method.
 - Fixed EnderChest behaviour and drops.
+- Fixed LightningRod placing.
 
 ### Removed
 

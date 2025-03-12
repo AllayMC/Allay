@@ -10,10 +10,10 @@ import org.joml.Vector3ic;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 
 /**
- * @author Dhaiven
+ * @author IWareQ
  */
-public class BlockRodBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockRodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockLightningRodBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockLightningRodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
@@ -24,20 +24,7 @@ public class BlockRodBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        // We shouldn't use PlaceBlockHelper.processFacingDirectionProperty here
-        // because the facing direction of a rod block is dependent on the block face the player clicked
-
-        var face = placementInfo.blockFace();
-        if (face.isHorizontal()) {
-            face = face.opposite();
-        }
-
-        var clickedBlockState = placementInfo.getClickedBlockState();
-        if (clickedBlockState.getBlockType() == getBlockType() && clickedBlockState.getPropertyValue(FACING_DIRECTION) == face.ordinal()) {
-            face = face.opposite();
-        }
-
-        blockState = blockState.setPropertyValue(FACING_DIRECTION, face.ordinal());
+        blockState = blockState.setPropertyValue(FACING_DIRECTION, placementInfo.blockFace().ordinal());
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
