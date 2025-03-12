@@ -1,6 +1,7 @@
 package org.allaymc.server.world;
 
 import com.google.common.base.Preconditions;
+import io.netty.util.AbstractReferenceCounted;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
@@ -31,7 +32,6 @@ import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentIm
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
@@ -198,18 +198,16 @@ public class AllayWorld implements World {
 
         // Find the spawn point only the first time the world is loaded
         if (this.worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
-            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getDisplayName()).start(() -> {
+            scheduler.scheduleDelayed(this, () -> {
                 var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
                 if (newSpawnPoint == null) {
                     log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getDisplayName());
                     newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
                 }
-                var finalNewSpawnPoint = newSpawnPoint;
-                overworld.getWorld().getScheduler().runLater(this, () -> {
-                    // Set new spawn point in world thread as world data object is not thread-safe
-                    worldData.setSpawnPoint(finalNewSpawnPoint);
-                });
-            });
+
+                worldData.setSpawnPoint(newSpawnPoint.add(0, 1, 0, new Vector3i()));
+                return false;
+            }, 5, true); // We need a few ticks to wait for the SpawnPointChunkLoader to load the chunks
         }
     }
 
@@ -463,8 +461,8 @@ public class AllayWorld implements World {
 
         @Override
         public void sendPacket(BedrockPacket packet) {
-            if (packet instanceof LevelChunkPacket lcp) {
-                lcp.release();
+            if (packet instanceof AbstractReferenceCounted referenceCounted) {
+                referenceCounted.release();
             }
         }
 

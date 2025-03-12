@@ -38,6 +38,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed skin display issue in 1.21.60.
+- Fixed safe spawn point finder.
 
 ### Removed
 
