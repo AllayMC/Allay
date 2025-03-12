@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
-    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
 
@@ -38,8 +38,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
             return error();
         }
 
-        sourceContainer.setItemStack(sourceSlot, destinationItem);
-        destinationContainer.setItemStack(destinationSlot, sourceItem);
+        sourceContainer.setItemStack(sourceSlot, destinationItem, false);
+        destinationContainer.setItemStack(destinationSlot, sourceItem, false);
         return new ActionResponse(
                 true,
                 List.of(
@@ -52,7 +52,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 destinationItem.getCount(),
                                                 destinationItem.getStackNetworkId(),
                                                 destinationItem.getCustomName(),
-                                                destinationItem.getDurability(),
+                                                destinationItem.getDamage(),
                                                 ""
                                         )
                                 ),
@@ -67,7 +67,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 sourceItem.getCount(),
                                                 sourceItem.getStackNetworkId(),
                                                 sourceItem.getCustomName(),
-                                                sourceItem.getDurability(),
+                                                sourceItem.getDamage(),
                                                 ""
                                         )
                                 ),

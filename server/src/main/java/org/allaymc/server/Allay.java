@@ -22,10 +22,7 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.permission.tree.PermissionTree;
-import org.allaymc.api.registry.DoubleKeyMappedRegistry;
-import org.allaymc.api.registry.IntMappedRegistry;
-import org.allaymc.api.registry.Registries;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.*;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
@@ -236,6 +233,10 @@ public final class Allay {
         Registries.RECIPES = IntMappedRegistry.create(new RecipeRegistryLoader());
         Registries.FURNACE_RECIPES = SimpleMappedRegistry.create(new FurnaceRecipeRegistryLoader());
         Registries.POTION_MIX_RECIPES = SimpleMappedRegistry.create(new PotionMixRecipeRegistryLoader());
+
+        // Trim Data
+        InternalRegistries.TRIM_PATTERNS = SimpleRegistry.create(new TrimPatternRegistryLoader());
+        InternalRegistries.TRIM_MATERIALS = SimpleRegistry.create(new TrimMaterialRegistryLoader());
 
         // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());

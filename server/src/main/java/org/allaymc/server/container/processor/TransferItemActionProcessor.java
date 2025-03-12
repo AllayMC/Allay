@@ -24,7 +24,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 public abstract class TransferItemActionProcessor<T extends TransferItemStackRequestAction> implements ContainerActionProcessor<T> {
 
     @Override
-    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var source = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var destination = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
 
@@ -81,12 +81,12 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         if (sourItem.getCount() == count) {
             // Case 1: Take all
             resultSourItem = ItemAirStack.AIR_STACK;
-            source.setItemStack(sourceSlot, resultSourItem);
+            source.setItemStack(sourceSlot, resultSourItem, false);
             if (destItem.getItemType() != AIR) {
                 resultDestItem = destItem;
                 // Destination item is not empty, just add count, and keep the same stack network id
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.notifySlotChange(destinationSlot);
+                destination.notifySlotChange(destinationSlot, false);
             } else {
                 // Destination item is empty, move the original stack to the new position, and use the source item's stack network id (like changing positions)
                 if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
@@ -94,23 +94,23 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                     sourItem = sourItem.copy(true);
                 }
                 resultDestItem = sourItem;
-                destination.setItemStack(destinationSlot, resultDestItem);
+                destination.setItemStack(destinationSlot, resultDestItem, false);
             }
         } else {
             // Case 2: Take part of the item
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
-            source.notifySlotChange(sourceSlot);
+            source.notifySlotChange(sourceSlot, false);
             if (destItem.getItemType() != AIR) {
                 // Destination item is not empty
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.notifySlotChange(destinationSlot);
+                destination.notifySlotChange(destinationSlot, false);
             } else {
                 // Destination item is empty, create a new stack network id for the separated sub-item stack
                 resultDestItem = sourItem.copy(true);
                 resultDestItem.setCount(count);
-                destination.setItemStack(destinationSlot, resultDestItem);
+                destination.setItemStack(destinationSlot, resultDestItem, false);
             }
         }
 
@@ -123,34 +123,35 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 resultDestItem.getCount(),
                                 resultDestItem.getStackNetworkId(),
                                 resultDestItem.getCustomName(),
-                                resultDestItem.getDurability(),
+                                resultDestItem.getDamage(),
                                 ""
                         )
                 ),
                 new FullContainerName(destination.getSlotType(destinationSlot), null)
         );
-        // No need to respond to CREATED_OUTPUT (mj's strange hack)
-        if (source.getContainerType() != FullContainerType.CREATED_OUTPUT) {
-            return new ActionResponse(
-                    true,
-                    List.of(new ItemStackResponseContainer(
-                            source.getSlotType(sourceSlot),
-                            List.of(
-                                    new ItemStackResponseSlot(
-                                            source.toNetworkSlotIndex(sourceSlot),
-                                            source.toNetworkSlotIndex(sourceSlot),
-                                            resultSourItem.getCount(),
-                                            resultSourItem.getStackNetworkId(),
-                                            resultSourItem.getCustomName(),
-                                            resultSourItem.getDurability(),
-                                            ""
-                                    )
-                            ),
-                            new FullContainerName(source.getSlotType(sourceSlot), null)
-                    ), destItemStackResponseSlot)
-            );
-        } else {
+
+        // Special case: no need to respond to CREATED_OUTPUT (mj's strange hack)
+        if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
             return new ActionResponse(true, List.of(destItemStackResponseSlot));
         }
+
+        return new ActionResponse(
+                true,
+                List.of(new ItemStackResponseContainer(
+                        source.getSlotType(sourceSlot),
+                        List.of(
+                                new ItemStackResponseSlot(
+                                        source.toNetworkSlotIndex(sourceSlot),
+                                        source.toNetworkSlotIndex(sourceSlot),
+                                        resultSourItem.getCount(),
+                                        resultSourItem.getStackNetworkId(),
+                                        resultSourItem.getCustomName(),
+                                        resultSourItem.getDamage(),
+                                        ""
+                                )
+                        ),
+                        new FullContainerName(source.getSlotType(sourceSlot), null)
+                ), destItemStackResponseSlot)
+        );
     }
 }

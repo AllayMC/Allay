@@ -10,8 +10,8 @@ import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
 import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
 import org.allaymc.api.item.recipe.impl.ShapedRecipe;
 import org.allaymc.api.item.recipe.impl.ShapelessRecipe;
-import org.allaymc.api.item.recipe.input.CraftingInput;
-import org.allaymc.api.item.recipe.input.FurnaceInput;
+import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
+import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -49,26 +49,26 @@ class RecipeTest {
         assertEquals(DIAMOND, grassMagic1.getOutputs()[0].getItemType());
         assertEquals("test_tag", grassMagic1.getTag());
 
-        var input1 = new CraftingInput(
+        var input1 = new CraftingRecipeInput(
                 grass(), grass(), air(),
                 grass(), grass(), air(),
                 air(), air(), air()
         );
-        var input2 = new CraftingInput(
+        var input2 = new CraftingRecipeInput(
                 grass(), grass(),
                 grass(), grass()
         );
-        var input3 = new CraftingInput(
+        var input3 = new CraftingRecipeInput(
                 air(), grass(), grass(),
                 air(), grass(), grass(),
                 air(), air(), air()
         );
-        var input4 = new CraftingInput(
+        var input4 = new CraftingRecipeInput(
                 air(), air(), air(),
                 air(), grass(), grass(),
                 air(), grass(), grass()
         );
-        var input5 = new CraftingInput(
+        var input5 = new CraftingRecipeInput(
                 air(), air(), air(),
                 grass(), grass(), air(),
                 grass(), grass(), air()
@@ -80,12 +80,12 @@ class RecipeTest {
         assertTrue(grassMagic1.match(input4));
         assertTrue(grassMagic1.match(input5));
 
-        var input6 = new CraftingInput(
+        var input6 = new CraftingRecipeInput(
                 grass(), grass(), grass(),
                 grass(), grass(), grass(),
                 grass(), grass(), grass()
         );
-        var input7 = new CraftingInput(
+        var input7 = new CraftingRecipeInput(
                 air(), air(), air(),
                 air(), air(), air(),
                 air(), air(), air()
@@ -107,32 +107,32 @@ class RecipeTest {
                 .outputs(new ItemStack[]{diamond()})
                 .build();
 
-        var input8 = new CraftingInput(
+        var input8 = new CraftingRecipeInput(
                 grass(), air(), air(),
                 grass(), air(), air(),
                 air(), air(), air()
         );
-        var input9 = new CraftingInput(
+        var input9 = new CraftingRecipeInput(
                 air(), grass(), air(),
                 air(), grass(), air(),
                 air(), air(), air()
         );
-        var input10 = new CraftingInput(
+        var input10 = new CraftingRecipeInput(
                 air(), air(), grass(),
                 air(), air(), grass(),
                 air(), air(), air()
         );
-        var input11 = new CraftingInput(
+        var input11 = new CraftingRecipeInput(
                 air(), air(), air(),
                 grass(), air(), air(),
                 grass(), air(), air()
         );
-        var input12 = new CraftingInput(
+        var input12 = new CraftingRecipeInput(
                 air(), air(), air(),
                 air(), grass(), air(),
                 air(), grass(), air()
         );
-        var input13 = new CraftingInput(
+        var input13 = new CraftingRecipeInput(
                 air(), air(), air(),
                 air(), air(), grass(),
                 air(), air(), grass()
@@ -165,19 +165,19 @@ class RecipeTest {
                 .outputs(new ItemStack[]{diamond()})
                 .build();
 
-        var input14 = new CraftingInput(
+        var input14 = new CraftingRecipeInput(
                 grass(), air(),
                 air(), air()
         );
-        var input15 = new CraftingInput(
+        var input15 = new CraftingRecipeInput(
                 air(), grass(),
                 air(), air()
         );
-        var input16 = new CraftingInput(
+        var input16 = new CraftingRecipeInput(
                 air(), air(),
                 grass(), air()
         );
-        var input17 = new CraftingInput(
+        var input17 = new CraftingRecipeInput(
                 air(), air(),
                 air(), grass()
         );
@@ -203,14 +203,14 @@ class RecipeTest {
                 .outputs(new ItemStack[]{diamond()})
                 .build();
 
-        var input1 = new CraftingInput(grass(), grass(), grass(), air());
+        var input1 = new CraftingRecipeInput(grass(), grass(), grass(), air());
 
         assertTrue(grassMagic1.match(input1));
 
-        var input2 = new CraftingInput(
+        var input2 = new CraftingRecipeInput(
                 grass(), grass(),
                 grass(), grass());
-        var input3 = new CraftingInput(
+        var input3 = new CraftingRecipeInput(
                 grass(), grass(), grass(),
                 diamond());
 
@@ -227,7 +227,7 @@ class RecipeTest {
                 .output(diamond())
                 .build();
 
-        var input1 = new FurnaceInput(grass(), FurnaceRecipe.FURNACE_TAG);
+        var input1 = new FurnaceRecipeInput(grass(), FurnaceRecipe.FURNACE_TAG);
 
         assertTrue(grassMagic1.match(input1));
 
@@ -238,12 +238,12 @@ class RecipeTest {
                 .output(diamond())
                 .build();
 
-        var input2 = new FurnaceInput(grass(), FurnaceRecipe.FURNACE_TAG);
+        var input2 = new FurnaceRecipeInput(grass(), FurnaceRecipe.FURNACE_TAG);
 
         assertFalse(grassMagic2.match(input2));
         assertEquals(grassMagic2.getIdentifier(), new Identifier(GRASS_BLOCK.getIdentifier() + "_" + FurnaceRecipe.BLAST_FURNACE_TAG));
 
-        var input3 = new FurnaceInput(grass(), FurnaceRecipe.BLAST_FURNACE_TAG);
+        var input3 = new FurnaceRecipeInput(grass(), FurnaceRecipe.BLAST_FURNACE_TAG);
 
         assertTrue(grassMagic1.match(input3));
     }

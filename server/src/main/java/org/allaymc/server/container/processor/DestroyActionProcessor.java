@@ -21,7 +21,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 @Slf4j
 public class DestroyActionProcessor implements ContainerActionProcessor<DestroyAction> {
     @Override
-    public ActionResponse handle(DestroyAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(DestroyAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getContainerBySlotType(action.getSource().getContainerName().getContainer());
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
@@ -44,10 +44,10 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
 
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);
-            container.notifySlotChange(slot);
+            container.notifySlotChange(slot, false);
         } else {
             item = AIR_STACK;
-            container.setItemStack(slot, item);
+            container.clearSlot(slot, false);
         }
 
         return new ActionResponse(
@@ -62,7 +62,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
                                                 item.getCustomName(),
-                                                item.getDurability(),
+                                                item.getDamage(),
                                                 ""
                                         )
                                 ),

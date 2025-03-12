@@ -36,11 +36,11 @@ public class ItemToolComponentImpl implements ItemToolComponent {
             return;
         }
 
-        baseComponent.tryReduceDurability(1);
+        baseComponent.tryIncreaseDamage(1);
     }
 
     @EventHandler
     protected void onAttackEntity(CItemAttackEntityEvent event) {
-        baseComponent.tryReduceDurability(2);
+        baseComponent.tryIncreaseDamage(2);
     }
 }

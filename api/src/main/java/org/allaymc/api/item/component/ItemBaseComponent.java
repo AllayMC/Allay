@@ -13,6 +13,7 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.type.AbstractEnchantmentProtectionType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -36,355 +37,375 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     int EMPTY_STACK_NETWORK_ID = 0;
 
     /**
-     * Get the item type.
+     * Gets the item type.
      *
-     * @return The item type.
+     * @return the {@link ItemType}
      */
     ItemType<? extends ItemStack> getItemType();
 
     /**
-     * Get the item count.
+     * Gets the item count.
      *
-     * @return The item count.
+     * @return the current count
      */
     int getCount();
 
     /**
-     * Set the item count.
+     * Sets the item count.
      *
-     * @param count The item count.
+     * @param count the new count
      */
     void setCount(int count);
 
     /**
-     * Reduce the item count.
+     * Reduces the item count.
      *
-     * @param count The count to reduce.
+     * @param count the amount to reduce
      */
     default void reduceCount(int count) {
         setCount(getCount() - count);
     }
 
     /**
-     * Increase the item count.
+     * Increases the item count.
      *
-     * @param count The count to increase.
+     * @param count the amount to increase
      */
     default void increaseCount(int count) {
         setCount(getCount() + count);
     }
 
     /**
-     * Check if the item is full.
-     * <p>
-     * A full item is an item with a count of its max stack size.
+     * Checks if the item stack is full.
      *
-     * @return {@code true} if the item is full, {@code false} otherwise.
+     * @return {@code true} if at max stack size, {@code false} otherwise
      */
     boolean isFull();
 
     /**
-     * Get the item meta.
+     * Gets the item meta value.
      *
-     * @return The item meta.
+     * @return the meta value
      */
     int getMeta();
 
     /**
-     * Set the item meta.
+     * Sets the item meta value.
      *
-     * @param meta The item meta.
+     * @param meta the new meta value
      */
     void setMeta(int meta);
 
     /**
-     * Get the item durability.
+     * Gets the maximum damage of the item.
      *
-     * @return The item durability.
+     * @return the max damage
      */
-    int getDurability();
+    default int getMaxDamage() {
+        return getItemType().getItemData().maxDamage();
+    }
 
     /**
-     * Set the item durability.
+     * Gets the current damage.
+     *
+     * @return the damage value
+     */
+    int getDamage();
+
+    /**
+     * Sets the damage.
      * <p>
-     * Note that the durability is not the same as the meta,
-     * and bigger durability means the item is more damaged.
+     * Higher values indicate more damage.
      *
-     * @param durability The item durability.
+     * @param damage the new damage value
      */
-    void setDurability(int durability);
+    void setDamage(int damage);
 
     /**
-     * Try to reduce the item durability.
+     * Attempts to increase the damage.
      * <p>
-     * The reduction can be ignored based on the unbreaking enchantment level of the item.
+     * May be ignored based on unbreaking enchantment.
      *
-     * @param reduction the reduction.
+     * @param increase the amount to increase
      *
-     * @return {@code true} if the item durability is reduced, {@code false} if reduction is ignored.
+     * @return {@code true} if increased, {@code false} if ignored
      */
-    boolean tryReduceDurability(int reduction);
+    boolean tryIncreaseDamage(int increase);
 
     /**
-     * Check if the item is broken.
+     * Gets the repair cost.
      *
-     * @return {@code true} if the item is broken, {@code false} otherwise.
+     * @return the repair cost
+     */
+    int getRepairCost();
+
+    /**
+     * Sets the repair cost.
+     *
+     * @param repairCost the new repair cost
+     */
+    void setRepairCost(int repairCost);
+
+    /**
+     * Checks if the item is broken.
+     *
+     * @return {@code true} if broken, {@code false} otherwise
      */
     boolean isBroken();
 
     /**
-     * Check if the item can be damaged this time.
+     * Checks if the item can be damaged now.
      *
-     * @return {@code true} if the item can be damaged this time, {@code false} otherwise.
+     * @return {@code true} if damageable, {@code false} otherwise
      */
     boolean canBeDamagedThisTime();
 
     /**
-     * Get the custom name.
+     * Gets the custom name.
      *
-     * @return The custom name.
+     * @return the custom name, or empty if none
      */
     String getCustomName();
 
     /**
-     * Set the custom name.
+     * Sets the custom name.
      *
-     * @param customName The custom name.
+     * @param customName the new custom name
      */
     void setCustomName(String customName);
 
     /**
-     * Get the lore.
+     * Gets the lore lines.
      *
-     * @return The lore.
+     * @return the lore list
      */
     List<String> getLore();
 
     /**
-     * Set the lore.
+     * Sets the lore lines.
      *
-     * @param lore The lore.
+     * @param lore the new lore list
      */
     void setLore(List<String> lore);
 
     /**
-     * Get the block state.
+     * Converts to a block state.
      *
-     * @return The block state.
+     * @return the {@link BlockState}
      */
     BlockState toBlockState();
 
     /**
-     * Get the network item data.
+     * Converts to network item data.
      *
-     * @return The network item data.
+     * @return the {@link ItemData}
      */
     ItemData toNetworkItemData();
 
     /**
-     * Check if the item has a stack network id.
+     * Checks if the item has a stack network ID.
      *
-     * @return {@code true} if the item has a stack network id, {@code false} otherwise.
+     * @return {@code true} if present, {@code false} otherwise
      */
     default boolean hasStackNetworkId() {
         return getStackNetworkId() != EMPTY_STACK_NETWORK_ID;
     }
 
     /**
-     * Get the stack network id.
+     * Gets the stack network ID.
      *
-     * @return The stack network id.
+     * @return the stack network ID
      */
     int getStackNetworkId();
 
     /**
-     * Set the stack network id.
+     * Sets the stack network ID.
      *
-     * @param newStackNetworkId The new stack network id.
+     * @param newStackNetworkId the new ID
      */
     void setStackNetworkId(int newStackNetworkId);
 
     /**
-     * Clear the stack network id.
+     * Clears the stack network ID.
      */
     default void clearStackNetworkId() {
         setStackNetworkId(EMPTY_STACK_NETWORK_ID);
     }
 
     /**
-     * Copy the item stack.
+     * Copies the item stack.
      *
-     * @return The copied item stack.
+     * @return the copied {@link ItemStack}
      */
     default ItemStack copy() {
         return copy(true);
     }
 
     /**
-     * Copy the item stack.
+     * Copies the item stack with optional new network ID.
      *
-     * @param newStackNetworkId Whether to generate a new stack network id.
+     * @param newStackNetworkId whether to generate a new ID
      *
-     * @return The copied item stack.
+     * @return the copied {@link ItemStack}
      */
     ItemStack copy(boolean newStackNetworkId);
 
     /**
-     * Save the extra tag.
+     * Saves extra tag data.
      *
-     * @return The extra tag.
+     * @return the {@link NbtMap} of extra tags
      */
     NbtMap saveExtraTag();
 
     /**
-     * Load the extra tag.
+     * Loads extra tag data.
      *
-     * @param extraTag The extra tag.
+     * @param extraTag the {@link NbtMap} to load
      */
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * Called when player right-click a block no matter the return value of {@code player.isUsingItemOnBlock()}.
+     * Handles right-click on a block.
      *
-     * @param dimension     The dimension the player is in.
-     * @param placeBlockPos The position of the block being right-clicked.
-     * @param interactInfo  Information about the interaction.
+     * @param dimension     the {@link Dimension}
+     * @param placeBlockPos the block position ({@link Vector3ic})
+     * @param interactInfo  the {@link PlayerInteractInfo}
      */
     @ApiStatus.OverrideOnly
     void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
-     * Attempt to use this item on a block.
+     * Attempts to use the item on a block.
      * <p>
-     * This method will be called only when client thinks "he can" use the item. In other words, when {@code player.isUsingItemOnBlock()} return {@code true}.
-     * This method should handle reducing item count, durability, etc., on successful use.
-     * No need to send item updates separately as the caller will handle it.
-     * <p>
-     * Note: Placing blocks will not invoke this method.
+     * Called when client allows use. Handles count/durability changes.
      *
-     * @param dimension     the dimension.
-     * @param placeBlockPos the position of the block being right-clicked.
-     * @param interactInfo  information about the interaction.
+     * @param dimension     the {@link Dimension}
+     * @param placeBlockPos the block position ({@link Vector3ic})
+     * @param interactInfo  the {@link PlayerInteractInfo}
      *
-     * @return true if successfully used
+     * @return {@code true} if used, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
     boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
-     * Attempt to place a block using this item, regardless of whether this item is a block item.
+     * Attempts to place a block with this item.
      *
-     * @param dimension     The dimension.
-     * @param placeBlockPos The position where the block will be placed.
-     * @param placementInfo The placement information, can be null.
+     * @param dimension     the {@link Dimension}
+     * @param placeBlockPos the placement position ({@link Vector3ic})
+     * @param placementInfo the {@link PlayerInteractInfo}, may be {@code null}
      *
-     * @return {@code true} if the block is successfully placed,
-     * {@code false} if placement fails (reasons: not a block item, placement check fails, event is canceled).
+     * @return {@code true} if placed, {@code false} otherwise
      */
     default boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         return false;
     }
 
     /**
-     * Called when the player clicked item in air.
+     * Handles clicking the item in air.
      *
-     * @param player The player who clicked.
+     * @param player the {@link EntityPlayer}
      */
     @ApiStatus.OverrideOnly
     default void clickItemInAir(EntityPlayer player) {}
 
     /**
-     * Called before the player prepares to use the item.
+     * Checks if the item can be used in air.
      *
-     * @param player the player preparing to use the item.
+     * @param player the {@link EntityPlayer}
      *
-     * @return whether this item can be used.
+     * @return {@code true} if usable, {@code false} otherwise
      */
     boolean canUseItemInAir(EntityPlayer player);
 
     /**
-     * Called when the player thinks he has finished using an item.
+     * Handles finishing item use in air.
      *
-     * @param player   the player using the item.
-     * @param usedTime the time spent.
+     * @param player   the {@link EntityPlayer}
+     * @param usedTime the usage duration
      *
-     * @return whether the item was used.
+     * @return {@code true} if used, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
     boolean useItemInAir(EntityPlayer player, long usedTime);
 
     /**
-     * Called when the player releases the item after holding right-click for a period.
+     * Handles releasing the item after use.
+     *
+     * @param player   the {@link EntityPlayer}
+     * @param usedTime the usage duration
      */
     @ApiStatus.OverrideOnly
     default void releaseUsingItem(EntityPlayer player, long usedTime) {}
 
     /**
-     * Check if the item can merge with the specified item stack.
+     * Checks if this item can merge with another.
      *
-     * @param itemStack the item stack to merge.
+     * @param itemStack the {@link ItemStack} to check
      *
-     * @return {@code true} if the item can merge, {@code false} otherwise.
+     * @return {@code true} if mergeable, {@code false} otherwise
      */
     default boolean canMerge(ItemStack itemStack) {
         return canMerge(itemStack, false);
     }
 
     /**
-     * Check if the item can merge with the specified item stack.
+     * Checks if this item can merge with another, with count option.
      *
-     * @param itemStack   The item stack to merge.
-     * @param ignoreCount Whether to ignore the count.
+     * @param itemStack   the {@link ItemStack} to check
+     * @param ignoreCount whether to ignore count in comparison
      *
-     * @return {@code true} if the item can merge, {@code false} otherwise.
+     * @return {@code true} if mergeable, {@code false} otherwise
      */
     boolean canMerge(ItemStack itemStack, boolean ignoreCount);
 
     /**
-     * Save the item to NBT.
+     * Saves item data to NBT.
      *
-     * @return The NBT.
+     * @return the {@link NbtMap} of item data
      */
     NbtMap saveNBT();
 
     /**
-     * Calculate the attack damage.
+     * Calculates the attack damage.
      *
-     * @return The attack damage.
+     * @return the attack damage value
      */
     float calculateAttackDamage();
 
     /**
-     * Check if the item has the specified enchantment.
+     * Checks for a specific enchantment.
      *
-     * @return {@code true} if the item has the specified enchantment, {@code false} otherwise.
+     * @param enchantmentType the {@link EnchantmentType}
+     *
+     * @return {@code true} if present, {@code false} otherwise
      */
     boolean hasEnchantment(EnchantmentType enchantmentType);
 
     /**
-     * Check if the item has any enchantments.
+     * Checks for any enchantments.
      *
-     * @return {@code true} if the item has enchantments, {@code false} otherwise.
+     * @return {@code true} if enchanted, {@code false} otherwise
      */
-    default boolean hasEnchantment() {
+    default boolean hasEnchantments() {
         return !getEnchantments().isEmpty();
     }
 
     /**
-     * Check if the item has any protection type enchantment.
+     * Checks for protection enchantments.
      *
-     * @return {@code true} if the item has protection type enchantment, {@code false} otherwise.
+     * @return {@code true} if present, {@code false} otherwise
      */
     default boolean hasProtectionEnchantment() {
         return getEnchantments().stream().anyMatch(enchantmentInstance -> enchantmentInstance.getType() instanceof AbstractEnchantmentProtectionType);
     }
 
     /**
-     * Get the protection factor of the item.
+     * Gets the protection factor for a damage type.
      *
-     * @param damageType The damage type.
+     * @param damageType the {@link DamageContainer.DamageType}
      *
-     * @return The protection factor.
+     * @return the total protection factor
      */
     default int getEnchantmentProtectionFactor(DamageContainer.DamageType damageType) {
         return getEnchantments().stream()
@@ -394,75 +415,75 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Get the level of the specified enchantment.
+     * Gets the level of an enchantment.
      *
-     * @param enchantmentType The enchantment type.
+     * @param enchantmentType the {@link EnchantmentType}
      *
-     * @return The level of the enchantment, or zero if the item doesn't have the enchantment.
+     * @return the level, or 0 if absent
      */
     int getEnchantmentLevel(EnchantmentType enchantmentType);
 
     /**
-     * Get all enchantments of the item.
+     * Gets all enchantments on the item.
      *
-     * @return The enchantments.
+     * @return the {@link Collection} of {@link EnchantmentInstance}
      */
     Collection<EnchantmentInstance> getEnchantments();
 
     /**
-     * Add an enchantment to the item.
+     * Adds an enchantment to the item.
      *
-     * @param enchantmentType The enchantment type.
-     * @param level           The level of the enchantment.
+     * @param enchantmentType the {@link EnchantmentType}
+     * @param level           the enchantment level
      */
     void addEnchantment(EnchantmentType enchantmentType, int level);
 
     /**
-     * Add multiple enchantments to the item.
+     * Adds multiple enchantments to the item.
      *
-     * @param enchantmentInstances The enchantment instances that will be added.
+     * @param enchantmentInstances the {@link Collection} of {@link EnchantmentInstance}
      */
     void addEnchantments(Collection<EnchantmentInstance> enchantmentInstances);
 
     /**
-     * Remove an enchantment from the item.
+     * Removes an enchantment from the item.
      *
-     * @param enchantmentType The enchantment type.
+     * @param enchantmentType the {@link EnchantmentType}
      *
-     * @return The removed enchantment, or {@code null} if the item doesn't have the enchantment.
+     * @return the removed {@link EnchantmentInstance}, or {@code null} if absent
      */
     EnchantmentInstance removeEnchantment(EnchantmentType enchantmentType);
 
     /**
-     * Remove all enchantments from the item.
+     * Removes all enchantments from the item.
      */
     void removeAllEnchantments();
 
     /**
-     * Called when the item is used to break a block.
+     * Handles breaking a block with this item.
      *
-     * @param block   The block being broken
-     * @param breaker The entity breaking the block
+     * @param block   the {@link BlockState} being broken
+     * @param breaker the {@link Entity} breaking it
      */
     @ApiStatus.OverrideOnly
     void onBreakBlock(BlockState block, Entity breaker);
 
     /**
-     * Called when the item is used to attack an entity successfully.
+     * Handles attacking an entity with this item.
      *
-     * @param attacker The entity attacking.
-     * @param victim   The entity being attacked.
+     * @param attacker the {@link Entity} attacking
+     * @param victim   the {@link Entity} attacked
      */
     @ApiStatus.OverrideOnly
     void onAttackEntity(Entity attacker, Entity victim);
 
     /**
-     * Interact an entity with this item and given performer.
+     * Interacts an entity with this item.
      *
-     * @param performer the entity who interact the target entity.
-     * @param victim    the target entity who will be interacted.
+     * @param performer the {@link Entity} performing the interaction
+     * @param victim    the {@link Entity} being interacted with
      *
-     * @return {@code true} if the interaction is successful, {@code false} otherwise.
+     * @return {@code true} if successful, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
     default boolean interactEntity(Entity performer, Entity victim) {
@@ -470,19 +491,20 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Get the break time bonus for breaking a block with this item.
+     * Gets the break time bonus for a block.
      *
-     * @param blockState The block to be broken.
+     * @param blockState the {@link BlockState} to break
      *
-     * @return Break time bonus.
+     * @return the bonus multiplier
      */
     default double getBreakTimeBonus(BlockState blockState) {
         var itemType = getItemType();
         var blockType = blockState.getBlockType();
         // Swords break cobwebs faster
-        if (itemType.hasItemTag(IS_SWORD)) {
-            if (blockType == BlockTypes.WEB) return 15d;
+        if (itemType.hasItemTag(IS_SWORD) && blockType == BlockTypes.WEB) {
+            return 15d;
         }
+
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
             if (blockType.hasBlockTag(BlockCustomTags.WOOL)) {
@@ -490,77 +512,76 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
             } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockCustomTags.LEAVES)) {
                 return 15d;
             }
+
             return 1d;
         }
-        if (!itemType.hasItemTag(IS_TOOL)) return 1d;
-        if (itemType.hasItemTag(GOLDEN_TIER)) return 12d;
-        if (itemType.hasItemTag(NETHERITE_TIER)) return 9d;
-        if (itemType.hasItemTag(DIAMOND_TIER)) return 8d;
-        if (itemType.hasItemTag(IRON_TIER)) return 6d;
-        if (itemType.hasItemTag(STONE_TIER)) return 4d;
+
         if (itemType.hasItemTag(WOODEN_TIER)) return 2d;
+        if (itemType.hasItemTag(STONE_TIER)) return 4d;
+        if (itemType.hasItemTag(IRON_TIER)) return 6d;
+        if (itemType.hasItemTag(DIAMOND_TIER)) return 8d;
+        if (itemType.hasItemTag(NETHERITE_TIER)) return 9d;
+        if (itemType.hasItemTag(GOLDEN_TIER)) return 12d;
         return 1d;
     }
 
     /**
-     * Check if this item is the correct tool for breaking the specified block.
-     * <p>
-     * If it's not the correct tool, breaking the block with this item will result in speed penalty and no drops.
+     * Checks if this is the correct tool for a block.
      *
-     * @param blockState The block to be broken
+     * @param blockState the {@link BlockState} to break
      *
-     * @return Whether it is the correct tool
+     * @return {@code true} if correct, {@code false} otherwise
      */
     boolean isCorrectToolFor(BlockState blockState);
 
     /**
-     * Check if this item can instantly break the specified block.
+     * Checks if this item can instantly break a block.
      *
-     * @param blockState The block to be broken
+     * @param blockState the {@link BlockState} to break
      *
-     * @return Whether the block can be instantly broken
+     * @return {@code true} if instant, {@code false} otherwise
      */
     default boolean canInstantBreak(BlockState blockState) {
-        double blockHardness = blockState.getBlockStateData().hardness();
+        var blockHardness = blockState.getBlockStateData().hardness();
         // Blocks with hardness of 0 can be instantly broken
-        if (blockHardness == 0) return true;
+        if (blockHardness == 0) {
+            return true;
+        }
+
         if (getItemType().hasItemTag(IS_SWORD)) {
             // Swords can break bamboo instantly
             return blockState.getBlockType() == BlockTypes.BAMBOO;
         }
+
         return false;
     }
 
     /**
-     * Check if all enchantments are available to this item when trying to enchant it in enchant
-     * table. If return {@code true}, enchantment option generator will ignore the return value
-     * of {@link EnchantmentType#canBeAppliedTo(ItemType)}. This method is usually used in book.
+     * Checks if all enchantments are available in an enchant table.
      *
-     * @return {@code true} if all enchantments are available, {@code false} otherwise.
+     * @return {@code true} if all available, {@code false} otherwise
      */
     default boolean isAllEnchantmentsAvailableInEnchantTable() {
         return false;
     }
 
     /**
-     * Check if the specified enchantment type is compatible with the enchantment types
-     * that this item already has. It won't check if the enchantment can be applied to
-     * this item type.
+     * Checks compatibility with an enchantment type.
      *
-     * @param type The enchantment type to check.
+     * @param type the {@link EnchantmentType} to check
      *
-     * @return {@code true} if the enchantment is compatible, {@code false} otherwise.
+     * @return {@code true} if compatible, {@code false} otherwise
      */
     default boolean checkEnchantmentCompatibility(EnchantmentType type) {
         return getIncompatibleEnchantmentTypes(type).isEmpty();
     }
 
     /**
-     * Get the incompatible enchantment types with the specified type.
+     * Gets incompatible enchantment types.
      *
-     * @param type The enchantment type.
+     * @param type the {@link EnchantmentType} to check
      *
-     * @return The incompatible enchantment types.
+     * @return the {@link Set} of incompatible {@link EnchantmentType}
      */
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {
         return getEnchantments().stream()
@@ -570,53 +591,53 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Get the block entity nbt in the item.
+     * Gets the block entity NBT data.
      * <p>
      * The block entity nbt will be stored in the item if player pick a block with ctrl pressed,
      * and the nbt will be used when the player place the block. Note that not every block has
      * block entity, so setting block entity nbt in an item whose block doesn't have block entity
      * will have no effect.
      *
-     * @return the block entity nbt in the item, or {@code null} if the item doesn't have block entity nbt.
+     * @return the {@link NbtMap}, or {@code null} if absent
      */
     NbtMap getBlockEntityNBT();
 
     /**
-     * Set the block entity nbt in the item.
-     * <p>
-     * The position information in the nbt will be simply removed when placing block.
+     * Sets the block entity NBT data.
      *
-     * @param blockEntityNBT the block entity nbt to set, can be {@code null} to clean the block entity nbt.
+     * @param blockEntityNBT the {@link NbtMap}, or {@code null} to clear
      */
     void setBlockEntityNBT(NbtMap blockEntityNBT);
 
     /**
-     * Clear the block entity nbt in the item.
-     */
-    default void clearBlockEntityNBT() {
-        setBlockEntityNBT(null);
-    }
-
-    /**
-     * Check if the item has block entity nbt.
+     * Checks for block entity NBT data.
      *
-     * @return {@code true} if the item has block entity nbt, {@code false} otherwise.
+     * @return {@code true} if present, {@code false} otherwise
      */
     default boolean hasBlockEntityNBT() {
         return getBlockEntityNBT() != null;
     }
 
     /**
-     * Get the lock mode of the item.
+     * Gets the item lock mode.
      *
-     * @return The lock mode of the item.
+     * @return the {@link ItemLockMode}
      */
     ItemLockMode getLockMode();
 
     /**
-     * Set the lock mode of the item.
+     * Sets the item lock mode.
      *
-     * @param lockMode The lock mode of the item.
+     * @param lockMode the {@link ItemLockMode}
      */
     void setLockMode(ItemLockMode lockMode);
+
+    /**
+     * Checks if the item stack is empty or air.
+     *
+     * @return {@code true} if empty or air, {@code false} otherwise
+     */
+    default boolean isEmptyOrAir() {
+        return getItemType() == ItemTypes.AIR || getCount() == 0;
+    }
 }

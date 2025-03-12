@@ -6,16 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * MinecraftVersionSensitive annotation is used to mark classes or classes under certain package
- * that may be changed when updating to the next minecraft version.
+ * Indicates that the annotated element may change with updates to Minecraft versions.
  * <p>
- * Although classes marked with this annotation are present in api, they are not part
- * of the public api. However, we decided to keep them in the api to make the developers
- * who believe that they are able to update their plugins during version updating timely
- * to develop plugins easier.
+ * This annotation is used to mark classes, fields, or packages that are subject to modification
+ * when updating to a new Minecraft version. While these elements are included in the API,
+ * they are not considered part of the stable public API. They are provided to assist developers
+ * who are willing and able to update their plugins promptly during version transitions.
  * <p>
- * If you decided to use these classes, you should be aware
- * that they may be changed in the future, and you need to update your code accordingly.
+ * Developers using elements marked with this annotation should be aware that they may change
+ * in future updates, requiring corresponding adjustments to their code.
  *
  * @author daoge_cmd
  */

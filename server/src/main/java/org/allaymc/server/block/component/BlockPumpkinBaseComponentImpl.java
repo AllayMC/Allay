@@ -30,7 +30,7 @@ public class BlockPumpkinBaseComponentImpl extends BlockBaseComponentImpl {
                 interactInfo.clickedBlockPos(),
                 BlockTypes.CARVED_PUMPKIN.copyPropertyValuesFrom(interactInfo.getClickedBlockState())
         );
-        itemStack.tryReduceDurability(1);
+        itemStack.tryIncreaseDamage(1);
         return true;
     }
 }

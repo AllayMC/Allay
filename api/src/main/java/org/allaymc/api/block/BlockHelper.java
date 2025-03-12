@@ -8,13 +8,12 @@ import org.allaymc.api.item.data.ToolTier;
  * @author daoge_cmd
  */
 public final class BlockHelper {
-
     /**
-     * Get the required tool tier to break the block.
+     * Gets the tool tier required to break a block type.
      *
-     * @param blockType the block type.
+     * @param blockType the {@link BlockType} to check
      *
-     * @return the required tool tier, or {@code null} if no tool tier is required.
+     * @return the required {@link ToolTier}, or {@code null} if none is needed
      */
     public static ToolTier getRequiredToolTier(BlockType<?> blockType) {
         if (blockType.hasBlockTag(BlockTags.DIAMOND_TIER_DESTRUCTIBLE)) {

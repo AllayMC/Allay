@@ -21,7 +21,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 @Slf4j
 public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeAction> {
     @Override
-    public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
         var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var sourceStackNetworkId = action.getSource().getStackNetworkId();
@@ -51,10 +51,10 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
 
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);
-            sourceContainer.notifySlotChange(slot);
+            sourceContainer.notifySlotChange(slot, false);
         } else {
             item = ItemAirStack.AIR_STACK;
-            sourceContainer.clearSlot(slot);
+            sourceContainer.clearSlot(slot, false);
         }
 
         return new ActionResponse(
@@ -69,7 +69,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
                                                 item.getCustomName(),
-                                                item.getDurability(),
+                                                item.getDamage(),
                                                 ""
                                         )
                                 ),

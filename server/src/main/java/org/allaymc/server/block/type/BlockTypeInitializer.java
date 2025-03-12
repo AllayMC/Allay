@@ -1384,4 +1384,51 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockGlazedTerracottaBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initStonecutterBlock() {
+        BlockTypes.STONECUTTER_BLOCK = AllayBlockType
+                .builder(BlockStonecutterBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.STONECUTTER_BLOCK)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockStonecutterBlockBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initGrindstone() {
+        BlockTypes.GRINDSTONE = AllayBlockType
+                .builder(BlockGrindstoneBehaviorImpl.class)
+                .vanillaBlock(BlockId.GRINDSTONE)
+                .setProperties(BlockPropertyTypes.ATTACHMENT, BlockPropertyTypes.DIRECTION_4)
+                .setBaseComponentSupplier(BlockGrindstoneBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initAnvil() {
+        BlockTypes.ANVIL = AllayBlockType
+                .builder(BlockAnvilBehaviorImpl.class)
+                .vanillaBlock(BlockId.ANVIL)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.CHIPPED_ANVIL))
+                .build();
+        BlockTypes.CHIPPED_ANVIL = AllayBlockType
+                .builder(BlockAnvilBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHIPPED_ANVIL)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.DAMAGED_ANVIL))
+                .build();
+        BlockTypes.DAMAGED_ANVIL = AllayBlockType
+                .builder(BlockAnvilBehaviorImpl.class)
+                .vanillaBlock(BlockId.DAMAGED_ANVIL)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.AIR))
+                .build();
+    }
+
+    public static void initSmithingTable() {
+        BlockTypes.SMITHING_TABLE = AllayBlockType
+                .builder(BlockSmithingTableBehaviorImpl.class)
+                .vanillaBlock(BlockId.SMITHING_TABLE)
+                .setBaseComponentSupplier(BlockSmithingTableBaseComponentImpl::new)
+                .build();
+    }
 }

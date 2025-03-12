@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class MineBlockActionProcessor implements ContainerActionProcessor<MineBlockAction> {
     @Override
-    public ActionResponse handle(MineBlockAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(MineBlockAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
         int handSlot = player.getHandSlot();
         if (handSlot != action.getHotbarSlot()) {
@@ -33,8 +33,8 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
             return error();
         }
 
-        if (itemInHand.getDurability() != action.getPredictedDurability()) {
-            log.warn("Durability predicted by the client does not match that of the server! client: {}, server: {}, player: {}", action.getPredictedDurability(), itemInHand.getDurability(), player.getOriginName());
+        if (itemInHand.getDamage() != action.getPredictedDurability()) {
+            log.warn("Durability predicted by the client does not match that of the server! client: {}, server: {}, player: {}", action.getPredictedDurability(), itemInHand.getDamage(), player.getOriginName());
         }
         return new ActionResponse(
                 true,
@@ -48,7 +48,7 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
                                                 itemInHand.getCount(),
                                                 itemInHand.getStackNetworkId(),
                                                 itemInHand.getCustomName(),
-                                                itemInHand.getDurability(),
+                                                itemInHand.getDamage(),
                                                 ""
                                         )
                                 ),

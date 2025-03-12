@@ -28,6 +28,6 @@ public class ItemHoeComponentImpl extends ItemToolComponentImpl {
 
         event.getDimension().setBlockState(blockPos, BlockTypes.FARMLAND.ofState(BlockPropertyTypes.MOISTURIZED_AMOUNT.createValue(0)));
         event.getDimension().addLevelSoundEvent(MathUtils.center(blockPos), SoundEvent.ITEM_USE_ON, clickedBlock.blockStateHash());
-        event.getInteractInfo().player().getItemInHand().tryReduceDurability(1);
+        event.getInteractInfo().player().getItemInHand().tryIncreaseDamage(1);
     }
 }

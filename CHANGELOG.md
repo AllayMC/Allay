@@ -14,9 +14,31 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.2.0](https://github.com/AllayMC/Allay/compare/0.2.0...HEAD)</small>
 
+### Added
+
+- (API) Added `ANVIL`, `STONECUTTER`, `GRINDSTONE`, `CARTOGRAPHY_TABLE`, `LOOM` and `SMITHING_TABLE` container types.
+- (API) Implemented all behaviors for `Stonecutter`, `Grindstone`, `Smithing Table` and `Anvil`.
+- (API) Added `ItemStack#isEmptyOrAir()` method.
+- (API) Added `BlockPlaceHelper#processDirection4Property()` method.
+- (API) Added `RecipeContainer` interface for validating crafting packets.
+- (API) Added `ItemRepairableComponent` to check if an item can be repaired with a specific material.
+- (API) Added `ItemTrimmableComponent` for trimming armor.
+- (API) Added `AnvilDamageEvent`, `AnvilTakeResultEvent` and `GrindstoneTakeResultEvent` for plugins.
+- Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
+
+### Changed
+
+- (API) Renamed durability related methods in`ItemBaseComponent`:
+  - `getDurability()` -> `getDamage()`
+  - `setDurability()` -> `setDamage()`
+  - `tryReduceDurability()` -> `tryIncreaseDamage()`
+- Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
+
 ### Fixed
 
 - Fixed skin display issue in 1.21.60.
+
+### Removed
 
 ## 0.2.0 (API 0.5.0) - 2025-3-3
 

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 
+import java.util.Objects;
+
 /**
  * Represents an instance of an enchantment.
  *
@@ -57,5 +59,19 @@ public class EnchantmentInstance {
 
     public EnchantData toNetwork() {
         return new EnchantData(getType().getId(), getLevel());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof EnchantmentInstance that)) {
+            return false;
+        }
+
+        return Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(type);
     }
 }

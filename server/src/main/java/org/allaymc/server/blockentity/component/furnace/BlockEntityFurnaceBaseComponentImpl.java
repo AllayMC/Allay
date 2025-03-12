@@ -15,7 +15,7 @@ import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
-import org.allaymc.api.item.recipe.input.FurnaceInput;
+import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
@@ -58,7 +58,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     protected int currentIngredientStackNetworkId = Integer.MAX_VALUE;
     protected FurnaceRecipe currentFurnaceRecipe = null;
-    protected FurnaceInput currentFurnaceInput = null;
+    protected FurnaceRecipeInput currentFurnaceRecipeInput = null;
 
     public BlockEntityFurnaceBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -102,7 +102,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public float getCurrentSpeed() {
-        return currentFurnaceRecipe.isFurnaceTypeMostSuitable(currentFurnaceInput) ? getIdealSpeed() : getNormalSpeed();
+        return currentFurnaceRecipe.isFurnaceTypeMostSuitable(currentFurnaceRecipeInput) ? getIdealSpeed() : getNormalSpeed();
     }
 
     @Override
@@ -220,7 +220,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         var furnaceRecipe = matchFurnaceRecipe(ingredient);
         if (furnaceRecipe == null) return false;
 
-        var furnaceInput = new FurnaceInput(ingredient, getFurnaceRecipeTag());
+        var furnaceInput = new FurnaceRecipeInput(ingredient, getFurnaceRecipeTag());
         if (!furnaceRecipe.match(furnaceInput)) {
             log.warn("Furnace recipe does not match input! Recipe: {}, Input: {}", furnaceRecipe.getIdentifier(), ingredient.getItemType().getIdentifier());
             return false;
@@ -228,7 +228,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
         currentIngredientStackNetworkId = ingredient.getStackNetworkId();
         currentFurnaceRecipe = furnaceRecipe;
-        currentFurnaceInput = furnaceInput;
+        currentFurnaceRecipeInput = furnaceInput;
         return true;
     }
 

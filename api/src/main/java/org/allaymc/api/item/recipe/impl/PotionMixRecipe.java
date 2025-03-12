@@ -6,8 +6,8 @@ import lombok.ToString;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.item.recipe.input.Input;
-import org.allaymc.api.item.recipe.input.PotionMixInput;
+import org.allaymc.api.item.recipe.input.RecipeInput;
+import org.allaymc.api.item.recipe.input.PotionMixRecipeInput;
 import org.allaymc.api.utils.Identified;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
@@ -48,9 +48,9 @@ public class PotionMixRecipe implements Recipe<PotionMixData>, Identified {
     }
 
     @Override
-    public boolean match(Input input) {
-        if (input instanceof PotionMixInput potionMixInput) {
-            return ingredient.match(potionMixInput.getIngredient()) && reagent.match(potionMixInput.getReagent());
+    public boolean match(RecipeInput input) {
+        if (input instanceof PotionMixRecipeInput potionMixRecipeInput) {
+            return ingredient.match(potionMixRecipeInput.getIngredient()) && reagent.match(potionMixRecipeInput.getReagent());
         }
 
         return false;

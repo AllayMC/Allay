@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.tag.ItemTag;
 
+import java.util.Objects;
+
 /**
  * Represents an item tag descriptor.
  * <p>
@@ -27,5 +29,18 @@ public class ItemTagDescriptor implements ItemDescriptor {
         return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemTagDescriptor(
                 itemTag.name()
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ItemTagDescriptor that)) {
+            return false;
+        }
+        return Objects.equals(itemTag, that.itemTag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(itemTag);
     }
 }

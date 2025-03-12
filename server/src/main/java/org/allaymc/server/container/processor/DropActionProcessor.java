@@ -20,7 +20,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 @Slf4j
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
     @Override
-    public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
+    public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
@@ -55,7 +55,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
                                                 item.getCustomName(),
-                                                item.getDurability(),
+                                                item.getDamage(),
                                                 ""
                                         )
                                 ),

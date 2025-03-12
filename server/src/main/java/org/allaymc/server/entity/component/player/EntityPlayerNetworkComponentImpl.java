@@ -330,6 +330,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(DeferredData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(DeferredData.BIOME_DEFINITION_LIST_PACKET.get());
         sendPacket(DeferredData.CRAFTING_DATA_PACKET.get());
+        sendPacket(DeferredData.TRIM_DATA_PACKET.get());
     }
 
     protected StartGamePacket encodeStartGamePacket(World spawnWorld, PlayerData playerData, Dimension dimension) {

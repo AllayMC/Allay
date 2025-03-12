@@ -1,6 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.recipe.Recipe;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CreateAction;
@@ -9,7 +10,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 
 import java.util.Map;
 
-import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
 import static org.allaymc.server.container.processor.CraftRecipeActionProcessor.RECIPE_DATA_KEY;
 
 /**
@@ -18,8 +18,8 @@ import static org.allaymc.server.container.processor.CraftRecipeActionProcessor.
 @Slf4j
 public class CreateActionProcessor implements ContainerActionProcessor<CreateAction> {
     @Override
-    public ActionResponse handle(CreateAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        var recipe = (Recipe) dataPool.get(RECIPE_DATA_KEY);
+    public ActionResponse handle(CreateAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+        var recipe = (Recipe<?>) dataPool.get(RECIPE_DATA_KEY);
         if (recipe == null) {
             log.warn("Recipe not found in data pool!");
             return error();
@@ -27,7 +27,7 @@ public class CreateActionProcessor implements ContainerActionProcessor<CreateAct
 
         // No need to copy because when we get item from created output, we will copy it
         var output = recipe.getOutputs()[action.getSlot()];
-        player.getContainer(CREATED_OUTPUT).setItemStack(0, output);
+        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(output);
         return null;
     }
 

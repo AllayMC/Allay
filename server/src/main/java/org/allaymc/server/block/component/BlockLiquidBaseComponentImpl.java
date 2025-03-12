@@ -344,7 +344,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             }
         }
 
-        var removedOnTouch = liquidReactionOnTouch.removedOnTouch();
+        var removedOnTouch = liquidReactionOnTouch.shouldRemoveOnTouch();
         if (!(existing.getBlockType() == BlockTypes.AIR || removedOnTouch) && (!canContainLiquid || !liquidReactionOnTouch.canLiquidFlowInto()/*canContainSpecificLiquid(existing.getBlockStateData(), getLiquidBlockState(newDepth, falling))*/)) {
             // Can't flow into this block.
             return false;
@@ -483,7 +483,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     protected boolean canFlowInto(Dimension dimension, int x, int y, int z, boolean sideways) {
         var existing = dimension.getBlockState(x, y, z);
         if (existing.getBlockType() == BlockTypes.AIR ||
-            existing.getBlockStateData().liquidReactionOnTouch().removedOnTouch()) {
+            existing.getBlockStateData().liquidReactionOnTouch().shouldRemoveOnTouch()) {
             return true;
         }
 
