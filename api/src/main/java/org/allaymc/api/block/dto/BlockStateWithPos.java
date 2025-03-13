@@ -2,6 +2,7 @@ package org.allaymc.api.block.dto;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
@@ -54,5 +55,9 @@ public record BlockStateWithPos(
      */
     public Dimension dimension() {
         return pos.dimension();
+    }
+
+    public <T extends BlockEntity> T getBlockEntity() {
+        return (T) dimension().getBlockEntity(pos);
     }
 }

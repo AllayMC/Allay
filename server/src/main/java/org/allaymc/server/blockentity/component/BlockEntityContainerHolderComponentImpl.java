@@ -4,7 +4,6 @@ import lombok.Setter;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -20,7 +19,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -38,16 +36,6 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
 
     public BlockEntityContainerHolderComponentImpl(Supplier<Container> containerSupplier) {
         this.container = containerSupplier.get();
-    }
-
-    public BlockEntityContainerHolderComponentImpl(
-            Supplier<Container> containerSupplier,
-            Consumer<ContainerViewer> onOpenListener,
-            Consumer<ContainerViewer> onCloseListener
-    ) {
-        this.container = containerSupplier.get();
-        this.container.addOnOpenListener(onOpenListener);
-        this.container.addOnCloseListener(onCloseListener);
     }
 
     @Override
@@ -117,8 +105,10 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     public <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {
         // BlockEntityContainerHolder can only hold one container in its lifetime
         // So we only need to check the slotType which caller provided
-        if (!container.getContainerType().heldSlotTypes().contains(slotType))
+        if (!container.getContainerType().heldSlotTypes().contains(slotType)) {
             throw new IllegalArgumentException("The container " + container.getContainerType() + " does not have the slot type " + slotType);
+        }
+
         return (T) container;
     }
 }
