@@ -126,7 +126,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
      */
     default BlockState getBlockState() {
         var pos = getPosition();
-        return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z());
+        return pos.dimension().getBlockState(pos);
     }
 
     /**
@@ -150,12 +150,5 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
      */
     default boolean hasCustomName() {
         return getCustomName() != null;
-    }
-
-    /**
-     * Clears the custom name of the block entity.
-     */
-    default void clearCustomName() {
-        setCustomName(null);
     }
 }

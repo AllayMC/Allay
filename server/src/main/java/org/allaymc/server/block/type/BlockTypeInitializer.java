@@ -399,6 +399,7 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.CHEST)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.CHEST)
+                .setBaseComponentSupplier(BlockChestBaseComponentImpl::new)
                 .build();
     }
 

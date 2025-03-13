@@ -1,6 +1,7 @@
 package org.allaymc.server.blockentity.impl;
 
 import lombok.experimental.Delegate;
+import org.allaymc.api.blockentity.component.BlockEntityChestBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
@@ -18,5 +19,11 @@ public class BlockEntityChestImpl extends BlockEntityImpl implements BlockEntity
 
     public BlockEntityChestImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
+    }
+
+    @Delegate
+    @Override
+    public BlockEntityChestBaseComponent getBaseComponent() {
+        return (BlockEntityChestBaseComponent) super.getBaseComponent();
     }
 }

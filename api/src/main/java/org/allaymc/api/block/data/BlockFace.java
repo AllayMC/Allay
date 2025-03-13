@@ -35,13 +35,6 @@ public enum BlockFace {
 
     private final Vector3ic offset;
 
-    /**
-     * Get the block face by index.
-     *
-     * @param value the index.
-     *
-     * @return the block face.
-     */
     public static BlockFace fromId(int value) {
         return switch (value) {
             case 0 -> BlockFace.DOWN;
@@ -72,36 +65,46 @@ public enum BlockFace {
         return VERTICAL_BLOCK_FACES;
     }
 
+    @ApiStatus.Experimental
+    public static BlockFace fromMinecraftCardinalDirection(MinecraftCardinalDirection direction) {
+        return switch (direction) {
+            case NORTH -> NORTH;
+            case SOUTH -> SOUTH;
+            case EAST -> EAST;
+            case WEST -> WEST;
+        };
+    }
+
     /**
-     * Add current block face offset to the given pos.
+     * Adds the current block face offset to the specified coordinates.
      *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
      *
-     * @return the result pos.
+     * @return a new Vector3ic representing the resulting position
      */
     public Vector3ic offsetPos(int x, int y, int z) {
         return offset.add(x, y, z, new Vector3i());
     }
 
     /**
-     * Add current block face offset to the given pos.
+     * Adds the current block face offset to the specified position.
      *
-     * @param pos the pos.
+     * @param pos the position to offset
      *
-     * @return the result pos.
+     * @return a new Vector3ic representing the resulting position
      */
     public Vector3ic offsetPos(Vector3ic pos) {
         return offset.add(pos, new Vector3i());
     }
 
     /**
-     * Rotate the given AABB.
+     * Rotates the given AABB based on this block face.
      *
-     * @param aabb the AABB.
+     * @param aabb the axis-aligned bounding box to rotate
      *
-     * @return the rotated AABB.
+     * @return a new AABBd representing the rotated bounding box
      */
     public AABBd rotateAABB(AABBdc aabb) {
         var c1 = new Vector3d(aabb.minX(), aabb.minY(), aabb.minZ());
@@ -119,11 +122,11 @@ public enum BlockFace {
     }
 
     /**
-     * Rotate the given vector.
+     * Rotates the given vector based on this block face.
      *
-     * @param vec the vector.
+     * @param vec the vector to rotate
      *
-     * @return the rotated vector.
+     * @return a new Vector3d representing the rotated vector
      */
     @SuppressWarnings("SuspiciousNameCombination")
     public Vector3d rotateVector(Vector3dc vec) {
@@ -163,16 +166,9 @@ public enum BlockFace {
         }
 
         // Translate back to original point
-        result.add(0.5, 0.5, 0.5);
-
-        return result;
+        return result.add(0.5, 0.5, 0.5);
     }
 
-    /**
-     * Get the opposite block face.
-     *
-     * @return the opposite block face.
-     */
     public BlockFace opposite() {
         return switch (this) {
             case DOWN -> UP;
@@ -185,9 +181,11 @@ public enum BlockFace {
     }
 
     /**
-     * Rotate this BlockFace around the Y axis clockwise (NORTH =&gt; EAST =&gt; SOUTH =&gt; WEST =&gt; NORTH).
+     * Rotates this block face clockwise around the Y axis (NORTH => EAST => SOUTH => WEST => NORTH).
      *
-     * @return block face.
+     * @return the rotated {@link BlockFace}
+     *
+     * @throws IllegalStateException if this face is {@link #UP} or {@link #DOWN}
      */
     public BlockFace rotateY() {
         return switch (this) {
@@ -200,9 +198,11 @@ public enum BlockFace {
     }
 
     /**
-     * Rotate this BlockFace around the Y axis counter-clockwise (NORTH =&gt; WEST =&gt; SOUTH =&gt; EAST =&gt; NORTH).
+     * Rotates this block face counter-clockwise around the Y axis (NORTH => WEST => SOUTH => EAST => NORTH).
      *
-     * @return block face.
+     * @return the rotated {@link BlockFace}
+     *
+     * @throws IllegalStateException if this face is {@link #UP} or {@link #DOWN}
      */
     public BlockFace rotateYCCW() {
         return switch (this) {
@@ -215,18 +215,27 @@ public enum BlockFace {
     }
 
     /**
-     * Check if this block face is vertical.
+     * Checks if this block face is horizontal.
      *
-     * @return true if vertical, false if not.
+     * @return {@code true} if this face is {@link #NORTH}, {@link #EAST}, {@link #SOUTH}, or {@link #WEST}, {@code false} otherwise
      */
     public boolean isHorizontal() {
         return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
 
     /**
-     * Get the Minecraft cardinal direction which represents this block face.
+     * Checks if this block face is vertical.
      *
-     * @return the Minecraft cardinal direction.
+     * @return {@code true} if this face is {@link #UP} or {@link #DOWN}, {@code false} otherwise
+     */
+    public boolean isVertical() {
+        return this == UP || this == DOWN;
+    }
+
+    /**
+     * Converts this block face to its corresponding Minecraft cardinal direction.
+     *
+     * @return the corresponding {@link MinecraftCardinalDirection}, or {@code null} if not applicable
      */
     @ApiStatus.Experimental
     public MinecraftCardinalDirection toMinecraftCardinalDirection() {
