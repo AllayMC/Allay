@@ -56,7 +56,6 @@ public final class AllayServer implements Server {
     private static final AllayServer INSTANCE = new AllayServer();
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
 
-    // TODO: replaced with ServerStatus
     private final AtomicBoolean isRunning;
     private final AtomicBoolean isStarting;
     private final AtomicBoolean isFullyStopped;
