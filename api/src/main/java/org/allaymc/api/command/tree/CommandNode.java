@@ -219,6 +219,20 @@ public interface CommandNode {
     CommandNode addLeaf(CommandNode leaf);
 
     /**
+     * Add a leaf node to this command node.
+     *
+     * @param leafProvider the provider that will provide the leaf node. The current command
+     *                     node will be passed to the provider, and the provider should return
+     *                     the leaf node. This is helpful for keeping chain calls when using
+     *                     custom command node.
+     *
+     * @return the {@code CommandNode}.
+     */
+    default CommandNode addLeaf(Function<CommandNode, CommandNode> leafProvider) {
+        return addLeaf(leafProvider.apply(this));
+    }
+
+    /**
      * Set the executor for this node, binding it to a specific sender type.
      *
      * @param <SENDER_TYPE> the type of the command sender.
