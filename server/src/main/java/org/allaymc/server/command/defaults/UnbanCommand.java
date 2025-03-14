@@ -20,7 +20,7 @@ public class UnbanCommand extends SimpleCommand {
                 .str("nameOrUUID")
                 .exec(context -> {
                     String nameOrUUID = context.getResult(0);
-                    if (Server.getInstance().unban(nameOrUUID)) {
+                    if (Server.getInstance().getPlayerService().unban(nameOrUUID)) {
                         context.addOutput(TrKeys.M_COMMANDS_UNBAN_SUCCESS, nameOrUUID);
                         return context.success();
                     } else {

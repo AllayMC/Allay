@@ -44,7 +44,7 @@ import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.AllayServer;
+import org.allaymc.server.client.service.AllayPlayerService;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
@@ -264,7 +264,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
         if (currentServerTick >= nextSavePlayerDataTime) {
-            Server.getInstance().getPlayerStorage().savePlayerData(thisPlayer);
+            Server.getInstance().getPlayerService().getPlayerStorage().savePlayerData(thisPlayer);
             nextSavePlayerDataTime = currentServerTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
         }
     }
@@ -455,8 +455,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setSkin(Skin skin) {
         this.skin = skin;
         var server = Server.getInstance();
-        server.broadcastPacket(createSkinPacket(skin));
-        ((AllayServer) server).onSkinUpdate(thisPlayer);
+        server.getPlayerService().broadcastPacket(createSkinPacket(skin));
+        ((AllayPlayerService) server.getPlayerService()).onSkinUpdate(thisPlayer);
     }
 
     protected PlayerSkinPacket createSkinPacket(Skin skin) {

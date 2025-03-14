@@ -20,7 +20,7 @@ public class BanCommand extends SimpleCommand {
                 .str("nameOrUUID")
                 .exec(context -> {
                     String nameOrUUID = context.getResult(0);
-                    if (Server.getInstance().ban(nameOrUUID)) {
+                    if (Server.getInstance().getPlayerService().ban(nameOrUUID)) {
                         context.addOutput(TrKeys.M_COMMANDS_BAN_SUCCESS, nameOrUUID);
                         return context.success();
                     } else {

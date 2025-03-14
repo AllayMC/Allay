@@ -25,7 +25,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
-import org.allaymc.server.AllayServer;
+import org.allaymc.server.client.service.AllayPlayerService;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
@@ -183,7 +183,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var server = Server.getInstance();
         var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT
-        thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getNbt());
+        thisPlayer.loadNBT(server.getPlayerService().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
@@ -197,9 +197,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
 
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
-        ((AllayServer) server).addToPlayerList(thisPlayer);
-        if (server.getOnlinePlayerCount() > 1) {
-            ((AllayServer) server).sendFullPlayerListInfoTo(thisPlayer);
+        ((AllayPlayerService) server.getPlayerService()).addToPlayerList(thisPlayer);
+        if (server.getPlayerService().getOnlinePlayerCount() > 1) {
+            ((AllayPlayerService) server.getPlayerService()).sendFullPlayerListInfoTo(thisPlayer);
         }
 
         thisPlayer.sendAttributesToClient();
@@ -214,7 +214,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         ((AllayWorld) world).sendWeather(thisPlayer);
 
         // Save player data the first time it joins
-        server.getPlayerStorage().savePlayerData(thisPlayer);
+        server.getPlayerService().getPlayerStorage().savePlayerData(thisPlayer);
     }
 
     @Override
@@ -263,7 +263,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     protected void onDisconnect(String disconnectReason) {
         thisPlayer.closeAllContainers();
-        ((AllayServer) Server.getInstance()).onDisconnect(thisPlayer);
+        ((AllayPlayerService) Server.getInstance().getPlayerService()).onDisconnect(thisPlayer);
         new PlayerQuitEvent(thisPlayer, disconnectReason).call();
     }
 
@@ -287,7 +287,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // initializePlayer() method will read all the data in PlayerData except nbt
         // To be more exactly, we will validate and set player's current pos in this method
         // And nbt will be used in EntityPlayer::loadNBT() in doFirstSpawn() method
-        var playerData = server.getPlayerStorage().readPlayerData(thisPlayer);
+        var playerData = server.getPlayerService().getPlayerStorage().readPlayerData(thisPlayer);
         // Validate and set player pos
         Dimension dimension;
         Vector3fc currentPos;
@@ -303,7 +303,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             writeVector3f(builder, EntityPlayerBaseComponentImpl.TAG_POS, currentPos);
             playerData.setNbt(builder.build());
             // Save new player data back to storage
-            server.getPlayerStorage().savePlayerData(thisPlayer.getUUID(), playerData);
+            server.getPlayerService().getPlayerStorage().savePlayerData(thisPlayer.getUUID(), playerData);
         } else {
             dimension = logOffWorld.getDimension(playerData.getDimension());
             // Read current pos from playerNBT
@@ -384,7 +384,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void completeLogin() {
-        if (Server.getInstance().getOnlinePlayerCount() >= Server.getInstance().getNetworkInterface().getMaxPlayerCount()) {
+        if (Server.getInstance().getPlayerService().getOnlinePlayerCount() >= Server.getInstance().getNetworkInterface().getMaxPlayerCount()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
             return;
         }
@@ -401,7 +401,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
         sendPacket(playStatusPacket);
 
-        ((AllayServer) Server.getInstance()).onLoggedIn(thisPlayer);
+        ((AllayPlayerService) Server.getInstance().getPlayerService()).onLoggedIn(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         sendPacket(DeferredData.RESOURCE_PACKS_INFO_PACKET.get());
     }

@@ -53,8 +53,8 @@ public class AllayNetworkInterface implements NetworkInterface {
 
     public void start() {
         var settings = Server.SETTINGS;
-        var nettyThreadNumber = settings.networkSettings().networkThreadNumber();
-        Preconditions.checkArgument(nettyThreadNumber >= 0);
+        var networkThreadNumber = settings.networkSettings().networkThreadNumber();
+        Preconditions.checkArgument(networkThreadNumber >= 0);
 
         this.pong = initPong(settings);
         this.bindAddress = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
@@ -64,13 +64,13 @@ public class AllayNetworkInterface implements NetworkInterface {
         EventLoopGroup eventLoopGroup;
         if (Epoll.isAvailable()) {
             datagramChannelClass = EpollDatagramChannel.class;
-            eventLoopGroup = new EpollEventLoopGroup(nettyThreadNumber, threadFactory);
+            eventLoopGroup = new EpollEventLoopGroup(networkThreadNumber, threadFactory);
         } else if (KQueue.isAvailable()) {
             datagramChannelClass = KQueueDatagramChannel.class;
-            eventLoopGroup = new KQueueEventLoopGroup(nettyThreadNumber, threadFactory);
+            eventLoopGroup = new KQueueEventLoopGroup(networkThreadNumber, threadFactory);
         } else {
             datagramChannelClass = NioDatagramChannel.class;
-            eventLoopGroup = new NioEventLoopGroup(nettyThreadNumber, threadFactory);
+            eventLoopGroup = new NioEventLoopGroup(networkThreadNumber, threadFactory);
         }
 
         this.channel = new ServerBootstrap()
@@ -87,7 +87,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                         }
 
                         var server = Server.getInstance();
-                        if (server.isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
+                        if (server.getPlayerService().isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
                             // TODO: I18n
                             session.disconnect("Your IP is banned!");
                             return;

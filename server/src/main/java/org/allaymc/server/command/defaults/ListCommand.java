@@ -19,7 +19,7 @@ public class ListCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
             var server = Server.getInstance();
-            var players = server.getOnlinePlayers().values();
+            var players = server.getPlayerService().getOnlinePlayers().values();
 
             var joiner = new StringJoiner(", ");
             players.forEach(player -> joiner.add(player.getDisplayName()));

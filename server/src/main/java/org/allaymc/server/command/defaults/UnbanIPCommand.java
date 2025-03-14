@@ -20,7 +20,7 @@ public class UnbanIPCommand extends SimpleCommand {
                 .str("ip")
                 .exec(context -> {
                     String ip = context.getResult(0);
-                    if (Server.getInstance().unbanIP(ip)) {
+                    if (Server.getInstance().getPlayerService().unbanIP(ip)) {
                         context.addOutput(TrKeys.M_COMMANDS_UNBANIP_SUCCESS, ip);
                         return context.success();
                     } else {
