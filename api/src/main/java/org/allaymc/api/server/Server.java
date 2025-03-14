@@ -7,7 +7,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
@@ -103,13 +102,6 @@ public interface Server extends TaskCreator, CommandSender {
     boolean isStarting();
 
     /**
-     * Get the network interface.
-     *
-     * @return the network interface.
-     */
-    NetworkInterface getNetworkInterface();
-
-    /**
      * Get the world pool.
      *
      * @return the world pool.
@@ -143,7 +135,7 @@ public interface Server extends TaskCreator, CommandSender {
      * @param text the text to broadcast.
      */
     default void broadcastText(String text) {
-        getPlayerService().getOnlinePlayers().values().forEach(player -> player.sendText(text));
+        getPlayerService().getPlayers().values().forEach(player -> player.sendText(text));
         sendText(text);
     }
 
@@ -178,7 +170,7 @@ public interface Server extends TaskCreator, CommandSender {
      */
     default void broadcastCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         sendCommandOutputs(sender, status, outputs);
-        getPlayerService().getOnlinePlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
+        getPlayerService().getPlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
     }
 
     @Override

@@ -51,7 +51,7 @@ public class WhitelistCommand extends SimpleCommand {
                 .key("list")
                 .exec(context -> {
                     var whitelist = Server.getInstance().getPlayerService().getWhitelistedPlayers();
-                    var onlineCount = (int) Server.getInstance().getPlayerService().getOnlinePlayers().values().stream()
+                    var onlineCount = (int) Server.getInstance().getPlayerService().getPlayers().values().stream()
                             .filter(player -> whitelist.contains(player.getUUID().toString()) ||
                                               whitelist.contains(player.getOriginName()))
                             .count();

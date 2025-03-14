@@ -198,7 +198,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
         ((AllayPlayerService) server.getPlayerService()).addToPlayerList(thisPlayer);
-        if (server.getPlayerService().getOnlinePlayerCount() > 1) {
+        if (server.getPlayerService().getPlayerCount() > 1) {
             ((AllayPlayerService) server.getPlayerService()).sendFullPlayerListInfoTo(thisPlayer);
         }
 
@@ -384,7 +384,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void completeLogin() {
-        if (Server.getInstance().getPlayerService().getOnlinePlayerCount() >= Server.getInstance().getNetworkInterface().getMaxPlayerCount()) {
+        if (Server.getInstance().getPlayerService().getPlayerCount() >= Server.getInstance().getPlayerService().getMaxPlayerCount()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
             return;
         }

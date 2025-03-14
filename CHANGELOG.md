@@ -35,7 +35,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   - `getDurability()` -> `getDamage()`
   - `setDurability()` -> `setDamage()`
   - `tryReduceDurability()` -> `tryIncreaseDamage()`
-- (API) Player, ban/whitelist related methods are moved from `Server` to the newly introduced class `PlayerService`. 
+- (API) Moved player, ban/whitelist related methods from `Server` to the new `PlayerService` class.
+- (API) Moved `Server#getNetworkInterface` method from `Server` to the new `PlayerService` class. `NetworkInterface` is now held by `PlayerService` rather than `Server`.
 - Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
 
 ### Fixed

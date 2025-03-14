@@ -343,12 +343,12 @@ public final class Dashboard {
     }
 
     private void updateOnlinePlayerCount() {
-        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText(I18n.get().tr(TrKeys.A_GUI_PLAYER_ONLINE, Server.getInstance().getPlayerService().getOnlinePlayerCount())));
+        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText(I18n.get().tr(TrKeys.A_GUI_PLAYER_ONLINE, Server.getInstance().getPlayerService().getPlayerCount())));
     }
 
     private void updateOnlinePlayerTable() {
         var title = new String[]{I18n.get().tr(TrKeys.A_GUI_PLAYER_NAME), I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS), I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID)};
-        var players = Server.getInstance().getPlayerService().getOnlinePlayers().values();
+        var players = Server.getInstance().getPlayerService().getPlayers().values();
         String[][] data = new String[players.size()][3];
         int row = 0;
         for (var player : players) {

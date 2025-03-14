@@ -57,7 +57,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var otherDevice = server.getPlayerService().getOnlinePlayers().get(loginData.getUuid());
+        var otherDevice = server.getPlayerService().getPlayers().get(loginData.getUuid());
         if (otherDevice != null) {
             otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }

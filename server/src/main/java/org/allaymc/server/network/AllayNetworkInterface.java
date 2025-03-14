@@ -135,12 +135,10 @@ public class AllayNetworkInterface implements NetworkInterface {
         updatePong();
     }
 
-    @Override
     public int getMaxPlayerCount() {
         return pong.maximumPlayerCount();
     }
 
-    @Override
     public void setMaxPlayerCount(int maxPlayerCount) {
         pong.maximumPlayerCount(maxPlayerCount);
         updatePong();

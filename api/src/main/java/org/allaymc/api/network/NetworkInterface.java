@@ -38,18 +38,4 @@ public interface NetworkInterface {
      * @return the current sub-motd.
      */
     String getSubMotd();
-
-    /**
-     * Set the current max player count of the server.
-     *
-     * @param maxPlayerCount the new max player count.
-     */
-    void setMaxPlayerCount(int maxPlayerCount);
-
-    /**
-     * Get the current max player count of the server.
-     *
-     * @return the current max player count.
-     */
-    int getMaxPlayerCount();
 }

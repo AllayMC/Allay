@@ -5,6 +5,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -27,16 +28,30 @@ public interface PlayerService {
      * @return the online players.
      */
     @UnmodifiableView
-    Map<UUID, EntityPlayer> getOnlinePlayers();
+    Map<UUID, EntityPlayer> getPlayers();
 
     /**
      * Get the online player count of the server.
      *
      * @return the online player count of the server.
      */
-    default int getOnlinePlayerCount() {
-        return getOnlinePlayers().size();
+    default int getPlayerCount() {
+        return getPlayers().size();
     }
+
+    /**
+     * Set the maximum online player count of the server.
+     *
+     * @param value the maximum online player count of the server.
+     */
+    void setMaxPlayerCount(int value);
+
+    /**
+     * Get the maximum online player count of the server.
+     *
+     * @return the maximum online player count of the server.
+     */
+    int getMaxPlayerCount();
 
     /**
      * Disconnect all players with the default reason.
@@ -51,7 +66,7 @@ public interface PlayerService {
      * @param reason the reason of the disconnection.
      */
     default void disconnectAllPlayers(@MayContainTrKey String reason) {
-        getOnlinePlayers().values().forEach(player -> player.disconnect(reason));
+        getPlayers().values().forEach(player -> player.disconnect(reason));
     }
 
     /**
@@ -74,7 +89,7 @@ public interface PlayerService {
      * @return the player if found, otherwise {@code null}.
      */
     default EntityPlayer getOnlinePlayerByName(String playerName) {
-        return getOnlinePlayers().values().stream()
+        return getPlayers().values().stream()
                 .filter(player -> player.getCommandSenderName().equals(playerName))
                 .findFirst()
                 .orElse(null);
@@ -170,7 +185,7 @@ public interface PlayerService {
 
         Server.SETTINGS.genericSettings().isWhitelisted(enable);
         if (enable) {
-            getOnlinePlayers().values().stream()
+            getPlayers().values().stream()
                     .filter(player -> !isWhitelisted(player))
                     .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
         }
@@ -221,4 +236,11 @@ public interface PlayerService {
      */
     @UnmodifiableView
     Set<String> getWhitelistedPlayers();
+
+    /**
+     * Get the network interface.
+     *
+     * @return the network interface.
+     */
+    NetworkInterface getNetworkInterface();
 }

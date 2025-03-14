@@ -13,7 +13,6 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.plugin.PluginManager;
@@ -77,8 +76,6 @@ public final class AllayServer implements Server {
     private final PluginManager pluginManager;
     @Getter
     private final Scheduler scheduler;
-    @Getter
-    private final NetworkInterface networkInterface;
     private final AllayTerminalConsole terminalConsole;
     private final GameLoop gameLoop;
 
@@ -89,7 +86,7 @@ public final class AllayServer implements Server {
         this.isRunning = new AtomicBoolean(true);
         this.isStarting = new AtomicBoolean(true);
         this.isFullyStopped = new AtomicBoolean(false);
-        this.playerService = new AllayPlayerService(Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE);
+        this.playerService = new AllayPlayerService(Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE, new AllayNetworkInterface(this));
         this.worldPool = new AllayWorldPool();
         this.computeThreadPool = createComputeThreadPool();
         this.virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
@@ -97,7 +94,6 @@ public final class AllayServer implements Server {
         this.scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
         this.pluginManager = new AllayPluginManager();
         this.scheduler = new AllayScheduler(virtualThreadPool);
-        this.networkInterface = new AllayNetworkInterface(this);
         this.terminalConsole = new AllayTerminalConsole(AllayServer.this);
         this.gameLoop = GameLoop.builder()
                 .loopCountPerSec(20)
@@ -170,13 +166,13 @@ public final class AllayServer implements Server {
             Thread.ofVirtual().name("Console Thread").start(terminalConsole::start);
         }
 
-        ((AllayPluginManager) pluginManager).loadPlugins();
+        ((AllayPluginManager) this.pluginManager).loadPlugins();
         this.worldPool.loadWorlds();
         this.scoreboardService.read();
-        ((AllayPluginManager) pluginManager).enablePlugins();
+        ((AllayPluginManager) this.pluginManager).enablePlugins();
 
         sendTr(TrKeys.A_NETWORK_INTERFACE_STARTING);
-        ((AllayNetworkInterface) this.networkInterface).start();
+        ((AllayPlayerService) this.playerService).startNetworkInterface();
         this.startTime = System.currentTimeMillis();
         sendTr(
                 TrKeys.A_NETWORK_INTERFACE_STARTED,
@@ -215,7 +211,7 @@ public final class AllayServer implements Server {
 
     private void shutdownReally() {
         // Shutdown network server to prevent new client connecting to the server
-        ((AllayNetworkInterface) this.networkInterface).shutdown();
+        ((AllayPlayerService) this.playerService).shutdownNetworkInterface();
         this.scheduler.shutdown();
 
         new ServerStopEvent().call();
@@ -245,7 +241,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void broadcastTr(@MayContainTrKey String tr, Object... args) {
-        playerService.getOnlinePlayers().values().forEach(player -> player.sendTr(tr, args));
+        playerService.getPlayers().values().forEach(player -> player.sendTr(tr, args));
         sendTr(tr, args);
     }
 

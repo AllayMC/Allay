@@ -38,18 +38,21 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AllayPlayerService implements PlayerService {
 
-    private static final String BAN_INFO_FILE_NAME = "ban-info.yml";
-    private static final String WHITELIST_FILE_NAME = "whitelist.yml";
+    protected static final String BAN_INFO_FILE_NAME = "ban-info.yml";
+    protected static final String WHITELIST_FILE_NAME = "whitelist.yml";
 
     @Getter
-    private final AllayPlayerStorage playerStorage;
-    private final Map<UUID, EntityPlayer> players;
-    private final Map<UUID, PlayerListPacket.Entry> playerListEntries;
-    private final BanInfo banInfo;
-    private final Whitelist whitelist;
+    protected final AllayPlayerStorage playerStorage;
+    @Getter
+    protected final AllayNetworkInterface networkInterface;
+    protected final Map<UUID, EntityPlayer> players;
+    protected final Map<UUID, PlayerListPacket.Entry> playerListEntries;
+    protected final BanInfo banInfo;
+    protected final Whitelist whitelist;
 
-    public AllayPlayerService(AllayPlayerStorage playerStorage) {
+    public AllayPlayerService(AllayPlayerStorage playerStorage, AllayNetworkInterface networkInterface) {
         this.playerStorage = playerStorage;
+        this.networkInterface = networkInterface;
         this.players = new ConcurrentHashMap<>();
         this.playerListEntries = new ConcurrentHashMap<>();
         this.banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
@@ -68,8 +71,18 @@ public class AllayPlayerService implements PlayerService {
 
     @Override
     @UnmodifiableView
-    public Map<UUID, EntityPlayer> getOnlinePlayers() {
+    public Map<UUID, EntityPlayer> getPlayers() {
         return Collections.unmodifiableMap(players);
+    }
+
+    @Override
+    public void setMaxPlayerCount(int value) {
+        networkInterface.setMaxPlayerCount(value);
+    }
+
+    @Override
+    public int getMaxPlayerCount() {
+        return networkInterface.getMaxPlayerCount();
     }
 
     @Override
@@ -211,9 +224,17 @@ public class AllayPlayerService implements PlayerService {
         return Collections.unmodifiableSet(whitelist.whitelist());
     }
 
+    public void startNetworkInterface() {
+        this.networkInterface.start();
+    }
+
+    public void shutdownNetworkInterface() {
+        this.networkInterface.shutdown();
+    }
+
     public void onLoggedIn(EntityPlayer player) {
         players.put(player.getUUID(), player);
-        ((AllayNetworkInterface) Server.getInstance().getNetworkInterface()).setPlayerCount(players.size());
+        networkInterface.setPlayerCount(players.size());
         Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
     }
 
@@ -240,7 +261,7 @@ public class AllayPlayerService implements PlayerService {
             }
         }
 
-        ((AllayNetworkInterface) Server.getInstance().getNetworkInterface()).setPlayerCount(players.size());
+        networkInterface.setPlayerCount(players.size());
     }
 
     public void addToPlayerList(EntityPlayer player) {

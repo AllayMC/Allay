@@ -20,10 +20,10 @@ public class SetMaxPlayersCommand extends SimpleCommand {
                 .intNum("maxPlayers")
                 .exec(context -> {
                     int maxPlayers = context.getResult(0);
-                    maxPlayers = Math.max(Server.getInstance().getPlayerService().getOnlinePlayerCount(), maxPlayers);
+                    maxPlayers = Math.max(Server.getInstance().getPlayerService().getPlayerCount(), maxPlayers);
 
                     Server.SETTINGS.genericSettings().maxPlayerCount(maxPlayers);
-                    Server.getInstance().getNetworkInterface().setMaxPlayerCount(maxPlayers);
+                    Server.getInstance().getPlayerService().setMaxPlayerCount(maxPlayers);
                     context.addOutput(TrKeys.M_COMMANDS_SETMAXPLAYERS_SUCCESS, maxPlayers);
 
                     return context.success();
