@@ -45,6 +45,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Fixed `BlockStateData#isTransparent()` method.
 - Fixed EnderChest behaviour and drops.
 - Fixed LightningRod placing.
+- Fixed Door placing.
 
 ### Removed
 
