@@ -158,20 +158,6 @@ public interface Server extends TaskCreator, CommandSender {
     Map<UUID, EntityPlayer> getOnlinePlayers();
 
     /**
-     * Find an online player by his name.
-     *
-     * @param playerName the name of the player.
-     *
-     * @return the player if found, otherwise {@code null}.
-     */
-    default EntityPlayer findOnlinePlayerByName(String playerName) {
-        return getOnlinePlayers().values().stream()
-                .filter(player -> player.getCommandSenderName().equals(playerName))
-                .findFirst()
-                .orElse(null);
-    }
-
-    /**
      * Get the world pool.
      *
      * @return the world pool.

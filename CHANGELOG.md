@@ -45,6 +45,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
+- (API) Removed `Server#findOnlinePlayerByName` method which is duplicated with `Server#getOnlinePlayerByName`.
 - Removed loot table api.
 
 ## 0.2.0 (API 0.5.0) - 2025-3-3
