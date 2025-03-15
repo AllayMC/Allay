@@ -45,3 +45,8 @@ github = "https://github.com/ScAllay/AllayScalaLibrary"
 description = "A Simple Minecraft to Discord Relay for the AllayMC Server Software!"
 authors = ["Acktar"]
 github = "https://github.com/acktarbadulla/DiscordRelay-AllayMC"
+
+[HuHoBot]
+description = "HuHoBot for AllayMC, enabling the official QQ bot to connect to your server."
+authors = ["HuoHuas001"]
+github = "https://github.com/HuHoBot/AllayMCAdapter"
