@@ -62,7 +62,7 @@ public class ScoreboardCommand extends SimpleCommand {
             return scorers;
         }
 
-        if ((player = Server.getInstance().getOnlinePlayerByName(wildcardTargetStr)) != null) {
+        if ((player = Server.getInstance().getPlayerService().getOnlinePlayerByName(wildcardTargetStr)) != null) {
             scorers.add(new PlayerScorer(player));
         } else {
             scorers.add(new FakeScorer(wildcardTargetStr));

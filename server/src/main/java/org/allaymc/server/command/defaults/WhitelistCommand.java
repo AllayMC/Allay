@@ -24,7 +24,7 @@ public class WhitelistCommand extends SimpleCommand {
                     String nameOrUUID = context.getResult(1);
                     switch (operation) {
                         case "add" -> {
-                            if (Server.getInstance().addToWhitelist(nameOrUUID)) {
+                            if (Server.getInstance().getPlayerService().addToWhitelist(nameOrUUID)) {
                                 context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_ADD_SUCCESS, nameOrUUID);
                                 return context.success();
                             } else {
@@ -33,7 +33,7 @@ public class WhitelistCommand extends SimpleCommand {
                             }
                         }
                         case "remove" -> {
-                            if (Server.getInstance().removeFromWhitelist(nameOrUUID)) {
+                            if (Server.getInstance().getPlayerService().removeFromWhitelist(nameOrUUID)) {
                                 context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_REMOVE_SUCCESS, nameOrUUID);
                                 return context.success();
                             } else {
@@ -50,8 +50,8 @@ public class WhitelistCommand extends SimpleCommand {
                 .root()
                 .key("list")
                 .exec(context -> {
-                    var whitelist = Server.getInstance().getWhitelistedPlayers();
-                    var onlineCount = (int) Server.getInstance().getOnlinePlayers().values().stream()
+                    var whitelist = Server.getInstance().getPlayerService().getWhitelistedPlayers();
+                    var onlineCount = (int) Server.getInstance().getPlayerService().getPlayers().values().stream()
                             .filter(player -> whitelist.contains(player.getUUID().toString()) ||
                                               whitelist.contains(player.getOriginName()))
                             .count();
@@ -62,14 +62,14 @@ public class WhitelistCommand extends SimpleCommand {
                 .root()
                 .key("enable")
                 .exec(context -> {
-                    Server.getInstance().setWhitelistStatus(true);
+                    Server.getInstance().getPlayerService().setWhitelistStatus(true);
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_ENABLED);
                     return context.success();
                 })
                 .root()
                 .key("disable")
                 .exec(context -> {
-                    Server.getInstance().setWhitelistStatus(false);
+                    Server.getInstance().getPlayerService().setWhitelistStatus(false);
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_DISABLED);
                     return context.success();
                 });

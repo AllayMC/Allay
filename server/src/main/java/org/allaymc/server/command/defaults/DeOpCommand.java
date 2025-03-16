@@ -20,7 +20,7 @@ public class DeOpCommand extends SimpleCommand {
                 .str("playerName")
                 .exec(context -> {
                     String playerName = context.getResult(0);
-                    var player = Server.getInstance().findOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
                     if (player == null) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_PLAYER_NOTFOUND);
                         return context.fail();

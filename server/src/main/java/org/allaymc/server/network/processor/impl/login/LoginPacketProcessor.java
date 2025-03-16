@@ -30,12 +30,12 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         networkComponent.setLoginData(loginData);
 
         var server = Server.getInstance();
-        if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.isWhitelisted(player.getOriginName())) {
+        if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.getPlayerService().isWhitelisted(player.getOriginName())) {
             player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED);
             return;
         }
 
-        if (server.isBanned(player.getUUID().toString()) || server.isBanned(player.getOriginName())) {
+        if (server.getPlayerService().isBanned(player.getUUID().toString()) || server.getPlayerService().isBanned(player.getOriginName())) {
             // TODO: I18n
             player.disconnect("You are banned!");
             return;
@@ -57,7 +57,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var otherDevice = server.getOnlinePlayers().get(loginData.getUuid());
+        var otherDevice = server.getPlayerService().getPlayers().get(loginData.getUuid());
         if (otherDevice != null) {
             otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }

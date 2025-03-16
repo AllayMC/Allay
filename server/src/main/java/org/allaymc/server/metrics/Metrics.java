@@ -585,20 +585,20 @@ public class Metrics {
 
             Metrics metrics = new Metrics("Allay", settings.serverUUID(), settings.logFailedRequests());
 
-            metrics.addCustomChart(new Metrics.SingleLineChart("players", server::getOnlinePlayerCount));
+            metrics.addCustomChart(new Metrics.SingleLineChart("players", server.getPlayerService()::getPlayerCount));
             metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", ProtocolInfo::getMinecraftVersionStr));
             metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", GitProperties::getBuildApiVersion));
             metrics.addCustomChart(new Metrics.SimplePie("allay_server_version", GitProperties::getBuildVersion));
             metrics.addCustomChart(new Metrics.SimplePie("max_memory", () -> String.format("%.2f", Runtime.getRuntime().maxMemory() / (1024d * 1024d * 1024d)) + "G"));
             metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> Server.SETTINGS.networkSettings().xboxAuth() ? "Required" : "Not required"));
 
-            metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getOnlinePlayers().values().stream()
+            metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getPlayerService().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)
                     .map(LoginData::getDeviceInfo)
                     .map(DeviceInfo::device)
                     .collect(groupingBy(Device::getName, countingInt()))));
 
-            metrics.addCustomChart(new Metrics.AdvancedPie("player_game_version", () -> server.getOnlinePlayers().values().stream()
+            metrics.addCustomChart(new Metrics.AdvancedPie("player_game_version", () -> server.getPlayerService().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)
                     .collect(groupingBy(LoginData::getGameVersion, countingInt()))));
 

@@ -25,6 +25,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `ItemTrimmableComponent` for trimming armor.
 - (API) Added `AnvilDamageEvent`, `AnvilTakeResultEvent` and `GrindstoneTakeResultEvent` for plugins.
 - (API) Added `ProtocolInfo.ITEM_STATE_UPDATER` which corresponds to `ProtocolInfo.BLOCK_STATE_UPDATER`.
+- (API) Added `CommandNode#addLeaf(Function<CommandNode, CommandNode>)` method which helps keeping chain calls when using custom command node.
+- (API) Introduced `PlayerService`, and added `Server#getPlayerService` method. Note that there are also a number of method moves from `Server` to `PlayerService`.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
 ### Changed
@@ -33,6 +35,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   - `getDurability()` -> `getDamage()`
   - `setDurability()` -> `setDamage()`
   - `tryReduceDurability()` -> `tryIncreaseDamage()`
+- (API) Moved player, ban/whitelist related methods from `Server` to the new `PlayerService` class.
+- (API) Moved `Server#getNetworkInterface` method from `Server` to the new `PlayerService` class. `NetworkInterface` is now held by `PlayerService` rather than `Server`.
 - Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
 
 ### Fixed
@@ -41,9 +45,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Fixed `BlockStateData#isTransparent()` method.
 - Fixed EnderChest behaviour and drops.
 - Fixed LightningRod placing.
+- Fixed Door placing.
 
 ### Removed
 
+- (API) Removed `Server#findOnlinePlayerByName` method which is duplicated with `Server#getOnlinePlayerByName`.
 - Removed loot table api.
 
 ## 0.2.0 (API 0.5.0) - 2025-3-3

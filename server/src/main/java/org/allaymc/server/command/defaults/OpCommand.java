@@ -21,7 +21,7 @@ public class OpCommand extends SimpleCommand {
                 .exec(context -> {
                     // TODO: Support offline player
                     String playerName = context.getResult(0);
-                    var player = Server.getInstance().findOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
                     if (player == null) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_PLAYER_NOTFOUND);
                         return context.fail();

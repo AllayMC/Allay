@@ -20,7 +20,7 @@ public class BanIPCommand extends SimpleCommand {
                 .str("ip")
                 .exec(context -> {
                     String ip = context.getResult(0);
-                    if (Server.getInstance().banIP(ip)) {
+                    if (Server.getInstance().getPlayerService().banIP(ip)) {
                         context.addOutput(TrKeys.M_COMMANDS_BANIP_SUCCESS, ip);
                         return context.success();
                     } else {

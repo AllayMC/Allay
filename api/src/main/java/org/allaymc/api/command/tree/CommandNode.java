@@ -86,14 +86,14 @@ public interface CommandNode {
      *
      * @param defaultValue the default value to set.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     CommandNode defaultValue(Object defaultValue);
 
     /**
      * Marks this node as optional.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     CommandNode optional();
 
@@ -214,9 +214,23 @@ public interface CommandNode {
      *
      * @param leaf the leaf node to add.
      *
-     * @return the {@code CommandNode}.
+     * @return the passed {@code CommandNode}.
      */
     CommandNode addLeaf(CommandNode leaf);
+
+    /**
+     * Add a leaf node to this command node.
+     *
+     * @param leafProvider the provider that will provide the leaf node. The current command
+     *                     node will be passed to the provider, and the provider should return
+     *                     the leaf node. This is helpful for keeping chain calls when using
+     *                     custom command node.
+     *
+     * @return the passed {@code CommandNode}.
+     */
+    default CommandNode addLeaf(Function<CommandNode, CommandNode> leafProvider) {
+        return addLeaf(leafProvider.apply(this));
+    }
 
     /**
      * Set the executor for this node, binding it to a specific sender type.
@@ -225,7 +239,7 @@ public interface CommandNode {
      * @param executor      the executor function to apply.
      * @param senderType    the sender type for this executor.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType<SENDER_TYPE> senderType);
 
@@ -234,7 +248,7 @@ public interface CommandNode {
      *
      * @param executor the executor function to apply.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     default CommandNode exec(Function<CommandContext, CommandResult> executor) {
         return exec((context, sender) -> executor.apply(context), SenderType.ANY);
@@ -258,7 +272,7 @@ public interface CommandNode {
      *
      * @param permission the permissions to check.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     CommandNode permission(String permission);
 
@@ -300,14 +314,14 @@ public interface CommandNode {
      *
      * @param option the parameter option to add.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     CommandNode addParamOption(CommandParamOption option);
 
     /**
      * Suppresses automatic enum completion for this node.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     default CommandNode suppressEnumAutoCompletion() {
         return addParamOption(CommandParamOption.SUPPRESS_ENUM_AUTOCOMPLETION);
@@ -316,7 +330,7 @@ public interface CommandNode {
     /**
      * Marks this node as having a semantic constraint.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     default CommandNode hasSemanticConstraint() {
         return addParamOption(CommandParamOption.HAS_SEMANTIC_CONSTRAINT);
@@ -325,7 +339,7 @@ public interface CommandNode {
     /**
      * Marks this node as an enum that behaves as a chained command.
      *
-     * @return the {@code CommandNode}.
+     * @return the current {@code CommandNode}.
      */
     default CommandNode enumAsChainedCommand() {
         return addParamOption(CommandParamOption.ENUM_AS_CHAINED_COMMAND);
@@ -344,7 +358,7 @@ public interface CommandNode {
      * @param key          the key of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode key(String key, String defaultValue) {
         return addLeaf(getFactory().key(key, this, defaultValue));
@@ -355,7 +369,7 @@ public interface CommandNode {
      *
      * @param key the key of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode key(String key) {
         return key(key, "");
@@ -367,7 +381,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode str(String name, String defaultValue) {
         return addLeaf(getFactory().str(name, this, defaultValue));
@@ -378,7 +392,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode str(String name) {
         return str(name, "");
@@ -390,7 +404,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode shortNum(String name, short defaultValue) {
         return addLeaf(getFactory().shortNum(name, this, defaultValue));
@@ -401,7 +415,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode shortNum(String name) {
         return shortNum(name, (short) 0);
@@ -413,7 +427,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode intNum(String name, int defaultValue) {
         return addLeaf(getFactory().intNum(name, this, defaultValue));
@@ -424,7 +438,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode intNum(String name) {
         return intNum(name, 0);
@@ -436,7 +450,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode longNum(String name, long defaultValue) {
         return addLeaf(getFactory().longNum(name, this, defaultValue));
@@ -447,7 +461,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode longNum(String name) {
         return longNum(name, 0);
@@ -459,7 +473,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode floatNum(String name, float defaultValue) {
         return addLeaf(getFactory().floatNum(name, this, defaultValue));
@@ -470,7 +484,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode floatNum(String name) {
         return floatNum(name, 0f);
@@ -482,7 +496,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode doubleNum(String name, double defaultValue) {
         return addLeaf(getFactory().doubleNum(name, this, defaultValue));
@@ -493,7 +507,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode doubleNum(String name) {
         return doubleNum(name, 0d);
@@ -505,7 +519,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode bool(String name, boolean defaultValue) {
         return addLeaf(getFactory().bool(name, this, defaultValue));
@@ -516,7 +530,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode bool(String name) {
         return bool(name, false);
@@ -529,7 +543,7 @@ public interface CommandNode {
      * @param defaultValue the default value of the parameter.
      * @param values       the allowed values for the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode enums(String name, String defaultValue, String[] values) {
         return addLeaf(getFactory().enums(name, this, defaultValue, values));
@@ -543,7 +557,7 @@ public interface CommandNode {
      * @param enumName     the name of the enum.
      * @param values       the allowed values for the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode enums(String name, String defaultValue, String enumName, String[] values) {
         return addLeaf(getFactory().enums(name, this, enumName, defaultValue, values));
@@ -555,7 +569,7 @@ public interface CommandNode {
      * @param name   the name of the parameter.
      * @param values the allowed values for the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode enums(String name, String... values) {
         return enums(name, "", values);
@@ -575,7 +589,7 @@ public interface CommandNode {
      * @param defaultValue the default value of the parameter.
      * @param enumClass    the class of the enum type.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default <T extends Enum<?>> CommandNode enumClass(String name, T defaultValue, Class<T> enumClass) {
         return addLeaf(getFactory().enumClass(name, this, defaultValue, enumClass));
@@ -592,7 +606,7 @@ public interface CommandNode {
      * @param enumName     the name of the enum.
      * @param enumClass    the class of the enum type.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default <T extends Enum<?>> CommandNode enumClass(String name, T defaultValue, String enumName, Class<T> enumClass) {
         return addLeaf(getFactory().enumClass(name, this, defaultValue, enumName, enumClass));
@@ -605,7 +619,7 @@ public interface CommandNode {
      * @param defaultValue the default value of the parameter.
      * @param enums        the allowed values for the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode enumsIgnoreCase(String name, String defaultValue, String[] enums) {
         return addLeaf(getFactory().enumsIgnoreCase(name, this, defaultValue, enums));
@@ -619,7 +633,7 @@ public interface CommandNode {
      * @param enumName     the name of the enum.
      * @param enums        the allowed values for the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode enumsIgnoreCase(String name, String defaultValue, String enumName, String[] enums) {
         return addLeaf(getFactory().enumsIgnoreCase(name, this, enumName, defaultValue, enums));
@@ -630,7 +644,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode msg(String name) {
         return msg(name, "");
@@ -642,7 +656,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode msg(String name, String defaultValue) {
         return addLeaf(getFactory().msg(name, this, defaultValue));
@@ -653,7 +667,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode remain(String name) {
         return remain(name, Lists.newArrayList());
@@ -665,7 +679,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode remain(String name, List<String> defaultValue) {
         return addLeaf(getFactory().remain(name, this, defaultValue));
@@ -676,7 +690,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode target(String name) {
         return addLeaf(getFactory().target(name, this, Lists.newArrayList()));
@@ -688,7 +702,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode target(String name, List<Entity> defaultValue) {
         return addLeaf(getFactory().target(name, this, defaultValue));
@@ -699,7 +713,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode playerTarget(String name) {
         return addLeaf(getFactory().playerTarget(name, this, Lists.newArrayList()));
@@ -711,7 +725,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode playerTarget(String name, List<EntityPlayer> defaultValue) {
         return addLeaf(getFactory().playerTarget(name, this, defaultValue));
@@ -720,7 +734,7 @@ public interface CommandNode {
     /**
      * Add a game mode parameter to this command node with a default name of "gameMode".
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode gameMode() {
         return gameMode("gameMode");
@@ -731,7 +745,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode gameMode(String name) {
         return addLeaf(getFactory().gameMode(name, this, null));
@@ -743,7 +757,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode gameMode(String name, GameType defaultValue) {
         return addLeaf(getFactory().gameMode(name, this, defaultValue));
@@ -754,7 +768,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode pos(String name) {
         return pos(name, null);
@@ -766,7 +780,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode pos(String name, Vector3fc defaultValue) {
         return addLeaf(getFactory().pos(name, this, defaultValue));
@@ -777,7 +791,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode wildcardTarget(String name) {
         return wildcardTarget(name, "");
@@ -789,7 +803,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode wildcardTarget(String name, String defaultValue) {
         return addLeaf(getFactory().wildcardTarget(name, this, defaultValue));
@@ -800,7 +814,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode enchantment(String name) {
         return enchantment(name, null);
@@ -812,7 +826,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode enchantment(String name, EnchantmentType defaultValue) {
         return addLeaf(getFactory().enchantment(name, this, defaultValue));
@@ -823,7 +837,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode effect(String name) {
         return effect(name, null);
@@ -835,7 +849,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode effect(String name, EffectType defaultValue) {
         return addLeaf(getFactory().effect(name, this, defaultValue));
@@ -846,7 +860,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode itemType(String name) {
         return itemType(name, null);
@@ -858,7 +872,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode itemType(String name, ItemType<?> defaultValue) {
         return addLeaf(getFactory().itemType(name, this, defaultValue));
@@ -869,7 +883,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode blockType(String name) {
         return blockType(name, null);
@@ -881,7 +895,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode blockType(String name, BlockType<?> defaultValue) {
         return addLeaf(getFactory().blockType(name, this, defaultValue));
@@ -892,7 +906,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode entityType(String name) {
         return entityType(name, null);
@@ -904,7 +918,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode entityType(String name, EntityType<?> defaultValue) {
         return addLeaf(getFactory().entityType(name, this, defaultValue));
@@ -915,7 +929,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode difficulty(String name) {
         return difficulty(name, null);
@@ -927,7 +941,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode difficulty(String name, Difficulty defaultValue) {
         return addLeaf(getFactory().difficulty(name, this, defaultValue));
@@ -938,7 +952,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode blockPropertyValues(String name) {
         return blockPropertyValues(name, Lists.newArrayList());
@@ -950,7 +964,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode blockPropertyValues(String name, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue) {
         return addLeaf(getFactory().blockPropertyValues(name, this, defaultValue));
@@ -961,7 +975,7 @@ public interface CommandNode {
      *
      * @param name the name of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode cmd(String name) {
         return cmd(name, "");
@@ -973,7 +987,7 @@ public interface CommandNode {
      * @param name         the name of the parameter.
      * @param defaultValue the default value of the parameter.
      *
-     * @return the {@code CommandNode}.
+     * @return the {@code CommandNode} that created by this method.
      */
     default CommandNode cmd(String name, String defaultValue) {
         return addLeaf(getFactory().cmd(name, this, defaultValue));

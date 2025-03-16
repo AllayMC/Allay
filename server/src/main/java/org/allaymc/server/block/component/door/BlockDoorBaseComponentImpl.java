@@ -32,20 +32,16 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (placeBlockPos.y() >= dimension.getDimensionInfo().maxHeight()) {
-            return false;
-        }
-
         if (placementInfo != null && placementInfo.blockFace() != BlockFace.UP) {
             return false;
         }
 
-        var downBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
+        var downBlockState = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
         if (!downBlockState.getBlockStateData().isSolid()) {
             return false;
         }
 
-        var upBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
+        var upBlockState = dimension.getBlockState(BlockFace.UP.offsetPos(placeBlockPos));
         if (!upBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
             return false;
         }
@@ -54,7 +50,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
-        blockState = blockState.setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, face.rotateYCCW().toMinecraftCardinalDirection());
+        blockState = blockState.setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, face.rotateY().toMinecraftCardinalDirection());
 
         var leftBlockState = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos));
         var rightBlockState = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos));
@@ -107,8 +103,8 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         var blockState = dimension.getBlockState(pos);
 
         Vector3ic otherPos = blockState.getPropertyValue(UPPER_BLOCK_BIT)
-                ? pos.sub(0, 1, 0)
-                : pos.add(0, 1, 0);
+                ? BlockFace.DOWN.offsetPos(pos)
+                : BlockFace.UP.offsetPos(pos);
 
         var isOpen = !blockState.getPropertyValue(OPEN_BIT);
 
@@ -123,7 +119,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         if (blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-            blockState.pos().dimension().breakBlock(((Vector3i) blockState.pos()).sub(0, 1, 0), null, entity);
+            blockState.pos().dimension().breakBlock(BlockFace.DOWN.offsetPos(blockState.pos()), null, entity);
         }
         super.onBreak(blockState, usedItem, entity);
     }
