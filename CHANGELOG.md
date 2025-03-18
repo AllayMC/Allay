@@ -41,11 +41,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Fixed
 
-- Fixed skin display issue in 1.21.60.
 - (API) Fixed `BlockStateData#isTransparent()` method.
+- Fixed skin display issue in 1.21.60.
 - Fixed EnderChest behaviour and drops.
 - Fixed LightningRod placing.
 - Fixed Door placing.
+- Fixed two bugs in `/give` command which make the gave item amount being shown incorrectly.
 
 ### Removed
 
