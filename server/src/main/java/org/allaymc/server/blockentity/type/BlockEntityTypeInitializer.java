@@ -41,6 +41,7 @@ public final class BlockEntityTypeInitializer {
                 .name(BlockEntityId.CHEST)
                 .addComponent(BlockEntityChestBaseComponentImpl::new, BlockEntityChestBaseComponentImpl.class)
                 .addComponent(() -> new BlockEntityContainerHolderComponentImpl(ChestContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .addComponent(BlockEntityPairableComponentImpl::new, BlockEntityPairableComponentImpl.class)
                 .build();
     }
 
