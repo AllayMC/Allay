@@ -1,6 +1,7 @@
 package org.allaymc.server.client.service;
 
 import eu.okaeri.configs.ConfigManager;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.service.PlayerService;
@@ -9,6 +10,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
 import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
+import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.eventbus.event.player.PlayerUnbanEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
@@ -31,7 +33,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author daoge_cmd
@@ -53,8 +54,8 @@ public class AllayPlayerService implements PlayerService {
     public AllayPlayerService(AllayPlayerStorage playerStorage, AllayNetworkInterface networkInterface) {
         this.playerStorage = playerStorage;
         this.networkInterface = networkInterface;
-        this.players = new ConcurrentHashMap<>();
-        this.playerListEntries = new ConcurrentHashMap<>();
+        this.players = new Object2ObjectOpenHashMap<>();
+        this.playerListEntries = new Object2ObjectOpenHashMap<>();
         this.banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
     }
@@ -232,18 +233,19 @@ public class AllayPlayerService implements PlayerService {
         this.networkInterface.shutdown();
     }
 
-    public void onLoggedIn(EntityPlayer player) {
+    public synchronized void onLoggedIn(EntityPlayer player) {
         players.put(player.getUUID(), player);
         networkInterface.setPlayerCount(players.size());
-        Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
     }
 
-    public void onDisconnect(EntityPlayer player) {
+    public synchronized void onDisconnect(EntityPlayer player) {
         Server.getInstance().sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
         // At this time the client have disconnected
         if (player.getLastClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal()) {
-            Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
+            var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT);
+            event.call();
+            Server.getInstance().broadcastTr(event.getQuitMessage(), player.getOriginName());
             players.remove(player.getUUID());
 
             // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off
@@ -264,7 +266,7 @@ public class AllayPlayerService implements PlayerService {
         networkInterface.setPlayerCount(players.size());
     }
 
-    public void addToPlayerList(EntityPlayer player) {
+    public synchronized void addToPlayerList(EntityPlayer player) {
         addToPlayerList(
                 player.getLoginData().getUuid(),
                 player.getRuntimeId(),
@@ -294,7 +296,7 @@ public class AllayPlayerService implements PlayerService {
         broadcastPacket(playerListPacket);
     }
 
-    public void removeFromPlayerList(EntityPlayer player) {
+    private void removeFromPlayerList(EntityPlayer player) {
         removeFromPlayerList(player.getLoginData().getUuid());
     }
 

@@ -27,6 +27,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `ProtocolInfo.ITEM_STATE_UPDATER` which corresponds to `ProtocolInfo.BLOCK_STATE_UPDATER`.
 - (API) Added `CommandNode#addLeaf(Function<CommandNode, CommandNode>)` method which helps keeping chain calls when using custom command node.
 - (API) Introduced `PlayerService`, and added `Server#getPlayerService` method. Note that there are also a number of method moves from `Server` to `PlayerService`.
+- (API) Added `ClientDisconnectEvent`.
+- (API) Added `PlayerJoinEvent#joinMessage` and `PlayerQuitEvent#quitMessage` and correspond setters. Now these messages can be edited by plugins.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
 ### Changed
@@ -37,6 +39,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   - `tryReduceDurability()` -> `tryIncreaseDamage()`
 - (API) Moved player, ban/whitelist related methods from `Server` to the new `PlayerService` class.
 - (API) Moved `Server#getNetworkInterface` method from `Server` to the new `PlayerService` class. `NetworkInterface` is now held by `PlayerService` rather than `Server`.
+- (API) Moved `PlayerQuitEvent#reason` to the newly introduced event `ClientDisconnectEvent`. `PlayerQuitEvent` will only be called for already logged in player now.
 - Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
 
 ### Fixed
