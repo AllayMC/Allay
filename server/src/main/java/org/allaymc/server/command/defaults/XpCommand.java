@@ -7,7 +7,6 @@ import org.allaymc.api.i18n.TrKeys;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author xingchentye
@@ -26,7 +25,6 @@ public class XpCommand extends SimpleCommand {
                 .exec(context -> {
                     String amountStr = context.getResult(0);
                     Collection<EntityPlayer> players = context.getResult(1);
-                    List<String> playerNameList = players.stream().map(EntityPlayer::getOriginName).collect(Collectors.toList());
 
                     if (players.isEmpty()) {
                         context.addNoTargetMatchError();
@@ -46,10 +44,11 @@ public class XpCommand extends SimpleCommand {
                         player.addExperience(amount);
                     }
 
+                    List<String> playersName = players.stream().map(EntityPlayer::getOriginName).toList();
                     if (isLevel) {
-                        context.addOutput(TrKeys.M_COMMANDS_XP_SUCCESS_LEVELS, amount, String.join(", ", playerNameList));
+                        context.addOutput(TrKeys.M_COMMANDS_XP_SUCCESS_LEVELS, amount, String.join(", ", playersName));
                     } else {
-                        context.addOutput(TrKeys.M_COMMANDS_XP_SUCCESS, amount, String.join(", ", playerNameList));
+                        context.addOutput(TrKeys.M_COMMANDS_XP_SUCCESS, amount, String.join(", ", playersName));
                     }
 
                     return context.success();

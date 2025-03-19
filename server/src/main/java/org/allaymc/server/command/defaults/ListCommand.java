@@ -18,13 +18,13 @@ public class ListCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            var server = Server.getInstance();
-            var players = server.getPlayerService().getPlayers().values();
+            var playerService = Server.getInstance().getPlayerService();
+            var players = playerService.getPlayers().values();
 
             var joiner = new StringJoiner(", ");
             players.forEach(player -> joiner.add(player.getDisplayName()));
 
-            context.getSender().sendTr(TrKeys.M_COMMANDS_PLAYERS_LIST, players.size(), server.getPlayerService().getMaxPlayerCount());
+            context.getSender().sendTr(TrKeys.M_COMMANDS_PLAYERS_LIST, players.size(), playerService.getMaxPlayerCount());
             context.getSender().sendText(joiner.toString());
             return context.success();
         });

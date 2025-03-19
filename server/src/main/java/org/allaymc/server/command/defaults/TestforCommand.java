@@ -24,13 +24,16 @@ public class TestforCommand extends SimpleCommand {
                 .exec(context -> {
                     List<Entity> entities = context.getResult(0);
                     if (entities.isEmpty()) {
-                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
+                        context.addNoTargetMatchError();
                         return context.fail();
                     }
 
                     context.addOutput(TrKeys.M_COMMANDS_TESTFOR_SUCCESS, entities.stream().map(entity -> {
                         var name = entity.getDisplayName();
-                        if (name.isBlank()) name = entity.getEntityType().getIdentifier().toString();
+                        if (name.isBlank()) {
+                            name = entity.getEntityType().getIdentifier().toString();
+                        }
+
                         return name;
                     }).collect(Collectors.joining(", ")));
                     return context.success(entities.size());
