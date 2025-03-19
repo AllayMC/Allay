@@ -29,6 +29,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `PlayerService`, and added `Server#getPlayerService` method. Note that there are also a number of method moves from `Server` to `PlayerService`.
 - (API) Added `ClientDisconnectEvent`.
 - (API) Added `PlayerJoinEvent#joinMessage` and `PlayerQuitEvent#quitMessage` and correspond setters. Now these messages can be edited by plugins.
+- (API) Added `BlockBaseComponent#getDropXpAmount` method.
+- Implemented ores.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
 ### Changed
