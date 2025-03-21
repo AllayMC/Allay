@@ -43,6 +43,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved `Server#getNetworkInterface` method from `Server` to the new `PlayerService` class. `NetworkInterface` is now held by `PlayerService` rather than `Server`.
 - (API) Moved `PlayerQuitEvent#reason` to the newly introduced event `ClientDisconnectEvent`. `PlayerQuitEvent` will only be called for already logged in player now.
 - Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
+- Use `AtomicReference<ServerState>` instead of `AtomicBoolean`'s fields for state management
 
 ### Fixed
 

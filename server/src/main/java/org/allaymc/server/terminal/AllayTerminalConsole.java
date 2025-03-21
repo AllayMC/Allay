@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.minecrell.terminalconsole.SimpleTerminalConsole;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerState;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 
@@ -14,12 +15,11 @@ import org.jline.reader.LineReaderBuilder;
 @Slf4j
 @AllArgsConstructor
 public class AllayTerminalConsole extends SimpleTerminalConsole {
-
     private Server server;
 
     @Override
     protected boolean isRunning() {
-        return server.isRunning();
+        return server.getState() == ServerState.RUNNING;
     }
 
     @Override
