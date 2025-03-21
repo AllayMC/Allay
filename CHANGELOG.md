@@ -30,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `ClientDisconnectEvent`.
 - (API) Added `PlayerJoinEvent#joinMessage` and `PlayerQuitEvent#quitMessage` and correspond setters. Now these messages can be edited by plugins.
 - (API) Added `BlockBaseComponent#getDropXpAmount` method.
+- (API) Added option `tickDimensionInParallel` to control whether tick dimensions in the same world in parallel during world tick.
 - Implemented ores.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
