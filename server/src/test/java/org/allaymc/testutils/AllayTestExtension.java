@@ -2,6 +2,7 @@ package org.allaymc.testutils;
 
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerState;
 import org.allaymc.server.Allay;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -22,7 +23,7 @@ public class AllayTestExtension implements BeforeAllCallback {
                     throw new RuntimeException(e);
                 }
             });
-            while (Server.getInstance() == null || Server.getInstance().isStarting()) {
+            while (Server.getInstance() == null || Server.getInstance().getState() == ServerState.STARTING) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
