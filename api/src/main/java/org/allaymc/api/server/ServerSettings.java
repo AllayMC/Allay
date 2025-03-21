@@ -197,6 +197,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("max-light-update-count-per-tick")
         private int maxLightUpdateCountPerTick = 128;
 
+        @Comment("If set to true, dimensions in the same world will be ticked in parallel during world tick")
+        @CustomKey("tick-dimension-in-parallel")
+        private boolean tickDimensionInParallel = true;
+
         public enum ChunkSendingStrategy {
             ASYNC,
             SYNC
