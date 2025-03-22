@@ -23,8 +23,8 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
 
     @Getter
     protected boolean lead;
-    protected int pairX;
-    protected int pairZ;
+    protected Integer pairX;
+    protected Integer pairZ;
 
     @Override
     public boolean tryPairWith(BlockEntity other) {
@@ -49,8 +49,8 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
     public void unpair() {
         lead = false;
 
-        pairX = Integer.MIN_VALUE;
-        pairZ = Integer.MIN_VALUE;
+        pairX = null;
+        pairZ = null;
 
         baseComponent.sendBlockEntityDataPacketToViewers();
     }
@@ -86,10 +86,11 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
 
     @Override
     public BlockEntity getPair() {
-        if (pairX == Integer.MIN_VALUE && pairZ == Integer.MIN_VALUE) {
-            return null;
-        }
-
         return baseComponent.getDimension().getBlockEntity(pairX, baseComponent.getPosition().y(), pairZ);
+    }
+
+    @Override
+    public boolean isPaired() {
+        return pairX != null && pairZ != null;
     }
 }
