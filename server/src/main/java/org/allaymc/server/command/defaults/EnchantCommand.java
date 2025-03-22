@@ -24,16 +24,26 @@ public class EnchantCommand extends SimpleCommand {
         tree.getRoot()
                 .playerTarget("player")
                 .enchantment("enchantmentName")
-                .intNum("level")
+                .intNum("level", 1).optional()
                 .exec(ctx -> {
                     Collection<EntityPlayer> players = ctx.getResult(0);
                     EnchantmentType enchantmentType = ctx.getResult(1);
                     int level = ctx.getResult(2);
 
+                    if (level > enchantmentType.getMaxLevel()) {
+                        ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOBIG, level, enchantmentType.getMaxLevel());
+                        ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
+                        return ctx.fail();
+                    } else if (level < 1) {
+                        ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOSMALL, level, 1);
+                        ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
+                        return ctx.fail();
+                    }
+
                     for (var player : players) {
                         var item = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
                         if (item == ItemAirStack.AIR_STACK) {
-                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_NOITEM);
+                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_NOITEM, player.getDisplayName());
                             return ctx.fail();
                         }
 

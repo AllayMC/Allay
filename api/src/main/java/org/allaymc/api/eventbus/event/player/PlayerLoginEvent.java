@@ -20,8 +20,18 @@ public class PlayerLoginEvent extends PlayerEvent implements CancellableEvent {
     @Getter
     protected String disconnectReason;
 
-    public PlayerLoginEvent(EntityPlayer player, String disconnectReason) {
+    /**
+     * The message that will be broadcast if the event is not cancelled.
+     * If the event is cancelled, this field will be ignored.
+     */
+    @MayContainTrKey
+    @Setter
+    @Getter
+    protected String joinMessage;
+
+    public PlayerLoginEvent(EntityPlayer player, String disconnectReason, String joinMessage) {
         super(player);
         this.disconnectReason = disconnectReason;
+        this.joinMessage = joinMessage;
     }
 }

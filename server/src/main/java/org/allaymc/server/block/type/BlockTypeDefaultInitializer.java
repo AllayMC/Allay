@@ -1339,7 +1339,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COAL_ORE == null) {
             BlockTypes.COAL_ORE = AllayBlockType
-                    .builder(BlockCoalOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.COAL_ORE)
                     .build();
         }
@@ -1500,7 +1500,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COPPER_ORE == null) {
             BlockTypes.COPPER_ORE = AllayBlockType
-                    .builder(BlockCopperOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_ORE)
                     .build();
         }
@@ -2187,49 +2187,49 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEEPSLATE_COAL_ORE == null) {
             BlockTypes.DEEPSLATE_COAL_ORE = AllayBlockType
-                    .builder(BlockDeepslateCoalOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_COAL_ORE)
                     .build();
         }
         if (BlockTypes.DEEPSLATE_COPPER_ORE == null) {
             BlockTypes.DEEPSLATE_COPPER_ORE = AllayBlockType
-                    .builder(BlockDeepslateCopperOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_COPPER_ORE)
                     .build();
         }
         if (BlockTypes.DEEPSLATE_DIAMOND_ORE == null) {
             BlockTypes.DEEPSLATE_DIAMOND_ORE = AllayBlockType
-                    .builder(BlockDeepslateDiamondOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_DIAMOND_ORE)
                     .build();
         }
         if (BlockTypes.DEEPSLATE_EMERALD_ORE == null) {
             BlockTypes.DEEPSLATE_EMERALD_ORE = AllayBlockType
-                    .builder(BlockDeepslateEmeraldOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_EMERALD_ORE)
                     .build();
         }
         if (BlockTypes.DEEPSLATE_GOLD_ORE == null) {
             BlockTypes.DEEPSLATE_GOLD_ORE = AllayBlockType
-                    .builder(BlockDeepslateGoldOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_GOLD_ORE)
                     .build();
         }
         if (BlockTypes.DEEPSLATE_IRON_ORE == null) {
             BlockTypes.DEEPSLATE_IRON_ORE = AllayBlockType
-                    .builder(BlockDeepslateIronOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_IRON_ORE)
                     .build();
         }
         if (BlockTypes.DEEPSLATE_LAPIS_ORE == null) {
             BlockTypes.DEEPSLATE_LAPIS_ORE = AllayBlockType
-                    .builder(BlockDeepslateLapisOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_LAPIS_ORE)
                     .build();
         }
         if (BlockTypes.DEEPSLATE_REDSTONE_ORE == null) {
             BlockTypes.DEEPSLATE_REDSTONE_ORE = AllayBlockType
-                    .builder(BlockDeepslateRedstoneOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_REDSTONE_ORE)
                     .build();
         }
@@ -2309,7 +2309,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DIAMOND_ORE == null) {
             BlockTypes.DIAMOND_ORE = AllayBlockType
-                    .builder(BlockDiamondOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.DIAMOND_ORE)
                     .build();
         }
@@ -3134,7 +3134,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EMERALD_ORE == null) {
             BlockTypes.EMERALD_ORE = AllayBlockType
-                    .builder(BlockEmeraldOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.EMERALD_ORE)
                     .build();
         }
@@ -3448,7 +3448,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GOLD_ORE == null) {
             BlockTypes.GOLD_ORE = AllayBlockType
-                    .builder(BlockGoldOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.GOLD_ORE)
                     .build();
         }
@@ -4025,7 +4025,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.IRON_ORE == null) {
             BlockTypes.IRON_ORE = AllayBlockType
-                    .builder(BlockIronOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.IRON_ORE)
                     .build();
         }
@@ -4202,7 +4202,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LAPIS_ORE == null) {
             BlockTypes.LAPIS_ORE = AllayBlockType
-                    .builder(BlockLapisOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.LAPIS_ORE)
                     .build();
         }
@@ -4573,7 +4573,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE == null) {
             BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = AllayBlockType
-                    .builder(BlockLitDeepslateRedstoneOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.LIT_DEEPSLATE_REDSTONE_ORE)
                     .build();
         }
@@ -4599,7 +4599,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIT_REDSTONE_ORE == null) {
             BlockTypes.LIT_REDSTONE_ORE = AllayBlockType
-                    .builder(BlockLitRedstoneOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.LIT_REDSTONE_ORE)
                     .build();
         }
@@ -5042,7 +5042,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.NETHER_GOLD_ORE == null) {
             BlockTypes.NETHER_GOLD_ORE = AllayBlockType
-                    .builder(BlockNetherGoldOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.NETHER_GOLD_ORE)
                     .build();
         }
@@ -6144,7 +6144,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.QUARTZ_ORE == null) {
             BlockTypes.QUARTZ_ORE = AllayBlockType
-                    .builder(BlockQuartzOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.QUARTZ_ORE)
                     .build();
         }
@@ -6370,7 +6370,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.REDSTONE_ORE == null) {
             BlockTypes.REDSTONE_ORE = AllayBlockType
-                    .builder(BlockRedstoneOreBehaviorImpl.class)
+                    .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.REDSTONE_ORE)
                     .build();
         }

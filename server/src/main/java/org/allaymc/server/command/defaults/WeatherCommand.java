@@ -36,15 +36,14 @@ public class WeatherCommand extends SimpleCommand {
                 .key("query")
                 .exec(context -> {
                     var weathers = context.getSender().getCmdExecuteLocation().dimension().getWorld().getWeathers();
-                    if (weathers.contains(Weather.CLEAR)) {
-                        context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "clear");
-                        return context.success();
-                    }
+                    var currentWeather = Weather.CLEAR;
                     if (weathers.contains(Weather.THUNDER)) {
-                        context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "rain and thunder");
-                        return context.success();
+                        currentWeather = Weather.THUNDER;
+                    } else if (weathers.contains(Weather.RAIN)) {
+                        currentWeather = Weather.RAIN;
                     }
-                    context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "rain");
+
+                    context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, currentWeather.name().toLowerCase());
                     return context.success();
                 });
     }

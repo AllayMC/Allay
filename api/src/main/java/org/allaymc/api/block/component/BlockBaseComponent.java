@@ -25,24 +25,24 @@ import static org.allaymc.api.item.ItemHelper.isSword;
  */
 public interface BlockBaseComponent extends BlockComponent {
     /**
-     * Get the block type.
+     * Retrieves the type of block associated with this component.
      *
-     * @return block type.
+     * @return the block type associated with this component.
      */
     BlockType<? extends BlockBehavior> getBlockType();
 
     /**
-     * Call when a blockState causes another blockState to update.
+     * Called when a neighboring block causes the current block to update.
      *
-     * @param current  The current block.
-     * @param neighbor The neighbor block that triggered the update.
-     * @param face     The face of the current block that is being updated.
+     * @param current  the current block that is being updated.
+     * @param neighbor the neighboring block that triggered the update.
+     * @param face     the face of the current block that is being updated.
      */
     @ApiStatus.OverrideOnly
     void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
 
     /**
-     * Called when the block encounters random update.
+     * Called when the block encounters a random update.
      *
      * @param current the block that encountered the random update.
      */
@@ -50,7 +50,7 @@ public interface BlockBaseComponent extends BlockComponent {
     void onRandomUpdate(BlockStateWithPos current);
 
     /**
-     * Check if the block can receive random updates.
+     * Determines if the block can receive random updates.
      *
      * @return {@code true} if the block can receive random updates, {@code false} otherwise.
      */
@@ -59,127 +59,117 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Try to place a block at the specified position and with optional placement info.
-     * <p>
-     * When this method is called, the caller ensures that the current block in `placeBlockPos`
-     * is a block that has REPLACEABLE tag.
+     * Attempts to place a block at the specified position and with optional placement info.
+     * This method assumes that the current block at the specified position is replaceable.
      *
-     * @param dimension     The dimension where the block is placed.
-     * @param blockState    The block that is being placed.
-     * @param placeBlockPos The pos that the player is trying to place the block on.
-     * @param placementInfo The player placement info, can be {@code null}.
+     * @param dimension     the dimension where the block is being placed.
+     * @param blockState    the block state to be placed.
+     * @param placeBlockPos the position at which the block is being placed.
+     * @param placementInfo information about the player's placement, can be {@code null}.
      *
-     * @return {@code true} if the block is placed successfully, {@code false} if failed.
+     * @return {@code true} if the block is successfully placed, {@code false} otherwise.
      */
     boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 
     /**
-     * Try to combine a block with another block which is already in the dimension and does not have REPLACEABLE tag.
-     * <p>
-     * This method is used by slab blocks for example. Two slab blocks can be combined to one double slab blocks.
-     * In most cases two blocks cannot be combined, so the default implementation just return {@code false}.
+     * Attempts to combine the block with another block that is already in the dimension and not marked as replaceable.
+     * For example, two slab blocks can be combined into a double slab block.
      *
-     * @param dimension       The dimension where the block is placed.
-     * @param blockState      The block that is going to be combined with another block which is already in the dimension.
-     * @param combineBlockPos The pos of the block that is being combined with.
-     * @param placementInfo   The player placement info, can be {@code null}.
+     * @param dimension       the dimension where the block is being placed.
+     * @param blockState      the block to be combined.
+     * @param combineBlockPos the position of the block being combined.
+     * @param placementInfo   the player placement information, can be {@code null}.
      *
-     * @return {@code true} if the block is combined successfully, {@code false} if failed.
+     * @return {@code true} if the block is successfully combined, {@code false} otherwise.
      */
     default boolean combine(Dimension dimension, BlockState blockState, Vector3ic combineBlockPos, PlayerInteractInfo placementInfo) {
         return false;
     }
 
     /**
-     * Called when place a block.
+     * Called when the block is placed.
      * <p>
-     * Please note that at this moment the block has not been placed yet, so
-     * you can't set a new block state using {@link Dimension#setBlockState}
-     * at this time, as the block state will be placed later and will override
-     * the block state you set here.
-     * <p>
-     * If you want to do the thing said above, consider using {@link BlockBehavior#afterPlaced}.
+     * Note that the block has not been placed yet, so changes to the block state via {@link Dimension#setBlockState}
+     * will be overridden by the actual placement.
+     * </p>
+     * For setting a new block state post-placement, consider using {@link BlockBehavior#afterPlaced}.
      *
-     * @param currentBlockState The block that is being replaced.
-     * @param newBlockState     The block that is replacing the current block.
-     * @param placementInfo     The player placement info, can be {@code null}.
+     * @param currentBlockState the block that is being replaced.
+     * @param newBlockState     the block that will replace the current block.
+     * @param placementInfo     the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * Called after a block is placed.
+     * Called after the block is placed.
      *
-     * @param oldBlockState The block that is being replaced.
-     * @param newBlockState The block that is replacing the current block.
-     * @param placementInfo The player placement info, can be {@code null}.
+     * @param oldBlockState the block that was replaced.
+     * @param newBlockState the new block that replaced the old block.
+     * @param placementInfo the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
     void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * Check if the block will drop as item when it is broke by the specified entity using the specified item.
+     * Determines if the block will drop as an item when it is broken by the specified entity using the specified item.
      *
-     * @param blockState the block being broke.
+     * @param blockState the block being broken.
      * @param usedItem   the item used to break the block, can be {@code null}.
-     * @param entity     the entity who break the block, can be {@code null}.
+     * @param entity     the entity breaking the block, can be {@code null}.
      *
-     * @return {@code true} if the block will drop as item, {@code false} otherwise.
+     * @return {@code true} if the block will drop as an item, {@code false} otherwise.
      */
     boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
-     * Called when a player interacts with the block.
+     * Handles player interaction with the block.
      *
-     * @param itemStack    The item in the player's hand.
-     * @param interactInfo The player interaction info.
+     * @param itemStack    the item in the player's hand.
+     * @param interactInfo information about the interaction.
      *
-     * @return Whether the operation is valid.
-     * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
-     * If {@code false} is returned, the useItemOn method of the player's item will continue to be called.
+     * @return {@code true} if the interaction is valid, {@code false} otherwise.
      */
     @ApiStatus.OverrideOnly
     boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo);
 
     /**
-     * Called when a block is replaced.
+     * Called when the block is replaced.
      *
-     * @param currentBlockState The block that is being replaced.
-     * @param newBlockState     The block that is replacing the current block.
-     * @param placementInfo     The player placement info, can be null.
+     * @param currentBlockState the block being replaced.
+     * @param newBlockState     the block that replaces the current block.
+     * @param placementInfo     the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
     void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * Called after a block is replaced.
+     * Called after a block has been replaced.
      *
-     * @param oldBlockState the block that is being replaced.
-     * @param newBlockState the block that is replacing the current block.
-     * @param placementInfo the player placement info, can be null.
+     * @param oldBlockState the block that was replaced.
+     * @param newBlockState the block that replaced the old block.
+     * @param placementInfo the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
     void afterReplaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * Called when a neighbor layer block is replaced.
-     * <pr>
-     * For example, if a water block is in layer 1 and layer 0 is replaced with air,
-     * then the water block's onNeighborLayerReplace() method will be called.
+     * Handles the case where a neighbor layer block is replaced.
+     * For example, when a water block in layer 1 is affected by a change in layer 0.
      *
-     * @param currentBlockState the block that is being replaced.
-     * @param newBlockState     the block that is replacing the current block.
-     * @param placementInfo     the player placement info, can be null.
+     * @param currentBlockState the block being replaced.
+     * @param newBlockState     the new block replacing the current block.
+     * @param placementInfo     the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
     void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * Called when a block is broken by non-creative game mode player.
+     * Handles when a block is broken by a non-creative player.
      *
      * @param blockState the block that was broken.
-     * @param usedItem   the item that was used to break the block, can be {@code null}.
-     * @param entity     the player who broke the block, can be {@code null}.
+     * @param usedItem   the item used to break the block, can be {@code null}.
+     * @param entity     the entity that broke the block, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
     void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
@@ -187,35 +177,48 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a block receives a scheduled update.
      *
-     * @param blockStateWithPos the block that received the scheduled update. Notes that the layer will always be zero.
+     * @param blockStateWithPos the block receiving the scheduled update.
      */
     @ApiStatus.OverrideOnly
     default void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {}
 
     /**
-     * Get the block's drops when it is broke by item normally.
+     * Retrieves the drops of the block when it is broken.
      *
-     * @param blockState the block being broke.
+     * @param blockState the block being broken.
      * @param usedItem   the item used to break the block, can be {@code null}.
-     * @param entity     the entity who break the block, can be {@code null}.
+     * @param entity     the entity breaking the block, can be {@code null}.
      *
-     * @return the drops.
+     * @return a set of {@link ItemStack} representing the drops.
      */
     Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
-     * Get the block's drops when it is broke by an item which has silk touch enchantment.
+     * Retrieves the drops of the block when it is broken with a silk touch enchantment.
      *
-     * @param blockState the block which is being broke.
+     * @param blockState the block being broken.
      *
-     * @return the drops.
+     * @return the silk touch drop as an {@link ItemStack}.
      */
     default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
         return blockState.blockState().toItemStack();
     }
 
     /**
-     * Check if the block can damage the item.
+     * Retrieves the amount of XP that should be dropped when the block is broken.
+     *
+     * @param blockState the block being broken.
+     * @param usedItem   the item used to break the block.
+     * @param entity     the entity breaking the block.
+     *
+     * @return the amount of XP to drop.
+     */
+    default int getDropXpAmount(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        return 0;
+    }
+
+    /**
+     * Determines if the block can damage the item used to break it.
      *
      * @param itemStack the item being damaged.
      *
@@ -226,22 +229,17 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Called when an entity falls on the block.
+     * Handles when an entity falls on the block.
      *
-     * @param entity the entity who falls on the block.
-     * @param block  the block state the entity falls on.
+     * @param entity the entity falling on the block.
+     * @param block  the block the entity is falling on.
      */
     @ApiStatus.OverrideOnly
     default void onEntityFallOn(Entity entity, BlockStateWithPos block) {}
 
     /**
-     * Get the block's fall damage reduction factor.
-     * <p>
-     * Fall damage reduction factor is a value that express
-     * how much the block can reduce the fall damage.
-     * <p>
-     * For example, if fall damage is 10.0 and the reduction factor is 0.5,
-     * the actual fall damage will be 5.0.
+     * Retrieves the fall damage reduction factor for the block.
+     * The factor determines how much fall damage is reduced when an entity falls on this block.
      *
      * @return the fall damage reduction factor.
      */
@@ -250,7 +248,7 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Check if the block can reset fall damage.
+     * Determines if the block can reset fall damage.
      *
      * @return {@code true} if the block can reset fall damage, {@code false} otherwise.
      */
@@ -259,10 +257,7 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Check whether this block type can collide with entities.
-     * <p>
-     * If return {@code true}, {@link #onCollideWithEntity(BlockStateWithPos, Entity)}
-     * method will be called when collide with an entity.
+     * Determines whether the block type can collide with entities.
      *
      * @return {@code true} if the block can collide with entities, {@code false} otherwise.
      */
@@ -271,9 +266,8 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Called when the block collides with an entity.
-     * <p>
-     * This method is called only if {@link #canCollideWithEntity()} returns {@code true}.
+     * Handles when a block collides with an entity.
+     * This method is only called if {@link #canCollideWithEntity()} returns {@code true}.
      *
      * @param blockStateWithPos the block that collides with the entity.
      * @param entity            the entity that collides with the block.
@@ -282,22 +276,25 @@ public interface BlockBaseComponent extends BlockComponent {
     default void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {}
 
     /**
-     * Calculate how long can break a specific block state.
+     * Calculates the time it takes to break the specific block state with the given item.
      *
-     * @param blockState the specific block state, must belong to this block type.
-     * @param usedItem   the item used, can be {@code null}.
-     * @param entity     the entity who break the block, can be {@code null}.
+     * @param blockState the specific block state to be broken.
+     * @param usedItem   the item used to break the block, can be {@code null}.
+     * @param entity     the entity breaking the block, can be {@code null}.
      *
-     * @return the time (second).
+     * @return the time in seconds required to break the block.
      */
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
         checkBlockType(blockState);
-        if (usedItem.canInstantBreak(blockState)) return 0;
+        if (usedItem.canInstantBreak(blockState)) {
+            return 0;
+        }
 
         var blockHardness = blockState.getBlockStateData().hardness();
         if (blockHardness == -1) {
             return Integer.MAX_VALUE;
         }
+
         var isCorrectTool = usedItem.isCorrectToolFor(blockState);
         var requiresCorrectToolForDrops = blockState.getBlockStateData().requiresCorrectToolForDrops();
         var hasAquaAffinity = false;
@@ -350,11 +347,17 @@ public interface BlockBaseComponent extends BlockComponent {
         // Entity haste potion effect bonus
         speed *= 1d + (0.2d * hasteEffectLevel);
         // Entity mining fatigue effect negative bonus
-        if (miningFatigueLevel != 0) speed /= Math.pow(miningFatigueLevel, 3);
+        if (miningFatigueLevel != 0) {
+            speed /= Math.pow(miningFatigueLevel, 3);
+        }
         // In water but no underwater speed mining effect
-        if (isEyesInWater && !hasAquaAffinity) speed *= 0.2d;
+        if (isEyesInWater && !hasAquaAffinity) {
+            speed *= 0.2d;
+        }
         // In midair
-        if (!isEyesInWater && !isOnGround) speed *= 0.2d;
+        if (!isEyesInWater && !isOnGround) {
+            speed *= 0.2d;
+        }
         return 1d / speed;
     }
 

@@ -50,7 +50,7 @@ public class GameRuleCommand extends SimpleCommand {
                 context.addOutput(TrKeys.M_COMMANDS_GAMERULE_SUCCESS, gamerule.getName(), value);
             } else {
                 value = world.getWorldData().getGameRuleValue(gamerule);
-                context.addOutput(String.valueOf(value));
+                context.addOutput(gamerule.getName() + " = " + value);
             }
 
             return context.success();

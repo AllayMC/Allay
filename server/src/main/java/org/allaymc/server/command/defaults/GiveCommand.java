@@ -36,7 +36,7 @@ public class GiveCommand extends SimpleCommand {
                     }
 
                     ItemType<?> itemType = context.getResult(1);
-                    int amount = context.getResult(2);
+                    final int amount = context.getResult(2);
                     if (amount <= 0) {
                         context.addSyntaxError(2);
                         return context.fail();
@@ -50,16 +50,17 @@ public class GiveCommand extends SimpleCommand {
 
                     for (var player : players) {
                         var maxStackSize = itemType.getItemData().maxStackSize();
-                        while (amount != 0) {
-                            int currentAmount;
-                            if (amount > maxStackSize) {
-                                currentAmount = maxStackSize;
-                                amount -= maxStackSize;
+                        var i = amount;
+                        while (i != 0) {
+                            int currentItemAmount;
+                            if (i > maxStackSize) {
+                                currentItemAmount = maxStackSize;
+                                i -= maxStackSize;
                             } else {
-                                currentAmount = amount;
-                                amount = 0;
+                                currentItemAmount = i;
+                                i = 0;
                             }
-                            var itemStack = itemType.createItemStack(currentAmount, data);
+                            var itemStack = itemType.createItemStack(currentItemAmount, data);
                             player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
                             if (itemStack.getCount() != 0) {
                                 player.dropItemInPlayerPos(itemStack);
@@ -68,10 +69,8 @@ public class GiveCommand extends SimpleCommand {
                         player.sendTr(TrKeys.M_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
                     }
                     context.addOutput(
-                            TrKeys.M_COMMANDS_GIVE_SUCCESS,
-                            itemType.getIdentifier().toString(),
-                            amount,
-                            players.stream().map(EntityPlayer::getDisplayName).collect(Collectors.joining(", "))
+                            TrKeys.M_COMMANDS_GIVE_SUCCESS, itemType.getIdentifier().toString(),
+                            amount, players.stream().map(EntityPlayer::getDisplayName).collect(Collectors.joining(", "))
                     );
                     return context.success();
                 });

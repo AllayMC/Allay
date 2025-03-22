@@ -9,6 +9,7 @@ import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerState;
 import org.allaymc.server.utils.GitProperties;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -160,7 +161,7 @@ public class Metrics {
      */
     private void startSubmitting() {
         final Runnable submitTask = () -> {
-            if (!Server.getInstance().isRunning()) {
+            if (Server.getInstance().getState() != ServerState.RUNNING) {
                 return;
             }
             submitData();

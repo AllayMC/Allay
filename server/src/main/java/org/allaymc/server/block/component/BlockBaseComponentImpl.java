@@ -125,6 +125,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         for (var drop : drops) {
             dimension.dropItem(drop, dropPos);
         }
+
+        var dropXpAmount = getDropXpAmount(blockState, usedItem, entity);
+        if (dropXpAmount > 0) {
+            dimension.dropXpOrb(dropPos, dropXpAmount);
+        }
     }
 
     @Override

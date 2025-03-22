@@ -19,6 +19,7 @@ import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardService;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerState;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.client.service.AllayPlayerService;
@@ -45,7 +46,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author daoge_cmd
@@ -54,11 +55,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class AllayServer implements Server {
 
     private static final AllayServer INSTANCE = new AllayServer();
+
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
 
-    private final AtomicBoolean isRunning;
-    private final AtomicBoolean isStarting;
-    private final AtomicBoolean isFullyStopped;
+    private final AtomicReference<ServerState> state;
     @Getter
     private final AllayWorldPool worldPool;
     @Getter
@@ -82,9 +82,7 @@ public final class AllayServer implements Server {
     private long startTime;
 
     private AllayServer() {
-        this.isRunning = new AtomicBoolean(true);
-        this.isStarting = new AtomicBoolean(true);
-        this.isFullyStopped = new AtomicBoolean(false);
+        this.state = new AtomicReference<>(ServerState.STARTING);
         this.playerService = new AllayPlayerService(Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE, new AllayNetworkInterface(this));
         this.worldPool = new AllayWorldPool();
         this.computeThreadPool = createComputeThreadPool();
@@ -107,7 +105,7 @@ public final class AllayServer implements Server {
     }
 
     private void serverThreadMain(GameLoop gameLoop) {
-        if (!isRunning.get()) {
+        if (getState() != ServerState.RUNNING) {
             gameLoop.stop();
             return;
         }
@@ -120,7 +118,7 @@ public final class AllayServer implements Server {
     }
 
     private void onServerStart() {
-        this.isStarting.set(false);
+        state.set(ServerState.RUNNING);
     }
 
     private void onServerStop() {
@@ -151,12 +149,12 @@ public final class AllayServer implements Server {
         }
 
         SignalUtils.addTask(() -> {
-            if (!isRunning.get()) {
+            if (getState() != ServerState.RUNNING) {
                 return;
             }
 
             shutdown();
-            while (!isFullyStopped.get()) {
+            while (getState() != ServerState.STOPPED) {
                 Thread.yield();
             }
         });
@@ -202,10 +200,15 @@ public final class AllayServer implements Server {
         // Mark the server as "not running"
         // The real shutdown logic is in shutdownReally() method
         // and will be called after all players are disconnected
-        if (!isRunning.compareAndSet(true, false)) {
+        if (!state.compareAndSet(ServerState.RUNNING, ServerState.STOPPING)) {
             return;
         }
         playerService.disconnectAllPlayers(TrKeys.A_SERVER_STOPPED);
+    }
+
+    @Override
+    public ServerState getState() {
+        return state.get();
     }
 
     private void shutdownReally() {
@@ -230,7 +233,7 @@ public final class AllayServer implements Server {
         this.virtualThreadPool.shutdown();
         this.computeThreadPool.shutdown();
 
-        this.isFullyStopped.set(true);
+        this.state.set(ServerState.STOPPED);
     }
 
     @Override
@@ -260,16 +263,6 @@ public final class AllayServer implements Server {
         for (var output : outputs) {
             log.info("[{}] {}{}", sender.getCommandSenderName(), status <= 0 ? TextFormat.RED : "", I18n.get().tr(output.str(), output.args()));
         }
-    }
-
-    @Override
-    public boolean isRunning() {
-        return isRunning.get();
-    }
-
-    @Override
-    public boolean isStarting() {
-        return isStarting.get();
     }
 
     @Override

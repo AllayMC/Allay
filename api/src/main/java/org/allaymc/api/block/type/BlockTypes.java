@@ -408,7 +408,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCoalBlockBehavior> COAL_BLOCK;
 
-    public static BlockType<BlockCoalOreBehavior> COAL_ORE;
+    public static BlockType<BlockOreBehavior> COAL_ORE;
 
     public static BlockType<BlockCoarseDirtBehavior> COARSE_DIRT;
 
@@ -456,7 +456,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperGrateBehavior> COPPER_GRATE;
 
-    public static BlockType<BlockCopperOreBehavior> COPPER_ORE;
+    public static BlockType<BlockOreBehavior> COPPER_ORE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> COPPER_TRAPDOOR;
 
@@ -664,21 +664,21 @@ public final class BlockTypes {
 
     public static BlockType<BlockBricksBehavior> DEEPSLATE_BRICKS;
 
-    public static BlockType<BlockDeepslateCoalOreBehavior> DEEPSLATE_COAL_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_COAL_ORE;
 
-    public static BlockType<BlockDeepslateCopperOreBehavior> DEEPSLATE_COPPER_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_COPPER_ORE;
 
-    public static BlockType<BlockDeepslateDiamondOreBehavior> DEEPSLATE_DIAMOND_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_DIAMOND_ORE;
 
-    public static BlockType<BlockDeepslateEmeraldOreBehavior> DEEPSLATE_EMERALD_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_EMERALD_ORE;
 
-    public static BlockType<BlockDeepslateGoldOreBehavior> DEEPSLATE_GOLD_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_GOLD_ORE;
 
-    public static BlockType<BlockDeepslateIronOreBehavior> DEEPSLATE_IRON_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_IRON_ORE;
 
-    public static BlockType<BlockDeepslateLapisOreBehavior> DEEPSLATE_LAPIS_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_LAPIS_ORE;
 
-    public static BlockType<BlockDeepslateRedstoneOreBehavior> DEEPSLATE_REDSTONE_ORE;
+    public static BlockType<BlockOreBehavior> DEEPSLATE_REDSTONE_ORE;
 
     public static BlockType<BlockDoubleSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB;
 
@@ -702,7 +702,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDiamondBlockBehavior> DIAMOND_BLOCK;
 
-    public static BlockType<BlockDiamondOreBehavior> DIAMOND_ORE;
+    public static BlockType<BlockOreBehavior> DIAMOND_ORE;
 
     public static BlockType<BlockDioriteBehavior> DIORITE;
 
@@ -974,7 +974,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockEmeraldBlockBehavior> EMERALD_BLOCK;
 
-    public static BlockType<BlockEmeraldOreBehavior> EMERALD_ORE;
+    public static BlockType<BlockOreBehavior> EMERALD_ORE;
 
     public static BlockType<BlockEnchantingTableBehavior> ENCHANTING_TABLE;
 
@@ -1070,7 +1070,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockGoldBlockBehavior> GOLD_BLOCK;
 
-    public static BlockType<BlockGoldOreBehavior> GOLD_ORE;
+    public static BlockType<BlockOreBehavior> GOLD_ORE;
 
     public static BlockType<BlockGoldenRailBehavior> GOLDEN_RAIL;
 
@@ -1256,7 +1256,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockIronDoorBehavior> IRON_DOOR;
 
-    public static BlockType<BlockIronOreBehavior> IRON_ORE;
+    public static BlockType<BlockOreBehavior> IRON_ORE;
 
     public static BlockType<BlockIronTrapdoorBehavior> IRON_TRAPDOOR;
 
@@ -1308,7 +1308,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockLapisBlockBehavior> LAPIS_BLOCK;
 
-    public static BlockType<BlockLapisOreBehavior> LAPIS_ORE;
+    public static BlockType<BlockOreBehavior> LAPIS_ORE;
 
     public static BlockType<BlockLargeAmethystBudBehavior> LARGE_AMETHYST_BUD;
 
@@ -1426,7 +1426,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBlastFurnaceBehavior> LIT_BLAST_FURNACE;
 
-    public static BlockType<BlockLitDeepslateRedstoneOreBehavior> LIT_DEEPSLATE_REDSTONE_ORE;
+    public static BlockType<BlockOreBehavior> LIT_DEEPSLATE_REDSTONE_ORE;
 
     public static BlockType<BlockFurnaceBehavior> LIT_FURNACE;
 
@@ -1434,7 +1434,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockLitRedstoneLampBehavior> LIT_REDSTONE_LAMP;
 
-    public static BlockType<BlockLitRedstoneOreBehavior> LIT_REDSTONE_ORE;
+    public static BlockType<BlockOreBehavior> LIT_REDSTONE_ORE;
 
     public static BlockType<BlockSmokerBehavior> LIT_SMOKER;
 
@@ -1568,7 +1568,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWallBehavior> NETHER_BRICK_WALL;
 
-    public static BlockType<BlockNetherGoldOreBehavior> NETHER_GOLD_ORE;
+    public static BlockType<BlockOreBehavior> NETHER_GOLD_ORE;
 
     public static BlockType<BlockNetherSproutsBehavior> NETHER_SPROUTS;
 
@@ -1900,7 +1900,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoubleSlabBehavior> QUARTZ_DOUBLE_SLAB;
 
-    public static BlockType<BlockQuartzOreBehavior> QUARTZ_ORE;
+    public static BlockType<BlockOreBehavior> QUARTZ_ORE;
 
     public static BlockType<BlockQuartzPillarBehavior> QUARTZ_PILLAR;
 
@@ -1970,7 +1970,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockRedstoneLampBehavior> REDSTONE_LAMP;
 
-    public static BlockType<BlockRedstoneOreBehavior> REDSTONE_ORE;
+    public static BlockType<BlockOreBehavior> REDSTONE_ORE;
 
     public static BlockType<BlockRedstoneTorchBehavior> REDSTONE_TORCH;
 

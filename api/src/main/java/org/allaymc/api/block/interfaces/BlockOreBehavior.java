@@ -2,5 +2,5 @@ package org.allaymc.api.block.interfaces;
 
 import org.allaymc.api.block.BlockBehavior;
 
-public interface BlockCopperOreBehavior extends BlockBehavior {
+public interface BlockOreBehavior extends BlockBehavior {
 }

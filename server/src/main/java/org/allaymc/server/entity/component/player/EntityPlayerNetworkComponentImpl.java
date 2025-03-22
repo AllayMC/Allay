@@ -10,10 +10,10 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
 import org.allaymc.api.eventbus.event.player.PlayerLoginEvent;
-import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
@@ -23,6 +23,7 @@ import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.server.client.service.AllayPlayerService;
@@ -262,9 +263,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void onDisconnect(String disconnectReason) {
+        var event = new ClientDisconnectEvent(clientSession, disconnectReason);
+        event.call();
         thisPlayer.closeAllContainers();
         ((AllayPlayerService) Server.getInstance().getPlayerService()).onDisconnect(thisPlayer);
-        new PlayerQuitEvent(thisPlayer, disconnectReason).call();
     }
 
     @Override
@@ -389,7 +391,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return;
         }
 
-        var event = new PlayerLoginEvent(thisPlayer, TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
+        var event = new PlayerLoginEvent(thisPlayer, TrKeys.M_DISCONNECTIONSCREEN_NOREASON, TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED);
         if (!event.call()) {
             disconnect(event.getDisconnectReason());
             return;
@@ -403,6 +405,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         ((AllayPlayerService) Server.getInstance().getPlayerService()).onLoggedIn(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
+        Server.getInstance().broadcastTr(event.getJoinMessage(), thisPlayer.getOriginName());
+
         sendPacket(DeferredData.RESOURCE_PACKS_INFO_PACKET.get());
     }
 

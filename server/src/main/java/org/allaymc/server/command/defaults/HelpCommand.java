@@ -9,66 +9,64 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.registry.AllayCommandRegistry;
 
+/**
+ * @author harryxi
+ */
 public class HelpCommand extends SimpleCommand {
+    private static final int COMMANDS_PER_PAGE = 7;
 
     public HelpCommand() {
         super("help", TrKeys.M_COMMANDS_HELP_DESCRIPTION);
-    }
-
-    @Override
-    public boolean isServerSideOnly() {
-        return true;
+        aliases.add("?");
     }
 
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .intNum("page",1).optional()
+                .intNum("page", 1).optional()
                 .exec((context, sender) -> {
-                    var num =  Registries.COMMANDS.getContent().size();
-                    var pages = num / 5;
+                    var commands = Registries.COMMANDS.getContent();
+                    var pages = commands.size() / COMMANDS_PER_PAGE;
                     var page = (int) context.getResult(0);
-                    if(page < 0 || page > pages) {
-                        context.addSyntaxError(0);
-                        context.addError("Invalid page number. The page number must be 0 or between 1 and " + pages);
-                        return context.fail();
-                    }
-                    if(page == 0){
-                        sender.sendText("Total "+num+" commands");
-                        sender.sendText("");
-                        for(var command : Registries.COMMANDS.getContent().values()) {
-                            printCommandHelp(sender, command);
-                            sender.sendText("");
-                        }
-                    } else {
-                        sender.sendTr(TrKeys.M_COMMANDS_HELP_HEADER,page,pages);
-                        for(var command : Registries.COMMANDS.getContent().values().stream().toList().subList((page-1)*5, page*5)) {
-                            printCommandHelp(sender, command);
-                            sender.sendText("");
-                        }
+                    page = Math.min(pages, Math.max(1, page));
 
+                    sender.sendTr(TrKeys.M_COMMANDS_HELP_HEADER, page, pages);
+                    for (var command : commands.values().stream().toList().subList((page - 1) * COMMANDS_PER_PAGE, page * COMMANDS_PER_PAGE)) {
+                        printCommandHelp(sender, command);
+                        sender.sendText("");
                     }
+                    sender.sendTr(TrKeys.M_COMMANDS_HELP_FOOTER);
                     return context.success();
                 }, SenderType.SERVER)
                 .root()
-                .str("name")
+                .str("command")
                 .exec((context, sender) -> {
-                    var command = ((AllayCommandRegistry) Registries.COMMANDS).findCommand(context.getResult(0));
-                    if (command == null) {
-                        context.addError("No such command");
-                        return context.fail();
+                    if (Registries.COMMANDS instanceof AllayCommandRegistry commandRegistry) {
+                        var command = commandRegistry.findCommand(context.getResult(0));
+                        if (command == null) {
+                            context.addSyntaxError(0);
+                            return context.fail();
+                        }
+
+                        printCommandHelp(sender, command);
+                        return context.success();
                     }
-                    printCommandHelp(sender, command);
-                    return context.success();
+
+                    return context.fail();
                 }, SenderType.SERVER);
     }
 
-    private static void printCommandHelp(Server sender, Command command) {
+    private void printCommandHelp(Server sender, Command command) {
         sender.sendTr(command.getAliases().isEmpty() ? command.getName() + ":" : TrKeys.M_COMMANDS_HELP_COMMAND_ALIASES, command.getName(), String.join(" ", command.getAliases()));
         sender.sendTr(command.getDescription());
         sender.sendTr(TrKeys.M_COMMANDS_GENERIC_USAGE_NOPARAM);
-        for(var usage: command.getCommandFormatTips()){
+        for (var usage : command.getCommandFormatTips()) {
             sender.sendText(usage);
         }
+    }
+
+    @Override
+    public boolean isServerSideOnly() {
+        return true;
     }
 }

@@ -96,6 +96,4 @@ public class ClearCommand extends SimpleCommand {
                     return success ? context.success(status) : context.fail();
                 }, SenderType.PLAYER);
     }
-
-
 }

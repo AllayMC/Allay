@@ -14,7 +14,6 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
@@ -33,7 +32,6 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3i;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -45,10 +43,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 public class AllayWorld implements World {
+
     // Send the time to client every 12 seconds
     protected static final int TIME_SENDING_INTERVAL = 12 * 20;
     protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
     protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = Server.SETTINGS.networkSettings().enableIndependentNetworkThread();
+    protected static final boolean TICK_DIMENSION_IN_PARALLEL = Server.SETTINGS.worldSettings().tickDimensionInParallel();
 
     @Getter
     protected final String name;
@@ -177,10 +177,19 @@ public class AllayWorld implements World {
         if (!ENABLE_INDEPENDENT_NETWORK_THREAD) {
             handleSyncPackets(null);
         }
+
         tickTime(currentTick);
         tickWeather();
         scheduler.tick();
-        getDimensions().values().forEach(d -> ((AllayDimension) d).tick(currentTick));
+
+        if (TICK_DIMENSION_IN_PARALLEL) {
+            dimensionMap.values().parallelStream().forEach(d -> ((AllayDimension) d).tick(currentTick));
+        } else {
+            for (var dimension : dimensionMap.values()) {
+                ((AllayDimension) dimension).tick(currentTick);
+            }
+        }
+
         worldStorage.tick(currentTick);
     }
 
@@ -196,21 +205,22 @@ public class AllayWorld implements World {
             overworld.getChunkService().addChunkLoader(new SpawnPointChunkLoader());
         }
 
-        // Find the spawn point only the first time the world is loaded
-        if (this.worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
-            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getDisplayName()).start(() -> {
-                var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
-                if (newSpawnPoint == null) {
-                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getDisplayName());
-                    newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
-                }
-                var finalNewSpawnPoint = newSpawnPoint;
-                overworld.getWorld().getScheduler().runLater(this, () -> {
-                    // Set new spawn point in world thread as world data object is not thread-safe
-                    worldData.setSpawnPoint(finalNewSpawnPoint);
-                });
-            });
-        }
+        // TODO: rewrite safe spawn point finder after we refactored chunk service
+//        // Find the spawn point only the first time the world is loaded
+//        if (this.worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
+//            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getDisplayName()).start(() -> {
+//                var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
+//                if (newSpawnPoint == null) {
+//                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getDisplayName());
+//                    newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
+//                }
+//                var finalNewSpawnPoint = newSpawnPoint;
+//                overworld.getWorld().getScheduler().runLater(this, () -> {
+//                    // Set new spawn point in world thread as world data object is not thread-safe
+//                    worldData.setSpawnPoint(finalNewSpawnPoint);
+//                });
+//            });
+//        }
     }
 
     protected boolean isSafeStandingPos(Position3ic pos) {
