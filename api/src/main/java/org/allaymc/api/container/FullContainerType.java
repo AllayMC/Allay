@@ -198,6 +198,12 @@ public record FullContainerType<T extends Container>(
             .mapRangedNetworkSlotIndex(51, 54, 0)
             .build();
 
+    public static final FullContainerType<DoubleChestContainer> DOUBLE_CHEST = builder()
+            .id(ContainerType.CONTAINER)
+            .size(54)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;

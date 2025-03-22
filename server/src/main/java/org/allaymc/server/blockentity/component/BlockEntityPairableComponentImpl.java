@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.component;
 
+import lombok.Getter;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
@@ -13,12 +14,15 @@ import org.allaymc.server.component.annotation.Dependency;
  * @author IWareQ
  */
 public class BlockEntityPairableComponentImpl implements BlockEntityPairableComponent {
+    protected static final String TAG_ALLAY_PAIR_LEAD = "allay:pairlead";
     protected static final String TAG_PAIR_X = "pairx";
     protected static final String TAG_PAIR_Z = "pairz";
 
     @Dependency
     protected BlockEntityBaseComponent baseComponent;
 
+    @Getter
+    protected boolean lead;
     protected int pairX;
     protected int pairZ;
 
@@ -32,15 +36,18 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
         pairZ = other.getPosition().z();
 
         baseComponent.sendBlockEntityDataPacketToViewers();
+
+        var pair = (BlockEntityPairableComponent) getPair();
+        if (pair.isPaired()) {
+            lead = true;
+        }
+
         return true;
     }
 
     @Override
     public void unpair() {
-        var pair = getPair();
-        if (pair instanceof BlockEntityPairableComponent pairableComponent) {
-            pairableComponent.unpair();
-        }
+        lead = false;
 
         pairX = Integer.MIN_VALUE;
         pairZ = Integer.MIN_VALUE;
@@ -51,6 +58,7 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
     @EventHandler
     protected void onLoadNBT(CBlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
+        nbt.listenForBoolean(TAG_ALLAY_PAIR_LEAD, value -> lead = value);
         nbt.listenForInt(TAG_PAIR_X, value -> pairX = value);
         nbt.listenForInt(TAG_PAIR_Z, value -> pairZ = value);
     }
@@ -59,7 +67,8 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
     protected void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
         if (isPaired()) {
-            builder.putInt(TAG_PAIR_X, pairX)
+            builder.putBoolean(TAG_ALLAY_PAIR_LEAD, lead)
+                    .putInt(TAG_PAIR_X, pairX)
                     .putInt(TAG_PAIR_Z, pairZ);
         }
     }
@@ -68,7 +77,10 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
     protected void onReplace(CBlockOnReplaceEvent event) {
         var blockEntity = event.getCurrentBlockState().getBlockEntity();
         if (blockEntity instanceof BlockEntityPairableComponent pairableComponent) {
-            pairableComponent.unpair();
+            if (pairableComponent.isPaired()) {
+                ((BlockEntityPairableComponent) pairableComponent.getPair()).unpair();
+                pairableComponent.unpair();
+            }
         }
     }
 
