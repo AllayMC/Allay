@@ -31,6 +31,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `PlayerJoinEvent#joinMessage` and `PlayerQuitEvent#quitMessage` and correspond setters. Now these messages can be edited by plugins.
 - (API) Added `BlockBaseComponent#getDropXpAmount` method.
 - (API) Added option `tickDimensionInParallel` to control whether tick dimensions in the same world in parallel during world tick.
+- (API) Added `BlockFace#fromMinecraftCardinalDirection` and `BlockFace#isVertical` methods.
+- (API) Added `BlockStateWithPos#getBlockEntity` method.
+- (API) Implemented chest pairing, and several related interfaces & objects including `BlockEntityPairableComponent`,
+    `DoubleChestContainer`, are added to api module, see commit history for more details.
 - Implemented ores.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
@@ -43,6 +47,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved player, ban/whitelist related methods from `Server` to the new `PlayerService` class.
 - (API) Moved `Server#getNetworkInterface` method from `Server` to the new `PlayerService` class. `NetworkInterface` is now held by `PlayerService` rather than `Server`.
 - (API) Moved `PlayerQuitEvent#reason` to the newly introduced event `ClientDisconnectEvent`. `PlayerQuitEvent` will only be called for already logged in player now.
+- (API) Removed `BlockEntityBaseComponent#clearCustomName` method, use `BlockEntityBaseComponent#setCustomName(null)` to clear custom name.
+- Removed `BlockEntityContainerHolderComponentImpl#constructor(Supplier<Container>, Consumer<ContainerViewer>, Consumer<ContainerViewer>)`.
 - Optimized `setItemStack` handling in `ItemStackRequestPacket` to no longer require sending an `InventorySlotPacket` (Issue #66).
 - Use `AtomicReference<ServerState>` instead of `AtomicBoolean`'s fields for state management
 
