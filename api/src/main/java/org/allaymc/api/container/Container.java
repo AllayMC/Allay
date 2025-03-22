@@ -161,7 +161,6 @@ public interface Container {
      */
     List<ItemData> toNetworkItemData();
 
-
     /**
      * @see #setItemStack(int, ItemStack, boolean)
      */
