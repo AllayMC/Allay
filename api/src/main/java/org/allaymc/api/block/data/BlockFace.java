@@ -48,7 +48,7 @@ public enum BlockFace {
     }
 
     /**
-     * Get horizontal block faces.
+     * Retrieves the horizontal block faces.
      *
      * @return the horizontal block faces.
      */
@@ -57,7 +57,7 @@ public enum BlockFace {
     }
 
     /**
-     * Get vertical block faces.
+     * Retrieves the vertical block faces.
      *
      * @return the vertical block faces.
      */
@@ -65,6 +65,13 @@ public enum BlockFace {
         return VERTICAL_BLOCK_FACES;
     }
 
+    /**
+     * Converts a {@link MinecraftCardinalDirection} to a corresponding {@link BlockFace}.
+     *
+     * @param direction the Minecraft cardinal direction to convert.
+     *
+     * @return the corresponding {@link BlockFace}.
+     */
     @ApiStatus.Experimental
     public static BlockFace fromMinecraftCardinalDirection(MinecraftCardinalDirection direction) {
         return switch (direction) {
