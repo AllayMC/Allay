@@ -12,9 +12,7 @@ public interface BlockEntityPairableComponent extends BlockEntityComponent {
 
     BlockEntity getPair();
 
-    default boolean isPaired() {
-        return getPair() != null;
-    }
+    boolean isPaired();
 
     boolean isLead();
 }
