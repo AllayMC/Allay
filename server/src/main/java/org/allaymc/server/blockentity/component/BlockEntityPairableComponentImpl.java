@@ -14,7 +14,7 @@ import org.allaymc.server.component.annotation.Dependency;
  * @author IWareQ
  */
 public class BlockEntityPairableComponentImpl implements BlockEntityPairableComponent {
-    protected static final String TAG_LEAD = "allay:lead";
+    protected static final String TAG_PAIR_LEAD = "allay:pairlead";
     protected static final String TAG_PAIR_X = "pairx";
     protected static final String TAG_PAIR_Z = "pairz";
 
@@ -58,7 +58,7 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
     @EventHandler
     protected void onLoadNBT(CBlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
-        nbt.listenForBoolean(TAG_LEAD, value -> lead = value);
+        nbt.listenForBoolean(TAG_PAIR_LEAD, value -> lead = value);
         nbt.listenForInt(TAG_PAIR_X, value -> pairX = value);
         nbt.listenForInt(TAG_PAIR_Z, value -> pairZ = value);
     }
@@ -67,7 +67,7 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
     protected void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
         if (isPaired()) {
-            builder.putBoolean(TAG_LEAD, lead)
+            builder.putBoolean(TAG_PAIR_LEAD, lead)
                     .putInt(TAG_PAIR_X, pairX)
                     .putInt(TAG_PAIR_Z, pairZ);
         }
