@@ -1,14 +1,13 @@
 package org.allaymc.server.world.chunk;
 
 import io.netty.buffer.ByteBuf;
+import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.ChunkSection;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.world.storage.leveldb.ChunkSectionVersion;
-
-import javax.annotation.concurrent.NotThreadSafe;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 import static org.allaymc.api.utils.HashUtils.hashChunkSectionXYZ;
@@ -17,8 +16,11 @@ import static org.allaymc.api.utils.HashUtils.hashChunkSectionXYZ;
  * @author Cool_Loong | daoge_cmd
  */
 @NotThreadSafe
-public record AllayChunkSection(byte sectionY, Palette<BlockState>[] blockLayers,
-                                Palette<BiomeType> biomes) implements ChunkSection {
+public record AllayChunkSection(
+        byte sectionY,
+        Palette<BlockState>[] blockLayers,
+        Palette<BiomeType> biomes
+) implements ChunkSection {
 
     public static final int LAYER_COUNT = 2;
     public static final int CURRENT_CHUNK_SECTION_VERSION = ChunkSectionVersion.PALETTED_MULTI_WITH_OFFSET.ordinal();

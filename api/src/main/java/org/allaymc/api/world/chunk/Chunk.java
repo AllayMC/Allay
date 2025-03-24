@@ -1,6 +1,7 @@
 package org.allaymc.api.world.chunk;
 
-import javax.annotation.concurrent.ThreadSafe;
+import org.allaymc.api.annotation.ThreadSafe;
+
 import java.util.function.Consumer;
 
 /**
