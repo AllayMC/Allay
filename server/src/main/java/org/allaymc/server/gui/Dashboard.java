@@ -14,7 +14,6 @@ import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -22,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URL;
@@ -230,20 +228,20 @@ public final class Dashboard {
         var originalOutputStream = System.out;
         return new OutputStream() {
             @Override
-            public void write(final int b) {
-                originalOutputStream.write(b);
-                appendTextToConsole(String.valueOf((char) b));
+            public void write(int i) {
+                originalOutputStream.write(i);
+                appendTextToConsole(String.valueOf((char) i));
             }
 
             @Override
-            public void write(byte @NonNull [] b, int off, int len) {
+            public void write(byte @NotNull [] b) {
+                write(b, 0, b.length);
+            }
+
+            @Override
+            public void write(byte @NotNull [] b, int off, int len) {
                 originalOutputStream.write(b, off, len);
                 appendTextToConsole(new String(b, off, len));
-            }
-
-            @Override
-            public void write(byte @NonNull [] b) throws IOException {
-                write(b, 0, b.length);
             }
         };
     }

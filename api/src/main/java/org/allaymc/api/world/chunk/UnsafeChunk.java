@@ -1,5 +1,6 @@
 package org.allaymc.api.world.chunk;
 
+import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -10,7 +11,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

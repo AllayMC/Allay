@@ -1,10 +1,9 @@
 package org.allaymc.api.world.chunk;
 
+import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.world.biome.BiomeType;
 import org.jetbrains.annotations.Range;
-
-import javax.annotation.concurrent.NotThreadSafe;
 
 /**
  * Represents a 16*16*16 area in a {@link Chunk}. Note that all methods in this class is not thread-safe.
