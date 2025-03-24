@@ -48,7 +48,7 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
 
             var left = getContainer();
             var right = ((BlockEntityContainerHolderComponent) pairableComponent.getPair()).getContainer();
-            if (pairableComponent.isLead()) {
+            if (!pairableComponent.isLead()) {
                 var temp = left;
                 left = right;
                 right = temp;
