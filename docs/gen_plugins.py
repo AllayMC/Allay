@@ -42,8 +42,7 @@ with mkdocs_gen_files.open("plugins.md", "w") as f:
 
     fp("## Adding Your Plugins")
     el()
-    fp("You are free to add your plugins and themes to the site, just open a new PR.")
-    fp("To add a plugin, you should edit `docs/plugins.toml` and add your plugin to **the end of** proper list.")
+    fp("You are free to add your plugins and themes to the site, just open a new issue.")
     el()
 
     fp("## Available Plugins")
