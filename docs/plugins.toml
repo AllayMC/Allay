@@ -47,3 +47,8 @@ github = "https://github.com/acktarbadulla/DiscordRelay-AllayMC"
 description = "HuHoBot for AllayMC, enabling the official QQ bot to connect to your server."
 authors = ["HuoHuas001"]
 github = "https://github.com/HuHoBot/AllayMCAdapter"
+
+[PlaceholderAPI]
+description = "The official placeholder api for Allay."
+authors = ["daoge_cmd"]
+github = "https://github.com/AllayMC/PlaceholderAPI"
