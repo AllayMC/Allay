@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public final class Dropdown extends CustomFormElement {
+public final class Dropdown implements CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "dropdown";

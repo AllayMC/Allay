@@ -8,7 +8,7 @@ import lombok.Getter;
  *
  * @author daoge_cmd
  */
-public final class Toggle extends CustomFormElement {
+public final class Toggle implements CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "toggle";

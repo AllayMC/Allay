@@ -3,24 +3,22 @@ package org.allaymc.api.form.element;
 import lombok.Getter;
 
 /**
- * Represents a label element in a {@link org.allaymc.api.form.type.CustomForm}.
- *
  * @author daoge_cmd
  */
-public final class Label implements SimpleFormElement, CustomFormElement {
+public final class Header implements SimpleFormElement, CustomFormElement {
 
     @SuppressWarnings("unused")
-    private final String type = "label";
+    private final String type = "header";
 
     @Getter
     private final String text;
 
     /**
-     * Create a new label.
+     * Create a new divider.
      *
-     * @param text the text of the label.
+     * @param text the text of the divider.
      */
-    public Label(String text) {
+    public Header(String text) {
         this.text = text;
     }
 

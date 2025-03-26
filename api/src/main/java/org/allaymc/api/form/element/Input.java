@@ -8,7 +8,7 @@ import lombok.Getter;
  *
  * @author daoge_cmd
  */
-public final class Input extends CustomFormElement {
+public final class Input implements CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "input";

@@ -8,7 +8,7 @@ import lombok.Getter;
  *
  * @author daoge_cmd
  */
-public final class Slider extends CustomFormElement {
+public final class Slider implements CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "slider";

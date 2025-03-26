@@ -110,7 +110,6 @@ public final class PacketProcessorHolder {
         this.registerProcessor(ClientStatus.IN_GAME, new ModalFormResponsePacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new ServerSettingsRequestProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new PlayerSkinPacketProcessor());
-        this.registerProcessor(ClientStatus.IN_GAME, new LevelSoundEvent2PacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new EntityEventPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new BlockEntityDataPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new EmotePacketProcessor());
@@ -121,6 +120,7 @@ public final class PacketProcessorHolder {
         this.registerProcessor(ClientStatus.IN_GAME, new AnvilDamagePacketProcessor());
     }
 
+    @SuppressWarnings("unchecked")
     public void registerProcessor(ClientStatus status, PacketProcessor<? extends BedrockPacket> processor) {
         processors.get(status).put(processor.getPacketType(), (PacketProcessor<BedrockPacket>) processor);
     }

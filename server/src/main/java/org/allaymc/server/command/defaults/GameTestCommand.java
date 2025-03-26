@@ -9,6 +9,7 @@ import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.form.Forms;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
@@ -311,6 +312,22 @@ public class GameTestCommand extends SimpleCommand {
                     item.setLockMode(context.getResult(1));
                     player.notifyItemInHandChange();
                     player.sendText("Item is locked in " + context.getResult(1) + " mode!");
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("testsimpleform")
+                .exec((context, player) -> {
+                    Forms.simple()
+                            .title("Test Simple Form")
+                            .content("test content")
+                            .button("test button 1")
+                            .onClick(button -> player.sendText("You clicked button 1"))
+                            .divider()
+                            .label("test label")
+                            .header("test header")
+                            .button("test button 2")
+                            .onClick(button -> player.sendText("You clicked button 2"))
+                            .sendTo(player);
                     return context.success();
                 }, SenderType.PLAYER);
     }

@@ -2,8 +2,7 @@ package org.allaymc.api.form.type;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.form.element.Button;
-import org.allaymc.api.form.element.ImageData;
+import org.allaymc.api.form.element.*;
 import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public final class SimpleForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "form";
 
-    private final List<Button> buttons = new ArrayList<>();
+    private final List<SimpleFormElement> elements = new ArrayList<>();
     private String title = "";
     private String content = "";
     private transient Consumer<Button> onResponse = button -> {};
@@ -60,7 +59,7 @@ public final class SimpleForm extends Form {
      */
     public Button button(Button button) {
         button.setForm(this);
-        buttons.add(button);
+        elements.add(button);
         return button;
     }
 
@@ -115,6 +114,40 @@ public final class SimpleForm extends Form {
     }
 
     /**
+     * Add a label to the form.
+     *
+     * @param text the text of the label.
+     *
+     * @return the form.
+     */
+    public SimpleForm label(String text) {
+        this.elements.add(new Label(text));
+        return this;
+    }
+
+    /**
+     * Add a header to the form.
+     *
+     * @param text the text of the header.
+     *
+     * @return the form.
+     */
+    public SimpleForm header(String text) {
+        this.elements.add(new Header(text));
+        return this;
+    }
+
+    /**
+     * Add a divider to the form.
+     *
+     * @return the form.
+     */
+    public SimpleForm divider() {
+        this.elements.add(new Divider());
+        return this;
+    }
+
+    /**
      * Add a callback that will be called when a button is clicked.
      *
      * @param onResponse the callback.
@@ -146,14 +179,14 @@ public final class SimpleForm extends Form {
             log.warn("Invalid simple form response: {}", data);
             return;
         }
-        if (buttonIndex >= this.buttons.size()) {
-            log.warn("Button index out of range: {}", buttonIndex);
-            return;
+        var button = getButton(buttonIndex);
+        if (button != null) {
+            onResponse.accept(button);
+            button.getOnClick().accept(button);
+            response = button;
+        } else {
+            log.warn("Player clicked an invalid simple form element: {}", data);
         }
-        var button = this.buttons.get(buttonIndex);
-        onResponse.accept(button);
-        button.getOnClick().accept(button);
-        response = button;
     }
 
     /**
@@ -170,5 +203,19 @@ public final class SimpleForm extends Form {
     @Override
     public Button getResponse() {
         return response != null ? (Button) response : null;
+    }
+
+    private Button getButton(int buttonIndex) {
+        for (var element : elements) {
+            if (element instanceof Button button) {
+                if (buttonIndex == 0) {
+                    return button;
+                }
+
+                buttonIndex--;
+            }
+        }
+
+        return null;
     }
 }

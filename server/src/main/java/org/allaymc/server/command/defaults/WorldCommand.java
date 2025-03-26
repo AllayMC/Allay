@@ -124,25 +124,28 @@ public class WorldCommand extends SimpleCommand {
                             .title(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TITLE))
                             .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_INPUT_NAME))
                             .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_STORAGETYPE), storageTypes)
+                            .divider()
                             .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_OVERWORLD), generatorTypes)
                             .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_OVERWORLD))
+                            .divider()
                             .toggle(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_NETHER))
                             .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_NETHER), generatorTypes)
                             .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_NETHER))
+                            .divider()
                             .toggle(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_THEEND))
                             .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_THEEND), generatorTypes)
                             .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_THEEND))
                             .onResponse(response -> {
                                 var name = response.get(0);
                                 var storageType = storageTypes.get(Integer.parseInt(response.get(1)));
-                                var overworldGenerator = generatorTypes.get(Integer.parseInt(response.get(2)));
-                                var overworldPreset = response.get(3);
-                                var enableNether = Boolean.parseBoolean(response.get(4));
-                                var netherGenerator = generatorTypes.get(Integer.parseInt(response.get(5)));
-                                var netherPreset = response.get(6);
-                                var enableTheEnd = Boolean.parseBoolean(response.get(7));
-                                var theEndGenerator = generatorTypes.get(Integer.parseInt(response.get(8)));
-                                var theEndPreset = response.get(9);
+                                var overworldGenerator = generatorTypes.get(Integer.parseInt(response.get(3)));
+                                var overworldPreset = response.get(4);
+                                var enableNether = Boolean.parseBoolean(response.get(6));
+                                var netherGenerator = generatorTypes.get(Integer.parseInt(response.get(7)));
+                                var netherPreset = response.get(8);
+                                var enableTheEnd = Boolean.parseBoolean(response.get(10));
+                                var theEndGenerator = generatorTypes.get(Integer.parseInt(response.get(11)));
+                                var theEndPreset = response.get(12);
 
                                 var worldSettingBuilder = WorldSettings.WorldSetting.builder()
                                         .enable(true)
