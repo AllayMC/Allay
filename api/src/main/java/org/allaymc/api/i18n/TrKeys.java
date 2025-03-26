@@ -3893,6 +3893,11 @@ public interface TrKeys {
     String M_COMMANDS_GENERIC_INVALIDCONTEXT = "minecraft:commands.generic.invalidcontext";
 
     /**
+     * Provided JSON failed to parse with the following error: %1#s
+     */
+    String M_COMMANDS_GENERIC_JSON_INVALID = "minecraft:commands.generic.json.invalid";
+
+    /**
      * Max level has to be larger than min level
      */
     String M_COMMANDS_GENERIC_LEVELERROR = "minecraft:commands.generic.levelError";
@@ -6101,11 +6106,6 @@ public interface TrKeys {
      * with field in rawtext must contain a array or another rawtext object. Example 1: "rawtext":[{"translate": "chat.type.announcement", "with": [ "value1", "value2" ]}]  Example 2: "rawtext":[{"translate": "chat.type.announcement", "with":{"rawtext":[{"text": "value1"}, {"text": "value2"}]}}]
      */
     String M_COMMANDS_TELLRAW_ERROR_WITHNOTARRAYORRAWTEXT = "minecraft:commands.tellraw.error.withNotArrayOrRawText";
-
-    /**
-     * Invalid json: %1#s
-     */
-    String M_COMMANDS_TELLRAW_JSONEXCEPTION = "minecraft:commands.tellraw.jsonException";
 
     /**
      * Invalid json string data.
@@ -9631,6 +9631,11 @@ public interface TrKeys {
      * The Character has been saved
      */
     String M_DR_NOTIFICATION_PERSONA_SAVE = "minecraft:dr.notification.persona_save";
+
+    /**
+     * A local or platform skin could not be loaded.
+     */
+    String M_DR_NOTIFICATION_SKIN_NOT_FOUND = "minecraft:dr.notification.skin_not_found";
 
     /**
      * Switching to Character Creator
@@ -15233,6 +15238,11 @@ public interface TrKeys {
     String M_ITEM_BLUE_BUNDLE = "minecraft:item.blue_bundle";
 
     /**
+     * Blue Egg
+     */
+    String M_ITEM_BLUE_EGG_NAME = "minecraft:item.blue_egg.name";
+
+    /**
      * Acacia Boat
      */
     String M_ITEM_BOAT_ACACIA_NAME = "minecraft:item.boat.acacia.name";
@@ -15341,6 +15351,11 @@ public interface TrKeys {
      * Brown Bundle
      */
     String M_ITEM_BROWN_BUNDLE = "minecraft:item.brown_bundle";
+
+    /**
+     * Brown Egg
+     */
+    String M_ITEM_BROWN_EGG_NAME = "minecraft:item.brown_egg.name";
 
     /**
      * Brush
@@ -20328,6 +20343,11 @@ public interface TrKeys {
     String M_NOTIFICATION_LOCK_NOREMOVE = "minecraft:notification.lock.noRemove";
 
     /**
+     * This item is locked and can't be replaced
+     */
+    String M_NOTIFICATION_LOCK_NOREPLACE = "minecraft:notification.lock.noReplace";
+
+    /**
      * Unable to open the NPC Link. This doesn't look like a supported URL.
      */
     String M_NPCURI_LAUNCH_FAILURE = "minecraft:npcUri.launch.failure";
@@ -21970,9 +21990,19 @@ public interface TrKeys {
     String M_TILE_BUDDING_AMETHYST_NAME = "minecraft:tile.budding_amethyst.name";
 
     /**
+     * Bush
+     */
+    String M_TILE_BUSH_NAME = "minecraft:tile.bush.name";
+
+    /**
      * Cactus
      */
     String M_TILE_CACTUS_NAME = "minecraft:tile.cactus.name";
+
+    /**
+     * Cactus Flower
+     */
+    String M_TILE_CACTUS_FLOWER_NAME = "minecraft:tile.cactus_flower.name";
 
     /**
      * Cake
@@ -23330,6 +23360,11 @@ public interface TrKeys {
     String M_TILE_FIRE_NAME = "minecraft:tile.fire.name";
 
     /**
+     * Firefly Bush
+     */
+    String M_TILE_FIREFLY_BUSH_NAME = "minecraft:tile.firefly_bush.name";
+
+    /**
      * Fletching Table
      */
     String M_TILE_FLETCHING_TABLE_NAME = "minecraft:tile.fletching_table.name";
@@ -23763,6 +23798,11 @@ public interface TrKeys {
      * Lava
      */
     String M_TILE_LAVA_NAME = "minecraft:tile.lava.name";
+
+    /**
+     * Leaf Litter
+     */
+    String M_TILE_LEAF_LITTER_NAME = "minecraft:tile.leaf_litter.name";
 
     /**
      * Acacia Leaves
@@ -25040,6 +25080,11 @@ public interface TrKeys {
     String M_TILE_SEAGRASS_SEAGRASS_NAME = "minecraft:tile.seagrass.seagrass.name";
 
     /**
+     * Short Dry Grass
+     */
+    String M_TILE_SHORT_DRY_GRASS_NAME = "minecraft:tile.short_dry_grass.name";
+
+    /**
      * Shroomlight
      */
     String M_TILE_SHROOMLIGHT_NAME = "minecraft:tile.shroomlight.name";
@@ -25970,6 +26015,11 @@ public interface TrKeys {
     String M_TILE_SWEET_BERRY_BUSH_NAME = "minecraft:tile.sweet_berry_bush.name";
 
     /**
+     * Tall Dry Grass
+     */
+    String M_TILE_TALL_DRY_GRASS_NAME = "minecraft:tile.tall_dry_grass.name";
+
+    /**
      * Fern
      */
     String M_TILE_TALLGRASS_FERN_NAME = "minecraft:tile.tallgrass.fern.name";
@@ -26463,6 +26513,11 @@ public interface TrKeys {
      * Cake with White Candle
      */
     String M_TILE_WHITE_CANDLE_CAKE_NAME = "minecraft:tile.white_candle_cake.name";
+
+    /**
+     * Wildflowers
+     */
+    String M_TILE_WILDFLOWERS_NAME = "minecraft:tile.wildflowers.name";
 
     /**
      * Wither Rose

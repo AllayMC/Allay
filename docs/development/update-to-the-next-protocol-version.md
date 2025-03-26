@@ -26,8 +26,10 @@ Allay's resource files are stored in `data/resources` directory.
 - `biome_definitions.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `block_types.json`
 - `creative_items.nbt`
+- `creative_groups.json`
 - `entity_identifiers.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `items.json`
+- `item_components.nbt`
 - `block_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `item_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `recipes.json`
@@ -76,7 +78,7 @@ This file usually doesn't change much in minor updates.
 
 **Check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `TagGen`.
 
-**Check for changes in `block_property_types.json`**. If changes exist, run `BlockPropertyTypeGen`.
+**Check for changes in `block_property_types.json`**. If changes exist, run `BlockPropertyTypeGen` in `codegen`.
 
 **Run BlockClassGen**. This step requires more manual operation:
 

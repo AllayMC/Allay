@@ -90,6 +90,8 @@ public interface ItemTags {
 
     ItemTag WOODEN_TIER = create("minecraft:wooden_tier");
 
+    ItemTag EGG = create("minecraft:egg");
+
     ItemTag TRANSFORM_TEMPLATES = create("minecraft:transform_templates");
 
     ItemTag IS_ARMOR = create("minecraft:is_armor");

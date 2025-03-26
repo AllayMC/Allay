@@ -301,7 +301,11 @@ public enum BlockId {
 
     BUDDING_AMETHYST("minecraft:budding_amethyst"),
 
+    BUSH("minecraft:bush"),
+
     CACTUS("minecraft:cactus"),
+
+    CACTUS_FLOWER("minecraft:cactus_flower"),
 
     CAKE("minecraft:cake"),
 
@@ -1041,6 +1045,8 @@ public enum BlockId {
 
     FIRE_CORAL_WALL_FAN("minecraft:fire_coral_wall_fan"),
 
+    FIREFLY_BUSH("minecraft:firefly_bush"),
+
     FLETCHING_TABLE("minecraft:fletching_table"),
 
     FLOWER_POT("minecraft:flower_pot"),
@@ -1320,6 +1326,8 @@ public enum BlockId {
     LARGE_FERN("minecraft:large_fern"),
 
     LAVA("minecraft:lava"),
+
+    LEAF_LITTER("minecraft:leaf_litter"),
 
     LECTERN("minecraft:lectern"),
 
@@ -2037,6 +2045,8 @@ public enum BlockId {
 
     SEAGRASS("minecraft:seagrass"),
 
+    SHORT_DRY_GRASS("minecraft:short_dry_grass"),
+
     SHORT_GRASS("minecraft:short_grass"),
 
     SHROOMLIGHT("minecraft:shroomlight"),
@@ -2230,6 +2240,8 @@ public enum BlockId {
     SUSPICIOUS_SAND("minecraft:suspicious_sand"),
 
     SWEET_BERRY_BUSH("minecraft:sweet_berry_bush"),
+
+    TALL_DRY_GRASS("minecraft:tall_dry_grass"),
 
     TALL_GRASS("minecraft:tall_grass"),
 
@@ -2484,6 +2496,8 @@ public enum BlockId {
     WHITE_TULIP("minecraft:white_tulip"),
 
     WHITE_WOOL("minecraft:white_wool"),
+
+    WILDFLOWERS("minecraft:wildflowers"),
 
     WITHER_ROSE("minecraft:wither_rose"),
 

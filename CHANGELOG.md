@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `BlockStateWithPos#getBlockEntity` method.
 - (API) Implemented chest pairing, and several related interfaces & objects including `BlockEntityPairableComponent`,
     `DoubleChestContainer`, are added to api module, see commit history for more details.
+- Add support for bedrock 1.21.70.
 - Implemented ores.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
