@@ -873,6 +873,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.BLUE_DYE)
                     .build();
         }
+        if (ItemTypes.BLUE_EGG == null) {
+            ItemTypes.BLUE_EGG = AllayItemType
+                    .builder(ItemBlueEggStackImpl.class)
+                    .vanillaItem(ItemId.BLUE_EGG)
+                    .build();
+        }
         if (ItemTypes.BLUE_GLAZED_TERRACOTTA == null) {
             ItemTypes.BLUE_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
@@ -1131,6 +1137,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.BROWN_DYE)
                     .build();
         }
+        if (ItemTypes.BROWN_EGG == null) {
+            ItemTypes.BROWN_EGG = AllayItemType
+                    .builder(ItemBrownEggStackImpl.class)
+                    .vanillaItem(ItemId.BROWN_EGG)
+                    .build();
+        }
         if (ItemTypes.BROWN_GLAZED_TERRACOTTA == null) {
             ItemTypes.BROWN_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
@@ -1239,10 +1251,22 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.BURN_POTTERY_SHERD)
                     .build();
         }
+        if (ItemTypes.BUSH == null) {
+            ItemTypes.BUSH = AllayItemType
+                    .builder(ItemBushStackImpl.class)
+                    .vanillaItem(ItemId.BUSH)
+                    .build();
+        }
         if (ItemTypes.CACTUS == null) {
             ItemTypes.CACTUS = AllayItemType
                     .builder(ItemCactusStackImpl.class)
                     .vanillaItem(ItemId.CACTUS)
+                    .build();
+        }
+        if (ItemTypes.CACTUS_FLOWER == null) {
+            ItemTypes.CACTUS_FLOWER = AllayItemType
+                    .builder(ItemCactusFlowerStackImpl.class)
+                    .vanillaItem(ItemId.CACTUS_FLOWER)
                     .build();
         }
         if (ItemTypes.CAKE == null) {
@@ -4113,6 +4137,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.FIRE_CORAL_WALL_FAN)
                     .build();
         }
+        if (ItemTypes.FIREFLY_BUSH == null) {
+            ItemTypes.FIREFLY_BUSH = AllayItemType
+                    .builder(ItemFireflyBushStackImpl.class)
+                    .vanillaItem(ItemId.FIREFLY_BUSH)
+                    .build();
+        }
         if (ItemTypes.FIREWORK_ROCKET == null) {
             ItemTypes.FIREWORK_ROCKET = AllayItemType
                     .builder(ItemFireworkRocketStackImpl.class)
@@ -5599,6 +5629,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.LEAD = AllayItemType
                     .builder(ItemLeadStackImpl.class)
                     .vanillaItem(ItemId.LEAD)
+                    .build();
+        }
+        if (ItemTypes.LEAF_LITTER == null) {
+            ItemTypes.LEAF_LITTER = AllayItemType
+                    .builder(ItemLeafLitterStackImpl.class)
+                    .vanillaItem(ItemId.LEAF_LITTER)
                     .build();
         }
         if (ItemTypes.LEATHER == null) {
@@ -8673,6 +8709,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.SHIELD)
                     .build();
         }
+        if (ItemTypes.SHORT_DRY_GRASS == null) {
+            ItemTypes.SHORT_DRY_GRASS = AllayItemType
+                    .builder(ItemShortDryGrassStackImpl.class)
+                    .vanillaItem(ItemId.SHORT_DRY_GRASS)
+                    .build();
+        }
         if (ItemTypes.SHORT_GRASS == null) {
             ItemTypes.SHORT_GRASS = AllayItemType
                     .builder(ItemShortGrassStackImpl.class)
@@ -9559,6 +9601,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.TADPOLE_SPAWN_EGG = AllayItemType
                     .builder(ItemSpawnEggStackImpl.class)
                     .vanillaItem(ItemId.TADPOLE_SPAWN_EGG)
+                    .build();
+        }
+        if (ItemTypes.TALL_DRY_GRASS == null) {
+            ItemTypes.TALL_DRY_GRASS = AllayItemType
+                    .builder(ItemTallDryGrassStackImpl.class)
+                    .vanillaItem(ItemId.TALL_DRY_GRASS)
                     .build();
         }
         if (ItemTypes.TALL_GRASS == null) {
@@ -10495,6 +10543,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.WILD_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
                     .builder(ItemWildArmorTrimSmithingTemplateStackImpl.class)
                     .vanillaItem(ItemId.WILD_ARMOR_TRIM_SMITHING_TEMPLATE)
+                    .build();
+        }
+        if (ItemTypes.WILDFLOWERS == null) {
+            ItemTypes.WILDFLOWERS = AllayItemType
+                    .builder(ItemWildflowersStackImpl.class)
+                    .vanillaItem(ItemId.WILDFLOWERS)
                     .build();
         }
         if (ItemTypes.WIND_CHARGE == null) {
