@@ -112,9 +112,8 @@ updater [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater) to the l
 ## Update `ProtocolInfo.java`
 
 You need to update the `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`. If you can't figure out the new value
-of `MINECRAFT_VERSION`, you can refer
-to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
-Make sure the dependency libraries are updated before this!
+of `MINECRAFT_VERSION`, you can refer to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP). Make sure the
+dependency libraries are updated before this!
 
 ## Test and Complete the Update
 
