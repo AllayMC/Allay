@@ -7,12 +7,11 @@ import org.jetbrains.annotations.ApiStatus;
  *
  * @author daoge_cmd
  */
-public abstract sealed class CustomFormElement permits
-        Dropdown, Input, Label, Slider, StepSlider, Toggle {
+public sealed interface CustomFormElement permits Divider, Dropdown, Header, Input, Label, Slider, StepSlider, Toggle {
 
     /**
      * Only used for server settings form
      */
     @ApiStatus.OverrideOnly
-    public abstract void syncDefaultValueToResponse(String response);
+    void syncDefaultValueToResponse(String response);
 }

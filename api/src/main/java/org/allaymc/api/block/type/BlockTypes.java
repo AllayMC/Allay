@@ -296,7 +296,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockBuddingAmethystBehavior> BUDDING_AMETHYST;
 
+    public static BlockType<BlockBushBehavior> BUSH;
+
     public static BlockType<BlockCactusBehavior> CACTUS;
+
+    public static BlockType<BlockCactusFlowerBehavior> CACTUS_FLOWER;
 
     public static BlockType<BlockCakeBehavior> CAKE;
 
@@ -1036,6 +1040,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockCoralWallFanBehavior> FIRE_CORAL_WALL_FAN;
 
+    public static BlockType<BlockFireflyBushBehavior> FIREFLY_BUSH;
+
     public static BlockType<BlockFletchingTableBehavior> FLETCHING_TABLE;
 
     public static BlockType<BlockFlowerPotBehavior> FLOWER_POT;
@@ -1315,6 +1321,8 @@ public final class BlockTypes {
     public static BlockType<BlockLargeFernBehavior> LARGE_FERN;
 
     public static BlockType<BlockLiquidBehavior> LAVA;
+
+    public static BlockType<BlockLeafLitterBehavior> LEAF_LITTER;
 
     public static BlockType<BlockLecternBehavior> LECTERN;
 
@@ -2032,6 +2040,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockSeagrassBehavior> SEAGRASS;
 
+    public static BlockType<BlockShortDryGrassBehavior> SHORT_DRY_GRASS;
+
     public static BlockType<BlockShortGrassBehavior> SHORT_GRASS;
 
     public static BlockType<BlockShroomlightBehavior> SHROOMLIGHT;
@@ -2225,6 +2235,8 @@ public final class BlockTypes {
     public static BlockType<BlockSuspiciousSandBehavior> SUSPICIOUS_SAND;
 
     public static BlockType<BlockSweetBerryBushBehavior> SWEET_BERRY_BUSH;
+
+    public static BlockType<BlockTallDryGrassBehavior> TALL_DRY_GRASS;
 
     public static BlockType<BlockTallGrassBehavior> TALL_GRASS;
 
@@ -2479,6 +2491,8 @@ public final class BlockTypes {
     public static BlockType<BlockWhiteTulipBehavior> WHITE_TULIP;
 
     public static BlockType<BlockWoolBehavior> WHITE_WOOL;
+
+    public static BlockType<BlockWildflowersBehavior> WILDFLOWERS;
 
     public static BlockType<BlockWitherRoseBehavior> WITHER_ROSE;
 

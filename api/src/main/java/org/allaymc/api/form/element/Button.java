@@ -12,7 +12,10 @@ import java.util.function.Consumer;
  *
  * @author daoge_cmd
  */
-public final class Button {
+public final class Button implements SimpleFormElement {
+
+    @SuppressWarnings("unused")
+    private final String type = "button";
 
     @Setter
     @Getter

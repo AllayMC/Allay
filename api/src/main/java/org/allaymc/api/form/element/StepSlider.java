@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public final class StepSlider extends CustomFormElement {
+public final class StepSlider implements CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "step_slider";

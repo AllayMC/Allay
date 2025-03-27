@@ -966,11 +966,23 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.BUDDING_AMETHYST)
                     .build();
         }
+        if (BlockTypes.BUSH == null) {
+            BlockTypes.BUSH = AllayBlockType
+                    .builder(BlockBushBehaviorImpl.class)
+                    .vanillaBlock(BlockId.BUSH)
+                    .build();
+        }
         if (BlockTypes.CACTUS == null) {
             BlockTypes.CACTUS = AllayBlockType
                     .builder(BlockCactusBehaviorImpl.class)
                     .vanillaBlock(BlockId.CACTUS)
                     .setProperties(BlockPropertyTypes.AGE_16)
+                    .build();
+        }
+        if (BlockTypes.CACTUS_FLOWER == null) {
+            BlockTypes.CACTUS_FLOWER = AllayBlockType
+                    .builder(BlockCactusFlowerBehaviorImpl.class)
+                    .vanillaBlock(BlockId.CACTUS_FLOWER)
                     .build();
         }
         if (BlockTypes.CAKE == null) {
@@ -3336,6 +3348,12 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                     .build();
         }
+        if (BlockTypes.FIREFLY_BUSH == null) {
+            BlockTypes.FIREFLY_BUSH = AllayBlockType
+                    .builder(BlockFireflyBushBehaviorImpl.class)
+                    .vanillaBlock(BlockId.FIREFLY_BUSH)
+                    .build();
+        }
         if (BlockTypes.FLETCHING_TABLE == null) {
             BlockTypes.FLETCHING_TABLE = AllayBlockType
                     .builder(BlockFletchingTableBehaviorImpl.class)
@@ -4225,6 +4243,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockLiquidBehaviorImpl.class)
                     .vanillaBlock(BlockId.LAVA)
                     .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
+                    .build();
+        }
+        if (BlockTypes.LEAF_LITTER == null) {
+            BlockTypes.LEAF_LITTER = AllayBlockType
+                    .builder(BlockLeafLitterBehaviorImpl.class)
+                    .vanillaBlock(BlockId.LEAF_LITTER)
+                    .setProperties(BlockPropertyTypes.GROWTH, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
         }
         if (BlockTypes.LECTERN == null) {
@@ -6576,6 +6601,12 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.SEA_GRASS_TYPE)
                     .build();
         }
+        if (BlockTypes.SHORT_DRY_GRASS == null) {
+            BlockTypes.SHORT_DRY_GRASS = AllayBlockType
+                    .builder(BlockShortDryGrassBehaviorImpl.class)
+                    .vanillaBlock(BlockId.SHORT_DRY_GRASS)
+                    .build();
+        }
         if (BlockTypes.SHORT_GRASS == null) {
             BlockTypes.SHORT_GRASS = AllayBlockType
                     .builder(BlockShortGrassBehaviorImpl.class)
@@ -7234,6 +7265,12 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockSweetBerryBushBehaviorImpl.class)
                     .vanillaBlock(BlockId.SWEET_BERRY_BUSH)
                     .setProperties(BlockPropertyTypes.GROWTH)
+                    .build();
+        }
+        if (BlockTypes.TALL_DRY_GRASS == null) {
+            BlockTypes.TALL_DRY_GRASS = AllayBlockType
+                    .builder(BlockTallDryGrassBehaviorImpl.class)
+                    .vanillaBlock(BlockId.TALL_DRY_GRASS)
                     .build();
         }
         if (BlockTypes.TALL_GRASS == null) {
@@ -8076,6 +8113,13 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.WHITE_WOOL = AllayBlockType
                     .builder(BlockWoolBehaviorImpl.class)
                     .vanillaBlock(BlockId.WHITE_WOOL)
+                    .build();
+        }
+        if (BlockTypes.WILDFLOWERS == null) {
+            BlockTypes.WILDFLOWERS = AllayBlockType
+                    .builder(BlockWildflowersBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WILDFLOWERS)
+                    .setProperties(BlockPropertyTypes.GROWTH, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
         }
         if (BlockTypes.WITHER_ROSE == null) {

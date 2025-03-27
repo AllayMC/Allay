@@ -296,6 +296,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemBlueDyeStack> BLUE_DYE;
 
+    public static ItemType<ItemBlueEggStack> BLUE_EGG;
+
     public static ItemType<ItemTerracottaStack> BLUE_GLAZED_TERRACOTTA;
 
     public static ItemType<ItemBlueIceStack> BLUE_ICE;
@@ -382,6 +384,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemBrownDyeStack> BROWN_DYE;
 
+    public static ItemType<ItemBrownEggStack> BROWN_EGG;
+
     public static ItemType<ItemTerracottaStack> BROWN_GLAZED_TERRACOTTA;
 
     public static ItemType<ItemBrownMushroomStack> BROWN_MUSHROOM;
@@ -418,7 +422,11 @@ public final class ItemTypes {
 
     public static ItemType<ItemBurnPotterySherdStack> BURN_POTTERY_SHERD;
 
+    public static ItemType<ItemBushStack> BUSH;
+
     public static ItemType<ItemCactusStack> CACTUS;
+
+    public static ItemType<ItemCactusFlowerStack> CACTUS_FLOWER;
 
     public static ItemType<ItemCakeStack> CAKE;
 
@@ -1376,6 +1384,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemCoralWallFanStack> FIRE_CORAL_WALL_FAN;
 
+    public static ItemType<ItemFireflyBushStack> FIREFLY_BUSH;
+
     public static ItemType<ItemFireworkRocketStack> FIREWORK_ROCKET;
 
     public static ItemType<ItemFireworkStarStack> FIREWORK_STAR;
@@ -1871,6 +1881,8 @@ public final class ItemTypes {
     public static ItemType<ItemBucketStack> LAVA_BUCKET;
 
     public static ItemType<ItemLeadStack> LEAD;
+
+    public static ItemType<ItemLeafLitterStack> LEAF_LITTER;
 
     public static ItemType<ItemLeatherStack> LEATHER;
 
@@ -2896,6 +2908,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemShieldStack> SHIELD;
 
+    public static ItemType<ItemShortDryGrassStack> SHORT_DRY_GRASS;
+
     public static ItemType<ItemShortGrassStack> SHORT_GRASS;
 
     public static ItemType<ItemShroomlightStack> SHROOMLIGHT;
@@ -3191,6 +3205,8 @@ public final class ItemTypes {
     public static ItemType<ItemBucketStack> TADPOLE_BUCKET;
 
     public static ItemType<ItemSpawnEggStack> TADPOLE_SPAWN_EGG;
+
+    public static ItemType<ItemTallDryGrassStack> TALL_DRY_GRASS;
 
     public static ItemType<ItemTallGrassStack> TALL_GRASS;
 
@@ -3503,6 +3519,8 @@ public final class ItemTypes {
     public static ItemType<ItemWoolStack> WHITE_WOOL;
 
     public static ItemType<ItemWildArmorTrimSmithingTemplateStack> WILD_ARMOR_TRIM_SMITHING_TEMPLATE;
+
+    public static ItemType<ItemWildflowersStack> WILDFLOWERS;
 
     public static ItemType<ItemWindChargeStack> WIND_CHARGE;
 

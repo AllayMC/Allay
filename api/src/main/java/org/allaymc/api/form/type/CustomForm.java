@@ -306,6 +306,26 @@ public final class CustomForm extends Form {
     }
 
     /**
+     * Add a header element to the form.
+     *
+     * @param text the text of the element.
+     *
+     * @return the form.
+     */
+    public CustomForm header(String text) {
+        return element(new Header(text));
+    }
+
+    /**
+     * Add a divider element to the form.
+     *
+     * @return the form.
+     */
+    public CustomForm divider() {
+        return element(new Divider());
+    }
+
+    /**
      * Set the action to be performed when the form is submitted.
      *
      * @param onResponse the action to be performed when the form is submitted.

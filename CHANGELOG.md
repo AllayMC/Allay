@@ -10,7 +10,7 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.2.1 (API 0.6.0) - Unreleased
+## 0.3.0 (API 0.6.0) - Unreleased
 
 <small>[Compare with 0.2.0](https://github.com/AllayMC/Allay/compare/0.2.0...HEAD)</small>
 
@@ -35,6 +35,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `BlockStateWithPos#getBlockEntity` method.
 - (API) Implemented chest pairing, and several related interfaces & objects including `BlockEntityPairableComponent`,
     `DoubleChestContainer`, are added to api module, see commit history for more details.
+- (API) Added support for the new elements in simple and custom form: divider and header. Label element now can be added
+  to simple form as well.
+- Added support for bedrock 1.21.70.
 - Implemented ores.
 - Added `InternalRegistries#TRIM_PATTERNS` and `InternalRegistries#TRIM_MATERIALS`.
 
