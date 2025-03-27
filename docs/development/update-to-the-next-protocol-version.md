@@ -26,10 +26,8 @@ Allay's resource files are stored in `data/resources` directory.
 - `biome_definitions.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `block_types.json`
 - `creative_items.nbt`
-- `creative_groups.json`
 - `entity_identifiers.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `items.json`
-- `item_components.nbt`
 - `block_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `item_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `recipes.json`
@@ -78,7 +76,7 @@ This file usually doesn't change much in minor updates.
 
 **Check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `TagGen`.
 
-**Check for changes in `block_property_types.json`**. If changes exist, run `BlockPropertyTypeGen` in `codegen`.
+**Run `BlockIdEnumGen` and then `BlockPropertyTypeGen`**.
 
 **Run BlockClassGen**. This step requires more manual operation:
 
@@ -93,7 +91,7 @@ This file usually doesn't change much in minor updates.
 - If there is a batch of similar blocks, you need to register new merged block in the `registerMergedBlocks()` method
   of `BlockClassGen` to avoid overcrowding the block class group.
 
-**Run `ItemClassGen`**. Similar to blocks, this step also requires a certain amount of manual operation, but the
+**Run `ItemIdEnumGen` and then `ItemClassGen`**. Similar to blocks, this step also requires a certain amount of manual operation, but the
 workload is less than before:
 
 - You need to manually delete old items. If an item has only changed its name, you need `to migrate code logic from the
@@ -112,8 +110,9 @@ updater [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater) to the l
 ## Update `ProtocolInfo.java`
 
 You need to update the `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`. If you can't figure out the new value
-of `MINECRAFT_VERSION`, you can refer to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP). Make sure the
-dependency libraries are updated before this!
+of `MINECRAFT_VERSION`, you can refer
+to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
+Make sure the dependency libraries are updated before this!
 
 ## Test and Complete the Update
 
