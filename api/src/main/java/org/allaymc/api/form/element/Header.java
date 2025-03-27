@@ -14,9 +14,9 @@ public final class Header implements SimpleFormElement, CustomFormElement {
     private final String text;
 
     /**
-     * Create a new divider.
+     * Create a new header.
      *
-     * @param text the text of the divider.
+     * @param text the text of the header.
      */
     public Header(String text) {
         this.text = text;
