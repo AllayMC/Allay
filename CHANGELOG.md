@@ -55,6 +55,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - (API) Fixed `BlockStateData#isTransparent()` method.
+- Fixed torch placement on non-full blocks (e.g., walls, fences) and automatic placement detection.
 - Fixed skin display issue in 1.21.60.
 - Fixed EnderChest behaviour and drops.
 - Fixed LightningRod placing.

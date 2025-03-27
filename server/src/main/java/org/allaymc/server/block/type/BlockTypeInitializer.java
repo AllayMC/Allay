@@ -30,8 +30,7 @@ import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
-import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
-import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
+import org.allaymc.server.block.component.BlockTorchBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.impl.*;
@@ -692,7 +691,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockColoredTorchBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
     }
 
