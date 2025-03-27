@@ -283,6 +283,8 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param entity     the entity breaking the block, can be {@code null}.
      *
      * @return the time in seconds required to break the block.
+     *
+     * @see <a href="https://minecraft.wiki/w/Breaking#Calculation">Breaking Calculation</a>
      */
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
         checkBlockType(blockState);
@@ -297,68 +299,56 @@ public interface BlockBaseComponent extends BlockComponent {
 
         var isCorrectTool = usedItem.isCorrectToolFor(blockState);
         var requiresCorrectToolForDrops = blockState.getBlockStateData().requiresCorrectToolForDrops();
-        var hasAquaAffinity = false;
-        var isEyesInWater = false;
-        var isOnGround = true;
-        var hasteEffectLevel = 0;
-        var miningFatigueLevel = 0;
-        var efficiencyLevel = 0;
 
-        if (entity != null) {
-            isEyesInWater = entity.isEyesInWater();
-            isOnGround = entity.isOnGround();
-            hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
-            // Conduit Power ensures at least level 2 haste effect
-            if (entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
-                hasteEffectLevel = Integer.max(hasteEffectLevel, 2);
-            }
-
-            miningFatigueLevel = entity.getEffectLevel(EffectTypes.HASTE);
-
-            if (entity instanceof EntityContainerHolderComponent containerHolder) {
-                if (containerHolder.hasContainer(FullContainerType.ARMOR))
-                    hasAquaAffinity = containerHolder
-                            .getContainer(FullContainerType.ARMOR)
-                            .getItemStack(0)
-                            .hasEnchantment(EnchantmentTypes.AQUA_AFFINITY);
-
-                if (containerHolder.hasContainer(FullContainerType.PLAYER_INVENTORY))
-                    efficiencyLevel = containerHolder
-                            .getContainer(FullContainerType.PLAYER_INVENTORY)
-                            .getItemInHand()
-                            .getEnchantmentLevel(EnchantmentTypes.EFFICIENCY);
-            }
-        }
-
-        // Calculate break time
-        // TODO: Further validation of the algorithm is needed
-        var baseTime = ((isCorrectTool || !requiresCorrectToolForDrops) ? 1.5 : 5d) * blockHardness;
+        var baseTime = ((isCorrectTool || !requiresCorrectToolForDrops) ? 1.5d : 5d) * blockHardness;
         var speed = 1d / baseTime;
+
         if (isCorrectTool) {
             // Tool level (wooden, stone, iron, etc...) bonus
-            speed *= usedItem.getBreakTimeBonus(blockState);
+            var efficiency = usedItem.getBreakTimeBonus(blockState);
             // Tool efficiency enchantment bonus
-            speed += speedBonusByEfficiency(efficiencyLevel);
-        } else if (isSword(usedItem.getItemType())) {
+            efficiency += speedBonusByEfficiency(usedItem.getEnchantmentLevel(EnchantmentTypes.EFFICIENCY));
+            speed *= efficiency;
+        } else if (isSword(usedItem.getItemType())) { // Special case
             // The minimum speed for swords digging blocks is 1.5 times
-            speed *= 1.5;
+            speed *= 1.5d;
         }
 
-        // Entity haste potion effect bonus
-        speed *= 1d + (0.2d * hasteEffectLevel);
-        // Entity mining fatigue effect negative bonus
-        if (miningFatigueLevel != 0) {
-            speed /= Math.pow(miningFatigueLevel, 3);
+        if (entity != null) {
+            if (entity.hasEffect(EffectTypes.HASTE) || entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
+                var level = Math.max(entity.getEffectLevel(EffectTypes.HASTE), entity.getEffectLevel(EffectTypes.CONDUIT_POWER));
+                speed *= (0.2d * level + 1) * Math.pow(1.2d, level);
+            }
+
+            // Entity mining fatigue effect negative bonus
+            if (entity.hasEffect(EffectTypes.MINING_FATIGUE)) {
+                // speedMultiplier *= 0.3 ^ miningFatigueLevel
+                // damage *= 0.7 ^ miningFatigueLevel
+                speed *= Math.pow(0.21d, entity.getEffectLevel(EffectTypes.MINING_FATIGUE));
+            }
+
+            var hasAquaAffinity = false;
+            if (entity instanceof EntityContainerHolderComponent containerHolder) {
+                if (containerHolder.hasContainer(FullContainerType.ARMOR)) {
+                    hasAquaAffinity = containerHolder
+                            .getContainer(FullContainerType.ARMOR)
+                            .getHelmet()
+                            .hasEnchantment(EnchantmentTypes.AQUA_AFFINITY);
+                }
+            }
+
+            // In water but no underwater speed mining effect
+            if (entity.isEyesInWater() && !hasAquaAffinity) {
+                speed /= 5d;
+            }
+
+            // In air
+            if (!entity.isOnGround()) {
+                speed /= 5d;
+            }
         }
-        // In water but no underwater speed mining effect
-        if (isEyesInWater && !hasAquaAffinity) {
-            speed *= 0.2d;
-        }
-        // In midair
-        if (!isEyesInWater && !isOnGround) {
-            speed *= 0.2d;
-        }
-        return 1d / speed;
+
+        return Math.ceil(1d / speed * 20d) / 20d;
     }
 
     /**
@@ -376,12 +366,16 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     private double speedBonusByEfficiency(int efficiencyLevel) {
-        if (efficiencyLevel == 0) return 0;
-        return efficiencyLevel * efficiencyLevel + 1;
+        if (efficiencyLevel == 0) {
+            return 0;
+        }
+
+        return (efficiencyLevel * efficiencyLevel) + 1;
     }
 
     private void checkBlockType(BlockState blockState) {
-        if (blockState.getBlockType() != getBlockType())
+        if (blockState.getBlockType() != getBlockType()) {
             throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + blockState.getBlockType().getIdentifier());
+        }
     }
 }

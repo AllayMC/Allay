@@ -61,6 +61,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed LightningRod placing.
 - Fixed Door placing.
 - Fixed two bugs in `/give` command which make the gave item amount being shown incorrectly.
+- Fixed block breaking time calculation to match Minecraft's official breaking time formula, resolving a rounding issue that caused slight discrepancies.
 
 ### Removed
 
