@@ -31,8 +31,6 @@ public class BlockClassGen extends BaseClassGen {
     public static Map<Pattern, String> MERGED_BLOCKS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
-        BlockIdEnumGen.generate();
-        BlockPropertyTypeGen.generate();
         generate();
     }
 
