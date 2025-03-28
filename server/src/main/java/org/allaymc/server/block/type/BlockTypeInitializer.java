@@ -30,7 +30,6 @@ import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
-import org.allaymc.server.block.component.BlockTorchBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.impl.*;
@@ -229,17 +228,17 @@ public final class BlockTypeInitializer {
         BlockTypes.GRAVEL = AllayBlockType
                 .builder(BlockGravelBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAVEL)
-                .setBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl())
                 .build();
         BlockTypes.SAND = AllayBlockType
                 .builder(BlockSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.SAND)
-                .setBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl())
                 .build();
         BlockTypes.RED_SAND = AllayBlockType
                 .builder(BlockRedSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SAND)
-                .setBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl())
                 .build();
     }
 

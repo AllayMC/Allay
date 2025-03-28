@@ -1,10 +1,8 @@
 package org.allaymc.server.block.component;
 
-import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.BlockFallableBaseComponent;
+import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
-import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -13,33 +11,35 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFallEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.component.event.CBlockBeforePlacedEvent;
+import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3ic;
 
 /**
  * @author IWareQ
  */
-public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl implements BlockFallableBaseComponent {
-    public BlockFallableBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
-        super(blockType);
-    }
-
-    @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
-
+public class BlockFallableComponentImpl implements BlockFallableComponent {
+    @EventHandler
+    public void onBlockOnNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
+        var current = event.getCurrent();
         var pos = current.pos();
         var dimension = pos.dimension();
         trySpawnFallingEntity(dimension, pos, current.blockState(), null);
     }
 
-    @Override
-    public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (trySpawnFallingEntity(dimension, placeBlockPos, blockState, placementInfo.player())) return true;
-        return super.place(dimension, blockState, placeBlockPos, placementInfo);
+    @EventHandler
+    protected void onBlockBeforePlaced(CBlockBeforePlacedEvent event) {
+        event.setCancelled(trySpawnFallingEntity(
+                event.getDimension(),
+                event.getPlaceBlockPos(),
+                event.getBlockState(),
+                event.getPlacementInfo().player()
+        ));
     }
 
     protected boolean trySpawnFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState, EntityPlayer player) {

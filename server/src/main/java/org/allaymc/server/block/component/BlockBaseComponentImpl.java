@@ -63,6 +63,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        var event = manager.callEvent(new CBlockBeforePlacedEvent(dimension, blockState, placeBlockPos, placementInfo));
+        if (event.isCancelled()) {
+            return true;
+        }
+
         dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
                 processBlockProperties(blockState, placeBlockPos, placementInfo),
