@@ -4,7 +4,9 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Set;
 
@@ -14,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author daoge_cmd
  */
+@ExtendWith(AllayTestExtension.class)
 class AllayLightServiceTest {
 
     @Test
@@ -99,6 +102,15 @@ class AllayLightServiceTest {
         assertEquals(11, lightService.getSkyLight(0, -3, 0));
 
         // Case 4
+        lightService.onBlockChange(0, 0, 0, 0, 15);
+        lightService.onBlockChange(0, 1, 0, 0, 15);
+        lightService.onBlockChange(0, 2, 0, 0, 15);
+        lightService.onBlockChange(0, 3, 0, 0, 15);
+        lightService.onBlockChange(0, 2, 0, 0, 0);
+        lightService.tickIgnoreLimitUnblocking();
+        assertEquals(14, lightService.getSkyLight(0, 2, 0));
+
+        // Case 5
         lightService.onBlockChange(0, 0, 0, 0, 0);
         lightService.onBlockChange(0, -1, 0, 0, 15);
         for (int y = 0; y <= 1; y++) {
