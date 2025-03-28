@@ -24,7 +24,6 @@ import java.util.Objects;
 @Getter
 @Setter
 public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl implements EntityFallingBlockBaseComponent {
-
     protected BlockState blockState;
 
     public EntityFallingBlockBaseComponentImpl(EntityInitInfo info) {
@@ -38,7 +37,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     @Override
     protected void initMetadata() {
         super.initMetadata();
-        Objects.requireNonNull(blockState, "blockState shouldn't be null");
+        Objects.requireNonNull(blockState, "blockState");
 
         metadata.set(EntityFlag.FIRE_IMMUNE, true);
         metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
@@ -63,7 +62,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             if (!getBlockStateStandingOn().blockState().getBlockStateData().shape().isFull(BlockFace.UP)) {
                 // Falling on a block which is not full in upper face, for example torch.
                 // In this case, the falling block should be turned into item instead of block
-                dimension.dropItem(currentBlock.toItemStack(), location);
+                dimension.dropItem(blockState.toItemStack(), location);
             } else {
                 // Set block state immediately when falling on ground to prevent
                 // the falling block entity above from getting into the ground.
@@ -81,7 +80,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             } else {
                 // The falling block get into a non-replaceable block for some reason
                 // In this case, just let the falling block become item
-                dimension.dropItem(currentBlock.toItemStack(), location);
+                dimension.dropItem(blockState.toItemStack(), location);
                 despawn();
             }
         }
