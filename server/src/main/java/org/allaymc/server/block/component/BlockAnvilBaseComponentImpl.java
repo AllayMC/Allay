@@ -33,7 +33,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
             return true;
         }
 
-        dimension.addSound(placeBlockPos, Sound.RANDOM_ANVIL_LAND, 1, 0.8f);
+        dimension.addSound(placeBlockPos, Sound.RANDOM_ANVIL_LAND);
 
         blockState = blockState.setPropertyValue(
                 MINECRAFT_CARDINAL_DIRECTION,

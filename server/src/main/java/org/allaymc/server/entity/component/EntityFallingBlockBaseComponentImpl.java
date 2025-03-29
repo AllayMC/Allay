@@ -2,6 +2,7 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
@@ -55,35 +56,47 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             return;
         }
 
+        if (onGround) {
+            return;
+        }
+
         var dimension = getDimension();
         var currentBlock = dimension.getBlockState(location);
+        if (currentBlock.getBlockType() == BlockTypes.AIR) {
+            return;
+        }
 
-        if (onGround) {
-            if (!getBlockStateStandingOn().blockState().getBlockStateData().shape().isFull(BlockFace.UP)) {
-                // Falling on a block which is not full in upper face, for example torch.
-                // In this case, the falling block should be turned into item instead of block
-                dimension.dropItem(blockState.toItemStack(), location);
-            } else {
-                // Set block state immediately when falling on ground to prevent
-                // the falling block entity above from getting into the ground.
-                dimension.setBlockState(location, blockState);
-            }
-            despawn();
+        var floorLoc = location.floor(new Vector3d());
+        if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+            dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
         } else {
-            if (currentBlock.getBlockType() == BlockTypes.AIR) {
-                return;
-            }
+            // The falling block get into a non-replaceable block for some reason
+            // In this case, just let the falling block become item
+            dimension.dropItem(blockState.toItemStack(), location);
+            despawn();
+        }
+    }
 
-            var floorLoc = location.floor(new Vector3d());
-            if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-                dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
-            } else {
-                // The falling block get into a non-replaceable block for some reason
-                // In this case, just let the falling block become item
-                dimension.dropItem(blockState.toItemStack(), location);
-                despawn();
+    @Override
+    public void onFall(double fallDistance) {
+        super.onFall(fallDistance);
+
+        var dimension = getDimension();
+        if (!getBlockStateStandingOn().blockState().getBlockStateData().shape().isFull(BlockFace.UP)) {
+            // Falling on a block which is not full in upper face, for example torch.
+            // In this case, the falling block should be turned into item instead of block
+            dimension.dropItem(blockState.toItemStack(), location);
+        } else {
+            // Set block state immediately when falling on ground to prevent
+            // the falling block entity above from getting into the ground.
+            dimension.setBlockState(location, blockState);
+
+            if (blockState.getBehavior() instanceof BlockFallableComponent fallableComponent) {
+                fallableComponent.onLanded(location, fallDistance);
             }
         }
+
+        despawn();
     }
 
     @Override

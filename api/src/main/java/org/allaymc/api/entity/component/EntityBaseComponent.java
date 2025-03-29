@@ -535,7 +535,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Called when the entity falls.
      */
     @ApiStatus.OverrideOnly
-    void onFall();
+    void onFall(double fallDistance);
 
     /**
      * Get all the effects of the entity.

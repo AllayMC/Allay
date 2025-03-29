@@ -14,6 +14,7 @@ import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.voxelshape.VoxelShapes;
+import org.allaymc.api.world.Sound;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
@@ -24,6 +25,8 @@ import org.allaymc.server.block.component.copper.BlockCopperStairsBaseComponentI
 import org.allaymc.server.block.component.crops.*;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
+import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
+import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
@@ -228,17 +231,17 @@ public final class BlockTypeInitializer {
         BlockTypes.GRAVEL = AllayBlockType
                 .builder(BlockGravelBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAVEL)
-                .addComponent(new BlockFallableComponentImpl())
+                .addComponent(new BlockFallableComponentImpl(Sound.LAND_GRAVEL))
                 .build();
         BlockTypes.SAND = AllayBlockType
                 .builder(BlockSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.SAND)
-                .addComponent(new BlockFallableComponentImpl())
+                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SAND))
                 .build();
         BlockTypes.RED_SAND = AllayBlockType
                 .builder(BlockRedSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SAND)
-                .addComponent(new BlockFallableComponentImpl())
+                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SAND))
                 .build();
     }
 
@@ -1409,18 +1412,21 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.CHIPPED_ANVIL))
+                .addComponent(new BlockAnvilFallableComponentImpl(Sound.RANDOM_ANVIL_LAND))
                 .build();
         BlockTypes.CHIPPED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHIPPED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.DAMAGED_ANVIL))
+                .addComponent(new BlockAnvilFallableComponentImpl(Sound.RANDOM_ANVIL_LAND))
                 .build();
         BlockTypes.DAMAGED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.DAMAGED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.AIR))
+                .addComponent(new BlockAnvilFallableComponentImpl(Sound.RANDOM_ANVIL_LAND))
                 .build();
     }
 

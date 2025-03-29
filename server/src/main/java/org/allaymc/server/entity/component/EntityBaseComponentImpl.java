@@ -495,7 +495,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
         if (onGround && this.fallDistance > 0) {
-            this.onFall();
+            this.onFall(this.fallDistance);
         }
     }
 
@@ -732,7 +732,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void onFall() {
+    public void onFall(double fallDistance) {
         var event = new EntityFallEvent(thisEntity, fallDistance);
         if (!event.call()) {
             this.fallDistance = 0;
