@@ -27,10 +27,10 @@ import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
+import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
-import org.allaymc.server.block.component.BlockTorchBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.impl.*;
@@ -1444,6 +1444,10 @@ public final class BlockTypeInitializer {
         BlockTypes.NETHER_GOLD_ORE = buildOre(BlockId.NETHER_GOLD_ORE, ItemId.GOLD_NUGGET, 2, 6, 0, 1);
         BlockTypes.QUARTZ_ORE = buildOre(BlockId.QUARTZ_ORE, ItemId.QUARTZ, 1, 1, 2, 5);
         BlockTypes.REDSTONE_ORE = buildOre(BlockId.REDSTONE_ORE, ItemId.REDSTONE, 4, 5, 1, 5);
+        BlockTypes.REDSTONE_ORE = AllayBlockType.builder(BlockOreBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_ORE)
+                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
+                .build();
         BlockTypes.LIT_REDSTONE_ORE = buildOre(BlockId.LIT_REDSTONE_ORE, ItemId.REDSTONE, 4, 5, 1, 5);
 
         BlockTypes.DEEPSLATE_COAL_ORE = buildOre(BlockId.DEEPSLATE_COAL_ORE, ItemId.COAL, 1, 1, 0, 2);
@@ -1453,7 +1457,10 @@ public final class BlockTypeInitializer {
         BlockTypes.DEEPSLATE_GOLD_ORE = buildOre(BlockId.DEEPSLATE_GOLD_ORE, ItemId.RAW_GOLD, 1, 1, 0, 0);
         BlockTypes.DEEPSLATE_IRON_ORE = buildOre(BlockId.DEEPSLATE_IRON_ORE, ItemId.RAW_IRON, 1, 1, 0, 0);
         BlockTypes.DEEPSLATE_LAPIS_ORE = buildOre(BlockId.DEEPSLATE_LAPIS_ORE, ItemId.LAPIS_LAZULI, 4, 9, 2, 5);
-        BlockTypes.DEEPSLATE_REDSTONE_ORE = buildOre(BlockId.DEEPSLATE_REDSTONE_ORE, ItemId.REDSTONE, 4, 5, 1, 5);
+        BlockTypes.DEEPSLATE_REDSTONE_ORE = AllayBlockType.builder(BlockOreBehaviorImpl.class)
+                .vanillaBlock(BlockId.DEEPSLATE_REDSTONE_ORE)
+                .setBaseComponentSupplier(BlockRedstoneOreBaseComponentImpl::new)
+                .build();
         BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = buildOre(BlockId.LIT_DEEPSLATE_REDSTONE_ORE, ItemId.REDSTONE, 4, 5, 1, 5);
     }
 
@@ -1461,6 +1468,22 @@ public final class BlockTypeInitializer {
         return AllayBlockType.builder(BlockOreBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setBaseComponentSupplier(type -> new BlockOreBaseComponentImpl(type, dropItem, minDropItem, maxDropItem, minDropXp, maxDropXp))
+                .build();
+    }
+
+    public static void initGlowstone() {
+        BlockTypes.GLOWSTONE = AllayBlockType
+                .builder(BlockGlowstoneBehaviorImpl.class)
+                .vanillaBlock(BlockId.GLOWSTONE)
+                .setBaseComponentSupplier(BlockGlowstoneBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initGildedBlackstone() {
+        BlockTypes.GILDED_BLACKSTONE = AllayBlockType
+                .builder(BlockGildedBlackstoneBehaviorImpl.class)
+                .vanillaBlock(BlockId.GILDED_BLACKSTONE)
+                .setBaseComponentSupplier(BlockGildedBlackstoneBaseComponentImpl::new)
                 .build();
     }
 }

@@ -28,7 +28,7 @@ public class FortuneDropHelper {
     }
 
     public static int binomial(ItemStack usedItem, int min) {
-        return binomial(usedItem, min, 3, 4d / 7d);
+        return binomial(usedItem, min, 3, 8d / 15d);
     }
 
     public static int binomial(ItemStack usedItem, int min, int minTrials, double chance) {

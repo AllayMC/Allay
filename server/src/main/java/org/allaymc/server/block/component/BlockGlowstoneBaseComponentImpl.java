@@ -11,15 +11,15 @@ import org.allaymc.api.item.type.ItemTypes;
 import java.util.Set;
 
 /**
- * @author daoge_cmd
+ * @author IWareQ
  */
-public class BlockMelonBlockBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockMelonBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockGlowstoneBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockGlowstoneBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemTypes.MELON_SLICE.createItemStack(FortuneDropHelper.discrete(usedItem, 3, 7, 9)));
+        return Set.of(ItemTypes.GLOWSTONE_DUST.createItemStack(FortuneDropHelper.discrete(usedItem, 2, 4, 4)));
     }
 }

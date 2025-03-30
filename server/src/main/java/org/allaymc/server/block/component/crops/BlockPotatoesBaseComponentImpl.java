@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.FortuneDropHelper;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
@@ -22,15 +23,15 @@ public class BlockPotatoesBaseComponentImpl extends BlockCropsBaseComponentImpl 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         var growth = blockState.blockState().getPropertyValue(BlockPropertyTypes.GROWTH);
-        var n = 1;
-        if (growth == 7) {
-            n += ThreadLocalRandom.current().nextInt(5);
-        }
-        if (ThreadLocalRandom.current().nextFloat() < 0.02) {
-            return Set.of(ItemTypes.POTATO.createItemStack(n), ItemTypes.POISONOUS_POTATO.createItemStack());
+        if (growth < BlockPropertyTypes.GROWTH.getMax()) {
+            return Set.of(ItemTypes.POTATO.createItemStack());
         }
 
-        return Set.of(ItemTypes.POTATO.createItemStack(n));
+        var potatoDropCount = FortuneDropHelper.binomial(usedItem, 1);
+        if (ThreadLocalRandom.current().nextFloat() < 0.02f) {
+            return Set.of(ItemTypes.POTATO.createItemStack(potatoDropCount), ItemTypes.POISONOUS_POTATO.createItemStack());
+        }
+
+        return Set.of(ItemTypes.POTATO.createItemStack(potatoDropCount));
     }
-
 }
