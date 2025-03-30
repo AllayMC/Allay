@@ -232,6 +232,7 @@ public final class BlockTypeInitializer {
         BlockTypes.GRAVEL = AllayBlockType
                 .builder(BlockGravelBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAVEL)
+                .setBaseComponentSupplier(BlockGravelBaseComponentImpl::new)
                 .addComponent(new BlockFallableComponentImpl(Sound.LAND_GRAVEL))
                 .build();
         BlockTypes.SAND = AllayBlockType
