@@ -3,6 +3,7 @@ package org.allaymc.server.block.component;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.FortuneDropHelper;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -12,7 +13,6 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
@@ -40,6 +40,10 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         this.saplingType = saplingType;
         this.canDropApple = canDropApple;
         this.dropMoreSaplings = dropMoreSaplings;
+    }
+
+    protected static long hashBlockXYZ(int x, int y, int z) {
+        return ((long) y << 52) + (((long) z & 0x3ffffff) << 26) + ((long) x & 0x3ffffff);
     }
 
     @Override
@@ -141,48 +145,18 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         Set<ItemStack> drops = new HashSet<>();
-        int fortune = usedItem != null ? usedItem.getEnchantmentLevel(EnchantmentTypes.FORTUNE) : 0;
-        int appleOdds;
-        int stickOdds;
-        int saplingOdds;
-        switch (fortune) {
-            case 0 -> {
-                appleOdds = 200;
-                stickOdds = 50;
-                saplingOdds = dropMoreSaplings ? 40 : 20;
-            }
-            case 1 -> {
-                appleOdds = 180;
-                stickOdds = 45;
-                saplingOdds = dropMoreSaplings ? 36 : 16;
-            }
-            case 2 -> {
-                appleOdds = 160;
-                stickOdds = 40;
-                saplingOdds = dropMoreSaplings ? 32 : 12;
-            }
-            default -> {
-                appleOdds = 120;
-                stickOdds = 30;
-                saplingOdds = dropMoreSaplings ? 24 : 10;
-            }
-        }
-
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-        if (canDropApple && random.nextInt(appleOdds) == 0) {
+        if (canDropApple && FortuneDropHelper.bonusChanceDivisor(usedItem, 200, 20)) {
             drops.add(ItemTypes.APPLE.createItemStack());
         }
-        if (random.nextInt(stickOdds) == 0) {
-            drops.add(ItemTypes.STICK.createItemStack());
+
+        if (FortuneDropHelper.bonusChanceDivisor(usedItem, 50, 5)) {
+            drops.add(ItemTypes.STICK.createItemStack(ThreadLocalRandom.current().nextInt(1, 2)));
         }
-        if (random.nextInt(saplingOdds) == 0 && saplingType != null) {
+
+        if (saplingType != null && FortuneDropHelper.bonusChanceDivisor(usedItem, dropMoreSaplings ? 40 : 20, 4)) {
             drops.add(saplingType.createItemStack());
         }
 
         return drops;
-    }
-
-    protected static long hashBlockXYZ(int x, int y, int z) {
-        return ((long) y << 52) + (((long) z & 0x3ffffff) << 26) + ((long) x & 0x3ffffff);
     }
 }

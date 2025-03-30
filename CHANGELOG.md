@@ -14,6 +14,15 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.3.0](https://github.com/AllayMC/Allay/compare/0.3.0...HEAD)</small>
 
+### Added
+
+- Added Glided Blackstone and Glowstone drop.
+
+### Fixed
+
+- (API) Fixed binomial chance.
+- Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
+
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 
 <small>[Compare with 0.2.0](https://github.com/AllayMC/Allay/compare/0.2.0...0.3.0)</small>

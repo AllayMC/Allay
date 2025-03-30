@@ -9,17 +9,22 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author daoge_cmd
+ * @author IWareQ
  */
-public class BlockMelonBlockBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockMelonBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockGildedBlackstoneBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockGildedBlackstoneBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemTypes.MELON_SLICE.createItemStack(FortuneDropHelper.discrete(usedItem, 3, 7, 9)));
+        if (FortuneDropHelper.bonusChanceDivisor(usedItem, 10, 3)) {
+            return Set.of(ItemTypes.GOLD_NUGGET.createItemStack(ThreadLocalRandom.current().nextInt(2, 5)));
+        }
+
+        return super.getDrops(blockState, usedItem, entity);
     }
 }
