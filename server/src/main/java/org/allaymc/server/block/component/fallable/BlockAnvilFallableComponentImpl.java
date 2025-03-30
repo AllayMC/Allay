@@ -18,6 +18,8 @@ public class BlockAnvilFallableComponentImpl extends BlockFallableComponentImpl 
 
     @Override
     public void onLanded(Location3d location, double fallDistance) {
+        fallDistance = Math.round(fallDistance);
+
         var dimension = location.dimension();
         if (fallDistance > 1) {
             if (ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE * fallDistance) {
