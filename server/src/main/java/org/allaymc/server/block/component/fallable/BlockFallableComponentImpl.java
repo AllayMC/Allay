@@ -64,12 +64,12 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
             return;
         }
 
-        // Set the block state to air immediately if the falling block
-        // entity will be spawned, so multiple neighbor updates won't
-        // cause the falling block entity being spawned multiple times
-        dimension.setBlockState(pos.x(), pos.y(), pos.z(), BlockTypes.AIR.getDefaultState());
-
-        dimension.getEntityService().addEntity(createFallingBlock(dimension, pos, blockState));
+        dimension.getEntityService().addEntity(createFallingBlock(dimension, pos, blockState), () -> {
+            // Set the block state to air immediately if the falling block
+            // entity will be spawned, so multiple neighbor updates won't
+            // cause the falling block entity being spawned multiple times
+            dimension.setBlockState(pos.x(), pos.y(), pos.z(), BlockTypes.AIR.getDefaultState());
+        });
     }
 
     protected boolean invalidDownBlock(BlockType<?> down0, BlockType<?> down1) {

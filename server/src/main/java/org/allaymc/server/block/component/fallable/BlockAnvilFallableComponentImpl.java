@@ -3,6 +3,7 @@ package org.allaymc.server.block.component.fallable;
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.world.Sound;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -12,8 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class BlockAnvilFallableComponentImpl extends BlockFallableComponentImpl {
     private static final float ANVIL_DAMAGE_CHANCE = 0.05f;
 
-    public BlockAnvilFallableComponentImpl(String landingSound) {
-        super(landingSound);
+    public BlockAnvilFallableComponentImpl() {
+        super(Sound.RANDOM_ANVIL_LAND);
     }
 
     @Override

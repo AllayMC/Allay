@@ -1414,21 +1414,21 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.CHIPPED_ANVIL))
-                .addComponent(new BlockAnvilFallableComponentImpl(Sound.RANDOM_ANVIL_LAND))
+                .addComponent(new BlockAnvilFallableComponentImpl())
                 .build();
         BlockTypes.CHIPPED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHIPPED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.DAMAGED_ANVIL))
-                .addComponent(new BlockAnvilFallableComponentImpl(Sound.RANDOM_ANVIL_LAND))
+                .addComponent(new BlockAnvilFallableComponentImpl())
                 .build();
         BlockTypes.DAMAGED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.DAMAGED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.AIR))
-                .addComponent(new BlockAnvilFallableComponentImpl(Sound.RANDOM_ANVIL_LAND))
+                .addComponent(new BlockAnvilFallableComponentImpl())
                 .build();
     }
 

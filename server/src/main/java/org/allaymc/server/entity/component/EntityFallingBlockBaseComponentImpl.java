@@ -67,11 +67,6 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         var floorLoc = location.floor(new Vector3d());
         if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
             dimension.setBlockState(floorLoc, BlockTypes.AIR.getDefaultState());
-        } else {
-            // The falling block get into a non-replaceable block for some reason
-            // In this case, just let the falling block become item
-            dimension.dropItem(currentBlock.toItemStack(), location);
-            despawn();
         }
     }
 
