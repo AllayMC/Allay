@@ -44,7 +44,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         updateHitBoxAndCollisionBoxMetadata();
         metadata.set(EntityFlag.HAS_GRAVITY, true);
         metadata.set(EntityFlag.FIRE_IMMUNE, true);
-        metadata.set(EntityFlag.HAS_COLLISION, true);
+        metadata.set(EntityFlag.HAS_COLLISION, false);
         metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
     }
 
