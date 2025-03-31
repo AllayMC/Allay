@@ -44,6 +44,10 @@ public class Metadata {
         return this.entityDataMap.get(entityData);
     }
 
+    public <T> boolean has(EntityDataType<T> entityData) {
+        return this.entityDataMap.containsKey(entityData);
+    }
+
     /**
      * Sets a flag in the metadata.
      *
@@ -68,6 +72,10 @@ public class Metadata {
      * @return The value of the flag.
      */
     public boolean get(EntityFlag entityFlag) {
+        return this.entityDataMap.getOrCreateFlags().contains(entityFlag);
+    }
+
+    public boolean has(EntityFlag entityFlag) {
         return this.entityDataMap.getOrCreateFlags().contains(entityFlag);
     }
 }

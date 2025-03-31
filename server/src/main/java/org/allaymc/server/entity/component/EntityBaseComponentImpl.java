@@ -170,7 +170,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 .build();
     }
 
-    private void updateHitBoxAndCollisionBoxMetadata() {
+    protected void updateHitBoxAndCollisionBoxMetadata() {
         metadata.set(EntityDataTypes.HITBOX, buildAABBTag());
         var aabb = getAABB();
         metadata.set(EntityDataTypes.COLLISION_BOX,
@@ -202,6 +202,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void tickBreathe() {
+        if (!getMetadata().has(EntityDataTypes.AIR_SUPPLY)) {
+            return;
+        }
+
         short airSupply = getMetadata().get(EntityDataTypes.AIR_SUPPLY);
         short airSupplyMax = getMetadata().get(EntityDataTypes.AIR_SUPPLY_MAX);
         short newAirSupply = airSupply;
