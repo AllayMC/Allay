@@ -22,20 +22,23 @@ public class BlockAnvilFallableComponentImpl extends BlockFallableComponentImpl 
         fallDistance = Math.round(fallDistance);
 
         var dimension = location.dimension();
-        if (fallDistance > 1) {
-            if (ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE * fallDistance) {
-                var anvilState = dimension.getBlockState(location);
-                if (anvilState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
-                    var newAnvilState = anvilComponent.damage(anvilState);
-                    dimension.setBlockState(location, newAnvilState);
+        if (fallDistance > 1 && ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE * fallDistance) {
+            var anvilState = dimension.getBlockState(location);
+            if (anvilState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
+                var newAnvilState = anvilComponent.damage(anvilState);
+                dimension.setBlockState(location, newAnvilState);
 
-                    if (newAnvilState.getBlockType() == BlockTypes.AIR) {
-                        return;
-                    }
+                if (newAnvilState.getBlockType() == BlockTypes.AIR) {
+                    return;
                 }
             }
         }
 
         super.onLanded(location, fallDistance);
+    }
+
+    @Override
+    public float getDamage(double fallDistance) {
+        return (float) Math.min(2f * fallDistance, 40f);
     }
 }

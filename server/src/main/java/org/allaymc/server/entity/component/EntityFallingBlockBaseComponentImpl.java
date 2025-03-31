@@ -7,7 +7,9 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
@@ -77,6 +79,19 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         var dimension = getDimension();
         // It is better to place the block when the Entity is removed, so that it looks visually normal.
         dimension.getEntityService().removeEntity(thisEntity, () -> {
+            if (!(blockState.getBehavior() instanceof BlockFallableComponent fallableComponent)) {
+                return;
+            }
+
+            var damage = fallableComponent.getDamage(fallDistance);
+            if (damage > 0) {
+                dimension.getEntityService().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
+                        .stream()
+                        .filter(entity -> entity instanceof EntityDamageComponent)
+                        .map(EntityDamageComponent.class::cast)
+                        .forEach(entity -> entity.attack(DamageContainer.fallingBlock(damage)));
+            }
+
             if (!getBlockStateStandingOn().blockState().getBlockStateData().shape().isFull(BlockFace.UP)) {
                 // Falling on a block which is not full in upper face, for example torch.
                 // In this case, the falling block should be turned into item instead of block
@@ -85,9 +100,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
                 // Set block state immediately when falling on ground to prevent
                 // the falling block entity above from getting into the ground.
                 dimension.setBlockState(location, blockState);
-                if (blockState.getBehavior() instanceof BlockFallableComponent fallableComponent) {
-                    fallableComponent.onLanded(location, fallDistance);
-                }
+                fallableComponent.onLanded(location, fallDistance);
             }
         });
     }

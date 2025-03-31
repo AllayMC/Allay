@@ -7,4 +7,8 @@ import org.allaymc.api.math.location.Location3d;
  */
 public interface BlockFallableComponent extends BlockComponent {
     void onLanded(Location3d location, double fallDistance);
+
+    default float getDamage(double fallDistance) {
+        return 0;
+    }
 }
