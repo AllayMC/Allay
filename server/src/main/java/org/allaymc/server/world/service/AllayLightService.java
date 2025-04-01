@@ -2,13 +2,8 @@ package org.allaymc.server.world.service;
 
 import com.google.common.base.Preconditions;
 import io.netty.util.internal.PlatformDependent;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
-import it.unimi.dsi.fastutil.longs.LongSet;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
@@ -21,9 +16,13 @@ import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayChunkSection;
 import org.allaymc.server.world.chunk.HeightMap;
+import org.jctools.maps.NonBlockingHashMapLong;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.VisibleForTesting;
 
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -32,68 +31,90 @@ import java.util.function.Supplier;
  */
 public class AllayLightService implements LightService {
 
-    protected static final int MAX_LIGHT_UPDATE_COUNT_PER_TICK = Server.SETTINGS.worldSettings().maxLightUpdateCountPerTick();
     protected final DimensionInfo dimensionInfo;
+    protected final String worldName;
+    protected final Supplier<Boolean> runningFlagSupplier;
     protected final Supplier<Integer> timeSupplier;
     protected final Supplier<Set<Weather>> weatherSupplier;
     protected final int minHeight;
     protected final int maxHeight;
     protected final int sectionCount;
     protected final boolean hasSkyLight;
-    // TODO(memory): use a more memory-efficient queue, for example a long queue
-    protected final BlockingQueueWrapper<Runnable> queue;
-    protected final LongSet chunks;
-    protected final Long2ObjectMap<ChunkSectionNibbleArray[]> lightDampening;
-    protected final Long2ObjectMap<ChunkSectionNibbleArray[]> blockLight;
+    protected final BlockingQueueWrapper<Runnable> chunkAndBlockUpdateQueue;
+    protected final BlockingQueueWrapper<Runnable> blockLightUpdateQueue;
+    protected final Set<Long> chunks;
+    protected final NonBlockingHashMapLong<ChunkSectionNibbleArray[]> lightDampening;
+    protected final NonBlockingHashMapLong<ChunkSectionNibbleArray[]> blockLight;
     protected final LightPropagator blockLightPropagator;
-    protected Long2ObjectMap<HeightMap> lightHeightMap;
-    protected Long2ObjectMap<ChunkSectionNibbleArray[]> skyLight;
+
+    protected BlockingQueueWrapper<Runnable> skyLightUpdateQueue;
+    protected NonBlockingHashMapLong<HeightMap> lightHeightMap;
+    protected NonBlockingHashMapLong<ChunkSectionNibbleArray[]> skyLight;
     protected LightPropagator skyLightPropagator;
 
     public AllayLightService(Dimension dimension) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers);
+        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld()::isRunning, dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers);
     }
 
-    public AllayLightService(DimensionInfo dimensionInfo, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
+    @VisibleForTesting
+    public AllayLightService(DimensionInfo dimensionInfo, String worldName, Supplier<Boolean> runningFlagSupplier, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
         this.dimensionInfo = dimensionInfo;
+        this.worldName = worldName;
+        this.runningFlagSupplier = runningFlagSupplier;
         this.timeSupplier = timeSupplier;
         this.weatherSupplier = weatherSupplier;
         this.minHeight = dimensionInfo.minHeight();
         this.maxHeight = dimensionInfo.maxHeight();
         this.sectionCount = dimensionInfo.chunkSectionCount();
         this.hasSkyLight = dimensionInfo.hasSkyLight();
-        this.queue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
-        // TODO: check if LongOpenHashSet can be used in multi-threaded environment,
-        // it seems that reading in one thread while another thread is writing
-        // will cause IndexOutOfBoundsException
-        this.chunks = new LongOpenHashSet();
-        this.lightDampening = new Long2ObjectOpenHashMap<>();
-        this.blockLight = new Long2ObjectOpenHashMap<>();
+        this.chunkAndBlockUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
+        this.blockLightUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
+        this.chunks = new CopyOnWriteArraySet<>();
+        this.lightDampening = new NonBlockingHashMapLong<>();
+        this.blockLight = new NonBlockingHashMapLong<>();
         this.blockLightPropagator = new LightPropagator(new BlockLightAccessor());
         if (hasSkyLight) {
-            this.lightHeightMap = new Long2ObjectOpenHashMap<>();
-            this.skyLight = new Long2ObjectOpenHashMap<>();
+            this.skyLightUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
+            this.lightHeightMap = new NonBlockingHashMapLong<>();
+            this.skyLight = new NonBlockingHashMapLong<>();
             this.skyLightPropagator = new LightPropagator(new SkyLightAccessor());
         }
     }
 
-    public void tick() {
-        int processedCount = 0;
-        Runnable runnable;
-        while (processedCount < MAX_LIGHT_UPDATE_COUNT_PER_TICK && (runnable = queue.pollNow()) != null) {
-            runnable.run();
-            processedCount++;
+    public void startTick() {
+        var dimensionName = worldName + ":" + dimensionInfo.toString();
+        startCalculatingThread("Light Calculating Thread (Chunk & Block) - " + dimensionName, chunkAndBlockUpdateQueue);
+        startCalculatingThread("Light Calculating Thread (Block Light) - " + dimensionName, blockLightUpdateQueue);
+        if (hasSkyLight) {
+            startCalculatingThread("Light Calculating Thread (Sky Light) - " + dimensionName, skyLightUpdateQueue);
         }
     }
 
-    public void tickIgnoreLimit() {
+    protected void startCalculatingThread(String name, BlockingQueueWrapper<Runnable> queue) {
+        Thread.ofPlatform().name(name).start(() -> {
+            while (runningFlagSupplier.get()) {
+                this.handleUpdateIn(queue);
+            }
+        });
+    }
+
+    protected void handleUpdateIn(BlockingQueueWrapper<Runnable> queue) {
         Runnable runnable;
         while ((runnable = queue.tryPoll(1, TimeUnit.SECONDS)) != null) {
             runnable.run();
         }
     }
 
-    public void tickIgnoreLimitUnblocking() {
+    @VisibleForTesting
+    public void handleUpdateUninterruptedlyInAllQueues() {
+        handleUpdateUninterruptedlyIn(chunkAndBlockUpdateQueue);
+        handleUpdateUninterruptedlyIn(blockLightUpdateQueue);
+        if (hasSkyLight) {
+            handleUpdateUninterruptedlyIn(skyLightUpdateQueue);
+        }
+    }
+
+    protected void handleUpdateUninterruptedlyIn(BlockingQueueWrapper<Runnable> queue) {
         Runnable runnable;
         while ((runnable = queue.pollNow()) != null) {
             runnable.run();
@@ -107,36 +128,40 @@ public class AllayLightService implements LightService {
      */
     protected void addChunk(UnsafeChunk chunk) {
         ChunkSectionNibbleArray[] chunkLightDampening = createNibbleArrays();
-        var chunkLightHeightMap = hasSkyLight ? new HeightMap((short) dimensionInfo.minHeight()) : null;
+        var blockLightUpdates = new ArrayList<Runnable>();
+        var skyLightUpdates = new ArrayList<Runnable>();
+        var chunkLightHeightMap = hasSkyLight ? new HeightMap((short) minHeight) : null;
+
         for (int y = maxHeight; y >= minHeight; y--) {
             var section = (AllayChunkSection) chunk.getSection(y >> 4);
-            if (section.isAirSection()) {
-                y -= 15;
-                continue;
-            }
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     var blockStateData = section.getBlockState(x, y & 0xf, z, 0).getBlockStateData();
-                    byte lightEmission = (byte) blockStateData.lightEmission();
                     final int finalX = (chunk.getX() << 4) + x;
                     final int finalY = y;
                     final int finalZ = (chunk.getZ() << 4) + z;
+
+                    byte lightEmission = (byte) blockStateData.lightEmission();
                     if (lightEmission != 0) {
-                        queue.offer(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, 0, lightEmission));
-                    }
-                    var lightDampening = blockStateData.lightDampening();
-                    if (lightDampening == 0) {
-                        continue;
+                        blockLightUpdates.add(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, 0, lightEmission));
                     }
 
-                    chunkLightDampening[(y - minHeight) >> 4].set(x, y & 0xf, z, lightDampening);
-                    if (chunkLightHeightMap != null && chunkLightHeightMap.get(x, z) == minHeight) {
-                        chunkLightHeightMap.set(x, z, (short) (y + 1));
-                        queue.offer(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY + 1, finalZ, 0, 15));
+                    boolean isSkyLightSourceAbove = hasSkyLight && y != maxHeight && chunkLightHeightMap.get(x, z) == minHeight;
+                    if (isSkyLightSourceAbove) {
+                        skyLightUpdates.add(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY + 1, finalZ, 0, 15));
+                    }
+
+                    var lightDampening = blockStateData.lightDampening();
+                    if (lightDampening != 0) {
+                        chunkLightDampening[(y - minHeight) >> 4].set(x, y & 0xf, z, lightDampening);
+                        if (isSkyLightSourceAbove) {
+                            chunkLightHeightMap.set(x, z, (short) (y + 1));
+                        }
                     }
                 }
             }
         }
+
         var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
         lightDampening.put(hash, chunkLightDampening);
         blockLight.put(hash, createNibbleArrays());
@@ -162,17 +187,21 @@ public class AllayLightService implements LightService {
                     final var finalZ = (cz << 4) + oz != 0 ? 15 : i;
                     byte blockLight = (byte) getBlockLight(finalX, finalY, finalZ);
                     if (blockLight != 0) {
-                        queue.offer(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, blockLight, blockLight));
+                        blockLightUpdates.add(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, blockLight, blockLight));
                     }
-                    if (!hasSkyLight) continue;
-
-                    byte skyLightValue = (byte) get(skyLight, finalX, finalY, finalZ, 0);
-                    if (skyLightValue != 0) {
-                        queue.offer(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, skyLightValue, skyLightValue));
+                    if (hasSkyLight) {
+                        byte skyLightValue = (byte) get(skyLight, finalX, finalY, finalZ, 0);
+                        if (skyLightValue != 0) {
+                            skyLightUpdates.add(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, skyLightValue, skyLightValue));
+                        }
                     }
                 }
             }
         }
+
+        // Add the light updates to the queue
+        blockLightUpdates.forEach(blockLightUpdateQueue::offer);
+        skyLightUpdates.forEach(skyLightUpdateQueue::offer);
     }
 
     /**
@@ -193,7 +222,7 @@ public class AllayLightService implements LightService {
         if (!hasSkyLight) {
             return 0;
         }
-        return y >= getLightHeight(x, z) ? 15 : get(skyLight, x, y, z, 0);
+        return get(skyLight, x, y, z, 0);
     }
 
     protected short getLightHeight(int x, int z) {
@@ -230,8 +259,7 @@ public class AllayLightService implements LightService {
     public void onBlockChange(int x, int y, int z, int le, int ld) {
         // Reduce memory usage by packing light data into a single byte
         var packedLightData = packLightData(le, ld);
-        queue.offer(() -> {
-            var lightEmission = unpackLightEmission(packedLightData);
+        chunkAndBlockUpdateQueue.offer(() -> {
             var lightDampening = unpackLightDampening(packedLightData);
             int oldLightHeight = hasSkyLight ? getLightHeight(x, z) : 0;
             var oldBlockDampening = getLightDampening(x, y, z);
@@ -240,25 +268,29 @@ public class AllayLightService implements LightService {
                 if (hasSkyLight) {
                     skyLightPropagator.setLightAndPropagate(x, y, z, get(skyLight, x, y, z, 0), 0);
                     var newLightHeight = getLightHeight(x, z);
-                    if (oldLightHeight != newLightHeight) {
-                        // Skylight source is changed
-                        // Remove the old source
-                        skyLightPropagator.setLightAndPropagate(x, oldLightHeight, z, 15, 0);
-                        // Set the new source
-                        skyLightPropagator.setLightAndPropagate(x, newLightHeight, z, 0, 15);
+                    if (newLightHeight > oldLightHeight) {
+                        for (int i = oldLightHeight; i < newLightHeight; i++) {
+                            final int j = i;
+                            skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, j, z, 15, 0));
+                        }
+                    } else if (newLightHeight < oldLightHeight) {
+                        for (int i = newLightHeight; i < oldLightHeight; i++) {
+                            final int j = i;
+                            skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, j, z, 0, 15));
+                        }
                     }
                 }
             }
-            blockLightPropagator.setLightAndPropagate(x, y, z, getBlockLight(x, y, z), lightEmission);
+            blockLightUpdateQueue.offer(() -> blockLightPropagator.setLightAndPropagate(x, y, z, getBlockLight(x, y, z), unpackLightEmission(packedLightData)));
         });
     }
 
     public void onChunkLoad(Chunk chunk) {
-        queue.offer(() -> chunk.applyOperation(this::addChunk, OperationType.READ, OperationType.NONE));
+        chunkAndBlockUpdateQueue.offer(() -> chunk.applyOperation(this::addChunk, OperationType.READ, OperationType.NONE));
     }
 
     public void onChunkUnload(Chunk chunk) {
-        queue.offer(() -> {
+        chunkAndBlockUpdateQueue.offer(() -> {
             var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
             lightDampening.remove(hash);
             blockLight.remove(hash);
@@ -272,20 +304,20 @@ public class AllayLightService implements LightService {
 
     @Override
     public int getQueuedUpdateCount() {
-        return queue.size();
+        return chunkAndBlockUpdateQueue.size() + blockLightUpdateQueue.size() + (skyLightUpdateQueue != null ? skyLightUpdateQueue.size() : 0);
     }
 
     protected int getLightDampening(int x, int y, int z) {
         return get(lightDampening, x, y, z, 0);
     }
 
-    protected int getWithoutCheck(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z) {
+    protected int getWithoutChunkCheck(NonBlockingHashMapLong<ChunkSectionNibbleArray[]> target, int x, int y, int z) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         var array = target.get(hash);
         return array[(y - minHeight) >> 4].get(x & 15, y & 15, z & 15);
     }
 
-    protected int get(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int defaultValue) {
+    protected int get(NonBlockingHashMapLong<ChunkSectionNibbleArray[]> target, int x, int y, int z, int defaultValue) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         if (!chunks.contains(hash)) {
             return defaultValue;
@@ -317,7 +349,7 @@ public class AllayLightService implements LightService {
         }
     }
 
-    protected void set(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
+    protected void set(NonBlockingHashMapLong<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         if (!chunks.contains(hash)) {
             return;
@@ -326,7 +358,7 @@ public class AllayLightService implements LightService {
         array[(y - minHeight) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
-    protected void setWithoutCheck(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
+    protected void setWithoutChunkCheck(NonBlockingHashMapLong<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         var array = target.get(hash);
         array[(y - minHeight) >> 4].set(x & 15, y & 15, z & 15, value);
@@ -371,17 +403,17 @@ public class AllayLightService implements LightService {
     protected class BlockLightAccessor implements LightAccessor {
         @Override
         public int getLight(int x, int y, int z) {
-            return getWithoutCheck(blockLight, x, y, z);
+            return getWithoutChunkCheck(blockLight, x, y, z);
         }
 
         @Override
         public int getLightDampening(int x, int y, int z) {
-            return getWithoutCheck(lightDampening, x, y, z);
+            return getWithoutChunkCheck(lightDampening, x, y, z);
         }
 
         @Override
         public void setLight(int x, int y, int z, int lightValue) {
-            setWithoutCheck(blockLight, x, y, z, lightValue);
+            setWithoutChunkCheck(blockLight, x, y, z, lightValue);
         }
 
         @Override
@@ -398,17 +430,17 @@ public class AllayLightService implements LightService {
     protected class SkyLightAccessor implements LightAccessor {
         @Override
         public int getLight(int x, int y, int z) {
-            return getWithoutCheck(skyLight, x, y, z);
+            return getWithoutChunkCheck(skyLight, x, y, z);
         }
 
         @Override
         public int getLightDampening(int x, int y, int z) {
-            return getWithoutCheck(lightDampening, x, y, z);
+            return getWithoutChunkCheck(lightDampening, x, y, z);
         }
 
         @Override
         public void setLight(int x, int y, int z, int lightValue) {
-            setWithoutCheck(skyLight, x, y, z, lightValue);
+            setWithoutChunkCheck(skyLight, x, y, z, lightValue);
         }
 
         @Override

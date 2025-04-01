@@ -94,10 +94,10 @@ public class AllayWorld implements World {
                 .currentTick(this.worldData.getTotalTime())
                 .onTick(this::worldThreadMain).build();
         this.worldThread = Thread.ofPlatform()
-                .name("World Thread - " + this.getWorldData().getDisplayName())
+                .name("World Thread - " + this.getName())
                 .unstarted(gameLoop::startLoop);
         this.networkThread = ENABLE_INDEPENDENT_NETWORK_THREAD ? Thread.ofPlatform()
-                .name("World Network Thread - " + this.getWorldData().getDisplayName())
+                .name("World Network Thread - " + this.getName())
                 .unstarted(this::networkThreadMain) : null;
         this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
         this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
@@ -135,7 +135,7 @@ public class AllayWorld implements World {
         try {
             tick(gameLoop.getTick());
         } catch (Throwable throwable) {
-            log.error("Error while ticking level {}", this.getWorldData().getDisplayName(), throwable);
+            log.error("Error while ticking world {}", name, throwable);
         } finally {
             if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
                 networkSemaphore.release();
@@ -154,7 +154,7 @@ public class AllayWorld implements World {
                 }
 
                 if (entry.player.getWorld() != this) {
-                    log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getDisplayName(), entry.player.getOriginName());
+                    log.warn("Trying to handle sync packet in world {} which the player {} is not in!", name, entry.player.getOriginName());
                 }
                 // The player may have been disconnected,
                 // which is possible because this is a synced packet
@@ -364,14 +364,14 @@ public class AllayWorld implements World {
     }
 
     public void shutdown() {
-        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADING, worldData.getDisplayName()));
+        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADING, name));
         getPlayers().forEach(EntityPlayer::disconnect);
         isRunning.set(false);
         scheduler.shutdown();
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
         worldStorage.shutdown();
-        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getDisplayName()));
+        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, name));
     }
 
     @Override
