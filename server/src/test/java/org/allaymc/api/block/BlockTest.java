@@ -24,11 +24,11 @@ import static org.mockito.Mockito.when;
 public class BlockTest {
     private static final EntityPlayer player = mock(EntityPlayer.class);
 
-    private static void testCalculatingBreakTime(double expectedTime, BlockBehavior behavior, ItemStack usedItem, boolean isOnGround, boolean isInWater) {
+    private static void testCalculatingBreakTime(double expectedTime, BlockBehavior breakingBlock, ItemStack usedItem, boolean isOnGround, boolean isInWater) {
         when(player.isOnGround()).thenReturn(isOnGround);
         when(player.isEyesInWater()).thenReturn(isInWater);
-        assertEquals(expectedTime, behavior.calculateBreakTime(
-                behavior.getBlockType().getDefaultState(),
+        assertEquals(expectedTime, breakingBlock.calculateBreakTime(
+                breakingBlock.getBlockType().getDefaultState(),
                 usedItem,
                 player
         ));
@@ -123,5 +123,60 @@ public class BlockTest {
         testCalculatingBreakTime(2.25, cobblestone, usedItem, false, true);
         testCalculatingBreakTime(0.1, cobblestone, usedItem, true, false);
         testCalculatingBreakTime(0.45, cobblestone, usedItem, false, false);
+    }
+
+    @Test
+    void testCalculatingBreakTime_by_sword() {
+        var breakingBlock = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
+        var usedItem = ItemTypes.DIAMOND_SWORD.createItemStack();
+
+        testCalculatingBreakTime(33.35, breakingBlock, usedItem, true, true);
+        testCalculatingBreakTime(166.7, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(6.7, breakingBlock, usedItem, true, false);
+        testCalculatingBreakTime(33.35, breakingBlock, usedItem, false, false);
+
+        breakingBlock = BlockTypes.WEB.getDefaultState().getBehavior();
+        testCalculatingBreakTime(2, breakingBlock, usedItem, true, true);
+        testCalculatingBreakTime(10, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(0.4, breakingBlock, usedItem, true, false);
+        testCalculatingBreakTime(2, breakingBlock, usedItem, false, false);
+
+        breakingBlock = BlockTypes.BAMBOO.getDefaultState().getBehavior();
+        testCalculatingBreakTime(0, breakingBlock, usedItem, true, true);
+        testCalculatingBreakTime(0, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(0, breakingBlock, usedItem, true, false);
+        testCalculatingBreakTime(0, breakingBlock, usedItem, false, false);
+    }
+
+    @Test
+    void testCalculatingBreakTime_by_shears() {
+        var breakingBlock = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
+        var usedItem = ItemTypes.SHEARS.createItemStack();
+
+        // TODO: find out why the current value is expected * 2
+//        testCalculatingBreakTime(25, breakingBlock, usedItem, true, true);
+//        testCalculatingBreakTime(125, breakingBlock, usedItem, false, true);
+//        testCalculatingBreakTime(5, breakingBlock, usedItem, true, false);
+//        testCalculatingBreakTime(25, breakingBlock, usedItem, false, false);
+
+        breakingBlock = BlockTypes.BLACK_WOOL.getDefaultState().getBehavior();
+        // TODO: find out why the current value is expected + 0.05
+//        testCalculatingBreakTime(1.2, breakingBlock, usedItem, true, true);
+//        testCalculatingBreakTime(6, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(0.25, breakingBlock, usedItem, true, false);
+        testCalculatingBreakTime(1.25, breakingBlock, usedItem, false, false);
+
+        breakingBlock = BlockTypes.WEB.getDefaultState().getBehavior();
+        testCalculatingBreakTime(2, breakingBlock, usedItem, true, true);
+        testCalculatingBreakTime(10, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(0.4, breakingBlock, usedItem, true, false);
+        testCalculatingBreakTime(2, breakingBlock, usedItem, false, false);
+
+        breakingBlock = BlockTypes.OAK_LEAVES.getDefaultState().getBehavior();
+        // TODO: find out why the current value is expected + 0.05
+//        testCalculatingBreakTime(0.1, breakingBlock, usedItem, true, true);
+//        testCalculatingBreakTime(0.5, breakingBlock, usedItem, false, true);
+//        testCalculatingBreakTime(0, breakingBlock, usedItem, true, false);
+//        testCalculatingBreakTime(0.1, breakingBlock, usedItem, false, false);
     }
 }

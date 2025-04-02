@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - (API) Fixed binomial chance.
+- Fixed swords block breaking time.
 - Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28

@@ -303,16 +303,19 @@ public interface BlockBaseComponent extends BlockComponent {
         var baseTime = ((isCorrectTool || !requiresCorrectToolForDrops) ? 1.5d : 5d) * blockHardness;
         var speed = 1d / baseTime;
 
+        double efficiency = 1d;
         if (isCorrectTool) {
             // Tool level (wooden, stone, iron, etc...) bonus
-            var efficiency = usedItem.getBreakTimeBonus(blockState);
+            efficiency = usedItem.getBreakTimeBonus(blockState);
             // Tool efficiency enchantment bonus
             efficiency += speedBonusByEfficiency(usedItem.getEnchantmentLevel(EnchantmentTypes.EFFICIENCY));
-            speed *= efficiency;
-        } else if (isSword(usedItem.getItemType())) { // Special case
-            // The minimum speed for swords digging blocks is 1.5 times
-            speed *= 1.5d;
         }
+
+        if (isSword(usedItem.getItemType())) { // Special case
+            efficiency *= 1.5d;
+        }
+
+        speed *= efficiency;
 
         if (entity != null) {
             if (entity.hasEffect(EffectTypes.HASTE) || entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
@@ -324,6 +327,7 @@ public interface BlockBaseComponent extends BlockComponent {
             if (entity.hasEffect(EffectTypes.MINING_FATIGUE)) {
                 // speedMultiplier *= 0.3 ^ miningFatigueLevel
                 // damage *= 0.7 ^ miningFatigueLevel
+                // 0.3 + 0.7 = 0.21 ^ miningFatigueLevel
                 speed *= Math.pow(0.21d, entity.getEffectLevel(EffectTypes.MINING_FATIGUE));
             }
 
