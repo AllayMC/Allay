@@ -39,19 +39,19 @@ public class LightServiceJMHTest {
                 );
             }
         }
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         for (int x = -3 * 16; x <= 3 * 16; x++) {
             for (int z = -3 * 16; z <= 3 * 16; z++) {
                 lightService.onBlockChange(x, 0, z, 0, 15);
             }
         }
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
     }
 
     @Benchmark
     public void testPlaceAndRemoveLight() {
         lightService.onBlockChange(0, 1, 0, 15, 0);
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
     }
 }

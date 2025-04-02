@@ -34,11 +34,11 @@ class AllayLightServiceTest {
                 );
             }
         }
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
 
         // Case 1
         lightService.onBlockChange(0, 1, 0, 14, 0);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(14, lightService.getBlockLight(0, 1, 0));
         assertEquals(13, lightService.getBlockLight(1, 1, 0));
         assertEquals(13, lightService.getBlockLight(0, 1, 1));
@@ -48,13 +48,13 @@ class AllayLightServiceTest {
 
         // Case 2
         lightService.onBlockChange(2, 1, 0, 0, 15);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(0, lightService.getBlockLight(2, 1, 0));
         assertEquals(9, lightService.getBlockLight(3, 1, 0));
 
         // Case 3
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(0, lightService.getBlockLight(0, 1, 0));
         assertEquals(0, lightService.getBlockLight(1, 1, 0));
         assertEquals(0, lightService.getBlockLight(0, 1, 1));
@@ -78,11 +78,11 @@ class AllayLightServiceTest {
                 );
             }
         }
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
 
         // Case 1
         lightService.onBlockChange(0, 0, 0, 0, 15);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(15, lightService.getSkyLight(0, 1, 0));
         assertEquals(15, lightService.getSkyLight(0, 2, 0));
         assertEquals(15, lightService.getSkyLight(0, 100, 0));
@@ -90,12 +90,12 @@ class AllayLightServiceTest {
 
         // Case 2
         lightService.onBlockChange(0, 0, 0, 0, 0);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(15, lightService.getSkyLight(0, -1, 0));
 
         // Case 3
         lightService.onBlockChange(0, 0, 0, 0, 1);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(14, lightService.getSkyLight(0, 0, 0));
         assertEquals(14, lightService.getSkyLight(0, -1, 0));
         assertEquals(14, lightService.getSkyLight(0, -2, 0));
@@ -106,7 +106,7 @@ class AllayLightServiceTest {
         lightService.onBlockChange(0, 1, 0, 0, 15);
         lightService.onBlockChange(0, 2, 0, 0, 15);
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(14, lightService.getSkyLight(0, 1, 0));
         lightService.onBlockChange(0, 0, 0, 0, 0);
         lightService.onBlockChange(0, 2, 0, 0, 0);
@@ -121,7 +121,7 @@ class AllayLightServiceTest {
             lightService.onBlockChange(0, y, -1, 0, 15);
         }
         lightService.onBlockChange(0, 2, 0, 0, 15);
-        lightService.handleUpdateUninterruptedlyInAllQueues();
+        lightService.handleUpdateInAllQueues();
         assertEquals(14, lightService.getSkyLight(0, 0, 0));
         assertEquals(14, lightService.getSkyLight(0, 1, 0));
         assertEquals(0, lightService.getSkyLight(0, 2, 0));
