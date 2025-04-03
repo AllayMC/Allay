@@ -24,10 +24,10 @@ import static org.mockito.Mockito.when;
 public class BlockTest {
     private static final EntityPlayer player = mock(EntityPlayer.class);
 
-    private static void testCalculatingBreakTime(double expectedTime, BlockBehavior breakingBlock, ItemStack usedItem, boolean isOnGround, boolean isInWater) {
+    private static void testCalculatingBreakTime(double expectedSeconds, BlockBehavior breakingBlock, ItemStack usedItem, boolean isOnGround, boolean isInWater) {
         when(player.isOnGround()).thenReturn(isOnGround);
         when(player.isEyesInWater()).thenReturn(isInWater);
-        assertEquals(expectedTime, breakingBlock.calculateBreakTime(
+        assertEquals(expectedSeconds, breakingBlock.calculateBreakTime(
                 breakingBlock.getBlockType().getDefaultState(),
                 usedItem,
                 player
@@ -153,16 +153,14 @@ public class BlockTest {
         var breakingBlock = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemTypes.SHEARS.createItemStack();
 
-        // TODO: find out why the current value is expected * 2
-//        testCalculatingBreakTime(25, breakingBlock, usedItem, true, true);
-//        testCalculatingBreakTime(125, breakingBlock, usedItem, false, true);
-//        testCalculatingBreakTime(5, breakingBlock, usedItem, true, false);
-//        testCalculatingBreakTime(25, breakingBlock, usedItem, false, false);
+        testCalculatingBreakTime(50, breakingBlock, usedItem, true, true);
+        testCalculatingBreakTime(250, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(10, breakingBlock, usedItem, true, false);
+        testCalculatingBreakTime(50, breakingBlock, usedItem, false, false);
 
         breakingBlock = BlockTypes.BLACK_WOOL.getDefaultState().getBehavior();
-        // TODO: find out why the current value is expected + 0.05
-//        testCalculatingBreakTime(1.2, breakingBlock, usedItem, true, true);
-//        testCalculatingBreakTime(6, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(1.25, breakingBlock, usedItem, true, true);
+        testCalculatingBreakTime(6.05, breakingBlock, usedItem, false, true);
         testCalculatingBreakTime(0.25, breakingBlock, usedItem, true, false);
         testCalculatingBreakTime(1.25, breakingBlock, usedItem, false, false);
 
@@ -173,10 +171,9 @@ public class BlockTest {
         testCalculatingBreakTime(2, breakingBlock, usedItem, false, false);
 
         breakingBlock = BlockTypes.OAK_LEAVES.getDefaultState().getBehavior();
-        // TODO: find out why the current value is expected + 0.05
-//        testCalculatingBreakTime(0.1, breakingBlock, usedItem, true, true);
-//        testCalculatingBreakTime(0.5, breakingBlock, usedItem, false, true);
-//        testCalculatingBreakTime(0, breakingBlock, usedItem, true, false);
-//        testCalculatingBreakTime(0.1, breakingBlock, usedItem, false, false);
+        testCalculatingBreakTime(0.15, breakingBlock, usedItem, true, true);
+        testCalculatingBreakTime(0.55, breakingBlock, usedItem, false, true);
+        testCalculatingBreakTime(0.05, breakingBlock, usedItem, true, false);
+        testCalculatingBreakTime(0.15, breakingBlock, usedItem, false, false);
     }
 }
