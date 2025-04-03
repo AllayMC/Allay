@@ -34,7 +34,8 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
     protected final String landingSound;
 
     @Override
-    public void onLanded(Location3d location, double fallDistance) {
+    public void onLanded(Location3d location, double fallDistance, BlockState blockState) {
+        location.dimension().setBlockState(location, blockState);
         location.dimension().addSound(location, landingSound);
     }
 

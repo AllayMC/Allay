@@ -97,10 +97,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
                 // In this case, the falling block should be turned into item instead of block
                 dimension.dropItem(blockState.toItemStack(), location);
             } else {
-                // Set block state immediately when falling on ground to prevent
-                // the falling block entity above from getting into the ground.
-                dimension.setBlockState(location, blockState);
-                fallableComponent.onLanded(location, fallDistance);
+                fallableComponent.onLanded(location, fallDistance, blockState);
             }
         });
     }

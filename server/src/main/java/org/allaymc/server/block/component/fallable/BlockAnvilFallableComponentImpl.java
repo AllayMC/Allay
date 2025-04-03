@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component.fallable;
 
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.world.Sound;
@@ -18,23 +19,21 @@ public class BlockAnvilFallableComponentImpl extends BlockFallableComponentImpl 
     }
 
     @Override
-    public void onLanded(Location3d location, double fallDistance) {
+    public void onLanded(Location3d location, double fallDistance, BlockState blockState) {
         fallDistance = Math.round(fallDistance);
 
-        var dimension = location.dimension();
         if (fallDistance > 1 && ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE * fallDistance) {
-            var anvilState = dimension.getBlockState(location);
-            if (anvilState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
-                var newAnvilState = anvilComponent.damage(anvilState);
-                dimension.setBlockState(location, newAnvilState);
-
+            if (blockState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
+                var newAnvilState = anvilComponent.damage(blockState);
                 if (newAnvilState.getBlockType() == BlockTypes.AIR) {
                     return;
                 }
+
+                blockState = newAnvilState;
             }
         }
 
-        super.onLanded(location, fallDistance);
+        super.onLanded(location, fallDistance, blockState);
     }
 
     @Override

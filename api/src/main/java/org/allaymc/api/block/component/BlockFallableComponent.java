@@ -1,5 +1,6 @@
 package org.allaymc.api.block.component;
 
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.math.location.Location3d;
 
 /**
@@ -11,8 +12,9 @@ public interface BlockFallableComponent extends BlockComponent {
      *
      * @param location     the location where the block lands
      * @param fallDistance the distance the block has fallen
+     * @param blockState   the block state to be placed
      */
-    void onLanded(Location3d location, double fallDistance);
+    void onLanded(Location3d location, double fallDistance, BlockState blockState);
 
     /**
      * Calculates the damage based on the fall distance.
