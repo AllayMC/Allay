@@ -500,9 +500,8 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     default double getBreakTimeBonus(BlockState blockState) {
         var itemType = getItemType();
         var blockType = blockState.getBlockType();
-        // Swords break cobwebs faster
-        if (itemType.hasItemTag(IS_SWORD) && blockType == BlockTypes.WEB) {
-            return 15d;
+        if (itemType.hasItemTag(IS_SWORD)) {
+            return 10d;
         }
 
         if (itemType == SHEARS) {
@@ -513,7 +512,7 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
                 return 15d;
             }
 
-            return 1d;
+            return 2d;
         }
 
         if (itemType.hasItemTag(WOODEN_TIER)) return 2d;

@@ -27,6 +27,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - (API) Fixed binomial chance.
+- Fixed swords block breaking time.
 - Fixed `NullPointerException` when breathe disabled.
 - Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
 
