@@ -3,7 +3,7 @@ package org.allaymc.server.world.service;
 /**
  * @author daoge_cmd
  */
-public interface LightAccessor {
+public interface LightDataAccessor {
     int getLight(int x, int y, int z);
 
     int getLightDampening(int x, int y, int z);

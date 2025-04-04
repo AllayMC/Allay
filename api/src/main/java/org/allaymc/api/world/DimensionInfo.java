@@ -7,13 +7,7 @@ import com.google.common.base.Preconditions;
  *
  * @author Cool_Loong | daoge_cmd
  */
-public record DimensionInfo(
-        int dimensionId,
-        int minHeight,
-        int maxHeight,
-        int chunkSectionCount,
-        boolean hasSkyLight
-) {
+public record DimensionInfo(int dimensionId, int minHeight, int maxHeight, int chunkSectionCount, boolean hasSkyLight) {
 
     public static final DimensionInfo OVERWORLD = new DimensionInfo(0, -64, 319, 24, true);
     public static final DimensionInfo NETHER = new DimensionInfo(1, 0, 127, 8, false);

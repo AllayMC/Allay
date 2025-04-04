@@ -12,7 +12,7 @@ import java.util.Set;
 public class TestLightService extends AllayLightService {
 
     public TestLightService() {
-        super(DimensionInfo.OVERWORLD, () -> 0, () -> Set.of(Weather.CLEAR));
+        super(DimensionInfo.OVERWORLD, "test_world", () -> true, () -> 0, () -> Set.of(Weather.CLEAR));
     }
 
     @Override
