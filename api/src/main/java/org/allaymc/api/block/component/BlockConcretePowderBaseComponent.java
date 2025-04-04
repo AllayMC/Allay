@@ -14,7 +14,7 @@ public interface BlockConcretePowderBaseComponent extends BlockBaseComponent {
      *
      * @return the block type of the solid concrete variant
      */
-    BlockType<?> getConcreteBlock();
+    BlockType<?> getSolidBlock();
 
     /**
      * Checks if there is water adjacent to the given block position, excluding the block below.

@@ -27,21 +27,21 @@ public class BlockConcretePowderBaseComponentImpl extends BlockBaseComponentImpl
         super.onNeighborUpdate(current, neighbor, face);
 
         if (hasAdjacentWater(current.dimension(), current.pos())) {
-            current.dimension().setBlockState(current.pos(), getConcreteBlock().getDefaultState());
+            current.dimension().setBlockState(current.pos(), getSolidBlock().getDefaultState());
         }
     }
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (hasAdjacentWater(dimension, placeBlockPos)) {
-            blockState = getConcreteBlock().getDefaultState();
+            blockState = getSolidBlock().getDefaultState();
         }
 
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
     @Override
-    public BlockType<?> getConcreteBlock() {
+    public BlockType<?> getSolidBlock() {
         return concreteBlockId.getBlockType();
     }
 }

@@ -19,7 +19,7 @@ public class BlockConcretePowderFallableComponentImpl extends BlockFallableCompo
         var dimension = location.dimension();
         if (blockState.getBehavior() instanceof BlockConcretePowderBaseComponent concretePowderBaseComponent) {
             if (concretePowderBaseComponent.hasAdjacentWater(dimension, MathUtils.floor(location))) {
-                dimension.setBlockState(location, concretePowderBaseComponent.getConcreteBlock().getDefaultState());
+                dimension.setBlockState(location, concretePowderBaseComponent.getSolidBlock().getDefaultState());
                 return;
             }
         }
