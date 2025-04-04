@@ -83,7 +83,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
                 return;
             }
 
-            var damage = fallableComponent.getDamage(fallDistance);
+            var damage = fallableComponent.calculateDamage(fallDistance);
             if (damage > 0) {
                 dimension.getEntityService().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
                         .stream()

@@ -37,7 +37,7 @@ public class BlockAnvilFallableComponentImpl extends BlockFallableComponentImpl 
     }
 
     @Override
-    public float getDamage(double fallDistance) {
+    public float calculateDamage(double fallDistance) {
         return (float) Math.min(2f * fallDistance, 40f);
     }
 }

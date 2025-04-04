@@ -23,7 +23,7 @@ public interface BlockFallableComponent extends BlockComponent {
      *
      * @return the calculated damage
      */
-    default float getDamage(double fallDistance) {
+    default float calculateDamage(double fallDistance) {
         return 0;
     }
 }

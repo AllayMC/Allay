@@ -12,7 +12,6 @@ import java.util.Objects;
  */
 @Getter
 public class Metadata {
-
     private final EntityDataMap entityDataMap = new EntityDataMap();
 
     /**
@@ -44,6 +43,14 @@ public class Metadata {
         return this.entityDataMap.get(entityData);
     }
 
+    /**
+     * Checks whether a value is set for the specified entity data type.
+     *
+     * @param <T>        the type of the value.
+     * @param entityData the entity data type to check.
+     *
+     * @return {@code true} if a value is present, {@code false} otherwise.
+     */
     public <T> boolean has(EntityDataType<T> entityData) {
         return this.entityDataMap.containsKey(entityData);
     }
@@ -75,6 +82,13 @@ public class Metadata {
         return this.entityDataMap.getOrCreateFlags().contains(entityFlag);
     }
 
+    /**
+     * Checks whether the specified entity flag is present.
+     *
+     * @param entityFlag the flag to check.
+     *
+     * @return {@code true} if the flag is present, {@code false} otherwise.
+     */
     public boolean has(EntityFlag entityFlag) {
         return this.entityDataMap.getOrCreateFlags().contains(entityFlag);
     }
