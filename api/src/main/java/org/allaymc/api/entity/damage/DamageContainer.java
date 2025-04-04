@@ -104,6 +104,10 @@ public class DamageContainer {
         return new DamageContainer(null, FALL, sourceDamage);
     }
 
+    public static DamageContainer fallingBlock(float sourceDamage) {
+        return new DamageContainer(null, FALLING_BLOCK, sourceDamage);
+    }
+
     /**
      * Create a magic effect damage container.
      *

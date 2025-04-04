@@ -2,6 +2,7 @@ package org.allaymc.server.block.impl;
 
 import lombok.experimental.Delegate;
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
+import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.interfaces.BlockAnvilBehavior;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.server.component.interfaces.ComponentProvider;
@@ -9,6 +10,9 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 import java.util.List;
 
 public class BlockAnvilBehaviorImpl extends BlockBehaviorImpl implements BlockAnvilBehavior {
+    @Delegate
+    private BlockFallableComponent fallableComponent;
+
     public BlockAnvilBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
     }

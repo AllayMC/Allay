@@ -2,6 +2,7 @@ package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
 import org.allaymc.api.item.recipe.Recipe;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -36,38 +37,34 @@ public final class DeferredData {
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(DeferredData::encodeTrimDataPacket);
 
     private static CraftingDataPacket encodeCraftingDataPacket() {
-        var pk = new CraftingDataPacket();
-        pk.getCraftingData().addAll(
+        var packet = new CraftingDataPacket();
+        packet.getCraftingData().addAll(
                 Registries.RECIPES.getContent().values().stream()
                         .map(Recipe::toNetworkData)
                         .toList()
         );
-        pk.getCraftingData().addAll(
+        packet.getCraftingData().addAll(
                 Registries.FURNACE_RECIPES.getContent().values().stream()
                         .map(Recipe::toNetworkData)
                         .toList()
         );
-        pk.getPotionMixData().addAll(
+        packet.getPotionMixData().addAll(
                 Registries.POTION_MIX_RECIPES.getContent().values().stream()
                         .map(Recipe::toNetworkData)
                         .toList()
         );
         // TODO: packet.getContainerMixData().addAll();
         // TODO: packet.getMaterialReducers().addAll();
-        pk.setCleanRecipes(true);
-        return pk;
+        packet.setCleanRecipes(true);
+        return packet;
     }
 
     public static List<ItemDefinition> encodeItemDefinitions() {
-        var list = new ArrayList<ItemDefinition>();
-        for (var itemType : Registries.ITEMS.getContent().values()) {
-            list.add(itemType.toNetworkDefinition());
-        }
-        return list;
+        return Registries.ITEMS.getContent().values().stream().map(ItemType::toNetworkDefinition).toList();
     }
 
     public static List<BlockDefinition> encodeBlockDefinitions() {
-        var list = new ArrayList<BlockDefinition>();
+        List<BlockDefinition> list = new ArrayList<>();
         for (var blockType : Registries.BLOCKS.getContent().values()) {
             blockType.getAllStates().forEach(state -> list.add(state.toNetworkBlockDefinition()));
         }
@@ -77,9 +74,9 @@ public final class DeferredData {
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {
         // TODO: support custom entity, we just read it from file currently
         try (var stream = NbtUtils.createNetworkReader(Utils.getResource("entity_identifiers.nbt"))) {
-            var pk = new AvailableEntityIdentifiersPacket();
-            pk.setIdentifiers((NbtMap) stream.readTag());
-            return pk;
+            var packet = new AvailableEntityIdentifiersPacket();
+            packet.setIdentifiers((NbtMap) stream.readTag());
+            return packet;
         } catch (Throwable t) {
             throw new AssertionError("Failed to load entity_identifiers.nbt", t);
         }
@@ -88,54 +85,48 @@ public final class DeferredData {
     public static BiomeDefinitionListPacket encodeBiomeDefinitionListPacket() {
         // TODO: support custom biome. Same to entity, we just read it from file currently
         try (var stream = Utils.getResource("biome_definitions.nbt")) {
-            var pk = new BiomeDefinitionListPacket();
-            pk.setDefinitions((NbtMap) NbtUtils.createNetworkReader(stream).readTag());
-            return pk;
+            var packet = new BiomeDefinitionListPacket();
+            packet.setDefinitions((NbtMap) NbtUtils.createNetworkReader(stream).readTag());
+            return packet;
         } catch (Exception e) {
             throw new AssertionError("Failed to load biome_definitions.nbt", e);
         }
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {
-        var pk = new ResourcePacksInfoPacket();
-
-        pk.setForcedToAccept(Server.SETTINGS.resourcePackSettings().forceResourcePacks());
-        pk.setWorldTemplateId(new UUID(0, 0));
-        pk.setWorldTemplateVersion("");
+        var packet = new ResourcePacksInfoPacket();
+        packet.setForcedToAccept(Server.SETTINGS.resourcePackSettings().forceResourcePacks());
+        packet.setWorldTemplateId(new UUID(0, 0));
+        packet.setWorldTemplateVersion("");
 
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
-            if (type != Pack.Type.RESOURCES) {
-                continue;
+            if (type == Pack.Type.RESOURCES) {
+                packet.getResourcePackInfos().add(pack.toEntryInfo());
             }
-
-            pk.getResourcePackInfos().add(pack.toEntryInfo());
         }
 
-        return pk;
+        return packet;
     }
 
     public static ResourcePackStackPacket encodeResourcesPackStackPacket() {
-        var pk = new ResourcePackStackPacket();
-
-        pk.setForcedToAccept(
+        var packet = new ResourcePackStackPacket();
+        packet.setForcedToAccept(
                 Server.SETTINGS.resourcePackSettings().forceResourcePacks() &&
                 !Server.SETTINGS.resourcePackSettings().allowClientResourcePacks()
         );
         // Just left '*' here. If we put in an exact game version, it is possible that client
         // won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
-        pk.setGameVersion("*");
+        packet.setGameVersion("*");
 
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
-            if (type != Pack.Type.RESOURCES) {
-                continue;
+            if (type == Pack.Type.RESOURCES) {
+                packet.getResourcePacks().add(pack.toEntryStack());
             }
-
-            pk.getResourcePacks().add(pack.toEntryStack());
         }
 
-        return pk;
+        return packet;
     }
 
     public static TrimDataPacket encodeTrimDataPacket() {

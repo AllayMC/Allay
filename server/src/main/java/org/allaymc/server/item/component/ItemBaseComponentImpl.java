@@ -362,10 +362,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             player = placementInfo.player();
         }
 
-        var blockType = blockState.getBlockType();
+        var blockBehavior = blockState.getBlockType().getBlockBehavior();
         var oldBlockState = dimension.getBlockState(placeBlockPos);
         if (!oldBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-            return blockType.getBlockBehavior().combine(dimension, blockState, placeBlockPos, placementInfo);
+            return blockBehavior.combine(dimension, blockState, placeBlockPos, placementInfo);
         }
 
         var event = new BlockPlaceEvent(
@@ -376,7 +376,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             return false;
         }
 
-        var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
+        var result = blockBehavior.place(dimension, blockState, placeBlockPos, placementInfo);
         if (result) {
             dimension.addLevelSoundEvent(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, SoundEvent.PLACE, blockState.blockStateHash());
             tryApplyBlockEntityNBT(dimension, placeBlockPos);

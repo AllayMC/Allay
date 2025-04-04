@@ -2287,7 +2287,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEPRECATED_ANVIL == null) {
             BlockTypes.DEPRECATED_ANVIL = AllayBlockType
-                    .builder(BlockAnvilBehaviorImpl.class)
+                    .builder(BlockDeprecatedAnvilBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEPRECATED_ANVIL)
                     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();

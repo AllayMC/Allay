@@ -696,7 +696,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDenyBehavior> DENY;
 
-    public static BlockType<BlockAnvilBehavior> DEPRECATED_ANVIL;
+    public static BlockType<BlockDeprecatedAnvilBehavior> DEPRECATED_ANVIL;
 
     public static BlockType<BlockDeprecatedPurpurBlock1Behavior> DEPRECATED_PURPUR_BLOCK_1;
 
