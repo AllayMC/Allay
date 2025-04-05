@@ -22,10 +22,10 @@ public final class BlockPlaceHelper {
     private static final BiMap<BlockFace, Integer> DIRECTION_4_MAPPER = HashBiMap.create(4);
 
     static {
-        DIRECTION_4_MAPPER.put(BlockFace.SOUTH, 0);
-        DIRECTION_4_MAPPER.put(BlockFace.WEST, 1);
-        DIRECTION_4_MAPPER.put(BlockFace.NORTH, 2);
-        DIRECTION_4_MAPPER.put(BlockFace.EAST, 3);
+        DIRECTION_4_MAPPER.put(BlockFace.NORTH, 0);
+        DIRECTION_4_MAPPER.put(BlockFace.EAST, 1);
+        DIRECTION_4_MAPPER.put(BlockFace.SOUTH, 2);
+        DIRECTION_4_MAPPER.put(BlockFace.WEST, 3);
     }
 
     public static BlockState processFacingDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
