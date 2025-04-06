@@ -104,6 +104,13 @@ public class DamageContainer {
         return new DamageContainer(null, FALL, sourceDamage);
     }
 
+    /**
+     * Create a falling block damage container.
+     *
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
     public static DamageContainer fallingBlock(float sourceDamage) {
         return new DamageContainer(null, FALLING_BLOCK, sourceDamage);
     }
