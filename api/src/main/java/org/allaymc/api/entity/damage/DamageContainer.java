@@ -105,6 +105,17 @@ public class DamageContainer {
     }
 
     /**
+     * Create a falling block damage container.
+     *
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
+    public static DamageContainer fallingBlock(float sourceDamage) {
+        return new DamageContainer(null, FALLING_BLOCK, sourceDamage);
+    }
+
+    /**
      * Create a magic effect damage container.
      *
      * @param sourceDamage the source damage.

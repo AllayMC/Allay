@@ -14,6 +14,7 @@ import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.voxelshape.VoxelShapes;
+import org.allaymc.api.world.Sound;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
@@ -24,6 +25,9 @@ import org.allaymc.server.block.component.copper.BlockCopperStairsBaseComponentI
 import org.allaymc.server.block.component.crops.*;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
+import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
+import org.allaymc.server.block.component.fallable.BlockConcretePowderFallableComponentImpl;
+import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
@@ -229,17 +233,18 @@ public final class BlockTypeInitializer {
         BlockTypes.GRAVEL = AllayBlockType
                 .builder(BlockGravelBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAVEL)
-                .setBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockGravelBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl(Sound.LAND_GRAVEL))
                 .build();
         BlockTypes.SAND = AllayBlockType
                 .builder(BlockSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.SAND)
-                .setBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SAND))
                 .build();
         BlockTypes.RED_SAND = AllayBlockType
                 .builder(BlockRedSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SAND)
-                .setBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SAND))
                 .build();
     }
 
@@ -1410,18 +1415,21 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.CHIPPED_ANVIL))
+                .addComponent(new BlockAnvilFallableComponentImpl())
                 .build();
         BlockTypes.CHIPPED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHIPPED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.DAMAGED_ANVIL))
+                .addComponent(new BlockAnvilFallableComponentImpl())
                 .build();
         BlockTypes.DAMAGED_ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)
                 .vanillaBlock(BlockId.DAMAGED_ANVIL)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBaseComponentSupplier(initInfo -> new BlockAnvilBaseComponentImpl(initInfo, BlockId.AIR))
+                .addComponent(new BlockAnvilFallableComponentImpl())
                 .build();
     }
 
@@ -1484,6 +1492,33 @@ public final class BlockTypeInitializer {
                 .builder(BlockGildedBlackstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.GILDED_BLACKSTONE)
                 .setBaseComponentSupplier(BlockGildedBlackstoneBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initConcretePowder() {
+        BlockTypes.BLACK_CONCRETE_POWDER = buildConcretePowder(BlockId.BLACK_CONCRETE_POWDER, BlockId.BLACK_CONCRETE);
+        BlockTypes.BLUE_CONCRETE_POWDER = buildConcretePowder(BlockId.BLUE_CONCRETE_POWDER, BlockId.BLUE_CONCRETE);
+        BlockTypes.BROWN_CONCRETE_POWDER = buildConcretePowder(BlockId.BROWN_CONCRETE_POWDER, BlockId.BROWN_CONCRETE);
+        BlockTypes.CYAN_CONCRETE_POWDER = buildConcretePowder(BlockId.CYAN_CONCRETE_POWDER, BlockId.CYAN_CONCRETE);
+        BlockTypes.GRAY_CONCRETE_POWDER = buildConcretePowder(BlockId.GRAY_CONCRETE_POWDER, BlockId.GRAY_CONCRETE);
+        BlockTypes.GREEN_CONCRETE_POWDER = buildConcretePowder(BlockId.GREEN_CONCRETE_POWDER, BlockId.GREEN_CONCRETE);
+        BlockTypes.LIGHT_BLUE_CONCRETE_POWDER = buildConcretePowder(BlockId.LIGHT_BLUE_CONCRETE_POWDER, BlockId.LIGHT_BLUE_CONCRETE);
+        BlockTypes.LIGHT_GRAY_CONCRETE_POWDER = buildConcretePowder(BlockId.LIGHT_GRAY_CONCRETE_POWDER, BlockId.LIGHT_GRAY_CONCRETE);
+        BlockTypes.LIME_CONCRETE_POWDER = buildConcretePowder(BlockId.LIME_CONCRETE_POWDER, BlockId.LIME_CONCRETE);
+        BlockTypes.MAGENTA_CONCRETE_POWDER = buildConcretePowder(BlockId.MAGENTA_CONCRETE_POWDER, BlockId.MAGENTA_CONCRETE);
+        BlockTypes.ORANGE_CONCRETE_POWDER = buildConcretePowder(BlockId.ORANGE_CONCRETE_POWDER, BlockId.ORANGE_CONCRETE);
+        BlockTypes.PINK_CONCRETE_POWDER = buildConcretePowder(BlockId.PINK_CONCRETE_POWDER, BlockId.PINK_CONCRETE);
+        BlockTypes.PURPLE_CONCRETE_POWDER = buildConcretePowder(BlockId.PURPLE_CONCRETE_POWDER, BlockId.PURPLE_CONCRETE);
+        BlockTypes.RED_CONCRETE_POWDER = buildConcretePowder(BlockId.RED_CONCRETE_POWDER, BlockId.RED_CONCRETE);
+        BlockTypes.WHITE_CONCRETE_POWDER = buildConcretePowder(BlockId.WHITE_CONCRETE_POWDER, BlockId.WHITE_CONCRETE);
+        BlockTypes.YELLOW_CONCRETE_POWDER = buildConcretePowder(BlockId.YELLOW_CONCRETE_POWDER, BlockId.YELLOW_CONCRETE);
+    }
+
+    public static BlockType<BlockConcretePowderBehavior> buildConcretePowder(BlockId blockId, BlockId concreteBlockId) {
+        return AllayBlockType.builder(BlockConcretePowderBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(type -> new BlockConcretePowderBaseComponentImpl(type, concreteBlockId))
+                .addComponent(new BlockConcretePowderFallableComponentImpl())
                 .build();
     }
 }

@@ -16,13 +16,20 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- Added Glided Blackstone and Glowstone drop.
+- (API) Added `DamageContainer#fallingBlock(float)`.
+- Added Glided Blackstone, Gravel and Glowstone drop.
+
+### Changed
+
+- (API) `onFall()` now accepted `fallDistance`.
+- Refactored falling block system, see commit history for more info.
 
 ### Fixed
 
 - (API) Fixed binomial chance.
 - (API) Fixed `DIRECTION_4` mapper.
 - Fixed swords block breaking time.
+- Fixed `NullPointerException` when breathe disabled.
 - Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
