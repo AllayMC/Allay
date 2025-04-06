@@ -13,7 +13,9 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
+import static org.allaymc.api.block.BlockPlaceHelper.DIRECTION_4_MAPPER;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.ATTACHMENT;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.DIRECTION_4;
 
 /**
  * @author IWareQ
@@ -39,6 +41,7 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
             blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.STANDING);
         } else {
             blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.SIDE);
+            blockState = blockState.setPropertyValue(DIRECTION_4, DIRECTION_4_MAPPER.get(placementInfo.blockFace().opposite()));
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
