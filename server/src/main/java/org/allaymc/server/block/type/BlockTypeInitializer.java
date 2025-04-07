@@ -1530,4 +1530,12 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockLadderBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initMagma() {
+        BlockTypes.MAGMA = AllayBlockType
+                .builder(BlockMagmaBehaviorImpl.class)
+                .vanillaBlock(BlockId.MAGMA)
+                .setBaseComponentSupplier(BlockMagmaBaseComponentImpl::new)
+                .build();
+    }
 }

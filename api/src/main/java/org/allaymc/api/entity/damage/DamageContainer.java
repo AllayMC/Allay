@@ -127,6 +127,17 @@ public class DamageContainer {
     }
 
     /**
+     * Create a magma damage container.
+     *
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
+    public static DamageContainer magma(float sourceDamage) {
+        return new DamageContainer(null, MAGMA, sourceDamage);
+    }
+
+    /**
      * Create a drown damage container.
      *
      * @param sourceDamage the source damage.
