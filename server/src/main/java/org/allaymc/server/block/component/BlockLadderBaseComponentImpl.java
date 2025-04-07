@@ -74,8 +74,7 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean canBeSupportedAt(BlockState blockState, BlockFace face) {
-//        var shape = blockState.getBlockStateData().shape();
-//        return shape.isFull(face); // FIXME: this doesnt work, because ladder faces is full when it's not solid
-        return blockState.getBlockStateData().isSolid();
+        var shape = blockState.getBlockStateData().collisionShape();
+        return shape.isFull(face);
     }
 }
