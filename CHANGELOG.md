@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added `DamageContainer#fallingBlock(float)`.
 - Added Glided Blackstone, Gravel and Glowstone drop.
+- Implemented ladder.
 
 ### Changed
 

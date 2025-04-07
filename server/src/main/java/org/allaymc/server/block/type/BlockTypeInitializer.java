@@ -1521,4 +1521,13 @@ public final class BlockTypeInitializer {
                 .addComponent(new BlockConcretePowderFallableComponentImpl())
                 .build();
     }
+
+    public static void initLadder() {
+        BlockTypes.LADDER = AllayBlockType
+                .builder(BlockLadderBehaviorImpl.class)
+                .vanillaBlock(BlockId.LADDER)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                .setBaseComponentSupplier(BlockLadderBaseComponentImpl::new)
+                .build();
+    }
 }

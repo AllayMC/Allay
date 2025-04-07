@@ -1,0 +1,76 @@
+package org.allaymc.server.block.component;
+
+import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.world.Dimension;
+import org.joml.Vector3ic;
+
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
+
+/**
+ * @author IWareQ
+ */
+public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockLadderBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+        super(blockType);
+    }
+
+    @Override
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
+        if (face.isVertical()) {
+            return;
+        }
+
+        var facingDirection = current.blockState().getPropertyValue(FACING_DIRECTION);
+        var blockFace = BlockFace.fromId(facingDirection);
+        if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()).blockState(), blockFace)) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
+    }
+
+    @Override
+    public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        if (placementInfo == null) {
+            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+            return true;
+        }
+
+        var blockFace = placementInfo.blockFace();
+        if (blockFace.isVertical()) {
+            return false;
+        }
+
+        if (!canBeSupportedAt(placementInfo.getClickedBlockState(), blockFace)) {
+            blockFace = findValidFace(dimension, placeBlockPos);
+        }
+
+        if (blockFace == null) {
+            return false;
+        }
+
+        dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(FACING_DIRECTION, blockFace.ordinal()));
+        return true;
+    }
+
+    private BlockFace findValidFace(Dimension dimension, Vector3ic placeBlockPos) {
+        for (var face : new BlockFace[]{BlockFace.SOUTH, BlockFace.NORTH, BlockFace.WEST, BlockFace.EAST}) {
+            if (canBeSupportedAt(dimension.getBlockState(face.offsetPos(placeBlockPos)), face.opposite())) {
+                return face.opposite();
+            }
+        }
+
+        return null;
+    }
+
+    private boolean canBeSupportedAt(BlockState blockState, BlockFace face) {
+//        var shape = blockState.getBlockStateData().shape();
+//        return shape.isFull(face); // FIXME: this doesnt work, because ladder faces is full when it's not solid
+        return blockState.getBlockStateData().isSolid();
+    }
+}
