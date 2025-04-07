@@ -40,7 +40,7 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
         );
         dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(),
-                blockState.setPropertyValue(UPPER_BLOCK_BIT, true),
+                blockState.withPropertyValue(UPPER_BLOCK_BIT, true),
                 placementInfo
         );
         return true;

@@ -27,7 +27,7 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
         var face = placementInfo.blockFace();
         if (face == BlockFace.UP) return false;
         if (face == BlockFace.DOWN) {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.HANGING, true);
+            blockState = blockState.withPropertyValue(BlockPropertyTypes.HANGING, true);
             var upperBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
             if (!upperBlock.getBlockStateData().isSolid()) return false;
 
@@ -35,13 +35,13 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
             var full = shape.isFull(BlockFace.DOWN);
             var centerFull = shape.isCenterFull(BlockFace.DOWN);
             if (placementInfo.player().isSneaking() || (centerFull && !full)) {
-                blockState = blockState.setPropertyValue(BlockPropertyTypes.ATTACHED_BIT, true);
+                blockState = blockState.withPropertyValue(BlockPropertyTypes.ATTACHED_BIT, true);
                 blockState = BlockPlaceHelper.processGroundSignDirectionProperty(blockState, placeBlockPos, placementInfo);
             } else if (full) {
                 blockState = BlockPlaceHelper.processFacingDirectionProperty(blockState, placeBlockPos, placementInfo);
             } else return false;
         } else {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.FACING_DIRECTION, face.opposite().rotateY().ordinal());
+            blockState = blockState.withPropertyValue(BlockPropertyTypes.FACING_DIRECTION, face.opposite().rotateY().ordinal());
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);

@@ -25,7 +25,7 @@ public class BlockGlazedTerracottaBaseComponentImpl extends BlockBaseComponentIm
         }
 
         var face = placementInfo.player().getHorizontalFace().opposite();
-        blockState = blockState.setPropertyValue(FACING_DIRECTION, face.ordinal());
+        blockState = blockState.withPropertyValue(FACING_DIRECTION, face.ordinal());
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }

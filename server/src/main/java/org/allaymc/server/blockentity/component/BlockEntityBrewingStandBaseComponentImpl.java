@@ -61,7 +61,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
                 var currentBlockState = getDimension().getBlockState(position);
                 var values = currentBlockState.getBlockType().getProperties().values();
                 //noinspection unchecked
-                currentBlockState = currentBlockState.setPropertyValue(values.toArray(new BlockPropertyType[0])[finalI - 1], item != ItemAirStack.AIR_STACK);
+                currentBlockState = currentBlockState.withPropertyValue(values.toArray(new BlockPropertyType[0])[finalI - 1], item != ItemAirStack.AIR_STACK);
                 getDimension().setBlockState(
                         position, currentBlockState,
                         0, true, true, false

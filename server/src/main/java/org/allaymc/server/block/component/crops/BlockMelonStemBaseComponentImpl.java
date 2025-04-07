@@ -45,7 +45,7 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
             if (current.dimension().getBlockState(melonBlockPos).getBlockType() != fruitId.getBlockType()) {
                 // Melon block is not connected to the stem,
                 // so reset the stem direction to BlockFace.DOWN
-                current.dimension().setBlockState(current.pos(), current.blockState().setPropertyValue(BlockPropertyTypes.FACING_DIRECTION, BlockFace.DOWN.ordinal()));
+                current.dimension().setBlockState(current.pos(), current.blockState().withPropertyValue(BlockPropertyTypes.FACING_DIRECTION, BlockFace.DOWN.ordinal()));
             }
         }
     }
@@ -56,7 +56,7 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
             current.dimension().getLightService().getInternalLight(current.pos()) >= 8) {
             var growth = current.blockState().getPropertyValue(BlockPropertyTypes.GROWTH);
             if (growth < 7) {
-                var newCrop = current.blockState().setPropertyValue(BlockPropertyTypes.GROWTH, growth + 1);
+                var newCrop = current.blockState().withPropertyValue(BlockPropertyTypes.GROWTH, growth + 1);
                 var event = new BlockGrowEvent(current, newCrop);
                 if (event.call()) {
                     current.dimension().setBlockState(current.pos(), event.getNewBlockState());
@@ -88,7 +88,7 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
                 if (event.call()) {
                     // Melon block can only be placed on farmland, dirt, or grass block
                     // Update stem direction
-                    current.dimension().setBlockState(current.pos(), current.blockState().setPropertyValue(BlockPropertyTypes.FACING_DIRECTION, face.ordinal()));
+                    current.dimension().setBlockState(current.pos(), current.blockState().withPropertyValue(BlockPropertyTypes.FACING_DIRECTION, face.ordinal()));
                     // Place melon block
                     current.dimension().setBlockState(melonBlockPos, event.getNewBlockState());
                 }

@@ -62,7 +62,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         var pos = blockStateWithPos.pos();
 
         if (!blockState.getPropertyValue(BlockPropertyTypes.UPDATE_BIT)) {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.UPDATE_BIT, true);
+            blockState = blockState.withPropertyValue(BlockPropertyTypes.UPDATE_BIT, true);
             pos.dimension().setBlockState(pos, blockState, 0, true, false, false);
         }
 
@@ -88,7 +88,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
 
         var pos = blockStateWithPos.pos();
         if (blockState.getPropertyValue(BlockPropertyTypes.PERSISTENT_BIT) || findLog(blockStateWithPos, 7, null)) {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.UPDATE_BIT, false);
+            blockState = blockState.withPropertyValue(BlockPropertyTypes.UPDATE_BIT, false);
             pos.dimension().setBlockState(pos, blockState, 0, true, false, false);
         } else {
             if (new BlockFadeEvent(blockStateWithPos, BlockTypes.AIR.getDefaultState()).call()) {

@@ -36,12 +36,12 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
 
         var clickedFace = placementInfo.blockFace();
         if (clickedFace == BlockFace.DOWN) {
-            blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.HANGING);
+            blockState = blockState.withPropertyValue(ATTACHMENT, Attachment.HANGING);
         } else if (clickedFace == BlockFace.UP) {
-            blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.STANDING);
+            blockState = blockState.withPropertyValue(ATTACHMENT, Attachment.STANDING);
         } else {
-            blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.SIDE);
-            blockState = blockState.setPropertyValue(DIRECTION_4, DIRECTION_4_MAPPER.get(placementInfo.blockFace().opposite()));
+            blockState = blockState.withPropertyValue(ATTACHMENT, Attachment.SIDE);
+            blockState = blockState.withPropertyValue(DIRECTION_4, DIRECTION_4_MAPPER.get(placementInfo.blockFace().opposite()));
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);

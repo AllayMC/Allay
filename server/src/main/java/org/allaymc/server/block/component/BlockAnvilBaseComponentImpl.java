@@ -35,7 +35,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
 
         dimension.addSound(placeBlockPos, Sound.RANDOM_ANVIL_LAND);
 
-        blockState = blockState.setPropertyValue(
+        blockState = blockState.withPropertyValue(
                 MINECRAFT_CARDINAL_DIRECTION,
                 placementInfo.player().getHorizontalFace().rotateYCCW().toMinecraftCardinalDirection()
         );

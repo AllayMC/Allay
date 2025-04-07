@@ -264,7 +264,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public BlockState setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
+        public BlockState withPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
             var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.blockPropertyValues.length];
             var succeed = false;
             for (int i = 0; i < blockPropertyValues.length; i++) {
@@ -284,12 +284,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setPropertyValue(PROPERTY property, DATATYPE value) {
-            return setPropertyValue(property.createValue(value));
+        public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState withPropertyValue(PROPERTY property, DATATYPE value) {
+            return withPropertyValue(property.createValue(value));
         }
 
         @Override
-        public BlockState setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+        public BlockState withPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
             var newPropertyValues = new BlockPropertyType.BlockPropertyValue<?, ?, ?>[this.blockPropertyValues.length];
             var succeedCount = 0;
             var succeed = new boolean[propertyValues.size()];

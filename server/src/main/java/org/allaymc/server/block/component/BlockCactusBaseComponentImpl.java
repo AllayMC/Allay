@@ -64,9 +64,9 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
         var block = current.blockState();
         var age = block.getPropertyValue(BlockPropertyTypes.AGE_16);
         if (age < 15) {
-            block = block.setPropertyValue(BlockPropertyTypes.AGE_16, age + 1);
+            block = block.withPropertyValue(BlockPropertyTypes.AGE_16, age + 1);
         } else if (age == 15) {
-            block = block.setPropertyValue(BlockPropertyTypes.AGE_16, 0);
+            block = block.withPropertyValue(BlockPropertyTypes.AGE_16, 0);
             if (canGrowHere(dimension, pos, false)) {
                 for (var y = 1; y < 3; y++) {
                     var blockType = dimension.getBlockState(pos.x(), pos.y() + y, pos.z()).getBlockType();

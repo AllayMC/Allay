@@ -23,6 +23,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - (API) `onFall()` now accepted `fallDistance`.
+- (API) Renamed `BlockState#setPropertyValue()` to `BlockState#withPropertyValue()`.
 - Refactored falling block system, see commit history for more info.
 
 ### Fixed

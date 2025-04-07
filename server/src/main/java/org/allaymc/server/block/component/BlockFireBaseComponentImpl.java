@@ -95,7 +95,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
         if (age < 15) {
             var newAge = age + random.nextInt(3);
-            var newBlockState = blockState.setPropertyValue(BlockPropertyTypes.AGE_16, Math.min(newAge, 15));
+            var newBlockState = blockState.withPropertyValue(BlockPropertyTypes.AGE_16, Math.min(newAge, 15));
             dimension.setBlockState(pos, newBlockState);
         }
 

@@ -24,7 +24,7 @@ public class BlockLightningRodBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        blockState = blockState.setPropertyValue(FACING_DIRECTION, placementInfo.blockFace().ordinal());
+        blockState = blockState.withPropertyValue(FACING_DIRECTION, placementInfo.blockFace().ordinal());
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
