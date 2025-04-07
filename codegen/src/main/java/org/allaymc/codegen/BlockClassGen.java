@@ -267,7 +267,7 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*FenceBehavior"), "BlockFenceBehavior");
         registerMergedBlock(Pattern.compile(".*FenceGateBehavior"), "BlockFenceGateBehavior");
         registerMergedBlock(Pattern.compile(".*(Head|Skull)Behavior"), "BlockHeadBehavior");
-        registerMergedBlock(Pattern.compile(".*BricksBehavior"), "BlockBricksBehavior");
+        registerMergedBlock(Pattern.compile("Block(?!.*Infested).*?BricksBehavior"), "BlockBricksBehavior");
         registerMergedBlock(Pattern.compile(".*IronTrapdoorBehavior"), "BlockIronTrapdoorBehavior");
         registerMergedBlock(Pattern.compile(".*CopperTrapdoorBehavior"), "BlockCopperTrapdoorBehavior");
         registerMergedBlock(Pattern.compile(".*TrapdoorBehavior"), "BlockTrapdoorBehavior");
@@ -276,5 +276,6 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*CopperBulbBehavior"), "BlockCopperBulbBehavior");
         registerMergedBlock(Pattern.compile(".*CopperGrateBehavior"), "BlockCopperGrateBehavior");
         registerMergedBlock(Pattern.compile(".*OreBehavior"), "BlockOreBehavior");
+        registerMergedBlock(Pattern.compile(".*Infested.*"), "BlockInfestedBlockBehavior");
     }
 }

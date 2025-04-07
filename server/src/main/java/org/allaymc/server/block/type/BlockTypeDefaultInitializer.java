@@ -3963,44 +3963,44 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.INFESTED_CHISELED_STONE_BRICKS == null) {
             BlockTypes.INFESTED_CHISELED_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_CHISELED_STONE_BRICKS)
                     .build();
         }
         if (BlockTypes.INFESTED_COBBLESTONE == null) {
             BlockTypes.INFESTED_COBBLESTONE = AllayBlockType
-                    .builder(BlockInfestedCobblestoneBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_COBBLESTONE)
                     .build();
         }
         if (BlockTypes.INFESTED_CRACKED_STONE_BRICKS == null) {
             BlockTypes.INFESTED_CRACKED_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_CRACKED_STONE_BRICKS)
                     .build();
         }
         if (BlockTypes.INFESTED_DEEPSLATE == null) {
             BlockTypes.INFESTED_DEEPSLATE = AllayBlockType
-                    .builder(BlockInfestedDeepslateBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_DEEPSLATE)
                     .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.INFESTED_MOSSY_STONE_BRICKS == null) {
             BlockTypes.INFESTED_MOSSY_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_MOSSY_STONE_BRICKS)
                     .build();
         }
         if (BlockTypes.INFESTED_STONE == null) {
             BlockTypes.INFESTED_STONE = AllayBlockType
-                    .builder(BlockInfestedStoneBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_STONE)
                     .build();
         }
         if (BlockTypes.INFESTED_STONE_BRICKS == null) {
             BlockTypes.INFESTED_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_STONE_BRICKS)
                     .build();
         }

@@ -1538,4 +1538,26 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockMagmaBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initInfestedBlocks() {
+        BlockTypes.INFESTED_CHISELED_STONE_BRICKS = buildInfestedBlock(BlockId.INFESTED_CHISELED_STONE_BRICKS, BlockId.CHISELED_STONE_BRICKS);
+        BlockTypes.INFESTED_COBBLESTONE = buildInfestedBlock(BlockId.INFESTED_COBBLESTONE, BlockId.COBBLESTONE);
+        BlockTypes.INFESTED_CRACKED_STONE_BRICKS = buildInfestedBlock(BlockId.INFESTED_CRACKED_STONE_BRICKS, BlockId.CRACKED_STONE_BRICKS);
+        BlockTypes.INFESTED_DEEPSLATE = AllayBlockType
+                .builder(BlockInfestedBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.INFESTED_DEEPSLATE)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .setBaseComponentSupplier(type -> new BlockInfestedBlockBaseComponentImpl(type, BlockId.DEEPSLATE))
+                .build();
+        BlockTypes.INFESTED_MOSSY_STONE_BRICKS = buildInfestedBlock(BlockId.INFESTED_MOSSY_STONE_BRICKS, BlockId.MOSSY_STONE_BRICKS);
+        BlockTypes.INFESTED_STONE = buildInfestedBlock(BlockId.INFESTED_STONE, BlockId.STONE);
+        BlockTypes.INFESTED_STONE_BRICKS = buildInfestedBlock(BlockId.INFESTED_STONE_BRICKS, BlockId.STONE_BRICKS);
+    }
+
+    public static BlockType<BlockInfestedBlockBehavior> buildInfestedBlock(BlockId blockId, BlockId imitateBlockId) {
+        return AllayBlockType.builder(BlockInfestedBlockBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(type -> new BlockInfestedBlockBaseComponentImpl(type, imitateBlockId))
+                .build();
+    }
 }

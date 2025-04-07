@@ -1236,19 +1236,19 @@ public final class BlockTypes {
 
     public static BlockType<BlockIceBehavior> ICE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_CHISELED_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_CHISELED_STONE_BRICKS;
 
-    public static BlockType<BlockInfestedCobblestoneBehavior> INFESTED_COBBLESTONE;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_COBBLESTONE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_CRACKED_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_CRACKED_STONE_BRICKS;
 
-    public static BlockType<BlockInfestedDeepslateBehavior> INFESTED_DEEPSLATE;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_DEEPSLATE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_MOSSY_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_MOSSY_STONE_BRICKS;
 
-    public static BlockType<BlockInfestedStoneBehavior> INFESTED_STONE;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_STONE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_STONE_BRICKS;
 
     public static BlockType<BlockInfoUpdateBehavior> INFO_UPDATE;
 
