@@ -30,6 +30,8 @@ import org.allaymc.server.block.component.fallable.BlockConcretePowderFallableCo
 import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
+import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
+import org.allaymc.server.block.component.ice.BlockPackedIceBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
@@ -1558,6 +1560,52 @@ public final class BlockTypeInitializer {
         return AllayBlockType.builder(BlockInfestedBlockBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setBaseComponentSupplier(type -> new BlockInfestedBlockBaseComponentImpl(type, imitateBlockId))
+                .build();
+    }
+
+    public static void initEndPortalFrame() {
+        BlockTypes.END_PORTAL_FRAME = AllayBlockType
+                .builder(BlockEndPortalFrameBehaviorImpl.class)
+                .vanillaBlock(BlockId.END_PORTAL_FRAME)
+                .setProperties(BlockPropertyTypes.END_PORTAL_EYE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockEndPortalFrameBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initIce() {
+        BlockTypes.BLUE_ICE = AllayBlockType
+                .builder(BlockIceBehaviorImpl.class)
+                .vanillaBlock(BlockId.BLUE_ICE)
+                .setBaseComponentSupplier(BlockPackedIceBaseComponentImpl::new)
+                .build();
+        BlockTypes.ICE = AllayBlockType
+                .builder(BlockIceBehaviorImpl.class)
+                .vanillaBlock(BlockId.ICE)
+                .setBaseComponentSupplier(BlockIceBaseComponentImpl::new)
+                .build();
+        BlockTypes.PACKED_ICE = AllayBlockType
+                .builder(BlockIceBehaviorImpl.class)
+                .vanillaBlock(BlockId.PACKED_ICE)
+                .setBaseComponentSupplier(BlockPackedIceBaseComponentImpl::new)
+                .build();
+        // TODO: Frosted ice
+    }
+
+    public static void initSnow() {
+        BlockTypes.SNOW = AllayBlockType
+                .builder(BlockSnowBehaviorImpl.class)
+                .vanillaBlock(BlockId.SNOW)
+                .setBaseComponentSupplier(BlockSnowBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSnowLayer() {
+        BlockTypes.SNOW_LAYER = AllayBlockType
+                .builder(BlockSnowLayerBehaviorImpl.class)
+                .vanillaBlock(BlockId.SNOW_LAYER)
+                .setProperties(BlockPropertyTypes.COVERED_BIT, BlockPropertyTypes.HEIGHT)
+                .setBaseComponentSupplier(BlockSnowLayerBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SNOW))
                 .build();
     }
 }

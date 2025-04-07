@@ -218,7 +218,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlazedTerracottaBehavior> BLUE_GLAZED_TERRACOTTA;
 
-    public static BlockType<BlockBlueIceBehavior> BLUE_ICE;
+    public static BlockType<BlockIceBehavior> BLUE_ICE;
 
     public static BlockType<BlockBlueOrchidBehavior> BLUE_ORCHID;
 
@@ -1056,7 +1056,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockFrogSpawnBehavior> FROG_SPAWN;
 
-    public static BlockType<BlockFrostedIceBehavior> FROSTED_ICE;
+    public static BlockType<BlockIceBehavior> FROSTED_ICE;
 
     public static BlockType<BlockFurnaceBehavior> FURNACE;
 
@@ -1672,7 +1672,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoubleCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockPackedIceBehavior> PACKED_ICE;
+    public static BlockType<BlockIceBehavior> PACKED_ICE;
 
     public static BlockType<BlockPackedMudBehavior> PACKED_MUD;
 

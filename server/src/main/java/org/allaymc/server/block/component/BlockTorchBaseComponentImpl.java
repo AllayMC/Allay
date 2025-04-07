@@ -79,7 +79,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean canBeSupportedAt(BlockState blockState, BlockFace face) {
-        var shape = blockState.getBlockStateData().shape();
+        var shape = blockState.getBlockStateData().collisionShape();
         return face == BlockFace.UP ? shape.isCenterFull(BlockFace.UP) : shape.isFull(face);
     }
 }

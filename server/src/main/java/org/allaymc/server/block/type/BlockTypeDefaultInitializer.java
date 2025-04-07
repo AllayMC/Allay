@@ -718,7 +718,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLUE_ICE == null) {
             BlockTypes.BLUE_ICE = AllayBlockType
-                    .builder(BlockBlueIceBehaviorImpl.class)
+                    .builder(BlockIceBehaviorImpl.class)
                     .vanillaBlock(BlockId.BLUE_ICE)
                     .build();
         }
@@ -3402,7 +3402,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.FROSTED_ICE == null) {
             BlockTypes.FROSTED_ICE = AllayBlockType
-                    .builder(BlockFrostedIceBehaviorImpl.class)
+                    .builder(BlockIceBehaviorImpl.class)
                     .vanillaBlock(BlockId.FROSTED_ICE)
                     .setProperties(BlockPropertyTypes.AGE_4)
                     .build();
@@ -5378,7 +5378,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PACKED_ICE == null) {
             BlockTypes.PACKED_ICE = AllayBlockType
-                    .builder(BlockPackedIceBehaviorImpl.class)
+                    .builder(BlockIceBehaviorImpl.class)
                     .vanillaBlock(BlockId.PACKED_ICE)
                     .build();
         }
