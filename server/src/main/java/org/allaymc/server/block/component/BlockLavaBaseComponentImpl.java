@@ -42,13 +42,13 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
         if (!(entity instanceof EntityDamageComponent damageComponent)) {
             return;
         }
 
         // Set on fire ticks
-        var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, blockStateWithPos.blockState(), 20 * 15);
+        var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, current.blockState(), 20 * 15);
         if (event1.call()) {
             damageComponent.setOnFireTicks(event1.getOnFireTicks());
         }

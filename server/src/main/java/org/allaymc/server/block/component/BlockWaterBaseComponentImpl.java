@@ -98,7 +98,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
         if (entity instanceof EntityDamageComponent damageComponent && damageComponent.getOnFireTicks() > 0) {
             damageComponent.setOnFireTicks(0);
             entity.getDimension().addParticle(entity.getLocation(), ParticleType.WHITE_SMOKE);

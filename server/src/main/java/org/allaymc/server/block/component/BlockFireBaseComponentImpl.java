@@ -249,12 +249,12 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
         if (!(entity instanceof EntityDamageComponent damageComponent)) {
             return;
         }
 
-        var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, blockStateWithPos.blockState(), 20 * 8);
+        var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, current.blockState(), 20 * 8);
         if (event.call()) {
             damageComponent.setOnFireTicks(event.getOnFireTicks());
         }

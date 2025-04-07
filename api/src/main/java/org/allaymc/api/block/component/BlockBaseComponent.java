@@ -269,11 +269,11 @@ public interface BlockBaseComponent extends BlockComponent {
      * Handles when a block collides with an entity.
      * This method is only called if {@link #canCollideWithEntity()} returns {@code true}.
      *
-     * @param blockStateWithPos the block that collides with the entity.
-     * @param entity            the entity that collides with the block.
+     * @param current the block that collides with the entity.
+     * @param entity  the entity that collides with the block.
      */
     @ApiStatus.OverrideOnly
-    default void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {}
+    default void onCollideWithEntity(BlockStateWithPos current, Entity entity) {}
 
     /**
      * Calculates the time it takes to break the specific block state with the given item.

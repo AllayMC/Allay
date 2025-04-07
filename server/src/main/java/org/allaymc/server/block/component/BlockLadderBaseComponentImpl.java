@@ -58,6 +58,11 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    @Override
+    public boolean canResetFallDamage() {
+        return true;
+    }
+
     private BlockFace findValidFace(Dimension dimension, Vector3ic placeBlockPos) {
         for (var face : new BlockFace[]{BlockFace.SOUTH, BlockFace.NORTH, BlockFace.WEST, BlockFace.EAST}) {
             if (canBeSupportedAt(dimension.getBlockState(face.offsetPos(placeBlockPos)), face.opposite())) {
