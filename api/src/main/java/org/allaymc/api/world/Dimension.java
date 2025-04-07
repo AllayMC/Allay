@@ -623,7 +623,7 @@ public interface Dimension {
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
-        var newBlockState = oldBlockState.withPropertyValue(propertyType, value);
+        var newBlockState = oldBlockState.setPropertyValue(propertyType, value);
         if (oldBlockState == newBlockState) {
             return;
         }

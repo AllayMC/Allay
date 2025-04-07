@@ -59,7 +59,7 @@ public interface BlockState {
      *
      * @throws IllegalArgumentException if any value is unsupported by this block type
      */
-    BlockState withPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
+    BlockState setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     /**
      * Gets the value of a specific property.
@@ -83,7 +83,7 @@ public interface BlockState {
      *
      * @throws IllegalArgumentException if value is unsupported by this block type
      */
-    BlockState withPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
+    BlockState setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
 
     /**
      * Creates a new state with a specific property value set.
@@ -97,7 +97,7 @@ public interface BlockState {
      *
      * @throws IllegalArgumentException if property or value is unsupported by this block type
      */
-    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState withPropertyValue(PROPERTY property, DATATYPE value);
+    <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setPropertyValue(PROPERTY property, DATATYPE value);
 
     /**
      * Gets the unsigned hash of this block state.

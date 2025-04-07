@@ -124,7 +124,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
             return false;
         }
 
-        var newCrop = crop.withPropertyValue(BlockPropertyTypes.GROWTH, Math.min(growth + ThreadLocalRandom.current().nextInt(4) + 2, 7));
+        var newCrop = crop.setPropertyValue(BlockPropertyTypes.GROWTH, Math.min(growth + ThreadLocalRandom.current().nextInt(4) + 2, 7));
         var event = new BlockGrowEvent(new BlockStateWithPos(crop, new Position3i(pos, dimension)), newCrop);
         if (event.call()) {
             dimension.setBlockState(pos, event.getNewBlockState());
@@ -151,7 +151,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
         } else {
             var growth = current.blockState().getPropertyValue(BlockPropertyTypes.GROWTH);
             if (growth < 7 && ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(current)) {
-                var newCrop = current.blockState().withPropertyValue(BlockPropertyTypes.GROWTH, growth + 1);
+                var newCrop = current.blockState().setPropertyValue(BlockPropertyTypes.GROWTH, growth + 1);
                 var event = new BlockGrowEvent(current, newCrop);
                 if (event.call()) {
                     current.dimension().setBlockState(current.pos(), event.getNewBlockState());

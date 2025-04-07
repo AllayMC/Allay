@@ -50,7 +50,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
-        blockState = blockState.withPropertyValue(MINECRAFT_CARDINAL_DIRECTION, face.rotateY().toMinecraftCardinalDirection());
+        blockState = blockState.setPropertyValue(MINECRAFT_CARDINAL_DIRECTION, face.rotateY().toMinecraftCardinalDirection());
 
         var leftBlockState = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos));
         var rightBlockState = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos));
@@ -58,18 +58,18 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         var hingeOnLeft = leftBlockState.getBlockType() == getBlockType() ||
                           (!rightBlockState.getBlockStateData().isTransparent() && leftBlockState.getBlockStateData().isTransparent());
         if (hingeOnLeft) { // Door hinge
-            blockState = blockState.withPropertyValue(DOOR_HINGE_BIT, true);
+            blockState = blockState.setPropertyValue(DOOR_HINGE_BIT, true);
         }
 
         dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
-                blockState.withPropertyValue(UPPER_BLOCK_BIT, false),
+                blockState.setPropertyValue(UPPER_BLOCK_BIT, false),
                 placementInfo
         ); //Bottom
 
         dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(),
-                blockState.withPropertyValue(UPPER_BLOCK_BIT, true),
+                blockState.setPropertyValue(UPPER_BLOCK_BIT, true),
                 placementInfo
         ); //Top
 

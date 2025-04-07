@@ -33,7 +33,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null) {
-            blockState = blockState.withPropertyValue(FACING_DIRECTION, placementInfo.blockFace().ordinal());
+            blockState = blockState.setPropertyValue(FACING_DIRECTION, placementInfo.blockFace().ordinal());
         }
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;

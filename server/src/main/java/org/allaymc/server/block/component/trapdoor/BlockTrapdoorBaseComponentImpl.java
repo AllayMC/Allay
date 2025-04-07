@@ -35,7 +35,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var blockFace = placementInfo.blockFace();
         if ((placementInfo.clickedPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {
-            blockState = blockState.withPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT, true);
+            blockState = blockState.setPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT, true);
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);

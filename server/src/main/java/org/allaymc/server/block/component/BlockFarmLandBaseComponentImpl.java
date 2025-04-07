@@ -53,7 +53,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
         var moisture = current.blockState().getPropertyValue(BlockPropertyTypes.MOISTURIZED_AMOUNT);
         if (!hydrated(current)) {
             if (moisture > 0) {
-                dimension.setBlockState(pos, current.blockState().withPropertyValue(BlockPropertyTypes.MOISTURIZED_AMOUNT, moisture - 1));
+                dimension.setBlockState(pos, current.blockState().setPropertyValue(BlockPropertyTypes.MOISTURIZED_AMOUNT, moisture - 1));
             } else {
                 var blockAbove = current.offsetPos(BlockFace.UP);
                 if (!blockAbove.blockState().getBlockType().hasBlockTag(BlockTags.CROP)) {
@@ -62,7 +62,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
                 }
             }
         } else if (moisture != 7) {
-            dimension.setBlockState(pos, current.blockState().withPropertyValue(BlockPropertyTypes.MOISTURIZED_AMOUNT, 7));
+            dimension.setBlockState(pos, current.blockState().setPropertyValue(BlockPropertyTypes.MOISTURIZED_AMOUNT, 7));
         }
     }
 

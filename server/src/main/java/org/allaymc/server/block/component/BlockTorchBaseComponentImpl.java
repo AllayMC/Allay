@@ -63,7 +63,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        blockState = blockState.withPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION, TORCH_FACING_DIRECTION_MAPPER.get(face));
+        blockState = blockState.setPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION, TORCH_FACING_DIRECTION_MAPPER.get(face));
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }

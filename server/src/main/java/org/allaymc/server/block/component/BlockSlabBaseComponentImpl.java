@@ -39,18 +39,18 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
                 if (clickedBlock.getBlockType() == this.blockType && clickedBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.BOTTOM) {
                     dimension.setBlockState(clickedBlockPos, getDoubleSlabBlockType().getDefaultState());
                 } else {
-                    dimension.setBlockState(placeBlockPos, blockState.withPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.BOTTOM));
+                    dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.BOTTOM));
                 }
             }
             case DOWN -> {
                 if (clickedBlock.getBlockType() == this.blockType && clickedBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.TOP) {
                     dimension.setBlockState(clickedBlockPos, getDoubleSlabBlockType().getDefaultState());
                 } else {
-                    dimension.setBlockState(placeBlockPos, blockState.withPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.TOP));
+                    dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.TOP));
                 }
             }
             default -> {
-                dimension.setBlockState(placeBlockPos, blockState.withPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, clickedPos.y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM));
+                dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, clickedPos.y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM));
             }
         }
         return true;

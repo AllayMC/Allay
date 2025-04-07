@@ -79,29 +79,29 @@ class AllayBlockTypeTest {
         // Test block properties
         var state = block.getBlockType().getDefaultState();
         assertFalse(state.getPropertyValue(TEST_BOOLEAN_PROPERTY_TYPE));
-        state = state.withPropertyValue(TEST_BOOLEAN_PROPERTY_TYPE, true);
+        state = state.setPropertyValue(TEST_BOOLEAN_PROPERTY_TYPE, true);
         assertTrue(state.getPropertyValue(TEST_BOOLEAN_PROPERTY_TYPE));
         assertEquals(0, state.getPropertyValue(TEST_INT_PROPERTY_TYPE));
-        state = state.withPropertyValue(TEST_INT_PROPERTY_TYPE, 5);
+        state = state.setPropertyValue(TEST_INT_PROPERTY_TYPE, 5);
         assertEquals(5, state.getPropertyValue(TEST_INT_PROPERTY_TYPE));
         assertEquals(TestEnum.A, state.getPropertyValue(TEST_ENUM_PROPERTY_TYPE));
-        state = state.withPropertyValue(TEST_ENUM_PROPERTY_TYPE, TestEnum.B);
+        state = state.setPropertyValue(TEST_ENUM_PROPERTY_TYPE, TestEnum.B);
         assertEquals(TestEnum.B, state.getPropertyValue(TEST_ENUM_PROPERTY_TYPE));
     }
 
     @Test
     void testBlockStateHash() {
         var b1 = COBBLED_DEEPSLATE_WALL.getDefaultState();
-        b1 = b1.withPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
-        b1 = b1.withPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
-        b1 = b1.withPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
-        b1 = b1.withPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
-        b1 = b1.withPropertyValue(BlockPropertyTypes.WALL_POST_BIT, true);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_POST_BIT, true);
         assertEquals(1789459903, b1.unsignedBlockStateHash());
 
         var b2 = BLUE_CANDLE.getDefaultState();
-        b2 = b2.withPropertyValue(BlockPropertyTypes.CANDLES, 2);
-        b2 = b2.withPropertyValue(BlockPropertyTypes.LIT, false);
+        b2 = b2.setPropertyValue(BlockPropertyTypes.CANDLES, 2);
+        b2 = b2.setPropertyValue(BlockPropertyTypes.LIT, false);
         assertEquals(4220034033L, b2.unsignedBlockStateHash());
     }
 

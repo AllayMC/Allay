@@ -54,7 +54,7 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        dimension.setBlockState(placeBlockPos, blockState.withPropertyValue(FACING_DIRECTION, blockFace.ordinal()));
+        dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(FACING_DIRECTION, blockFace.ordinal()));
         return true;
     }
 
