@@ -32,6 +32,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed swords block breaking time.
 - Fixed `NullPointerException` when breathe disabled.
 - Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
+- Fixed `SetTimePacket` spamming.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 

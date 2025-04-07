@@ -242,10 +242,10 @@ public class AllayWorld implements World {
                 // Client will always keep time flowing, so we still need to send the
                 // same time uninterruptedly if the daylight cycle is disabled
                 worldData.sendTimeOfDay(getPlayers());
-                return;
             } else {
                 worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
             }
+
             nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
         }
     }
