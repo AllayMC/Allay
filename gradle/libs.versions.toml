@@ -3,7 +3,7 @@ log4j = "2.24.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"
-netty = "4.1.119.Final"
+netty = "4.2.0.Final"
 
 [libraries]
 # NBT
@@ -67,7 +67,7 @@ joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version.ref = "netty" }
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version.ref = "netty" }
 # Configulation lib
-okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.6" }
+okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.8" }
 # Native Operating System and Hardware Information
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.0" }
 # GUI
@@ -77,14 +77,14 @@ formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.12.1" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.1" }
-mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.16.1" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.17.0" }
 # Lombok
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 # Random generator
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.5.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.6.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
