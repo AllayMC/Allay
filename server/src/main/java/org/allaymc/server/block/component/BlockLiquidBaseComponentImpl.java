@@ -72,10 +72,10 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {
-        var pos = blockStateWithPos.pos();
-        var dimension = blockStateWithPos.dimension();
-        var liquid = blockStateWithPos.blockState();
+    public void onScheduledUpdate(BlockStateWithPos current) {
+        var pos = current.pos();
+        var dimension = current.dimension();
+        var liquid = current.blockState();
         if (canFormSource() && getDepth(liquid) == 7) {
             // Attempt to form new water source blocks.
             var count = 0;
@@ -90,7 +90,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                     // Only form a new source block if there either is no water below this block,
                     // or if the water below this is not falling (full source block).
                     var newLiquid = getSourceBlockState();
-                    var event = new LiquidFlowEvent(blockStateWithPos, pos, newLiquid, true);
+                    var event = new LiquidFlowEvent(current, pos, newLiquid, true);
                     if (!event.call()) {
                         return;
                     }
@@ -98,7 +98,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                 }
             }
         }
-        updateLiquid(dimension, pos, liquid, blockStateWithPos.layer());
+        updateLiquid(dimension, pos, liquid, current.layer());
     }
 
     /**

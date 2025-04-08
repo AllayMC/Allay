@@ -18,7 +18,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added `DamageContainer#fallingBlock(float)`.
 - Added Glided Blackstone, Gravel and Glowstone drop.
-- Implemented ladder, infested blocks, ice, snow and end portal frame.
+- Implemented ladder, infested blocks, ice, snow, sea lantern and end portal frame.
+- Implemented basic functional for scaffolding.
 
 ### Changed
 

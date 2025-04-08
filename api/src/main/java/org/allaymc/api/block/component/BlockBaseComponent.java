@@ -177,10 +177,10 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a block receives a scheduled update.
      *
-     * @param blockStateWithPos the block receiving the scheduled update.
+     * @param current the block receiving the scheduled update.
      */
     @ApiStatus.OverrideOnly
-    default void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {}
+    default void onScheduledUpdate(BlockStateWithPos current) {}
 
     /**
      * Retrieves the drops of the block when it is broken.

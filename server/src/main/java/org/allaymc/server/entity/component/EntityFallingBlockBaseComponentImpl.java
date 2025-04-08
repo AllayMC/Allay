@@ -66,9 +66,8 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             return;
         }
 
-        var floorLoc = location.floor(new Vector3d());
         if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-            dimension.setBlockState(floorLoc, BlockTypes.AIR.getDefaultState());
+            dimension.setBlockState(location.floor(new Vector3d()), BlockTypes.AIR.getDefaultState());
         }
     }
 

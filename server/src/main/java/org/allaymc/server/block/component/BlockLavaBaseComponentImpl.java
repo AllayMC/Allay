@@ -70,9 +70,9 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {
-        if (!tryHarden(blockStateWithPos, null)) {
-            super.onScheduledUpdate(blockStateWithPos);
+    public void onScheduledUpdate(BlockStateWithPos current) {
+        if (!tryHarden(current, null)) {
+            super.onScheduledUpdate(current);
         }
     }
 

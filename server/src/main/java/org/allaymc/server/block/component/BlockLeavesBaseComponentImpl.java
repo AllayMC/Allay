@@ -53,8 +53,8 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {
-        onNeighborOrScheduledUpdate(blockStateWithPos);
+    public void onScheduledUpdate(BlockStateWithPos current) {
+        onNeighborOrScheduledUpdate(current);
     }
 
     protected void onNeighborOrScheduledUpdate(BlockStateWithPos blockStateWithPos) {

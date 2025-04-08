@@ -498,7 +498,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
-        if (onGround && this.fallDistance > 0) {
+        if (onGround) {
             this.onFall(this.fallDistance);
         }
     }

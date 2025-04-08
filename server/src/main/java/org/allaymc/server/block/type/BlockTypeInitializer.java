@@ -1608,4 +1608,22 @@ public final class BlockTypeInitializer {
                 .addComponent(new BlockFallableComponentImpl(Sound.LAND_SNOW))
                 .build();
     }
+
+    public static void initSeaLantern() {
+        BlockTypes.SEA_LANTERN = AllayBlockType
+                .builder(BlockSeaLanternBehaviorImpl.class)
+                .vanillaBlock(BlockId.SEA_LANTERN)
+                .setBaseComponentSupplier(BlockSeaLanternBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initScaffolding() {
+        BlockTypes.SCAFFOLDING = AllayBlockType
+                .builder(BlockScaffoldingBehaviorImpl.class)
+                .vanillaBlock(BlockId.SCAFFOLDING)
+                .setProperties(BlockPropertyTypes.STABILITY, BlockPropertyTypes.STABILITY_CHECK)
+                .setBaseComponentSupplier(BlockScaffoldingBaseComponentImpl::new)
+                .addComponent(new BlockFallableComponentImpl(Sound.BLOCK_SCAFFOLDING_FALL))
+                .build();
+    }
 }
