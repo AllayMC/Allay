@@ -1626,4 +1626,21 @@ public final class BlockTypeInitializer {
                 .addComponent(new BlockFallableComponentImpl(Sound.BLOCK_SCAFFOLDING_FALL))
                 .build();
     }
+
+    public static void initChorusFlower() {
+        BlockTypes.CHORUS_FLOWER = AllayBlockType
+                .builder(BlockChorusFlowerBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHORUS_FLOWER)
+                .setProperties(BlockPropertyTypes.AGE_6)
+                .setBaseComponentSupplier(BlockChorusFlowerBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initChorusPlant() {
+        BlockTypes.CHORUS_PLANT = AllayBlockType
+                .builder(BlockChorusPlantBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHORUS_PLANT)
+                .setBaseComponentSupplier(BlockChorusPlantBaseComponentImpl::new)
+                .build();
+    }
 }

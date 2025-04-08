@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Added Glided Blackstone, Gravel and Glowstone drop.
 - Implemented ladder, infested blocks, ice, snow, sea lantern and end portal frame.
 - Implemented basic functional for scaffolding.
+- Implemented chorus plant & flower.
 
 ### Changed
 
@@ -34,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed `NullPointerException` when breathe disabled.
 - Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
 - Fixed `SetTimePacket` spamming.
+- Fixed random bounds.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 

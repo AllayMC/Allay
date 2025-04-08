@@ -150,7 +150,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         if (FortuneDropHelper.bonusChanceDivisor(usedItem, 50, 5)) {
-            drops.add(ItemTypes.STICK.createItemStack(ThreadLocalRandom.current().nextInt(1, 2)));
+            drops.add(ItemTypes.STICK.createItemStack(ThreadLocalRandom.current().nextInt(1, 3)));
         }
 
         if (saplingType != null && FortuneDropHelper.bonusChanceDivisor(usedItem, dropMoreSaplings ? 40 : 20, 4)) {

@@ -20,6 +20,6 @@ public class BlockSeaLanternBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemTypes.PRISMARINE_CRYSTALS.createItemStack(ThreadLocalRandom.current().nextInt(2, 3)));
+        return Set.of(ItemTypes.PRISMARINE_CRYSTALS.createItemStack(ThreadLocalRandom.current().nextInt(2, 4)));
     }
 }

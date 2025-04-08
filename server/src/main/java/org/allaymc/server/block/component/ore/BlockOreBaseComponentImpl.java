@@ -43,6 +43,6 @@ public class BlockOreBaseComponentImpl extends BlockBaseComponentImpl {
             return 0;
         }
 
-        return ThreadLocalRandom.current().nextInt(minDropXp, maxDropXp);
+        return ThreadLocalRandom.current().nextInt(minDropXp, maxDropXp + 1);
     }
 }
