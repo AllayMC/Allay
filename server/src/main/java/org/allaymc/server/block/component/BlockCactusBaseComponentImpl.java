@@ -44,7 +44,7 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
         if (entity instanceof EntityDamageComponent damageComponent) {
             damageComponent.attack(DamageContainer.contact(0.5f));
         }

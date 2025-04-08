@@ -70,9 +70,9 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {
-        var pos = blockStateWithPos.pos();
-        var blockState = blockStateWithPos.blockState();
+    public void onScheduledUpdate(BlockStateWithPos current) {
+        var pos = current.pos();
+        var blockState = current.blockState();
         if (blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
             pos.dimension().updateBlockProperty(BUTTON_PRESSED_BIT, false, pos);
             pos.dimension().addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_OFF);

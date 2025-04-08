@@ -177,10 +177,10 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a block receives a scheduled update.
      *
-     * @param blockStateWithPos the block receiving the scheduled update.
+     * @param current the block receiving the scheduled update.
      */
     @ApiStatus.OverrideOnly
-    default void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {}
+    default void onScheduledUpdate(BlockStateWithPos current) {}
 
     /**
      * Retrieves the drops of the block when it is broken.
@@ -269,11 +269,11 @@ public interface BlockBaseComponent extends BlockComponent {
      * Handles when a block collides with an entity.
      * This method is only called if {@link #canCollideWithEntity()} returns {@code true}.
      *
-     * @param blockStateWithPos the block that collides with the entity.
-     * @param entity            the entity that collides with the block.
+     * @param current the block that collides with the entity.
+     * @param entity  the entity that collides with the block.
      */
     @ApiStatus.OverrideOnly
-    default void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {}
+    default void onCollideWithEntity(BlockStateWithPos current, Entity entity) {}
 
     /**
      * Calculates the time it takes to break the specific block state with the given item.
@@ -303,16 +303,19 @@ public interface BlockBaseComponent extends BlockComponent {
         var baseTime = ((isCorrectTool || !requiresCorrectToolForDrops) ? 1.5d : 5d) * blockHardness;
         var speed = 1d / baseTime;
 
+        double efficiency = 1d;
         if (isCorrectTool) {
             // Tool level (wooden, stone, iron, etc...) bonus
-            var efficiency = usedItem.getBreakTimeBonus(blockState);
+            efficiency = usedItem.getBreakTimeBonus(blockState);
             // Tool efficiency enchantment bonus
             efficiency += speedBonusByEfficiency(usedItem.getEnchantmentLevel(EnchantmentTypes.EFFICIENCY));
-            speed *= efficiency;
-        } else if (isSword(usedItem.getItemType())) { // Special case
-            // The minimum speed for swords digging blocks is 1.5 times
-            speed *= 1.5d;
         }
+
+        if (isSword(usedItem.getItemType())) { // Special case
+            efficiency *= 1.5d;
+        }
+
+        speed *= efficiency;
 
         if (entity != null) {
             if (entity.hasEffect(EffectTypes.HASTE) || entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
@@ -324,6 +327,7 @@ public interface BlockBaseComponent extends BlockComponent {
             if (entity.hasEffect(EffectTypes.MINING_FATIGUE)) {
                 // speedMultiplier *= 0.3 ^ miningFatigueLevel
                 // damage *= 0.7 ^ miningFatigueLevel
+                // 0.3 + 0.7 = 0.21 ^ miningFatigueLevel
                 speed *= Math.pow(0.21d, entity.getEffectLevel(EffectTypes.MINING_FATIGUE));
             }
 

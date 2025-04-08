@@ -19,13 +19,13 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  */
 @UtilityClass
 public final class BlockPlaceHelper {
-    private static final BiMap<BlockFace, Integer> DIRECTION_4_MAPPER = HashBiMap.create(4);
+    public static final BiMap<BlockFace, Integer> DIRECTION_4_MAPPER = HashBiMap.create(4);
 
     static {
-        DIRECTION_4_MAPPER.put(BlockFace.SOUTH, 0);
-        DIRECTION_4_MAPPER.put(BlockFace.WEST, 1);
-        DIRECTION_4_MAPPER.put(BlockFace.NORTH, 2);
-        DIRECTION_4_MAPPER.put(BlockFace.EAST, 3);
+        DIRECTION_4_MAPPER.put(BlockFace.NORTH, 0);
+        DIRECTION_4_MAPPER.put(BlockFace.EAST, 1);
+        DIRECTION_4_MAPPER.put(BlockFace.SOUTH, 2);
+        DIRECTION_4_MAPPER.put(BlockFace.WEST, 3);
     }
 
     public static BlockState processFacingDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
@@ -89,15 +89,6 @@ public final class BlockPlaceHelper {
         }
 
         var playerFace = placementInfo.player().getHorizontalFace();
-        var clickedFace = placementInfo.blockFace();
-
-        var value = DIRECTION_4_MAPPER.get(clickedFace);
-        if (clickedFace == BlockFace.DOWN) {
-            value = DIRECTION_4_MAPPER.get(playerFace.opposite());
-        } else if (clickedFace == BlockFace.UP) {
-            value = DIRECTION_4_MAPPER.get(playerFace);
-        }
-
-        return blockState.setPropertyValue(DIRECTION_4, value);
+        return blockState.setPropertyValue(DIRECTION_4, DIRECTION_4_MAPPER.get(playerFace.opposite()));
     }
 }

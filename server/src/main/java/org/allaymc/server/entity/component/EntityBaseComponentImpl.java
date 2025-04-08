@@ -170,7 +170,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 .build();
     }
 
-    private void updateHitBoxAndCollisionBoxMetadata() {
+    protected void updateHitBoxAndCollisionBoxMetadata() {
         metadata.set(EntityDataTypes.HITBOX, buildAABBTag());
         var aabb = getAABB();
         metadata.set(EntityDataTypes.COLLISION_BOX,
@@ -202,6 +202,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void tickBreathe() {
+        if (!getMetadata().has(EntityDataTypes.AIR_SUPPLY)) {
+            return;
+        }
+
         short airSupply = getMetadata().get(EntityDataTypes.AIR_SUPPLY);
         short airSupplyMax = getMetadata().get(EntityDataTypes.AIR_SUPPLY_MAX);
         short newAirSupply = airSupply;
@@ -494,8 +498,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
-        if (onGround && this.fallDistance > 0) {
-            this.onFall();
+        if (onGround) {
+            this.onFall(this.fallDistance);
         }
     }
 
@@ -732,7 +736,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void onFall() {
+    public void onFall(double fallDistance) {
         var event = new EntityFallEvent(thisEntity, fallDistance);
         if (!event.call()) {
             this.fallDistance = 0;

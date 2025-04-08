@@ -718,7 +718,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLUE_ICE == null) {
             BlockTypes.BLUE_ICE = AllayBlockType
-                    .builder(BlockBlueIceBehaviorImpl.class)
+                    .builder(BlockIceBehaviorImpl.class)
                     .vanillaBlock(BlockId.BLUE_ICE)
                     .build();
         }
@@ -2287,7 +2287,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEPRECATED_ANVIL == null) {
             BlockTypes.DEPRECATED_ANVIL = AllayBlockType
-                    .builder(BlockAnvilBehaviorImpl.class)
+                    .builder(BlockDeprecatedAnvilBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEPRECATED_ANVIL)
                     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
@@ -3402,7 +3402,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.FROSTED_ICE == null) {
             BlockTypes.FROSTED_ICE = AllayBlockType
-                    .builder(BlockFrostedIceBehaviorImpl.class)
+                    .builder(BlockIceBehaviorImpl.class)
                     .vanillaBlock(BlockId.FROSTED_ICE)
                     .setProperties(BlockPropertyTypes.AGE_4)
                     .build();
@@ -3963,44 +3963,44 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.INFESTED_CHISELED_STONE_BRICKS == null) {
             BlockTypes.INFESTED_CHISELED_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_CHISELED_STONE_BRICKS)
                     .build();
         }
         if (BlockTypes.INFESTED_COBBLESTONE == null) {
             BlockTypes.INFESTED_COBBLESTONE = AllayBlockType
-                    .builder(BlockInfestedCobblestoneBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_COBBLESTONE)
                     .build();
         }
         if (BlockTypes.INFESTED_CRACKED_STONE_BRICKS == null) {
             BlockTypes.INFESTED_CRACKED_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_CRACKED_STONE_BRICKS)
                     .build();
         }
         if (BlockTypes.INFESTED_DEEPSLATE == null) {
             BlockTypes.INFESTED_DEEPSLATE = AllayBlockType
-                    .builder(BlockInfestedDeepslateBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_DEEPSLATE)
                     .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.INFESTED_MOSSY_STONE_BRICKS == null) {
             BlockTypes.INFESTED_MOSSY_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_MOSSY_STONE_BRICKS)
                     .build();
         }
         if (BlockTypes.INFESTED_STONE == null) {
             BlockTypes.INFESTED_STONE = AllayBlockType
-                    .builder(BlockInfestedStoneBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_STONE)
                     .build();
         }
         if (BlockTypes.INFESTED_STONE_BRICKS == null) {
             BlockTypes.INFESTED_STONE_BRICKS = AllayBlockType
-                    .builder(BlockBricksBehaviorImpl.class)
+                    .builder(BlockInfestedBlockBehaviorImpl.class)
                     .vanillaBlock(BlockId.INFESTED_STONE_BRICKS)
                     .build();
         }
@@ -5378,7 +5378,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PACKED_ICE == null) {
             BlockTypes.PACKED_ICE = AllayBlockType
-                    .builder(BlockPackedIceBehaviorImpl.class)
+                    .builder(BlockIceBehaviorImpl.class)
                     .vanillaBlock(BlockId.PACKED_ICE)
                     .build();
         }

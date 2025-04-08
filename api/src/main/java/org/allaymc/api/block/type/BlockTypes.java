@@ -218,7 +218,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockGlazedTerracottaBehavior> BLUE_GLAZED_TERRACOTTA;
 
-    public static BlockType<BlockBlueIceBehavior> BLUE_ICE;
+    public static BlockType<BlockIceBehavior> BLUE_ICE;
 
     public static BlockType<BlockBlueOrchidBehavior> BLUE_ORCHID;
 
@@ -696,7 +696,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDenyBehavior> DENY;
 
-    public static BlockType<BlockAnvilBehavior> DEPRECATED_ANVIL;
+    public static BlockType<BlockDeprecatedAnvilBehavior> DEPRECATED_ANVIL;
 
     public static BlockType<BlockDeprecatedPurpurBlock1Behavior> DEPRECATED_PURPUR_BLOCK_1;
 
@@ -1056,7 +1056,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockFrogSpawnBehavior> FROG_SPAWN;
 
-    public static BlockType<BlockFrostedIceBehavior> FROSTED_ICE;
+    public static BlockType<BlockIceBehavior> FROSTED_ICE;
 
     public static BlockType<BlockFurnaceBehavior> FURNACE;
 
@@ -1236,19 +1236,19 @@ public final class BlockTypes {
 
     public static BlockType<BlockIceBehavior> ICE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_CHISELED_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_CHISELED_STONE_BRICKS;
 
-    public static BlockType<BlockInfestedCobblestoneBehavior> INFESTED_COBBLESTONE;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_COBBLESTONE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_CRACKED_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_CRACKED_STONE_BRICKS;
 
-    public static BlockType<BlockInfestedDeepslateBehavior> INFESTED_DEEPSLATE;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_DEEPSLATE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_MOSSY_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_MOSSY_STONE_BRICKS;
 
-    public static BlockType<BlockInfestedStoneBehavior> INFESTED_STONE;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_STONE;
 
-    public static BlockType<BlockBricksBehavior> INFESTED_STONE_BRICKS;
+    public static BlockType<BlockInfestedBlockBehavior> INFESTED_STONE_BRICKS;
 
     public static BlockType<BlockInfoUpdateBehavior> INFO_UPDATE;
 
@@ -1672,7 +1672,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoubleCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockPackedIceBehavior> PACKED_ICE;
+    public static BlockType<BlockIceBehavior> PACKED_ICE;
 
     public static BlockType<BlockPackedMudBehavior> PACKED_MUD;
 

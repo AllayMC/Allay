@@ -66,30 +66,30 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {
+    public void onScheduledUpdate(BlockStateWithPos current) {
         // Fire spreading is done in scheduled tick
-        if (!blockStateWithPos.pos().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_FIRE_TICK)) {
+        if (!current.pos().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_FIRE_TICK)) {
             // Fire tick is disabled
             return;
         }
 
-        var pos = blockStateWithPos.pos();
+        var pos = current.pos();
         var dimension = pos.dimension();
-        var downBlockState = blockStateWithPos.offsetPos(BlockFace.DOWN).blockState();
+        var downBlockState = current.offsetPos(BlockFace.DOWN).blockState();
 
-        if (!canSupportFire(downBlockState) && !canNeighborBurn(blockStateWithPos)) {
-            var event = new BlockFadeEvent(blockStateWithPos, BlockTypes.AIR.getDefaultState());
+        if (!canSupportFire(downBlockState) && !canNeighborBurn(current)) {
+            var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
                 dimension.setBlockState(pos, event.getNewBlockState());
                 return;
             }
         }
 
-        if (tryWipedOutByRain(blockStateWithPos)) {
+        if (tryWipedOutByRain(current)) {
             return;
         }
 
-        var blockState = blockStateWithPos.blockState();
+        var blockState = current.blockState();
         var random = ThreadLocalRandom.current();
         var age = blockState.getPropertyValue(BlockPropertyTypes.AGE_16);
 
@@ -104,29 +104,29 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         var burnForever = canFireBurnForever(downBlockState);
 
         if (!burnForever) {
-            if (!canNeighborBurn(blockStateWithPos)) {
+            if (!canNeighborBurn(current)) {
                 if (canSupportFire(downBlockState) && age <= 3) {
                     return;
                 }
 
-                var event = new BlockFadeEvent(blockStateWithPos, BlockTypes.AIR.getDefaultState());
+                var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
                 if (event.call()) {
-                    blockStateWithPos.dimension().setBlockState(blockStateWithPos.pos(), event.getNewBlockState());
+                    current.dimension().setBlockState(current.pos(), event.getNewBlockState());
                     return;
                 }
             }
 
             if (!(downBlockState.getBlockStateData().burnOdds() > 0) && age == 15 && random.nextInt(4) == 0) {
-                var event = new BlockFadeEvent(blockStateWithPos, BlockTypes.AIR.getDefaultState());
+                var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
                 if (event.call()) {
-                    blockStateWithPos.dimension().setBlockState(blockStateWithPos.pos(), event.getNewBlockState());
+                    current.dimension().setBlockState(current.pos(), event.getNewBlockState());
                     return;
                 }
             }
         }
 
-        burnBlockAround(blockStateWithPos, age);
-        spreadFire(blockStateWithPos);
+        burnBlockAround(current, age);
+        spreadFire(current);
     }
 
     private void burnBlockAround(BlockStateWithPos blockStateWithPos, Integer age) {
@@ -249,12 +249,12 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
         if (!(entity instanceof EntityDamageComponent damageComponent)) {
             return;
         }
 
-        var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, blockStateWithPos.blockState(), 20 * 8);
+        var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, current.blockState(), 20 * 8);
         if (event.call()) {
             damageComponent.setOnFireTicks(event.getOnFireTicks());
         }

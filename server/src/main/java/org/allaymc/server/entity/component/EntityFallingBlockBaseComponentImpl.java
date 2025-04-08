@@ -2,11 +2,14 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
@@ -24,7 +27,6 @@ import java.util.Objects;
 @Getter
 @Setter
 public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl implements EntityFallingBlockBaseComponent {
-
     protected BlockState blockState;
 
     public EntityFallingBlockBaseComponentImpl(EntityInitInfo info) {
@@ -37,10 +39,12 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
     @Override
     protected void initMetadata() {
-        super.initMetadata();
-        Objects.requireNonNull(blockState, "blockState shouldn't be null");
+        Objects.requireNonNull(blockState, "blockState");
 
+        updateHitBoxAndCollisionBoxMetadata();
+        metadata.set(EntityFlag.HAS_GRAVITY, true);
         metadata.set(EntityFlag.FIRE_IMMUNE, true);
+        metadata.set(EntityFlag.HAS_COLLISION, false);
         metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
     }
 
@@ -51,40 +55,50 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     protected void tickFalling() {
-        if (this.willBeDespawnedNextTick()) {
+        if (this.willBeDespawnedNextTick() || onGround) {
             // The falling block entity already became block
             return;
         }
 
         var dimension = getDimension();
         var currentBlock = dimension.getBlockState(location);
+        if (currentBlock.getBlockType() == BlockTypes.AIR) {
+            return;
+        }
 
-        if (onGround) {
-            if (!getBlockStateStandingOn().blockState().getBlockStateData().shape().isFull(BlockFace.UP)) {
-                // Falling on a block which is not full in upper face, for example torch.
-                // In this case, the falling block should be turned into item instead of block
-                dimension.dropItem(currentBlock.toItemStack(), location);
-            } else {
-                // Set block state immediately when falling on ground to prevent
-                // the falling block entity above from getting into the ground.
-                dimension.setBlockState(location, blockState);
-            }
-            despawn();
-        } else {
-            if (currentBlock.getBlockType() == BlockTypes.AIR) {
+        if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+            dimension.setBlockState(location.floor(new Vector3d()), BlockTypes.AIR.getDefaultState());
+        }
+    }
+
+    @Override
+    public void onFall(double fallDistance) {
+        super.onFall(fallDistance);
+
+        var dimension = getDimension();
+        // It is better to place the block when the Entity is removed, so that it looks visually normal.
+        dimension.getEntityService().removeEntity(thisEntity, () -> {
+            if (!(blockState.getBehavior() instanceof BlockFallableComponent fallableComponent)) {
                 return;
             }
 
-            var floorLoc = location.floor(new Vector3d());
-            if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-                dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
-            } else {
-                // The falling block get into a non-replaceable block for some reason
-                // In this case, just let the falling block become item
-                dimension.dropItem(currentBlock.toItemStack(), location);
-                despawn();
+            var damage = fallableComponent.calculateDamage(fallDistance);
+            if (damage > 0) {
+                dimension.getEntityService().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
+                        .stream()
+                        .filter(entity -> entity instanceof EntityDamageComponent)
+                        .map(EntityDamageComponent.class::cast)
+                        .forEach(entity -> entity.attack(DamageContainer.fallingBlock(damage)));
             }
-        }
+
+            if (!getBlockStateStandingOn().blockState().getBlockStateData().shape().isFull(BlockFace.UP)) {
+                // Falling on a block which is not full in upper face, for example torch.
+                // In this case, the falling block should be turned into item instead of block
+                dimension.dropItem(blockState.toItemStack(), location);
+            } else {
+                fallableComponent.onLanded(location, fallDistance, blockState);
+            }
+        });
     }
 
     @Override

@@ -31,7 +31,7 @@ public enum Weather {
      * @return the random time length for this weather.
      */
     public int generateRandomTimeLength() {
-        return ThreadLocalRandom.current().nextInt(minTime, maxTime);
+        return ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
     }
 
     /**

@@ -65,12 +65,14 @@ public abstract class Pack implements AutoCloseable {
     }
 
     public byte[] getHash() {
-        if (this.hash == null) {
-            try {
-                this.hash = MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(this.loader.getNetworkPreparedFile().join()));
-            } catch (Exception exception) {
-                throw new IllegalStateException("Unable to get hash of pack", exception);
-            }
+        if (this.hash != null) {
+            return this.hash;
+        }
+
+        try {
+            this.hash = MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(this.loader.getNetworkPreparedFile().join()));
+        } catch (Exception exception) {
+            throw new IllegalStateException("Unable to get hash of pack", exception);
         }
 
         return this.hash;
@@ -79,8 +81,11 @@ public abstract class Pack implements AutoCloseable {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public ByteBuf getChunk(int offset, int length) {
         byte[] chunk;
-        if ((this.getSize() - offset) > length) chunk = new byte[length];
-        else chunk = new byte[(int) (this.getSize() - offset)];
+        if ((this.getSize() - offset) > length) {
+            chunk = new byte[length];
+        } else {
+            chunk = new byte[(int) (this.getSize() - offset)];
+        }
 
         try (var input = Files.newInputStream(this.loader.getNetworkPreparedFile().join())) {
             input.skip(offset);
@@ -102,7 +107,7 @@ public abstract class Pack implements AutoCloseable {
         packet.setChunkCount((long) Math.ceil(this.getSize() / (double) MAX_CHUNK_SIZE));
         packet.setCompressedPackSize(this.getSize());
         packet.setHash(this.getHash());
-        packet.setType(this.getType().toNetwork());
+        packet.setType(this.getType().getNetworkType());
         return packet;
     }
 
@@ -152,21 +157,20 @@ public abstract class Pack implements AutoCloseable {
         return this.getId().hashCode();
     }
 
-    // Taken from https://learn.microsoft.com/en-us/minecraft/creator/reference/content/addonsreference/examples/addonmanifest?view=minecraft-bedrock-stable#modules
+    /**
+     * @see <a href="https://learn.microsoft.com/en-us/minecraft/creator/reference/content/addonsreference/packmanifest?view=minecraft-bedrock-stable#modules">packmanifest</a>
+     */
+    @Getter
+    @RequiredArgsConstructor
     public enum Type {
+        RESOURCES(ResourcePackType.RESOURCES),
+        DATA(ResourcePackType.DATA_ADD_ON),
+        WORLD_TEMPLATE(ResourcePackType.WORLD_TEMPLATE),
+        SCRIPT(ResourcePackType.ADDON);
 
-        RESOURCES,
-        DATA,
-        SKIN_PACK,
-        WORLD_TEMPLATE,
-        SCRIPT;
-
-        public ResourcePackType toNetwork() {
-            return ResourcePackType.values()[this.ordinal() + 1];
-        }
+        private final ResourcePackType networkType;
 
         public static class Serializer implements JsonSerializer<Type> {
-
             @Override
             public JsonElement serialize(Type src, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
                 return new JsonPrimitive(src.name().toLowerCase());
@@ -174,7 +178,6 @@ public abstract class Pack implements AutoCloseable {
         }
 
         public static class Deserializer implements JsonDeserializer<Type> {
-
             @Override
             public Type deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                 return Type.valueOf(json.getAsString().toUpperCase());
@@ -184,7 +187,6 @@ public abstract class Pack implements AutoCloseable {
 
     @FunctionalInterface
     public interface Factory {
-
         Pack create(PackLoader loader, PackManifest manifest);
     }
 }
