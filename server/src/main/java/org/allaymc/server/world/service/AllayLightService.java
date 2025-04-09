@@ -373,7 +373,12 @@ public class AllayLightService implements LightService {
         // Reduce memory usage by packing light data into a single byte
         var packedLightData = packLightData(le, ld);
         chunkAndBlockUpdateQueue.offer(() -> {
-            var chunkLightCalculated = !awaitingLightCalculationChunks.contains(HashUtils.hashXZ(x >> 4, z >> 4));
+            var chunkHash = HashUtils.hashXZ(x >> 4, z >> 4);
+            if (!chunks.contains(chunkHash)) {
+                // Chunk is not loaded
+                return;
+            }
+
             var lightDampening = unpackLightDampening(packedLightData);
             var lightEmissionValue = unpackLightEmission(packedLightData);
             int oldLightHeight = dimensionInfo.hasSkyLight() ? getLightHeight(x, z) : 0;
@@ -388,6 +393,7 @@ public class AllayLightService implements LightService {
                 lightDataAccessorForCBThread.setLightEmission(x, y, z, lightEmissionValue);
             }
 
+            var chunkLightCalculated = !awaitingLightCalculationChunks.contains(chunkHash);
             if (!chunkLightCalculated || (oldBlockDampening == lightDampening && oldBlockEmission == lightEmissionValue)) {
                 return;
             }
