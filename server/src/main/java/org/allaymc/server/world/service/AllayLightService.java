@@ -22,10 +22,8 @@ import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.VisibleForTesting;
 
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -49,7 +47,12 @@ public class AllayLightService implements LightService {
     protected final NonBlockingHashMapLong<ChunkSectionNibbleArray[]> lightDampening;
     protected final NonBlockingHashMapLong<ChunkSectionNibbleArray[]> lightEmission;
     protected final NonBlockingHashMapLong<ChunkSectionNibbleArray[]> blockLight;
+    protected final CachedLightDataAccessor blockLightDataAccessor;
     protected final LightPropagator blockLightPropagator;
+    // The light data accessor used in "Chunk & Block" thread. We use LightDataAccessor as much
+    // as possible, because the implementation of LightDataAccessor will cache the last reading
+    // chunk and avoid getting chunk from large hash table every time (which will be much faster)
+    protected final CachedLightDataAccessor lightDataAccessorForCBThread;
 
     /*
      * The following fields are not null only when the dimension has sky light
@@ -58,10 +61,13 @@ public class AllayLightService implements LightService {
     protected BlockingQueueWrapper<Runnable> skyLightUpdateQueue;
     // Store the sky light sources' height in each chunk
     protected NonBlockingHashMapLong<HeightMap> lightHeightMap;
+    // Use CachedMapAccessor to get light height for better performance
+    protected CachedChunkMapAccessor<HeightMap> lightHeightMapAccessor;
     // This map only contains the propagation result of sky light sources that are in the
     // border (at critical light height or horizontal propagation needs to be considered).
     // Skylight sources have a value of 15 in this map
     protected NonBlockingHashMapLong<ChunkSectionNibbleArray[]> skyLightInBorder;
+    protected CachedLightDataAccessor skyLightDataAccessor;
     protected LightPropagator skyLightPropagator;
 
     public AllayLightService(Dimension dimension) {
@@ -83,13 +89,19 @@ public class AllayLightService implements LightService {
         this.lightDampening = new NonBlockingHashMapLong<>();
         this.lightEmission = new NonBlockingHashMapLong<>();
         this.blockLight = new NonBlockingHashMapLong<>();
-        this.blockLightPropagator = new LightPropagator(new BlockLightDataAccessor());
+        this.blockLightDataAccessor = new CachedLightDataAccessor(dimensionInfo, blockLight, lightDampening, lightEmission);
+        this.blockLightPropagator = new LightPropagator(blockLightDataAccessor);
         if (dimensionInfo.hasSkyLight()) {
             this.skyLightUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
             this.lightHeightMap = new NonBlockingHashMapLong<>();
+            this.lightHeightMapAccessor = new CachedChunkMapAccessor<>(lightHeightMap);
             this.skyLightInBorder = new NonBlockingHashMapLong<>();
-            this.skyLightPropagator = new LightPropagator(new SkyLightDataAccessor());
+            this.skyLightDataAccessor = new CachedLightDataAccessor(dimensionInfo, skyLightInBorder, lightDampening, lightEmission);
+            this.skyLightPropagator = new LightPropagator(skyLightDataAccessor);
         }
+        // Initialize lightDataAccessorForCBThread after we initialized skylight related things
+        // NOTICE: we only cache skyLightInBorder, block light is not much used in "Chunk & Block" thread
+        this.lightDataAccessorForCBThread = new CachedLightDataAccessor(dimensionInfo, skyLightInBorder, lightDampening, lightEmission);
     }
 
     public void startTick() {
@@ -178,31 +190,23 @@ public class AllayLightService implements LightService {
     }
 
     protected void calculateLightInChunk(int chunkX, int chunkZ) {
-        // Use linked list instead of array list to avoid array resizing which is very slow
-        var pendingBlockLightUpdates = new LinkedList<Runnable>();
-        var pendingSkyLightUpdates = dimensionInfo.hasSkyLight() ? new LinkedList<Runnable>() : null;
         for (int worldY = dimensionInfo.maxHeight(); worldY >= dimensionInfo.minHeight(); worldY--) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     final int worldX = (chunkX << 4) + x;
                     final int worldZ = (chunkZ << 4) + z;
-                    calculateBlockLightAt(worldX, worldY, worldZ, pendingBlockLightUpdates::add);
+                    calculateBlockLightAt(worldX, worldY, worldZ);
                     if (dimensionInfo.hasSkyLight()) {
-                        calculateSkyLightAt(worldX, worldZ, pendingSkyLightUpdates::add);
+                        calculateSkyLightAt(worldX, worldZ);
                     }
                 }
             }
         }
-
-        pendingBlockLightUpdates.forEach(blockLightUpdateQueue::offer);
-        if (dimensionInfo.hasSkyLight()) {
-            pendingSkyLightUpdates.forEach(skyLightUpdateQueue::offer);
-        }
     }
 
-    protected void calculateBlockLightAt(int x, int y, int z, Consumer<Runnable> updateConsumer) {
-        byte lightEmissionValue = (byte) getLightEmission(x, y, z);
-        byte minNeighborLightEmission = 15;
+    protected void calculateBlockLightAt(int x, int y, int z) {
+        int lightEmissionValue = lightDataAccessorForCBThread.getLightEmission(x, y, z);
+        int minNeighborLightEmission = 15;
         if (lightEmissionValue != 0) {
             var ignoreCurrentBlockLight = false;
             for (var blockFace : BlockFace.values()) {
@@ -211,14 +215,14 @@ public class AllayLightService implements LightService {
                 var neighborY = y + blockFace.getOffset().y();
                 var neighborZ = z + blockFace.getOffset().z();
 
-                byte neighborLightEmission = (byte) getLightEmission(neighborX, neighborY, neighborZ);
+                int neighborLightEmission = lightDataAccessorForCBThread.getLightEmission(neighborX, neighborY, neighborZ);
                 if (neighborLightEmission > lightEmissionValue) {
                     // We can ignore the current block, because the neighbor block's light will cover the current block
                     ignoreCurrentBlockLight = true;
                     break;
                 }
 
-                minNeighborLightEmission = (byte) Math.min(minNeighborLightEmission, neighborLightEmission);
+                minNeighborLightEmission = Math.min(minNeighborLightEmission, neighborLightEmission);
             }
 
             // Check if the current block is surrounded with blocks that have the same light
@@ -229,45 +233,74 @@ public class AllayLightService implements LightService {
             }
 
             if (!ignoreCurrentBlockLight) {
-                updateConsumer.accept(() -> blockLightPropagator.setLightAndPropagate(x, y, z, 0, lightEmissionValue));
+                blockLightUpdateQueue.offer(() -> blockLightPropagator.setLightAndPropagate(x, y, z, 0, lightEmissionValue));
             }
         }
     }
 
-    protected void calculateSkyLightAt(int x, int z, Consumer<Runnable> updateConsumer) {
+    protected void calculateSkyLightAt(int x, int z) {
         var lightHeight = getLightHeight(x, z);
         if (lightHeight > dimensionInfo.maxHeight()) {
             // This x-z position is full of blocks
             return;
         }
 
-        var maxNeighborLightHeight = getMaxNeighborLightHeight(x, z);
+        var neighborLightHeights = getNeighborLightHeights(x, z);
+        var maxNeighborLightHeight = MathUtils.max(neighborLightHeights);
         if (lightHeight >= maxNeighborLightHeight) {
             // The current light height is same or bigger to the neighbors' max light height, so the sky light
             // can only be propagated to the lower position. If the lower block has light dampening bigger
             // than 13, we can skip the calculation since the light will be blocked by the lower block
-            if (lightHeight != dimensionInfo.minHeight() && getWithoutChunkCheck(lightDampening, x, lightHeight - 1, z) < 14) {
-                updateConsumer.accept(() -> skyLightPropagator.setLightAndPropagate(x, lightHeight, z, 0, 15));
+            if (lightHeight != dimensionInfo.minHeight() && lightDataAccessorForCBThread.getLightDampening(x, lightHeight - 1, z) < 14) {
+                skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, lightHeight, z, 0, 15));
             } else {
                 // Although we do not need to propagate the current sky light, we should still set the
                 // current pos to 15 in skyLightInBorder so that we can know it is a sky light source later
-                setWithoutChunkCheck(skyLightInBorder, x, lightHeight, z, 15);
+                lightDataAccessorForCBThread.setLight(x, lightHeight, z, 15);
             }
         } else {
             for (int i = lightHeight; i < maxNeighborLightHeight; i++) {
                 final int skyLightSourceY = i;
-                updateConsumer.accept(() -> skyLightPropagator.setLightAndPropagate(x, skyLightSourceY, z, 0, 15));
+
+                // Check if we can skip the propagation of this skylight source, and we can save a lot of memory
+                // because there won't be a lot of small pending updates in queue
+                var skipSkyLightPropagation = true;
+                BlockFace[] horizontalBlockFaces = BlockFace.getHorizontalBlockFaces();
+                for (int j = 0, horizontalBlockFacesLength = horizontalBlockFaces.length; j < horizontalBlockFacesLength; j++) {
+                    var face = horizontalBlockFaces[j];
+                    var neighborLightHeight = neighborLightHeights[j];
+                    if (lightHeight >= neighborLightHeight) {
+                        continue;
+                    }
+
+                    var ox = x + face.getOffset().x();
+                    var oz = z + face.getOffset().z();
+                    var neighborLightDampening = lightDataAccessorForCBThread.getLightDampening(ox, skyLightSourceY, oz);
+                    if (neighborLightDampening < 14) {
+                        // The horizontal propagation of sky light is necessary
+                        skipSkyLightPropagation = false;
+                        break;
+                    }
+                }
+
+                if (!skipSkyLightPropagation) {
+                    skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, skyLightSourceY, z, 0, 15));
+                } else {
+                    lightDataAccessorForCBThread.setLight(x, skyLightSourceY, z, 15);
+                }
             }
         }
     }
 
-    protected int getMaxNeighborLightHeight(int x, int z) {
-        int max = dimensionInfo.minHeight();
-        for (var face : BlockFace.getHorizontalBlockFaces()) {
-            max = Math.max(max, getLightHeight(x + face.getOffset().x(), z + face.getOffset().z()));
+    protected int[] getNeighborLightHeights(int x, int z) {
+        int[] heights = new int[4];
+        BlockFace[] horizontalBlockFaces = BlockFace.getHorizontalBlockFaces();
+        for (int i = 0; i < horizontalBlockFaces.length; i++) {
+            var face = horizontalBlockFaces[i];
+            heights[i] = getLightHeight(x + face.getOffset().x(), z + face.getOffset().z());
         }
 
-        return max;
+        return heights;
     }
 
     protected boolean canCalculateLightInChunk(int chunkX, int chunkZ) {
@@ -314,13 +347,11 @@ public class AllayLightService implements LightService {
     }
 
     protected short getLightHeight(int x, int z) {
-        var hash = HashUtils.hashXZ(x >> 4, z >> 4);
-        return lightHeightMap.get(hash).get(x & 15, z & 15);
+        return lightHeightMapAccessor.get(x, z).get(x & 15, z & 15);
     }
 
     protected void setLightHeight(int x, int z, short value) {
-        var hash = HashUtils.hashXZ(x >> 4, z >> 4);
-        lightHeightMap.get(hash).set(x & 15, z & 15, value);
+        lightHeightMapAccessor.get(x, z).set(x & 15, z & 15, value);
     }
 
     @Override
@@ -346,15 +377,15 @@ public class AllayLightService implements LightService {
             var lightDampening = unpackLightDampening(packedLightData);
             var lightEmissionValue = unpackLightEmission(packedLightData);
             int oldLightHeight = dimensionInfo.hasSkyLight() ? getLightHeight(x, z) : 0;
-            var oldBlockDampening = getLightDampening(x, y, z);
-            var oldBlockEmission = getLightEmission(x, y, z);
+            var oldBlockDampening = lightDataAccessorForCBThread.getLightDampening(x, y, z);
+            var oldBlockEmission = lightDataAccessorForCBThread.getLightEmission(x, y, z);
 
             if (oldBlockDampening != lightDampening) {
                 setLightDampening(x, y, z, lightDampening);
             }
 
             if (oldBlockEmission != lightEmissionValue) {
-                setLightEmission(x, y, z, lightEmissionValue);
+                lightDataAccessorForCBThread.setLightEmission(x, y, z, lightEmissionValue);
             }
 
             if (!chunkLightCalculated || (oldBlockDampening == lightDampening && oldBlockEmission == lightEmissionValue)) {
@@ -371,7 +402,7 @@ public class AllayLightService implements LightService {
             var newLightHeight = getLightHeight(x, z);
             if (newLightHeight == oldLightHeight) {
                 // No change to light height, only need to make sure the sky light can be re-propagated to the changed block's position
-                skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, y, z, getWithoutChunkCheck(skyLightInBorder, x, y, z), 0));
+                skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, y, z, lightDataAccessorForCBThread.getLight(x, y, z), 0));
             } else {
                 var min = Math.min(oldLightHeight, newLightHeight);
                 var max = Math.max(oldLightHeight, newLightHeight);
@@ -379,24 +410,24 @@ public class AllayLightService implements LightService {
                 // Remove old skylight sources responsible for horizontal skylight propagation
                 for (int i = min; i <= max; i++) {
                     var skyLightSourceY = i;
-                    if (getWithoutChunkCheck(skyLightInBorder, x, skyLightSourceY, z) == 15) {
+                    if (lightDataAccessorForCBThread.getLight(x, skyLightSourceY, z) == 15) {
                         skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, skyLightSourceY, z, 15, 0));
                     }
                     for (var face : BlockFace.getHorizontalBlockFaces()) {
                         var ox = x + face.getOffset().x();
                         var oz = z + face.getOffset().z();
-                        if (getWithoutChunkCheck(skyLightInBorder, ox, skyLightSourceY, oz) == 15) {
+                        if (lightDataAccessorForCBThread.getLight(ox, skyLightSourceY, oz) == 15) {
                             skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(ox, skyLightSourceY, oz, 15, 0));
                         }
                     }
                 }
 
                 // Recalculate skylight
-                calculateSkyLightAt(x, z, skyLightUpdateQueue::offer);
+                calculateSkyLightAt(x, z);
                 for (var face : BlockFace.getHorizontalBlockFaces()) {
                     var neighborX = x + face.getOffset().x();
                     var neighborZ = z + face.getOffset().z();
-                    calculateSkyLightAt(neighborX, neighborZ, skyLightUpdateQueue::offer);
+                    calculateSkyLightAt(neighborX, neighborZ);
                 }
             }
         });
@@ -438,19 +469,29 @@ public class AllayLightService implements LightService {
             chunks.remove(hash);
             awaitingLightCalculationChunks.remove(hash);
 
-            // Add the neighbor chunk to the awaiting light calculation chunks, since their
-            // neighbor chunk has been unloaded. Once the neighbor chunk is loaded back, the
-            // light in these chunks will be recalculated
+            // Add the loaded neighbor chunk to the awaiting light calculation chunks, since
+            // their neighbor chunk has been unloaded. Once the neighbor chunk is loaded back,
+            // the light in these chunks will be recalculated
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
                     if (i == 0 && j == 0) {
                         continue;
                     }
 
-                    awaitingLightCalculationChunks.add(HashUtils.hashXZ(chunk.getX() + i, chunk.getZ() + j));
+                    var neighborChunkHash = HashUtils.hashXZ(chunk.getX() + i, chunk.getZ() + j);
+                    if (chunks.contains(neighborChunkHash) && !awaitingLightCalculationChunks.contains(neighborChunkHash)) {
+                        awaitingLightCalculationChunks.add(neighborChunkHash);
+                        resetBlockAndSkyLightInChunk(neighborChunkHash);
+                    }
                 }
             }
         });
+    }
+
+    protected void resetBlockAndSkyLightInChunk(long hash) {
+        for (var array : blockLight.get(hash)) {
+            array.reset();
+        }
     }
 
     @Override
@@ -488,10 +529,6 @@ public class AllayLightService implements LightService {
         array[(y - dimensionInfo.minHeight()) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
-    protected int getLightDampening(int x, int y, int z) {
-        return getWithoutChunkCheck(lightDampening, x, y, z);
-    }
-
     protected void setLightDampening(int x, int y, int z, int value) {
         setWithoutChunkCheck(lightDampening, x, y, z, value);
         if (!dimensionInfo.hasSkyLight()) {
@@ -503,7 +540,7 @@ public class AllayLightService implements LightService {
         if (value == 0 && currentLightHeight >= y + 1) {
             short newLightHeight = (short) dimensionInfo.minHeight();
             for (short i = currentLightHeight; i >= dimensionInfo.minHeight(); i--) {
-                if (getLightDampening(x, i, z) != 0) {
+                if (lightDataAccessorForCBThread.getLightDampening(x, i, z) != 0) {
                     newLightHeight = (short) (i + 1);
                     break;
                 }
@@ -512,14 +549,6 @@ public class AllayLightService implements LightService {
         } else if (currentLightHeight <= y) {
             setLightHeight(x, z, (short) (y + 1));
         }
-    }
-
-    protected int getLightEmission(int x, int y, int z) {
-        return getWithoutChunkCheck(lightEmission, x, y, z);
-    }
-
-    protected void setLightEmission(int x, int y, int z, int value) {
-        setWithoutChunkCheck(lightEmission, x, y, z, value);
     }
 
     @VisibleForTesting
@@ -558,59 +587,5 @@ public class AllayLightService implements LightService {
 
     protected static byte unpackLightDampening(byte data) {
         return (byte) ((data >> 4) & 0x0F);
-    }
-
-    protected class BlockLightDataAccessor implements LightDataAccessor {
-        @Override
-        public int getLight(int x, int y, int z) {
-            return getWithoutChunkCheck(blockLight, x, y, z);
-        }
-
-        @Override
-        public int getLightDampening(int x, int y, int z) {
-            return getWithoutChunkCheck(lightDampening, x, y, z);
-        }
-
-        @Override
-        public void setLight(int x, int y, int z, int lightValue) {
-            setWithoutChunkCheck(blockLight, x, y, z, lightValue);
-        }
-
-        @Override
-        public boolean isChunkLoaded(int cx, int cz) {
-            return chunks.contains(HashUtils.hashXZ(cx, cz));
-        }
-
-        @Override
-        public boolean isYInRange(int y) {
-            return y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight();
-        }
-    }
-
-    protected class SkyLightDataAccessor implements LightDataAccessor {
-        @Override
-        public int getLight(int x, int y, int z) {
-            return getWithoutChunkCheck(skyLightInBorder, x, y, z);
-        }
-
-        @Override
-        public int getLightDampening(int x, int y, int z) {
-            return getWithoutChunkCheck(lightDampening, x, y, z);
-        }
-
-        @Override
-        public void setLight(int x, int y, int z, int lightValue) {
-            setWithoutChunkCheck(skyLightInBorder, x, y, z, lightValue);
-        }
-
-        @Override
-        public boolean isChunkLoaded(int cx, int cz) {
-            return chunks.contains(HashUtils.hashXZ(cx, cz));
-        }
-
-        @Override
-        public boolean isYInRange(int y) {
-            return y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight();
-        }
     }
 }

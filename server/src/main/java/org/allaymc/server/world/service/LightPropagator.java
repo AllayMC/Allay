@@ -44,7 +44,7 @@ public class LightPropagator {
                 var ox = x + offset.x();
                 var oy = y + offset.y();
                 var oz = z + offset.z();
-                if (!lightDataAccessor.isYInRange(oy) || ((ox >> 4 != x >> 4 || oz >> 4 != z >> 4) && !lightDataAccessor.isChunkLoaded(ox >> 4, oz >> 4))) {
+                if (!lightDataAccessor.isYInRange(oy)) {
                     continue;
                 }
                 int neighborLightValue = lightDataAccessor.getLight(ox, oy, oz);
@@ -74,7 +74,7 @@ public class LightPropagator {
                 var ox = x + offset.x();
                 var oy = y + offset.y();
                 var oz = z + offset.z();
-                if (!lightDataAccessor.isYInRange(oy) || ((ox >> 4 != x >> 4 || oz >> 4 != z >> 4) && !lightDataAccessor.isChunkLoaded(ox >> 4, oz >> 4))) {
+                if (!lightDataAccessor.isYInRange(oy)) {
                     continue;
                 }
                 int currentNeighborLightValue = lightDataAccessor.getLight(ox, oy, oz);
