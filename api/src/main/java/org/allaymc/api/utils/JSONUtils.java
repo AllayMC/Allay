@@ -254,7 +254,7 @@ public class JSONUtils {
      */
     public static <V> V fromLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
-        reader.setLenient(true);
+        reader.setStrictness(Strictness.LENIENT);
         return GSON.fromJson(reader, type);
     }
 
@@ -268,7 +268,7 @@ public class JSONUtils {
      */
     public static <V> V fromLenient(InputStream inputStream, TypeToken<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
-        reader.setLenient(true);
+        reader.setStrictness(Strictness.LENIENT);
         return GSON.fromJson(reader, type);
     }
 
@@ -282,7 +282,7 @@ public class JSONUtils {
      */
     public static <V> List<V> fromListLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
-        reader.setLenient(true);
+        reader.setStrictness(Strictness.LENIENT);
         TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
         return GSON.fromJson(reader, typeToken.getType());
     }
@@ -298,7 +298,7 @@ public class JSONUtils {
     public static <V> V fromLenient(File file, Class<V> type) {
         try {
             JsonReader reader = new JsonReader(new FileReader(file));
-            reader.setLenient(true);
+            reader.setStrictness(Strictness.LENIENT);
             return GSON.fromJson(reader, type);
         } catch (FileNotFoundException e) {
             throw new GsonException("gson lenient from error, file path: {}, type: {}", file.getPath(), type, e);
@@ -316,7 +316,7 @@ public class JSONUtils {
     public static <V> List<V> fromListLenient(File file, Class<V> type) {
         try {
             JsonReader reader = new JsonReader(new FileReader(file));
-            reader.setLenient(true);
+            reader.setStrictness(Strictness.LENIENT);
             TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
             return GSON.fromJson(reader, typeToken.getType());
         } catch (FileNotFoundException e) {
@@ -337,7 +337,7 @@ public class JSONUtils {
             return null;
         }
         JsonReader reader = new JsonReader(new StringReader(json));
-        reader.setLenient(true);
+        reader.setStrictness(Strictness.LENIENT);
         return GSON.fromJson(reader, type);
     }
 
@@ -354,7 +354,7 @@ public class JSONUtils {
             return null;
         }
         JsonReader reader = new JsonReader(new StringReader(json));
-        reader.setLenient(true);
+        reader.setStrictness(Strictness.LENIENT);
         return GSON.fromJson(reader, type);
     }
 
@@ -371,7 +371,7 @@ public class JSONUtils {
             return null;
         }
         JsonReader reader = new JsonReader(new StringReader(json));
-        reader.setLenient(true);
+        reader.setStrictness(Strictness.LENIENT);
         return GSON.fromJson(reader, typeToken.getType());
     }
 
@@ -388,7 +388,7 @@ public class JSONUtils {
             return null;
         }
         JsonReader reader = new JsonReader(new StringReader(json));
-        reader.setLenient(true);
+        reader.setStrictness(Strictness.LENIENT);
         TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
         return GSON.fromJson(reader, typeToken.getType());
     }

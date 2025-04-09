@@ -27,7 +27,7 @@ public class LightServiceJMHTest {
     public void setup() throws MissingImplementationException {
         Allay.initI18n();
         Allay.initAllay();
-        lightService = new AllayLightService(DimensionInfo.THE_END, () -> 0, () -> Set.of(Weather.CLEAR));
+        lightService = new AllayLightService(DimensionInfo.THE_END, "test_world", () -> true, () -> 0, () -> Set.of(Weather.CLEAR));
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 lightService.onChunkLoad(
@@ -39,19 +39,19 @@ public class LightServiceJMHTest {
                 );
             }
         }
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
         for (int x = -3 * 16; x <= 3 * 16; x++) {
             for (int z = -3 * 16; z <= 3 * 16; z++) {
                 lightService.onBlockChange(x, 0, z, 0, 15);
             }
         }
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
     }
 
     @Benchmark
     public void testPlaceAndRemoveLight() {
         lightService.onBlockChange(0, 1, 0, 15, 0);
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
     }
 }
