@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Implemented ladder, infested blocks, ice, snow, sea lantern, dead bush and end portal frame.
 - Implemented basic functional for scaffolding.
 - Implemented chorus plant & flower.
+- Implemented walls.
 
 ### Changed
 

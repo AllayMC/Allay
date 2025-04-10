@@ -1651,4 +1651,41 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockDeadbushBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initWalls() {
+        BlockTypes.ANDESITE_WALL = buildWall(BlockId.ANDESITE_WALL);
+        BlockTypes.BLACKSTONE_WALL = buildWall(BlockId.BLACKSTONE_WALL);
+        BlockTypes.BRICK_WALL = buildWall(BlockId.BRICK_WALL);
+        BlockTypes.COBBLED_DEEPSLATE_WALL = buildWall(BlockId.COBBLED_DEEPSLATE_WALL);
+        BlockTypes.COBBLESTONE_WALL = buildWall(BlockId.COBBLESTONE_WALL);
+        BlockTypes.DEEPSLATE_BRICK_WALL = buildWall(BlockId.DEEPSLATE_BRICK_WALL);
+        BlockTypes.DEEPSLATE_TILE_WALL = buildWall(BlockId.DEEPSLATE_TILE_WALL);
+        BlockTypes.DIORITE_WALL = buildWall(BlockId.DIORITE_WALL);
+        BlockTypes.END_STONE_BRICK_WALL = buildWall(BlockId.END_STONE_BRICK_WALL);
+        BlockTypes.GRANITE_WALL = buildWall(BlockId.GRANITE_WALL);
+        BlockTypes.MOSSY_COBBLESTONE_WALL = buildWall(BlockId.MOSSY_COBBLESTONE_WALL);
+        BlockTypes.MOSSY_STONE_BRICK_WALL = buildWall(BlockId.MOSSY_STONE_BRICK_WALL);
+        BlockTypes.MUD_BRICK_WALL = buildWall(BlockId.MUD_BRICK_WALL);
+        BlockTypes.NETHER_BRICK_WALL = buildWall(BlockId.NETHER_BRICK_WALL);
+        BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL = buildWall(BlockId.POLISHED_BLACKSTONE_BRICK_WALL);
+        BlockTypes.POLISHED_BLACKSTONE_WALL = buildWall(BlockId.POLISHED_BLACKSTONE_WALL);
+        BlockTypes.POLISHED_DEEPSLATE_WALL = buildWall(BlockId.POLISHED_DEEPSLATE_WALL);
+        BlockTypes.POLISHED_TUFF_WALL = buildWall(BlockId.POLISHED_TUFF_WALL);
+        BlockTypes.PRISMARINE_WALL = buildWall(BlockId.PRISMARINE_WALL);
+        BlockTypes.RED_NETHER_BRICK_WALL = buildWall(BlockId.RED_NETHER_BRICK_WALL);
+        BlockTypes.RED_SANDSTONE_WALL = buildWall(BlockId.RED_SANDSTONE_WALL);
+        BlockTypes.RESIN_BRICK_WALL = buildWall(BlockId.RESIN_BRICK_WALL);
+        BlockTypes.SANDSTONE_WALL = buildWall(BlockId.SANDSTONE_WALL);
+        BlockTypes.STONE_BRICK_WALL = buildWall(BlockId.STONE_BRICK_WALL);
+        BlockTypes.TUFF_BRICK_WALL = buildWall(BlockId.TUFF_BRICK_WALL);
+        BlockTypes.TUFF_WALL = buildWall(BlockId.TUFF_WALL);
+    }
+
+    public static BlockType<BlockWallBehavior> buildWall(BlockId blockId) {
+        return AllayBlockType.builder(BlockWallBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
+                .setBaseComponentSupplier(BlockWallBaseComponentImpl::new)
+                .build();
+    }
 }
