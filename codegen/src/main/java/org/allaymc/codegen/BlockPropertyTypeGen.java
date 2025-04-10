@@ -142,6 +142,14 @@ public class BlockPropertyTypeGen {
             List<String> values;
 
             public String getEnumClassName() {
+                // Special cases, because values equals
+                if (serializationName.contains("wall_connection_type_")) {
+                    return "WallConnectionType";
+                }
+                if (serializationName.contains("pale_moss_carpet_side_")) {
+                    return "PaleMossCarpetSide";
+                }
+
                 //minecraft:cardinal_direction WTF???
                 return convertToPascalCase(serializationName.replace(":", "_"));
             }

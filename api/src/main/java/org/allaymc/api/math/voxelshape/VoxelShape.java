@@ -3,6 +3,7 @@ package org.allaymc.api.math.voxelshape;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import org.allaymc.api.block.data.BlockFace;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  * @author daoge_cmd
  */
 @Getter
+@ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VoxelShape {
 

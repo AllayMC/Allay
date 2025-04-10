@@ -4,7 +4,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
-import org.allaymc.api.item.component.tool.ItemToolComponent;
+import org.allaymc.api.item.component.ItemToolComponent;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.item.component.event.CItemAttackEntityEvent;

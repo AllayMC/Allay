@@ -73,7 +73,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ACACIA_PRESSURE_PLATE == null) {
             BlockTypes.ACACIA_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockAcaciaPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.ACACIA_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -328,7 +328,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO_PRESSURE_PLATE == null) {
             BlockTypes.BAMBOO_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockBambooPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.BAMBOO_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -513,7 +513,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BIRCH_PRESSURE_PLATE == null) {
             BlockTypes.BIRCH_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockBirchPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.BIRCH_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -1170,7 +1170,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CHERRY_PRESSURE_PLATE == null) {
             BlockTypes.CHERRY_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockCherryPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.CHERRY_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -1431,28 +1431,28 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COLORED_TORCH_BLUE == null) {
             BlockTypes.COLORED_TORCH_BLUE = AllayBlockType
-                    .builder(BlockColoredTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.COLORED_TORCH_BLUE)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
         }
         if (BlockTypes.COLORED_TORCH_GREEN == null) {
             BlockTypes.COLORED_TORCH_GREEN = AllayBlockType
-                    .builder(BlockColoredTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.COLORED_TORCH_GREEN)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
         }
         if (BlockTypes.COLORED_TORCH_PURPLE == null) {
             BlockTypes.COLORED_TORCH_PURPLE = AllayBlockType
-                    .builder(BlockColoredTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.COLORED_TORCH_PURPLE)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
         }
         if (BlockTypes.COLORED_TORCH_RED == null) {
             BlockTypes.COLORED_TORCH_RED = AllayBlockType
-                    .builder(BlockColoredTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.COLORED_TORCH_RED)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
@@ -1654,7 +1654,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRIMSON_PRESSURE_PLATE == null) {
             BlockTypes.CRIMSON_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockCrimsonPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.CRIMSON_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -1918,7 +1918,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DARK_OAK_PRESSURE_PLATE == null) {
             BlockTypes.DARK_OAK_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockDarkOakPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.DARK_OAK_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -3905,7 +3905,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE == null) {
             BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockHeavyWeightedPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.HEAVY_WEIGHTED_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -4130,7 +4130,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.JUNGLE_PRESSURE_PLATE == null) {
             BlockTypes.JUNGLE_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockJunglePressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.JUNGLE_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -4495,7 +4495,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE == null) {
             BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockLightWeightedPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.LIGHT_WEIGHTED_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -4786,7 +4786,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MANGROVE_PRESSURE_PLATE == null) {
             BlockTypes.MANGROVE_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockMangrovePressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.MANGROVE_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -5471,7 +5471,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PALE_OAK_PRESSURE_PLATE == null) {
             BlockTypes.PALE_OAK_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockPaleOakPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.PALE_OAK_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -5780,7 +5780,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE == null) {
             BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockPolishedBlackstonePressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -6401,7 +6401,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.REDSTONE_TORCH == null) {
             BlockTypes.REDSTONE_TORCH = AllayBlockType
-                    .builder(BlockRedstoneTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.REDSTONE_TORCH)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
@@ -6829,7 +6829,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SOUL_TORCH == null) {
             BlockTypes.SOUL_TORCH = AllayBlockType
-                    .builder(BlockSoulTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.SOUL_TORCH)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
@@ -6909,7 +6909,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SPRUCE_PRESSURE_PLATE == null) {
             BlockTypes.SPRUCE_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockSprucePressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.SPRUCE_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -7040,7 +7040,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.STONE_PRESSURE_PLATE == null) {
             BlockTypes.STONE_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockStonePressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.STONE_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -7308,13 +7308,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TORCHFLOWER == null) {
             BlockTypes.TORCHFLOWER = AllayBlockType
-                    .builder(BlockTorchflowerBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.TORCHFLOWER)
                     .build();
         }
         if (BlockTypes.TORCHFLOWER_CROP == null) {
             BlockTypes.TORCHFLOWER_CROP = AllayBlockType
-                    .builder(BlockTorchflowerCropBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.TORCHFLOWER_CROP)
                     .setProperties(BlockPropertyTypes.GROWTH)
                     .build();
@@ -7471,7 +7471,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.UNDERWATER_TORCH == null) {
             BlockTypes.UNDERWATER_TORCH = AllayBlockType
-                    .builder(BlockUnderwaterTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.UNDERWATER_TORCH)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
@@ -7490,7 +7490,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.UNLIT_REDSTONE_TORCH == null) {
             BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                    .builder(BlockRedstoneTorchBehaviorImpl.class)
+                    .builder(BlockTorchBehaviorImpl.class)
                     .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
                     .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
@@ -7612,7 +7612,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WARPED_PRESSURE_PLATE == null) {
             BlockTypes.WARPED_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockWarpedPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WARPED_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -8151,7 +8151,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WOODEN_PRESSURE_PLATE == null) {
             BlockTypes.WOODEN_PRESSURE_PLATE = AllayBlockType
-                    .builder(BlockWoodenPressurePlateBehaviorImpl.class)
+                    .builder(BlockPressurePlateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WOODEN_PRESSURE_PLATE)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();

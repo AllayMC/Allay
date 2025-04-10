@@ -5,14 +5,12 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
-import org.joml.Vector3ic;
 
 /**
  * @author daoge_cmd
  */
 @Getter
 public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
-    protected Vector3ic blockPos;
     /**
      * Can be null
      */

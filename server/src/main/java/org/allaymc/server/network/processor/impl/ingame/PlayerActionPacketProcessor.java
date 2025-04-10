@@ -3,6 +3,7 @@ package org.allaymc.server.network.processor.impl.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
@@ -60,15 +61,19 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
 
                 var pos = packet.getBlockPosition();
                 var world = player.getDimension();
+                var itemInHand = player.getItemInHand();
                 var oldState = world.getBlockState(pos.getX(), pos.getY(), pos.getZ());
+                if (!world.breakBlock(pos.getX(), pos.getY(), pos.getZ(), itemInHand, player)) {
+                    world.sendBlockUpdateTo(oldState, MathUtils.CBVecToJOMLVec(pos), 0, player);
+                    yield PacketSignal.HANDLED;
+                }
+
                 var pk = new LevelEventPacket();
                 pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
                 pk.setPosition(Vector3f.from(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f));
                 pk.setData(oldState.blockStateHash());
                 player.getCurrentChunk().addChunkPacket(pk);
 
-                var itemInHand = player.getItemInHand();
-                world.breakBlock(pos.getX(), pos.getY(), pos.getZ(), itemInHand, player);
                 itemInHand.onBreakBlock(oldState, player);
                 if (itemInHand.isBroken()) {
                     player.clearItemInHand();

@@ -693,9 +693,9 @@ public final class BlockTypeInitializer {
         BlockTypes.COLORED_TORCH_PURPLE = buildColoredTorch(BlockId.COLORED_TORCH_PURPLE);
     }
 
-    private static BlockType<BlockColoredTorchBehavior> buildColoredTorch(BlockId blockId) {
+    private static BlockType<BlockTorchBehavior> buildColoredTorch(BlockId blockId) {
         return AllayBlockType
-                .builder(BlockColoredTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
@@ -704,20 +704,20 @@ public final class BlockTypeInitializer {
 
     public static void initTorch() {
         BlockTypes.REDSTONE_TORCH = AllayBlockType
-                .builder(BlockRedstoneTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
         BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                .builder(BlockRedstoneTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
 
         BlockTypes.SOUL_TORCH = AllayBlockType
-                .builder(BlockSoulTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.SOUL_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
@@ -730,7 +730,7 @@ public final class BlockTypeInitializer {
                 .build();
 
         BlockTypes.UNDERWATER_TORCH = AllayBlockType
-                .builder(BlockUnderwaterTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNDERWATER_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
