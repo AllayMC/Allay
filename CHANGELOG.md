@@ -18,7 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added `DamageContainer#fallingBlock(float)`.
 - Added Glided Blackstone, Gravel and Glowstone drop.
-- Implemented ladder, infested blocks, ice, snow, sea lantern and end portal frame.
+- Implemented ladder, infested blocks, ice, snow, sea lantern, dead bush and end portal frame.
 - Implemented basic functional for scaffolding.
 - Implemented chorus plant & flower.
 
@@ -26,6 +26,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) `onFall()` now accepted `fallDistance`.
 - Refactored falling block system, see commit history for more info.
+- Replaced `PaleMossCarpetSide(FACE)` and `WallConnectionType(FACE)` to `PaleMossCarpetSide` and `WallConnectionType`.
 
 ### Fixed
 
@@ -36,6 +37,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
 - Fixed `SetTimePacket` spamming.
 - Fixed random bounds.
+- Fixed `BlockBreakEvent` cancelling.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 

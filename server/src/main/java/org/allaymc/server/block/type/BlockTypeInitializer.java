@@ -1643,4 +1643,12 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockChorusPlantBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initDeadBush() {
+        BlockTypes.DEADBUSH = AllayBlockType
+                .builder(BlockDeadbushBehaviorImpl.class)
+                .vanillaBlock(BlockId.DEADBUSH)
+                .setBaseComponentSupplier(BlockDeadbushBaseComponentImpl::new)
+                .build();
+    }
 }
