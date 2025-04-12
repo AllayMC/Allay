@@ -8,16 +8,16 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author IWareQ
  */
-public class ItemPoisonousPotatoBaseComponentImpl extends ItemFoodComponentImpl {
-    public ItemPoisonousPotatoBaseComponentImpl() {
+public class ItemChickenFoodComponentImpl extends ItemFoodComponentImpl {
+    public ItemChickenFoodComponentImpl() {
         super(2, 1.2f);
     }
 
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        if (0.6f >= ThreadLocalRandom.current().nextFloat()) {
-            player.addEffect(EffectTypes.POISON.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
+        if (0.3f >= ThreadLocalRandom.current().nextFloat()) {
+            player.addEffect(EffectTypes.HUNGER.createInstance(0, 30 * 20)); // 1 lvl, 30 seconds
         }
     }
 }

@@ -9,8 +9,8 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 /**
  * @author IWareQ
  */
-public class ItemChorusFruitBaseComponentImpl extends ItemFoodComponentImpl {
-    public ItemChorusFruitBaseComponentImpl() {
+public class ItemChorusFruitFoodComponentImpl extends ItemFoodComponentImpl {
+    public ItemChorusFruitFoodComponentImpl() {
         super(4, 2.4f);
     }
 

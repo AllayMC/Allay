@@ -8,8 +8,8 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author IWareQ
  */
-public class ItemRottenFleshBaseComponentImpl extends ItemFoodComponentImpl {
-    public ItemRottenFleshBaseComponentImpl() {
+public class ItemRottenFleshFoodComponentImpl extends ItemFoodComponentImpl {
+    public ItemRottenFleshFoodComponentImpl() {
         super(4, 0.8f);
     }
 

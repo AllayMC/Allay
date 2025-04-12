@@ -6,8 +6,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 /**
  * @author IWareQ
  */
-public class ItemSpiderEyeBaseComponentImpl extends ItemFoodComponentImpl {
-    public ItemSpiderEyeBaseComponentImpl() {
+public class ItemSpiderEyeFoodComponentImpl extends ItemFoodComponentImpl {
+    public ItemSpiderEyeFoodComponentImpl() {
         super(2, 3.2f);
     }
 

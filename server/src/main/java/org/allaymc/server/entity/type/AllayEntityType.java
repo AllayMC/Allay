@@ -1,7 +1,7 @@
 package org.allaymc.server.entity.type;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import me.sunlan.fastreflection.FastConstructor;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
@@ -10,7 +10,6 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 
@@ -31,11 +30,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     @Getter
     protected Identifier identifier;
 
-    @SneakyThrows
-    protected AllayEntityType(
-            Function<EntityInitInfo, T> instanceCreator,
-            Identifier identifier
-    ) {
+    protected AllayEntityType(Function<EntityInitInfo, T> instanceCreator, Identifier identifier) {
         this.instanceCreator = instanceCreator;
         this.identifier = identifier;
     }
@@ -44,7 +39,6 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         return new Builder(clazz);
     }
 
-    @SneakyThrows
     @Override
     public T createEntity(EntityInitInfo info) {
         info.setEntityType(this);
@@ -75,35 +69,34 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
             return this;
         }
 
-        public Builder setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
-            if (componentProviders == null)
-                throw new BlockTypeBuildException("Component providers cannot be null");
-            this.componentProviders = new HashMap<>(componentProviders);
+        public Builder setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> providers) {
+            Preconditions.checkNotNull(providers, "providers");
+            this.componentProviders = new HashMap<>(providers);
             return this;
         }
 
-        public Builder addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
-            this.componentProviders.putAll(componentProviders);
+        public Builder addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> providers) {
+            this.componentProviders.putAll(providers);
             return this;
         }
 
         public Builder addComponent(Function<EntityInitInfo, ? extends EntityComponent> provider, Class<?> componentClass) {
-            var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
+            var p = new ComponentProvider.Simple<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
-        public Builder addComponent(ComponentProvider<? extends EntityComponent> p) {
-            this.componentProviders.put(p.findComponentIdentifier(), p);
+        public Builder addComponent(ComponentProvider<? extends EntityComponent> provider) {
+            this.componentProviders.put(provider.findComponentIdentifier(), provider);
             return this;
         }
 
-        public Builder setComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
-            return setComponents(toMap(componentProviders));
+        public Builder setComponents(List<ComponentProvider<? extends EntityComponent>> providers) {
+            return setComponents(toMap(providers));
         }
 
-        public Builder addComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
-            return addComponents(toMap(componentProviders));
+        public Builder addComponents(List<ComponentProvider<? extends EntityComponent>> providers) {
+            return addComponents(toMap(providers));
         }
 
         public Builder addComponent(Supplier<? extends EntityComponent> supplier, Class<?> componentClass) {
@@ -111,19 +104,18 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         public <T extends Entity> EntityType<T> build() {
+            Preconditions.checkNotNull(identifier, "identifier");
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
                 addComponent(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
             }
-            if (identifier == null) {
-                throw new EntityTypeBuildException("identifier cannot be null!");
-            }
+
             Function<EntityInitInfo, T> instanceCreator;
             try {
-                var fastMemberConstructor = FastConstructor.create(clazz.getConstructors()[0]);
+                var constructor = FastConstructor.create(clazz.getConstructor(EntityInitInfo.class, List.class));
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {
-                        return (T) fastMemberConstructor.invoke(info, componentProviderList);
+                        return (T) constructor.invoke(info, componentProviderList);
                     } catch (Throwable t) {
                         throw new EntityTypeBuildException("Failed to create block entity instance!", t);
                     }

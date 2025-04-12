@@ -1,6 +1,8 @@
 package org.allaymc.api.entity.data;
 
 import lombok.Getter;
+import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
 /**
@@ -274,5 +276,9 @@ public enum EntityId {
     EntityId(String identifier, int networkId) {
         this.identifier = new Identifier(identifier);
         this.networkId = networkId;
+    }
+
+    public EntityType<?> getEntityType() {
+        return Registries.ENTITIES.get(this.getIdentifier());
     }
 }

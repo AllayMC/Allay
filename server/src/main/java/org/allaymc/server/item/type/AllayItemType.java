@@ -1,8 +1,8 @@
 package org.allaymc.server.item.type;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
 import org.allaymc.api.block.type.BlockType;
@@ -48,7 +48,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final ItemComponentData itemComponentData;
     private final Supplier<BlockType<?>> blockType;
 
-    @SneakyThrows
     private AllayItemType(
             Function<ItemStackInitInfo, T> instanceCreator, Identifier identifier,
             int runtimeId, Set<ItemTag> itemTags, ItemData itemData, ItemComponentData itemComponentData
@@ -66,11 +65,12 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         return new Builder(clazz);
     }
 
-    @SneakyThrows
     @Override
     public T createItemStack(ItemStackInitInfo info) {
         // "info" for ItemAirType is useless and can be null
-        if (info != null) info.setItemType(this);
+        if (info != null) {
+            info.setItemType(this);
+        }
         return instanceCreator.apply(info);
     }
 
@@ -101,8 +101,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected ItemComponentData itemComponentData = ItemComponentData.DEFAULT;
 
         public Builder(Class<?> clazz) {
-            if (clazz == null)
-                throw new ItemTypeBuildException("Interface class cannot be null!");
             this.clazz = clazz;
         }
 
@@ -170,7 +168,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         public Builder addComponent(Function<ItemStackInitInfo, ? extends ItemComponent> provider, Class<?> componentClass) {
-            var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
+            var p = new ComponentProvider.Simple<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
@@ -194,12 +192,9 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         public <T extends ItemStack> ItemType<T> build() {
+            Preconditions.checkNotNull(identifier, "identifier");
             if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER)) {
                 addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
-            }
-
-            if (identifier == null) {
-                throw new ItemTypeBuildException("identifier cannot be null!");
             }
             if (runtimeId == Integer.MAX_VALUE) {
                 runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
@@ -207,11 +202,11 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
             Function<ItemStackInitInfo, T> instanceCreator;
             try {
-                var fastMemberConstructor = FastConstructor.create(clazz.getConstructors()[0]);
+                var constructor = FastConstructor.create(clazz.getConstructor(ItemStackInitInfo.class, List.class));
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {
-                        return (T) fastMemberConstructor.invoke(info, componentProviderList);
+                        return (T) constructor.invoke(info, componentProviderList);
                     } catch (Throwable t) {
                         throw new ItemTypeBuildException("Failed to create item stack instance!", t);
                     }

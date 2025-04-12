@@ -6,8 +6,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 /**
  * @author IWareQ
  */
-public class ItemEnchantedGoldenAppleBaseComponentImpl extends ItemFoodComponentImpl {
-    public ItemEnchantedGoldenAppleBaseComponentImpl() {
+public class ItemEnchantedGoldenAppleFoodComponentImpl extends ItemFoodComponentImpl {
+    public ItemEnchantedGoldenAppleFoodComponentImpl() {
         super(4, 9.6f);
     }
 

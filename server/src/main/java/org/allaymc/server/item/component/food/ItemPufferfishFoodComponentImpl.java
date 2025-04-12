@@ -6,8 +6,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 /**
  * @author IWareQ
  */
-public class ItemPufferfishBaseComponentImpl extends ItemFoodComponentImpl {
-    public ItemPufferfishBaseComponentImpl() {
+public class ItemPufferfishFoodComponentImpl extends ItemFoodComponentImpl {
+    public ItemPufferfishFoodComponentImpl() {
         super(1, 0.2f);
     }
 
