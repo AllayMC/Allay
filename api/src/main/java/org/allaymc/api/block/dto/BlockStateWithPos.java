@@ -3,6 +3,7 @@ package org.allaymc.api.block.dto;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
@@ -67,7 +68,23 @@ public record BlockStateWithPos(
         return (T) dimension().getBlockEntity(pos);
     }
 
+    /**
+     * Updates a property of the block at the current position and layer.
+     *
+     * @param <DATATYPE>   the type of the property value.
+     * @param propertyType the type of the block property to update.
+     * @param value        the new value of the block property.
+     */
     public <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value) {
         dimension().updateBlockProperty(propertyType, value, pos, layer);
+    }
+
+    /**
+     * Checks whether the current block is air.
+     *
+     * @return {@code true} if the block type is {@link BlockTypes#AIR}, {@code false} otherwise.
+     */
+    public boolean isAir() {
+        return blockState.getBlockType() == BlockTypes.AIR;
     }
 }

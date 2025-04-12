@@ -24,43 +24,33 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
-
-        if (!isValidChorusPlantPosition(current)) {
+        if (!canBeSupportedAt(current)) {
             current.dimension().breakBlock(current.pos());
         }
     }
 
-    private boolean isValidChorusPlantPosition(BlockStateWithPos current) {
-        boolean hasHorizontalNeighbor = false;
-        boolean hasSupportFromNeighbor = false;
-
-        var blockBelow = current.offsetPos(BlockFace.DOWN);
-        var blockAbove = current.offsetPos(BlockFace.UP);
-
+    private boolean canBeSupportedAt(BlockStateWithPos current) {
+        boolean sideSupport = false;
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             var neighbor = current.offsetPos(face);
-
-            if (neighbor.blockState().getBlockType() == BlockTypes.CHORUS_PLANT) {
-                if (!hasHorizontalNeighbor) {
-                    if (blockAbove.blockState().getBlockType() != BlockTypes.AIR && blockBelow.blockState().getBlockType() != BlockTypes.AIR) {
-                        return false;
-                    }
-
-                    hasHorizontalNeighbor = true;
-                }
-
-                var supportBlock = neighbor.offsetPos(BlockFace.DOWN);
-                if (supportBlock.blockState().getBlockType() == BlockTypes.CHORUS_PLANT || supportBlock.blockState().getBlockType() == BlockTypes.END_STONE) {
-                    hasSupportFromNeighbor = true;
-                }
+            if (neighbor.blockState().getBlockType() == BlockTypes.CHORUS_PLANT && hasDownSupport(neighbor)) {
+                sideSupport = true;
+                break;
             }
         }
 
-        if (hasHorizontalNeighbor && hasSupportFromNeighbor) {
-            return true;
+        if (sideSupport) {
+            var upperBlocked = !current.offsetPos(BlockFace.UP).isAir();
+            var downBlocked = !current.offsetPos(BlockFace.DOWN).isAir();
+            return !(upperBlocked && downBlocked);
+        } else {
+            return hasDownSupport(current);
         }
+    }
 
-        return blockBelow.blockState().getBlockType() == BlockTypes.CHORUS_PLANT || blockBelow.blockState().getBlockType() == BlockTypes.END_STONE;
+    private boolean hasDownSupport(BlockStateWithPos current) {
+        var downType = current.offsetPos(BlockFace.DOWN).blockState().getBlockType();
+        return downType == BlockTypes.CHORUS_PLANT || downType == BlockTypes.END_STONE;
     }
 
     @Override
