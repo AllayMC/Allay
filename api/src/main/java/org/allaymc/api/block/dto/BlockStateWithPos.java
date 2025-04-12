@@ -1,6 +1,7 @@
 package org.allaymc.api.block.dto;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.math.position.Position3i;
@@ -64,5 +65,9 @@ public record BlockStateWithPos(
      */
     public <T extends BlockEntity> T getBlockEntity() {
         return (T) dimension().getBlockEntity(pos);
+    }
+
+    public <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value) {
+        dimension().updateBlockProperty(propertyType, value, pos, layer);
     }
 }

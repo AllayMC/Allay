@@ -27,7 +27,7 @@ public class BlockChestBaseComponentImpl extends BlockBaseComponentImpl {
         super.afterPlaced(oldBlockState, newBlockState, placementInfo);
 
         var direction = newBlockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
-        var blockFace = BlockFace.fromMinecraftCardinalDirection(direction);
+        var blockFace = BlockFace.from(direction);
         var thisChest = blockEntityHolderComponent.getBlockEntity(oldBlockState.pos());
 
         if (placementInfo != null && placementInfo.player().isSneaking()) {

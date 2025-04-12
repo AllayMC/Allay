@@ -55,10 +55,10 @@ public final class BlockPlaceHelper {
             return blockState;
         }
 
-        return blockState.setPropertyValue(PILLAR_AXIS, switch (placementInfo.blockFace()) {
-            case EAST, WEST -> PillarAxis.X;
-            case DOWN, UP -> PillarAxis.Y;
-            case NORTH, SOUTH -> PillarAxis.Z;
+        return blockState.setPropertyValue(PILLAR_AXIS, switch (placementInfo.blockFace().getAxis()) {
+            case X -> PillarAxis.X;
+            case Y -> PillarAxis.Y;
+            case Z -> PillarAxis.Z;
         });
     }
 

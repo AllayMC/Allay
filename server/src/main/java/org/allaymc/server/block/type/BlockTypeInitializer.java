@@ -1688,4 +1688,27 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockWallBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initFenceGates() {
+        BlockTypes.ACACIA_FENCE_GATE = buildFenceGate(BlockId.ACACIA_FENCE_GATE);
+        BlockTypes.BAMBOO_FENCE_GATE = buildFenceGate(BlockId.BAMBOO_FENCE_GATE);
+        BlockTypes.BIRCH_FENCE_GATE = buildFenceGate(BlockId.BIRCH_FENCE_GATE);
+        BlockTypes.CHERRY_FENCE_GATE = buildFenceGate(BlockId.CHERRY_FENCE_GATE);
+        BlockTypes.CRIMSON_FENCE_GATE = buildFenceGate(BlockId.CRIMSON_FENCE_GATE);
+        BlockTypes.DARK_OAK_FENCE_GATE = buildFenceGate(BlockId.DARK_OAK_FENCE_GATE);
+        BlockTypes.FENCE_GATE = buildFenceGate(BlockId.FENCE_GATE);
+        BlockTypes.JUNGLE_FENCE_GATE = buildFenceGate(BlockId.JUNGLE_FENCE_GATE);
+        BlockTypes.MANGROVE_FENCE_GATE = buildFenceGate(BlockId.MANGROVE_FENCE_GATE);
+        BlockTypes.PALE_OAK_FENCE_GATE = buildFenceGate(BlockId.PALE_OAK_FENCE_GATE);
+        BlockTypes.SPRUCE_FENCE_GATE = buildFenceGate(BlockId.SPRUCE_FENCE_GATE);
+        BlockTypes.WARPED_FENCE_GATE = buildFenceGate(BlockId.WARPED_FENCE_GATE);
+    }
+
+    public static BlockType<BlockFenceGateBehavior> buildFenceGate(BlockId blockId) {
+        return AllayBlockType.builder(BlockFenceGateBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
+                .setBaseComponentSupplier(BlockFenceGateBaseComponentImpl::new)
+                .build();
+    }
 }

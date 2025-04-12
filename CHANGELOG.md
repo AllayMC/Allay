@@ -17,11 +17,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added `DamageContainer#fallingBlock(float)`.
+- (API) Added `BlockStateWithPos#updateBlockProperty(BlockPropertyType<DATATYPE>, DATATYPE)` method.
 - Added Glided Blackstone, Gravel and Glowstone drop.
-- Implemented ladder, infested blocks, ice, snow, sea lantern, dead bush and end portal frame.
-- Implemented basic functional for scaffolding.
-- Implemented chorus plant & flower.
-- Implemented walls.
+- Implemented ladder, infested blocks, ice, snow, sea lantern, dead bush and end portal frame behavior.
+- Implemented basic behavior for scaffolding.
+- Implemented chorus plant & flower behavior.
+- Implemented walls & fence gate behavior.
 
 ### Changed
 

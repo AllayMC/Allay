@@ -4,6 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
 import org.allaymc.api.block.interfaces.BlockSignBehavior;
 import org.allaymc.api.block.interfaces.BlockTorchBehavior;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
@@ -97,6 +98,11 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
 
     private boolean canConnect(BlockStateWithPos current, BlockFace face) {
         var neighbor = current.offsetPos(face).blockState();
+        if (neighbor.getBehavior() instanceof BlockFenceGateBehavior) {
+            var direction = neighbor.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
+            return BlockFace.from(direction).getAxis() != face.getAxis();
+        }
+
         var type = neighbor.getBlockType();
         return neighbor.getBehavior() instanceof BlockWallBehavior ||
                type == BlockTypes.IRON_BARS ||
