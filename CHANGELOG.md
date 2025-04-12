@@ -40,6 +40,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed `SetTimePacket` spamming.
 - Fixed random bounds.
 - Fixed `BlockBreakEvent` cancelling.
+- Fixed spam click bug.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 
