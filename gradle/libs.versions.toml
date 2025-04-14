@@ -13,7 +13,7 @@ network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", ve
 # State Updater
 stateupdater = { group = "org.allaymc", name = "stateupdater", version = "master-SNAPSHOT" }
 # Collections
-guava = { group = "com.google.guava", name = "guava", version = "33.4.6-jre" }
+guava = { group = "com.google.guava", name = "guava", version = "33.4.7-jre" }
 # Fastutil
 fastutil-object-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-int-maps", version.ref = "fastutil" }
 fastutil-object-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-reference-maps", version.ref = "fastutil" }
@@ -35,7 +35,7 @@ fastutil-short-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = 
 fastutil-byte-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "byte-object-maps", version.ref = "fastutil" }
 fastutil-io = { group = "org.cloudburstmc.fastutil", name = "io", version.ref = "fastutil" }
 # Serialization
-gson = { group = "com.google.code.gson", name = "gson", version = "2.12.1" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.13.0" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.4" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
@@ -44,7 +44,7 @@ semver4j = { group = "org.semver4j", name = "semver4j", version = "5.6.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.18.0" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.19.0" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.0" }
 # LevelDB
@@ -57,7 +57,7 @@ log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.
 # CLI dependencie
 mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 # Code generating
-javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.6.0" }
+javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.7.0" }
 # Reflections
 fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version = "8733a599fa" }
 # Math computing
@@ -71,12 +71,12 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 # Native Operating System and Hardware Information
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.0" }
 # GUI
-flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.4" }
+flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 # JUnit
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.12.1" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.12.2" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.1" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.12.2" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.17.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
@@ -84,7 +84,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.6.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.7.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
