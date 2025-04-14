@@ -62,17 +62,17 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
         var transactionType = packet.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
-                var clickBlockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
-                var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
-                // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
-                if (isSpamClick(clickPos, clickBlockPos, MathUtils.CBVecToJOMLVec(packet.getPlayerPosition()))) {
-                    break;
-                }
-
                 var blockFace = BlockFace.fromId(packet.getBlockFace());
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
+                        var clickBlockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
+                        var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
+                        // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
+                        if (isSpamClick(clickPos, clickBlockPos, MathUtils.CBVecToJOMLVec(packet.getPlayerPosition()))) {
+                            break;
+                        }
+
                         var dimension = player.getDimension();
                         var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE);
                         var placeBlockPos = clickedBlockStateReplaceable ? clickBlockPos : Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
@@ -81,6 +81,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 player, clickBlockPos,
                                 clickPos, blockFace
                         );
+
+                        player.setUsingItemInAir(false);
                         itemInHand.rightClickItemOn(dimension, placeBlockPos, interactInfo);
                         if (player.isUsingItemOnBlock()) {
                             if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {

@@ -27,11 +27,7 @@ public class BlockDeadbushBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        if (face != BlockFace.DOWN) {
-            return;
-        }
-
-        if (!canBeSupportedAt(neighbor.blockState())) {
+        if (face == BlockFace.DOWN && !canBeSupportedAt(neighbor.blockState())) {
             current.pos().dimension().breakBlock(current.pos());
         }
     }
@@ -40,6 +36,7 @@ public class BlockDeadbushBaseComponentImpl extends BlockBaseComponentImpl {
         var blockType = blockState.getBlockType();
         return blockState.getBehavior() instanceof BlockTerracottaBehavior ||
                blockType == SAND ||
+               blockType == RED_SAND ||
                blockType == DIRT ||
                blockType == PODZOL ||
                blockType == MUD ||

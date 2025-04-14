@@ -49,23 +49,23 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
                     dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.TOP));
                 }
             }
-            default -> {
-                dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, clickedPos.y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM));
-            }
+            default ->
+                    dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, clickedPos.y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM));
         }
         return true;
     }
 
+    // TODO: Fix combine
     @Override
     public boolean combine(Dimension dimension, BlockState blockState, Vector3ic combineBlockPos, PlayerInteractInfo placementInfo) {
-        var combineBlock = dimension.getBlockState(combineBlockPos);
-        if (combineBlock.getBlockType() != this.blockType) {
+        var existingBlock = dimension.getBlockState(combineBlockPos);
+        if (existingBlock.getBlockType() != this.blockType) {
             return false;
         }
 
-        var value = combineBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF);
-        if (value != (placementInfo.clickedPos().y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM)) {
-            // They are complementary
+        var existingHalf = existingBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF);
+        var clickedHalf = placementInfo.clickedPos().y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM;
+        if (existingHalf != clickedHalf) {
             dimension.setBlockState(combineBlockPos, getDoubleSlabBlockType().getDefaultState());
             return true;
         }

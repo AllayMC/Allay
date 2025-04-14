@@ -2,9 +2,11 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityJukebox;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3d;
 import org.allaymc.api.math.position.Position3i;
@@ -46,5 +48,14 @@ public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         return true;
+    }
+
+    @Override
+    public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        super.onBreak(blockState, usedItem, entity);
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.pos());
+        if (blockEntity instanceof BlockEntityJukebox jukebox) {
+            jukebox.stop();
+        }
     }
 }

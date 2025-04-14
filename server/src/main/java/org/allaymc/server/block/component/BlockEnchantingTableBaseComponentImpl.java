@@ -18,7 +18,9 @@ public class BlockEnchantingTableBaseComponentImpl extends BlockBaseComponentImp
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        if (super.onInteract(itemStack, dimension, interactInfo)) return true;
+        if (super.onInteract(itemStack, dimension, interactInfo)) {
+            return true;
+        }
 
         var player = interactInfo.player();
         if (player.isSneaking()) {

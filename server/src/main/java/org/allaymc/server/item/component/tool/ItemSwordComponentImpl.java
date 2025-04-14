@@ -19,10 +19,14 @@ public class ItemSwordComponentImpl implements ItemToolComponent {
     @EventHandler
     protected void onBreakBlock(CItemBreakBlockEvent event) {
         var entity = event.getBreaker();
-        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return;
+        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) {
+            return;
+        }
 
         var hardness = event.getBlock().getBlockStateData().hardness();
-        if (hardness == 0) return;
+        if (hardness == 0) {
+            return;
+        }
 
         baseComponent.tryIncreaseDamage(2);
     }

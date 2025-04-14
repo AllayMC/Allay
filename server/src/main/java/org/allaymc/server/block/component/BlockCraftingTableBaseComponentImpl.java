@@ -18,10 +18,14 @@ public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl 
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        if (super.onInteract(itemStack, dimension, interactInfo)) return true;
+        if (super.onInteract(itemStack, dimension, interactInfo)) {
+            return true;
+        }
 
         var player = interactInfo.player();
-        if (player.isSneaking()) return false;
+        if (player.isSneaking()) {
+            return false;
+        }
 
         var craftingTableContainer = player.getContainer(FullContainerType.CRAFTING_TABLE);
         craftingTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));

@@ -23,6 +23,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author daoge_cmd
  */
 public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
+    // TODO: add more entities or find a better way
+    protected static final Set<Identifier> VALID_ENTITIES = Set.of(EntityId.PLAYER.getIdentifier());
+
     public BlockFarmLandBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -89,9 +92,6 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
 
         return false;
     }
-
-    // TODO: add more entities or find a better way
-    protected static final Set<Identifier> VALID_ENTITIES = Set.of(EntityId.PLAYER.getIdentifier());
 
     @Override
     public void onEntityFallOn(Entity entity, BlockStateWithPos block) {

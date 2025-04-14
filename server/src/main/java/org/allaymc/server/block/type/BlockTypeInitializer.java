@@ -941,51 +941,51 @@ public final class BlockTypeInitializer {
     }
 
     public static void initWallSigns() {
-        BlockTypes.WALL_SIGN = buildWallSign(BlockId.WALL_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockId.ACACIA_WALL_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockId.BAMBOO_WALL_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockId.BIRCH_WALL_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockId.CHERRY_WALL_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockId.CRIMSON_WALL_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockId.DARKOAK_WALL_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockId.JUNGLE_WALL_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockId.MANGROVE_WALL_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockId.SPRUCE_WALL_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockId.WARPED_WALL_SIGN, ItemTypes.WARPED_SIGN);
-        BlockTypes.PALE_OAK_WALL_SIGN = buildWallSign(BlockId.PALE_OAK_WALL_SIGN, ItemTypes.PALE_OAK_SIGN);
+        BlockTypes.WALL_SIGN = buildWallSign(BlockId.WALL_SIGN, ItemId.OAK_SIGN);
+        BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockId.ACACIA_WALL_SIGN, ItemId.ACACIA_SIGN);
+        BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockId.BAMBOO_WALL_SIGN, ItemId.BAMBOO_SIGN);
+        BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockId.BIRCH_WALL_SIGN, ItemId.BIRCH_SIGN);
+        BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockId.CHERRY_WALL_SIGN, ItemId.CHERRY_SIGN);
+        BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockId.CRIMSON_WALL_SIGN, ItemId.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockId.DARKOAK_WALL_SIGN, ItemId.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockId.JUNGLE_WALL_SIGN, ItemId.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockId.MANGROVE_WALL_SIGN, ItemId.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockId.SPRUCE_WALL_SIGN, ItemId.SPRUCE_SIGN);
+        BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockId.WARPED_WALL_SIGN, ItemId.WARPED_SIGN);
+        BlockTypes.PALE_OAK_WALL_SIGN = buildWallSign(BlockId.PALE_OAK_WALL_SIGN, ItemId.PALE_OAK_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildWallSign(BlockId blockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildWallSign(BlockId blockId, ItemId dropItemId) {
         return AllayBlockType
                 .builder(BlockSignBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
-                .setBaseComponentSupplier(blockType -> new BlockWallSignBaseComponentImpl(blockType, dropItemType))
+                .setBaseComponentSupplier(blockType -> new BlockWallSignBaseComponentImpl(blockType, dropItemId))
                 .bindBlockEntity(BlockEntityTypes.SIGN)
                 .build();
     }
 
     public static void initStandingSigns() {
-        BlockTypes.STANDING_SIGN = buildStandingSign(BlockId.STANDING_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockId.ACACIA_STANDING_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockId.BAMBOO_STANDING_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockId.BIRCH_STANDING_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockId.CHERRY_STANDING_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockId.CRIMSON_STANDING_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockId.DARKOAK_STANDING_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockId.JUNGLE_STANDING_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockId.MANGROVE_STANDING_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockId.SPRUCE_STANDING_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockId.WARPED_STANDING_SIGN, ItemTypes.WARPED_SIGN);
-        BlockTypes.PALE_OAK_STANDING_SIGN = buildStandingSign(BlockId.PALE_OAK_STANDING_SIGN, ItemTypes.PALE_OAK_SIGN);
+        BlockTypes.STANDING_SIGN = buildStandingSign(BlockId.STANDING_SIGN, ItemId.OAK_SIGN);
+        BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockId.ACACIA_STANDING_SIGN, ItemId.ACACIA_SIGN);
+        BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockId.BAMBOO_STANDING_SIGN, ItemId.BAMBOO_SIGN);
+        BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockId.BIRCH_STANDING_SIGN, ItemId.BIRCH_SIGN);
+        BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockId.CHERRY_STANDING_SIGN, ItemId.CHERRY_SIGN);
+        BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockId.CRIMSON_STANDING_SIGN, ItemId.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockId.DARKOAK_STANDING_SIGN, ItemId.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockId.JUNGLE_STANDING_SIGN, ItemId.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockId.MANGROVE_STANDING_SIGN, ItemId.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockId.SPRUCE_STANDING_SIGN, ItemId.SPRUCE_SIGN);
+        BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockId.WARPED_STANDING_SIGN, ItemId.WARPED_SIGN);
+        BlockTypes.PALE_OAK_STANDING_SIGN = buildStandingSign(BlockId.PALE_OAK_STANDING_SIGN, ItemId.PALE_OAK_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(BlockId blockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(BlockId blockId, ItemId dropItemId) {
         return AllayBlockType
                 .builder(BlockSignBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
-                .setBaseComponentSupplier(blockType -> new BlockStandingSignBaseComponentImpl(blockType, dropItemType))
+                .setBaseComponentSupplier(blockType -> new BlockStandingSignBaseComponentImpl(blockType, dropItemId))
                 .bindBlockEntity(BlockEntityTypes.SIGN)
                 .build();
     }
@@ -1516,10 +1516,10 @@ public final class BlockTypeInitializer {
         BlockTypes.YELLOW_CONCRETE_POWDER = buildConcretePowder(BlockId.YELLOW_CONCRETE_POWDER, BlockId.YELLOW_CONCRETE);
     }
 
-    public static BlockType<BlockConcretePowderBehavior> buildConcretePowder(BlockId blockId, BlockId concreteBlockId) {
+    public static BlockType<BlockConcretePowderBehavior> buildConcretePowder(BlockId blockId, BlockId solidBlockId) {
         return AllayBlockType.builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(type -> new BlockConcretePowderBaseComponentImpl(type, concreteBlockId))
+                .setBaseComponentSupplier(type -> new BlockConcretePowderBaseComponentImpl(type, solidBlockId))
                 .addComponent(new BlockConcretePowderFallableComponentImpl())
                 .build();
     }
