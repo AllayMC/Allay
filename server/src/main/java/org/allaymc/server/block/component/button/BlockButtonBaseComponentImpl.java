@@ -44,12 +44,12 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(current, neighbor, face);
 
         // Check if the neighbor is block below
-        if (current.blockState().getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) {
+        if (current.getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) {
             return;
         }
 
-        if (!neighbor.blockState().getBlockStateData().isSolid()) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (!neighbor.getBlockStateData().isSolid()) {
+            current.breakBlock();
         }
     }
 
@@ -71,11 +71,9 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onScheduledUpdate(BlockStateWithPos current) {
-        var pos = current.pos();
-        var blockState = current.blockState();
-        if (blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
-            pos.dimension().updateBlockProperty(BUTTON_PRESSED_BIT, false, pos);
-            pos.dimension().addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_OFF);
+        if (current.getPropertyValue(BUTTON_PRESSED_BIT)) {
+            current.updateBlockProperty(BUTTON_PRESSED_BIT, false);
+            current.addLevelSoundEvent(SoundEvent.BUTTON_CLICK_OFF);
         }
     }
 }

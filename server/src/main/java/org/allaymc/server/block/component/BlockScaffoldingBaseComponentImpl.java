@@ -23,12 +23,9 @@ public class BlockScaffoldingBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (face == BlockFace.UP) {
-            return;
-        }
-
-        if (!canBeSupportedAt(current.offsetPos(BlockFace.DOWN).blockState())) {
-            current.dimension().breakBlock(current.pos());
+        // TODO: add support horizontal scaffolding
+        if (face == BlockFace.DOWN && !canBeSupportedAt(current.offsetPos(BlockFace.DOWN))) {
+            current.breakBlock();
         }
     }
 

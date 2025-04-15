@@ -26,8 +26,8 @@ public class BlockConcretePowderBaseComponentImpl extends BlockBaseComponentImpl
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        if (hasAdjacentWater(current.dimension(), current.pos())) {
-            current.dimension().setBlockState(current.pos(), getSolidBlock().getDefaultState());
+        if (hasAdjacentWater(current.getDimension(), current.getPos())) {
+            current.getDimension().setBlockState(current.getPos(), getSolidBlock().getDefaultState());
         }
     }
 

@@ -11,6 +11,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * BiomeData represents the data of a biome.
@@ -32,7 +33,7 @@ public record BiomeData(
         float waterColorR,
         float white_ash
 ) {
-    private static final EnumMap<BiomeId, BiomeData> BIOME_DATA = new EnumMap(BiomeId.class);
+    private static final Map<BiomeId, BiomeData> BIOME_DATA = new EnumMap<>(BiomeId.class);
 
     static {
         try (var stream = Utils.getResource("biome_definitions.nbt")) {
@@ -43,10 +44,6 @@ public record BiomeData(
         } catch (Exception e) {
             throw new AssertionError("Failed to load biome_definitions.nbt", e);
         }
-    }
-
-    public boolean isHumid() {
-        return downfall >= 0.85;
     }
 
     public static BiomeData getBiomeData(BiomeId biomeId) {
@@ -74,5 +71,9 @@ public record BiomeData(
                 nbt.getFloat("waterColorR"),
                 nbt.getFloat("white_ash")
         );
+    }
+
+    public boolean isHumid() {
+        return downfall >= 0.85;
     }
 }

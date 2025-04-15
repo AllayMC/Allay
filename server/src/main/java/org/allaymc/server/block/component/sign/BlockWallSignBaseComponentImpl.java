@@ -27,18 +27,14 @@ public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        var signFaceOpposite = BlockFace.fromId(current.blockState().getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)).opposite();
-        if (face != signFaceOpposite) {
-            return;
-        }
-
-        if (!neighbor.blockState().getBlockStateData().isSolid()) {
-            current.pos().dimension().breakBlock(current.pos());
+        var signFaceOpposite = BlockFace.fromId(current.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)).opposite();
+        if (face == signFaceOpposite && !neighbor.getBlockStateData().isSolid()) {
+            current.breakBlock();
         }
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         return Set.of(dropItemId.getItemType().createItemStack(1));
     }
 

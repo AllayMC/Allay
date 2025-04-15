@@ -27,10 +27,10 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var facingDirection = current.blockState().getPropertyValue(FACING_DIRECTION);
+        var facingDirection = current.getPropertyValue(FACING_DIRECTION);
         var blockFace = BlockFace.fromId(facingDirection);
-        if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()).blockState(), blockFace)) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()), blockFace)) {
+            current.breakBlock();
         }
     }
 

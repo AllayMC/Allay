@@ -48,7 +48,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
 
         // Set on fire ticks
-        var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, current.blockState(), 20 * 15);
+        var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, current, 20 * 15);
         if (event1.call()) {
             damageComponent.setOnFireTicks(event1.getOnFireTicks());
         }
@@ -79,24 +79,24 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     @Override
     public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlockState, newBlockState, placementInfo);
-        tryHarden(new BlockStateWithPos(newBlockState, oldBlockState.pos(), oldBlockState.layer()), null);
+        tryHarden(new BlockStateWithPos(newBlockState, oldBlockState.getPos(), oldBlockState.getLayer()), null);
     }
 
     @Override
     public boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
-        var dimension = current.dimension();
-        var pos = current.pos();
+        var dimension = current.getDimension();
+        var pos = current.getPos();
         BlockState hardenedBlockState = null;
         if (flownIntoBy == null) {
             BlockState waterBlockState = null;
-            var down = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos));
+            var down = current.offsetPos(BlockFace.DOWN);
             var soulSoilUnder = down.getBlockType() == BlockTypes.SOUL_SOIL;
             for (var face : BlockFace.values()) {
                 if (face == BlockFace.DOWN) {
                     continue;
                 }
 
-                var neighborBlockState = dimension.getBlockState(face.offsetPos(pos));
+                var neighborBlockState = current.offsetPos(face);
                 var neighborBlockType = neighborBlockState.getBlockType();
                 if (neighborBlockType == BlockTypes.BLUE_ICE && soulSoilUnder) {
                     hardenedBlockState = BlockTypes.BASALT.getDefaultState();
@@ -106,7 +106,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                 // This method also considered BlockTypes.FLOWING_WATER as the same liquid type
                 if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(neighborBlockType)) {
                     waterBlockState = neighborBlockState;
-                    if (isSource(current.blockState())) {
+                    if (isSource(current)) {
                         hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
                     } else {
                         hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
@@ -121,25 +121,25 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                 }
 
                 dimension.setBlockState(pos, event.getHardenedBlockState());
-                dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
+                current.addLevelSoundEvent(SoundEvent.FIZZ);
                 return true;
             }
 
             return false;
         }
 
-        var isWaterFlownInto = BlockTypes.WATER.getBlockBehavior().isSameLiquidType(flownIntoBy.blockState().getBlockType());
+        var isWaterFlownInto = BlockTypes.WATER.getBlockBehavior().isSameLiquidType(flownIntoBy.getBlockType());
         if (!isWaterFlownInto) {
             return false;
         }
 
-        if (isSource(current.blockState())) {
+        if (isSource(current)) {
             hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
         } else {
             hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
         }
 
-        var event = new LiquidHardenEvent(current, flownIntoBy.blockState(), hardenedBlockState);
+        var event = new LiquidHardenEvent(current, flownIntoBy, hardenedBlockState);
         if (!event.call()) {
             return false;
         }
@@ -152,12 +152,12 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     // See https://minecraft.wiki/w/Lava#Fire_spread
     @Override
     public void onRandomUpdate(BlockStateWithPos blockStateWithPos) {
-        if (!blockStateWithPos.dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_FIRE_TICK)) {
+        if (!blockStateWithPos.getDimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_FIRE_TICK)) {
             return;
         }
 
-        var pos = blockStateWithPos.pos();
-        var dimension = blockStateWithPos.dimension();
+        var pos = blockStateWithPos.getPos();
+        var dimension = blockStateWithPos.getDimension();
         var random = ThreadLocalRandom.current();
         var i = random.nextInt(3);
 
@@ -197,7 +197,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
     }
 
-    protected static BlockState getFireBlockState(Dimension dimension, Vector3ic pos) {
+    protected BlockState getFireBlockState(Dimension dimension, Vector3ic pos) {
         // Check if the block that the player clicked on is a soul fire converter
         // In that case, we should place a soul fire instead of a normal fire
         return dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType().hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();

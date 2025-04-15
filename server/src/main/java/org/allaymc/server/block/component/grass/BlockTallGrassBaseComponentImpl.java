@@ -50,19 +50,19 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         var keep = true;
         if (face == BlockFace.UP) {
-            if (!current.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-                keep = isSamePlant(neighbor.blockState());
+            if (!current.getPropertyValue(UPPER_BLOCK_BIT)) {
+                keep = isSamePlant(neighbor);
             }
         } else if (face == BlockFace.DOWN) {
-            if (current.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-                keep = isSamePlant(neighbor.blockState());
+            if (current.getPropertyValue(UPPER_BLOCK_BIT)) {
+                keep = isSamePlant(neighbor);
             } else {
-                keep = canPlaceOn(neighbor.blockState().getBlockType());
+                keep = canPlaceOn(neighbor.getBlockType());
             }
         }
 
         if (!keep) {
-            current.pos().dimension().breakBlock(current.pos());
+            current.breakBlock();
         }
     }
 
@@ -72,17 +72,20 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
 
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)) return false;
+        if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
+            return false;
+        }
+
         // Don't drop if entity is null
         return entity != null && super.isDroppable(blockState, usedItem, entity);
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
             return Set.of(shearDrop.getItemType().createItemStack(2));
         }
 
-        return super.getDrops(blockState, usedItem, entity);
+        return super.getDrops(current, usedItem, entity);
     }
 }

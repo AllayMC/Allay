@@ -33,7 +33,7 @@ public class BlockChestBaseComponentImpl extends BlockBaseComponentImpl {
 
         var direction = newBlockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
         var blockFace = BlockFace.from(direction);
-        var thisChest = blockEntityHolderComponent.getBlockEntity(oldBlockState.pos());
+        var thisChest = blockEntityHolderComponent.getBlockEntity(oldBlockState.getPos());
 
         for (var face : new BlockFace[]{blockFace.rotateY(), blockFace.rotateYCCW()}) {
             var other = oldBlockState.offsetPos(face).getBlockEntity();

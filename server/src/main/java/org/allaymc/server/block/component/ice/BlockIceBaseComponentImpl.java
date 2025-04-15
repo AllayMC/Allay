@@ -25,18 +25,18 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
 
-        if (current.dimension().getLightService().getInternalLight(current.pos()) > 11) {
+        if (current.getDimension().getLightService().getInternalLight(current.getPos()) > 11) {
             var event = new BlockFadeEvent(current, BlockTypes.WATER.getDefaultState());
             if (event.call()) {
-                current.dimension().setBlockState(current.pos(), event.getNewBlockState());
+                current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
             }
         }
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (blockState.offsetPos(BlockFace.DOWN).blockState().getBlockType() != BlockTypes.AIR) {
-            blockState.dimension().setBlockState(blockState.pos(), BlockTypes.WATER.getDefaultState());
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        if (current.offsetPos(BlockFace.DOWN).getBlockType() != BlockTypes.AIR) {
+            current.getDimension().setBlockState(current.getPos(), BlockTypes.WATER.getDefaultState());
         }
 
         return Utils.EMPTY_ITEM_STACK_SET;

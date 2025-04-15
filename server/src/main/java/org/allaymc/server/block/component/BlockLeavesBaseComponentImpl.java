@@ -15,11 +15,12 @@ import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.math.position.Position3i;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPDATE_BIT;
 
 /**
  * @author daoge_cmd
@@ -57,62 +58,56 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         onNeighborOrScheduledUpdate(current);
     }
 
-    protected void onNeighborOrScheduledUpdate(BlockStateWithPos blockStateWithPos) {
-        var blockState = blockStateWithPos.blockState();
-        var pos = blockStateWithPos.pos();
-
-        if (!blockState.getPropertyValue(BlockPropertyTypes.UPDATE_BIT)) {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.UPDATE_BIT, true);
-            pos.dimension().setBlockState(pos, blockState, 0, true, false, false);
+    protected void onNeighborOrScheduledUpdate(BlockStateWithPos current) {
+        var pos = current.getPos();
+        if (!current.getPropertyValue(UPDATE_BIT)) {
+            current = current.setPropertyValue(UPDATE_BIT, true);
+            pos.dimension().setBlockState(pos, current, 0, true, false, false);
         }
 
         // Slowly propagates the need to update instead of peaking down the TPS for huge trees
         for (var face : BlockFace.values()) {
-            var offsetPos = face.offsetPos(pos);
-            var sideBlockState = pos.dimension().getBlockState(offsetPos);
+            var sideBlockState = current.offsetPos(face);
             if (sideBlockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
-                if (!sideBlockState.getPropertyValue(BlockPropertyTypes.UPDATE_BIT)) {
-                    pos.dimension().getBlockUpdateService().scheduleBlockUpdateInDelay(offsetPos, 2);
+                if (!sideBlockState.getPropertyValue(UPDATE_BIT)) {
+                    pos.dimension().getBlockUpdateService().scheduleBlockUpdateInDelay(sideBlockState.getPos(), 2);
                 }
             }
         }
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockStateWithPos) {
-        super.onRandomUpdate(blockStateWithPos);
-        var blockState = blockStateWithPos.blockState();
-        if (!blockState.getPropertyValue(BlockPropertyTypes.UPDATE_BIT)) {
+    public void onRandomUpdate(BlockStateWithPos current) {
+        super.onRandomUpdate(current);
+        if (!current.getPropertyValue(UPDATE_BIT)) {
             return;
         }
 
-        var pos = blockStateWithPos.pos();
-        if (blockState.getPropertyValue(BlockPropertyTypes.PERSISTENT_BIT) || findLog(blockStateWithPos, 7, null)) {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.UPDATE_BIT, false);
-            pos.dimension().setBlockState(pos, blockState, 0, true, false, false);
+        var pos = current.getPos();
+        if (current.getPropertyValue(BlockPropertyTypes.PERSISTENT_BIT) || findLog(current, 7, null)) {
+            current = current.setPropertyValue(UPDATE_BIT, false);
+            pos.dimension().setBlockState(pos, current, 0, true, false, false);
         } else {
-            if (new BlockFadeEvent(blockStateWithPos, BlockTypes.AIR.getDefaultState()).call()) {
+            if (new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState()).call()) {
                 pos.dimension().breakBlock(pos, null, null);
             }
         }
     }
 
-    protected boolean findLog(BlockStateWithPos currentBlockStateWithPos, int distance, Long2LongMap visited) {
-        var blockState = currentBlockStateWithPos.blockState();
-        var pos = currentBlockStateWithPos.pos();
-
+    protected boolean findLog(BlockStateWithPos current, int distance, Long2LongMap visited) {
         if (visited == null) {
             visited = new Long2LongOpenHashMap();
             visited.defaultReturnValue(-1);
         }
 
-        if (blockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES_SUPPORTER)) {
+        if (current.getBlockType().hasBlockTag(BlockCustomTags.LEAVES_SUPPORTER)) {
             return true;
         }
-        if (distance == 0 || !blockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
+        if (distance == 0 || !current.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
             return false;
         }
 
+        var pos = current.getPos();
         long hash = hashBlockXYZ(pos.x(), pos.y(), pos.z());
         if (visited.get(hash) >= distance) {
             return false;
@@ -120,12 +115,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
 
         visited.put(hash, distance);
         for (BlockFace face : LOG_FINDING_ORDER) {
-            var offsetPos = face.offsetPos(pos);
-            var nextBlockStateWithPos = new BlockStateWithPos(
-                    pos.dimension().getBlockState(offsetPos),
-                    new Position3i(offsetPos, pos.dimension()),
-                    0
-            );
+            var nextBlockStateWithPos = current.offsetPos(face);
             if (findLog(nextBlockStateWithPos, distance - 1, visited)) {
                 return true;
             }
@@ -139,9 +129,9 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
-            return super.getDrops(blockState, usedItem, entity);
+            return super.getDrops(current, usedItem, entity);
         }
 
         Set<ItemStack> drops = new HashSet<>();

@@ -27,7 +27,7 @@ public class BlockDoubleSlabBaseComponentImpl extends BlockBaseComponentImpl imp
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         return Set.of(getSingleSlabBlockType().getItemType().createItemStack(2));
     }
 }

@@ -33,8 +33,8 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        if (face == BlockFace.DOWN && !canBeSupportedAt(current.offsetPos(BlockFace.DOWN).blockState())) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (face == BlockFace.DOWN && !canBeSupportedAt(current.offsetPos(BlockFace.DOWN))) {
+            current.breakBlock();
         }
     }
 
@@ -42,8 +42,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
 
-        var blockState = current.blockState();
-        var currentAge = blockState.getPropertyValue(AGE_6);
+        var currentAge = current.getPropertyValue(AGE_6);
         if (currentAge >= AGE_6.getMax()) {
             return;
         }
@@ -81,13 +80,13 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
             }
 
             if (grew) {
-                current.dimension().setBlockState(current.pos(), BlockTypes.CHORUS_PLANT.getDefaultState());
+                current.getDimension().setBlockState(current.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
                 return;
             }
         }
 
         // Growth failed — kill flower
-        current.dimension().setBlockState(current.pos(), blockState.setPropertyValue(AGE_6, AGE_6.getMax()));
+        current.getDimension().setBlockState(current.getPos(), current.setPropertyValue(AGE_6, AGE_6.getMax()));
     }
 
     @Override
@@ -130,8 +129,8 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected boolean canBranchTo(BlockStateWithPos side, BlockFace fromFace) {
-        return side.blockState().getBlockType() == BlockTypes.AIR &&
-               side.offsetPos(BlockFace.DOWN).blockState().getBlockType() == BlockTypes.AIR &&
+        return side.getBlockType() == BlockTypes.AIR &&
+               side.offsetPos(BlockFace.DOWN).getBlockType() == BlockTypes.AIR &&
                isSurroundingAir(side, fromFace.opposite());
     }
 
@@ -141,7 +140,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
                 continue;
             }
 
-            if (current.offsetPos(face).blockState().getBlockType() != BlockTypes.AIR) {
+            if (current.offsetPos(face).getBlockType() != BlockTypes.AIR) {
                 return false;
             }
         }
@@ -156,14 +155,14 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
 
         for (int i = 0; i < MAX_STEM_HEIGHT; i++) {
             down = down.offsetPos(BlockFace.DOWN);
-            if (down.blockState().getBlockType() != BlockTypes.CHORUS_PLANT) {
+            if (down.getBlockType() != BlockTypes.CHORUS_PLANT) {
                 break;
             }
 
             stemHeight++;
 
             for (var face : BlockFace.getHorizontalBlockFaces()) {
-                if (down.offsetPos(face).blockState().getBlockType() == BlockTypes.CHORUS_PLANT) {
+                if (down.offsetPos(face).getBlockType() == BlockTypes.CHORUS_PLANT) {
                     hasBranch = true;
                     break;
                 }
@@ -174,12 +173,13 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected void growInDirection(BlockStateWithPos current, BlockFace face, int addingAge) {
-        current.dimension().setBlockState(current.pos(), BlockTypes.CHORUS_PLANT.getDefaultState());
+        current.getDimension().setBlockState(current.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
 
-        var newBlockState = current.blockState();
+        var newPos = current.offsetPos(face).getPos();
+        var newBlockState = (BlockState) current;
         var currentAge = newBlockState.getPropertyValue(AGE_6);
         newBlockState = newBlockState.setPropertyValue(AGE_6, Math.min(AGE_6.getMax(), currentAge + addingAge));
-        current.dimension().setBlockState(current.offsetPos(face).pos(), newBlockState);
-        current.dimension().addSound(current.offsetPos(face).pos(), Sound.BLOCK_CHORUSFLOWER_GROW);
+        current.getDimension().setBlockState(newPos, newBlockState);
+        current.getDimension().addSound(newPos, Sound.BLOCK_CHORUSFLOWER_GROW);
     }
 }

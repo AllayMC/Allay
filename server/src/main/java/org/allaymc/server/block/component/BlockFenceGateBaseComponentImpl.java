@@ -62,10 +62,10 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean shouldBeLowered(BlockStateWithPos current) {
-        var direction = current.blockState().getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
+        var direction = current.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
         var blockFace = BlockFace.from(direction);
         blockFace = blockFace.rotateY();
-        return current.offsetPos(blockFace).blockState().getBehavior() instanceof BlockWallBehavior ||
-               current.offsetPos(blockFace.opposite()).blockState().getBehavior() instanceof BlockWallBehavior;
+        return current.offsetPos(blockFace).getBehavior() instanceof BlockWallBehavior ||
+               current.offsetPos(blockFace.opposite()).getBehavior() instanceof BlockWallBehavior;
     }
 }

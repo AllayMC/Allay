@@ -40,10 +40,10 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var torchFacingDirection = current.blockState().getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
+        var torchFacingDirection = current.getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
         var blockFace = TORCH_FACING_DIRECTION_MAPPER.inverse().get(torchFacingDirection);
-        if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()).blockState(), blockFace)) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()), blockFace)) {
+            current.breakBlock();
         }
     }
 

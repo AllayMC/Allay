@@ -27,12 +27,8 @@ public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        if (face != BlockFace.DOWN) {
-            return;
-        }
-
-        if (!canPlaceOn(neighbor.blockState().getBlockType())) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (face == BlockFace.DOWN && !canPlaceOn(neighbor.getBlockType())) {
+            current.breakBlock();
         }
     }
 
@@ -49,10 +45,11 @@ public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (FortuneDropHelper.bonusChanceDivisor(usedItem, 8, 2)) {
             return Set.of(ItemTypes.WHEAT_SEEDS.createItemStack());
         }
+
         return Set.of(ItemAirStack.AIR_STACK);
     }
 }

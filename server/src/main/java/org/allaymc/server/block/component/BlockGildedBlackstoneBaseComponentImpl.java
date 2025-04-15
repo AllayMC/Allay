@@ -8,6 +8,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,11 +21,11 @@ public class BlockGildedBlackstoneBaseComponentImpl extends BlockBaseComponentIm
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (FortuneDropHelper.bonusChanceDivisor(usedItem, 10, 3)) {
             return Set.of(ItemTypes.GOLD_NUGGET.createItemStack(ThreadLocalRandom.current().nextInt(2, 6)));
         }
 
-        return super.getDrops(blockState, usedItem, entity);
+        return Collections.emptySet();
     }
 }

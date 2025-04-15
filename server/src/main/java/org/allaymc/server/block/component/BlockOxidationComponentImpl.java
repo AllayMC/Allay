@@ -42,8 +42,8 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         }
 
         var current = event.getBlockState();
-        var position = current.pos();
-        var dimension = position.dimension();
+        var position = current.getPos();
+        var dimension = current.getDimension();
         var currentLevel = this.getOxidationLevel().ordinal();
 
         int higherOxidizedBlocks = 0;
@@ -82,7 +82,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         chance *= chance;
         if (random.nextFloat() < chance) {
             var nextBlockType = getBlockWithOxidationLevel(OxidationLevel.values()[currentLevel + 1]);
-            var blockFadeEvent = new BlockFadeEvent(current, nextBlockType.copyPropertyValuesFrom(current.blockState()));
+            var blockFadeEvent = new BlockFadeEvent(current, nextBlockType.copyPropertyValuesFrom(current));
             if (blockFadeEvent.call()) {
                 dimension.setBlockState(position, blockFadeEvent.getNewBlockState());
             }

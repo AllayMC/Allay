@@ -38,7 +38,7 @@ public class ItemHoneycombBaseComponentImpl extends ItemBaseComponentImpl {
                 new Position3i(clickedBlockPos, dimension),
                 0
         );
-        dimension.setBlockState(clickedBlockPos, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
+        dimension.setBlockState(clickedBlockPos, nextBlockType.copyPropertyValuesFrom(oldBlockState));
         interactInfo.player().tryConsumeItemInHand();
         dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_ON);
         return true;
