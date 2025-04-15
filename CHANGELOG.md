@@ -29,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) `onFall()` now accepted `fallDistance`.
 - Refactored falling block system, see commit history for more info.
 - Replaced `PaleMossCarpetSide(FACE)` and `WallConnectionType(FACE)` to `PaleMossCarpetSide` and `WallConnectionType`.
+- Refactored `BlockStateWithPos`, now this allows calling `BlockState` methods directly through `BlockStateWithPos`.
 
 ### Fixed
 
@@ -43,6 +44,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed spam click bug.
 - Fixed chicken food points.
 - Fixed jukebox music continue playing when broken.
+- Fixed `Position3i` math methods.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 
