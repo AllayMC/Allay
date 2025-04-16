@@ -6,7 +6,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 import java.util.Set;
@@ -15,12 +15,11 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
+    protected ItemId dropItemId;
 
-    protected ItemType<?> dropItemType;
-
-    public BlockStandingSignBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemType<?> dropItemType) {
+    public BlockStandingSignBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId dropItemId) {
         super(blockType);
-        this.dropItemType = dropItemType;
+        this.dropItemId = dropItemId;
     }
 
     @Override
@@ -38,11 +37,11 @@ public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Set.of(dropItemType.createItemStack(1));
+        return Set.of(dropItemId.getItemType().createItemStack(1));
     }
 
     @Override
     public ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
-        return dropItemType.createItemStack(1);
+        return dropItemId.getItemType().createItemStack(1);
     }
 }

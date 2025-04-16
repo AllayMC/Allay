@@ -15,11 +15,11 @@ import org.joml.Vector3ic;
  * @author IWareQ
  */
 public class BlockConcretePowderBaseComponentImpl extends BlockBaseComponentImpl implements BlockConcretePowderBaseComponent {
-    protected BlockId concreteBlockId;
+    protected BlockId solidBlockId;
 
-    public BlockConcretePowderBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId concreteBlockId) {
+    public BlockConcretePowderBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId solidBlockId) {
         super(blockType);
-        this.concreteBlockId = concreteBlockId;
+        this.solidBlockId = solidBlockId;
     }
 
     @Override
@@ -42,6 +42,6 @@ public class BlockConcretePowderBaseComponentImpl extends BlockBaseComponentImpl
 
     @Override
     public BlockType<?> getSolidBlock() {
-        return concreteBlockId.getBlockType();
+        return solidBlockId.getBlockType();
     }
 }

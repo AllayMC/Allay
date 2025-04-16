@@ -4,6 +4,7 @@ import lombok.Setter;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemStuffStorableComponent;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.component.event.CItemLoadExtraTagEvent;
 import org.allaymc.server.item.component.event.CItemPlacedAsBlockEvent;
 import org.allaymc.server.item.component.event.CItemSaveExtraTagEvent;
@@ -18,6 +19,9 @@ import java.util.List;
  * @author daoge_cmd
  */
 public class ItemStuffStorableComponentImpl implements ItemStuffStorableComponent {
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_stuf_storable_component");
+
     @Setter
     protected List<NbtMap> storedItems = List.of();
 
@@ -30,7 +34,9 @@ public class ItemStuffStorableComponentImpl implements ItemStuffStorableComponen
     @EventHandler
     protected void onSaveExtraTag(CItemSaveExtraTagEvent event) {
         var builder = event.getExtraTag();
-        if (!storedItems.isEmpty()) builder.put("Items", storedItems);
+        if (!storedItems.isEmpty()) {
+            builder.put("Items", storedItems);
+        }
     }
 
     @EventHandler

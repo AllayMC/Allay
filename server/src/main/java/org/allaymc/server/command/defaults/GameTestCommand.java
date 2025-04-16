@@ -9,6 +9,7 @@ import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
@@ -17,6 +18,7 @@ import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
@@ -32,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author daoge_cmd
@@ -328,6 +331,27 @@ public class GameTestCommand extends SimpleCommand {
                             .button("test button 2")
                             .onClick(button -> player.sendText("You clicked button 2"))
                             .sendTo(player);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("blockstate")
+                .bool("enable")
+                .exec((context, player) -> {
+                    boolean enable = context.getResult(1);
+                    Consumer<BlockBreakEvent> lambda = (event) -> {
+                        System.out.println(event.getBlockState().blockState().getBlockStateTag());
+                        var data = event.getBlockState().blockState().getBlockStateData();
+                        System.out.println(data.collisionShape());
+                        System.out.println(data.shape());
+                        event.setCancelled(true);
+                    };
+                    if (enable) {
+                        Server.getInstance().getEventBus().registerListenerFor(BlockBreakEvent.class, lambda);
+                        player.sendText("Break block to see the blockstate");
+                    } else {
+                        Server.getInstance().getEventBus().unregisterListenerFor(BlockBreakEvent.class, lambda);
+                        player.sendText("Disabled");
+                    }
                     return context.success();
                 }, SenderType.PLAYER);
     }

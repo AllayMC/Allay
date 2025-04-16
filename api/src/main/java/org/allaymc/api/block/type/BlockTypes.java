@@ -26,7 +26,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> ACACIA_PLANKS;
 
-    public static BlockType<BlockAcaciaPressurePlateBehavior> ACACIA_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> ACACIA_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> ACACIA_SAPLING;
 
@@ -102,7 +102,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> BAMBOO_PLANKS;
 
-    public static BlockType<BlockBambooPressurePlateBehavior> BAMBOO_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> BAMBOO_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> BAMBOO_SAPLING;
 
@@ -156,7 +156,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> BIRCH_PLANKS;
 
-    public static BlockType<BlockBirchPressurePlateBehavior> BIRCH_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> BIRCH_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> BIRCH_SAPLING;
 
@@ -356,7 +356,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> CHERRY_PLANKS;
 
-    public static BlockType<BlockCherryPressurePlateBehavior> CHERRY_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> CHERRY_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> CHERRY_SAPLING;
 
@@ -436,13 +436,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockCocoaBehavior> COCOA;
 
-    public static BlockType<BlockColoredTorchBehavior> COLORED_TORCH_BLUE;
+    public static BlockType<BlockTorchBehavior> COLORED_TORCH_BLUE;
 
-    public static BlockType<BlockColoredTorchBehavior> COLORED_TORCH_GREEN;
+    public static BlockType<BlockTorchBehavior> COLORED_TORCH_GREEN;
 
-    public static BlockType<BlockColoredTorchBehavior> COLORED_TORCH_PURPLE;
+    public static BlockType<BlockTorchBehavior> COLORED_TORCH_PURPLE;
 
-    public static BlockType<BlockColoredTorchBehavior> COLORED_TORCH_RED;
+    public static BlockType<BlockTorchBehavior> COLORED_TORCH_RED;
 
     public static BlockType<BlockCommandBlockBehavior> COMMAND_BLOCK;
 
@@ -504,7 +504,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> CRIMSON_PLANKS;
 
-    public static BlockType<BlockCrimsonPressurePlateBehavior> CRIMSON_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> CRIMSON_PRESSURE_PLATE;
 
     public static BlockType<BlockCrimsonRootsBehavior> CRIMSON_ROOTS;
 
@@ -584,7 +584,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> DARK_OAK_PLANKS;
 
-    public static BlockType<BlockDarkOakPressurePlateBehavior> DARK_OAK_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> DARK_OAK_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> DARK_OAK_SAPLING;
 
@@ -1218,7 +1218,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockHeavyCoreBehavior> HEAVY_CORE;
 
-    public static BlockType<BlockHeavyWeightedPressurePlateBehavior> HEAVY_WEIGHTED_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> HEAVY_WEIGHTED_PRESSURE_PLATE;
 
     public static BlockType<BlockHoneyBlockBehavior> HONEY_BLOCK;
 
@@ -1288,7 +1288,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> JUNGLE_PLANKS;
 
-    public static BlockType<BlockJunglePressurePlateBehavior> JUNGLE_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> JUNGLE_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> JUNGLE_SAPLING;
 
@@ -1402,7 +1402,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoolBehavior> LIGHT_GRAY_WOOL;
 
-    public static BlockType<BlockLightWeightedPressurePlateBehavior> LIGHT_WEIGHTED_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> LIGHT_WEIGHTED_PRESSURE_PLATE;
 
     public static BlockType<BlockLightningRodBehavior> LIGHTNING_ROD;
 
@@ -1492,7 +1492,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> MANGROVE_PLANKS;
 
-    public static BlockType<BlockMangrovePressurePlateBehavior> MANGROVE_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> MANGROVE_PRESSURE_PLATE;
 
     public static BlockType<BlockMangrovePropaguleBehavior> MANGROVE_PROPAGULE;
 
@@ -1700,7 +1700,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> PALE_OAK_PLANKS;
 
-    public static BlockType<BlockPaleOakPressurePlateBehavior> PALE_OAK_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> PALE_OAK_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> PALE_OAK_SAPLING;
 
@@ -1792,7 +1792,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoubleSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockPolishedBlackstonePressurePlateBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE;
 
     public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_SLAB;
 
@@ -1980,7 +1980,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockOreBehavior> REDSTONE_ORE;
 
-    public static BlockType<BlockRedstoneTorchBehavior> REDSTONE_TORCH;
+    public static BlockType<BlockTorchBehavior> REDSTONE_TORCH;
 
     public static BlockType<BlockRedstoneWireBehavior> REDSTONE_WIRE;
 
@@ -2108,7 +2108,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSoulSoilBehavior> SOUL_SOIL;
 
-    public static BlockType<BlockSoulTorchBehavior> SOUL_TORCH;
+    public static BlockType<BlockTorchBehavior> SOUL_TORCH;
 
     public static BlockType<BlockSpongeBehavior> SPONGE;
 
@@ -2132,7 +2132,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> SPRUCE_PLANKS;
 
-    public static BlockType<BlockSprucePressurePlateBehavior> SPRUCE_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> SPRUCE_PRESSURE_PLATE;
 
     public static BlockType<BlockSaplingBehavior> SPRUCE_SAPLING;
 
@@ -2170,7 +2170,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockButtonBehavior> STONE_BUTTON;
 
-    public static BlockType<BlockStonePressurePlateBehavior> STONE_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> STONE_PRESSURE_PLATE;
 
     public static BlockType<BlockStairsBehavior> STONE_STAIRS;
 
@@ -2248,9 +2248,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockTorchBehavior> TORCH;
 
-    public static BlockType<BlockTorchflowerBehavior> TORCHFLOWER;
+    public static BlockType<BlockTorchBehavior> TORCHFLOWER;
 
-    public static BlockType<BlockTorchflowerCropBehavior> TORCHFLOWER_CROP;
+    public static BlockType<BlockTorchBehavior> TORCHFLOWER_CROP;
 
     public static BlockType<BlockTrapdoorBehavior> TRAPDOOR;
 
@@ -2296,13 +2296,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockUnderwaterTntBehavior> UNDERWATER_TNT;
 
-    public static BlockType<BlockUnderwaterTorchBehavior> UNDERWATER_TORCH;
+    public static BlockType<BlockTorchBehavior> UNDERWATER_TORCH;
 
     public static BlockType<BlockShulkerBoxBehavior> UNDYED_SHULKER_BOX;
 
     public static BlockType<BlockUnknownBehavior> UNKNOWN;
 
-    public static BlockType<BlockRedstoneTorchBehavior> UNLIT_REDSTONE_TORCH;
+    public static BlockType<BlockTorchBehavior> UNLIT_REDSTONE_TORCH;
 
     public static BlockType<BlockUnpoweredComparatorBehavior> UNPOWERED_COMPARATOR;
 
@@ -2338,7 +2338,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPlanksBehavior> WARPED_PLANKS;
 
-    public static BlockType<BlockWarpedPressurePlateBehavior> WARPED_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> WARPED_PRESSURE_PLATE;
 
     public static BlockType<BlockWarpedRootsBehavior> WARPED_ROOTS;
 
@@ -2502,7 +2502,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> WOODEN_DOOR;
 
-    public static BlockType<BlockWoodenPressurePlateBehavior> WOODEN_PRESSURE_PLATE;
+    public static BlockType<BlockPressurePlateBehavior> WOODEN_PRESSURE_PLATE;
 
     public static BlockType<BlockCandleBehavior> YELLOW_CANDLE;
 

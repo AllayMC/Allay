@@ -18,18 +18,42 @@ import static java.lang.reflect.Modifier.isStatic;
  * @author daoge_cmd
  */
 public interface ComponentProvider<T extends Component> {
+    /**
+     * Creates a {@link ComponentProvider} using the given {@link Supplier} and component class.
+     *
+     * @param provider       the supplier that creates new component instances
+     * @param componentClass the class of the component
+     * @param <T>            the type of the component
+     *
+     * @return a component provider using the given supplier
+     */
     static <T extends Component> ComponentProvider<T> of(Supplier<T> provider, Class<?> componentClass) {
-        return new SimpleComponentProvider<>((info) -> provider.get(), componentClass);
+        return of($ -> provider.get(), componentClass);
     }
 
+    /**
+     * Creates a {@link ComponentProvider} using the given {@link Function} and component class.
+     *
+     * @param provider       a function that accepts initialization info and returns a new component
+     * @param componentClass the class of the component
+     * @param <T>            the type of the component
+     *
+     * @return a component provider using the given function
+     */
     static <T extends Component> ComponentProvider<T> of(Function<ComponentInitInfo, T> provider, Class<?> componentClass) {
-        return new SimpleComponentProvider<>(provider, componentClass);
+        return new Simple<>(provider, componentClass);
     }
 
-    static <T extends Component> ComponentProvider<T> ofSingleton(T singleton) {
-        return of((info) -> singleton, singleton.getClass());
-    }
-
+    /**
+     * Converts a list of component providers into a map indexed by their {@link Identifier}s.
+     *
+     * @param componentProviders the list of component providers
+     * @param <P>                the base type of components
+     *
+     * @return a map from identifiers to providers
+     *
+     * @throws IllegalArgumentException if duplicate identifiers are found
+     */
     static <P extends Component> Map<Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
         Map<Identifier, ComponentProvider<? extends P>> map = new HashMap<>(componentProviders.size());
         for (var provider : componentProviders) {
@@ -42,6 +66,14 @@ public interface ComponentProvider<T extends Component> {
         return map;
     }
 
+    /**
+     * Searches the class hierarchy to find a static field annotated with {@link Identifier.Component}
+     * and returns its {@link Identifier} value.
+     *
+     * @param clazz the class to inspect
+     *
+     * @return the identifier if found, otherwise {@code null}
+     */
     static Identifier findComponentIdentifier(Class<?> clazz) {
         var current = clazz;
         while (current != null) {
@@ -56,6 +88,13 @@ public interface ComponentProvider<T extends Component> {
         return null;
     }
 
+    /**
+     * Finds the first static field annotated with {@link Identifier.Component} within the given class.
+     *
+     * @param clazz the class to inspect
+     *
+     * @return the identifier if found, otherwise {@code null}
+     */
     static Identifier findComponentIdentifierInClass(Class<?> clazz) {
         try {
             for (var field : clazz.getDeclaredFields()) {
@@ -81,14 +120,14 @@ public interface ComponentProvider<T extends Component> {
     T provide(ComponentInitInfo info);
 
     /**
-     * Gets the class of the component provided by this provider.
+     * Retrieves the class of the component provided by this provider.
      *
      * @return the component class
      */
     Class<?> getComponentClass();
 
     /**
-     * Finds the identifier for the component.
+     * Finds the identifier for the component based on its class.
      *
      * @return the component identifier, or {@code null} if not found
      */
@@ -96,9 +135,15 @@ public interface ComponentProvider<T extends Component> {
         return findComponentIdentifier(getComponentClass());
     }
 
+    /**
+     * A simple implementation of {@link ComponentProvider} backed by a {@link Function}.
+     *
+     * @param <T> the type of the component
+     * @param <I> the type of the component initialization info
+     */
     @Getter
     @AllArgsConstructor
-    class SimpleComponentProvider<T extends Component, I extends ComponentInitInfo> implements ComponentProvider<T> {
+    class Simple<T extends Component, I extends ComponentInitInfo> implements ComponentProvider<T> {
         private Function<I, T> provider;
         private Class<?> componentClass;
 

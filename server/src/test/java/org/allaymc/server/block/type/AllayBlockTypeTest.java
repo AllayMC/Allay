@@ -1,10 +1,7 @@
 package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.component.data.BlockStateData;
-import org.allaymc.api.block.property.enums.WallConnectionTypeEast;
-import org.allaymc.api.block.property.enums.WallConnectionTypeNorth;
-import org.allaymc.api.block.property.enums.WallConnectionTypeSouth;
-import org.allaymc.api.block.property.enums.WallConnectionTypeWest;
+import org.allaymc.api.block.property.enums.WallConnectionType;
 import org.allaymc.api.block.property.type.*;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
@@ -92,10 +89,10 @@ class AllayBlockTypeTest {
     @Test
     void testBlockStateHash() {
         var b1 = COBBLED_DEEPSLATE_WALL.getDefaultState();
-        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
-        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
-        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
-        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionType.NONE);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionType.TALL);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionType.SHORT);
+        b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionType.NONE);
         b1 = b1.setPropertyValue(BlockPropertyTypes.WALL_POST_BIT, true);
         assertEquals(1789459903, b1.unsignedBlockStateHash());
 

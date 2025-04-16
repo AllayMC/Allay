@@ -7,6 +7,7 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemFoodComponent;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
 import org.allaymc.server.item.component.event.CItemUsedInAirEvent;
@@ -18,6 +19,9 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 @Getter
 @RequiredArgsConstructor
 public class ItemFoodComponentImpl implements ItemFoodComponent {
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_food_component");
+
     private static final int DEFAULT_EATING_TIME = 32; // GameTick
 
     private final int foodPoints;

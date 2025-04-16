@@ -3,10 +3,8 @@ package org.allaymc.server.item.component.tool;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemBaseComponent;
-import org.allaymc.api.item.component.tool.ItemToolComponent;
+import org.allaymc.api.item.component.ItemToolComponent;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.item.component.event.CItemAttackEntityEvent;
 import org.allaymc.server.item.component.event.CItemBreakBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -15,8 +13,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
  * @author IWareQ, daoge_cmd
  */
 public class ItemToolComponentImpl implements ItemToolComponent {
-    @Dependency
-    protected ItemBaseComponent baseComponent;
     @ComponentObject
     protected ItemStack itemStack;
 
@@ -36,11 +32,11 @@ public class ItemToolComponentImpl implements ItemToolComponent {
             return;
         }
 
-        baseComponent.tryIncreaseDamage(1);
+        itemStack.tryIncreaseDamage(1);
     }
 
     @EventHandler
     protected void onAttackEntity(CItemAttackEntityEvent event) {
-        baseComponent.tryIncreaseDamage(2);
+        itemStack.tryIncreaseDamage(2);
     }
 }

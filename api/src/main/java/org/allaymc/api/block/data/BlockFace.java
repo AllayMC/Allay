@@ -22,18 +22,18 @@ import static java.lang.Math.min;
 @Getter
 @AllArgsConstructor
 public enum BlockFace {
-
-    DOWN(new Vector3i(0, -1, 0)),
-    UP(new Vector3i(0, 1, 0)),
-    NORTH(new Vector3i(0, 0, -1)),
-    SOUTH(new Vector3i(0, 0, 1)),
-    WEST(new Vector3i(-1, 0, 0)),
-    EAST(new Vector3i(1, 0, 0));
+    DOWN(new Vector3i(0, -1, 0), Axis.Y),
+    UP(new Vector3i(0, 1, 0), Axis.X),
+    NORTH(new Vector3i(0, 0, -1), Axis.Z),
+    SOUTH(new Vector3i(0, 0, 1), Axis.Z),
+    WEST(new Vector3i(-1, 0, 0), Axis.X),
+    EAST(new Vector3i(1, 0, 0), Axis.X);
 
     private static final BlockFace[] HORIZONTAL_BLOCK_FACES = {NORTH, EAST, SOUTH, WEST};
     private static final BlockFace[] VERTICAL_BLOCK_FACES = {UP, DOWN};
 
     private final Vector3ic offset;
+    private final Axis axis;
 
     public static BlockFace fromId(int value) {
         return switch (value) {
@@ -44,6 +44,23 @@ public enum BlockFace {
             case 4 -> BlockFace.WEST;
             case 5 -> BlockFace.EAST;
             default -> null;
+        };
+    }
+
+    /**
+     * Converts a {@link MinecraftCardinalDirection} to a corresponding {@link BlockFace}.
+     *
+     * @param direction the Minecraft cardinal direction to convert.
+     *
+     * @return the corresponding {@link BlockFace}.
+     */
+    @ApiStatus.Experimental
+    public static BlockFace from(MinecraftCardinalDirection direction) {
+        return switch (direction) {
+            case NORTH -> NORTH;
+            case SOUTH -> SOUTH;
+            case EAST -> EAST;
+            case WEST -> WEST;
         };
     }
 
@@ -63,23 +80,6 @@ public enum BlockFace {
      */
     public static BlockFace[] getVerticalBlockFaces() {
         return VERTICAL_BLOCK_FACES;
-    }
-
-    /**
-     * Converts a {@link MinecraftCardinalDirection} to a corresponding {@link BlockFace}.
-     *
-     * @param direction the Minecraft cardinal direction to convert.
-     *
-     * @return the corresponding {@link BlockFace}.
-     */
-    @ApiStatus.Experimental
-    public static BlockFace fromMinecraftCardinalDirection(MinecraftCardinalDirection direction) {
-        return switch (direction) {
-            case NORTH -> NORTH;
-            case SOUTH -> SOUTH;
-            case EAST -> EAST;
-            case WEST -> WEST;
-        };
     }
 
     /**
@@ -253,5 +253,11 @@ public enum BlockFace {
             case WEST -> MinecraftCardinalDirection.WEST;
             default -> null;
         };
+    }
+
+    public enum Axis {
+        X,
+        Y,
+        Z
     }
 }

@@ -13,6 +13,8 @@ import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
+import org.joml.Vector3fc;
+import org.joml.Vector3ic;
 
 import java.util.Objects;
 
@@ -33,18 +35,44 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     public static final int ITEM_RELEASE_RELEASE = 0;
     public static final int ITEM_RELEASE_CONSUME = 1;
 
+    private static final double SPAM_BUG_TIME_THRESHOLD = 100d; // 100ms
+    private static final double SPAM_BUG_POS_THRESHOLD = 0.00001d;
+
+    private LastRightClickData lastRightClick;
+
+    private boolean isSpamClick(Vector3fc clickPos, Vector3ic clickBlockPos, Vector3fc playerPos) {
+        var currentTime = System.currentTimeMillis();
+        if (lastRightClick == null) {
+            lastRightClick = new LastRightClickData(playerPos, clickBlockPos, clickPos, currentTime);
+            return false;
+        }
+
+        boolean isSpam = (currentTime - lastRightClick.time()) < SPAM_BUG_TIME_THRESHOLD &&
+                         lastRightClick.playerPos().distanceSquared(playerPos) < SPAM_BUG_POS_THRESHOLD &&
+                         lastRightClick.blockPos().equals(clickBlockPos) &&
+                         lastRightClick.clickPos().distanceSquared(clickPos) < SPAM_BUG_POS_THRESHOLD;
+
+        lastRightClick = new LastRightClickData(playerPos, clickBlockPos, clickPos, currentTime);
+        return isSpam;
+    }
+
     @Override
     public void handleSync(EntityPlayer player, InventoryTransactionPacket packet, long receiveTime) {
         var itemInHand = player.getItemInHand();
         var transactionType = packet.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
-                var clickBlockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
-                var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
                 var blockFace = BlockFace.fromId(packet.getBlockFace());
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
+                        var clickBlockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
+                        var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
+                        // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
+                        if (isSpamClick(clickPos, clickBlockPos, MathUtils.CBVecToJOMLVec(packet.getPlayerPosition()))) {
+                            break;
+                        }
+
                         var dimension = player.getDimension();
                         var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE);
                         var placeBlockPos = clickedBlockStateReplaceable ? clickBlockPos : Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
@@ -53,6 +81,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 player, clickBlockPos,
                                 clickPos, blockFace
                         );
+
+                        player.setUsingItemInAir(false);
                         itemInHand.rightClickItemOn(dimension, placeBlockPos, interactInfo);
                         if (player.isUsingItemOnBlock()) {
                             if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
@@ -126,17 +156,19 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         // Doesn't have damage component, can't attack
-                        if (!(target instanceof EntityDamageComponent damageable)) return;
-
-                        var damage = itemInHand.calculateAttackDamage();
-                        if (damage == 0) damage = 1;
-
-                        var damageContainer = DamageContainer.entityAttack(player, damage);
-                        if (!damageable.attack(damageContainer)) {
+                        if (!(target instanceof EntityDamageComponent damageable)) {
                             return;
                         }
 
-                        itemInHand.onAttackEntity(player, target);
+                        var damage = itemInHand.calculateAttackDamage();
+                        if (damage == 0) {
+                            damage = 1;
+                        }
+
+                        var damageContainer = DamageContainer.entityAttack(player, damage);
+                        if (damageable.attack(damageContainer)) {
+                            itemInHand.onAttackEntity(player, target);
+                        }
                     }
                 }
             }
@@ -173,12 +205,17 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
         // The item may have been changed or broken
         // So we need to send update to client
-        if (itemInHand.isBroken()) player.clearItemInHand();
-        else player.notifyItemInHandChange();
+        if (itemInHand.isBroken()) {
+            player.clearItemInHand();
+        } else {
+            player.notifyItemInHandChange();
+        }
     }
 
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.INVENTORY_TRANSACTION;
     }
+
+    private record LastRightClickData(Vector3fc playerPos, Vector3ic blockPos, Vector3fc clickPos, double time) {}
 }

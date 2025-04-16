@@ -21,11 +21,10 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 public class BlockStateDataComponentImpl implements BlockStateDataComponent {
-
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_state_data_component");
 
-    protected static final BlockStateDataComponentImpl DEFAULT = BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT);
+    protected static final BlockStateDataComponentImpl DEFAULT = ofGlobalStatic(BlockStateData.DEFAULT);
 
     protected Function<BlockState, BlockStateData> attributeAccessor;
 
@@ -41,36 +40,40 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return new BlockStateDataComponentImpl(state -> attributes);
     }
 
-    public static BlockStateDataComponentImpl ofDirectDynamic(Function<BlockState, BlockStateData> directAttributeAccessor) {
-        return new BlockStateDataComponentImpl(directAttributeAccessor);
+    public static BlockStateDataComponentImpl ofDirectDynamic(Function<BlockState, BlockStateData> accessor) {
+        return new BlockStateDataComponentImpl(accessor);
     }
 
-    public static BlockStateDataComponentImpl ofCachedDynamic(Function<BlockState, BlockStateData> directAttributeAccessor) {
-        return new BlockStateDataComponentImpl(new CachedAttributeAccessor(directAttributeAccessor));
+    public static BlockStateDataComponentImpl ofCachedDynamic(Function<BlockState, BlockStateData> accessor) {
+        return new BlockStateDataComponentImpl(new CachedAttributeAccessor(accessor));
     }
 
-    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Supplier<Map<Integer, BlockStateData>> attributeMapSupplier) {
-        return ofMappedBlockStateHash(attributeMapSupplier.get());
+    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Supplier<Map<Integer, BlockStateData>> supplier) {
+        return ofMappedBlockStateHash(supplier.get());
     }
 
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap) {
         return ofMappedBlockStateHash(attributeMap, BlockStateData.DEFAULT);
     }
 
-    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap, BlockStateData defaultAttributes) {
-        return new BlockStateDataComponentImpl(state -> attributeMap.getOrDefault(state.blockStateHash(), defaultAttributes));
+    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap, BlockStateData defaultData) {
+        return new BlockStateDataComponentImpl(state -> attributeMap.getOrDefault(state.blockStateHash(), defaultData));
     }
 
-    public static BlockStateDataComponentImpl ofMappedBlockStateHashLazyLoad(Function<BlockType<?>, Map<Integer, BlockStateData>> lazyLoader) {
-        return ofDirectDynamic(new LazyLoaderAttributeAccessor(lazyLoader));
+    public static BlockStateDataComponentImpl ofMappedBlockStateHashLazyLoad(Function<BlockType<?>, Map<Integer, BlockStateData>> loader) {
+        return ofDirectDynamic(new LazyLoaderAttributeAccessor(loader));
     }
 
-    public static BlockStateDataComponentImpl ofRedefinedCollisionShape(Function<BlockState, VoxelShape> shapeRedefiner) {
-        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.collisionShape(shapeRedefiner.apply(blockType.ofState(blockStateHash))).build());
+    public static BlockStateDataComponentImpl ofRedefinedCollisionShape(Function<BlockState, VoxelShape> shapeFunction) {
+        return ofRedefinedData((builder, blockType, blockStateHash) ->
+                builder.collisionShape(shapeFunction.apply(blockType.ofState(blockStateHash))).build()
+        );
     }
 
-    public static BlockStateDataComponentImpl ofRedefinedShape(Function<BlockState, VoxelShape> shapeRedefiner) {
-        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.shape(shapeRedefiner.apply(blockType.ofState(blockStateHash))).build());
+    public static BlockStateDataComponentImpl ofRedefinedShape(Function<BlockState, VoxelShape> shapeFunction) {
+        return ofRedefinedData((builder, blockType, blockStateHash) ->
+                builder.shape(shapeFunction.apply(blockType.ofState(blockStateHash))).build()
+        );
     }
 
     public static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {
@@ -79,12 +82,10 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
             Objects.requireNonNull(vanillaId);
             var attributeMap = InternalRegistries.BLOCK_STATE_DATA.get(vanillaId);
             Objects.requireNonNull(attributeMap);
-            var newAttributeMap = new HashMap<Integer, BlockStateData>();
+
+            Map<Integer, BlockStateData> newAttributeMap = new HashMap<>();
             attributeMap.forEach((blockStateHash, attribute) ->
-                    newAttributeMap.put(
-                            blockStateHash,
-                            redefiner.apply(attribute.toBuilder(), blockType, blockStateHash)
-                    )
+                    newAttributeMap.put(blockStateHash, redefiner.apply(attribute.toBuilder(), blockType, blockStateHash))
             );
             return newAttributeMap;
         });
@@ -96,7 +97,7 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
     }
 
     private static class CachedAttributeAccessor implements Function<BlockState, BlockStateData> {
-        private final Map<Integer, BlockStateData> attributeMap = new NonBlockingHashMap<>();
+        private final Map<Integer, BlockStateData> cache = new NonBlockingHashMap<>();
         private final Function<BlockState, BlockStateData> directAttributeAccessor;
 
         public CachedAttributeAccessor(Function<BlockState, BlockStateData> directAttributeAccessor) {
@@ -105,23 +106,24 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
 
         @Override
         public BlockStateData apply(BlockState blockState) {
-            return attributeMap.computeIfAbsent(blockState.blockStateHash(), $ -> directAttributeAccessor.apply(blockState));
+            return cache.computeIfAbsent(blockState.blockStateHash(), $ -> directAttributeAccessor.apply(blockState));
         }
     }
 
     private static class LazyLoaderAttributeAccessor implements Function<BlockState, BlockStateData> {
+        private final Function<BlockType<?>, Map<Integer, BlockStateData>> loader;
+        private Map<Integer, BlockStateData> loadedMap;
 
-        private final Function<BlockType<?>, Map<Integer, BlockStateData>> lazyLoader;
-        private Map<Integer, BlockStateData> lazyLoadAttributeMap;
-
-        public LazyLoaderAttributeAccessor(Function<BlockType<?>, Map<Integer, BlockStateData>> lazyLoader) {
-            this.lazyLoader = lazyLoader;
+        public LazyLoaderAttributeAccessor(Function<BlockType<?>, Map<Integer, BlockStateData>> loader) {
+            this.loader = loader;
         }
 
         @Override
         public BlockStateData apply(BlockState blockState) {
-            if (lazyLoadAttributeMap == null) lazyLoadAttributeMap = lazyLoader.apply(blockState.getBlockType());
-            return lazyLoadAttributeMap.get(blockState.blockStateHash());
+            if (loadedMap == null) {
+                loadedMap = loader.apply(blockState.getBlockType());
+            }
+            return loadedMap.get(blockState.blockStateHash());
         }
     }
 }

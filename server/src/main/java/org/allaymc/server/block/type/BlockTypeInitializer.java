@@ -693,9 +693,9 @@ public final class BlockTypeInitializer {
         BlockTypes.COLORED_TORCH_PURPLE = buildColoredTorch(BlockId.COLORED_TORCH_PURPLE);
     }
 
-    private static BlockType<BlockColoredTorchBehavior> buildColoredTorch(BlockId blockId) {
+    private static BlockType<BlockTorchBehavior> buildColoredTorch(BlockId blockId) {
         return AllayBlockType
-                .builder(BlockColoredTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
@@ -704,20 +704,20 @@ public final class BlockTypeInitializer {
 
     public static void initTorch() {
         BlockTypes.REDSTONE_TORCH = AllayBlockType
-                .builder(BlockRedstoneTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
         BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                .builder(BlockRedstoneTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
 
         BlockTypes.SOUL_TORCH = AllayBlockType
-                .builder(BlockSoulTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.SOUL_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
@@ -730,7 +730,7 @@ public final class BlockTypeInitializer {
                 .build();
 
         BlockTypes.UNDERWATER_TORCH = AllayBlockType
-                .builder(BlockUnderwaterTorchBehaviorImpl.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNDERWATER_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
@@ -941,51 +941,51 @@ public final class BlockTypeInitializer {
     }
 
     public static void initWallSigns() {
-        BlockTypes.WALL_SIGN = buildWallSign(BlockId.WALL_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockId.ACACIA_WALL_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockId.BAMBOO_WALL_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockId.BIRCH_WALL_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockId.CHERRY_WALL_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockId.CRIMSON_WALL_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockId.DARKOAK_WALL_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockId.JUNGLE_WALL_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockId.MANGROVE_WALL_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockId.SPRUCE_WALL_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockId.WARPED_WALL_SIGN, ItemTypes.WARPED_SIGN);
-        BlockTypes.PALE_OAK_WALL_SIGN = buildWallSign(BlockId.PALE_OAK_WALL_SIGN, ItemTypes.PALE_OAK_SIGN);
+        BlockTypes.WALL_SIGN = buildWallSign(BlockId.WALL_SIGN, ItemId.OAK_SIGN);
+        BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockId.ACACIA_WALL_SIGN, ItemId.ACACIA_SIGN);
+        BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockId.BAMBOO_WALL_SIGN, ItemId.BAMBOO_SIGN);
+        BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockId.BIRCH_WALL_SIGN, ItemId.BIRCH_SIGN);
+        BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockId.CHERRY_WALL_SIGN, ItemId.CHERRY_SIGN);
+        BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockId.CRIMSON_WALL_SIGN, ItemId.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockId.DARKOAK_WALL_SIGN, ItemId.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockId.JUNGLE_WALL_SIGN, ItemId.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockId.MANGROVE_WALL_SIGN, ItemId.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockId.SPRUCE_WALL_SIGN, ItemId.SPRUCE_SIGN);
+        BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockId.WARPED_WALL_SIGN, ItemId.WARPED_SIGN);
+        BlockTypes.PALE_OAK_WALL_SIGN = buildWallSign(BlockId.PALE_OAK_WALL_SIGN, ItemId.PALE_OAK_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildWallSign(BlockId blockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildWallSign(BlockId blockId, ItemId dropItemId) {
         return AllayBlockType
                 .builder(BlockSignBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
-                .setBaseComponentSupplier(blockType -> new BlockWallSignBaseComponentImpl(blockType, dropItemType))
+                .setBaseComponentSupplier(blockType -> new BlockWallSignBaseComponentImpl(blockType, dropItemId))
                 .bindBlockEntity(BlockEntityTypes.SIGN)
                 .build();
     }
 
     public static void initStandingSigns() {
-        BlockTypes.STANDING_SIGN = buildStandingSign(BlockId.STANDING_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockId.ACACIA_STANDING_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockId.BAMBOO_STANDING_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockId.BIRCH_STANDING_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockId.CHERRY_STANDING_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockId.CRIMSON_STANDING_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockId.DARKOAK_STANDING_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockId.JUNGLE_STANDING_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockId.MANGROVE_STANDING_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockId.SPRUCE_STANDING_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockId.WARPED_STANDING_SIGN, ItemTypes.WARPED_SIGN);
-        BlockTypes.PALE_OAK_STANDING_SIGN = buildStandingSign(BlockId.PALE_OAK_STANDING_SIGN, ItemTypes.PALE_OAK_SIGN);
+        BlockTypes.STANDING_SIGN = buildStandingSign(BlockId.STANDING_SIGN, ItemId.OAK_SIGN);
+        BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockId.ACACIA_STANDING_SIGN, ItemId.ACACIA_SIGN);
+        BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockId.BAMBOO_STANDING_SIGN, ItemId.BAMBOO_SIGN);
+        BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockId.BIRCH_STANDING_SIGN, ItemId.BIRCH_SIGN);
+        BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockId.CHERRY_STANDING_SIGN, ItemId.CHERRY_SIGN);
+        BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockId.CRIMSON_STANDING_SIGN, ItemId.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockId.DARKOAK_STANDING_SIGN, ItemId.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockId.JUNGLE_STANDING_SIGN, ItemId.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockId.MANGROVE_STANDING_SIGN, ItemId.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockId.SPRUCE_STANDING_SIGN, ItemId.SPRUCE_SIGN);
+        BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockId.WARPED_STANDING_SIGN, ItemId.WARPED_SIGN);
+        BlockTypes.PALE_OAK_STANDING_SIGN = buildStandingSign(BlockId.PALE_OAK_STANDING_SIGN, ItemId.PALE_OAK_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(BlockId blockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(BlockId blockId, ItemId dropItemId) {
         return AllayBlockType
                 .builder(BlockSignBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
-                .setBaseComponentSupplier(blockType -> new BlockStandingSignBaseComponentImpl(blockType, dropItemType))
+                .setBaseComponentSupplier(blockType -> new BlockStandingSignBaseComponentImpl(blockType, dropItemId))
                 .bindBlockEntity(BlockEntityTypes.SIGN)
                 .build();
     }
@@ -1516,10 +1516,10 @@ public final class BlockTypeInitializer {
         BlockTypes.YELLOW_CONCRETE_POWDER = buildConcretePowder(BlockId.YELLOW_CONCRETE_POWDER, BlockId.YELLOW_CONCRETE);
     }
 
-    public static BlockType<BlockConcretePowderBehavior> buildConcretePowder(BlockId blockId, BlockId concreteBlockId) {
+    public static BlockType<BlockConcretePowderBehavior> buildConcretePowder(BlockId blockId, BlockId solidBlockId) {
         return AllayBlockType.builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(type -> new BlockConcretePowderBaseComponentImpl(type, concreteBlockId))
+                .setBaseComponentSupplier(type -> new BlockConcretePowderBaseComponentImpl(type, solidBlockId))
                 .addComponent(new BlockConcretePowderFallableComponentImpl())
                 .build();
     }
@@ -1641,6 +1641,74 @@ public final class BlockTypeInitializer {
                 .builder(BlockChorusPlantBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHORUS_PLANT)
                 .setBaseComponentSupplier(BlockChorusPlantBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initDeadBush() {
+        BlockTypes.DEADBUSH = AllayBlockType
+                .builder(BlockDeadbushBehaviorImpl.class)
+                .vanillaBlock(BlockId.DEADBUSH)
+                .setBaseComponentSupplier(BlockDeadbushBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initWalls() {
+        BlockTypes.ANDESITE_WALL = buildWall(BlockId.ANDESITE_WALL);
+        BlockTypes.BLACKSTONE_WALL = buildWall(BlockId.BLACKSTONE_WALL);
+        BlockTypes.BRICK_WALL = buildWall(BlockId.BRICK_WALL);
+        BlockTypes.COBBLED_DEEPSLATE_WALL = buildWall(BlockId.COBBLED_DEEPSLATE_WALL);
+        BlockTypes.COBBLESTONE_WALL = buildWall(BlockId.COBBLESTONE_WALL);
+        BlockTypes.DEEPSLATE_BRICK_WALL = buildWall(BlockId.DEEPSLATE_BRICK_WALL);
+        BlockTypes.DEEPSLATE_TILE_WALL = buildWall(BlockId.DEEPSLATE_TILE_WALL);
+        BlockTypes.DIORITE_WALL = buildWall(BlockId.DIORITE_WALL);
+        BlockTypes.END_STONE_BRICK_WALL = buildWall(BlockId.END_STONE_BRICK_WALL);
+        BlockTypes.GRANITE_WALL = buildWall(BlockId.GRANITE_WALL);
+        BlockTypes.MOSSY_COBBLESTONE_WALL = buildWall(BlockId.MOSSY_COBBLESTONE_WALL);
+        BlockTypes.MOSSY_STONE_BRICK_WALL = buildWall(BlockId.MOSSY_STONE_BRICK_WALL);
+        BlockTypes.MUD_BRICK_WALL = buildWall(BlockId.MUD_BRICK_WALL);
+        BlockTypes.NETHER_BRICK_WALL = buildWall(BlockId.NETHER_BRICK_WALL);
+        BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL = buildWall(BlockId.POLISHED_BLACKSTONE_BRICK_WALL);
+        BlockTypes.POLISHED_BLACKSTONE_WALL = buildWall(BlockId.POLISHED_BLACKSTONE_WALL);
+        BlockTypes.POLISHED_DEEPSLATE_WALL = buildWall(BlockId.POLISHED_DEEPSLATE_WALL);
+        BlockTypes.POLISHED_TUFF_WALL = buildWall(BlockId.POLISHED_TUFF_WALL);
+        BlockTypes.PRISMARINE_WALL = buildWall(BlockId.PRISMARINE_WALL);
+        BlockTypes.RED_NETHER_BRICK_WALL = buildWall(BlockId.RED_NETHER_BRICK_WALL);
+        BlockTypes.RED_SANDSTONE_WALL = buildWall(BlockId.RED_SANDSTONE_WALL);
+        BlockTypes.RESIN_BRICK_WALL = buildWall(BlockId.RESIN_BRICK_WALL);
+        BlockTypes.SANDSTONE_WALL = buildWall(BlockId.SANDSTONE_WALL);
+        BlockTypes.STONE_BRICK_WALL = buildWall(BlockId.STONE_BRICK_WALL);
+        BlockTypes.TUFF_BRICK_WALL = buildWall(BlockId.TUFF_BRICK_WALL);
+        BlockTypes.TUFF_WALL = buildWall(BlockId.TUFF_WALL);
+    }
+
+    public static BlockType<BlockWallBehavior> buildWall(BlockId blockId) {
+        return AllayBlockType.builder(BlockWallBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
+                .setBaseComponentSupplier(BlockWallBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initFenceGates() {
+        BlockTypes.ACACIA_FENCE_GATE = buildFenceGate(BlockId.ACACIA_FENCE_GATE);
+        BlockTypes.BAMBOO_FENCE_GATE = buildFenceGate(BlockId.BAMBOO_FENCE_GATE);
+        BlockTypes.BIRCH_FENCE_GATE = buildFenceGate(BlockId.BIRCH_FENCE_GATE);
+        BlockTypes.CHERRY_FENCE_GATE = buildFenceGate(BlockId.CHERRY_FENCE_GATE);
+        BlockTypes.CRIMSON_FENCE_GATE = buildFenceGate(BlockId.CRIMSON_FENCE_GATE);
+        BlockTypes.DARK_OAK_FENCE_GATE = buildFenceGate(BlockId.DARK_OAK_FENCE_GATE);
+        BlockTypes.FENCE_GATE = buildFenceGate(BlockId.FENCE_GATE);
+        BlockTypes.JUNGLE_FENCE_GATE = buildFenceGate(BlockId.JUNGLE_FENCE_GATE);
+        BlockTypes.MANGROVE_FENCE_GATE = buildFenceGate(BlockId.MANGROVE_FENCE_GATE);
+        BlockTypes.PALE_OAK_FENCE_GATE = buildFenceGate(BlockId.PALE_OAK_FENCE_GATE);
+        BlockTypes.SPRUCE_FENCE_GATE = buildFenceGate(BlockId.SPRUCE_FENCE_GATE);
+        BlockTypes.WARPED_FENCE_GATE = buildFenceGate(BlockId.WARPED_FENCE_GATE);
+    }
+
+    public static BlockType<BlockFenceGateBehavior> buildFenceGate(BlockId blockId) {
+        return AllayBlockType.builder(BlockFenceGateBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT)
+                .setBaseComponentSupplier(BlockFenceGateBaseComponentImpl::new)
                 .build();
     }
 }

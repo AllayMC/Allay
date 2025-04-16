@@ -26,14 +26,14 @@ public class BlockChestBaseComponentImpl extends BlockBaseComponentImpl {
     public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlockState, newBlockState, placementInfo);
 
-        var direction = newBlockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
-        var blockFace = BlockFace.fromMinecraftCardinalDirection(direction);
-        var thisChest = blockEntityHolderComponent.getBlockEntity(oldBlockState.pos());
-
         if (placementInfo != null && placementInfo.player().isSneaking()) {
             // Do not check for pairing if the player is sneaking
             return;
         }
+
+        var direction = newBlockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
+        var blockFace = BlockFace.from(direction);
+        var thisChest = blockEntityHolderComponent.getBlockEntity(oldBlockState.pos());
 
         for (var face : new BlockFace[]{blockFace.rotateY(), blockFace.rotateYCCW()}) {
             var other = oldBlockState.offsetPos(face).getBlockEntity();

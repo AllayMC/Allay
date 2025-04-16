@@ -158,13 +158,13 @@ public interface BlockPropertyTypes {
 
     BooleanPropertyType OUTPUT_SUBTRACT_BIT = BooleanPropertyType.of("output_subtract_bit", false);
 
-    EnumPropertyType<PaleMossCarpetSideEast> PALE_MOSS_CARPET_SIDE_EAST = EnumPropertyType.of("pale_moss_carpet_side_east", PaleMossCarpetSideEast.class, PaleMossCarpetSideEast.values()[0]);
+    EnumPropertyType<PaleMossCarpetSide> PALE_MOSS_CARPET_SIDE_EAST = EnumPropertyType.of("pale_moss_carpet_side_east", PaleMossCarpetSide.class, PaleMossCarpetSide.values()[0]);
 
-    EnumPropertyType<PaleMossCarpetSideNorth> PALE_MOSS_CARPET_SIDE_NORTH = EnumPropertyType.of("pale_moss_carpet_side_north", PaleMossCarpetSideNorth.class, PaleMossCarpetSideNorth.values()[0]);
+    EnumPropertyType<PaleMossCarpetSide> PALE_MOSS_CARPET_SIDE_NORTH = EnumPropertyType.of("pale_moss_carpet_side_north", PaleMossCarpetSide.class, PaleMossCarpetSide.values()[0]);
 
-    EnumPropertyType<PaleMossCarpetSideSouth> PALE_MOSS_CARPET_SIDE_SOUTH = EnumPropertyType.of("pale_moss_carpet_side_south", PaleMossCarpetSideSouth.class, PaleMossCarpetSideSouth.values()[0]);
+    EnumPropertyType<PaleMossCarpetSide> PALE_MOSS_CARPET_SIDE_SOUTH = EnumPropertyType.of("pale_moss_carpet_side_south", PaleMossCarpetSide.class, PaleMossCarpetSide.values()[0]);
 
-    EnumPropertyType<PaleMossCarpetSideWest> PALE_MOSS_CARPET_SIDE_WEST = EnumPropertyType.of("pale_moss_carpet_side_west", PaleMossCarpetSideWest.class, PaleMossCarpetSideWest.values()[0]);
+    EnumPropertyType<PaleMossCarpetSide> PALE_MOSS_CARPET_SIDE_WEST = EnumPropertyType.of("pale_moss_carpet_side_west", PaleMossCarpetSide.class, PaleMossCarpetSide.values()[0]);
 
     BooleanPropertyType PERSISTENT_BIT = BooleanPropertyType.of("persistent_bit", false);
 
@@ -226,13 +226,13 @@ public interface BlockPropertyTypes {
 
     IntPropertyType VINE_DIRECTION_BITS = IntPropertyType.of("vine_direction_bits", 0, 15, 0);
 
-    EnumPropertyType<WallConnectionTypeEast> WALL_CONNECTION_TYPE_EAST = EnumPropertyType.of("wall_connection_type_east", WallConnectionTypeEast.class, WallConnectionTypeEast.values()[0]);
+    EnumPropertyType<WallConnectionType> WALL_CONNECTION_TYPE_EAST = EnumPropertyType.of("wall_connection_type_east", WallConnectionType.class, WallConnectionType.values()[0]);
 
-    EnumPropertyType<WallConnectionTypeNorth> WALL_CONNECTION_TYPE_NORTH = EnumPropertyType.of("wall_connection_type_north", WallConnectionTypeNorth.class, WallConnectionTypeNorth.values()[0]);
+    EnumPropertyType<WallConnectionType> WALL_CONNECTION_TYPE_NORTH = EnumPropertyType.of("wall_connection_type_north", WallConnectionType.class, WallConnectionType.values()[0]);
 
-    EnumPropertyType<WallConnectionTypeSouth> WALL_CONNECTION_TYPE_SOUTH = EnumPropertyType.of("wall_connection_type_south", WallConnectionTypeSouth.class, WallConnectionTypeSouth.values()[0]);
+    EnumPropertyType<WallConnectionType> WALL_CONNECTION_TYPE_SOUTH = EnumPropertyType.of("wall_connection_type_south", WallConnectionType.class, WallConnectionType.values()[0]);
 
-    EnumPropertyType<WallConnectionTypeWest> WALL_CONNECTION_TYPE_WEST = EnumPropertyType.of("wall_connection_type_west", WallConnectionTypeWest.class, WallConnectionTypeWest.values()[0]);
+    EnumPropertyType<WallConnectionType> WALL_CONNECTION_TYPE_WEST = EnumPropertyType.of("wall_connection_type_west", WallConnectionType.class, WallConnectionType.values()[0]);
 
     BooleanPropertyType WALL_POST_BIT = BooleanPropertyType.of("wall_post_bit", false);
 

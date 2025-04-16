@@ -215,11 +215,4 @@ public class AllayEntityService implements EntityService {
     public void checkAutoSaveImmediately() {
         this.autoSaveTimer = Server.SETTINGS.storageSettings().entityAutoSaveCycle();
     }
-
-    protected enum EntityUpdateType {
-        ADD,
-        REMOVE
-    }
-
-    protected record EntityUpdateOperation(Entity entity, EntityUpdateType type, Runnable callback) {}
 }

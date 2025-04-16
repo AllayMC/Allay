@@ -597,10 +597,17 @@ public interface Dimension {
     }
 
     /**
-     * @see #updateBlockProperty(BlockPropertyType, Object, int, int, int, int)
+     * @see #updateBlockProperty(BlockPropertyType, Object, Vector3ic, int)
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, Vector3ic pos) {
-        updateBlockProperty(propertyType, value, pos.x(), pos.y(), pos.z(), 0);
+        updateBlockProperty(propertyType, value, pos, 0);
+    }
+
+    /**
+     * @see #updateBlockProperty(BlockPropertyType, Object, int, int, int, int)
+     */
+    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, Vector3ic pos, int layer) {
+        updateBlockProperty(propertyType, value, pos.x(), pos.y(), pos.z(), layer);
     }
 
     /**

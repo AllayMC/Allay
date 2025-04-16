@@ -1,6 +1,6 @@
 package org.allaymc.api.item.component;
 
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.block.data.BlockId;
 
 /**
  * Represents a sign base component.
@@ -13,12 +13,12 @@ public interface ItemSignBaseComponent extends ItemBaseComponent {
      *
      * @return The wall sign block id.
      */
-    Identifier getWallSignId();
+    BlockId getWallSignId();
 
     /**
      * Get the standing sign block id.
      *
      * @return The standing sign block id.
      */
-    Identifier getStandingSignId();
+    BlockId getStandingSignId();
 }

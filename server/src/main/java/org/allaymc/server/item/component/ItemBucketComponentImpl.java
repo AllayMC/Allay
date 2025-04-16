@@ -2,19 +2,19 @@ package org.allaymc.server.item.component;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemBucketComponent;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
@@ -25,17 +25,17 @@ import org.joml.Vector3ic;
 @Slf4j
 @AllArgsConstructor
 public class ItemBucketComponentImpl implements ItemBucketComponent {
-    public final Identifier liquidId;
-    public final Identifier entityId;
+    public final BlockId liquidId;
+    public final EntityId entityId;
 
     @Override
     public BlockType<?> getLiquidType() {
-        return Registries.BLOCKS.get(liquidId);
+        return liquidId.getBlockType();
     }
 
     @Override
     public EntityType<?> getEntityType() {
-        return entityId == null ? null : Registries.ENTITIES.get(entityId);
+        return entityId == null ? null : entityId.getEntityType();
     }
 
     @EventHandler

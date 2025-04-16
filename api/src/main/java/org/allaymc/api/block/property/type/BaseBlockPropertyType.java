@@ -2,6 +2,7 @@ package org.allaymc.api.block.property.type;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.allaymc.api.block.property.BlockPropertyProcessor;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Objects;
  * @author daoge_cmd
  */
 @Getter
+@ToString
 public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPropertyType<DATATYPE> permits BooleanPropertyType, EnumPropertyType, IntPropertyType {
 
     protected final String name;
