@@ -27,6 +27,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - (API) `onFall()` now accepted `fallDistance`.
+- Refactored light engine, and it should work much faster than before with multiple bug fixes.
 - Refactored falling block system, see commit history for more info.
 - Replaced `PaleMossCarpetSide(FACE)` and `WallConnectionType(FACE)` to `PaleMossCarpetSide` and `WallConnectionType`.
 
@@ -43,6 +44,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed spam click bug.
 - Fixed chicken food points.
 - Fixed jukebox music continue playing when broken.
+- Fixed incorrect horizontal sky light propagation.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 
