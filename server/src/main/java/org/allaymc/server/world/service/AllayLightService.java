@@ -5,6 +5,7 @@ import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
@@ -189,16 +190,15 @@ public class AllayLightService implements LightService {
             skyLightInBorder.put(hash, createNibbleArrays());
         }
         chunks.add(hash);
-
-        // Check if we can calculate the light in this chunk immediately
-        if (canCalculateLightInChunk(chunk.getX(), chunk.getZ())) {
-            calculateLightInChunk(chunk.getX(), chunk.getZ());
-        } else {
-            awaitingLightCalculationChunks.add(hash);
-        }
     }
 
-    protected void calculateLightInChunk(int chunkX, int chunkZ) {
+    protected void tryCalculateChunkLightAt(int chunkX, int chunkZ, Runnable afterCalculated) {
+        if (this.getQueuedUpdateCount() > Server.SETTINGS.worldSettings().maxLightUpdateCount()) {
+            // We have too many light updates in the queue, so we need to wait for a while
+            chunkAndBlockUpdateQueue.offer(() -> tryCalculateChunkLightAt(chunkX, chunkZ, afterCalculated));
+            return;
+        }
+
         for (int worldY = dimensionInfo.maxHeight(); worldY >= dimensionInfo.minHeight(); worldY--) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
@@ -210,6 +210,10 @@ public class AllayLightService implements LightService {
                     }
                 }
             }
+        }
+
+        if (afterCalculated != null) {
+            afterCalculated.run();
         }
     }
 
@@ -417,6 +421,14 @@ public class AllayLightService implements LightService {
     public void onChunkLoad(Chunk chunk) {
         chunkAndBlockUpdateQueue.offer(() -> {
             chunk.applyOperation(this::addChunk, OperationType.READ, OperationType.NONE);
+
+            // Check if we can calculate the light in this chunk immediately
+            if (canCalculateLightInChunk(chunk.getX(), chunk.getZ())) {
+                tryCalculateChunkLightAt(chunk.getX(), chunk.getZ(), null);
+            } else {
+                awaitingLightCalculationChunks.add(HashUtils.hashXZ(chunk.getX(), chunk.getZ()));
+            }
+
             // Check if the neighbor chunks' light can be calculated since we have a
             // new chunk added (if the neighbor chunks' light haven't been calculated)
             for (int i = -1; i <= 1; i++) {
@@ -428,8 +440,9 @@ public class AllayLightService implements LightService {
                     var neighborChunkHash = HashUtils.hashXZ(chunk.getX() + i, chunk.getZ() + j);
                     if (awaitingLightCalculationChunks.contains(neighborChunkHash)) {
                         if (canCalculateLightInChunk(chunk.getX() + i, chunk.getZ() + j)) {
-                            calculateLightInChunk(chunk.getX() + i, chunk.getZ() + j);
-                            awaitingLightCalculationChunks.remove(neighborChunkHash);
+                            tryCalculateChunkLightAt(chunk.getX() + i, chunk.getZ() + j, () -> {
+                                awaitingLightCalculationChunks.remove(neighborChunkHash);
+                            });
                         }
                     }
                 }
