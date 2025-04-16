@@ -25,7 +25,7 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
 
-        if (current.dimension().getLightService().getInternalLight(current.pos()) > 11) {
+        if (current.dimension().getLightService().getBlockLight(current.pos()) > 11) {
             var event = new BlockFadeEvent(current, BlockTypes.WATER.getDefaultState());
             if (event.call()) {
                 current.dimension().setBlockState(current.pos(), event.getNewBlockState());
