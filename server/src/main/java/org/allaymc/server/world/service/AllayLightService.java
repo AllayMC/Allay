@@ -261,50 +261,6 @@ public class AllayLightService implements LightService {
             final int skyLightSourceY = i;
             skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, skyLightSourceY, z, 0, 15));
         }
-
-//        if (lightHeight >= maxNeighborLightHeight) {
-//            // The current light height is same or bigger to the neighbors' max light height, so the sky light
-//            // can only be propagated to the lower position. If the lower block has light dampening bigger
-//            // than 13, we can skip the calculation since the light will be blocked by the lower block
-//            if (lightHeight != dimensionInfo.minHeight() && lightDataAccessorForCBThread.getLightDampening(x, lightHeight - 1, z) < 14) {
-//                skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, lightHeight, z, 0, 15));
-//            } else {
-//                // Although we do not need to propagate the current sky light, we should still set the
-//                // current pos to 15 in skyLightInBorder so that we can know it is a sky light source later
-//                lightDataAccessorForCBThread.setLight(x, lightHeight, z, 15);
-//            }
-//        } else {
-//            for (int i = lightHeight; i < maxNeighborLightHeight; i++) {
-//                final int skyLightSourceY = i;
-//
-//                // Check if we can skip the propagation of this skylight source, and we can save a lot of memory
-//                // because there won't be a lot of small pending updates in queue
-//                var skipSkyLightPropagation = true;
-//                BlockFace[] horizontalBlockFaces = BlockFace.getHorizontalBlockFaces();
-//                for (int j = 0, horizontalBlockFacesLength = horizontalBlockFaces.length; j < horizontalBlockFacesLength; j++) {
-//                    var face = horizontalBlockFaces[j];
-//                    var neighborLightHeight = neighborLightHeights[j];
-//                    if (lightHeight >= neighborLightHeight) {
-//                        continue;
-//                    }
-//
-//                    var ox = x + face.getOffset().x();
-//                    var oz = z + face.getOffset().z();
-//                    var neighborLightDampening = lightDataAccessorForCBThread.getLightDampening(ox, skyLightSourceY, oz);
-//                    if (neighborLightDampening < 14) {
-//                        // The horizontal propagation of sky light is necessary
-//                        skipSkyLightPropagation = false;
-//                        break;
-//                    }
-//                }
-//
-//                if (!skipSkyLightPropagation) {
-//                    skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, skyLightSourceY, z, 0, 15));
-//                } else {
-//                    lightDataAccessorForCBThread.setLight(x, skyLightSourceY, z, 15);
-//                }
-//            }
-//        }
     }
 
     protected int[] getNeighborLightHeights(int x, int z) {
@@ -427,8 +383,6 @@ public class AllayLightService implements LightService {
             } else {
                 var min = Math.min(oldLightHeight, newLightHeight);
                 var max = Math.max(oldLightHeight, newLightHeight);
-
-                // FIXME
 
                 // Remove old skylight sources responsible for horizontal skylight propagation
                 for (int i = min; i <= max; i++) {
