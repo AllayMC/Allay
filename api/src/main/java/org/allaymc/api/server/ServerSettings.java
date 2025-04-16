@@ -191,10 +191,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("tick-dimension-in-parallel")
         private boolean tickDimensionInParallel = true;
 
-        @Comment("Indicate the max light update count in a dimension, if the count is exceeded, light in")
+        @Comment("Indicate the max light update count per dimension, if the count is exceeded, light in")
         @Comment("newly loaded chunks won't be calculated immediately to avoid taking too much memory")
         @CustomKey("max-light-update-count")
-        private int maxLightUpdateCount = 1280000;
+        private int maxLightUpdateCountPerDimension = 1280000;
 
         public enum ChunkSendingStrategy {
             ASYNC,
