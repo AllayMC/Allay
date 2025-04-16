@@ -37,6 +37,7 @@ public class AllayLightService implements LightService {
     protected final Supplier<Boolean> runningFlagSupplier;
     protected final Supplier<Integer> timeSupplier;
     protected final Supplier<Set<Weather>> weatherSupplier;
+    protected final int maxUpdateCount;
     protected final BlockingQueueWrapper<Runnable> chunkAndBlockUpdateQueue;
     protected final BlockingQueueWrapper<Runnable> blockLightUpdateQueue;
     protected final Set<Long> chunks;
@@ -83,16 +84,21 @@ public class AllayLightService implements LightService {
     protected LightPropagator skyLightPropagator;
 
     public AllayLightService(Dimension dimension) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld()::isRunning, dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers);
+        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld()::isRunning, dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers, Server.SETTINGS.worldSettings().maxLightUpdateCountPerDimension());
     }
 
     @VisibleForTesting
     public AllayLightService(DimensionInfo dimensionInfo, String worldName, Supplier<Boolean> runningFlagSupplier, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
+        this(dimensionInfo, worldName, runningFlagSupplier, timeSupplier, weatherSupplier, Integer.MAX_VALUE);
+    }
+
+    protected AllayLightService(DimensionInfo dimensionInfo, String worldName, Supplier<Boolean> runningFlagSupplier, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier, int maxUpdateCount) {
         this.dimensionInfo = dimensionInfo;
         this.worldName = worldName;
         this.runningFlagSupplier = runningFlagSupplier;
         this.timeSupplier = timeSupplier;
         this.weatherSupplier = weatherSupplier;
+        this.maxUpdateCount = maxUpdateCount;
         this.chunkAndBlockUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.blockLightUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.chunks = new NonBlockingHashSet<>();
@@ -193,7 +199,7 @@ public class AllayLightService implements LightService {
     }
 
     protected void tryCalculateChunkLightAt(int chunkX, int chunkZ, Runnable afterCalculated) {
-        if (this.getQueuedUpdateCount() > Server.SETTINGS.worldSettings().maxLightUpdateCountPerDimension()) {
+        if (this.getQueuedUpdateCount() > maxUpdateCount) {
             // We have too many light updates in the queue, so we need to wait for a while
             chunkAndBlockUpdateQueue.offer(() -> tryCalculateChunkLightAt(chunkX, chunkZ, afterCalculated));
             return;
