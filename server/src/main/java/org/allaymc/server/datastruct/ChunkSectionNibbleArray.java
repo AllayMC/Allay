@@ -118,6 +118,11 @@ public final class ChunkSectionNibbleArray {
         }
     }
 
+    public void reset() {
+        checkSum = 0;
+        bytes = null;
+    }
+
     /**
      * {@return if the nibble at {@code n} is stored in the less
      * significant (smaller) 4 bits of the byte in the backing array}

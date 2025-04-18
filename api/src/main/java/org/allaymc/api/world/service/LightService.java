@@ -11,13 +11,6 @@ import org.joml.Vector3ic;
 public interface LightService {
 
     /**
-     * @see #getSkyLight(int, int, int)
-     */
-    default int getSkyLight(Vector3ic pos) {
-        return getSkyLight(pos.x(), pos.y(), pos.z());
-    }
-
-    /**
      * Get the skylight level at the specified position.
      *
      * @param x the x coordinate of the pos.
@@ -29,10 +22,10 @@ public interface LightService {
     int getSkyLight(int x, int y, int z);
 
     /**
-     * @see #getInternalLight(int, int, int)
+     * @see #getSkyLight(int, int, int)
      */
-    default int getInternalLight(Vector3ic pos) {
-        return getInternalLight(pos.x(), pos.y(), pos.z());
+    default int getSkyLight(Vector3ic pos) {
+        return getSkyLight(pos.x(), pos.y(), pos.z());
     }
 
     /**
@@ -47,6 +40,13 @@ public interface LightService {
     int getInternalLight(int x, int y, int z);
 
     /**
+     * @see #getInternalLight(int, int, int)
+     */
+    default int getInternalLight(Vector3ic pos) {
+        return getInternalLight(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
      * Get the internal skylight level at the specified position.
      *
      * @param x the x coordinate of the pos.
@@ -58,6 +58,13 @@ public interface LightService {
     int getInternalSkyLight(int x, int y, int z);
 
     /**
+     * @see #getInternalSkyLight(int, int, int)
+     */
+    default int getInternalSkyLight(Vector3ic pos) {
+        return getInternalSkyLight(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
      * Get the block light level at the specified position.
      *
      * @param x the x coordinate of the pos.
@@ -67,6 +74,13 @@ public interface LightService {
      * @return the block light level at the specified position.
      */
     int getBlockLight(int x, int y, int z);
+
+    /**
+     * @see #getBlockLight(int, int, int)
+     */
+    default int getBlockLight(Vector3ic pos) {
+        return getBlockLight(pos.x(), pos.y(), pos.z());
+    }
 
     /**
      * Get the queued update count.
