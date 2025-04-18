@@ -115,7 +115,7 @@ public class AllayLightService implements LightService {
             this.skyLightInBorder = new NonBlockingHashMapLong<>();
             this.skyLightPropagator = new LightPropagator(new CachedLightDataAccessor(dimensionInfo, skyLightInBorder, lightDampening, lightEmission));
         }
-        // Initialize lightDataAccessorForCBThread after we initialized skylight related things
+        // Initialize lightDataAccessor after we initialized skylight related things
         // NOTICE: we only cache skyLightInBorder, block light is not much used in "Chunk & Block" thread
         this.lightDataAccessor = new CachedLightDataAccessor(dimensionInfo, skyLightInBorder, lightDampening, lightEmission);
     }
@@ -265,23 +265,21 @@ public class AllayLightService implements LightService {
             return;
         }
 
-        var neighborLightHeights = getNeighborLightHeights(x, z);
-        var maxNeighborLightHeight = MathUtils.max(neighborLightHeights);
+        var maxNeighborLightHeight = getMaxNeighborLightHeight(x, z);
         for (int i = lightHeight; i <= maxNeighborLightHeight; i++) {
             final int skyLightSourceY = i;
             skyLightUpdateQueue.offer(() -> skyLightPropagator.setLightAndPropagate(x, skyLightSourceY, z, 0, 15));
         }
     }
 
-    protected int[] getNeighborLightHeights(int x, int z) {
-        int[] heights = new int[4];
+    protected int getMaxNeighborLightHeight(int x, int z) {
+        int max = Integer.MIN_VALUE;
         BlockFace[] horizontalBlockFaces = BlockFace.getHorizontalBlockFaces();
-        for (int i = 0; i < horizontalBlockFaces.length; i++) {
-            var face = horizontalBlockFaces[i];
-            heights[i] = getLightHeight(x + face.getOffset().x(), z + face.getOffset().z());
+        for (BlockFace face : horizontalBlockFaces) {
+            max = Math.max(max, getLightHeight(x + face.getOffset().x(), z + face.getOffset().z()));
         }
 
-        return heights;
+        return max;
     }
 
     protected boolean canCalculateLightInChunk(int chunkX, int chunkZ) {
