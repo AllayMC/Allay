@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.BlockPlaceHelper;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -24,12 +25,9 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        var blockFace = placementInfo.blockFace();
         var stairFace = placementInfo.player().getHorizontalFace();
         blockState = blockState.setPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION, toStairDirectionValue(stairFace));
-        if ((placementInfo.clickedPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT, true);
-        }
+        blockState = BlockPlaceHelper.processUpsideDownBitProperty(blockState, placeBlockPos, placementInfo);
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
@@ -44,7 +42,7 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
      *
      * @return the stair direction value.
      */
-    protected static int toStairDirectionValue(BlockFace blockFace) {
+    protected int toStairDirectionValue(BlockFace blockFace) {
         return switch (blockFace) {
             case EAST -> 0;
             case WEST -> 1;

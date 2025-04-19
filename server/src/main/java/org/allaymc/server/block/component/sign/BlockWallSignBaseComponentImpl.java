@@ -10,6 +10,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -27,8 +28,8 @@ public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        var signFaceOpposite = BlockFace.fromId(current.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)).opposite();
-        if (face == signFaceOpposite && !neighbor.getBlockStateData().isSolid()) {
+        var signFace = Objects.requireNonNull(BlockFace.fromId(current.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)));
+        if (face == signFace.opposite() && !neighbor.getBlockStateData().isSolid()) {
             current.breakBlock();
         }
     }

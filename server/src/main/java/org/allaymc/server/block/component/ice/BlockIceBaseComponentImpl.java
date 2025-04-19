@@ -27,7 +27,7 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
 
-        if (isNeighborBlockLightBiggerThan(current.dimension(), current.pos(), 11)) {
+        if (isNeighborBlockLightBiggerThan(current.getDimension(), current.getPos())) {
             var event = new BlockFadeEvent(current, BlockTypes.WATER.getDefaultState());
             if (event.call()) {
                 current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
@@ -35,9 +35,9 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
-    protected boolean isNeighborBlockLightBiggerThan(Dimension dimension, Vector3ic pos, int value) {
+    protected boolean isNeighborBlockLightBiggerThan(Dimension dimension, Vector3ic pos) {
         for (var face : BlockFace.values()) {
-            if (dimension.getLightService().getBlockLight(face.offsetPos(pos)) > value) {
+            if (dimension.getLightService().getBlockLight(face.offsetPos(pos)) > 11) {
                 return true;
             }
         }

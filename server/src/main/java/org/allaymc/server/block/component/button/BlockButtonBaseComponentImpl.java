@@ -59,12 +59,11 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        var pos = interactInfo.clickedBlockPos();
         var clickedBlockState = interactInfo.getClickedBlockState();
         if (!clickedBlockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
-            dimension.updateBlockProperty(BUTTON_PRESSED_BIT, true, pos);
-            dimension.getBlockUpdateService().scheduleBlockUpdateInDelay(pos, getActivationTime());
-            dimension.addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_ON);
+            clickedBlockState.updateBlockProperty(BUTTON_PRESSED_BIT, true);
+            dimension.getBlockUpdateService().scheduleBlockUpdateInDelay(clickedBlockState.getPos(), getActivationTime());
+            clickedBlockState.addLevelSoundEvent(SoundEvent.BUTTON_CLICK_ON);
         }
         return true;
     }

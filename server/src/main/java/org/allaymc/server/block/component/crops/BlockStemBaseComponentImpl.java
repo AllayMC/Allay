@@ -13,6 +13,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
@@ -21,11 +22,10 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
 /**
  * @author daoge_cmd
  */
-public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
-
+public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     protected final BlockId fruitId;
 
-    public BlockMelonStemBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId fruitId) {
+    public BlockStemBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId fruitId) {
         super(blockType);
         this.fruitId = fruitId;
     }
@@ -34,21 +34,22 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face == BlockFace.DOWN && neighbor.getBlockType() != BlockTypes.FARMLAND) {
             current.breakBlock();
-        } else {
-            var stemFace = BlockFace.fromId(current.getPropertyValue(FACING_DIRECTION));
-            if (stemFace == BlockFace.DOWN || stemFace == BlockFace.UP) {
-                // No melon block is connected to the stem,
-                // so we don't need to check if the melon block
-                // is still exists
-                return;
-            }
+            return;
+        }
 
-            var melonBlock = current.offsetPos(stemFace);
-            if (melonBlock.getBlockType() != fruitId.getBlockType()) {
-                // Melon block is not connected to the stem,
-                // so reset the stem direction to BlockFace.DOWN
-                current.getDimension().setBlockState(current.getPos(), current.setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal()));
-            }
+        var stemFace = Objects.requireNonNull(BlockFace.fromId(current.getPropertyValue(FACING_DIRECTION)));
+        if (stemFace == BlockFace.DOWN || stemFace == BlockFace.UP) {
+            // No fruit block is connected to the stem,
+            // so we don't need to check if the fruit block
+            // is still exists
+            return;
+        }
+
+        var fruitBlock = current.offsetPos(stemFace);
+        if (fruitBlock.getBlockType() != fruitId.getBlockType()) {
+            // Fruit block is not connected to the stem,
+            // so reset the stem direction to BlockFace.DOWN
+            current.getDimension().setBlockState(current.getPos(), current.setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal()));
         }
     }
 
@@ -68,15 +69,15 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
 
             for (var face : BlockFace.getHorizontalBlockFaces()) {
                 if (current.offsetPos(face).getBlockType() == fruitId.getBlockType()) {
-                    // Melon block already exists
+                    // Fruit block already exists
                     return;
                 }
             }
 
             var face = BlockFace.getHorizontalBlockFaces()[ThreadLocalRandom.current().nextInt(4)];
-            var melonBlock = current.offsetPos(face);
-            if (melonBlock.getBlockType() == BlockTypes.AIR) {
-                var downBlockType = melonBlock.offsetPos(BlockFace.DOWN).getBlockType();
+            var fruitBlock = current.offsetPos(face);
+            if (fruitBlock.getBlockType() == BlockTypes.AIR) {
+                var downBlockType = fruitBlock.offsetPos(BlockFace.DOWN).getBlockType();
                 if (downBlockType != BlockTypes.FARMLAND &&
                     downBlockType != BlockTypes.DIRT &&
                     downBlockType != BlockTypes.GRASS_BLOCK) {
@@ -84,7 +85,7 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
                 }
 
                 var event = new BlockGrowEvent(
-                        new BlockStateWithPos(BlockTypes.AIR.getDefaultState(), new Position3i(melonBlock.getPos(), current.getDimension())),
+                        new BlockStateWithPos(BlockTypes.AIR.getDefaultState(), new Position3i(fruitBlock.getPos(), current.getDimension())),
                         fruitId.getBlockType().getDefaultState()
                 );
                 if (event.call()) {
@@ -92,7 +93,7 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
                     // Update stem direction
                     current.getDimension().setBlockState(current.getPos(), current.setPropertyValue(FACING_DIRECTION, face.ordinal()));
                     // Place melon block
-                    current.getDimension().setBlockState(melonBlock.getPos(), event.getNewBlockState());
+                    current.getDimension().setBlockState(fruitBlock.getPos(), event.getNewBlockState());
                 }
             }
         }

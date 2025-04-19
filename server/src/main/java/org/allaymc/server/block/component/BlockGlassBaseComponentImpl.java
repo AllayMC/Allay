@@ -5,8 +5,8 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.interfaces.ItemAirStack;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -19,6 +19,6 @@ public class BlockGlassBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemAirStack.AIR_STACK);
+        return Collections.emptySet();
     }
 }

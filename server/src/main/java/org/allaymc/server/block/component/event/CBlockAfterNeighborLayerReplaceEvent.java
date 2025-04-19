@@ -6,6 +6,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.Event;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author daoge_cmd
@@ -15,5 +16,6 @@ import org.allaymc.api.eventbus.event.Event;
 public class CBlockAfterNeighborLayerReplaceEvent extends Event {
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
-    protected PlayerInteractInfo placementInfo; // Can be null
+    @Nullable
+    protected PlayerInteractInfo placementInfo;
 }

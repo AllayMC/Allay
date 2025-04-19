@@ -8,7 +8,6 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
-import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.event.CBlockRandomUpdateEvent;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -42,8 +41,6 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         }
 
         var current = event.getBlockState();
-        var position = current.getPos();
-        var dimension = current.getDimension();
         var currentLevel = this.getOxidationLevel().ordinal();
 
         int higherOxidizedBlocks = 0;
@@ -55,13 +52,8 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
                         continue;
                     }
 
-                    var neighborPos = position.add(x, y, z, new Position3i(position.dimension()));
-                    if (position.distance(neighborPos) > SCAN_RANGE) {
-                        continue;
-                    }
-
-                    var neighborState = dimension.getBlockState(neighborPos);
-                    if (!(neighborState instanceof BlockOxidationComponent neighborOxidation)) {
+                    var neighbor = current.offsetPos(x, y, z);
+                    if (!(neighbor.getBehavior() instanceof BlockOxidationComponent neighborOxidation)) {
                         continue;
                     }
 
@@ -77,14 +69,14 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
             }
         }
 
-        float chance = (higherOxidizedBlocks + 1f) / (higherOxidizedBlocks + sameOxidizedBlocks + 1f);
+        var chance = (higherOxidizedBlocks + 1f) / (higherOxidizedBlocks + sameOxidizedBlocks + 1f);
         chance *= currentLevel == 0 ? 0.75f : 1f;
         chance *= chance;
         if (random.nextFloat() < chance) {
             var nextBlockType = getBlockWithOxidationLevel(OxidationLevel.values()[currentLevel + 1]);
             var blockFadeEvent = new BlockFadeEvent(current, nextBlockType.copyPropertyValuesFrom(current));
             if (blockFadeEvent.call()) {
-                dimension.setBlockState(position, blockFadeEvent.getNewBlockState());
+                current.getDimension().setBlockState(current.getPos(), blockFadeEvent.getNewBlockState());
             }
         }
     }

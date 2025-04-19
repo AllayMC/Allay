@@ -9,6 +9,8 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
+import java.util.Objects;
+
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 
 /**
@@ -28,7 +30,7 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var facingDirection = current.getPropertyValue(FACING_DIRECTION);
-        var blockFace = BlockFace.fromId(facingDirection);
+        var blockFace = Objects.requireNonNull(BlockFace.fromId(facingDirection));
         if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()), blockFace)) {
             current.breakBlock();
         }

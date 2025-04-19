@@ -1,10 +1,11 @@
 package org.allaymc.api.math.position;
 
 import com.google.common.base.Objects;
+import lombok.NoArgsConstructor;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.joml.Runtime;
 import org.joml.*;
+import org.joml.Runtime;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -17,6 +18,7 @@ import java.text.NumberFormat;
 /**
  * @author Cool_Loong
  */
+@NoArgsConstructor
 public class Position3d extends Vector3d implements Position3dc {
     public WeakReference<Dimension> dimension;
 
@@ -129,7 +131,7 @@ public class Position3d extends Vector3d implements Position3dc {
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException {
         x = in.readDouble();
         y = in.readDouble();
         z = in.readDouble();

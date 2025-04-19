@@ -9,7 +9,6 @@ import org.allaymc.api.block.interfaces.BlockWallBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -56,8 +55,9 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
                 dimension.updateBlockProperty(MINECRAFT_CARDINAL_DIRECTION, playerFacing.toMinecraftCardinalDirection(), clickedPos);
             }
         }
-        dimension.updateBlockProperty(OPEN_BIT, open, clickedPos);
-        dimension.addLevelSoundEvent(MathUtils.center(clickedPos), open ? SoundEvent.FENCE_GATE_OPEN : SoundEvent.FENCE_GATE_CLOSE);
+
+        clickedBlockState.updateBlockProperty(OPEN_BIT, open);
+        clickedBlockState.addLevelSoundEvent(open ? SoundEvent.FENCE_GATE_OPEN : SoundEvent.FENCE_GATE_CLOSE);
         return true;
     }
 

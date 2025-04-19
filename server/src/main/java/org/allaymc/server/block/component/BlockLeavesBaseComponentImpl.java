@@ -13,8 +13,9 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemTypes;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,14 +32,14 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN, BlockFace.UP
     };
 
-    // Can be null
-    protected final ItemType<?> saplingType;
+    @Nullable
+    protected final ItemId saplingId;
     protected final boolean canDropApple;
     protected final boolean dropMoreSaplings;
 
-    public BlockLeavesBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemType<?> saplingType, boolean canDropApple, boolean dropMoreSaplings) {
+    public BlockLeavesBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId saplingId, boolean canDropApple, boolean dropMoreSaplings) {
         super(blockType);
-        this.saplingType = saplingType;
+        this.saplingId = saplingId;
         this.canDropApple = canDropApple;
         this.dropMoreSaplings = dropMoreSaplings;
     }
@@ -89,7 +90,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             pos.dimension().setBlockState(pos, current, 0, true, false, false);
         } else {
             if (new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState()).call()) {
-                pos.dimension().breakBlock(pos, null, null);
+                current.breakBlock();
             }
         }
     }
@@ -143,8 +144,8 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             drops.add(ItemTypes.STICK.createItemStack(ThreadLocalRandom.current().nextInt(1, 3)));
         }
 
-        if (saplingType != null && FortuneDropHelper.bonusChanceDivisor(usedItem, dropMoreSaplings ? 40 : 20, 4)) {
-            drops.add(saplingType.createItemStack());
+        if (saplingId != null && FortuneDropHelper.bonusChanceDivisor(usedItem, dropMoreSaplings ? 40 : 20, 4)) {
+            drops.add(saplingId.getItemType().createItemStack());
         }
 
         return drops;

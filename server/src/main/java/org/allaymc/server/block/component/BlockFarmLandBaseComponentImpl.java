@@ -89,8 +89,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onEntityFallOn(Entity entity, BlockStateWithPos block) {
         if (ThreadLocalRandom.current().nextFloat() < entity.getFallDistance() - 0.5f) {
-            if (!VALID_ENTITIES.contains(entity.getEntityType().getIdentifier()) ||
-                entity.getMetadata().get(EntityFlag.BABY)) {
+            if (!VALID_ENTITIES.contains(entity.getEntityType().getIdentifier()) || entity.getMetadata().get(EntityFlag.BABY)) {
                 return;
             }
 

@@ -20,6 +20,7 @@ import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +33,10 @@ public class BlockStateWithPos implements BlockState {
     private final BlockState blockState;
     private final Position3ic pos;
     private final int layer;
+
+    public BlockStateWithPos(Vector3ic pos, Dimension dimension) {
+        this(dimension.getBlockState(pos), new Position3i(pos, dimension), 0);
+    }
 
     public BlockStateWithPos(BlockState blockState, Position3ic pos) {
         this(blockState, pos, 0);
@@ -58,11 +63,27 @@ public class BlockStateWithPos implements BlockState {
         return new BlockStateWithPos(blockState.setPropertyValue(property, value), pos, layer);
     }
 
+    /**
+     * Returns a new {@code BlockStateWithPos} offset from the current position in the specified direction.
+     *
+     * @param blockFace the direction to offset.
+     *
+     * @return a new {@code BlockStateWithPos} at the offset position.
+     */
     public BlockStateWithPos offsetPos(BlockFace blockFace) {
         var offset = blockFace.getOffset();
         return offsetPos(offset.x(), offset.y(), offset.z());
     }
 
+    /**
+     * Returns a new {@code BlockStateWithPos} offset from the current position by the given deltas.
+     *
+     * @param x the x-axis offset.
+     * @param y the y-axis offset.
+     * @param z the z-axis offset.
+     *
+     * @return a new {@code BlockStateWithPos} at the offset position.
+     */
     public BlockStateWithPos offsetPos(int x, int y, int z) {
         var newPos = pos.add(x, y, z, new Vector3i());
         return new BlockStateWithPos(
