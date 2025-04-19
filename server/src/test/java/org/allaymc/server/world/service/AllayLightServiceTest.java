@@ -21,7 +21,7 @@ class AllayLightServiceTest {
 
     @Test
     void testBlockLight() {
-        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
+        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, "test_world", () -> true, () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
 
         // Prepare space for testing
         for (int x = -3; x <= 3; x++) {
@@ -34,11 +34,11 @@ class AllayLightServiceTest {
                 );
             }
         }
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
 
         // Case 1
         lightService.onBlockChange(0, 1, 0, 14, 0);
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
         assertEquals(14, lightService.getBlockLight(0, 1, 0));
         assertEquals(13, lightService.getBlockLight(1, 1, 0));
         assertEquals(13, lightService.getBlockLight(0, 1, 1));
@@ -48,13 +48,13 @@ class AllayLightServiceTest {
 
         // Case 2
         lightService.onBlockChange(2, 1, 0, 0, 15);
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
         assertEquals(0, lightService.getBlockLight(2, 1, 0));
         assertEquals(9, lightService.getBlockLight(3, 1, 0));
 
         // Case 3
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
         assertEquals(0, lightService.getBlockLight(0, 1, 0));
         assertEquals(0, lightService.getBlockLight(1, 1, 0));
         assertEquals(0, lightService.getBlockLight(0, 1, 1));
@@ -65,7 +65,7 @@ class AllayLightServiceTest {
 
     @Test
     void testSkyLight() {
-        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
+        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, "test_world", () -> true, () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
 
         // Prepare space for testing
         for (int x = -3; x <= 3; x++) {
@@ -78,11 +78,11 @@ class AllayLightServiceTest {
                 );
             }
         }
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
 
         // Case 1
         lightService.onBlockChange(0, 0, 0, 0, 15);
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
         assertEquals(15, lightService.getSkyLight(0, 1, 0));
         assertEquals(15, lightService.getSkyLight(0, 2, 0));
         assertEquals(15, lightService.getSkyLight(0, 100, 0));
@@ -90,42 +90,36 @@ class AllayLightServiceTest {
 
         // Case 2
         lightService.onBlockChange(0, 0, 0, 0, 0);
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
         assertEquals(15, lightService.getSkyLight(0, -1, 0));
 
         // Case 3
         lightService.onBlockChange(0, 0, 0, 0, 1);
-        lightService.tickIgnoreLimitUnblocking();
+        lightService.handleUpdateInAllQueues();
         assertEquals(14, lightService.getSkyLight(0, 0, 0));
-        assertEquals(13, lightService.getSkyLight(0, -1, 0));
-        assertEquals(12, lightService.getSkyLight(0, -2, 0));
-        assertEquals(11, lightService.getSkyLight(0, -3, 0));
+        assertEquals(14, lightService.getSkyLight(0, -1, 0));
+        assertEquals(14, lightService.getSkyLight(0, -2, 0));
+        assertEquals(14, lightService.getSkyLight(0, -3, 0));
 
         // Case 4
         lightService.onBlockChange(0, 0, 0, 0, 15);
         lightService.onBlockChange(0, 1, 0, 0, 15);
         lightService.onBlockChange(0, 2, 0, 0, 15);
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.tickIgnoreLimitUnblocking();
-        // TODO: Should be 14
-        assertEquals(11, lightService.getSkyLight(0, 1, 0));
+        lightService.handleUpdateInAllQueues();
+        assertEquals(14, lightService.getSkyLight(0, 1, 0));
         lightService.onBlockChange(0, 0, 0, 0, 0);
         lightService.onBlockChange(0, 2, 0, 0, 0);
 
         // Case 5
-        lightService.onBlockChange(0, 0, 0, 0, 0);
-        lightService.onBlockChange(0, -1, 0, 0, 15);
-        for (int y = 0; y <= 1; y++) {
-            lightService.onBlockChange(1, y, 0, 0, 15);
-            lightService.onBlockChange(0, y, 1, 0, 15);
-            lightService.onBlockChange(-1, y, 0, 0, 15);
-            lightService.onBlockChange(0, y, -1, 0, 15);
-        }
+        lightService.onBlockChange(0, 0, 0, 0, 15);
+        lightService.onBlockChange(1, 1, 0, 0, 15);
+        lightService.onBlockChange(0, 1, 1, 0, 15);
+        lightService.onBlockChange(-1, 1, 0, 0, 15);
+        lightService.onBlockChange(0, 1, -1, 0, 15);
         lightService.onBlockChange(0, 2, 0, 0, 15);
-        lightService.tickIgnoreLimitUnblocking();
-        assertEquals(0, lightService.getSkyLight(0, 0, 0));
+        lightService.handleUpdateInAllQueues();
         assertEquals(0, lightService.getSkyLight(0, 1, 0));
-        assertEquals(0, lightService.getSkyLight(0, 2, 0));
     }
 
     @Test

@@ -10,7 +10,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -57,13 +56,7 @@ public class AllayDimension implements Dimension {
 
     public void startTick() {
         this.chunkService.startTick();
-        if (Server.SETTINGS.worldSettings().calculateLightAsync()) {
-            Thread.ofPlatform().name("Light Calculating Thread - " + this).start(() -> {
-                while (world.isRunning()) {
-                    this.lightService.tickIgnoreLimit();
-                }
-            });
-        }
+        this.lightService.startTick();
     }
 
     public void tick(long currentTick) {
@@ -74,9 +67,6 @@ public class AllayDimension implements Dimension {
         this.entityService.tick(currentTick);
         this.chunkService.tick(currentTick);
         this.blockUpdateService.tick();
-        if (!Server.SETTINGS.worldSettings().calculateLightAsync()) {
-            this.lightService.tick();
-        }
 
         // Send the new chunk packets again after most of the work is done
         this.chunkService.sendChunkPackets();
@@ -185,6 +175,6 @@ public class AllayDimension implements Dimension {
 
     @Override
     public String toString() {
-        return "world=" + this.world.getWorldData().getDisplayName() + " dimId=" + this.dimensionInfo.dimensionId();
+        return "world=" + this.world.getName() + " dimId=" + this.dimensionInfo.dimensionId();
     }
 }

@@ -47,7 +47,7 @@ public class FillCommand extends SimpleCommand {
                     for (var x = from.x; x <= to.x; x++) {
                         for (var y = from.y; y <= to.y; y++) {
                             for (var z = from.z; z <= to.z; z++) {
-                                dim.setBlockState((int) x, (int) y, (int) z, blockState);
+                                dim.setBlockState(x, y, z, blockState);
                                 count++;
                             }
                         }

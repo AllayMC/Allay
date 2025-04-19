@@ -413,4 +413,21 @@ public final class MathUtils {
         aabb.maxZ += growth;
         return aabb;
     }
+
+    /**
+     * Get the maximum value from an int array.
+     *
+     * @param array the int array to get the maximum value from.
+     *
+     * @return the maximum int value.
+     */
+    public static int max(int[] array) {
+        int max = Integer.MIN_VALUE;
+        for (int i : array) {
+            if (i > max) {
+                max = i;
+            }
+        }
+        return max;
+    }
 }

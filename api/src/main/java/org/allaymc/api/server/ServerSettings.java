@@ -187,19 +187,14 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("spawn-point-chunk-radius")
         private int spawnPointChunkRadius = 3;
 
-        @Comment("Whether to calculate light asynchronously")
-        @Comment("If set to true, the server will calculate light in an independent thread")
-        @CustomKey("calculate-light-async")
-        private boolean calculateLightAsync = true;
-
-        @Comment("Determines the maximum number of light updates that can be processed per tick")
-        @Comment("This only be effective when async light calculating is disabled")
-        @CustomKey("max-light-update-count-per-tick")
-        private int maxLightUpdateCountPerTick = 128;
-
         @Comment("If set to true, dimensions in the same world will be ticked in parallel during world tick")
         @CustomKey("tick-dimension-in-parallel")
         private boolean tickDimensionInParallel = true;
+
+        @Comment("Indicate the max light update count per dimension, if the count is exceeded, light in")
+        @Comment("newly loaded chunks won't be calculated immediately to avoid taking too much memory")
+        @CustomKey("max-light-update-count")
+        private int maxLightUpdateCountPerDimension = 1280000;
 
         public enum ChunkSendingStrategy {
             ASYNC,
