@@ -173,6 +173,16 @@ public record Structure(
         );
     }
 
+    private static int indexFormPos(int sizeX, int sizeY, int sizeZ, int x, int y, int z) {
+        // sizeX is kept for better looking
+        return x * sizeY * sizeZ + y * sizeZ + z;
+    }
+
+    private static Vector3i posFromIndex(int sizeX, int sizeY, int sizeZ, int index) {
+        // sizeX is kept for better looking
+        return new Vector3i(index / (sizeY * sizeZ), index % (sizeY * sizeZ) / sizeZ, index % (sizeY * sizeZ) % sizeZ);
+    }
+
     /**
      * Place the structure in the dimension.
      *
@@ -185,10 +195,10 @@ public record Structure(
         for (int lx = 0; lx < sizeX; lx++) {
             for (int ly = 0; ly < sizeY; ly++) {
                 for (int lz = 0; lz < sizeZ; lz++) {
-                    if (blockStates[0][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
+                    if (!blockStates[0][lx][ly][lz].equals(STRUCTURE_VOID_DEFAULT_STATE)) {
                         dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[0][lx][ly][lz], 0, true, false);
                     }
-                    if (blockStates[1][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
+                    if (!blockStates[1][lx][ly][lz].equals(STRUCTURE_VOID_DEFAULT_STATE)) {
                         dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[1][lx][ly][lz], 1, true, false);
                     }
                 }
@@ -283,22 +293,12 @@ public record Structure(
                 .build();
     }
 
-    private static int indexFormPos(int sizeX, int sizeY, int sizeZ, int x, int y, int z) {
-        // sizeX is kept for better looking
-        return x * sizeY * sizeZ + y * sizeZ + z;
-    }
-
-    private static Vector3i posFromIndex(int sizeX, int sizeY, int sizeZ, int index) {
-        // sizeX is kept for better looking
-        return new Vector3i(index / (sizeY * sizeZ), index % (sizeY * sizeZ) / sizeZ, index % (sizeY * sizeZ) % sizeZ);
-    }
-
     private static class BlockStatePalette {
         @Getter
         private final List<BlockState> palette = new ArrayList<>();
 
         public int getIndexOf(BlockState block) {
-            if (block == STRUCTURE_VOID_DEFAULT_STATE) {
+            if (block.equals(STRUCTURE_VOID_DEFAULT_STATE)) {
                 return -1;
             }
             if (palette.contains(block)) {

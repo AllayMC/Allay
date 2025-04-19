@@ -21,6 +21,8 @@ import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
+
 /**
  * @author Dhaiven | daoge_cmd
  */
@@ -43,60 +45,59 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        if (face == BlockFace.DOWN && neighbor.blockState().getBlockType() != BlockTypes.FARMLAND) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (face == BlockFace.DOWN && neighbor.getBlockType() != BlockTypes.FARMLAND) {
+            current.breakBlock();
         }
     }
 
     /**
      * Calculate the chance the crop will grow during a random tick.
      *
-     * @param blockStateWithPos the block state to calculate the growth chance for.
+     * @param block the block state to calculate the growth chance for.
      *
      * @return the chance the crop will grow.
      */
-    protected float calculateGrowthChance(BlockStateWithPos blockStateWithPos) {
+    protected float calculateGrowthChance(BlockStateWithPos block) {
         var points = 0.0f;
 
-        var dimension = blockStateWithPos.dimension();
-        var block = blockStateWithPos.blockState();
-        var under = BlockFace.DOWN.offsetPos(blockStateWithPos.pos());
-
+        var under = block.offsetPos(BlockFace.DOWN);
         for (var x = -1; x <= 1; x++) {
             for (var z = -1; z <= 1; z++) {
-                block = dimension.getBlockState(under.x() + x, under.y(), under.z() + z);
-                if (block.getBlockType() == BlockTypes.FARMLAND) {
-                    var farmlandPoints = 0.0f;
-                    if (block.getPropertyValue(BlockPropertyTypes.MOISTURIZED_AMOUNT) > 0) {
+                var neighbor = under.offsetPos(x, 0, z);
+                if (neighbor.getBlockType() == BlockTypes.FARMLAND) {
+                    var farmlandPoints = 0f;
+                    if (neighbor.getPropertyValue(BlockPropertyTypes.MOISTURIZED_AMOUNT) > 0) {
                         farmlandPoints = 4;
                     } else {
                         farmlandPoints = 2;
                     }
                     if (x != 0 || z != 0) {
-                        farmlandPoints = (farmlandPoints - 1.0f) / 4.0f;
+                        farmlandPoints = (farmlandPoints - 1f) / 4f;
                     }
                     points += farmlandPoints;
                 }
             }
         }
 
-        var north = BlockFace.NORTH.offsetPos(blockStateWithPos.pos());
-        var south = BlockFace.SOUTH.offsetPos(blockStateWithPos.pos());
+        var north = block.offsetPos(BlockFace.NORTH);
+        var south = block.offsetPos(BlockFace.SOUTH);
+        var west = block.offsetPos(BlockFace.WEST);
+        var east = block.offsetPos(BlockFace.EAST);
 
-        var northSouth = dimension.getBlockState(north).getBlockType() == this.blockType ||
-                         dimension.getBlockState(south).getBlockType() == this.blockType;
-        var westEast = dimension.getBlockState(BlockFace.WEST.offsetPos(blockStateWithPos.pos())).getBlockType() == this.blockType ||
-                       dimension.getBlockState(BlockFace.EAST.offsetPos(blockStateWithPos.pos())).getBlockType() == this.blockType;
+        var northSouth = north.getBlockType() == this.blockType || south.getBlockType() == this.blockType;
+        var westEast = west.getBlockType() == this.blockType || east.getBlockType() == this.blockType;
         if (northSouth && westEast) {
-            points /= 2.0f;
-        } else if (dimension.getBlockState(BlockFace.WEST.offsetPos(north)) == this.blockType ||
-                   dimension.getBlockState(BlockFace.EAST.offsetPos(north)) == this.blockType ||
-                   dimension.getBlockState(BlockFace.WEST.offsetPos(south)) == this.blockType ||
-                   dimension.getBlockState(BlockFace.EAST.offsetPos(south)) == this.blockType) {
-            points /= 2.0f;
+            points /= 2f;
+        } else if (
+                north.offsetPos(BlockFace.WEST).getBlockType() == this.blockType ||
+                north.offsetPos(BlockFace.EAST).getBlockType() == this.blockType ||
+                south.offsetPos(BlockFace.WEST).getBlockType() == this.blockType ||
+                south.offsetPos(BlockFace.EAST).getBlockType() == this.blockType
+        ) {
+            points /= 2f;
         }
 
-        return 1.0f / (25.0f / points + 1.0f);
+        return 1f / (25f / points + 1f);
     }
 
     @Override
@@ -119,12 +120,12 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     }
 
     protected boolean onBoneMealUsed(Dimension dimension, Vector3ic pos, BlockState crop) {
-        var growth = crop.getPropertyValue(BlockPropertyTypes.GROWTH);
-        if (growth == 7) {
+        var growth = crop.getPropertyValue(GROWTH);
+        if (growth == GROWTH.getMax()) {
             return false;
         }
 
-        var newCrop = crop.setPropertyValue(BlockPropertyTypes.GROWTH, Math.min(growth + ThreadLocalRandom.current().nextInt(4) + 2, 7));
+        var newCrop = crop.setPropertyValue(GROWTH, Math.min(growth + ThreadLocalRandom.current().nextInt(4) + 2, 7));
         var event = new BlockGrowEvent(new BlockStateWithPos(crop, new Position3i(pos, dimension)), newCrop);
         if (event.call()) {
             dimension.setBlockState(pos, event.getNewBlockState());
@@ -143,18 +144,18 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
 
-        if (current.dimension().getLightService().getInternalLight(current.pos()) < 8) {
+        if (current.getDimension().getLightService().getInternalLight(current.getPos()) < 8) {
             var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
-                current.dimension().breakBlock(current.pos(), null, null);
+                current.breakBlock();
             }
         } else {
-            var growth = current.blockState().getPropertyValue(BlockPropertyTypes.GROWTH);
-            if (growth < 7 && ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(current)) {
-                var newCrop = current.blockState().setPropertyValue(BlockPropertyTypes.GROWTH, growth + 1);
+            var growth = current.getPropertyValue(GROWTH);
+            if (growth < GROWTH.getMax() && ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(current)) {
+                var newCrop = current.setPropertyValue(GROWTH, growth + 1);
                 var event = new BlockGrowEvent(current, newCrop);
                 if (event.call()) {
-                    current.dimension().setBlockState(current.pos(), event.getNewBlockState());
+                    current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
                 }
             }
         }

@@ -8,18 +8,18 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.math.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 import java.util.ArrayDeque;
+import java.util.Queue;
 
 /**
  * @author daoge_cmd
  */
 public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
-
     protected static final int MAX_REMOVED_WATER_COUNT = 64;
+    protected static final int MAX_ABSORB_DISTANCE = 6;
 
     public BlockSpongeBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -39,54 +39,54 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
 
     protected void tryAbsorbWater(BlockStateWithPos center) {
         if (performAbsorbWater(center)) {
-            center.dimension().setBlockState(center.pos(), BlockTypes.WET_SPONGE.getDefaultState());
-            center.dimension().addLevelEvent(
-                    MathUtils.center(center.pos()),
-                    LevelEvent.PARTICLE_DESTROY_BLOCK,
-                    BlockTypes.WATER.getDefaultState().blockStateHash()
-            );
-            center.dimension().addLevelSoundEvent(
-                    MathUtils.center(center.pos()),
-                    SoundEvent.SPONGE_ABSORB
-            );
+            center.getDimension().setBlockState(center.getPos(), BlockTypes.WET_SPONGE.getDefaultState());
+            center.addLevelEvent(LevelEvent.PARTICLE_DESTROY_BLOCK, BlockTypes.WATER.getDefaultState().blockStateHash());
+            center.addLevelSoundEvent(SoundEvent.SPONGE_ABSORB);
         }
     }
 
     protected boolean performAbsorbWater(BlockStateWithPos center) {
-        var waterFound = false;
-        for (var face : BlockFace.values()) {
-            if (center.offsetPos(face).blockState().getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
-                waterFound = true;
-                break;
-            }
-        }
-        if (!waterFound) {
+        if (!hasAdjacentWater(center)) {
             return false;
         }
 
-        var entries = new ArrayDeque<Entry>();
-        entries.add(new Entry(center, 0));
+        Queue<Entry> queue = new ArrayDeque<>();
+        queue.add(new Entry(center, 0));
 
-        Entry entry;
-        var waterRemoved = 0;
-        while (waterRemoved < MAX_REMOVED_WATER_COUNT && (entry = entries.poll()) != null) {
+        int removedWaterCount = 0;
+        while (!queue.isEmpty() && removedWaterCount < MAX_REMOVED_WATER_COUNT) {
+            var entry = queue.poll();
+            var currentDistance = entry.distance();
+
             for (var face : BlockFace.values()) {
-                var side = entry.block.offsetPos(face);
-                if (side.blockState().getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
-                    center.dimension().setBlockState(side.pos(), BlockTypes.AIR.getDefaultState());
-                    ++waterRemoved;
-                    if (entry.distance < 6) {
-                        entries.add(new Entry(side, entry.distance + 1));
+                var neighbor = entry.block().offsetPos(face);
+                var neighborType = neighbor.getBlockType();
+
+                if (neighborType.hasBlockTag(BlockCustomTags.WATER)) {
+                    center.getDimension().setBlockState(neighbor.getPos(), BlockTypes.AIR.getDefaultState());
+                    removedWaterCount++;
+                    if (currentDistance < MAX_ABSORB_DISTANCE) {
+                        queue.add(new Entry(neighbor, currentDistance + 1));
                     }
-                } else if (side.blockState().getBlockType() == BlockTypes.AIR) {
-                    if (entry.distance < 6) {
-                        entries.add(new Entry(side, entry.distance + 1));
+                } else if (neighborType == BlockTypes.AIR) {
+                    if (currentDistance < MAX_ABSORB_DISTANCE) {
+                        queue.add(new Entry(neighbor, currentDistance + 1));
                     }
                 }
             }
         }
 
-        return waterRemoved > 0;
+        return removedWaterCount > 0;
+    }
+
+    private boolean hasAdjacentWater(BlockStateWithPos center) {
+        for (var face : BlockFace.values()) {
+            if (center.offsetPos(face).getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected record Entry(BlockStateWithPos block, int distance) {}

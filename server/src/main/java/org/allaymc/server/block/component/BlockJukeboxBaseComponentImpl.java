@@ -53,7 +53,7 @@ public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         super.onBreak(blockState, usedItem, entity);
-        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.pos());
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.getPos());
         if (blockEntity instanceof BlockEntityJukebox jukebox) {
             jukebox.stop();
         }

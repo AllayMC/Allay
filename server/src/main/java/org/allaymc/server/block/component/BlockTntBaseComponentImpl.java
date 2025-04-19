@@ -50,9 +50,10 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
 
     @Override
     public void prime(BlockStateWithPos blockStateWithPos, int fuse) {
-        var dimension = blockStateWithPos.dimension();
-        var pos = blockStateWithPos.pos();
+        var dimension = blockStateWithPos.getDimension();
+        var pos = blockStateWithPos.getPos();
         dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
+
         var angle = ThreadLocalRandom.current().nextFloat() * Math.PI * 2;
         var motion = new Vector3d(-Math.sin(angle) * 0.02, 0.2, -Math.cos(angle) * 0.02);
         var entity = EntityTypes.TNT.createEntity(

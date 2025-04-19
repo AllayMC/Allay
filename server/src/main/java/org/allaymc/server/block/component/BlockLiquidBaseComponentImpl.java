@@ -32,24 +32,39 @@ import static org.allaymc.api.block.component.BlockLiquidBaseComponent.*;
  */
 @Slf4j
 public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImpl implements BlockLiquidBaseComponent {
-
     public BlockLiquidBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
-    public boolean canResetFallDamage() {
-        return true;
-    }
+    public void onScheduledUpdate(BlockStateWithPos current) {
+        var pos = current.getPos();
+        var dimension = current.getDimension();
+        if (canFormSource() && getDepth(current) == 7) {
+            // Attempt to form new water source blocks.
+            var count = 0;
+            for (var face : BlockFace.getHorizontalBlockFaces()) {
+                var neighbor = current.offsetPos(face);
+                if (isSameLiquidType(neighbor.getBlockType()) && isSource(neighbor)) {
+                    count++;
+                }
+            }
 
-    @Override
-    public boolean canCollideWithEntity() {
-        return true;
-    }
+            if (count >= 2) {
+                if (!canFlowInto(dimension, BlockFace.DOWN.offsetPos(pos), true)) {
+                    // Only form a new source block if there either is no water below this block,
+                    // or if the water below this is not falling (full source block).
+                    var newLiquid = getSourceBlockState();
+                    var event = new LiquidFlowEvent(current, pos, newLiquid, true);
+                    if (!event.call()) {
+                        return;
+                    }
+                    dimension.setLiquid(pos, newLiquid);
+                }
+            }
+        }
 
-    @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Collections.emptySet();
+        updateLiquid(dimension, pos, current, current.getLayer());
     }
 
     @Override
@@ -65,40 +80,25 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     protected void tryScheduleLiquidUpdate(BlockStateWithPos current) {
-        var blockUpdateService = current.dimension().getBlockUpdateService();
-        if (!blockUpdateService.hasScheduledBlockUpdate(current.pos())) {
-            blockUpdateService.scheduleBlockUpdateInDelay(current.pos(), getFlowSpeed(current.dimension().getDimensionInfo()));
+        var blockUpdateService = current.getDimension().getBlockUpdateService();
+        if (!blockUpdateService.hasScheduledBlockUpdate(current.getPos())) {
+            blockUpdateService.scheduleBlockUpdateInDelay(current.getPos(), getFlowSpeed(current.getDimension().getDimensionInfo()));
         }
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos current) {
-        var pos = current.pos();
-        var dimension = current.dimension();
-        var liquid = current.blockState();
-        if (canFormSource() && getDepth(liquid) == 7) {
-            // Attempt to form new water source blocks.
-            var count = 0;
-            for (var face : BlockFace.getHorizontalBlockFaces()) {
-                var neighbor = dimension.getBlockState(face.offsetPos(pos));
-                if (isSameLiquidType(neighbor.getBlockType()) && isSource(neighbor)) {
-                    count++;
-                }
-            }
-            if (count >= 2) {
-                if (!canFlowInto(dimension, BlockFace.DOWN.offsetPos(pos), true)) {
-                    // Only form a new source block if there either is no water below this block,
-                    // or if the water below this is not falling (full source block).
-                    var newLiquid = getSourceBlockState();
-                    var event = new LiquidFlowEvent(current, pos, newLiquid, true);
-                    if (!event.call()) {
-                        return;
-                    }
-                    dimension.setLiquid(pos, newLiquid);
-                }
-            }
-        }
-        updateLiquid(dimension, pos, liquid, current.layer());
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public boolean canResetFallDamage() {
+        return true;
+    }
+
+    @Override
+    public boolean canCollideWithEntity() {
+        return true;
     }
 
     /**

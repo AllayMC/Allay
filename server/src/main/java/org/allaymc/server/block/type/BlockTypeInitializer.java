@@ -11,8 +11,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.item.data.ItemId;
-import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.voxelshape.VoxelShapes;
 import org.allaymc.api.world.Sound;
 import org.allaymc.server.block.component.*;
@@ -205,29 +203,29 @@ public final class BlockTypeInitializer {
     }
 
     public static void initLeaves() {
-        BlockTypes.ACACIA_LEAVES = buildLeaves(BlockId.ACACIA_LEAVES, ItemTypes.ACACIA_SAPLING);
+        BlockTypes.ACACIA_LEAVES = buildLeaves(BlockId.ACACIA_LEAVES, ItemId.ACACIA_SAPLING);
         BlockTypes.AZALEA_LEAVES = buildLeaves(BlockId.AZALEA_LEAVES, null);
         BlockTypes.AZALEA_LEAVES_FLOWERED = buildLeaves(BlockId.AZALEA_LEAVES_FLOWERED, null);
-        BlockTypes.BIRCH_LEAVES = buildLeaves(BlockId.BIRCH_LEAVES, ItemTypes.BIRCH_SAPLING);
-        BlockTypes.CHERRY_LEAVES = buildLeaves(BlockId.CHERRY_LEAVES, ItemTypes.CHERRY_SAPLING);
-        BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockId.DARK_OAK_LEAVES, ItemTypes.DARK_OAK_SAPLING);
-        BlockTypes.JUNGLE_LEAVES = buildLeaves(BlockId.JUNGLE_LEAVES, ItemTypes.JUNGLE_SAPLING, false, true);
+        BlockTypes.BIRCH_LEAVES = buildLeaves(BlockId.BIRCH_LEAVES, ItemId.BIRCH_SAPLING);
+        BlockTypes.CHERRY_LEAVES = buildLeaves(BlockId.CHERRY_LEAVES, ItemId.CHERRY_SAPLING);
+        BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockId.DARK_OAK_LEAVES, ItemId.DARK_OAK_SAPLING);
+        BlockTypes.JUNGLE_LEAVES = buildLeaves(BlockId.JUNGLE_LEAVES, ItemId.JUNGLE_SAPLING, false, true);
         BlockTypes.MANGROVE_LEAVES = buildLeaves(BlockId.MANGROVE_LEAVES, null);
-        BlockTypes.OAK_LEAVES = buildLeaves(BlockId.OAK_LEAVES, ItemTypes.OAK_SAPLING, true, false);
-        BlockTypes.SPRUCE_LEAVES = buildLeaves(BlockId.SPRUCE_LEAVES, ItemTypes.SPRUCE_SAPLING);
-        BlockTypes.PALE_OAK_LEAVES = buildLeaves(BlockId.PALE_OAK_LEAVES, ItemTypes.PALE_OAK_SAPLING);
+        BlockTypes.OAK_LEAVES = buildLeaves(BlockId.OAK_LEAVES, ItemId.OAK_SAPLING, true, false);
+        BlockTypes.SPRUCE_LEAVES = buildLeaves(BlockId.SPRUCE_LEAVES, ItemId.SPRUCE_SAPLING);
+        BlockTypes.PALE_OAK_LEAVES = buildLeaves(BlockId.PALE_OAK_LEAVES, ItemId.PALE_OAK_SAPLING);
     }
 
-    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id, ItemType<?> saplingType) {
-        return buildLeaves(id, saplingType, false, false);
+    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id, ItemId saplingId) {
+        return buildLeaves(id, saplingId, false, false);
     }
 
-    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id, ItemType<?> saplingType, boolean canDropApple, boolean dropMoreSaplings) {
+    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id, ItemId saplingId, boolean canDropApple, boolean dropMoreSaplings) {
         return AllayBlockType
                 .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(id)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockLeavesBaseComponentImpl(blockType, saplingType, canDropApple, dropMoreSaplings))
+                .setBaseComponentSupplier(blockType -> new BlockLeavesBaseComponentImpl(blockType, saplingId, canDropApple, dropMoreSaplings))
                 .build();
     }
 
@@ -1276,13 +1274,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockMelonStemBehaviorImpl.class)
                 .vanillaBlock(BlockId.MELON_STEM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
-                .setBaseComponentSupplier(blockType -> new BlockMelonStemBaseComponentImpl(blockType, BlockId.MELON_BLOCK))
+                .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.MELON_BLOCK))
                 .build();
         BlockTypes.PUMPKIN_STEM = AllayBlockType
                 .builder(BlockPumpkinBehaviorImpl.class)
                 .vanillaBlock(BlockId.PUMPKIN_STEM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
-                .setBaseComponentSupplier(blockType -> new BlockMelonStemBaseComponentImpl(blockType, BlockId.PUMPKIN))
+                .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.PUMPKIN))
                 .build();
     }
 

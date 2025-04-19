@@ -18,7 +18,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author IWareQ
  */
 public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityJukeboxBaseComponent {
-
     protected static final String TAG_RECORD_ITEM = "RecordItem";
 
     @Getter
@@ -43,12 +42,12 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public void onReplace(CBlockOnReplaceEvent event) {
-        var pos = event.getCurrentBlockState().pos();
-        var dimension = pos.dimension();
-        var rand = ThreadLocalRandom.current();
-
         if (this.musicDiscItem != null) {
-            dimension.dropItem(this.musicDiscItem, new Vector3d(
+            var current = event.getCurrentBlockState();
+            var pos = current.getPos();
+            var rand = ThreadLocalRandom.current();
+
+            current.getDimension().dropItem(this.musicDiscItem, new Vector3d(
                     pos.x() + rand.nextDouble(0.5) + 0.25,
                     pos.y() + rand.nextDouble(0.5) + 0.25,
                     pos.z() + rand.nextDouble(0.5) + 0.25

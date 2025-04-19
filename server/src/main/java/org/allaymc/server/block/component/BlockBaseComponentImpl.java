@@ -28,7 +28,6 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class BlockBaseComponentImpl implements BlockBaseComponent {
-
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
 
@@ -53,9 +52,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (getBlockType().getItemType() != null) {
-            return Set.of(getSilkTouchDrop(blockState));
+            return Set.of(getSilkTouchDrop(current));
         }
 
         return Utils.EMPTY_ITEM_STACK_SET;
@@ -113,8 +112,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             return;
         }
 
-        var dropPos = MathUtils.center(blockState.pos());
-        var dimension = blockState.pos().dimension();
+        var dropPos = MathUtils.center(blockState.getPos());
+        var dimension = blockState.getDimension();
         if (usedItem != null && usedItem.hasEnchantment(EnchantmentTypes.SILK_TOUCH)) {
             // Silk Touch, directly drop the block itself
             dimension.dropItem(getSilkTouchDrop(blockState), dropPos);
@@ -138,7 +137,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             return false;
         }
 
-        return !blockState.blockState().getBlockStateData().requiresCorrectToolForDrops() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
+        return !blockState.getBlockStateData().requiresCorrectToolForDrops() || (usedItem != null && usedItem.isCorrectToolFor(blockState));
     }
 
     @Override

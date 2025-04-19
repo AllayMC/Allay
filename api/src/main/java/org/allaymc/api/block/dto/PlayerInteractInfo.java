@@ -1,7 +1,6 @@
 package org.allaymc.api.block.dto;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
@@ -28,7 +27,7 @@ public record PlayerInteractInfo(
      *
      * @return The state of the clicked block
      */
-    public BlockState getClickedBlockState() {
-        return player.getDimension().getBlockState(clickedBlockPos);
+    public BlockStateWithPos getClickedBlockState() {
+        return new BlockStateWithPos(clickedBlockPos, player.getDimension());
     }
 }

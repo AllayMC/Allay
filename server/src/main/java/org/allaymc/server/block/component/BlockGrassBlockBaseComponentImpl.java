@@ -27,17 +27,12 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemTypes.DIRT.createItemStack(1));
-    }
-
-    @Override
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
-        var pos = current.pos();
-        var dimension = pos.dimension();
+        var pos = current.getPos();
+        var dimension = current.getDimension();
 
-        var upperBlockState = dimension.getBlockState(BlockFace.UP.offsetPos(pos));
+        var upperBlockState = current.offsetPos(BlockFace.UP);
         // Grass dies and changes to dirt after a random time (when a random tick lands on the block)
         // if directly covered by any opaque block.
         // Transparent blocks can kill grass in a similar manner,
@@ -72,10 +67,15 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
                 var spreadBlockState = new BlockStateWithPos(BlockTypes.GRASS_BLOCK.getDefaultState(), new Position3i(x, y, z, dimension), 0);
                 var event = new BlockSpreadEvent(current, spreadBlockState);
                 if (event.call()) {
-                    dimension.setBlockState(x, y, z, event.getSpreadBlockState().blockState());
+                    dimension.setBlockState(x, y, z, event.getSpreadBlockState());
                 }
             }
         }
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        return Set.of(ItemTypes.DIRT.createItemStack(1));
     }
 
     @Override

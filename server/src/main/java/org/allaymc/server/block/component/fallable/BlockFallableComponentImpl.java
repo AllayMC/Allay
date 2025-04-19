@@ -42,15 +42,13 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
     @EventHandler
     public void onBlockOnNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
         var current = event.getCurrent();
-        var pos = current.pos();
-        var dimension = pos.dimension();
-        trySpawnFallingEntity(dimension, pos, current.blockState());
+        trySpawnFallingEntity(current.getDimension(), current.getPos(), current);
     }
 
     @EventHandler
     protected void onBlockAfterPlaced(CBlockAfterPlacedEvent event) {
         var oldBlockState = event.getOldBlockState();
-        trySpawnFallingEntity(oldBlockState.dimension(), oldBlockState.pos(), event.getNewBlockState());
+        trySpawnFallingEntity(oldBlockState.getDimension(), oldBlockState.getPos(), event.getNewBlockState());
     }
 
     protected void trySpawnFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState) {

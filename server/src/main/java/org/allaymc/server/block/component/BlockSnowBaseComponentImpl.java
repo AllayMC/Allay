@@ -18,7 +18,7 @@ public class BlockSnowBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.SNOWBALL.createItemStack(4));
     }
 }

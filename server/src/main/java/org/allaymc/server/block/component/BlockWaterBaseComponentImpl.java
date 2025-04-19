@@ -11,7 +11,6 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -34,8 +33,8 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (current.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
-            current.dimension().setLiquid(current.pos(), null);
+        if (current.getDimension().getDimensionInfo() == DimensionInfo.NETHER) {
+            current.getDimension().setLiquid(current.getPos(), null);
             return;
         }
 
@@ -44,8 +43,8 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        if (oldBlockState.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
-            oldBlockState.dimension().setLiquid(oldBlockState.pos(), null);
+        if (oldBlockState.getDimension().getDimensionInfo() == DimensionInfo.NETHER) {
+            oldBlockState.getDimension().setLiquid(oldBlockState.getPos(), null);
             return;
         }
 
@@ -56,20 +55,20 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onReplace(currentBlockState, newBlockState, placementInfo);
 
-        if (!isSource(currentBlockState.blockState())) {
+        if (!isSource(currentBlockState)) {
             // Only source block can be moved to layer 1
             return;
         }
 
-        if (currentBlockState.layer() != 0) {
+        if (currentBlockState.getLayer() != 0) {
             return;
         }
 
-        var dim = currentBlockState.pos().dimension();
+        var dim = currentBlockState.getDimension();
         if (newBlockState.getBlockType() != AIR && newBlockState.getBlockStateData().canContainLiquidSource()) {
             // If the old block is water and the new block can contain liquid,
             // we need to move water to layer 1
-            dim.setBlockState(currentBlockState.pos(), currentBlockState.blockState(), 1);
+            dim.setBlockState(currentBlockState.getPos(), currentBlockState, 1);
         }
     }
 
@@ -77,23 +76,24 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterNeighborLayerReplace(currentBlockState, newBlockState, placementInfo);
 
-        if (currentBlockState.layer() != 0 || isSameLiquidType(newBlockState.getBlockType())) {
+        if (currentBlockState.getLayer() != 0 || isSameLiquidType(newBlockState.getBlockType())) {
             return;
         }
 
-        var dim = currentBlockState.pos().dimension();
+        var dim = currentBlockState.getDimension();
+        var pos = currentBlockState.getPos();
         if (newBlockState.getBlockType() == AIR) {
-            if (isSource(dim.getBlockState(currentBlockState.pos(), 1))) {
+            if (isSource(dim.getBlockState(pos, 1))) {
                 // Move layer 1 water back to layer 0 only when the liquid is a source liquid
-                dim.setBlockState(currentBlockState.pos(), BlockTypes.WATER.getDefaultState(), 0);
+                dim.setBlockState(pos, BlockTypes.WATER.getDefaultState(), 0);
             }
-            dim.setBlockState(currentBlockState.pos(), BlockTypes.AIR.getDefaultState(), 1);
+            dim.setBlockState(pos, BlockTypes.AIR.getDefaultState(), 1);
             return;
         }
 
         if (!newBlockState.getBlockStateData().canContainLiquidSource()) {
             // New layer 0 block cannot contain liquid, remove layer 1 water
-            dim.setBlockState(currentBlockState.pos(), BlockTypes.AIR.getDefaultState(), 1);
+            dim.setBlockState(pos, BlockTypes.AIR.getDefaultState(), 1);
         }
     }
 
@@ -112,25 +112,25 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return false;
         }
 
-        var dimension = current.dimension();
+        var dimension = current.getDimension();
         // This method also considered BlockTypes.FLOWING_LAVA as the same liquid type
-        if (!BlockTypes.LAVA.getBlockBehavior().isSameLiquidType(flownIntoBy.blockState().getBlockType())) {
+        if (!BlockTypes.LAVA.getBlockBehavior().isSameLiquidType(flownIntoBy.getBlockType())) {
             return false;
         }
 
         BlockState hardenedBlockState;
-        if (flownIntoBy.pos().y() == current.pos().y() + 1) {
+        if (flownIntoBy.getPos().y() == current.getPos().y() + 1) {
             hardenedBlockState = BlockTypes.STONE.getDefaultState();
         } else {
             hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
         }
-        var event = new LiquidHardenEvent(flownIntoBy, current.blockState(), hardenedBlockState);
+        var event = new LiquidHardenEvent(flownIntoBy, current, hardenedBlockState);
         if (!event.call()) {
             return false;
         }
 
-        dimension.setBlockState(flownIntoBy.pos(), event.getHardenedBlockState());
-        dimension.addLevelSoundEvent(MathUtils.center(flownIntoBy.pos()), SoundEvent.FIZZ);
+        dimension.setBlockState(flownIntoBy.getPos(), event.getHardenedBlockState());
+        flownIntoBy.addLevelSoundEvent(SoundEvent.FIZZ);
         return true;
     }
 

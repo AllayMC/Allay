@@ -5,8 +5,8 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.joml.Runtime;
 import org.joml.*;
+import org.joml.Runtime;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -382,7 +382,7 @@ public class Location3i extends Position3i implements Location3ic {
     }
 
     @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+    public void readExternal(ObjectInput in) throws IOException {
         x = in.readInt();
         y = in.readInt();
         z = in.readInt();

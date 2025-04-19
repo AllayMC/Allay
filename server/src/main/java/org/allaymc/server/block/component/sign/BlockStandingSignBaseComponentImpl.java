@@ -26,17 +26,13 @@ public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        if (face != BlockFace.DOWN) {
-            return;
-        }
-
-        if (!neighbor.blockState().getBlockStateData().isSolid()) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
+            current.breakBlock();
         }
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         return Set.of(dropItemId.getItemType().createItemStack(1));
     }
 

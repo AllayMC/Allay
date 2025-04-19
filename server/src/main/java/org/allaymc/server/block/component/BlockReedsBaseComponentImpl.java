@@ -4,7 +4,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -15,6 +14,8 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3ic;
+
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.AGE_16;
 
 /**
  * @author daoge_cmd
@@ -35,32 +36,26 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canRandomUpdate() {
-        return true;
-    }
-
-    @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!canGrowHere(current.dimension(), current.pos(), true)) {
-            current.dimension().breakBlock(current.pos(), null, null);
+        if (!canGrowHere(current.getDimension(), current.getPos(), true)) {
+            current.breakBlock();
         }
     }
 
     @Override
     public void onRandomUpdate(BlockStateWithPos current) {
-        var dimension = current.dimension();
-        var pos = current.pos();
+        var dimension = current.getDimension();
+        var pos = current.getPos();
         if (!canGrowHere(dimension, pos, true)) {
             dimension.breakBlock(pos, null, null);
             return;
         }
 
-        var block = current.blockState();
-        var age = block.getPropertyValue(BlockPropertyTypes.AGE_16);
-        if (age < 15) {
-            block = block.setPropertyValue(BlockPropertyTypes.AGE_16, age + 1);
-        } else if (age == 15) {
-            block = block.setPropertyValue(BlockPropertyTypes.AGE_16, 0);
+        var age = current.getPropertyValue(AGE_16);
+        if (age < AGE_16.getMax()) {
+            current = current.setPropertyValue(AGE_16, age + 1);
+        } else if (age == AGE_16.getMax()) {
+            current = current.setPropertyValue(AGE_16, 0);
             if (canGrowHere(dimension, pos, false)) {
                 for (var y = 1; y < 3; y++) {
                     var blockType = dimension.getBlockState(pos.x(), pos.y() + y, pos.z()).getBlockType();
@@ -74,7 +69,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        dimension.setBlockState(pos, block);
+        dimension.setBlockState(pos, current);
     }
 
     @Override
@@ -100,6 +95,11 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         return false;
+    }
+
+    @Override
+    public boolean canRandomUpdate() {
+        return true;
     }
 
     /**

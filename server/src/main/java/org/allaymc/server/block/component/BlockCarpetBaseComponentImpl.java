@@ -18,7 +18,7 @@ public class BlockCarpetBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(current, neighbor, face);
 
         if (face == BlockFace.DOWN && neighbor.isAir()) {
-            current.pos().dimension().breakBlock(current.pos());
+            current.breakBlock();
         }
     }
 }

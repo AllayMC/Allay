@@ -25,7 +25,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * @author Dhaiven
  */
 public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
-
     public BlockDoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -82,15 +81,15 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var keep = true;
         if (face == BlockFace.UP) {
-            keep = current.blockState().getPropertyValue(UPPER_BLOCK_BIT) || neighbor.blockState().getBlockType() == getBlockType();
+            keep = current.getPropertyValue(UPPER_BLOCK_BIT) || neighbor.getBlockType() == getBlockType();
         } else if (face == BlockFace.DOWN) {
-            keep = current.blockState().getPropertyValue(UPPER_BLOCK_BIT)
-                    ? neighbor.blockState().getBlockType() == getBlockType()
-                    : neighbor.blockState().getBlockStateData().isSolid();
+            keep = current.getPropertyValue(UPPER_BLOCK_BIT)
+                    ? neighbor.getBlockType() == getBlockType()
+                    : neighbor.getBlockStateData().isSolid();
         }
 
         if (!keep) {
-            current.pos().dimension().breakBlock(current.pos());
+            current.breakBlock();
         }
     }
 
@@ -118,14 +117,14 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-            blockState.pos().dimension().breakBlock(BlockFace.DOWN.offsetPos(blockState.pos()), null, entity);
+        if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
+            blockState.getDimension().breakBlock(BlockFace.DOWN.offsetPos(blockState.getPos()), null, entity);
         }
         super.onBreak(blockState, usedItem, entity);
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(blockState, usedItem, entity);
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        return current.getPropertyValue(UPPER_BLOCK_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(current, usedItem, entity);
     }
 }

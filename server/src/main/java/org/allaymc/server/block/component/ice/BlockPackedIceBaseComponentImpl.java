@@ -18,7 +18,7 @@ public class BlockPackedIceBaseComponentImpl extends BlockIceBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         return Utils.EMPTY_ITEM_STACK_SET;
     }
 

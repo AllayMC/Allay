@@ -201,7 +201,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @return the silk touch drop as an {@link ItemStack}.
      */
     default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
-        return blockState.blockState().toItemStack();
+        return blockState.toItemStack();
     }
 
     /**

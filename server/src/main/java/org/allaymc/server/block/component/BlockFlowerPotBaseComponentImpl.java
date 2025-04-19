@@ -31,8 +31,8 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
-        if (face == BlockFace.DOWN && !isValidWeighBlock(neighbor.blockState())) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (face == BlockFace.DOWN && !isValidWeighBlock(neighbor)) {
+            current.breakBlock();
         }
     }
 

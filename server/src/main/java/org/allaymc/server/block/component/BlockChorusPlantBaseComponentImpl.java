@@ -25,7 +25,7 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
         if (!canBeSupportedAt(current)) {
-            current.dimension().breakBlock(current.pos());
+            current.breakBlock();
         }
     }
 
@@ -33,7 +33,7 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
         boolean sideSupport = false;
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             var neighbor = current.offsetPos(face);
-            if (neighbor.blockState().getBlockType() == BlockTypes.CHORUS_PLANT && hasDownSupport(neighbor)) {
+            if (neighbor.getBlockType() == BlockTypes.CHORUS_PLANT && hasDownSupport(neighbor)) {
                 sideSupport = true;
                 break;
             }
@@ -49,12 +49,12 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean hasDownSupport(BlockStateWithPos current) {
-        var downType = current.offsetPos(BlockFace.DOWN).blockState().getBlockType();
+        var downType = current.offsetPos(BlockFace.DOWN).getBlockType();
         return downType == BlockTypes.CHORUS_PLANT || downType == BlockTypes.END_STONE;
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (ThreadLocalRandom.current().nextBoolean()) {
             return Set.of(ItemTypes.CHORUS_FRUIT.createItemStack());
         }

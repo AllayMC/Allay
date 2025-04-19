@@ -30,10 +30,10 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
 
-        if (current.dimension().getLightService().getInternalLight(current.pos()) > 11) {
+        if (current.getDimension().getLightService().getInternalLight(current.getPos()) > 11) {
             var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
-                current.dimension().setBlockState(current.pos(), event.getNewBlockState());
+                current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
             }
         }
     }
@@ -68,8 +68,8 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemTypes.SNOWBALL.createItemStack((int) Math.max(1, (double) (blockState.blockState().getPropertyValue(HEIGHT) / 2))));
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        return Set.of(ItemTypes.SNOWBALL.createItemStack((int) Math.max(1, (double) (current.getPropertyValue(HEIGHT) / 2))));
     }
 
     @Override

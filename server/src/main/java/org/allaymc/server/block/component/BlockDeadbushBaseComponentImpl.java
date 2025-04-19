@@ -27,8 +27,8 @@ public class BlockDeadbushBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        if (face == BlockFace.DOWN && !canBeSupportedAt(neighbor.blockState())) {
-            current.pos().dimension().breakBlock(current.pos());
+        if (face == BlockFace.DOWN && !canBeSupportedAt(neighbor)) {
+            current.breakBlock();
         }
     }
 
@@ -46,9 +46,9 @@ public class BlockDeadbushBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
-            return super.getDrops(blockState, usedItem, entity);
+            return super.getDrops(current, usedItem, entity);
         }
 
         return Set.of(ItemTypes.STICK.createItemStack(ThreadLocalRandom.current().nextInt(0, 3)));

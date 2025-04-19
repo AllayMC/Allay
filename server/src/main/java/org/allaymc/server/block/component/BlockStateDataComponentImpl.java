@@ -32,50 +32,126 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         this.attributeAccessor = attributeAccessor;
     }
 
+    /**
+     * Retrieves the default block state data component.
+     *
+     * @return the default instance returning {@link BlockStateData#DEFAULT}
+     */
     public static BlockStateDataComponentImpl ofDefault() {
         return DEFAULT;
     }
 
+    /**
+     * Creates a static block state data component that always returns the same data.
+     *
+     * @param attributes the static {@link BlockStateData} to return
+     *
+     * @return a new static data component instance
+     */
     public static BlockStateDataComponentImpl ofGlobalStatic(BlockStateData attributes) {
         return new BlockStateDataComponentImpl(state -> attributes);
     }
 
+    /**
+     * Creates a data component using a direct dynamic accessor.
+     *
+     * @param accessor a function to dynamically compute {@link BlockStateData}
+     *
+     * @return a new dynamic data component instance
+     */
     public static BlockStateDataComponentImpl ofDirectDynamic(Function<BlockState, BlockStateData> accessor) {
         return new BlockStateDataComponentImpl(accessor);
     }
 
+    /**
+     * Creates a data component with caching support using a dynamic accessor.
+     *
+     * @param accessor the underlying data computation function
+     *
+     * @return a cached data component instance
+     */
     public static BlockStateDataComponentImpl ofCachedDynamic(Function<BlockState, BlockStateData> accessor) {
         return new BlockStateDataComponentImpl(new CachedAttributeAccessor(accessor));
     }
 
+    /**
+     * Creates a data component using a provided block state hash map supplier.
+     *
+     * @param supplier supplies the attribute map
+     *
+     * @return a mapped data component instance
+     */
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Supplier<Map<Integer, BlockStateData>> supplier) {
         return ofMappedBlockStateHash(supplier.get());
     }
 
+    /**
+     * Creates a data component using a provided block state hash map.
+     *
+     * @param attributeMap a map from block state hash to attribute data
+     *
+     * @return a mapped data component instance
+     */
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap) {
         return ofMappedBlockStateHash(attributeMap, BlockStateData.DEFAULT);
     }
 
+    /**
+     * Creates a data component using a provided block state hash map and a default value.
+     *
+     * @param attributeMap a map from block state hash to attribute data
+     * @param defaultData  the default data if no match is found
+     *
+     * @return a mapped data component instance
+     */
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap, BlockStateData defaultData) {
         return new BlockStateDataComponentImpl(state -> attributeMap.getOrDefault(state.blockStateHash(), defaultData));
     }
 
+    /**
+     * Creates a lazily loaded block state data component from a block type loader.
+     *
+     * @param loader the function loading maps per block type
+     *
+     * @return a lazy-loaded data component instance
+     */
     public static BlockStateDataComponentImpl ofMappedBlockStateHashLazyLoad(Function<BlockType<?>, Map<Integer, BlockStateData>> loader) {
         return ofDirectDynamic(new LazyLoaderAttributeAccessor(loader));
     }
 
+    /**
+     * Redefines the collision shape using the given function.
+     *
+     * @param shapeFunction a function to compute the new collision shape
+     *
+     * @return a new data component instance with overridden collision shape
+     */
     public static BlockStateDataComponentImpl ofRedefinedCollisionShape(Function<BlockState, VoxelShape> shapeFunction) {
         return ofRedefinedData((builder, blockType, blockStateHash) ->
                 builder.collisionShape(shapeFunction.apply(blockType.ofState(blockStateHash))).build()
         );
     }
 
+    /**
+     * Redefines the visual shape using the given function.
+     *
+     * @param shapeFunction a function to compute the new shape
+     *
+     * @return a new data component instance with overridden shape
+     */
     public static BlockStateDataComponentImpl ofRedefinedShape(Function<BlockState, VoxelShape> shapeFunction) {
         return ofRedefinedData((builder, blockType, blockStateHash) ->
                 builder.shape(shapeFunction.apply(blockType.ofState(blockStateHash))).build()
         );
     }
 
+    /**
+     * Redefines full {@link BlockStateData} using a custom tri-function.
+     *
+     * @param redefiner the redefining function that customizes each state's builder
+     *
+     * @return a new redefined data component instance
+     */
     public static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());

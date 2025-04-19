@@ -91,4 +91,16 @@ public final class BlockPlaceHelper {
         var playerFace = placementInfo.player().getHorizontalFace();
         return blockState.setPropertyValue(DIRECTION_4, DIRECTION_4_MAPPER.get(playerFace.opposite()));
     }
+
+    public static BlockState processUpsideDownBitProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        if (placementInfo == null) {
+            return blockState;
+        }
+
+        var blockFace = placementInfo.blockFace();
+        return blockState.setPropertyValue(
+                UPSIDE_DOWN_BIT,
+                (placementInfo.clickedPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN
+        );
+    }
 }

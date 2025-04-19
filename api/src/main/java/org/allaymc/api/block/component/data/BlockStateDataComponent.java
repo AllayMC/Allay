@@ -8,11 +8,11 @@ import org.allaymc.api.block.type.BlockState;
  */
 public interface BlockStateDataComponent extends BlockComponent {
     /**
-     * Get the block state data of the specific block state.
+     * Retrieves the {@link BlockStateData} associated with the specified {@link BlockState}.
      *
-     * @param blockState the block state.
+     * @param blockState the block state
      *
-     * @return the block state data of the provided block state.
+     * @return the block state data for the given state
      */
     BlockStateData getBlockStateData(BlockState blockState);
 }

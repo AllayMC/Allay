@@ -19,7 +19,7 @@ public class BlockGlowstoneBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.GLOWSTONE_DUST.createItemStack(FortuneDropHelper.discrete(usedItem, 2, 4, 4)));
     }
 }
