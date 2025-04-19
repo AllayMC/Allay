@@ -15,7 +15,6 @@ import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemTypes;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,8 +31,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN, BlockFace.UP
     };
 
-    @Nullable
-    protected final ItemId saplingId;
+    protected final ItemId saplingId; // Nullable
     protected final boolean canDropApple;
     protected final boolean dropMoreSaplings;
 

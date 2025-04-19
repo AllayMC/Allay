@@ -6,7 +6,6 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.Event;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author daoge_cmd
@@ -16,6 +15,5 @@ import org.jetbrains.annotations.Nullable;
 public class CBlockOnReplaceEvent extends Event {
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
-    @Nullable
-    protected PlayerInteractInfo placementInfo;
+    protected PlayerInteractInfo placementInfo; // Nullable
 }
