@@ -13,7 +13,7 @@ network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", ve
 # State Updater
 stateupdater = { group = "org.allaymc", name = "stateupdater", version = "master-SNAPSHOT" }
 # Collections
-guava = { group = "com.google.guava", name = "guava", version = "33.4.7-jre" }
+guava = { group = "com.google.guava", name = "guava", version = "33.4.8-jre" }
 # Fastutil
 fastutil-object-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-int-maps", version.ref = "fastutil" }
 fastutil-object-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-reference-maps", version.ref = "fastutil" }
@@ -69,7 +69,7 @@ netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", ve
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.8" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.0" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.1" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
@@ -84,7 +84,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.7.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.8.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
