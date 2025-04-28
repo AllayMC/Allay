@@ -35,7 +35,7 @@ fastutil-short-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = 
 fastutil-byte-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "byte-object-maps", version.ref = "fastutil" }
 fastutil-io = { group = "org.cloudburstmc.fastutil", name = "io", version.ref = "fastutil" }
 # Serialization
-gson = { group = "com.google.code.gson", name = "gson", version = "2.13.0" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.13.1" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.4" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
@@ -84,7 +84,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.8.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.10.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
