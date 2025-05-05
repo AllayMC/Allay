@@ -40,7 +40,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.4" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
-semver4j = { group = "org.semver4j", name = "semver4j", version = "5.6.0" }
+semver4j = { group = "org.semver4j", name = "semver4j", version = "5.7.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
@@ -84,7 +84,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.10.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.11.1" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
