@@ -3,8 +3,8 @@ package org.allaymc.api.math.position;
 import com.google.common.base.Objects;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.joml.Runtime;
 import org.joml.*;
+import org.joml.Runtime;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -116,74 +116,62 @@ public class Position3i extends Vector3i implements Position3ic {
 
     @Override
     public Position3i set(Vector3ic v) {
-        super.set(v);
-        return this;
+        return new Position3i(super.set(v), dimension());
     }
 
     @Override
     public Position3i set(Vector3dc v) {
-        super.set(v);
-        return this;
+        return new Position3i(super.set(v), dimension());
     }
 
     @Override
     public Position3i set(Vector3dc v, int mode) {
-        super.set(v, mode);
-        return this;
+        return new Position3i(super.set(v, mode), dimension());
     }
 
     @Override
     public Position3i set(Vector3fc v, int mode) {
-        super.set(v, mode);
-        return this;
+        return new Position3i(super.set(v, mode), dimension());
     }
 
     @Override
     public Position3i set(Vector2ic v, int z) {
-        super.set(v, z);
-        return this;
+        return new Position3i(super.set(v, z), dimension());
     }
 
     @Override
     public Position3i set(int d) {
-        super.set(d);
-        return this;
+        return new Position3i(super.set(d), dimension());
     }
 
     @Override
     public Position3i set(int x, int y, int z) {
-        super.set(x, y, z);
-        return this;
+        return new Position3i(super.set(x, y, z), dimension());
     }
 
     @Override
     public Position3i set(int[] xyz) {
-        super.set(xyz);
-        return this;
+        return new Position3i(super.set(xyz), dimension());
     }
 
     @Override
     public Position3i set(ByteBuffer buffer) {
-        super.set(buffer);
-        return this;
+        return new Position3i(super.set(buffer), dimension());
     }
 
     @Override
     public Position3i set(int index, ByteBuffer buffer) {
-        super.set(index, buffer);
-        return this;
+        return new Position3i(super.set(index, buffer), dimension());
     }
 
     @Override
     public Position3i set(IntBuffer buffer) {
-        super.set(buffer);
-        return this;
+        return new Position3i(super.set(buffer), dimension());
     }
 
     @Override
     public Position3i set(int index, IntBuffer buffer) {
-        super.set(index, buffer);
-        return this;
+        return new Position3i(super.set(index, buffer), dimension());
     }
 
     @Override
@@ -193,8 +181,7 @@ public class Position3i extends Vector3i implements Position3ic {
 
     @Override
     public Position3i setComponent(int component, int value) throws IllegalArgumentException {
-        super.setComponent(component, value);
-        return this;
+        return new Position3i(super.setComponent(component, value), dimension());
     }
 
     @Override
@@ -204,116 +191,97 @@ public class Position3i extends Vector3i implements Position3ic {
 
     @Override
     public Position3i sub(Vector3ic v) {
-        super.sub(v);
-        return this;
+        return new Position3i(super.sub(v), dimension());
     }
 
     @Override
     public Position3i sub(Vector3ic v, Vector3i dest) {
-        super.sub(v, dest);
-        return this;
+        return new Position3i(super.sub(v, dest), dimension());
     }
 
     @Override
     public Position3i sub(int x, int y, int z) {
-        super.sub(x, y, z);
-        return this;
+        return new Position3i(super.sub(x, y, z), dimension());
     }
 
     @Override
     public Position3i sub(int x, int y, int z, Vector3i dest) {
-        super.sub(x, y, z, dest);
-        return this;
+        return new Position3i(super.sub(x, y, z, dest), dimension());
     }
 
     @Override
     public Position3i add(Vector3ic v) {
-        super.add(v);
-        return this;
+        return new Position3i(super.add(v), dimension());
     }
 
     @Override
     public Position3i add(Vector3ic v, Vector3i dest) {
-        super.add(v, dest);
-        return this;
+        return new Position3i(super.add(v, dest), dimension());
     }
 
     @Override
     public Position3i add(int x, int y, int z) {
-        super.add(x, y, z);
-        return this;
+        return new Position3i(super.add(x, y, z), dimension());
     }
 
     @Override
     public Position3i add(int x, int y, int z, Vector3i dest) {
-        super.add(x, y, z, dest);
-        return this;
+        return new Position3i(super.add(x, y, z, dest), dimension());
     }
 
     @Override
     public Position3i mul(int scalar) {
-        super.mul(scalar);
-        return this;
+        return new Position3i(super.mul(scalar), dimension());
     }
 
     @Override
     public Position3i mul(int scalar, Vector3i dest) {
-        super.mul(scalar, dest);
-        return this;
+        return new Position3i(super.mul(scalar, dest), dimension());
     }
 
     @Override
     public Position3i mul(Vector3ic v) {
-        super.mul(v);
-        return this;
+        return new Position3i(super.mul(v), dimension());
     }
 
     @Override
     public Position3i mul(Vector3ic v, Vector3i dest) {
-        super.mul(v, dest);
-        return this;
+        return new Position3i(super.mul(v, dest), dimension());
     }
 
     @Override
     public Position3i mul(int x, int y, int z) {
-        super.mul(x, y, z);
-        return this;
+        return new Position3i(super.mul(x, y, z), dimension());
     }
 
     @Override
     public Position3i mul(int x, int y, int z, Vector3i dest) {
-        super.mul(x, y, z, dest);
-        return this;
+        return new Position3i(super.mul(x, y, z, dest), dimension());
     }
 
     @Override
     public Position3i div(float scalar) {
-        super.div(scalar);
-        return this;
+        return new Position3i(super.div(scalar), dimension());
     }
 
     @Override
     public Position3i div(float scalar, Vector3i dest) {
-        super.div(scalar, dest);
-        return this;
+        return new Position3i(super.div(scalar, dest), dimension());
     }
 
     @Override
     public Position3i div(int scalar) {
-        super.div(scalar);
-        return this;
+        return new Position3i(super.div(scalar), dimension());
     }
 
     @Override
     public Position3i div(int scalar, Vector3i dest) {
-        super.div(scalar, dest);
-        return this;
+        return new Position3i(super.div(scalar, dest), dimension());
     }
 
     @Override
     public Position3i zero() {
-        super.zero();
-        return this;
+        return new Position3i(super.zero(), dimension());
     }
 
     @Override
@@ -335,50 +303,42 @@ public class Position3i extends Vector3i implements Position3ic {
 
     @Override
     public Position3i negate() {
-        super.negate();
-        return this;
+        return new Position3i(super.negate(), dimension());
     }
 
     @Override
     public Position3i negate(Vector3i dest) {
-        super.negate(dest);
-        return this;
+        return new Position3i(super.negate(dest), dimension());
     }
 
     @Override
     public Position3i min(Vector3ic v) {
-        super.min(v);
-        return this;
+        return new Position3i(super.min(v), dimension());
     }
 
     @Override
     public Position3i min(Vector3ic v, Vector3i dest) {
-        super.min(v, dest);
-        return this;
+        return new Position3i(super.min(v, dest), dimension());
     }
 
     @Override
     public Position3i max(Vector3ic v) {
-        super.max(v);
-        return this;
+        return new Position3i(super.max(v), dimension());
     }
 
     @Override
     public Position3i max(Vector3ic v, Vector3i dest) {
-        super.max(v, dest);
-        return this;
+        return new Position3i(super.max(v, dest), dimension());
     }
 
     @Override
     public Position3i absolute() {
-        super.absolute();
-        return this;
+        return new Position3i(super.absolute(), dimension());
     }
 
     @Override
     public Position3i absolute(Vector3i dest) {
-        super.absolute(dest);
-        return this;
+        return new Position3i(super.absolute(dest), dimension());
     }
 
     @Override

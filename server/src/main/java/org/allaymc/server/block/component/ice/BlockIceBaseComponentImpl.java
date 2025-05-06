@@ -27,17 +27,17 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(BlockStateWithPos current) {
         super.onRandomUpdate(current);
 
-        if (isNeighborBlockLightBiggerThan(current.dimension(), current.pos(), 11)) {
+        if (isNeighborBlockLightBiggerThan(current.getDimension(), current.getPos())) {
             var event = new BlockFadeEvent(current, BlockTypes.WATER.getDefaultState());
             if (event.call()) {
-                current.dimension().setBlockState(current.pos(), event.getNewBlockState());
+                current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
             }
         }
     }
 
-    protected boolean isNeighborBlockLightBiggerThan(Dimension dimension, Vector3ic pos, int value) {
+    protected boolean isNeighborBlockLightBiggerThan(Dimension dimension, Vector3ic pos) {
         for (var face : BlockFace.values()) {
-            if (dimension.getLightService().getBlockLight(face.offsetPos(pos)) > value) {
+            if (dimension.getLightService().getBlockLight(face.offsetPos(pos)) > 11) {
                 return true;
             }
         }
@@ -47,9 +47,9 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
 
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (blockState.offsetPos(BlockFace.DOWN).blockState().getBlockType() != BlockTypes.AIR) {
-            blockState.dimension().setBlockState(blockState.pos(), BlockTypes.WATER.getDefaultState());
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        if (current.offsetPos(BlockFace.DOWN).getBlockType() != BlockTypes.AIR) {
+            current.getDimension().setBlockState(current.getPos(), BlockTypes.WATER.getDefaultState());
         }
 
         return Utils.EMPTY_ITEM_STACK_SET;

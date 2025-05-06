@@ -9,9 +9,9 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.gamerule.GameRule;
 
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -26,9 +26,9 @@ public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        var dimension = blockState.dimension();
-        var pos = blockState.pos();
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        var dimension = current.getDimension();
+        var pos = current.getPos();
         if (dimension.getWorld().getWorldData().getGameRuleValue(GameRule.DO_TILE_DROPS)) {
             dimension.getEntityService().addEntity(EntityTypes.SILVERFISH.createEntity(
                     EntityInitInfo.builder()
@@ -38,7 +38,7 @@ public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl 
             ));
         }
 
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Collections.emptySet();
     }
 
     @Override

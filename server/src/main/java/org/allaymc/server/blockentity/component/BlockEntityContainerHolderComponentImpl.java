@@ -79,14 +79,14 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     protected void onReplace(CBlockOnReplaceEvent event) {
         if (!dropItemWhenBreak()) return;
 
-        var pos = event.getCurrentBlockState().pos();
-        var dimension = pos.dimension();
+        var current = event.getCurrentBlockState();
+        var pos = current.getPos();
         var rand = ThreadLocalRandom.current();
 
         container.removeAllViewers();
         for (var itemStack : container.getItemStacks()) {
             if (itemStack == ItemAirStack.AIR_STACK) continue;
-            dimension.dropItem(itemStack, new Vector3d(
+            current.getDimension().dropItem(itemStack, new Vector3d(
                     pos.x() + rand.nextDouble(0.5) + 0.25,
                     pos.y() + rand.nextDouble(0.5) + 0.25,
                     pos.z() + rand.nextDouble(0.5) + 0.25

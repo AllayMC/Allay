@@ -35,8 +35,8 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(current, neighbor, face);
 
         var updatedState = updateConnectionsAndPost(current);
-        if (updatedState != current.blockState()) {
-            current.dimension().setBlockState(current.pos(), updatedState);
+        if (!updatedState.equals(current)) {
+            current.getDimension().setBlockState(current.getPos(), updatedState);
         }
     }
 
@@ -47,22 +47,21 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
-    private BlockState updateConnectionsAndPost(BlockStateWithPos current) {
-        var blockState = current.blockState();
-        var above = current.offsetPos(BlockFace.UP).blockState();
+    private BlockStateWithPos updateConnectionsAndPost(BlockStateWithPos current) {
+        var aboveBlock = current.offsetPos(BlockFace.UP);
 
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             if (canConnect(current, face)) {
-                blockState = connect(blockState, above, face);
+                current = connect(current, aboveBlock, face);
             } else {
-                blockState = blockState.setPropertyValue(getWallConnectionProperty(face), WallConnectionType.NONE);
+                current = current.setPropertyValue(getWallConnectionProperty(face), WallConnectionType.NONE);
             }
         }
 
-        return blockState.setPropertyValue(BlockPropertyTypes.WALL_POST_BIT, shouldHavePost(blockState, above));
+        return current.setPropertyValue(BlockPropertyTypes.WALL_POST_BIT, shouldHavePost(current, aboveBlock));
     }
 
-    private BlockState connect(BlockState current, BlockState above, BlockFace face) {
+    private BlockStateWithPos connect(BlockStateWithPos current, BlockState above, BlockFace face) {
         var property = getWallConnectionProperty(face);
 
         boolean shouldBeTall;
@@ -97,7 +96,7 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean canConnect(BlockStateWithPos current, BlockFace face) {
-        var neighbor = current.offsetPos(face).blockState();
+        var neighbor = current.offsetPos(face);
         if (neighbor.getBehavior() instanceof BlockFenceGateBehavior) {
             var direction = neighbor.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
             return BlockFace.from(direction).getAxis() != face.getAxis();

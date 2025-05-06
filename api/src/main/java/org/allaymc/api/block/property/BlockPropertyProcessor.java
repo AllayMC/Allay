@@ -24,6 +24,7 @@ public interface BlockPropertyProcessor {
         MINECRAFT_CARDINAL_DIRECTION.setProcessor(BlockPlaceHelper::processMinecraftCardinalDirectionProperty);
         FACING_DIRECTION.setProcessor(BlockPlaceHelper::processFacingDirectionProperty);
         GROUND_SIGN_DIRECTION.setProcessor(BlockPlaceHelper::processGroundSignDirectionProperty);
+        UPSIDE_DOWN_BIT.setProcessor(BlockPlaceHelper::processUpsideDownBitProperty);
     }
 
     /**

@@ -6,7 +6,7 @@ import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemMusicDiscComponent;
+import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -18,7 +18,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author IWareQ
  */
 public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityJukeboxBaseComponent {
-
     protected static final String TAG_RECORD_ITEM = "RecordItem";
 
     @Getter
@@ -31,7 +30,7 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public void play() {
-        if (this.musicDiscItem instanceof ItemMusicDiscComponent component) {
+        if (this.musicDiscItem instanceof ItemMusicDiscBaseComponent component) {
             this.getDimension().addLevelSoundEvent(this.getPosition(), component.getSound());
         }
     }
@@ -43,12 +42,12 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public void onReplace(CBlockOnReplaceEvent event) {
-        var pos = event.getCurrentBlockState().pos();
-        var dimension = pos.dimension();
-        var rand = ThreadLocalRandom.current();
-
         if (this.musicDiscItem != null) {
-            dimension.dropItem(this.musicDiscItem, new Vector3d(
+            var current = event.getCurrentBlockState();
+            var pos = current.getPos();
+            var rand = ThreadLocalRandom.current();
+
+            current.getDimension().dropItem(this.musicDiscItem, new Vector3d(
                     pos.x() + rand.nextDouble(0.5) + 0.25,
                     pos.y() + rand.nextDouble(0.5) + 0.25,
                     pos.z() + rand.nextDouble(0.5) + 0.25

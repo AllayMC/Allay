@@ -24,13 +24,13 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
             return true;
         }
 
-        var clickedBlock = interactInfo.getClickedBlockState();
-        if (clickedBlock.getPropertyValue(END_PORTAL_EYE_BIT) || itemStack.getItemType() != ItemTypes.ENDER_EYE) {
+        var clickedBlockState = interactInfo.getClickedBlockState();
+        if (clickedBlockState.getPropertyValue(END_PORTAL_EYE_BIT) || itemStack.getItemType() != ItemTypes.ENDER_EYE) {
             return false;
         }
 
-        dimension.updateBlockProperty(END_PORTAL_EYE_BIT, true, interactInfo.clickedBlockPos());
-        dimension.addLevelSoundEvent(interactInfo.clickedBlockPos(), SoundEvent.BLOCK_END_PORTAL_FRAME_FILL);
+        clickedBlockState.updateBlockProperty(END_PORTAL_EYE_BIT, true);
+        clickedBlockState.addLevelSoundEvent(SoundEvent.BLOCK_END_PORTAL_FRAME_FILL);
         interactInfo.player().tryConsumeItemInHand();
         return true;
     }

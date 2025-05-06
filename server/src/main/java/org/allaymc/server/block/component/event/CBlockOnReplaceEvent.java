@@ -15,5 +15,5 @@ import org.allaymc.api.eventbus.event.Event;
 public class CBlockOnReplaceEvent extends Event {
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
-    protected PlayerInteractInfo placementInfo; // Can be null
+    protected PlayerInteractInfo placementInfo; // Nullable
 }

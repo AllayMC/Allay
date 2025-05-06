@@ -2,6 +2,8 @@ package org.allaymc.server.block;
 
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
+import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.testutils.AllayTestExtension;
@@ -9,12 +11,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author daoge_cmd
@@ -39,5 +40,14 @@ class BlockStateHashTest {
         for (var computedHash : Registries.BLOCK_STATE_PALETTE.getContent().keySet()) {
             assertNotNull(BLOCK_STATE_DATA.get(computedHash));
         }
+    }
+
+    @Test
+    void testBlockStateEquals() {
+        assertSame(BlockTypes.BLUE_CANDLE.getDefaultState(), BlockTypes.BLUE_CANDLE.getDefaultState());
+        assertEquals(BlockTypes.BLUE_CANDLE.getDefaultState(), BlockTypes.BLUE_CANDLE.getDefaultState());
+
+        assertNotSame(BlockTypes.BLUE_CANDLE.getDefaultState(), new BlockStateWithPos(BlockTypes.BLUE_CANDLE.getDefaultState(), null));
+        assertEquals(new BlockStateWithPos(BlockTypes.BLUE_CANDLE.getDefaultState(), null), new BlockStateWithPos(BlockTypes.BLUE_CANDLE.getDefaultState(), null));
     }
 }

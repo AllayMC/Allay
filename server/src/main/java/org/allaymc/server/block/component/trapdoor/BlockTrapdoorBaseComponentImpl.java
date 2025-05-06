@@ -2,9 +2,7 @@ package org.allaymc.server.block.component.trapdoor;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.BlockPlaceHelper;
-import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
@@ -32,12 +30,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         blockState = BlockPlaceHelper.processDirection4Property(blockState, placeBlockPos, placementInfo);
-
-        var blockFace = placementInfo.blockFace();
-        if ((placementInfo.clickedPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {
-            blockState = blockState.setPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT, true);
-        }
-
+        blockState = BlockPlaceHelper.processUpsideDownBitProperty(blockState, placeBlockPos, placementInfo);
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
@@ -52,12 +45,11 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var pos = interactInfo.clickedBlockPos();
-        var blockState = dimension.getBlockState(pos);
-        var isOpen = !blockState.getPropertyValue(OPEN_BIT);
-        dimension.updateBlockProperty(OPEN_BIT, isOpen, pos);
+        var clickedBlockState = interactInfo.getClickedBlockState();
+        var isOpen = !clickedBlockState.getPropertyValue(OPEN_BIT);
+        clickedBlockState.updateBlockProperty(OPEN_BIT, isOpen);
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
-        dimension.addSound(MathUtils.center(pos), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
+        dimension.addSound(MathUtils.center(clickedBlockState.getPos()), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
         return true;
     }
 }

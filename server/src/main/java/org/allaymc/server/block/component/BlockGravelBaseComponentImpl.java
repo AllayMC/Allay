@@ -19,11 +19,11 @@ public class BlockGravelBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
         if (FortuneDropHelper.bonusChanceDivisor(usedItem, 10, 3)) {
             return Set.of(ItemTypes.FLINT.createItemStack());
         }
 
-        return super.getDrops(blockState, usedItem, entity);
+        return super.getDrops(current, usedItem, entity);
     }
 }
