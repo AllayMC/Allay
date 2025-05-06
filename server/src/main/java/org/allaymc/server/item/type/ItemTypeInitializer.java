@@ -60,7 +60,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemMusicDiscStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent($ -> new ItemMusicDiscComponentImpl(sound), ItemMusicDiscComponentImpl.class)
+                .addComponent(initInfo -> new ItemMusicDiscBaseComponentImpl(initInfo, sound), ItemMusicDiscBaseComponentImpl.class)
                 .build();
     }
 

@@ -5,7 +5,7 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 /**
  * @author IWareQ
  */
-public interface ItemMusicDiscComponent extends ItemComponent {
+public interface ItemMusicDiscBaseComponent extends ItemBaseComponent {
     /**
      * Get the sound of the music disc.
      *

@@ -6,7 +6,7 @@ import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemMusicDiscComponent;
+import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -30,7 +30,7 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public void play() {
-        if (this.musicDiscItem instanceof ItemMusicDiscComponent component) {
+        if (this.musicDiscItem instanceof ItemMusicDiscBaseComponent component) {
             this.getDimension().addLevelSoundEvent(this.getPosition(), component.getSound());
         }
     }
