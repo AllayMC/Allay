@@ -1077,6 +1077,16 @@
         15
       ]
     },
+    "rehydration_level": {
+      "serializationName": "rehydration_level",
+      "valueType": "INTEGER",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
     "repeater_delay": {
       "serializationName": "repeater_delay",
       "valueType": "INTEGER",

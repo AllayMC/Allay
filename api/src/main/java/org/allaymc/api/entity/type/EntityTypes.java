@@ -108,6 +108,8 @@ public final class EntityTypes {
 
     public static EntityType<EntityGuardian> GUARDIAN;
 
+    public static EntityType<EntityHappyGhast> HAPPY_GHAST;
+
     public static EntityType<EntityHoglin> HOGLIN;
 
     public static EntityType<EntityHopperMinecart> HOPPER_MINECART;

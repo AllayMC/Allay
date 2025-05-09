@@ -214,5 +214,6 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*(Head|Skull)Stack"), "ItemHeadStack");
         registerMergedItem(Pattern.compile(".*BundleStack"), "ItemBundleStack");
         registerMergedItem(Pattern.compile(".*(Furnace|Smoker)Stack"), "ItemFurnaceStack");
+        registerMergedItem(Pattern.compile(".*HarnessStack"), "ItemHarnessStack");
     }
 }

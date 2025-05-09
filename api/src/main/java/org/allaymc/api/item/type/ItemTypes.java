@@ -250,6 +250,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> BLACK_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> BLACK_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> BLACK_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> BLACK_STAINED_GLASS;
@@ -299,6 +301,8 @@ public final class ItemTypes {
     public static ItemType<ItemBlueEggStack> BLUE_EGG;
 
     public static ItemType<ItemTerracottaStack> BLUE_GLAZED_TERRACOTTA;
+
+    public static ItemType<ItemHarnessStack> BLUE_HARNESS;
 
     public static ItemType<ItemBlueIceStack> BLUE_ICE;
 
@@ -387,6 +391,8 @@ public final class ItemTypes {
     public static ItemType<ItemBrownEggStack> BROWN_EGG;
 
     public static ItemType<ItemTerracottaStack> BROWN_GLAZED_TERRACOTTA;
+
+    public static ItemType<ItemHarnessStack> BROWN_HARNESS;
 
     public static ItemType<ItemBrownMushroomStack> BROWN_MUSHROOM;
 
@@ -792,6 +798,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> CYAN_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> CYAN_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> CYAN_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> CYAN_STAINED_GLASS;
@@ -1017,6 +1025,8 @@ public final class ItemTypes {
     public static ItemType<ItemDragonEggStack> DRAGON_EGG;
 
     public static ItemType<ItemHeadStack> DRAGON_HEAD;
+
+    public static ItemType<ItemDriedGhastStack> DRIED_GHAST;
 
     public static ItemType<ItemDriedKelpStack> DRIED_KELP;
 
@@ -1532,6 +1542,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> GRAY_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> GRAY_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> GRAY_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> GRAY_STAINED_GLASS;
@@ -1558,6 +1570,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> GREEN_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> GREEN_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> GREEN_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> GREEN_STAINED_GLASS;
@@ -1579,6 +1593,8 @@ public final class ItemTypes {
     public static ItemType<ItemGusterPotterySherdStack> GUSTER_POTTERY_SHERD;
 
     public static ItemType<ItemHangingRootsStack> HANGING_ROOTS;
+
+    public static ItemType<ItemSpawnEggStack> HAPPY_GHAST_SPAWN_EGG;
 
     public static ItemType<ItemGlassStack> HARD_BLACK_STAINED_GLASS;
 
@@ -1954,6 +1970,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> LIGHT_BLUE_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> LIGHT_BLUE_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> LIGHT_BLUE_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> LIGHT_BLUE_STAINED_GLASS;
@@ -1977,6 +1995,8 @@ public final class ItemTypes {
     public static ItemType<ItemConcretePowderStack> LIGHT_GRAY_CONCRETE_POWDER;
 
     public static ItemType<ItemLightGrayDyeStack> LIGHT_GRAY_DYE;
+
+    public static ItemType<ItemHarnessStack> LIGHT_GRAY_HARNESS;
 
     public static ItemType<ItemShulkerBoxStack> LIGHT_GRAY_SHULKER_BOX;
 
@@ -2011,6 +2031,8 @@ public final class ItemTypes {
     public static ItemType<ItemLimeDyeStack> LIME_DYE;
 
     public static ItemType<ItemTerracottaStack> LIME_GLAZED_TERRACOTTA;
+
+    public static ItemType<ItemHarnessStack> LIME_HARNESS;
 
     public static ItemType<ItemShulkerBoxStack> LIME_SHULKER_BOX;
 
@@ -2067,6 +2089,8 @@ public final class ItemTypes {
     public static ItemType<ItemMagentaDyeStack> MAGENTA_DYE;
 
     public static ItemType<ItemTerracottaStack> MAGENTA_GLAZED_TERRACOTTA;
+
+    public static ItemType<ItemHarnessStack> MAGENTA_HARNESS;
 
     public static ItemType<ItemShulkerBoxStack> MAGENTA_SHULKER_BOX;
 
@@ -2368,6 +2392,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> ORANGE_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> ORANGE_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> ORANGE_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> ORANGE_STAINED_GLASS;
@@ -2499,6 +2525,8 @@ public final class ItemTypes {
     public static ItemType<ItemPinkDyeStack> PINK_DYE;
 
     public static ItemType<ItemTerracottaStack> PINK_GLAZED_TERRACOTTA;
+
+    public static ItemType<ItemHarnessStack> PINK_HARNESS;
 
     public static ItemType<ItemPinkPetalsStack> PINK_PETALS;
 
@@ -2684,6 +2712,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> PURPLE_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> PURPLE_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> PURPLE_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> PURPLE_STAINED_GLASS;
@@ -2769,6 +2799,8 @@ public final class ItemTypes {
     public static ItemType<ItemRedFlowerStack> RED_FLOWER;
 
     public static ItemType<ItemTerracottaStack> RED_GLAZED_TERRACOTTA;
+
+    public static ItemType<ItemHarnessStack> RED_HARNESS;
 
     public static ItemType<ItemRedMushroomStack> RED_MUSHROOM;
 
@@ -3506,6 +3538,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> WHITE_GLAZED_TERRACOTTA;
 
+    public static ItemType<ItemHarnessStack> WHITE_HARNESS;
+
     public static ItemType<ItemShulkerBoxStack> WHITE_SHULKER_BOX;
 
     public static ItemType<ItemGlassStack> WHITE_STAINED_GLASS;
@@ -3579,6 +3613,8 @@ public final class ItemTypes {
     public static ItemType<ItemYellowDyeStack> YELLOW_DYE;
 
     public static ItemType<ItemTerracottaStack> YELLOW_GLAZED_TERRACOTTA;
+
+    public static ItemType<ItemHarnessStack> YELLOW_HARNESS;
 
     public static ItemType<ItemShulkerBoxStack> YELLOW_SHULKER_BOX;
 

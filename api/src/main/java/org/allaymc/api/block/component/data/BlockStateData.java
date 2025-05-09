@@ -31,9 +31,9 @@ public class BlockStateData {
      */
     public static final float DEFAULT_FRICTION = 0.6f;
 
-    public static BlockStateData DEFAULT = BlockStateData.builder().build();
+    public static final BlockStateData DEFAULT = BlockStateData.builder().build();
 
-    protected static Gson SERIALIZER = new GsonBuilder()
+    protected static final Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var array = json.getAsJsonArray();
                 if (array.isEmpty() || array.get(0).isJsonArray()) {
@@ -78,6 +78,7 @@ public class BlockStateData {
             })
             .registerTypeAdapter(LiquidReactionOnTouch.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> LiquidReactionOnTouch.valueOf(json.getAsString()))
             .create();
+
     /**
      * The burnOdds of this block state.
      * <p>

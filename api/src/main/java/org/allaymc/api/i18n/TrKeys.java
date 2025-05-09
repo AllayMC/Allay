@@ -1238,6 +1238,11 @@ public interface TrKeys {
     String M_ACTION_INTERACT_EQUIPCARPET = "minecraft:action.interact.equipcarpet";
 
     /**
+     * Equip Harness
+     */
+    String M_ACTION_INTERACT_EQUIPHARNESS = "minecraft:action.interact.equipharness";
+
+    /**
      * Equip Horse Armor
      */
     String M_ACTION_INTERACT_EQUIPHORSEARMOR = "minecraft:action.interact.equiphorsearmor";
@@ -1306,6 +1311,11 @@ public interface TrKeys {
      * Read
      */
     String M_ACTION_INTERACT_READ = "minecraft:action.interact.read";
+
+    /**
+     * Remove Harness
+     */
+    String M_ACTION_INTERACT_REMOVEHARNESS = "minecraft:action.interact.removeharness";
 
     /**
      * Remove Wolf Armor
@@ -3186,6 +3196,21 @@ public interface TrKeys {
      * Too many blocks in the specified area (%1#d > %2#d)
      */
     String M_COMMANDS_COMPARE_TOOMANYBLOCKS = "minecraft:commands.compare.tooManyBlocks";
+
+    /**
+     * Sets or clears control scheme.
+     */
+    String M_COMMANDS_CONTROLSCHEME_DESCRIPTION = "minecraft:commands.controlscheme.description";
+
+    /**
+     * Failed to apply control scheme to the following player(s): %s
+     */
+    String M_COMMANDS_CONTROLSCHEME_FAILED = "minecraft:commands.controlscheme.failed";
+
+    /**
+     * Applied control scheme to the following player(s): %s
+     */
+    String M_COMMANDS_CONTROLSCHEME_SUCCESS = "minecraft:commands.controlscheme.success";
 
     /**
      * Corrupts the world loaded on the server.
@@ -7493,6 +7518,11 @@ public interface TrKeys {
     String M_DATE_TIMELEFT = "minecraft:date.timeLeft";
 
     /**
+     * UTC
+     */
+    String M_DATE_TIME_ZONE_UTC = "minecraft:date.time_zone_utc";
+
+    /**
      * %1#s was squashed by a falling anvil
      */
     String M_DEATH_ATTACK_ANVIL = "minecraft:death.attack.anvil";
@@ -8083,7 +8113,7 @@ public interface TrKeys {
     String M_DISCONNECTIONSCREEN_CANTCONNECTTOREALM = "minecraft:disconnectionScreen.cantConnectToRealm";
 
     /**
-     * Unable to connect to realms.
+     * Unable to connect to Realms.
      */
     String M_DISCONNECTIONSCREEN_CANTCONNECTTOREALMS = "minecraft:disconnectionScreen.cantConnectToRealms";
 
@@ -8188,6 +8218,11 @@ public interface TrKeys {
     String M_DISCONNECTIONSCREEN_ERRORCODE = "minecraft:disconnectionScreen.errorCode";
 
     /**
+     * There was a problem loading into the server. 
+     */
+    String M_DISCONNECTIONSCREEN_FAILEDASYNCCHECK = "minecraft:disconnectionScreen.failedAsyncCheck";
+
+    /**
      * Realm not found, or you are not a member.
      */
     String M_DISCONNECTIONSCREEN_FORBIDDEN = "minecraft:disconnectionScreen.forbidden";
@@ -8223,7 +8258,7 @@ public interface TrKeys {
     String M_DISCONNECTIONSCREEN_INCOMPATIBLEPACK_MEMORY = "minecraft:disconnectionScreen.incompatiblePack.memory";
 
     /**
-     * Your client is incompatible or out of date. Update your client to connect to realms.
+     * Your client is incompatible or out of date. Update your client to connect to Realms.
      */
     String M_DISCONNECTIONSCREEN_INCOMPATIBLEREALM = "minecraft:disconnectionScreen.incompatibleRealm";
 
@@ -21490,7 +21525,7 @@ public interface TrKeys {
     String M_SAFETY_MUTED_TITLE = "minecraft:safety.muted.title";
 
     /**
-     * §eChat and other user generated text is not available on this realm right now. Please try again later.§f
+     * §eChat and other user generated text is not available right now. Please try again later.§f
      */
     String M_SAFETY_TEXTPROCESSOROFFLINE_MESSAGE = "minecraft:safety.textProcessorOffline.message";
 

@@ -7,14 +7,19 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.server.registry.InternalRegistries;
+import org.allaymc.server.world.biome.BiomeData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
+import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -83,14 +88,14 @@ public final class DeferredData {
     }
 
     public static BiomeDefinitionListPacket encodeBiomeDefinitionListPacket() {
-        // TODO: support custom biome. Same to entity, we just read it from file currently
-        try (var stream = Utils.getResource("biome_definitions.nbt")) {
-            var packet = new BiomeDefinitionListPacket();
-            packet.setDefinitions((NbtMap) NbtUtils.createNetworkReader(stream).readTag());
-            return packet;
-        } catch (Exception e) {
-            throw new AssertionError("Failed to load biome_definitions.nbt", e);
+        var definitions = new HashMap<String, BiomeDefinitionData>();
+        for (var biomeId : BiomeId.values()) {
+            var biomeData = BiomeData.getBiomeData(biomeId);
+            definitions.put(biomeId.getIdentifier().path(), biomeData.toNetworkData());
         }
+        var packet = new BiomeDefinitionListPacket();
+        packet.setBiomes(new BiomeDefinitions(definitions));
+        return packet;
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {

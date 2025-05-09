@@ -1,14 +1,19 @@
 package org.allaymc.server.world.biome;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonParser;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 
+import java.awt.*;
+import java.io.BufferedInputStream;
+import java.io.InputStreamReader;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -18,31 +23,40 @@ import java.util.Map;
  */
 @MinecraftVersionSensitive
 public record BiomeData(
-        float ash,
-        float blue_spores,
+        float ashDensity,
+        float blueSporeDensity,
         float depth,
         float downfall,
-        float height,
+        Color mapWaterColor,
         boolean rain,
-        float red_spores,
+        float redSporeDensity,
+        float scale,
         List<String> tags,
         float temperature,
-        float waterColorA,
-        float waterColorB,
-        float waterColorG,
-        float waterColorR,
-        float white_ash
+        float whiteAshDensity
 ) {
+    private static final Gson SERIALIZER = new GsonBuilder()
+            .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
+                var obj = json.getAsJsonObject();
+                return new Color(
+                        obj.get("r").getAsInt(),
+                        obj.get("g").getAsInt(),
+                        obj.get("b").getAsInt(),
+                        obj.get("a").getAsInt()
+                );
+            })
+            .create();
     private static final Map<BiomeId, BiomeData> BIOME_DATA = new EnumMap<>(BiomeId.class);
 
     static {
-        try (var stream = Utils.getResource("biome_definitions.nbt")) {
-            var tag = (NbtMap) NbtUtils.createNetworkReader(stream).readTag();
-            tag.forEach((key, value) -> {
-                BIOME_DATA.put((BiomeId) BiomeId.fromIdentifier(new Identifier("minecraft", key)), fromNBT((NbtMap) value));
+        try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("biome_definitions.json")))) {
+            JsonParser.parseReader(reader).getAsJsonObject().asMap().forEach((key, obj) -> {
+                var biomeId = (BiomeId) BiomeId.fromIdentifier(new Identifier(Identifier.DEFAULT_NAMESPACE, key));
+                var biomeData = SERIALIZER.fromJson(obj.toString(), BiomeData.class);
+                BIOME_DATA.put(biomeId, biomeData);
             });
         } catch (Exception e) {
-            throw new AssertionError("Failed to load biome_definitions.nbt", e);
+            throw new AssertionError("Failed to load biome_definitions.json", e);
         }
     }
 
@@ -54,26 +68,15 @@ public record BiomeData(
         return getBiomeData((BiomeId) biomeType);
     }
 
-    private static BiomeData fromNBT(NbtMap nbt) {
-        return new BiomeData(
-                nbt.getFloat("ash"),
-                nbt.getFloat("blue_spores"),
-                nbt.getFloat("depth"),
-                nbt.getFloat("downfall"),
-                nbt.getFloat("height"),
-                nbt.getBoolean("rain"),
-                nbt.getFloat("red_spores"),
-                nbt.getList("tags", NbtType.STRING),
-                nbt.getFloat("temperature"),
-                nbt.getFloat("waterColorA"),
-                nbt.getFloat("waterColorB"),
-                nbt.getFloat("waterColorG"),
-                nbt.getFloat("waterColorR"),
-                nbt.getFloat("white_ash")
-        );
-    }
-
     public boolean isHumid() {
         return downfall >= 0.85;
+    }
+
+    public BiomeDefinitionData toNetworkData() {
+        return new BiomeDefinitionData(
+                null, temperature, downfall, redSporeDensity,
+                blueSporeDensity, ashDensity, whiteAshDensity, depth,
+                scale, mapWaterColor, rain, tags, null
+        );
     }
 }

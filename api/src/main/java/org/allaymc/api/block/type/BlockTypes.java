@@ -730,6 +730,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockHeadBehavior> DRAGON_HEAD;
 
+    public static BlockType<BlockDriedGhastBehavior> DRIED_GHAST;
+
     public static BlockType<BlockDriedKelpBlockBehavior> DRIED_KELP_BLOCK;
 
     public static BlockType<BlockDripstoneBlockBehavior> DRIPSTONE_BLOCK;
