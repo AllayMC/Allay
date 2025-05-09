@@ -28,6 +28,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.awt.*;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -289,6 +290,7 @@ public class AllayPlayerService implements PlayerService {
         entry.setBuildPlatform(deviceInfo.device().getId());
         entry.setSkin(skin.toNetwork());
         entry.setTrustedSkin(skin.isTrusted());
+        entry.setColor(Color.BLACK);
 
         playerListPacket.getEntries().add(entry);
         playerListEntries.put(uuid, entry);
