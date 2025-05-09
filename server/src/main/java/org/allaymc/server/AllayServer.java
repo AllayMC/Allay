@@ -119,6 +119,10 @@ public final class AllayServer implements Server {
 
     private void onServerStart() {
         state.set(ServerState.RUNNING);
+
+        if (System.console() != null) {
+            Thread.ofVirtual().name("Console Thread").start(terminalConsole::start);
+        }
     }
 
     private void onServerStop() {
@@ -159,10 +163,6 @@ public final class AllayServer implements Server {
             }
         });
 
-        if (System.console() != null) {
-            Thread.ofVirtual().name("Console Thread").start(terminalConsole::start);
-        }
-
         ((AllayPluginManager) this.pluginManager).loadPlugins();
         this.worldPool.loadWorlds();
         this.scoreboardService.read();
@@ -182,6 +182,7 @@ public final class AllayServer implements Server {
         if (SETTINGS.genericSettings().enableGui()) {
             Allay.DASHBOARD.afterServerStarted();
         }
+
         this.gameLoop.startLoop();
     }
 

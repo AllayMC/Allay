@@ -47,6 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed jukebox music continue playing when broken.
 - Fixed incorrect horizontal sky light propagation.
 - Fixed `Position3i` math methods.
+- Fixed execute commands in terminal.
 
 ## 0.3.0 (API 0.6.0) - 2025-3-28
 
