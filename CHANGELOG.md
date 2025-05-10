@@ -10,9 +10,13 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.3.1 (API 0.7.0) - Unreleased
+## 0.4.1 (API 0.8.0) - Unreleased
 
-<small>[Compare with 0.3.0](https://github.com/AllayMC/Allay/compare/0.3.0...HEAD)</small>
+<small>[Compare with 0.4.0](https://github.com/AllayMC/Allay/compare/0.4.0...HEAD)</small>
+
+## 0.4.0 (API 0.7.0) - Unreleased
+
+<small>[Compare with 0.3.0](https://github.com/AllayMC/Allay/compare/0.3.0...0.4.0)</small>
 
 ### Added
 
@@ -23,6 +27,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Implemented basic behavior for scaffolding.
 - Implemented chorus plant & flower behavior.
 - Implemented walls & fence gate behavior.
+- Added support for bedrock 1.21.80.
 
 ### Changed
 
