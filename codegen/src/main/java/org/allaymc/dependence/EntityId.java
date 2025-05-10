@@ -108,6 +108,8 @@ public enum EntityId {
 
     GUARDIAN("minecraft:guardian", 49),
 
+    HAPPY_GHAST("minecraft:happy_ghast", 147),
+
     HOGLIN("minecraft:hoglin", 124),
 
     HOPPER_MINECART("minecraft:hopper_minecart", 96),

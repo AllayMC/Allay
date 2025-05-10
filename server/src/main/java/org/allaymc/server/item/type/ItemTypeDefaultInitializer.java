@@ -735,6 +735,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.BLACK_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.BLACK_HARNESS == null) {
+            ItemTypes.BLACK_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.BLACK_HARNESS)
+                    .build();
+        }
         if (ItemTypes.BLACK_SHULKER_BOX == null) {
             ItemTypes.BLACK_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -883,6 +889,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.BLUE_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
                     .vanillaItem(ItemId.BLUE_GLAZED_TERRACOTTA)
+                    .build();
+        }
+        if (ItemTypes.BLUE_HARNESS == null) {
+            ItemTypes.BLUE_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.BLUE_HARNESS)
                     .build();
         }
         if (ItemTypes.BLUE_ICE == null) {
@@ -1147,6 +1159,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.BROWN_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
                     .vanillaItem(ItemId.BROWN_GLAZED_TERRACOTTA)
+                    .build();
+        }
+        if (ItemTypes.BROWN_HARNESS == null) {
+            ItemTypes.BROWN_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.BROWN_HARNESS)
                     .build();
         }
         if (ItemTypes.BROWN_MUSHROOM == null) {
@@ -2361,6 +2379,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.CYAN_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.CYAN_HARNESS == null) {
+            ItemTypes.CYAN_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.CYAN_HARNESS)
+                    .build();
+        }
         if (ItemTypes.CYAN_SHULKER_BOX == null) {
             ItemTypes.CYAN_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -3037,6 +3061,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.DRAGON_HEAD = AllayItemType
                     .builder(ItemHeadStackImpl.class)
                     .vanillaItem(ItemId.DRAGON_HEAD)
+                    .build();
+        }
+        if (ItemTypes.DRIED_GHAST == null) {
+            ItemTypes.DRIED_GHAST = AllayItemType
+                    .builder(ItemDriedGhastStackImpl.class)
+                    .vanillaItem(ItemId.DRIED_GHAST)
                     .build();
         }
         if (ItemTypes.DRIED_KELP == null) {
@@ -4581,6 +4611,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.GRAY_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.GRAY_HARNESS == null) {
+            ItemTypes.GRAY_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.GRAY_HARNESS)
+                    .build();
+        }
         if (ItemTypes.GRAY_SHULKER_BOX == null) {
             ItemTypes.GRAY_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -4659,6 +4695,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.GREEN_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.GREEN_HARNESS == null) {
+            ItemTypes.GREEN_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.GREEN_HARNESS)
+                    .build();
+        }
         if (ItemTypes.GREEN_SHULKER_BOX == null) {
             ItemTypes.GREEN_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -4723,6 +4765,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.HANGING_ROOTS = AllayItemType
                     .builder(ItemHangingRootsStackImpl.class)
                     .vanillaItem(ItemId.HANGING_ROOTS)
+                    .build();
+        }
+        if (ItemTypes.HAPPY_GHAST_SPAWN_EGG == null) {
+            ItemTypes.HAPPY_GHAST_SPAWN_EGG = AllayItemType
+                    .builder(ItemSpawnEggStackImpl.class)
+                    .vanillaItem(ItemId.HAPPY_GHAST_SPAWN_EGG)
                     .build();
         }
         if (ItemTypes.HARD_BLACK_STAINED_GLASS == null) {
@@ -5847,6 +5895,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.LIGHT_BLUE_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.LIGHT_BLUE_HARNESS == null) {
+            ItemTypes.LIGHT_BLUE_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.LIGHT_BLUE_HARNESS)
+                    .build();
+        }
         if (ItemTypes.LIGHT_BLUE_SHULKER_BOX == null) {
             ItemTypes.LIGHT_BLUE_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -5917,6 +5971,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.LIGHT_GRAY_DYE = AllayItemType
                     .builder(ItemLightGrayDyeStackImpl.class)
                     .vanillaItem(ItemId.LIGHT_GRAY_DYE)
+                    .build();
+        }
+        if (ItemTypes.LIGHT_GRAY_HARNESS == null) {
+            ItemTypes.LIGHT_GRAY_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.LIGHT_GRAY_HARNESS)
                     .build();
         }
         if (ItemTypes.LIGHT_GRAY_SHULKER_BOX == null) {
@@ -6019,6 +6079,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.LIME_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
                     .vanillaItem(ItemId.LIME_GLAZED_TERRACOTTA)
+                    .build();
+        }
+        if (ItemTypes.LIME_HARNESS == null) {
+            ItemTypes.LIME_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.LIME_HARNESS)
                     .build();
         }
         if (ItemTypes.LIME_SHULKER_BOX == null) {
@@ -6187,6 +6253,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.MAGENTA_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
                     .vanillaItem(ItemId.MAGENTA_GLAZED_TERRACOTTA)
+                    .build();
+        }
+        if (ItemTypes.MAGENTA_HARNESS == null) {
+            ItemTypes.MAGENTA_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.MAGENTA_HARNESS)
                     .build();
         }
         if (ItemTypes.MAGENTA_SHULKER_BOX == null) {
@@ -7089,6 +7161,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.ORANGE_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.ORANGE_HARNESS == null) {
+            ItemTypes.ORANGE_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.ORANGE_HARNESS)
+                    .build();
+        }
         if (ItemTypes.ORANGE_SHULKER_BOX == null) {
             ItemTypes.ORANGE_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -7483,6 +7561,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.PINK_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
                     .vanillaItem(ItemId.PINK_GLAZED_TERRACOTTA)
+                    .build();
+        }
+        if (ItemTypes.PINK_HARNESS == null) {
+            ItemTypes.PINK_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.PINK_HARNESS)
                     .build();
         }
         if (ItemTypes.PINK_PETALS == null) {
@@ -8037,6 +8121,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.PURPLE_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.PURPLE_HARNESS == null) {
+            ItemTypes.PURPLE_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.PURPLE_HARNESS)
+                    .build();
+        }
         if (ItemTypes.PURPLE_SHULKER_BOX == null) {
             ItemTypes.PURPLE_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -8293,6 +8383,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.RED_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
                     .vanillaItem(ItemId.RED_GLAZED_TERRACOTTA)
+                    .build();
+        }
+        if (ItemTypes.RED_HARNESS == null) {
+            ItemTypes.RED_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.RED_HARNESS)
                     .build();
         }
         if (ItemTypes.RED_MUSHROOM == null) {
@@ -10503,6 +10599,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.WHITE_GLAZED_TERRACOTTA)
                     .build();
         }
+        if (ItemTypes.WHITE_HARNESS == null) {
+            ItemTypes.WHITE_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.WHITE_HARNESS)
+                    .build();
+        }
         if (ItemTypes.WHITE_SHULKER_BOX == null) {
             ItemTypes.WHITE_SHULKER_BOX = AllayItemType
                     .builder(ItemShulkerBoxStackImpl.class)
@@ -10723,6 +10825,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.YELLOW_GLAZED_TERRACOTTA = AllayItemType
                     .builder(ItemTerracottaStackImpl.class)
                     .vanillaItem(ItemId.YELLOW_GLAZED_TERRACOTTA)
+                    .build();
+        }
+        if (ItemTypes.YELLOW_HARNESS == null) {
+            ItemTypes.YELLOW_HARNESS = AllayItemType
+                    .builder(ItemHarnessStackImpl.class)
+                    .vanillaItem(ItemId.YELLOW_HARNESS)
                     .build();
         }
         if (ItemTypes.YELLOW_SHULKER_BOX == null) {

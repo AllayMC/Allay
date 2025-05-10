@@ -23,9 +23,10 @@ Allay's resource files are stored in `data/resources` directory.
 
 ### Directly update the following files
 
-- `biome_definitions.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
+- `biome_definitions.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `block_types.json`
 - `creative_items.nbt`
+- `creative_groups.json`
 - `entity_identifiers.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `items.json`
 - `block_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
@@ -43,7 +44,7 @@ Although these files will not be included in the final jar, they will be used du
   directory.
 - `item_tags.json`
 - `block_palette.nbt`
-- `block_property_types.json`: run `BlockPropertyTypeGen` under `data` after updating `block_palette.nbt`
+- `block_property_types.json`: run `BlockPropertyTypeDataFileGen` under `data` after updating `block_palette.nbt`
 - `biome_id_and_type.json`: update it manually as biomes are not updated frequently
 - `entity_id_map.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `music_definitions.json`: obtained

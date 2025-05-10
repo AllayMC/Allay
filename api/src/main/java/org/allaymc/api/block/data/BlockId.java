@@ -735,6 +735,8 @@ public enum BlockId {
 
     DRAGON_HEAD("minecraft:dragon_head"),
 
+    DRIED_GHAST("minecraft:dried_ghast"),
+
     DRIED_KELP_BLOCK("minecraft:dried_kelp_block"),
 
     DRIPSTONE_BLOCK("minecraft:dripstone_block"),

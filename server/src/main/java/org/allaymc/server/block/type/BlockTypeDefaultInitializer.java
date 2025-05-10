@@ -2398,6 +2398,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                     .build();
         }
+        if (BlockTypes.DRIED_GHAST == null) {
+            BlockTypes.DRIED_GHAST = AllayBlockType
+                    .builder(BlockDriedGhastBehaviorImpl.class)
+                    .vanillaBlock(BlockId.DRIED_GHAST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REHYDRATION_LEVEL)
+                    .build();
+        }
         if (BlockTypes.DRIED_KELP_BLOCK == null) {
             BlockTypes.DRIED_KELP_BLOCK = AllayBlockType
                     .builder(BlockDriedKelpBlockBehaviorImpl.class)

@@ -26,6 +26,8 @@ public interface ItemTags {
 
     ItemTag BOOKSHELF_BOOKS = create("minecraft:bookshelf_books");
 
+    ItemTag HARNESS = create("minecraft:harness");
+
     ItemTag PLANKS = create("minecraft:planks");
 
     ItemTag ARROW = create("minecraft:arrow");

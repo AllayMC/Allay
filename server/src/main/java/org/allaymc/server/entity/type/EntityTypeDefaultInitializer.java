@@ -315,6 +315,12 @@ public final class EntityTypeDefaultInitializer {
                     .vanillaEntity(EntityId.GUARDIAN)
                     .build();
         }
+        if (EntityTypes.HAPPY_GHAST == null) {
+            EntityTypes.HAPPY_GHAST = AllayEntityType
+                    .builder(EntityHappyGhastImpl.class)
+                    .vanillaEntity(EntityId.HAPPY_GHAST)
+                    .build();
+        }
         if (EntityTypes.HOGLIN == null) {
             EntityTypes.HOGLIN = AllayEntityType
                     .builder(EntityHoglinImpl.class)
