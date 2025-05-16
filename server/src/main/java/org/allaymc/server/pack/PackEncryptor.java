@@ -61,8 +61,10 @@ public final class PackEncryptor {
 
     @SneakyThrows
     private static void encrypt0(ZipFile inputZip, Path outputPath, String key) {
-        if (key.length() != KEY_LENGTH)
+        if (key.length() != KEY_LENGTH) {
             throw new IllegalArgumentException("key length must be 32");
+        }
+
         // Find content id
         var uuid = findPackUUID(inputZip);
 
@@ -79,10 +81,14 @@ public final class PackEncryptor {
                     // Handle sub pack
                     encryptSubPack(inputZip, outputStream, zipEntry.getName(), key, uuid);
                 }
+
                 return;
             }
             // Sub pack files will be handled in encryptSubPack()
-            if (isSubPackFile(zipEntry)) return;
+            if (isSubPackFile(zipEntry)) {
+                return;
+            }
+
             String entryKey = null;
             // Check if file is excluded
             if (EXCLUDED_FILES.contains(zipEntry.getName())) {
@@ -105,8 +111,10 @@ public final class PackEncryptor {
 
         // Encrypt files
         inputZip.stream().forEach(zipEntry -> {
-            if (zipEntry.isDirectory()) return;
-            if (!zipEntry.getName().startsWith(subPackPath)) return;
+            if (zipEntry.isDirectory() || !zipEntry.getName().startsWith(subPackPath)) {
+                return;
+            }
+
             String entryKey = encryptFile(inputZip, zos, zipEntry);
             subPackContentEntries.add(new ContentEntry(zipEntry.getName().substring(subPackPath.length()), entryKey));
         });
@@ -169,19 +177,24 @@ public final class PackEncryptor {
     }
 
     private static boolean isSubPackRoot(ZipEntry zipEntry) {
-        return zipEntry.isDirectory() && zipEntry.getName().startsWith("subpacks/") && calCharCount(zipEntry.getName(), '/') == 2;
+        return zipEntry.isDirectory() && zipEntry.getName().startsWith("subpacks/") && calculateCharCount(zipEntry.getName(), '/') == 2;
     }
 
-    private static int calCharCount(String str, char target) {
+    private static int calculateCharCount(String str, char target) {
         int count = 0;
         for (char c : str.toCharArray()) {
-            if (c == target) count++;
+            if (c == target) {
+                count++;
+            }
         }
         return count;
     }
 
     private static void paddingTo(ByteArrayOutputStream stream, int pos) {
-        if (pos <= stream.size()) throw new IllegalArgumentException("pos must be bigger than stream size");
+        if (pos <= stream.size()) {
+            throw new IllegalArgumentException("pos must be bigger than stream size");
+        }
+
         var need = pos - stream.size();
         for (int i = 0; i < need; i++) {
             stream.write(0);
@@ -191,7 +204,10 @@ public final class PackEncryptor {
     @SneakyThrows
     private static String findPackUUID(ZipFile zip) {
         var manifestEntry = zip.getEntry("manifest.json");
-        if (manifestEntry == null) throw new IllegalArgumentException("manifest file not exists");
+        if (manifestEntry == null) {
+            throw new IllegalArgumentException("manifest file not exists");
+        }
+
         var manifest = JSONUtils.from(new InputStreamReader(zip.getInputStream(manifestEntry), StandardCharsets.UTF_8), PackManifest.class);
         return manifest.getHeader().getUuid().toString();
     }
