@@ -20,6 +20,7 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
+@SuppressWarnings("ALL")
 @Getter
 @Accessors(fluent = true)
 public class ServerSettings extends OkaeriConfig {
@@ -129,12 +130,17 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("resource-leak-detector-level")
         private ResourceLeakDetector.Level resourceLeakDetectorLevel = ResourceLeakDetector.Level.DISABLED;
 
+        @Comment("The maximum number of datagram packets each address can send within one RakNet tick (10ms).")
+        @Comment("Ignored if the server is running in Dev mode.")
+        @CustomKey("raknet-packet-limit")
+        private int raknetPacketLimit = 120;
+
         @Comment("The max time (unit: gt) that a client can have in login stage")
         @Comment("This would prevent the server from being stuck by a lot")
         @Comment("of fake clients that are keep in login stage maliciously")
         @Comment("To disable it, just make the value <= 0")
         @CustomKey("max-login-time")
-        private int maxLoginTime = 1800; // 90 seconds
+        private int maxLoginTime = 90 * 20;
 
         @Comment("Encoding protection will prevent client from sending large garbage data")
         @Comment("It is recommended to enable this feature, however if clients are kicked due")

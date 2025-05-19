@@ -14,6 +14,15 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.4.1](https://github.com/AllayMC/Allay/compare/0.4.1...HEAD)</small>
 
+### Added
+
+- (API) Introduced new option `raknet-packet-limit` in `ServerSettings` to control the maximum number of datagram
+  packets each client can send within a single RakNet tick.
+
+### Changed
+
+- Replaced the outdated event loop group handling with new `MultiThreadIoEventLoopGroup`.
+
 ## 0.4.1 (API 0.7.0) - 2025-5-11
 
 <small>[Compare with 0.4.0](https://github.com/AllayMC/Allay/compare/0.4.0...0.4.1)</small>

@@ -4,14 +4,15 @@ import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.IoHandlerFactory;
+import io.netty.channel.MultiThreadIoEventLoopGroup;
 import io.netty.channel.epoll.Epoll;
 import io.netty.channel.epoll.EpollDatagramChannel;
-import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollIoHandler;
 import io.netty.channel.kqueue.KQueue;
 import io.netty.channel.kqueue.KQueueDatagramChannel;
-import io.netty.channel.kqueue.KQueueEventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.kqueue.KQueueIoHandler;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.extern.slf4j.Slf4j;
@@ -61,23 +62,24 @@ public class AllayNetworkInterface implements NetworkInterface {
 
         var threadFactory = new ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").setDaemon(true).build();
         Class<? extends DatagramChannel> datagramChannelClass;
-        EventLoopGroup eventLoopGroup;
+        IoHandlerFactory ioHandlerFactory;
         if (Epoll.isAvailable()) {
             datagramChannelClass = EpollDatagramChannel.class;
-            eventLoopGroup = new EpollEventLoopGroup(networkThreadNumber, threadFactory);
+            ioHandlerFactory = EpollIoHandler.newFactory();
         } else if (KQueue.isAvailable()) {
             datagramChannelClass = KQueueDatagramChannel.class;
-            eventLoopGroup = new KQueueEventLoopGroup(networkThreadNumber, threadFactory);
+            ioHandlerFactory = KQueueIoHandler.newFactory();
         } else {
             datagramChannelClass = NioDatagramChannel.class;
-            eventLoopGroup = new NioEventLoopGroup(networkThreadNumber, threadFactory);
+            ioHandlerFactory = NioIoHandler.newFactory();
         }
 
         this.channel = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : 120) // This option fixed localhost blocking address
-                .group(eventLoopGroup)
+                // Integer.MAX_VALUE fixed localhost blocking address
+                .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : settings.networkSettings().raknetPacketLimit())
+                .group(new MultiThreadIoEventLoopGroup(networkThreadNumber, threadFactory, ioHandlerFactory))
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
