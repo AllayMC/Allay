@@ -7,7 +7,6 @@ import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBlockPickEvent;
-import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -68,7 +67,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
                 var emptySlot = findFirstEmptyHotbarSlot(inventory);
                 if (emptySlot != -1) {
                     inventory.setItemStack(emptySlot, hotBarItem);
-                    inventory.setItemStack(slot, ItemAirStack.AIR_STACK);
+                    inventory.clearSlot(slot);
                     player.setHandSlot(emptySlot);
                 } else {
                     var handSlot = player.getHandSlot();
