@@ -432,7 +432,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setHandSlot(int handSlot) {
+    public void setHandSlot(int handSlot, boolean sendToSelf) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
 
         var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
@@ -448,6 +448,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         packet.setInventorySlot(handSlot);
         packet.setHotbarSlot(handSlot);
 
+        if (sendToSelf) {
+            sendPacket(packet);
+        }
         sendPacketToViewers(packet);
     }
 

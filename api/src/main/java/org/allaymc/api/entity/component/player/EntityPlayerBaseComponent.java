@@ -175,12 +175,17 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     int getHandSlot();
 
+    default void setHandSlot(int handSlot) {
+        setHandSlot(handSlot, true);
+    }
+
     /**
      * Set the hand slot of the player.
      *
-     * @param handSlot The hand slot of the player.
+     * @param handSlot   The hand slot of the player.
+     * @param sendToSelf Whether the change should be sent to the self.
      */
-    void setHandSlot(int handSlot);
+    void setHandSlot(int handSlot, boolean sendToSelf);
 
     /**
      * Get the base offset of the player.

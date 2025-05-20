@@ -23,6 +23,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Replaced the outdated event loop group handling with new `MultiThreadIoEventLoopGroup`.
 
+### Fixed
+
+- Fixed block picking behavior.
+
 ## 0.4.1 (API 0.7.0) - 2025-5-11
 
 <small>[Compare with 0.4.0](https://github.com/AllayMC/Allay/compare/0.4.0...0.4.1)</small>
