@@ -149,7 +149,7 @@ public final class PackEncryptor {
 
     @SneakyThrows
     private static void encryptExcludedFile(ZipFile inputZip, ZipOutputStream outputStream, ZipEntry zipEntry) {
-        outputStream.putNextEntry((ZipEntry) zipEntry.clone());
+        outputStream.putNextEntry(copyZipEntry(zipEntry));
         outputStream.write(inputZip.getInputStream(zipEntry).readAllBytes());
         outputStream.closeEntry();
     }
@@ -166,7 +166,7 @@ public final class PackEncryptor {
         // Encrypt the file
         var encryptedBytes = cipher.doFinal(bytes);
         // Write bytes
-        outputStream.putNextEntry((ZipEntry) zipEntry.clone());
+        outputStream.putNextEntry(copyZipEntry(zipEntry));
         outputStream.write(encryptedBytes);
         outputStream.closeEntry();
         return key;
@@ -201,6 +201,13 @@ public final class PackEncryptor {
         }
     }
 
+    private static ZipEntry copyZipEntry(ZipEntry entry) {
+        var newEntry = new ZipEntry(entry);
+        // Explicitly set method to DEFLATED to avoid invalid crc-32 error
+        newEntry.setMethod(ZipEntry.DEFLATED);
+        return newEntry;
+    }
+
     @SneakyThrows
     private static String findPackUUID(ZipFile zip) {
         var manifestEntry = zip.getEntry("manifest.json");
@@ -214,7 +221,7 @@ public final class PackEncryptor {
 
     @SneakyThrows
     private static void createDirectoryRoot(ZipEntry zipEntry, ZipOutputStream outputStream) {
-        outputStream.putNextEntry((ZipEntry) zipEntry.clone());
+        outputStream.putNextEntry(copyZipEntry(zipEntry));
         outputStream.closeEntry();
     }
 
