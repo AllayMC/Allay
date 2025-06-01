@@ -14,7 +14,7 @@ public class SetDefaultGameTypePacketProcessor extends PacketProcessor<SetDefaul
 
     @Override
     public void handleSync(EntityPlayer player, SetDefaultGameTypePacket packet, long receiveTime) {
-        if (!player.isOp()) return;
+        if (!player.isOperator()) return;
         Server.SETTINGS.genericSettings().defaultGameType(GameType.from(packet.getGamemode()));
     }
 

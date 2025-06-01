@@ -9,7 +9,6 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -166,9 +165,6 @@ public final class AllayAPI {
 
         // World
         requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
-
-        // Perm
-        requireImpl(PermissionTree.Factory.class, PermissionTree.FACTORY::set);
 
         // Command
         requireImpl(EntitySelectorAPI.class, EntitySelectorAPI.API::set);

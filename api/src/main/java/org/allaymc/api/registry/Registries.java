@@ -14,6 +14,8 @@ import org.allaymc.api.item.recipe.impl.PotionMixRecipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pdc.PersistentDataTypeRegistry;
+import org.allaymc.api.permission.Permission;
+import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -65,4 +67,8 @@ public final class Registries {
 
     // Persistent Data Container (PDC)
     public static PersistentDataTypeRegistry PERSISTENT_DATA_TYPES;
+
+    // Permission
+    public static SimpleMappedRegistry<String, Permission> PERMISSIONS;
+    public static SimpleMappedRegistry<String, PermissionGroup> PERMISSION_GROUPS;
 }

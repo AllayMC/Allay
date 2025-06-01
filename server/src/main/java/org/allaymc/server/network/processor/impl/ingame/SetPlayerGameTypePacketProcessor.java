@@ -13,7 +13,7 @@ public class SetPlayerGameTypePacketProcessor extends PacketProcessor<SetPlayerG
 
     @Override
     public void handleSync(EntityPlayer player, SetPlayerGameTypePacket packet, long receiveTime) {
-        if (!player.isOp()) return;
+        if (!player.isOperator()) return;
         player.setGameType(GameType.from(packet.getGamemode()));
     }
 

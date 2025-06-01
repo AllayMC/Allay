@@ -26,12 +26,12 @@ public class DeOpCommand extends SimpleCommand {
                         return context.fail();
                     }
 
-                    if (!player.isOp()) {
+                    if (!player.isOperator()) {
                         context.addError("%" + TrKeys.M_COMMANDS_DEOP_FAILED, playerName);
                         return context.fail();
                     }
 
-                    player.setOp(false);
+                    player.setOperator(false);
 
                     context.addOutput(TrKeys.M_COMMANDS_DEOP_SUCCESS, playerName);
                     player.sendTr(TrKeys.M_COMMANDS_DEOP_MESSAGE);

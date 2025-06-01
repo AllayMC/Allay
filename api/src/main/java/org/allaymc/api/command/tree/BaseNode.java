@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
+import org.allaymc.api.permission.Permission;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
@@ -39,7 +40,7 @@ public abstract class BaseNode implements CommandNode {
     @Setter
     protected int maxArgCostBranch;
     protected Set<CommandParamOption> paramOptions;
-    protected List<String> permissions;
+    protected List<Permission> permissions;
 
     public BaseNode(String name, CommandNode parent) {
         this(name, parent, null);
@@ -241,7 +242,7 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public CommandNode permission(String permission) {
+    public CommandNode permission(Permission permission) {
         if (this.optional) {
             throw new IllegalArgumentException("Adding permissions to optional node is not allowed!");
         }
@@ -251,7 +252,7 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public List<String> getPermissions() {
+    public List<Permission> getPermissions() {
         return Collections.unmodifiableList(this.permissions);
     }
 

@@ -1,10 +1,10 @@
 package org.allaymc.api.command;
 
-import com.google.common.collect.Lists;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.permission.Permission;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -23,7 +23,7 @@ public abstract class BaseCommand implements Command {
     @MayContainTrKey
     protected final String description;
     @Getter
-    protected final List<String> permissions;
+    protected final List<Permission> permissions;
     protected final Set<CommandData.Flag> flags = new HashSet<>();
     protected final List<String> aliases = new ArrayList<>();
     protected final List<CommandParamData[]> overloads = new ArrayList<>();
@@ -34,10 +34,10 @@ public abstract class BaseCommand implements Command {
     private CommandOverloadData[] networkOverloadsData = null;
 
     public BaseCommand(String name, @MayContainTrKey String description) {
-        this(name, description, Lists.newArrayList(COMMAND_PERMISSION_PREFIX + name));
+        this(name, description, List.of(Command.createPermissionForCommand(name)));
     }
 
-    public BaseCommand(String name, @MayContainTrKey String description, List<String> permissions) {
+    public BaseCommand(String name, @MayContainTrKey String description, List<Permission> permissions) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         this.permissions = Objects.requireNonNull(permissions);

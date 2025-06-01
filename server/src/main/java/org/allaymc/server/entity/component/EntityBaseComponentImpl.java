@@ -25,8 +25,9 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.pdc.PersistentDataContainer;
-import org.allaymc.api.permission.DefaultPermissions;
-import org.allaymc.api.permission.tree.PermissionTree;
+import org.allaymc.api.permission.Permissible;
+import org.allaymc.api.permission.PermissionGroup;
+import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
@@ -99,6 +100,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected final long runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
     @Getter
     protected final Metadata metadata;
+    @Getter
+    protected PermissionGroup permissionGroup;
     // Will be reset in method loadUniqueId()
     @Getter
     protected long uniqueId = Long.MAX_VALUE;
@@ -142,6 +145,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void onInitFinish(EntityInitInfo initInfo) {
         loadNBT(initInfo.nbt());
         initMetadata();
+        initPermissionGroup();
     }
 
     protected void initMetadata() {
@@ -153,6 +157,15 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         metadata.set(EntityFlag.HAS_COLLISION, true);
         metadata.set(EntityFlag.CAN_CLIMB, true);
         metadata.set(EntityFlag.BREATHING, true);
+    }
+
+    protected void initPermissionGroup() {
+        this.permissionGroup = PermissionGroup.create("Permission group for entity " + uniqueId, Set.of(), PermissionGroups.OPERATOR, false);
+    }
+
+    @Override
+    public Permissible getPermissible() {
+        return thisEntity;
     }
 
     private NbtMap buildAABBTag() {
@@ -877,11 +890,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         // Do nothing
-    }
-
-    @Override
-    public PermissionTree getPermissionTree() {
-        return DefaultPermissions.OPERATOR;
     }
 
     @Override

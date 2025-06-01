@@ -2,21 +2,19 @@ package org.allaymc.api.client.data;
 
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.permission.PermissionKeys;
-import org.allaymc.api.permission.tree.PermissionTree;
+import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.Permissions;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.AbilityLayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAbilitiesPacket;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
-import java.util.function.Consumer;
-
-import static org.allaymc.api.permission.tree.PermissionTree.PermissionChangeType.ADD;
 
 /**
  * @author daoge_cmd
@@ -40,47 +38,36 @@ public final class Abilities {
 
     public Abilities(EntityPlayer player) {
         this.player = player;
-        var tree = player.getPermissionTree();
-        tree.registerPermissionListener(PermissionKeys.BUILD, syncTo(Ability.BUILD));
-        tree.registerPermissionListener(PermissionKeys.MINE, syncTo(Ability.MINE));
-        tree.registerPermissionListener(PermissionKeys.DOORS_AND_SWITCHES, syncTo(Ability.DOORS_AND_SWITCHES));
-        tree.registerPermissionListener(PermissionKeys.OPEN_CONTAINERS, syncTo(Ability.OPEN_CONTAINERS));
-        tree.registerPermissionListener(PermissionKeys.ATTACK_PLAYERS, syncTo(Ability.ATTACK_PLAYERS));
-        tree.registerPermissionListener(PermissionKeys.ATTACK_MOBS, syncTo(Ability.ATTACK_MOBS));
-        tree.registerPermissionListener(PermissionKeys.MAY_FLY, syncTo(Ability.MAY_FLY));
-        tree.registerPermissionListener(PermissionKeys.SUMMON_LIGHTNING, syncTo(Ability.LIGHTNING));
-        tree.registerPermissionListener(PermissionKeys.MUTED, syncTo(Ability.MUTED));
     }
 
     public void applyGameType(GameType gameType) {
-        var tree = player.getPermissionTree();
         // Set only necessary permissions
-        tree.setPermission(PermissionKeys.BUILD, gameType != GameType.SPECTATOR);
-        tree.setPermission(PermissionKeys.MINE, gameType != GameType.SPECTATOR);
-        tree.setPermission(PermissionKeys.DOORS_AND_SWITCHES, gameType != GameType.SPECTATOR);
-        tree.setPermission(PermissionKeys.OPEN_CONTAINERS, gameType != GameType.SPECTATOR);
-        tree.setPermission(PermissionKeys.ATTACK_PLAYERS, gameType != GameType.SPECTATOR);
-        tree.setPermission(PermissionKeys.ATTACK_MOBS, gameType != GameType.SPECTATOR);
-        tree.setPermission(PermissionKeys.MAY_FLY, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
+        player.setPermission(Permissions.ABILITY_BUILD, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ABILITY_MINE, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ABILITY_DOORS_AND_SWITCHES, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ABILITY_OPEN_CONTAINERS, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ABILITY_ATTACK_PLAYERS, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ABILITY_ATTACK_MOBS, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ABILITY_MAY_FLY, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
         // Do not need to manage SUMMON_LIGHTNING and CHAT;
         // allow plugins to control without resetting after mode switch
         // The following abilities do not need to be integrated into the permission tree
         set(Ability.NO_CLIP, gameType == GameType.SPECTATOR);
         set(Ability.FLYING, gameType == GameType.SPECTATOR);
         set(Ability.INSTABUILD, gameType == GameType.CREATIVE);
-        // The purpose of setting OPERATOR_COMMANDS here is solely to allow OP clients to display quick commands
-        set(Ability.OPERATOR_COMMANDS, player.isOp());
         set(Ability.TELEPORT, true);
         dirty = true;
         sync();
     }
 
+    @ApiStatus.Internal
     public void set(Ability ability, boolean value) {
         if (value) abilities.add(ability);
         else abilities.remove(ability);
         dirty = true;
     }
 
+    @ApiStatus.Internal
     public boolean has(Ability ability) {
         return abilities.contains(ability);
     }
@@ -104,6 +91,7 @@ public final class Abilities {
         set(Ability.FLYING, flying);
     }
 
+    @ApiStatus.Internal
     public void sync() {
         if (!dirty) return;
         UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
@@ -125,32 +113,23 @@ public final class Abilities {
         dirty = false;
     }
 
-    private Consumer<PermissionTree.PermissionChangeType> syncTo(Ability ability) {
-        return syncTo(ability, false);
-    }
-
-    private Consumer<PermissionTree.PermissionChangeType> syncTo(Ability ability, boolean reverse) {
-        return type -> {
-            if (type == ADD) {
-                if (reverse) abilities.remove(ability);
-                else abilities.add(ability);
-            } else {
-                if (reverse) abilities.add(ability);
-                else abilities.remove(ability);
-            }
-            dirty = true;
-        };
-    }
-
     private UpdateAbilitiesPacket createUpdateAbilitiesPacket() {
         UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
         updateAbilitiesPacket.setUniqueEntityId(player.getRuntimeId());
-        // The command permissions set here are actually not very useful;
-        // their main function is to allow OPs to have quick command options
+        // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
         // If this player does not have specific command permissions, the command description won't even be sent to the client
-        updateAbilitiesPacket.setCommandPermission(player.isOp() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
-        // TODO: Check reasons for the old writing style
-        updateAbilitiesPacket.setPlayerPermission(player.isOp() /*&& player.getGameType() != GameType.SPECTATOR*/ ? PlayerPermission.OPERATOR : PlayerPermission.MEMBER);
+        updateAbilitiesPacket.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
+        // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
+        updateAbilitiesPacket.setPlayerPermission(calculatePlayerPermission(player));
         return updateAbilitiesPacket;
+    }
+
+    private PlayerPermission calculatePlayerPermission(EntityPlayer player) {
+        if (player.hasPermissions(PermissionGroups.OPERATOR, true)) {
+            return PlayerPermission.OPERATOR;
+        } else if (player.hasPermissions(PermissionGroups.MEMBER, true)) {
+            return PlayerPermission.MEMBER;
+        }
+        return PlayerPermission.VISITOR;
     }
 }
