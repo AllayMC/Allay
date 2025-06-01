@@ -17,6 +17,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.permission.Permission;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -185,10 +186,16 @@ public class GameTestCommand extends SimpleCommand {
                 .str("perm")
                 .bool("value")
                 .exec((context) -> {
-                    String perm = context.getResult(1);
+                    String name = context.getResult(1);
+                    var permission = Permission.get(name);
+                    if (permission == null) {
+                        context.addError("Unknown permission: " + name);
+                        return context.fail();
+                    }
+
                     boolean value = context.getResult(2);
-                    context.getSender().setPermission(perm, value);
-                    context.addOutput("Perm " + perm + " was set to " + value);
+                    context.getSender().setPermission(permission, value);
+                    context.addOutput("Perm " + permission + " was set to " + value);
                     return context.success();
                 })
                 .root()

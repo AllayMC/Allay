@@ -27,12 +27,12 @@ public class OpCommand extends SimpleCommand {
                         return context.fail();
                     }
 
-                    if (player.isOp()) {
+                    if (player.isOperator()) {
                         context.addError("%" + TrKeys.M_COMMANDS_OP_FAILED, playerName);
                         return context.fail();
                     }
 
-                    player.setOp(true);
+                    player.setOperator(true);
 
                     context.addOutput(TrKeys.M_COMMANDS_OP_SUCCESS, playerName);
                     player.sendTr(TrKeys.M_COMMANDS_OP_MESSAGE);

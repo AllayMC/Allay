@@ -2,6 +2,7 @@ package org.allaymc.api.command;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.permission.Permission;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -15,9 +16,20 @@ import java.util.Set;
 public interface Command {
 
     /**
-     * Prefix for command permissions.
+     * Prefix of allay's build-in command permissions.
      */
-    String COMMAND_PERMISSION_PREFIX = "command.";
+    String ALLAY_BUILD_IN_COMMAND_PERMISSION_PREFIX = "allay.command.";
+
+    /**
+     * Helper method for creating a permission for the given command name.
+     *
+     * @param commandName the name of the command for which to create a permission.
+     *
+     * @return a new {@link Permission} instance representing the command permission.
+     */
+    static Permission createPermissionForCommand(String commandName) {
+        return Permission.create(ALLAY_BUILD_IN_COMMAND_PERMISSION_PREFIX + commandName, "The permission to use the command /" + commandName);
+    }
 
     /**
      * Executes this command with the given sender and arguments.
@@ -95,7 +107,7 @@ public interface Command {
      *
      * @return The permissions required to execute this command.
      */
-    List<String> getPermissions();
+    List<Permission> getPermissions();
 
     /**
      * Get this command's overloaded description string

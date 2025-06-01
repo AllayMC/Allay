@@ -47,13 +47,13 @@ Let's make the following changes to our code:
 ```java linenums="1" hl_lines="9"
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.permission.DefaultPermissions;
+import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.server.Server;
 
 public class HelloCommand extends SimpleCommand {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
-        getPermissions().forEach(DefaultPermissions.MEMBER::addPermission); /*(1)!*/
+        getPermissions().forEach(PermissionGroups.MEMBER::addPermission); /*(1)!*/
     }
 }
 ```
@@ -63,13 +63,13 @@ public class HelloCommand extends SimpleCommand {
 !!! tip
 
     The `getPermissions()` method returns a list of permissions that the command requires, 
-    and DefaultPermissions.MEMBER is the default permission tree for new players.
+    and PermissionGroups.MEMBER is the default permission group for new players.
 
-    DefaultPermissions class contains the following values:
+    PermissionGroups class contains the following values:
 
-    - `DefaultPermissions.OPERATOR`: default permission tree for operators.
-    - `DefaultPermissions.MEMBER`: default permission tree for new players.
-    - `DefaultPermissions.VISITOR`: default permission tree for visitors.
+    - `PermissionGroups.OPERATOR`: default permission tree for operators.
+    - `PermissionGroups.MEMBER`: default permission tree for new players.
+    - `PermissionGroups.VISITOR`: default permission tree for visitors.
 
 ## Handle the commands
 

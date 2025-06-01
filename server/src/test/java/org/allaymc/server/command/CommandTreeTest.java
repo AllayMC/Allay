@@ -5,6 +5,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
@@ -91,8 +92,8 @@ public class CommandTreeTest {
     @Test
     void testAddPermissionToOptionalParam() {
         var tree = AllayCommandTree.create(mockCmd);
-        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").optional().permission("xxx"));
-        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").permission("xxx").optional());
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").optional().permission(Permissions.ABILITY_BUILD));
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").permission(Permissions.ABILITY_BUILD).optional());
     }
 
     @Test

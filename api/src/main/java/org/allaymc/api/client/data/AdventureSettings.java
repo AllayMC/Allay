@@ -3,12 +3,10 @@ package org.allaymc.api.client.data;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.permission.PermissionKeys;
+import org.allaymc.api.permission.Permissions;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAdventureSettingsPacket;
-
-import static org.allaymc.api.permission.tree.PermissionTree.PermissionChangeType.REMOVE;
-import static org.cloudburstmc.protocol.bedrock.data.GameType.SPECTATOR;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * @author daoge_cmd
@@ -29,45 +27,48 @@ public final class AdventureSettings {
 
     public AdventureSettings(EntityPlayer player) {
         this.player = player;
-        var tree = player.getPermissionTree();
-        tree.registerPermissionListener(PermissionKeys.PVM, type -> this.setNoPVM(type == REMOVE));
-        tree.registerPermissionListener(PermissionKeys.MVP, type -> this.setNoMVP(type == REMOVE));
     }
 
     public void applyGameType(GameType gameType) {
-        player.getPermissionTree().setPermission(PermissionKeys.PVM, gameType != SPECTATOR);
-        player.getPermissionTree().setPermission(PermissionKeys.MVP, gameType != SPECTATOR);
-        this.setImmutableWorld(gameType == SPECTATOR);
-        this.setShowNameTags(gameType != SPECTATOR);
+        player.setPermission(Permissions.ADVENTURE_SETTING_PVM, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ADVENTURE_SETTING_MVP, gameType != GameType.SPECTATOR);
+        player.setPermission(Permissions.ADVENTURE_SETTING_SHOW_NAME_TAGS, gameType != GameType.SPECTATOR);
+        this.setImmutableWorld(gameType == GameType.SPECTATOR);
         dirty = true;
         sync();
     }
 
+    @ApiStatus.Internal
     public void setNoPVM(boolean noPVM) {
         this.noPVM = noPVM;
         dirty = true;
     }
 
+    @ApiStatus.Internal
     public void setNoMVP(boolean noMVP) {
         this.noMVP = noMVP;
         dirty = true;
     }
 
+    @ApiStatus.Internal
     public void setImmutableWorld(boolean immutableWorld) {
         this.immutableWorld = immutableWorld;
         dirty = true;
     }
 
+    @ApiStatus.Internal
     public void setShowNameTags(boolean showNameTags) {
         this.showNameTags = showNameTags;
         dirty = true;
     }
 
+    @ApiStatus.Internal
     public void setAutoJump(boolean autoJump) {
         this.autoJump = autoJump;
         dirty = true;
     }
 
+    @ApiStatus.Internal
     public void sync() {
         if (!dirty) return;
         var packet = new UpdateAdventureSettingsPacket();

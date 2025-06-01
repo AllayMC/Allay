@@ -12,6 +12,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.permission.Permission;
 import org.allaymc.api.world.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
@@ -274,7 +275,7 @@ public interface CommandNode {
      *
      * @return the current {@code CommandNode}.
      */
-    CommandNode permission(String permission);
+    CommandNode permission(Permission permission);
 
     /**
      * Get the permissions required to access this node.
@@ -282,7 +283,7 @@ public interface CommandNode {
      * @return the permissions.
      */
     @UnmodifiableView
-    List<String> getPermissions();
+    List<Permission> getPermissions();
 
     /**
      * Check if the command sender has all the required permissions for accessing this node.

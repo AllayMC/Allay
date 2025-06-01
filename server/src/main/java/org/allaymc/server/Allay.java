@@ -21,7 +21,8 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.permission.tree.PermissionTree;
+import org.allaymc.api.permission.Permission;
+import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.registry.*;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
@@ -38,7 +39,6 @@ import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.creative.AllayCreativeItemRegistry;
 import org.allaymc.server.pdc.AllayPersistentDataTypeRegistry;
-import org.allaymc.server.permission.tree.AllayPermissionTree;
 import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.registry.loader.*;
@@ -155,9 +155,6 @@ public final class Allay {
         // World
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
 
-        // Perm
-        api.bind(PermissionTree.Factory.class, () -> AllayPermissionTree::create);
-
         // Command
         api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);
         api.bind(CommandTree.Factory.class, () -> AllayCommandTree::create);
@@ -240,6 +237,18 @@ public final class Allay {
 
         // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());
+
+        // Permission
+        SimpleMappedRegistry.create(
+                RegistryLoaders.empty(() -> new HashMap<String, Permission>()),
+                r -> Registries.PERMISSIONS = r,
+                new PermissionRegistryPopulator()
+        );
+        SimpleMappedRegistry.create(
+                RegistryLoaders.empty(() -> new HashMap<String, PermissionGroup>()),
+                r -> Registries.PERMISSION_GROUPS = r,
+                new PermissionGroupRegistryPopulator()
+        );
 
         // Command
         Registries.COMMANDS = new AllayCommandRegistry();

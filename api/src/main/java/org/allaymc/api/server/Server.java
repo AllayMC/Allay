@@ -142,11 +142,6 @@ public interface Server extends TaskCreator, CommandSender {
      */
     void broadcastTr(@MayContainTrKey String tr, Object... args);
 
-    @Override
-    default void setOp(boolean value) {
-        throw new UnsupportedOperationException("Cannot call setOp() on server instance!");
-    }
-
     /**
      * Broadcasts command execution outputs to all players.
      *
@@ -157,11 +152,6 @@ public interface Server extends TaskCreator, CommandSender {
     default void broadcastCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         sendCommandOutputs(sender, status, outputs);
         getPlayerService().getPlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
-    }
-
-    @Override
-    default boolean hasPermission(String permission) {
-        return true;
     }
 
     /**

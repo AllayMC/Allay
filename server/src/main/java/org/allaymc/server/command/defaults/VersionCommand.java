@@ -5,6 +5,7 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.server.utils.GitProperties;
 
 /**
@@ -16,6 +17,7 @@ public class VersionCommand extends SimpleCommand {
         super("version", TrKeys.A_COMMAND_VERSION_DESCRIPTION);
         aliases.add("ver");
         aliases.add("about");
+        getPermissions().forEach(PermissionGroups.MEMBER::addPermission);
     }
 
     @Override

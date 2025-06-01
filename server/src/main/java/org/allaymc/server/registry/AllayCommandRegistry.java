@@ -9,7 +9,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.permission.DefaultPermissions;
+import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
@@ -75,6 +75,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new StructureCommand());
         register(new FillCommand());
         register(new TitleCommand());
+        register(new PermissionCommand());
         if (AllayAPI.getInstance().isDevBuild()) {
             register(new GameTestCommand());
         }
@@ -83,7 +84,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     @Override
     public void register(Command command) {
         content.put(command.getName(), command);
-        command.getPermissions().forEach(DefaultPermissions.OPERATOR::addPermission);
+        command.getPermissions().forEach(permission -> PermissionGroups.OPERATOR.addPermission(permission, null));
     }
 
     @Override
@@ -102,7 +103,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     public Command unregister(String name) {
         var cmd = getContent().remove(name);
         if (cmd != null) {
-            cmd.getPermissions().forEach(DefaultPermissions.OPERATOR::removePermission);
+            cmd.getPermissions().forEach(permission -> PermissionGroups.OPERATOR.removePermission(permission, null));
         }
         return cmd;
     }
@@ -128,7 +129,7 @@ public class AllayCommandRegistry extends CommandRegistry {
             return CommandResult.fail();
         }
 
-        if (!sender.hasPermission(command.getPermissions())) {
+        if (!sender.hasPermissions(command.getPermissions())) {
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
@@ -148,7 +149,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
         getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && player.hasPermission(command.getPermissions()))
+                .filter(command -> !command.isServerSideOnly() && player.hasPermissions(command.getPermissions()))
                 .forEach(command -> pk.getCommands().add(command.buildNetworkDataFor(player)));
         return pk;
     }

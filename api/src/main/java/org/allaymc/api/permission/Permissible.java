@@ -1,97 +1,95 @@
 package org.allaymc.api.permission;
 
-import org.allaymc.api.permission.tree.PermissionTree;
-
 import java.util.Collection;
 
 /**
- * Represents a permissible object.
+ * Represents an entity that can have permissions.
  *
  * @author daoge_cmd
  */
 public interface Permissible {
-    /**
-     * Check if this object is an operator.
-     *
-     * @return {@code true} if this object is an operator, {@code false} otherwise.
-     */
-    default boolean isOp() {
-        return getPermissionTree().isOp();
-    }
 
     /**
-     * Set if this object is an operator.
+     * Gets the permission group of this entity.
      *
-     * @param value {@code true} if this object is an operator, {@code false} otherwise.
+     * @return the permission group of this entity.
      */
-    default void setOp(boolean value) {
-        getPermissionTree().setOp(value);
-    }
+    PermissionGroup getPermissionGroup();
 
     /**
-     * Check if this object has the given permission.
+     * Override this method to return the actual permissible object. Useful when you want the
+     * {@link PermissionListener} can get the actual permissible object.
      *
-     * @param permission the permission to check.
-     *
-     * @return {@code true} if this object has the given permission, {@code false} otherwise.
+     * @return the actual permissible object.
      */
-    default boolean hasPermission(String permission) {
-        return getPermissionTree().hasPermission(permission);
-    }
-
-    /**
-     * Check if this object has all the given permissions.
-     *
-     * @param permissions the permissions to check.
-     *
-     * @return {@code true} if this object has all the given permissions, {@code false} otherwise.
-     */
-    default boolean hasPermission(Collection<String> permissions) {
-        return permissions.stream().allMatch(this::hasPermission);
-    }
-
-    /**
-     * Add a permission to this object.
-     *
-     * @param permission the permission to add.
-     *
-     * @return this object.
-     */
-    default Permissible addPermission(String permission) {
-        getPermissionTree().addPermission(permission);
+    default Permissible getPermissible() {
         return this;
     }
 
     /**
-     * Remove a permission from this object.
-     *
-     * @param permission the permission to remove.
-     *
-     * @return this object.
+     * @see PermissionGroup#hasPermission(Permission)
      */
-    default Permissible removePermission(String permission) {
-        getPermissionTree().removePermission(permission);
+    default boolean hasPermission(Permission permission) {
+        return getPermissionGroup().hasPermission(permission);
+    }
+
+    /**
+     * @see PermissionGroup#hasPermissions(Permission...)
+     */
+    default boolean hasPermissions(Permission... permissions) {
+        return getPermissionGroup().hasPermissions(permissions);
+    }
+
+    /**
+     * @see PermissionGroup#hasPermissions(Collection)
+     */
+    default boolean hasPermissions(Collection<Permission> permissions) {
+        return getPermissionGroup().hasPermissions(permissions);
+    }
+
+    /**
+     * @see PermissionGroup#hasPermissions(PermissionGroup, boolean)
+     */
+    default boolean hasPermissions(PermissionGroup group, boolean includeParentPermissions) {
+        return getPermissionGroup().hasPermissions(group, includeParentPermissions);
+    }
+
+    /**
+     * @see PermissionGroup#addPermission(Permission, Permissible)
+     */
+    default Permissible addPermission(Permission permission) {
+        getPermissionGroup().addPermission(permission, getPermissible());
         return this;
     }
 
     /**
-     * Set the value of a permission.
-     *
-     * @param permission  the permission to set.
-     * @param value {@code true} to add the permission, {@code false} to remove it.
-     *
-     * @return this object.
+     * @see PermissionGroup#removePermission(Permission, Permissible)
      */
-    default Permissible setPermission(String permission, boolean value) {
-        if (value) addPermission(permission);
-        else removePermission(permission);
+    default Permissible removePermission(Permission permission) {
+        getPermissionGroup().removePermission(permission, getPermissible());
         return this;
     }
 
     /**
-     * Get the permission tree of this object.
-     *
-     * @return the permission tree of this object.
+     * @see PermissionGroup#setPermission(Permission, boolean, Permissible)
      */
-    PermissionTree getPermissionTree();
+    default Permissible setPermission(Permission permission, boolean value) {
+        getPermissionGroup().setPermission(permission, value, getPermissible());
+        return this;
+    }
+
+    /**
+     * @see PermissionGroup#isOperator()
+     */
+    default boolean isOperator() {
+        return getPermissionGroup().isOperator();
+    }
+
+    /**
+     * @see PermissionGroup#setOperator(boolean, Permissible)
+     */
+    default Permissible setOperator(boolean value) {
+        getPermissionGroup().setOperator(value, getPermissible());
+        return this;
+    }
 }

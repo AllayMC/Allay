@@ -249,7 +249,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             var id = idsBuf.readLongLE();
             var nbt = this.db.get(LevelDBKey.indexEntity(id));
             if (nbt == null) {
-                log.error("Data for existing entity unique id {} is missing!", id);
+                log.error("NBT data for existing entity unique id {} is missing!", id);
                 continue;
             }
 

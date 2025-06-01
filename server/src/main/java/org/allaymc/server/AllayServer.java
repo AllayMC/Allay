@@ -1,5 +1,6 @@
 package org.allaymc.server;
 
+import com.google.common.base.Suppliers;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +14,8 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.permission.DefaultPermissions;
-import org.allaymc.api.permission.tree.PermissionTree;
+import org.allaymc.api.permission.PermissionGroup;
+import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardService;
@@ -42,11 +43,13 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 /**
  * @author daoge_cmd
@@ -75,6 +78,7 @@ public final class AllayServer implements Server {
     private final PluginManager pluginManager;
     @Getter
     private final Scheduler scheduler;
+    private final Supplier<PermissionGroup> permissionGroup;
     private final AllayTerminalConsole terminalConsole;
     private final GameLoop gameLoop;
 
@@ -91,6 +95,8 @@ public final class AllayServer implements Server {
         this.scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
         this.pluginManager = new AllayPluginManager();
         this.scheduler = new AllayScheduler(virtualThreadPool);
+        // Initialize the permission group with a memoized supplier to avoid NPE during server startup
+        this.permissionGroup = Suppliers.memoize(() -> PermissionGroup.create("Permission group for server instance", Set.of(), PermissionGroups.OPERATOR, false));
         this.terminalConsole = new AllayTerminalConsole(AllayServer.this);
         this.gameLoop = GameLoop.builder()
                 .loopCountPerSec(20)
@@ -282,7 +288,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public PermissionTree getPermissionTree() {
-        return DefaultPermissions.OPERATOR;
+    public PermissionGroup getPermissionGroup() {
+        return permissionGroup.get();
     }
 }

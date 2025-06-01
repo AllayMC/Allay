@@ -32,7 +32,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.permission.tree.PermissionTree;
+import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -47,7 +47,6 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.client.service.AllayPlayerService;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
@@ -111,8 +110,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected Abilities abilities;
     @Getter
-    protected PermissionTree permissionTree;
-    @Getter
     protected int chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
     @Getter
     @Setter
@@ -166,28 +163,26 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @EventHandler
     protected void onPlayerLoggedIn(CPlayerLoggedInEvent event) {
         var loginData = networkComponent.getLoginData();
-        skin = loginData.getSkin();
+        this.skin = loginData.getSkin();
+        this.uniqueId = loginData.getUuid().getMostSignificantBits();
         setDisplayName(loginData.getDisplayName());
-        uniqueId = loginData.getUuid().getMostSignificantBits();
     }
 
     @Override
-    @OnInitFinish
-    public void onInitFinish(EntityInitInfo initInfo) {
-        super.onInitFinish(initInfo);
-        permissionTree = PermissionTree.create();
-        permissionTree.setOp(true);
-        adventureSettings = new AdventureSettings(thisPlayer);
-        abilities = new Abilities(thisPlayer);
-        // Init adventure settings and abilities
-        permissionTree.notifyAllPermissionListeners();
+    protected void initPermissionGroup() {
+        this.adventureSettings = new AdventureSettings(thisPlayer);
+        this.abilities = new Abilities(thisPlayer);
+        // Do not register player's permission group
+        this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), null, false);
+        // Set parent permission group alone, so that adventure settings and abilities will also be updated
+        this.permissionGroup.setParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission().name()), thisPlayer);
     }
 
     @Override
     protected void initMetadata() {
         super.initMetadata();
         // Player name is always shown
-        metadata.set(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
+        this.metadata.set(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
     }
 
     @Override
@@ -203,10 +198,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setGameType(GameType gameType) {
         var event = new PlayerGameTypeChangeEvent(thisPlayer, this.gameType, gameType);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         gameType = event.getNewGameType();
-
         this.gameType = gameType;
 
         this.fallDistance = 0;
@@ -482,7 +478,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
-                .putCompound(TAG_PERMISSION, permissionTree.saveNBT())
+                .putCompound(TAG_PERMISSION, permissionGroup.saveNBT())
                 .putList(
                         TAG_OFFHAND,
                         NbtType.COMPOUND,
@@ -516,7 +512,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionTree.loadNBT(permNbt, true));
+        nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionGroup.loadNBT(permNbt, thisPlayer));
         nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
                 containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(offhandNbt)
         );
