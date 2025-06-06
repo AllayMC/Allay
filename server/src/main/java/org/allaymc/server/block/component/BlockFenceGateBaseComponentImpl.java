@@ -47,7 +47,7 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
 
         var clickedPos = interactInfo.clickedBlockPos();
         var clickedBlockState = interactInfo.getClickedBlockState();
-        var open = !clickedBlockState.getPropertyValue(IN_WALL_BIT);
+        var open = !clickedBlockState.getPropertyValue(OPEN_BIT);
         if (open) {
             var playerFacing = interactInfo.player().getHorizontalFace();
             var direction = clickedBlockState.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);

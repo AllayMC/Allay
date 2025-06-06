@@ -26,6 +26,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed block picking behavior.
+- Fixed fence gate opening in server-side.
 
 ## 0.4.1 (API 0.7.0) - 2025-5-11
 
