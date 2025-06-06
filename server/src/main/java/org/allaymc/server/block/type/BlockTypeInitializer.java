@@ -1731,4 +1731,14 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockQuartzBlockBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initPurpurBlock() {
+        // IDK why mojang added PILLAR_AXIS to purpur block properties and doesn't use it.
+        BlockTypes.PURPUR_BLOCK = AllayBlockType
+                .builder(BlockPurpurBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.PURPUR_BLOCK)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .setBaseComponentSupplier(BlockPurpurBlockBaseComponentImpl::new)
+                .build();
+    }
 }
