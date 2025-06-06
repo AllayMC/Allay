@@ -1709,4 +1709,26 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockFenceGateBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initQuartzBlocks() {
+        // IDK why mojang added PILLAR_AXIS to quartz block properties and doesn't use it.
+        BlockTypes.QUARTZ_BLOCK = AllayBlockType
+                .builder(BlockQuartzBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.QUARTZ_BLOCK)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .setBaseComponentSupplier(BlockQuartzBlockBaseComponentImpl::new)
+                .build();
+        BlockTypes.CHISELED_QUARTZ_BLOCK = AllayBlockType
+                .builder(BlockChiseledQuartzBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHISELED_QUARTZ_BLOCK)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .setBaseComponentSupplier(BlockQuartzBlockBaseComponentImpl::new)
+                .build();
+        BlockTypes.SMOOTH_QUARTZ = AllayBlockType
+                .builder(BlockSmoothQuartzBehaviorImpl.class)
+                .vanillaBlock(BlockId.SMOOTH_QUARTZ)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .setBaseComponentSupplier(BlockQuartzBlockBaseComponentImpl::new)
+                .build();
+    }
 }

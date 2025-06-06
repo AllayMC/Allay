@@ -23,7 +23,7 @@ import static java.lang.Math.min;
 @AllArgsConstructor
 public enum BlockFace {
     DOWN(new Vector3i(0, -1, 0), Axis.Y),
-    UP(new Vector3i(0, 1, 0), Axis.X),
+    UP(new Vector3i(0, 1, 0), Axis.Y),
     NORTH(new Vector3i(0, 0, -1), Axis.Z),
     SOUTH(new Vector3i(0, 0, 1), Axis.Z),
     WEST(new Vector3i(-1, 0, 0), Axis.X),
