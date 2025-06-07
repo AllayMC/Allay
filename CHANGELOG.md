@@ -22,6 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - Replaced the outdated event loop group handling with new `MultiThreadIoEventLoopGroup`.
+- Refactored permission system, see commit history for more info.
 
 ### Fixed
 
