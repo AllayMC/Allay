@@ -3,7 +3,7 @@ log4j = "2.24.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"
-netty = "4.2.1.Final"
+netty = "4.2.2.Final"
 
 [libraries]
 # NBT
@@ -40,13 +40,13 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.4" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
-semver4j = { group = "org.semver4j", name = "semver4j", version = "5.7.0" }
+semver4j = { group = "org.semver4j", name = "semver4j", version = "5.7.1" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.19.0" }
 # Cache
-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.0" }
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.1" }
 # LevelDB
 leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version.ref = "leveldb" }
 leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version.ref = "leveldb" }
@@ -74,9 +74,9 @@ oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.2" }
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 # JUnit
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.13.0" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.13.1" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.13.0" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.13.1" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.18.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
