@@ -8,8 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.allaymc.api.client.skin.*;
 import org.allaymc.api.i18n.LangCode;
+import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 
@@ -35,7 +35,7 @@ public class LoginData {
     private DeviceInfo deviceInfo;
     private LangCode langCode;
     private String gameVersion;
-    private Skin skin;
+    private SerializedSkin skin;
     private String identityPublicKey;
 
     private LoginData(LoginPacket loginPacket) {
@@ -91,76 +91,84 @@ public class LoginData {
             this.gameVersion = skinMap.get("GameVersion").getAsString();
         }
 
-        this.skin = new Skin();
+        var skinBuilder = SerializedSkin.builder();
         if (skinMap.has("SkinId")) {
-            this.skin.setSkinId(skinMap.get("SkinId").getAsString());
+            skinBuilder.skinId(skinMap.get("SkinId").getAsString());
         }
 
         if (skinMap.has("SkinResourcePatch")) {
-            this.skin.setResourcePatch(new String(Base64.getDecoder().decode(skinMap.get("SkinResourcePatch").getAsString()), StandardCharsets.UTF_8));
+            skinBuilder.skinResourcePatch(new String(Base64.getDecoder().decode(skinMap.get("SkinResourcePatch").getAsString()), StandardCharsets.UTF_8));
         }
 
         if (skinMap.has("SkinGeometryData")) {
-            this.skin.setGeometryData(new String(Base64.getDecoder().decode(skinMap.get("SkinGeometryData").getAsString()), StandardCharsets.UTF_8));
+            skinBuilder.geometryData(new String(Base64.getDecoder().decode(skinMap.get("SkinGeometryData").getAsString()), StandardCharsets.UTF_8));
         }
 
         if (skinMap.has("SkinGeometryDataEngineVersion")) {
-            this.skin.setGeometryDataEngineVersion(new String(Base64.getDecoder().decode(skinMap.get("SkinGeometryDataEngineVersion").getAsString()), StandardCharsets.UTF_8));
+            skinBuilder.geometryDataEngineVersion(new String(Base64.getDecoder().decode(skinMap.get("SkinGeometryDataEngineVersion").getAsString()), StandardCharsets.UTF_8));
         }
 
         if (skinMap.has("AnimationData")) {
-            this.skin.setAnimationData(new String(Base64.getDecoder().decode(skinMap.get("AnimationData").getAsString()), StandardCharsets.UTF_8));
+            skinBuilder.animationData(new String(Base64.getDecoder().decode(skinMap.get("AnimationData").getAsString()), StandardCharsets.UTF_8));
         }
 
         if (skinMap.has("CapeId")) {
-            this.skin.setCapeId(skinMap.get("CapeId").getAsString());
+            skinBuilder.capeId(skinMap.get("CapeId").getAsString());
         }
 
         if (skinMap.has("SkinColor")) {
-            this.skin.setSkinColor(skinMap.get("SkinColor").getAsString());
+            skinBuilder.skinColor(skinMap.get("SkinColor").getAsString());
         }
 
         if (skinMap.has("ArmSize")) {
-            this.skin.setArmSize(skinMap.get("ArmSize").getAsString());
+            skinBuilder.armSize(skinMap.get("ArmSize").getAsString());
         }
 
         if (skinMap.has("PlayFabID")) {
-            this.skin.setPlayFabId(skinMap.get("PlayFabID").getAsString());
+            skinBuilder.playFabId(skinMap.get("PlayFabID").getAsString());
         }
 
-        this.skin.setSkinData(this.getImage(skinMap, "Skin"));
-        this.skin.setCapeData(this.getImage(skinMap, "Cape"));
+        skinBuilder.skinData(this.getImage(skinMap, "Skin"));
+        skinBuilder.capeData(this.getImage(skinMap, "Cape"));
 
         if (skinMap.has("PremiumSkin")) {
-            this.skin.setPremium(skinMap.get("PremiumSkin").getAsBoolean());
+            skinBuilder.premium(skinMap.get("PremiumSkin").getAsBoolean());
         }
 
         if (skinMap.has("PersonaSkin")) {
-            this.skin.setPersona(skinMap.get("PersonaSkin").getAsBoolean());
+            skinBuilder.persona(skinMap.get("PersonaSkin").getAsBoolean());
         }
 
         if (skinMap.has("CapeOnClassicSkin")) {
-            this.skin.setCapeOnClassic(skinMap.get("CapeOnClassicSkin").getAsBoolean());
+            skinBuilder.capeOnClassic(skinMap.get("CapeOnClassicSkin").getAsBoolean());
         }
 
         if (skinMap.has("AnimatedImageData")) {
             JsonArray array = skinMap.getAsJsonArray("AnimatedImageData");
+            var list = new ArrayList<AnimationData>();
             for (JsonElement jsonElement : array) {
-                this.skin.getSkinAnimations().add(this.getSkinAnimationData(jsonElement.getAsJsonObject()));
+                list.add(this.getSkinAnimationData(jsonElement.getAsJsonObject()));
             }
+            skinBuilder.animations(list);
         }
 
         if (skinMap.has("PersonaPieces")) {
+            var list = new ArrayList<PersonaPieceData>();
             for (JsonElement jsonElement : skinMap.getAsJsonArray("PersonaPieces")) {
-                this.skin.getPersonaPieces().add(this.getPersonaPiece(jsonElement.getAsJsonObject()));
+                list.add(this.getPersonaPiece(jsonElement.getAsJsonObject()));
             }
+            skinBuilder.personaPieces(list);
         }
 
         if (skinMap.has("PieceTintColors")) {
+            var list = new ArrayList<PersonaPieceTintData>();
             for (JsonElement jsonElement : skinMap.getAsJsonArray("PieceTintColors")) {
-                this.skin.getPersonaPieceTints().add(this.getPersonaPieceTint(jsonElement.getAsJsonObject()));
+                list.add(this.getPersonaPieceTint(jsonElement.getAsJsonObject()));
             }
+            skinBuilder.tintColors(list);
         }
+
+        this.skin = skinBuilder.build();
     }
 
     private JsonObject decodeToken(String token) {
@@ -171,46 +179,45 @@ public class LoginData {
         return GSON.fromJson(new String(Base64.getDecoder().decode(tokenSplit[1]), StandardCharsets.UTF_8), JsonObject.class);
     }
 
-    private Image getImage(JsonObject skinMap, String name) {
+    private ImageData getImage(JsonObject skinMap, String name) {
         if (skinMap.has(name + "Data")) {
             byte[] skinImage = Base64.getDecoder().decode(skinMap.get(name + "Data").getAsString());
             if (skinMap.has(name + "ImageHeight") && skinMap.has(name + "ImageWidth")) {
                 int width = skinMap.get(name + "ImageWidth").getAsInt();
                 int height = skinMap.get(name + "ImageHeight").getAsInt();
-                return new Image(width, height, skinImage);
+                return ImageData.of(width, height, skinImage);
             } else {
-                return Image.getImage(skinImage);
+                return ImageData.of(skinImage);
             }
         }
-        return new Image(0, 0, new byte[0]);
+        return ImageData.EMPTY;
     }
 
-    private SkinAnimation getSkinAnimationData(JsonObject animationData) {
+    private AnimationData getSkinAnimationData(JsonObject animationData) {
         byte[] data = Base64.getDecoder().decode(animationData.get("Image").getAsString());
         int width = animationData.get("ImageWidth").getAsInt();
         int height = animationData.get("ImageHeight").getAsInt();
         float frames = animationData.get("Frames").getAsFloat();
-        int type = animationData.get("Type").getAsInt();
-        int expression = animationData.get("AnimationExpression").getAsInt();
-        return new SkinAnimation(new Image(width, height, data), type, frames, expression);
+        var type = AnimatedTextureType.from(animationData.get("Type").getAsInt());
+        var expression = AnimationExpressionType.from(animationData.get("AnimationExpression").getAsInt());
+        return new AnimationData(ImageData.of(width, height, data), type, frames, expression);
     }
 
-    private PersonaPiece getPersonaPiece(JsonObject personaPiece) {
+    private PersonaPieceData getPersonaPiece(JsonObject personaPiece) {
         String pieceId = personaPiece.get("PieceId").getAsString();
         String pieceType = personaPiece.get("PieceType").getAsString();
         String packId = personaPiece.get("PackId").getAsString();
         String productId = personaPiece.get("ProductId").getAsString();
         boolean isDefault = personaPiece.get("IsDefault").getAsBoolean();
-        return new PersonaPiece(pieceId, pieceType, packId, productId, isDefault);
+        return new PersonaPieceData(pieceId, pieceType, packId, isDefault, productId);
     }
 
-    private PersonaPieceTint getPersonaPieceTint(JsonObject personaPiceTint) {
+    private PersonaPieceTintData getPersonaPieceTint(JsonObject personaPiceTint) {
         String pieceType = personaPiceTint.get("PieceType").getAsString();
         List<String> colors = new ArrayList<>();
         for (JsonElement element : personaPiceTint.getAsJsonArray("Colors")) {
             colors.add(element.getAsString());
         }
-        return new PersonaPieceTint(pieceType, colors);
+        return new PersonaPieceTintData(pieceType, colors);
     }
-
 }

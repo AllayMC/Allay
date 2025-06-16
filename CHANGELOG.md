@@ -22,6 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
+- (API) Removed classes under `org.allaymc.api.client.skin`. `SerializedSkin` class in protocol library is used directly now.
 - Replaced the outdated event loop group handling with new `MultiThreadIoEventLoopGroup`.
 - Refactored permission system, see commit history for more info.
 

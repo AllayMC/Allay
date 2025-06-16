@@ -1,7 +1,6 @@
 package org.allaymc.server.network.processor.impl.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerChangeSkinEvent;
 import org.allaymc.server.network.processor.PacketProcessor;
@@ -15,7 +14,7 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerSkinPacket;
 public class PlayerSkinPacketProcessor extends PacketProcessor<PlayerSkinPacket> {
     @Override
     public void handleSync(EntityPlayer player, PlayerSkinPacket packet, long receiveTime) {
-        var newSkin = Skin.fromNetwork(packet.getSkin());
+        var newSkin = packet.getSkin();
         if (!newSkin.isValid()) {
             log.warn("{} want to use an invalid skin!", player.getOriginName());
             return;

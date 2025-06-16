@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
-import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
@@ -68,6 +67,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -104,7 +104,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected GameType gameType = Server.SETTINGS.genericSettings().defaultGameType();
     @Getter
-    protected Skin skin;
+    protected SerializedSkin skin;
     @Getter
     protected AdventureSettings adventureSettings;
     @Getter
@@ -451,17 +451,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setSkin(Skin skin) {
+    public void setSkin(SerializedSkin skin) {
         this.skin = skin;
         var server = Server.getInstance();
         server.getPlayerService().broadcastPacket(createSkinPacket(skin));
         ((AllayPlayerService) server.getPlayerService()).onSkinUpdate(thisPlayer);
     }
 
-    protected PlayerSkinPacket createSkinPacket(Skin skin) {
+    protected PlayerSkinPacket createSkinPacket(SerializedSkin skin) {
         var packet = new PlayerSkinPacket();
         packet.setUuid(networkComponent.getLoginData().getUuid());
-        packet.setSkin(skin.toNetwork());
+        packet.setSkin(skin);
         packet.setNewSkinName(skin.getSkinId());
         // It seems that old skin name is unused
         packet.setOldSkinName("");

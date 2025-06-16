@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.service.PlayerService;
-import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
@@ -24,6 +23,7 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.client.storage.AllayPlayerStorage;
 import org.allaymc.server.network.AllayNetworkInterface;
+import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -278,7 +278,7 @@ public class AllayPlayerService implements PlayerService {
         );
     }
 
-    private void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, Skin skin) {
+    private void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, SerializedSkin skin) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
 
@@ -288,8 +288,8 @@ public class AllayPlayerService implements PlayerService {
         entry.setXuid(xuid);
         entry.setPlatformChatId(deviceInfo.deviceName());
         entry.setBuildPlatform(deviceInfo.device().getId());
-        entry.setSkin(skin.toNetwork());
-        entry.setTrustedSkin(skin.isTrusted());
+        entry.setSkin(skin);
+        entry.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
         entry.setColor(Color.BLACK);
 
         playerListPacket.getEntries().add(entry);
@@ -321,6 +321,6 @@ public class AllayPlayerService implements PlayerService {
     }
 
     public void onSkinUpdate(EntityPlayer player) {
-        this.playerListEntries.get(player.getUUID()).setSkin(player.getSkin().toNetwork());
+        this.playerListEntries.get(player.getUUID()).setSkin(player.getSkin());
     }
 }
