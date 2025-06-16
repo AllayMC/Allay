@@ -1,0 +1,14 @@
+services:
+  allaymc:
+    build: ./
+    ports:
+      - "19132:19132"
+      - "19132:19132/udp"
+    volumes:
+      - data:/data
+    container_name: allaymc
+    restart: unless-stopped
+volumes:
+  data:
+    external: true
+    name: allaymc-data
