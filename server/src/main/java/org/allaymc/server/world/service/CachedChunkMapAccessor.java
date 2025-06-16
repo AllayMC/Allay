@@ -18,8 +18,15 @@ public class CachedChunkMapAccessor<T> {
     public T get(int x, int z) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         if (hash != lastKey) {
-            lastKey = hash;
-            lastValue = map.get(hash);
+            var value = map.get(hash);
+            if (value != null) {
+                // Only cache the value if it exists, null value is not cached since
+                // it may be a valid (non-null) value in the future
+                lastKey = hash;
+                lastValue = value;
+            } else {
+                return null;
+            }
         }
         return lastValue;
     }

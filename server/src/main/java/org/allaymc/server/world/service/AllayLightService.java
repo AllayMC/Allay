@@ -25,6 +25,7 @@ import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 /**
@@ -34,7 +35,7 @@ public class AllayLightService implements LightService {
 
     protected final DimensionInfo dimensionInfo;
     protected final String worldName;
-    protected final Supplier<Boolean> runningFlagSupplier;
+    protected final AtomicBoolean isRunning;
     protected final Supplier<Integer> timeSupplier;
     protected final Supplier<Set<Weather>> weatherSupplier;
     protected final int maxUpdateCount;
@@ -84,18 +85,18 @@ public class AllayLightService implements LightService {
     protected LightPropagator skyLightPropagator;
 
     public AllayLightService(Dimension dimension) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld()::isRunning, dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers, Server.SETTINGS.worldSettings().maxLightUpdateCountPerDimension());
+        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers, Server.SETTINGS.worldSettings().maxLightUpdateCountPerDimension());
     }
 
     @VisibleForTesting
-    public AllayLightService(DimensionInfo dimensionInfo, String worldName, Supplier<Boolean> runningFlagSupplier, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
-        this(dimensionInfo, worldName, runningFlagSupplier, timeSupplier, weatherSupplier, Integer.MAX_VALUE);
+    public AllayLightService(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
+        this(dimensionInfo, worldName, timeSupplier, weatherSupplier, Integer.MAX_VALUE);
     }
 
-    protected AllayLightService(DimensionInfo dimensionInfo, String worldName, Supplier<Boolean> runningFlagSupplier, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier, int maxUpdateCount) {
+    protected AllayLightService(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier, int maxUpdateCount) {
         this.dimensionInfo = dimensionInfo;
         this.worldName = worldName;
-        this.runningFlagSupplier = runningFlagSupplier;
+        this.isRunning = new AtomicBoolean(true);
         this.timeSupplier = timeSupplier;
         this.weatherSupplier = weatherSupplier;
         this.maxUpdateCount = maxUpdateCount;
@@ -129,9 +130,13 @@ public class AllayLightService implements LightService {
         }
     }
 
+    public void shutdown() {
+        this.isRunning.set(false);
+    }
+
     protected void startCalculatingThread(String name, BlockingQueueWrapper<Runnable> queue) {
         Thread.ofPlatform().name(name).start(() -> {
-            while (runningFlagSupplier.get()) {
+            while (isRunning.get()) {
                 this.handleUpdateIn(queue);
             }
         });
@@ -349,6 +354,10 @@ public class AllayLightService implements LightService {
     }
 
     public void onBlockChange(int x, int y, int z, int le, int ld) {
+        if (!isRunning.get()) {
+            return;
+        }
+
         // Reduce memory usage by packing light data into a single byte
         var packedLightData = packLightData(le, ld);
         chunkAndBlockUpdateQueue.offer(() -> {
@@ -423,6 +432,10 @@ public class AllayLightService implements LightService {
     }
 
     public void onChunkLoad(Chunk chunk) {
+        if (!isRunning.get()) {
+            return;
+        }
+
         chunkAndBlockUpdateQueue.offer(() -> {
             chunk.applyOperation(this::addChunk, OperationType.READ, OperationType.NONE);
 
@@ -455,6 +468,10 @@ public class AllayLightService implements LightService {
     }
 
     public void onChunkUnload(Chunk chunk) {
+        if (!isRunning.get()) {
+            return;
+        }
+
         chunkAndBlockUpdateQueue.offer(() -> {
             var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
             lightDampening.remove(hash);

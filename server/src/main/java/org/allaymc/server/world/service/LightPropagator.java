@@ -20,15 +20,24 @@ public class LightPropagator {
     }
 
     public void setLightAndPropagate(int x, int y, int z, int oldLightValue, int newLightValue) {
-        if (oldLightValue != newLightValue) {
-            lightDataAccessor.setLight(x, y, z, newLightValue);
-        }
-        if (newLightValue > oldLightValue) {
-            lightIncreaseQueue.add(new LightUpdateEntry(x, y, z, newLightValue));
-            propagateIncrease();
-        } else {
-            lightDecreaseQueue.add(new LightUpdateEntry(x, y, z, oldLightValue));
-            propagateDecrease();
+        try {
+            if (oldLightValue != newLightValue) {
+                lightDataAccessor.setLight(x, y, z, newLightValue);
+            }
+            if (newLightValue > oldLightValue) {
+                lightIncreaseQueue.add(new LightUpdateEntry(x, y, z, newLightValue));
+                propagateIncrease();
+            } else {
+                lightDecreaseQueue.add(new LightUpdateEntry(x, y, z, oldLightValue));
+                propagateDecrease();
+            }
+        } catch (NullPointerException ignored) {
+            // It is possible to have NullPointerException occur during light propagation.
+            // This is because the chunks we touched is unloaded and the related light data
+            // is removed in "Light Calculating Thread (Chunk & Block)" which is not the same
+            // thread as the one we are currently running. Since the chunks we touched is
+            // unloaded, we can safely ignore this exception and leave directly (light
+            // in these chunks will be recalculated when they can be calculated again)
         }
     }
 

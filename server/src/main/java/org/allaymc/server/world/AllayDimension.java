@@ -55,8 +55,8 @@ public class AllayDimension implements Dimension {
     }
 
     public void startTick() {
-        this.chunkService.startTick();
         this.lightService.startTick();
+        this.chunkService.startTick();
     }
 
     public void tick(long currentTick) {
@@ -73,8 +73,12 @@ public class AllayDimension implements Dimension {
     }
 
     public void shutdown() {
-        chunkService.unloadAllChunks().join();
-        entityService.shutdown();
+        // Shutdown light service first, because when unloading chunks, chunk service
+        // will send updates to light service which is meaningless
+        this.lightService.shutdown();
+        // Save entities before unloading chunks to avoid potential issues
+        this.entityService.shutdown();
+        this.chunkService.unloadAllChunks().join();
     }
 
     @Override

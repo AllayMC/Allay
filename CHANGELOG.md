@@ -32,6 +32,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed fence gate opening in server-side.
 - Fixed quartz and purpur blocks behavior.
 - Fixed `BlockFace.UP` axis.
+- Fixed potential NPE in light service during server shutdown.
 
 ## 0.4.1 (API 0.7.0) - 2025-5-11
 
