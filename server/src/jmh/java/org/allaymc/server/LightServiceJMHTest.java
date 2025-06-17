@@ -27,7 +27,7 @@ public class LightServiceJMHTest {
     public void setup() throws MissingImplementationException {
         Allay.initI18n();
         Allay.initAllay();
-        lightService = new AllayLightService(DimensionInfo.THE_END, "test_world", () -> true, () -> 0, () -> Set.of(Weather.CLEAR));
+        lightService = new AllayLightService(DimensionInfo.THE_END, "test_world", () -> 0, () -> Set.of(Weather.CLEAR));
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 lightService.onChunkLoad(

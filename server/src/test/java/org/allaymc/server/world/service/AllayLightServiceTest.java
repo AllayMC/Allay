@@ -21,7 +21,7 @@ class AllayLightServiceTest {
 
     @Test
     void testBlockLight() {
-        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, "test_world", () -> true, () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
+        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, "test_world", () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
 
         // Prepare space for testing
         for (int x = -3; x <= 3; x++) {
@@ -61,11 +61,13 @@ class AllayLightServiceTest {
         assertEquals(0, lightService.getBlockLight(-1, 1, 0));
         assertEquals(0, lightService.getBlockLight(0, 1, -1));
         assertEquals(0, lightService.getBlockLight(0, 2, 0));
+
+        lightService.shutdown();
     }
 
     @Test
     void testSkyLight() {
-        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, "test_world", () -> true, () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
+        var lightService = new AllayLightService(DimensionInfo.OVERWORLD, "test_world", () -> WorldData.TIME_NOON, () -> Set.of(Weather.CLEAR));
 
         // Prepare space for testing
         for (int x = -3; x <= 3; x++) {
@@ -120,6 +122,8 @@ class AllayLightServiceTest {
         lightService.onBlockChange(0, 2, 0, 0, 15);
         lightService.handleUpdateInAllQueues();
         assertEquals(0, lightService.getSkyLight(0, 1, 0));
+
+        lightService.shutdown();
     }
 
     @Test

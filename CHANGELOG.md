@@ -10,7 +10,7 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.4.2 (API 0.7.0) - Unreleased
+## 0.5.0 (API 0.8.0) - Unreleased
 
 <small>[Compare with 0.4.1](https://github.com/AllayMC/Allay/compare/0.4.1...HEAD)</small>
 
@@ -18,9 +18,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Introduced new option `raknet-packet-limit` in `ServerSettings` to control the maximum number of datagram
   packets each client can send within a single RakNet tick.
+- Added docker and docker-compose support, now you can build docker image by your own (image will be uploaded to Docker Hub in the future).
 
 ### Changed
 
+- (API) Removed classes under `org.allaymc.api.client.skin`. `SerializedSkin` class in protocol library is used directly now.
 - Replaced the outdated event loop group handling with new `MultiThreadIoEventLoopGroup`.
 - Refactored permission system, see commit history for more info.
 
@@ -30,6 +32,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed fence gate opening in server-side.
 - Fixed quartz and purpur blocks behavior.
 - Fixed `BlockFace.UP` axis.
+- Fixed potential NPE in light service during server shutdown.
 
 ## 0.4.1 (API 0.7.0) - 2025-5-11
 

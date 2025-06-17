@@ -3,7 +3,6 @@ package org.allaymc.api.entity.component.player;
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
-import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.form.type.CustomForm;
@@ -13,6 +12,7 @@ import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -228,14 +228,14 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return The skin of the player.
      */
-    Skin getSkin();
+    SerializedSkin getSkin();
 
     /**
      * Sets the skin of the player.
      *
      * @param skin The skin to set.
      */
-    void setSkin(Skin skin);
+    void setSkin(SerializedSkin skin);
 
     /**
      * Get the game type of the player.
