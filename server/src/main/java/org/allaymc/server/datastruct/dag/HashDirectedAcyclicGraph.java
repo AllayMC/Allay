@@ -323,11 +323,10 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
 
         List<B> sort(NodePathSet nodePathSet) {
             List<B> result = new ArrayList<>();
-            List<B> initialNodes = new LinkedList<>();
-            initialNodes.addAll(nodePathSet);
+            List<B> initialNodes = new LinkedList<>(nodePathSet);
 
             while (!initialNodes.isEmpty()) {
-                B initialNode = initialNodes.remove(0);
+                B initialNode = initialNodes.removeFirst();
                 result.add(initialNode);
 
                 Iterator<B> iterator = get(initialNode).getAfterSet().iterator();

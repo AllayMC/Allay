@@ -23,7 +23,9 @@ public class C extends CachedFilterSelectorArgument {
         ParseUtils.cannotReversed(arguments[0]);
 
         var c = Integer.parseInt(arguments[0]);
-        if (c == 0) throw new SelectorSyntaxException("C cannot be zero!");
+        if (c == 0) {
+            throw new SelectorSyntaxException("'c' argument cannot be zero");
+        }
 
         return entities -> {
             entities.sort(Comparator.comparingDouble(e -> e.getLocation().distanceSquared(basePos)));

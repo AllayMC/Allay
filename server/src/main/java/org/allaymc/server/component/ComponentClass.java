@@ -18,6 +18,7 @@ import org.allaymc.server.utils.ReflectionUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author daoge_cmd
@@ -161,10 +162,13 @@ public abstract class ComponentClass {
                 var optional = annotation.optional();
                 // Try to find dependencies through inheritance
                 // Try to match by namespace ID
-                if (!requireCompId.isBlank())
-                    dependencies = dependencies.stream().filter(dependency -> ComponentProvider.findComponentIdentifier(dependency.getClass()).toString().equals(requireCompId)).toList();
-                else
+                if (!requireCompId.isBlank()) {
+                    dependencies = dependencies.stream().filter(dependency ->
+                            Objects.requireNonNull(ComponentProvider.findComponentIdentifier(dependency.getClass())).toString().equals(requireCompId)
+                    ).toList();
+                } else {
                     dependencies = dependencies.stream().filter(type::isInstance).toList();
+                }
                 count = dependencies.size();
                 // Matches to multiple dependencies
                 if (count > 1) {

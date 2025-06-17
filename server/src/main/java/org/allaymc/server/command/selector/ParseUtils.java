@@ -87,8 +87,9 @@ public class ParseUtils {
      * @param value Given string
      */
     public static void cannotReversed(String value) throws SelectorSyntaxException {
-        if (checkReversed(value))
+        if (checkReversed(value)) {
             throw new SelectorSyntaxException("Argument cannot be reversed!");
+        }
     }
 
     /**
@@ -98,8 +99,9 @@ public class ParseUtils {
      * @param keyName Parameter key name
      */
     public static void singleArgument(String[] args, String keyName) throws SelectorSyntaxException {
-        if (args.length > 1)
+        if (args.length > 1) {
             throw new SelectorSyntaxException("Multiple arguments is not allow in arg " + keyName);
+        }
     }
 
     /**

@@ -20,8 +20,9 @@ public class RYM extends CachedSimpleSelectorArgument {
         ParseUtils.cannotReversed(arguments[0]);
 
         var rym = Double.parseDouble(arguments[0]);
-        if (!ParseUtils.checkBetween(-180d, 180d, rym))
-            throw new SelectorSyntaxException("RX out of bound (-180 - 180): " + rym);
+        if (!ParseUtils.checkBetween(-180d, 180d, rym)) {
+            throw new SelectorSyntaxException("RYM out of bound (-180 to 180): " + rym);
+        }
         return entity -> ((entity.getLocation().yaw() + 90) % 360 - 180) >= rym;
     }
 

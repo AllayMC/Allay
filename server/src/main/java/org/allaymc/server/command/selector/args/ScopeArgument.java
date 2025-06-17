@@ -18,8 +18,10 @@ public abstract class ScopeArgument implements SelectorArgument {
 
     @Override
     public String getDefaultValue(Map<String, List<String>> values, SelectorType selectorType, CommandSender sender) {
-        if (values.containsKey("dx") || values.containsKey("dy") || values.containsKey("dz"))
+        if (values.containsKey("dx") || values.containsKey("dy") || values.containsKey("dz")) {
             return "0";
+        }
+
         return null;
     }
 }

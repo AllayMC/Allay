@@ -3,7 +3,6 @@ package org.allaymc.server.command.selector;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.NPCCommandSender;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
@@ -69,6 +68,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         registerArgument(new Scores());
     }
 
+    // TODO: refactor this
     @Override
     public List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException {
         var cachedMatches = MATCHES_CACHE.getIfPresent(token);
@@ -180,67 +180,59 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
 
     @Override
     public boolean checkValid(String token) {
-        return MATCHES_CACHE.get(token, k -> ENTITY_SELECTOR.matcher(token).matches());
+        return Boolean.TRUE.equals(MATCHES_CACHE.get(token, k -> ENTITY_SELECTOR.matcher(token).matches()));
     }
 
     @Override
     public boolean registerArgument(SelectorArgument argument) {
-        if (!registry.containsKey(argument.getKeyName())) {
-            registry.put(argument.getKeyName(), argument);
-            orderedArgs.add(argument);
-            Collections.sort(orderedArgs);
-            return true;
+        if (registry.containsKey(argument.getKeyName())) {
+            return false;
         }
 
-        return false;
+        registry.put(argument.getKeyName(), argument);
+        orderedArgs.add(argument);
+        Collections.sort(orderedArgs);
+        return true;
     }
 
     protected Map<String, List<String>> parseArgumentMap(String inputArguments) throws SelectorSyntaxException {
-        Map<String, List<String>> args = Maps.newHashMap();
+        Map<String, List<String>> args = new HashMap<>();
+        if (inputArguments == null || inputArguments.isEmpty()) {
+            return args;
+        }
 
-        if (inputArguments != null) {
-            for (var arg : separateArguments(inputArguments)) {
-                var split = AllayStringUtils.fastSplit(arg, ARGUMENT_JOINER, 2);
+        for (var arg : separateArguments(inputArguments)) {
+            var split = AllayStringUtils.fastSplit(arg, ARGUMENT_JOINER, 2);
 
-                var argName = split.get(0);
-                if (!registry.containsKey(argName)) {
-                    throw new SelectorSyntaxException("Unknown selector argument: " + argName);
-                }
-
-                if (!args.containsKey(argName)) {
-                    args.put(argName, Lists.newArrayList(split.size() > 1 ? split.get(1) : ""));
-                } else {
-                    args.get(argName).add(split.size() > 1 ? split.get(1) : "");
-                }
+            var argName = split.get(0);
+            if (!registry.containsKey(argName)) {
+                throw new SelectorSyntaxException("Unknown selector argument: " + argName);
             }
+
+            args.computeIfAbsent(argName, k -> new ArrayList<>()).add(split.size() > 1 ? split.get(1) : "");
         }
 
         return args;
     }
 
-    protected List<String> separateArguments(String inputArguments) {
-        boolean go_on = false;
+    protected List<String> separateArguments(String input) {
         List<String> result = new ArrayList<>();
         int start = 0;
+        boolean inBraces = false;
 
-        for (int i = 0; i < inputArguments.length(); i++) {
-            if (inputArguments.charAt(i) == ',' && !go_on) {
-                result.add(inputArguments.substring(start, i));
-                start = i + 1;
-            }
-
-            if (inputArguments.charAt(i) == '{') go_on = true;
-
-            if (inputArguments.charAt(i) == '}') {
-                go_on = false;
-                i++;
-                result.add(inputArguments.substring(start, i));
+        for (int i = 0; i < input.length(); i++) {
+            var ch = input.charAt(i);
+            if (ch == '{') inBraces = true;
+            if (ch == '}') inBraces = false;
+            if (ch == ',' && !inBraces) {
+                result.add(input.substring(start, i));
                 start = i + 1;
             }
         }
 
-        if (start < inputArguments.length())
-            result.add(inputArguments.substring(start));
+        if (start < input.length()) {
+            result.add(input.substring(start));
+        }
 
         return result.stream().filter(s -> !s.isEmpty()).toList();
     }

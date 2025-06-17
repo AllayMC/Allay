@@ -368,13 +368,14 @@ public final class CustomForm extends Form {
      */
     @ApiStatus.Internal
     public void syncDefaultValueToResponse() {
+        var response = getResponse();
         if (response == null) {
             log.warn("syncDefaultValueToResponse() called before receive response is called");
             return;
         }
         for (var index = 0; index < content.size(); index++) {
             var element = content.get(index);
-            element.syncDefaultValueToResponse(getResponse().get(index));
+            element.syncDefaultValueToResponse(response.get(index));
         }
     }
 

@@ -19,10 +19,13 @@ public class M extends CachedSimpleSelectorArgument {
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
 
-        var gmStr = arguments[0];
-        var reversed = ParseUtils.checkReversed(gmStr);
-        if (reversed) gmStr = gmStr.substring(1);
-        var gm = ParseUtils.parseGameMode(gmStr);
+        var rawGm = arguments[0];
+        var reversed = ParseUtils.checkReversed(rawGm);
+        if (reversed) {
+            rawGm = rawGm.substring(1);
+        }
+
+        var gm = ParseUtils.parseGameMode(rawGm);
         return entity -> entity instanceof EntityPlayer player && (reversed != (player.getGameType().ordinal() == gm));
     }
 

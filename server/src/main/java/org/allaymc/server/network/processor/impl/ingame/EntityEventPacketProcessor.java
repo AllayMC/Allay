@@ -19,7 +19,7 @@ public class EntityEventPacketProcessor extends PacketProcessor<EntityEventPacke
         return switch (packet.getType()) {
             case EATING_ITEM -> {
                 if (packet.getData() == 0 || packet.getRuntimeEntityId() != player.getRuntimeId()) {
-                    log.warn(player.getOriginName() + " entity event eid mismatch");
+                    log.warn("{} entity event eid mismatch", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 

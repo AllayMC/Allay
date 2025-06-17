@@ -105,9 +105,8 @@ public class StructureCommand extends SimpleCommand {
                 .exec(context -> {
                     checkStructureDirectory();
                     context.addOutput("Available structure files:");
-                    try {
-                        Files.list(STRUCTURE_DIR)
-                                .filter(path -> path.toString().endsWith(STRUCTURE_FILE_EXT))
+                    try (var paths = Files.list(STRUCTURE_DIR)) {
+                        paths.filter(path -> path.toString().endsWith(STRUCTURE_FILE_EXT))
                                 .forEach(path -> context.addOutput("- " + path.getFileName().toString()));
                     } catch (IOException e) {
                         context.addError(e.toString());
