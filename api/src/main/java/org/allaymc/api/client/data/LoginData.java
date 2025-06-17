@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.allaymc.api.client.skin.*;
 import org.allaymc.api.i18n.LangCode;
+import org.cloudburstmc.protocol.bedrock.data.auth.CertificateChainPayload;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 
@@ -39,8 +40,8 @@ public class LoginData {
     private String identityPublicKey;
 
     private LoginData(LoginPacket loginPacket) {
-        this.decodeChainData(loginPacket.getChain());
-        this.decodeSkinData(loginPacket.getExtra());
+        this.decodeChainData(((CertificateChainPayload) loginPacket.getAuthPayload()).getChain());
+        this.decodeSkinData(loginPacket.getClientJwt());
     }
 
     public static LoginData decode(LoginPacket loginPacket) {
@@ -212,5 +213,4 @@ public class LoginData {
         }
         return new PersonaPieceTint(pieceType, colors);
     }
-
 }
