@@ -151,7 +151,7 @@ public class BlockPropertyTypeDataFileGen {
             if (propertyTypeEntry.getValue().serializationName.isEmpty()) {
                 continue;
             }
-            Map<String, Object> obj = new TreeMap();
+            Map<String, Object> obj = new TreeMap<>();
 
             obj.put("serializationName", propertyTypeEntry.getValue().serializationName);
             obj.put("valueType", propertyTypeEntry.getValue().valueType);
