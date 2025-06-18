@@ -42,7 +42,10 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.ChatRestrictionLevel;
+import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -95,7 +98,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void handleDataPacket(BedrockPacket packet, long time) {
         var processor = packetProcessorHolder.getProcessor(packet);
         if (processor == null) {
-            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, packetProcessorHolder.getClientStatus().name());
+            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientStatus());
             return;
         }
         processor.handleSync(thisPlayer, packet, time);
@@ -108,9 +111,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var maxLoginTime = Server.SETTINGS.networkSettings().maxLoginTime();
         if (maxLoginTime > 0) {
             Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
-                var status = packetProcessorHolder.getClientStatus();
+                var status = getClientStatus();
                 if (status != ClientStatus.DISCONNECTED && status.ordinal() < ClientStatus.IN_GAME.ordinal()) {
-                    log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress().toString(), Server.SETTINGS.networkSettings().maxLoginTime() / 20d);
+                    log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress(), maxLoginTime / 20d);
                     disconnect(TrKeys.M_DISCONNECTIONSCREEN_TIMEOUT);
                 }
                 return true;
@@ -120,7 +123,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
-                if (!packetProcessorHolder.getClientStatus().canHandlePackets()) {
+                if (!getClientStatus().canHandlePackets()) {
                     return PacketSignal.HANDLED;
                 }
 
@@ -133,7 +136,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
                 var processor = packetProcessorHolder.getProcessor(packet);
                 if (processor == null) {
-                    log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, packetProcessorHolder.getClientStatus().name());
+                    log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientStatus());
                     return PacketSignal.HANDLED;
                 }
 
@@ -263,8 +266,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void onDisconnect(String disconnectReason) {
-        var event = new ClientDisconnectEvent(clientSession, disconnectReason);
-        event.call();
+        new ClientDisconnectEvent(clientSession, disconnectReason).call();
         thisPlayer.closeAllContainers();
         ((AllayPlayerService) Server.getInstance().getPlayerService()).onDisconnect(thisPlayer);
     }
@@ -317,8 +319,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 
-        var startGamePacket = encodeStartGamePacket(dimension.getWorld(), playerData, dimension);
-        sendPacket(startGamePacket);
+        sendPacket(encodeStartGamePacket(dimension.getWorld(), playerData, dimension));
 
         clientSession.getPeer().getCodecHelper().setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(DeferredData.ITEM_DEFINITIONS.get()).build());
         clientSession.getPeer().getCodecHelper().setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(DeferredData.BLOCK_DEFINITIONS.get()).build());
@@ -360,7 +361,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setVanillaVersion("*");
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(true);
-        startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         startGamePacket.setServerAuthoritativeBlockBreaking(true);
         startGamePacket.setCommandsEnabled(true);
         startGamePacket.setMultiplayerGame(true);
@@ -382,11 +382,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setServerId("");
         startGamePacket.setWorldId("");
         startGamePacket.setScenarioId("");
+        startGamePacket.setOwnerId("");
         return startGamePacket;
     }
 
     public void completeLogin() {
-        if (Server.getInstance().getPlayerService().getPlayerCount() >= Server.getInstance().getPlayerService().getMaxPlayerCount()) {
+        var playerService = Server.getInstance().getPlayerService();
+        if (playerService.getPlayerCount() >= playerService.getMaxPlayerCount()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
             return;
         }
@@ -403,11 +405,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
         sendPacket(playStatusPacket);
 
-        ((AllayPlayerService) Server.getInstance().getPlayerService()).onLoggedIn(thisPlayer);
+        ((AllayPlayerService) playerService).onLoggedIn(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         Server.getInstance().broadcastTr(event.getJoinMessage(), thisPlayer.getOriginName());
 
         sendPacket(DeferredData.RESOURCE_PACKS_INFO_PACKET.get());
     }
-
 }

@@ -51,7 +51,7 @@ public class BlockPropertyDefaultValueGen {
         blockPropertyDefaultValues.forEach((type, value) -> {
             serializedValues.put(type.getName(), value.getValue());
         });
-        Files.writeString(Path.of("data/resources/unpacked/block_property_default_values.json"), gson.toJson(serializedValues));
+        Utils.writeFileWithCRLF(Path.of("data/resources/unpacked/block_property_default_values.json"), gson.toJson(serializedValues));
     }
 
     public static class BlockTypeData {

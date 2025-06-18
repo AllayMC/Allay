@@ -1,6 +1,8 @@
 package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
+import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
@@ -18,9 +20,9 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -30,6 +32,7 @@ import java.util.function.Supplier;
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public final class DeferredData {
 
     public static final Supplier<CraftingDataPacket> CRAFTING_DATA_PACKET = Suppliers.memoize(DeferredData::encodeCraftingDataPacket);
@@ -65,15 +68,16 @@ public final class DeferredData {
     }
 
     public static List<ItemDefinition> encodeItemDefinitions() {
-        return Registries.ITEMS.getContent().values().stream().map(ItemType::toNetworkDefinition).toList();
+        return Registries.ITEMS.getContent().values().stream()
+                .map(ItemType::toNetworkDefinition)
+                .toList();
     }
 
     public static List<BlockDefinition> encodeBlockDefinitions() {
-        List<BlockDefinition> list = new ArrayList<>();
-        for (var blockType : Registries.BLOCKS.getContent().values()) {
-            blockType.getAllStates().forEach(state -> list.add(state.toNetworkBlockDefinition()));
-        }
-        return list;
+        return Registries.BLOCKS.getContent().values().stream()
+                .flatMap(block -> block.getAllStates().stream())
+                .map(BlockState::toNetworkBlockDefinition)
+                .toList();
     }
 
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {
@@ -83,12 +87,12 @@ public final class DeferredData {
             packet.setIdentifiers((NbtMap) stream.readTag());
             return packet;
         } catch (Throwable t) {
-            throw new AssertionError("Failed to load entity_identifiers.nbt", t);
+            throw new RuntimeException("Failed to load entity_identifiers.nbt", t);
         }
     }
 
     public static BiomeDefinitionListPacket encodeBiomeDefinitionListPacket() {
-        var definitions = new HashMap<String, BiomeDefinitionData>();
+        Map<String, BiomeDefinitionData> definitions = new HashMap<>();
         for (var biomeId : BiomeId.values()) {
             var biomeData = BiomeData.getBiomeData(biomeId);
             definitions.put(biomeId.getIdentifier().path(), biomeData.toNetworkData());
@@ -99,10 +103,13 @@ public final class DeferredData {
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {
+        var settings = Server.SETTINGS.resourcePackSettings();
+
         var packet = new ResourcePacksInfoPacket();
-        packet.setForcedToAccept(Server.SETTINGS.resourcePackSettings().forceResourcePacks());
+        packet.setForcedToAccept(settings.forceResourcePacks());
         packet.setWorldTemplateId(new UUID(0, 0));
         packet.setWorldTemplateVersion("");
+        packet.setVibrantVisualsForceDisabled(settings.disableVibrantVisuals());
 
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
@@ -115,11 +122,10 @@ public final class DeferredData {
     }
 
     public static ResourcePackStackPacket encodeResourcesPackStackPacket() {
+        var settings = Server.SETTINGS.resourcePackSettings();
+
         var packet = new ResourcePackStackPacket();
-        packet.setForcedToAccept(
-                Server.SETTINGS.resourcePackSettings().forceResourcePacks() &&
-                !Server.SETTINGS.resourcePackSettings().allowClientResourcePacks()
-        );
+        packet.setForcedToAccept(settings.forceResourcePacks() && !settings.allowClientResourcePacks());
         // Just left '*' here. If we put in an exact game version, it is possible that client
         // won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
         packet.setGameVersion("*");

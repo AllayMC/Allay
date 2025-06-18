@@ -2260,6 +2260,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemMusicDiscStack> MUSIC_DISC_STRAD;
 
+    public static ItemType<ItemMusicDiscStack> MUSIC_DISC_TEARS;
+
     public static ItemType<ItemMusicDiscStack> MUSIC_DISC_WAIT;
 
     public static ItemType<ItemMusicDiscStack> MUSIC_DISC_WARD;

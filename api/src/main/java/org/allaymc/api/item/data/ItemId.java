@@ -165,7 +165,7 @@ public enum ItemId {
 
     BANNER("minecraft:banner", 600),
 
-    BANNER_PATTERN("minecraft:banner_pattern", 812),
+    BANNER_PATTERN("minecraft:banner_pattern", 813),
 
     BARREL("minecraft:barrel", -203),
 
@@ -325,7 +325,7 @@ public enum ItemId {
 
     BOARD("minecraft:board", 629),
 
-    BOAT("minecraft:boat", 810),
+    BOAT("minecraft:boat", 811),
 
     BOGGED_SPAWN_EGG("minecraft:bogged_spawn_egg", 490),
 
@@ -497,7 +497,7 @@ public enum ItemId {
 
     CHEMICAL_HEAT("minecraft:chemical_heat", 192),
 
-    CHEMISTRY_TABLE("minecraft:chemistry_table", 804),
+    CHEMISTRY_TABLE("minecraft:chemistry_table", 805),
 
     CHERRY_BOAT("minecraft:cherry_boat", 686),
 
@@ -631,7 +631,7 @@ public enum ItemId {
 
     COLORED_TORCH_BLUE("minecraft:colored_torch_blue", 204),
 
-    COLORED_TORCH_BP("minecraft:colored_torch_bp", 808),
+    COLORED_TORCH_BP("minecraft:colored_torch_bp", 809),
 
     COLORED_TORCH_GREEN("minecraft:colored_torch_green", -963),
 
@@ -639,7 +639,7 @@ public enum ItemId {
 
     COLORED_TORCH_RED("minecraft:colored_torch_red", 202),
 
-    COLORED_TORCH_RG("minecraft:colored_torch_rg", 807),
+    COLORED_TORCH_RG("minecraft:colored_torch_rg", 808),
 
     COMMAND_BLOCK("minecraft:command_block", 137),
 
@@ -1045,7 +1045,7 @@ public enum ItemId {
 
     DUNE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:dune_armor_trim_smithing_template", 719),
 
-    DYE("minecraft:dye", 811),
+    DYE("minecraft:dye", 812),
 
     ECHO_SHARD("minecraft:echo_shard", 684),
 
@@ -1313,7 +1313,7 @@ public enum ItemId {
 
     END_BRICKS("minecraft:end_bricks", 206),
 
-    END_CRYSTAL("minecraft:end_crystal", 814),
+    END_CRYSTAL("minecraft:end_crystal", 815),
 
     END_GATEWAY("minecraft:end_gateway", 209),
 
@@ -1459,7 +1459,7 @@ public enum ItemId {
 
     GLOBE_BANNER_PATTERN("minecraft:globe_banner_pattern", 621),
 
-    GLOW_BERRIES("minecraft:glow_berries", 815),
+    GLOW_BERRIES("minecraft:glow_berries", 816),
 
     GLOW_FRAME("minecraft:glow_frame", 660),
 
@@ -1661,9 +1661,9 @@ public enum ItemId {
 
     HARD_RED_STAINED_GLASS_PANE("minecraft:hard_red_stained_glass_pane", -671),
 
-    HARD_STAINED_GLASS("minecraft:hard_stained_glass", 805),
+    HARD_STAINED_GLASS("minecraft:hard_stained_glass", 806),
 
-    HARD_STAINED_GLASS_PANE("minecraft:hard_stained_glass_pane", 806),
+    HARD_STAINED_GLASS_PANE("minecraft:hard_stained_glass_pane", 807),
 
     HARD_WHITE_STAINED_GLASS("minecraft:hard_white_stained_glass", 254),
 
@@ -1925,7 +1925,7 @@ public enum ItemId {
 
     LEVER("minecraft:lever", 69),
 
-    LIGHT_BLOCK("minecraft:light_block", 809),
+    LIGHT_BLOCK("minecraft:light_block", 810),
 
     LIGHT_BLOCK_0("minecraft:light_block_0", -215),
 
@@ -2264,6 +2264,8 @@ public enum ItemId {
     MUSIC_DISC_STAL("minecraft:music_disc_stal", 574),
 
     MUSIC_DISC_STRAD("minecraft:music_disc_strad", 575),
+
+    MUSIC_DISC_TEARS("minecraft:music_disc_tears", 804),
 
     MUSIC_DISC_WAIT("minecraft:music_disc_wait", 578),
 
@@ -3051,7 +3053,7 @@ public enum ItemId {
 
     SPARKLER("minecraft:sparkler", 637),
 
-    SPAWN_EGG("minecraft:spawn_egg", 813),
+    SPAWN_EGG("minecraft:spawn_egg", 814),
 
     SPIDER_EYE("minecraft:spider_eye", 300),
 

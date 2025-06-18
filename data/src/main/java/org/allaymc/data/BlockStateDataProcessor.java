@@ -27,7 +27,7 @@ public class BlockStateDataProcessor {
             });
         }
 
-        Files.writeString(Path.of("data/resources/block_states.json"), gson.toJson(out));
+        Utils.writeFileWithCRLF(Path.of("data/resources/block_states.json"), gson.toJson(out));
     }
 
     public static class RawBlockStateData {

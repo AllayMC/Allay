@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonParser;
+import com.google.gson.annotations.SerializedName;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
@@ -27,6 +28,7 @@ public record BiomeData(
         float blueSporeDensity,
         float depth,
         float downfall,
+        @SerializedName("mapWaterColour")
         Color mapWaterColor,
         boolean rain,
         float redSporeDensity,

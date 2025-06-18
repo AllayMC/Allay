@@ -6765,6 +6765,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.MUSIC_DISC_STRAD)
                     .build();
         }
+        if (ItemTypes.MUSIC_DISC_TEARS == null) {
+            ItemTypes.MUSIC_DISC_TEARS = AllayItemType
+                    .builder(ItemMusicDiscStackImpl.class)
+                    .vanillaItem(ItemId.MUSIC_DISC_TEARS)
+                    .build();
+        }
         if (ItemTypes.MUSIC_DISC_WAIT == null) {
             ItemTypes.MUSIC_DISC_WAIT = AllayItemType
                     .builder(ItemMusicDiscStackImpl.class)

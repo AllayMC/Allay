@@ -7,7 +7,7 @@ import org.allaymc.updater.block.BlockStateUpdater_1_21_60;
 import org.allaymc.updater.item.ItemStateUpdater;
 import org.allaymc.updater.item.ItemStateUpdater_1_21_50;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v800.Bedrock_v800;
+import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 
 /**
  * This class contains information about the current protocol version.
@@ -20,12 +20,12 @@ public final class ProtocolInfo {
     /**
      * The current used packet codec.
      */
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v800.CODEC;
+    public static final BedrockCodec PACKET_CODEC = Bedrock_v818.CODEC;
 
     /**
      * The current minecraft version.
      */
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 80, 3, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 90, 3, 0);
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
@@ -55,7 +55,7 @@ public final class ProtocolInfo {
     /**
      * The encoded version number of the block state version.
      */
-    public static final int BLOCK_STATE_VERSION_NUM = BLOCK_STATE_VERSION_NUM_NO_REVISION | BLOCK_STATE_VERSION.revision(); // revision
+    public static final int BLOCK_STATE_VERSION_NUM = BLOCK_STATE_VERSION_NUM_NO_REVISION | BLOCK_STATE_VERSION.revision(); // 18168865
 
     /**
      * Get the string style of the current minecraft version.

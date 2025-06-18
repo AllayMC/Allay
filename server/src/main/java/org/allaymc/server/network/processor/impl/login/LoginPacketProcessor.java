@@ -69,18 +69,17 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
 
         try {
             var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
-            var encryptionKeyPair = EncryptionUtils.createKeyPair();
-            var encryptionToken = EncryptionUtils.generateRandomToken();
-            var encryptionSecretKey = EncryptionUtils.getSecretKey(
-                    encryptionKeyPair.getPrivate(), clientKey,
-                    encryptionToken
-            );
+            var serverKeyPair = EncryptionUtils.createKeyPair();
+            var token = EncryptionUtils.generateRandomToken();
+            var encryptionSecretKey = EncryptionUtils.getSecretKey(serverKeyPair.getPrivate(), clientKey, token);
+
             networkComponent.setEncryptionSecretKey(encryptionSecretKey);
-            var encryptionJWT = EncryptionUtils.createHandshakeJwt(encryptionKeyPair, encryptionToken);
             networkComponent.setNetworkEncryptionEnabled(true);
+
             var handshakePacket = new ServerToClientHandshakePacket();
-            handshakePacket.setJwt(encryptionJWT);
+            handshakePacket.setJwt(EncryptionUtils.createHandshakeJwt(serverKeyPair, token));
             player.sendPacketImmediately(handshakePacket);
+
             player.getClientSession().enableEncryption(encryptionSecretKey);
             // completeLogin() when client send back ClientToServerHandshakePacket
         } catch (Exception exception) {

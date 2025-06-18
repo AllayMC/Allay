@@ -14,10 +14,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 /**
@@ -187,7 +185,7 @@ public class BlockPropertyTypeDataFileGen {
         String json = gson.toJson(obj);
         Path path = Path.of("data/resources/unpacked/block_property_types.json");
         Files.deleteIfExists(path);
-        Files.writeString(path, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+        Utils.writeFileWithCRLF(path, json);
     }
 
     static class PropertyType {

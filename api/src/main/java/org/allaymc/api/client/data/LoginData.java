@@ -9,9 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.allaymc.api.i18n.LangCode;
-import org.cloudburstmc.protocol.bedrock.data.auth.CertificateChainPayload;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
+import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -40,38 +40,30 @@ public class LoginData {
     private String identityPublicKey;
 
     private LoginData(LoginPacket loginPacket) {
-        this.decodeChainData(((CertificateChainPayload) loginPacket.getAuthPayload()).getChain());
-        this.decodeSkinData(loginPacket.getClientJwt());
+        try {
+            var result = EncryptionUtils.validatePayload(loginPacket.getAuthPayload());
+            this.decodeChainData(result);
+            this.decodeSkinData(loginPacket.getClientJwt());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static LoginData decode(LoginPacket loginPacket) {
         return new LoginData(loginPacket);
     }
 
-    private void decodeChainData(List<String> chainData) {
-        try {
-            this.xboxAuthenticated = EncryptionUtils.validateChain(chainData).signed();
-        } catch (Exception e) {
-            this.xboxAuthenticated = false;
-        }
+    private void decodeChainData(ChainValidationResult result) {
+        this.xboxAuthenticated = result.signed();
 
-        for (String chain : chainData) {
-            JsonObject chainMap = decodeToken(chain);
-            if (chainMap == null) {
-                continue;
-            }
-            if (chainMap.has("extraData")) {
-                JsonObject extraData = (JsonObject) chainMap.get("extraData");
-                this.displayName = extraData.get("displayName").getAsString();
-                this.uuid = UUID.fromString(extraData.get("identity").getAsString());
-                this.xuid = extraData.get("XUID").getAsString();
-            }
-            this.identityPublicKey = chainMap.get("identityPublicKey").getAsString();
-        }
+        var extraData = result.identityClaims().extraData;
+        this.displayName = extraData.displayName;
+        this.uuid = extraData.identity;
+        this.xuid = extraData.xuid;
+        this.identityPublicKey = result.identityClaims().identityPublicKey;
     }
 
     private void decodeSkinData(String skinData) {
-
         JsonObject skinMap = decodeToken(skinData);
         if (skinMap.has("DeviceModel") && skinMap.has("DeviceId") &&
             skinMap.has("ClientRandomId") && skinMap.has("DeviceOS") &&
