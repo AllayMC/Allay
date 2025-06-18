@@ -292,7 +292,7 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("trust-all-skins")
         private boolean trustAllSkins = true;
 
-        @Comment("If set to true, disables the Vibrant Visuals feature")
+        @Comment("If set to true, Vibrant Visuals will be disabled")
         @CustomKey("disable-vibrant-visuals")
         private boolean disableVibrantVisuals = false;
 
