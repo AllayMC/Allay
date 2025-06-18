@@ -19,6 +19,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced new option `raknet-packet-limit` in `ServerSettings` to control the maximum number of datagram
   packets each client can send within a single RakNet tick.
 - Added docker and docker-compose support, now you can build docker image by your own (image will be uploaded to Docker Hub in the future).
+- Added support for bedrock 1.21.90.
 
 ### Changed
 
