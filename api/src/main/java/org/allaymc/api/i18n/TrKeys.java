@@ -1030,6 +1030,11 @@ public interface TrKeys {
     /**
      * Press :_input_key.sneak: to dismount
      */
+    String M_ACTION_HINT_EXIT_CONSOLE_HAPPY_GHAST = "minecraft:action.hint.exit.console.happy_ghast";
+
+    /**
+     * Press :_input_key.sneak: to dismount
+     */
     String M_ACTION_HINT_EXIT_CONSOLE_HORSE = "minecraft:action.hint.exit.console.horse";
 
     /**
@@ -1080,6 +1085,11 @@ public interface TrKeys {
     /**
      * Tap sneak to dismount
      */
+    String M_ACTION_HINT_EXIT_HAPPY_GHAST = "minecraft:action.hint.exit.happy_ghast";
+
+    /**
+     * Tap sneak to dismount
+     */
     String M_ACTION_HINT_EXIT_HORSE = "minecraft:action.hint.exit.horse";
 
     /**
@@ -1116,6 +1126,11 @@ public interface TrKeys {
      * Tap dismount to dismount
      */
     String M_ACTION_HINT_EXIT_SCHEME_DONKEY = "minecraft:action.hint.exit.scheme.donkey";
+
+    /**
+     * Tap sneak to dismount
+     */
+    String M_ACTION_HINT_EXIT_SCHEME_HAPPY_GHAST = "minecraft:action.hint.exit.scheme.happy_ghast";
 
     /**
      * Tap dismount to dismount
@@ -1223,6 +1238,11 @@ public interface TrKeys {
     String M_ACTION_INTERACT_CURE = "minecraft:action.interact.cure";
 
     /**
+     * Cut 
+     */
+    String M_ACTION_INTERACT_CUT = "minecraft:action.interact.cut";
+
+    /**
      * Dye
      */
     String M_ACTION_INTERACT_DYE = "minecraft:action.interact.dye";
@@ -1313,9 +1333,24 @@ public interface TrKeys {
     String M_ACTION_INTERACT_READ = "minecraft:action.interact.read";
 
     /**
+     * Remove Carpet 
+     */
+    String M_ACTION_INTERACT_REMOVECARPET = "minecraft:action.interact.removecarpet";
+
+    /**
      * Remove Harness
      */
     String M_ACTION_INTERACT_REMOVEHARNESS = "minecraft:action.interact.removeharness";
+
+    /**
+     * Remove Horse Armor 
+     */
+    String M_ACTION_INTERACT_REMOVEHORSEARMOR = "minecraft:action.interact.removehorsearmor";
+
+    /**
+     * Remove Saddle 
+     */
+    String M_ACTION_INTERACT_REMOVESADDLE = "minecraft:action.interact.removesaddle";
 
     /**
      * Remove Wolf Armor
@@ -1331,6 +1366,11 @@ public interface TrKeys {
      * Repair Wolf Armor
      */
     String M_ACTION_INTERACT_REPAIRWOLFARMOR = "minecraft:action.interact.repairwolfarmor";
+
+    /**
+     * Retrieve 
+     */
+    String M_ACTION_INTERACT_RETRIEVE = "minecraft:action.interact.retrieve";
 
     /**
      * Board
@@ -5413,6 +5453,11 @@ public interface TrKeys {
     String M_COMMANDS_SCOREBOARD_PLAYERS_OFFLINEPLAYERNAME = "minecraft:commands.scoreboard.players.offlinePlayerName";
 
     /**
+     * Operation results in integer overflow
+     */
+    String M_COMMANDS_SCOREBOARD_PLAYERS_OPERATION_INTEGEROVERFLOW = "minecraft:commands.scoreboard.players.operation.integerOverflow";
+
+    /**
      * Invalid operation %1#s
      */
     String M_COMMANDS_SCOREBOARD_PLAYERS_OPERATION_INVALIDOPERATION = "minecraft:commands.scoreboard.players.operation.invalidOperation";
@@ -6838,7 +6883,7 @@ public interface TrKeys {
     String M_CONNECT_FAILED = "minecraft:connect.failed";
 
     /**
-     * Please press the 'A' button on your controller to continue
+     * Please press the A button on your controller to continue
      */
     String M_CONNECT_GAMEPAD_PRESSBUTTONTOCONTINUE = "minecraft:connect_gamepad.pressButtonToContinue";
 
@@ -10393,6 +10438,11 @@ public interface TrKeys {
     String M_ENTITY_GUARDIAN_NAME = "minecraft:entity.guardian.name";
 
     /**
+     * Happy Ghast
+     */
+    String M_ENTITY_HAPPY_GHAST_NAME = "minecraft:entity.happy_ghast.name";
+
+    /**
      * Hoglin
      */
     String M_ENTITY_HOGLIN_NAME = "minecraft:entity.hoglin.name";
@@ -11036,6 +11086,21 @@ public interface TrKeys {
      * Did not expect Entity of type '%s'
      */
     String M_GAMETEST_ASSERT_DIDNOTEXPECTENTITYOFTYPE = "minecraft:gameTest.assert.didNotExpectEntityOfType";
+
+    /**
+     * Duplicated entity with the same ID as another entity
+     */
+    String M_GAMETEST_ASSERT_ERRORDUPLICATEDENTITY = "minecraft:gameTest.assert.errorDuplicatedEntity";
+
+    /**
+     * Duplicated entity, entity trying to load with player's ActorUniqueId
+     */
+    String M_GAMETEST_ASSERT_ERRORDUPLICATEDENTITYPLAYERUNIQUEID = "minecraft:gameTest.assert.errorDuplicatedEntityPlayerUniqueID";
+
+    /**
+     * Attempting to spawn a hostile mob in a peaceful world
+     */
+    String M_GAMETEST_ASSERT_ERRORSPAWNHOSTILEINPEACEFULWORLD = "minecraft:gameTest.assert.errorSpawnHostileInPeacefulWorld";
 
     /**
      * Expected Block of type '%s'
@@ -15253,6 +15318,11 @@ public interface TrKeys {
     String M_ITEM_BLACK_BUNDLE = "minecraft:item.black_bundle";
 
     /**
+     * Black Harness
+     */
+    String M_ITEM_BLACK_HARNESS_NAME = "minecraft:item.black_harness.name";
+
+    /**
      * Blade Pottery Sherd
      */
     String M_ITEM_BLADE_POTTERY_SHERD_NAME = "minecraft:item.blade_pottery_sherd.name";
@@ -15276,6 +15346,11 @@ public interface TrKeys {
      * Blue Egg
      */
     String M_ITEM_BLUE_EGG_NAME = "minecraft:item.blue_egg.name";
+
+    /**
+     * Blue Harness
+     */
+    String M_ITEM_BLUE_HARNESS_NAME = "minecraft:item.blue_harness.name";
 
     /**
      * Acacia Boat
@@ -15391,6 +15466,11 @@ public interface TrKeys {
      * Brown Egg
      */
     String M_ITEM_BROWN_EGG_NAME = "minecraft:item.brown_egg.name";
+
+    /**
+     * Brown Harness
+     */
+    String M_ITEM_BROWN_HARNESS_NAME = "minecraft:item.brown_harness.name";
 
     /**
      * Brush
@@ -15746,6 +15826,11 @@ public interface TrKeys {
      * Cyan Bundle
      */
     String M_ITEM_CYAN_BUNDLE = "minecraft:item.cyan_bundle";
+
+    /**
+     * Cyan Harness
+     */
+    String M_ITEM_CYAN_HARNESS_NAME = "minecraft:item.cyan_harness.name";
 
     /**
      * Danger Pottery Sherd
@@ -16348,9 +16433,19 @@ public interface TrKeys {
     String M_ITEM_GRAY_BUNDLE = "minecraft:item.gray_bundle";
 
     /**
+     * Gray Harness
+     */
+    String M_ITEM_GRAY_HARNESS_NAME = "minecraft:item.gray_harness.name";
+
+    /**
      * Green Bundle
      */
     String M_ITEM_GREEN_BUNDLE = "minecraft:item.green_bundle";
+
+    /**
+     * Green Harness
+     */
+    String M_ITEM_GREEN_HARNESS_NAME = "minecraft:item.green_harness.name";
 
     /**
      * Gunpowder
@@ -16593,14 +16688,29 @@ public interface TrKeys {
     String M_ITEM_LIGHT_BLUE_BUNDLE = "minecraft:item.light_blue_bundle";
 
     /**
+     * Light Blue Harness
+     */
+    String M_ITEM_LIGHT_BLUE_HARNESS_NAME = "minecraft:item.light_blue_harness.name";
+
+    /**
      * Light Gray Bundle
      */
     String M_ITEM_LIGHT_GRAY_BUNDLE = "minecraft:item.light_gray_bundle";
 
     /**
+     * Light Gray Harness
+     */
+    String M_ITEM_LIGHT_GRAY_HARNESS_NAME = "minecraft:item.light_gray_harness.name";
+
+    /**
      * Lime Bundle
      */
     String M_ITEM_LIME_BUNDLE = "minecraft:item.lime_bundle";
+
+    /**
+     * Lime Harness
+     */
+    String M_ITEM_LIME_HARNESS_NAME = "minecraft:item.lime_harness.name";
 
     /**
      * Lodestone Compass
@@ -16616,6 +16726,11 @@ public interface TrKeys {
      * Magenta Bundle
      */
     String M_ITEM_MAGENTA_BUNDLE = "minecraft:item.magenta_bundle";
+
+    /**
+     * Magenta Harness
+     */
+    String M_ITEM_MAGENTA_HARNESS_NAME = "minecraft:item.magenta_harness.name";
 
     /**
      * Magma Cream
@@ -16903,6 +17018,11 @@ public interface TrKeys {
     String M_ITEM_ORANGE_BUNDLE = "minecraft:item.orange_bundle";
 
     /**
+     * Orange Harness
+     */
+    String M_ITEM_ORANGE_HARNESS_NAME = "minecraft:item.orange_harness.name";
+
+    /**
      * Oxidized Copper Door
      */
     String M_ITEM_OXIDIZED_COPPER_DOOR_NAME = "minecraft:item.oxidized_copper_door.name";
@@ -16951,6 +17071,11 @@ public interface TrKeys {
      * Pink Bundle
      */
     String M_ITEM_PINK_BUNDLE = "minecraft:item.pink_bundle";
+
+    /**
+     * Pink Harness
+     */
+    String M_ITEM_PINK_HARNESS_NAME = "minecraft:item.pink_harness.name";
 
     /**
      * Pitcher Pod
@@ -17021,6 +17146,11 @@ public interface TrKeys {
      * Purple Bundle
      */
     String M_ITEM_PURPLE_BUNDLE = "minecraft:item.purple_bundle";
+
+    /**
+     * Purple Harness
+     */
+    String M_ITEM_PURPLE_HARNESS_NAME = "minecraft:item.purple_harness.name";
 
     /**
      * Nether Quartz
@@ -17158,6 +17288,11 @@ public interface TrKeys {
     String M_ITEM_RECORD_STRAD_DESC = "minecraft:item.record_strad.desc";
 
     /**
+     * Amos Roddy - Tears   
+     */
+    String M_ITEM_RECORD_TEARS_DESC = "minecraft:item.record_tears.desc";
+
+    /**
      * C418 - wait
      */
     String M_ITEM_RECORD_WAIT_DESC = "minecraft:item.record_wait.desc";
@@ -17176,6 +17311,11 @@ public interface TrKeys {
      * Red Bundle
      */
     String M_ITEM_RED_BUNDLE = "minecraft:item.red_bundle";
+
+    /**
+     * Red Harness
+     */
+    String M_ITEM_RED_HARNESS_NAME = "minecraft:item.red_harness.name";
 
     /**
      * Redstone Dust
@@ -17611,6 +17751,11 @@ public interface TrKeys {
      * Guardian Spawn Egg
      */
     String M_ITEM_SPAWN_EGG_ENTITY_GUARDIAN_NAME = "minecraft:item.spawn_egg.entity.guardian.name";
+
+    /**
+     * Happy Ghast Spawn Egg
+     */
+    String M_ITEM_SPAWN_EGG_ENTITY_HAPPY_GHAST_NAME = "minecraft:item.spawn_egg.entity.happy_ghast.name";
 
     /**
      * Hoglin Spawn Egg
@@ -18413,6 +18558,11 @@ public interface TrKeys {
     String M_ITEM_WHITE_BUNDLE = "minecraft:item.white_bundle";
 
     /**
+     * White Harness
+     */
+    String M_ITEM_WHITE_HARNESS_NAME = "minecraft:item.white_harness.name";
+
+    /**
      * Wild Armor Trim
      */
     String M_ITEM_WILD_ARMOR_TRIM_SMITHING_TEMPLATE_NAME = "minecraft:item.wild_armor_trim_smithing_template.name";
@@ -18476,6 +18626,11 @@ public interface TrKeys {
      * Yellow Bundle
      */
     String M_ITEM_YELLOW_BUNDLE = "minecraft:item.yellow_bundle";
+
+    /**
+     * Yellow Harness
+     */
+    String M_ITEM_YELLOW_HARNESS_NAME = "minecraft:item.yellow_harness.name";
 
     /**
      * Anvils
@@ -18661,6 +18816,11 @@ public interface TrKeys {
      * Hanging Signs
      */
     String M_ITEMGROUP_NAME_HANGING_SIGN = "minecraft:itemGroup.name.hanging_sign";
+
+    /**
+     * Harnesses
+     */
+    String M_ITEMGROUP_NAME_HARNESSES = "minecraft:itemGroup.name.harnesses";
 
     /**
      * Helmets
@@ -23263,6 +23423,11 @@ public interface TrKeys {
      * Dragon Egg
      */
     String M_TILE_DRAGON_EGG_NAME = "minecraft:tile.dragon_egg.name";
+
+    /**
+     * Dried Ghast
+     */
+    String M_TILE_DRIED_GHAST_NAME = "minecraft:tile.dried_ghast.name";
 
     /**
      * Dried Kelp Block

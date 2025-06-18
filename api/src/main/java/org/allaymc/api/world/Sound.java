@@ -226,6 +226,8 @@ public interface Sound {
 
     String LAND_ROOTS = "land.roots";
 
+    String MOB_UNSADDLE = "mob.unsaddle";
+
     String ELYTRA_LOOP = "elytra.loop";
 
     String MOB_BOGGED_AMBIENT = "mob.bogged.ambient";
@@ -239,6 +241,8 @@ public interface Sound {
     String BREAK_SUSPICIOUS_GRAVEL = "break.suspicious_gravel";
 
     String HIT_CHERRY_LEAVES = "hit.cherry_leaves";
+
+    String MOB_HAPPY_GHAST_AMBIENT = "mob.happy_ghast.ambient";
 
     String BOTTLE_EMPTY = "bottle.empty";
 
@@ -462,6 +466,8 @@ public interface Sound {
 
     String MOB_ARMADILLO_BRUSH = "mob.armadillo.brush";
 
+    String MOB_HAPPY_GHAST_HURT = "mob.happy_ghast.hurt";
+
     String MUSIC_GAME_SWAMP_MUSIC = "music.game.swamp_music";
 
     String MOB_CAT_STRAYMEOW = "mob.cat.straymeow";
@@ -556,6 +562,8 @@ public interface Sound {
 
     String DIG_MOSS = "dig.moss";
 
+    String MOB_HAPPY_GHAST_GOGGLES_UP = "mob.happy_ghast.goggles_up";
+
     String CLICK_ON_NETHER_WOOD_BUTTON = "click_on.nether_wood_button";
 
     String USE_NETHER_GOLD_ORE = "use.nether_gold_ore";
@@ -639,6 +647,8 @@ public interface Sound {
     String STEP_HEAVY_CORE = "step.heavy_core";
 
     String PLACE_SCULK_CATALYST = "place.sculk_catalyst";
+
+    String BLOCK_DRIED_GHAST_FALL = "block.dried_ghast.fall";
 
     String MOB_HUSK_HURT = "mob.husk.hurt";
 
@@ -810,6 +820,8 @@ public interface Sound {
 
     String MOB_WOLF_CUTE_HURT = "mob.wolf.cute.hurt";
 
+    String MOB_HAPPY_GHAST_RIDE = "mob.happy_ghast.ride";
+
     String PLACE_POWDER_SNOW = "place.powder_snow";
 
     String RANDOM_FUSE = "random.fuse";
@@ -914,6 +926,8 @@ public interface Sound {
 
     String CLOSE_NETHER_WOOD_FENCE_GATE = "close.nether_wood_fence_gate";
 
+    String MOB_HAPPY_GHAST_HARNESS_UNEQUIP = "mob.happy_ghast.harness_unequip";
+
     String MOB_WARDEN_STEP = "mob.warden.step";
 
     String NOTE_DIDGERIDOO = "note.didgeridoo";
@@ -1003,6 +1017,8 @@ public interface Sound {
     String BLOCK_FURNACE_LIT = "block.furnace.lit";
 
     String RANDOM_BREAK = "random.break";
+
+    String MOB_HAPPY_GHAST_HARNESS_EQUIP = "mob.happy_ghast.harness_equip";
 
     String PICK_BERRIES_CAVE_VINES = "pick_berries.cave_vines";
 
@@ -1119,6 +1135,8 @@ public interface Sound {
     String CLOSE_IRON_TRAPDOOR = "close.iron_trapdoor";
 
     String MOB_SNOWGOLEM_HURT = "mob.snowgolem.hurt";
+
+    String BLOCK_DRIED_GHAST_PLACE_IN_WATER = "block.dried_ghast.place_in_water";
 
     String STEP_DIRT_WITH_ROOTS = "step.dirt_with_roots";
 
@@ -1344,6 +1362,8 @@ public interface Sound {
 
     String MOB_CAMEL_STAND = "mob.camel.stand";
 
+    String BLOCK_DRY_GRASS_AMBIENT_ATTACHED = "block.dry_grass.ambient.attached";
+
     String HIT_DRIPSTONE_BLOCK = "hit.dripstone_block";
 
     String BLOCK_RESIN_BREAK = "block.resin.break";
@@ -1396,6 +1416,8 @@ public interface Sound {
 
     String FALL_ROOTS = "fall.roots";
 
+    String MOB_LLAMA_CARPET_UNEQUIP = "mob.llama.carpet_unequip";
+
     String FALL_SNOW = "fall.snow";
 
     String MOB_WARDEN_DEATH = "mob.warden.death";
@@ -1415,6 +1437,8 @@ public interface Sound {
     String HIT_CALCITE = "hit.calcite";
 
     String FIREWORK_TWINKLE = "firework.twinkle";
+
+    String MUSIC_OVERWORLD_FOREST = "music.overworld.forest";
 
     String RECORD_13 = "record.13";
 
@@ -1538,6 +1562,8 @@ public interface Sound {
 
     String MOB_BLAZE_DEATH = "mob.blaze.death";
 
+    String BLOCK_DRIED_GHAST_AMBIENT = "block.dried_ghast.ambient";
+
     String MOB_HOGLIN_ANGRY = "mob.hoglin.angry";
 
     String MOB_VEX_HURT = "mob.vex.hurt";
@@ -1648,6 +1674,8 @@ public interface Sound {
 
     String MOB_WOLF_GRUMPY_BARK = "mob.wolf.grumpy.bark";
 
+    String MOB_HORSE_HORSE_ARMOR_UNEQUIP = "mob.horse.horse_armor_unequip";
+
     String MOB_HORSE_DONKEY_DEATH = "mob.horse.donkey.death";
 
     String DIG_AZALEA_LEAVES = "dig.azalea_leaves";
@@ -1657,6 +1685,8 @@ public interface Sound {
     String MOB_GUARDIAN_FLOP = "mob.guardian.flop";
 
     String FALL_CORAL = "fall.coral";
+
+    String BLOCK_DRIED_GHAST_STATE_CHANGE = "block.dried_ghast.state_change";
 
     String UI_STONECUTTER_TAKE_RESULT = "ui.stonecutter.take_result";
 
@@ -1701,6 +1731,8 @@ public interface Sound {
     String MOB_WARDEN_ATTACK = "mob.warden.attack";
 
     String MOB_HORSE_LAND = "mob.horse.land";
+
+    String MOB_HAPPY_GHAST_DEATH = "mob.happy_ghast.death";
 
     String MOB_RAVAGER_STUN = "mob.ravager.stun";
 
@@ -1771,6 +1803,8 @@ public interface Sound {
     String BLOCK_MOB_SPAWNER_STEP = "block.mob_spawner.step";
 
     String LAND_MOSS = "land.moss";
+
+    String RECORD_TEARS = "record.tears";
 
     String BLOCK_BOWHIT = "block.bowhit";
 
@@ -1884,6 +1918,8 @@ public interface Sound {
 
     String LAND_GRAVEL = "land.gravel";
 
+    String MOB_GHASTLING_AMBIENT = "mob.ghastling.ambient";
+
     String ARMOR_EQUIP_CHAIN = "armor.equip_chain";
 
     String APPLY_EFFECT_RAID_OMEN = "apply_effect.raid_omen";
@@ -1961,6 +1997,8 @@ public interface Sound {
     String STEP_CAVE_VINES = "step.cave_vines";
 
     String CLICK_ON_STONE_PRESSURE_PLATE = "click_on.stone_pressure_plate";
+
+    String BLOCK_DRIED_GHAST_BREAK = "block.dried_ghast.break";
 
     String MOB_DROWNED_DEATH = "mob.drowned.death";
 
@@ -2073,6 +2111,8 @@ public interface Sound {
     String MOB_CREAKING_DEATH = "mob.creaking.death";
 
     String BLOCK_COMPOSTER_EMPTY = "block.composter.empty";
+
+    String BLOCK_DRIED_GHAST_PLACE = "block.dried_ghast.place";
 
     String BLOCK_EYEBLOSSOM_OPEN = "block.eyeblossom.open";
 
@@ -2246,6 +2286,8 @@ public interface Sound {
 
     String MOB_DROWNED_SAY_WATER = "mob.drowned.say_water";
 
+    String BLOCK_DRIED_GHAST_STEP = "block.dried_ghast.step";
+
     String HIT_NETHER_BRICK = "hit.nether_brick";
 
     String MOB_ENDERMEN_IDLE = "mob.endermen.idle";
@@ -2338,6 +2380,8 @@ public interface Sound {
 
     String JUMP_WOOD = "jump.wood";
 
+    String MOB_HAPPY_GHAST_GOGGLES_DOWN = "mob.happy_ghast.goggles_down";
+
     String UI_LOOM_TAKE_RESULT = "ui.loom.take_result";
 
     String STEP_PINK_PETALS = "step.pink_petals";
@@ -2353,6 +2397,8 @@ public interface Sound {
     String MOB_SNIFFER_DEATH = "mob.sniffer.death";
 
     String BLOCK_MUDDY_MANGROVE_ROOTS_FALL = "block.muddy_mangrove_roots.fall";
+
+    String MOB_GHASTLING_DEATH = "mob.ghastling.death";
 
     String POWER_ON_SCULK_SENSOR = "power.on.sculk_sensor";
 
@@ -2478,6 +2524,8 @@ public interface Sound {
 
     String HORN_CALL_6 = "horn.call.6";
 
+    String MOB_GHASTLING_HURT = "mob.ghastling.hurt";
+
     String HORN_CALL_5 = "horn.call.5";
 
     String PLACE_AMETHYST_BLOCK = "place.amethyst_block";
@@ -2495,6 +2543,8 @@ public interface Sound {
     String USE_CANDLE = "use.candle";
 
     String MOB_SILVERFISH_STEP = "mob.silverfish.step";
+
+    String BLOCK_DRIED_GHAST_AMBIENT_WATER = "block.dried_ghast.ambient_water";
 
     String BREAK_IRON = "break.iron";
 
@@ -2577,8 +2627,6 @@ public interface Sound {
     String MOB_CHICKEN_PLOP = "mob.chicken.plop";
 
     String MOB_DROWNED_SWIM = "mob.drowned.swim";
-
-    String BLOCK_SAND_AMBIENT_ATTACHED = "block.sand.ambient.attached";
 
     String MOB_PIGLIN_BRUTE_STEP = "mob.piglin_brute.step";
 
@@ -2856,6 +2904,8 @@ public interface Sound {
 
     String UI_HARDCORE_DISABLE = "ui.hardcore_disable";
 
+    String MOB_GHASTLING_SPAWN = "mob.ghastling.spawn";
+
     String DIG_LODESTONE = "dig.lodestone";
 
     String USE_COPPER = "use.copper";
@@ -2890,6 +2940,8 @@ public interface Sound {
 
     String LAND_SCULK_SENSOR = "land.sculk_sensor";
 
+    String LEAD_BREAK = "lead.break";
+
     String FIRE_IGNITE = "fire.ignite";
 
     String BLOCK_LEAF_LITTER_STEP = "block.leaf_litter.step";
@@ -2903,6 +2955,8 @@ public interface Sound {
     String MOB_PHANTOM_FLAP = "mob.phantom.flap";
 
     String MUSIC_OVERWORLD_DESERT = "music.overworld.desert";
+
+    String AMBIENT_WEATHER_THE_END_LIGHT_FLASH = "ambient.weather.the_end_light_flash";
 
     String BLOCK_WEEPING_VINES_JUMP = "block.weeping_vines.jump";
 

@@ -22,6 +22,7 @@ public class ItemClassGen extends BaseClassGen {
     public static Map<Pattern, String> MERGED_ITEMS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
+        ItemIdEnumGen.generate();
         generate();
     }
 
