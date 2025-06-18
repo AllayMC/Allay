@@ -2,123 +2,108 @@
 comments: true
 ---
 
-# Update to The Next Protocol Version
+# Updating to the Next Protocol Version
 
-This tutorial will detail the general process Allay uses to complete a protocol version update.
-In practice, many special situations may arise, and you should not rely entirely on this document.
+This guide outlines the general process for updating the **Allay** core to a new Minecraft Bedrock Edition protocol
+version. In practice, special cases may occur, so do not rely solely on this guide.
 
-## Update Endstone
+## 1. Update Endstone
 
-Allay uses the **Endstone DevTools** to export the necessary data from BDS.
-Therefore, before updating Allay, we need to update [Endstone](https://github.com/EndstoneMC/endstone).
+Before updating Allay, you need to extract the latest data from BDS using **Endstone DevTools**.
+First, update [Endstone](https://github.com/EndstoneMC/endstone/releases) to the latest version.
+Then, use it to export the following files:
 
-## Update the First Batch of Resource Files
-
-Please note that resource files must be updated in a specific order.
-Allay's resource files are stored in `data/resources` directory.
-
-!!! tip
-
-    Unless otherwise specified, the default root directory is `data/resources`.
-
-### Directly update the following files
-
-- `biome_definitions.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
-- `block_types.json`
-- `creative_items.nbt`
-- `creative_groups.json`
-- `entity_identifiers.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
-- `items.json`
-- `block_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
-- `item_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
-- `recipes.json`
-- `trim_data.json`: this file is manually maintained. It is small and do isn't changed frequently. To update
-  it, use [CloudburstMC/ProxyPass](https://github.com/CloudburstMC/ProxyPass).
-
-### Update the files under the `unpacked` directory
-
-Although these files will not be included in the final jar, they will be used during the code generation process:
-
-- `block_tags.json`
-- `block_states_raw.json`: rename `block_states.json` to `block_states_raw.json` and place it in the `unpacked`
-  directory.
-- `item_tags.json`
+- `biomes.json`
 - `block_palette.nbt`
-- `block_property_types.json`: run `BlockPropertyTypeDataFileGen` under `data` after updating `block_palette.nbt`
-- `biome_id_and_type.json`: update it manually as biomes are not updated frequently
-- `entity_id_map.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
-- `music_definitions.json`: obtained
-  from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json)
-- `sound_definitions.json`: obtained
-  from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/sound_definitions.json)
+- `block_states.json`
+- `block_tags.json`
+- `block_types.json`
+- `creative_groups.json`
+- `creative_items.nbt`
+- `item_components.nbt`
+- `item_tags.json`
+- `items.json`
+- `recipes.json`
 
-### Generate `block_states.json`
+## 2. Update Resource Files (`data/resources`)
 
-**Run `BlockStateDataProcessor` under `data`**. This script will generate `block_states.json` based on
-`block_states_raw.json`.
+### Files obtained directly
 
-### Update Lang Files
+| File                                                    | Source                                                                                                                    |
+|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| `biome_definitions.json`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData)                                                                   |
+| `entity_identifiers.nbt`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData)                                                                   |
+| `music_definitions.json`                                | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json) |
+| `sound_definitions.json`                                | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/sound_definitions.json) |
+| Others (`block_types.json`, `creative_items.nbt`, etc.) | Exported from Endstone                                                                                                    |
 
-Firstly, obtain the original language files from BDS and copy them to the `unpacked/lang_raw/vanilla` directory.
-Then, run `LangBuilder` under `data`. Finally, run `TrKeysGen` under `codegen`. With this, the language file update is
-complete.
+### Manually maintained files
 
-## Code Generation
+| File                     | Notes                                                                                                              |
+|--------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `block_tags_custom.json` | Update manually if IDs have changed                                                                                |
+| `item_tags_custom.json`  | Same as above                                                                                                      |
+| `trim_data.json`         | Rarely changes; can be updated using [CloudburstMC/ProxyPass](https://github.com/CloudburstMC/ProxyPass) if needed |
 
-Allay completes most repetitive work through code generation. Next, we'll focus on `codegen`.
+## 3. Update Files in `data/resources/unpacked`
 
-**Check for changes in `music_definitions.json` and `sound_definitions.json`**. If changes exist, run `SoundNameGen`.
+These are used in code generation and are not included in the final `.jar`:
 
-**Check for changes in `biome_id_and_type.json`**. If changes exist, run `BiomeIdEnumGen`. This file usually doesn't
-change much in minor updates.
+| File                        | Source / Notes                                          |
+|-----------------------------|---------------------------------------------------------|
+| `block_tags.json`           | From Endstone                                           |
+| `block_states_raw.json`     | Rename `block_states.json` from Endstone                |
+| `block_palette.nbt`         | From Endstone                                           |
+| `item_tags.json`            | From Endstone                                           |
+| `block_property_types.json` | Generated by running `BlockPropertyTypeDataFileGen`     |
+| `biome_id_and_type.json`    | Update manually (biomes rarely change)                  |
+| `entity_id_map.json`        | [pmmp/BedrockData](https://github.com/pmmp/BedrockData) |
 
-**Check for changes in `entity_id_map.json`**. If changes exist, first run `EntityIdEnumGen`, then run `EntityClassGen`.
-This file usually doesn't change much in minor updates.
+## 4. Generate Derived Files
 
-**Check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `TagGen`.
+### `block_states.json`
 
-**Run `BlockIdEnumGen` and then `BlockPropertyTypeGen`**.
+Generate using `BlockStateDataProcessor`, based on `block_states_raw.json`.
 
-**Run BlockClassGen**. This step requires more manual operation:
+### Language Files
 
-- You need to manually delete old blocks. If there are changes in block properties, you need to manually modify them to
-  adapt. You can refer to [StateUpdater](https://github.com/AllayMC/StateUpdater) to understand block
-  changes.
-  By checking if there are errors
-  in `server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`, you can quickly determine
-  which block properties have changed.
-  **Adapting block properties is not just about modifying the parameters of `setProperties()`, you also need to adapt
-  the block's code logic**, which is crucial!
-- If there is a batch of similar blocks, you need to register new merged block in the `registerMergedBlocks()` method
-  of `BlockClassGen` to avoid overcrowding the block class group.
+1. Copy original `.lang` files from `endstone/bedrock_server/resource_packs/vanilla/texts` to
+   `unpacked/lang_raw/vanilla`.
+2. Run `LangBuilder` in `data`.
+3. Then run `TrKeysGen` in `codegen`.
 
-**Run `ItemIdEnumGen` and then `ItemClassGen`**. Similar to blocks, this step also requires a certain amount of manual operation, but the
-workload is less than before:
+## 5. Code Generation (`codegen`)
 
-- You need to manually delete old items. If an item has only changed its name, you need `to migrate code logic from the
-  old item to the new one.`
-- Even if there are no additions or deletions of items, the logic of implemented items may change in the original
-  version. To respect the original version, Allay needs to synchronize changes. However, if we are only discussing
-  protocol updates, this can be deferred.
-- If there is a batch of similar items, you need to register new merged item in the `registerMergedItems()` method
-  of `ItemClassGen` to avoid overcrowding the item class group.
+| Generator                                         | When to Run                                                                                                                                                                                   |
+|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `SoundNameGen`                                    | If `music_definitions.json` or `sound_definitions.json` changed                                                                                                                               |
+| `BiomeIdEnumGen`                                  | If `biome_id_and_type.json` changed                                                                                                                                                           |
+| `EntityClassGen`                                  | If `entity_id_map.json` changed                                                                                                                                                               |
+| `TagGen`                                          | If `item_tags.json` or `block_tags.json` changed                                                                                                                                              |
+| `BlockIdEnumGen` → `BlockPropertyTypeDataFileGen` | Always after block updates                                                                                                                                                                    |
+| `BlockClassGen`                                   | Requires manual edits:<br>– Delete old blocks<br>– Update properties and logic<br>– Check `BlockTypeInitializer.java` for errors<br>– Add merged blocks in `registerMergedBlocks()` if needed |
+| `ItemClassGen`                                    | Similar to blocks:<br>– Remove old items<br>– Migrate logic if only names changed<br>– Add merged items in `registerMergedItems()` if needed                                                  |
 
-## Update Dependencies
+## 6. Update Dependencies and `ProtocolInfo.java`
 
-Update the protocol library [Cloudburst/Protocol](https://github.com/CloudburstMC/Protocol) and the block state
-updater [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater) to the latest version.
+Update to the latest versions of:
 
-## Update `ProtocolInfo.java`
+- [CloudburstMC/Protocol](https://github.com/CloudburstMC/Protocol)
+- [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater)
 
-You need to update the `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`. If you can't figure out the new value
-of `MINECRAFT_VERSION`, you can refer to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
-Make sure the dependency libraries are updated before this!
+Modify `ProtocolInfo.java` fields:
 
-## Test and Complete the Update
+- `PACKET_CODEC`
+- `MINECRAFT_VERSION`
 
-Run `gradle test` to ensure nothing is broken, then update the client and test on the server (this is very important!).
-The update is now complete.
+If you're unsure about the new `MINECRAFT_VERSION`, refer
+to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
+Ensure dependencies are updated before editing this file.
 
-## Update Changelog
+## 7. Test and Finalize
 
-After the update is completed, you need to update the changelog. The changelog is stored in `CHANGELOG.md`.
+1. Run `gradle test` to ensure all tests pass.
+2. Update the client and test connectivity with the server.
+3. Once verified, the update is considered complete.
+
+Don't forget to record all changes in `CHANGELOG.md`.
