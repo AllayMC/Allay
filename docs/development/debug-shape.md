@@ -16,3 +16,4 @@
 - Setting a value greater than zero for `totalTimeLeft` does not seem to cause the client to stop displaying the debug shape after the specified time. 
 In other words, the server must actively notify the client to remove the debug shape, although this value is still sent to the client.
 - Setting `text` to `null` causes the client to not show anything, including the black background of the text.
+- To remove a specified debug shape, send the shape data in the same id and let other parameters keep `null`.
