@@ -2,7 +2,9 @@ package org.allaymc.api.debugshape;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.DebugShape.Type;
+import org.cloudburstmc.protocol.bedrock.packet.ServerScriptDebugDrawerPacket;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -71,10 +73,17 @@ public abstract class DebugShape {
     }
 
     /**
-     * Removes this shape from the world. The shape can be re-added.
+     * Removes this shape from the specified player's side, so that the player will no longer see it.
      */
-    public void remove() {
-        // TODO
+    public void removeFrom(EntityPlayer player) {
+        var packet = new ServerScriptDebugDrawerPacket();
+        packet.getShapes().add(new org.cloudburstmc.protocol.bedrock.data.DebugShape(
+                this.id, null, null,
+                null, null, null,
+                null, null, null,
+                null, null, null, null
+        ));
+        player.sendPacket(packet);
     }
 
     /**
