@@ -1,0 +1,18 @@
+# Available Parameters for DebugShape
+
+|               | position  | scale | color | text | boxBounds | lineEndPosition | arrowHeadLength | arrowHeadRadius | segments |
+|---------------|-----------|-------|-------|------|-----------|-----------------|-----------------|-----------------|----------|
+| line          | √         |       | √     |      |           | √               |                 |                 |          |
+| box           | √         | √     | √     |      | √         |                 |                 |                 |          |
+| sphere        | √         | √     | √     |      |           |                 |                 |                 | √        |
+| circle        | √         | √     | √     |      |           |                 |                 |                 | √        |
+| text          | √         |       | √     | √    |           |                 |                 |                 |          |
+| arrow         | √         |       | √     |      |           | √               | √               | √               | √        |
+| default value | (0, 0, 0) | 1     | white |      | (1, 1, 1) | (0, 0, 0)       |                 |                 | 20       |
+
+## Notes
+
+- `rotation` seems to have no effect on all types of debug shape.
+- Setting a value greater than zero for `totalTimeLeft` does not seem to cause the client to stop displaying the debug shape after the specified time. 
+In other words, the server must actively notify the client to remove the debug shape, although this value is still sent to the client.
+- Setting `text` to `null` causes the client to not show anything, including the black background of the text.
