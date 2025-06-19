@@ -34,9 +34,13 @@ public final class MathUtils {
      *
      * @param cbVec cloudburst vector.
      *
-     * @return joml vector.
+     * @return joml vector, or {@code null} if the input is {@code null}.
      */
     public static Vector3ic CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
+        if (cbVec == null) {
+            return null;
+        }
+
         return new Vector3i(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
@@ -45,9 +49,13 @@ public final class MathUtils {
      *
      * @param cbVec cloudburst vector.
      *
-     * @return joml vector.
+     * @return joml vector, or {@code null} if the input is {@code null}.
      */
     public static Vector3dc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
+        if (cbVec == null) {
+            return null;
+        }
+
         return new Vector3d(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
@@ -56,9 +64,13 @@ public final class MathUtils {
      *
      * @param cbVec cloudburst vector.
      *
-     * @return joml vector.
+     * @return joml vector, or {@code null} if the input is {@code null}.
      */
     public static Vector3fc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
+        if (cbVec == null) {
+            return null;
+        }
+
         return new Vector3f(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
@@ -67,9 +79,13 @@ public final class MathUtils {
      *
      * @param JOMLVec joml vector.
      *
-     * @return cloudburst vector.
+     * @return cloudburst vector, or {@code null} if the input is {@code null}.
      */
     public static org.cloudburstmc.math.vector.Vector3i JOMLVecToCBVec(Vector3ic JOMLVec) {
+        if (JOMLVec == null) {
+            return null;
+        }
+
         return org.cloudburstmc.math.vector.Vector3i.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 
@@ -78,9 +94,13 @@ public final class MathUtils {
      *
      * @param JOMLVec joml vector.
      *
-     * @return cloudburst vector.
+     * @return cloudburst vector, or {@code null} if the input is {@code null}.
      */
     public static org.cloudburstmc.math.vector.Vector3d JOMLVecToCBVec(Vector3dc JOMLVec) {
+        if (JOMLVec == null) {
+            return null;
+        }
+
         return org.cloudburstmc.math.vector.Vector3d.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 
@@ -89,9 +109,13 @@ public final class MathUtils {
      *
      * @param JOMLVec joml vector.
      *
-     * @return cloudburst vector.
+     * @return cloudburst vector, or {@code null} if the input is {@code null}.
      */
     public static org.cloudburstmc.math.vector.Vector3f JOMLVecToCBVec(Vector3fc JOMLVec) {
+        if (JOMLVec == null) {
+            return null;
+        }
+
         return org.cloudburstmc.math.vector.Vector3f.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 

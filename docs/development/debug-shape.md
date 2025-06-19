@@ -1,14 +1,14 @@
 # Available Parameters for DebugShape
 
-|               | position  | scale | color | text | boxBounds | lineEndPosition | arrowHeadLength | arrowHeadRadius | segments |
-|---------------|-----------|-------|-------|------|-----------|-----------------|-----------------|-----------------|----------|
-| line          | √         |       | √     |      |           | √               |                 |                 |          |
-| box           | √         | √     | √     |      | √         |                 |                 |                 |          |
-| sphere        | √         | √     | √     |      |           |                 |                 |                 | √        |
-| circle        | √         | √     | √     |      |           |                 |                 |                 | √        |
-| text          | √         |       | √     | √    |           |                 |                 |                 |          |
-| arrow         | √         |       | √     |      |           | √               | √               | √               | √        |
-| default value | (0, 0, 0) | 1     | white |      | (1, 1, 1) | (0, 0, 0)       |                 |                 | 20       |
+|               | position  | scale | color | text | boxBounds | lineEndPosition | arrowHeadLength | arrowHeadRadius | segments                             |
+|---------------|-----------|-------|-------|------|-----------|-----------------|-----------------|-----------------|--------------------------------------|
+| line          | √         |       | √     |      |           | √               |                 |                 |                                      |
+| box           | √         | √     | √     |      | √         |                 |                 |                 |                                      |
+| sphere        | √         | √     | √     |      |           |                 |                 |                 | √                                    |
+| circle        | √         | √     | √     |      |           |                 |                 |                 | √                                    |
+| text          | √         |       | √     | √    |           |                 |                 |                 |                                      |
+| arrow         | √         |       | √     |      |           | √               | √               | √               | √                                    |
+| default value | (0, 0, 0) | 1     | white |      | (1, 1, 1) | (0, 0, 0)       | 1               | 0.5             | 20 for circle/sphere and 4 for arrow |
 
 ## Notes
 

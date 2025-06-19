@@ -25,8 +25,11 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Explosion;
+import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.DebugShape;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
+import org.cloudburstmc.protocol.bedrock.packet.ServerScriptDebugDrawerPacket;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -41,6 +44,8 @@ import java.util.function.Consumer;
  * @author daoge_cmd
  */
 public class GameTestCommand extends SimpleCommand {
+
+    private static long DEBUG_SHAPE_ID_COUNTER = 0;
 
     public GameTestCommand() {
         super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
@@ -359,6 +364,26 @@ public class GameTestCommand extends SimpleCommand {
                         Server.getInstance().getEventBus().unregisterListenerFor(BlockBreakEvent.class, lambda);
                         player.sendText("Disabled");
                     }
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("testdebugshape")
+                .exec((context, player) -> {
+                    var packet = new ServerScriptDebugDrawerPacket();
+                    // default segments is 20
+                    // default lineEndPosition is (0, 0, 0)
+                    // boxBounds define the length of the box in each axis, default is (1, 1, 1)
+                    var debugShape = new DebugShape(
+                            1,
+                            DebugShape.Type.ARROW,
+                            Vector3f.from(10, 10, 10),
+                            null, null,
+                            null, null,
+                            null, null, null,
+                            1.0f, null, 4
+                    );
+                    packet.getShapes().add(debugShape);
+                    player.sendPacket(packet);
                     return context.success();
                 }, SenderType.PLAYER);
     }

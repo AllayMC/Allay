@@ -14,6 +14,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.5.0](https://github.com/AllayMC/Allay/compare/0.5.0...HEAD)</small>
 
+### Added
+
+- (API) Added APIs for the new `DebugShape` system. Related classes can be found under `org.allaymc.api.debugshape`.
+
 ## 0.5.0 (API 0.8.0) - 2025-6-19
 
 <small>[Compare with 0.4.1](https://github.com/AllayMC/Allay/compare/0.4.1...HEAD)</small>
