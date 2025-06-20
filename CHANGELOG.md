@@ -16,7 +16,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- (API) Added APIs for the new `DebugShape` system. Related classes can be found under `org.allaymc.api.debugshape`.
+- (API) Added APIs for the new `DebugShape` system. Available debug shape classes can be found under `org.allaymc.api.debugshape`,
+  and add/remove methods for debug shape are available in `Dimension` class.
 
 ## 0.5.0 (API 0.8.0) - 2025-6-19
 

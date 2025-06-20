@@ -157,6 +157,14 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
+    public void removeAllDebugShapes() {
+        for (var player : players) {
+            removeDebugShapesFrom(player);
+        }
+        this.debugShapes.clear();
+    }
+
+    @Override
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {

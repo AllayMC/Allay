@@ -128,6 +128,11 @@ public interface Dimension {
     Set<DebugShape> getDebugShapes();
 
     /**
+     * Removes all debug shapes from the dimension.
+     */
+    void removeAllDebugShapes();
+
+    /**
      * Get the light service of this dimension.
      *
      * @return the light service.
