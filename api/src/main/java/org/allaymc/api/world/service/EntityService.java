@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 public interface EntityService {
 
     /**
-     * Add an entity to the world.
+     * Add an entity to the dimension.
      *
      * @param entity the entity pending to be spawned.
      */
@@ -24,19 +24,19 @@ public interface EntityService {
     }
 
     /**
-     * Add an entity to the world.
+     * Add an entity to the dimension.
      * <p>
-     * The entity won't be added to the world immediately.
-     * It will be added to the world in the next tick, and
+     * The entity won't be added to the dimension immediately.
+     * It will be added to the dimension in the next tick, and
      * the callback will be called.
      *
      * @param entity   The entity pending to be spawned
-     * @param callback The callback to be called after the entity is added to the world
+     * @param callback The callback to be called after the entity is added to the dimension
      */
     void addEntity(Entity entity, Runnable callback);
 
     /**
-     * Remove an entity from the world.
+     * Remove an entity from the dimension.
      *
      * @param entity the entity pending to be despawned.
      */
@@ -45,14 +45,14 @@ public interface EntityService {
     }
 
     /**
-     * Remove an entity from the world.
+     * Remove an entity from the dimension.
      * <p>
-     * The entity won't be removed from the world immediately.
-     * It will be removed from the world in the next tick, and
+     * The entity won't be removed from the dimension immediately.
+     * It will be removed from the dimension in the next tick, and
      * the callback will be called.
      *
      * @param entity   The entity pending to be despawned
-     * @param callback The callback to be called after the entity is removed from the world
+     * @param callback The callback to be called after the entity is removed from the dimension
      */
     void removeEntity(Entity entity, Runnable callback);
 

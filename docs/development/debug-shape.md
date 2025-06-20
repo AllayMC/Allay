@@ -27,3 +27,4 @@ In other words, the server must actively notify the client to remove the debug s
 - Setting `text` to `null` causes the client to not show anything, including the black background of the text.
 - The properties of a debug shape can be updated by sending the shape data again, except its type.
 - To remove a specified debug shape, send the shape data in the same id and let other parameters keep `null`.
+- `R`, `G`, `B`, and even `A` of the color are available.

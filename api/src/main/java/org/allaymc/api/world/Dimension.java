@@ -11,6 +11,7 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -103,6 +104,28 @@ public interface Dimension {
      * @return the entity service.
      */
     EntityService getEntityService();
+
+    /**
+     * Adds a debug shape to the dimension.
+     *
+     * @param debugShape the debug shape to add.
+     */
+    void addDebugShape(DebugShape debugShape);
+
+    /**
+     * Removes a debug shape from the dimension.
+     *
+     * @param debugShape the debug shape to remove.
+     */
+    void removeDebugShape(DebugShape debugShape);
+
+    /**
+     * Gets all debug shapes in the dimension.
+     *
+     * @return a set of debug shapes, where the key is the debug shape ID and the value is the debug shape.
+     */
+    @UnmodifiableView
+    Set<DebugShape> getDebugShapes();
 
     /**
      * Get the light service of this dimension.

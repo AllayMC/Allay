@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
@@ -20,6 +21,7 @@ import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
+import org.cloudburstmc.protocol.bedrock.packet.ServerScriptDebugDrawerPacket;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -42,6 +44,7 @@ public class AllayDimension implements Dimension {
     protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayLightService lightService;
     protected final Set<EntityPlayer> players;
+    protected final Set<DebugShape> debugShapes;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -52,6 +55,7 @@ public class AllayDimension implements Dimension {
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.lightService = new AllayLightService(this);
         this.players = new NonBlockingHashSet<>();
+        this.debugShapes = new NonBlockingHashSet<>();
     }
 
     public void startTick() {
@@ -86,6 +90,16 @@ public class AllayDimension implements Dimension {
         this.players.add(player);
         this.chunkService.addChunkLoader(player);
         this.entityService.addEntity(player, runnable);
+        addDebugShapesTo(player);
+    }
+
+    protected void addDebugShapesTo(EntityPlayer player) {
+        var packet = new ServerScriptDebugDrawerPacket();
+        for (var debugShape : debugShapes) {
+            debugShape.addViewer(player);
+            packet.getShapes().add(debugShape.toNetworkData());
+        }
+        player.sendPacket(packet);
     }
 
     @Override
@@ -102,12 +116,44 @@ public class AllayDimension implements Dimension {
             // Run the callback directly
             runnable.run();
         }
+        removeDebugShapesFrom(player);
+    }
+
+    protected void removeDebugShapesFrom(EntityPlayer player) {
+        var packet = new ServerScriptDebugDrawerPacket();
+        for (var debugShape : debugShapes) {
+            debugShape.removeViewer(player);
+            packet.getShapes().add(debugShape.createRemovalNotice());
+        }
+        player.sendPacket(packet);
     }
 
     @Override
     @UnmodifiableView
     public Set<EntityPlayer> getPlayers() {
         return Collections.unmodifiableSet(this.players);
+    }
+
+    @Override
+    public void addDebugShape(DebugShape debugShape) {
+        this.debugShapes.add(debugShape);
+        for (var player : this.players) {
+            debugShape.addViewer(player);
+        }
+    }
+
+    @Override
+    public void removeDebugShape(DebugShape debugShape) {
+        this.debugShapes.remove(debugShape);
+        for (var player : this.players) {
+            debugShape.removeViewer(player);
+        }
+    }
+
+    @Override
+    @UnmodifiableView
+    public Set<DebugShape> getDebugShapes() {
+        return Collections.unmodifiableSet(this.debugShapes);
     }
 
     @Override

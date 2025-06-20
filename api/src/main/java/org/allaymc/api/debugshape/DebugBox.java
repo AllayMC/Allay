@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import lombok.Setter;
 import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -19,14 +18,12 @@ public class DebugBox extends DebugShape {
      * <p>
      * Can be {@code null}, and in that case that the scale will be set to 1 client-side.
      */
-    @Setter
     protected Float scale;
     /**
      * The bounds of the box, which is a vector representing the size of the box in each dimension (x, y and z).
      * <p>
      * Can be {@code null}, and in that case that the boxBounds will be set to (1, 1, 1) client-side.
      */
-    @Setter
     protected Vector3fc boxBounds;
 
     /**
@@ -53,12 +50,32 @@ public class DebugBox extends DebugShape {
     }
 
     /**
+     * Sets the scale of the box.
+     *
+     * @param scale the scale of the box, which is a multiplier for the size of the box.
+     */
+    public void setScale(Float scale) {
+        this.scale = scale;
+        this.onChange();
+    }
+
+    /**
      * Gets the bounds of the box.
      *
      * @return the bounds of the box.
      */
     public Vector3fc getBoxBounds() {
         return boxBounds != null ? boxBounds : DEFAULT_BOX_BOUNDS;
+    }
+
+    /**
+     * Sets the bounds of the box.
+     *
+     * @param boxBounds the bounds of the box, which is a vector representing the size of the box in each dimension (x, y and z).
+     */
+    public void setBoxBounds(Vector3fc boxBounds) {
+        this.boxBounds = boxBounds;
+        this.onChange();
     }
 
     @Override

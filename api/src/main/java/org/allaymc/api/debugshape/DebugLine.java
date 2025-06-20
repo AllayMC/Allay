@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import lombok.Setter;
 import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
@@ -16,19 +15,18 @@ public class DebugLine extends DebugShape {
      * <p>
      * Can be {@code null}, and in that case that the position will be set to (0, 0, 0) client-side.
      */
-    @Setter
-    protected Vector3fc lineEndPosition;
+    protected Vector3fc endPosition;
 
     /**
      * Creates a new DebugLine with the specified position, color, and end position.
      *
-     * @param position        the starting position of the line.
-     * @param color           the color of the line.
-     * @param lineEndPosition the end position of the line.
+     * @param position    the starting position of the line.
+     * @param color       the color of the line.
+     * @param endPosition the end position of the line.
      */
-    public DebugLine(Vector3fc position, Color color, Vector3fc lineEndPosition) {
+    public DebugLine(Vector3fc position, Color color, Vector3fc endPosition) {
         super(position, color);
-        this.lineEndPosition = lineEndPosition;
+        this.endPosition = endPosition;
     }
 
     /**
@@ -36,8 +34,18 @@ public class DebugLine extends DebugShape {
      *
      * @return the end position of the line.
      */
-    public Vector3fc getLineEndPosition() {
-        return lineEndPosition != null ? lineEndPosition : ZERO_VECTOR;
+    public Vector3fc getEndPosition() {
+        return endPosition != null ? endPosition : ZERO_VECTOR;
+    }
+
+    /**
+     * Sets the end position of the line.
+     *
+     * @param endPosition the new end position of the line.
+     */
+    public void setEndPosition(Vector3fc endPosition) {
+        this.endPosition = endPosition;
+        this.onChange();
     }
 
     @Override
@@ -50,7 +58,7 @@ public class DebugLine extends DebugShape {
         return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
                 id, getType(), MathUtils.JOMLVecToCBVec(position), null,
                 null, null, color,
-                null, null, MathUtils.JOMLVecToCBVec(lineEndPosition),
+                null, null, MathUtils.JOMLVecToCBVec(endPosition),
                 null, null, null
         );
     }

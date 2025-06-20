@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import lombok.Setter;
 import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
@@ -16,32 +15,42 @@ public class DebugArrow extends DebugShape {
      * <p>
      * Can be {@code null}, and in that case that the position will be set to (0, 0, 0) client-side.
      */
-    @Setter
-    protected Vector3fc lineEndPosition;
+    protected Vector3fc endPosition;
     /**
      * The length of the arrow head.
      * <p>
      * Can be {@code null}, and in that case that the arrow head length will be set to 1 client-side.
      */
-    @Setter
     protected Float arrowHeadLength;
     /**
      * The radius of the arrow head.
      * <p>
      * Can be {@code null}, and in that case that the arrow head radius will be set to 0.5 client-side.
      */
-    @Setter
     protected Float arrowHeadRadius;
     /**
      * The segments of the arrow head, which determines how many segments the arrow head will be divided into.
      * <p>
      * Can be {@code null}, and in that case that the segments will be set to 4 client-side.
      */
-    @Setter
     protected Integer arrowHeadSegments;
 
-    public DebugArrow(Vector3fc position, Color color) {
+    /**
+     * Creates a new DebugArrow instance with the specified parameters.
+     *
+     * @param position          the starting position of the arrow.
+     * @param color             the color of the arrow.
+     * @param endPosition       the end position of the arrow.
+     * @param arrowHeadLength   the length of the arrow head.
+     * @param arrowHeadRadius   the radius of the arrow head.
+     * @param arrowHeadSegments the number of segments in the arrow head.
+     */
+    public DebugArrow(Vector3fc position, Color color, Vector3fc endPosition, Float arrowHeadLength, Float arrowHeadRadius, Integer arrowHeadSegments) {
         super(position, color);
+        this.endPosition = endPosition;
+        this.arrowHeadLength = arrowHeadLength;
+        this.arrowHeadRadius = arrowHeadRadius;
+        this.arrowHeadSegments = arrowHeadSegments;
     }
 
     /**
@@ -49,8 +58,18 @@ public class DebugArrow extends DebugShape {
      *
      * @return the end position of the arrow.
      */
-    public Vector3fc getLineEndPosition() {
-        return lineEndPosition != null ? lineEndPosition : ZERO_VECTOR;
+    public Vector3fc getEndPosition() {
+        return endPosition != null ? endPosition : ZERO_VECTOR;
+    }
+
+    /**
+     * Sets the end position of the arrow.
+     *
+     * @param endPosition the end position of the arrow.
+     */
+    public void setEndPosition(Vector3fc endPosition) {
+        this.endPosition = endPosition;
+        this.onChange();
     }
 
     /**
@@ -63,6 +82,16 @@ public class DebugArrow extends DebugShape {
     }
 
     /**
+     * Sets the length of the arrow head.
+     *
+     * @param arrowHeadLength the length of the arrow head.
+     */
+    public void setArrowHeadLength(Float arrowHeadLength) {
+        this.arrowHeadLength = arrowHeadLength;
+        this.onChange();
+    }
+
+    /**
      * Gets the radius of the arrow head.
      *
      * @return the radius of the arrow head.
@@ -72,12 +101,32 @@ public class DebugArrow extends DebugShape {
     }
 
     /**
+     * Sets the radius of the arrow head.
+     *
+     * @param arrowHeadRadius the radius of the arrow head.
+     */
+    public void setArrowHeadRadius(Float arrowHeadRadius) {
+        this.arrowHeadRadius = arrowHeadRadius;
+        this.onChange();
+    }
+
+    /**
      * Gets the segments of the arrow head.
      *
      * @return the segments of the arrow head.
      */
     public int getArrowHeadSegments() {
         return arrowHeadSegments != null ? arrowHeadSegments : 4;
+    }
+
+    /**
+     * Sets the segments of the arrow head.
+     *
+     * @param arrowHeadSegments the number of segments in the arrow head.
+     */
+    public void setArrowHeadSegments(Integer arrowHeadSegments) {
+        this.arrowHeadSegments = arrowHeadSegments;
+        this.onChange();
     }
 
     @Override
@@ -90,7 +139,7 @@ public class DebugArrow extends DebugShape {
         return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
                 id, getType(), MathUtils.JOMLVecToCBVec(position), null,
                 null, null, color,
-                null, null, MathUtils.JOMLVecToCBVec(lineEndPosition),
+                null, null, MathUtils.JOMLVecToCBVec(endPosition),
                 arrowHeadLength, arrowHeadRadius, arrowHeadSegments
         );
     }

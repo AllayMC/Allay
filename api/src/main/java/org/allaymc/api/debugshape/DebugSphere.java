@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import lombok.Setter;
 import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
@@ -16,14 +15,12 @@ public class DebugSphere extends DebugShape {
      * <p>
      * Can be {@code null}, and in that case that the scale will be set to 1 client-side.
      */
-    @Setter
     protected Float scale;
     /**
      * The segments of the sphere, which determines how many segments the sphere will be divided into.
      * <p>
      * Can be {@code null}, and in that case that the segments will be set to 20 client-side.
      */
-    @Setter
     protected Integer segments;
 
     /**
@@ -50,12 +47,30 @@ public class DebugSphere extends DebugShape {
     }
 
     /**
+     * Sets the scale of the sphere.
+     *
+     * @param scale the scale of the sphere, which is a multiplier for the size of the sphere.
+     */
+    public void setScale(Float scale) {
+        this.scale = scale;
+    }
+
+    /**
      * Gets the segments of the sphere.
      *
      * @return the segments of the sphere.
      */
     public int getSegments() {
         return segments != null ? segments : 20;
+    }
+
+    /**
+     * Sets the segments of the sphere.
+     *
+     * @param segments the segments of the sphere, which determines how many segments the sphere will be divided into.
+     */
+    public void setSegments(Integer segments) {
+        this.segments = segments;
     }
 
     @Override

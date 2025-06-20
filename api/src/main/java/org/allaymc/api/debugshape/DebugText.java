@@ -1,7 +1,6 @@
 package org.allaymc.api.debugshape;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
@@ -16,7 +15,6 @@ public class DebugText extends DebugShape {
      * The text to display.
      */
     @Getter
-    @Setter
     protected String text;
 
     /**
@@ -29,6 +27,16 @@ public class DebugText extends DebugShape {
     public DebugText(Vector3fc position, Color color, String text) {
         super(position, color);
         this.text = text;
+    }
+
+    /**
+     * Sets the text to display.
+     *
+     * @param text The text to display.
+     */
+    public void setText(String text) {
+        this.text = text;
+        this.onChange();
     }
 
     @Override

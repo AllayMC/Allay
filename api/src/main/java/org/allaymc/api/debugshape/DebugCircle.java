@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import lombok.Setter;
 import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
@@ -16,14 +15,12 @@ public class DebugCircle extends DebugShape {
      * <p>
      * Can be {@code null}, and in that case that the scale will be set to 1 client-side.
      */
-    @Setter
     protected Float scale;
     /**
      * The segments of the circle, which determines how many segments the circle will be divided into.
      * <p>
      * Can be {@code null}, and in that case that the segments will be set to 20 client-side.
      */
-    @Setter
     protected Integer segments;
 
     /**
@@ -50,12 +47,32 @@ public class DebugCircle extends DebugShape {
     }
 
     /**
+     * Sets the scale of the circle.
+     *
+     * @param scale the scale of the circle, which is a multiplier for the size of the circle.
+     */
+    public void setScale(Float scale) {
+        this.scale = scale;
+        this.onChange();
+    }
+
+    /**
      * Gets the segments of the circle.
      *
      * @return the segments of the circle.
      */
     public int getSegments() {
         return segments != null ? segments : 20;
+    }
+
+    /**
+     * Sets the segments of the circle.
+     *
+     * @param segments the segments of the circle, which determines how many segments the circle will be divided into.
+     */
+    public void setSegments(Integer segments) {
+        this.segments = segments;
+        this.onChange();
     }
 
     @Override
