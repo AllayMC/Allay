@@ -90,6 +90,7 @@ public class AllayDimension implements Dimension {
         this.players.add(player);
         this.chunkService.addChunkLoader(player);
         this.entityService.addEntity(player, runnable);
+        // TODO: not visible when player join
         addDebugShapesTo(player);
     }
 
