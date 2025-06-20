@@ -38,7 +38,7 @@ public class DebugArrow extends DebugShape {
      * Can be {@code null}, and in that case that the segments will be set to 4 client-side.
      */
     @Setter
-    protected Integer segments;
+    protected Integer arrowHeadSegments;
 
     public DebugArrow(Vector3fc position, Color color) {
         super(position, color);
@@ -76,8 +76,8 @@ public class DebugArrow extends DebugShape {
      *
      * @return the segments of the arrow head.
      */
-    public int getSegments() {
-        return segments != null ? segments : 4;
+    public int getArrowHeadSegments() {
+        return arrowHeadSegments != null ? arrowHeadSegments : 4;
     }
 
     @Override
@@ -91,7 +91,7 @@ public class DebugArrow extends DebugShape {
                 id, getType(), MathUtils.JOMLVecToCBVec(position), null,
                 null, null, color,
                 null, null, MathUtils.JOMLVecToCBVec(lineEndPosition),
-                arrowHeadLength, arrowHeadRadius, segments
+                arrowHeadLength, arrowHeadRadius, arrowHeadSegments
         );
     }
 }
