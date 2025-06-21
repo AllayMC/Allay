@@ -11,9 +11,11 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.server.network.processor.impl.login.SetLocalPlayerAsInitializedPacketProcessor;
 import org.allaymc.server.world.service.AllayBlockUpdateService;
 import org.allaymc.server.world.service.AllayChunkService;
 import org.allaymc.server.world.service.AllayEntityService;
@@ -90,14 +92,24 @@ public class AllayDimension implements Dimension {
         this.players.add(player);
         this.chunkService.addChunkLoader(player);
         this.entityService.addEntity(player, runnable);
-        // TODO: not visible when player join
-        addDebugShapesTo(player);
+        if (player.getClientStatus() == ClientStatus.IN_GAME) {
+            // Only send debug shapes to the players when they are in-game. This
+            // solves the issue that debug shapes won't be displayed if the player
+            // haven't fully joined. When the player join, the debug shapes will be
+            // sent to the player after the player is fully joined.
+            // See SetLocalPlayerAsInitializedPacketProcessor.
+            addDebugShapesTo(player);
+        }
     }
 
-    protected void addDebugShapesTo(EntityPlayer player) {
+    /**
+     * Set this method to public because it is used in {@link SetLocalPlayerAsInitializedPacketProcessor}
+     */
+    public void addDebugShapesTo(EntityPlayer player) {
         var packet = new ServerScriptDebugDrawerPacket();
         for (var debugShape : debugShapes) {
-            debugShape.addViewer(player);
+            // Let's send all the debug shapes in one packet to improve performance
+            debugShape.addViewer(player, false);
             packet.getShapes().add(debugShape.toNetworkData());
         }
         player.sendPacket(packet);
@@ -123,7 +135,8 @@ public class AllayDimension implements Dimension {
     protected void removeDebugShapesFrom(EntityPlayer player) {
         var packet = new ServerScriptDebugDrawerPacket();
         for (var debugShape : debugShapes) {
-            debugShape.removeViewer(player);
+            // Let's send all the remove notices in one packet to improve performance
+            debugShape.removeViewer(player, false);
             packet.getShapes().add(debugShape.createRemovalNotice());
         }
         player.sendPacket(packet);
