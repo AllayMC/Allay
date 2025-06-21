@@ -10,6 +10,7 @@ import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -54,13 +55,48 @@ public class AllayEntityService implements EntityService {
     }
 
     public void shutdown() {
+        // Make sure that all the tasks in the queue is done, and we are safe to call
+        // processQueue() here because the ticking-thread have been stopped.
+        // Do this before removing entities to handle potential add entity tasks first
+        processQueue();
         removeAndSaveEntitiesIf($ -> true, false);
+        // Do it again to handle new tasks due to the previous removeAndSaveEntitiesIf() call
+        processQueue();
     }
 
     public void onChunkLoad(int chunkX, int chunkZ) {
         this.worldStorage.readEntities(chunkX, chunkZ, dimension.getDimensionInfo()).thenAccept(entities -> {
             for (var entity : entities.values()) {
                 addEntity(entity);
+            }
+        });
+    }
+
+    public void onChunkUnload(int chunkX, int chunkZ) {
+        // Run the check in ticking thread
+        this.queue.offer(() -> {
+            // Check if there is no entity in this chunk, and if so, remove the old saved entities in this chunk
+            for (var entry : entities.long2ObjectEntrySet()) {
+                var entity = entry.getValue();
+                if (!entity.willBeSaved()) {
+                    // Discard entities that will not be saved
+                    continue;
+                }
+
+                var loc = entity.getLocation();
+                if (chunkX == (int) loc.x() >> 4 && chunkZ == (int) loc.z() >> 4) {
+                    // There are still entities in this chunk, so we don't remove the old saved entities
+                    // since the old saved entities will be overwritten by the new entities.
+                    return;
+                }
+            }
+
+            // No entity in this chunk, so we should remove the old saved entities
+            if (dimension.getWorld().getState() == WorldState.STOPPING) {
+                // Do it in sync if the world is stopping
+                this.worldStorage.writeEntitiesSync(chunkX, chunkZ, dimension.getDimensionInfo(), Map.of());
+            } else {
+                this.worldStorage.writeEntities(chunkX, chunkZ, dimension.getDimensionInfo(), Map.of());
             }
         });
     }

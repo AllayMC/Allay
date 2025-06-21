@@ -21,6 +21,7 @@ import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -36,7 +37,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author daoge_cmd
@@ -58,7 +59,7 @@ public class AllayWorld implements World {
     protected final AllayWorldData worldData;
     protected final BlockingQueueWrapper<PacketQueueEntry> packetQueue;
     protected final Semaphore networkSemaphore;
-    protected final AtomicBoolean isRunning;
+    protected final AtomicReference<WorldState> state;
     @Getter
     protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
     @Getter
@@ -87,12 +88,15 @@ public class AllayWorld implements World {
         this.worldData.increaseWorldStartCount();
         this.packetQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.networkSemaphore = ENABLE_INDEPENDENT_NETWORK_THREAD ? new Semaphore(1) : null;
-        this.isRunning = new AtomicBoolean(true);
+        this.state = new AtomicReference<>(WorldState.STARTING);
         this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
         this.gameLoop = GameLoop.builder()
                 .currentTick(this.worldData.getTotalTime())
-                .onTick(this::worldThreadMain).build();
+                .onStart(this::onWorldStart)
+                .onTick(this::worldThreadMain)
+                .onStop(this::shutdownReally)
+                .build();
         this.worldThread = Thread.ofPlatform()
                 .name("World Thread - " + this.getName())
                 .unstarted(gameLoop::startLoop);
@@ -104,9 +108,13 @@ public class AllayWorld implements World {
         this.effectiveWeathers = new HashSet<>();
     }
 
+    protected void onWorldStart() {
+        this.state.set(WorldState.RUNNING);
+    }
+
     @SneakyThrows
     protected void networkThreadMain() {
-        while (isRunning.get()) {
+        while (getState() == WorldState.RUNNING) {
             // Block until there are packets to handle (up to 1 second)
             var firstEntry = packetQueue.tryPoll(1, TimeUnit.SECONDS);
             if (firstEntry == null) {
@@ -123,7 +131,7 @@ public class AllayWorld implements World {
     @SneakyThrows
     private void worldThreadMain(GameLoop gameLoop) {
         this.worldData.setTotalTime(gameLoop.getTick());
-        if (!isRunning.get()) {
+        if (getState() != WorldState.RUNNING) {
             gameLoop.stop();
             return;
         }
@@ -364,19 +372,24 @@ public class AllayWorld implements World {
     }
 
     public void shutdown() {
+        // Mark the world as STOPPING, the real shutdown logic is in shutdownReally() method
+        state.set(WorldState.STOPPING);
+    }
+
+    protected void shutdownReally() {
         log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADING, name));
         getPlayers().forEach(EntityPlayer::disconnect);
-        isRunning.set(false);
         scheduler.shutdown();
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
         worldStorage.shutdown();
+        state.set(WorldState.STOPPED);
         log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, name));
     }
 
     @Override
-    public boolean isRunning() {
-        return isRunning.get();
+    public WorldState getState() {
+        return state.get();
     }
 
     @Override

@@ -133,11 +133,11 @@ public interface World extends TaskCreator {
     void saveWorldData();
 
     /**
-     * Check if the world is running.
+     * Retrieves the current state of the world.
      *
-     * @return {@code true} if the world is running, otherwise {@code false}.
+     * @return the world state.
      */
-    boolean isRunning();
+    WorldState getState();
 
     /**
      * Broadcast a packet to all players in this world.
@@ -181,6 +181,6 @@ public interface World extends TaskCreator {
 
     @Override
     default boolean isValid() {
-        return isRunning();
+        return getState() == WorldState.RUNNING;
     }
 }

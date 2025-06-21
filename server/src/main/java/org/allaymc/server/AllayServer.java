@@ -204,13 +204,8 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
-        // Mark the server as "not running"
-        // The real shutdown logic is in shutdownReally() method
-        // and will be called after all players are disconnected
-        if (!state.compareAndSet(ServerState.RUNNING, ServerState.STOPPING)) {
-            return;
-        }
-        playerService.disconnectAllPlayers(TrKeys.A_SERVER_STOPPED);
+        // Mark the server as STOPPING, the real shutdown logic is in shutdownReally() method
+        state.compareAndSet(ServerState.RUNNING, ServerState.STOPPING);
     }
 
     @Override
@@ -218,7 +213,10 @@ public final class AllayServer implements Server {
         return state.get();
     }
 
+    @SneakyThrows
     private void shutdownReally() {
+        // Disconnect all players
+        playerService.disconnectAllPlayers(TrKeys.A_SERVER_STOPPED);
         // Shutdown network server to prevent new client connecting to the server
         ((AllayPlayerService) this.playerService).shutdownNetworkInterface();
         this.scheduler.shutdown();
@@ -236,7 +234,7 @@ public final class AllayServer implements Server {
         // Shutdown all worlds
         this.worldPool.shutdown();
 
-        // Shutdown thread pools
+        // Shutdown all thread pools
         this.virtualThreadPool.shutdown();
         this.computeThreadPool.shutdown();
 

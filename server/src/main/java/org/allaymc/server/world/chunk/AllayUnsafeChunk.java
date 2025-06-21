@@ -239,6 +239,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public void onChunkUnload(Dimension dimension) {
         ((AllayLightService) dimension.getLightService()).onChunkUnload(safeChunk);
+        ((AllayEntityService) dimension.getEntityService()).onChunkUnload(this.x, this.z);
         blockChangeCallback = null;
     }
 

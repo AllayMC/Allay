@@ -24,11 +24,7 @@ public class AllayTestExtension implements BeforeAllCallback {
                 }
             });
             while (Server.getInstance() == null || Server.getInstance().getState() == ServerState.STARTING) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Thread.onSpinWait();
             }
         }
     }

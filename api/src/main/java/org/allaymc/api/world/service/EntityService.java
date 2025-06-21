@@ -85,7 +85,7 @@ public interface EntityService {
 
     /**
      * For-each all entities in specified chunk. Different from {@link #forEachEntitiesInChunk(int, int, Consumer)},
-     * this method will call the consumer immediately, so it is not safe to be called in any thread.
+     * this method will call the consumer immediately, so it is not safe to be called in non-ticking thread.
      *
      * @param chunkX the x coordinate of the chunk.
      * @param chunkZ the z coordinate of the chunk.
@@ -93,7 +93,8 @@ public interface EntityService {
     void forEachEntitiesInChunkImmediately(int chunkX, int chunkZ, Consumer<Entity> consumer);
 
     /**
-     * Get all entities in specified chunk.
+     * Get all entities in specified chunk. Since it used {@link #forEachEntitiesInChunkImmediately(int, int, Consumer)},
+     * it is not safe to be called in non-ticking thread.
      *
      * @param chunkX the x coordinate of the chunk.
      * @param chunkZ the z coordinate of the chunk.
@@ -102,7 +103,7 @@ public interface EntityService {
      */
     default Map<Long, Entity> getEntitiesInChunk(int chunkX, int chunkZ) {
         var map = new Long2ObjectOpenHashMap<Entity>();
-        forEachEntitiesInChunk(chunkX, chunkZ, entity -> map.put(entity.getRuntimeId(), entity));
+        forEachEntitiesInChunkImmediately(chunkX, chunkZ, entity -> map.put(entity.getRuntimeId(), entity));
         return map;
     }
 

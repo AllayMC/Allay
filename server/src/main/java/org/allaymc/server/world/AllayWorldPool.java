@@ -9,10 +9,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.World;
-import org.allaymc.api.world.WorldPool;
-import org.allaymc.api.world.WorldSettings;
+import org.allaymc.api.world.*;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.cloudburstmc.protocol.common.util.Preconditions;
 
@@ -51,6 +48,10 @@ public final class AllayWorldPool implements WorldPool {
 
     public void shutdown() {
         worlds.values().forEach(AllayWorld::shutdown);
+        // Waiting for all worlds to fully shutdown
+        while (worlds.values().stream().anyMatch(world -> world.getState() != WorldState.STOPPED)) {
+            Thread.onSpinWait();
+        }
         worldConfig.save();
     }
 

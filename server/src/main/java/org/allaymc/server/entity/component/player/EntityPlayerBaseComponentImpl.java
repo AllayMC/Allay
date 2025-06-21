@@ -42,6 +42,7 @@ import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.client.service.AllayPlayerService;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -662,7 +663,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public Location3ic validateAndGetSpawnPoint() {
-        if (!spawnPoint.dimension().getWorld().isRunning()) {
+        if (spawnPoint.dimension().getWorld().getState() != WorldState.RUNNING) {
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
         }
         return spawnPoint;
@@ -670,7 +671,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void setSpawnPoint(Location3ic spawnPoint) {
-        if (!spawnPoint.dimension().getWorld().isRunning()) {
+        if (spawnPoint.dimension().getWorld().getState() != WorldState.RUNNING) {
             log.warn("Trying to set spawn point to a world which is not running");
             return;
         }

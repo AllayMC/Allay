@@ -191,8 +191,8 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     public CompletableFuture<Void> writeChunk(Chunk chunk) {
         return CompletableFuture
                 .runAsync(() -> writeChunkSync(chunk), Server.getInstance().getVirtualThreadPool())
-                .exceptionally(e -> {
-                    log.error("Failed to write chunk {}, {}", chunk.getX(), chunk.getZ(), e);
+                .exceptionally(t -> {
+                    log.error("Failed to write chunk {}, {}", chunk.getX(), chunk.getZ(), t);
                     return null;
                 });
     }
@@ -230,7 +230,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return CompletableFuture
                 .supplyAsync(() -> readEntitiesSync(chunkX, chunkZ, dimensionInfo), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(t -> {
-                    log.error("Failed to read entities in chunk {}, {}", chunkX, chunkZ);
+                    log.error("Failed to read entities in chunk {}, {}", chunkX, chunkZ, t);
                     return Collections.emptyMap();
                 });
     }
@@ -309,10 +309,6 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 }
             }
 
-            if (entities.isEmpty()) {
-                return handleEntitiesWriteBatch(chunkX, chunkZ, writeBatch, asyncWrite);
-            }
-
             // Write the new entities
             for (var entry : entities.entrySet()) {
                 if (!entry.getValue().willBeSaved()) {
@@ -337,7 +333,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return CompletableFuture
                     .runAsync(() -> this.db.write(writeBatch), Server.getInstance().getVirtualThreadPool())
                     .exceptionally(t -> {
-                        log.error("Failed to write entities in chunk {}, {}", chunkX, chunkZ);
+                        log.error("Failed to write entities in chunk {}, {}", chunkX, chunkZ, t);
                         return null;
                     });
         } else {

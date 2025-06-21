@@ -18,6 +18,19 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added APIs for the new `DebugShape` system. Available debug shape classes can be found under `org.allaymc.api.debugshape`,
   and add/remove methods for debug shape are available in `Dimension` class.
+- (API) Added method `World.getState` as the replacement for the removed `World.isRunning` method.
+
+### Changed
+
+- (API) Method `EntityService.getEntitiesInChunk` is considered not thread-safe to better its behavior now.
+
+### Fixed
+
+- Fixed the bug that in some cases entities would still spawn after a server reboot even though they had been killed.
+
+### Removed
+
+- (API) Removed `World.isRunning` method, please use `World.getState` method instead.
 
 ## 0.5.0 (API 0.8.0) - 2025-6-19
 

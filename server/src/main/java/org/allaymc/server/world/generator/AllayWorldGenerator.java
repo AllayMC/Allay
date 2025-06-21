@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.ChunkState;
@@ -93,7 +94,7 @@ public class AllayWorldGenerator implements WorldGenerator {
 
     public void startTick() {
         Thread.ofVirtual().name("Population Queue Processing Thread - " + dimension.getWorld().getName()).start(() -> {
-            while (dimension.getWorld().isRunning()) {
+            while (dimension.getWorld().getState() == WorldState.RUNNING) {
                 processPopulationQueue();
             }
         });
@@ -101,7 +102,7 @@ public class AllayWorldGenerator implements WorldGenerator {
 
     private void processPopulationQueue() {
         // dimension may be null in a short term when initializing
-        if (dimension != null && !dimension.getWorld().isRunning()) {
+        if (dimension != null && dimension.getWorld().getState() != WorldState.RUNNING) {
             return;
         }
 

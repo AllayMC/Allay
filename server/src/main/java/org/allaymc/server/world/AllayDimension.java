@@ -82,9 +82,10 @@ public class AllayDimension implements Dimension {
         // Shutdown light service first, because when unloading chunks, chunk service
         // will send updates to light service which is meaningless
         this.lightService.shutdown();
-        // Save entities before unloading chunks to avoid potential issues
-        this.entityService.shutdown();
         this.chunkService.unloadAllChunks().join();
+        // EntityService should be shutdown after chunk service, because it requires
+        // the callback AllayEntityService.onChunkUnload() to be called
+        this.entityService.shutdown();
     }
 
     @Override
