@@ -50,7 +50,7 @@ Allay provides several types of debug shapes, each with unique properties:
 ### DebugBox
 A box with customizable position, color, scale, and bounds.
 
-```java
+```java linenums="1"
 DebugBox debugBox = new DebugBox(
     new Vector3f(100, 64, 100),
     Color.BLUE,
@@ -62,7 +62,7 @@ DebugBox debugBox = new DebugBox(
 ### DebugLine
 A line with a start and end position.
 
-```java
+```java linenums="1"
 DebugLine debugLine = new DebugLine(
     new Vector3f(100, 64, 100),
     Color.GREEN,
@@ -73,7 +73,7 @@ DebugLine debugLine = new DebugLine(
 ### DebugArrow
 An arrow with a start and end position, and customizable arrowhead properties.
 
-```java
+```java linenums="1"
 DebugArrow debugArrow = new DebugArrow(
     new Vector3f(100, 64, 100),
     Color.YELLOW,
@@ -87,7 +87,7 @@ DebugArrow debugArrow = new DebugArrow(
 ### DebugCircle
 A circle with customizable position, color, scale, and segments.
 
-```java
+```java linenums="1"
 DebugCircle debugCircle = new DebugCircle(
     new Vector3f(100, 64, 100),
     Color.MAGENTA,
@@ -99,7 +99,7 @@ DebugCircle debugCircle = new DebugCircle(
 ### DebugSphere
 A sphere with customizable position, color, scale, and segments.
 
-```java
+```java linenums="1"
 DebugSphere debugSphere = new DebugSphere(
     new Vector3f(100, 64, 100),
     Color.CYAN,
@@ -111,7 +111,7 @@ DebugSphere debugSphere = new DebugSphere(
 ### DebugText
 A text marker with customizable position, color, and text content.
 
-```java
+```java linenums="1"
 DebugText debugText = new DebugText(
     new Vector3f(100, 64, 100),
     Color.WHITE,
@@ -123,14 +123,14 @@ DebugText debugText = new DebugText(
 
 Debug shapes are visible to players who are added as viewers. Use the `addViewer` method to make a debug shape visible to a specific player:
 
-```java
+```java linenums="1"
 // Add a viewer to the debug shape
 debugBox.addViewer(player);
 ```
 
 To remove a viewer:
 
-```java
+```java linenums="1"
 // Remove a viewer from the debug shape
 debugBox.removeViewer(player);
 ```
