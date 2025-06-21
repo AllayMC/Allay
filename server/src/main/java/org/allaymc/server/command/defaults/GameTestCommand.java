@@ -6,6 +6,7 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
+import org.allaymc.api.debugshape.DebugLine;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -29,10 +30,13 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
@@ -359,6 +363,114 @@ public class GameTestCommand extends SimpleCommand {
                         Server.getInstance().getEventBus().unregisterListenerFor(BlockBreakEvent.class, lambda);
                         player.sendText("Disabled");
                     }
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("renderobj")
+                .str("filename")
+                .floatNum("scale", 1)
+                .optional()
+                .pos("pos")
+                .optional()
+                .exec((context, player) -> {
+                    String filename = context.getResult(1);
+                    String objData;
+                    try {
+                        objData = Files.readString(Path.of(filename));
+                    } catch (IOException e) {
+                        context.addError(e.getMessage());
+                        return context.fail();
+                    }
+                    float scale = context.getResult(2);
+                    Vector3fc pos = context.getResult(3);
+                    if (pos == null) {
+                        var playerLocation = player.getLocation();
+                        pos = new Vector3f((float) playerLocation.x(), (float) playerLocation.y(), (float) playerLocation.z());
+                    }
+
+                    // Parse the obj data
+                    var vertices = new ArrayList<Vector3f>();
+                    var lines = new ArrayList<List<Integer>>();
+                    var faces = new ArrayList<List<Integer>>();
+
+                    var contentLines = objData.split("\n");
+                    for (var line : contentLines) {
+                        var tokens = line.trim().split("\\s+");
+                        if (tokens.length == 0) {
+                            continue;
+                        }
+
+                        switch (tokens[0]) {
+                            case "v" -> vertices.add(new Vector3f(
+                                    Float.parseFloat(tokens[1]),
+                                    Float.parseFloat(tokens[2]),
+                                    Float.parseFloat(tokens[3])
+                            ));
+                            case "l" -> {
+                                List<Integer> lineIndices = new ArrayList<>();
+                                for (int i = 1; i < tokens.length; i++) {
+                                    lineIndices.add(Integer.parseInt(tokens[i]) - 1);
+                                }
+                                lines.add(lineIndices);
+                            }
+                            case "f" -> {
+                                List<Integer> faceIndices = new ArrayList<>();
+                                for (int i = 1; i < tokens.length; i++) {
+                                    // Handle format like "3/285/285" - extract only the vertex index (first number)
+                                    String vertexRef = tokens[i];
+                                    if (vertexRef.contains("/")) {
+                                        vertexRef = vertexRef.split("/")[0];
+                                    }
+                                    faceIndices.add(Integer.parseInt(vertexRef) - 1);
+                                }
+                                faces.add(faceIndices);
+                            }
+                        }
+                    }
+
+                    if (scale != 1.0f) {
+                        for (var vec : vertices) {
+                            vec.mul(scale);
+                        }
+                    }
+
+                    List<DebugLine> shapes = new ArrayList<>();
+
+                    // Draw lines
+                    for (var line : lines) {
+                        for (int i = 0; i < line.size() - 1; i++) {
+                            var start = vertices.get(line.get(i));
+                            var end = vertices.get(line.get(i + 1));
+                            if (start != null && end != null) {
+                                shapes.add(new DebugLine(pos.add(start, new Vector3f()), null, pos.add(end, new Vector3f())));
+                            }
+                        }
+                    }
+
+                    // Draw faces
+                    for (List<Integer> face : faces) {
+                        for (int i = 0; i < face.size(); i++) {
+                            var start = vertices.get(face.get(i));
+                            var end = vertices.get(face.get((i + 1) % face.size()));
+                            if (start != null && end != null) {
+                                shapes.add(new DebugLine(pos.add(start, new Vector3f()), null, pos.add(end, new Vector3f())));
+                            }
+                        }
+                    }
+
+                    // Add debug shapes to the dimension
+                    for (var shape : shapes) {
+                        player.getDimension().addDebugShape(shape);
+                    }
+
+                    context.addOutput("Done");
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("removealldebugshapes")
+                .exec((context, player) -> {
+                    player.getDimension().removeAllDebugShapes();
+                    context.addOutput("Done");
                     return context.success();
                 }, SenderType.PLAYER);
     }

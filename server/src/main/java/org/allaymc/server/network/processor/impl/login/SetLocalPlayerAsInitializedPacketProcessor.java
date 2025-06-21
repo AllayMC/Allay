@@ -8,6 +8,7 @@ import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.impl.ingame.ILoginPacketProcessor;
+import org.allaymc.server.world.AllayDimension;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SetLocalPlayerAsInitializedPacket;
 
@@ -28,6 +29,8 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground
         ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).sendLocationToSelf();
+        // Send debug shapes to the player after player fully joined
+        ((AllayDimension) player.getDimension()).addDebugShapesTo(player);
     }
 
     @Override
