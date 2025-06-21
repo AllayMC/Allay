@@ -46,8 +46,6 @@ import java.util.function.Consumer;
  */
 public class GameTestCommand extends SimpleCommand {
 
-    private static long DEBUG_SHAPE_ID_COUNTER = 0;
-
     public GameTestCommand() {
         super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
         aliases.add("gt");
