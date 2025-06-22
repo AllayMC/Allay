@@ -223,7 +223,7 @@ public final class AllayServer implements Server {
 
         new ServerStopEvent().call();
 
-        // Disable all plugins firstly
+        // Disable all plugins
         ((AllayPluginManager) this.pluginManager).disablePlugins();
 
         // Save all configurations & data

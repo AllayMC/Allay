@@ -79,6 +79,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
                 // Integer.MAX_VALUE fixed localhost blocking address
                 .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : settings.networkSettings().raknetPacketLimit())
+                .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : settings.networkSettings().raknetGlobalPacketLimit())
                 .group(new MultiThreadIoEventLoopGroup(networkThreadNumber, threadFactory, ioHandlerFactory))
                 .childHandler(new BedrockServerInitializer() {
                     @Override

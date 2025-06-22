@@ -383,8 +383,8 @@ public class AllayWorld implements World {
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
         worldStorage.shutdown();
-        state.set(WorldState.STOPPED);
         log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, name));
+        state.set(WorldState.STOPPED);
     }
 
     @Override

@@ -130,10 +130,15 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("resource-leak-detector-level")
         private ResourceLeakDetector.Level resourceLeakDetectorLevel = ResourceLeakDetector.Level.DISABLED;
 
-        @Comment("The maximum number of datagram packets each address can send within one RakNet tick (10ms).")
-        @Comment("Ignored if the server is running in Dev mode.")
+        @Comment("The maximum number of datagram packets each address can send within one RakNet tick (10ms)")
+        @Comment("Default value is 120 packets, and will be Integer.MAX_VALUE if the server is running in dev mode")
         @CustomKey("raknet-packet-limit")
         private int raknetPacketLimit = 120;
+
+        @Comment("A number of all datagrams that will be handled within one RakNet tick before server starts dropping any incoming data")
+        @Comment("Default value is 100000 (raknetPacketLimit * 0.56 * 1500 different connections), and will be Integer.MAX_VALUE if the server is running in dev mode")
+        @CustomKey("raknet-global-packet-limit")
+        private int raknetGlobalPacketLimit = 100000;
 
         @Comment("The max time (unit: gt) that a client can have in login stage")
         @Comment("This would prevent the server from being stuck by a lot")
