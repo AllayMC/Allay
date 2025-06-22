@@ -112,7 +112,7 @@ public class AllayNetworkInterface implements NetworkInterface {
     }
 
     public void shutdown() {
-        channel.close();
+        channel.close().syncUninterruptibly();
     }
 
     @Override
