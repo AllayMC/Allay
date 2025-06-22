@@ -5,7 +5,7 @@
   "server.stopped": "服务器已关闭",
   "lang.set": "服务器语言已设置为 %1",
   "network.interface.starting": "启动网络接口中...",
-  "network.interface.started": "网络接口已在 %1:%2 启动 (%3 毫秒)",
+  "network.interface.started": "网络接口已在 %1:%2 和 [%3]:%4 启动 (%5 毫秒)",
   "network.client.connected": "客户端已连接, 地址: %1",
   "network.client.disconnected": "客户端断开连接, 地址: %1",
   "blocktype.loading": "正在加载方块类型...",

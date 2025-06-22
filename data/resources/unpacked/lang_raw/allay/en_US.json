@@ -4,7 +4,7 @@
   "server.stopped": "Server stopped",
   "lang.set": "Server language was set to %1",
   "network.interface.starting": "Starting up network interface...",
-  "network.interface.started": "Network interface started at %1:%2 (%3 ms)",
+  "network.interface.started": "Network interface started at %1:%2 and [%3]:%4 (%5 ms)",
   "network.client.connected": "Client connected, IP: %1",
   "network.client.disconnected": "Client disconnected, IP: %1",
   "blocktype.loading": "Loading block types...",

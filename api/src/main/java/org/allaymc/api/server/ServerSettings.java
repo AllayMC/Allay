@@ -98,7 +98,11 @@ public class ServerSettings extends OkaeriConfig {
     public static class NetworkSettings extends OkaeriConfig {
         private String ip = "0.0.0.0";
 
+        private String ipv6 = "::";
+
         private int port = 19132;
+
+        private int portv6 = 19133;
 
         @CustomKey("xbox-auth")
         private boolean xboxAuth = true;

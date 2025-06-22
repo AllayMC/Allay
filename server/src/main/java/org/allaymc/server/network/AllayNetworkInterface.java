@@ -15,6 +15,7 @@ import io.netty.channel.kqueue.KQueueIoHandler;
 import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -36,6 +37,8 @@ import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author daoge_cmd
@@ -43,22 +46,26 @@ import java.net.InetSocketAddress;
 @Slf4j
 public class AllayNetworkInterface implements NetworkInterface {
 
-    protected InetSocketAddress bindAddress;
+    protected final Server server;
+    protected final Set<Channel> channels;
+    protected InetSocketAddress address;
+    protected InetSocketAddress addressv6;
     protected BedrockPong pong;
-    protected Server server;
-    protected Channel channel;
 
     public AllayNetworkInterface(Server server) {
         this.server = server;
+        this.channels = new HashSet<>();
     }
 
+    @SneakyThrows
     public void start() {
         var settings = Server.SETTINGS;
         var networkThreadNumber = settings.networkSettings().networkThreadNumber();
         Preconditions.checkArgument(networkThreadNumber >= 0);
 
         this.pong = initPong(settings);
-        this.bindAddress = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
+        this.address = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
+        this.addressv6 = new InetSocketAddress(settings.networkSettings().ipv6(), settings.networkSettings().portv6());
 
         var threadFactory = new ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").setDaemon(true).build();
         Class<? extends DatagramChannel> datagramChannelClass;
@@ -74,7 +81,7 @@ public class AllayNetworkInterface implements NetworkInterface {
             ioHandlerFactory = NioIoHandler.newFactory();
         }
 
-        this.channel = new ServerBootstrap()
+        var bootstrap = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
                 // Integer.MAX_VALUE fixed localhost blocking address
@@ -106,14 +113,16 @@ public class AllayNetworkInterface implements NetworkInterface {
                         log.info(I18n.get().tr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
                         ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientSession(session);
                     }
-                })
-                .bind(bindAddress)
-                .syncUninterruptibly()
-                .channel();
+                });
+
+        this.channels.add(bootstrap.bind(address).syncUninterruptibly().channel());
+        this.channels.add(bootstrap.bind(addressv6).syncUninterruptibly().channel());
     }
 
     public void shutdown() {
-        channel.close().syncUninterruptibly();
+        for (var channel : channels) {
+            channel.close().syncUninterruptibly();
+        }
     }
 
     @Override
@@ -164,11 +173,12 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .version(ProtocolInfo.getMinecraftVersionStr())
                 .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
-                // TODO: support ipv6
-                .ipv6Port(settings.networkSettings().port());
+                .ipv6Port(settings.networkSettings().portv6());
     }
 
     protected void updatePong() {
-        this.channel.config().setOption(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf());
+        for (var channel : channels) {
+            channel.config().setOption(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf());
+        }
     }
 }

@@ -84,7 +84,7 @@
   "allay:lang.set": "服务器语言已设置为 %1",
   "allay:network.client.connected": "客户端已连接, 地址: %1",
   "allay:network.client.disconnected": "客户端断开连接, 地址: %1",
-  "allay:network.interface.started": "网络接口已在 %1:%2 启动 (%3 毫秒)",
+  "allay:network.interface.started": "网络接口已在 %1:%2 和 [%3]:%4 启动 (%5 毫秒)",
   "allay:network.interface.starting": "启动网络接口中...",
   "allay:pack.autoencrypt.enabled": "资源包自动加密已开启，准备加密资源包...",
   "allay:pack.encrypted": "资源包 %1 已加密。密钥为: %2",
