@@ -4,31 +4,32 @@ comments: true
 
 # Getting Started
 
-Starting an Allay server would be very easy! The following guide will help you to
-install and run your first Allay server.
+Getting an **Allay** server up and running is simple!
+This guide will walk you through installing and launching your first Allay server.
 
 ## Install Java
 
-Allay is written and running in java 21, so you need to install java 21. There are several version of java,
-and we recommend you to use [GraalVM](https://www.graalvm.org/) for the best performance. [OpenJDK](https://adoptopenjdk.net/) is
-also a good choice if you want to have a stable experience.
+Allay requires **Java 21** to run. There are several Java distributions available, but we recommend the following:
+
+- [**GraalVM**](https://www.graalvm.org/) – for best performance.
+- [**OpenJDK**](https://adoptium.net/) – for a more stable and familiar experience.
 
 !!! tip
 
-    If you are going to use GraalVM, please install the lastest LTS version instead of java 21 version.
+    If you choose GraalVM, we recommend installing the latest **LTS** version (e.g. 22.3 LTS) rather than specifically Java 21.
 
-After you have installed java 21, you can check if it is installed correctly by running the following command:
+Once installed, verify that Java is correctly set up by running:
 
 ```shell
 java --version
 ```
 
-And if you have your java 21 installed correctly, the java version will be shown with no error message.
+If everything is installed correctly, you should see the version output with no error messages.
 
-## Use AllayLauncher <small>recommended</small>
+## Use AllayLauncher <small>(Recommended)</small>
 
-[AllayLauncher](https://github.com/AllayMC/AllayLauncher) is a small and fast tool written in c++ for downloading,
-updating and managing Allay.
+[AllayLauncher](https://github.com/AllayMC/AllayLauncher) is a lightweight, fast tool (written in C++) that helps you
+download, update, and manage your Allay server effortlessly.
 
 To install it, you just need to run one command:
 
@@ -48,26 +49,38 @@ To install it, you just need to run one command:
 
 ### Download Allay
 
-You can download the latest release from [GitHub](https://github.com/AllayMC/Allay/releases/latest).
-If you want to take a look at the latest in-development features, you can also try
-[Nightly Build](https://github.com/AllayMC/Allay/releases/tag/nightly), which is the latest build of the master branch.
+Get the latest release from the [**GitHub Releases**](https://github.com/AllayMC/Allay/releases/latest) page.
+
+For the bleeding-edge version with the latest features, you can also try the
+[**Nightly Build**](https://github.com/AllayMC/Allay/releases/tag/nightly), which is built from the `master` branch.
 
 ### Run Allay
 
-You should now have a file named `allay-server-<version of allay server>-<git hash>[-dev]-shaded.jar`, and an example
-name is
-`allay-server-0.1.0-dev-shaded.jar`. If there is a `dev` flag in the file name, it means that this is a development
-version.
-If your platform has a graphical interface, you can just double-click the jar file to run it, then a window will pop up
-if you have installed java correctly:
+You should now have a file named like:
+
+```
+allay-server-<version>-<commit-hash>[-dev]-shaded.jar
+```
+
+Example:
+
+```
+allay-server-0.1.0-dev-shaded.jar
+```
+
+> The `-dev` suffix indicates a development version.
+
+#### Running the Server
+
+If your system has a graphical interface (GUI), just **double-click** the `.jar` file.
+If Java is installed correctly, a window like this will appear:
 
 ![installation-p1.png](installation-p1.png)
 
-If you are running on a server which does not have graphical interface, you can run the following command to start the
-server:
+If you're on a headless server (no GUI), start the server with:
 
-```shell
+```bash
 java -jar allay-server-*-shaded.jar
 ```
 
-And the same output will be shown in the console.
+You’ll see the same startup output in the terminal.

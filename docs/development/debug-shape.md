@@ -4,27 +4,27 @@ comments: true
 
 # Debug Shape
 
-Debug shape is a feature that is introduced in 1.21.90. It allows the server to draw a set of different types of shapes client-side,
-which would be very useful.
+The **Debug Shape** feature, introduced in **1.21.90**, allows the server to draw various client-side shapes.
+This is a powerful tool for visual debugging and development.
 
-## Available Parameters for DebugShape
+## Supported Parameters by Shape Type
 
-|               | position  | scale | color | text | boxBounds | lineEndPosition | arrowHeadLength | arrowHeadRadius | segments                             |
-|---------------|-----------|-------|-------|------|-----------|-----------------|-----------------|-----------------|--------------------------------------|
-| line          | √         |       | √     |      |           | √               |                 |                 |                                      |
-| box           | √         | √     | √     |      | √         |                 |                 |                 |                                      |
-| sphere        | √         | √     | √     |      |           |                 |                 |                 | √                                    |
-| circle        | √         | √     | √     |      |           |                 |                 |                 | √                                    |
-| text          | √         |       | √     | √    |           |                 |                 |                 |                                      |
-| arrow         | √         |       | √     |      |           | √               | √               | √               | √                                    |
-| default value | (0, 0, 0) | 1     | white |      | (1, 1, 1) | (0, 0, 0)       | 1               | 0.5             | 20 for circle/sphere and 4 for arrow |
+|               | position  | scale | color | text | boxBounds | lineEndPosition | arrowHeadLength | arrowHeadRadius | segments                      |
+|---------------|-----------|-------|-------|------|-----------|-----------------|-----------------|-----------------|-------------------------------|
+| Line          | √         |       | √     |      |           | √               |                 |                 |                               |
+| Box           | √         | √     | √     |      | √         |                 |                 |                 |                               |
+| Sphere        | √         | √     | √     |      |           |                 |                 |                 | √                             |
+| Circle        | √         | √     | √     |      |           |                 |                 |                 | √                             |
+| Text          | √         |       | √     | √    |           |                 |                 |                 |                               |
+| Arrow         | √         |       | √     |      |           | √               | √               | √               | √                             |
+| Default value | (0, 0, 0) | 1     | white |      | (1, 1, 1) | (0, 0, 0)       | 1               | 0.5             | 20 (circle/sphere), 4 (arrow) |
 
-## Notes
+## Additional Notes
 
-- `rotation` seems to have no effect on all types of debug shape.
-- Setting a value greater than zero for `totalTimeLeft` does not seem to cause the client to stop displaying the debug shape after the specified time. 
-In other words, the server must actively notify the client to remove the debug shape, although this value is still sent to the client.
-- Setting `text` to `null` causes the client to not show anything, including the black background of the text.
-- The properties of a debug shape can be updated by sending the shape data again, except its type.
-- To remove a specified debug shape, send the shape data in the same id and let other parameters keep `null`.
-- `R`, `G`, `B`, and even `A` of the color are available.
+- `rotation` currently has **no effect** on any debug shape.
+- Setting `totalTimeLeft` to a value greater than zero **does not automatically remove** the shape after that time. The
+  server must explicitly remove it by sending a removal request.
+- Setting `text` to `null` will cause **nothing to render**, including the black background.
+- You **can update** the properties of an existing shape (except its type) by resending it with the same ID.
+- To **remove** a shape, resend it with the same ID and set all other fields to `null`.
+- The `color` parameter supports **RGBA** components: red, green, blue, and alpha.
