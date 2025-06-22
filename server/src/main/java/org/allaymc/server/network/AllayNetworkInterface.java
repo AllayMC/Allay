@@ -165,8 +165,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
                 // TODO: support ipv6
-                .ipv6Port(settings.networkSettings().port())
-                .serverId(channel.config().getOption(RakChannelOption.RAK_GUID));
+                .ipv6Port(settings.networkSettings().port());
     }
 
     protected void updatePong() {
