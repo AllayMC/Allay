@@ -160,10 +160,13 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .playerCount(0)
                 .maximumPlayerCount(settings.genericSettings().maxPlayerCount())
                 .gameType(settings.genericSettings().defaultGameType().name())
+                .nintendoLimited(false)
                 .version(ProtocolInfo.getMinecraftVersionStr())
                 .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
-                .ipv6Port(settings.networkSettings().port()); // TODO: ipv6
+                // TODO: support ipv6
+                .ipv6Port(settings.networkSettings().port())
+                .serverId(channel.config().getOption(RakChannelOption.RAK_GUID));
     }
 
     protected void updatePong() {
