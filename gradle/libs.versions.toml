@@ -1,5 +1,5 @@
 [versions]
-log4j = "2.24.3"
+log4j = "2.25.0"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"
@@ -84,7 +84,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.13.3" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.14.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
