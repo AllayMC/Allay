@@ -181,6 +181,8 @@ public final class AllayServer implements Server {
                 TrKeys.A_NETWORK_INTERFACE_STARTED,
                 SETTINGS.networkSettings().ip(),
                 String.valueOf(SETTINGS.networkSettings().port()),
+                SETTINGS.networkSettings().ipv6(),
+                String.valueOf(SETTINGS.networkSettings().portv6()),
                 String.valueOf(startTime - initialTime)
         );
 

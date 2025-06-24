@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   and add/remove methods for debug shape are available in `Dimension` class.
 - (API) Added method `World.getState` as the replacement for the removed `World.isRunning` method.
 - (API) Added `ServerSettings.NetworkSettings.raknetGlobalPacketLimit` to control the global packet limit for RakNet.
+- (API) Added support for ipv6, and two new options `ipv6` and `portv6` are added to `server-settings.yml`.
 
 ### Changed
 

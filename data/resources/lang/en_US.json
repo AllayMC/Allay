@@ -84,7 +84,7 @@
   "allay:lang.set": "Server language was set to %1",
   "allay:network.client.connected": "Client connected, IP: %1",
   "allay:network.client.disconnected": "Client disconnected, IP: %1",
-  "allay:network.interface.started": "Network interface started at %1:%2 (%3 ms)",
+  "allay:network.interface.started": "Network interface started at %1:%2 and [%3]:%4 (%5 ms)",
   "allay:network.interface.starting": "Starting up network interface...",
   "allay:pack.autoencrypt.enabled": "Pack auto encrypting is enabled, encryption is starting...",
   "allay:pack.encrypted": "Pack %1 is encrypted. Key: %2",
