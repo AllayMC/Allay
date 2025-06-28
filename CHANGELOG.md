@@ -25,6 +25,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - (API) Method `EntityService.getEntitiesInChunk` is considered not thread-safe to better its behavior now.
+- (API) Refactored `LoginData` to match the update of LoginPacket recently. Method `LoginData.getDisplayName()` was renamed to `LoginData.getXname()`.
 
 ### Fixed
 

@@ -46,7 +46,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var name = loginData.getDisplayName();
+        var name = loginData.getXname();
         if (!NAME_PATTERN.matcher(name).matches()) {
             player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDNAME);
             return;

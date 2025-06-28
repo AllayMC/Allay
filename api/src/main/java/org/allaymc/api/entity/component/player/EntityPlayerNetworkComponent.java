@@ -80,7 +80,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return the origin name of the player.
      */
     default String getOriginName() {
-        return getLoginData().getDisplayName();
+        return getLoginData().getXname();
     }
 
     /**

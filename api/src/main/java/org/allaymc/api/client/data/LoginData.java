@@ -29,20 +29,50 @@ import java.util.UUID;
 @AllArgsConstructor
 public class LoginData {
     private static final Gson GSON = new Gson();
+
+    /**
+     * Whether the player has been authenticated with Xbox Live. This is {@code true} when the player is
+     * online and {@code false} when the player is offline. When xbox-auth is enabled by the server, this
+     * field should always be {@code true} since unauthenticated players are not allowed to join the server.
+     */
     private boolean xboxAuthenticated;
-    private String displayName;
+    /**
+     * This is the name of the player's xbox account when online and can't be easily changed.
+     * When offline, this name can be changed locally.
+     * <p>
+     * One thing to note is that players can change their names, so plugins shouldn't use this
+     * value as a key to store player data. Consider using {@link #xuid} or {@link #uuid}
+     */
+    private String xname;
+    /**
+     * The player's xbox user id.
+     */
     private String xuid;
+    /**
+     * The player's uuid, derived from the {@link #xuid} when online, or from the username when offline.
+     */
     private UUID uuid;
+    /**
+     * The information of player's device.
+     */
     private DeviceInfo deviceInfo;
+    /**
+     * The language code of the player's client.
+     */
     private LangCode langCode;
+    /**
+     * The version of the player's client.
+     */
     private String gameVersion;
+    /**
+     * The player's skin.
+     */
     private SerializedSkin skin;
     private String identityPublicKey;
 
     private LoginData(LoginPacket loginPacket) {
         try {
-            var result = EncryptionUtils.validatePayload(loginPacket.getAuthPayload());
-            this.decodeChainData(result);
+            this.decodeChainData(EncryptionUtils.validatePayload(loginPacket.getAuthPayload()));
             this.decodeSkinData(loginPacket.getClientJwt());
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -57,7 +87,7 @@ public class LoginData {
         this.xboxAuthenticated = result.signed();
 
         var extraData = result.identityClaims().extraData;
-        this.displayName = extraData.displayName;
+        this.xname = extraData.displayName;
         this.uuid = extraData.identity;
         this.xuid = extraData.xuid;
         this.identityPublicKey = result.identityClaims().identityPublicKey;

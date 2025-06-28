@@ -166,7 +166,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var loginData = networkComponent.getLoginData();
         this.skin = loginData.getSkin();
         this.uniqueId = loginData.getUuid().getMostSignificantBits();
-        setDisplayName(loginData.getDisplayName());
+        setDisplayName(loginData.getXname());
     }
 
     @Override
