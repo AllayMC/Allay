@@ -27,7 +27,7 @@ public class FillCommand extends SimpleCommand {
                 .optional()
                 .exec(context -> {
                     var from = context.<Vector3d>getResult(0).floor();
-                    var to = context.<Vector3d>getResult(1).ceil();
+                    var to = context.<Vector3d>getResult(1).floor();
                     var dim = context.getSender().getCmdExecuteLocation().dimension();
                     if (!dim.isInWorld(from.x(), from.y(), from.z()) || !dim.isInWorld(to.x(), to.y(), to.z())) {
                         context.addError("%" + TrKeys.M_COMMANDS_FILL_OUTOFWORLD);
@@ -43,15 +43,22 @@ public class FillCommand extends SimpleCommand {
                         return context.fail();
                     }
 
-                    var count = 0;
-                    for (var x = from.x; x <= to.x; x++) {
-                        for (var y = from.y; y <= to.y; y++) {
-                            for (var z = from.z; z <= to.z; z++) {
+                    var minX = Math.min(from.x, to.x);
+                    var maxX = Math.max(from.x, to.x);
+                    var minY = Math.min(from.y, to.y);
+                    var maxY = Math.max(from.y, to.y);
+                    var minZ = Math.min(from.z, to.z);
+                    var maxZ = Math.max(from.z, to.z);
+
+                    for (var x = minX; x <= maxX; x++) {
+                        for (var y = minY; y <= maxY; y++) {
+                            for (var z = minZ; z <= maxZ; z++) {
                                 dim.setBlockState(x, y, z, blockState);
                                 count++;
                             }
                         }
                     }
+
                     context.addOutput(TrKeys.M_COMMANDS_FILL_SUCCESS, count);
 
                     return context.success();
