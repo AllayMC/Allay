@@ -30,4 +30,18 @@ public abstract class AbstractEffectType implements EffectType {
     public EffectInstance createInstance(int amplifier, int duration, boolean ambient, boolean visible) {
         return new EffectInstance(this, amplifier, duration, ambient, visible);
     }
+
+    @Override 
+    public boolean equals(Object other) {
+        if (other instanceof AbstractEffectType effect) {
+            return id == effect.id;
+        } else {
+            return false;
+        }
+    }
+    
+    @Override 
+    public int hashCode() {
+        return id;
+    }
 }
