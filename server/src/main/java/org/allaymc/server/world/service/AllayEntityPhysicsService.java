@@ -630,8 +630,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
                 var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
                 if (!event.call()) {
-                    // Let client back to the previous pos
-                    player.teleport(event.getFrom());
+                    // Teleport player to specified revert position, if specified.
+                    if (event.getRevertTo() != null) {
+                        player.teleport(event.getRevertTo());
+                    }
                     continue;
                 }
 
