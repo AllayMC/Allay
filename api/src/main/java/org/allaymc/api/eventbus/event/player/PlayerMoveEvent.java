@@ -1,6 +1,7 @@
 package org.allaymc.api.eventbus.event.player;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.math.location.Location3dc;
@@ -12,6 +13,14 @@ import org.allaymc.api.math.location.Location3dc;
 public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
     protected Location3dc from;
     protected Location3dc to;
+
+    /**
+     * If event is cancelled, player get teleported to specified location, which is defaults to original one.
+     *
+     * If set to null, no teleport would be issued; it up to user to handle client-server movement desync.
+     */ 
+    @Setter
+    protected Location3dc revertTo = from;
 
     public PlayerMoveEvent(EntityPlayer player, Location3dc from, Location3dc to) {
         super(player);
