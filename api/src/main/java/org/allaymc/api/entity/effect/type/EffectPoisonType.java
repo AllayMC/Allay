@@ -12,7 +12,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectPoisonType extends AbstractEffectType {
-    public EffectPoisonType() {
+    EffectPoisonType() {
         super(19, new Identifier("minecraft:poison"), true);
     }
 

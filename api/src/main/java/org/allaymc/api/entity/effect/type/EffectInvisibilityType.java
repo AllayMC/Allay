@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
  * @author daoge_cmd
  */
 public class EffectInvisibilityType extends AbstractEffectType {
-    public EffectInvisibilityType() {
+    EffectInvisibilityType() {
         super(14, new Identifier("minecraft:invisibility"));
     }
 

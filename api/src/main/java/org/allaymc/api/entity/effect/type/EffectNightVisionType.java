@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectNightVisionType extends AbstractEffectType {
-    public EffectNightVisionType() {
+    EffectNightVisionType() {
         super(16, new Identifier("minecraft:night_vision"));
     }
 }

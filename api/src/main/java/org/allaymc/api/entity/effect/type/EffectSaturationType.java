@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectSaturationType extends AbstractEffectType {
-    public EffectSaturationType() {
+    EffectSaturationType() {
         super(23, new Identifier("minecraft:saturation"));
     }
 

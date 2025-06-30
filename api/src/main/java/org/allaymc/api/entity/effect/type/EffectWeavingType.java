@@ -19,7 +19,7 @@ import static org.allaymc.api.block.data.BlockId.WEB;
  * @author IWareQ
  */
 public class EffectWeavingType extends AbstractEffectType {
-    public EffectWeavingType() {
+    EffectWeavingType() {
         super(33, new Identifier("minecraft:weaving"), true);
     }
 

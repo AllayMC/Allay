@@ -13,7 +13,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectInstantHealthType extends AbstractEffectType {
-    public EffectInstantHealthType() {
+    EffectInstantHealthType() {
         super(6, new Identifier("minecraft:instant_health"));
     }
 

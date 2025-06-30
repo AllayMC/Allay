@@ -27,6 +27,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Method `EntityService.getEntitiesInChunk` is considered not thread-safe to better its behavior now.
 - (API) Refactored `LoginData` to match the update of LoginPacket recently. Method `LoginData.getDisplayName()` was renamed to `LoginData.getXname()`.
+- (API) All constructors of `EffectXXXType` are now package-private to prevent plugins from constructing them directly. Plugin developers are expected
+  to use `EffectTypes` class to get the effect types.
 
 ### Fixed
 

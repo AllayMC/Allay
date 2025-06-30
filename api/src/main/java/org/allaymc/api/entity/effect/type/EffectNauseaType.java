@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectNauseaType extends AbstractEffectType {
-    public EffectNauseaType() {
+    EffectNauseaType() {
         super(9, new Identifier("minecraft:nausea"), true);
     }
 }

@@ -13,7 +13,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectInstantDamageType extends AbstractEffectType {
-    public EffectInstantDamageType() {
+    EffectInstantDamageType() {
         super(7, new Identifier("minecraft:instant_damage"), true);
     }
 

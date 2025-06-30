@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author IWareQ
  */
 public class EffectTrialOmenType extends AbstractEffectType {
-    public EffectTrialOmenType() {
+    EffectTrialOmenType() {
         super(31, new Identifier("minecraft:trial_omen"));
     }
 }

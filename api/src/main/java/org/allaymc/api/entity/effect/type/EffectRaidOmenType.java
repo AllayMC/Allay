@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author IWareQ
  */
 public class EffectRaidOmenType extends AbstractEffectType {
-    public EffectRaidOmenType() {
+    EffectRaidOmenType() {
         super(36, new Identifier("minecraft:raid_omen"));
     }
 }

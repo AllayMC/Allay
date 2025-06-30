@@ -11,7 +11,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectWitherType extends AbstractEffectType {
-    public EffectWitherType() {
+    EffectWitherType() {
         super(20, new Identifier("minecraft:wither"), true);
     }
 

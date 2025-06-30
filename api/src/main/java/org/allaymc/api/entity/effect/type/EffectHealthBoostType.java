@@ -11,7 +11,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectHealthBoostType extends AbstractEffectType {
-    public EffectHealthBoostType() {
+    EffectHealthBoostType() {
         super(21, new Identifier("minecraft:health_boost"));
     }
 

@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectStrengthType extends AbstractEffectType {
-    public EffectStrengthType() {
+    EffectStrengthType() {
         super(5, new Identifier("minecraft:strength"));
     }
 }

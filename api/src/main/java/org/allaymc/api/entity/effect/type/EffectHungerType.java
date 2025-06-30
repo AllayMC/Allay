@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectHungerType extends AbstractEffectType {
-    public EffectHungerType() {
+    EffectHungerType() {
         super(17, new Identifier("minecraft:hunger"), true);
     }
 

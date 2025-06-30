@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectSlownessType extends AbstractEffectType {
-    public EffectSlownessType() {
+    EffectSlownessType() {
         super(2, new Identifier("minecraft:slowness"), true);
     }
 

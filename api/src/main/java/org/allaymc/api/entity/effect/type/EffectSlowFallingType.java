@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectSlowFallingType extends AbstractEffectType {
-    public EffectSlowFallingType() {
+    EffectSlowFallingType() {
         super(27, new Identifier("minecraft:slow_falling"));
     }
 }

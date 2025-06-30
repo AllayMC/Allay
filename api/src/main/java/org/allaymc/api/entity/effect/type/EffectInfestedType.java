@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author IWareQ
  */
 public class EffectInfestedType extends AbstractEffectType {
-    public EffectInfestedType() {
+    EffectInfestedType() {
         super(35, new Identifier("minecraft:infested"), true);
     }
 

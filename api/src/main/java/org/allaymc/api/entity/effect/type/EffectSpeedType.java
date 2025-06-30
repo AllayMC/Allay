@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectSpeedType extends AbstractEffectType {
-    public EffectSpeedType() {
+    EffectSpeedType() {
         super(1, new Identifier("minecraft:speed"));
     }
 

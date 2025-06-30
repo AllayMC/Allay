@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectVillageHeroType extends AbstractEffectType {
-    public EffectVillageHeroType() {
+    EffectVillageHeroType() {
         super(29, new Identifier("minecraft:village_hero"));
     }
 }

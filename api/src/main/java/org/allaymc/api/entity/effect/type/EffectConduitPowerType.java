@@ -7,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectConduitPowerType extends AbstractEffectType {
-    public EffectConduitPowerType() {
+    EffectConduitPowerType() {
         super(26, new Identifier("minecraft:conduit_power"));
     }
 }
