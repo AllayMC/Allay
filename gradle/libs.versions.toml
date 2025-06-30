@@ -40,7 +40,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.4" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
-semver4j = { group = "org.semver4j", name = "semver4j", version = "5.7.1" }
+semver4j = { group = "org.semver4j", name = "semver4j", version = "6.0.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
@@ -74,9 +74,9 @@ oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.2" }
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 # JUnit
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.13.1" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.13.2" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.13.1" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.13.2" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.18.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
@@ -84,7 +84,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.14.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.16.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
@@ -102,6 +102,6 @@ leveldb = ["leveldb", "leveldb-api"]
 rng = ["rng-simple", "rng-sampling"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "8.3.6" }
+shadow = { id = "com.gradleup.shadow", version = "8.3.7" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.0" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
