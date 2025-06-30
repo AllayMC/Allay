@@ -50,6 +50,7 @@ public class FillCommand extends SimpleCommand {
                     var minZ = Math.min(from.z, to.z);
                     var maxZ = Math.max(from.z, to.z);
 
+                    int count = 0;
                     for (var x = minX; x <= maxX; x++) {
                         for (var y = minY; y <= maxY; y++) {
                             for (var z = minZ; z <= maxZ; z++) {

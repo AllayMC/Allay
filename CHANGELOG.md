@@ -30,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed the bug that in some cases entities would still spawn after a server reboot even though they had been killed.
+- Fixed `/fill` command behavior, it now more closely matches the vanilla behavior.
 
 ### Removed
 
