@@ -11,8 +11,8 @@ import org.allaymc.server.datastruct.dag.DAGCycleException;
 import org.allaymc.server.datastruct.dag.DirectedAcyclicGraph;
 import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
-import org.semver4j.RangesListFactory;
 import org.semver4j.Semver;
+import org.semver4j.range.RangeListFactory;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -205,7 +205,7 @@ public class AllayPluginManager implements PluginManager {
                     log.warn(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_VERSION_MISMATCH,
                             descriptor.getName(),
                             dependency.name(),
-                            RangesListFactory.create(dependency.version()),
+                            RangeListFactory.create(dependency.version()),
                             dependencyContainer.descriptor().getVersion()));
                 }
             }
@@ -245,7 +245,7 @@ public class AllayPluginManager implements PluginManager {
 
         var dependencyVersion = dependency.getVersion();
         var dependencySemver = Semver.coerce(dependencyVersion);
-        var versionRanges = RangesListFactory.create(requireVersion);
+        var versionRanges = RangeListFactory.create(requireVersion);
         // Already checked at org.allaymc.api.plugin.PluginDescriptor.checkDescriptorValid
         Preconditions.checkNotNull(dependencySemver);
         return !dependencySemver.satisfies(versionRanges);
