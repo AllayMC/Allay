@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added method `World.getState` as the replacement for the removed `World.isRunning` method.
 - (API) Added `ServerSettings.NetworkSettings.raknetGlobalPacketLimit` to control the global packet limit for RakNet.
 - (API) Added support for ipv6, and two new options `ipv6` and `portv6` are added to `server-settings.yml`.
+- (API) Added `PlayerMoveEvent.setRevertTo()` method which allow to specify custom cancel/revert position for `PlayerMoveEvent`.
 
 ### Changed
 
