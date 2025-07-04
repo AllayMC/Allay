@@ -6717,6 +6717,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.MUSIC_DISC_FAR)
                     .build();
         }
+        if (ItemTypes.MUSIC_DISC_LAVA_CHICKEN == null) {
+            ItemTypes.MUSIC_DISC_LAVA_CHICKEN = AllayItemType
+                    .builder(ItemMusicDiscStackImpl.class)
+                    .vanillaItem(ItemId.MUSIC_DISC_LAVA_CHICKEN)
+                    .build();
+        }
         if (ItemTypes.MUSIC_DISC_MALL == null) {
             ItemTypes.MUSIC_DISC_MALL = AllayItemType
                     .builder(ItemMusicDiscStackImpl.class)

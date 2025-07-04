@@ -10,7 +10,7 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.5.1 (API 0.9.0) - Unreleased
+## 0.6.0 (API 0.9.0) - Unreleased
 
 <small>[Compare with 0.5.0](https://github.com/AllayMC/Allay/compare/0.5.0...HEAD)</small>
 
@@ -22,6 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `ServerSettings.NetworkSettings.raknetGlobalPacketLimit` to control the global packet limit for RakNet.
 - (API) Added support for ipv6, and two new options `ipv6` and `portv6` are added to `server-settings.yml`.
 - (API) Added `PlayerMoveEvent.setRevertTo()` method which allow to specify custom cancel/revert position for `PlayerMoveEvent`.
+- Added support for bedrock 1.21.93.
 
 ### Changed
 

@@ -20,12 +20,12 @@ public final class ProtocolInfo {
     /**
      * The current used packet codec.
      */
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v818.CODEC;
+    public static final BedrockCodec PACKET_CODEC = Bedrock_v818.CODEC.toBuilder().minecraftVersion("1.21.93").protocolVersion(819).build();
 
     /**
      * The current minecraft version.
      */
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 90, 3, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 93, 1, 0);
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.

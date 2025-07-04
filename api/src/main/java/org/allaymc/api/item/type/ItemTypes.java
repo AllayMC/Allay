@@ -2244,6 +2244,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemMusicDiscStack> MUSIC_DISC_FAR;
 
+    public static ItemType<ItemMusicDiscStack> MUSIC_DISC_LAVA_CHICKEN;
+
     public static ItemType<ItemMusicDiscStack> MUSIC_DISC_MALL;
 
     public static ItemType<ItemMusicDiscStack> MUSIC_DISC_MELLOHI;
