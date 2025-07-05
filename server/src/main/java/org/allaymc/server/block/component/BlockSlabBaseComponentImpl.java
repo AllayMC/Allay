@@ -26,8 +26,7 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
-            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-            return true;
+            return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
         var face = placementInfo.blockFace();
@@ -37,22 +36,22 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
         switch (face) {
             case UP -> {
                 if (clickedBlock.getBlockType() == this.blockType && clickedBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.BOTTOM) {
-                    dimension.setBlockState(clickedBlockPos, getDoubleSlabBlockType().getDefaultState());
+                    return dimension.setBlockState(clickedBlockPos, getDoubleSlabBlockType().getDefaultState());
                 } else {
-                    dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.BOTTOM));
+                    return dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.BOTTOM));
                 }
             }
             case DOWN -> {
                 if (clickedBlock.getBlockType() == this.blockType && clickedBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.TOP) {
-                    dimension.setBlockState(clickedBlockPos, getDoubleSlabBlockType().getDefaultState());
+                    return dimension.setBlockState(clickedBlockPos, getDoubleSlabBlockType().getDefaultState());
                 } else {
-                    dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.TOP));
+                    return dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, MinecraftVerticalHalf.TOP));
                 }
             }
-            default ->
-                    dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, clickedPos.y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM));
+            default -> {
+                return dimension.setBlockState(placeBlockPos, blockState.setPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF, clickedPos.y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM));
+            }
         }
-        return true;
     }
 
     // TODO: Fix combine

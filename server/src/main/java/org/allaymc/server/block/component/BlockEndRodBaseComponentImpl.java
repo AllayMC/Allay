@@ -20,8 +20,7 @@ public class BlockEndRodBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
-            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-            return true;
+            return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
         var face = placementInfo.blockFace();
@@ -35,7 +34,6 @@ public class BlockEndRodBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         blockState = blockState.setPropertyValue(FACING_DIRECTION, face.ordinal());
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 }

@@ -62,13 +62,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        dimension.setBlockState(
+        return dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
                 processBlockProperties(blockState, placeBlockPos, placementInfo),
                 placementInfo
         );
-
-        return true;
     }
 
     protected BlockState processBlockProperties(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {

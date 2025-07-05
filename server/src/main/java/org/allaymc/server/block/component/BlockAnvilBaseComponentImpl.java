@@ -29,8 +29,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
-            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-            return true;
+            return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
         dimension.addSound(placeBlockPos, Sound.RANDOM_ANVIL_LAND);
@@ -39,8 +38,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
                 MINECRAFT_CARDINAL_DIRECTION,
                 placementInfo.player().getHorizontalFace().rotateYCCW().toMinecraftCardinalDirection()
         );
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
     @Override

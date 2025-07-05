@@ -30,15 +30,18 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Refactored `LoginData` to match the update of LoginPacket recently. Method `LoginData.getDisplayName()` was renamed to `LoginData.getXname()`.
 - (API) All constructors of `EffectXXXType` are now package-private to prevent plugins from constructing them directly. Plugin developers are expected
   to use `EffectTypes` class to get the effect types.
+- (API) Method `Dimension.setBlockState()` now return `boolean` instead of `void`, since in some cases the block state may not be set successfully.
 
 ### Fixed
 
+- (API) Fixed the bug that `BlockPlaceEvent.getBlockState()` won't return the accurate block state that is being placed.
 - Fixed the bug that in some cases entities would still spawn after a server reboot even though they had been killed.
 - Fixed `/fill` command behavior, it now more closely matches the vanilla behavior.
 
 ### Removed
 
 - (API) Removed `World.isRunning` method, please use `World.getState` method instead.
+- (API) Removed `BlockPlaceEvent.getItemUsed()`, consider using `EntityPlayer.getItemInHand()` instead.
 
 ## 0.5.0 (API 0.8.0) - 2025-6-19
 

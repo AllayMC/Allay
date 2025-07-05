@@ -28,8 +28,7 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
-            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-            return true;
+            return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
         blockState = BlockPlaceHelper.processDirection4Property(blockState, placeBlockPos, placementInfo);
@@ -44,8 +43,7 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
             blockState = blockState.setPropertyValue(DIRECTION_4, DIRECTION_4_MAPPER.get(placementInfo.blockFace().opposite()));
         }
 
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
     @Override

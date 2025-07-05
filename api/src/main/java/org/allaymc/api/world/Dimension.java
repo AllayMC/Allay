@@ -213,121 +213,121 @@ public interface Dimension {
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3dc pos, BlockState blockState) {
-        setBlockState(pos, blockState, 0);
+    default boolean setBlockState(Vector3dc pos, BlockState blockState) {
+        return setBlockState(pos, blockState, 0);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3dc pos, BlockState blockState, int layer) {
+    default boolean setBlockState(Vector3dc pos, BlockState blockState, int layer) {
         pos = pos.floor(new Vector3d());
-        setBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), blockState, layer);
+        return setBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), blockState, layer);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(double x, double y, double z, BlockState blockState) {
-        setBlockState(x, y, z, blockState, 0);
+    default boolean setBlockState(double x, double y, double z, BlockState blockState) {
+        return setBlockState(x, y, z, blockState, 0);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(double x, double y, double z, BlockState blockState, int layer) {
-        setBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), blockState, layer);
+    default boolean setBlockState(double x, double y, double z, BlockState blockState, int layer) {
+        return setBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), blockState, layer);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(int x, int y, int z, BlockState blockState) {
-        setBlockState(x, y, z, blockState, 0, true, true);
+    default boolean setBlockState(int x, int y, int z, BlockState blockState) {
+        return setBlockState(x, y, z, blockState, 0, true, true);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3ic pos, BlockState blockState) {
-        setBlockState(pos, blockState, 0, true, true);
+    default boolean setBlockState(Vector3ic pos, BlockState blockState) {
+        return setBlockState(pos, blockState, 0, true, true);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
-        setBlockState(x, y, z, blockState, layer, true, true);
+    default boolean setBlockState(int x, int y, int z, BlockState blockState, int layer) {
+        return setBlockState(x, y, z, blockState, layer, true, true);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3ic pos, BlockState blockState, int layer) {
-        setBlockState(pos, blockState, layer, true, true);
+    default boolean setBlockState(Vector3ic pos, BlockState blockState, int layer) {
+        return setBlockState(pos, blockState, layer, true, true);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
-        setBlockState(x, y, z, blockState, layer, send, true);
+    default boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
+        return setBlockState(x, y, z, blockState, layer, send, true);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send) {
-        setBlockState(pos, blockState, layer, send, true);
+    default boolean setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send) {
+        return setBlockState(pos, blockState, layer, send, true);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update) {
-        setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update);
+    default boolean setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update) {
+        return setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
-        setBlockState(x, y, z, blockState, layer, send, update, true, null);
+    default boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
+        return setBlockState(x, y, z, blockState, layer, send, update, true, null);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
-        setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior);
+    default boolean setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
+        return setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
-        setBlockState(x, y, z, blockState, layer, send, update, callBlockBehavior, null);
+    default boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
+        return setBlockState(x, y, z, blockState, layer, send, update, callBlockBehavior, null);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(int x, int y, int z, BlockState blockState, PlayerInteractInfo placementInfo) {
-        setBlockState(x, y, z, blockState, 0, true, true, true, placementInfo);
+    default boolean setBlockState(int x, int y, int z, BlockState blockState, PlayerInteractInfo placementInfo) {
+        return setBlockState(x, y, z, blockState, 0, true, true, true, placementInfo);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, PlayerInteractInfo placementInfo) {
-        setBlockState(x, y, z, blockState, layer, true, true, true, placementInfo);
+    default boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, PlayerInteractInfo placementInfo) {
+        return setBlockState(x, y, z, blockState, layer, true, true, true, placementInfo);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
-        setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior, placementInfo);
+    default boolean setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
+        return setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior, placementInfo);
     }
 
     /**
@@ -342,8 +342,10 @@ public interface Dimension {
      * @param update            whether to update the blocks around the block.
      * @param callBlockBehavior whether to call the block behavior.
      * @param placementInfo     the placement info.
+     *
+     * @return whether the block state was set successfully. Return {@code false} when the block is failed to be set, usually because chunk is unloaded or event is being cancelled.
      */
-    void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
+    boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
 
     /**
      * @see #sendBlockUpdateTo(BlockState, int, int, int, int, EntityPlayer)

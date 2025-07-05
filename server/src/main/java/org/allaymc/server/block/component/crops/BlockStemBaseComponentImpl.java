@@ -108,10 +108,9 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
 
         // Do not use processBlockProperties here, because the FACING_DIRECTION property should keep
         // the default value (BlockFace.DOWN) rather than facing to the player
-        dimension.setBlockState(
+        return dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
                 blockState, placementInfo
         );
-        return true;
     }
 }

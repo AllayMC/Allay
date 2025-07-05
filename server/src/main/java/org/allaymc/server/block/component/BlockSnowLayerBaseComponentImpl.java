@@ -58,8 +58,7 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
     }
 
     private boolean canBeSupportedAt(BlockState blockState) {

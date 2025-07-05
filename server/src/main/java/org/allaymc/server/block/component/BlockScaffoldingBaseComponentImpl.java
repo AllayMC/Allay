@@ -56,8 +56,7 @@ public class BlockScaffoldingBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         blockState = blockState.setPropertyValue(STABILITY_CHECK, true);
-        dimension.setBlockState(placeBlockPos, blockState);
-        return true;
+        return dimension.setBlockState(placeBlockPos, blockState);
     }
 
     private Vector3ic findNextScaffoldingPos(Dimension dimension, Vector3ic placeBlockPos) {

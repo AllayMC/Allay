@@ -96,8 +96,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         if (canBeSupportedAt(placementInfo.getClickedBlockState()) && placementInfo.blockFace() == BlockFace.UP) {
-            dimension.setBlockState(placeBlockPos, blockState);
-            return true;
+            return dimension.setBlockState(placeBlockPos, blockState);
         }
 
         return false;

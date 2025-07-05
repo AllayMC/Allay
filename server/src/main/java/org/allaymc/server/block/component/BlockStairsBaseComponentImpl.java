@@ -28,8 +28,7 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
         var stairFace = placementInfo.player().getHorizontalFace();
         blockState = blockState.setPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION, toStairDirectionValue(stairFace));
         blockState = BlockPlaceHelper.processUpsideDownBitProperty(blockState, placeBlockPos, placementInfo);
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
     @Override

@@ -35,8 +35,7 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         blockState = BlockPlaceHelper.processMinecraftCardinalDirectionProperty(blockState, placeBlockPos, placementInfo);
         var current = new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension));
         blockState = blockState.setPropertyValue(IN_WALL_BIT, shouldBeLowered(current));
-        dimension.setBlockState(placeBlockPos, blockState);
-        return true;
+        return dimension.setBlockState(placeBlockPos, blockState);
     }
 
     @Override

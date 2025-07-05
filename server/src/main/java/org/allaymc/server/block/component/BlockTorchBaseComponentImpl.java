@@ -50,8 +50,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
-            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-            return true;
+            return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
         var face = placementInfo.blockFace();
@@ -64,8 +63,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         blockState = blockState.setPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION, TORCH_FACING_DIRECTION_MAPPER.get(face));
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
     private BlockFace findValidFace(Dimension dimension, Vector3ic placeBlockPos) {

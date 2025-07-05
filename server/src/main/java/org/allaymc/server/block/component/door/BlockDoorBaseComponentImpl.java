@@ -60,19 +60,9 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
             blockState = blockState.setPropertyValue(DOOR_HINGE_BIT, true);
         }
 
-        dimension.setBlockState(
-                placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
-                blockState.setPropertyValue(UPPER_BLOCK_BIT, false),
-                placementInfo
-        ); //Bottom
-
-        dimension.setBlockState(
-                placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(),
-                blockState.setPropertyValue(UPPER_BLOCK_BIT, true),
-                placementInfo
-        ); //Top
-
-        return true;
+        // Bottom and top
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState.setPropertyValue(UPPER_BLOCK_BIT, false), placementInfo) &&
+               dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(), blockState.setPropertyValue(UPPER_BLOCK_BIT, true), placementInfo);
     }
 
     @Override

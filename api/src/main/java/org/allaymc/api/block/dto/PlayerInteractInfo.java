@@ -25,7 +25,7 @@ public record PlayerInteractInfo(
     /**
      * Returns the state of the block that the player clicked on.
      *
-     * @return The state of the clicked block
+     * @return The state of the clicked block.
      */
     public BlockStateWithPos getClickedBlockState() {
         return new BlockStateWithPos(clickedBlockPos, player.getDimension());

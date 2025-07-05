@@ -35,8 +35,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         if (placementInfo != null) {
             blockState = blockState.setPropertyValue(FACING_DIRECTION, placementInfo.blockFace().ordinal());
         }
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
+import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.network.ClientStatus;
@@ -180,15 +181,23 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
+    public boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            return;
+            return false;
         }
 
         var xIndex = x & 15;
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
+
+        var event = new BlockPlaceEvent(
+                new BlockStateWithPos(blockState, new Position3i(x, y, z, this), layer),
+                oldBlockState, placementInfo != null ? placementInfo.player() : null, placementInfo
+        );
+        if (!event.call()) {
+            return false;
+        }
 
         var blockPos = new Position3i(x, y, z, this);
         var oldBlockStateWithPos = new BlockStateWithPos(oldBlockState, blockPos, layer);
@@ -207,6 +216,8 @@ public class AllayDimension implements Dimension {
             blockState.getBehavior().afterPlaced(oldBlockStateWithPos, blockState, placementInfo);
             oldBlockState.getBehavior().afterReplaced(oldBlockStateWithPos, blockState, placementInfo);
         }
+
+        return true;
     }
 
     @Override

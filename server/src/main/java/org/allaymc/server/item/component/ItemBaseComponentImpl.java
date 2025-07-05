@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockHelper;
-import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.tag.BlockTags;
@@ -14,7 +13,6 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
@@ -26,7 +24,6 @@ import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
@@ -366,14 +363,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         var oldBlockState = dimension.getBlockState(placeBlockPos);
         if (!oldBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
             return blockBehavior.combine(dimension, blockState, placeBlockPos, placementInfo);
-        }
-
-        var event = new BlockPlaceEvent(
-                new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension), 0),
-                oldBlockState, thisItemStack, player, placementInfo
-        );
-        if (!event.call()) {
-            return false;
         }
 
         var result = blockBehavior.place(dimension, blockState, placeBlockPos, placementInfo);

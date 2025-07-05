@@ -33,17 +33,8 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        dimension.setBlockState(
-                placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
-                blockState,
-                placementInfo
-        );
-        dimension.setBlockState(
-                placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(),
-                blockState.setPropertyValue(UPPER_BLOCK_BIT, true),
-                placementInfo
-        );
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo) &&
+               dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(), blockState.setPropertyValue(UPPER_BLOCK_BIT, true), placementInfo);
     }
 
     @Override

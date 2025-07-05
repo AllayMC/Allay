@@ -31,8 +31,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
 
     @Override
