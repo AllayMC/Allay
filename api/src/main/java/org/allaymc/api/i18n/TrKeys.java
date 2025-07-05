@@ -433,7 +433,7 @@ public interface TrKeys {
     String A_NETWORK_CLIENT_DISCONNECTED = "allay:network.client.disconnected";
 
     /**
-     * Network interface started at %1:%2 (%3 ms)
+     * Network interface started at %1:%2 and [%3]:%4 (%5 ms)
      */
     String A_NETWORK_INTERFACE_STARTED = "allay:network.interface.started";
 
@@ -17246,6 +17246,11 @@ public interface TrKeys {
      * C418 - far
      */
     String M_ITEM_RECORD_FAR_DESC = "minecraft:item.record_far.desc";
+
+    /**
+     * Hyper Potions - Lava Chicken   
+     */
+    String M_ITEM_RECORD_LAVA_CHICKEN_DESC = "minecraft:item.record_lava_chicken.desc";
 
     /**
      * C418 - mall

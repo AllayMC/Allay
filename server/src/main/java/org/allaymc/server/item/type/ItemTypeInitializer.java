@@ -40,6 +40,7 @@ public final class ItemTypeInitializer {
         ItemTypes.MUSIC_DISC_BLOCKS = buildMusicDisc(ItemId.MUSIC_DISC_BLOCKS, SoundEvent.RECORD_BLOCKS);
         ItemTypes.MUSIC_DISC_CHIRP = buildMusicDisc(ItemId.MUSIC_DISC_CHIRP, SoundEvent.RECORD_CHIRP);
         ItemTypes.MUSIC_DISC_FAR = buildMusicDisc(ItemId.MUSIC_DISC_FAR, SoundEvent.RECORD_FAR);
+        ItemTypes.MUSIC_DISC_LAVA_CHICKEN = buildMusicDisc(ItemId.MUSIC_DISC_LAVA_CHICKEN, SoundEvent.RECORD_LAVA_CHICKEN);
         ItemTypes.MUSIC_DISC_MALL = buildMusicDisc(ItemId.MUSIC_DISC_MALL, SoundEvent.RECORD_MALL);
         ItemTypes.MUSIC_DISC_MELLOHI = buildMusicDisc(ItemId.MUSIC_DISC_MELLOHI, SoundEvent.RECORD_MELLOHI);
         ItemTypes.MUSIC_DISC_STAL = buildMusicDisc(ItemId.MUSIC_DISC_STAL, SoundEvent.RECORD_STAL);
