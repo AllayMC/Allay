@@ -45,7 +45,8 @@ public enum GameRule {
     SHOW_BORDER_EFFECT("showBorderEffect", true, Type.BOOLEAN),
     SHOW_DAYS_PLAYED("showDaysPlayed", false, Type.BOOLEAN),
     FUNCTION_COMMAND_LIMIT("functionCommandLimit", 10000, Type.INT),
-    DO_LIMITED_CRAFTING("dolimitedcrafting", false, Type.BOOLEAN);
+    DO_LIMITED_CRAFTING("dolimitedcrafting", false, Type.BOOLEAN),
+    LOCATOR_BAR("locatorBar", true, Type.BOOLEAN);
 
     private final String name;
     private final Object defaultValue;
