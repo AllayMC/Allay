@@ -48,11 +48,13 @@ public enum BlockFace {
      *
      * @param index the index of the block face.
      *
-     * @return the corresponding {@link BlockFace}.
-     *
-     * @throws IndexOutOfBoundsException if the index is out of range (0-5).
+     * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range.
      */
     public static BlockFace fromIndex(int index) {
+        if (index < 0 || index >= FACES.length) {
+            return null;
+        }
+
         return FACES[index];
     }
 
@@ -61,11 +63,13 @@ public enum BlockFace {
      *
      * @param index the horizontal index of the block face (0-3).
      *
-     * @return the corresponding {@link BlockFace}.
-     *
-     * @throws IndexOutOfBoundsException if the index is out of range (0-3).
+     * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range.
      */
     public static BlockFace fromHorizontalIndex(int index) {
+        if (index < 0 || index >= HORIZONTAL_BLOCK_FACES.length) {
+            return null;
+        }
+
         return HORIZONTAL_BLOCK_FACES[index];
     }
 
