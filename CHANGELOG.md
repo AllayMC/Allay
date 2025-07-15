@@ -18,6 +18,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added `GameRule.LOCATOR_BAR`.
 
+### Fixed
+
+- Fixed trapdoor placement.
+
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 
 <small>[Compare with 0.5.0](https://github.com/AllayMC/Allay/compare/0.5.0...0.6.0)</small>
