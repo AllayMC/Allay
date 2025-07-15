@@ -280,6 +280,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("auto-encrypt-packs")
         @Comment("If set to true, packs will be automatically encrypted")
+        @Comment("Notes that Vibrant Visuals will be disabled if this is set to true")
         private boolean autoEncryptPacks = true;
 
         @CustomKey("max-chunk-size")
