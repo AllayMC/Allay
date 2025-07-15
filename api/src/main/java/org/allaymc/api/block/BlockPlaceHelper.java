@@ -1,5 +1,7 @@
 package org.allaymc.api.block;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.CompassRoseDirection;
@@ -17,6 +19,17 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  */
 @UtilityClass
 public final class BlockPlaceHelper {
+
+    // Special direction_4 mapper for trapdoor and stairs
+    public static final BiMap<BlockFace, Integer> EWSN_DIRECTION_4_MAPPER = HashBiMap.create(4);
+
+    static {
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.EAST, 0);
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.WEST, 1);
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.SOUTH, 2);
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.NORTH, 3);
+    }
+
     public static BlockState processFacingDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) {
             return blockState;
