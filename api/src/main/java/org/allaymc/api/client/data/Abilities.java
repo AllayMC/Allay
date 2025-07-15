@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.AbilityLayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -62,8 +63,11 @@ public final class Abilities {
 
     @ApiStatus.Internal
     public void set(Ability ability, boolean value) {
-        if (value) abilities.add(ability);
-        else abilities.remove(ability);
+        if (value) {
+            abilities.add(ability);
+        } else {
+            abilities.remove(ability);
+        }
         dirty = true;
     }
 
@@ -93,23 +97,24 @@ public final class Abilities {
 
     @ApiStatus.Internal
     public void sync() {
-        if (!dirty) return;
-        UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
+        if (!dirty) {
+            return;
+        }
 
+        UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
         AbilityLayer abilityLayer = new AbilityLayer();
         abilityLayer.setLayerType(AbilityLayer.Type.BASE);
         abilityLayer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
         abilityLayer.getAbilityValues().addAll(abilities);
-
         abilityLayer.getAbilityValues().add(Ability.WALK_SPEED);
         abilityLayer.getAbilityValues().add(Ability.FLY_SPEED);
         abilityLayer.setWalkSpeed(this.walkSpeed);
         abilityLayer.setFlySpeed(this.flySpeed);
         abilityLayer.setVerticalFlySpeed(this.verticalFlySpeed);
-
         updateAbilitiesPacket.getAbilityLayers().add(abilityLayer);
+        // Broadcast the packet to all players, so that players can see each other's permission level
+        Server.getInstance().getPlayerService().broadcastPacket(updateAbilitiesPacket);
 
-        player.sendPacket(updateAbilitiesPacket);
         dirty = false;
     }
 

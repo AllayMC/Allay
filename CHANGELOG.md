@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added `GameRule.LOCATOR_BAR`.
+- Players now can see each other's permission level in pause menu.
 
 ### Changed
 
