@@ -198,6 +198,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Update abilities, adventure settings, entity flags that are related to game type
         thisPlayer.setGameType(thisPlayer.getGameType());
 
+        // Send other players' abilities data to this player
+        Server.getInstance().getPlayerService().getPlayers().values().forEach(other -> sendPacket(other.getAbilities().encodeUpdateAbilitiesPacket()));
+
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
 
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin

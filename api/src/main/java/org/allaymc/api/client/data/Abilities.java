@@ -101,7 +101,23 @@ public final class Abilities {
             return;
         }
 
-        UpdateAbilitiesPacket updateAbilitiesPacket = createUpdateAbilitiesPacket();
+        // Broadcast the packet to all players, so that players can see each other's permission level
+        Server.getInstance().getPlayerService().broadcastPacket(encodeUpdateAbilitiesPacket());
+
+        dirty = false;
+    }
+
+    @ApiStatus.Internal
+    public UpdateAbilitiesPacket encodeUpdateAbilitiesPacket() {
+        UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
+
+        updateAbilitiesPacket.setUniqueEntityId(player.getRuntimeId());
+        // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
+        // If this player does not have specific command permissions, the command description won't even be sent to the client
+        updateAbilitiesPacket.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
+        // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
+        updateAbilitiesPacket.setPlayerPermission(calculatePlayerPermission(player));
+
         AbilityLayer abilityLayer = new AbilityLayer();
         abilityLayer.setLayerType(AbilityLayer.Type.BASE);
         abilityLayer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
@@ -112,20 +128,7 @@ public final class Abilities {
         abilityLayer.setFlySpeed(this.flySpeed);
         abilityLayer.setVerticalFlySpeed(this.verticalFlySpeed);
         updateAbilitiesPacket.getAbilityLayers().add(abilityLayer);
-        // Broadcast the packet to all players, so that players can see each other's permission level
-        Server.getInstance().getPlayerService().broadcastPacket(updateAbilitiesPacket);
 
-        dirty = false;
-    }
-
-    private UpdateAbilitiesPacket createUpdateAbilitiesPacket() {
-        UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
-        updateAbilitiesPacket.setUniqueEntityId(player.getRuntimeId());
-        // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
-        // If this player does not have specific command permissions, the command description won't even be sent to the client
-        updateAbilitiesPacket.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
-        // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
-        updateAbilitiesPacket.setPlayerPermission(calculatePlayerPermission(player));
         return updateAbilitiesPacket;
     }
 
