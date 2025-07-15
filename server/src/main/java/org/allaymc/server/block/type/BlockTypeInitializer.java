@@ -1274,13 +1274,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockMelonStemBehaviorImpl.class)
                 .vanillaBlock(BlockId.MELON_STEM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
-                .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.MELON_BLOCK))
+                .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.MELON_BLOCK, ItemId.MELON_SEEDS))
                 .build();
         BlockTypes.PUMPKIN_STEM = AllayBlockType
                 .builder(BlockPumpkinBehaviorImpl.class)
                 .vanillaBlock(BlockId.PUMPKIN_STEM)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
-                .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.PUMPKIN))
+                .setBaseComponentSupplier(blockType -> new BlockStemBaseComponentImpl(blockType, BlockId.PUMPKIN, ItemId.PUMPKIN_SEEDS))
                 .build();
     }
 

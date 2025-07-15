@@ -8,12 +8,16 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockGrowEvent;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
@@ -24,10 +28,12 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
  */
 public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     protected final BlockId fruitId;
+    protected final ItemId seedsId;
 
-    public BlockStemBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId fruitId) {
+    public BlockStemBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId fruitId, ItemId seedsId) {
         super(blockType);
         this.fruitId = fruitId;
+        this.seedsId = seedsId;
     }
 
     @Override
@@ -112,5 +118,10 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
                 blockState, placementInfo
         );
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+        return Set.of(seedsId.getItemType().createItemStack(1));
     }
 }

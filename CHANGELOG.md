@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed trapdoor placement.
+- Fixed melon/pumpkin stem drop.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 
