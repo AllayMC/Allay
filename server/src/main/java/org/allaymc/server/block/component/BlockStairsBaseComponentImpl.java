@@ -37,19 +37,4 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
     public boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
         return !blockState.getBlockStateData().collisionShape().isFull(blockFace);
     }
-
-    /**
-     * Get the stair direction value which represents this block face.
-     *
-     * @return the stair direction value.
-     */
-    protected int toStairDirectionValue(BlockFace blockFace) {
-        return switch (blockFace) {
-            case EAST -> 0;
-            case WEST -> 1;
-            case SOUTH -> 2;
-            case NORTH -> 3;
-            default -> throw new IllegalStateException("Unexpected value: " + blockFace);
-        };
-    }
 }
