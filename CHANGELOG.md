@@ -18,6 +18,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added `GameRule.LOCATOR_BAR`.
 
+### Changed
+
+- Commands `/op` and `/deop` now use player target parameter instead of string parameter.
+
 ### Fixed
 
 - Fixed trapdoor placement.
