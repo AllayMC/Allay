@@ -28,7 +28,7 @@ public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         super.onNeighborUpdate(current, neighbor, face);
 
-        var signFace = Objects.requireNonNull(BlockFace.fromId(current.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)));
+        var signFace = Objects.requireNonNull(BlockFace.fromIndex(current.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)));
         if (face == signFace.opposite() && !neighbor.getBlockStateData().isSolid()) {
             current.breakBlock();
         }

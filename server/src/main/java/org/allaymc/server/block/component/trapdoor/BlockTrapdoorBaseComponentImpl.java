@@ -1,7 +1,10 @@
 package org.allaymc.server.block.component.trapdoor;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.BlockPlaceHelper;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -12,12 +15,24 @@ import org.allaymc.api.world.Sound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.DIRECTION_4;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.OPEN_BIT;
 
 /**
  * @author harry-xi
  */
 public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
+
+    // Special direction_4 mapper for trapdoor
+    private static final BiMap<BlockFace, Integer> EWSN_DIRECTION_4_MAPPER = HashBiMap.create(4);
+
+    static {
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.EAST, 0);
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.WEST, 1);
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.SOUTH, 2);
+        EWSN_DIRECTION_4_MAPPER.put(BlockFace.NORTH, 3);
+    }
+
     public BlockTrapdoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -28,7 +43,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
             return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
-        blockState = BlockPlaceHelper.processDirection4Property(blockState, placeBlockPos, placementInfo);
+        blockState = blockState.setPropertyValue(DIRECTION_4, EWSN_DIRECTION_4_MAPPER.get(placementInfo.player().getHorizontalFace().opposite()));
         blockState = BlockPlaceHelper.processUpsideDownBitProperty(blockState, placeBlockPos, placementInfo);
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }

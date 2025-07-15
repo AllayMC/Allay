@@ -30,7 +30,7 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var facingDirection = current.getPropertyValue(FACING_DIRECTION);
-        var blockFace = Objects.requireNonNull(BlockFace.fromId(facingDirection));
+        var blockFace = Objects.requireNonNull(BlockFace.fromIndex(facingDirection));
         if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()), blockFace)) {
             current.breakBlock();
         }

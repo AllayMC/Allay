@@ -215,7 +215,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         updateBreakingTime(player, currentTime);
 
         var pk1 = new LevelEventPacket();
-        var type = switch (Objects.requireNonNull(BlockFace.fromId(faceToBreak))) {
+        var type = switch (Objects.requireNonNull(BlockFace.fromIndex(faceToBreak))) {
             case UP -> PARTICLE_BREAK_BLOCK_UP;
             case DOWN -> PARTICLE_BREAK_BLOCK_DOWN;
             case NORTH -> PARTICLE_BREAK_BLOCK_NORTH;

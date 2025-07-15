@@ -62,7 +62,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
         var transactionType = packet.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
-                var blockFace = BlockFace.fromId(packet.getBlockFace());
+                var blockFace = BlockFace.fromIndex(packet.getBlockFace());
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {

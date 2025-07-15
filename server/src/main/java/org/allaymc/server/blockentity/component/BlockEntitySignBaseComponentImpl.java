@@ -171,7 +171,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         var blockState = getBlockState();
         if (blockState.getBlockType().hasProperty(BlockPropertyTypes.FACING_DIRECTION)) {
             // Wall sign
-            return interactedFace == BlockFace.fromId(blockState.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION));
+            return interactedFace == BlockFace.fromIndex(blockState.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION));
         }
         var signDirection = CompassRoseDirection.from(blockState.getPropertyValue(BlockPropertyTypes.GROUND_SIGN_DIRECTION));
         return switch (signDirection) {

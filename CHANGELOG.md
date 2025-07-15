@@ -17,10 +17,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added `GameRule.LOCATOR_BAR`.
+- (API) Added method `BlockFace.getHorizontalIndex()` to get the horizontal index of the block face.
+- (API) Added method `BlockFace.fromHorizontalIndex()` to get the block face from the horizontal index.
 - Players now can see each other's permission level in pause menu.
 
 ### Changed
 
+- (API) Renamed method `BlockFace.fromId()` to `BlockFace.fromIndex()`.
 - Commands `/op` and `/deop` now use player target parameter instead of string parameter.
 
 ### Fixed
@@ -29,6 +32,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed trapdoor placement.
 - Fixed melon/pumpkin stem drop.
 - Fixed the bug that vibration visual feature can't be enabled in the settings menu when playing in the server.
+
+### Removed
+
+- (API) Removed method `BlockPlaceHelper.processDirection4Property()`.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 

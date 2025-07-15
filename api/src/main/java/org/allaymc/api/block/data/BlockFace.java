@@ -22,29 +22,51 @@ import static java.lang.Math.min;
 @Getter
 @AllArgsConstructor
 public enum BlockFace {
-    DOWN(new Vector3i(0, -1, 0), Axis.Y),
-    UP(new Vector3i(0, 1, 0), Axis.Y),
-    NORTH(new Vector3i(0, 0, -1), Axis.Z),
-    SOUTH(new Vector3i(0, 0, 1), Axis.Z),
-    WEST(new Vector3i(-1, 0, 0), Axis.X),
-    EAST(new Vector3i(1, 0, 0), Axis.X);
+    DOWN(new Vector3i(0, -1, 0), -1, Axis.Y),
+    UP(new Vector3i(0, 1, 0), -1, Axis.Y),
+    NORTH(new Vector3i(0, 0, -1), 2, Axis.Z),
+    SOUTH(new Vector3i(0, 0, 1), 0, Axis.Z),
+    WEST(new Vector3i(-1, 0, 0), 1, Axis.X),
+    EAST(new Vector3i(1, 0, 0), 3, Axis.X);
 
-    private static final BlockFace[] HORIZONTAL_BLOCK_FACES = {NORTH, EAST, SOUTH, WEST};
+    private static final BlockFace[] FACES = values();
+    /**
+     * All faces with horizontal axis in order S-W-N-E
+     */
+    private static final BlockFace[] HORIZONTAL_BLOCK_FACES = {SOUTH, WEST, NORTH, EAST};
+    /**
+     * All faces with vertical axis in order U-D
+     */
     private static final BlockFace[] VERTICAL_BLOCK_FACES = {UP, DOWN};
 
     private final Vector3ic offset;
+    private final int horizontalIndex;
     private final Axis axis;
 
-    public static BlockFace fromId(int value) {
-        return switch (value) {
-            case 0 -> BlockFace.DOWN;
-            case 1 -> BlockFace.UP;
-            case 2 -> BlockFace.NORTH;
-            case 3 -> BlockFace.SOUTH;
-            case 4 -> BlockFace.WEST;
-            case 5 -> BlockFace.EAST;
-            default -> null;
-        };
+    /**
+     * Retrieves the block face by its index.
+     *
+     * @param index the index of the block face.
+     *
+     * @return the corresponding {@link BlockFace}.
+     *
+     * @throws IndexOutOfBoundsException if the index is out of range (0-5).
+     */
+    public static BlockFace fromIndex(int index) {
+        return FACES[index];
+    }
+
+    /**
+     * Retrieves the block face by its horizontal index.
+     *
+     * @param index the horizontal index of the block face (0-3).
+     *
+     * @return the corresponding {@link BlockFace}.
+     *
+     * @throws IndexOutOfBoundsException if the index is out of range (0-3).
+     */
+    public static BlockFace fromHorizontalIndex(int index) {
+        return HORIZONTAL_BLOCK_FACES[index];
     }
 
     /**

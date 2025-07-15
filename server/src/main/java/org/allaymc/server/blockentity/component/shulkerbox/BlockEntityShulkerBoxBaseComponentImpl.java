@@ -70,7 +70,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForByte(TAG_FACING, facing -> this.facing = BlockFace.fromId(facing));
+        nbt.listenForByte(TAG_FACING, facing -> this.facing = BlockFace.fromIndex(facing));
     }
 
     @Override

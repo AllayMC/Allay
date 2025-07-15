@@ -1,7 +1,6 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.BlockPlaceHelper;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.Attachment;
@@ -13,7 +12,6 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.block.BlockPlaceHelper.DIRECTION_4_MAPPER;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.ATTACHMENT;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.DIRECTION_4;
 
@@ -31,16 +29,16 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
             return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
-        blockState = BlockPlaceHelper.processDirection4Property(blockState, placeBlockPos, placementInfo);
-
         var clickedFace = placementInfo.blockFace();
-        if (clickedFace == BlockFace.DOWN) {
-            blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.HANGING);
-        } else if (clickedFace == BlockFace.UP) {
+        if (clickedFace == BlockFace.UP) {
             blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.STANDING);
+            blockState = blockState.setPropertyValue(DIRECTION_4, placementInfo.player().getHorizontalFace().opposite().getHorizontalIndex());
+        } else if (clickedFace == BlockFace.DOWN) {
+            blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.HANGING);
+            blockState = blockState.setPropertyValue(DIRECTION_4, placementInfo.player().getHorizontalFace().opposite().getHorizontalIndex());
         } else {
             blockState = blockState.setPropertyValue(ATTACHMENT, Attachment.SIDE);
-            blockState = blockState.setPropertyValue(DIRECTION_4, DIRECTION_4_MAPPER.get(placementInfo.blockFace().opposite()));
+            blockState = blockState.setPropertyValue(DIRECTION_4, placementInfo.blockFace().getHorizontalIndex());
         }
 
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);

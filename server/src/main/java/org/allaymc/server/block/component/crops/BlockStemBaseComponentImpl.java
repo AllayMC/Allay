@@ -43,7 +43,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
             return;
         }
 
-        var stemFace = Objects.requireNonNull(BlockFace.fromId(current.getPropertyValue(FACING_DIRECTION)));
+        var stemFace = Objects.requireNonNull(BlockFace.fromIndex(current.getPropertyValue(FACING_DIRECTION)));
         if (stemFace == BlockFace.DOWN || stemFace == BlockFace.UP) {
             // No fruit block is connected to the stem,
             // so we don't need to check if the fruit block
