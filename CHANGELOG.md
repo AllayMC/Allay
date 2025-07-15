@@ -25,9 +25,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Fixed
 
-- `AvailableCommandsPacket` will be resent to the player if command permissions changed, usually when using `/op` and `/deop` commands.
+- Fixed the bug that `AvailableCommandsPacket` won't be resent to the player if command permissions changed, usually when using `/op` and `/deop` commands.
 - Fixed trapdoor placement.
 - Fixed melon/pumpkin stem drop.
+- Fixed the bug that vibration visual feature can't be enabled in the settings menu when playing in the server.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 

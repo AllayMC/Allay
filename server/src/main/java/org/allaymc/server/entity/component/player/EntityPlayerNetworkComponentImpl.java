@@ -386,6 +386,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setWorldId("");
         startGamePacket.setScenarioId("");
         startGamePacket.setOwnerId("");
+        startGamePacket.getExperiments().addAll(DeferredData.EXPERIMENT_DATA_LIST.get());
         return startGamePacket;
     }
 

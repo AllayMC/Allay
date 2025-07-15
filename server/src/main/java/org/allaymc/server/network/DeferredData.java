@@ -14,6 +14,7 @@ import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.world.biome.BiomeData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
@@ -40,27 +41,16 @@ public final class DeferredData {
     public static final Supplier<List<BlockDefinition>> BLOCK_DEFINITIONS = Suppliers.memoize(DeferredData::encodeBlockDefinitions);
     public static final Supplier<AvailableEntityIdentifiersPacket> AVAILABLE_ENTITY_IDENTIFIERS_PACKET = Suppliers.memoize(DeferredData::encodeAvailableEntityIdentifiersPacket);
     public static final Supplier<BiomeDefinitionListPacket> BIOME_DEFINITION_LIST_PACKET = Suppliers.memoize(DeferredData::encodeBiomeDefinitionListPacket);
+    public static final Supplier<List<ExperimentData>> EXPERIMENT_DATA_LIST = Suppliers.memoize(DeferredData::encodeExperimentDataList);
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(DeferredData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(DeferredData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(DeferredData::encodeTrimDataPacket);
 
     private static CraftingDataPacket encodeCraftingDataPacket() {
         var packet = new CraftingDataPacket();
-        packet.getCraftingData().addAll(
-                Registries.RECIPES.getContent().values().stream()
-                        .map(Recipe::toNetworkData)
-                        .toList()
-        );
-        packet.getCraftingData().addAll(
-                Registries.FURNACE_RECIPES.getContent().values().stream()
-                        .map(Recipe::toNetworkData)
-                        .toList()
-        );
-        packet.getPotionMixData().addAll(
-                Registries.POTION_MIX_RECIPES.getContent().values().stream()
-                        .map(Recipe::toNetworkData)
-                        .toList()
-        );
+        packet.getCraftingData().addAll(Registries.RECIPES.getContent().values().stream().map(Recipe::toNetworkData).toList());
+        packet.getCraftingData().addAll(Registries.FURNACE_RECIPES.getContent().values().stream().map(Recipe::toNetworkData).toList());
+        packet.getPotionMixData().addAll(Registries.POTION_MIX_RECIPES.getContent().values().stream().map(Recipe::toNetworkData).toList());
         // TODO: packet.getContainerMixData().addAll();
         // TODO: packet.getMaterialReducers().addAll();
         packet.setCleanRecipes(true);
@@ -102,6 +92,20 @@ public final class DeferredData {
         return packet;
     }
 
+    public static List<ExperimentData> encodeExperimentDataList() {
+        // See https://learn.microsoft.com/en-us/minecraft/creator/documents/experimentalfeaturestoggle for info on each experiment
+        return List.of(
+                // data_driven_items (Holiday Creator Features) is needed for blocks and items
+                new ExperimentData("data_driven_items", true),
+                // Needed for block properties for states
+                new ExperimentData("upcoming_creator_features", true),
+                // Needed for certain molang queries used in blocks and items
+                new ExperimentData("experimental_molang_features", true),
+                // Allows Vibrant Visuals to appear in the settings menu
+                new ExperimentData("experimental_graphics", true)
+        );
+    }
+
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {
         var settings = Server.SETTINGS.resourcePackSettings();
 
@@ -129,6 +133,7 @@ public final class DeferredData {
         // Just left '*' here. If we put in an exact game version, it is possible that client
         // won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
         packet.setGameVersion("*");
+        packet.getExperiments().addAll(EXPERIMENT_DATA_LIST.get());
 
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
