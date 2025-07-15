@@ -540,6 +540,13 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
+     * Require encoding and resending {@link org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket} to
+     * the player next tick. This method is usually called when command permissions change, and you don't need to
+     * call this method manually, because the permission listener does it.
+     */
+    void requireResendingAvailableCommands();
+
+    /**
      * {@inheritDoc}
      */
     @Override

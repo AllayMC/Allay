@@ -24,6 +24,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Fixed
 
+- `AvailableCommandsPacket` will be resent to the player if command permissions changed, usually when using `/op` and `/deop` commands.
 - Fixed trapdoor placement.
 - Fixed melon/pumpkin stem drop.
 

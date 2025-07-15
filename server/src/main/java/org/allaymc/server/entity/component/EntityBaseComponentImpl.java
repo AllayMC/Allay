@@ -490,7 +490,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public AABBdc getAABB() {
-        // Default aabb is player's
+        // Default aabb is player's aabb
         return new AABBd(-0.3, 0.0, -0.3, 0.3, 1.8, 0.3);
     }
 

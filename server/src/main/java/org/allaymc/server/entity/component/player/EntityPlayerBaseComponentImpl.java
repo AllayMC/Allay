@@ -32,6 +32,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.permission.PermissionGroup;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -118,6 +119,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected CommandOriginData commandOriginData;
     protected Location3ic spawnPoint;
     protected boolean awaitingDimensionChangeACK;
+    protected boolean requireResendingAvailableCommands;
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
@@ -233,6 +235,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public void requireResendingAvailableCommands() {
+        this.requireResendingAvailableCommands = true;
+    }
+
+    @Override
     protected void computeAndNotifyCollidedBlocks() {
         if (abilities.has(Ability.NO_CLIP)) {
             return;
@@ -272,6 +279,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // and sending these data will take up a lot of bandwidth
         abilities.sync();
         adventureSettings.sync();
+
+        if (requireResendingAvailableCommands) {
+            sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
+        }
     }
 
     protected void tryPickUpItems() {
