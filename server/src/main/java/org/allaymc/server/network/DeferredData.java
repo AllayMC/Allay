@@ -100,9 +100,7 @@ public final class DeferredData {
                 // Needed for block properties for states
                 new ExperimentData("upcoming_creator_features", true),
                 // Needed for certain molang queries used in blocks and items
-                new ExperimentData("experimental_molang_features", true),
-                // Allows Vibrant Visuals to appear in the settings menu
-                new ExperimentData("experimental_graphics", true)
+                new ExperimentData("experimental_molang_features", true)
         );
     }
 
