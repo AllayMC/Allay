@@ -9,8 +9,6 @@ import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
 
-import java.util.ArrayList;
-
 /**
  * @author daoge_cmd
  */
@@ -19,24 +17,24 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
     @Override
     public void handleSync(EntityPlayer player, BookEditPacket packet, long receiveTime) {
         if (player.getHandSlot() != packet.getInventorySlot()) {
-            log.warn("invalid inventory slot: {}, should be {}", packet.getInventorySlot(), player.getHandSlot());
+            log.warn("Invalid inventory slot: {}, should be {}", packet.getInventorySlot(), player.getHandSlot());
             return;
         }
 
         if (!(player.getItemInHand() instanceof ItemWritableBookStack book)) {
-            log.warn("inventory slot {} does not contain a writable book", player.getHandSlot());
+            log.warn("Inventory slot {} does not contain a writable book", player.getHandSlot());
             return;
         }
 
         var page = packet.getPageNumber();
         if (page >= 50 || page < 0) {
-            log.warn("page number {} is out of bounds", page);
+            log.warn("Page number {} is out of bounds", page);
             return;
         }
 
         var text = packet.getText();
         if (text != null && text.getBytes().length > 256) {
-            log.warn("text can not be longer than 256 bytes");
+            log.warn("Text can not be longer than 256 bytes");
             return;
         }
 
@@ -44,7 +42,7 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
             case REPLACE_PAGE -> book.setPage(page, text);
             case ADD_PAGE -> {
                 if (book.getPageCount() >= 50) {
-                    log.warn("unable to add page beyond 50");
+                    log.warn("Unable to add page beyond 50");
                     return;
                 }
 
@@ -54,7 +52,7 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
                 }
 
                 if (book.getPageText(page) == null) {
-                    log.warn("unable to insert page at {}", page);
+                    log.warn("Unable to insert page at {}", page);
                     return;
                 }
 
@@ -72,7 +70,7 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
             case SWAP_PAGES -> {
                 var secondPage = packet.getSecondaryPageNumber();
                 if (secondPage >= 50) {
-                    log.warn("second page number out of bounds");
+                    log.warn("Second page number out of bounds");
                     return;
                 }
 
@@ -86,11 +84,16 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
                 book.swapPage(page, secondPage);
             }
             case SIGN_BOOK -> {
+                if (!packet.getXuid().equals(player.getLoginData().getXuid())) {
+                    log.warn("Player xuid mismatch! Expected: {}, Actual: {}", player.getLoginData().getXuid(), packet.getXuid());
+                    return;
+                }
+
                 var writtenBook = ItemTypes.WRITTEN_BOOK.createItemStack();
                 writtenBook.setTitle(packet.getTitle());
                 writtenBook.setAuthor(packet.getAuthor());
                 writtenBook.setXuid(packet.getXuid());
-                writtenBook.setPages(new ArrayList<>(book.getPages()));
+                writtenBook.setPages(book.getPages());
                 writtenBook.setGeneration(WrittenBookGeneration.ORIGINAL_GENERATION);
                 player.setItemInHand(writtenBook);
             }

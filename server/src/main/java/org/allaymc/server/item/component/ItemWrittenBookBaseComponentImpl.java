@@ -10,6 +10,7 @@ import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,11 @@ public class ItemWrittenBookBaseComponentImpl extends ItemBaseComponentImpl impl
 
     public ItemWrittenBookBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
+        this.title = "";
+        this.author = "";
+        this.xuid = "";
+        this.generation = WrittenBookGeneration.ORIGINAL_GENERATION;
+        this.pages = new ArrayList<>();
     }
 
     @Override
@@ -46,6 +52,11 @@ public class ItemWrittenBookBaseComponentImpl extends ItemBaseComponentImpl impl
     @Override
     public @UnmodifiableView List<String> getPages() {
         return Collections.unmodifiableList(pages);
+    }
+
+    @Override
+    public void setPages(List<String> pages) {
+        this.pages = new ArrayList<>(pages);
     }
 
     @Override
