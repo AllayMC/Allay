@@ -115,7 +115,7 @@ public class AllayPlayerService implements PlayerService {
 
         banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect("You are banned!"));
 
         return true;
@@ -216,7 +216,7 @@ public class AllayPlayerService implements PlayerService {
 
         whitelist.whitelist().remove(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
         return true;
     }
@@ -235,7 +235,7 @@ public class AllayPlayerService implements PlayerService {
     }
 
     public synchronized void onLoggedIn(EntityPlayer player) {
-        players.put(player.getUUID(), player);
+        players.put(player.getLoginData().getUuid(), player);
         networkInterface.setPlayerCount(players.size());
     }
 
@@ -247,7 +247,7 @@ public class AllayPlayerService implements PlayerService {
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT);
             event.call();
             Server.getInstance().broadcastTr(event.getQuitMessage(), player.getOriginName());
-            players.remove(player.getUUID());
+            players.remove(player.getLoginData().getUuid());
 
             // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off
             // the server without waiting for the status change to IN_GAME, which is why the session remains and the
@@ -313,7 +313,7 @@ public class AllayPlayerService implements PlayerService {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
         playerListEntries.forEach((uuid, entry) -> {
-            if (uuid != player.getUUID()) {
+            if (uuid != player.getLoginData().getUuid()) {
                 playerListPacket.getEntries().add(entry);
             }
         });
@@ -321,6 +321,6 @@ public class AllayPlayerService implements PlayerService {
     }
 
     public void onSkinUpdate(EntityPlayer player) {
-        this.playerListEntries.get(player.getUUID()).setSkin(player.getSkin());
+        this.playerListEntries.get(player.getLoginData().getUuid()).setSkin(player.getSkin());
     }
 }

@@ -35,7 +35,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        if (server.getPlayerService().isBanned(player.getUUID().toString()) || server.getPlayerService().isBanned(player.getOriginName())) {
+        if (server.getPlayerService().isBanned(player.getLoginData().getUuid().toString()) || server.getPlayerService().isBanned(player.getOriginName())) {
             // TODO: I18n
             player.disconnect("You are banned!");
             return;

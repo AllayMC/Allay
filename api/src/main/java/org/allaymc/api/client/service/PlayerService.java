@@ -199,7 +199,7 @@ public interface PlayerService {
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     default boolean isWhitelisted(EntityPlayer player) {
-        return isWhitelisted(player.getUUID().toString()) || isWhitelisted(player.getOriginName());
+        return isWhitelisted(player.getLoginData().getUuid().toString()) || isWhitelisted(player.getOriginName());
     }
 
     /**

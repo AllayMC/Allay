@@ -89,7 +89,7 @@ public abstract class BaseCommand implements Command {
         if (!networkDataPrepared) {
             prepareNetworkData();
         }
-        return new CommandData(name, I18n.get().tr(player.getLangCode(), description), flags, CommandPermission.ANY, networkAliasesData, List.of(), networkOverloadsData);
+        return new CommandData(name, I18n.get().tr(player.getLoginData().getLangCode(), description), flags, CommandPermission.ANY, networkAliasesData, List.of(), networkOverloadsData);
     }
 
     public List<String> getCommandFormatTips() {

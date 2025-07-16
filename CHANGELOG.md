@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added method `BlockFace.fromHorizontalIndex()` to get the block face from the horizontal index.
 - (API) Added event `PlayerInteractEntityEvent`.
 - (API) Added events `PlayerBucketFillEvent` and `PlayerBucketEmptyEvent`.
+- (API) Implemented writable book and written book, a number of related classes were added. Check the commit history for details.
 - Players now can see each other's permission level in pause menu.
 
 ### Changed
@@ -38,6 +39,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Removed
 
 - (API) Removed method `BlockPlaceHelper.processDirection4Property()`.
+- (API) Removed several default methods in `EntityPlayerNetworkComponent` that forward call to `LoginData` for better codebase.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 
