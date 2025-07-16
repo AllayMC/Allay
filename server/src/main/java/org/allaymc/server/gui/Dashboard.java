@@ -124,7 +124,7 @@ public final class Dashboard {
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID) + ": " + player.getUUID().toString() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID) + ": " + player.getLoginData().getUuid().toString() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getDisplayName() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
@@ -149,7 +149,7 @@ public final class Dashboard {
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
                     var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
-                    Server.getInstance().getPlayerService().ban(player.getUUID().toString());
+                    Server.getInstance().getPlayerService().ban(player.getLoginData().getUuid().toString());
                 });
                 popupMenu.add(banItem);
 
@@ -353,7 +353,7 @@ public final class Dashboard {
             data[row] = new String[]{
                     player.getOriginName(),
                     player.getClientSession().getSocketAddress().toString(),
-                    player.getUUID().toString()
+                    player.getLoginData().getUuid().toString()
             };
             row++;
         }

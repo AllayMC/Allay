@@ -117,7 +117,7 @@ public class WorldCommand extends SimpleCommand {
                 .root()
                 .key("create")
                 .exec((context, player) -> {
-                    var langCode = player.getLangCode();
+                    var langCode = player.getLoginData().getLangCode();
                     var storageTypes = new ArrayList<>(Registries.WORLD_STORAGE_FACTORIES.getContent().keySet());
                     var generatorTypes = new ArrayList<>(Registries.WORLD_GENERATOR_FACTORIES.getContent().keySet());
                     Forms.custom()

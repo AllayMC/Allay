@@ -28,7 +28,7 @@ public final class PlayerScorer implements Scorer {
     }
 
     public PlayerScorer(EntityPlayer player) {
-        this(player.getUUID());
+        this(player.getLoginData().getUuid());
     }
 
     public EntityPlayer getPlayer() {

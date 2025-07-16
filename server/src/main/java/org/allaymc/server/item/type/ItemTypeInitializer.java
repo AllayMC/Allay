@@ -765,6 +765,10 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.WRITABLE_BOOK)
                 .addComponent(ItemWritableBookBaseComponentImpl::new, ItemWritableBookBaseComponentImpl.class)
                 .build();
-        // TODO: written book
+        ItemTypes.WRITTEN_BOOK = AllayItemType
+                .builder(ItemWrittenBookStackImpl.class)
+                .vanillaItem(ItemId.WRITTEN_BOOK)
+                .addComponent(ItemWrittenBookBaseComponentImpl::new, ItemWrittenBookBaseComponentImpl.class)
+                .build();
     }
 }

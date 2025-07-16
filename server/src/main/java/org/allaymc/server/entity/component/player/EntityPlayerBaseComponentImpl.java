@@ -570,14 +570,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             for (var output : outputs) {
                 packet.getMessages().add(new CommandOutputMessage(
                         status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
-                        I18n.get().tr(thisPlayer.getLangCode(), output.str(), output.args()),
+                        I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()),
                         Utils.EMPTY_STRING_ARRAY));
             }
             packet.setSuccessCount(status);
             networkComponent.sendPacket(packet);
         } else {
             for (var output : outputs) {
-                var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLangCode(), output.str(), output.args()) + "]";
+                var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()) + "]";
                 sendText(str);
             }
         }
@@ -785,7 +785,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
         if (!forceTranslatedByClient) {
-            sendText(I18n.get().tr(thisPlayer.getLangCode(), key, args));
+            sendText(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), key, args));
             return;
         }
 

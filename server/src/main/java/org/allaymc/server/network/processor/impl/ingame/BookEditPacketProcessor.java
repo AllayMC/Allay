@@ -2,10 +2,14 @@ package org.allaymc.server.network.processor.impl.ingame;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.data.WrittenBookGeneration;
 import org.allaymc.api.item.interfaces.ItemWritableBookStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
+
+import java.util.ArrayList;
 
 /**
  * @author daoge_cmd
@@ -82,7 +86,13 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
                 book.swapPage(page, secondPage);
             }
             case SIGN_BOOK -> {
-                // TODO
+                var writtenBook = ItemTypes.WRITTEN_BOOK.createItemStack();
+                writtenBook.setTitle(packet.getTitle());
+                writtenBook.setAuthor(packet.getAuthor());
+                writtenBook.setXuid(packet.getXuid());
+                writtenBook.setPages(new ArrayList<>(book.getPages()));
+                writtenBook.setGeneration(WrittenBookGeneration.ORIGINAL_GENERATION);
+                player.setItemInHand(writtenBook);
             }
         }
 

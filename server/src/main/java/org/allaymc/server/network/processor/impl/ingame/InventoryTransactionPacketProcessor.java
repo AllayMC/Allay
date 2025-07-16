@@ -182,11 +182,11 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             case NORMAL -> {
                 // When the ItemStackRequest system is used, this transaction type is used for dropping items by pressing Q.
                 // I don't know why they don't just use ItemStackRequest for that too, which already supports dropping items by
-                // clicking them outside an open inventory menu, but for now it is what it is.
-                // Fortunately, this means we can be much stricter about the validation criteria.
-                // For more details, see item_throwing.md
+                // clicking them outside an open inventory menu, but for now it is what it is. Fortunately, this means we can
+                // be much stricter about the validation criteria. For more details, see item_throwing.md
                 if (packet.getActions().size() != 2) {
-                    log.warn("Expected two actions for dropping an item, got {}", packet.getActions().size());
+                    // Editing writable book will also send this packet with three actions, so just don't warn it
+                    log.debug("Expected two actions for dropping an item, got {}", packet.getActions().size());
                     return;
                 }
 

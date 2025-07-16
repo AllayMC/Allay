@@ -1,9 +1,7 @@
 package org.allaymc.api.entity.component.player;
 
-import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.ClientStatus;
@@ -11,7 +9,6 @@ import org.allaymc.api.network.PacketReceiver;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
 import javax.crypto.SecretKey;
-import java.util.UUID;
 
 /**
  * EntityPlayerNetworkComponent is the component that manages network related things of a player.
@@ -25,51 +22,6 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return the login data of the player.
      */
     LoginData getLoginData();
-
-    /**
-     * Get the XUID of the player.
-     *
-     * @return the XUID of the player.
-     */
-    default String getXUID() {
-        return getLoginData().getXuid();
-    }
-
-    /**
-     * Get the UUID of the player.
-     *
-     * @return the UUID of the player.
-     */
-    default UUID getUUID() {
-        return getLoginData().getUuid();
-    }
-
-    /**
-     * Get the device info of the player.
-     *
-     * @return the device info of the player.
-     */
-    default DeviceInfo getDeviceInfo() {
-        return getLoginData().getDeviceInfo();
-    }
-
-    /**
-     * Get the language code of the player.
-     *
-     * @return the language code of the player.
-     */
-    default LangCode getLangCode() {
-        return getLoginData().getLangCode();
-    }
-
-    /**
-     * Check if the player is Xbox authenticated.
-     *
-     * @return {@code true} if the player is Xbox authenticated, {@code true} otherwise.
-     */
-    default boolean isXboxAuthenticated() {
-        return getLoginData().isXboxAuthenticated();
-    }
 
     /**
      * Get the origin name of the player.

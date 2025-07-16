@@ -246,7 +246,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
-        var disconnectReason = I18n.get().tr(thisPlayer.getLangCode(), reason);
+        var disconnectReason = I18n.get().tr(thisPlayer.getLoginData().getLangCode(), reason);
         try {
             onDisconnect(disconnectReason);
             // Tell the client that it should disconnect
@@ -310,7 +310,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             writeVector3f(builder, EntityPlayerBaseComponentImpl.TAG_POS, currentPos);
             playerData.setNbt(builder.build());
             // Save new player data back to storage
-            server.getPlayerService().getPlayerStorage().savePlayerData(thisPlayer.getUUID(), playerData);
+            server.getPlayerService().getPlayerStorage().savePlayerData(thisPlayer.getLoginData().getUuid(), playerData);
         } else {
             dimension = logOffWorld.getDimension(playerData.getDimension());
             // Read current pos from playerNBT
@@ -331,7 +331,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         itemComponentPacket.getItems().addAll(DeferredData.ITEM_DEFINITIONS.get());
         sendPacket(itemComponentPacket);
 
-        sendPacket(Registries.CREATIVE_ITEMS.getCreativeContentPacketFor(thisPlayer.getLangCode()));
+        sendPacket(Registries.CREATIVE_ITEMS.getCreativeContentPacketFor(thisPlayer.getLoginData().getLangCode()));
 
         sendPacket(DeferredData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(DeferredData.BIOME_DEFINITION_LIST_PACKET.get());

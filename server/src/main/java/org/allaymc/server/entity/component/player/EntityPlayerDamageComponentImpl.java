@@ -123,7 +123,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
 
         var packet = new DeathInfoPacket();
         // Translate it server-side
-        packet.setCauseAttackName(I18n.get().tr(thisPlayer.getLangCode(), deathInfo.left(), (Object[]) deathInfo.right()));
+        packet.setCauseAttackName(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), deathInfo.left(), (Object[]) deathInfo.right()));
         thisPlayer.sendPacket(packet);
     }
 }
