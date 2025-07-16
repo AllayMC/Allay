@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed trapdoor placement.
 - Fixed melon/pumpkin stem drop.
 - Fixed the bug that vibration visual feature can't be enabled in the settings menu when playing in the server.
+- Fixed lag in entity movement due to packets not being sent immediately.
 
 ### Removed
 

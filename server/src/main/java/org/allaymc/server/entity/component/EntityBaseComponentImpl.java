@@ -596,8 +596,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
         var movementPk = createMovePacket(newLoc, teleporting);
         var motionPk = createMotionPacket();
-        sendPacketToViewers(movementPk);
-        sendPacketToViewers(motionPk);
+        // Should send packets immediately here, otherwise entity movement will lag
+        sendPacketToViewersImmediately(movementPk);
+        sendPacketToViewersImmediately(motionPk);
     }
 
     protected BedrockPacket createMovePacket(Location3dc newLoc, boolean teleporting) {
