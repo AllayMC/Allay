@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
@@ -13,8 +12,13 @@ import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.player.PlayerBucketEmptyEvent;
+import org.allaymc.api.eventbus.event.player.PlayerBucketFillEvent;
 import org.allaymc.api.item.component.ItemBucketComponent;
+import org.allaymc.api.item.interfaces.ItemBucketStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.math.MathUtils;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
@@ -23,10 +27,17 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Slf4j
-@AllArgsConstructor
 public class ItemBucketComponentImpl implements ItemBucketComponent {
-    public final BlockId liquidId;
-    public final EntityId entityId;
+
+    protected final BlockId liquidId;
+    protected final EntityId entityId;
+    @ComponentObject
+    protected ItemBucketStack thisBucketStack;
+
+    public ItemBucketComponentImpl(BlockId liquidId, EntityId entityId) {
+        this.liquidId = liquidId;
+        this.entityId = entityId;
+    }
 
     @Override
     public BlockType<?> getLiquidType() {
@@ -54,6 +65,10 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
                 }
             } catch (IllegalArgumentException ignore) {}
 
+            if (!new PlayerBucketFillEvent(player, thisBucketStack, interactInfo).call()) {
+                return;
+            }
+
             var blockType = clickedBlockState.getBlockType();
             if (blockType == BlockTypes.WATER || blockType == BlockTypes.FLOWING_WATER) {
                 player.tryConsumeItemInHand();
@@ -65,6 +80,10 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             }
             event.setCanBeUsed(true);
+            return;
+        }
+
+        if (!new PlayerBucketEmptyEvent(player, thisBucketStack, interactInfo).call()) {
             return;
         }
 
@@ -83,12 +102,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
 
         var entity = getEntityType();
         if (entity != null) {
-            var entityInstance = entity.createEntity(
-                    EntityInitInfo.builder()
-                            .dimension(dimension)
-                            .pos(liquidPlacedPos.x() + 0.5f, liquidPlacedPos.y() + 0.5f, liquidPlacedPos.z() + 0.5f)
-                            .build()
-            );
+            var entityInstance = entity.createEntity(EntityInitInfo.builder().dimension(dimension).pos(MathUtils.center(liquidPlacedPos)).build());
             dimension.getEntityService().addEntity(entityInstance);
         }
 

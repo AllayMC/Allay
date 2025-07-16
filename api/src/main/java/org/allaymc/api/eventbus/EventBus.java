@@ -60,7 +60,6 @@ public interface EventBus {
 
     /**
      * Unregister a listener for a specific event class.
-     * <>
      *
      * @param eventClass    the class of the event.
      * @param eventConsumer the consumer to unregister, should be the same object as the one registered.

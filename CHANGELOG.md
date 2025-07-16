@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added method `BlockFace.getHorizontalIndex()` to get the horizontal index of the block face.
 - (API) Added method `BlockFace.fromHorizontalIndex()` to get the block face from the horizontal index.
 - (API) Added event `PlayerInteractEntityEvent`.
+- (API) Added events `PlayerBucketFillEvent` and `PlayerBucketEmptyEvent`.
 - Players now can see each other's permission level in pause menu.
 
 ### Changed
