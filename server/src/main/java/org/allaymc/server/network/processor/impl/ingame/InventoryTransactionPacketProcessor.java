@@ -8,6 +8,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerInteractEntityEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -126,9 +127,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 switch (packet.getActionType()) {
                     case ITEM_RELEASE_RELEASE -> {
                         itemInHand.releaseUsingItem(player, player.getItemUsingInAirTime(receiveTime));
-                        // 玩家吃东西中断时，ITEM_USE_CLICK_AIR并不会发送
-                        // 然而ITEM_RELEASE_RELEASE总是会在玩家停止使用物品时发送，无论是否使用成功
-                        // 所以我们在收到ITEM_RELEASE_RELEASE时也刷新玩家物品使用状态，作为ITEM_USE_CLICK_AIR的补充
+                        // When a player is interrupted from eating, the ITEM_USE_CLICK_AIR is not sent
+                        // However ITEM_RELEASE_RELEASE will always be sent when the player stops using the item, regardless of whether it was used successfully or not
+                        // Therefore, when we receive ITEM_RELEASE_RELEASE, we also refresh the player's item usage status as a supplement to the ITEM_USE_CLICK_AIR
                         player.setUsingItemInAir(false);
                     }
                     case ITEM_RELEASE_CONSUME -> {
@@ -150,6 +151,12 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
+                        var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
+                        var event = new PlayerInteractEntityEvent(player, target, itemInHand, clickPos);
+                        if (!event.call()) {
+                            return;
+                        }
+
                         if (!itemInHand.interactEntity(player, target)) {
                             target.onInteract(player, itemInHand);
                         }
