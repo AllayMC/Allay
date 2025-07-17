@@ -246,6 +246,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
+
         var disconnectReason = I18n.get().tr(thisPlayer.getLoginData().getLangCode(), reason);
         try {
             onDisconnect(disconnectReason);
@@ -322,7 +323,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 
-        sendPacket(encodeStartGamePacket(dimension.getWorld(), playerData, dimension));
+        sendPacketImmediately(encodeStartGamePacket(dimension.getWorld(), playerData, dimension));
 
         clientSession.getPeer().getCodecHelper().setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(DeferredData.ITEM_DEFINITIONS.get()).build());
         clientSession.getPeer().getCodecHelper().setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(DeferredData.BLOCK_DEFINITIONS.get()).build());
