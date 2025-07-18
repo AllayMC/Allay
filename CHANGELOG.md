@@ -22,6 +22,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added event `PlayerInteractEntityEvent`.
 - (API) Added events `PlayerBucketFillEvent` and `PlayerBucketEmptyEvent`.
 - (API) Implemented writable book and written book, a number of related classes were added. Check the commit history for details.
+- (API) Added class `CustomItemComponentDataGenerator` which adds basic support for custom item.
+- (API) Added method `CreativeItemCategory.getNamedGroup()` to get a named group in a creative category by its name.
 - Players now can see each other's permission level in pause menu.
 
 ### Changed

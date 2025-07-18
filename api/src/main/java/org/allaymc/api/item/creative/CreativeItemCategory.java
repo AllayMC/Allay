@@ -24,6 +24,17 @@ public interface CreativeItemCategory {
     CreativeItemGroup getGroup(int index);
 
     /**
+     * Get a specific group by name in this category.
+     *
+     * @param name the name of the group, empty or blank string is not allowed here. Translation key is supported.
+     *
+     * @return the group with the specified name. {@code null} will be returned if the group does not exist.
+     *
+     * @throws IllegalArgumentException if the name is empty or blank.
+     */
+    CreativeItemGroup getNamedGroup(@MayContainTrKey String name);
+
+    /**
      * Register a new named group in the category. See docs in {@link CreativeItemGroup} for more details
      * about the difference between named and unnamed groups.
      *
