@@ -8,7 +8,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
  */
 public class ItemEnchantedGoldenAppleFoodComponentImpl extends ItemFoodComponentImpl {
     public ItemEnchantedGoldenAppleFoodComponentImpl() {
-        super(4, 9.6f);
+        super(4, 9.6f, DEFAULT_EATING_TIME, false, true);
     }
 
     @Override
@@ -18,10 +18,5 @@ public class ItemEnchantedGoldenAppleFoodComponentImpl extends ItemFoodComponent
         player.addEffect(EffectTypes.ABSORPTION.createInstance(3, 60 * 2 * 20)); // 4 lvl, 2 minutes
         player.addEffect(EffectTypes.RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
         player.addEffect(EffectTypes.FIRE_RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
-    }
-
-    @Override
-    public boolean canBeAlwaysEaten() {
-        return true;
     }
 }

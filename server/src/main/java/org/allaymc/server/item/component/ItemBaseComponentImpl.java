@@ -59,7 +59,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected static final String TAG_EXTRA_TAG = "tag";
     protected static final String TAG_BLOCK = "Block";
 
-    // The following tag is in extra tag.
+    // The following tags are in extra tag.
+
     protected static final String TAG_DAMAGE = "Damage";
     protected static final String TAG_REPAIR_COST = "RepairCost";
     protected static final String TAG_DISPLAY = "display";
@@ -487,8 +488,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
 
         var maxDamage = itemType.getItemData().maxDamage();
-        // This item does not support durability
-        if (maxDamage == 0) {
+        if (maxDamage <= 0) {
+            // This should be a bug
+            log.warn("Item {} does not support durability (maxDamage <= 0) but isDamageable is false!", itemType.getIdentifier());
             return false;
         }
 

@@ -2,6 +2,7 @@ package org.allaymc.server.item.component.food;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
@@ -21,18 +22,28 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 public class ItemFoodComponentImpl implements ItemFoodComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_food_component");
-
-    private static final int DEFAULT_EATING_TIME = 32; // GameTick
+    public static final int DEFAULT_EATING_TIME = 32; // GameTick
 
     private final int foodPoints;
     private final float saturationPoints;
     private final int eatingTime;
+    private final boolean drink;
+    @Accessors(fluent = true)
+    private final boolean canBeAlwaysEaten;
 
     @ComponentObject
     protected ItemStack thisItemStack;
 
     public ItemFoodComponentImpl(int foodPoints, float saturationPoints) {
-        this(foodPoints, saturationPoints, DEFAULT_EATING_TIME);
+        this(foodPoints, saturationPoints, DEFAULT_EATING_TIME, false, false);
+    }
+
+    public ItemFoodComponentImpl(int foodPoints, float saturationPoints, int eatingTime) {
+        this(foodPoints, saturationPoints, eatingTime, false, false);
+    }
+
+    public ItemFoodComponentImpl(int foodPoints, float saturationPoints, int eatingTime, boolean drink) {
+        this(foodPoints, saturationPoints, eatingTime, drink, false);
     }
 
     @Override
@@ -40,11 +51,6 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
         player.saturate(this.foodPoints, this.saturationPoints);
         var pos = player.getLocation();
         player.getDimension().addLevelSoundEvent(pos.x(), pos.y(), pos.z(), SoundEvent.BURP);
-    }
-
-    @Override
-    public boolean canBeAlwaysEaten() {
-        return false;
     }
 
     @EventHandler

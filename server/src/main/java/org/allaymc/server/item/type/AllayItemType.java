@@ -43,22 +43,22 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @Getter
     private final ItemData itemData;
 
+    private final Supplier<BlockType<?>> blockType;
     // Item component data is used to be sent to the client to let the client know
     // the attributes of the item, so that the client know how to handle the item
     private final ItemComponentData itemComponentData;
-    private final Supplier<BlockType<?>> blockType;
 
     private AllayItemType(
-            Function<ItemStackInitInfo, T> instanceCreator, Identifier identifier,
-            int runtimeId, Set<ItemTag> itemTags, ItemData itemData, ItemComponentData itemComponentData
+            Function<ItemStackInitInfo, T> instanceCreator, Identifier identifier, int runtimeId,
+            Set<ItemTag> itemTags, ItemData itemData, ItemComponentDataGenerator itemComponentDataGenerator
     ) {
         this.instanceCreator = instanceCreator;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
         this.itemTags = itemTags;
         this.itemData = itemData;
-        this.itemComponentData = itemComponentData;
         this.blockType = Suppliers.memoize(() -> Registries.BLOCKS.get(BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier)));
+        this.itemComponentData = itemComponentDataGenerator.generate(this);
     }
 
     public static <T extends ItemStack> Builder builder(Class<T> clazz) {
@@ -98,7 +98,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected int runtimeId = Integer.MAX_VALUE;
         protected Set<ItemTag> itemTags = Set.of();
         protected ItemData itemData = ItemData.DEFAULT;
-        protected ItemComponentData itemComponentData = ItemComponentData.DEFAULT;
+        protected ItemComponentDataGenerator itemComponentDataGenerator = $ -> ItemComponentData.DEFAULT;
 
         public Builder(Class<?> clazz) {
             this.clazz = clazz;
@@ -126,7 +126,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             // Item component data for vanilla item
             var vanillaItemComponentData = InternalRegistries.ITEM_COMPONENT_DATA.get(itemId);
             if (vanillaItemComponentData != null) {
-                itemComponentData(vanillaItemComponentData);
+                itemComponentDataGenerator($ -> vanillaItemComponentData);
             }
 
             // Tags for vanilla item
@@ -143,8 +143,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             return this;
         }
 
-        public Builder itemComponentData(ItemComponentData itemComponentData) {
-            this.itemComponentData = itemComponentData;
+        public Builder itemComponentDataGenerator(ItemComponentDataGenerator itemComponentDataGenerator) {
+            this.itemComponentDataGenerator = itemComponentDataGenerator;
             return this;
         }
 
@@ -215,7 +215,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 throw new ItemTypeBuildException("Failed to create item type!", e);
             }
 
-            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags, itemData, itemComponentData);
+            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags, itemData, itemComponentDataGenerator);
             Registries.ITEMS.register(identifier, type);
             return type;
         }
