@@ -26,7 +26,6 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
      */
     @MayContainTrKey
     protected final String displayName;
-    // TODO: check creative category and group
     /**
      * Whether item is displayed with enchantment glint even when not enchanted (like enchanted golden apple).
      */
