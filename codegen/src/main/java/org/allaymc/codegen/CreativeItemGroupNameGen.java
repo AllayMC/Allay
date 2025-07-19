@@ -34,7 +34,7 @@ public class CreativeItemGroupNameGen {
 
         for (var name : names) {
             codeBuilder.addField(
-                    FieldSpec.builder(ClassNames.STRING, StringUtils.fastSplit(name, ".").get(2).toUpperCase(), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                    FieldSpec.builder(ClassNames.STRING, Utils.camelCaseToSnakeCase(StringUtils.fastSplit(name, ".").get(2)).toUpperCase(), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("$S", name)
                             .build()
             );

@@ -8,7 +8,7 @@ public interface CreativeItemGroups {
 
     String FLOWER = "itemGroup.name.flower";
 
-    String GLASSPANE = "itemGroup.name.glassPane";
+    String GLASS_PANE = "itemGroup.name.glassPane";
 
     String MUSHROOM = "itemGroup.name.mushroom";
 
@@ -20,11 +20,11 @@ public interface CreativeItemGroups {
 
     String CHESTPLATE = "itemGroup.name.chestplate";
 
-    String SHULKERBOX = "itemGroup.name.shulkerBox";
+    String SHULKER_BOX = "itemGroup.name.shulkerBox";
 
     String ANVIL = "itemGroup.name.anvil";
 
-    String MOBEGG = "itemGroup.name.mobEgg";
+    String MOB_EGG = "itemGroup.name.mobEgg";
 
     String GRASS = "itemGroup.name.grass";
 
@@ -44,9 +44,9 @@ public interface CreativeItemGroups {
 
     String MINECART = "itemGroup.name.minecart";
 
-    String MONSTERSTONEEGG = "itemGroup.name.monsterStoneEgg";
+    String MONSTER_STONE_EGG = "itemGroup.name.monsterStoneEgg";
 
-    String COOKEDFOOD = "itemGroup.name.cookedFood";
+    String COOKED_FOOD = "itemGroup.name.cookedFood";
 
     String SIGN = "itemGroup.name.sign";
 
@@ -54,15 +54,15 @@ public interface CreativeItemGroups {
 
     String SLAB = "itemGroup.name.slab";
 
-    String STAINEDCLAY = "itemGroup.name.stainedClay";
+    String STAINED_CLAY = "itemGroup.name.stainedClay";
 
-    String GOATHORN = "itemGroup.name.goatHorn";
+    String GOAT_HORN = "itemGroup.name.goatHorn";
 
     String CHEST = "itemGroup.name.chest";
 
     String PLANKS = "itemGroup.name.planks";
 
-    String WOOLCARPET = "itemGroup.name.woolCarpet";
+    String WOOL_CARPET = "itemGroup.name.woolCarpet";
 
     String WOOD = "itemGroup.name.wood";
 
@@ -80,19 +80,19 @@ public interface CreativeItemGroups {
 
     String FIREWORK = "itemGroup.name.firework";
 
-    String GLAZEDTERRACOTTA = "itemGroup.name.glazedTerracotta";
+    String GLAZED_TERRACOTTA = "itemGroup.name.glazedTerracotta";
 
-    String PRESSUREPLATE = "itemGroup.name.pressurePlate";
+    String PRESSURE_PLATE = "itemGroup.name.pressurePlate";
 
     String CORAL = "itemGroup.name.coral";
 
-    String SPLASHPOTION = "itemGroup.name.splashPotion";
+    String SPLASH_POTION = "itemGroup.name.splashPotion";
 
     String BOAT = "itemGroup.name.boat";
 
     String DYE = "itemGroup.name.dye";
 
-    String POTTERYSHERDS = "itemGroup.name.potterySherds";
+    String POTTERY_SHERDS = "itemGroup.name.potterySherds";
 
     String BUNDLES = "itemGroup.name.bundles";
 
@@ -102,23 +102,23 @@ public interface CreativeItemGroups {
 
     String GLASS = "itemGroup.name.glass";
 
-    String ENCHANTEDBOOK = "itemGroup.name.enchantedBook";
+    String ENCHANTED_BOOK = "itemGroup.name.enchantedBook";
 
     String TRAPDOOR = "itemGroup.name.trapdoor";
 
     String CHESTBOAT = "itemGroup.name.chestboat";
 
-    String CONCRETEPOWDER = "itemGroup.name.concretePowder";
+    String CONCRETE_POWDER = "itemGroup.name.concretePowder";
 
-    String HORSEARMOR = "itemGroup.name.horseArmor";
+    String HORSE_ARMOR = "itemGroup.name.horseArmor";
 
     String CONCRETE = "itemGroup.name.concrete";
 
-    String MISCFOOD = "itemGroup.name.miscFood";
+    String MISC_FOOD = "itemGroup.name.miscFood";
 
-    String OMINOUSBOTTLE = "itemGroup.name.ominousBottle";
+    String OMINOUS_BOTTLE = "itemGroup.name.ominousBottle";
 
-    String FIREWORKSTARS = "itemGroup.name.fireworkStars";
+    String FIREWORK_STARS = "itemGroup.name.fireworkStars";
 
     String BED = "itemGroup.name.bed";
 
@@ -132,7 +132,7 @@ public interface CreativeItemGroups {
 
     String SWORD = "itemGroup.name.sword";
 
-    String LINGERINGPOTION = "itemGroup.name.lingeringPotion";
+    String LINGERING_POTION = "itemGroup.name.lingeringPotion";
 
     String PICKAXE = "itemGroup.name.pickaxe";
 
@@ -142,7 +142,7 @@ public interface CreativeItemGroups {
 
     String SMITHING_TEMPLATES = "itemGroup.name.smithing_templates";
 
-    String RAWFOOD = "itemGroup.name.rawFood";
+    String RAW_FOOD = "itemGroup.name.rawFood";
 
     String SHOVEL = "itemGroup.name.shovel";
 
@@ -150,11 +150,11 @@ public interface CreativeItemGroups {
 
     String COPPER = "itemGroup.name.copper";
 
-    String FENCEGATE = "itemGroup.name.fenceGate";
+    String FENCE_GATE = "itemGroup.name.fenceGate";
 
     String HARNESSES = "itemGroup.name.harnesses";
 
-    String STONEBRICK = "itemGroup.name.stoneBrick";
+    String STONE_BRICK = "itemGroup.name.stoneBrick";
 
     String BANNER_PATTERN = "itemGroup.name.banner_pattern";
 
