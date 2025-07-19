@@ -22,7 +22,7 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
      */
     protected final String texture;
     /**
-     * The text shown when an item name is shown, such as hover text. If {@code null}, the display name will be the path of the item identifier.
+     * The text shown when an item name is shown, such as hover text. If {@code null}, the display name will be the identifier of the item.
      */
     @MayContainTrKey
     protected final String displayName;
@@ -64,7 +64,7 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
         }
 
         var components = NbtMap.builder();
-        components.putCompound("minecraft:display_name", NbtMap.builder().putString("value", this.displayName != null ? this.displayName : itemType.getIdentifier().path()).build());
+        components.putCompound("minecraft:display_name", NbtMap.builder().putString("value", this.displayName != null ? this.displayName : itemType.getIdentifier().toString()).build());
 
         if (itemData.isDamageable()) {
             components.putCompound("minecraft:durability", NbtMap.builder().putInt("max_durability", itemData.maxDamage()).build());
