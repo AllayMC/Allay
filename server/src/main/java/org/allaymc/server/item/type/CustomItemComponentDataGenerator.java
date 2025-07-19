@@ -1,6 +1,7 @@
 package org.allaymc.server.item.type;
 
 import lombok.Builder;
+import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
 import org.allaymc.api.item.component.ItemFoodComponent;
 import org.allaymc.api.item.component.ItemToolComponent;
@@ -21,8 +22,9 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
      */
     protected final String texture;
     /**
-     * The display name of the item. If {@code null}, the display name will be the path of the item identifier.
+     * The text shown when an item name is shown, such as hover text. If {@code null}, the display name will be the path of the item identifier.
      */
+    @MayContainTrKey
     protected final String displayName;
     // TODO: check creative category and group
     /**
