@@ -11,7 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
  */
 public class ItemChorusFruitFoodComponentImpl extends ItemFoodComponentImpl {
     public ItemChorusFruitFoodComponentImpl() {
-        super(4, 2.4f);
+        super(4, 2.4f, DEFAULT_EATING_TIME, false, true);
     }
 
     @Override
@@ -36,10 +36,5 @@ public class ItemChorusFruitFoodComponentImpl extends ItemFoodComponentImpl {
         }
         return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z()).getBlockType() == BlockTypes.AIR &&
                pos.dimension().getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockType() == BlockTypes.AIR;
-    }
-
-    @Override
-    public boolean canBeAlwaysEaten() {
-        return true;
     }
 }

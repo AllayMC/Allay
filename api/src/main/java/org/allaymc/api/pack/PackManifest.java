@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.SemVersion;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -23,7 +21,7 @@ import java.util.UUID;
 @Slf4j
 public class PackManifest {
 
-    private static final Path PATH = Path.of("manifest.json");
+    private static final String FILE_NAME = "manifest.json";
 
     @SerializedName("format_version")
     private String formatVersion;
@@ -43,14 +41,14 @@ public class PackManifest {
     public static PackManifest load(PackLoader loader) {
         Objects.requireNonNull(loader);
 
-        if (!loader.hasFile(PATH)) {
+        if (!loader.hasFile(FILE_NAME)) {
             return null;
         }
 
         try {
-            return JSONUtils.from(loader.getFile(PATH), PackManifest.class);
-        } catch (IllegalStateException | IOException exception) {
-            log.error("Failed to load {}", loader.getLocation(), exception);
+            return JSONUtils.from(loader.getFile(FILE_NAME), PackManifest.class);
+        } catch (Throwable t) {
+            log.error("Failed to load {}", loader.getLocation(), t);
             return null;
         }
     }

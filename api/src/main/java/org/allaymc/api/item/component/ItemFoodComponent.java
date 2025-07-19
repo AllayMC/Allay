@@ -27,6 +27,22 @@ public interface ItemFoodComponent extends ItemComponent {
     boolean canBeAlwaysEaten();
 
     /**
+     * Gets the time it takes to eat the food (unit: game tick).
+     *
+     * @return The eating time in ticks (unit: game tick).
+     */
+    int getEatingTime();
+
+    /**
+     * Checks if the food is a drink.
+     * <p>
+     * Some food items are drinks, such as milk buckets and potions.
+     *
+     * @return {@code true} if the food is a drink, {@code false} otherwise.
+     */
+    boolean isDrink();
+
+    /**
      * Get the food points.
      *
      * @return The food points.

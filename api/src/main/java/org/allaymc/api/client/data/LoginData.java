@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.allaymc.api.i18n.LangCode;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
@@ -70,13 +67,10 @@ public class LoginData {
     private SerializedSkin skin;
     private String identityPublicKey;
 
+    @SneakyThrows
     private LoginData(LoginPacket loginPacket) {
-        try {
-            this.decodeChainData(EncryptionUtils.validatePayload(loginPacket.getAuthPayload()));
-            this.decodeSkinData(loginPacket.getClientJwt());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        this.decodeChainData(EncryptionUtils.validatePayload(loginPacket.getAuthPayload()));
+        this.decodeSkinData(loginPacket.getClientJwt());
     }
 
     public static LoginData decode(LoginPacket loginPacket) {

@@ -2,6 +2,7 @@ package org.allaymc.server.item.creative;
 
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.creative.CreativeItemCategory;
@@ -20,11 +21,13 @@ public class AllayCreativeItemCategory implements CreativeItemCategory {
     protected final org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory type;
 
     protected Map<Integer, CreativeItemGroup> groups;
+    protected Map<String, CreativeItemGroup> namedGroups;
 
     public AllayCreativeItemCategory(AllayCreativeItemRegistry registry, org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory type) {
         this.registry = registry;
         this.type = type;
         this.groups = new Int2ObjectOpenHashMap<>();
+        this.namedGroups = new Object2ObjectOpenHashMap<>();
     }
 
     @Override
@@ -33,11 +36,21 @@ public class AllayCreativeItemCategory implements CreativeItemCategory {
     }
 
     @Override
+    public CreativeItemGroup getNamedGroup(String name) {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Group name cannot be blank");
+        }
+
+        return namedGroups.get(name);
+    }
+
+    @Override
     public CreativeItemGroup registerGroup(String name, ItemStack icon) {
         Preconditions.checkNotNull(name);
         Preconditions.checkNotNull(icon);
         var group = new AllayCreativeItemGroup(registry, this, name, icon);
         groups.put(group.getIndex(), group);
+        namedGroups.put(name, group);
         return group;
     }
 

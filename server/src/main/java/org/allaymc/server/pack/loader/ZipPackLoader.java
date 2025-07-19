@@ -3,39 +3,33 @@ package org.allaymc.server.pack.loader;
 import lombok.SneakyThrows;
 import org.allaymc.api.pack.PackLoader;
 import org.allaymc.server.pack.PackUtils;
+import org.allaymc.server.pack.ResourcePackException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.Collections;
 
 /**
- * @author IWareQ, Cloudburst Server
+ * The loader that loads packs from zip/mcpack files using java.nio.file.FileSystem.
  */
 public class ZipPackLoader implements PackLoader {
 
     public static final PackLoader.Factory FACTORY = new ZipFactory();
 
     private final Path path;
-    private final ZipFile zipFile;
+    private final FileSystem zipFileSystem;
+    private final Path root;
 
-    private transient CompletableFuture<Path> networkPreparedFuture;
-
-    private ZipPackLoader(Path path) throws IOException {
+    @SneakyThrows
+    private ZipPackLoader(Path path) {
         this.path = path;
-        try {
-            this.zipFile = new ZipFile(this.path.toFile());
-        } catch (IOException exception) {
-            throw new IOException("Path is not a zip file", exception);
-        }
-    }
-
-    private ZipEntry getEntry(Path path) {
-        return this.zipFile.getEntry(path.toString());
+        this.zipFileSystem = FileSystems.newFileSystem(URI.create("jar:" + path.toUri()), Collections.singletonMap("create", "false"));
+        this.root = zipFileSystem.getPath("/");
     }
 
     @Override
@@ -44,64 +38,49 @@ public class ZipPackLoader implements PackLoader {
     }
 
     @Override
-    public boolean hasFile(Path path) {
-        var entry = this.getEntry(path);
-        return entry != null && !entry.isDirectory();
+    public boolean hasFile(String name) {
+        Path zipPath = root.resolve(path);
+        return Files.exists(zipPath) && Files.isRegularFile(zipPath);
     }
 
     @Override
-    public InputStream getFile(Path path) throws IOException {
-        var entry = this.getEntry(path);
-        if (entry == null) return null;
-        return this.zipFile.getInputStream(entry);
+    public InputStream getFile(String name) throws IOException {
+        Path zipPath = root.resolve(path);
+        return Files.exists(zipPath) ? Files.newInputStream(zipPath) : null;
     }
 
     @Override
-    public boolean hasFolder(Path folder) {
-        var entry = this.getEntry(path);
-        return entry != null && entry.isDirectory();
-    }
-
-    @Override
-    public void forEachIn(Path path, Consumer<Path> consumer, boolean recurse) {
-        var entries = this.zipFile.entries();
-        while (entries.hasMoreElements()) {
-            var entry = entries.nextElement();
-
-            var entryPath = Path.of(entry.getName());
-            if (entryPath.getParent().equals(path)) consumer.accept(entryPath);
-            if (entry.isDirectory()) this.forEachIn(entryPath, consumer, true);
+    public byte[] readAllBytes() {
+        try {
+            return Files.readAllBytes(this.root);
+        } catch (IOException e) {
+            throw new ResourcePackException(e);
         }
     }
 
     @Override
-    public CompletableFuture<Path> getNetworkPreparedFile() {
-        if (this.networkPreparedFuture == null)
-            this.networkPreparedFuture = CompletableFuture.completedFuture(this.path);
-        return this.networkPreparedFuture;
-    }
-
-    @SneakyThrows
-    @Override
-    public String findContentKey() {
+    public String getContentKey() {
         var keyFilePath = path.getParent().resolve(path.getFileName() + ".key");
-        return Files.exists(keyFilePath) ? Files.readString(keyFilePath) : "";
+        try {
+            return Files.exists(keyFilePath) ? Files.readString(keyFilePath) : "";
+        } catch (IOException e) {
+            throw new ResourcePackException(e);
+        }
     }
 
     @Override
     public void close() throws IOException {
-        this.zipFile.close();
+        this.zipFileSystem.close();
     }
 
     private static class ZipFactory implements Factory {
-
         @Override
         public boolean canLoad(Path path) {
             return PackUtils.isZipPack(path);
         }
 
         @Override
-        public PackLoader create(Path path) throws IOException {
+        public PackLoader create(Path path) {
             return new ZipPackLoader(path);
         }
     }
