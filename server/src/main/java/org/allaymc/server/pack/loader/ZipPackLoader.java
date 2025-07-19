@@ -39,13 +39,13 @@ public class ZipPackLoader implements PackLoader {
 
     @Override
     public boolean hasFile(String name) {
-        Path zipPath = root.resolve(path);
+        Path zipPath = root.resolve(name);
         return Files.exists(zipPath) && Files.isRegularFile(zipPath);
     }
 
     @Override
     public InputStream getFile(String name) throws IOException {
-        Path zipPath = root.resolve(path);
+        Path zipPath = root.resolve(name);
         return Files.exists(zipPath) ? Files.newInputStream(zipPath) : null;
     }
 
