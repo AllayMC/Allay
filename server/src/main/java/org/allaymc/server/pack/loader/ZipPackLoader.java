@@ -52,7 +52,7 @@ public class ZipPackLoader implements PackLoader {
     @Override
     public byte[] readAllBytes() {
         try {
-            return Files.readAllBytes(this.root);
+            return Files.readAllBytes(this.path);
         } catch (IOException e) {
             throw new ResourcePackException(e);
         }
