@@ -3,6 +3,7 @@ package org.allaymc.server.entity.type;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import me.sunlan.fastreflection.FastConstructor;
+import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.entity.data.EntityId;
@@ -111,7 +112,11 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
             Function<EntityInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(clazz.getConstructor(EntityInitInfo.class, List.class));
+                var constructor = FastConstructor.create(
+                        clazz.getConstructor(EntityInitInfo.class, List.class),
+                        new FastMemberLoader(StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getClassLoader()),
+                        false
+                );
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {

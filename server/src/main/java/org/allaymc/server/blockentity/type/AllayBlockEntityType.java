@@ -3,6 +3,7 @@ package org.allaymc.server.blockentity.type;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import me.sunlan.fastreflection.FastConstructor;
+import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
@@ -91,7 +92,11 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
 
             Function<BlockEntityInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(clazz.getConstructor(BlockEntityInitInfo.class, List.class));
+                var constructor = FastConstructor.create(
+                        clazz.getConstructor(BlockEntityInitInfo.class, List.class),
+                        new FastMemberLoader(StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getClassLoader()),
+                        false
+                );
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {

@@ -65,7 +65,9 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                     var iconItemTypeName = new Identifier(group.get("icon").getAsString());
                     var iconItemType = Registries.ITEMS.get(iconItemTypeName);
                     Objects.requireNonNull(iconItemType, "Unknown icon item type: " + iconItemTypeName);
-                    category.registerGroup(name, iconItemType.createItemStack());
+                    // Here we should add "minecraft:" prefix to the group name, so that plugins can get
+                    // the named group by using the translation keys in TrKeys.java directly
+                    category.registerGroup(Identifier.DEFAULT_NAMESPACE + Identifier.NAMESPACE_SEPARATOR + name, iconItemType.createItemStack());
                 }
             });
         }

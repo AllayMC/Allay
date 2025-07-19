@@ -5,6 +5,7 @@ import com.google.common.base.Suppliers;
 import lombok.Getter;
 import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
+import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
@@ -98,10 +99,11 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         protected int runtimeId = Integer.MAX_VALUE;
         protected Set<ItemTag> itemTags = Set.of();
         protected ItemData itemData = ItemData.DEFAULT;
-        protected ItemComponentDataGenerator itemComponentDataGenerator = $ -> ItemComponentData.DEFAULT;
+        protected ItemComponentDataGenerator itemComponentDataGenerator;
 
         public Builder(Class<?> clazz) {
             this.clazz = clazz;
+            this.itemComponentDataGenerator = $ -> ItemComponentData.DEFAULT;
         }
 
         public Builder identifier(Identifier identifier) {
@@ -202,7 +204,11 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
             Function<ItemStackInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(clazz.getConstructor(ItemStackInitInfo.class, List.class));
+                var constructor = FastConstructor.create(
+                        clazz.getConstructor(ItemStackInitInfo.class, List.class),
+                        new FastMemberLoader(StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getClassLoader()),
+                        false
+                );
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {

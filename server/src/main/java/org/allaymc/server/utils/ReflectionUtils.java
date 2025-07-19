@@ -4,7 +4,6 @@ import com.google.common.reflect.ClassPath;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
