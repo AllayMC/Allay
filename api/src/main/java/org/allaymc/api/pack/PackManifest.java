@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.SemVersion;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -48,8 +47,8 @@ public class PackManifest {
 
         try {
             return JSONUtils.from(loader.getFile(FILE_NAME), PackManifest.class);
-        } catch (IllegalStateException | IOException exception) {
-            log.error("Failed to load {}", loader.getLocation(), exception);
+        } catch (Throwable t) {
+            log.error("Failed to load {}", loader.getLocation(), t);
             return null;
         }
     }

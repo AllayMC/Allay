@@ -3,6 +3,7 @@ package org.allaymc.server.pack.loader;
 import lombok.SneakyThrows;
 import org.allaymc.api.pack.PackLoader;
 import org.allaymc.server.pack.PackUtils;
+import org.allaymc.server.pack.ResourcePackException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,17 +49,23 @@ public class ZipPackLoader implements PackLoader {
         return Files.exists(zipPath) ? Files.newInputStream(zipPath) : null;
     }
 
-    @SneakyThrows
     @Override
     public byte[] readAllBytes() {
-        return Files.readAllBytes(this.root);
+        try {
+            return Files.readAllBytes(this.root);
+        } catch (IOException e) {
+            throw new ResourcePackException(e);
+        }
     }
 
-    @SneakyThrows
     @Override
     public String getContentKey() {
         var keyFilePath = path.getParent().resolve(path.getFileName() + ".key");
-        return Files.exists(keyFilePath) ? Files.readString(keyFilePath) : "";
+        try {
+            return Files.exists(keyFilePath) ? Files.readString(keyFilePath) : "";
+        } catch (IOException e) {
+            throw new ResourcePackException(e);
+        }
     }
 
     @Override

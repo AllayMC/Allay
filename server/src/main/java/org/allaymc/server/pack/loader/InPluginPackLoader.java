@@ -2,6 +2,7 @@ package org.allaymc.server.pack.loader;
 
 import lombok.SneakyThrows;
 import org.allaymc.api.pack.PackLoader;
+import org.allaymc.server.pack.ResourcePackException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,12 +46,15 @@ public class InPluginPackLoader implements PackLoader {
     }
 
     @Override
-    public InputStream getFile(String name) throws IOException {
+    public InputStream getFile(String name) {
         Path zipPath = root.resolve(name);
-        return Files.exists(zipPath) ? Files.newInputStream(zipPath) : null;
+        try {
+            return Files.exists(zipPath) ? Files.newInputStream(zipPath) : null;
+        } catch (IOException e) {
+            throw new ResourcePackException(e);
+        }
     }
 
-    @SneakyThrows
     @Override
     public byte[] readAllBytes() {
         try (var byteArrayOutputStream = new ByteArrayOutputStream();
@@ -71,11 +75,13 @@ public class InPluginPackLoader implements PackLoader {
                     in.transferTo(zipOutputStream);
                     zipOutputStream.closeEntry();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    throw new ResourcePackException(e);
                 }
             });
             zipOutputStream.finish();
             return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            throw new ResourcePackException(e);
         }
     }
 
