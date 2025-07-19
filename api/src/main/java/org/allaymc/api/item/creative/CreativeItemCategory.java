@@ -1,6 +1,5 @@
 package org.allaymc.api.item.creative;
 
-import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.ItemStack;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -26,13 +25,14 @@ public interface CreativeItemCategory {
     /**
      * Get a specific group by name in this category.
      *
-     * @param name the name of the group, empty or blank string is not allowed here. Translation key is supported.
+     * @param name the name of the group, empty or blank string is not allowed here. Check
+     *             {@link CreativeItemGroups} for all available group names in vanilla.
      *
      * @return the group with the specified name. {@code null} will be returned if the group does not exist.
      *
      * @throws IllegalArgumentException if the name is empty or blank.
      */
-    CreativeItemGroup getNamedGroup(@MayContainTrKey String name);
+    CreativeItemGroup getNamedGroup(String name);
 
     /**
      * Register a new named group in the category. See docs in {@link CreativeItemGroup} for more details
@@ -43,7 +43,7 @@ public interface CreativeItemCategory {
      *
      * @return the registered group.
      */
-    CreativeItemGroup registerGroup(@MayContainTrKey String name, ItemStack icon);
+    CreativeItemGroup registerGroup(String name, ItemStack icon);
 
     /**
      * Register a new unnamed group in the category. See docs in {@link CreativeItemGroup} for more details

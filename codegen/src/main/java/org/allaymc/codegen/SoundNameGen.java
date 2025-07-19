@@ -35,7 +35,6 @@ public class SoundNameGen {
             );
         }
 
-
         var javaFile = JavaFile.builder(ClassNames.SOUND.packageName(), codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
