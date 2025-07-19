@@ -10,6 +10,7 @@ import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.Allay;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 
@@ -85,6 +86,10 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         }
 
         public <T extends BlockEntity> BlockEntityType<T> build() {
+            return build(Allay.class.getClassLoader());
+        }
+
+        public <T extends BlockEntity> BlockEntityType<T> build(ClassLoader classLoader) {
             Preconditions.checkNotNull(name, "name");
             if (!componentProviders.containsKey(BlockEntityBaseComponentImpl.IDENTIFIER)) {
                 addComponent(BlockEntityBaseComponentImpl::new, BlockEntityBaseComponentImpl.class);
@@ -92,11 +97,7 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
 
             Function<BlockEntityInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(
-                        clazz.getConstructor(BlockEntityInitInfo.class, List.class),
-                        new FastMemberLoader(StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getClassLoader()),
-                        false
-                );
+                var constructor = FastConstructor.create(clazz.getConstructor(BlockEntityInitInfo.class, List.class), new FastMemberLoader(classLoader), false);
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {

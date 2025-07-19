@@ -17,6 +17,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.Allay;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.server.registry.InternalRegistries;
@@ -194,6 +195,10 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         public <T extends ItemStack> ItemType<T> build() {
+            return build(Allay.class.getClassLoader());
+        }
+
+        public <T extends ItemStack> ItemType<T> build(ClassLoader classLoader) {
             Preconditions.checkNotNull(identifier, "identifier");
             if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER)) {
                 addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
@@ -204,11 +209,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
             Function<ItemStackInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(
-                        clazz.getConstructor(ItemStackInitInfo.class, List.class),
-                        new FastMemberLoader(StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getClassLoader()),
-                        false
-                );
+                var constructor = FastConstructor.create(clazz.getConstructor(ItemStackInitInfo.class, List.class), new FastMemberLoader(classLoader), false);
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {

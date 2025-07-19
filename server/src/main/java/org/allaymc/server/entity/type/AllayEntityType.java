@@ -11,6 +11,7 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.Allay;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 
@@ -105,6 +106,10 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         public <T extends Entity> EntityType<T> build() {
+            return build(Allay.class.getClassLoader());
+        }
+
+        public <T extends Entity> EntityType<T> build(ClassLoader classLoader) {
             Preconditions.checkNotNull(identifier, "identifier");
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
                 addComponent(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
@@ -112,11 +117,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
 
             Function<EntityInitInfo, T> instanceCreator;
             try {
-                var constructor = FastConstructor.create(
-                        clazz.getConstructor(EntityInitInfo.class, List.class),
-                        new FastMemberLoader(StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass().getClassLoader()),
-                        false
-                );
+                var constructor = FastConstructor.create(clazz.getConstructor(EntityInitInfo.class, List.class), new FastMemberLoader(classLoader), false);
                 var componentProviderList = new ArrayList<>(componentProviders.values());
                 instanceCreator = info -> {
                     try {
