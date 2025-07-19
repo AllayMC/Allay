@@ -5,6 +5,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.SemVersion;
 import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
@@ -13,16 +14,15 @@ import org.cloudburstmc.protocol.bedrock.packet.ResourcePackDataInfoPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackStackPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePacksInfoPacket;
 
-import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.util.UUID;
 
 /**
  * @author IWareQ, Cloudburst Server
  */
+@Slf4j
 @Getter
-@RequiredArgsConstructor
 public abstract class Pack implements AutoCloseable {
 
     public static final int MAX_CHUNK_SIZE = Server.SETTINGS.resourcePackSettings().maxChunkSize() * 1024;
@@ -31,8 +31,23 @@ public abstract class Pack implements AutoCloseable {
     private final PackManifest manifest;
     // Will be empty if this is not an encrypted pack
     private final String contentKey;
+    private final byte[] hash;
+    private final ByteBuffer buffer;
 
-    private byte[] hash;
+    public Pack(PackLoader loader, PackManifest manifest, String contentKey) {
+        this.loader = loader;
+        this.manifest = manifest;
+        this.contentKey = contentKey;
+        var bytes = loader.readAllBytes();
+        try {
+            this.hash = MessageDigest.getInstance("SHA-256").digest(bytes);
+        } catch (Exception exception) {
+            throw new IllegalStateException("Unable to calculate the hash of pack " + getName(), exception);
+        }
+        this.buffer = ByteBuffer.allocateDirect(bytes.length);
+        this.buffer.put(bytes);
+        this.buffer.flip();
+    }
 
     public String getName() {
         return this.manifest.getHeader().getName();
@@ -56,29 +71,14 @@ public abstract class Pack implements AutoCloseable {
         );
     }
 
-    public long getSize() {
-        try {
-            return Files.size(this.loader.getNetworkPreparedFile().join());
-        } catch (IOException exception) {
-            throw new IllegalStateException("Unable to get size of pack", exception);
-        }
+    public int getSize() {
+        return this.buffer.limit();
     }
 
     public byte[] getHash() {
-        if (this.hash != null) {
-            return this.hash;
-        }
-
-        try {
-            this.hash = MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(this.loader.getNetworkPreparedFile().join()));
-        } catch (Exception exception) {
-            throw new IllegalStateException("Unable to get hash of pack", exception);
-        }
-
         return this.hash;
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     public ByteBuf getChunk(int offset, int length) {
         byte[] chunk;
         if ((this.getSize() - offset) > length) {
@@ -87,11 +87,10 @@ public abstract class Pack implements AutoCloseable {
             chunk = new byte[(int) (this.getSize() - offset)];
         }
 
-        try (var input = Files.newInputStream(this.loader.getNetworkPreparedFile().join())) {
-            input.skip(offset);
-            input.read(chunk);
+        try {
+            buffer.get(offset, chunk);
         } catch (Exception exception) {
-            throw new IllegalStateException("Unable to read pack chunk");
+            log.error("An error occurred while processing the resource pack {} at offset {} and length {}", getName(), offset, length, exception);
         }
 
         return Unpooled.wrappedBuffer(chunk);

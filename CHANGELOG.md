@@ -24,11 +24,14 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented writable book and written book, a number of related classes were added. Check the commit history for details.
 - (API) Added class `CustomItemComponentDataGenerator` which adds basic support for custom item.
 - (API) Added method `CreativeItemCategory.getNamedGroup()` to get a named group in a creative category by its name.
+- Added support for in-plugin resource pack, which allows plugins to include their resource pack under `assets/resource_pack`. This
+  is useful for plugins that have custom items or blocks that require a resource pack to be displayed correctly.
 - Players now can see each other's permission level in pause menu.
 
 ### Changed
 
 - (API) Renamed method `BlockFace.fromId()` to `BlockFace.fromIndex()`.
+- (API) Several methods in `PackLoader` are renamed to better match their usage.
 - Commands `/op` and `/deop` now use player target parameter instead of string parameter.
 
 ### Fixed
@@ -43,6 +46,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Removed method `BlockPlaceHelper.processDirection4Property()`.
 - (API) Removed several default methods in `EntityPlayerNetworkComponent` that forward call to `LoginData` for better codebase.
+- (API) Removed methods `PackLoader.hasFolder()` and `PackLoader.forEachIn()`, since these methods are never used.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 

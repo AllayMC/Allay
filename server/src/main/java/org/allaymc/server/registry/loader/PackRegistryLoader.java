@@ -13,7 +13,9 @@ import org.allaymc.api.server.Server;
 import org.allaymc.server.pack.PackEncryptor;
 import org.allaymc.server.pack.PackUtils;
 import org.allaymc.server.pack.defaults.ResourcePack;
+import org.allaymc.server.pack.loader.InPluginPackLoader;
 import org.allaymc.server.pack.loader.ZipPackLoader;
+import org.allaymc.server.plugin.DefaultPluginSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +29,13 @@ import java.util.*;
 @Slf4j
 public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>> {
 
-    private static final Path PACKS_PATH = Path.of("resource_packs");
+    private static final Path NORMAL_PACKS_PATH = Path.of("resource_packs");
+    private static final Set<Path> PACKS_PATHS = Set.of(
+            // Normal resource packs path
+            NORMAL_PACKS_PATH,
+            // In-plugin resource packs path
+            DefaultPluginSource.DEFAULT_PLUGIN_FOLDER
+    );
     private static final List<String> EXCLUDED_FORMATS = List.of(".tmp", ".key", ".bak");
 
     private final List<PackLoader.Factory> packLoaders = new ArrayList<>();
@@ -43,19 +51,27 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
         log.info(I18n.get().tr(TrKeys.A_PACK_LOADING));
         var packs = new HashMap<UUID, Pack>();
 
-        Preconditions.checkNotNull(PACKS_PATH, "path");
-        Preconditions.checkArgument(Files.isDirectory(PACKS_PATH), "%s is not a directory", PACKS_PATH);
+        Preconditions.checkNotNull(PACKS_PATHS, "paths");
+        for (var path : PACKS_PATHS) {
+            Preconditions.checkArgument(Files.isDirectory(path), "%s is not a directory", path);
+        }
 
         // find loaders
         List<PackLoader> foundedLoaders = new ArrayList<>();
-        try (var stream = Files.newDirectoryStream(PACKS_PATH)) {
-            for (var entry : stream) {
-                if (isExcludedFormat(entry)) continue;
+        for (var path : PACKS_PATHS) {
+            try (var stream = Files.newDirectoryStream(path)) {
+                for (var entry : stream) {
+                    if (isExcludedFormat(entry)) {
+                        continue;
+                    }
 
-                var loader = this.findLoader(entry);
-                if (loader == null) continue;
+                    var loader = this.findLoader(entry);
+                    if (loader == null) {
+                        continue;
+                    }
 
-                foundedLoaders.add(loader);
+                    foundedLoaders.add(loader);
+                }
             }
         }
 
@@ -85,8 +101,6 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
             var pack = factory.create(loader, manifest);
             packs.put(uuid, pack);
 
-            // prepare for network
-            loader.getNetworkPreparedFile();
             log.info(I18n.get().tr(TrKeys.A_PACK_LOADED_ENTRY, pack.getName()));
         });
         log.info(I18n.get().tr(TrKeys.A_PACK_LOADED, packs.size()));
@@ -95,32 +109,35 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
 
     @SneakyThrows
     private void init() {
-        if (Files.exists(PACKS_PATH) && Server.SETTINGS.resourcePackSettings().autoEncryptPacks()) {
+        for (var path : PACKS_PATHS) {
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        }
+        if (Server.SETTINGS.resourcePackSettings().autoEncryptPacks()) {
             encryptPacks();
-        } else {
-            Files.createDirectories(PACKS_PATH);
         }
         this.registerLoaderFactory(ZipPackLoader.FACTORY);
-        // todo: more pack loaders
+        this.registerLoaderFactory(InPluginPackLoader.FACTORY);
         this.registerPackFactory(Pack.Type.RESOURCES, ResourcePack.FACTORY);
-        // todo: more pack factories
     }
 
     @SneakyThrows
     private void encryptPacks() {
         log.info(I18n.get().tr(TrKeys.A_PACK_AUTOENCRYPT_ENABLED));
-        try (var stream = Files.newDirectoryStream(PACKS_PATH)) {
+        // Only encrypt packs in the normal packs path
+        try (var stream = Files.newDirectoryStream(NORMAL_PACKS_PATH)) {
             for (var zipPack : stream) {
                 if (!PackUtils.isZipPack(zipPack)) continue;
 
-                var keyPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".key");
+                var keyPath = NORMAL_PACKS_PATH.resolve(zipPack.getFileName().toString() + ".key");
                 if (Files.exists(keyPath)) continue;
 
                 log.info(I18n.get().tr(TrKeys.A_PACK_ENCRYPTING, zipPack.getFileName()));
-                var backupPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".bak");
+                var backupPath = NORMAL_PACKS_PATH.resolve(zipPack.getFileName().toString() + ".bak");
                 Files.copy(zipPack, backupPath, StandardCopyOption.REPLACE_EXISTING);
 
-                var tmpPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".tmp");
+                var tmpPath = NORMAL_PACKS_PATH.resolve(zipPack.getFileName().toString() + ".tmp");
                 Files.deleteIfExists(tmpPath);
 
                 String key;
@@ -146,7 +163,6 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
             }
         }
 
-        if (loader == null) log.warn("Could not load '{}' due to format not recognized", path);
         return loader;
     }
 
