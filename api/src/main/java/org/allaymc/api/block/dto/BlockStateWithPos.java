@@ -132,10 +132,23 @@ public class BlockStateWithPos implements BlockState {
         getDimension().addParticle(MathUtils.center(pos), particleType, 0);
     }
 
+    /**
+     * Breaks the block at the current position and layer.
+     *
+     * @return {@code true} if the block was successfully broken, {@code false} otherwise.
+     */
     public boolean breakBlock() {
         return breakBlock(null, null);
     }
 
+    /**
+     * Breaks the block at the current position and layer using the specified item and entity.
+     *
+     * @param usedItem the item used to break the block, can be {@code null}.
+     * @param entity   the entity that broke the block, can be {@code null}.
+     *
+     * @return {@code true} if the block was successfully broken, {@code false} otherwise.
+     */
     public boolean breakBlock(ItemStack usedItem, Entity entity) {
         return getDimension().breakBlock(pos, usedItem, entity);
     }

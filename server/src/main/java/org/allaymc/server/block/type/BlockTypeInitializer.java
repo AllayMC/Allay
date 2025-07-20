@@ -1741,4 +1741,21 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockPurpurBlockBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initItemFrame() {
+        BlockTypes.FRAME = AllayBlockType
+                .builder(BlockFrameBehaviorImpl.class)
+                .vanillaBlock(BlockId.FRAME)
+                .bindBlockEntity(BlockEntityTypes.ITEM_FRAME)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ITEM_FRAME_MAP_BIT, BlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
+                .setBaseComponentSupplier(BlockFrameBaseComponentImpl::new)
+                .build();
+        BlockTypes.GLOW_FRAME = AllayBlockType
+                .builder(BlockGlowFrameBehaviorImpl.class)
+                .vanillaBlock(BlockId.GLOW_FRAME)
+                .bindBlockEntity(BlockEntityTypes.GLOW_ITEM_FRAME)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ITEM_FRAME_MAP_BIT, BlockPropertyTypes.ITEM_FRAME_PHOTO_BIT)
+                .setBaseComponentSupplier(BlockFrameBaseComponentImpl::new)
+                .build();
+    }
 }
