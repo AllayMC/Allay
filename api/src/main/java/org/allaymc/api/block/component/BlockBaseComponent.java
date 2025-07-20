@@ -126,6 +126,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * Handles player interaction with the block.
      *
      * @param itemStack    the item in the player's hand.
+     * @param dimension    the dimension where the interaction occurs.
      * @param interactInfo information about the interaction.
      *
      * @return {@code true} if the interaction is valid, {@code false} otherwise.
@@ -165,7 +166,17 @@ public interface BlockBaseComponent extends BlockComponent {
     void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * Handles when a block is broken by a non-creative player.
+     * Called when the block is punched by an entity.
+     *
+     * @param currentBlockState the block being punched.
+     * @param usedItem          the item used to punch the block, can be {@code null}.
+     * @param entity            the entity who punched the block, can be {@code null}.
+     */
+    @ApiStatus.OverrideOnly
+    void onPunch(BlockStateWithPos currentBlockState, BlockFace blockFace, ItemStack usedItem, Entity entity);
+
+    /**
+     * Handles when a block is broken by a non-creative entity.
      *
      * @param blockState the block that was broken.
      * @param usedItem   the item used to break the block, can be {@code null}.

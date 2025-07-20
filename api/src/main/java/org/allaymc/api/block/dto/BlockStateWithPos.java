@@ -185,7 +185,7 @@ public class BlockStateWithPos implements BlockState {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof BlockStateWithPos that)) return false;
-        return Objects.equals(blockState, that.blockState);
+        return blockState == that.blockState;
     }
 
     @Override

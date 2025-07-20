@@ -21,10 +21,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added method `BlockFace.fromHorizontalIndex()` to get the block face from the horizontal index.
 - (API) Added event `PlayerInteractEntityEvent`.
 - (API) Added events `PlayerBucketFillEvent` and `PlayerBucketEmptyEvent`.
-- (API) Implemented writable book and written book, a number of related classes were added. Check the commit history for details.
 - (API) Added class `CustomItemComponentDataGenerator` which adds basic support for custom item.
 - (API) Added method `CreativeItemCategory.getNamedGroup()` to get a named group in a creative category by its name.
 - (API) Added class `CreativeItemGroups` which contains all the available creative item groups in vanilla.
+- (API) Implemented writable book and written book, several classes were added. Check the commit history for details.
+- (API) Implemented (glowing) item frame, several classes were added. Check the commit history for details.
 - Added overloads for methods `AllayXXXType.Builder.build()` which accept a custom `ClassLoader`. This parameter should be used by plugins
   if plugins want to create custom item type, because plugins classes are loaded by `JarPluginClassLoader`.
 - Added support for in-plugin resource pack, which allows plugins to include their resource pack under `assets/resource_pack`. This
