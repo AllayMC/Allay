@@ -175,7 +175,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void stopBreak(EntityPlayer player) {
-        if (this.blockToBreak != null) {
+        if (this.blockToBreak == null) {
             log.debug("Player {} tried to stop breaking a block while not breaking any block", player.getOriginName());
             return;
         }
