@@ -43,9 +43,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
 
-    protected int blockToBreakX = Integer.MAX_VALUE;
-    protected int blockToBreakY = Integer.MAX_VALUE;
-    protected int blockToBreakZ = Integer.MAX_VALUE;
+    protected int breakingPosX = Integer.MAX_VALUE;
+    protected int breakingPosY = Integer.MAX_VALUE;
+    protected int breakingPosZ = Integer.MAX_VALUE;
 
     protected BlockFace faceToBreak;
     protected BlockState blockToBreak;
@@ -100,7 +100,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     }
 
                     // HACK: The client for some reason sends a meaningless BLOCK_CONTINUE_DESTROY before BLOCK_PREDICT_DESTROY, presumably a bug, so ignore it here
-                    if (this.blockToBreakX == pos.getX() && this.blockToBreakY == pos.getY() && this.blockToBreakZ == pos.getZ()) {
+                    if (this.breakingPosX == pos.getX() && this.breakingPosY == pos.getY() && this.breakingPosZ == pos.getZ()) {
                         continue;
                     }
 
@@ -136,7 +136,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             stopBreak(player);
         }
 
-        if (this.blockToBreakX == x && this.blockToBreakY == y && this.blockToBreakZ == z) {
+        if (this.breakingPosX == x && this.breakingPosY == y && this.breakingPosZ == z) {
             log.debug("Player {} tried to start breaking the same block twice", player.getOriginName());
             return;
         }
@@ -147,9 +147,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
-        this.blockToBreakX = x;
-        this.blockToBreakY = y;
-        this.blockToBreakZ = z;
+        this.breakingPosX = x;
+        this.breakingPosY = y;
+        this.breakingPosZ = z;
         this.faceToBreak = BlockFace.fromIndex(blockFaceId);
         this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new BlockStateWithPos(blockToBreak, new Position3i(x, y, z, player.getDimension())), faceToBreak, player.getItemInHand(), player);
         if (player.getGameType() != GameType.CREATIVE) {
@@ -160,7 +160,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
         this.stopBreakingTime = startBreakingTime + this.timeNeededToBreak * 20.0d;
 
-        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(blockToBreakX, blockToBreakZ);
+        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(breakingPosX, breakingPosZ);
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
         pk.setPosition(Vector3f.from(x, y, z));
@@ -175,15 +175,20 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void stopBreak(EntityPlayer player) {
-        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(blockToBreakX, blockToBreakZ);
+        if (this.blockToBreak != null) {
+            log.debug("Player {} tried to stop breaking a block while not breaking any block", player.getOriginName());
+            return;
+        }
+
+        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(breakingPosX, breakingPosZ);
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_STOP_BREAK);
-        pk.setPosition(Vector3f.from(this.blockToBreakX, this.blockToBreakY, this.blockToBreakZ));
+        pk.setPosition(Vector3f.from(this.breakingPosX, this.breakingPosY, this.breakingPosZ));
         chunk.addChunkPacket(pk);
 
-        this.blockToBreakX = Integer.MAX_VALUE;
-        this.blockToBreakY = Integer.MAX_VALUE;
-        this.blockToBreakZ = Integer.MAX_VALUE;
+        this.breakingPosX = Integer.MAX_VALUE;
+        this.breakingPosY = Integer.MAX_VALUE;
+        this.breakingPosZ = Integer.MAX_VALUE;
         this.faceToBreak = null;
         this.blockToBreak = null;
         this.timeNeededToBreak = 0;
@@ -191,7 +196,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void completeBreak(EntityPlayer player, int x, int y, int z) {
-        if (this.blockToBreakX != x || this.blockToBreakY != y || this.blockToBreakZ != z) {
+        if (this.breakingPosX != x || this.breakingPosY != y || this.breakingPosZ != z) {
             log.debug("Player {} tried to complete breaking a different block", player.getOriginName());
             return;
         }
@@ -200,7 +205,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (Math.abs(currentTime - this.stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = player.getDimension();
             var itemInHand = player.getItemInHand();
-            world.breakBlock(this.blockToBreakX, this.blockToBreakY, this.blockToBreakZ, itemInHand, player);
+            world.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, player);
             itemInHand.onBreakBlock(this.blockToBreak, player);
             if (itemInHand.isBroken()) {
                 player.clearItemInHand();
@@ -226,22 +231,22 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case WEST -> PARTICLE_BREAK_BLOCK_WEST;
             case EAST -> PARTICLE_BREAK_BLOCK_EAST;
         };
-        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(blockToBreakX, blockToBreakZ);
+        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(breakingPosX, breakingPosZ);
         pk1.setType(type);
-        pk1.setPosition(Vector3f.from(this.blockToBreakX + 0.5f, this.blockToBreakY + 0.5f, this.blockToBreakZ + 0.5f));
+        pk1.setPosition(Vector3f.from(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f));
         pk1.setData(this.blockToBreak.blockStateHash());
         chunk.addChunkPacket(pk1);
 
         var pk2 = new LevelEventPacket();
         pk2.setType(BLOCK_UPDATE_BREAK);
-        pk2.setPosition(Vector3f.from(this.blockToBreakX, this.blockToBreakY, this.blockToBreakZ));
+        pk2.setPosition(Vector3f.from(this.breakingPosX, this.breakingPosY, this.breakingPosZ));
         pk2.setData(toNetworkBreakTime(this.timeNeededToBreak));
 
         chunk.addChunkPacket(pk2);
     }
 
     protected void checkInteractDistance(EntityPlayer player) {
-        if (!player.canReach(this.blockToBreakX + 0.5f, this.blockToBreakY + 0.5f, this.blockToBreakZ + 0.5f)) {
+        if (!player.canReach(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f)) {
             log.debug("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
         }
