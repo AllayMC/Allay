@@ -128,4 +128,17 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityFlowerPotBaseComponentImpl::new, BlockEntityFlowerPotBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initItemFrame() {
+        BlockEntityTypes.ITEM_FRAME = AllayBlockEntityType
+                .builder(BlockEntityItemFrameImpl.class)
+                .name(BlockEntityId.ITEM_FRAME)
+                .addComponent(BlockEntityItemFrameBaseComponentImpl::new, BlockEntityItemFrameBaseComponentImpl.class)
+                .build();
+        BlockEntityTypes.GLOW_ITEM_FRAME = AllayBlockEntityType
+                .builder(BlockEntityItemFrameImpl.class)
+                .name(BlockEntityId.GLOW_ITEM_FRAME)
+                .addComponent(BlockEntityItemFrameBaseComponentImpl::new, BlockEntityItemFrameBaseComponentImpl.class)
+                .build();
+    }
 }

@@ -9,10 +9,7 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
-import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
-import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
+import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 
@@ -67,5 +64,11 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
         var pos = event.getInteractInfo().clickedBlockPos();
         var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
         ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onInteract(event);
+    }
+
+    @EventHandler
+    protected void onPunch(CBlockOnPunchEvent event) {
+        var blockEntity = getBlockEntity(event.getCurrentBlockState().getPos());
+        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onPunch(event);
     }
 }

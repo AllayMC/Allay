@@ -20,4 +20,6 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityBrewingStand> BREWING_STAND;
     public static BlockEntityType<BlockEntityEnderChest> ENDER_CHEST;
     public static BlockEntityType<BlockEntityFlowerPot> FLOWER_POT;
+    public static BlockEntityType<BlockEntityItemFrame> ITEM_FRAME;
+    public static BlockEntityType<BlockEntityGlowItemFrame> GLOW_ITEM_FRAME;
 }

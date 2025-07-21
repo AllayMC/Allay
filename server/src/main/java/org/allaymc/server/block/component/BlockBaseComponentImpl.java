@@ -105,6 +105,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
+    public void onPunch(BlockStateWithPos currentBlockState, BlockFace blockFace, ItemStack usedItem, Entity entity) {
+        manager.callEvent(new CBlockOnPunchEvent(currentBlockState, blockFace, usedItem, entity));
+    }
+
+    @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         if (!isDroppable(blockState, usedItem, entity)) {
             return;
