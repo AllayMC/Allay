@@ -3,7 +3,7 @@ log4j = "2.25.1"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"
-netty = "4.2.2.Final"
+netty = "4.2.3.Final"
 
 [libraries]
 # NBT
@@ -44,7 +44,7 @@ semver4j = { group = "org.semver4j", name = "semver4j", version = "6.0.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.19.0" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.20.0" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.2" }
 # LevelDB
