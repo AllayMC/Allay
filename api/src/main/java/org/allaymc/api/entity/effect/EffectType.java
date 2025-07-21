@@ -33,9 +33,9 @@ public interface EffectType {
     /**
      * Creates a new instance of this effect with the given amplifier, duration, ambient and visibility.
      *
-     * @param amplifier The amplifier of the effect.
+     * @param amplifier The amplifier of the effect. Note that amplifier 0 is level 1, and ambient 1 is level 2.
      * @param duration  The duration of the effect in ticks.
-     * @param ambient   Whether the effect is ambient. Note that ambient 0 is level 1, and ambient 1 is level 2.
+     * @param ambient   Whether the effect is ambient.
      * @param visible   Whether the effect is visible.
      *
      * @return A new instance of this effect.
