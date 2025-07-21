@@ -3,6 +3,7 @@ package org.allaymc.api.world.chunk;
 import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Unsafe is similar to {@link Chunk} but is not thread-safe.
@@ -45,6 +47,19 @@ public interface UnsafeChunk {
      */
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
+
+    /**
+     * Get the player chunk loaders that load this chunk
+     *
+     * @return the player chunk loaders
+     */
+    @UnmodifiableView
+    default Set<EntityPlayer> getPlayerChunkLoaders() {
+        return getChunkLoaders().stream()
+                .filter(EntityPlayer.class::isInstance)
+                .map(EntityPlayer.class::cast)
+                .collect(Collectors.toSet());
+    }
 
     /**
      * Add a chunk loader to this chunk.

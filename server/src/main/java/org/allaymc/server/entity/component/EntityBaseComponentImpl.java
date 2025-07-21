@@ -402,8 +402,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        Collection<EntityPlayer> oldChunkPlayers = oldDimension != null ? oldDimension.getEntityService().getPlayersInChunk(oldChunkX, oldChunkZ).values() : Collections.emptySet();
-        Collection<EntityPlayer> newChunkPlayers = newDimension != null ? newDimension.getEntityService().getPlayersInChunk(newChunkX, newChunkZ).values() : Collections.emptySet();
+        Set<EntityPlayer> oldChunkPlayers = oldDimension != null ? oldDimension.getChunkService().getChunk(oldChunkX, oldChunkZ).getPlayerChunkLoaders() : Collections.emptySet();
+        Set<EntityPlayer> newChunkPlayers = newDimension != null ? newDimension.getChunkService().getChunk(newChunkX, newChunkZ).getPlayerChunkLoaders() : Collections.emptySet();
         Set<EntityPlayer> oldChunkOnlyPlayers = new HashSet<>(oldChunkPlayers);
         oldChunkOnlyPlayers.removeAll(newChunkPlayers);
         Set<EntityPlayer> newChunkOnlyPlayers = new HashSet<>(newChunkPlayers);
