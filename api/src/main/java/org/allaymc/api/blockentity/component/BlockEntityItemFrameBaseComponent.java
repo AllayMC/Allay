@@ -35,12 +35,12 @@ public interface BlockEntityItemFrameBaseComponent extends BlockEntityBaseCompon
      * @return the rotation of the item, from 0 to 7, where 0 is no rotation and 7 is a full rotation.
      */
     @Range(from = 0, to = 7)
-    byte getItemRotation();
+    int getItemRotation();
 
     /**
      * Sets the rotation of the item in the item frame.
      *
      * @param itemRotation the rotation of the item, from 0 to 7, where 0 is no rotation and 7 is a full rotation.
      */
-    void setItemRotation(@Range(from = 0, to = 7) byte itemRotation);
+    void setItemRotation(@Range(from = 0, to = 7) int itemRotation);
 }

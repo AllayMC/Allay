@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.component;
 
+import com.google.common.base.Preconditions;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.component.BlockEntityItemFrameBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
@@ -27,7 +28,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     protected static final String TAG_ITEM_DROP_CHANCE = "ItemDropChance";
 
     protected ItemStack itemStack;
-    protected @Range(from = 0, to = 7) byte itemRotation;
+    protected @Range(from = 0, to = 7) int itemRotation;
 
     public BlockEntityItemFrameBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -40,7 +41,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
 
         if (itemStack != ItemAirStack.AIR_STACK) {
             // Rotate the item in the frame
-            setItemRotation((byte) ((itemRotation + 1) % 8));
+            setItemRotation((itemRotation + 1) % 8);
             event.getDimension().addLevelEvent(MathUtils.center(event.getInteractInfo().clickedBlockPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_ROTATE);
         } else {
             // Move the item from player's hand to the frame
@@ -86,7 +87,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     public NbtMap saveNBT() {
         var builder = super.saveNBT().toBuilder();
         builder.putCompound(TAG_ITEM, itemStack.saveNBT());
-        builder.putByte(TAG_ITEM_ROTATION, itemRotation);
+        builder.putByte(TAG_ITEM_ROTATION, (byte) itemRotation);
         // Item drop chance is always 1.0f in vanilla
         builder.putFloat(TAG_ITEM_DROP_CHANCE, 1.0f);
         return builder.build();
@@ -117,12 +118,13 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @Override
-    public @Range(from = 0, to = 7) byte getItemRotation() {
+    public @Range(from = 0, to = 7) int getItemRotation() {
         return this.itemRotation;
     }
 
     @Override
-    public void setItemRotation(@Range(from = 0, to = 7) byte itemRotation) {
+    public void setItemRotation(@Range(from = 0, to = 7) int itemRotation) {
+        Preconditions.checkArgument(itemRotation >= 0 && itemRotation <= 7, "Item rotation must be between 0 and 7");
         this.itemRotation = itemRotation;
         sendBlockEntityDataPacketToViewers();
     }
