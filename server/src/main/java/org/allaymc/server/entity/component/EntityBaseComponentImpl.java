@@ -308,10 +308,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             throw new IllegalStateException("Trying to set location of an entity which cannot being spawned!");
         }
 
-        setLocation(location, false);
+        setLocationWithoutChunkCheck(location, false);
     }
 
-    protected void setLocation(Location3dc location, boolean calculateFallDistance) {
+    protected void setLocationWithoutChunkCheck(Location3dc location, boolean calculateFallDistance) {
         if (MathUtils.hasNaN(location)) {
             throw new IllegalArgumentException("Trying to set the location of entity " + runtimeId + " to a new location which contains NaN: " + location);
         }
@@ -385,40 +385,32 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return status == EntityStatus.DESPAWNED;
     }
 
-    public boolean setLocationAndCheckChunk(Location3dc newLoc) {
-        return setLocationAndCheckChunk(newLoc, true);
+    public void setLocation(Location3dc newLoc) {
+        setLocation(newLoc, true);
     }
 
-    public boolean setLocationAndCheckChunk(Location3dc newLoc, boolean calculateFallDistance) {
-        if (checkChunk(this.location, newLoc)) {
-            setLocation(newLoc, calculateFallDistance);
-            return true;
-        }
-        return false;
-    }
-
-    protected boolean checkChunk(Location3dc oldLoc, Location3dc newLoc) {
-        var oldChunkX = (int) oldLoc.x() >> 4;
-        var oldChunkZ = (int) oldLoc.z() >> 4;
+    public void setLocation(Location3dc newLoc, boolean calculateFallDistance) {
+        var oldChunkX = (int) this.location.x() >> 4;
+        var oldChunkZ = (int) this.location.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
         var newChunkZ = (int) newLoc.z() >> 4;
+        var oldDimension = this.location.dimension();
+        var newDimension = newLoc.dimension();
+        setLocationWithoutChunkCheck(newLoc, calculateFallDistance);
+
         if (oldChunkX == newChunkX && oldChunkZ == newChunkZ) {
-            return true;
+            return;
         }
 
-        var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-        var oldChunk = this.location.dimension() != null ? this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ) : null;
+        Collection<EntityPlayer> oldChunkPlayers = oldDimension != null ? oldDimension.getEntityService().getPlayersInChunk(oldChunkX, oldChunkZ).values() : Collections.emptySet();
+        Collection<EntityPlayer> newChunkPlayers = newDimension != null ? newDimension.getEntityService().getPlayersInChunk(newChunkX, newChunkZ).values() : Collections.emptySet();
+        Set<EntityPlayer> oldChunkOnlyPlayers = new HashSet<>(oldChunkPlayers);
+        oldChunkOnlyPlayers.removeAll(newChunkPlayers);
+        Set<EntityPlayer> newChunkOnlyPlayers = new HashSet<>(newChunkPlayers);
+        newChunkOnlyPlayers.removeAll(oldChunkPlayers);
 
-        Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
-        Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
-        samePlayers.retainAll(oldChunkPlayers);
-        oldChunkPlayers.stream()
-                .filter(player -> !samePlayers.contains(player) && player != thisEntity)
-                .forEach(this::despawnFrom);
-        newChunk.getPlayerChunkLoaders().stream()
-                .filter(player -> !samePlayers.contains(player) && player != thisEntity)
-                .forEach(this::spawnTo);
-        return true;
+        oldChunkOnlyPlayers.stream().filter(player -> player != thisEntity).forEach(this::despawnFrom);
+        newChunkOnlyPlayers.stream().filter(player -> player != thisEntity).forEach(this::spawnTo);
     }
 
     @Override
@@ -459,7 +451,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void teleportInDimension(Location3dc target) {
         // This method should always return true because we've loaded the chunk
-        setLocationAndCheckChunk(target, false);
+        setLocation(target, false);
         broadcastMoveToViewers(target, true);
     }
 
@@ -552,8 +544,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void spawnTo(EntityPlayer player) {
-        var pk = createSpawnPacket();
-        player.sendPacket(pk);
+        player.sendPacket(createSpawnPacket());
         viewers.put(player.getRuntimeId(), player);
     }
 
@@ -864,7 +855,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public Location3dc getCmdExecuteLocation() {
+    public Location3dc getCommandExecuteLocation() {
         return getLocation();
     }
 

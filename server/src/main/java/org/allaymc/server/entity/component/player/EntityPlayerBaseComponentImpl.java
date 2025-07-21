@@ -286,7 +286,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     protected void tryPickUpItems() {
-        if (isDead() || !isSpawned() || willBeDespawnedNextTick()) {
+        if (isDead() || !isSpawned() || willBeDespawnedNextTick() || !isCurrentChunkLoaded()) {
             return;
         }
 
@@ -318,7 +318,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 var packet = new TakeItemEntityPacket();
                 packet.setRuntimeEntityId(runtimeId);
                 packet.setItemRuntimeEntityId(entityItem.getRuntimeId());
-                Objects.requireNonNull(dimension.getChunkService().getChunkByDimensionPos((int) location.x, (int) location.z)).sendChunkPacket(packet);
+                getCurrentChunk().sendChunkPacket(packet);
                 // Set item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
                 entityItem.despawn();

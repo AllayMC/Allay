@@ -35,7 +35,7 @@ public interface CommandSender extends TextReceiver, Permissible {
      *
      * @return The location where the command was executed.
      */
-    Location3dc getCmdExecuteLocation();
+    Location3dc getCommandExecuteLocation();
 
     /**
      * Handle the result of the command execution.
@@ -45,7 +45,7 @@ public interface CommandSender extends TextReceiver, Permissible {
     @ApiStatus.OverrideOnly
     default void handleResult(CommandResult result) {
         if (result.context() == null) return;
-        if (!getCmdExecuteLocation().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (!getCommandExecuteLocation().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {
             return;
         }
 

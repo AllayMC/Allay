@@ -28,7 +28,7 @@ public class SummonCommand extends SimpleCommand {
                 .intNum("count", 1)
                 .optional()
                 .exec((context, sender) -> {
-                    var dim = sender.getCmdExecuteLocation().dimension();
+                    var dim = sender.getCommandExecuteLocation().dimension();
                     EntityType<?> entityType = context.getResult(0);
                     if (entityType == EntityTypes.PLAYER) {
                         context.addError("%" + TrKeys.M_COMMANDS_SUMMON_FAILED);
@@ -36,7 +36,7 @@ public class SummonCommand extends SimpleCommand {
                     }
                     Vector3dc pos = context.getResult(1);
                     if (pos == null) {
-                        pos = sender.getCmdExecuteLocation();
+                        pos = sender.getCommandExecuteLocation();
                     }
                     var floorPos = pos.floor(new Vector3d());
                     if (dim.getChunkService().getChunkByDimensionPos((int) floorPos.x(), (int) floorPos.z()) == null) {

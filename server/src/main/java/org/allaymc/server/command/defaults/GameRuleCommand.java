@@ -40,7 +40,7 @@ public class GameRuleCommand extends SimpleCommand {
 
     protected Function<CommandContext, CommandResult> executor(boolean isBoolGameRule) {
         return context -> {
-            var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
+            var world = context.getSender().getCommandExecuteLocation().dimension().getWorld();
             var gamerule = GameRule.fromName(context.getResult(0));
             var value = context.getResult(1);
             if (value != null) {

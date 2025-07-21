@@ -28,7 +28,7 @@ public class FillCommand extends SimpleCommand {
                 .exec(context -> {
                     var from = context.<Vector3d>getResult(0).floor();
                     var to = context.<Vector3d>getResult(1).floor();
-                    var dim = context.getSender().getCmdExecuteLocation().dimension();
+                    var dim = context.getSender().getCommandExecuteLocation().dimension();
                     if (!dim.isInWorld(from.x(), from.y(), from.z()) || !dim.isInWorld(to.x(), to.y(), to.z())) {
                         context.addError("%" + TrKeys.M_COMMANDS_FILL_OUTOFWORLD);
                         return context.fail();

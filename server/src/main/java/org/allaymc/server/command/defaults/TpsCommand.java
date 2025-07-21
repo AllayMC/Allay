@@ -20,13 +20,13 @@ public class TpsCommand extends SimpleCommand {
                 .key("tps")
                 .optional()
                 .exec(context -> {
-                    context.getSender().sendText(TextFormat.GREEN + "TPS: " + context.getSender().getCmdExecuteLocation().dimension().getWorld().getTPS());
+                    context.getSender().sendText(TextFormat.GREEN + "TPS: " + context.getSender().getCommandExecuteLocation().dimension().getWorld().getTPS());
                     return context.success();
                 })
                 .root()
                 .key("mspt")
                 .exec(context -> {
-                    context.getSender().sendText(TextFormat.GREEN + "MSPT: " + context.getSender().getCmdExecuteLocation().dimension().getWorld().getMSPT());
+                    context.getSender().sendText(TextFormat.GREEN + "MSPT: " + context.getSender().getCommandExecuteLocation().dimension().getWorld().getMSPT());
                     return context.success();
                 });
     }

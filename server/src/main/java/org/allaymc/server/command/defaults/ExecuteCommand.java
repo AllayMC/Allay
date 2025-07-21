@@ -42,7 +42,7 @@ public class ExecuteCommand extends SimpleCommand {
                     var successCount = 0;
                     for (var target : origin) {
                         var proxySender = new ProxyCommandSender(target);
-                        proxySender.setCmdExecuteLocation(context.getSender().getCmdExecuteLocation());
+                        proxySender.setCmdExecuteLocation(context.getSender().getCommandExecuteLocation());
                         var result = tree.parse(proxySender, remain.toArray(String[]::new));
                         context.addOutputs(result.context().getOutputs());
                         successCount += result.status();
@@ -58,7 +58,7 @@ public class ExecuteCommand extends SimpleCommand {
                     List<String> remain = context.getResult(2);
 
                     var proxySender = new ProxyCommandSender(context.getSender());
-                    var newLoc = new Location3d(context.getSender().getCmdExecuteLocation());
+                    var newLoc = new Location3d(context.getSender().getCommandExecuteLocation());
                     var newLocFloor = newLoc.floor(new Vector3d());
                     if (axes.contains("x")) {
                         newLoc.x = newLocFloor.x;
@@ -106,7 +106,7 @@ public class ExecuteCommand extends SimpleCommand {
                     List<String> remain = context.getResult(2);
                     var sender = context.getSender();
                     var proxySender = new ProxyCommandSender(sender);
-                    var loc = sender.getCmdExecuteLocation();
+                    var loc = sender.getCommandExecuteLocation();
                     var newLoc = new Location3d(loc);
                     newLoc.set(pos);
                     proxySender.setCmdExecuteLocation(newLoc);
@@ -138,7 +138,7 @@ public class ExecuteCommand extends SimpleCommand {
                     var dim = world.getDimension(dimInfo.dimensionId());
                     var sender = context.getSender();
                     var proxySender = new ProxyCommandSender(sender);
-                    var loc = sender.getCmdExecuteLocation();
+                    var loc = sender.getCommandExecuteLocation();
                     var newLoc = new Location3d(loc);
                     newLoc.setDimension(dim);
                     proxySender.setCmdExecuteLocation(newLoc);

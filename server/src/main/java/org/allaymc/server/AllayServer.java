@@ -283,7 +283,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public Location3dc getCmdExecuteLocation() {
+    public Location3dc getCommandExecuteLocation() {
         return new Location3d(0, 0, 0, getWorldPool().getDefaultWorld().getOverWorld());
     }
 

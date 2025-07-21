@@ -25,7 +25,7 @@ public class TeleportCommand extends SimpleCommand {
                 .pos("pos")
                 .exec((context, sender) -> {
                     Vector3d pos = context.getResult(0);
-                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
+                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCommandExecuteLocation().dimension());
 
                     sender.teleport(loc);
                     context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
@@ -60,7 +60,7 @@ public class TeleportCommand extends SimpleCommand {
                 .exec(context -> {
                     List<Entity> victims = context.getResult(0);
                     Vector3d pos = context.getResult(1);
-                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
+                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCommandExecuteLocation().dimension());
                     for (Entity victim : victims) {
                         victim.teleport(loc);
                         context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, victim.getDisplayName(), pos.x, pos.y, pos.z);

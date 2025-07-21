@@ -3,7 +3,6 @@ package org.allaymc.api.world.chunk;
 import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Unsafe is similar to {@link Chunk} but is not thread-safe.
@@ -36,49 +34,36 @@ public interface UnsafeChunk {
     /**
      * Check if the chunk is loaded.
      *
-     * @return {@code true} if the chunk is loaded, {@code false} otherwise
+     * @return {@code true} if the chunk is loaded, {@code false} otherwise.
      */
     boolean isLoaded();
 
     /**
      * Get the chunk loaders that load this chunk
      *
-     * @return the chunk loaders
+     * @return the chunk loaders.
      */
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
 
     /**
-     * Get the player chunk loaders that load this chunk
-     *
-     * @return the player chunk loaders
-     */
-    @UnmodifiableView
-    default Set<EntityPlayer> getPlayerChunkLoaders() {
-        return getChunkLoaders().stream()
-                .filter(EntityPlayer.class::isInstance)
-                .map(EntityPlayer.class::cast)
-                .collect(Collectors.toSet());
-    }
-
-    /**
      * Add a chunk loader to this chunk.
      *
-     * @param chunkLoader the chunk loader to add
+     * @param chunkLoader the chunk loader to add.
      */
     void addChunkLoader(ChunkLoader chunkLoader);
 
     /**
      * Remove a chunk loader from this chunk.
      *
-     * @param chunkLoader the chunk loader to remove
+     * @param chunkLoader the chunk loader to remove.
      */
     void removeChunkLoader(ChunkLoader chunkLoader);
 
     /**
      * Get the number of chunk loaders that load this chunk.
      *
-     * @return the number of chunk loaders
+     * @return the number of chunk loaders.
      */
     default int getChunkLoaderCount() {
         return getChunkLoaders().size();
@@ -89,7 +74,7 @@ public interface UnsafeChunk {
      * <p>
      * Chunk packet will be sent to all chunk loaders every tick.
      *
-     * @param packet the packet to add
+     * @param packet the packet to add.
      */
     void addChunkPacket(BedrockPacket packet);
 
@@ -98,21 +83,23 @@ public interface UnsafeChunk {
      * <p>
      * Chunk packet will be sent to chunk loaders that match the predicate every tick.
      *
-     * @param packet               the packet to add
-     * @param chunkLoaderPredicate the predicate to match chunk loaders
+     * @param packet               the packet to add.
+     * @param chunkLoaderPredicate the predicate to match chunk loaders.
      */
     void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     /**
      * Send packet to all chunk loaders.
+     *
+     * @param packet the packet to send.
      */
     void sendChunkPacket(BedrockPacket packet);
 
     /**
      * Send packet to chunk loaders that match the predicate.
      *
-     * @param packet               the packet to send
-     * @param chunkLoaderPredicate the predicate to match chunk loaders
+     * @param packet               the packet to send.
+     * @param chunkLoaderPredicate the predicate to match chunk loaders.
      */
     void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 

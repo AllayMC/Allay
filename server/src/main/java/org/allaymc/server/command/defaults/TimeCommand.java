@@ -19,7 +19,7 @@ public class TimeCommand extends SimpleCommand {
                 .key("set")
                 .enums("time", "day", "night", "midnight", "noon", "sunrise", "sunset")
                 .exec(context -> {
-                    var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
+                    var world = context.getSender().getCommandExecuteLocation().dimension().getWorld();
                     String strTime = context.getResult(1);
                     int time = switch (strTime) {
                         case "day" -> WorldData.TIME_DAY;
@@ -37,7 +37,7 @@ public class TimeCommand extends SimpleCommand {
                 .up()
                 .intNum("amount")
                 .exec(context -> {
-                    var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
+                    var world = context.getSender().getCommandExecuteLocation().dimension().getWorld();
                     int time = context.getResult(1);
                     world.getWorldData().setTimeOfDay(time);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_SET, time);
@@ -47,7 +47,7 @@ public class TimeCommand extends SimpleCommand {
                 .key("add")
                 .intNum("amount")
                 .exec(context -> {
-                    var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
+                    var world = context.getSender().getCommandExecuteLocation().dimension().getWorld();
                     int amount = context.getResult(1);
                     world.getWorldData().addTimeOfDay(amount);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_ADDED, amount);

@@ -22,10 +22,10 @@ public class ProxyCommandSender implements CommandSender {
     }
 
     @Override
-    public Location3dc getCmdExecuteLocation() {
+    public Location3dc getCommandExecuteLocation() {
         if (cmdExecuteLocation != null) {
             return cmdExecuteLocation;
         }
-        return origin.getCmdExecuteLocation();
+        return origin.getCommandExecuteLocation();
     }
 }

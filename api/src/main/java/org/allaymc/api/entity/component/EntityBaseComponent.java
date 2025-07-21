@@ -42,6 +42,7 @@ import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
@@ -453,7 +454,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param players the players to spawn the entity to.
      */
-    default void spawnTo(Set<EntityPlayer> players) {
+    default void spawnTo(Collection<EntityPlayer> players) {
         players.forEach(this::spawnTo);
     }
 
@@ -740,7 +741,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the current chunk of the entity.
      *
-     * @return the current chunk of the entity.
+     * @return the current chunk of the entity, or {@code null} if the chunk is not loaded.
      */
     default Chunk getCurrentChunk() {
         var loc = getLocation();

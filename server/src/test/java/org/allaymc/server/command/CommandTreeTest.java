@@ -29,7 +29,7 @@ public class CommandTreeTest {
     @BeforeAll
     static void init() {
         Mockito.when(mockCmd.getName()).thenReturn("test");
-        Mockito.when(mockSender.getCmdExecuteLocation()).thenReturn(cmdExecLoc);
+        Mockito.when(mockSender.getCommandExecuteLocation()).thenReturn(cmdExecLoc);
         CommandNodeFactory.FACTORY.set(new AllayCommandNodeFactory());
     }
 

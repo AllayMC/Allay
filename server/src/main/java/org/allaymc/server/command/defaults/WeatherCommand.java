@@ -21,9 +21,9 @@ public class WeatherCommand extends SimpleCommand {
                 .exec(context -> {
                     Weather weather = context.getResult(0);
                     if (weather == Weather.CLEAR) {
-                        context.getSender().getCmdExecuteLocation().dimension().getWorld().clearWeather();
+                        context.getSender().getCommandExecuteLocation().dimension().getWorld().clearWeather();
                     } else {
-                        context.getSender().getCmdExecuteLocation().dimension().getWorld().addWeather(weather);
+                        context.getSender().getCommandExecuteLocation().dimension().getWorld().addWeather(weather);
                     }
                     context.addOutput(switch (weather) {
                         case CLEAR -> TrKeys.M_COMMANDS_WEATHER_CLEAR;
@@ -35,7 +35,7 @@ public class WeatherCommand extends SimpleCommand {
                 .root()
                 .key("query")
                 .exec(context -> {
-                    var weathers = context.getSender().getCmdExecuteLocation().dimension().getWorld().getWeathers();
+                    var weathers = context.getSender().getCommandExecuteLocation().dimension().getWorld().getWeathers();
                     var currentWeather = Weather.CLEAR;
                     if (weathers.contains(Weather.THUNDER)) {
                         currentWeather = Weather.THUNDER;

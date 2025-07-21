@@ -17,7 +17,7 @@ public class PosNode extends BaseNode {
 
     @Override
     public boolean match(CommandContext context) {
-        var basePos = context.getSender().getCmdExecuteLocation();
+        var basePos = context.getSender().getCommandExecuteLocation();
         var baseX = basePos.x();
         var baseY = basePos.y();
         var baseZ = basePos.z();

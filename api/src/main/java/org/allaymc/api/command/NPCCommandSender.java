@@ -34,7 +34,7 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public Location3dc getCmdExecuteLocation() {
+    public Location3dc getCommandExecuteLocation() {
         return npc.getLocation();
     }
 

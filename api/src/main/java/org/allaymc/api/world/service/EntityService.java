@@ -2,6 +2,7 @@ package org.allaymc.api.world.service;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -104,6 +105,25 @@ public interface EntityService {
     default Map<Long, Entity> getEntitiesInChunk(int chunkX, int chunkZ) {
         var map = new Long2ObjectOpenHashMap<Entity>();
         forEachEntitiesInChunkImmediately(chunkX, chunkZ, entity -> map.put(entity.getRuntimeId(), entity));
+        return map;
+    }
+
+    /**
+     * Get all players in specified chunk. Same to {@link #getEntitiesInChunk(int, int)}, this method is not safe to be
+     * called in non-ticking thread.
+     *
+     * @param chunkX the x coordinate of the chunk.
+     * @param chunkZ the z coordinate of the chunk.
+     *
+     * @return all players in the chunk.
+     */
+    default Map<Long, EntityPlayer> getPlayersInChunk(int chunkX, int chunkZ) {
+        var map = new Long2ObjectOpenHashMap<EntityPlayer>();
+        forEachEntitiesInChunkImmediately(chunkX, chunkZ, entity -> {
+            if (entity instanceof EntityPlayer player) {
+                map.put(player.getRuntimeId(), player);
+            }
+        });
         return map;
     }
 

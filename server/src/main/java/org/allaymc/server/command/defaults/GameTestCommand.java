@@ -313,7 +313,7 @@ public class GameTestCommand extends SimpleCommand {
                     var explosion = new Explosion(context.getResult(2), context.getResult(3));
                     Vector3d pos = context.getResult(1);
                     if (pos == null) {
-                        pos = new Vector3d(context.getSender().getCmdExecuteLocation());
+                        pos = new Vector3d(context.getSender().getCommandExecuteLocation());
                     }
                     explosion.explode(player.getDimension(), pos);
                     return context.success();

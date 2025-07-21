@@ -92,7 +92,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         }
 
         // Get the cloned location information of the executor
-        var senderLocation = new Location3d(sender.getCmdExecuteLocation());
+        var senderLocation = new Location3d(sender.getCommandExecuteLocation());
         // Get the selector type
         var selectorType = parseSelectorType(matcher.group(1));
         // Determine the entity detection range according to the selector type first

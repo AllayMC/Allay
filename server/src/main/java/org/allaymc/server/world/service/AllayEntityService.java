@@ -179,7 +179,6 @@ public class AllayEntityService implements EntityService {
 
     protected void addEntityImmediately(Entity entity) {
         new EntitySpawnEvent(entity).call();
-
         var current = entities.putIfAbsent(entity.getRuntimeId(), entity);
         if (current != null) {
             log.warn("Trying to add an entity which already exists! Entity: {}", entity);
@@ -187,12 +186,7 @@ public class AllayEntityService implements EntityService {
         }
 
         physicsService.addEntity(entity);
-
-        var chunk = entity.getCurrentChunk();
-        if (chunk != null) {
-            entity.spawnTo(chunk.getPlayerChunkLoaders());
-        }
-
+        entity.spawnTo(getPlayersInChunk((int) entity.getLocation().x() >> 4, (int) entity.getLocation().z() >> 4).values());
         ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.ALIVE);
     }
 

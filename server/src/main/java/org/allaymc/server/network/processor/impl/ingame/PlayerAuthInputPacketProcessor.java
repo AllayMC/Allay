@@ -160,11 +160,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
         this.stopBreakingTime = startBreakingTime + this.timeNeededToBreak * 20.0d;
 
+        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(blockToBreakX, blockToBreakZ);
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
         pk.setPosition(Vector3f.from(x, y, z));
         pk.setData(toNetworkBreakTime(this.timeNeededToBreak));
-        player.getCurrentChunk().addChunkPacket(pk);
+        chunk.addChunkPacket(pk);
         sendBreakingPracticeAndTime(player, startBreakingTime);
     }
 
@@ -174,10 +175,11 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void stopBreak(EntityPlayer player) {
+        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(blockToBreakX, blockToBreakZ);
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_STOP_BREAK);
         pk.setPosition(Vector3f.from(this.blockToBreakX, this.blockToBreakY, this.blockToBreakZ));
-        player.getCurrentChunk().addChunkPacket(pk);
+        chunk.addChunkPacket(pk);
 
         this.blockToBreakX = Integer.MAX_VALUE;
         this.blockToBreakY = Integer.MAX_VALUE;
@@ -224,17 +226,18 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case WEST -> PARTICLE_BREAK_BLOCK_WEST;
             case EAST -> PARTICLE_BREAK_BLOCK_EAST;
         };
+        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(blockToBreakX, blockToBreakZ);
         pk1.setType(type);
         pk1.setPosition(Vector3f.from(this.blockToBreakX + 0.5f, this.blockToBreakY + 0.5f, this.blockToBreakZ + 0.5f));
         pk1.setData(this.blockToBreak.blockStateHash());
-        player.getCurrentChunk().addChunkPacket(pk1);
+        chunk.addChunkPacket(pk1);
 
         var pk2 = new LevelEventPacket();
         pk2.setType(BLOCK_UPDATE_BREAK);
         pk2.setPosition(Vector3f.from(this.blockToBreakX, this.blockToBreakY, this.blockToBreakZ));
         pk2.setData(toNetworkBreakTime(this.timeNeededToBreak));
 
-        player.getCurrentChunk().addChunkPacket(pk2);
+        chunk.addChunkPacket(pk2);
     }
 
     protected void checkInteractDistance(EntityPlayer player) {
