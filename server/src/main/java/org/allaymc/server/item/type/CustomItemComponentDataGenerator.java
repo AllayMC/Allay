@@ -152,7 +152,6 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
          * @return a RenderOffsets instance with scaled offsets based on the texture size.
          */
         public static RenderOffsets textureSize(int textureSize) {
-            Preconditions.checkArgument(textureSize % 16 == 0, "Texture size must be a multiple of 16");
             return scale(textureSize / 16f);
         }
 
