@@ -1,14 +1,21 @@
 package org.allaymc.server.item.type;
 
+import com.google.common.base.Preconditions;
 import lombok.Builder;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
 import org.allaymc.api.item.component.ItemFoodComponent;
 import org.allaymc.api.item.component.ItemToolComponent;
+import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtMapBuilder;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemVersion;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +33,10 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
      */
     @MayContainTrKey
     protected final String displayName;
+    /**
+     * The render offsets of the item at different viewpoints.
+     */
+    protected final RenderOffsets renderOffsets;
     /**
      * Whether item is displayed with enchantment glint even when not enchanted (like enchanted golden apple).
      */
@@ -49,6 +60,8 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
         var itemStack = itemType.createItemStack();
 
         var properties = NbtMap.builder();
+        var components = NbtMap.builder();
+
         properties.putInt("max_stack_size", itemData.maxStackSize())
                 // When item is a tool, it is displayed as hand equipped which is different from normal items
                 .putBoolean("hand_equipped", itemStack instanceof ItemToolComponent)
@@ -59,12 +72,21 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
                 NbtMap.builder().putCompound("textures",
                         NbtMap.builder().putString("default", this.texture).build()).build());
 
+        if (renderOffsets != null) {
+            components.putCompound("minecraft:render_offsets", renderOffsets.toNBT());
+        }
+
         if (this.foil) {
             properties.putBoolean("foil", true);
         }
 
-        var components = NbtMap.builder();
         components.putCompound("minecraft:display_name", NbtMap.builder().putString("value", this.displayName != null ? this.displayName : itemType.getIdentifier().toString()).build());
+
+        var tags = itemType.getItemTags();
+        if (!tags.isEmpty()) {
+            // TODO: Check if we should use `minecraft:tags`
+            components.putList("item_tags", NbtType.STRING, tags.stream().map(ItemTag::name).toArray(String[]::new));
+        }
 
         if (itemData.isDamageable()) {
             components.putCompound("minecraft:durability", NbtMap.builder().putInt("max_durability", itemData.maxDamage()).build());
@@ -111,5 +133,132 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
         }
 
         return new ItemComponentData(true, NbtMap.builder().putCompound("components", components.build()).build(), ItemVersion.DATA_DRIVEN);
+    }
+
+    /**
+     * Store the render offsets of custom items.
+     *
+     * @param mainHand the offsets for the main hand, can be {@code null}.
+     * @param offHand  the offsets for the offHand, can be {@code null}.
+     */
+    @Builder
+    public record RenderOffsets(Hand mainHand, Hand offHand) {
+
+        /**
+         * Creates a RenderOffsets instance with texture size applied to the offsets.
+         *
+         * @param textureSize the size of the texture, must be greater than 0 and a multiple of 16.
+         *
+         * @return a RenderOffsets instance with scaled offsets based on the texture size.
+         */
+        public static RenderOffsets textureSize(int textureSize) {
+            Preconditions.checkArgument(textureSize % 16 == 0, "Texture size must be a multiple of 16");
+            return scale(textureSize / 16f);
+        }
+
+        /**
+         * Creates a RenderOffsets instance with scale applied to the offsets.
+         *
+         * @param scale the scale factor to apply to the offsets, must be greater than 0.
+         *
+         * @return a RenderOffsets instance with scaled offsets.
+         */
+        public static RenderOffsets scale(float scale) {
+            Preconditions.checkArgument(scale > 0, "Scale must be greater than 0");
+            float scale1 = (float) (0.075 / scale);
+            float scale2 = (float) (0.125 / scale);
+            float scale3 = (float) (0.075 / (scale * 2.4f));
+            return RenderOffsets.builder()
+                    .mainHand(
+                            Hand.builder()
+                                    .firstPerson(Offset.builder().scale(new Vector3f(scale3, scale3, scale3)).build())
+                                    .thirdPerson(Offset.builder().scale(new Vector3f(scale1, scale2, scale1)).build())
+                                    .build()
+                    )
+                    .offHand(
+                            Hand.builder()
+                                    .firstPerson(Offset.builder().scale(new Vector3f(scale1, scale2, scale1)).build())
+                                    .thirdPerson(Offset.builder().scale(new Vector3f(scale1, scale2, scale1)).build())
+                                    .build()
+                    )
+                    .build();
+        }
+
+        /**
+         * The hand that is used for the offset.
+         *
+         * @param firstPerson the offset for the first person view, can be {@code null}.
+         * @param thirdPerson the offset for the third person view, can be {@code null}.
+         */
+        @Builder
+        public record Hand(Offset firstPerson, Offset thirdPerson) {
+            private NbtMap toNBT() {
+                if (firstPerson == null && thirdPerson == null) {
+                    return null;
+                }
+
+                var builder = NbtMap.builder();
+                if (firstPerson != null) {
+                    builder.putCompound("first_person", firstPerson.toNBT());
+                }
+                if (thirdPerson != null) {
+                    builder.putCompound("third_person", thirdPerson.toNBT());
+                }
+
+                return builder.build();
+            }
+        }
+
+        /**
+         * The offset of the item.
+         *
+         * @param position the position, can be {@code null}.
+         * @param rotation the rotation, can be {@code null}.
+         * @param scale    the scale, can be {@code null}.
+         */
+        @Builder
+        public record Offset(Vector3fc position, Vector3fc rotation, Vector3fc scale) {
+            private NbtMap toNBT() {
+                if (position == null && rotation == null && scale == null) {
+                    return null;
+                }
+
+                NbtMapBuilder builder = NbtMap.builder();
+                if (position != null) {
+                    builder.putList("position", NbtType.FLOAT, vecToList(position));
+                }
+                if (rotation != null) {
+                    builder.putList("rotation", NbtType.FLOAT, vecToList(rotation));
+                }
+                if (scale != null) {
+                    builder.putList("scale", NbtType.FLOAT, vecToList(scale));
+                }
+
+                return builder.build();
+            }
+
+            private static List<Float> vecToList(Vector3fc xyz) {
+                return List.of(xyz.x(), xyz.y(), xyz.z());
+            }
+        }
+
+        public NbtMap toNBT() {
+            var builder = NbtMap.builder();
+
+            if (mainHand != null) {
+                NbtMap nbt = mainHand.toNBT();
+                if (nbt != null) {
+                    builder.putCompound("main_hand", nbt);
+                }
+            }
+            if (offHand != null) {
+                NbtMap nbt = offHand.toNBT();
+                if (nbt != null) {
+                    builder.putCompound("off_hand", nbt);
+                }
+            }
+
+            return builder.build();
+        }
     }
 }
