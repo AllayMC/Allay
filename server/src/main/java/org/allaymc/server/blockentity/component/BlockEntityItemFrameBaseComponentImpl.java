@@ -97,7 +97,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
         // Should use setItemStack() here, since this method will set ITEM_FRAME_MAP_BIT to true if the item stack is a map
-        nbt.listenForCompound(TAG_ITEM, itemNbt -> this.setItemStack(ItemHelper.fromNBT(itemNbt)));
+        nbt.listenForCompound(TAG_ITEM, itemNbt -> this.itemStack = ItemHelper.fromNBT(itemNbt));
         nbt.listenForByte(TAG_ITEM_ROTATION, itemRotation -> this.itemRotation = itemRotation);
     }
 
