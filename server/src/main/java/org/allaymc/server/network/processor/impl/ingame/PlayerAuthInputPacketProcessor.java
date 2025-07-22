@@ -147,10 +147,15 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
+        this.faceToBreak = BlockFace.fromIndex(blockFaceId);
+        if (this.faceToBreak == null) {
+            log.debug("Player {} tried to break a block with an invalid face {}", player.getOriginName(), blockFaceId);
+            return;
+        }
+
         this.breakingPosX = x;
         this.breakingPosY = y;
         this.breakingPosZ = z;
-        this.faceToBreak = BlockFace.fromIndex(blockFaceId);
         this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new BlockStateWithPos(blockToBreak, new Position3i(x, y, z, player.getDimension())), faceToBreak, player.getItemInHand(), player);
         if (player.getGameType() != GameType.CREATIVE) {
             this.timeNeededToBreak = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
