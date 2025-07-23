@@ -64,27 +64,40 @@ public class BlockStateWithPos implements BlockState {
     }
 
     /**
+     * @see #offsetPos(BlockFace, int)
+     */
+    public BlockStateWithPos offsetPos(BlockFace blockFace) {
+        return offsetPos(blockFace, layer);
+    }
+
+    /**
      * Returns a new {@code BlockStateWithPos} offset from the current position in the specified direction.
      *
      * @param blockFace the direction to offset.
-     *
      * @return a new {@code BlockStateWithPos} at the offset position.
      */
-    public BlockStateWithPos offsetPos(BlockFace blockFace) {
+    public BlockStateWithPos offsetPos(BlockFace blockFace, int layer) {
         var offset = blockFace.getOffset();
-        return offsetPos(offset.x(), offset.y(), offset.z());
+        return offsetPos(offset.x(), offset.y(), offset.z(), layer);
+    }
+
+    /**
+     * @see #offsetPos(int, int, int, int)
+     */
+    public BlockStateWithPos offsetPos(int x, int y, int z) {
+        return offsetPos(x, y, z, layer);
     }
 
     /**
      * Returns a new {@code BlockStateWithPos} offset from the current position by the given deltas.
      *
-     * @param x the x-axis offset.
-     * @param y the y-axis offset.
-     * @param z the z-axis offset.
-     *
+     * @param x     the x-axis offset.
+     * @param y     the y-axis offset.
+     * @param z     the z-axis offset.
+     * @param layer the layer of the block.
      * @return a new {@code BlockStateWithPos} at the offset position.
      */
-    public BlockStateWithPos offsetPos(int x, int y, int z) {
+    public BlockStateWithPos offsetPos(int x, int y, int z, int layer) {
         var newPos = pos.add(x, y, z, new Vector3i());
         return new BlockStateWithPos(
                 pos.dimension().getBlockState(newPos, layer),
@@ -146,7 +159,6 @@ public class BlockStateWithPos implements BlockState {
      *
      * @param usedItem the item used to break the block, can be {@code null}.
      * @param entity   the entity that broke the block, can be {@code null}.
-     *
      * @return {@code true} if the block was successfully broken, {@code false} otherwise.
      */
     public boolean breakBlock(ItemStack usedItem, Entity entity) {
@@ -175,7 +187,6 @@ public class BlockStateWithPos implements BlockState {
      * Retrieves the block entity at the current position.
      *
      * @param <T> the type of the block entity.
-     *
      * @return the block entity at the current position.
      */
     public <T extends BlockEntity> T getBlockEntity() {

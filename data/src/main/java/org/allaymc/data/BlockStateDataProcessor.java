@@ -46,6 +46,7 @@ public class BlockStateDataProcessor {
         public int lightDampening;
         public int lightEmission;
         public String mapColor;
+        public String tintMethod;
         public float thickness;
         public boolean requiresCorrectToolForDrops;
         public boolean isSolid;
@@ -68,6 +69,7 @@ public class BlockStateDataProcessor {
         public int lightDampening;
         public int lightEmission;
         public String mapColor;
+        public String tintMethod;
         public float thickness;
         public boolean requiresCorrectToolForDrops;
         public boolean isSolid;
@@ -89,6 +91,7 @@ public class BlockStateDataProcessor {
             data.lightDampening = raw.lightDampening;
             data.lightEmission = raw.lightEmission;
             data.mapColor = raw.mapColor;
+            data.tintMethod = raw.tintMethod;
             data.thickness = raw.thickness;
             data.requiresCorrectToolForDrops = raw.requiresCorrectToolForDrops;
             data.isSolid = raw.isSolid;

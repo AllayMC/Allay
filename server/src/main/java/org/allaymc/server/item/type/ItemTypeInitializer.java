@@ -14,6 +14,7 @@ import org.allaymc.server.item.component.seeds.ItemBeetrootSeedsBaseComponentImp
 import org.allaymc.server.item.component.seeds.ItemMelonSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemPumpkinSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemWheatSeedsBaseComponentImpl;
+import org.allaymc.server.item.component.tool.ItemEmptyMapBaseComponentImpl;
 import org.allaymc.server.item.component.tool.ItemHoeComponentImpl;
 import org.allaymc.server.item.component.tool.ItemSwordComponentImpl;
 import org.allaymc.server.item.component.tool.ItemToolComponentImpl;
@@ -769,6 +770,19 @@ public final class ItemTypeInitializer {
                 .builder(ItemWrittenBookStackImpl.class)
                 .vanillaItem(ItemId.WRITTEN_BOOK)
                 .addComponent(ItemWrittenBookBaseComponentImpl::new, ItemWrittenBookBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initMap() {
+        ItemTypes.FILLED_MAP = AllayItemType
+                .builder(ItemFilledMapStackImpl.class)
+                .vanillaItem(ItemId.FILLED_MAP)
+                .addComponent(ItemFilledMapBaseComponentImpl::new, ItemFilledMapBaseComponentImpl.class)
+                .build();
+        ItemTypes.EMPTY_MAP = AllayItemType
+                .builder(ItemEmptyMapStackImpl.class)
+                .vanillaItem(ItemId.EMPTY_MAP)
+                .addComponent(ItemEmptyMapBaseComponentImpl::new, ItemEmptyMapBaseComponentImpl.class)
                 .build();
     }
 }

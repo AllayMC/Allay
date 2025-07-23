@@ -84,9 +84,10 @@ public final class PacketProcessorHolder {
         // See PlayerAuthInputPacketProcessor#notReadyForInput()
         this.registerProcessor(ClientStatus.LOGGED_IN, new PlayerAuthInputPacketProcessor());
         this.registerProcessor(ClientStatus.LOGGED_IN, new ServerboundLoadingScreenPacketProcessor());
-        // These two packets seem are also sent during initialize chunk sending stage, so we also added them
+        // These three packets seem are also sent during initialize chunk sending stage, so we also added them
         this.registerProcessor(ClientStatus.LOGGED_IN, new MobEquipmentPacketProcessor());
         this.registerProcessor(ClientStatus.LOGGED_IN, new InteractPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new MapInfoRequestPacketProcessor());
     }
 
     private void registerInGamePacketProcessors() {
@@ -119,6 +120,7 @@ public final class PacketProcessorHolder {
         this.registerProcessor(ClientStatus.IN_GAME, new ServerboundLoadingScreenPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new AnvilDamagePacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new BookEditPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new MapInfoRequestPacketProcessor());
     }
 
     @SuppressWarnings("unchecked")

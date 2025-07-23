@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
@@ -24,6 +25,7 @@ import java.awt.*;
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 @EqualsAndHashCode
+@Slf4j
 public class BlockStateData {
 
     /**
@@ -77,6 +79,24 @@ public class BlockStateData {
                         Integer.parseInt(str.substring(7), 16));
             })
             .registerTypeAdapter(LiquidReactionOnTouch.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> LiquidReactionOnTouch.valueOf(json.getAsString()))
+            .registerTypeAdapter(TintMethod.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
+                var str = json.getAsString();
+                return switch (str) {
+                    case "None" -> TintMethod.NONE;
+                    case "DefaultFoliage" -> TintMethod.DEFAULT_FOLIAGE;
+                    case "BirchFoliage" -> TintMethod.BIRCH_FOLIAGE;
+                    case "EvergreenFoliage" -> TintMethod.EVERGREEN_FOLIAGE;
+                    case "DryFoliage" -> TintMethod.DRY_FOLIAGE;
+                    case "Grass" -> TintMethod.GRASS;
+                    case "Water" -> TintMethod.WATER;
+                    case "Stem" -> TintMethod.STEM;
+                    case "RedStoneWire" -> TintMethod.RED_STONE_WIRE;
+                    default -> {
+                        log.warn("Unknown tint method: {}", str);
+                        yield TintMethod.NONE;
+                    }
+                };
+            })
             .create();
 
     /**
@@ -150,6 +170,11 @@ public class BlockStateData {
      */
     @Builder.Default
     protected Color mapColor = Color.BLACK;
+    /**
+     * The tint method of the block state. Used in map rendering.
+     */
+    @Builder.Default
+    protected TintMethod tintMethod = TintMethod.NONE;
     /**
      * The thickness of the block state.
      */

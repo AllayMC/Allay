@@ -17,6 +17,7 @@ import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.data.ItemLockMode;
+import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.registry.Registries;
@@ -33,6 +34,7 @@ import org.joml.Vector3dc;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
+import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -471,6 +473,39 @@ public class GameTestCommand extends SimpleCommand {
                 .exec((context, player) -> {
                     player.getDimension().removeAllDebugShapes();
                     context.addOutput("Done");
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setmapimage")
+                .str("filename")
+                .exec((context, player) -> {
+                    if (!(player.getItemInHand() instanceof ItemFilledMapStack map)) {
+                        context.addError("You must hold a filled map in your hand to set its image.");
+                        return context.fail();
+                    }
+
+                    String filename = context.getResult(1);
+                    Path path = Path.of(filename);
+                    if (!Files.exists(path)) {
+                        context.addError("File does not exist: " + filename);
+                        return context.fail();
+                    }
+
+                    try {
+                        var image = ImageIO.read(Files.newInputStream(path));
+                        if (image == null) {
+                            context.addError("Failed to load image from file: " + filename);
+                            return context.fail();
+                        }
+
+                        map.setImage(image);
+                        map.sendToPlayer(player);
+                        context.addOutput("Map image set successfully!");
+                    } catch (IOException e) {
+                        context.addError("Error reading file: " + e.getMessage());
+                        return context.fail();
+                    }
+
                     return context.success();
                 }, SenderType.PLAYER);
     }

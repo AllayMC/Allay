@@ -48,6 +48,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
@@ -72,7 +73,6 @@ public interface Dimension {
      * @param y             the y coordinate of the block.
      * @param z             the z coordinate of the block.
      * @param layer         the layer which contains the block.
-     *
      * @return the created block update packet.
      */
     private static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
@@ -176,7 +176,8 @@ public interface Dimension {
      * @see #addPlayer(EntityPlayer, Runnable)
      */
     default void addPlayer(EntityPlayer player) {
-        addPlayer(player, () -> {});
+        addPlayer(player, () -> {
+        });
     }
 
     /**
@@ -191,7 +192,8 @@ public interface Dimension {
      * @see #removePlayer(EntityPlayer, Runnable)
      */
     default void removePlayer(EntityPlayer player) {
-        removePlayer(player, () -> {});
+        removePlayer(player, () -> {
+        });
     }
 
     /**
@@ -342,7 +344,6 @@ public interface Dimension {
      * @param update            whether to update the blocks around the block.
      * @param callBlockBehavior whether to call the block behavior.
      * @param placementInfo     the placement info.
-     *
      * @return whether the block state was set successfully. Return {@code false} when the block is failed to be set, usually because chunk is unloaded or event is being cancelled.
      */
     boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
@@ -426,7 +427,6 @@ public interface Dimension {
      * @param y     the y coordinate of the block.
      * @param z     the z coordinate of the block.
      * @param layer the layer which contains the block.
-     *
      * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found or the chunk is not loaded.
      */
     default BlockState getBlockState(int x, int y, int z, int layer) {
@@ -452,7 +452,6 @@ public interface Dimension {
      * @param sizeY the size of the region in the y-axis.
      * @param sizeZ the size of the region in the z-axis.
      * @param layer the layer which contains the block.
-     *
      * @return the block states at the specified region.
      */
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
@@ -688,7 +687,6 @@ public interface Dimension {
      * @param aabb            the AABB to check.
      * @param layer           the layer which contains the block.
      * @param ignoreCollision include blocks that don't have collision.
-     *
      * @return the block states that collide with the specified AABB, or {@code null} if no block collides.
      */
     default BlockState[][][] getCollidingBlockStates(AABBdc aabb, int layer, boolean ignoreCollision) {
@@ -903,7 +901,6 @@ public interface Dimension {
      * Get blocks around a pos.
      *
      * @param pos the pos.
-     *
      * @return the blocks around the pos.
      */
     default BlockStateWithPos[] getNeighborsBlockState(Vector3ic pos) {
@@ -916,7 +913,6 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
-     *
      * @return the blocks around the pos.
      */
     default BlockStateWithPos[] getNeighborsBlockState(int x, int y, int z) {
@@ -933,7 +929,6 @@ public interface Dimension {
      * Check if the y coordinate is in the range of this dimension.
      *
      * @param y the y coordinate.
-     *
      * @return {@code true} if the y coordinate is in the range of this dimension, otherwise {@code false}.
      */
     default boolean isYInRange(double y) {
@@ -946,7 +941,6 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
-     *
      * @return {@code true} if the pos is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isInWorld(double x, double y, double z) {
@@ -957,7 +951,6 @@ public interface Dimension {
      * Check if the aabb is in a valid and loaded region.
      *
      * @param aabb the aabb.
-     *
      * @return {@code true} if the aabb is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isAABBInWorld(AABBdc aabb) {
@@ -970,7 +963,6 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
-     *
      * @return the block entity at the specified pos. {@code null} will be returned if block entity is not found or the chunk is not loaded.
      */
     default BlockEntity getBlockEntity(int x, int y, int z) {
@@ -987,6 +979,18 @@ public interface Dimension {
      */
     default BlockEntity getBlockEntity(Vector3ic pos) {
         return getBlockEntity(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
+     * Get all block entities in this dimension.
+     *
+     * @return a map of block entities, where the key is the block entity ID and the value is the block entity.
+     */
+    @Unmodifiable
+    default Map<Integer, BlockEntity> getBlockEntities() {
+        return getChunkService().getLoadedChunks().stream()
+                .flatMap(chunk -> chunk.getBlockEntities().entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**
@@ -1286,7 +1290,6 @@ public interface Dimension {
      * @param usedItem     The item used to break the block, can be {@code null}.
      * @param entity       The player who breaks the block, can be {@code null}.
      * @param sendParticle Whether to send the break particle.
-     *
      * @return Whether the block is successfully broken.
      */
     boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity, boolean sendParticle);
@@ -1297,7 +1300,6 @@ public interface Dimension {
      *
      * @param x the x coordinate.
      * @param z the z coordinate.
-     *
      * @return the height of the highest non-air block at the specified x and z coordinates.
      */
     default int getHeight(int x, int z) {
@@ -1314,7 +1316,6 @@ public interface Dimension {
      *
      * @param x the x coordinate.
      * @param z the z coordinate.
-     *
      * @return the highest blockstate at the specified x and z coordinates.
      */
     default BlockState getHighestBlockState(int x, int z) {
@@ -1334,7 +1335,6 @@ public interface Dimension {
      * @param x     the x coordinate.
      * @param z     the z coordinate.
      * @param range the range to search.
-     *
      * @return a safe standing position around the specified x and z coordinates, or {@code null} if not found.
      */
     default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range, @Range(from = 0, to = Integer.MAX_VALUE) int attemptCount) {
@@ -1364,7 +1364,6 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
-     *
      * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
      */
     default boolean canPosSeeSky(int x, int y, int z) {
@@ -1384,7 +1383,6 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
-     *
      * @return the biome at the specified pos.{@code BiomeId.PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded.
      */
     default BiomeType getBiome(int x, int y, int z) {
@@ -1436,7 +1434,6 @@ public interface Dimension {
      * the liquid is returned. If not, the boolean returned is false.
      *
      * @param pos the position to check for a liquid block.
-     *
      * @return the liquid block at the position and the layer it is in, or {@link #PAIR_LIQUID_NOT_FOUND} if no liquid is found.
      */
     default IntObjectPair<BlockState> getLiquid(Vector3ic pos) {
@@ -1513,7 +1510,6 @@ public interface Dimension {
      * were left on layer 0.
      *
      * @param pos the position to remove the liquid from.
-     *
      * @return {@code true} if no blocks were left on layer 0.
      */
     default boolean removeLiquid(Vector3ic pos) {
