@@ -9,7 +9,6 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class DebugArrow extends DebugShape {
-
     /**
      * The end position of the arrow.
      * <p>
@@ -36,6 +35,13 @@ public class DebugArrow extends DebugShape {
     protected Integer arrowHeadSegments;
 
     /**
+     * The scale of the arrow head, which is a multiplier for the size of the arrow head.
+     * <p>
+     * Can be {@code null}, and in that case that the scale will be set to 1 client-side.
+     */
+    protected Float arrowHeadScale;
+
+    /**
      * Creates a new DebugArrow instance with the specified parameters.
      *
      * @param position          the starting position of the arrow.
@@ -45,12 +51,13 @@ public class DebugArrow extends DebugShape {
      * @param arrowHeadRadius   the radius of the arrow head.
      * @param arrowHeadSegments the number of segments in the arrow head.
      */
-    public DebugArrow(Vector3fc position, Color color, Vector3fc endPosition, Float arrowHeadLength, Float arrowHeadRadius, Integer arrowHeadSegments) {
+    public DebugArrow(Vector3fc position, Color color, Vector3fc endPosition, Float arrowHeadLength, Float arrowHeadRadius, Integer arrowHeadSegments, Float arrowHeadScale) {
         super(position, color);
         this.endPosition = endPosition;
         this.arrowHeadLength = arrowHeadLength;
         this.arrowHeadRadius = arrowHeadRadius;
         this.arrowHeadSegments = arrowHeadSegments;
+        this.arrowHeadScale = arrowHeadScale;
     }
 
     /**
@@ -129,6 +136,25 @@ public class DebugArrow extends DebugShape {
         this.onChange();
     }
 
+    /**
+     * Gets the scale of the arrow head.
+     *
+     * @return the scale of the arrow head.
+     */
+    public float getArrowHeadScale() {
+        return arrowHeadScale != null ? arrowHeadScale : 1.0f;
+    }
+
+    /**
+     * Sets the scale of the arrow head.
+     *
+     * @param arrowHeadScale the scale of the arrow head.
+     */
+    public void setArrowHeadScale(Float arrowHeadScale) {
+        this.arrowHeadScale = arrowHeadScale;
+        this.onChange();
+    }
+
     @Override
     public org.cloudburstmc.protocol.bedrock.data.DebugShape.Type getType() {
         return org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.ARROW;
@@ -137,7 +163,7 @@ public class DebugArrow extends DebugShape {
     @Override
     public org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData() {
         return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                id, getType(), MathUtils.JOMLVecToCBVec(position), null,
+                id, getType(), MathUtils.JOMLVecToCBVec(position), arrowHeadScale,
                 null, null, color,
                 null, null, MathUtils.JOMLVecToCBVec(endPosition),
                 arrowHeadLength, arrowHeadRadius, arrowHeadSegments
