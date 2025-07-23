@@ -5,6 +5,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.component.BlockEntityItemFrameBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.block.ItemFrameUseEvent;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -40,10 +41,22 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         super.onInteract(event);
 
         if (itemStack != ItemAirStack.AIR_STACK) {
+            var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlockState(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.ROTATE);
+            if (!e.call()) {
+                event.setSuccess(false);
+                return;
+            }
+
             // Rotate the item in the frame
             setItemRotation((itemRotation + 1) % 8);
             event.getDimension().addLevelEvent(MathUtils.center(event.getInteractInfo().clickedBlockPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_ROTATE);
         } else {
+            var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlockState(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.PUT);
+            if (!e.call()) {
+                event.setSuccess(false);
+                return;
+            }
+
             // Move the item from player's hand to the frame
             var itemStack = event.getItemStack().copy();
             itemStack.setCount(1);
@@ -60,6 +73,11 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         super.onPunch(event);
 
         if (itemStack == ItemAirStack.AIR_STACK) {
+            return;
+        }
+
+        var e = new ItemFrameUseEvent(event.getCurrentBlockState(), event.getEntity(), ItemFrameUseEvent.Action.DROP);
+        if (!e.call()) {
             return;
         }
 
