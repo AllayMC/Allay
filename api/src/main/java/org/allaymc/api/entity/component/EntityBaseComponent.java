@@ -955,7 +955,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         }
 
         var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
-        if (currentBlockState == air) {
+        if (currentBlockState != air) {
             return new BlockStateWithPos(
                     currentBlockState,
                     new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y()), (int) Math.floor(loc.z()), getDimension())

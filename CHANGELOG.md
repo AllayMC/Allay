@@ -46,6 +46,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed melon/pumpkin stem drop.
 - Fixed the bug that vibration visual feature can't be enabled in the settings menu when playing in the server.
 - Fixed lag in entity movement due to packets not being sent immediately.
+- Fixed falling blocks now become blocks instead of dropped items when they hit the ground
 
 ### Removed
 
