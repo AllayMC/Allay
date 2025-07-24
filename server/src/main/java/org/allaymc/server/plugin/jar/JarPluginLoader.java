@@ -108,8 +108,9 @@ public class JarPluginLoader implements PluginLoader {
         @Override
         public Map<String, String> getLangMap(LangCode langCode) {
             try {
-                var str = Files.readString(jarFileSystem.getPath("lang/" + langCode.name() + ".json"));
-                TypeToken<HashMap<String, String>> typeToken = new TypeToken<>() {};
+                var str = Files.readString(jarFileSystem.getPath("assets/lang/" + langCode.name() + ".json"));
+                TypeToken<HashMap<String, String>> typeToken = new TypeToken<>() {
+                };
                 return JSONUtils.fromLenient(str, typeToken);
             } catch (NoSuchFileException e) {
                 return Collections.emptyMap();

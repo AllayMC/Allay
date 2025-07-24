@@ -40,6 +40,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed method `BlockFace.fromId()` to `BlockFace.fromIndex()`.
 - (API) Several methods in `PackLoader` are renamed to better match their usage.
 - (API) Renamed method `CommandSender.getCmdExecuteLocation()` to `CommandSender.getCommandExecuteLocation()`.
+- (API) Moved plugin i18n file directory from `lang` to `assets/lang`.
 - Commands `/op` and `/deop` now use player target parameter instead of string parameter.
 
 ### Fixed
