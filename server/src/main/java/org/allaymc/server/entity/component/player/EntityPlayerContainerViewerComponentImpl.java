@@ -149,9 +149,19 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     public void notifySlotChange(Container container, int slot) {
         var id = idToContainer.inverse().get(container);
         if (id == null) {
-            if (!(container instanceof PlayerContainer playerContainer)) return;
-            // Player can see player container even if it's not opened
-            sendContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId(), slot);
+            if (!(container instanceof PlayerContainer playerContainer)) {
+                return;
+            }
+
+            // PlayerContainer is always opened
+            if (playerContainer.getContainerType() == FullContainerType.OFFHAND) {
+                // HACK: for unknown reason, we should send InventoryContentPacket instead of InventorySlotPacket
+                // for offhand container, otherwise the client will not update the offhand item
+                // TODO: replace this hack when we find the reason and have better solution
+                sendContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId());
+            } else {
+                sendContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId(), slot);
+            }
             return;
         }
         sendContentsWithSpecificContainerId(container, id, slot);

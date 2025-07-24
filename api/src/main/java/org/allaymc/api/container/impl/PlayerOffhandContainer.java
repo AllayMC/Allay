@@ -20,10 +20,6 @@ public class PlayerOffhandContainer extends PlayerContainer {
         addOnSlotChangeListener(0, this::onOffhandChange);
     }
 
-    protected void onOffhandChange(ItemStack newItemStack) {
-        playerSupplier.get().sendPacketToViewers(buildEquipmentPacket());
-    }
-
     public void sendEquipmentPacketTo(EntityPlayer player) {
         player.sendPacket(buildEquipmentPacket());
     }
@@ -36,6 +32,15 @@ public class PlayerOffhandContainer extends PlayerContainer {
         setItemStack(OFFHAND_SLOT, itemStack);
     }
 
+    @Override
+    public int getUnopenedContainerId() {
+        return UnopenedContainerId.OFFHAND;
+    }
+
+    protected void onOffhandChange(ItemStack newItemStack) {
+        playerSupplier.get().sendPacketToViewers(buildEquipmentPacket());
+    }
+
     protected MobEquipmentPacket buildEquipmentPacket() {
         var pk = new MobEquipmentPacket();
         pk.setRuntimeEntityId(playerSupplier.get().getRuntimeId());
@@ -46,10 +51,5 @@ public class PlayerOffhandContainer extends PlayerContainer {
         pk.setInventorySlot(1);
         pk.setItem(getOffhand().toNetworkItemData());
         return pk;
-    }
-
-    @Override
-    public int getUnopenedContainerId() {
-        return UnopenedContainerId.OFFHAND;
     }
 }
