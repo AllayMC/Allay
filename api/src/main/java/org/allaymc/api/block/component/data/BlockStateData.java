@@ -166,7 +166,10 @@ public class BlockStateData {
     @Builder.Default
     protected int lightEmission = 0;
     /**
-     * The map color of the block state.
+     * The map color of the block state. Please note that this is not the final map color, and
+     * the final map color will be calculated dynamically based on the {@link TintMethod} of the
+     * block. Some block's mapColor may return `#00000000`, and this is expected behavior since
+     * these blocks have special tint method (e.g. minecraft:grass_block).
      */
     @Builder.Default
     protected Color mapColor = Color.BLACK;

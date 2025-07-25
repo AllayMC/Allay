@@ -1,6 +1,7 @@
 package org.allaymc.server.item.component;
 
 import lombok.Getter;
+import org.allaymc.api.block.component.data.TintMethod;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.tag.BlockTags;
@@ -8,7 +9,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.component.ItemFilledMapBaseComponent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.server.world.biome.BiomeData;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -31,10 +34,41 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
     protected static final String TAG_MAP_UUID = "map_uuid";
     // NOTICE: this tag doesn't exist in vanilla
     protected static final String TAG_MAP_IMAGE = "map_image";
+
     // Image height and width
     protected static final int IMAGE_HW = 128;
     protected static final int SEA_LEVEL = 62;
-    protected static final Color VOID_COLOR = new Color(0, 0, 0, 0);
+
+    // Color constants
+    protected static final Color VOID = new Color(0, 0, 0, 0);
+    protected static final Color BIRCH_FOLIAGE = new Color(0x80a755);
+    protected static final Color EVERGREEN_FOLIAGE = new Color(0x619961);
+    protected static final Color DRY_FOLIAGE_SPECIAL_A = new Color(0x7b5334);
+    protected static final Color DRY_FOLIAGE_SPECIAL_B = new Color(0xa0a69c);
+    protected static final Color SWAMP_BIOME_FOLIAGE = new Color(0x6a7039);
+    protected static final Color SWAMP_BIOME_GRASS_A = new Color(0x6a7039);
+    protected static final Color BIOME_SWAMP_GRASS_B = new Color(0x4c763c);
+    protected static final Color MANGROVE_SWAMP_BIOME_FOLIAGE = new Color(0x8db127);
+    protected static final Color ROOFED_FOREST_BIOME_GRASS = new Color(0x507a32);
+    protected static final Color MESA_BIOME_GRASS = new Color(0x90814d);
+    protected static final Color MESA_BIOME_FOLIAGE = new Color(0x9e814d);
+    protected static final Color CHERRY_GROVE_BIOME_PLANT = new Color(0xb6db61);
+    protected static final Color PALE_GARDEN_BIOME_PLANT = new Color(0x878d76);
+
+    // Colormaps
+    protected static final BufferedImage FOLIAGE_COLORMAP;
+    protected static final BufferedImage DRY_FOLIAGE_COLORMAP;
+    protected static final BufferedImage GRASS_COLORMAP;
+
+    static {
+        try {
+            FOLIAGE_COLORMAP = ImageIO.read(Utils.getResource("colormap/foliage.png"));
+            DRY_FOLIAGE_COLORMAP = ImageIO.read(Utils.getResource("colormap/dry_foliage.png"));
+            GRASS_COLORMAP = ImageIO.read(Utils.getResource("colormap/grass.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     protected BufferedImage image;
     protected long mapId;
@@ -64,7 +98,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         int[] pixels = new int[IMAGE_HW * IMAGE_HW];
         for (int z = 0; z < IMAGE_HW * zoom; z += zoom) {
             for (int x = 0; x < IMAGE_HW * zoom; x += zoom) {
-                pixels[(z * IMAGE_HW + x) / zoom] = computeMapColor(dimension, startX + x, startZ + z).getRGB();
+                pixels[(z * IMAGE_HW + x) / zoom] = getMapColor(dimension, startX + x, startZ + z).getRGB();
             }
         }
         var renderedImage = new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
@@ -127,15 +161,14 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         return builder.build();
     }
 
-    protected static Color computeMapColor(Dimension dimension, int x, int z) {
-        // TODO: TintMethod
-        var color = VOID_COLOR;
+    protected static Color getMapColor(Dimension dimension, int x, int z) {
+        var color = VOID;
         var block = getMapColoredBlock(dimension, x, z);
         if (block == null) {
             return color;
         }
 
-        color = block.getBlockStateData().mapColor();
+        color = computeMapColor(block);
         var upperLayer0 = block.offsetPos(BlockFace.UP, 0);
         var upperLayer1 = block.offsetPos(BlockFace.UP, 1);
         if (upperLayer0.getBlockType().hasBlockTag(BlockTags.WATER) ||
@@ -144,16 +177,17 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             var finalRed = color.getRed();
             var finalGreen = color.getGreen();
             var finalBlue = color.getBlue();
+            // TODO: mix neighbor biomes' water color
             var waterColor = BiomeData.getBiomeData(dimension.getBiome(block.getPos())).mapWaterColor();
             if (block.getPos().y() < SEA_LEVEL) {
                 // Under sea level, the farther away from sea level, the closer the color is to the ocean color
                 var depth = SEA_LEVEL - block.getPos().y();
-                if (depth > 96) {
+                if (depth > 15) {
                     return waterColor;
                 }
 
                 finalBlue = waterColor.getBlue();
-                var radio = depth / 96f;
+                var radio = depth / 15f;
                 if (radio < 0.5f) {
                     radio = 0.5f;
                 }
@@ -177,11 +211,11 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         var blockY = block.getPos().y();
         var neighborBlockY = neighborBlock.getPos().y();
         if (blockY < neighborBlockY) {
-            return darker(color, 0.875f - Math.min(5, neighborBlockY - blockY) * 0.05f);
+            return darker(color, 0.85);
         }
 
         if (blockY > neighborBlockY) {
-            return brighter(color, 0.875f - Math.min(5, blockY - neighborBlockY) * 0.05f);
+            return brighter(color, 0.85);
         }
 
         return color;
@@ -199,7 +233,8 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         while (height >= dimension.getDimensionInfo().minHeight()) {
             var block = chunk.getBlockState(chunkX, height, chunkZ);
             var color = block.getBlockStateData().mapColor();
-            if (color.getAlpha() == 0) {
+            var tintMethod = block.getBlockStateData().tintMethod();
+            if (tintMethod == TintMethod.WATER || (color.getAlpha() == 0 && tintMethod == TintMethod.NONE)) {
                 height--;
             } else {
                 return new BlockStateWithPos(block, new Position3i(x, height, z, dimension), 0);
@@ -207,6 +242,96 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         }
 
         return null;
+    }
+
+    protected static Color computeMapColor(BlockStateWithPos block) {
+        var blockStateData = block.getBlockStateData();
+        var tintMethod = blockStateData.tintMethod();
+        return switch (tintMethod) {
+            // TODO: find out how to handle STEM
+            case NONE, STEM -> blockStateData.mapColor();
+            case RED_STONE_WIRE -> Color.RED;
+            // TODO: calculate mixed color
+            case DEFAULT_FOLIAGE, BIRCH_FOLIAGE, EVERGREEN_FOLIAGE, DRY_FOLIAGE, GRASS -> getPlantColor(block);
+            // Shouldn't reach here
+            default -> throw new IllegalStateException("Unexpected tint method: " + tintMethod);
+        };
+    }
+
+    /**
+     * See <a href="https://minecraft.wiki/w/Color#Biome_colors">Biome Colors</a>
+     */
+    protected static Color getPlantColor(BlockStateWithPos block) {
+        var tintMethod = block.getBlockStateData().tintMethod();
+        if (tintMethod == TintMethod.BIRCH_FOLIAGE) {
+            return BIRCH_FOLIAGE;
+        }
+
+        if (tintMethod == TintMethod.EVERGREEN_FOLIAGE) {
+            return EVERGREEN_FOLIAGE;
+        }
+
+        var biomeType = block.getDimension().getBiome(block.getPos());
+        if (biomeType == BiomeId.SWAMPLAND || biomeType == BiomeId.SWAMPLAND_MUTATED || biomeType == BiomeId.MANGROVE_SWAMP) {
+            if (tintMethod == TintMethod.DRY_FOLIAGE) {
+                return DRY_FOLIAGE_SPECIAL_A;
+            }
+
+            if (tintMethod == TintMethod.GRASS) {
+                // TODO: The color of grass in (mangrove) swamp biome is based on perlin noise,
+                // and we should use SWAMP_BIOME_GRASS_COLOR_B if perlin noise value < -0.1
+                return SWAMP_BIOME_GRASS_A;
+            }
+
+            return biomeType == BiomeId.MANGROVE_SWAMP ? MANGROVE_SWAMP_BIOME_FOLIAGE : SWAMP_BIOME_FOLIAGE;
+        }
+
+        if (biomeType == BiomeId.ROOFED_FOREST || biomeType == BiomeId.ROOFED_FOREST_MUTATED) {
+            if (tintMethod == TintMethod.GRASS) {
+                return ROOFED_FOREST_BIOME_GRASS;
+            }
+
+            if (tintMethod == TintMethod.DRY_FOLIAGE) {
+                return DRY_FOLIAGE_SPECIAL_A;
+            }
+        }
+
+        if (biomeType == BiomeId.MESA ||
+            biomeType == BiomeId.MESA_BRYCE ||
+            biomeType == BiomeId.MESA_PLATEAU ||
+            biomeType == BiomeId.MESA_PLATEAU_MUTATED ||
+            biomeType == BiomeId.MESA_PLATEAU_STONE ||
+            biomeType == BiomeId.MESA_PLATEAU_STONE_MUTATED
+        ) {
+            if (tintMethod == TintMethod.GRASS) {
+                return MESA_BIOME_GRASS;
+            }
+
+            return MESA_BIOME_FOLIAGE;
+        }
+
+        if (biomeType == BiomeId.CHERRY_GROVE) {
+            return CHERRY_GROVE_BIOME_PLANT;
+        }
+
+        if (biomeType == BiomeId.PALE_GARDEN) {
+            if (tintMethod == TintMethod.DRY_FOLIAGE) {
+                return DRY_FOLIAGE_SPECIAL_B;
+            }
+
+            return PALE_GARDEN_BIOME_PLANT;
+        }
+
+        var adjTemperature = Math.clamp(BiomeData.getBiomeData(biomeType).temperature(), 0, 1);
+        var adjDownfall = Math.clamp(BiomeData.getBiomeData(biomeType).downfall(), 0, 1) * adjTemperature;
+        var colormap = switch (tintMethod) {
+            case TintMethod.DRY_FOLIAGE -> DRY_FOLIAGE_COLORMAP;
+            case TintMethod.GRASS -> GRASS_COLORMAP;
+            default -> FOLIAGE_COLORMAP;
+        };
+        var x = (int) ((1 - adjTemperature) * 255);
+        var y = (int) ((1 - adjDownfall) * 255);
+        return new Color(colormap.getRGB(x, y));
     }
 
     protected static Color brighter(Color source, double factor) {

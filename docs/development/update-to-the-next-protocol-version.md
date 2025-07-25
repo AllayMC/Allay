@@ -34,6 +34,7 @@ Then, use it to export the following files:
 | `biome_definitions.json`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData)                                                                   |
 | `entity_identifiers.nbt`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData)                                                                   |
 | `music_definitions.json`                                | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json) |
+| `colormap/*`                                            | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/textures/colormap)             |
 | `sound_definitions.json`                                | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/sound_definitions.json) |
 | Others (`block_types.json`, `creative_items.nbt`, etc.) | Exported from Endstone                                                                                                    |
 
