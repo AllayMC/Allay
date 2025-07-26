@@ -46,33 +46,14 @@ public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoReques
 
         var finalMapItem = mapItem;
         if (mapItem.getImage() == null) {
-            Thread.ofVirtual().name("Map Render Thread #" + mapId).start(() -> {
-                var floorPos = player.getLocation().floor(new Vector3d());
-                finalMapItem.renderMap(
-                        player.getDimension(),
-                        ((int) floorPos.x / 128) * 128,
-                        ((int) floorPos.z / 128) * 128
-                );
-                finalMapItem.sendToPlayer(player);
-//                Server.getInstance().getScheduler().scheduleDelayed(
-//                        Server.getInstance(),
-//                        () -> {
-//                            finalMapItem.sendToPlayer(player);
-//                            return true;
-//                        },
-//                        20
-//                );
-            });
+            var floorPos = player.getLocation().floor(new Vector3d());
+            finalMapItem.renderMap(
+                    player.getDimension(),
+                    ((int) floorPos.x / 128) * 128,
+                    ((int) floorPos.z / 128) * 128
+            ).thenRun(() -> finalMapItem.sendToPlayer(player));
         } else {
             finalMapItem.sendToPlayer(player);
-//            Server.getInstance().getScheduler().scheduleDelayed(
-//                    Server.getInstance(),
-//                    () -> {
-//                        finalMapItem.sendToPlayer(player);
-//                        return true;
-//                    },
-//                    20
-//            );
         }
     }
 

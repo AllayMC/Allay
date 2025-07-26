@@ -1,6 +1,8 @@
 package org.allaymc.server.item.component;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.data.TintMethod;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
@@ -9,6 +11,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.component.ItemFilledMapBaseComponent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeId;
@@ -24,11 +27,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author daoge_cmd
  */
 @Getter
+@Slf4j
 public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implements ItemFilledMapBaseComponent {
 
     protected static final String TAG_MAP_UUID = "map_uuid";
@@ -94,16 +99,25 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
     }
 
     @Override
-    public void renderMap(Dimension dimension, int startX, int startZ, int zoom) {
-        int[] pixels = new int[IMAGE_HW * IMAGE_HW];
-        for (int z = 0; z < IMAGE_HW * zoom; z += zoom) {
-            for (int x = 0; x < IMAGE_HW * zoom; x += zoom) {
-                pixels[(z * IMAGE_HW + x) / zoom] = getMapColor(dimension, startX + x, startZ + z).getRGB();
-            }
-        }
-        var renderedImage = new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
-        renderedImage.setRGB(0, 0, IMAGE_HW, IMAGE_HW, pixels, 0, IMAGE_HW);
-        this.image = renderedImage;
+    public CompletableFuture<BufferedImage> renderMap(Dimension dimension, int startX, int startZ, int zoom) {
+        return CompletableFuture
+                .supplyAsync(() -> {
+                    int[] pixels = new int[IMAGE_HW * IMAGE_HW];
+                    for (int z = 0; z < IMAGE_HW * zoom; z += zoom) {
+                        for (int x = 0; x < IMAGE_HW * zoom; x += zoom) {
+                            pixels[(z * IMAGE_HW + x) / zoom] = getMapColor(dimension, startX + x, startZ + z).getRGB();
+                        }
+                    }
+
+                    var image = new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
+                    image.setRGB(0, 0, IMAGE_HW, IMAGE_HW, pixels, 0, IMAGE_HW);
+                    return image;
+                }, Server.getInstance().getVirtualThreadPool())
+                .exceptionally(t -> {
+                    log.error("Error while rendering map!", t);
+                    return new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
+                })
+                .thenApply(image -> this.image = image);
     }
 
     @Override
@@ -222,10 +236,8 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
     }
 
     protected static BlockStateWithPos getMapColoredBlock(Dimension dimension, int x, int z) {
-        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
-        if (chunk == null) {
-            return null;
-        }
+        var chunk = dimension.getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        Preconditions.checkArgument(chunk != null);
 
         var chunkX = x & 0xF;
         var chunkZ = z & 0xF;

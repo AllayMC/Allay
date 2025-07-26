@@ -4,6 +4,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.Dimension;
 
 import java.awt.image.BufferedImage;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author daoge_cmd
@@ -34,8 +35,8 @@ public interface ItemFilledMapBaseComponent extends ItemBaseComponent {
     /**
      * @see #renderMap(Dimension, int, int, int)
      */
-    default void renderMap(Dimension dimension, int x, int z) {
-        this.renderMap(dimension, x, z, 1);
+    default CompletableFuture<BufferedImage> renderMap(Dimension dimension, int x, int z) {
+        return this.renderMap(dimension, x, z, 1);
     }
 
     /**
@@ -46,8 +47,9 @@ public interface ItemFilledMapBaseComponent extends ItemBaseComponent {
      * @param startZ    the start z coordinate of the map.
      * @param zoom      the zoom level of the map, which will be multiplied by the width and height of the area.
      *                  Default value should be 1, which means the map will cover a 128x128 area.
+     * @return the rendered map image.
      */
-    void renderMap(Dimension dimension, int startX, int startZ, int zoom);
+    CompletableFuture<BufferedImage> renderMap(Dimension dimension, int startX, int startZ, int zoom);
 
     /**
      * Sends the map to the player. Usually you should call this method
