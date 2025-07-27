@@ -126,7 +126,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             case ITEM_RELEASE -> {
                 switch (packet.getActionType()) {
                     case ITEM_RELEASE_RELEASE -> {
-                        itemInHand.releaseUsingItem(player, player.getItemUsingInAirTime(receiveTime));
+                        itemInHand.releaseItem(player, player.getItemUsingInAirTime(receiveTime));
                         // When a player is interrupted from eating, the ITEM_USE_CLICK_AIR is not sent
                         // However ITEM_RELEASE_RELEASE will always be sent when the player stops using the item, regardless of whether it was used successfully or not
                         // Therefore, when we receive ITEM_RELEASE_RELEASE, we also refresh the player's item usage status as a supplement to the ITEM_USE_CLICK_AIR
@@ -224,5 +224,6 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
         return BedrockPacketType.INVENTORY_TRANSACTION;
     }
 
-    private record LastRightClickData(Vector3fc playerPos, Vector3ic blockPos, Vector3fc clickPos, double time) {}
+    private record LastRightClickData(Vector3fc playerPos, Vector3ic blockPos, Vector3fc clickPos, double time) {
+    }
 }

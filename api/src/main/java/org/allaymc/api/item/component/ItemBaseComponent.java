@@ -316,7 +316,9 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     boolean canUseItemInAir(EntityPlayer player);
 
     /**
-     * Handles finishing item use in air.
+     * Called when client finish using certain item (e.g. foods). Different from {@link #releaseItem(EntityPlayer, long)},
+     * this method will only be called when the client think he has finished using certain item. This means that if the
+     * player stops using an item early, this method will not be called.
      *
      * @param player   the {@link EntityPlayer}
      * @param usedTime the usage duration
@@ -326,13 +328,16 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     boolean useItemInAir(EntityPlayer player, long usedTime);
 
     /**
-     * Handles releasing the item after use.
+     * Called when client release an item, and it is usually the right click/screen that is held down for a while and then
+     * released. Please note that no matter whether the used time is enough, this method will always being called, and that's
+     * different from {@link #useItemInAir(EntityPlayer, long)} which require enough used time to be called. This method is
+     * used in bow.
      *
      * @param player   the {@link EntityPlayer}
      * @param usedTime the usage duration
      */
     @ApiStatus.OverrideOnly
-    default void releaseUsingItem(EntityPlayer player, long usedTime) {
+    default void releaseItem(EntityPlayer player, long usedTime) {
     }
 
     /**

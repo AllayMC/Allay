@@ -22,7 +22,7 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 public class ItemFoodComponentImpl implements ItemFoodComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_food_component");
-    public static final int DEFAULT_EATING_TIME = 32; // GameTick
+    public static final int DEFAULT_EATING_TIME = 31; // GameTick
 
     private final int foodPoints;
     private final float saturationPoints;
