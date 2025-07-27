@@ -59,6 +59,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed lag in entity movement due to packets not being sent immediately.
 - Fixed falling blocks, they now become blocks instead of dropped items when they hit the ground.
 - Fixed the bug that client's offhand won't get updated when setting offhand item.
+- Fixed a possible NPE in method `ItemBaseComponent.isCorrectToolFor()`.
 
 ### Removed
 

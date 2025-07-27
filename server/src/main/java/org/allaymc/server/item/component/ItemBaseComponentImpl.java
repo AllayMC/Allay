@@ -525,9 +525,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var requiredToolTier = BlockHelper.getRequiredToolTier(blockType);
         // requiredToolTier != null means that this block has tool tier requirement
-        if (requiredToolTier != null && !ItemHelper.getToolTier(itemType).isBetterThan(requiredToolTier)) {
-            // The tool tier is not enough
-            return false;
+        if (requiredToolTier != null) {
+            var toolTier = ItemHelper.getToolTier(itemType);
+            if (toolTier == null || !toolTier.isBetterThan(requiredToolTier)) {
+                // The tool tier is not enough
+                return false;
+            }
         }
 
         if (itemType == ItemTypes.SHEARS) {
