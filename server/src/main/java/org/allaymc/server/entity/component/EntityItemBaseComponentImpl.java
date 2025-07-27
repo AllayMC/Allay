@@ -38,7 +38,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     }
 
     @Override
-    public void onCollideWith(Entity other) {
+    public void onCollideWithEntity(Entity other) {
         if (!this.isOnGround() || !other.isOnGround() || this.getAge() % 20 != 0) {
             // Check for merge every second, and only when both entities are on the ground
             return;

@@ -9,5 +9,5 @@ import org.allaymc.api.block.type.BlockState;
  */
 @FunctionalInterface
 public interface PosAndBlockStateConsumer {
-    void apply(int a, int b, int c, BlockState blockState);
+    void apply(int x, int y, int z, BlockState blockState);
 }

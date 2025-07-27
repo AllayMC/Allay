@@ -10,6 +10,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.food.*;
+import org.allaymc.server.item.component.projectile.ItemProjectileComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemBeetrootSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemMelonSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemPumpkinSeedsBaseComponentImpl;
@@ -783,6 +784,14 @@ public final class ItemTypeInitializer {
                 .builder(ItemEmptyMapStackImpl.class)
                 .vanillaItem(ItemId.EMPTY_MAP)
                 .addComponent(ItemEmptyMapBaseComponentImpl::new, ItemEmptyMapBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initProjectile() {
+        ItemTypes.SNOWBALL = AllayItemType
+                .builder(ItemSnowballStackImpl.class)
+                .vanillaItem(ItemId.SNOWBALL)
+                .addComponent(() -> new ItemProjectileComponentImpl(EntityId.SNOWBALL, 1.5), ItemProjectileComponentImpl.class)
                 .build();
     }
 }

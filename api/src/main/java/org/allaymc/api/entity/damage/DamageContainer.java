@@ -61,7 +61,6 @@ public class DamageContainer {
      * Create a simple attack damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer simpleAttack(float sourceDamage) {
@@ -73,7 +72,6 @@ public class DamageContainer {
      *
      * @param attacker     the attacker.
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
@@ -86,7 +84,6 @@ public class DamageContainer {
      * Create a starve damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer starve(float sourceDamage) {
@@ -97,7 +94,6 @@ public class DamageContainer {
      * Create a fall damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer fall(float sourceDamage) {
@@ -108,7 +104,6 @@ public class DamageContainer {
      * Create a falling block damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer fallingBlock(float sourceDamage) {
@@ -119,7 +114,6 @@ public class DamageContainer {
      * Create a magic effect damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer magicEffect(float sourceDamage) {
@@ -130,7 +124,6 @@ public class DamageContainer {
      * Create a magma damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer magma(float sourceDamage) {
@@ -141,7 +134,6 @@ public class DamageContainer {
      * Create a drown damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer drown(float sourceDamage) {
@@ -152,7 +144,6 @@ public class DamageContainer {
      * Create a fire tick damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer fireTick(float sourceDamage) {
@@ -163,7 +154,6 @@ public class DamageContainer {
      * Create a lava damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer lava(float sourceDamage) {
@@ -174,7 +164,6 @@ public class DamageContainer {
      * Create a block explosion damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer blockExplosion(float sourceDamage) {
@@ -186,7 +175,6 @@ public class DamageContainer {
      *
      * @param attacker     the entity that exploded.
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer entityExplosion(Entity attacker, float sourceDamage) {
@@ -197,7 +185,6 @@ public class DamageContainer {
      * Create a contact damage container.
      *
      * @param sourceDamage the source damage.
-     *
      * @return the damage container.
      */
     public static DamageContainer contact(float sourceDamage) {
@@ -205,10 +192,19 @@ public class DamageContainer {
     }
 
     /**
+     * Create a projectile damage container.
+     *
+     * @param sourceDamage the source damage.
+     * @return the damage container.
+     */
+    public static DamageContainer projectile(Entity projectile, float sourceDamage) {
+        return new DamageContainer(projectile, PROJECTILE, sourceDamage);
+    }
+
+    /**
      * Get the attacker.
      *
      * @param <T> the type of the attacker.
-     *
      * @return the attacker, or {@code null} if the attacker is not present.
      */
     public <T> T getAttacker() {
@@ -323,7 +319,7 @@ public class DamageContainer {
         public static DamageType MAGMA = fixed(TrKeys.M_DEATH_ATTACK_MAGMA);
         public static DamageType PISTON = defaultFixed(); // TODO
         /**
-         * Damage caused by being hit by a projectile such as an Arrow
+         * Damage caused by being hit by a projectile such as an arrow
          */
         public static DamageType PROJECTILE = fixedWithExtraSingleParam(TrKeys.M_DEATH_ATTACK_ARROW, attacker -> switch (attacker) {
             case EntityPlayer player -> player.getDisplayName();

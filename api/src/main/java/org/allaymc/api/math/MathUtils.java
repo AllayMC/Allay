@@ -33,7 +33,6 @@ public final class MathUtils {
      * Convert cloudburst vector to joml vector.
      *
      * @param cbVec cloudburst vector.
-     *
      * @return joml vector, or {@code null} if the input is {@code null}.
      */
     public static Vector3ic CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
@@ -48,7 +47,6 @@ public final class MathUtils {
      * Convert cloudburst vector to joml vector.
      *
      * @param cbVec cloudburst vector.
-     *
      * @return joml vector, or {@code null} if the input is {@code null}.
      */
     public static Vector3dc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
@@ -63,7 +61,6 @@ public final class MathUtils {
      * Convert cloudburst vector to joml vector.
      *
      * @param cbVec cloudburst vector.
-     *
      * @return joml vector, or {@code null} if the input is {@code null}.
      */
     public static Vector3fc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
@@ -78,7 +75,6 @@ public final class MathUtils {
      * Convert joml vector to cloudburst vector.
      *
      * @param JOMLVec joml vector.
-     *
      * @return cloudburst vector, or {@code null} if the input is {@code null}.
      */
     public static org.cloudburstmc.math.vector.Vector3i JOMLVecToCBVec(Vector3ic JOMLVec) {
@@ -93,7 +89,6 @@ public final class MathUtils {
      * Convert joml vector to cloudburst vector.
      *
      * @param JOMLVec joml vector.
-     *
      * @return cloudburst vector, or {@code null} if the input is {@code null}.
      */
     public static org.cloudburstmc.math.vector.Vector3d JOMLVecToCBVec(Vector3dc JOMLVec) {
@@ -108,7 +103,6 @@ public final class MathUtils {
      * Convert joml vector to cloudburst vector.
      *
      * @param JOMLVec joml vector.
-     *
      * @return cloudburst vector, or {@code null} if the input is {@code null}.
      */
     public static org.cloudburstmc.math.vector.Vector3f JOMLVecToCBVec(Vector3fc JOMLVec) {
@@ -123,7 +117,6 @@ public final class MathUtils {
      * Floor a vector.
      *
      * @param vector3d the vector to floor.
-     *
      * @return the floored vector.
      */
     public static Vector3i floor(Vector3dc vector3d) {
@@ -134,7 +127,6 @@ public final class MathUtils {
      * Floor a vector.
      *
      * @param vector3f the vector to floor.
-     *
      * @return the floored vector.
      */
     public static Vector3i floor(Vector3fc vector3f) {
@@ -145,7 +137,6 @@ public final class MathUtils {
      * Ceil a vector.
      *
      * @param vector3d the vector to ceil.
-     *
      * @return the ceiled vector.
      */
     public static Vector3i ceil(Vector3dc vector3d) {
@@ -156,7 +147,6 @@ public final class MathUtils {
      * Ceil a vector.
      *
      * @param vector3f the vector to ceil.
-     *
      * @return the ceiled vector.
      */
     public static Vector3i ceil(Vector3fc vector3f) {
@@ -167,7 +157,6 @@ public final class MathUtils {
      * Center a vector (Adding 0.5 to the coordinates of the vector).
      *
      * @param vector3i the vector to center.
-     *
      * @return the centered vector.
      */
     public static Vector3d center(Vector3ic vector3i) {
@@ -179,7 +168,6 @@ public final class MathUtils {
      *
      * @param d         the double to round.
      * @param precision the precision.
-     *
      * @return the rounded double.
      */
     public static double round(double d, int precision) {
@@ -191,7 +179,6 @@ public final class MathUtils {
      * Fast inverse square root (float).
      *
      * @param x the value.
-     *
      * @return the result.
      */
     public static float fastFloatInverseSqrt(float x) {
@@ -207,7 +194,6 @@ public final class MathUtils {
      * Fast inverse square root (double).
      *
      * @param x the value.
-     *
      * @return the result.
      */
     public static double fastDoubleInverseSqrt(double x) {
@@ -225,7 +211,6 @@ public final class MathUtils {
      * @param l     the left.
      * @param value the value to check.
      * @param r     the right.
-     *
      * @return {@code true} if the value is in the range, otherwise {@code false}.
      */
     public static boolean isInRange(double l, double value, double r) {
@@ -233,11 +218,17 @@ public final class MathUtils {
     }
 
     /**
-     * Calculate equivalent direction vector by yaw and pitch.
+     * @see #getDirectionVector(double, double)
+     */
+    public static Vector3d getDirectionVector(Location3dc location) {
+        return getDirectionVector(location.yaw(), location.pitch());
+    }
+
+    /**
+     * Calculate equivalent normalized direction vector by yaw and pitch.
      *
      * @param yaw   the yaw.
      * @param pitch the pitch.
-     *
      * @return the direction vector.
      */
     public static Vector3d getDirectionVector(double yaw, double pitch) {
@@ -253,7 +244,6 @@ public final class MathUtils {
      * Calculate yaw from the direction vector.
      *
      * @param vector the direction vector.
-     *
      * @return the yaw.
      */
     public static double getYawFromVector(Vector3dc vector) {
@@ -270,7 +260,6 @@ public final class MathUtils {
      * Calculate the pitch by the direction vector.
      *
      * @param vector the direction vector.
-     *
      * @return the pitch.
      */
     public static double getPitchFromVector(Vector3dc vector) {
@@ -290,7 +279,6 @@ public final class MathUtils {
      * Calculate sin value quickly by looking up a pre-calculated table.
      *
      * @param radian the radian.
-     *
      * @return the sin value.
      */
     public static double fastSin(float radian) {
@@ -301,7 +289,6 @@ public final class MathUtils {
      * Calculate sin value quickly by looking up a pre-calculated table.
      *
      * @param radian the radian.
-     *
      * @return the sin value.
      */
     public static double fastSin(double radian) {
@@ -312,7 +299,6 @@ public final class MathUtils {
      * Calculate cos value quickly by looking up a pre-calculated table.
      *
      * @param radian the radian.
-     *
      * @return the cos value.
      */
     public static double fastCos(float radian) {
@@ -323,7 +309,6 @@ public final class MathUtils {
      * Calculate cos value quickly by looking up a pre-calculated table.
      *
      * @param radian the radian.
-     *
      * @return the cos value.
      */
     public static double fastCos(double radian) {
@@ -334,7 +319,6 @@ public final class MathUtils {
      * Check if the vector contains NaN.
      *
      * @param v the vector to check.
-     *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
     public static boolean hasNaN(Vector3fc v) {
@@ -345,7 +329,6 @@ public final class MathUtils {
      * Check if the vector contains NaN.
      *
      * @param v the vector to check.
-     *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
     public static boolean hasNaN(Vector3dc v) {
@@ -356,7 +339,6 @@ public final class MathUtils {
      * Check if the location contains NaN.
      *
      * @param l the location to check.
-     *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
     public static boolean hasNaN(Location3fc l) {
@@ -368,7 +350,6 @@ public final class MathUtils {
      * Check if the location contains NaN.
      *
      * @param l the location to check.
-     *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
     public static boolean hasNaN(Location3dc l) {
@@ -382,7 +363,6 @@ public final class MathUtils {
      * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
      *
      * @param v the vector.
-     *
      * @return the normalized vector.
      */
     public static Vector3f normalizeIfNotZero(Vector3f v) {
@@ -395,7 +375,6 @@ public final class MathUtils {
      * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
      *
      * @param v the vector.
-     *
      * @return the normalized vector.
      */
     public static Vector3d normalizeIfNotZero(Vector3d v) {
@@ -407,7 +386,6 @@ public final class MathUtils {
      *
      * @param aabb   the AABB to grow.
      * @param growth the amount to grow by.
-     *
      * @return the grown AABB.
      */
     public static AABBf grow(AABBf aabb, float growth) {
@@ -425,7 +403,6 @@ public final class MathUtils {
      *
      * @param aabb   the AABB to grow.
      * @param growth the amount to grow by.
-     *
      * @return the grown AABB.
      */
     public static AABBd grow(AABBd aabb, double growth) {
@@ -442,7 +419,6 @@ public final class MathUtils {
      * Get the maximum value from an int array.
      *
      * @param array the int array to get the maximum value from.
-     *
      * @return the maximum int value.
      */
     public static int max(int[] array) {

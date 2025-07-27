@@ -26,9 +26,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added class `CreativeItemGroups` which contains all the available creative item groups in vanilla.
 - (API) Added event `ItemFrameUseEvent` which is called when an item frame is used.
 - (API) Added `scale` property for `DebugArrow`.
-- (API) Implemented writable book and written book, several classes were added. Check the commit history for details.
-- (API) Implemented (glowing) item frame, several classes were added. Check the commit history for details.
-- (API) Implemented map, several classes were added. Check the commit history for details.
+- (API) Added methods `updateMotion()`, `trySetLocation()` and `applyMotion()` to `EntityBaseComponent`. These methods
+  are intended only be called by physics engine, and user should override them only.
+- (API) Added methods `hasBlockCollision()` and `onCollideWithBlock()` to `EntityBaseComponent`.
+- (API) Implemented writable book and written book.
+- (API) Implemented (glowing) item frame.
+- (API) Implemented map.
+- (API) Implemented snowball.
 - Added overloads for methods `AllayXXXType.Builder.build()` which accept a custom `ClassLoader`. This parameter should be used by plugins
   if plugins want to create custom item type, because plugins classes are loaded by `JarPluginClassLoader`.
 - Added support for in-plugin resource pack, which allows plugins to include their resource pack under `assets/resource_pack`. This

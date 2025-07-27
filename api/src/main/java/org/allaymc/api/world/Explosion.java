@@ -179,8 +179,8 @@ public class Explosion {
         var rand = ThreadLocalRandom.current();
         var d = size * 2;
         var aabb = new AABBd(
-                (double) Math.floor(x - d - 1), (double) Math.floor(y - d - 1), (double) Math.floor(z - d - 1),
-                (double) Math.ceil(x + d + 1), (double) Math.ceil(y + d + 1), (double) Math.ceil(z + d + 1)
+                Math.floor(x - d - 1), Math.floor(y - d - 1), Math.floor(z - d - 1),
+                Math.ceil(x + d + 1), Math.ceil(y + d + 1), Math.ceil(z + d + 1)
         );
         MathUtils.grow(aabb, 2);
 

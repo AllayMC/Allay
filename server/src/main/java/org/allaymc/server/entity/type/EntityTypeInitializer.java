@@ -7,6 +7,7 @@ import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
+import org.allaymc.server.entity.component.projectile.EntitySnowballBaseComponentImpl;
 import org.allaymc.server.entity.impl.*;
 
 import static org.allaymc.api.entity.component.attribute.EntityAttributeComponent.basicEntityAttributes;
@@ -93,6 +94,14 @@ public final class EntityTypeInitializer {
                 .builder(EntityTntImpl.class)
                 .vanillaEntity(EntityId.TNT)
                 .addComponent(EntityTntBaseComponentImpl::new, EntityTntBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initProjectile() {
+        EntityTypes.SNOWBALL = AllayEntityType
+                .builder(EntitySnowballImpl.class)
+                .vanillaEntity(EntityId.SNOWBALL)
+                .addComponent(EntitySnowballBaseComponentImpl::new, EntitySnowballBaseComponentImpl.class)
                 .build();
     }
 }

@@ -338,6 +338,19 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
+    public void clickItemInAir(EntityPlayer player) {
+        var event = new CItemClickInAirEvent(player);
+        manager.callEvent(event);
+    }
+
+    @Override
+    public boolean interactEntity(Entity performer, Entity victim) {
+        var event = new CItemInteractEntityEvent(performer, victim, false);
+        manager.callEvent(event);
+        return event.isCanBeUsed();
+    }
+
+    @Override
     public boolean canUseItemInAir(EntityPlayer player) {
         var event = new CItemTryUseInAirEvent(player, false);
         manager.callEvent(event);

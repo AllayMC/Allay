@@ -13,6 +13,7 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
@@ -118,7 +119,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Then you need to set the entity's location before spawn the entity.
      *
      * @param location the location you want to set.
-     *
      * @throws IllegalStateException if the entity is already spawned.
      */
     void setLocationBeforeSpawn(Location3dc location);
@@ -323,9 +323,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if the entity has collision.
+     * Check if this entity has entity collision. If return {@code true}, method {@link #onCollideWithEntity(Entity)}
+     * will be called when this entity collide with another entity.
      *
-     * @return {@code true} if the entity has collision.
+     * @return {@code true} if the entity has entity collision.
      */
     default boolean hasEntityCollision() {
         return getMetadata().get(EntityFlag.HAS_COLLISION);
@@ -334,10 +335,21 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Set if the entity has collision.
      *
-     * @param hasEntityCollision {@code true} if the entity has collision.
+     * @param hasEntityCollision {@code true} if the entity has collision, {@code false} otherwise.
      */
     default void setHasEntityCollision(boolean hasEntityCollision) {
         setAndSendEntityFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
+    }
+
+    /**
+     * Check if this entity has block collision. If return {@code true}, method {@link #onCollideWithBlock(BlockStateWithPos)}
+     * and {@link org.allaymc.api.block.BlockBehavior#onCollideWithEntity(BlockStateWithPos, Entity)} will be called when this
+     * entity collide with a block.
+     *
+     * @return {@code true} if this entity has block collision, {@code false} otherwise.
+     */
+    default boolean hasBlockCollision() {
+        return true;
     }
 
     /**
@@ -373,7 +385,17 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param other the entity collides with.
      */
     @ApiStatus.OverrideOnly
-    default void onCollideWith(Entity other) {}
+    default void onCollideWithEntity(Entity other) {
+    }
+
+    /**
+     * Called when the entity collides with a block.
+     *
+     * @param block the block that collides with this entity.
+     */
+    @ApiStatus.OverrideOnly
+    default void onCollideWithBlock(BlockStateWithPos block) {
+    }
 
     /**
      * Get the viewers of this entity.
@@ -429,6 +451,43 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Update the entity's motion. This method is used by physics engine, and allow
+     * entity to customize how its motion being updated.
+     * <p>
+     * This method should be safe to be called in multithread environment since physics
+     * engine may use parallel stream to handle all the entities.
+     *
+     * @param hasLiquidMotion whether this entity's motion is affected by liquid.
+     * @return the updated motion.
+     */
+    @ApiStatus.OverrideOnly
+    Vector3d updateMotion(boolean hasLiquidMotion);
+
+    /**
+     * Try to set this entity's location. This method is intended to be called by physics engine,
+     * and user is not expected to call it.
+     * <p>
+     * The implementation will call {@link EntityMoveEvent}, and because this event is cancellable,
+     * the method call may not be valid.
+     *
+     * @param newLocation the new location that this entity moves to.
+     * @return {@code true} if the method call is valid, {@code false} otherwise.
+     */
+    @ApiStatus.OverrideOnly
+    boolean trySetLocation(Location3dc newLocation);
+
+    /**
+     * Apply the entity's motion. Similar to {@link #updateMotion(boolean)}, this method
+     * is used by physics engine, and allow entity to customize how its motion being applied.
+     * <p>
+     * This method is also required to be safe called in multithread environment.
+     *
+     * @return {@code true} if the entity's position is updated, {@code false} otherwise.
+     */
+    @ApiStatus.OverrideOnly
+    boolean applyMotion();
+
+    /**
      * Get the last motion of this entity.
      *
      * @return the last motion of this entity.
@@ -460,6 +519,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
     /**
      * Despawn the entity from the specified player.
+     * <p>
+     * This method will only remove the entity from the specific viewer, and it will still exist in the world.
      *
      * @param player the player to despawn the entity from.
      */
@@ -468,7 +529,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Despawn the entity from all viewers.
      * <p>
-     * This method will only remove the entity from the viewers, but the entity will still exist in the world.
+     * This method will only remove the entity from the viewers, and it will still exist in the world.
      */
     void despawnFromAll();
 
@@ -550,7 +611,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the entity has the specified effect.
      *
      * @param effectType the effect type to check.
-     *
      * @return {@code true} if the entity has the specified effect, otherwise {@code false}.
      */
     boolean hasEffect(EffectType effectType);
@@ -559,7 +619,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Get the effect level of the specified effect.
      *
      * @param effectType the effect type to get.
-     *
      * @return the effect level of the specified effect.
      */
     int getEffectLevel(EffectType effectType);
@@ -568,7 +627,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Add the specified effect to the entity.
      *
      * @param effectInstance the effect instance to add.
-     *
      * @return {@code true} if the effect is added successfully, otherwise {@code false}.
      */
     boolean addEffect(EffectInstance effectInstance);
@@ -691,7 +749,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Given yaw, if the movement multiplier is not 0, the entity will move towards the direction specified by yaw.
      *
      * @return the movement factor of this entity.
-     *
      * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
      */
     default double getMovementFactor() {
@@ -851,7 +908,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Add a tag to the entity.
      *
      * @param tag the tag to add.
-     *
      * @return {@code true} if the tag is added, otherwise {@code false}.
      */
     boolean addTag(String tag);
@@ -860,7 +916,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Remove a tag from the entity.
      *
      * @param tag the tag to remove.
-     *
      * @return {@code true} if the tag is removed, otherwise {@code false}.
      */
     boolean removeTag(String tag);
@@ -869,7 +924,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the entity has the specified tag.
      *
      * @param tag the tag to check.
-     *
      * @return {@code true} if the entity has the specified tag, otherwise {@code false}.
      */
     boolean hasTag(String tag);
@@ -923,7 +977,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the specific effect can apply on the entity.
      *
      * @param effectType the specific effect
-     *
      * @return {@code true} if the specific effect can apply on the entity, otherwise {@code false}.
      */
     default boolean canApplyEffect(EffectType effectType) {
@@ -935,7 +988,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param player    The player who interacted with the entity, can be null
      * @param itemStack The item used to interact with the entity
-     *
      * @return {@code true} if the interaction is successful
      */
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
@@ -981,7 +1033,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param x the x coordinate.
      * @param y the y coordinate.
      * @param z the z coordinate.
-     *
      * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
      */
     default boolean canStandSafely(int x, int y, int z, Dimension dimension) {
