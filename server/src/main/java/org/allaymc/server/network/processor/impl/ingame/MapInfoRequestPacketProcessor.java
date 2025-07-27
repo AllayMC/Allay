@@ -5,6 +5,7 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityItemFrame;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerMapInfoRequestEvent;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -19,7 +20,6 @@ public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoReques
 
     @Override
     public void handleSync(EntityPlayer player, MapInfoRequestPacket packet, long receiveTime) {
-        // TODO: PlayerMapInfoRequestEvent
         var mapId = packet.getUniqueMapId();
 
         // Try to find the map item in the player's offhand and inventory
@@ -29,18 +29,25 @@ public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoReques
         }
 
         // Try to find the map item in item frames
+        BlockEntityItemFrame itemFrame = null;
         if (mapItem == null) {
             for (var blockEntity : player.getDimension().getBlockEntities().values()) {
                 if (blockEntity instanceof BlockEntityItemFrame frame &&
                     frame.getItemStack() instanceof ItemFilledMapStack item &&
                     item.getMapId() == mapId) {
                     mapItem = item;
+                    itemFrame = frame;
                 }
             }
         }
 
         if (mapItem == null) {
             log.warn("Cannot find map item with ID {} for player {}", mapId, player.getOriginName());
+            return;
+        }
+
+        var event = new PlayerMapInfoRequestEvent(player, mapItem, itemFrame);
+        if (!event.call()) {
             return;
         }
 

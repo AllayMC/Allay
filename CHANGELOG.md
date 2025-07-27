@@ -30,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   are intended only be called by physics engine, and user should override them only.
 - (API) Added methods `hasBlockCollision()` and `onCollideWithBlock()` to `EntityBaseComponent`.
 - (API) Added `ProjectileLaunchEvent` and `ProjectileHitEvent` events.
+- (API) Added `PlayerMapInfoRequestEvent` event.
 - (API) Implemented writable book and written book.
 - (API) Implemented (glowing) item frame.
 - (API) Implemented map.
