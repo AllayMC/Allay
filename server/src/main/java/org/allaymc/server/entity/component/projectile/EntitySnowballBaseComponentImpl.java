@@ -5,7 +5,9 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.entity.ProjectileHitEvent;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -43,16 +45,31 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
             return;
         }
 
-        if (other instanceof EntityDamageComponent damageComponent) {
-            damageComponent.attack(DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0));
-        }
+        if (!this.willBeDespawnedNextTick()) {
+            var event = new ProjectileHitEvent((EntityProjectile) thisEntity, other);
+            if (!event.call()) {
+                return;
+            }
 
-        this.onCollide();
+            if (other instanceof EntityDamageComponent damageComponent) {
+                damageComponent.attack(DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0));
+            }
+            this.despawn();
+            this.addHitEffect();
+        }
     }
 
     @Override
     public void onCollideWithBlock(BlockStateWithPos block) {
-        this.onCollide();
+        if (!this.willBeDespawnedNextTick()) {
+            var event = new ProjectileHitEvent((EntityProjectile) thisEntity, block);
+            if (!event.call()) {
+                return;
+            }
+
+            this.despawn();
+            this.addHitEffect();
+        }
     }
 
     @Override
@@ -65,7 +82,6 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
         return 0.01;
     }
 
-    @Override
     protected void addHitEffect() {
         var particleCount = nextParticleCount();
         for (var i = 0; i < particleCount; i++) {

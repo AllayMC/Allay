@@ -86,17 +86,4 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
 
         return !newPos.equals(location) && trySetLocation(newPos);
     }
-
-    protected void onCollide() {
-        // Projectile may collide with multiple blocks in one tick, so we need to check
-        // if we have marked this projectile as "will be despawned next tick"
-        if (!this.willBeDespawnedNextTick()) {
-            this.despawn();
-            this.addHitEffect();
-        }
-    }
-
-    protected void addHitEffect() {
-        // No-op
-    }
 }

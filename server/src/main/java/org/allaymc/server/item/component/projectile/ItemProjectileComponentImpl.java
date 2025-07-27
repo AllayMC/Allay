@@ -2,12 +2,13 @@ package org.allaymc.server.item.component.projectile;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityProjectileBaseComponent;
 import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.entity.ProjectileLaunchEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemProjectileComponent;
 import org.allaymc.api.math.MathUtils;
@@ -50,24 +51,30 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
     }
 
     @Override
-    public void shoot(Entity entity) {
-        if (!(entity instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
+    public boolean shoot(Entity shooter) {
+        var location = shooter.getLocation();
+        var direction = MathUtils.getDirectionVector(location);
+        var shootPos = new Vector3d(location.x(), location.y() + shooter.getEyeHeight() - 0.3, location.z());
+        var entity = getProjectileEntityType().createEntity(EntityInitInfo.builder().dimension(shooter.getDimension()).pos(shootPos).build());
+        if (!(entity instanceof EntityProjectile projectile)) {
+            log.error("Entity {} is not a projectile entity", projectileEntityId);
+            return false;
+        }
+        projectile.setShootingEntity(shooter);
+        projectile.setMotion(direction.mul(getThrowForce(), new Vector3d()));
+
+        var event = new ProjectileLaunchEvent(projectile, shooter);
+        if (!event.call()) {
+            return false;
+        }
+
+        shooter.getDimension().getEntityService().addEntity(entity);
+        addShootSound(new Position3d(shootPos, location.dimension()));
+        if (!(shooter instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
             thisItemStack.reduceCount(1);
         }
 
-        var location = entity.getLocation();
-        var direction = MathUtils.getDirectionVector(location);
-        var shootPos = new Vector3d(location.x(), location.y() + entity.getEyeHeight() - 0.3, location.z());
-        var projectileEntity = getProjectileEntityType().createEntity(EntityInitInfo.builder().dimension(entity.getDimension()).pos(shootPos).build());
-        if (!(projectileEntity instanceof EntityProjectileBaseComponent projectileBaseComponent)) {
-            log.error("Entity {} is not a projectile entity", projectileEntityId);
-            return;
-        }
-
-        projectileBaseComponent.setShootingEntity(entity);
-        projectileBaseComponent.setMotion(direction.mul(getThrowForce(), new Vector3d()));
-        entity.getDimension().getEntityService().addEntity(projectileEntity);
-        addShootSound(new Position3d(shootPos, location.dimension()));
+        return true;
     }
 
     @EventHandler
@@ -77,8 +84,7 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
 
     @EventHandler
     protected void onInteractEntity(CItemInteractEntityEvent event) {
-        shoot(event.getPerformer());
-        event.setCanBeUsed(true);
+        event.setCanBeUsed(shoot(event.getPerformer()));
     }
 
     protected void addShootSound(Position3d pos) {

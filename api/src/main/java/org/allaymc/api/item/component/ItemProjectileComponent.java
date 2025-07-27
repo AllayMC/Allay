@@ -2,6 +2,7 @@ package org.allaymc.api.item.component;
 
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.eventbus.event.entity.ProjectileLaunchEvent;
 
 /**
  * ItemProjectileComponent is used in item that can be shot by entity. When right click,
@@ -28,7 +29,9 @@ public interface ItemProjectileComponent extends ItemComponent {
     /**
      * Try to shoot this item by a specific entity.
      *
-     * @param entity the entity that shoots this item.
+     * @param shooter the entity that shoots this item.
+     * @return {@code true} if the projectile is shot successfully, {@code false} otherwise
+     * (may because event {@link ProjectileLaunchEvent} being cancelled).
      */
-    void shoot(Entity entity);
+    boolean shoot(Entity shooter);
 }
