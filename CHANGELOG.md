@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented (glowing) item frame.
 - (API) Implemented map.
 - (API) Implemented snowball.
+- The color of the player on the locator bar is now calculated based on their name.
 - Added overloads for methods `AllayXXXType.Builder.build()` which accept a custom `ClassLoader`. This parameter should be used by plugins
   if plugins want to create custom item type, because plugins classes are loaded by `JarPluginClassLoader`.
 - Added support for in-plugin resource pack, which allows plugins to include their resource pack under `assets/resource_pack`. This

@@ -290,7 +290,7 @@ public class AllayPlayerService implements PlayerService {
         entry.setBuildPlatform(deviceInfo.device().getId());
         entry.setSkin(skin);
         entry.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
-        entry.setColor(Color.BLACK);
+        entry.setColor(new Color(name.hashCode() & 0xFFFFFF));
 
         playerListPacket.getEntries().add(entry);
         playerListEntries.put(uuid, entry);
