@@ -9,12 +9,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectInstantHealthType extends AbstractEffectType {
     EffectInstantHealthType() {
-        super(6, new Identifier("minecraft:instant_health"));
+        super(6, new Identifier("minecraft:instant_health"), new Color(0xf82423));
     }
 
     @Override

@@ -31,11 +31,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added methods `hasBlockCollision()` and `onCollideWithBlock()` to `EntityBaseComponent`.
 - (API) Added `ProjectileLaunchEvent` and `ProjectileHitEvent` events.
 - (API) Added `PlayerMapInfoRequestEvent` event.
+- (API) Added method `EffectType.getColor()` to get the color of an effect type.
+- (API) Added class `PotionType` which represents the type of potion bottle item.
 - (API) Implemented writable book and written book.
 - (API) Implemented (glowing) item frame.
 - (API) Implemented map.
 - (API) Implemented snowball.
-- (API) Implemented potion.
+- (API) Implemented potion and splash potion.
 - The color of the player on the locator bar is now calculated based on their name.
 - Added overloads for methods `AllayXXXType.Builder.build()` which accept a custom `ClassLoader`. This parameter should be used by plugins
   if plugins want to create custom item type, because plugins classes are loaded by `JarPluginClassLoader`.
@@ -69,6 +71,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `BlockPlaceHelper.processDirection4Property()`.
 - (API) Removed several default methods in `EntityPlayerNetworkComponent` that forward call to `LoginData` for better codebase.
 - (API) Removed methods `PackLoader.hasFolder()` and `PackLoader.forEachIn()`, since these methods are never used.
+- (API) Removed method `MathUtils.grow()`. Consider using `AABBd.expand` instead.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 

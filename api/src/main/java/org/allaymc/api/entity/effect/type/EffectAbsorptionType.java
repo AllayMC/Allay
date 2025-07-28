@@ -7,12 +7,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectAbsorptionType extends AbstractEffectType {
     EffectAbsorptionType() {
-        super(22, new Identifier("minecraft:absorption"));
+        super(22, new Identifier("minecraft:absorption"), new Color(0x2552a5));
     }
 
     @Override

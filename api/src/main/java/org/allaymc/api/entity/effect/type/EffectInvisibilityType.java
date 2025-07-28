@@ -6,12 +6,14 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectInvisibilityType extends AbstractEffectType {
     EffectInvisibilityType() {
-        super(14, new Identifier("minecraft:invisibility"));
+        super(14, new Identifier("minecraft:invisibility"), new Color(0xf6f6f6));
     }
 
     @Override

@@ -1,14 +1,23 @@
 package org.allaymc.server.item.impl;
 
-import java.util.List;
+import lombok.experimental.Delegate;
 import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.item.component.ItemPotionComponent;
+import org.allaymc.api.item.component.ItemProjectileComponent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemSplashPotionStack;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 
+import java.util.List;
+
 public class ItemSplashPotionStackImpl extends ItemStackImpl implements ItemSplashPotionStack {
+    @Delegate
+    protected ItemProjectileComponent projectileComponent;
+    @Delegate
+    protected ItemPotionComponent potionComponent;
+
     public ItemSplashPotionStackImpl(ItemStackInitInfo initInfo,
-            List<ComponentProvider<? extends Component>> componentProviders) {
+                                     List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

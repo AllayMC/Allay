@@ -1,28 +1,29 @@
 package org.allaymc.server.item.component.edible;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.ItemPotionComponent;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.component.annotation.Dependency;
 
 /**
  * @author daoge_cmd
  */
-public class ItemPotionComponentImpl extends ItemEdibleComponentImpl implements ItemPotionComponent {
+public class ItemPotionComponentImpl implements ItemPotionComponent {
 
-    public ItemPotionComponentImpl() {
-        super(0, 0, DEFAULT_EATING_TIME, true, true);
-    }
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:potion_component");
 
-    @Override
-    public void onEaten(EntityPlayer player) {
-        super.onEaten(player);
-        this.getPotionType().applyTo(player);
-        player.tryAddItem(ItemTypes.GLASS_BOTTLE.createItemStack(1));
-    }
+    @Dependency
+    protected ItemBaseComponent baseComponent;
 
     @Override
     public PotionType getPotionType() {
-        return PotionType.fromItemMeta(thisItemStack.getMeta());
+        return PotionType.fromId(baseComponent.getMeta());
+    }
+
+    @Override
+    public void setPotionType(PotionType potionType) {
+        baseComponent.setMeta(potionType.ordinal());
     }
 }

@@ -600,6 +600,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void onFall(double fallDistance);
 
     /**
+     * Called when the entity is splashed by a splash water bottle.
+     */
+    @ApiStatus.OverrideOnly
+    default void onSplash() {
+    }
+
+    /**
      * Get all the effects of the entity.
      *
      * @return all the effects of the entity.

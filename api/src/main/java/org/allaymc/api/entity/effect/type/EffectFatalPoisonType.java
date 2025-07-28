@@ -7,12 +7,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectFatalPoisonType extends AbstractEffectType {
     EffectFatalPoisonType() {
-        super(25, new Identifier("minecraft:fatal_poison"), true);
+        super(25, new Identifier("minecraft:fatal_poison"), new Color(0x4e9331), true);
     }
 
     @Override

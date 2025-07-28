@@ -6,12 +6,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectHungerType extends AbstractEffectType {
     EffectHungerType() {
-        super(17, new Identifier("minecraft:hunger"), true);
+        super(17, new Identifier("minecraft:hunger"), new Color(0x587653), true);
     }
 
     @Override

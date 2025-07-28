@@ -7,12 +7,14 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author IWareQ
  */
 public class EffectOozingType extends AbstractEffectType {
     EffectOozingType() {
-        super(34, new Identifier("minecraft:oozing"), true);
+        super(34, new Identifier("minecraft:oozing"), new Color(0x99ffa3), true);
     }
 
     @Override

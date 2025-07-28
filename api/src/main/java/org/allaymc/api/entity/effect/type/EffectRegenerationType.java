@@ -6,12 +6,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectRegenerationType extends AbstractEffectType {
     EffectRegenerationType() {
-        super(10, new Identifier("minecraft:regeneration"));
+        super(10, new Identifier("minecraft:regeneration"), new Color(0xcd5cab));
     }
 
     @Override

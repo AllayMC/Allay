@@ -6,12 +6,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectResistanceType extends AbstractEffectType {
     EffectResistanceType() {
-        super(11, new Identifier("minecraft:resistance"));
+        super(11, new Identifier("minecraft:resistance"), new Color(0x9146f0));
     }
 
     @Override

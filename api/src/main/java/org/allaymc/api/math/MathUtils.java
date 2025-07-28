@@ -4,7 +4,6 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
 import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBf;
 
 import java.lang.Math;
 
@@ -382,36 +381,21 @@ public final class MathUtils {
     }
 
     /**
-     * Grow an AABB by a certain amount.
+     * Grows the AABB on all axes as represented by the vector passed. The
+     * vec values are subtracted from the minimum values of the AABB and added
+     * to maximum values of the AABB.
      *
      * @param aabb   the AABB to grow.
-     * @param growth the amount to grow by.
+     * @param growth the vector.
      * @return the grown AABB.
      */
-    public static AABBf grow(AABBf aabb, float growth) {
-        aabb.minX -= growth;
-        aabb.minY -= growth;
-        aabb.minZ -= growth;
-        aabb.maxX += growth;
-        aabb.maxY += growth;
-        aabb.maxZ += growth;
-        return aabb;
-    }
-
-    /**
-     * Grow an AABB by a certain amount.
-     *
-     * @param aabb   the AABB to grow.
-     * @param growth the amount to grow by.
-     * @return the grown AABB.
-     */
-    public static AABBd grow(AABBd aabb, double growth) {
-        aabb.minX -= growth;
-        aabb.minY -= growth;
-        aabb.minZ -= growth;
-        aabb.maxX += growth;
-        aabb.maxY += growth;
-        aabb.maxZ += growth;
+    public static AABBd grow(AABBd aabb, Vector3dc growth) {
+        aabb.minX -= growth.x();
+        aabb.minY -= growth.y();
+        aabb.minZ -= growth.z();
+        aabb.maxX += growth.x();
+        aabb.maxY += growth.y();
+        aabb.maxZ += growth.z();
         return aabb;
     }
 

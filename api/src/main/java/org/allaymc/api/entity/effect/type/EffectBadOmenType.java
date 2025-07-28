@@ -3,11 +3,13 @@ package org.allaymc.api.entity.effect.type;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectBadOmenType extends AbstractEffectType {
     EffectBadOmenType() {
-        super(28, new Identifier("minecraft:bad_omen"), true);
+        super(28, new Identifier("minecraft:bad_omen"), new Color(0x0b6138), true);
     }
 }

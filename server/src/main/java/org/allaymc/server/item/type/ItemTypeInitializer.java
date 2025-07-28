@@ -2,14 +2,19 @@ package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.data.EntityId;
+import org.allaymc.api.entity.interfaces.EntityProjectile;
+import org.allaymc.api.entity.interfaces.EntitySplashPotion;
 import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.edible.*;
+import org.allaymc.server.item.component.projectile.ItemBottleProjectileComponentImpl;
 import org.allaymc.server.item.component.projectile.ItemProjectileComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemBeetrootSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemMelonSeedsBaseComponentImpl;
@@ -21,6 +26,7 @@ import org.allaymc.server.item.component.tool.ItemSwordComponentImpl;
 import org.allaymc.server.item.component.tool.ItemToolComponentImpl;
 import org.allaymc.server.item.impl.*;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.joml.Vector3d;
 
 /**
  * @author daoge_cmd
@@ -800,6 +806,20 @@ public final class ItemTypeInitializer {
                 .builder(ItemPotionStackImpl.class)
                 .vanillaItem(ItemId.POTION)
                 .addComponent(ItemPotionComponentImpl::new, ItemPotionComponentImpl.class)
+                .addComponent(ItemPotionEdibleComponentImpl::new, ItemPotionEdibleComponentImpl.class)
+                .build();
+        ItemTypes.SPLASH_POTION = AllayItemType
+                .builder(ItemSplashPotionStackImpl.class)
+                .vanillaItem(ItemId.SPLASH_POTION)
+                .addComponent(ItemPotionComponentImpl::new, ItemPotionComponentImpl.class)
+                .addComponent(() -> new ItemBottleProjectileComponentImpl(EntityId.SPLASH_POTION, 0.5) {
+                    @Override
+                    protected EntityProjectile createProjectile(Entity shooter, Vector3d shootPos) {
+                        var projectile = (EntitySplashPotion) super.createProjectile(shooter, shootPos);
+                        projectile.setPotionType(PotionType.fromId(thisItemStack.getMeta()));
+                        return projectile;
+                    }
+                }, ItemBottleProjectileComponentImpl.class)
                 .build();
     }
 }

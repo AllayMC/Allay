@@ -217,7 +217,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void computeAndNotifyCollidedBlocks() {
-        var aabb = MathUtils.grow(getOffsetAABB(), 2 * FAT_AABB_MARGIN);
+        var aabb = getOffsetAABB().expand(2 * FAT_AABB_MARGIN);
         var dimension = getDimension();
         dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
             var entityHasBlockCollision = this.hasBlockCollision();

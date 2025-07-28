@@ -28,7 +28,13 @@ public final class EffectInstance {
      * The duration of this effect instance, and the unit is game tick.
      */
     private int duration;
+    /**
+     * Whether the effect is ambient, leading to reduced particles shown to the client.
+     */
     private boolean ambient;
+    /**
+     * Whether the particle is visible to players.
+     */
     private boolean visible;
 
     /**

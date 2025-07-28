@@ -6,12 +6,14 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectSlownessType extends AbstractEffectType {
     EffectSlownessType() {
-        super(2, new Identifier("minecraft:slowness"), true);
+        super(2, new Identifier("minecraft:slowness"), new Color(0x8bafe0), true);
     }
 
     @Override

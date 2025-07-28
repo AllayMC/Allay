@@ -274,13 +274,22 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Handles when a block collides with an entity. This method is only called if {@link #canCollideWithEntity()} returns {@code true}.
+     * Called when a block collides with an entity. This method is only called if {@link #canCollideWithEntity()} returns {@code true}.
      *
      * @param current the block that collides with the entity.
      * @param entity  the entity that collides with the block.
      */
     @ApiStatus.OverrideOnly
     default void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
+    }
+
+    /**
+     * Called when a block is splashed by a splash water bottle.
+     *
+     * @param current the block being splashed.
+     */
+    @ApiStatus.OverrideOnly
+    default void onSplash(BlockStateWithPos current) {
     }
 
     /**

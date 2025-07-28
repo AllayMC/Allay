@@ -6,12 +6,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectSaturationType extends AbstractEffectType {
     EffectSaturationType() {
-        super(23, new Identifier("minecraft:saturation"));
+        super(23, new Identifier("minecraft:saturation"), new Color(0xf82423));
     }
 
     @Override

@@ -4,10 +4,11 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.type.EffectTypes;
 
+import java.awt.*;
 import java.util.List;
 
 /**
- * PotionType holds the effects given by a specific potion
+ * PotionType holds the effects given by a specific potion.
  *
  * @author daoge_cmd
  */
@@ -85,19 +86,42 @@ public enum PotionType {
 
     // This shouldn't be touchable by user code since effect instance is mutable
     private final List<EffectInstance> effects;
+    private final Color color;
 
     PotionType(EffectInstance... effects) {
         this.effects = List.of(effects);
+        this.color = computeColor(effects);
     }
 
     /**
-     * Gets the potion type from potion item's meta.
+     * Gets the potion type from id.
      *
-     * @param meta the meta of potion item.
-     * @return the potion type from potion item's meta.
+     * @param id the id of potion.
+     * @return the potion type.
      */
-    public static PotionType fromItemMeta(int meta) {
-        return VALUES[meta];
+    public static PotionType fromId(int id) {
+        return VALUES[id];
+    }
+
+    private static Color computeColor(EffectInstance... effects) {
+        if (effects.length == 0) {
+            // Don't extract it as a constant, because in an enum class the enum member is
+            // initialized before the static member, at which point the static member is null
+            return new Color(64, 64, 160);
+        }
+
+        int r = 0;
+        int g = 0;
+        int b = 0;
+        int count = 0;
+        for (var effect : effects) {
+            r += effect.getType().getColor().getRed() * effect.getLevel();
+            g += effect.getType().getColor().getGreen() * effect.getLevel();
+            b += effect.getType().getColor().getBlue() * effect.getLevel();
+            count += effect.getLevel();
+        }
+
+        return new Color(r / count, g / count, b / count);
     }
 
     /**
@@ -106,6 +130,25 @@ public enum PotionType {
      * @param entity the entity that this potion type will be applied to.
      */
     public void applyTo(Entity entity) {
-        effects.stream().map(EffectInstance::new).forEach(entity::addEffect);
+        getEffects().forEach(entity::addEffect);
+    }
+
+    /**
+     * Gets the effects that this potion type has.
+     *
+     * @return the effects that this potion type has.
+     */
+    public List<EffectInstance> getEffects() {
+        return this.effects.stream().map(EffectInstance::new).toList();
+    }
+
+    /**
+     * Gets the color of this potion type, which is a mix of all effect types that
+     * this potion type has.
+     *
+     * @return the color of this potion type.
+     */
+    public Color getColor() {
+        return this.color;
     }
 }

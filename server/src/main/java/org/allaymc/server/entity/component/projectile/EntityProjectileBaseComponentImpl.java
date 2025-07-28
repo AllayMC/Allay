@@ -2,9 +2,12 @@ package org.allaymc.server.entity.component.projectile;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityProjectileBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.interfaces.EntityProjectile;
+import org.allaymc.api.eventbus.event.entity.ProjectileHitEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -85,5 +88,10 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
         }
 
         return !newPos.equals(location) && trySetLocation(newPos);
+    }
+
+    protected boolean callProjectileHitEvent(BlockStateWithPos blockBeingHit) {
+        var event = new ProjectileHitEvent((EntityProjectile) thisEntity, blockBeingHit);
+        return event.call();
     }
 }

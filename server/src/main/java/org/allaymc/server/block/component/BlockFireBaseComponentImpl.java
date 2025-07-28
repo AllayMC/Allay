@@ -127,6 +127,14 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         spreadFire(current);
     }
 
+    @Override
+    public void onSplash(BlockStateWithPos current) {
+        var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
+        if (event.call()) {
+            current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
+        }
+    }
+
     private void burnBlockAround(BlockStateWithPos blockStateWithPos, Integer age) {
         // TODO: INCREASED_FIRE_BURNOUT
         for (var face : BlockFace.getHorizontalBlockFaces()) {

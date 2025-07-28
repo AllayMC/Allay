@@ -8,6 +8,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
 import org.allaymc.server.entity.component.projectile.EntitySnowballBaseComponentImpl;
+import org.allaymc.server.entity.component.projectile.EntitySplashPotionBaseComponentImpl;
 import org.allaymc.server.entity.impl.*;
 
 import static org.allaymc.api.entity.component.attribute.EntityAttributeComponent.basicEntityAttributes;
@@ -102,6 +103,11 @@ public final class EntityTypeInitializer {
                 .builder(EntitySnowballImpl.class)
                 .vanillaEntity(EntityId.SNOWBALL)
                 .addComponent(EntitySnowballBaseComponentImpl::new, EntitySnowballBaseComponentImpl.class)
+                .build();
+        EntityTypes.SPLASH_POTION = AllayEntityType
+                .builder(EntitySplashPotionImpl.class)
+                .vanillaEntity(EntityId.SPLASH_POTION)
+                .addComponent(EntitySplashPotionBaseComponentImpl::new, EntitySplashPotionBaseComponentImpl.class)
                 .build();
     }
 }

@@ -9,12 +9,14 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
+
 /**
  * @author daoge_cmd
  */
 public class EffectInstantDamageType extends AbstractEffectType {
     EffectInstantDamageType() {
-        super(7, new Identifier("minecraft:instant_damage"), true);
+        super(7, new Identifier("minecraft:instant_damage"), new Color(0xa9656a), true);
     }
 
     @Override

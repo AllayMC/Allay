@@ -10,6 +10,7 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -20,7 +21,7 @@ import static org.allaymc.api.block.data.BlockId.WEB;
  */
 public class EffectWeavingType extends AbstractEffectType {
     EffectWeavingType() {
-        super(33, new Identifier("minecraft:weaving"), true);
+        super(33, new Identifier("minecraft:weaving"), new Color(0x78695a), true);
     }
 
     @Override

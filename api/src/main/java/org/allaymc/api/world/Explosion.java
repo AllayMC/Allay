@@ -181,8 +181,7 @@ public class Explosion {
         var aabb = new AABBd(
                 Math.floor(x - d - 1), Math.floor(y - d - 1), Math.floor(z - d - 1),
                 Math.ceil(x + d + 1), Math.ceil(y + d + 1), Math.ceil(z + d + 1)
-        );
-        MathUtils.grow(aabb, 2);
+        ).expand(2);
 
         if (affectEntities) {
             var affectedEntities = dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb);

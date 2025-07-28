@@ -9,6 +9,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.Identifier;
 
+import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -16,7 +17,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class EffectInfestedType extends AbstractEffectType {
     EffectInfestedType() {
-        super(35, new Identifier("minecraft:infested"), true);
+        super(35, new Identifier("minecraft:infested"), new Color(0x8c9b8c), true);
     }
 
     @Override
