@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.food;
+package org.allaymc.server.item.component.edible;
 
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -6,8 +6,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 /**
  * @author IWareQ
  */
-public class ItemSpiderEyeFoodComponentImpl extends ItemFoodComponentImpl {
-    public ItemSpiderEyeFoodComponentImpl() {
+public class ItemSpiderEyeEdibleComponentImpl extends ItemEdibleComponentImpl {
+    public ItemSpiderEyeEdibleComponentImpl() {
         super(2, 3.2f);
     }
 

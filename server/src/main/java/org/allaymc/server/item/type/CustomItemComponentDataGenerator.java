@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.Builder;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
-import org.allaymc.api.item.component.ItemFoodComponent;
+import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.item.component.ItemToolComponent;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
@@ -114,10 +114,10 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
             }
         }
 
-        if (itemStack instanceof ItemFoodComponent foodComponent) {
-            properties.putInt("use_duration", foodComponent.getEatingTime())
-                    .putInt("use_animation", foodComponent.isDrink() ? 2 : 1);
-            components.putCompound("minecraft:food", NbtMap.builder().putBoolean("can_always_eat", foodComponent.canBeAlwaysEaten()).build());
+        if (itemStack instanceof ItemEdibleComponent edibleComponent) {
+            properties.putInt("use_duration", edibleComponent.getEatingTime())
+                    .putInt("use_animation", edibleComponent.isDrink() ? 2 : 1);
+            components.putCompound("minecraft:food", NbtMap.builder().putBoolean("can_always_eat", edibleComponent.canBeAlwaysEaten()).build());
         }
 
         if (itemStack instanceof ItemToolComponent) {
@@ -148,7 +148,6 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
          * Creates a RenderOffsets instance with texture size applied to the offsets.
          *
          * @param textureSize the size of the texture, must be greater than 0 and a multiple of 16.
-         *
          * @return a RenderOffsets instance with scaled offsets based on the texture size.
          */
         public static RenderOffsets textureSize(int textureSize) {
@@ -159,7 +158,6 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
          * Creates a RenderOffsets instance with scale applied to the offsets.
          *
          * @param scale the scale factor to apply to the offsets, must be greater than 0.
-         *
          * @return a RenderOffsets instance with scaled offsets.
          */
         public static RenderOffsets scale(float scale) {

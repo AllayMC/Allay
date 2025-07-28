@@ -29,22 +29,69 @@ public interface EntityPlayer extends
         EntityContainerViewerComponent,
         EntityDamageComponent {
 
+    /**
+     * Returns the reachable container for the given full container type.
+     * This includes opened containers and containers that the player holds.
+     *
+     * @param slotType the full container type.
+     * @param <T>      the container type.
+     * @return the reachable container, or {@code null} if none.
+     */
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);
         if (container == null) container = getContainer(slotType);
         return (T) container;
     }
 
+    /**
+     * Returns the reachable container for the given container slot type.
+     * This includes opened containers and containers that the player holds.
+     *
+     * @param slotType the container slot type.
+     * @param <T>      the container type.
+     * @return the reachable container, or {@code null} if none.
+     */
     default <T extends Container> T getReachableContainerBySlotType(ContainerSlotType slotType) {
         var container = getOpenedContainerBySlotType(slotType);
         if (container == null) container = getContainerBySlotType(slotType);
         return (T) container;
     }
 
+    /**
+     * Attempts to add an item stack to the player's inventory.
+     * If it cannot be fully added, the remaining items are dropped at the player's position.
+     *
+     * @param itemStack the item stack to add.
+     * @return {@code true} if all items were added successfully, {@code false} if some were dropped.
+     */
+    default boolean tryAddItem(ItemStack itemStack) {
+        getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
+        if (itemStack.getCount() != 0) {
+            dropItemInPlayerPos(itemStack);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Attempts to drop the item currently held in hand.
+     *
+     * @param count the number of items to drop.
+     * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
+     */
     default boolean tryDropItemInHand(int count) {
         return tryDropItem(FullContainerType.PLAYER_INVENTORY, getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot(), count);
     }
 
+    /**
+     * Attempts to drop an item from a specific slot in a container.
+     *
+     * @param containerType the container type.
+     * @param slot          the slot index.
+     * @param count         the number of items to drop.
+     * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
+     */
     default boolean tryDropItem(FullContainerType<?> containerType, int slot, int count) {
         var container = getReachableContainer(containerType);
         if (container == null) {
@@ -62,6 +109,19 @@ public interface EntityPlayer extends
         return true;
     }
 
+    /**
+     * Forces the player to drop an item from a container slot.
+     * Will trigger a PlayerDropItemEvent and update the container accordingly.
+     * <p>
+     * Please note that this method won't check if the dropped item is valid. The
+     * user should be sure that the item in given slot is not an air and have enough
+     * count.
+     *
+     * @param container the container to drop from.
+     * @param slot      the slot index.
+     * @param count     the number of items to drop. If the count is bigger than the item currently
+     *                  has, the whole item stack will be dropped.
+     */
     default void forceDropItem(Container container, int slot, int count) {
         var item = container.getItemStack(slot);
         var event = new PlayerDropItemEvent(this, item);
@@ -83,6 +143,11 @@ public interface EntityPlayer extends
         dropItemInPlayerPos(droppedItemStack);
     }
 
+    /**
+     * Drops the given item stack at the player's position with forward motion.
+     *
+     * @param itemStack the item stack to drop.
+     */
     default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
         var dimension = playerLoc.dimension();
@@ -94,18 +159,35 @@ public interface EntityPlayer extends
         );
     }
 
+    /**
+     * Gets the item currently held in the player's hand.
+     *
+     * @return the item in hand.
+     */
     default ItemStack getItemInHand() {
         return getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
     }
 
+    /**
+     * Sets the item in the player's hand.
+     *
+     * @param itemStack the item to set in hand.
+     */
     default void setItemInHand(ItemStack itemStack) {
         getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(itemStack);
     }
 
+    /**
+     * Clears the item in the player's hand.
+     */
     default void clearItemInHand() {
         getContainer(FullContainerType.PLAYER_INVENTORY).clearItemInHand();
     }
 
+    /**
+     * Attempts to consume one unit of the item in hand.
+     * Does nothing in Creative mode.
+     */
     default void tryConsumeItemInHand() {
         if (getGameType() == GameType.CREATIVE) {
             return;
@@ -119,6 +201,10 @@ public interface EntityPlayer extends
         }
     }
 
+    /**
+     * Notifies that the item in hand has changed.
+     * Will update the inventory slot or clear it if the item count is zero.
+     */
     default void notifyItemInHandChange() {
         var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();
@@ -129,6 +215,9 @@ public interface EntityPlayer extends
         }
     }
 
+    /**
+     * Sends a swing arm animation packet to the player and nearby viewers.
+     */
     default void swingArm() {
         var packet = new AnimatePacket();
         packet.setAction(AnimatePacket.Action.SWING_ARM);

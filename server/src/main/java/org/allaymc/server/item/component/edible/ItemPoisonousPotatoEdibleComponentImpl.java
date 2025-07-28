@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.food;
+package org.allaymc.server.item.component.edible;
 
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -8,8 +8,8 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author IWareQ
  */
-public class ItemPoisonousPotatoFoodComponentImpl extends ItemFoodComponentImpl {
-    public ItemPoisonousPotatoFoodComponentImpl() {
+public class ItemPoisonousPotatoEdibleComponentImpl extends ItemEdibleComponentImpl {
+    public ItemPoisonousPotatoEdibleComponentImpl() {
         super(2, 1.2f);
     }
 

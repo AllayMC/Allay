@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented (glowing) item frame.
 - (API) Implemented map.
 - (API) Implemented snowball.
+- (API) Implemented potion.
 - The color of the player on the locator bar is now calculated based on their name.
 - Added overloads for methods `AllayXXXType.Builder.build()` which accept a custom `ClassLoader`. This parameter should be used by plugins
   if plugins want to create custom item type, because plugins classes are loaded by `JarPluginClassLoader`.
@@ -48,6 +49,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Several methods in `PackLoader` are renamed to better match their usage.
 - (API) Renamed method `CommandSender.getCmdExecuteLocation()` to `CommandSender.getCommandExecuteLocation()`.
 - (API) Moved plugin i18n file directory from `lang` to `assets/lang`.
+- (API) Renamed `ItemFoodComponent` to `ItemEdibleComponent`.
+- (API) Renamed `PlayerEatFoodEvent` to `PlayerEatEvent`.
 - Commands `/op` and `/deop` now use player target parameter instead of string parameter.
 
 ### Fixed

@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.food;
+package org.allaymc.server.item.component.edible;
 
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -9,8 +9,8 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 /**
  * @author IWareQ
  */
-public class ItemChorusFruitFoodComponentImpl extends ItemFoodComponentImpl {
-    public ItemChorusFruitFoodComponentImpl() {
+public class ItemChorusFruitEdibleComponentImpl extends ItemEdibleComponentImpl {
+    public ItemChorusFruitEdibleComponentImpl() {
         super(4, 2.4f, DEFAULT_EATING_TIME, false, true);
     }
 

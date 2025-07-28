@@ -6,14 +6,16 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a player eat an edible item, such as food, potion, etc...
+ *
  * @author daoge_cmd
  */
 @Getter
-public class PlayerEatFoodEvent extends PlayerEvent implements CancellableEvent {
-    protected ItemStack food;
+public class PlayerEatEvent extends PlayerEvent implements CancellableEvent {
+    protected ItemStack edible;
 
-    public PlayerEatFoodEvent(EntityPlayer player, ItemStack food) {
+    public PlayerEatEvent(EntityPlayer player, ItemStack edible) {
         super(player);
-        this.food = food;
+        this.edible = edible;
     }
 }

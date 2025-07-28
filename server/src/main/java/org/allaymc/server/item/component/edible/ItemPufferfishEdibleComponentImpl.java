@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.food;
+package org.allaymc.server.item.component.edible;
 
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -6,8 +6,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 /**
  * @author IWareQ
  */
-public class ItemPufferfishFoodComponentImpl extends ItemFoodComponentImpl {
-    public ItemPufferfishFoodComponentImpl() {
+public class ItemPufferfishEdibleComponentImpl extends ItemEdibleComponentImpl {
+    public ItemPufferfishEdibleComponentImpl() {
         super(1, 0.2f);
     }
 

@@ -1,13 +1,13 @@
-package org.allaymc.server.item.component.food;
+package org.allaymc.server.item.component.edible;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
+import org.allaymc.api.eventbus.event.player.PlayerEatEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemFoodComponent;
+import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
@@ -19,7 +19,7 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
  */
 @Getter
 @RequiredArgsConstructor
-public class ItemFoodComponentImpl implements ItemFoodComponent {
+public class ItemEdibleComponentImpl implements ItemEdibleComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_food_component");
     public static final int DEFAULT_EATING_TIME = 31; // GameTick
@@ -34,15 +34,15 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     @ComponentObject
     protected ItemStack thisItemStack;
 
-    public ItemFoodComponentImpl(int foodPoints, float saturationPoints) {
+    public ItemEdibleComponentImpl(int foodPoints, float saturationPoints) {
         this(foodPoints, saturationPoints, DEFAULT_EATING_TIME, false, false);
     }
 
-    public ItemFoodComponentImpl(int foodPoints, float saturationPoints, int eatingTime) {
+    public ItemEdibleComponentImpl(int foodPoints, float saturationPoints, int eatingTime) {
         this(foodPoints, saturationPoints, eatingTime, false, false);
     }
 
-    public ItemFoodComponentImpl(int foodPoints, float saturationPoints, int eatingTime, boolean drink) {
+    public ItemEdibleComponentImpl(int foodPoints, float saturationPoints, int eatingTime, boolean drink) {
         this(foodPoints, saturationPoints, eatingTime, drink, false);
     }
 
@@ -66,7 +66,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
         }
 
         var player = event.getPlayer();
-        var playerEatFoodEvent = new PlayerEatFoodEvent(player, thisItemStack);
+        var playerEatFoodEvent = new PlayerEatEvent(player, thisItemStack);
         if (!playerEatFoodEvent.call()) {
             event.setCanBeUsed(false);
             return;

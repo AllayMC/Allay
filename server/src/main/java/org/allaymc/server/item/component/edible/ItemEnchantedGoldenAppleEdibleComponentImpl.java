@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.food;
+package org.allaymc.server.item.component.edible;
 
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -6,8 +6,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 /**
  * @author IWareQ
  */
-public class ItemEnchantedGoldenAppleFoodComponentImpl extends ItemFoodComponentImpl {
-    public ItemEnchantedGoldenAppleFoodComponentImpl() {
+public class ItemEnchantedGoldenAppleEdibleComponentImpl extends ItemEdibleComponentImpl {
+    public ItemEnchantedGoldenAppleEdibleComponentImpl() {
         super(4, 9.6f, DEFAULT_EATING_TIME, false, true);
     }
 
