@@ -91,7 +91,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
                         .forEach(entity -> entity.attack(DamageContainer.fallingBlock(damage)));
             }
 
-            if (!getBlockStateStandingOn().getBlockStateData().shape().isFull(BlockFace.UP)) {
+            if (!getBlockStateStandingOn().getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
                 // Falling on a block which is not full in upper face, for example torch.
                 // In this case, the falling block should be turned into item instead of block
                 dimension.dropItem(blockState.toItemStack(), location);

@@ -43,7 +43,7 @@ public class EffectWeavingType extends AbstractEffectType {
             var posBelow = new Position3i(pos).add(0, -1, 0);
             if (
                     posToSpawnWeb.contains(pos) ||
-                    !entity.getDimension().getBlockState(posBelow).getBlockStateData().shape().isEdgeFull(BlockFace.UP)
+                    !entity.getDimension().getBlockState(posBelow).getBlockStateData().collisionShape().isEdgeFull(BlockFace.UP)
             ) continue;
 
             posToSpawnWeb.add(pos);

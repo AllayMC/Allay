@@ -42,7 +42,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
+    public void onEntityInside(BlockStateWithPos current, Entity entity) {
         if (!(entity instanceof EntityDamageComponent damageComponent)) {
             return;
         }

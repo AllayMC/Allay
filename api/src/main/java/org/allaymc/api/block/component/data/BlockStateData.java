@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
@@ -119,12 +122,21 @@ public class BlockStateData {
     /**
      * The collision shape of the block state.
      * <p>
-     * Collision shape is used to manage the collision with entity.
+     * When an entity is collided with block's collision shape and method {@link BlockBehavior#canCollideWithEntity()}
+     * return {@code true}, method {@link BlockBehavior#onCollideWithEntity(BlockStateWithPos, Entity)}.
+     * <p>
+     * If method {@link Entity#hasBlockCollision()} return {@code true}, {@link Entity#onInsideBlock(BlockStateWithPos)}
+     * will also be called.
      */
     @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
     /**
-     * The shape of the block state.
+     * The shape of the block state. When an entity is collided with block's shape, both
+     * {@link BlockBehavior#onEntityInside(BlockStateWithPos, Entity)} and
+     * {@link Entity#onInsideBlock(BlockStateWithPos)} will be called.
+     * <p>
+     * This is useful for some blocks that do not have collision shape, such as lava and
+     * fire. These two blocks rely on the above method to ignite entity inside.
      */
     @Builder.Default
     protected VoxelShape shape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();

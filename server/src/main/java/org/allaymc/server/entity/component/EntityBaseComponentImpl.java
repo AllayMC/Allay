@@ -220,22 +220,27 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var aabb = getOffsetAABB().expand(2 * FAT_AABB_MARGIN);
         var dimension = getDimension();
         dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
+            var block = new BlockStateWithPos(blockState, new Position3i(x, y, z, dimension), 0);
             var entityHasBlockCollision = this.hasBlockCollision();
             var blockCanCollideWithEntity = blockState.getBehavior().canCollideWithEntity();
+
+            // When either of them can collide with the other, we need to check for collisions
             if (entityHasBlockCollision || blockCanCollideWithEntity) {
-                // When either of them can collide with the other, we need to check for collisions
-                if (!blockState.getBlockStateData().collisionShape().translate(x, y, z).intersectsAABB(aabb)) {
-                    return;
-                }
+                if (blockState.getBlockStateData().collisionShape().translate(x, y, z).intersectsAABB(aabb)) {
+                    if (entityHasBlockCollision) {
+                        this.onCollideWithBlock(block);
+                    }
 
-                var block = new BlockStateWithPos(blockState, new Position3i(x, y, z, dimension), 0);
-                if (entityHasBlockCollision) {
-                    this.onCollideWithBlock(block);
+                    if (blockCanCollideWithEntity) {
+                        blockState.getBehavior().onCollideWithEntity(block, thisEntity);
+                    }
                 }
+            }
 
-                if (blockCanCollideWithEntity) {
-                    blockState.getBehavior().onCollideWithEntity(block, thisEntity);
-                }
+            // Check if the entity is inside block
+            if (blockState.getBlockStateData().shape().translate(x, y, z).intersectsAABB(aabb)) {
+                blockState.getBehavior().onEntityInside(block, thisEntity);
+                this.onInsideBlock(block);
             }
         });
     }

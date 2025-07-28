@@ -248,12 +248,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canCollideWithEntity() {
-        return true;
-    }
-
-    @Override
-    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
+    public void onEntityInside(BlockStateWithPos current, Entity entity) {
         if (!(entity instanceof EntityDamageComponent damageComponent)) {
             return;
         }

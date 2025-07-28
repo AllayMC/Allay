@@ -33,6 +33,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `PlayerMapInfoRequestEvent` event.
 - (API) Added method `EffectType.getColor()` to get the color of an effect type.
 - (API) Added class `PotionType` which represents the type of potion bottle item.
+- (API) Added methods `BlockBehavior.onEntityInside()` and `Entity.onInsideBlock()`.
 - (API) Implemented writable book and written book.
 - (API) Implemented (glowing) item frame.
 - (API) Implemented map.
@@ -65,6 +66,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed falling blocks, they now become blocks instead of dropped items when they hit the ground.
 - Fixed the bug that client's offhand won't get updated when setting offhand item.
 - Fixed a possible NPE in method `ItemBaseComponent.isCorrectToolFor()`.
+- Fixed the bug that lava and fire won't ignite the entity
 
 ### Removed
 

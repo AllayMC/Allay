@@ -78,7 +78,8 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
 
                 var factor = entity != entityBeingHit ? 1.0 - distance / 4.0 : 1.0;
                 for (var effect : effects) {
-                    effect.setDuration(Math.max(1, (int) (effect.getDuration() * durationMultiplier * factor)));
+                    // Zero duration is still meaningful for instantaneous effects
+                    effect.setDuration((int) (effect.getDuration() * durationMultiplier * factor));
                     entity.addEffect(effect);
                 }
             }

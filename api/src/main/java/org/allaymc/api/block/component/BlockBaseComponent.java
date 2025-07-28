@@ -284,6 +284,16 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
+     * Called when an entity is inside a block.
+     *
+     * @param current the block that the entity inside.
+     * @param entity  the entity that inside a block.
+     */
+    @ApiStatus.OverrideOnly
+    default void onEntityInside(BlockStateWithPos current, Entity entity) {
+    }
+
+    /**
      * Called when a block is splashed by a splash water bottle.
      *
      * @param current the block being splashed.

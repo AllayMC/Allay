@@ -389,6 +389,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Called when the entity is inside a block.
+     *
+     * @param block the block that this entity inside.
+     */
+    @ApiStatus.OverrideOnly
+    default void onInsideBlock(BlockStateWithPos block) {
+    }
+
+    /**
      * Called when the entity collides with a block.
      *
      * @param block the block that collides with this entity.
