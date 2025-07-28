@@ -150,28 +150,28 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var minY = (int) floor(aabb.minY());
         var minZ = (int) floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
-        double V = 0;
-        for (int ox = 0, blocksLength = collidedBlocks.length; ox < blocksLength; ox++) {
-            BlockState[][] sub1 = collidedBlocks[ox];
-            for (int oy = 0, sub1Length = sub1.length; oy < sub1Length; oy++) {
-                BlockState[] sub2 = sub1[oy];
-                for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
-                    BlockState blockState = sub2[oz];
+        double volume = 0;
+        for (int offsetX = 0, length0 = collidedBlocks.length; offsetX < length0; offsetX++) {
+            var sub1 = collidedBlocks[offsetX];
+            for (int offsetY = 0, length1 = sub1.length; offsetY < length1; offsetY++) {
+                var sub2 = sub1[offsetY];
+                for (int offsetZ = 0, length2 = sub2.length; offsetZ < length2; offsetZ++) {
+                    var blockState = sub2[offsetZ];
                     if (blockState == null) {
                         continue;
                     }
 
-                    var currentX = minX + ox;
-                    var currentY = minY + oy;
-                    var currentZ = minZ + oz;
+                    var currentX = minX + offsetX;
+                    var currentY = minY + offsetY;
+                    var currentZ = minZ + offsetZ;
                     var intersection = blockState
                             .getBlockStateData()
                             .computeOffsetCollisionShape(currentX, currentY, currentZ)
                             .unionAABB()
                             .intersection(aabb);
-                    var currentV = intersection.lengthX() * intersection.lengthY() * intersection.lengthZ();
-                    if (currentV > V) {
-                        V = currentV;
+                    var currentVolume = intersection.lengthX() * intersection.lengthY() * intersection.lengthZ();
+                    if (currentVolume > volume) {
+                        volume = currentVolume;
                         targetX = currentX;
                         targetY = currentY;
                         targetZ = currentZ;

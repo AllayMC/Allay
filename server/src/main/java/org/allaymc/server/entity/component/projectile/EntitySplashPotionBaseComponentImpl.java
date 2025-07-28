@@ -86,17 +86,22 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
                 }
             }
         } else if (potionType == PotionType.WATER) {
-            // Splash blocks
             // Splash the block being hit
             if (blockBeingHit != null) {
                 blockBeingHit.getBehavior().onSplash(blockBeingHit);
             }
+
+            // Splash the block at current pos
             var blockPos = new Vector3i();
             blockPos.set(this.location.floor());
+            var block = getDimension().getBlockState(blockPos);
+            block.getBehavior().onSplash(new BlockStateWithPos(block, new Position3i(blockPos, getDimension())));
+
             // Splash horizontal neighbor blocks
             for (var face : BlockFace.getHorizontalBlockFaces()) {
-                var block = getDimension().getBlockState(face.offsetPos(blockPos));
-                block.getBehavior().onSplash(new BlockStateWithPos(block, new Position3i(blockPos, getDimension())));
+                var offsetPos = face.offsetPos(blockPos);
+                block = getDimension().getBlockState(offsetPos);
+                block.getBehavior().onSplash(new BlockStateWithPos(block, new Position3i(offsetPos, getDimension())));
             }
 
             // Splash entities

@@ -20,7 +20,6 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.OperationType;
@@ -443,30 +442,6 @@ public interface Dimension {
     }
 
     /**
-     * Get the block state at the specified region.
-     *
-     * @param x     the start x coordinate of the region.
-     * @param y     the start y coordinate of the region.
-     * @param z     the start z coordinate of the region.
-     * @param sizeX the size of the region in the x-axis.
-     * @param sizeY the size of the region in the y-axis.
-     * @param sizeZ the size of the region in the z-axis.
-     * @param layer the layer which contains the block.
-     * @return the block states at the specified region.
-     */
-    default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
-        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
-            return Utils.EMPTY_BLOCK_STATE_ARRAY_3D;
-        }
-
-        var blockStates = new BlockState[sizeX][sizeY][sizeZ];
-        forEachBlockStates(x, y, z, sizeX, sizeY, sizeZ, layer, (globalX, globalY, globalZ, blockState) -> {
-            blockStates[globalX - x][globalY - y][globalZ - z] = blockState;
-        });
-        return blockStates;
-    }
-
-    /**
      * @see #forEachBlockStates(int, int, int, int, int, int, int, PosAndBlockStateConsumer)
      */
     default void forEachBlockStates(AABBdc aabb, int layer, PosAndBlockStateConsumer blockStateConsumer) {
@@ -491,13 +466,52 @@ public interface Dimension {
      * @param layer              the layer which contains the block.
      * @param blockStateConsumer the block state consumer. The consumer will be called with the global x, y, z coordinates of the pos, and the block state.
      */
-    default void forEachBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer, PosAndBlockStateConsumer blockStateConsumer) {
-        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
+    default void forEachBlockStates(
+            int x, int y, int z,
+            @Range(from = 1, to = Integer.MAX_VALUE) int sizeX,
+            @Range(from = 1, to = Integer.MAX_VALUE) int sizeY,
+            @Range(from = 1, to = Integer.MAX_VALUE) int sizeZ,
+            int layer, PosAndBlockStateConsumer blockStateConsumer) {
+        var blockStates = getBlockStates(x, y, z, sizeX, sizeY, sizeZ, layer);
+        if (blockStates == null) {
             return;
         }
 
-        var dimensionInfo = getDimensionInfo();
+        for (int offsetX = 0, length0 = blockStates.length; offsetX < length0; offsetX++) {
+            var sub1 = blockStates[offsetX];
+            for (int offsetY = 0, length1 = sub1.length; offsetY < length1; offsetY++) {
+                var sub2 = sub1[offsetY];
+                for (int offsetZ = 0, length2 = sub2.length; offsetZ < length2; offsetZ++) {
+                    var blockState = sub2[offsetZ];
+                    if (blockState == null) {
+                        continue;
+                    }
 
+                    blockStateConsumer.apply(x + offsetX, y + offsetY, z + offsetZ, blockState);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get the block state at the specified region.
+     *
+     * @param x     the start x coordinate of the region.
+     * @param y     the start y coordinate of the region.
+     * @param z     the start z coordinate of the region.
+     * @param sizeX the size of the region in the x-axis.
+     * @param sizeY the size of the region in the y-axis.
+     * @param sizeZ the size of the region in the z-axis.
+     * @param layer the layer which contains the block.
+     * @return the block states at the specified region, or {@code null} if sizeX/Y/Z is smaller than 1.
+     */
+    default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
+        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
+            return null;
+        }
+
+        var blockStates = new BlockState[sizeX][sizeY][sizeZ];
+        var dimensionInfo = getDimensionInfo();
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;
@@ -537,7 +551,7 @@ public interface Dimension {
                                     var globalY = cY + localY;
                                     var globalZ = cZ + localZ;
                                     var blockState = section.getBlockState(localX, localY, localZ, layer);
-                                    blockStateConsumer.apply(globalX, globalY, globalZ, blockState);
+                                    blockStates[globalX - x][globalY - y][globalZ - z] = blockState;
                                 }
                             }
                         }
@@ -545,6 +559,8 @@ public interface Dimension {
                 }
             }
         }
+
+        return blockStates;
     }
 
     /**
@@ -566,7 +582,6 @@ public interface Dimension {
         }
 
         var dimensionInfo = getDimensionInfo();
-
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;

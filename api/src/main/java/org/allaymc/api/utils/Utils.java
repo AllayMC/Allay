@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.tag.BlockTag;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.tag.ItemTag;
@@ -28,7 +27,6 @@ public class Utils {
     // Some empty constants
 
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
-    public static final BlockState[][][] EMPTY_BLOCK_STATE_ARRAY_3D = new BlockState[0][0][0];
     public static final BlockTag[] EMPTY_BLOCK_TAG_ARRAY = new BlockTag[0];
     public static final ItemTag[] EMPTY_ITEM_TAG_ARRAY = new ItemTag[0];
     public static final ItemId[] EMPTY_ITEM_ID_ARRAY = new ItemId[0];
@@ -41,7 +39,6 @@ public class Utils {
      *
      * @param bytes1 the first byte array.
      * @param bytes2 the other byte arrays.
-     *
      * @return the merged byte array.
      */
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
@@ -65,7 +62,6 @@ public class Utils {
      * Calculates the number of bit that the specified value convert to binary.
      *
      * @param value the value.
-     *
      * @return the bits.
      */
     public byte computeRequiredBits(int value) {
@@ -82,7 +78,6 @@ public class Utils {
      * Convert a netty byte buffer to a byte array.
      *
      * @param buf the byte buffer.
-     *
      * @return the byte array.
      */
     public byte[] convertByteBuf2Array(ByteBuf buf) {
@@ -95,7 +90,6 @@ public class Utils {
      * Convert a {@code Object[]} array to a {@code String[]} array.
      *
      * @param objectArray the object array.
-     *
      * @return the string array.
      */
     public String[] objectArrayToStringArray(Object[] objectArray) {
@@ -106,9 +100,7 @@ public class Utils {
      * Read a string from the input stream.
      *
      * @param inputStream the input stream.
-     *
      * @return the string.
-     *
      * @throws IOException if an I/O error occurs.
      */
     public static String readString(InputStream inputStream) throws IOException {
@@ -119,9 +111,7 @@ public class Utils {
      * Read a string from the reader.
      *
      * @param reader the reader.
-     *
      * @return the string.
-     *
      * @throws IOException if an I/O error occurs.
      */
     public static String readString(Reader reader) throws IOException {
@@ -144,7 +134,6 @@ public class Utils {
      * Get a specified resource in the jar file.
      *
      * @param resourceName the resource name.
-     *
      * @return the input stream.
      */
     public static InputStream getResource(String resourceName) {
@@ -155,7 +144,6 @@ public class Utils {
      * Create a default config initializer.
      *
      * @param file the file path.
-     *
      * @return the config initializer.
      */
     public static OkaeriConfigInitializer createConfigInitializer(Path file) {
