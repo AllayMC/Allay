@@ -21,7 +21,7 @@ public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseCompo
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick() || other == shootingEntity) {
+        if (this.willBeDespawnedNextTick() || other == shooter) {
             return;
         }
 
@@ -44,18 +44,18 @@ public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseCompo
     }
 
     protected void teleport() {
-        if (shootingEntity == null) {
+        if (shooter == null) {
             return;
         }
 
         this.getDimension().addLevelSoundEvent(this.location, SoundEvent.TELEPORT);
-        if (!shootingEntity.teleport(this.location, EntityTeleportEvent.Reason.PROJECTILE)) {
+        if (!shooter.teleport(this.location, EntityTeleportEvent.Reason.PROJECTILE)) {
             return;
         }
 
         this.getDimension().addLevelSoundEvent(this.location, SoundEvent.TELEPORT);
         this.getDimension().addLevelEvent(this.location, LevelEvent.PARTICLE_TELEPORT);
-        if (shootingEntity instanceof EntityDamageComponent damageComponent) {
+        if (shooter instanceof EntityDamageComponent damageComponent) {
             damageComponent.attack(DamageContainer.fall(5));
         }
         // TODO: spawn ender mite
