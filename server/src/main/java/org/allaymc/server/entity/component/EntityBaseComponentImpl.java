@@ -17,7 +17,6 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
-import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
@@ -81,6 +80,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
+
     // This tag is also used in EntityPlayerNetworkComponentImpl, so make it public for reuse
     public static final String TAG_POS = "Pos";
     protected static final String TAG_IDENTIFIER = "identifier";
@@ -94,7 +94,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     // Constants used in physics calculation
     protected static final DoubleBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new DoubleBooleanImmutablePair(0, false);
-    protected static final double MOMENTUM_FACTOR = 0.91;
     protected static final double STEPPING_OFFSET = 0.05;
     protected static final int X = 0;
     protected static final int Y = 1;
@@ -103,14 +102,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected static final int DEFAULT_DEAD_TIMER = 20;
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
-
-    private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
+    protected static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
 
     @Getter
     protected final Location3d location;
-    protected final Location3d locLastSent = new Location3d(0, 0, 0, null);
+    protected final Location3d locationLastSent;
     @Getter
-    protected final long runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
+    protected final long runtimeId;
     @Getter
     protected final Metadata metadata;
     @Getter
@@ -126,8 +124,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected EntityAttributeComponent attributeComponent;
     @Getter
     protected EntityType<? extends Entity> entityType;
-    protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
-    protected Map<EffectType, EffectInstance> effects = new HashMap<>();
+    protected Map<Long, EntityPlayer> viewers;
+    protected Map<EffectType, EffectInstance> effects;
     @Getter
     protected Vector3d motion = new Vector3d();
     @Getter
@@ -135,22 +133,29 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected boolean onGround = true;
     @Getter
-    protected EntityStatus status = EntityStatus.DESPAWNED;
+    protected EntityStatus status;
     protected int deadTimer;
     @Getter
     protected double fallDistance;
     @Getter
     @Setter
     protected String displayName;
-    protected Set<String> tags = new HashSet<>();
+    protected Set<String> tags;
     @Getter
     @Setter
-    protected PersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+    protected PersistentDataContainer persistentDataContainer;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
-        this.entityType = info.getEntityType();
+        this.locationLastSent = new Location3d(0, 0, 0, null);
+        this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
         this.metadata = new Metadata();
+        this.entityType = info.getEntityType();
+        this.viewers = new Long2ObjectOpenHashMap<>();
+        this.effects = new HashMap<>();
+        this.status = EntityStatus.DESPAWNED;
+        this.tags = new HashSet<>();
+        this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
         setDisplayName(entityType.getIdentifier().toString());
     }
 
@@ -245,43 +250,19 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         });
     }
 
-    /**
-     * The default implementation is the logic used in player.
-     *
-     * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
-     */
     @Override
     public Vector3d updateMotion(boolean hasLiquidMotion) {
         var blockStateStandingOn = this.getBlockStateStandingOn();
-
-        // 1. Multiplier factors
-        var movementFactor = this.getMovementFactor();
-        var speedLevel = this.getEffectLevel(EffectTypes.SPEED);
-        var slownessLevel = this.getEffectLevel(EffectTypes.SLOWNESS);
-        var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
-        double slipperinessMultiplier = 1;
+        var slipperinessMultiplier = 1.0;
         if (!hasLiquidMotion) {
             // Entity that has liquid motion won't be affected by the friction of the block it stands on
             slipperinessMultiplier = blockStateStandingOn != null ? blockStateStandingOn.getBlockStateData().friction() : DEFAULT_FRICTION;
         }
-        var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;
-        var momentumMz = motion.z() * slipperinessMultiplier * MOMENTUM_FACTOR;
-
-        // 2. Complete Formulas
-        var velocityFactor = this.isOnGround() ? this.getDragFactorOnGround() : this.getDragFactorInAir();
-        var acceleration = velocityFactor * movementFactor;
-        if (this.isOnGround()) {
-            acceleration *= effectFactor * pow(DEFAULT_FRICTION / slipperinessMultiplier, 3);
-        }
-
-        var yaw = location.yaw();
-        var newMx = momentumMx + acceleration * sin(yaw);
-        var newMz = momentumMz + acceleration * cos(yaw);
-
-        // Skip sprint jump boost because this service does not handle player's movement
-
-        var newMy = (motion.y() - (this.hasGravity() ? this.getGravity() : 0f)) * (1 - this.getDragFactorInAir());
-        return new Vector3d(newMx, newMy, newMz);
+        return new Vector3d(
+                motion.x() * slipperinessMultiplier * (1 - this.getDragFactorOnGround()),
+                (motion.y() - (this.hasGravity() ? this.getGravity() : 0f)) * (1 - this.getDragFactorInAir()),
+                motion.z() * slipperinessMultiplier * (1 - this.getDragFactorOnGround())
+        );
     }
 
     @Override
@@ -953,27 +934,27 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         pk.getFlags().addAll(moveFlags);
         if (moveFlags.contains(HAS_X)) {
             pk.setX((float) newLoc.x());
-            locLastSent.x = newLoc.x();
+            locationLastSent.x = newLoc.x();
         }
         if (moveFlags.contains(HAS_Y)) {
             pk.setY((float) newLoc.y());
-            locLastSent.y = newLoc.y() + getNetworkOffset();
+            locationLastSent.y = newLoc.y() + getNetworkOffset();
         }
         if (moveFlags.contains(HAS_Z)) {
             pk.setZ((float) newLoc.z());
-            locLastSent.z = newLoc.z();
+            locationLastSent.z = newLoc.z();
         }
         if (moveFlags.contains(HAS_PITCH)) {
             pk.setPitch((float) newLoc.pitch());
-            locLastSent.pitch = newLoc.pitch();
+            locationLastSent.pitch = newLoc.pitch();
         }
         if (moveFlags.contains(HAS_YAW)) {
             pk.setYaw((float) newLoc.yaw());
-            locLastSent.yaw = newLoc.yaw();
+            locationLastSent.yaw = newLoc.yaw();
         }
         if (moveFlags.contains(HAS_HEAD_YAW)) {
             pk.setHeadYaw((float) newLoc.headYaw());
-            locLastSent.headYaw = newLoc.headYaw();
+            locationLastSent.headYaw = newLoc.headYaw();
         }
         if (onGround) {
             pk.getFlags().add(ON_GROUND);
@@ -989,12 +970,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
         var diffPositionThreshold = settings.diffPositionThreshold();
         var diffRotationThreshold = settings.diffRotationThreshold();
-        if (abs(locLastSent.x() - newLoc.x()) > diffPositionThreshold) flags.add(HAS_X);
-        if (abs(locLastSent.y() - newLoc.y()) > diffPositionThreshold) flags.add(HAS_Y);
-        if (abs(locLastSent.z() - newLoc.z()) > diffPositionThreshold) flags.add(HAS_Z);
-        if (abs(locLastSent.yaw() - newLoc.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
-        if (abs(locLastSent.pitch() - newLoc.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
-        if (enableHeadYaw() && abs(locLastSent.headYaw() - newLoc.headYaw()) > diffRotationThreshold)
+        if (abs(locationLastSent.x() - newLoc.x()) > diffPositionThreshold) flags.add(HAS_X);
+        if (abs(locationLastSent.y() - newLoc.y()) > diffPositionThreshold) flags.add(HAS_Y);
+        if (abs(locationLastSent.z() - newLoc.z()) > diffPositionThreshold) flags.add(HAS_Z);
+        if (abs(locationLastSent.yaw() - newLoc.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
+        if (abs(locationLastSent.pitch() - newLoc.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
+        if (enableHeadYaw() && abs(locationLastSent.headYaw() - newLoc.headYaw()) > diffRotationThreshold)
             flags.add(HAS_HEAD_YAW);
         return flags;
     }

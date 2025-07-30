@@ -52,10 +52,6 @@ import java.util.Set;
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder {
 
-    double SPRINTING_MOVEMENT_FACTOR = 1.3;
-    double WALKING_MOVEMENT_FACTOR = 1;
-    double SNEAKING_MOVEMENT_FACTOR = 0.3;
-    double STOP_MOVEMENT_FACTOR = 0;
     double DEFAULT_PUSH_SPEED_REDUCTION = 1;
     double DEFAULT_KNOCKBACK = 0.4;
 
@@ -712,13 +708,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the drag factor when on ground of this entity.
      * <p>
-     * This factor will be multiplied to the motion along x and z axis every tick.
-     * The bigger the factor is, the quicker the entity will stop in x-axis and z-axis.
+     * This value represents the percentage of velocity lost by the entity per tick on the
+     * x and z axis. The bigger this value, the faster the entity stops.
      *
      * @return the drag factor when on ground of this entity.
      */
     default double getDragFactorOnGround() {
-        return 0.1;
+        return 0.09;
     }
 
     /**
@@ -759,18 +755,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default double getEyeHeight() {
         return (getAABB().maxY() - getAABB().minY()) * 0.9;
-    }
-
-    /**
-     * Get the movement factor of this entity.
-     * <p>
-     * Given yaw, if the movement multiplier is not 0, the entity will move towards the direction specified by yaw.
-     *
-     * @return the movement factor of this entity.
-     * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
-     */
-    default double getMovementFactor() {
-        return STOP_MOVEMENT_FACTOR;
     }
 
     /**

@@ -94,11 +94,13 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
         if (shape.intersectsRay(location, newPos.sub(location, new Vector3d()), result)) {
             // There are blocks/entities in our way, let's move as far as possible
             newPos = new Location3d(location);
-            newPos.add(motion.mul(Math.clamp(result.x, 0, 1), new Vector3d()));
+            newPos.add(motion.mul(result.x, new Vector3d()));
         }
 
         return !newPos.equals(location) && trySetLocation(newPos);
     }
+
+    // TODO: Implement onHitEntity() and onHitBlock()
 
     protected boolean callProjectileHitEvent(BlockStateWithPos blockBeingHit) {
         var event = new ProjectileHitEvent((EntityProjectile) thisEntity, blockBeingHit);

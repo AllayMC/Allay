@@ -44,7 +44,9 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
         }
 
         if (other instanceof EntityDamageComponent damageComponent) {
-            damageComponent.attack(DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0));
+            var damage = DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0);
+            damage.setCustomKnockback(0.3f);
+            damageComponent.attack(damage);
         }
 
         this.despawn();
