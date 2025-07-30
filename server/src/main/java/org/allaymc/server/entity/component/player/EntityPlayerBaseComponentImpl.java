@@ -2,7 +2,6 @@ package org.allaymc.server.entity.component.player;
 
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -71,6 +70,8 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jctools.maps.NonBlockingHashMap;
+import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
@@ -104,7 +105,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected EntityPlayerNetworkComponent networkComponent;
 
     @Getter
-    protected GameType gameType = Server.SETTINGS.genericSettings().defaultGameType();
+    protected GameType gameType;
     @Getter
     protected SerializedSkin skin;
     @Getter
@@ -112,10 +113,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected Abilities abilities;
     @Getter
-    protected int chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
+    protected int chunkLoadingRadius;
     @Getter
     @Setter
-    protected int chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+    protected int chunkTrySendCountPerTick;
     protected CommandOriginData commandOriginData;
     protected Location3ic spawnPoint;
     protected boolean awaitingDimensionChangeACK;
@@ -147,20 +148,32 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     // this random value will be covered
     @Getter
     @Setter
-    protected int enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-    protected long startUsingItemInAirTime = -1;
-    protected AtomicInteger formIdCounter = new AtomicInteger(0);
-    protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
+    protected int enchantmentSeed;
+    protected long startUsingItemInAirTime;
+    protected AtomicInteger formIdCounter;
+    protected Map<Integer, Form> forms;
+    protected Map<String, Long> cooldowns;
     protected CustomForm serverSettingForm;
-    protected int serverSettingFormId = -1;
+    protected int serverSettingFormId;
     @Getter
-    protected float movementSpeed = DEFAULT_MOVEMENT_SPEED;
+    protected float movementSpeed;
     @ComponentObject
     protected EntityPlayer thisPlayer;
-    protected long nextSavePlayerDataTime = Integer.MAX_VALUE;
+    protected long nextSavePlayerDataTime;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
+        this.gameType = Server.SETTINGS.genericSettings().defaultGameType();
+        this.chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
+        this.chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+        this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+        this.startUsingItemInAirTime = -1;
+        this.formIdCounter = new AtomicInteger(0);
+        this.forms = new NonBlockingHashMap<>();
+        this.cooldowns = new NonBlockingHashMap<>();
+        this.serverSettingFormId = -1;
+        this.movementSpeed = DEFAULT_MOVEMENT_SPEED;
+        this.nextSavePlayerDataTime = Integer.MAX_VALUE;
     }
 
     @EventHandler
@@ -237,6 +250,27 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void requireResendingAvailableCommands() {
         this.requireResendingAvailableCommands = true;
+    }
+
+    @Override
+    public void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send) {
+        this.cooldowns.put(category, getWorld().getTick() + duration);
+        if (send) {
+            var packet = new PlayerStartItemCooldownPacket();
+            packet.setItemCategory(category);
+            packet.setCooldownDuration(duration);
+            this.networkComponent.sendPacket(packet);
+        }
+    }
+
+    @Override
+    public boolean isCooldownEnd(String category) {
+        var coolDown = cooldowns.get(category);
+        if (coolDown == null) {
+            return true;
+        }
+
+        return coolDown < getWorld().getTick();
     }
 
     @Override

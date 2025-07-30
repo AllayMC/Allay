@@ -50,6 +50,16 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
     }
 
     @Override
+    public double getGravity() {
+        return 0.03;
+    }
+
+    @Override
+    public double getDragFactorInAir() {
+        return 0.01;
+    }
+
+    @Override
     public Vector3d updateMotion(boolean hasLiquidMotion) {
         return new Vector3d(
                 this.motion.x * (1 - this.getDragFactorInAir()),

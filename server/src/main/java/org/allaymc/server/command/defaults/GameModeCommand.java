@@ -6,6 +6,7 @@ import org.allaymc.api.command.data.CommonEnums;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
@@ -48,8 +49,7 @@ public class GameModeCommand extends SimpleCommand {
                     }
 
                     for (var player : players) {
-                        // Let client translate the game mode name as nesting translate key is not supported currently
-                        var gameTypeName = "%" + I18n.get().toClientFriendlyStyle(CommonEnums.getGameTypeTrKey(gameType));
+                        var gameTypeName = I18n.get().tr(CommonEnums.getGameTypeTrKey(gameType), LangCode.en_US);
                         player.setGameType(gameType);
 
                         if (player == context.getSender()) {

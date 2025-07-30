@@ -507,6 +507,20 @@ public class GameTestCommand extends SimpleCommand {
                     }
 
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("addcooldown")
+                .str("category", null)
+                .optional()
+                .exec((context, player) -> {
+                    String category = context.getResult(1);
+                    if (category != null) {
+                        player.setCooldown(category, 20);
+                    } else {
+                        player.setCooldown(player.getItemInHand().getItemType(), 20);
+                    }
+
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }

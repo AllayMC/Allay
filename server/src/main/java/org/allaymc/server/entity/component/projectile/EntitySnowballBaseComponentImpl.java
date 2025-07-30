@@ -61,16 +61,6 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
         this.addHitEffect();
     }
 
-    @Override
-    public double getGravity() {
-        return 0.03;
-    }
-
-    @Override
-    public double getDragFactorInAir() {
-        return 0.01;
-    }
-
     protected void addHitEffect() {
         var particleCount = nextParticleCount();
         for (var i = 0; i < particleCount; i++) {

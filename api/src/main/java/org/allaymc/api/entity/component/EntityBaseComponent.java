@@ -202,9 +202,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Teleport the entity to the specified location.
      *
      * @param location the location to teleport the entity to.
+     * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
      */
-    default void teleport(Location3dc location) {
-        teleport(location, EntityTeleportEvent.Reason.UNKNOWN);
+    default boolean teleport(Location3dc location) {
+        return teleport(location, EntityTeleportEvent.Reason.UNKNOWN);
     }
 
     /**
@@ -212,8 +213,18 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param location the location to teleport the entity to.
      * @param reason   the reason of the teleport.
+     * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
      */
-    void teleport(Location3dc location, EntityTeleportEvent.Reason reason);
+    boolean teleport(Location3dc location, EntityTeleportEvent.Reason reason);
+
+    /**
+     * Teleport the entity to the specified location.
+     *
+     * @param location the location to teleport the entity to.
+     */
+    default boolean teleport(Location3ic location) {
+        return teleport(new Location3d(location));
+    }
 
     /**
      * Teleport the entity to the specified location asynchronously.
@@ -224,15 +235,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default void teleportAsync(Location3dc location) {
         Thread.ofVirtual().start(() -> teleport(location));
-    }
-
-    /**
-     * Teleport the entity to the specified location.
-     *
-     * @param location the location to teleport the entity to.
-     */
-    default void teleport(Location3ic location) {
-        teleport(new Location3d(location));
     }
 
     /**

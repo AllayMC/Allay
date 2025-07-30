@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.data.EntityId;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySplashPotion;
 import org.allaymc.api.item.data.ArmorType;
@@ -798,6 +799,24 @@ public final class ItemTypeInitializer {
                 .builder(ItemSnowballStackImpl.class)
                 .vanillaItem(ItemId.SNOWBALL)
                 .addComponent(() -> new ItemProjectileComponentImpl(EntityId.SNOWBALL, 1.5), ItemProjectileComponentImpl.class)
+                .build();
+        ItemTypes.ENDER_PEARL = AllayItemType
+                .builder(ItemEnderPearlStackImpl.class)
+                .vanillaItem(ItemId.ENDER_PEARL)
+                .addComponent(() -> new ItemProjectileComponentImpl(EntityId.ENDER_PEARL, 1.5) {
+                    @Override
+                    public boolean shoot(Entity shooter) {
+                        if (shooter instanceof EntityPlayer player) {
+                            if (!player.isCooldownEnd(ItemTypes.ENDER_PEARL)) {
+                                return false;
+                            }
+
+                            player.setCooldown(ItemTypes.ENDER_PEARL, 20);
+                        }
+
+                        return super.shoot(shooter);
+                    }
+                }, ItemProjectileComponentImpl.class)
                 .build();
     }
 

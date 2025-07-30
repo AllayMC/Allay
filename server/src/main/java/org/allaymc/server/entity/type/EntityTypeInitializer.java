@@ -7,6 +7,7 @@ import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
+import org.allaymc.server.entity.component.projectile.EntityEnderPearlBaseComponentImpl;
 import org.allaymc.server.entity.component.projectile.EntitySnowballBaseComponentImpl;
 import org.allaymc.server.entity.component.projectile.EntitySplashPotionBaseComponentImpl;
 import org.allaymc.server.entity.impl.*;
@@ -108,6 +109,11 @@ public final class EntityTypeInitializer {
                 .builder(EntitySplashPotionImpl.class)
                 .vanillaEntity(EntityId.SPLASH_POTION)
                 .addComponent(EntitySplashPotionBaseComponentImpl::new, EntitySplashPotionBaseComponentImpl.class)
+                .build();
+        EntityTypes.ENDER_PEARL = AllayEntityType
+                .builder(EntityEnderPearlImpl.class)
+                .vanillaEntity(EntityId.ENDER_PEARL)
+                .addComponent(EntityEnderPearlBaseComponentImpl::new, EntityEnderPearlBaseComponentImpl.class)
                 .build();
     }
 }

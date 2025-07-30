@@ -34,11 +34,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added method `EffectType.getColor()` to get the color of an effect type.
 - (API) Added class `PotionType` which represents the type of potion bottle item.
 - (API) Added methods `BlockBehavior.onEntityInside()` and `Entity.onInsideBlock()`.
+- (API) Added method `CustomItemComponentDataGenerator.Builder.cooldown()` to set cooldown for custom item.
 - (API) Implemented writable book and written book.
 - (API) Implemented (glowing) item frame.
 - (API) Implemented map.
 - (API) Implemented snowball.
 - (API) Implemented potion and splash potion.
+- (API) Implemented ender pearl.
 - The color of the player on the locator bar is now calculated based on their name.
 - Added overloads for methods `AllayXXXType.Builder.build()` which accept a custom `ClassLoader`. This parameter should be used by plugins
   if plugins want to create custom item type, because plugins classes are loaded by `JarPluginClassLoader`.
@@ -54,6 +56,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved plugin i18n file directory from `lang` to `assets/lang`.
 - (API) Renamed `ItemFoodComponent` to `ItemEdibleComponent`.
 - (API) Renamed `PlayerEatFoodEvent` to `PlayerEatEvent`.
+- (API) Method `Entity.teleport()` now return a `boolean` value which indicates whether the event is cancelled.
 - Commands `/op` and `/deop` now use player target parameter instead of string parameter.
 
 ### Fixed

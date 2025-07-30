@@ -34,11 +34,6 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
     }
 
     @Override
-    public double getDragFactorInAir() {
-        return 0.01;
-    }
-
-    @Override
     public void onCollideWithEntity(Entity other) {
         if (this.willBeDespawnedNextTick() || other == shootingEntity || !callProjectileHitEvent(null)) {
             return;

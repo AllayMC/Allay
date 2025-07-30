@@ -2,6 +2,7 @@ package org.allaymc.server.item.component.edible;
 
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3ic;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -24,8 +25,9 @@ public class ItemChorusFruitEdibleComponentImpl extends ItemEdibleComponentImpl 
         var safePos = dimension.findSuitableGroundPosAround(this::isSafeStandingPos, (int) playerLoc.x(), (int) playerLoc.z(), 8, 16);
         if (safePos != null) {
             dimension.addLevelSoundEvent(playerLoc, SoundEvent.TELEPORT);
-            player.teleport(new Location3d(safePos.x() + 0.5, safePos.y(), safePos.z() + 0.5, dimension));
-            dimension.addLevelSoundEvent(playerLoc, SoundEvent.TELEPORT);
+            if (player.teleport(new Location3d(safePos.x() + 0.5, safePos.y(), safePos.z() + 0.5, dimension), EntityTeleportEvent.Reason.CHORUS_FRUIT)) {
+                dimension.addLevelSoundEvent(playerLoc, SoundEvent.TELEPORT);
+            }
         }
     }
 

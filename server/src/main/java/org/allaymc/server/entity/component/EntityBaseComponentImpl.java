@@ -743,21 +743,21 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void teleport(Location3dc target, EntityTeleportEvent.Reason reason) {
+    public boolean teleport(Location3dc target, EntityTeleportEvent.Reason reason) {
         Objects.requireNonNull(target.dimension());
         if (this.location.dimension() == null) {
             log.warn("Trying to teleport an entity whose dimension is null! Entity: {}", thisEntity);
-            return;
+            return false;
         }
 
         if (!this.isSpawned()) {
             log.warn("Trying to teleport an entity which is not spawned! Entity: {}", thisEntity);
-            return;
+            return false;
         }
 
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3d(target), reason);
         if (!event.call()) {
-            return;
+            return false;
         }
 
         target = event.getTo();
@@ -769,6 +769,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         } else {
             teleportOverDimension(target);
         }
+
+        return true;
     }
 
     protected void beforeTeleport(Location3dc target) {

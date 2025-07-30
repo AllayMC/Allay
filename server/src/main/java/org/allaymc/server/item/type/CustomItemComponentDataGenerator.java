@@ -50,6 +50,10 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
      * Whether the item can be held in the off-hand slot.
      */
     protected final boolean allowOffHand;
+    /**
+     * Cooldown for this item.
+     */
+    protected final Integer cooldown;
 
     protected final Map<String, NbtMap> customProperties;
     protected final Map<String, NbtMap> customComponents;
@@ -118,6 +122,10 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
             properties.putInt("use_duration", edibleComponent.getEatingTime())
                     .putInt("use_animation", edibleComponent.isDrink() ? 2 : 1);
             components.putCompound("minecraft:food", NbtMap.builder().putBoolean("can_always_eat", edibleComponent.canBeAlwaysEaten()).build());
+        }
+
+        if (cooldown != null) {
+            components.putCompound("minecraft:cooldown", NbtMap.builder().putString("category", itemType.getIdentifier().toString()).putFloat("duration", cooldown).build());
         }
 
         if (itemStack instanceof ItemToolComponent) {
