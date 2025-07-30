@@ -7,6 +7,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
+import org.joml.Vector3dc;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,7 +39,7 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
     }
 
     @Override
-    protected void onHitEntity(Entity other) {
+    protected void onHitEntity(Entity other, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick() || other == shootingEntity) {
             return;
         }
@@ -54,7 +55,7 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
     }
 
     @Override
-    protected void onHitBlock(BlockStateWithPos block) {
+    protected void onHitBlock(BlockStateWithPos block, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick()) {
             return;
         }

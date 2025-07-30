@@ -13,6 +13,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.Vector3i;
 
 /**
@@ -34,7 +35,7 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
     }
 
     @Override
-    protected void onHitEntity(Entity other) {
+    protected void onHitEntity(Entity other, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick() || other == shootingEntity) {
             return;
         }
@@ -44,7 +45,7 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
     }
 
     @Override
-    protected void onHitBlock(BlockStateWithPos block) {
+    protected void onHitBlock(BlockStateWithPos block, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick()) {
             return;
         }

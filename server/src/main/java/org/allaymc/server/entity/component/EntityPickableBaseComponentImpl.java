@@ -13,8 +13,9 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 @Setter
 @Getter
 public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl implements EntityPickableBaseComponent {
-    public static final int MAX_AGE = 6000;
-    public static final int DEFAULT_PICKUP_DELAY = 10;
+
+    protected static final int MAX_AGE = 6000;
+    protected static final int DEFAULT_PICKUP_DELAY = 10;
 
     protected int age;
     protected int pickupDelay = DEFAULT_PICKUP_DELAY;

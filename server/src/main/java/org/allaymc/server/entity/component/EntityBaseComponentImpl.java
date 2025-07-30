@@ -170,11 +170,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         metadata.set(EntityDataTypes.PLAYER_INDEX, 0);
         metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 300);
         metadata.set(EntityDataTypes.AIR_SUPPLY_MAX, (short) 300);
-        updateHitBoxAndCollisionBoxMetadata();
         metadata.set(EntityFlag.HAS_GRAVITY, true);
         metadata.set(EntityFlag.HAS_COLLISION, true);
         metadata.set(EntityFlag.CAN_CLIMB, true);
         metadata.set(EntityFlag.BREATHING, true);
+        updateHitBoxAndCollisionBoxMetadata();
     }
 
     protected void initPermissionGroup() {

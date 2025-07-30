@@ -82,7 +82,7 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
             return null;
         }
 
-        projectile.setShootingEntity(shooter);
+        projectile.setShooter(shooter);
         projectile.setMotion(computeMotion(shooter.getLocation()));
         return projectile;
     }

@@ -5,6 +5,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.eventbus.event.CancellableEvent;
+import org.joml.Vector3dc;
 
 /**
  * @author daoge_cmd
@@ -12,6 +13,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 public class ProjectileHitEvent extends EntityEvent implements CancellableEvent {
 
+    protected Vector3dc hitPos;
     /**
      * The block being hit, can be {@code null}.
      */
@@ -21,8 +23,9 @@ public class ProjectileHitEvent extends EntityEvent implements CancellableEvent 
      */
     protected Entity victim;
 
-    public ProjectileHitEvent(EntityProjectile entity, Entity victim, BlockStateWithPos block) {
+    public ProjectileHitEvent(EntityProjectile entity, Vector3dc hitPos, Entity victim, BlockStateWithPos block) {
         super(entity);
+        this.hitPos = hitPos;
         this.victim = victim;
         this.block = block;
     }

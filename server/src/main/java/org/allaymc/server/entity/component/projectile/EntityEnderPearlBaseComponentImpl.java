@@ -9,6 +9,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.joml.Vector3dc;
 
 /**
  * @author daoge_cmd
@@ -19,7 +20,7 @@ public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseCompo
     }
 
     @Override
-    protected void onHitEntity(Entity other) {
+    protected void onHitEntity(Entity other, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick() || other == shootingEntity) {
             return;
         }
@@ -33,7 +34,7 @@ public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseCompo
     }
 
     @Override
-    protected void onHitBlock(BlockStateWithPos block) {
+    protected void onHitBlock(BlockStateWithPos block, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick()) {
             return;
         }

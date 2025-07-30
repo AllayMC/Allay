@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added class `PotionType` which represents the type of potion bottle item.
 - (API) Added methods `BlockBehavior.onEntityInside()` and `Entity.onInsideBlock()`.
 - (API) Added method `CustomItemComponentDataGenerator.Builder.cooldown()` to set cooldown for custom item.
+- (API) Added methods `BlockBehavior.onProjectileHit()` and `Entity.onProjectileHit()`.
 - (API) Implemented writable book and written book.
 - (API) Implemented (glowing) item frame.
 - (API) Implemented map.

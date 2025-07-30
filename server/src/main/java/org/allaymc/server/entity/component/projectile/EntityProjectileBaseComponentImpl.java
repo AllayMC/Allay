@@ -13,6 +13,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 import org.joml.primitives.Rayd;
@@ -22,12 +23,27 @@ import org.joml.primitives.Rayd;
  */
 public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl implements EntityProjectileBaseComponent {
 
+    protected static final int MAX_AGE = 6000;
+
     @Getter
     @Setter
-    protected Entity shootingEntity;
+    protected Entity shooter;
+    protected int age;
 
     public EntityProjectileBaseComponentImpl(EntityInitInfo info) {
         super(info);
+    }
+
+    @Override
+    public void tick(long currentTick) {
+        super.tick(currentTick);
+
+        if (age != -1) {
+            age++;
+            if (age >= MAX_AGE) {
+                despawn();
+            }
+        }
     }
 
     @Override
@@ -89,7 +105,6 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
         final class RayCastResult {
             Object hit = null;
             double result = Double.MAX_VALUE;
-            boolean hitBlock = false;
         }
         var rayCastResult = new RayCastResult();
 
@@ -100,14 +115,13 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
                 if (result.x() < rayCastResult.result) {
                     rayCastResult.result = result.x();
                     rayCastResult.hit = new BlockStateWithPos(block, new Position3i(x, y, z, dimension));
-                    rayCastResult.hitBlock = true;
                 }
             }
         });
 
         // Ray cast entities
         dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb).forEach(entity -> {
-            if (entity == thisEntity || entity == shootingEntity) {
+            if (entity == thisEntity || (age <= 10 && entity == shooter)) {
                 return;
             }
 
@@ -116,7 +130,6 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
                 if (result.x() < rayCastResult.result) {
                     rayCastResult.result = result.x();
                     rayCastResult.hit = entity;
-                    rayCastResult.hitBlock = false;
                 }
             }
         });
@@ -128,10 +141,12 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
         }
 
         if (!newPos.equals(location) && trySetLocation(newPos)) {
-            if (rayCastResult.hitBlock && callHitEvent(null, (BlockStateWithPos) rayCastResult.hit)) {
-                this.onHitBlock((BlockStateWithPos) rayCastResult.hit);
-            } else if (callHitEvent((Entity) rayCastResult.hit, null)) {
-                this.onHitEntity((Entity) rayCastResult.hit);
+            if (rayCastResult.hit instanceof BlockStateWithPos block && callHitEvent(newPos, null, block)) {
+                block.getBehavior().onProjectileHit(block, (EntityProjectile) thisEntity, newPos);
+                onHitBlock(block, newPos);
+            } else if (rayCastResult.hit instanceof Entity entity && callHitEvent(newPos, entity, null)) {
+                entity.onProjectileHit((EntityProjectile) thisEntity, newPos);
+                onHitEntity(entity, newPos);
             }
 
             return true;
@@ -140,14 +155,14 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
         return false;
     }
 
-    protected boolean callHitEvent(Entity victim, BlockStateWithPos block) {
-        var event = new ProjectileHitEvent((EntityProjectile) thisEntity, victim, block);
+    protected boolean callHitEvent(Vector3dc hitPos, Entity victim, BlockStateWithPos block) {
+        var event = new ProjectileHitEvent((EntityProjectile) thisEntity, hitPos, victim, block);
         return event.call();
     }
 
-    protected void onHitBlock(BlockStateWithPos block) {
+    protected void onHitBlock(BlockStateWithPos block, Vector3dc hitPos) {
     }
 
-    protected void onHitEntity(Entity entity) {
+    protected void onHitEntity(Entity entity, Vector3dc hitPos) {
     }
 }

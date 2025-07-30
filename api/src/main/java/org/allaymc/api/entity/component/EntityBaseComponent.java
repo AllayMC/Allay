@@ -11,6 +11,7 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
@@ -391,6 +392,16 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     @ApiStatus.OverrideOnly
     default void onCollideWithBlock(BlockStateWithPos block) {
+    }
+
+    /**
+     * Called when the entity is hit by a projectile.
+     *
+     * @param projectile the projectile that hits the entity.
+     * @param hitPos     the hit pos.
+     */
+    @ApiStatus.OverrideOnly
+    default void onProjectileHit(EntityProjectile projectile, Vector3dc hitPos) {
     }
 
     /**

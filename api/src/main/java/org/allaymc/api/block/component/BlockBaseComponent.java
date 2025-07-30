@@ -10,10 +10,12 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.world.Dimension;
 import org.jetbrains.annotations.ApiStatus;
+import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.util.Set;
@@ -262,7 +264,7 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Called when a block collides with an entity.
+     * Called when the block collides with an entity.
      *
      * @param current the block that collides with the entity.
      * @param entity  the entity that collides with the block.
@@ -272,7 +274,7 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Called when an entity is inside a block.
+     * Called when an entity is inside the block.
      *
      * @param current the block that the entity inside.
      * @param entity  the entity that inside a block.
@@ -282,12 +284,23 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Called when a block is splashed by a splash water bottle.
+     * Called when the block is splashed by a splash water bottle.
      *
      * @param current the block being splashed.
      */
     @ApiStatus.OverrideOnly
     default void onSplash(BlockStateWithPos current) {
+    }
+
+    /**
+     * Called when the block is hit by a projectile.
+     *
+     * @param current    the block that is being hit.
+     * @param projectile the projectile that hits the block.
+     * @param hitPos     the hit pos.
+     */
+    @ApiStatus.OverrideOnly
+    default void onProjectileHit(BlockStateWithPos current, EntityProjectile projectile, Vector3dc hitPos) {
     }
 
     /**
