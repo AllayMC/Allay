@@ -28,7 +28,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `scale` property for `DebugArrow`.
 - (API) Added methods `updateMotion()`, `trySetLocation()` and `applyMotion()` to `EntityBaseComponent`. These methods
   are intended only be called by physics engine, and user should override them only.
-- (API) Added methods `hasBlockCollision()` and `onCollideWithBlock()` to `EntityBaseComponent`.
+- (API) Added method `onCollideWithBlock()` to `EntityBaseComponent`.
 - (API) Added `ProjectileLaunchEvent` and `ProjectileHitEvent` events.
 - (API) Added `PlayerMapInfoRequestEvent` event.
 - (API) Added method `EffectType.getColor()` to get the color of an effect type.
@@ -77,6 +77,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed several default methods in `EntityPlayerNetworkComponent` that forward call to `LoginData` for better codebase.
 - (API) Removed methods `PackLoader.hasFolder()` and `PackLoader.forEachIn()`, since these methods are never used.
 - (API) Removed method `MathUtils.grow()`. Consider using `AABBd.expand` instead.
+- (API) Removed methods `BlockBehavior.canCollideWithEntity()` and `EntityBaseComponent.hasBlockCollision()`.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 

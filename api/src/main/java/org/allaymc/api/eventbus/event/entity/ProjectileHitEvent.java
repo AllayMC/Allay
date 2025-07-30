@@ -21,14 +21,10 @@ public class ProjectileHitEvent extends EntityEvent implements CancellableEvent 
      */
     protected Entity victim;
 
-    public ProjectileHitEvent(EntityProjectile entity, BlockStateWithPos block) {
-        super(entity);
-        this.block = block;
-    }
-
-    public ProjectileHitEvent(EntityProjectile entity, Entity victim) {
+    public ProjectileHitEvent(EntityProjectile entity, Entity victim, BlockStateWithPos block) {
         super(entity);
         this.victim = victim;
+        this.block = block;
     }
 
     @Override

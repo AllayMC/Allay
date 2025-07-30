@@ -78,7 +78,6 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
      * @param dimension the dimension that the cactus is in.
      * @param pos       the pos of the cactus.
      * @param recursive whether to check the block below recursively.
-     *
      * @return {@code true} if cactus can live/grow here, {@code false} otherwise
      */
     protected boolean canGrowHere(Dimension dimension, Vector3ic pos, boolean recursive) {
@@ -98,11 +97,6 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean canRandomUpdate() {
-        return true;
-    }
-
-    @Override
-    public boolean canCollideWithEntity() {
         return true;
     }
 }

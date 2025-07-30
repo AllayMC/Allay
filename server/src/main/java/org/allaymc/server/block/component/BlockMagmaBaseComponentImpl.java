@@ -26,9 +26,4 @@ public class BlockMagmaBaseComponentImpl extends BlockBaseComponentImpl {
             damageComponent.attack(DamageContainer.magma(1));
         }
     }
-
-    @Override
-    public boolean canCollideWithEntity() {
-        return true;
-    }
 }

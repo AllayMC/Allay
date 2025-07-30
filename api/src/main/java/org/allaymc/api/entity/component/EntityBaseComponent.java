@@ -340,17 +340,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if this entity has block collision. If return {@code true}, method {@link #onCollideWithBlock(BlockStateWithPos)}
-     * and {@link org.allaymc.api.block.BlockBehavior#onCollideWithEntity(BlockStateWithPos, Entity)} will be called when this
-     * entity collide with a block.
-     *
-     * @return {@code true} if this entity has block collision, {@code false} otherwise.
-     */
-    default boolean hasBlockCollision() {
-        return true;
-    }
-
-    /**
      * Check if the entity has entity collision motion.
      *
      * @return {@code true} if the entity has entity collision motion.

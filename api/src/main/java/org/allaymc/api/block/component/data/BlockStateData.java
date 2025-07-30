@@ -122,11 +122,8 @@ public class BlockStateData {
     /**
      * The collision shape of the block state.
      * <p>
-     * When an entity is collided with block's collision shape and method {@link BlockBehavior#canCollideWithEntity()}
-     * return {@code true}, method {@link BlockBehavior#onCollideWithEntity(BlockStateWithPos, Entity)}.
-     * <p>
-     * If method {@link Entity#hasBlockCollision()} return {@code true}, {@link Entity#onInsideBlock(BlockStateWithPos)}
-     * will also be called.
+     * When an entity is collided with block's collision shape, methods {@link BlockBehavior#onCollideWithEntity(BlockStateWithPos, Entity)}
+     * and {@link Entity#onInsideBlock(BlockStateWithPos)} will be called.
      */
     @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();

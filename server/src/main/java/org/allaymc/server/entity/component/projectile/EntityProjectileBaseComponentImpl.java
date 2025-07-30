@@ -9,12 +9,13 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.eventbus.event.entity.ProjectileHitEvent;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
+import org.joml.primitives.Rayd;
 
 /**
  * @author daoge_cmd
@@ -81,29 +82,72 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
                 Math.max(location.y, newPos.y),
                 Math.max(location.z, newPos.z)
         );
-        var builder = VoxelShape.builder();
-        getDimension().forEachBlockStates(aabb, 0, (x, y, z, block) ->
-                block.getBlockStateData().computeOffsetCollisionShape(x, y, z).getSolids().forEach(builder::solid));
-        getDimension().getEntityService().getPhysicsService().computeCollidingEntities(aabb).forEach(entity -> {
-            if (entity != thisEntity && entity != shootingEntity) {
-                builder.solid(entity.getOffsetAABB());
+        var dimension = getDimension();
+        var ray = new Rayd(location, newPos.sub(location, new Vector3d()));
+
+        // Local class that stores used values during ray casting
+        final class RayCastResult {
+            Object hit = null;
+            double result = Double.MAX_VALUE;
+            boolean hitBlock = false;
+        }
+        var rayCastResult = new RayCastResult();
+
+        // Ray cast blocks
+        dimension.forEachBlockStates(aabb, 0, (x, y, z, block) -> {
+            var result = new Vector2d();
+            if (block.getBlockStateData().computeOffsetCollisionShape(x, y, z).intersectsRay(ray, result)) {
+                if (result.x() < rayCastResult.result) {
+                    rayCastResult.result = result.x();
+                    rayCastResult.hit = new BlockStateWithPos(block, new Position3i(x, y, z, dimension));
+                    rayCastResult.hitBlock = true;
+                }
             }
         });
-        var shape = builder.build();
-        var result = new Vector2d();
-        if (shape.intersectsRay(location, newPos.sub(location, new Vector3d()), result)) {
-            // There are blocks/entities in our way, let's move as far as possible
+
+        // Ray cast entities
+        dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb).forEach(entity -> {
+            if (entity == thisEntity || entity == shootingEntity) {
+                return;
+            }
+
+            var result = new Vector2d();
+            if (entity.getOffsetAABB().intersectsRay(ray, result)) {
+                if (result.x() < rayCastResult.result) {
+                    rayCastResult.result = result.x();
+                    rayCastResult.hit = entity;
+                    rayCastResult.hitBlock = false;
+                }
+            }
+        });
+
+        // Let's move as far as possible if there are blocks/entities in our way,
+        if (rayCastResult.hit != null) {
             newPos = new Location3d(location);
-            newPos.add(motion.mul(result.x, new Vector3d()));
+            newPos.add(motion.mul(rayCastResult.result, new Vector3d()));
         }
 
-        return !newPos.equals(location) && trySetLocation(newPos);
+        if (!newPos.equals(location) && trySetLocation(newPos)) {
+            if (rayCastResult.hitBlock && callHitEvent(null, (BlockStateWithPos) rayCastResult.hit)) {
+                this.onHitBlock((BlockStateWithPos) rayCastResult.hit);
+            } else if (callHitEvent((Entity) rayCastResult.hit, null)) {
+                this.onHitEntity((Entity) rayCastResult.hit);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
-    // TODO: Implement onHitEntity() and onHitBlock()
-
-    protected boolean callProjectileHitEvent(BlockStateWithPos blockBeingHit) {
-        var event = new ProjectileHitEvent((EntityProjectile) thisEntity, blockBeingHit);
+    protected boolean callHitEvent(Entity victim, BlockStateWithPos block) {
+        var event = new ProjectileHitEvent((EntityProjectile) thisEntity, victim, block);
         return event.call();
+    }
+
+    protected void onHitBlock(BlockStateWithPos block) {
+    }
+
+    protected void onHitEntity(Entity entity) {
     }
 }

@@ -38,8 +38,8 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
     }
 
     @Override
-    public void onCollideWithEntity(Entity other) {
-        if (this.willBeDespawnedNextTick() || other == shootingEntity || !callProjectileHitEvent(null)) {
+    protected void onHitEntity(Entity other) {
+        if (this.willBeDespawnedNextTick() || other == shootingEntity) {
             return;
         }
 
@@ -54,8 +54,8 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
     }
 
     @Override
-    public void onCollideWithBlock(BlockStateWithPos block) {
-        if (this.willBeDespawnedNextTick() || !callProjectileHitEvent(block)) {
+    protected void onHitBlock(BlockStateWithPos block) {
+        if (this.willBeDespawnedNextTick()) {
             return;
         }
 

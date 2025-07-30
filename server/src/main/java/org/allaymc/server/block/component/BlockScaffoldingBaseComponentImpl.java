@@ -76,9 +76,4 @@ public class BlockScaffoldingBaseComponentImpl extends BlockBaseComponentImpl {
     public boolean canResetFallDamage() {
         return true;
     }
-
-    @Override
-    public boolean canCollideWithEntity() {
-        return true;
-    }
 }

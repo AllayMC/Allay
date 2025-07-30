@@ -8,7 +8,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.item.ItemStack;
@@ -263,18 +262,7 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Determines whether the block type can collide with entities. If return {@code true}, method
-     * {@link EntityBaseComponent#onCollideWithBlock(BlockStateWithPos)} and {@link BlockBehavior#onCollideWithEntity(BlockStateWithPos, Entity)}
-     * will be called when the block collide with an entity.
-     *
-     * @return {@code true} if the block can collide with entities, {@code false} otherwise.
-     */
-    default boolean canCollideWithEntity() {
-        return false;
-    }
-
-    /**
-     * Called when a block collides with an entity. This method is only called if {@link #canCollideWithEntity()} returns {@code true}.
+     * Called when a block collides with an entity.
      *
      * @param current the block that collides with the entity.
      * @param entity  the entity that collides with the block.
