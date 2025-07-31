@@ -58,7 +58,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed `ItemFoodComponent` to `ItemEdibleComponent`.
 - (API) Renamed `PlayerEatFoodEvent` to `PlayerEatEvent`.
 - (API) Method `Entity.teleport()` now return a `boolean` value which indicates whether the event is cancelled.
-- Commands `/op` and `/deop` now use player target parameter instead of string parameter.
+- (API) Updated method `Entity.knockback()`. It now accepts a custom `additionalMotion` vector.
+- Commands `/op` and `/deop` now use player target parameter instead of string parameter.`
+- Refactored knockback related logic, it now better matches the vanilla.
 
 ### Fixed
 
@@ -79,6 +81,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed methods `PackLoader.hasFolder()` and `PackLoader.forEachIn()`, since these methods are never used.
 - (API) Removed method `MathUtils.grow()`. Consider using `AABBd.expand` instead.
 - (API) Removed methods `BlockBehavior.canCollideWithEntity()` and `EntityBaseComponent.hasBlockCollision()`.
+- (API) Removed fields `customKnockbackXXX` in `DamageContainer`. Consider setting `DamageContainer.hasKnockback` to `false` and apply your own knockback logic.
 
 ## 0.6.0 (API 0.9.0) - 2025-7-7
 

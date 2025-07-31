@@ -52,11 +52,6 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
     }
 
     @Override
-    public double getStepHeight() {
-        return 0;
-    }
-
-    @Override
     public boolean computeEntityCollisionMotion() {
         return false;
     }

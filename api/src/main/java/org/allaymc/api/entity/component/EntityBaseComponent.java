@@ -830,24 +830,31 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * @see #knockback(Vector3dc, double, boolean, double)
+     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
     default void knockback(Vector3dc source) {
         knockback(source, DEFAULT_KNOCKBACK);
     }
 
     /**
-     * @see #knockback(Vector3dc, double, boolean, double)
+     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
     default void knockback(Vector3dc source, double kb) {
-        knockback(source, kb, false);
+        knockback(source, kb, kb);
     }
 
     /**
-     * @see #knockback(Vector3dc, double, boolean, double)
+     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
-    default void knockback(Vector3dc source, double kb, boolean ignoreKnockbackResistance) {
-        knockback(source, kb, ignoreKnockbackResistance, kb);
+    default void knockback(Vector3dc source, double kb, double kby) {
+        knockback(source, kb, kby, new Vector3d());
+    }
+
+    /**
+     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
+     */
+    default void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion) {
+        knockback(source, kb, kby, additionalMotion, false);
     }
 
     /**
@@ -855,10 +862,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param source                    the source of the knockback.
      * @param kb                        the knockback strength to apply.
-     * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored.
      * @param kby                       the knockback strength in y-axis.
+     * @param additionalMotion          the additional motion that will be appiled to the entity.
+     * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored.
      */
-    void knockback(Vector3dc source, double kb, boolean ignoreKnockbackResistance, double kby);
+    void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance);
 
     /**
      * Apply the entity event to the entity.

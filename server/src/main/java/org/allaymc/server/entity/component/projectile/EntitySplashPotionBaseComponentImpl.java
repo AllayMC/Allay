@@ -36,7 +36,7 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick() || other == shooter) {
+        if (this.willBeDespawnedNextTick()) {
             return;
         }
 

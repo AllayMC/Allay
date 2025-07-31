@@ -21,7 +21,7 @@ public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseCompo
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick() || other == shooter) {
+        if (this.willBeDespawnedNextTick()) {
             return;
         }
 

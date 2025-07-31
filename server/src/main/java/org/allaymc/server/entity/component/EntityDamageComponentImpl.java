@@ -2,17 +2,19 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import org.allaymc.api.component.interfaces.ComponentManager;
+import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.type.EffectTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.ComponentClass;
@@ -23,6 +25,7 @@ import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
+import org.joml.Vector3d;
 
 /**
  * @author daoge_cmd
@@ -66,35 +69,35 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     protected void applyDamage(DamageContainer damage) {
-        attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
-        baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
-
+        this.attributeComponent.setHealth(this.attributeComponent.getHealth() - damage.getFinalDamage());
+        this.baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
         if (damage.isCritical()) {
-            baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+            this.baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+        }
+        this.manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
+
+        if (!(damage.getAttacker() instanceof Entity entity)) {
+            return;
         }
 
-        manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
+        ((ComponentClass) entity).getManager().callEvent(CEntityAttackEvent.INSTANCE);
+        if (!damage.isHasKnockback()) {
+            return;
+        }
 
-        Entity attacker = damage.getAttacker();
-        if (attacker == null) return;
-
-        ((ComponentClass) attacker).getManager().callEvent(CEntityAttackEvent.INSTANCE);
-
-        if (damage.hasCustomKnockback()) {
-            baseComponent.knockback(attacker.getLocation(), damage.getCustomKnockback());
-        } else {
-            if (attacker instanceof EntityPlayer player) {
-                // TODO: Zombies and other creatures that can hold weapons need to be considered
-                var kb = EntityBaseComponent.DEFAULT_KNOCKBACK;
-                var kbEnchantmentLevel = player.getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
-                if (kbEnchantmentLevel != 0) {
-                    kb += kbEnchantmentLevel * 0.1f;
-                }
-                baseComponent.knockback(attacker.getLocation(), kb);
-            } else {
-                baseComponent.knockback(attacker.getLocation());
+        var kb = EntityBaseComponent.DEFAULT_KNOCKBACK;
+        var kby = EntityBaseComponent.DEFAULT_KNOCKBACK;
+        var additionalMotion = new Vector3d();
+        if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(FullContainerType.PLAYER_INVENTORY)) {
+            var kbEnchantmentLevel = component.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+            if (kbEnchantmentLevel != 0) {
+                kb /= 2.0;
+                additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
+                additionalMotion.mul(kbEnchantmentLevel * 0.5);
             }
         }
+
+        baseComponent.knockback(entity.getLocation(), kb, kby, additionalMotion);
     }
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {

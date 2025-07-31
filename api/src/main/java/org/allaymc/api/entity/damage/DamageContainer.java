@@ -33,28 +33,54 @@ public class DamageContainer {
     );
 
     /**
-     * The attacker of the damage <br>
-     * Attacker not only can be an entity, but also can be a block or even null!
+     * The attacker of the damage. Attacker not only can be an entity, but also can be a block
+     * or even {@code null}, it depends on the caller.
      */
     protected Object attacker;
+    /**
+     * The type of this damage.
+     */
     protected DamageType damageType;
+    /**
+     * The initial amount of damage.
+     */
     protected float sourceDamage;
+    /**
+     * The final amount of damage.
+     */
     @Setter
     protected float finalDamage;
+    /**
+     * Whether the damage has knockback. Set this to {@code false} to apply custom knockback.
+     */
     @Setter
-    protected float customKnockback = -1;
-    protected float knockbackResistance = 0;
+    protected boolean hasKnockback;
+    /**
+     * The cooldown after this damage. When an entity is on cooldown, it cannot be damaged.
+     */
     @Setter
-    protected int coolDown = DEFAULT_DAMAGE_COOL_DOWN;
+    protected int coolDown;
+    /**
+     * Whether this damage is critical. If this value is {@code true}, the final damage will be multiplied by {@code 1.5},
+     * and critical particle will be applied to the victim.
+     */
     @Setter
     protected boolean critical;
 
+    /**
+     * Creates a new damage container.
+     *
+     * @param attacker     the attacker that cause the damage. Can be {@code null}.
+     * @param damageType   the type of this damage.
+     * @param sourceDamage the source amount of damage.
+     */
     public DamageContainer(Object attacker, DamageType damageType, float sourceDamage) {
-        // attacker is nullable
         this.attacker = attacker;
         this.damageType = Objects.requireNonNull(damageType);
         this.sourceDamage = sourceDamage;
         this.finalDamage = sourceDamage;
+        this.hasKnockback = true;
+        this.coolDown = DEFAULT_DAMAGE_COOL_DOWN;
     }
 
     /**
@@ -210,15 +236,6 @@ public class DamageContainer {
     public <T> T getAttacker() {
         // noinspection unchecked
         return (T) attacker;
-    }
-
-    /**
-     * Check if the damage has a custom knockback.
-     *
-     * @return {@code true} if the damage has a custom knockback, otherwise {@code false}.
-     */
-    public boolean hasCustomKnockback() {
-        return customKnockback != -1;
     }
 
     /**

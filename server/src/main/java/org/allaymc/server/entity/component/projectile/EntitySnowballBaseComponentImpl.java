@@ -7,6 +7,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,13 +41,15 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick() || other == shooter) {
+        if (this.willBeDespawnedNextTick()) {
             return;
         }
 
         if (other instanceof EntityDamageComponent damageComponent) {
             var damage = DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0);
-            damage.setCustomKnockback(0.3f);
+            damage.setHasKnockback(false);
+            // Use the last location as the knockback source
+            other.knockback(hitPos.sub(this.motion, new Vector3d()));
             damageComponent.attack(damage);
         }
 

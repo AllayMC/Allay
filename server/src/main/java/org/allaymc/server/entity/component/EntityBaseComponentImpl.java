@@ -65,7 +65,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.floor;
 import static org.allaymc.api.block.component.data.BlockStateData.DEFAULT_FRICTION;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector2f;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
@@ -811,19 +812,21 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void knockback(Vector3dc source, double kb, boolean ignoreKnockbackResistance, double kby) {
-        setMotion(calculateKnockbackMotion(source, kb, ignoreKnockbackResistance, kby));
+    public void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
+        setMotion(calculateKnockbackMotion(source, kb, kby, additionalMotion, ignoreKnockbackResistance));
     }
 
-    protected Vector3d calculateKnockbackMotion(Vector3dc source, double kb, boolean ignoreKnockbackResistance, double kby) {
+    protected Vector3d calculateKnockbackMotion(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
         if (!ignoreKnockbackResistance) {
             var resistance = 0.0;
             if (attributeComponent != null && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
                 resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
             }
             if (resistance > 0) {
-                kb *= 1 - resistance;
-                kby *= 1 - resistance;
+                var factor = 1 - resistance;
+                kb *= factor;
+                kby *= factor;
+                additionalMotion = additionalMotion.mul(factor, new Vector3d());
             }
         }
         Vector3d vec;
@@ -834,14 +837,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             var rz = rand.nextDouble(1) - 0.5;
             vec = MathUtils.normalizeIfNotZero(new Vector3d(rx, 0, rz)).mul(kb);
         } else {
-            vec = location.sub(source, new Vector3d()).normalize().mul(kb);
-            vec.y = 0;
+            vec = location.sub(source, new Vector3d()).setComponent(1, 0).normalize().mul(kb);
         }
-        return new Vector3d(
-                motion.x / 2 + vec.x,
-                min(motion.y / 2 + kby, kby),
-                motion.z / 2 + vec.z
-        );
+        vec.y = kby;
+        return motion.mul(0.5, new Vector3d()).add(vec).add(additionalMotion);
     }
 
     @Override
