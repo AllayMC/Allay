@@ -63,7 +63,7 @@ public record AllayChunkSection(
         // Block layer count
         byteBuf.writeByte(LAYER_COUNT);
         // Extra byte since version 9
-        byteBuf.writeByte(sectionY & 0xFF);
+        byteBuf.writeByte(sectionY);
 
         for (var blockLayer : blockLayers) {
             blockLayer.writeToNetwork(byteBuf, BlockState::blockStateHash);

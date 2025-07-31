@@ -22,7 +22,7 @@ import java.util.List;
 public final class Palette<V> {
 
     private static final int SECTION_SIZE = 16 * 16 * 16;
-    private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
+    //    private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
     private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V0;
 
     private List<V> palette;
@@ -75,8 +75,6 @@ public final class Palette<V> {
 
     // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
-        trim();
-
         if (oneEntryOnly()) {
             byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, false));
             try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
@@ -134,7 +132,6 @@ public final class Palette<V> {
 //            byteBuf.writeByte(COPY_LAST_FLAG_HEADER);
 //            return;
 //        }
-        trim();
 
         if (this.oneEntryOnly()) {
             byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, true));

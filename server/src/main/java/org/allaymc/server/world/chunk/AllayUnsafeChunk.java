@@ -543,9 +543,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         packet.setChunkZ(this.getZ());
         packet.setCachingEnabled(false);
         packet.setRequestSubChunks(true);
-        packet.setSubChunkLimit(getDimensionInfo().chunkSectionCount());
+        // NOTICE: Sub chunk limit is bigger than zero
+        packet.setSubChunkLimit(findHighestNonAirSectionY() - dimensionInfo.minSectionY());
         packet.setData(writeToNetworkBiomeOnly());
         return packet;
+    }
+
+    private int findHighestNonAirSectionY() {
+        for (int highest = dimensionInfo.maxSectionY(); highest > dimensionInfo.minSectionY(); highest--) {
+            if (!getSection(highest).isAirSection()) {
+                return highest;
+            }
+        }
+
+        return dimensionInfo.minSectionY();
     }
 
     public LevelChunkPacket createFullLevelChunkPacketChunk() {

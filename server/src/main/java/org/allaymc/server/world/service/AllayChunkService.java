@@ -520,12 +520,11 @@ public final class AllayChunkService implements ChunkService {
 
         private LevelChunkPacket createLevelChunkPacket(Chunk chunk) {
             var lcp = new LevelChunkPacket[1];
-
-            if (Server.SETTINGS.worldSettings().useSubChunkSendingSystem()) {
-                chunk.applyOperation(unsafeChunk -> lcp[0] = ((AllayUnsafeChunk) unsafeChunk).createSubChunkLevelChunkPacket(), OperationType.NONE, OperationType.READ);
-            } else {
-                chunk.applyOperation(unsafeChunk -> lcp[0] = ((AllayUnsafeChunk) unsafeChunk).createFullLevelChunkPacketChunk(), OperationType.READ, OperationType.READ);
-            }
+            chunk.applyOperation(unsafeChunk -> {
+                lcp[0] = Server.SETTINGS.worldSettings().useSubChunkSendingSystem() ?
+                        ((AllayUnsafeChunk) unsafeChunk).createSubChunkLevelChunkPacket() :
+                        ((AllayUnsafeChunk) unsafeChunk).createFullLevelChunkPacketChunk();
+            }, OperationType.READ, OperationType.READ);
             return lcp[0];
         }
 
