@@ -128,4 +128,11 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return the ping of the player.
      */
     int getPing();
+
+    /**
+     * Check if the client cache is enabled.
+     *
+     * @return {@code true} if the client cache is enabled, {@code false} otherwise.
+     */
+    boolean isClientCacheEnabled();
 }

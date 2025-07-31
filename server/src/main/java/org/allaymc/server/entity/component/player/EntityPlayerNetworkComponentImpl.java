@@ -79,7 +79,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected EntityPlayerBaseComponentImpl baseComponent;
     @Getter
     @Setter
-    protected boolean networkEncryptionEnabled = false;
+    protected boolean networkEncryptionEnabled;
+    @Getter
+    @Setter
+    protected boolean clientCacheEnabled;
     protected AtomicInteger fullyJoinChunkThreshold;
     @Getter
     @Setter
@@ -91,8 +94,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected BedrockServerSession clientSession;
 
     public EntityPlayerNetworkComponentImpl() {
-        this.fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
         this.packetProcessorHolder = new PacketProcessorHolder();
+        // Client cache is enabled in most cases
+        this.clientCacheEnabled = true;
+        this.fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
     }
 
     public void handleDataPacket(BedrockPacket packet, long time) {
