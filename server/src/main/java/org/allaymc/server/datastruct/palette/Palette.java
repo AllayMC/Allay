@@ -59,24 +59,19 @@ public final class Palette<V> {
         }
 
         byteBuf.writeByte(createPaletteHeader(this.bitArray.version(), true));
-
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
-
         VarInts.writeInt(byteBuf, this.palette.size());
         this.palette.forEach(value -> VarInts.writeInt(byteBuf, serializer.serialize(value)));
     }
 
     // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
     public void writeToStorage(ByteBuf byteBuf, NBTSerializer<V> serializer) {
-        var version = this.bitArray.version();
-        byteBuf.writeByte(Palette.createPaletteHeader(version, false));
-
+        byteBuf.writeByte(Palette.createPaletteHeader(this.bitArray.version(), false));
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
-
         byteBuf.writeIntLE(this.palette.size());
         try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
             for (V value : this.palette) {
@@ -94,11 +89,9 @@ public final class Palette<V> {
         }
 
         byteBuf.writeByte(Palette.createPaletteHeader(this.bitArray.version(), false));
-
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
-
         byteBuf.writeIntLE(this.palette.size());
         for (V value : this.palette) {
             byteBuf.writeIntLE(serializer.serialize(value));
@@ -112,12 +105,10 @@ public final class Palette<V> {
         }
 
         var version = getVersionFromPaletteHeader(header);
-        this.palette.clear();
-
         readWords(byteBuf, version);
-        int paletteSize = byteBuf.readIntLE();
+        var paletteSize = byteBuf.readIntLE();
         checkVersion(version, paletteSize);
-
+        this.palette.clear();
         for (int i = 0; i < paletteSize; i++) {
             this.palette.add(deserializer.deserialize(byteBuf));
         }
@@ -137,13 +128,10 @@ public final class Palette<V> {
         }
 
         var version = getVersionFromPaletteHeader(header);
-        this.palette.clear();
-        var paletteSize = 1;
-
         readWords(byteBuf, version);
-        paletteSize = byteBuf.readIntLE();
+        var paletteSize = byteBuf.readIntLE();
         checkVersion(version, paletteSize);
-
+        this.palette.clear();
         for (int i = 0; i < paletteSize; i++) {
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
         }

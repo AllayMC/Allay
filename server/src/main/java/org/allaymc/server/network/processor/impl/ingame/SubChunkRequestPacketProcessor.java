@@ -62,7 +62,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
         int sectionY = center.getY() + offset.getY();
         if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
-            log.warn("Player {} requested sub-chunk at Y={} which is out of bounds [{}, {}]", player.getOriginName(), sectionY, dimensionInfo.minSectionY(), dimensionInfo.maxSectionY());
+            log.warn("Player {} requested sub-chunk at y={} which is out of bounds ({}, {})", player.getOriginName(), sectionY, dimensionInfo.minSectionY(), dimensionInfo.maxSectionY());
             subChunkData.setResult(SubChunkRequestResult.INDEX_OUT_OF_BOUNDS);
             subChunkData.setData(Unpooled.EMPTY_BUFFER);
             subChunkData.setHeightMapType(HeightMapDataType.NO_DATA);
@@ -73,7 +73,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         int chunkZ = center.getZ() + offset.getZ();
         var chunk = player.getDimension().getChunkService().getChunk(chunkX, chunkZ);
         if (chunk == null) {
-            log.warn("Player {} requested sub-chunk in a non-loaded chunk at [{}, {}]", player.getOriginName(), chunkX, chunkZ);
+            log.warn("Player {} requested sub-chunk in a non-loaded chunk at ({}, {})", player.getOriginName(), chunkX, chunkZ);
             subChunkData.setResult(SubChunkRequestResult.CHUNK_NOT_FOUND);
             subChunkData.setData(Unpooled.EMPTY_BUFFER);
             subChunkData.setHeightMapType(HeightMapDataType.NO_DATA);

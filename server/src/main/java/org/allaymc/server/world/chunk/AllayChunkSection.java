@@ -66,7 +66,6 @@ public record AllayChunkSection(
         byteBuf.writeByte(sectionY);
 
         for (var blockLayer : blockLayers) {
-            // TODO: Check if we can use copy last flag here
             blockLayer.writeToNetwork(byteBuf, BlockState::blockStateHash, null);
         }
     }
