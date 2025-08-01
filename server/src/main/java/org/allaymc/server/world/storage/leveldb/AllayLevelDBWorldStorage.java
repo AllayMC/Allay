@@ -513,7 +513,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 buffer.writeByte(AllayChunkSection.LAYER_COUNT);
                 buffer.writeByte(ySection);
                 for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
-                    section.blockLayers()[i].trim();
+                    section.blockLayers()[i].compact();
                     section.blockLayers()[i].writeToStorage(buffer, BlockState::getBlockStateTag);
                 }
                 writeBatch.put(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()), Utils.convertByteBuf2Array(buffer));
@@ -631,9 +631,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             Palette<BiomeType> lastPalette = null;
             for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
                 AllayChunkSection section = chunk.getSection(y);
-                section.biomes().trim();
+                section.biomes().compact();
                 section.biomes().writeToStorage(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
-                lastPalette = section.biomes();
+                // TODO: Fix client crash due to biome copy flag
+//                lastPalette = section.biomes();
             }
             writeBatch.put(LevelDBKey.DATA_3D.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
         } finally {

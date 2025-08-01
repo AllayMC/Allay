@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.server.datastruct.bitarray.BitArray;
 import org.allaymc.server.datastruct.bitarray.BitArrayVersion;
+import org.allaymc.server.datastruct.bitarray.SingletonBitArray;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
@@ -42,14 +43,6 @@ public final class Palette<V> {
         this.palette.add(first);
     }
 
-    private static boolean isNetwork(short header) {
-        return (header & 1) == 1;
-    }
-
-    private static byte createCopyLastFlag(boolean network) {
-        return (byte) ((0x7F << 1) | (network ? 1 : 0));
-    }
-
     public V get(int index) {
         return this.palette.get(this.bitArray.get(index));
     }
@@ -65,42 +58,26 @@ public final class Palette<V> {
             return;
         }
 
-        if (bitArray.version() == BitArrayVersion.V0) {
-            byteBuf.writeByte(createPaletteHeader(BitArrayVersion.V0, true));
-            VarInts.writeInt(byteBuf, serializer.serialize(palette.getFirst()));
-            return;
-        }
-
         byteBuf.writeByte(createPaletteHeader(this.bitArray.version(), true));
 
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
-        VarInts.writeInt(byteBuf, this.palette.size());
 
+        VarInts.writeInt(byteBuf, this.palette.size());
         this.palette.forEach(value -> VarInts.writeInt(byteBuf, serializer.serialize(value)));
     }
 
     // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
     public void writeToStorage(ByteBuf byteBuf, NBTSerializer<V> serializer) {
-        if (oneEntryOnly()) {
-            byteBuf.writeByte(Palette.createPaletteHeader(BitArrayVersion.V0, false));
-            try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
-                outputStream.writeTag(serializer.serialize(palette.getFirst()));
-            } catch (IOException e) {
-                throw new PaletteException(e);
-            }
-            return;
-        }
-
         var version = this.bitArray.version();
         byteBuf.writeByte(Palette.createPaletteHeader(version, false));
 
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
-        byteBuf.writeIntLE(this.palette.size());
 
+        byteBuf.writeIntLE(this.palette.size());
         try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
             for (V value : this.palette) {
                 outputStream.writeTag(serializer.serialize(value));
@@ -116,20 +93,13 @@ public final class Palette<V> {
             return;
         }
 
-        if (this.oneEntryOnly()) {
-            byteBuf.writeByte(Palette.createPaletteHeader(BitArrayVersion.V0, false));
-            byteBuf.writeIntLE(serializer.serialize(this.palette.getFirst()));
-            return;
-        }
-
-        var version = this.bitArray.version();
-        byteBuf.writeByte(Palette.createPaletteHeader(version, false));
+        byteBuf.writeByte(Palette.createPaletteHeader(this.bitArray.version(), false));
 
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
-        byteBuf.writeIntLE(this.palette.size());
 
+        byteBuf.writeIntLE(this.palette.size());
         for (V value : this.palette) {
             byteBuf.writeIntLE(serializer.serialize(value));
         }
@@ -143,12 +113,6 @@ public final class Palette<V> {
 
         var version = getVersionFromPaletteHeader(header);
         this.palette.clear();
-
-        if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(SECTION_SIZE, null);
-            this.palette.add(deserializer.deserialize(byteBuf));
-            return;
-        }
 
         readWords(byteBuf, version);
         int paletteSize = byteBuf.readIntLE();
@@ -165,6 +129,9 @@ public final class Palette<V> {
             log.warn("Reading network palette data with non-network method!");
         }
         if (hasCopyLastFlag(header)) {
+            if (last == null) {
+                throw new PaletteException("Find copy last flag but last palette is null!");
+            }
             last.copyTo(this);
             return;
         }
@@ -172,12 +139,6 @@ public final class Palette<V> {
         var version = getVersionFromPaletteHeader(header);
         this.palette.clear();
         var paletteSize = 1;
-
-        if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(SECTION_SIZE, null);
-            this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
-            return;
-        }
 
         readWords(byteBuf, version);
         paletteSize = byteBuf.readIntLE();
@@ -231,7 +192,7 @@ public final class Palette<V> {
         return bitArray.version();
     }
 
-    public void trim() {
+    public void compact() {
         var newPalette = new ReferenceArrayList<V>();
         // Make sure the first entry won't be changed
         newPalette.add(palette.getFirst());
@@ -258,10 +219,13 @@ public final class Palette<V> {
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
-        var wordCount = version.getWordsForSize(SECTION_SIZE);
-        var words = new int[wordCount];
-        Arrays.setAll(words, i -> byteBuf.readIntLE());
+        if (version == BitArrayVersion.V0) {
+            this.bitArray = SingletonBitArray.INSTANCE;
+            return;
+        }
 
+        var words = new int[version.getWordsForSize(SECTION_SIZE)];
+        Arrays.setAll(words, i -> byteBuf.readIntLE());
         this.bitArray = version.createArray(SECTION_SIZE, words);
     }
 
@@ -312,6 +276,14 @@ public final class Palette<V> {
         if (version.maxEntryIndex < paletteSize - 1) {
             throw new PaletteException("Palette (version " + version.name() + ") is too large. Max size " + version.maxEntryIndex + ". Actual size " + paletteSize);
         }
+    }
+
+    private static boolean isNetwork(short header) {
+        return (header & 1) == 1;
+    }
+
+    private static byte createCopyLastFlag(boolean network) {
+        return (byte) ((0x7F << 1) | (network ? 1 : 0));
     }
 
     @Override

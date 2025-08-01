@@ -1,6 +1,5 @@
 package org.allaymc.server.datastruct.bitarray;
 
-import com.google.common.base.Preconditions;
 import org.cloudburstmc.math.GenericMath;
 
 /**
@@ -68,7 +67,9 @@ public enum BitArrayVersion {
     }
 
     public int getWordsForSize(int size) {
-        Preconditions.checkArgument(this != V0);
+        if (this == V0) {
+            return 0;
+        }
         return GenericMath.ceil((float) size / this.entriesPerWord);
     }
 
