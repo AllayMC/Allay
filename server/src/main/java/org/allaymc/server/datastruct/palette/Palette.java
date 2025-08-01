@@ -22,7 +22,6 @@ import java.util.List;
 public final class Palette<V> {
 
     private static final int SECTION_SIZE = 16 * 16 * 16;
-    //    private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
     private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V0;
 
     private List<V> palette;
@@ -43,8 +42,12 @@ public final class Palette<V> {
         this.palette.add(first);
     }
 
-    private static boolean isPersistent(short header) {
-        return (header & 1) == 0;
+    private static boolean isNetwork(short header) {
+        return (header & 1) == 1;
+    }
+
+    private static byte createCopyLastFlag(boolean network) {
+        return (byte) ((0x7F << 1) | (network ? 1 : 0));
     }
 
     public V get(int index) {
@@ -56,14 +59,19 @@ public final class Palette<V> {
         this.bitArray.set(index, paletteIndex);
     }
 
-    public void writeToNetwork(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
+    public void writeToNetwork(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
+        if (last != null && last.equals(this)) {
+            byteBuf.writeByte(createCopyLastFlag(true));
+            return;
+        }
+
         if (bitArray.version() == BitArrayVersion.V0) {
-            byteBuf.writeByte(getPaletteHeader(BitArrayVersion.V0, true));
+            byteBuf.writeByte(createPaletteHeader(BitArrayVersion.V0, true));
             VarInts.writeInt(byteBuf, serializer.serialize(palette.getFirst()));
             return;
         }
 
-        byteBuf.writeByte(getPaletteHeader(this.bitArray.version(), true));
+        byteBuf.writeByte(createPaletteHeader(this.bitArray.version(), true));
 
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
@@ -74,9 +82,9 @@ public final class Palette<V> {
     }
 
     // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
-    public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
+    public void writeToStorage(ByteBuf byteBuf, NBTSerializer<V> serializer) {
         if (oneEntryOnly()) {
-            byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, false));
+            byteBuf.writeByte(Palette.createPaletteHeader(BitArrayVersion.V0, false));
             try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
                 outputStream.writeTag(serializer.serialize(palette.getFirst()));
             } catch (IOException e) {
@@ -86,7 +94,7 @@ public final class Palette<V> {
         }
 
         var version = this.bitArray.version();
-        byteBuf.writeByte(Palette.getPaletteHeader(version, false));
+        byteBuf.writeByte(Palette.createPaletteHeader(version, false));
 
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
@@ -102,10 +110,35 @@ public final class Palette<V> {
         }
     }
 
-    public void readFromStoragePersistent(ByteBuf byteBuf, PersistentDataDeserializer<V> deserializer) {
+    public void writeToStorage(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
+        if (last != null && last.equals(this)) {
+            byteBuf.writeByte(createCopyLastFlag(false));
+            return;
+        }
+
+        if (this.oneEntryOnly()) {
+            byteBuf.writeByte(Palette.createPaletteHeader(BitArrayVersion.V0, false));
+            byteBuf.writeIntLE(serializer.serialize(this.palette.getFirst()));
+            return;
+        }
+
+        var version = this.bitArray.version();
+        byteBuf.writeByte(Palette.createPaletteHeader(version, false));
+
+        for (int word : this.bitArray.words()) {
+            byteBuf.writeIntLE(word);
+        }
+        byteBuf.writeIntLE(this.palette.size());
+
+        for (V value : this.palette) {
+            byteBuf.writeIntLE(serializer.serialize(value));
+        }
+    }
+
+    public void readFromStorage(ByteBuf byteBuf, NBTDeserializer<V> deserializer) {
         var header = byteBuf.readUnsignedByte();
-        if (!isPersistent(header)) {
-            log.warn("Reading runtime data with persistent method!");
+        if (isNetwork(header)) {
+            log.warn("Reading network palette data with non-network method!");
         }
 
         var version = getVersionFromPaletteHeader(header);
@@ -126,36 +159,10 @@ public final class Palette<V> {
         }
     }
 
-    public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
-        // FIXME: copy last flag
-//        if (last != null && last.equals(this)) {
-//            byteBuf.writeByte(COPY_LAST_FLAG_HEADER);
-//            return;
-//        }
-
-        if (this.oneEntryOnly()) {
-            byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, true));
-            byteBuf.writeIntLE(serializer.serialize(this.palette.getFirst()));
-            return;
-        }
-
-        var version = this.bitArray.version();
-        byteBuf.writeByte(Palette.getPaletteHeader(version, true));
-
-        for (int word : this.bitArray.words()) {
-            byteBuf.writeIntLE(word);
-        }
-        byteBuf.writeIntLE(this.palette.size());
-
-        for (V value : this.palette) {
-            byteBuf.writeIntLE(serializer.serialize(value));
-        }
-    }
-
-    public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
+    public void readFromStorage(ByteBuf byteBuf, IntDeserializer<V> deserializer, Palette<V> last) {
         var header = byteBuf.readUnsignedByte();
-        if (isPersistent(header)) {
-            log.warn("Reading persistent data with runtime method!");
+        if (isNetwork(header)) {
+            log.warn("Reading network palette data with non-network method!");
         }
         if (hasCopyLastFlag(header)) {
             last.copyTo(this);
@@ -293,8 +300,8 @@ public final class Palette<V> {
         return (header >> 1) == 0x7F;
     }
 
-    private static short getPaletteHeader(BitArrayVersion version, boolean runtime) {
-        return (short) ((version.bits << 1) | (runtime ? 1 : 0));
+    private static short createPaletteHeader(BitArrayVersion version, boolean network) {
+        return (short) ((version.bits << 1) | (network ? 1 : 0));
     }
 
     private static BitArrayVersion getVersionFromPaletteHeader(short header) {

@@ -514,7 +514,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 buffer.writeByte(ySection);
                 for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
                     section.blockLayers()[i].trim();
-                    section.blockLayers()[i].writeToStoragePersistent(buffer, BlockState::getBlockStateTag);
+                    section.blockLayers()[i].writeToStorage(buffer, BlockState::getBlockStateTag);
                 }
                 writeBatch.put(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()), Utils.convertByteBuf2Array(buffer));
             } finally {
@@ -560,7 +560,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                         section = new AllayChunkSection((byte) ySection, palettes);
                     }
                     for (int layer = 0; layer < layers; layer++) {
-                        section.blockLayers()[layer].readFromStoragePersistent(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
+                        section.blockLayers()[layer].readFromStorage(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
                     }
                     sections[ySection - minSectionY] = section;
                     break;
@@ -632,7 +632,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
                 AllayChunkSection section = chunk.getSection(y);
                 section.biomes().trim();
-                section.biomes().writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
+                section.biomes().writeToStorage(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
                 lastPalette = section.biomes();
             }
             writeBatch.put(LevelDBKey.DATA_3D.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
@@ -667,7 +667,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 continue;
             }
 
-            section.biomes().readFromStorageRuntime(heightAndBiomesBuffer, AllayLevelDBWorldStorage::getBiomeByIdNonNull, lastPalette);
+            section.biomes().readFromStorage(heightAndBiomesBuffer, AllayLevelDBWorldStorage::getBiomeByIdNonNull, lastPalette);
             lastPalette = section.biomes();
         }
     }

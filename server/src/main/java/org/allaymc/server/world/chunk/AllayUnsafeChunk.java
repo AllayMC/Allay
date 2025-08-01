@@ -28,6 +28,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
+import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.world.service.AllayEntityService;
 import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -608,8 +609,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     private void writeBiomes(ByteBuf byteBuf) {
+        Palette<BiomeType> last = null;
         for (var section : sections) {
-            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+            section.biomes().writeToNetwork(byteBuf, BiomeType::getId, last);
+            last = section.biomes();
         }
     }
 

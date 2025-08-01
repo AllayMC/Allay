@@ -6,6 +6,6 @@ import org.cloudburstmc.nbt.NbtMap;
  * @author JukeboxMC | daoge_cmd
  */
 @FunctionalInterface
-public interface PersistentDataSerializer<V> {
+public interface NBTSerializer<V> {
     NbtMap serialize(V value);
 }
