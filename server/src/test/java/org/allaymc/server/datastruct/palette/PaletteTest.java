@@ -50,13 +50,13 @@ class PaletteTest {
     }
 
     @Test
-    void testPersistent() {
+    void testStorage() {
         var e0 = new Entry(0);
         var e1 = new Entry(1);
         var p0 = new Palette<>(e0, BitArrayVersion.V0);
         p0.set(1, e1);
 
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
         p0.writeToStorage(buffer, PDSerializerImpl.INSTANCE);
 
         var p1 = new Palette<>(e0, BitArrayVersion.V0);
@@ -66,7 +66,7 @@ class PaletteTest {
     }
 
     @Test
-    void testPersistentV2() {
+    void testStorageV2() {
         var e0 = new Entry(0);
         var e1 = new Entry(1);
         var e2 = new Entry(2);
@@ -74,13 +74,13 @@ class PaletteTest {
         var p0 = new Palette<>(e0, BitArrayVersion.V0);
         p0.set(1, e1);
         p0.set(2, e2);
-        ByteBuf b0 = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf b0 = ByteBufAllocator.DEFAULT.buffer();
         p0.writeToStorage(b0, PDSerializerImpl.INSTANCE);
 
         var p1 = new Palette<>(e0, BitArrayVersion.V2);
         p1.set(1, e1);
         p1.set(2, e2);
-        ByteBuf b1 = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf b1 = ByteBufAllocator.DEFAULT.buffer();
         p1.writeToStorage(b1, PDSerializerImpl.INSTANCE);
 
         var bytes0 = Utils.convertByteBuf2Array(b0);

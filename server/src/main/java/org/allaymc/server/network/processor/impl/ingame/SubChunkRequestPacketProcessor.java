@@ -131,7 +131,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             } else {
                 subChunkData.setResult(SubChunkRequestResult.SUCCESS);
 
-                var buffer = ByteBufAllocator.DEFAULT.ioBuffer();
+                var buffer = ByteBufAllocator.DEFAULT.buffer();
                 subChunk.writeToNetwork(buffer);
 
                 var blockEntities = chunk.getSectionBlockEntities(sectionY);

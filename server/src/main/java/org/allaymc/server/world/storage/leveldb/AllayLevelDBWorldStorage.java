@@ -296,7 +296,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     protected CompletableFuture<Void> writeEntities0(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities, boolean asyncWrite) {
-        var idsBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        var idsBuf = ByteBufAllocator.DEFAULT.buffer();
         try (var writeBatch = this.db.createWriteBatch()) {
             var idsKey = LevelDBKey.createEntityIdsKey(chunkX, chunkZ, dimensionInfo);
 
@@ -507,7 +507,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static void serializeSections(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
             AllayChunkSection section = chunk.getSection(ySection);
-            ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
+            ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
             try {
                 buffer.writeByte(AllayChunkSection.CURRENT_CHUNK_SECTION_VERSION);
                 buffer.writeByte(AllayChunkSection.LAYER_COUNT);
@@ -621,7 +621,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
      * @see <a href="https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115">Biome 3d</a>
      */
     private static void serializeHeightAndBiome(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
-        ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.buffer();
         try {
             // Serialize height map
             for (short height : chunk.calculateAndGetHeightMap().getHeights()) {
@@ -709,7 +709,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         if (blockEntities.isEmpty()) {
             writeBatch.delete(blockEntitiesKey);
         } else {
-            ByteBuf blockEntitiesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
+            ByteBuf blockEntitiesBuffer = ByteBufAllocator.DEFAULT.buffer();
             try (var bufStream = new ByteBufOutputStream(blockEntitiesBuffer);
                  var writerLE = NbtUtils.createWriterLE(bufStream)) {
                 for (BlockEntity blockEntity : blockEntities) {
@@ -761,7 +761,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return;
         }
 
-        ByteBuf scheduledUpdatesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
+        ByteBuf scheduledUpdatesBuffer = ByteBufAllocator.DEFAULT.buffer();
         try (var bufStream = new ByteBufOutputStream(scheduledUpdatesBuffer);
              var writerLE = NbtUtils.createWriterLE(bufStream)) {
             var nbt = NbtMap.builder()

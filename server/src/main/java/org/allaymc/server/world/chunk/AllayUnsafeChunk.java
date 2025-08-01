@@ -573,7 +573,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     private ByteBuf writeToNetwork() {
-        var byteBuf = ByteBufAllocator.DEFAULT.buffer();
+        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
             writeBlocks(byteBuf);
             writeBiomes(byteBuf);
@@ -589,7 +589,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     private ByteBuf writeToNetworkBiomeOnly() {
-        var byteBuf = ByteBufAllocator.DEFAULT.buffer();
+        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
             writeBiomes(byteBuf);
             // Length of 1 byte for the border block count
