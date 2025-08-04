@@ -612,7 +612,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Palette<BiomeType> last = null;
         for (var section : sections) {
             section.biomes().writeToNetwork(byteBuf, BiomeType::getId, last);
-            last = section.biomes();
+            // TODO: fix copy last flag
+//            last = section.biomes();
         }
     }
 
