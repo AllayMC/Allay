@@ -634,7 +634,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 section.biomes().compact();
                 section.biomes().writeToStorage(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
                 // TODO: Fix client crash due to biome copy flag
-//                lastPalette = section.biomes();
+                lastPalette = section.biomes();
             }
             writeBatch.put(LevelDBKey.DATA_3D.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), Utils.convertByteBuf2Array(heightAndBiomesBuffer));
         } finally {

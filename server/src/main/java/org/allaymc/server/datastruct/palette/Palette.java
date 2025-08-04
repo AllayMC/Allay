@@ -54,11 +54,17 @@ public final class Palette<V> {
 
     public void writeToNetwork(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
         if (last != null && last.equals(this)) {
-            byteBuf.writeByte(createCopyLastFlag(true));
+            byteBuf.writeByte(createCopyLastFlag(false));
             return;
         }
 
-        byteBuf.writeByte(createPaletteHeader(this.bitArray.version(), true));
+        if (oneEntryOnly()) {
+            byteBuf.writeByte(createPaletteHeader(BitArrayVersion.V0, false));
+            VarInts.writeInt(byteBuf, serializer.serialize(this.palette.getFirst()));
+            return;
+        }
+
+        byteBuf.writeByte(createPaletteHeader(this.bitArray.version(), false));
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
@@ -66,9 +72,48 @@ public final class Palette<V> {
         this.palette.forEach(value -> VarInts.writeInt(byteBuf, serializer.serialize(value)));
     }
 
+    public void readFromNetwork(ByteBuf byteBuf, IntDeserializer<V> deserializer, Palette<V> last) {
+        var header = byteBuf.readUnsignedByte();
+        if (isNBT(header)) {
+            throw new PaletteException("Reading nbt palette data with non-nbt method!");
+        }
+
+        if (hasCopyLastFlag(header)) {
+            if (last == null) {
+                throw new PaletteException("Find copy last flag but last palette is null!");
+            }
+            last.copyTo(this);
+            return;
+        }
+
+        this.palette.clear();
+        var version = getVersionFromPaletteHeader(header);
+        readWords(byteBuf, version);
+        if (version == BitArrayVersion.V0) {
+            this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
+            return;
+        }
+
+        var paletteSize = VarInts.readInt(byteBuf);
+        checkVersion(version, paletteSize);
+        for (int i = 0; i < paletteSize; i++) {
+            this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
+        }
+    }
+
     // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
     public void writeToStorage(ByteBuf byteBuf, NBTSerializer<V> serializer) {
-        byteBuf.writeByte(Palette.createPaletteHeader(this.bitArray.version(), false));
+        if (oneEntryOnly()) {
+            byteBuf.writeByte(Palette.createPaletteHeader(BitArrayVersion.V0, true));
+            try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
+                outputStream.writeTag(serializer.serialize(this.palette.getFirst()));
+            } catch (IOException e) {
+                throw new PaletteException(e);
+            }
+            return;
+        }
+
+        byteBuf.writeByte(Palette.createPaletteHeader(this.bitArray.version(), true));
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
@@ -82,9 +127,36 @@ public final class Palette<V> {
         }
     }
 
+    public void readFromStorage(ByteBuf byteBuf, NBTDeserializer<V> deserializer) {
+        var header = byteBuf.readUnsignedByte();
+        if (!isNBT(header)) {
+            throw new PaletteException("Reading non-nbt palette data with nbt method!");
+        }
+
+        this.palette.clear();
+        var version = getVersionFromPaletteHeader(header);
+        readWords(byteBuf, version);
+        if (version == BitArrayVersion.V0) {
+            this.palette.add(deserializer.deserialize(byteBuf));
+            return;
+        }
+
+        var paletteSize = byteBuf.readIntLE();
+        checkVersion(version, paletteSize);
+        for (int i = 0; i < paletteSize; i++) {
+            this.palette.add(deserializer.deserialize(byteBuf));
+        }
+    }
+
     public void writeToStorage(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
         if (last != null && last.equals(this)) {
             byteBuf.writeByte(createCopyLastFlag(false));
+            return;
+        }
+
+        if (oneEntryOnly()) {
+            byteBuf.writeByte(createPaletteHeader(BitArrayVersion.V0, false));
+            byteBuf.writeIntLE(serializer.serialize(this.palette.getFirst()));
             return;
         }
 
@@ -98,27 +170,12 @@ public final class Palette<V> {
         }
     }
 
-    public void readFromStorage(ByteBuf byteBuf, NBTDeserializer<V> deserializer) {
-        var header = byteBuf.readUnsignedByte();
-        if (isNetwork(header)) {
-            log.warn("Reading network palette data with non-network method!");
-        }
-
-        var version = getVersionFromPaletteHeader(header);
-        readWords(byteBuf, version);
-        var paletteSize = byteBuf.readIntLE();
-        checkVersion(version, paletteSize);
-        this.palette.clear();
-        for (int i = 0; i < paletteSize; i++) {
-            this.palette.add(deserializer.deserialize(byteBuf));
-        }
-    }
-
     public void readFromStorage(ByteBuf byteBuf, IntDeserializer<V> deserializer, Palette<V> last) {
         var header = byteBuf.readUnsignedByte();
-        if (isNetwork(header)) {
-            log.warn("Reading network palette data with non-network method!");
+        if (isNBT(header)) {
+            throw new PaletteException("Reading nbt palette data with non-nbt method!");
         }
+
         if (hasCopyLastFlag(header)) {
             if (last == null) {
                 throw new PaletteException("Find copy last flag but last palette is null!");
@@ -127,11 +184,16 @@ public final class Palette<V> {
             return;
         }
 
+        this.palette.clear();
         var version = getVersionFromPaletteHeader(header);
         readWords(byteBuf, version);
+        if (version == BitArrayVersion.V0) {
+            this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
+            return;
+        }
+
         var paletteSize = byteBuf.readIntLE();
         checkVersion(version, paletteSize);
-        this.palette.clear();
         for (int i = 0; i < paletteSize; i++) {
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
         }
@@ -252,8 +314,8 @@ public final class Palette<V> {
         return (header >> 1) == 0x7F;
     }
 
-    private static short createPaletteHeader(BitArrayVersion version, boolean network) {
-        return (short) ((version.bits << 1) | (network ? 1 : 0));
+    private static short createPaletteHeader(BitArrayVersion version, boolean nbt) {
+        return (short) ((version.bits << 1) | (nbt ? 0 : 1));
     }
 
     private static BitArrayVersion getVersionFromPaletteHeader(short header) {
@@ -266,12 +328,13 @@ public final class Palette<V> {
         }
     }
 
-    private static boolean isNetwork(short header) {
-        return (header & 1) == 1;
+    private static boolean isNBT(short header) {
+        return (header & 1) == 0;
     }
 
-    private static byte createCopyLastFlag(boolean network) {
-        return (byte) ((0x7F << 1) | (network ? 1 : 0));
+    @SuppressWarnings("ALL")
+    private static byte createCopyLastFlag(boolean nbt) {
+        return (byte) ((0x7F << 1) | (nbt ? 0 : 1));
     }
 
     @Override

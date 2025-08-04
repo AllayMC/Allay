@@ -624,7 +624,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     writer.writeTag(blockEntity.saveNBT());
                 }
             } catch (Throwable t) {
-                log.error("Error while encoding block entities in chunk {}, {}", getX(), getZ(), t);
+                log.error("Error while encoding block entities in chunk {}, {}", x, z, t);
             }
         }
     }
