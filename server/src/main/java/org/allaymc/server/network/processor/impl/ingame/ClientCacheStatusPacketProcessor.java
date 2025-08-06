@@ -1,6 +1,8 @@
 package org.allaymc.server.network.processor.impl.ingame;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ClientCacheStatusPacket;
@@ -13,6 +15,8 @@ public class ClientCacheStatusPacketProcessor extends PacketProcessor<ClientCach
 
     @Override
     public PacketSignal handleAsync(EntityPlayer player, ClientCacheStatusPacket packet, long receiveTime) {
+        var networkComponent = (EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent();
+        networkComponent.setClientCacheEnabled(packet.isSupported());
         return PacketSignal.HANDLED;
     }
 

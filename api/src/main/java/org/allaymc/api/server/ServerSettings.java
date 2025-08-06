@@ -178,8 +178,6 @@ public class ServerSettings extends OkaeriConfig {
         private boolean useSubChunkSendingSystem = false;
 
         @Comment("Possible values: ASYNC, SYNC")
-        @Comment("This only works if sub-chunk sending system is not enabled")
-        @Comment("And will be forced to SYNC if sub-chunk sending system is enabled")
         @CustomKey("chunk-sending-strategy")
         private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
 

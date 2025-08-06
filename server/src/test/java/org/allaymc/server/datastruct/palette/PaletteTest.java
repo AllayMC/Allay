@@ -50,23 +50,23 @@ class PaletteTest {
     }
 
     @Test
-    void testPersistent() {
+    void testStorage() {
         var e0 = new Entry(0);
         var e1 = new Entry(1);
         var p0 = new Palette<>(e0, BitArrayVersion.V0);
         p0.set(1, e1);
 
-        ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
-        p0.writeToStoragePersistent(buffer, PDSerializerImpl.INSTANCE);
+        ByteBuf buffer = ByteBufAllocator.DEFAULT.buffer();
+        p0.writeToStorage(buffer, PDSerializerImpl.INSTANCE);
 
         var p1 = new Palette<>(e0, BitArrayVersion.V0);
-        p1.readFromStoragePersistent(buffer, PDDeserializerImpl.INSTANCE);
+        p1.readFromStorage(buffer, PDDeserializerImpl.INSTANCE);
         assertEquals(e0, p1.get(0));
         assertEquals(e1, p1.get(1));
     }
 
     @Test
-    void testPersistentV2() {
+    void testStorageV2() {
         var e0 = new Entry(0);
         var e1 = new Entry(1);
         var e2 = new Entry(2);
@@ -74,23 +74,24 @@ class PaletteTest {
         var p0 = new Palette<>(e0, BitArrayVersion.V0);
         p0.set(1, e1);
         p0.set(2, e2);
-        ByteBuf b0 = ByteBufAllocator.DEFAULT.ioBuffer();
-        p0.writeToStoragePersistent(b0, PDSerializerImpl.INSTANCE);
+        ByteBuf b0 = ByteBufAllocator.DEFAULT.buffer();
+        p0.writeToStorage(b0, PDSerializerImpl.INSTANCE);
 
         var p1 = new Palette<>(e0, BitArrayVersion.V2);
         p1.set(1, e1);
         p1.set(2, e2);
-        ByteBuf b1 = ByteBufAllocator.DEFAULT.ioBuffer();
-        p1.writeToStoragePersistent(b1, PDSerializerImpl.INSTANCE);
+        ByteBuf b1 = ByteBufAllocator.DEFAULT.buffer();
+        p1.writeToStorage(b1, PDSerializerImpl.INSTANCE);
 
         var bytes0 = Utils.convertByteBuf2Array(b0);
         var bytes1 = Utils.convertByteBuf2Array(b1);
         assertArrayEquals(bytes0, bytes1);
     }
 
-    record Entry(int id) {}
+    record Entry(int id) {
+    }
 
-    static class PDSerializerImpl implements PersistentDataSerializer<Entry> {
+    static class PDSerializerImpl implements NBTSerializer<Entry> {
 
         static PDSerializerImpl INSTANCE = new PDSerializerImpl();
 
@@ -100,7 +101,7 @@ class PaletteTest {
         }
     }
 
-    static class PDDeserializerImpl implements PersistentDataDeserializer<Entry> {
+    static class PDDeserializerImpl implements NBTDeserializer<Entry> {
 
         static PDDeserializerImpl INSTANCE = new PDDeserializerImpl();
 

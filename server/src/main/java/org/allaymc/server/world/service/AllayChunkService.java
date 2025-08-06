@@ -14,7 +14,6 @@ import org.allaymc.api.eventbus.event.world.ChunkPreLoadEvent;
 import org.allaymc.api.eventbus.event.world.ChunkUnloadEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -34,11 +33,11 @@ import org.joml.Vector3i;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.ASYNC;
-import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.SYNC;
 import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 
 /**
@@ -424,8 +423,9 @@ public final class AllayChunkService implements ChunkService {
         public void onRemoved() {
             removeChunkLoaderInChunks(sentChunks);
             chunkLoader.onChunkOutOfRange(sentChunks);
-            if (asyncChunkSendingManager != null)
+            if (asyncChunkSendingManager != null) {
                 asyncChunkSendingManager.stop();
+            }
         }
 
         public void tick() {
@@ -503,28 +503,13 @@ public final class AllayChunkService implements ChunkService {
             if (!chunkReadyToSend.isEmpty()) {
                 chunkLoader.beforeSendChunks();
                 var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
-                var useSubChunkSendingSystem = Server.SETTINGS.worldSettings().useSubChunkSendingSystem();
-                if (useSubChunkSendingSystem) {
-                    // Use SYNC mode if a sub-chunk sending system is enabled
-                    // Because the encoding of sub-chunk lcp is very quick
-                    chunkSendingStrategy = SYNC;
-                }
-
                 if (chunkSendingStrategy == ASYNC) {
                     asyncChunkSendingManager.addChunkToSendingQueue(chunkReadyToSend.values());
                 } else {
                     // Priority is given to sending chunks that are close to the chunk loader
                     var lcpStream = chunkReadyToSend.values().stream();
                     lcpStream.sorted(chunkDistanceComparator).forEachOrdered(chunk -> {
-                        final LevelChunkPacket[] lcp = new LevelChunkPacket[1];
-
-                        if (useSubChunkSendingSystem) {
-                            lcp[0] = ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createSubChunkLevelChunkPacket();
-                        } else {
-                            chunk.applyOperation(unsafeChunk -> lcp[0] = ((AllayUnsafeChunk) unsafeChunk).createFullLevelChunkPacketChunk(), OperationType.READ, OperationType.READ);
-                        }
-
-                        chunkLoader.sendPacket(lcp[0]);
+                        chunkLoader.sendPacket(createLevelChunkPacket(chunk));
                         chunkLoader.onChunkInRangeSend(chunk);
                     });
                 }
@@ -533,18 +518,41 @@ public final class AllayChunkService implements ChunkService {
             }
         }
 
+        private LevelChunkPacket createLevelChunkPacket(Chunk chunk) {
+            var lcp = new LevelChunkPacket[1];
+            chunk.applyOperation(unsafeChunk -> {
+                lcp[0] = Server.SETTINGS.worldSettings().useSubChunkSendingSystem() ?
+                        ((AllayUnsafeChunk) unsafeChunk).createSubChunkLevelChunkPacket() :
+                        ((AllayUnsafeChunk) unsafeChunk).createFullLevelChunkPacketChunk();
+            }, OperationType.READ, OperationType.READ);
+            return lcp[0];
+        }
+
         private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {
             return chunkX * chunkX + chunkZ * chunkZ <= radius * radius;
         }
 
         private class AsyncChunkSendingManager {
+
             private static final int DEFAULT_INITIAL_CAPACITY = 11;
 
-            private final PriorityBlockingQueue<Chunk> chunkSendingQueue = new PriorityBlockingQueue<>(DEFAULT_INITIAL_CAPACITY, chunkDistanceComparator);
-            private final GameLoop loop = GameLoop.builder().loopCountPerSec(20).onTick(gl -> tick()).build();
+            private final PriorityBlockingQueue<Chunk> chunkSendingQueue;
+            private final AtomicBoolean isRunning;
 
             public AsyncChunkSendingManager() {
-                Thread.ofVirtual().start(loop::startLoop);
+                this.chunkSendingQueue = new PriorityBlockingQueue<>(DEFAULT_INITIAL_CAPACITY, chunkDistanceComparator);
+                this.isRunning = new AtomicBoolean(true);
+                Thread.ofVirtual().start(() -> {
+                    while (isRunning.get()) {
+                        try {
+                            var chunk = chunkSendingQueue.take();
+                            chunkLoader.sendPacket(createLevelChunkPacket(chunk));
+                            chunkLoader.onChunkInRangeSend(chunk);
+                        } catch (InterruptedException e) {
+                            return;
+                        }
+                    }
+                });
             }
 
             public void addChunkToSendingQueue(Collection<Chunk> chunks) {
@@ -552,16 +560,7 @@ public final class AllayChunkService implements ChunkService {
             }
 
             public void stop() {
-                loop.stop();
-            }
-
-            private void tick() {
-                while (!chunkSendingQueue.isEmpty()) {
-                    var chunk = chunkSendingQueue.poll();
-                    var lcp = ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createFullLevelChunkPacketChunk();
-                    chunkLoader.sendPacket(lcp);
-                    chunkLoader.onChunkInRangeSend(chunk);
-                }
+                isRunning.set(false);
             }
         }
     }

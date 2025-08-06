@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.server.datastruct.bitarray.BitArray;
 import org.allaymc.server.datastruct.bitarray.BitArrayVersion;
+import org.allaymc.server.datastruct.bitarray.SingletonBitArray;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
@@ -22,7 +23,6 @@ import java.util.List;
 public final class Palette<V> {
 
     private static final int SECTION_SIZE = 16 * 16 * 16;
-    private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
     private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V0;
 
     private List<V> palette;
@@ -43,10 +43,6 @@ public final class Palette<V> {
         this.palette.add(first);
     }
 
-    private static boolean isPersistent(short header) {
-        return (header & 1) == 0;
-    }
-
     public V get(int index) {
         return this.palette.get(this.bitArray.get(index));
     }
@@ -56,45 +52,72 @@ public final class Palette<V> {
         this.bitArray.set(index, paletteIndex);
     }
 
-    public void writeToNetwork(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
-        if (bitArray.version() == BitArrayVersion.V0) {
-            byteBuf.writeByte(getPaletteHeader(BitArrayVersion.V0, true));
-            VarInts.writeInt(byteBuf, serializer.serialize(palette.getFirst()));
+    public void writeToNetwork(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
+        if (last != null && last.equals(this)) {
+            byteBuf.writeByte(createCopyLastFlag(false));
             return;
         }
 
-        byteBuf.writeByte(getPaletteHeader(this.bitArray.version(), true));
+        if (oneEntryOnly()) {
+            byteBuf.writeByte(createPaletteHeader(BitArrayVersion.V0, false));
+            VarInts.writeInt(byteBuf, serializer.serialize(this.palette.getFirst()));
+            return;
+        }
 
+        byteBuf.writeByte(createPaletteHeader(this.bitArray.version(), false));
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
         VarInts.writeInt(byteBuf, this.palette.size());
-
         this.palette.forEach(value -> VarInts.writeInt(byteBuf, serializer.serialize(value)));
     }
 
-    // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
-    public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
-        trim();
+    public void readFromNetwork(ByteBuf byteBuf, IntDeserializer<V> deserializer, Palette<V> last) {
+        var header = byteBuf.readUnsignedByte();
+        if (isNBT(header)) {
+            throw new PaletteException("Reading nbt palette data with non-nbt method!");
+        }
 
+        if (hasCopyLastFlag(header)) {
+            if (last == null) {
+                throw new PaletteException("Find copy last flag but last palette is null!");
+            }
+            last.copyTo(this);
+            return;
+        }
+
+        this.palette.clear();
+        var version = getVersionFromPaletteHeader(header);
+        readWords(byteBuf, version);
+        if (version == BitArrayVersion.V0) {
+            this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
+            return;
+        }
+
+        var paletteSize = VarInts.readInt(byteBuf);
+        checkVersion(version, paletteSize);
+        for (int i = 0; i < paletteSize; i++) {
+            this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
+        }
+    }
+
+    // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
+    public void writeToStorage(ByteBuf byteBuf, NBTSerializer<V> serializer) {
         if (oneEntryOnly()) {
-            byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, false));
+            byteBuf.writeByte(Palette.createPaletteHeader(BitArrayVersion.V0, true));
             try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
-                outputStream.writeTag(serializer.serialize(palette.getFirst()));
+                outputStream.writeTag(serializer.serialize(this.palette.getFirst()));
             } catch (IOException e) {
                 throw new PaletteException(e);
             }
             return;
         }
 
-        var version = this.bitArray.version();
-        byteBuf.writeByte(Palette.getPaletteHeader(version, false));
-
+        byteBuf.writeByte(Palette.createPaletteHeader(this.bitArray.version(), true));
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
         byteBuf.writeIntLE(this.palette.size());
-
         try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
             for (V value : this.palette) {
                 outputStream.writeTag(serializer.serialize(value));
@@ -104,81 +127,73 @@ public final class Palette<V> {
         }
     }
 
-    public void readFromStoragePersistent(ByteBuf byteBuf, PersistentDataDeserializer<V> deserializer) {
+    public void readFromStorage(ByteBuf byteBuf, NBTDeserializer<V> deserializer) {
         var header = byteBuf.readUnsignedByte();
-        if (!isPersistent(header)) {
-            log.warn("Reading runtime data with persistent method!");
+        if (!isNBT(header)) {
+            throw new PaletteException("Reading non-nbt palette data with nbt method!");
         }
 
-        var version = getVersionFromPaletteHeader(header);
         this.palette.clear();
-
+        var version = getVersionFromPaletteHeader(header);
+        readWords(byteBuf, version);
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(SECTION_SIZE, null);
             this.palette.add(deserializer.deserialize(byteBuf));
             return;
         }
 
-        readWords(byteBuf, version);
-        int paletteSize = byteBuf.readIntLE();
+        var paletteSize = byteBuf.readIntLE();
         checkVersion(version, paletteSize);
-
         for (int i = 0; i < paletteSize; i++) {
             this.palette.add(deserializer.deserialize(byteBuf));
         }
     }
 
-    public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
-        // FIXME: copy last flag
-//        if (last != null && last.equals(this)) {
-//            byteBuf.writeByte(COPY_LAST_FLAG_HEADER);
-//            return;
-//        }
-        trim();
+    public void writeToStorage(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
+        if (last != null && last.equals(this)) {
+            byteBuf.writeByte(createCopyLastFlag(false));
+            return;
+        }
 
-        if (this.oneEntryOnly()) {
-            byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, true));
+        if (oneEntryOnly()) {
+            byteBuf.writeByte(createPaletteHeader(BitArrayVersion.V0, false));
             byteBuf.writeIntLE(serializer.serialize(this.palette.getFirst()));
             return;
         }
 
-        var version = this.bitArray.version();
-        byteBuf.writeByte(Palette.getPaletteHeader(version, true));
-
+        byteBuf.writeByte(Palette.createPaletteHeader(this.bitArray.version(), false));
         for (int word : this.bitArray.words()) {
             byteBuf.writeIntLE(word);
         }
         byteBuf.writeIntLE(this.palette.size());
-
         for (V value : this.palette) {
             byteBuf.writeIntLE(serializer.serialize(value));
         }
     }
 
-    public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
+    public void readFromStorage(ByteBuf byteBuf, IntDeserializer<V> deserializer, Palette<V> last) {
         var header = byteBuf.readUnsignedByte();
-        if (isPersistent(header)) {
-            log.warn("Reading persistent data with runtime method!");
+        if (isNBT(header)) {
+            throw new PaletteException("Reading nbt palette data with non-nbt method!");
         }
+
         if (hasCopyLastFlag(header)) {
+            if (last == null) {
+                throw new PaletteException("Find copy last flag but last palette is null!");
+            }
             last.copyTo(this);
             return;
         }
 
-        var version = getVersionFromPaletteHeader(header);
         this.palette.clear();
-        var paletteSize = 1;
-
+        var version = getVersionFromPaletteHeader(header);
+        readWords(byteBuf, version);
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(SECTION_SIZE, null);
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
             return;
         }
 
-        readWords(byteBuf, version);
-        paletteSize = byteBuf.readIntLE();
+        var paletteSize = byteBuf.readIntLE();
         checkVersion(version, paletteSize);
-
         for (int i = 0; i < paletteSize; i++) {
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
         }
@@ -227,7 +242,7 @@ public final class Palette<V> {
         return bitArray.version();
     }
 
-    public void trim() {
+    public void compact() {
         var newPalette = new ReferenceArrayList<V>();
         // Make sure the first entry won't be changed
         newPalette.add(palette.getFirst());
@@ -254,10 +269,13 @@ public final class Palette<V> {
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
-        var wordCount = version.getWordsForSize(SECTION_SIZE);
-        var words = new int[wordCount];
-        Arrays.setAll(words, i -> byteBuf.readIntLE());
+        if (version == BitArrayVersion.V0) {
+            this.bitArray = SingletonBitArray.INSTANCE;
+            return;
+        }
 
+        var words = new int[version.getWordsForSize(SECTION_SIZE)];
+        Arrays.setAll(words, i -> byteBuf.readIntLE());
         this.bitArray = version.createArray(SECTION_SIZE, words);
     }
 
@@ -296,8 +314,8 @@ public final class Palette<V> {
         return (header >> 1) == 0x7F;
     }
 
-    private static short getPaletteHeader(BitArrayVersion version, boolean runtime) {
-        return (short) ((version.bits << 1) | (runtime ? 1 : 0));
+    private static short createPaletteHeader(BitArrayVersion version, boolean nbt) {
+        return (short) ((version.bits << 1) | (nbt ? 0 : 1));
     }
 
     private static BitArrayVersion getVersionFromPaletteHeader(short header) {
@@ -308,6 +326,15 @@ public final class Palette<V> {
         if (version.maxEntryIndex < paletteSize - 1) {
             throw new PaletteException("Palette (version " + version.name() + ") is too large. Max size " + version.maxEntryIndex + ". Actual size " + paletteSize);
         }
+    }
+
+    private static boolean isNBT(short header) {
+        return (header & 1) == 0;
+    }
+
+    @SuppressWarnings("ALL")
+    private static byte createCopyLastFlag(boolean nbt) {
+        return (byte) ((0x7F << 1) | (nbt ? 0 : 1));
     }
 
     @Override

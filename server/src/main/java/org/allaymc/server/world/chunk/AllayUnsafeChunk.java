@@ -28,6 +28,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
+import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.world.service.AllayEntityService;
 import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -537,59 +538,86 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public LevelChunkPacket createSubChunkLevelChunkPacket() {
-        var levelChunkPacket = new LevelChunkPacket();
-        levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
-        levelChunkPacket.setChunkX(this.getX());
-        levelChunkPacket.setChunkZ(this.getZ());
-        levelChunkPacket.setCachingEnabled(false);
-        levelChunkPacket.setRequestSubChunks(true);
-        // This value is used in the subchunk system to control the maximum value of sectionY requested by the client.
-        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionCount());
-        levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
-        return levelChunkPacket;
+        var packet = new LevelChunkPacket();
+        packet.setDimension(getDimensionInfo().dimensionId());
+        packet.setChunkX(this.getX());
+        packet.setChunkZ(this.getZ());
+        packet.setCachingEnabled(false);
+        packet.setRequestSubChunks(true);
+        // NOTICE: Sub chunk limit is bigger than zero
+        packet.setSubChunkLimit(findHighestNonAirSectionY() - dimensionInfo.minSectionY());
+        packet.setData(writeToNetworkBiomeOnly());
+        return packet;
+    }
+
+    private int findHighestNonAirSectionY() {
+        for (int highest = dimensionInfo.maxSectionY(); highest > dimensionInfo.minSectionY(); highest--) {
+            if (!getSection(highest).isAirSection()) {
+                return highest;
+            }
+        }
+
+        return dimensionInfo.minSectionY();
     }
 
     public LevelChunkPacket createFullLevelChunkPacketChunk() {
-        var levelChunkPacket = new LevelChunkPacket();
-        levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
-        levelChunkPacket.setChunkX(this.getX());
-        levelChunkPacket.setChunkZ(this.getZ());
-        levelChunkPacket.setCachingEnabled(false);
-        levelChunkPacket.setRequestSubChunks(false);
-        levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionCount());
-        try {
-            levelChunkPacket.setData(writeToNetwork());
-        } catch (Throwable t) {
-            levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
-        }
-        return levelChunkPacket;
+        var packet = new LevelChunkPacket();
+        packet.setDimension(getDimensionInfo().dimensionId());
+        packet.setChunkX(this.getX());
+        packet.setChunkZ(this.getZ());
+        packet.setCachingEnabled(false);
+        packet.setRequestSubChunks(false);
+        packet.setSubChunksLength(getDimensionInfo().chunkSectionCount());
+        packet.setData(writeToNetwork());
+        return packet;
     }
 
     private ByteBuf writeToNetwork() {
-        var byteBuf = ByteBufAllocator.DEFAULT.buffer();
+        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            writeToNetwork0(byteBuf);
+            writeBlocks(byteBuf);
+            writeBiomes(byteBuf);
+            // Length of 1 byte for the border block count
+            byteBuf.writeByte(0);
+            writeBlockEntities(byteBuf);
             return byteBuf;
         } catch (Throwable t) {
             log.error("Error while encoding chunk(x={}, z={})!", getX(), getZ(), t);
             byteBuf.release();
-            throw t;
+            return Unpooled.EMPTY_BUFFER;
         }
     }
 
-    private void writeToNetwork0(ByteBuf byteBuf) {
-        // Write blocks
+    private ByteBuf writeToNetworkBiomeOnly() {
+        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        try {
+            writeBiomes(byteBuf);
+            // Length of 1 byte for the border block count
+            byteBuf.writeByte(0);
+            return byteBuf;
+        } catch (Throwable t) {
+            log.error("Error while encoding chunk(x={}, z={})!", getX(), getZ(), t);
+            byteBuf.release();
+            return Unpooled.EMPTY_BUFFER;
+        }
+    }
+
+    private void writeBlocks(ByteBuf byteBuf) {
         for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
             getSection(i).writeToNetwork(byteBuf);
         }
+    }
 
-        // Write biomes
+    private void writeBiomes(ByteBuf byteBuf) {
+        Palette<BiomeType> last = null;
         for (var section : sections) {
-            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+            section.biomes().writeToNetwork(byteBuf, BiomeType::getId, last);
+            // TODO: fix copy last flag
+//            last = section.biomes();
         }
-        byteBuf.writeByte(0); // edu- border blocks
+    }
 
-        // Write block entities
+    private void writeBlockEntities(ByteBuf byteBuf) {
         var blockEntities = getBlockEntities().values();
         if (!blockEntities.isEmpty()) {
             try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {
@@ -597,10 +625,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     writer.writeTag(blockEntity.saveNBT());
                 }
             } catch (Throwable t) {
-                log.error("Error while encoding block entities in chunk {}, {}", getX(), getZ(), t);
+                log.error("Error while encoding block entities in chunk {}, {}", x, z, t);
             }
         }
     }
 
-    protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {}
+    protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
+    }
 }
