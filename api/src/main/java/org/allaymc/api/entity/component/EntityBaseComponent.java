@@ -352,6 +352,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
     /**
      * Check if the entity has block collision motion.
+     * <p>
+     * If return {@code true}, the physics engine will calculate a specific motion for the entity when
+     * it is sticking in blocks to move the entity out of the blocks. When performing the above calculations,
+     * the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods will not be called.
+     * <p>
+     * If return {@code false}, the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods
+     * will always being called even if the entity is sticking in blocks.
      *
      * @return {@code true} if the entity has block collision motion.
      */

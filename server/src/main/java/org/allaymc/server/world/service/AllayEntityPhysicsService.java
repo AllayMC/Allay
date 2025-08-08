@@ -92,7 +92,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             }
 
             var collidedBlocks = dimension.getCollidingBlockStates(entity.getOffsetAABB());
-            if (collidedBlocks == null) {
+            if (collidedBlocks == null || !entity.computeBlockCollisionMotion()) {
                 // 1. The entity is not stuck in the block
                 if (entity.computeEntityCollisionMotion()) {
                     computeEntityCollisionMotion(entity);
