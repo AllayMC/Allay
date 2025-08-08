@@ -1,7 +1,7 @@
 package org.allaymc.api.entity.component;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
@@ -39,6 +39,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.RoundingMode;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
@@ -382,7 +383,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param block the block that this entity inside.
      */
     @ApiStatus.OverrideOnly
-    default void onInsideBlock(BlockStateWithPos block) {
+    default void onInsideBlock(Block block) {
     }
 
     /**
@@ -391,7 +392,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param block the block that collides with this entity.
      */
     @ApiStatus.OverrideOnly
-    default void onCollideWithBlock(BlockStateWithPos block) {
+    default void onCollideWithBlock(Block block) {
     }
 
     /**
@@ -1009,21 +1010,21 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the block which the entity is standing on, or air if the entity is not standing on any block (and the pos will be {@code null}).
      */
-    default BlockStateWithPos getBlockStateStandingOn() {
+    default Block getBlockStateStandingOn() {
         var loc = getLocation();
         var air = BlockTypes.AIR.getDefaultState();
         if (!isOnGround()) {
-            return new BlockStateWithPos(air, null);
+            return new Block(air, new Position3i(loc, RoundingMode.FLOOR, getDimension()));
         }
 
         var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
         if (currentBlockState != air) {
-            return new BlockStateWithPos(
+            return new Block(
                     currentBlockState,
                     new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y()), (int) Math.floor(loc.z()), getDimension())
             );
         } else {
-            return new BlockStateWithPos(
+            return new Block(
                     getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z()),
                     new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y() - 1), (int) Math.floor(loc.z()), getDimension())
             );

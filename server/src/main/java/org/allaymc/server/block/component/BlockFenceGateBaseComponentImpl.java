@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.BlockPlaceHelper;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockWallBehavior;
 import org.allaymc.api.block.type.BlockState;
@@ -25,15 +25,15 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
-        current.updateBlockProperty(IN_WALL_BIT, shouldBeLowered(current));
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+        block.updateBlockProperty(IN_WALL_BIT, shouldBeLowered(block));
     }
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         blockState = BlockPlaceHelper.processMinecraftCardinalDirectionProperty(blockState, placeBlockPos, placementInfo);
-        var current = new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension));
+        var current = new Block(blockState, new Position3i(placeBlockPos, dimension));
         blockState = blockState.setPropertyValue(IN_WALL_BIT, shouldBeLowered(current));
         return dimension.setBlockState(placeBlockPos, blockState);
     }
@@ -45,7 +45,7 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var clickedPos = interactInfo.clickedBlockPos();
-        var clickedBlockState = interactInfo.getClickedBlockState();
+        var clickedBlockState = interactInfo.getClickedBlock();
         var open = !clickedBlockState.getPropertyValue(OPEN_BIT);
         if (open) {
             var playerFacing = interactInfo.player().getHorizontalFace();
@@ -60,7 +60,7 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
-    private boolean shouldBeLowered(BlockStateWithPos current) {
+    private boolean shouldBeLowered(Block current) {
         var direction = current.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
         var blockFace = BlockFace.from(direction);
         blockFace = blockFace.rotateY();

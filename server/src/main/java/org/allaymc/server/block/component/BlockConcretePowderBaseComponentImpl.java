@@ -4,7 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockConcretePowderBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -23,11 +23,11 @@ public class BlockConcretePowderBaseComponentImpl extends BlockBaseComponentImpl
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
-        if (hasAdjacentWater(current.getDimension(), current.getPos())) {
-            current.getDimension().setBlockState(current.getPos(), getSolidBlock().getDefaultState());
+        if (hasAdjacentWater(block.getDimension(), block.getPos())) {
+            block.getDimension().setBlockState(block.getPos(), getSolidBlock().getDefaultState());
         }
     }
 

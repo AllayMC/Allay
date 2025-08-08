@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
@@ -23,8 +23,8 @@ public class BlockPlaceEvent extends BlockEvent implements CancellableEvent {
      */
     protected PlayerInteractInfo interactInfo;
 
-    public BlockPlaceEvent(BlockStateWithPos blockStatePlaced, BlockState blockStateReplaced, Entity entity, PlayerInteractInfo interactInfo) {
-        super(blockStatePlaced);
+    public BlockPlaceEvent(Block blockPlaced, BlockState blockStateReplaced, Entity entity, PlayerInteractInfo interactInfo) {
+        super(blockPlaced);
         this.blockStateReplaced = blockStateReplaced;
         this.entity = entity;
         this.interactInfo = interactInfo;

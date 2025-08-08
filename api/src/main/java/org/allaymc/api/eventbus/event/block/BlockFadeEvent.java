@@ -2,7 +2,7 @@ package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -14,8 +14,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class BlockFadeEvent extends BlockEvent implements CancellableEvent {
     protected BlockState newBlockState;
 
-    public BlockFadeEvent(BlockStateWithPos blockState, BlockState newBlockState) {
-        super(blockState);
+    public BlockFadeEvent(Block block, BlockState newBlockState) {
+        super(block);
         this.newBlockState = newBlockState;
     }
 }

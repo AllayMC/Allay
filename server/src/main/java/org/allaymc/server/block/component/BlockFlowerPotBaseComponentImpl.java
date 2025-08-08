@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
@@ -29,10 +29,10 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
-        if (face == BlockFace.DOWN && !isValidWeighBlock(neighbor)) {
-            current.breakBlock();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+        if (face == BlockFace.DOWN && !isValidWeighBlock(neighbor.getBlockState())) {
+            block.breakBlock();
         }
     }
 

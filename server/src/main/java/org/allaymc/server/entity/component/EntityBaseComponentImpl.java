@@ -6,7 +6,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.interfaces.ComponentManager;
@@ -226,7 +226,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var aabb = getOffsetAABB().expand(2 * FAT_AABB_MARGIN);
         var dimension = getDimension();
         dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
-            var block = new BlockStateWithPos(blockState, new Position3i(x, y, z, dimension), 0);
+            var block = new Block(blockState, new Position3i(x, y, z, dimension), 0);
 
             if (blockState.getBlockStateData().collisionShape().translate(x, y, z).intersectsAABB(aabb)) {
                 this.onCollideWithBlock(block);

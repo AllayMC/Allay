@@ -27,7 +27,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
     @EventHandler
     protected void onBlockPlace(CBlockOnPlaceEvent event) {
-        var pos = event.getCurrentBlockState().getPos();
+        var pos = event.getCurrentBlock().getPos();
 
         createBlockEntity(pos, false);
         var blockEntity = getBlockEntity(pos);
@@ -42,7 +42,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
     @EventHandler
     protected void onBlockRemove(CBlockOnReplaceEvent event) {
-        var pos = event.getCurrentBlockState().getPos();
+        var pos = event.getCurrentBlock().getPos();
         var blockEntity = getBlockEntity(pos);
         if (blockEntity == null) {
             log.warn("Block entity not found at pos: {}", pos);
@@ -68,7 +68,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
     @EventHandler
     protected void onPunch(CBlockOnPunchEvent event) {
-        var blockEntity = getBlockEntity(event.getCurrentBlockState().getPos());
+        var blockEntity = getBlockEntity(event.getCurrentBlock().getPos());
         ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onPunch(event);
     }
 }

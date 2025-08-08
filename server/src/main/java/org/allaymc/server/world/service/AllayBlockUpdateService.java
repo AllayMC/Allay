@@ -4,7 +4,7 @@ import io.netty.util.internal.PlatformDependent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
@@ -80,8 +80,8 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             var layer0 = dimension.getBlockState(pos);
             var layer1 = dimension.getBlockState(pos, 1);
 
-            var block0 = new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0);
-            var neighborBlock0 = new BlockStateWithPos(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
+            var block0 = new Block(layer0, new Position3i(pos, dimension), 0);
+            var neighborBlock0 = new Block(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
 
             if (!callNeighborUpdateEvent(block0, neighborBlock0, blockFace)) {
                 return;
@@ -96,7 +96,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             // Only update second layer block if it's a liquid block for better performance,
             // because only liquid blocks need to be updated in the second layer.
             if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
-                var block1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
+                var block1 = new Block(layer1, new Position3i(pos, dimension), 1);
 
                 if (!callNeighborUpdateEvent(block1, neighborBlock0, blockFace)) {
                     return;
@@ -113,7 +113,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
         }
     }
 
-    protected boolean callNeighborUpdateEvent(BlockStateWithPos block, BlockStateWithPos neighborBlock, BlockFace blockFace) {
+    protected boolean callNeighborUpdateEvent(Block block, Block neighborBlock, BlockFace blockFace) {
         return new BlockNeighborUpdateEvent(block, neighborBlock, blockFace).call();
     }
 

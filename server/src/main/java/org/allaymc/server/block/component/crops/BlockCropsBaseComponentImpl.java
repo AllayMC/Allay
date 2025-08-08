@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
@@ -34,7 +34,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo.blockFace() != BlockFace.UP ||
-            placementInfo.getClickedBlockState().getBlockType() != BlockTypes.FARMLAND) {
+            placementInfo.getClickedBlock().getBlockType() != BlockTypes.FARMLAND) {
             return false;
         }
 
@@ -42,11 +42,11 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
         if (face == BlockFace.DOWN && neighbor.getBlockType() != BlockTypes.FARMLAND) {
-            current.breakBlock();
+            block.breakBlock();
         }
     }
 
@@ -54,10 +54,9 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
      * Calculate the chance the crop will grow during a random tick.
      *
      * @param block the block state to calculate the growth chance for.
-     *
      * @return the chance the crop will grow.
      */
-    protected float calculateGrowthChance(BlockStateWithPos block) {
+    protected float calculateGrowthChance(Block block) {
         var points = 0.0f;
 
         var under = block.offsetPos(BlockFace.DOWN);
@@ -110,7 +109,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
             return false;
         }
 
-        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlockState())) {
+        if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
             interactInfo.player().tryConsumeItemInHand();
             dimension.addLevelEvent(MathUtils.center(interactInfo.clickedBlockPos()), LevelEvent.PARTICLE_CROP_GROWTH);
             return true;
@@ -126,7 +125,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
         }
 
         var newCrop = crop.setPropertyValue(GROWTH, Math.min(growth + ThreadLocalRandom.current().nextInt(4) + 2, 7));
-        var event = new BlockGrowEvent(new BlockStateWithPos(crop, new Position3i(pos, dimension)), newCrop);
+        var event = new BlockGrowEvent(new Block(crop, new Position3i(pos, dimension)), newCrop);
         if (event.call()) {
             dimension.setBlockState(pos, event.getNewBlockState());
             return true;
@@ -141,21 +140,21 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        super.onRandomUpdate(current);
+    public void onRandomUpdate(Block block) {
+        super.onRandomUpdate(block);
 
-        if (current.getDimension().getLightService().getInternalLight(current.getPos()) < 8) {
-            var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
+        if (block.getDimension().getLightService().getInternalLight(block.getPos()) < 8) {
+            var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
-                current.breakBlock();
+                block.breakBlock();
             }
         } else {
-            var growth = current.getPropertyValue(GROWTH);
-            if (growth < GROWTH.getMax() && ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(current)) {
-                var newCrop = current.setPropertyValue(GROWTH, growth + 1);
-                var event = new BlockGrowEvent(current, newCrop);
+            var growth = block.getPropertyValue(GROWTH);
+            if (growth < GROWTH.getMax() && ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(block)) {
+                var newCrop = block.setPropertyValue(GROWTH, growth + 1);
+                var event = new BlockGrowEvent(block, newCrop.getBlockState());
                 if (event.call()) {
-                    current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
                 }
             }
         }

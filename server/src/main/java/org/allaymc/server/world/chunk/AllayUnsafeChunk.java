@@ -10,7 +10,7 @@ import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -172,12 +172,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             var pos = info.getPos();
             var blockState = getBlockState(pos.x() & 15, pos.y(), pos.z() & 15);
 
-            var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(pos, dimension));
-            if (!new BlockScheduleUpdateEvent(blockStateWithPos).call()) {
+            var block = new Block(blockState, new Position3i(pos, dimension));
+            if (!new BlockScheduleUpdateEvent(block).call()) {
                 return;
             }
 
-            blockState.getBehavior().onScheduledUpdate(blockStateWithPos);
+            blockState.getBehavior().onScheduledUpdate(block);
         });
     }
 
@@ -209,9 +209,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                 // that supports random tick, this would be much quicker
                 var blockState = getBlockState(localX, sectionY * 16 + localY, localZ, 0);
                 if (blockState.getBehavior().canRandomUpdate()) {
-                    var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (this.x << 4), localY + (sectionY << 4), localZ + (this.z << 4), dimension), 0);
-                    if (new BlockRandomUpdateEvent(blockStateWithPos).call()) {
-                        blockState.getBehavior().onRandomUpdate(blockStateWithPos);
+                    var block = new Block(blockState, new Position3i(localX + (this.x << 4), localY + (sectionY << 4), localZ + (this.z << 4), dimension), 0);
+                    if (new BlockRandomUpdateEvent(block).call()) {
+                        blockState.getBehavior().onRandomUpdate(block);
                     }
                 }
             }

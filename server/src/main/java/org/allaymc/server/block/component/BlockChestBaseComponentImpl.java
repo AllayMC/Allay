@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
@@ -23,20 +23,20 @@ public class BlockChestBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        super.afterPlaced(oldBlockState, newBlockState, placementInfo);
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
 
         if (placementInfo != null && placementInfo.player().isSneaking()) {
             // Java edition behavior: Do not check for pairing if the player is sneaking
             return;
         }
 
-        var thisChest = blockEntityHolderComponent.getBlockEntity(oldBlockState.getPos());
+        var thisChest = blockEntityHolderComponent.getBlockEntity(oldBlock.getPos());
 
         var direction = newBlockState.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
         var blockFace = BlockFace.from(direction);
         for (var face : new BlockFace[]{blockFace.rotateY(), blockFace.rotateYCCW()}) {
-            var other = oldBlockState.offsetPos(face).getBlockEntity();
+            var other = oldBlock.offsetPos(face).getBlockEntity();
             if (other instanceof BlockEntityChest otherChest && !otherChest.isPaired()) {
                 if (direction == otherChest.getBlockState().getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)) {
                     if (otherChest.tryPairWith(thisChest)) {

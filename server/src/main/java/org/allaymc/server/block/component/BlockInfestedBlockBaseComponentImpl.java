@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockInfestedBlockBaseComponent;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -26,9 +26,9 @@ public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
-        var dimension = current.getDimension();
-        var pos = current.getPos();
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        var dimension = block.getDimension();
+        var pos = block.getPos();
         if (dimension.getWorld().getWorldData().getGameRuleValue(GameRule.DO_TILE_DROPS)) {
             dimension.getEntityService().addEntity(EntityTypes.SILVERFISH.createEntity(
                     EntityInitInfo.builder()
@@ -42,7 +42,7 @@ public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     @Override
-    public ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
+    public ItemStack getSilkTouchDrop(Block block) {
         return getImitatedBlock().getItemType().createItemStack();
     }
 

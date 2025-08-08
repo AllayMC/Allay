@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -42,19 +42,19 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        manager.callEvent(new CBlockOnNeighborUpdateEvent(current, neighbor, face));
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        manager.callEvent(new CBlockOnNeighborUpdateEvent(block, neighbor, face));
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        manager.callEvent(new CBlockRandomUpdateEvent(current));
+    public void onRandomUpdate(Block block) {
+        manager.callEvent(new CBlockRandomUpdateEvent(block));
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (getBlockType().getItemType() != null) {
-            return Set.of(getSilkTouchDrop(current));
+            return Set.of(getSilkTouchDrop(block));
         }
 
         return Utils.EMPTY_ITEM_STACK_SET;
@@ -80,67 +80,67 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        manager.callEvent(new CBlockOnPlaceEvent(currentBlockState, newBlockState, placementInfo));
+    public void onPlace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockOnPlaceEvent(block, newBlockState, placementInfo));
     }
 
     @Override
-    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        manager.callEvent(new CBlockAfterPlacedEvent(oldBlockState, newBlockState, placementInfo));
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockAfterPlacedEvent(oldBlock, newBlockState, placementInfo));
     }
 
     @Override
-    public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        manager.callEvent(new CBlockOnReplaceEvent(currentBlockState, newBlockState, placementInfo));
+    public void onReplace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockOnReplaceEvent(block, newBlockState, placementInfo));
     }
 
     @Override
-    public void afterReplaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        manager.callEvent(new CBlockAfterReplacedEvent(oldBlockState, newBlockState, placementInfo));
+    public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockAfterReplacedEvent(oldBlock, newBlockState, placementInfo));
     }
 
     @Override
-    public void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        manager.callEvent(new CBlockAfterNeighborLayerReplaceEvent(currentBlockState, newBlockState, placementInfo));
+    public void afterNeighborLayerReplace(Block currentBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockAfterNeighborLayerReplaceEvent(currentBlock, newBlockState, placementInfo));
     }
 
     @Override
-    public void onPunch(BlockStateWithPos currentBlockState, BlockFace blockFace, ItemStack usedItem, Entity entity) {
-        manager.callEvent(new CBlockOnPunchEvent(currentBlockState, blockFace, usedItem, entity));
+    public void onPunch(Block block, BlockFace blockFace, ItemStack usedItem, Entity entity) {
+        manager.callEvent(new CBlockOnPunchEvent(block, blockFace, usedItem, entity));
     }
 
     @Override
-    public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (!isDroppable(blockState, usedItem, entity)) {
+    public void onBreak(Block block, ItemStack usedItem, Entity entity) {
+        if (!isDroppable(block, usedItem, entity)) {
             return;
         }
 
-        var dropPos = MathUtils.center(blockState.getPos());
-        var dimension = blockState.getDimension();
+        var dropPos = MathUtils.center(block.getPos());
+        var dimension = block.getDimension();
         if (usedItem != null && usedItem.hasEnchantment(EnchantmentTypes.SILK_TOUCH)) {
             // Silk Touch, directly drop the block itself
-            dimension.dropItem(getSilkTouchDrop(blockState), dropPos);
+            dimension.dropItem(getSilkTouchDrop(block), dropPos);
             return;
         }
 
-        var drops = getDrops(blockState, usedItem, entity);
+        var drops = getDrops(block, usedItem, entity);
         for (var drop : drops) {
             dimension.dropItem(drop, dropPos);
         }
 
-        var dropXpAmount = getDropXpAmount(blockState, usedItem, entity);
+        var dropXpAmount = getDropXpAmount(block, usedItem, entity);
         if (dropXpAmount > 0) {
             dimension.dropXpOrb(dropPos, dropXpAmount);
         }
     }
 
     @Override
-    public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public boolean isDroppable(Block block, ItemStack usedItem, Entity entity) {
         if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) {
             return false;
         }
 
-        return !blockState.getBlockStateData().requiresCorrectToolForDrops() || (usedItem != null && usedItem.isCorrectToolFor(blockState));
+        return !block.getBlockStateData().requiresCorrectToolForDrops() || (usedItem != null && usedItem.isCorrectToolFor(block.getBlockState()));
     }
 
     @Override

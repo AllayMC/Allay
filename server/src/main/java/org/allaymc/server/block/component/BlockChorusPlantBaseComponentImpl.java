@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -22,14 +22,14 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
-        if (!canBeSupportedAt(current)) {
-            current.breakBlock();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+        if (!canBeSupportedAt(block)) {
+            block.breakBlock();
         }
     }
 
-    private boolean canBeSupportedAt(BlockStateWithPos current) {
+    private boolean canBeSupportedAt(Block current) {
         boolean sideSupport = false;
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             var neighbor = current.offsetPos(face);
@@ -48,13 +48,13 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
-    private boolean hasDownSupport(BlockStateWithPos current) {
+    private boolean hasDownSupport(Block current) {
         var downType = current.offsetPos(BlockFace.DOWN).getBlockType();
         return downType == BlockTypes.CHORUS_PLANT || downType == BlockTypes.END_STONE;
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (ThreadLocalRandom.current().nextBoolean()) {
             return Set.of(ItemTypes.CHORUS_FRUIT.createItemStack());
         }
@@ -63,7 +63,7 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
+    public ItemStack getSilkTouchDrop(Block block) {
         return ItemTypes.AIR.createItemStack();
     }
 }

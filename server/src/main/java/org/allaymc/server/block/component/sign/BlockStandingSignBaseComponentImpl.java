@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.sign;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
@@ -23,21 +23,21 @@ public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
         if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
-            current.breakBlock();
+            block.breakBlock();
         }
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(dropItemId.getItemType().createItemStack(1));
     }
 
     @Override
-    public ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
+    public ItemStack getSilkTouchDrop(Block block) {
         return dropItemId.getItemType().createItemStack(1);
     }
 }

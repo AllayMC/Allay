@@ -330,6 +330,18 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 return blockType.getBlockStateHashMap().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), values));
             }
         }
+
+        @Override
+        public boolean equals(Object obj) {
+            // For each block state, we use a unique object to represent
+            // it, so here we can directly compare the memory addresses
+            return this == obj;
+        }
+
+        @Override
+        public int hashCode() {
+            return blockStateHash;
+        }
     }
 
     @Slf4j

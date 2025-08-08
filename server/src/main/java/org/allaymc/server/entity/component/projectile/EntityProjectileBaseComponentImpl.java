@@ -2,7 +2,7 @@ package org.allaymc.server.entity.component.projectile;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityProjectileBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -109,7 +109,7 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
             if (block.getBlockStateData().computeOffsetCollisionShape(x, y, z).intersectsRay(ray, result)) {
                 if (result.x() < rayCastResult.result) {
                     rayCastResult.result = result.x();
-                    rayCastResult.hit = new BlockStateWithPos(block, new Position3i(x, y, z, dimension));
+                    rayCastResult.hit = new Block(block, new Position3i(x, y, z, dimension));
                 }
             }
         });
@@ -136,7 +136,7 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
         }
 
         if (!newPos.equals(location) && trySetLocation(newPos)) {
-            if (rayCastResult.hit instanceof BlockStateWithPos block && callHitEvent(newPos, null, block)) {
+            if (rayCastResult.hit instanceof Block block && callHitEvent(newPos, null, block)) {
                 block.getBehavior().onProjectileHit(block, (EntityProjectile) thisEntity, newPos);
                 onHitBlock(block, newPos);
             } else if (rayCastResult.hit instanceof Entity entity && callHitEvent(newPos, entity, null)) {
@@ -150,12 +150,12 @@ public class EntityProjectileBaseComponentImpl extends EntityBaseComponentImpl i
         return false;
     }
 
-    protected boolean callHitEvent(Vector3dc hitPos, Entity victim, BlockStateWithPos block) {
+    protected boolean callHitEvent(Vector3dc hitPos, Entity victim, Block block) {
         var event = new ProjectileHitEvent((EntityProjectile) thisEntity, hitPos, victim, block);
         return event.call();
     }
 
-    protected void onHitBlock(BlockStateWithPos block, Vector3dc hitPos) {
+    protected void onHitBlock(Block block, Vector3dc hitPos) {
     }
 
     protected void onHitEntity(Entity entity, Vector3dc hitPos) {

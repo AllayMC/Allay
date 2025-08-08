@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 
@@ -14,7 +14,7 @@ public class BlockSlimeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onEntityFallOn(Entity entity, BlockStateWithPos block) {
+    public void onEntityFallOn(Entity entity, Block block) {
         // Client will handle the bounce
         if (!entity.computeMovementServerSide()) {
             return;

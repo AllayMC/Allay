@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
@@ -11,5 +11,5 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @AllArgsConstructor
 public class CBlockRandomUpdateEvent extends Event {
-    protected BlockStateWithPos blockState;
+    protected Block block;
 }

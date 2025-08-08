@@ -352,8 +352,8 @@ public class GameTestCommand extends SimpleCommand {
                 .exec((context, player) -> {
                     boolean enable = context.getResult(1);
                     Consumer<BlockBreakEvent> lambda = (event) -> {
-                        System.out.println(event.getBlockState().getBlockStateTag());
-                        var data = event.getBlockState().getBlockStateData();
+                        System.out.println(event.getBlock().getBlockStateTag());
+                        var data = event.getBlock().getBlockStateData();
                         System.out.println(data.collisionShape());
                         System.out.println(data.shape());
                         event.setCancelled(true);

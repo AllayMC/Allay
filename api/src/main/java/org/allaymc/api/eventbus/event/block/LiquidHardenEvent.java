@@ -2,7 +2,7 @@ package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -23,8 +23,8 @@ public class LiquidHardenEvent extends BlockEvent implements CancellableEvent {
     @Setter
     protected BlockState hardenedBlockState;
 
-    public LiquidHardenEvent(BlockStateWithPos blockState, BlockState cause, BlockState hardenedBlockState) {
-        super(blockState);
+    public LiquidHardenEvent(Block block, BlockState cause, BlockState hardenedBlockState) {
+        super(block);
         this.cause = cause;
         this.hardenedBlockState = hardenedBlockState;
     }

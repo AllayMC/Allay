@@ -32,7 +32,7 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
         var face = placementInfo.blockFace();
         var clickedBlockPos = placementInfo.clickedBlockPos();
         var clickedPos = placementInfo.clickedPos();
-        var clickedBlock = placementInfo.getClickedBlockState();
+        var clickedBlock = placementInfo.getClickedBlock();
         switch (face) {
             case UP -> {
                 if (clickedBlock.getBlockType() == this.blockType && clickedBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.BOTTOM) {

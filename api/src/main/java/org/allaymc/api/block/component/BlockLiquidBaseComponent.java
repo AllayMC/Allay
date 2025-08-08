@@ -1,6 +1,6 @@
 package org.allaymc.api.block.component;
 
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -17,7 +17,6 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      * Check if the liquid is falling.
      *
      * @param blockState the block state to check.
-     *
      * @return {@code true} if the liquid is flowing down, {@code false} otherwise.
      */
     static boolean isFalling(BlockState blockState) {
@@ -32,7 +31,6 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      * Other blocks have a liquid depth between 1 and 7.
      *
      * @param blockState the block state to get the liquid depth from.
-     *
      * @return the liquid depth of the block.
      */
     static int getDepth(BlockState blockState) {
@@ -46,7 +44,6 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      * Check if the block state represents a liquid source.
      *
      * @param blockState the block state to check.
-     *
      * @return {@code true} if the block state represents a liquid source, {@code false} otherwise.
      */
     static boolean isSource(BlockState blockState) {
@@ -58,7 +55,6 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      *
      * @param depth   the depth of the liquid.
      * @param falling {@code true} if the liquid is falling, {@code false} otherwise.
-     *
      * @return the block state of the liquid block with given depth and falling state.
      */
     default BlockState getLiquidBlockState(int depth, boolean falling) {
@@ -96,13 +92,12 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      * Check if the block should harden when looking at the surrounding blocks and sets the position
      * to the hardened block when adequate. If the block was hardened, the method returns true.
      *
-     * @param current     the current block.
+     * @param block       the current block.
      * @param flownIntoBy the block flown into by, can be {@code null}.
-     *
      * @return {@code true} if the block was hardened, {@code false} otherwise.
      */
     @ApiStatus.OverrideOnly
-    default boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
+    default boolean tryHarden(Block block, Block flownIntoBy) {
         return false;
     }
 
@@ -137,7 +132,6 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      * Check if the given block type is the same liquid type as this block type.
      *
      * @param blockType the block type to check.
-     *
      * @return {@code true} if the given block type is the same liquid type as this block type, {@code false} otherwise.
      */
     boolean isSameLiquidType(BlockType<?> blockType);

@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.sign;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
@@ -25,22 +25,22 @@ public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
-        var signFace = Objects.requireNonNull(BlockFace.fromIndex(current.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)));
+        var signFace = Objects.requireNonNull(BlockFace.fromIndex(block.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)));
         if (face == signFace.opposite() && !neighbor.getBlockStateData().isSolid()) {
-            current.breakBlock();
+            block.breakBlock();
         }
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(dropItemId.getItemType().createItemStack(1));
     }
 
     @Override
-    public ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
+    public ItemStack getSilkTouchDrop(Block block) {
         return dropItemId.getItemType().createItemStack(1);
     }
 }

@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.grass;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -38,22 +38,22 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         var keep = true;
         if (face == BlockFace.UP) {
-            if (!current.getPropertyValue(UPPER_BLOCK_BIT)) {
-                keep = isSamePlant(neighbor);
+            if (!block.getPropertyValue(UPPER_BLOCK_BIT)) {
+                keep = isSamePlant(neighbor.getBlockState());
             }
         } else if (face == BlockFace.DOWN) {
-            if (current.getPropertyValue(UPPER_BLOCK_BIT)) {
-                keep = isSamePlant(neighbor);
+            if (block.getPropertyValue(UPPER_BLOCK_BIT)) {
+                keep = isSamePlant(neighbor.getBlockState());
             } else {
-                keep = canPlaceOn(neighbor.getBlockType());
+                keep = canPlaceOn(neighbor.getBlockState().getBlockType());
             }
         }
 
         if (!keep) {
-            current.breakBlock();
+            block.breakBlock();
         }
     }
 
@@ -62,21 +62,21 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
     }
 
     @Override
-    public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
+    public boolean isDroppable(Block block, ItemStack usedItem, Entity entity) {
+        if (block.getPropertyValue(UPPER_BLOCK_BIT)) {
             return false;
         }
 
         // Don't drop if entity is null
-        return entity != null && super.isDroppable(blockState, usedItem, entity);
+        return entity != null && super.isDroppable(block, usedItem, entity);
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
             return Set.of(shearDrop.getItemType().createItemStack(2));
         }
 
-        return super.getDrops(current, usedItem, entity);
+        return super.getDrops(block, usedItem, entity);
     }
 }

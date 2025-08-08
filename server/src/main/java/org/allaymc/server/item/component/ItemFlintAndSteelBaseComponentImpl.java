@@ -1,7 +1,7 @@
 package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockTypes;
@@ -39,9 +39,9 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
             tryIncreaseDamage(1);
         }
 
-        var clickedBlock = interactInfo.getClickedBlockState();
+        var clickedBlock = interactInfo.getClickedBlock();
         if (clickedBlock.getBlockType() == BlockTypes.TNT) {
-            BlockTypes.TNT.getBlockBehavior().prime(new BlockStateWithPos(clickedBlock, new Position3i(interactInfo.clickedBlockPos(), dimension)));
+            BlockTypes.TNT.getBlockBehavior().prime(new Block(clickedBlock.getBlockState(), new Position3i(interactInfo.clickedBlockPos(), dimension)));
             return true;
         }
 
@@ -50,7 +50,7 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
             var supportBlockState = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
             if (BlockFireBaseComponentImpl.canSupportFire(supportBlockState)) {
                 var event = new BlockIgniteEvent(
-                        new BlockStateWithPos(supportBlockState, new Position3i(BlockFace.DOWN.offsetPos(placeBlockPos), dimension), 0),
+                        new Block(supportBlockState, new Position3i(BlockFace.DOWN.offsetPos(placeBlockPos), dimension), 0),
                         null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL
                 );
                 if (event.call()) {
@@ -64,10 +64,10 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
         } else {
             // Check if the block that the player clicked on can be ignited
             // This branch will be executed when the player clicks on the side of a block
-            var clickedBlockState = interactInfo.getClickedBlockState();
-            if (clickedBlockState.getBlockStateData().flameOdds() > 0) {
+            clickedBlock = interactInfo.getClickedBlock();
+            if (clickedBlock.getBlockStateData().flameOdds() > 0) {
                 var event = new BlockIgniteEvent(
-                        new BlockStateWithPos(clickedBlockState, new Position3i(interactInfo.clickedBlockPos(), dimension), 0),
+                        new Block(clickedBlock.getBlockState(), new Position3i(interactInfo.clickedBlockPos(), dimension), 0),
                         null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL
                 );
                 if (event.call()) {

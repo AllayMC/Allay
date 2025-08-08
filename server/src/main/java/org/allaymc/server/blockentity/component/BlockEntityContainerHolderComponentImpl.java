@@ -79,7 +79,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     protected void onReplace(CBlockOnReplaceEvent event) {
         if (!dropItemWhenBreak()) return;
 
-        var current = event.getCurrentBlockState();
+        var current = event.getCurrentBlock();
         var pos = current.getPos();
         var rand = ThreadLocalRandom.current();
 

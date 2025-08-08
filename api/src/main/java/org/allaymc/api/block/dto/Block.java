@@ -1,7 +1,6 @@
 package org.allaymc.api.block.dto;
 
 import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Delegate;
@@ -25,48 +24,100 @@ import org.joml.Vector3ic;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * An immutable data transfer object that represents a block in a world. It contains the block's state,
+ * position and layer. All the methods that available in {@link BlockState} are also available in this class.
+ *
+ * @author daoge_cmd | IWareQ
+ */
 @Getter
 @ToString
-public class BlockStateWithPos implements BlockState {
+public class Block {
+    /**
+     * The block state of this block.
+     */
     @Delegate
-    @Getter(AccessLevel.NONE)
     private final BlockState blockState;
+    /**
+     * The position of the block in the world.
+     */
     private final Position3ic pos;
+    /**
+     * The layer of the block.
+     */
     private final int layer;
 
-    public BlockStateWithPos(Vector3ic pos, Dimension dimension) {
-        this(dimension.getBlockState(pos), new Position3i(pos, dimension), 0);
+    /**
+     * @see #Block(BlockState, Position3ic, int)
+     */
+    public Block(Dimension dimension, Vector3ic pos) {
+        this(dimension, pos, 0);
     }
 
-    public BlockStateWithPos(BlockState blockState, Position3ic pos) {
+    /**
+     * @see #Block(BlockState, Position3ic, int)
+     */
+    public Block(Dimension dimension, Vector3ic pos, int layer) {
+        this(dimension.getBlockState(pos), new Position3i(pos, dimension), layer);
+    }
+
+    /**
+     * @see #Block(BlockState, Position3ic, int)
+     */
+    public Block(BlockState blockState, Position3ic pos) {
         this(blockState, pos, 0);
     }
 
-    public BlockStateWithPos(BlockState blockState, Position3ic pos, int layer) {
+    /**
+     * Creates a new {@code Block} instance with the specified block state, position, and layer.
+     *
+     * @param blockState the state of the block, must not be null.
+     * @param pos        the position of the block in the world, must not be null.
+     * @param layer      the layer of the block, typically 0 for the main layer.
+     */
+    public Block(BlockState blockState, Position3ic pos, int layer) {
         this.blockState = Preconditions.checkNotNull(blockState, "blockState cannot be null");
-        this.pos = pos;
+        this.pos = Preconditions.checkNotNull(pos, "pos cannot be null");
         this.layer = layer;
     }
 
-    @Override
-    public BlockStateWithPos setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        return new BlockStateWithPos(blockState.setPropertyValues(propertyValues), pos, layer);
+    /**
+     * Sets the property values of the block state and returns a new {@code Block} instance with the updated block state.
+     *
+     * @param propertyValues the list of property values to set for the block state.
+     * @return a new {@code Block} instance with the updated block state.
+     */
+    public Block setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+        return new Block(blockState.setPropertyValues(propertyValues), pos, layer);
     }
 
-    @Override
-    public BlockStateWithPos setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
-        return new BlockStateWithPos(blockState.setPropertyValue(propertyValue), pos, layer);
+    /**
+     * Sets a property value and returns a new {@code Block} instance with the updated block state.
+     *
+     * @param propertyValue the property value to set.
+     * @return a new {@code Block} instance with the updated block state.
+     */
+    public Block setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
+        return new Block(blockState.setPropertyValue(propertyValue), pos, layer);
     }
 
-    @Override
-    public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockStateWithPos setPropertyValue(PROPERTY property, DATATYPE value) {
-        return new BlockStateWithPos(blockState.setPropertyValue(property, value), pos, layer);
+    /**
+     * Sets a property value and returns a new {@code Block} instance with the updated block state.
+     *
+     * @param property   the property to set.
+     * @param value      the value to set for the property.
+     * @param <DATATYPE> the type of the property value.
+     * @param <PROPERTY> the type of the block property.
+     * @return a new {@code Block} instance with the updated block state.
+     */
+    public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> Block setPropertyValue(PROPERTY property, DATATYPE value) {
+        return new Block(blockState.setPropertyValue(property, value), pos, layer);
     }
 
     /**
      * @see #offsetPos(BlockFace, int)
      */
-    public BlockStateWithPos offsetPos(BlockFace blockFace) {
+    public Block offsetPos(BlockFace blockFace) {
         return offsetPos(blockFace, layer);
     }
 
@@ -76,7 +127,7 @@ public class BlockStateWithPos implements BlockState {
      * @param blockFace the direction to offset.
      * @return a new {@code BlockStateWithPos} at the offset position.
      */
-    public BlockStateWithPos offsetPos(BlockFace blockFace, int layer) {
+    public Block offsetPos(BlockFace blockFace, int layer) {
         var offset = blockFace.getOffset();
         return offsetPos(offset.x(), offset.y(), offset.z(), layer);
     }
@@ -84,7 +135,7 @@ public class BlockStateWithPos implements BlockState {
     /**
      * @see #offsetPos(int, int, int, int)
      */
-    public BlockStateWithPos offsetPos(int x, int y, int z) {
+    public Block offsetPos(int x, int y, int z) {
         return offsetPos(x, y, z, layer);
     }
 
@@ -97,9 +148,9 @@ public class BlockStateWithPos implements BlockState {
      * @param layer the layer of the block.
      * @return a new {@code BlockStateWithPos} at the offset position.
      */
-    public BlockStateWithPos offsetPos(int x, int y, int z, int layer) {
+    public Block offsetPos(int x, int y, int z, int layer) {
         var newPos = pos.add(x, y, z, new Vector3i());
-        return new BlockStateWithPos(
+        return new Block(
                 pos.dimension().getBlockState(newPos, layer),
                 new Position3i(newPos, pos.dimension()),
                 layer
@@ -189,18 +240,21 @@ public class BlockStateWithPos implements BlockState {
      * @param <T> the type of the block entity.
      * @return the block entity at the current position.
      */
+    @SuppressWarnings("ALL")
     public <T extends BlockEntity> T getBlockEntity() {
         return (T) getDimension().getBlockEntity(pos);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof BlockStateWithPos that)) return false;
-        return blockState == that.blockState;
+        if (!(o instanceof Block that)) return false;
+        return blockState.equals(that.blockState) &&
+               pos.equals(that.pos) &&
+               layer == that.layer;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(blockState);
+        return Objects.hash(blockState, pos, layer);
     }
 }

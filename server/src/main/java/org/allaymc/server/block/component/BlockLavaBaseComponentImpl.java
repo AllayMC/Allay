@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
@@ -42,13 +42,13 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onEntityInside(BlockStateWithPos current, Entity entity) {
+    public void onEntityInside(Block block, Entity entity) {
         if (!(entity instanceof EntityDamageComponent damageComponent)) {
             return;
         }
 
         // Set on fire ticks
-        var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, current, 20 * 15);
+        var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, block, 20 * 15);
         if (event1.call()) {
             damageComponent.setOnFireTicks(event1.getOnFireTicks());
         }
@@ -63,41 +63,41 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!tryHarden(current, null)) {
-            super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        if (!tryHarden(block, null)) {
+            super.onNeighborUpdate(block, neighbor, face);
         }
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos current) {
-        if (!tryHarden(current, null)) {
-            super.onScheduledUpdate(current);
+    public void onScheduledUpdate(Block block) {
+        if (!tryHarden(block, null)) {
+            super.onScheduledUpdate(block);
         }
     }
 
     @Override
-    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        super.afterPlaced(oldBlockState, newBlockState, placementInfo);
-        tryHarden(new BlockStateWithPos(newBlockState, oldBlockState.getPos(), oldBlockState.getLayer()), null);
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
+        tryHarden(new Block(newBlockState, oldBlock.getPos(), oldBlock.getLayer()), null);
     }
 
     @Override
-    public boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
-        var dimension = current.getDimension();
-        var pos = current.getPos();
+    public boolean tryHarden(Block block, Block flownIntoBy) {
+        var dimension = block.getDimension();
+        var pos = block.getPos();
         BlockState hardenedBlockState = null;
         if (flownIntoBy == null) {
             BlockState waterBlockState = null;
-            var down = current.offsetPos(BlockFace.DOWN);
+            var down = block.offsetPos(BlockFace.DOWN);
             var soulSoilUnder = down.getBlockType() == BlockTypes.SOUL_SOIL;
             for (var face : BlockFace.values()) {
                 if (face == BlockFace.DOWN) {
                     continue;
                 }
 
-                var neighborBlockState = current.offsetPos(face);
-                var neighborBlockType = neighborBlockState.getBlockType();
+                var neighborBlock = block.offsetPos(face);
+                var neighborBlockType = neighborBlock.getBlockType();
                 if (neighborBlockType == BlockTypes.BLUE_ICE && soulSoilUnder) {
                     hardenedBlockState = BlockTypes.BASALT.getDefaultState();
                     continue;
@@ -105,8 +105,8 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
                 // This method also considered BlockTypes.FLOWING_WATER as the same liquid type
                 if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(neighborBlockType)) {
-                    waterBlockState = neighborBlockState;
-                    if (isSource(current)) {
+                    waterBlockState = neighborBlock.getBlockState();
+                    if (isSource(block.getBlockState())) {
                         hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
                     } else {
                         hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
@@ -115,13 +115,13 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             }
 
             if (hardenedBlockState != null) {
-                var event = new LiquidHardenEvent(current, waterBlockState, hardenedBlockState);
+                var event = new LiquidHardenEvent(block, waterBlockState, hardenedBlockState);
                 if (!event.call()) {
                     return false;
                 }
 
                 dimension.setBlockState(pos, event.getHardenedBlockState());
-                current.addLevelSoundEvent(SoundEvent.FIZZ);
+                block.addLevelSoundEvent(SoundEvent.FIZZ);
                 return true;
             }
 
@@ -133,13 +133,13 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return false;
         }
 
-        if (isSource(current)) {
+        if (isSource(block.getBlockState())) {
             hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
         } else {
             hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
         }
 
-        var event = new LiquidHardenEvent(current, flownIntoBy, hardenedBlockState);
+        var event = new LiquidHardenEvent(block, flownIntoBy.getBlockState(), hardenedBlockState);
         if (!event.call()) {
             return false;
         }
@@ -151,13 +151,13 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     // See https://minecraft.wiki/w/Lava#Fire_spread
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockStateWithPos) {
-        if (!blockStateWithPos.getDimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_FIRE_TICK)) {
+    public void onRandomUpdate(Block block) {
+        if (!block.getDimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_FIRE_TICK)) {
             return;
         }
 
-        var pos = blockStateWithPos.getPos();
-        var dimension = blockStateWithPos.getDimension();
+        var pos = block.getPos();
+        var dimension = block.getDimension();
         var random = ThreadLocalRandom.current();
         var i = random.nextInt(3);
 
@@ -171,7 +171,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                         continue;
                     }
 
-                    var event = new BlockIgniteEvent(new BlockStateWithPos(blockState, new Position3i(v, dimension), 0), blockStateWithPos, null, BlockIgniteEvent.BlockIgniteCause.LAVA);
+                    var event = new BlockIgniteEvent(new Block(blockState, new Position3i(v, dimension), 0), block, null, BlockIgniteEvent.BlockIgniteCause.LAVA);
                     if (event.call()) {
                         var fireBlockState = getFireBlockState(dimension, v);
                         dimension.setBlockState(v, fireBlockState);
@@ -188,7 +188,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                     continue;
                 }
 
-                var event = new BlockIgniteEvent(new BlockStateWithPos(blockState, new Position3i(v, dimension), 0), blockStateWithPos, null, BlockIgniteEvent.BlockIgniteCause.LAVA);
+                var event = new BlockIgniteEvent(new Block(blockState, new Position3i(v, dimension), 0), block, null, BlockIgniteEvent.BlockIgniteCause.LAVA);
                 if (event.call()) {
                     var fireBlockState = getFireBlockState(dimension, v);
                     dimension.setBlockState(v, fireBlockState);

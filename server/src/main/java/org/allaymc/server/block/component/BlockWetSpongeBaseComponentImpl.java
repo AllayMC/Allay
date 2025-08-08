@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -19,14 +19,14 @@ public class BlockWetSpongeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        super.afterPlaced(oldBlockState, newBlockState, placementInfo);
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
 
-        var dimension = oldBlockState.getDimension();
+        var dimension = oldBlock.getDimension();
         if (dimension.getDimensionInfo() == DimensionInfo.NETHER) {
-            dimension.setBlockState(oldBlockState.getPos(), BlockTypes.SPONGE.getDefaultState());
-            oldBlockState.addLevelSoundEvent(SoundEvent.FIZZ);
-            oldBlockState.addParticle(ParticleType.EXPLODE);
+            dimension.setBlockState(oldBlock.getPos(), BlockTypes.SPONGE.getDefaultState());
+            oldBlock.addLevelSoundEvent(SoundEvent.FIZZ);
+            oldBlock.addParticle(ParticleType.EXPLODE);
         }
     }
 }

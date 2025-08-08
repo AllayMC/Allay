@@ -3,7 +3,7 @@ package org.allaymc.server.blockentity.component;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.CompassRoseDirection;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
@@ -88,7 +88,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             return;
         }
 
-        var event = new SignTextChangeEvent(new BlockStateWithPos(getBlockState(), position, 0), newText, player);
+        var event = new SignTextChangeEvent(new Block(getBlockState(), position, 0), newText, player);
         if (!event.call()) return;
         newText = event.getText();
 
@@ -122,7 +122,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         var itemInHand = player.getItemInHand();
 
         if (itemInHand.getItemType() == ItemTypes.HONEYCOMB && !waxed) {
-            var signWaxEvent = new SignWaxEvent(new BlockStateWithPos(getBlockState(), position, 0), player);
+            var signWaxEvent = new SignWaxEvent(new Block(getBlockState(), position, 0), player);
             if (!signWaxEvent.call()) return;
 
             setWaxed(true);

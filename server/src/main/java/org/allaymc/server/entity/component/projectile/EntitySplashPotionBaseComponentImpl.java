@@ -3,7 +3,7 @@ package org.allaymc.server.entity.component.projectile;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntitySplashPotionBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -45,7 +45,7 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
     }
 
     @Override
-    protected void onHitBlock(BlockStateWithPos block, Vector3dc hitPos) {
+    protected void onHitBlock(Block block, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick()) {
             return;
         }
@@ -54,7 +54,7 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
         this.splash(block, null, 1);
     }
 
-    protected void splash(BlockStateWithPos blockBeingHit, Entity entityBeingHit, float durationMultiplier) {
+    protected void splash(Block blockBeingHit, Entity entityBeingHit, float durationMultiplier) {
         this.location.dimension().addLevelSoundEvent(this.location, SoundEvent.GLASS);
         if (potionType == null) {
             return;
@@ -89,13 +89,13 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
             var blockPos = new Vector3i();
             blockPos.set(this.location.floor());
             var block = getDimension().getBlockState(blockPos);
-            block.getBehavior().onSplash(new BlockStateWithPos(block, new Position3i(blockPos, getDimension())));
+            block.getBehavior().onSplash(new Block(block, new Position3i(blockPos, getDimension())));
 
             // Splash horizontal neighbor blocks
             for (var face : BlockFace.getHorizontalBlockFaces()) {
                 var offsetPos = face.offsetPos(blockPos);
                 block = getDimension().getBlockState(offsetPos);
-                block.getBehavior().onSplash(new BlockStateWithPos(block, new Position3i(offsetPos, getDimension())));
+                block.getBehavior().onSplash(new Block(block, new Position3i(offsetPos, getDimension())));
             }
 
             // Splash entities

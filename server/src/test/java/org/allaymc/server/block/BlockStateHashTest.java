@@ -2,7 +2,7 @@ package org.allaymc.server.block;
 
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
@@ -47,7 +47,7 @@ class BlockStateHashTest {
         assertSame(BlockTypes.BLUE_CANDLE.getDefaultState(), BlockTypes.BLUE_CANDLE.getDefaultState());
         assertEquals(BlockTypes.BLUE_CANDLE.getDefaultState(), BlockTypes.BLUE_CANDLE.getDefaultState());
 
-        assertNotSame(BlockTypes.BLUE_CANDLE.getDefaultState(), new BlockStateWithPos(BlockTypes.BLUE_CANDLE.getDefaultState(), null));
-        assertEquals(new BlockStateWithPos(BlockTypes.BLUE_CANDLE.getDefaultState(), null), new BlockStateWithPos(BlockTypes.BLUE_CANDLE.getDefaultState(), null));
+        assertNotSame(BlockTypes.BLUE_CANDLE.getDefaultState(), new Block(BlockTypes.BLUE_CANDLE.getDefaultState(), null));
+        assertEquals(new Block(BlockTypes.BLUE_CANDLE.getDefaultState(), null), new Block(BlockTypes.BLUE_CANDLE.getDefaultState(), null));
     }
 }

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -37,15 +37,15 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos current) {
-        var pos = current.getPos();
-        var dimension = current.getDimension();
-        if (canFormSource() && getDepth(current) == 7) {
+    public void onScheduledUpdate(Block block) {
+        var pos = block.getPos();
+        var dimension = block.getDimension();
+        if (canFormSource() && getDepth(block.getBlockState()) == 7) {
             // Attempt to form new water source blocks.
             var count = 0;
             for (var face : BlockFace.getHorizontalBlockFaces()) {
-                var neighbor = current.offsetPos(face);
-                if (isSameLiquidType(neighbor.getBlockType()) && isSource(neighbor)) {
+                var neighbor = block.offsetPos(face);
+                if (isSameLiquidType(neighbor.getBlockType()) && isSource(neighbor.getBlockState())) {
                     count++;
                 }
             }
@@ -55,7 +55,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                     // Only form a new source block if there either is no water below this block,
                     // or if the water below this is not falling (full source block).
                     var newLiquid = getSourceBlockState();
-                    var event = new LiquidFlowEvent(current, pos, newLiquid, true);
+                    var event = new LiquidFlowEvent(block, pos, newLiquid, true);
                     if (!event.call()) {
                         return;
                     }
@@ -64,22 +64,22 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             }
         }
 
-        updateLiquid(dimension, pos, current, current.getLayer());
+        updateLiquid(dimension, pos, block.getBlockState(), block.getLayer());
     }
 
     @Override
-    public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        super.onPlace(currentBlockState, newBlockState, placementInfo);
-        tryScheduleLiquidUpdate(currentBlockState);
+    public void onPlace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.onPlace(block, newBlockState, placementInfo);
+        tryScheduleLiquidUpdate(block);
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
-        tryScheduleLiquidUpdate(current);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+        tryScheduleLiquidUpdate(block);
     }
 
-    protected void tryScheduleLiquidUpdate(BlockStateWithPos current) {
+    protected void tryScheduleLiquidUpdate(Block current) {
         var blockUpdateService = current.getDimension().getBlockUpdateService();
         if (!blockUpdateService.hasScheduledBlockUpdate(current.getPos())) {
             blockUpdateService.scheduleBlockUpdateInDelay(current.getPos(), getFlowSpeed(current.getDimension().getDimensionInfo()));
@@ -87,7 +87,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Collections.emptySet();
     }
 
@@ -181,7 +181,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             if (getDepth(liquid) - 4 > 0) {
                 newLiquid = getLiquidBlockState(getDepth(liquid) - 2 * getFlowDecay(dimension.getDimensionInfo()), false);
             }
-            var event = new LiquidDecayEvent(new BlockStateWithPos(liquid, new Position3i(pos, dimension), layer), newLiquid);
+            var event = new LiquidDecayEvent(new Block(liquid, new Position3i(pos, dimension), layer), newLiquid);
             if (!event.call()) {
                 return;
             }
@@ -305,7 +305,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                     return true;
                 }
                 var event = new LiquidFlowEvent(
-                        new BlockStateWithPos(liquid, new Position3i(src, dimension), srcLayer),
+                        new Block(liquid, new Position3i(src, dimension), srcLayer),
                         pos, existing
                 );
                 if (!event.call()) {
@@ -318,8 +318,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
             // Not the same liquid type, try to harden the existing liquid.
             existingLiquidBaseComponent.tryHarden(
-                    new BlockStateWithPos(existing, new Position3i(pos, dimension), 0),
-                    new BlockStateWithPos(liquid, new Position3i(src, dimension), 0)
+                    new Block(existing, new Position3i(pos, dimension), 0),
+                    new Block(liquid, new Position3i(src, dimension), 0)
             );
             return false;
         }
@@ -344,7 +344,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         var event = new LiquidFlowEvent(
-                new BlockStateWithPos(getLiquidBlockState(newDepth, falling), new Position3i(src, dimension), srcLayer),
+                new Block(getLiquidBlockState(newDepth, falling), new Position3i(src, dimension), srcLayer),
                 pos, existing
         );
         if (!event.call()) {

@@ -41,7 +41,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         super.onInteract(event);
 
         if (itemStack != ItemAirStack.AIR_STACK) {
-            var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlockState(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.ROTATE);
+            var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlock(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.ROTATE);
             if (!e.call()) {
                 event.setSuccess(false);
                 return;
@@ -51,7 +51,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
             setItemRotation((itemRotation + 1) % 8);
             event.getDimension().addLevelEvent(MathUtils.center(event.getInteractInfo().clickedBlockPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_ROTATE);
         } else {
-            var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlockState(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.PUT);
+            var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlock(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.PUT);
             if (!e.call()) {
                 event.setSuccess(false);
                 return;
@@ -76,18 +76,18 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
             return;
         }
 
-        var e = new ItemFrameUseEvent(event.getCurrentBlockState(), event.getEntity(), ItemFrameUseEvent.Action.DROP);
+        var e = new ItemFrameUseEvent(event.getCurrentBlock(), event.getEntity(), ItemFrameUseEvent.Action.DROP);
         if (!e.call()) {
             return;
         }
 
-        var dimension = event.getCurrentBlockState().getDimension();
+        var dimension = event.getCurrentBlock().getDimension();
         if (!(event.getEntity() instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
             // Item won't drop if the entity is a dropItem in creative mode
-            dimension.dropItem(itemStack, MathUtils.center(event.getCurrentBlockState().getPos()));
+            dimension.dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPos()));
         }
         clearItemStack();
-        dimension.addLevelEvent(MathUtils.center(event.getCurrentBlockState().getPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_REMOVE);
+        dimension.addLevelEvent(MathUtils.center(event.getCurrentBlock().getPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_REMOVE);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
 
         if (this.itemStack != ItemAirStack.AIR_STACK) {
             // Drop the item in the frame when the frame is replaced
-            event.getCurrentBlockState().getDimension().dropItem(itemStack, MathUtils.center(event.getCurrentBlockState().getPos()));
+            event.getCurrentBlock().getDimension().dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPos()));
             this.itemStack = ItemAirStack.AIR_STACK;
         }
     }

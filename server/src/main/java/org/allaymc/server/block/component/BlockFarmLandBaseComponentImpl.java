@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockType;
@@ -32,33 +32,33 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
         if (face == BlockFace.UP && neighbor.getBlockStateData().isSolid()) {
-            current.getDimension().setBlockState(current.getPos(), BlockTypes.DIRT.getDefaultState());
+            block.getDimension().setBlockState(block.getPos(), BlockTypes.DIRT.getDefaultState());
         }
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        super.onRandomUpdate(current);
+    public void onRandomUpdate(Block block) {
+        super.onRandomUpdate(block);
 
-        var dimension = current.getDimension();
-        var pos = current.getPos();
-        var moisture = current.getPropertyValue(MOISTURIZED_AMOUNT);
-        if (!hydrated(current)) {
+        var dimension = block.getDimension();
+        var pos = block.getPos();
+        var moisture = block.getPropertyValue(MOISTURIZED_AMOUNT);
+        if (!hydrated(block)) {
             if (moisture > 0) {
-                dimension.setBlockState(pos, current.setPropertyValue(MOISTURIZED_AMOUNT, moisture - 1));
+                dimension.setBlockState(pos, block.getBlockState().setPropertyValue(MOISTURIZED_AMOUNT, moisture - 1));
             } else {
-                var blockAbove = current.offsetPos(BlockFace.UP);
+                var blockAbove = block.offsetPos(BlockFace.UP);
                 if (!blockAbove.getBlockType().hasBlockTag(BlockTags.CROP)) {
                     // Convert farmland to dirt only if there is no crop above.
                     dimension.setBlockState(pos, BlockTypes.DIRT.getDefaultState());
                 }
             }
         } else if (moisture != MOISTURIZED_AMOUNT.getMax()) {
-            dimension.setBlockState(pos, current.setPropertyValue(MOISTURIZED_AMOUNT, MOISTURIZED_AMOUNT.getMax()));
+            dimension.setBlockState(pos, block.getBlockState().setPropertyValue(MOISTURIZED_AMOUNT, MOISTURIZED_AMOUNT.getMax()));
         }
     }
 
@@ -66,10 +66,9 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
      * Check for water within 4 blocks in each direction from the farmland.
      *
      * @param block The farmland block.
-     *
      * @return {@code true} if the farmland is hydrated, {@code false} otherwise.
      */
-    protected boolean hydrated(BlockStateWithPos block) {
+    protected boolean hydrated(Block block) {
         var dimension = block.getDimension();
         var pos = block.getPos();
         for (var y = 0; y <= 1; y++) {
@@ -87,7 +86,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onEntityFallOn(Entity entity, BlockStateWithPos block) {
+    public void onEntityFallOn(Entity entity, Block block) {
         if (ThreadLocalRandom.current().nextFloat() < entity.getFallDistance() - 0.5f) {
             if (!VALID_ENTITIES.contains(entity.getEntityType().getIdentifier()) || entity.getMetadata().get(EntityFlag.BABY)) {
                 return;
@@ -101,7 +100,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.DIRT.createItemStack());
     }
 

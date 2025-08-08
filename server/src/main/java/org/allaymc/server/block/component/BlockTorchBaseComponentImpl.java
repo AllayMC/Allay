@@ -4,7 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.EnumBiMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -33,17 +33,17 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
         if (face == BlockFace.UP) {
             return;
         }
 
-        var torchFacingDirection = current.getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
+        var torchFacingDirection = block.getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
         var blockFace = TORCH_FACING_DIRECTION_MAPPER.inverse().get(torchFacingDirection);
-        if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()), blockFace)) {
-            current.breakBlock();
+        if (!canBeSupportedAt(block.offsetPos(blockFace.opposite()).getBlockState(), blockFace)) {
+            block.breakBlock();
         }
     }
 
@@ -54,7 +54,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var face = placementInfo.blockFace();
-        if (face == BlockFace.DOWN || !canBeSupportedAt(placementInfo.getClickedBlockState(), face)) {
+        if (face == BlockFace.DOWN || !canBeSupportedAt(placementInfo.getClickedBlock().getBlockState(), face)) {
             face = findValidFace(dimension, placeBlockPos);
         }
 

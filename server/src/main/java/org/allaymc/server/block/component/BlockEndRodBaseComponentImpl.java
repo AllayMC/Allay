@@ -28,7 +28,7 @@ public class BlockEndRodBaseComponentImpl extends BlockBaseComponentImpl {
             face = face.opposite();
         }
 
-        var clickedBlockState = placementInfo.getClickedBlockState();
+        var clickedBlockState = placementInfo.getClickedBlock();
         if (clickedBlockState.getBlockType() == getBlockType() && clickedBlockState.getPropertyValue(FACING_DIRECTION) == face.ordinal()) {
             face = face.opposite();
         }

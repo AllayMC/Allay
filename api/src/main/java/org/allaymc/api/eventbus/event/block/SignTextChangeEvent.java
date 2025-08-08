@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -13,8 +13,8 @@ public class SignTextChangeEvent extends BlockEvent implements CancellableEvent 
     protected String[] text;
     protected EntityPlayer editor;
 
-    public SignTextChangeEvent(BlockStateWithPos blockState, String[] text, EntityPlayer editor) {
-        super(blockState);
+    public SignTextChangeEvent(Block block, String[] text, EntityPlayer editor) {
+        super(block);
         setText(text);
         this.editor = editor;
     }

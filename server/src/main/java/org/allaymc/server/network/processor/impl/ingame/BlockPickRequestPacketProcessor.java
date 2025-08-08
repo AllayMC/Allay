@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.impl.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
@@ -28,7 +28,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
             return;
         }
 
-        var block = new BlockStateWithPos(blockPos, player.getDimension());
+        var block = new Block(player.getDimension(), blockPos);
         if (block.getBlockType() == BlockTypes.AIR) {
             log.warn("Player {} tried to pick air!", player.getOriginName());
             return;

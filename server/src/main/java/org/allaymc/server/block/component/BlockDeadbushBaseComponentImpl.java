@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.interfaces.BlockTerracottaBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -24,11 +24,11 @@ public class BlockDeadbushBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
-        if (face == BlockFace.DOWN && !canBeSupportedAt(neighbor)) {
-            current.breakBlock();
+        if (face == BlockFace.DOWN && !canBeSupportedAt(neighbor.getBlockState())) {
+            block.breakBlock();
         }
     }
 
@@ -46,9 +46,9 @@ public class BlockDeadbushBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
-            return super.getDrops(current, usedItem, entity);
+            return super.getDrops(block, usedItem, entity);
         }
 
         return Set.of(ItemTypes.STICK.createItemStack(ThreadLocalRandom.current().nextInt(0, 3)));

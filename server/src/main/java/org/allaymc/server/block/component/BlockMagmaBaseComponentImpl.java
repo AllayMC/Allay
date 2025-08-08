@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
@@ -17,7 +17,7 @@ public class BlockMagmaBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
+    public void onCollideWithEntity(Block block, Entity entity) {
         if (entity instanceof EntityDamageComponent damageComponent) {
             if (entity instanceof EntityPlayer player && player.isSneaking()) {
                 return;

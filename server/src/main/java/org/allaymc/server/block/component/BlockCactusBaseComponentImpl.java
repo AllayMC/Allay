@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
@@ -34,30 +34,30 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
+    public void onCollideWithEntity(Block block, Entity entity) {
         if (entity instanceof EntityDamageComponent damageComponent) {
             damageComponent.attack(DamageContainer.contact(0.5f));
         }
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!canGrowHere(current.getDimension(), current.getPos(), true)) {
-            current.breakBlock();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        if (!canGrowHere(block.getDimension(), block.getPos(), true)) {
+            block.breakBlock();
         }
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        var dimension = current.getDimension();
-        var age = current.getPropertyValue(AGE_16);
+    public void onRandomUpdate(Block block) {
+        var dimension = block.getDimension();
+        var age = block.getPropertyValue(AGE_16);
         if (age < AGE_16.getMax()) {
-            current = current.setPropertyValue(AGE_16, age + 1);
+            block = block.setPropertyValue(AGE_16, age + 1);
         } else if (age == AGE_16.getMax()) {
-            current = current.setPropertyValue(AGE_16, 0);
-            if (canGrowHere(dimension, current.getPos(), false)) {
+            block = block.setPropertyValue(AGE_16, 0);
+            if (canGrowHere(dimension, block.getPos(), false)) {
                 for (var y = 1; y < 3; y++) {
-                    var upperBlock = current.offsetPos(0, y, 0);
+                    var upperBlock = block.offsetPos(0, y, 0);
                     var blockType = upperBlock.getBlockType();
                     if (blockType == BlockTypes.AIR) {
                         dimension.setBlockState(upperBlock.getPos(), BlockTypes.CACTUS.getDefaultState());
@@ -69,7 +69,7 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        dimension.setBlockState(current.getPos(), current);
+        dimension.setBlockState(block.getPos(), block.getBlockState());
     }
 
     /**

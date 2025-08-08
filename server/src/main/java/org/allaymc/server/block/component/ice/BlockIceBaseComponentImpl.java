@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.ice;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -24,13 +24,13 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        super.onRandomUpdate(current);
+    public void onRandomUpdate(Block block) {
+        super.onRandomUpdate(block);
 
-        if (isNeighborBlockLightBiggerThan(current.getDimension(), current.getPos())) {
-            var event = new BlockFadeEvent(current, BlockTypes.WATER.getDefaultState());
+        if (isNeighborBlockLightBiggerThan(block.getDimension(), block.getPos())) {
+            var event = new BlockFadeEvent(block, BlockTypes.WATER.getDefaultState());
             if (event.call()) {
-                current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
+                block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
             }
         }
     }
@@ -47,9 +47,9 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
 
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
-        if (current.offsetPos(BlockFace.DOWN).getBlockType() != BlockTypes.AIR) {
-            current.getDimension().setBlockState(current.getPos(), BlockTypes.WATER.getDefaultState());
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        if (block.offsetPos(BlockFace.DOWN).getBlockType() != BlockTypes.AIR) {
+            block.getDimension().setBlockState(block.getPos(), BlockTypes.WATER.getDefaultState());
         }
 
         return Utils.EMPTY_ITEM_STACK_SET;

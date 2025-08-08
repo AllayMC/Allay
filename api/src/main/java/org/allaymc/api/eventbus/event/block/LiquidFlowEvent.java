@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.joml.Vector3ic;
@@ -33,12 +33,12 @@ public class LiquidFlowEvent extends BlockEvent implements CancellableEvent {
      */
     protected boolean isFormingSource;
 
-    public LiquidFlowEvent(BlockStateWithPos blockState, Vector3ic into, BlockState replacedBlockState) {
-        this(blockState, into, replacedBlockState, false);
+    public LiquidFlowEvent(Block block, Vector3ic into, BlockState replacedBlockState) {
+        this(block, into, replacedBlockState, false);
     }
 
-    public LiquidFlowEvent(BlockStateWithPos blockState, Vector3ic into, BlockState replacedBlockState, boolean isFormingSource) {
-        super(blockState);
+    public LiquidFlowEvent(Block block, Vector3ic into, BlockState replacedBlockState, boolean isFormingSource) {
+        super(block);
         this.into = into;
         this.replacedBlockState = replacedBlockState;
         this.isFormingSource = isFormingSource;

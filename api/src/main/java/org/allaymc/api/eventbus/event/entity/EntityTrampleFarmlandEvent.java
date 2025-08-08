@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -13,10 +13,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 public class EntityTrampleFarmlandEvent extends EntityEvent implements CancellableEvent {
 
-    protected BlockStateWithPos blockState;
+    protected Block block;
 
-    public EntityTrampleFarmlandEvent(Entity entity, BlockStateWithPos blockState) {
+    public EntityTrampleFarmlandEvent(Entity entity, Block block) {
         super(entity);
-        this.blockState = blockState;
+        this.block = block;
     }
 }

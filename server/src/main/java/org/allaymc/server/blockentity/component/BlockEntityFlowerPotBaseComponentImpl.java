@@ -50,7 +50,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
             return;
         }
 
-        var current = event.getCurrentBlockState();
+        var current = event.getCurrentBlock();
         current.getDimension().dropItem(plantBlock.toItemStack(), MathUtils.center(current.getPos()));
         plantBlock = null;
     }

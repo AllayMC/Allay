@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.data.TintMethod;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.component.ItemFilledMapBaseComponent;
@@ -235,7 +235,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         return color;
     }
 
-    protected static BlockStateWithPos getMapColoredBlock(Dimension dimension, int x, int z) {
+    protected static Block getMapColoredBlock(Dimension dimension, int x, int z) {
         var chunk = dimension.getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
         Preconditions.checkArgument(chunk != null);
 
@@ -249,14 +249,14 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             if (tintMethod == TintMethod.WATER || (color.getAlpha() == 0 && tintMethod == TintMethod.NONE)) {
                 height--;
             } else {
-                return new BlockStateWithPos(block, new Position3i(x, height, z, dimension), 0);
+                return new Block(block, new Position3i(x, height, z, dimension), 0);
             }
         }
 
         return null;
     }
 
-    protected static Color computeMapColor(BlockStateWithPos block) {
+    protected static Color computeMapColor(Block block) {
         var blockStateData = block.getBlockStateData();
         var tintMethod = blockStateData.tintMethod();
         return switch (tintMethod) {
@@ -273,7 +273,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
     /**
      * See <a href="https://minecraft.wiki/w/Color#Biome_colors">Biome Colors</a>
      */
-    protected static Color getPlantColor(BlockStateWithPos block) {
+    protected static Color getPlantColor(Block block) {
         var tintMethod = block.getBlockStateData().tintMethod();
         if (tintMethod == TintMethod.BIRCH_FOLIAGE) {
             return BIRCH_FOLIAGE;

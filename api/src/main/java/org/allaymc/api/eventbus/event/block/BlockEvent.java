@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
@@ -9,9 +9,9 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 public abstract class BlockEvent extends Event {
-    protected BlockStateWithPos blockState;
+    protected Block block;
 
-    public BlockEvent(BlockStateWithPos blockState) {
-        this.blockState = blockState;
+    public BlockEvent(Block block) {
+        this.block = block;
     }
 }

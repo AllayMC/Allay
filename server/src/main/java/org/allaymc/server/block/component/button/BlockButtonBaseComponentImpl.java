@@ -3,7 +3,7 @@ package org.allaymc.server.block.component.button;
 import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -39,16 +39,16 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
         // Check if the neighbor is block below
-        if (current.getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) {
+        if (block.getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) {
             return;
         }
 
         if (!neighbor.getBlockStateData().isSolid()) {
-            current.breakBlock();
+            block.breakBlock();
         }
     }
 
@@ -58,7 +58,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        var clickedBlockState = interactInfo.getClickedBlockState();
+        var clickedBlockState = interactInfo.getClickedBlock();
         if (!clickedBlockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
             clickedBlockState.updateBlockProperty(BUTTON_PRESSED_BIT, true);
             dimension.getBlockUpdateService().scheduleBlockUpdateInDelay(clickedBlockState.getPos(), getActivationTime());
@@ -68,10 +68,10 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos current) {
-        if (current.getPropertyValue(BUTTON_PRESSED_BIT)) {
-            current.updateBlockProperty(BUTTON_PRESSED_BIT, false);
-            current.addLevelSoundEvent(SoundEvent.BUTTON_CLICK_OFF);
+    public void onScheduledUpdate(Block block) {
+        if (block.getPropertyValue(BUTTON_PRESSED_BIT)) {
+            block.updateBlockProperty(BUTTON_PRESSED_BIT, false);
+            block.addLevelSoundEvent(SoundEvent.BUTTON_CLICK_OFF);
         }
     }
 }

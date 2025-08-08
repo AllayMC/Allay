@@ -97,7 +97,7 @@ public final class DeferredData {
         return List.of(
                 // data_driven_items (Holiday Creator Features) is needed for blocks and items
                 new ExperimentData("data_driven_items", true),
-                // Needed for block properties for states
+                // Needed for block properties for states@
                 new ExperimentData("upcoming_creator_features", true),
                 // Needed for certain molang queries used in blocks and items
                 new ExperimentData("experimental_molang_features", true)

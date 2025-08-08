@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -30,30 +30,30 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
-        if (face == BlockFace.DOWN && !canBeSupportedAt(current.offsetPos(BlockFace.DOWN))) {
-            current.breakBlock();
+        if (face == BlockFace.DOWN && !canBeSupportedAt(block.offsetPos(BlockFace.DOWN).getBlockState())) {
+            block.breakBlock();
         }
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        super.onRandomUpdate(current);
+    public void onRandomUpdate(Block block) {
+        super.onRandomUpdate(block);
 
-        var currentAge = current.getPropertyValue(AGE_6);
+        var currentAge = block.getPropertyValue(AGE_6);
         if (currentAge >= AGE_6.getMax()) {
             return;
         }
 
-        var stemInfo = findStem(current);
+        var stemInfo = findStem(block);
         var stemHeight = stemInfo.left();
         var hasBranch = stemInfo.right();
 
         // Try upward growth
-        if (currentAge < 5 && shouldGrowUpward(stemHeight, hasBranch) && isSurroundingAir(current.offsetPos(BlockFace.UP), null)) {
-            growInDirection(current, BlockFace.UP, 0);
+        if (currentAge < 5 && shouldGrowUpward(stemHeight, hasBranch) && isSurroundingAir(block.offsetPos(BlockFace.UP), null)) {
+            growInDirection(block, BlockFace.UP, 0);
             return;
         }
 
@@ -72,21 +72,21 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
                     break;
                 }
 
-                var side = current.offsetPos(face);
+                var side = block.offsetPos(face);
                 if (canBranchTo(side, face)) {
-                    growInDirection(current, face, 1);
+                    growInDirection(block, face, 1);
                     grew = true;
                 }
             }
 
             if (grew) {
-                current.getDimension().setBlockState(current.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
+                block.getDimension().setBlockState(block.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
                 return;
             }
         }
 
         // Growth failed — kill flower
-        current.getDimension().setBlockState(current.getPos(), current.setPropertyValue(AGE_6, AGE_6.getMax()));
+        block.getDimension().setBlockState(block.getPos(), block.getBlockState().setPropertyValue(AGE_6, AGE_6.getMax()));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
             return super.place(dimension, blockState, placeBlockPos, null);
         }
 
-        if (canBeSupportedAt(placementInfo.getClickedBlockState()) && placementInfo.blockFace() == BlockFace.UP) {
+        if (canBeSupportedAt(placementInfo.getClickedBlock().getBlockState()) && placementInfo.blockFace() == BlockFace.UP) {
             return dimension.setBlockState(placeBlockPos, blockState);
         }
 
@@ -127,13 +127,13 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
         return ThreadLocalRandom.current().nextFloat() < chance;
     }
 
-    protected boolean canBranchTo(BlockStateWithPos side, BlockFace fromFace) {
+    protected boolean canBranchTo(Block side, BlockFace fromFace) {
         return side.getBlockType() == BlockTypes.AIR &&
                side.offsetPos(BlockFace.DOWN).getBlockType() == BlockTypes.AIR &&
                isSurroundingAir(side, fromFace.opposite());
     }
 
-    protected boolean isSurroundingAir(BlockStateWithPos current, BlockFace ignore) {
+    protected boolean isSurroundingAir(Block current, BlockFace ignore) {
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             if (face == ignore) {
                 continue;
@@ -147,7 +147,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
-    protected Pair<Integer, Boolean> findStem(BlockStateWithPos current) {
+    protected Pair<Integer, Boolean> findStem(Block current) {
         int stemHeight = 0;
         boolean hasBranch = false;
         var down = current;
@@ -171,7 +171,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
         return Pair.of(stemHeight, hasBranch);
     }
 
-    protected void growInDirection(BlockStateWithPos current, BlockFace face, int addingAge) {
+    protected void growInDirection(Block current, BlockFace face, int addingAge) {
         current.getDimension().setBlockState(current.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
 
         var newPos = current.offsetPos(face).getPos();

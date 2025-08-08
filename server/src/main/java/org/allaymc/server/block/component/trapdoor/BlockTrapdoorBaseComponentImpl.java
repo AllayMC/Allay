@@ -46,7 +46,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var clickedBlockState = interactInfo.getClickedBlockState();
+        var clickedBlockState = interactInfo.getClickedBlock();
         var isOpen = !clickedBlockState.getPropertyValue(OPEN_BIT);
         clickedBlockState.updateBlockProperty(OPEN_BIT, isOpen);
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason

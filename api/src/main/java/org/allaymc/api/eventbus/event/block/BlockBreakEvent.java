@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
@@ -20,8 +20,8 @@ public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
      */
     protected Entity entity;
 
-    public BlockBreakEvent(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        super(blockState);
+    public BlockBreakEvent(Block block, ItemStack usedItem, Entity entity) {
+        super(block);
         this.usedItem = usedItem;
         this.entity = entity;
     }

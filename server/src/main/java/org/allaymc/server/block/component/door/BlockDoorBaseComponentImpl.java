@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.door;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
@@ -66,20 +66,20 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
         var keep = true;
         if (face == BlockFace.UP) {
-            keep = current.getPropertyValue(UPPER_BLOCK_BIT) || neighbor.getBlockType() == getBlockType();
+            keep = block.getPropertyValue(UPPER_BLOCK_BIT) || neighbor.getBlockType() == getBlockType();
         } else if (face == BlockFace.DOWN) {
-            keep = current.getPropertyValue(UPPER_BLOCK_BIT)
+            keep = block.getPropertyValue(UPPER_BLOCK_BIT)
                     ? neighbor.getBlockType() == getBlockType()
                     : neighbor.getBlockStateData().isSolid();
         }
 
         if (!keep) {
-            current.breakBlock();
+            block.breakBlock();
         }
     }
 
@@ -106,15 +106,15 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
-            blockState.getDimension().breakBlock(BlockFace.DOWN.offsetPos(blockState.getPos()), null, entity);
+    public void onBreak(Block block, ItemStack usedItem, Entity entity) {
+        if (block.getPropertyValue(UPPER_BLOCK_BIT)) {
+            block.getDimension().breakBlock(BlockFace.DOWN.offsetPos(block.getPos()), null, entity);
         }
-        super.onBreak(blockState, usedItem, entity);
+        super.onBreak(block, usedItem, entity);
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
-        return current.getPropertyValue(UPPER_BLOCK_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(current, usedItem, entity);
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        return block.getPropertyValue(UPPER_BLOCK_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(block, usedItem, entity);
     }
 }

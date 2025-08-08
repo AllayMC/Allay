@@ -3,7 +3,7 @@ package org.allaymc.server.block.component.fallable;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
@@ -42,12 +42,12 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
     @EventHandler
     public void onBlockOnNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
         var current = event.getCurrent();
-        trySpawnFallingEntity(current.getDimension(), current.getPos(), current);
+        trySpawnFallingEntity(current.getDimension(), current.getPos(), current.getBlockState());
     }
 
     @EventHandler
     protected void onBlockAfterPlaced(CBlockAfterPlacedEvent event) {
-        var oldBlockState = event.getOldBlockState();
+        var oldBlockState = event.getOldBlock();
         trySpawnFallingEntity(oldBlockState.getDimension(), oldBlockState.getPos(), event.getNewBlockState());
     }
 
@@ -58,7 +58,7 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
             return;
         }
 
-        var event = new BlockFallEvent(new BlockStateWithPos(blockState, new Position3i(pos, dimension), 0));
+        var event = new BlockFallEvent(new Block(blockState, new Position3i(pos, dimension), 0));
         if (!event.call()) {
             return;
         }

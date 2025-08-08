@@ -1,6 +1,6 @@
 package org.allaymc.api.block.component;
 
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 
 /**
  * @author daoge_cmd
@@ -8,17 +8,17 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 public interface BlockTntBaseComponent extends BlockBaseComponent {
 
     /**
-     * @see #prime(BlockStateWithPos, int)
+     * @see #prime(Block, int)
      */
-    default void prime(BlockStateWithPos blockStateWithPos) {
-        this.prime(blockStateWithPos, 80);
+    default void prime(Block block) {
+        this.prime(block, 80);
     }
 
     /**
      * Primes the TNT with a custom fuse duration.
      *
-     * @param blockStateWithPos the {@link BlockStateWithPos} to prime
+     * @param block the {@link Block} to prime
      * @param fuse              the fuse duration in ticks
      */
-    void prime(BlockStateWithPos blockStateWithPos, int fuse);
+    void prime(Block block, int fuse);
 }

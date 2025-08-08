@@ -3,7 +3,7 @@ package org.allaymc.server.block.component.ore;
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.FortuneDropHelper;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
@@ -33,12 +33,12 @@ public class BlockOreBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(this.dropItem.getItemType().createItemStack(FortuneDropHelper.weighted(usedItem, minDropItem, maxDropItem)));
     }
 
     @Override
-    public int getDropXpAmount(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    public int getDropXpAmount(Block block, ItemStack usedItem, Entity entity) {
         if (maxDropXp == 0) {
             return 0;
         }

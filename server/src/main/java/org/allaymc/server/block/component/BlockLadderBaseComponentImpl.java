@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -22,17 +22,17 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
         if (face.isVertical()) {
             return;
         }
 
-        var facingDirection = current.getPropertyValue(FACING_DIRECTION);
+        var facingDirection = block.getPropertyValue(FACING_DIRECTION);
         var blockFace = Objects.requireNonNull(BlockFace.fromIndex(facingDirection));
-        if (!canBeSupportedAt(current.offsetPos(blockFace.opposite()), blockFace)) {
-            current.breakBlock();
+        if (!canBeSupportedAt(block.offsetPos(blockFace.opposite()).getBlockState(), blockFace)) {
+            block.breakBlock();
         }
     }
 
@@ -47,7 +47,7 @@ public class BlockLadderBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        if (!canBeSupportedAt(placementInfo.getClickedBlockState(), blockFace)) {
+        if (!canBeSupportedAt(placementInfo.getClickedBlock().getBlockState(), blockFace)) {
             blockFace = findValidFace(dimension, placeBlockPos);
         }
 

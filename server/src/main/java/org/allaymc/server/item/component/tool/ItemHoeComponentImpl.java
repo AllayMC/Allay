@@ -15,7 +15,7 @@ public class ItemHoeComponentImpl extends ItemToolComponentImpl {
     @EventHandler
     protected void onUseOnBlock(CItemRightClickOnBlockEvent event) {
         var blockPos = event.getInteractInfo().clickedBlockPos();
-        var clickedBlock = event.getInteractInfo().getClickedBlockState();
+        var clickedBlock = event.getInteractInfo().getClickedBlock();
         if (!clickedBlock.getBlockType().hasBlockTag(BlockTags.GRASS)) {
             // This tag represents blocks that can be tilled by a hoe.
             return;

@@ -3,7 +3,7 @@ package org.allaymc.api.world;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
@@ -286,7 +286,7 @@ public class Explosion {
             if (blockType == BlockTypes.TNT) {
                 // Explosion can prime tnt around
                 BlockTypes.TNT.getBlockBehavior().prime(
-                        new BlockStateWithPos(block, new Position3i(pos, dimension)),
+                        new Block(block, new Position3i(pos, dimension)),
                         10 + rand.nextInt(30)
                 );
                 continue;
@@ -295,7 +295,7 @@ public class Explosion {
             dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
             if (itemDropChance > rand.nextDouble()) {
                 var centerPos = MathUtils.center(pos);
-                for (var item : block.getBehavior().getDrops(new BlockStateWithPos(block, new Position3i(pos, dimension)), null, null)) {
+                for (var item : block.getBehavior().getDrops(new Block(block, new Position3i(pos, dimension)), null, null)) {
                     dimension.dropItem(item, centerPos);
                 }
             }

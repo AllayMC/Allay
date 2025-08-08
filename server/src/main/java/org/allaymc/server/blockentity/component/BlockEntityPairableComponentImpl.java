@@ -75,7 +75,7 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
 
     @EventHandler
     protected void onReplace(CBlockOnReplaceEvent event) {
-        var blockEntity = event.getCurrentBlockState().getBlockEntity();
+        var blockEntity = event.getCurrentBlock().getBlockEntity();
         if (blockEntity instanceof BlockEntityPairableComponent pairableComponent) {
             if (pairableComponent.isPaired()) {
                 ((BlockEntityPairableComponent) pairableComponent.getPair()).unpair();

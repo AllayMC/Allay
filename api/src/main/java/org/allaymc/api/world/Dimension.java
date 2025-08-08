@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
 import it.unimi.dsi.fastutil.ints.IntObjectPair;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockCustomTags;
@@ -918,8 +918,8 @@ public interface Dimension {
      * @param pos the pos.
      * @return the blocks around the pos.
      */
-    default BlockStateWithPos[] getNeighborsBlockState(Vector3ic pos) {
-        return getNeighborsBlockState(pos.x(), pos.y(), pos.z());
+    default Block[] getNeighborsBlocks(Vector3ic pos) {
+        return getNeighborsBlocks(pos.x(), pos.y(), pos.z());
     }
 
     /**
@@ -930,12 +930,12 @@ public interface Dimension {
      * @param z the z coordinate of the pos.
      * @return the blocks around the pos.
      */
-    default BlockStateWithPos[] getNeighborsBlockState(int x, int y, int z) {
-        var result = new BlockStateWithPos[6];
+    default Block[] getNeighborsBlocks(int x, int y, int z) {
+        var result = new Block[6];
         for (int i = 0; i < BlockFace.values().length; i++) {
             var offsetPos = BlockFace.values()[i].offsetPos(x, y, z);
             var neighborBlockState = getBlockState(offsetPos.x(), offsetPos.y(), offsetPos.z(), 0);
-            result[i] = new BlockStateWithPos(neighborBlockState, new Position3i(offsetPos, this), 0);
+            result[i] = new Block(neighborBlockState, new Position3i(offsetPos, this), 0);
         }
         return result;
     }

@@ -2,7 +2,7 @@ package org.allaymc.api.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -36,20 +36,20 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when a neighboring block causes the current block to update.
      *
-     * @param current  the current block that is being updated.
+     * @param block    the current block that is being updated.
      * @param neighbor the neighboring block that triggered the update.
      * @param face     the face of the current block that is being updated.
      */
     @ApiStatus.OverrideOnly
-    void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
+    void onNeighborUpdate(Block block, Block neighbor, BlockFace face);
 
     /**
      * Called when the block encounters a random update.
      *
-     * @param current the block that encountered the random update.
+     * @param block the block that encountered the random update.
      */
     @ApiStatus.OverrideOnly
-    void onRandomUpdate(BlockStateWithPos current);
+    void onRandomUpdate(Block block);
 
     /**
      * Determines if the block can receive random updates.
@@ -94,32 +94,32 @@ public interface BlockBaseComponent extends BlockComponent {
      * </p>
      * For setting a new block state post-placement, consider using {@link BlockBehavior#afterPlaced}.
      *
-     * @param currentBlockState the block that is being replaced.
-     * @param newBlockState     the block that will replace the current block.
-     * @param placementInfo     the player placement information, can be {@code null}.
+     * @param block         the block that is being replaced.
+     * @param newBlockState the block that will replace the current block.
+     * @param placementInfo the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
-    void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+    void onPlace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Called after the block is placed.
      *
-     * @param oldBlockState the block that was replaced.
+     * @param oldBlock      the block that was replaced.
      * @param newBlockState the new block that replaced the old block.
      * @param placementInfo the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
-    void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+    void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Determines if the block will drop as an item when it is broken by the specified entity using the specified item.
      *
-     * @param blockState the block being broken.
-     * @param usedItem   the item used to break the block, can be {@code null}.
-     * @param entity     the entity breaking the block, can be {@code null}.
+     * @param block    the block being broken.
+     * @param usedItem the item used to break the block, can be {@code null}.
+     * @param entity   the entity breaking the block, can be {@code null}.
      * @return {@code true} if the block will drop as an item, {@code false} otherwise.
      */
-    boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
+    boolean isDroppable(Block block, ItemStack usedItem, Entity entity);
 
     /**
      * Handles player interaction with the block.
@@ -135,92 +135,92 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when the block is replaced.
      *
-     * @param currentBlockState the block being replaced.
-     * @param newBlockState     the block that replaces the current block.
-     * @param placementInfo     the player placement information, can be {@code null}.
+     * @param block         the block being replaced.
+     * @param newBlockState the block that replaces the current block.
+     * @param placementInfo the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
-    void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+    void onReplace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Called after a block has been replaced.
      *
-     * @param oldBlockState the block that was replaced.
+     * @param oldBlock      the block that was replaced.
      * @param newBlockState the block that replaced the old block.
      * @param placementInfo the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
-    void afterReplaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+    void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Handles the case where a neighbor layer block is replaced.
      * For example, when a water block in layer 1 is affected by a change in layer 0.
      *
-     * @param currentBlockState the block being replaced.
-     * @param newBlockState     the new block replacing the current block.
-     * @param placementInfo     the player placement information, can be {@code null}.
+     * @param currentBlock  the block being replaced.
+     * @param newBlockState the new block replacing the current block.
+     * @param placementInfo the player placement information, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
-    void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+    void afterNeighborLayerReplace(Block currentBlock, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Called when the block is punched by an entity.
      *
-     * @param currentBlockState the block being punched.
-     * @param usedItem          the item used to punch the block, can be {@code null}.
-     * @param entity            the entity who punched the block, can be {@code null}.
+     * @param block    the block being punched.
+     * @param usedItem the item used to punch the block, can be {@code null}.
+     * @param entity   the entity who punched the block, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
-    void onPunch(BlockStateWithPos currentBlockState, BlockFace blockFace, ItemStack usedItem, Entity entity);
+    void onPunch(Block block, BlockFace blockFace, ItemStack usedItem, Entity entity);
 
     /**
      * Handles when a block is broken by a non-creative entity.
      *
-     * @param blockState the block that was broken.
-     * @param usedItem   the item used to break the block, can be {@code null}.
-     * @param entity     the entity that broke the block, can be {@code null}.
+     * @param block    the block that was broken.
+     * @param usedItem the item used to break the block, can be {@code null}.
+     * @param entity   the entity that broke the block, can be {@code null}.
      */
     @ApiStatus.OverrideOnly
-    void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
+    void onBreak(Block block, ItemStack usedItem, Entity entity);
 
     /**
      * Called when a block receives a scheduled update.
      *
-     * @param current the block receiving the scheduled update.
+     * @param block the block receiving the scheduled update.
      */
     @ApiStatus.OverrideOnly
-    default void onScheduledUpdate(BlockStateWithPos current) {
+    default void onScheduledUpdate(Block block) {
     }
 
     /**
      * Retrieves the drops of the block when it is broken.
      *
-     * @param blockState the block being broken.
-     * @param usedItem   the item used to break the block, can be {@code null}.
-     * @param entity     the entity breaking the block, can be {@code null}.
+     * @param block    the block being broken.
+     * @param usedItem the item used to break the block, can be {@code null}.
+     * @param entity   the entity breaking the block, can be {@code null}.
      * @return a set of {@link ItemStack} representing the drops.
      */
-    Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
+    Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity);
 
     /**
      * Retrieves the drops of the block when it is broken with a silk touch enchantment.
      *
-     * @param blockState the block being broken.
+     * @param block the block being broken.
      * @return the silk touch drop as an {@link ItemStack}.
      */
-    default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
-        return blockState.toItemStack();
+    default ItemStack getSilkTouchDrop(Block block) {
+        return block.toItemStack();
     }
 
     /**
      * Retrieves the amount of XP that should be dropped when the block is broken.
      *
-     * @param blockState the block being broken.
-     * @param usedItem   the item used to break the block.
-     * @param entity     the entity breaking the block.
+     * @param block    the block being broken.
+     * @param usedItem the item used to break the block.
+     * @param entity   the entity breaking the block.
      * @return the amount of XP to drop.
      */
-    default int getDropXpAmount(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+    default int getDropXpAmount(Block block, ItemStack usedItem, Entity entity) {
         return 0;
     }
 
@@ -241,7 +241,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param block  the block the entity is falling on.
      */
     @ApiStatus.OverrideOnly
-    default void onEntityFallOn(Entity entity, BlockStateWithPos block) {
+    default void onEntityFallOn(Entity entity, Block block) {
     }
 
     /**
@@ -266,41 +266,41 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when the block collides with an entity.
      *
-     * @param current the block that collides with the entity.
-     * @param entity  the entity that collides with the block.
+     * @param block  the block that collides with the entity.
+     * @param entity the entity that collides with the block.
      */
     @ApiStatus.OverrideOnly
-    default void onCollideWithEntity(BlockStateWithPos current, Entity entity) {
+    default void onCollideWithEntity(Block block, Entity entity) {
     }
 
     /**
      * Called when an entity is inside the block.
      *
-     * @param current the block that the entity inside.
-     * @param entity  the entity that inside a block.
+     * @param block  the block that the entity inside.
+     * @param entity the entity that inside a block.
      */
     @ApiStatus.OverrideOnly
-    default void onEntityInside(BlockStateWithPos current, Entity entity) {
+    default void onEntityInside(Block block, Entity entity) {
     }
 
     /**
      * Called when the block is splashed by a splash water bottle.
      *
-     * @param current the block being splashed.
+     * @param block the block being splashed.
      */
     @ApiStatus.OverrideOnly
-    default void onSplash(BlockStateWithPos current) {
+    default void onSplash(Block block) {
     }
 
     /**
      * Called when the block is hit by a projectile.
      *
-     * @param current    the block that is being hit.
+     * @param block      the block that is being hit.
      * @param projectile the projectile that hits the block.
      * @param hitPos     the hit pos.
      */
     @ApiStatus.OverrideOnly
-    default void onProjectileHit(BlockStateWithPos current, EntityProjectile projectile, Vector3dc hitPos) {
+    default void onProjectileHit(Block block, EntityProjectile projectile, Vector3dc hitPos) {
     }
 
     /**

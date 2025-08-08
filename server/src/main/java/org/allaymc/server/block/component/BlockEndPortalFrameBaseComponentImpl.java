@@ -24,7 +24,7 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
             return true;
         }
 
-        var clickedBlockState = interactInfo.getClickedBlockState();
+        var clickedBlockState = interactInfo.getClickedBlock();
         if (clickedBlockState.getPropertyValue(END_PORTAL_EYE_BIT) || itemStack.getItemType() != ItemTypes.ENDER_EYE) {
             return false;
         }

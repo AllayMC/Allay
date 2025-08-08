@@ -3,7 +3,7 @@ package org.allaymc.server.block.component.crops;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -37,13 +37,13 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         if (face == BlockFace.DOWN && neighbor.getBlockType() != BlockTypes.FARMLAND) {
-            current.breakBlock();
+            block.breakBlock();
             return;
         }
 
-        var stemFace = Objects.requireNonNull(BlockFace.fromIndex(current.getPropertyValue(FACING_DIRECTION)));
+        var stemFace = Objects.requireNonNull(BlockFace.fromIndex(block.getPropertyValue(FACING_DIRECTION)));
         if (stemFace == BlockFace.DOWN || stemFace == BlockFace.UP) {
             // No fruit block is connected to the stem,
             // so we don't need to check if the fruit block
@@ -51,37 +51,37 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
             return;
         }
 
-        var fruitBlock = current.offsetPos(stemFace);
+        var fruitBlock = block.offsetPos(stemFace);
         if (fruitBlock.getBlockType() != fruitId.getBlockType()) {
             // Fruit block is not connected to the stem,
             // so reset the stem direction to BlockFace.DOWN
-            current.getDimension().setBlockState(current.getPos(), current.setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal()));
+            block.getDimension().setBlockState(block.getPos(), block.getBlockState().setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal()));
         }
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        if (ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(current) &&
-            current.getDimension().getLightService().getInternalLight(current.getPos()) >= 8) {
-            var growth = current.getPropertyValue(GROWTH);
+    public void onRandomUpdate(Block block) {
+        if (ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(block) &&
+            block.getDimension().getLightService().getInternalLight(block.getPos()) >= 8) {
+            var growth = block.getPropertyValue(GROWTH);
             if (growth < GROWTH.getMax()) {
-                var newCrop = current.setPropertyValue(GROWTH, growth + 1);
-                var event = new BlockGrowEvent(current, newCrop);
+                var newCrop = block.setPropertyValue(GROWTH, growth + 1);
+                var event = new BlockGrowEvent(block, newCrop.getBlockState());
                 if (event.call()) {
-                    current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
                 }
                 return;
             }
 
             for (var face : BlockFace.getHorizontalBlockFaces()) {
-                if (current.offsetPos(face).getBlockType() == fruitId.getBlockType()) {
+                if (block.offsetPos(face).getBlockType() == fruitId.getBlockType()) {
                     // Fruit block already exists
                     return;
                 }
             }
 
             var face = BlockFace.getHorizontalBlockFaces()[ThreadLocalRandom.current().nextInt(4)];
-            var fruitBlock = current.offsetPos(face);
+            var fruitBlock = block.offsetPos(face);
             if (fruitBlock.getBlockType() == BlockTypes.AIR) {
                 var downBlockType = fruitBlock.offsetPos(BlockFace.DOWN).getBlockType();
                 if (downBlockType != BlockTypes.FARMLAND &&
@@ -91,15 +91,15 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
                 }
 
                 var event = new BlockGrowEvent(
-                        new BlockStateWithPos(BlockTypes.AIR.getDefaultState(), new Position3i(fruitBlock.getPos(), current.getDimension())),
+                        new Block(BlockTypes.AIR.getDefaultState(), new Position3i(fruitBlock.getPos(), block.getDimension())),
                         fruitId.getBlockType().getDefaultState()
                 );
                 if (event.call()) {
                     // Melon block can only be placed on farmland, dirt, or grass block
                     // Update stem direction
-                    current.getDimension().setBlockState(current.getPos(), current.setPropertyValue(FACING_DIRECTION, face.ordinal()));
+                    block.getDimension().setBlockState(block.getPos(), block.getBlockState().setPropertyValue(FACING_DIRECTION, face.ordinal()));
                     // Place melon block
-                    current.getDimension().setBlockState(fruitBlock.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(fruitBlock.getPos(), event.getNewBlockState());
                 }
             }
         }
@@ -108,7 +108,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo.blockFace() != BlockFace.UP ||
-            placementInfo.getClickedBlockState().getBlockType() != BlockTypes.FARMLAND) {
+            placementInfo.getClickedBlock().getBlockType() != BlockTypes.FARMLAND) {
             return false;
         }
 
@@ -121,7 +121,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(seedsId.getItemType().createItemStack(1));
     }
 }

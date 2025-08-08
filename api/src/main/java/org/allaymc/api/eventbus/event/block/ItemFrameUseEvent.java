@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -22,8 +22,8 @@ public class ItemFrameUseEvent extends BlockEvent implements CancellableEvent {
      */
     protected Action action;
 
-    public ItemFrameUseEvent(BlockStateWithPos blockState, Entity entity, Action action) {
-        super(blockState);
+    public ItemFrameUseEvent(Block block, Entity entity, Action action) {
+        super(block);
         this.entity = entity;
         this.action = action;
     }

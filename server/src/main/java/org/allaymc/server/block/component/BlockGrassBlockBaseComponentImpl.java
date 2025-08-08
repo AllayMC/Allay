@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -27,19 +27,19 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        super.onRandomUpdate(current);
-        var pos = current.getPos();
-        var dimension = current.getDimension();
+    public void onRandomUpdate(Block block) {
+        super.onRandomUpdate(block);
+        var pos = block.getPos();
+        var dimension = block.getDimension();
 
-        var upperBlockState = current.offsetPos(BlockFace.UP);
+        var upperBlockState = block.offsetPos(BlockFace.UP);
         // Grass dies and changes to dirt after a random time (when a random tick lands on the block)
         // if directly covered by any opaque block.
         // Transparent blocks can kill grass in a similar manner,
         // but only if they cause the light level above the grass block to be four or below (like water does),
         // and the surrounding area is not otherwise sufficiently lit up.
         if (upperBlockState.getBlockStateData().lightDampening() > 1) {
-            var event = new BlockFadeEvent(current, BlockTypes.DIRT.getDefaultState());
+            var event = new BlockFadeEvent(block, BlockTypes.DIRT.getDefaultState());
             if (event.call()) {
                 dimension.setBlockState(pos, event.getNewBlockState());
             }
@@ -64,17 +64,17 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
                 dimension.getLightService().getInternalLight(x, y + 1, z) >= 4 &&
                 // Any block directly above the dirt block must not reduce light by 2 levels or more.
                 dimension.getBlockState(x, y + 1, z).getBlockStateData().lightDampening() < 2) {
-                var spreadBlockState = new BlockStateWithPos(BlockTypes.GRASS_BLOCK.getDefaultState(), new Position3i(x, y, z, dimension), 0);
-                var event = new BlockSpreadEvent(current, spreadBlockState);
+                var spreadBlock = new Block(BlockTypes.GRASS_BLOCK.getDefaultState(), new Position3i(x, y, z, dimension), 0);
+                var event = new BlockSpreadEvent(block, spreadBlock);
                 if (event.call()) {
-                    dimension.setBlockState(x, y, z, event.getSpreadBlockState());
+                    dimension.setBlockState(x, y, z, event.getSpreadBlock().getBlockState());
                 }
             }
         }
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of(ItemTypes.DIRT.createItemStack(1));
     }
 

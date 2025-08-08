@@ -54,7 +54,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         var interactInfo = event.getInteractInfo();
         var player = interactInfo.player();
         var dimension = player.getDimension();
-        var clickedBlockState = interactInfo.getClickedBlockState();
+        var clickedBlockState = interactInfo.getClickedBlock();
         if (isEmpty()) {
             if (!(clickedBlockState.getBehavior() instanceof BlockLiquidBehavior)) {
                 return;
@@ -63,7 +63,8 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
                 if (clickedBlockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH) != 0) {
                     return;
                 }
-            } catch (IllegalArgumentException ignore) {}
+            } catch (IllegalArgumentException ignore) {
+            }
 
             if (!new PlayerBucketFillEvent(player, thisBucketStack, interactInfo).call()) {
                 return;

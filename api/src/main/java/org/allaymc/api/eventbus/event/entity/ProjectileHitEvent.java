@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.eventbus.event.CancellableEvent;
@@ -17,13 +17,13 @@ public class ProjectileHitEvent extends EntityEvent implements CancellableEvent 
     /**
      * The block being hit, can be {@code null}.
      */
-    protected BlockStateWithPos block;
+    protected Block block;
     /**
      * The entity being hit, can be {@code null}.
      */
     protected Entity victim;
 
-    public ProjectileHitEvent(EntityProjectile entity, Vector3dc hitPos, Entity victim, BlockStateWithPos block) {
+    public ProjectileHitEvent(EntityProjectile entity, Vector3dc hitPos, Entity victim, Block block) {
         super(entity);
         this.hitPos = hitPos;
         this.victim = victim;

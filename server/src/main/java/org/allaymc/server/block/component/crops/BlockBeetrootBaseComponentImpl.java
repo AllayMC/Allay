@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.FortuneDropHelper;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
@@ -21,8 +21,8 @@ public class BlockBeetrootBaseComponentImpl extends BlockCropsBaseComponentImpl 
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
-        var growth = current.getPropertyValue(GROWTH);
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        var growth = block.getPropertyValue(GROWTH);
         if (growth < GROWTH.getMax()) {
             return Set.of(ItemTypes.BEETROOT_SEEDS.createItemStack());
         }

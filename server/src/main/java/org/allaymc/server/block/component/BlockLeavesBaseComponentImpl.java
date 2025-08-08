@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.FortuneDropHelper;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
@@ -47,21 +47,21 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
-        onNeighborOrScheduledUpdate(current);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+        onNeighborOrScheduledUpdate(block);
     }
 
     @Override
-    public void onScheduledUpdate(BlockStateWithPos current) {
-        onNeighborOrScheduledUpdate(current);
+    public void onScheduledUpdate(Block block) {
+        onNeighborOrScheduledUpdate(block);
     }
 
-    protected void onNeighborOrScheduledUpdate(BlockStateWithPos current) {
+    protected void onNeighborOrScheduledUpdate(Block current) {
         var pos = current.getPos();
         if (!current.getPropertyValue(UPDATE_BIT)) {
             current = current.setPropertyValue(UPDATE_BIT, true);
-            pos.dimension().setBlockState(pos, current, 0, true, false, false);
+            pos.dimension().setBlockState(pos, current.getBlockState(), 0, true, false, false);
         }
 
         // Slowly propagates the need to update instead of peaking down the TPS for huge trees
@@ -76,24 +76,24 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        super.onRandomUpdate(current);
-        if (!current.getPropertyValue(UPDATE_BIT)) {
+    public void onRandomUpdate(Block block) {
+        super.onRandomUpdate(block);
+        if (!block.getPropertyValue(UPDATE_BIT)) {
             return;
         }
 
-        var pos = current.getPos();
-        if (current.getPropertyValue(BlockPropertyTypes.PERSISTENT_BIT) || findLog(current, 7, null)) {
-            current = current.setPropertyValue(UPDATE_BIT, false);
-            pos.dimension().setBlockState(pos, current, 0, true, false, false);
+        var pos = block.getPos();
+        if (block.getPropertyValue(BlockPropertyTypes.PERSISTENT_BIT) || findLog(block, 7, null)) {
+            block = block.setPropertyValue(UPDATE_BIT, false);
+            pos.dimension().setBlockState(pos, block.getBlockState(), 0, true, false, false);
         } else {
-            if (new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState()).call()) {
-                current.breakBlock();
+            if (new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState()).call()) {
+                block.breakBlock();
             }
         }
     }
 
-    protected boolean findLog(BlockStateWithPos current, int distance, Long2LongMap visited) {
+    protected boolean findLog(Block current, int distance, Long2LongMap visited) {
         if (visited == null) {
             visited = new Long2LongOpenHashMap();
             visited.defaultReturnValue(-1);
@@ -128,9 +128,9 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
-            return super.getDrops(current, usedItem, entity);
+            return super.getDrops(block, usedItem, entity);
         }
 
         Set<ItemStack> drops = new HashSet<>();

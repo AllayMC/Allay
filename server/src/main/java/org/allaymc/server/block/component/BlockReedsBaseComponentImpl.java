@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
@@ -35,26 +35,26 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!canGrowHere(current.getDimension(), current.getPos(), true)) {
-            current.breakBlock();
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        if (!canGrowHere(block.getDimension(), block.getPos(), true)) {
+            block.breakBlock();
         }
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        var dimension = current.getDimension();
-        var pos = current.getPos();
+    public void onRandomUpdate(Block block) {
+        var dimension = block.getDimension();
+        var pos = block.getPos();
         if (!canGrowHere(dimension, pos, true)) {
             dimension.breakBlock(pos, null, null);
             return;
         }
 
-        var age = current.getPropertyValue(AGE_16);
+        var age = block.getPropertyValue(AGE_16);
         if (age < AGE_16.getMax()) {
-            current = current.setPropertyValue(AGE_16, age + 1);
+            block = block.setPropertyValue(AGE_16, age + 1);
         } else if (age == AGE_16.getMax()) {
-            current = current.setPropertyValue(AGE_16, 0);
+            block = block.setPropertyValue(AGE_16, 0);
             if (canGrowHere(dimension, pos, false)) {
                 for (var y = 1; y < 3; y++) {
                     var blockType = dimension.getBlockState(pos.x(), pos.y() + y, pos.z()).getBlockType();
@@ -68,7 +68,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        dimension.setBlockState(pos, current);
+        dimension.setBlockState(pos, block.getBlockState());
     }
 
     @Override
@@ -107,7 +107,6 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
      * @param dimension the dimension that the sugar cane is in.
      * @param pos       the pos of the sugar cane.
      * @param recursive whether to check the block below recursively.
-     *
      * @return {@code true} if sugar cane can live/grow here, {@code false} otherwise
      */
     protected boolean canGrowHere(Dimension dimension, Vector3ic pos, boolean recursive) {

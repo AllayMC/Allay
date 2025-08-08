@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
@@ -26,18 +26,18 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        super.afterPlaced(oldBlockState, newBlockState, placementInfo);
-        tryAbsorbWater(oldBlockState);
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
+        tryAbsorbWater(oldBlock);
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
-        tryAbsorbWater(current);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+        tryAbsorbWater(block);
     }
 
-    protected void tryAbsorbWater(BlockStateWithPos center) {
+    protected void tryAbsorbWater(Block center) {
         if (performAbsorbWater(center)) {
             center.getDimension().setBlockState(center.getPos(), BlockTypes.WET_SPONGE.getDefaultState());
             center.addLevelEvent(LevelEvent.PARTICLE_DESTROY_BLOCK, BlockTypes.WATER.getDefaultState().blockStateHash());
@@ -45,7 +45,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
-    protected boolean performAbsorbWater(BlockStateWithPos center) {
+    protected boolean performAbsorbWater(Block center) {
         if (!hasAdjacentWater(center)) {
             return false;
         }
@@ -79,7 +79,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         return removedWaterCount > 0;
     }
 
-    private boolean hasAdjacentWater(BlockStateWithPos center) {
+    private boolean hasAdjacentWater(Block center) {
         for (var face : BlockFace.values()) {
             if (center.offsetPos(face).getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
                 return true;
@@ -89,5 +89,6 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
-    protected record Entry(BlockStateWithPos block, int distance) {}
+    protected record Entry(Block block, int distance) {
+    }
 }

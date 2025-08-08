@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -15,7 +15,7 @@ public class BlockIgniteEvent extends BlockEvent implements CancellableEvent {
      * The source block that ignite the current block,
      * can be {@code null} if the block is ignited by an entity.
      */
-    protected final BlockStateWithPos source;
+    protected final Block source;
     /**
      * The entity that ignite the current block,
      * can be {@code null} if the block is ignited by a block.
@@ -26,8 +26,8 @@ public class BlockIgniteEvent extends BlockEvent implements CancellableEvent {
      */
     protected final BlockIgniteCause cause;
 
-    public BlockIgniteEvent(BlockStateWithPos blockState, BlockStateWithPos source, Entity entity, BlockIgniteCause cause) {
-        super(blockState);
+    public BlockIgniteEvent(Block block, Block source, Entity entity, BlockIgniteCause cause) {
+        super(block);
         this.source = source;
         this.entity = entity;
         this.cause = cause;

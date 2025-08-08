@@ -3,7 +3,7 @@ package org.allaymc.server.item.component;
 import org.allaymc.api.block.component.BlockOxidationComponent;
 import org.allaymc.api.block.component.BlockStrippableComponent;
 import org.allaymc.api.block.data.OxidationLevel;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
@@ -50,7 +50,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
 
-        var clickedBlockState = interactInfo.getClickedBlockState();
+        var clickedBlockState = interactInfo.getClickedBlock();
         if (!(clickedBlockState.getBehavior() instanceof BlockOxidationComponent oxidationComponent)) {
             return false;
         }
@@ -59,7 +59,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
 
         if (oxidationComponent.isWaxed()) {
             var nextBlockType = oxidationComponent.getBlockWithWaxed(false);
-            tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlockState()), () -> {
+            tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
                 dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_OFF);
             });
 
@@ -73,7 +73,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
 
         oxidationLevel = OxidationLevel.values()[oxidationLevel.ordinal() - 1];
         var nextBlockType = oxidationComponent.getBlockWithOxidationLevel(oxidationLevel);
-        tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlockState()), () -> {
+        tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
             dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_SCRAPE);
         });
 
@@ -82,13 +82,13 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
 
     private void tryFadeBlock(Dimension dimension, PlayerInteractInfo interactInfo, BlockState newBlockState, Runnable postBlockPlace) {
         var clickedBlockPos = interactInfo.clickedBlockPos();
-        var oldBlockState = new BlockStateWithPos(
-                interactInfo.getClickedBlockState(),
+        var oldBlock = new Block(
+                interactInfo.getClickedBlock().getBlockState(),
                 new Position3i(clickedBlockPos, dimension),
                 0
         );
 
-        var event = new BlockFadeEvent(oldBlockState, newBlockState);
+        var event = new BlockFadeEvent(oldBlock, newBlockState);
         if (event.call()) {
             dimension.setBlockState(clickedBlockPos, event.getNewBlockState());
             if (interactInfo.player().getGameType() != GameType.CREATIVE) {

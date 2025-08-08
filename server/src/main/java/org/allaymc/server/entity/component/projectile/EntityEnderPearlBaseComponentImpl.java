@@ -1,6 +1,6 @@
 package org.allaymc.server.entity.component.projectile;
 
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -34,7 +34,7 @@ public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseCompo
     }
 
     @Override
-    protected void onHitBlock(BlockStateWithPos block, Vector3dc hitPos) {
+    protected void onHitBlock(Block block, Vector3dc hitPos) {
         if (this.willBeDespawnedNextTick()) {
             return;
         }

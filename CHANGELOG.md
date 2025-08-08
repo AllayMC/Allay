@@ -542,7 +542,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Improved code readability for I18n module.
 - NBT library is now updated to 3.0.10.
 - `/gametest` command is now only available in dev build.
-- Removed the `dimension` field in `BlockBreakEvent`, which is duplicated with `blockStateWithPos#dimension`.
+- Removed the `dimension` field in `BlockBreakEvent`, which is duplicated with `block#dimension`.
 - Removed unused `cn.powernukkitx:libdeflate-java` library, related classes are also removed.
 
 ### Fixed

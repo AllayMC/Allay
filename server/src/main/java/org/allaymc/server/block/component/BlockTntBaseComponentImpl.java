@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockTntBaseComponent;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -31,17 +31,17 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         super.onInteract(itemStack, dimension, interactInfo);
 
-        var blockStateWithPos = new BlockStateWithPos(interactInfo.getClickedBlockState(), new Position3i(interactInfo.clickedBlockPos(), dimension));
+        var block = new Block(interactInfo.getClickedBlock().getBlockState(), new Position3i(interactInfo.clickedBlockPos(), dimension));
 
         if (itemStack.getItemType() == ItemTypes.FIRE_CHARGE) {
             itemStack.reduceCount(1);
-            prime(blockStateWithPos);
+            prime(block);
             return true;
         }
 
         if (itemStack.hasEnchantment(EnchantmentTypes.FIRE_ASPECT)) {
             itemStack.tryIncreaseDamage(1);
-            prime(blockStateWithPos);
+            prime(block);
             return true;
         }
 
@@ -49,9 +49,9 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
     }
 
     @Override
-    public void prime(BlockStateWithPos blockStateWithPos, int fuse) {
-        var dimension = blockStateWithPos.getDimension();
-        var pos = blockStateWithPos.getPos();
+    public void prime(Block block, int fuse) {
+        var dimension = block.getDimension();
+        var pos = block.getPos();
         dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
 
         var angle = ThreadLocalRandom.current().nextFloat() * Math.PI * 2;

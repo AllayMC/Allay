@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -27,13 +27,13 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos current) {
-        super.onRandomUpdate(current);
+    public void onRandomUpdate(Block block) {
+        super.onRandomUpdate(block);
 
-        if (current.getDimension().getLightService().getInternalLight(current.getPos()) > 11) {
-            var event = new BlockFadeEvent(current, BlockTypes.AIR.getDefaultState());
+        if (block.getDimension().getLightService().getInternalLight(block.getPos()) > 11) {
+            var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
-                current.getDimension().setBlockState(current.getPos(), event.getNewBlockState());
+                block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
             }
         }
     }
@@ -44,7 +44,7 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
             return super.place(dimension, blockState, placeBlockPos, null);
         }
 
-        var clickedBlockState = placementInfo.getClickedBlockState();
+        var clickedBlockState = placementInfo.getClickedBlock();
         if (clickedBlockState.getBlockType() == BlockTypes.SNOW_LAYER) {
             var height = clickedBlockState.getPropertyValue(HEIGHT);
             if (height == HEIGHT.getMax()) {
@@ -67,8 +67,8 @@ public class BlockSnowLayerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos current, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemTypes.SNOWBALL.createItemStack((int) Math.max(1, (double) (current.getPropertyValue(HEIGHT) / 2))));
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        return Set.of(ItemTypes.SNOWBALL.createItemStack((int) Math.max(1, (double) (block.getPropertyValue(HEIGHT) / 2))));
     }
 
     @Override

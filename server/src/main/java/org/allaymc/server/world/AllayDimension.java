@@ -2,7 +2,7 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.debugshape.DebugShape;
@@ -192,7 +192,7 @@ public class AllayDimension implements Dimension {
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
         var event = new BlockPlaceEvent(
-                new BlockStateWithPos(blockState, new Position3i(x, y, z, this), layer),
+                new Block(blockState, new Position3i(x, y, z, this), layer),
                 oldBlockState, placementInfo != null ? placementInfo.player() : null, placementInfo
         );
         if (!event.call()) {
@@ -200,10 +200,10 @@ public class AllayDimension implements Dimension {
         }
 
         var blockPos = new Position3i(x, y, z, this);
-        var oldBlockStateWithPos = new BlockStateWithPos(oldBlockState, blockPos, layer);
+        var oldBlock = new Block(oldBlockState, blockPos, layer);
         if (callBlockBehavior) {
-            blockState.getBehavior().onPlace(oldBlockStateWithPos, blockState, placementInfo);
-            oldBlockState.getBehavior().onReplace(oldBlockStateWithPos, blockState, placementInfo);
+            blockState.getBehavior().onPlace(oldBlock, blockState, placementInfo);
+            oldBlockState.getBehavior().onReplace(oldBlock, blockState, placementInfo);
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
@@ -212,9 +212,9 @@ public class AllayDimension implements Dimension {
         }
 
         if (callBlockBehavior) {
-            chunk.getBlockState(xIndex, y, zIndex, layer == 0 ? 1 : 0).getBehavior().afterNeighborLayerReplace(oldBlockStateWithPos, blockState, placementInfo);
-            blockState.getBehavior().afterPlaced(oldBlockStateWithPos, blockState, placementInfo);
-            oldBlockState.getBehavior().afterReplaced(oldBlockStateWithPos, blockState, placementInfo);
+            chunk.getBlockState(xIndex, y, zIndex, layer == 0 ? 1 : 0).getBehavior().afterNeighborLayerReplace(oldBlock, blockState, placementInfo);
+            blockState.getBehavior().afterPlaced(oldBlock, blockState, placementInfo);
+            oldBlockState.getBehavior().afterReplaced(oldBlock, blockState, placementInfo);
         }
 
         return true;
@@ -228,7 +228,7 @@ public class AllayDimension implements Dimension {
         }
 
         var event = new BlockBreakEvent(
-                new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
+                new Block(block, new Position3i(x, y, z, this), 0),
                 usedItem, entity
         );
         if (!event.call()) {
@@ -244,7 +244,7 @@ public class AllayDimension implements Dimension {
         }
 
         block.getBehavior().onBreak(
-                new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
+                new Block(block, new Position3i(x, y, z, this), 0),
                 usedItem, entity
         );
 

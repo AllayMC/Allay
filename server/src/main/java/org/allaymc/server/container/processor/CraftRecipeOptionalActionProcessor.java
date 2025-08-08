@@ -2,7 +2,7 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -200,7 +200,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 var anvilState = player.getDimension().getBlockState(anvilPos);
                 if (anvilState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
                     var newAnvilState = anvilComponent.damage(anvilState);
-                    var event = new AnvilDamageEvent(new BlockStateWithPos(anvilState, anvilPos), newAnvilState);
+                    var event = new AnvilDamageEvent(new Block(anvilState, anvilPos), newAnvilState);
                     if (event.call()) {
                         if (newAnvilState.getBlockType() == BlockTypes.AIR) {
                             player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_BREAK);

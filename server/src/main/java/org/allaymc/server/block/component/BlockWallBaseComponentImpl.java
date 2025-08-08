@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
 import org.allaymc.api.block.interfaces.BlockSignBehavior;
@@ -31,37 +31,37 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
 
-        var updatedState = updateConnectionsAndPost(current);
-        if (!updatedState.equals(current)) {
-            current.getDimension().setBlockState(current.getPos(), updatedState);
+        var updatedState = updateConnectionsAndPost(block);
+        if (!updatedState.equals(block)) {
+            block.getDimension().setBlockState(block.getPos(), updatedState);
         }
     }
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        var stateWithPos = new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension));
-        blockState = updateConnectionsAndPost(stateWithPos);
+        var block = new Block(blockState, new Position3i(placeBlockPos, dimension));
+        blockState = updateConnectionsAndPost(block);
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
-    private BlockStateWithPos updateConnectionsAndPost(BlockStateWithPos current) {
+    private BlockState updateConnectionsAndPost(Block current) {
         var aboveBlock = current.offsetPos(BlockFace.UP);
 
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             if (canConnect(current, face)) {
-                current = connect(current, aboveBlock, face);
+                current = connect(current, aboveBlock.getBlockState(), face);
             } else {
                 current = current.setPropertyValue(getWallConnectionProperty(face), WallConnectionType.NONE);
             }
         }
 
-        return current.setPropertyValue(BlockPropertyTypes.WALL_POST_BIT, shouldHavePost(current, aboveBlock));
+        return current.setPropertyValue(BlockPropertyTypes.WALL_POST_BIT, shouldHavePost(current.getBlockState(), aboveBlock.getBlockState())).getBlockState();
     }
 
-    private BlockStateWithPos connect(BlockStateWithPos current, BlockState above, BlockFace face) {
+    private Block connect(Block current, BlockState above, BlockFace face) {
         var property = getWallConnectionProperty(face);
 
         boolean shouldBeTall;
@@ -95,7 +95,7 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         return current.setPropertyValue(property, shouldBeTall ? WallConnectionType.TALL : WallConnectionType.SHORT);
     }
 
-    private boolean canConnect(BlockStateWithPos current, BlockFace face) {
+    private boolean canConnect(Block current, BlockFace face) {
         var neighbor = current.offsetPos(face);
         if (neighbor.getBehavior() instanceof BlockFenceGateBehavior) {
             var direction = neighbor.getPropertyValue(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION);
