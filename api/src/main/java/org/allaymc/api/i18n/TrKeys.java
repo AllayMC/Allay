@@ -1473,6 +1473,11 @@ public interface TrKeys {
     String M_ADVMODE_COMMAND_CHARLIMITEXCEEDED = "minecraft:advMode.command.charLimitExceeded";
 
     /**
+     * @n = nearest entity 
+     */
+    String M_ADVMODE_NEAREST = "minecraft:advMode.nearest";
+
+    /**
      * @p = nearest player
      */
     String M_ADVMODE_NEARESTPLAYER = "minecraft:advMode.nearestPlayer";
@@ -2741,6 +2746,11 @@ public interface TrKeys {
      * all entities
      */
     String M_COMMANDS_AUTOCOMPLETE_E = "minecraft:commands.autocomplete.e";
+
+    /**
+     * nearest entity
+     */
+    String M_COMMANDS_AUTOCOMPLETE_N = "minecraft:commands.autocomplete.n";
 
     /**
      * closest player
@@ -5933,6 +5943,11 @@ public interface TrKeys {
     String M_COMMANDS_STRUCTURE_DESCRIPTION = "minecraft:commands.structure.description";
 
     /**
+     * Tried to find a structure with name %s but had %1#s results for that name
+     */
+    String M_COMMANDS_STRUCTURE_EDITOR_AMBIGUOUSQUERY = "minecraft:commands.structure.editor.ambiguousquery";
+
+    /**
      * Can't load a structure with no entities and no blocks
      */
     String M_COMMANDS_STRUCTURE_EMPTY_LOAD = "minecraft:commands.structure.empty.load";
@@ -5941,6 +5956,11 @@ public interface TrKeys {
      * Can't save a structure with no entities and no blocks
      */
     String M_COMMANDS_STRUCTURE_EMPTY_SAVE = "minecraft:commands.structure.empty.save";
+
+    /**
+     * An unexpected error occurred
+     */
+    String M_COMMANDS_STRUCTURE_ERROR = "minecraft:commands.structure.error";
 
     /**
      * Animation time must be 0 or higher
@@ -8143,9 +8163,114 @@ public interface TrKeys {
     String M_DISCONNECTIONSCREEN_BLOCKMISMATCH = "minecraft:disconnectionScreen.blockMismatch";
 
     /**
+     * We are unable to connect you to this server.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_CANTCONNECTSERVER = "minecraft:disconnectionScreen.body.cantConnectServer";
+
+    /**
+     * Unable to find Client.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_CANTFINDCLIENT = "minecraft:disconnectionScreen.body.cantFindClient";
+
+    /**
+     * Server not found.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_CANTFINDSERVER = "minecraft:disconnectionScreen.body.cantFindServer";
+
+    /**
+     * Check your connection and try again
+     */
+    String M_DISCONNECTIONSCREEN_BODY_CHECKCONNECTIONANDTRY = "minecraft:disconnectionScreen.body.checkConnectionAndTry";
+
+    /**
+     * Check the storage space on your device, delete items to free up more space.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_CHECKDEVICESTORAGE = "minecraft:disconnectionScreen.body.checkDeviceStorage";
+
+    /**
+     * The game version you are using is out of date. Update your game to the latest version and try again.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_GAMEOUTOFDATE = "minecraft:disconnectionScreen.body.gameOutOfDate";
+
+    /**
+     * The host you are trying to join is using an older version of Minecraft. Try again when the host has updated its version.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_HOSTVERSIONOLDER = "minecraft:disconnectionScreen.body.hostVersionOlder";
+
+    /**
+     * You have been idle for too long.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_IDLETOOLONG = "minecraft:disconnectionScreen.body.idleTooLong";
+
+    /**
+     * You may be logged in at another location.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_LOGGEDINELSEWHERE = "minecraft:disconnectionScreen.body.loggedInElsewhere";
+
+    /**
+     * Your client is having trouble establishing a connection to multiplayer services.  Please check your internet connection, restart your client, and try again.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_MULTIPLAYERCONNECTION = "minecraft:disconnectionScreen.body.multiplayerConnection";
+
+    /**
+     * You can't join the server unless the host unblocks you.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_NEEDSHOSTUNBLOCK = "minecraft:disconnectionScreen.body.needsHostUnblock";
+
+    /**
+     * Permissions do not allow you to join.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_PERMISSIONSDONOTALLOW = "minecraft:disconnectionScreen.body.permissionsDoNotAllow";
+
+    /**
      * Unable to join this specific server.
      */
     String M_DISCONNECTIONSCREEN_BODY_REALMS_HIDDEN = "minecraft:disconnectionScreen.body.realms_hidden";
+
+    /**
+     * The server you are attempting to join may not exist or be locked.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_SERVERNONEORLOCKED = "minecraft:disconnectionScreen.body.serverNoneOrLocked";
+
+    /**
+     * Your skin appears to be banned.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_SKINBANNED = "minecraft:disconnectionScreen.body.skinBanned";
+
+    /**
+     * Your skin may be locked to a specific platform.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_SKINLOCKEDPLATFORM = "minecraft:disconnectionScreen.body.skinLockedPlatform";
+
+    /**
+     * You may be out of storage space on your device.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_STORAGEOUT = "minecraft:disconnectionScreen.body.storageOut";
+
+    /**
+     * Your version does not match the host's version.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_VERSIONMISMATCHHOST = "minecraft:disconnectionScreen.body.versionMismatchHost";
+
+    /**
+     * Your version is not supported.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_VERSIONNOTSUPPORTED = "minecraft:disconnectionScreen.body.versionNotSupported";
+
+    /**
+     * This world was made with a more recent version.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_WORLDNEWERVERSION = "minecraft:disconnectionScreen.body.worldNewerVersion";
+
+    /**
+     * The world you're connecting to is no longer active.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_WORLDNOLONGERACTIVE = "minecraft:disconnectionScreen.body.worldNoLongerActive";
+
+    /**
+     * This world is no longer available.
+     */
+    String M_DISCONNECTIONSCREEN_BODY_WORLDNOLONGERAVAILABLE = "minecraft:disconnectionScreen.body.worldNoLongerAvailable";
 
     /**
      * Unable to connect to world.
@@ -8536,6 +8661,141 @@ public interface TrKeys {
      * There was a problem connecting to the world. Please try again. If this error continues, check your internet connection or try restarting Minecraft.
      */
     String M_DISCONNECTIONSCREEN_TIMEOUT = "minecraft:disconnectionScreen.timeout";
+
+    /**
+     * You are banned by the host.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_BANNEDBYHOST = "minecraft:disconnectionScreen.title.bannedByHost";
+
+    /**
+     * Connection timed out.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_CONNECTIONTIMEOUT = "minecraft:disconnectionScreen.title.connectionTimeout";
+
+    /**
+     * Disconnected.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_DISCONNECTED = "minecraft:disconnectionScreen.title.disconnected";
+
+    /**
+     * Disconnected from host.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_DISCONNECTEDFROMHOST = "minecraft:disconnectionScreen.title.disconnectedFromHost";
+
+    /**
+     * You have encountered an error.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_ERRORENCOUNTERED = "minecraft:disconnectionScreen.title.errorEncountered";
+
+    /**
+     * An error has occurred.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_ERROROCCURRED = "minecraft:disconnectionScreen.title.errorOccurred";
+
+    /**
+     * Incompatible Pack.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_INCOMPATIBLEPACK = "minecraft:disconnectionScreen.title.incompatiblePack";
+
+    /**
+     * Incompatible World.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_INCOMPATIBLEWORLD = "minecraft:disconnectionScreen.title.incompatibleWorld";
+
+    /**
+     * Invalid Skin.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_INVALIDSKIN = "minecraft:disconnectionScreen.title.invalidSkin";
+
+    /**
+     * Invalid Tenant ID
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_INVALIDTENANTID = "minecraft:disconnectionScreen.title.invalidTenantId";
+
+    /**
+     * You have been kicked from the world.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_KICKEDFROMWORLD = "minecraft:disconnectionScreen.title.kickedFromWorld";
+
+    /**
+     * Local server not found.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_LOCALSERVERNOTFOUND = "minecraft:disconnectionScreen.title.localServerNotFound";
+
+    /**
+     * Multiplayer Connection Failed
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_MULTIPLAYERCONNECTION = "minecraft:disconnectionScreen.title.multiplayerConnection";
+
+    /**
+     * Multiplayer is disabled.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_MULTIPLAYERDISABLED = "minecraft:disconnectionScreen.title.multiplayerDisabled";
+
+    /**
+     * No WiFi Connection
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_NOWIFI = "minecraft:disconnectionScreen.title.noWifi";
+
+    /**
+     * Out of storage space
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_OUTOFSTORAGE = "minecraft:disconnectionScreen.title.outOfStorage";
+
+    /**
+     * This Realm has no world assigned.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_REALMSWORLDUNASSIGNED = "minecraft:disconnectionScreen.title.realmsWorldUnassigned";
+
+    /**
+     * Resource pack failed to load.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_RESOURCEPACKLOAD = "minecraft:disconnectionScreen.title.resourcePackLoad";
+
+    /**
+     * Server not found.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_SERVERNOTFOUND = "minecraft:disconnectionScreen.title.serverNotFound";
+
+    /**
+     * Skin error.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_SKINERROR = "minecraft:disconnectionScreen.title.skinError";
+
+    /**
+     * There is an issue with your skin.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_SKINISSUE = "minecraft:disconnectionScreen.title.skinIssue";
+
+    /**
+     * Unable to connect.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_UNABLETOCONNECT = "minecraft:disconnectionScreen.title.unableToConnect";
+
+    /**
+     * Version mismatch
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_VERSIONMISMATCH = "minecraft:disconnectionScreen.title.versionMismatch";
+
+    /**
+     * Your version does not match the host's version
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_VERSIONMISMATCHHOST = "minecraft:disconnectionScreen.title.versionMismatchHost";
+
+    /**
+     * Version is out of date.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_VERSIONOUTOFDATE = "minecraft:disconnectionScreen.title.versionOutOfDate";
+
+    /**
+     * World failed to load.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_WORLDFAILEDLOAD = "minecraft:disconnectionScreen.title.worldFailedLoad";
+
+    /**
+     * The World you are trying to join is full.
+     */
+    String M_DISCONNECTIONSCREEN_TITLE_WORLDFULL = "minecraft:disconnectionScreen.title.worldFull";
 
     /**
      * Disconnected due to an unexpected type of packet received which cannot be processed.  This could be due to a version mismatch or corruption at the networking level.
@@ -17248,7 +17508,7 @@ public interface TrKeys {
     String M_ITEM_RECORD_FAR_DESC = "minecraft:item.record_far.desc";
 
     /**
-     * Hyper Potions - Lava Chicken   
+     * Hyper Potions - Lava Chicken
      */
     String M_ITEM_RECORD_LAVA_CHICKEN_DESC = "minecraft:item.record_lava_chicken.desc";
 
@@ -17293,7 +17553,7 @@ public interface TrKeys {
     String M_ITEM_RECORD_STRAD_DESC = "minecraft:item.record_strad.desc";
 
     /**
-     * Amos Roddy - Tears   
+     * Amos Roddy - Tears
      */
     String M_ITEM_RECORD_TEARS_DESC = "minecraft:item.record_tears.desc";
 
@@ -19148,6 +19408,11 @@ public interface TrKeys {
     String M_KEY_BACK = "minecraft:key.back";
 
     /**
+     * Cancel    
+     */
+    String M_KEY_CANCELTOAST = "minecraft:key.cancelToast";
+
+    /**
      * Gameplay
      */
     String M_KEY_CATEGORIES_GAMEPLAY = "minecraft:key.categories.gameplay";
@@ -19221,6 +19486,11 @@ public interface TrKeys {
      * Cycle Fixed Inventory
      */
     String M_KEY_CYCLEFIXEDINVENTORY = "minecraft:key.cyclefixedinventory";
+
+    /**
+     * Decline    
+     */
+    String M_KEY_DECLINETOAST = "minecraft:key.declineToast";
 
     /**
      * Drop Item
@@ -19576,6 +19846,11 @@ public interface TrKeys {
      * Use Item/Place Block
      */
     String M_KEY_USE = "minecraft:key.use";
+
+    /**
+     * View    
+     */
+    String M_KEY_VIEWTOAST = "minecraft:key.viewToast";
 
     /**
      * 0

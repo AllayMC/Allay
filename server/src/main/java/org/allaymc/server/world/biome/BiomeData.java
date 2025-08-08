@@ -52,8 +52,8 @@ public record BiomeData(
 
     static {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("biome_definitions.json")))) {
-            JsonParser.parseReader(reader).getAsJsonObject().asMap().forEach((key, obj) -> {
-                var biomeId = (BiomeId) BiomeId.fromIdentifier(new Identifier(Identifier.DEFAULT_NAMESPACE, key));
+            JsonParser.parseReader(reader).getAsJsonObject().asMap().forEach((id, obj) -> {
+                var biomeId = (BiomeId) BiomeId.fromIdentifier(new Identifier(id));
                 var biomeData = SERIALIZER.fromJson(obj.toString(), BiomeData.class);
                 BIOME_DATA.put(biomeId, biomeData);
             });

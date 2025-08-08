@@ -18,7 +18,6 @@ public class EntityClassGen extends BaseClassGen {
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
     public static void main(String[] args) {
-        EntityIdEnumGen.generate();
         generate();
     }
 

@@ -52,6 +52,8 @@ public final class EntityTypes {
 
     public static EntityType<EntityCommandBlockMinecart> COMMAND_BLOCK_MINECART;
 
+    public static EntityType<EntityCopperGolem> COPPER_GOLEM;
+
     public static EntityType<EntityCow> COW;
 
     public static EntityType<EntityCreaking> CREAKING;

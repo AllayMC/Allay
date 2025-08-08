@@ -2001,10 +2001,22 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.COOKIE)
                     .build();
         }
+        if (ItemTypes.COPPER_AXE == null) {
+            ItemTypes.COPPER_AXE = AllayItemType
+                    .builder(ItemAxeStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_AXE)
+                    .build();
+        }
         if (ItemTypes.COPPER_BLOCK == null) {
             ItemTypes.COPPER_BLOCK = AllayItemType
                     .builder(ItemCopperBlockStackImpl.class)
                     .vanillaItem(ItemId.COPPER_BLOCK)
+                    .build();
+        }
+        if (ItemTypes.COPPER_BOOTS == null) {
+            ItemTypes.COPPER_BOOTS = AllayItemType
+                    .builder(ItemBootsStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_BOOTS)
                     .build();
         }
         if (ItemTypes.COPPER_BULB == null) {
@@ -2013,10 +2025,28 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.COPPER_BULB)
                     .build();
         }
+        if (ItemTypes.COPPER_CHEST == null) {
+            ItemTypes.COPPER_CHEST = AllayItemType
+                    .builder(ItemCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_CHEST)
+                    .build();
+        }
+        if (ItemTypes.COPPER_CHESTPLATE == null) {
+            ItemTypes.COPPER_CHESTPLATE = AllayItemType
+                    .builder(ItemChestplateStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_CHESTPLATE)
+                    .build();
+        }
         if (ItemTypes.COPPER_DOOR == null) {
             ItemTypes.COPPER_DOOR = AllayItemType
                     .builder(ItemDoorStackImpl.class)
                     .vanillaItem(ItemId.COPPER_DOOR)
+                    .build();
+        }
+        if (ItemTypes.COPPER_GOLEM_SPAWN_EGG == null) {
+            ItemTypes.COPPER_GOLEM_SPAWN_EGG = AllayItemType
+                    .builder(ItemSpawnEggStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_GOLEM_SPAWN_EGG)
                     .build();
         }
         if (ItemTypes.COPPER_GRATE == null) {
@@ -2025,16 +2055,58 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.COPPER_GRATE)
                     .build();
         }
+        if (ItemTypes.COPPER_HELMET == null) {
+            ItemTypes.COPPER_HELMET = AllayItemType
+                    .builder(ItemHelmetStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_HELMET)
+                    .build();
+        }
+        if (ItemTypes.COPPER_HOE == null) {
+            ItemTypes.COPPER_HOE = AllayItemType
+                    .builder(ItemHoeStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_HOE)
+                    .build();
+        }
         if (ItemTypes.COPPER_INGOT == null) {
             ItemTypes.COPPER_INGOT = AllayItemType
                     .builder(ItemCopperIngotStackImpl.class)
                     .vanillaItem(ItemId.COPPER_INGOT)
                     .build();
         }
+        if (ItemTypes.COPPER_LEGGINGS == null) {
+            ItemTypes.COPPER_LEGGINGS = AllayItemType
+                    .builder(ItemLeggingsStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_LEGGINGS)
+                    .build();
+        }
+        if (ItemTypes.COPPER_NUGGET == null) {
+            ItemTypes.COPPER_NUGGET = AllayItemType
+                    .builder(ItemCopperNuggetStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_NUGGET)
+                    .build();
+        }
         if (ItemTypes.COPPER_ORE == null) {
             ItemTypes.COPPER_ORE = AllayItemType
                     .builder(ItemCopperOreStackImpl.class)
                     .vanillaItem(ItemId.COPPER_ORE)
+                    .build();
+        }
+        if (ItemTypes.COPPER_PICKAXE == null) {
+            ItemTypes.COPPER_PICKAXE = AllayItemType
+                    .builder(ItemPickaxeStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_PICKAXE)
+                    .build();
+        }
+        if (ItemTypes.COPPER_SHOVEL == null) {
+            ItemTypes.COPPER_SHOVEL = AllayItemType
+                    .builder(ItemShovelStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_SHOVEL)
+                    .build();
+        }
+        if (ItemTypes.COPPER_SWORD == null) {
+            ItemTypes.COPPER_SWORD = AllayItemType
+                    .builder(ItemSwordStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_SWORD)
                     .build();
         }
         if (ItemTypes.COPPER_TRAPDOOR == null) {
@@ -4033,6 +4105,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.EXPOSED_COPPER_BULB = AllayItemType
                     .builder(ItemExposedCopperBulbStackImpl.class)
                     .vanillaItem(ItemId.EXPOSED_COPPER_BULB)
+                    .build();
+        }
+        if (ItemTypes.EXPOSED_COPPER_CHEST == null) {
+            ItemTypes.EXPOSED_COPPER_CHEST = AllayItemType
+                    .builder(ItemExposedCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.EXPOSED_COPPER_CHEST)
                     .build();
         }
         if (ItemTypes.EXPOSED_COPPER_DOOR == null) {
@@ -7239,6 +7317,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.OXIDIZED_COPPER_BULB)
                     .build();
         }
+        if (ItemTypes.OXIDIZED_COPPER_CHEST == null) {
+            ItemTypes.OXIDIZED_COPPER_CHEST = AllayItemType
+                    .builder(ItemOxidizedCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.OXIDIZED_COPPER_CHEST)
+                    .build();
+        }
         if (ItemTypes.OXIDIZED_COPPER_DOOR == null) {
             ItemTypes.OXIDIZED_COPPER_DOOR = AllayItemType
                     .builder(ItemDoorStackImpl.class)
@@ -10245,6 +10329,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.WAXED_COPPER_BULB)
                     .build();
         }
+        if (ItemTypes.WAXED_COPPER_CHEST == null) {
+            ItemTypes.WAXED_COPPER_CHEST = AllayItemType
+                    .builder(ItemWaxedCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.WAXED_COPPER_CHEST)
+                    .build();
+        }
         if (ItemTypes.WAXED_COPPER_DOOR == null) {
             ItemTypes.WAXED_COPPER_DOOR = AllayItemType
                     .builder(ItemDoorStackImpl.class)
@@ -10303,6 +10393,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.WAXED_EXPOSED_COPPER_BULB = AllayItemType
                     .builder(ItemWaxedExposedCopperBulbStackImpl.class)
                     .vanillaItem(ItemId.WAXED_EXPOSED_COPPER_BULB)
+                    .build();
+        }
+        if (ItemTypes.WAXED_EXPOSED_COPPER_CHEST == null) {
+            ItemTypes.WAXED_EXPOSED_COPPER_CHEST = AllayItemType
+                    .builder(ItemWaxedExposedCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.WAXED_EXPOSED_COPPER_CHEST)
                     .build();
         }
         if (ItemTypes.WAXED_EXPOSED_COPPER_DOOR == null) {
@@ -10365,6 +10461,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.WAXED_OXIDIZED_COPPER_BULB)
                     .build();
         }
+        if (ItemTypes.WAXED_OXIDIZED_COPPER_CHEST == null) {
+            ItemTypes.WAXED_OXIDIZED_COPPER_CHEST = AllayItemType
+                    .builder(ItemWaxedOxidizedCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.WAXED_OXIDIZED_COPPER_CHEST)
+                    .build();
+        }
         if (ItemTypes.WAXED_OXIDIZED_COPPER_DOOR == null) {
             ItemTypes.WAXED_OXIDIZED_COPPER_DOOR = AllayItemType
                     .builder(ItemDoorStackImpl.class)
@@ -10423,6 +10525,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.WAXED_WEATHERED_COPPER_BULB = AllayItemType
                     .builder(ItemWaxedWeatheredCopperBulbStackImpl.class)
                     .vanillaItem(ItemId.WAXED_WEATHERED_COPPER_BULB)
+                    .build();
+        }
+        if (ItemTypes.WAXED_WEATHERED_COPPER_CHEST == null) {
+            ItemTypes.WAXED_WEATHERED_COPPER_CHEST = AllayItemType
+                    .builder(ItemWaxedWeatheredCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.WAXED_WEATHERED_COPPER_CHEST)
                     .build();
         }
         if (ItemTypes.WAXED_WEATHERED_COPPER_DOOR == null) {
@@ -10489,6 +10597,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.WEATHERED_COPPER_BULB = AllayItemType
                     .builder(ItemWeatheredCopperBulbStackImpl.class)
                     .vanillaItem(ItemId.WEATHERED_COPPER_BULB)
+                    .build();
+        }
+        if (ItemTypes.WEATHERED_COPPER_CHEST == null) {
+            ItemTypes.WEATHERED_COPPER_CHEST = AllayItemType
+                    .builder(ItemWeatheredCopperChestStackImpl.class)
+                    .vanillaItem(ItemId.WEATHERED_COPPER_CHEST)
                     .build();
         }
         if (ItemTypes.WEATHERED_COPPER_DOOR == null) {

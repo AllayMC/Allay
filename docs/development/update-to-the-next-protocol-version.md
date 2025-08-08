@@ -75,16 +75,16 @@ Generate using `BlockStateDataProcessor`, based on `block_states_raw.json`.
 
 ## 5. Code Generation (`codegen`)
 
-| Generator                                         | When to Run                                                                                                                                                                                   |
-|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SoundNameGen`                                    | If `music_definitions.json` or `sound_definitions.json` changed                                                                                                                               |
-| `CreativeItemGroupNameGen`                        | If `creative_groups.json` changed                                                                                                                                                             |
-| `BiomeIdEnumGen`                                  | If `biome_id_and_type.json` changed                                                                                                                                                           |
-| `EntityClassGen`                                  | If `entity_id_map.json` changed                                                                                                                                                               |
-| `TagGen`                                          | If `item_tags.json` or `block_tags.json` changed                                                                                                                                              |
-| `BlockIdEnumGen` → `BlockPropertyTypeDataFileGen` | Always after block updates                                                                                                                                                                    |
-| `BlockClassGen`                                   | Requires manual edits:<br>– Delete old blocks<br>– Update properties and logic<br>– Check `BlockTypeInitializer.java` for errors<br>– Add merged blocks in `registerMergedBlocks()` if needed |
-| `ItemClassGen`                                    | Similar to blocks:<br>– Remove old items<br>– Migrate logic if only names changed<br>– Add merged items in `registerMergedItems()` if needed                                                  |
+| Generator                                          | When to Run                                                                                                                                                                                   |
+|----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `SoundNameGen`                                     | If `music_definitions.json` or `sound_definitions.json` changed                                                                                                                               |
+| `CreativeItemGroupNameGen`                         | If `creative_groups.json` changed                                                                                                                                                             |
+| `BiomeIdEnumGen`                                   | If `biome_id_and_type.json` changed                                                                                                                                                           |
+| `EntityIdEnumGen` -> `EntityClassGen`              | If `entity_id_map.json` changed                                                                                                                                                               |
+| `TagGen`                                           | If `item_tags.json` or `block_tags.json` changed                                                                                                                                              |
+| `BlockIdEnumGen` -> `BlockPropertyTypeDataFileGen` | Always after block updates                                                                                                                                                                    |
+| `BlockClassGen`                                    | Requires manual edits:<br>– Delete old blocks<br>– Update properties and logic<br>– Check `BlockTypeInitializer.java` for errors<br>– Add merged blocks in `registerMergedBlocks()` if needed |
+| `ItemIdEnumGen` -> `ItemClassGen`                  | Similar to blocks:<br>– Remove old items<br>– Migrate logic if only names changed<br>– Add merged items in `registerMergedItems()` if needed                                                  |
 
 ## 6. Update Dependencies and `ProtocolInfo.java`
 

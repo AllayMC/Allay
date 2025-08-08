@@ -456,6 +456,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBulbBehavior> COPPER_BULB;
 
+    public static BlockType<BlockCopperChestBehavior> COPPER_CHEST;
+
     public static BlockType<BlockCopperDoorBehavior> COPPER_DOOR;
 
     public static BlockType<BlockCopperGrateBehavior> COPPER_GRATE;
@@ -1011,6 +1013,8 @@ public final class BlockTypes {
     public static BlockType<BlockCopperBehavior> EXPOSED_COPPER;
 
     public static BlockType<BlockCopperBulbBehavior> EXPOSED_COPPER_BULB;
+
+    public static BlockType<BlockExposedCopperChestBehavior> EXPOSED_COPPER_CHEST;
 
     public static BlockType<BlockCopperDoorBehavior> EXPOSED_COPPER_DOOR;
 
@@ -1659,6 +1663,8 @@ public final class BlockTypes {
     public static BlockType<BlockCopperBehavior> OXIDIZED_COPPER;
 
     public static BlockType<BlockCopperBulbBehavior> OXIDIZED_COPPER_BULB;
+
+    public static BlockType<BlockOxidizedCopperChestBehavior> OXIDIZED_COPPER_CHEST;
 
     public static BlockType<BlockCopperDoorBehavior> OXIDIZED_COPPER_DOOR;
 
@@ -2368,6 +2374,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBulbBehavior> WAXED_COPPER_BULB;
 
+    public static BlockType<BlockWaxedCopperChestBehavior> WAXED_COPPER_CHEST;
+
     public static BlockType<BlockCopperDoorBehavior> WAXED_COPPER_DOOR;
 
     public static BlockType<BlockCopperGrateBehavior> WAXED_COPPER_GRATE;
@@ -2387,6 +2395,8 @@ public final class BlockTypes {
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_COPPER;
 
     public static BlockType<BlockCopperBulbBehavior> WAXED_EXPOSED_COPPER_BULB;
+
+    public static BlockType<BlockWaxedExposedCopperChestBehavior> WAXED_EXPOSED_COPPER_CHEST;
 
     public static BlockType<BlockCopperDoorBehavior> WAXED_EXPOSED_COPPER_DOOR;
 
@@ -2408,6 +2418,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBulbBehavior> WAXED_OXIDIZED_COPPER_BULB;
 
+    public static BlockType<BlockWaxedOxidizedCopperChestBehavior> WAXED_OXIDIZED_COPPER_CHEST;
+
     public static BlockType<BlockCopperDoorBehavior> WAXED_OXIDIZED_COPPER_DOOR;
 
     public static BlockType<BlockCopperGrateBehavior> WAXED_OXIDIZED_COPPER_GRATE;
@@ -2428,6 +2440,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBulbBehavior> WAXED_WEATHERED_COPPER_BULB;
 
+    public static BlockType<BlockWaxedWeatheredCopperChestBehavior> WAXED_WEATHERED_COPPER_CHEST;
+
     public static BlockType<BlockCopperDoorBehavior> WAXED_WEATHERED_COPPER_DOOR;
 
     public static BlockType<BlockCopperGrateBehavior> WAXED_WEATHERED_COPPER_GRATE;
@@ -2447,6 +2461,8 @@ public final class BlockTypes {
     public static BlockType<BlockCopperBehavior> WEATHERED_COPPER;
 
     public static BlockType<BlockCopperBulbBehavior> WEATHERED_COPPER_BULB;
+
+    public static BlockType<BlockWeatheredCopperChestBehavior> WEATHERED_COPPER_CHEST;
 
     public static BlockType<BlockCopperDoorBehavior> WEATHERED_COPPER_DOOR;
 
