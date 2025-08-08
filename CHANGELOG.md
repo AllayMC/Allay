@@ -48,6 +48,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Added support for in-plugin resource pack, which allows plugins to include their resource pack under `assets/resource_pack`. This
   is useful for plugins that have custom items or blocks that require a resource pack to be displayed correctly.
 - Players now can see each other's permission level in pause menu.
+- Improved `/kick` command.
+- Added support for 1.21.100.
 
 ### Changed
 
@@ -59,6 +61,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed `PlayerEatFoodEvent` to `PlayerEatEvent`.
 - (API) Method `Entity.teleport()` now return a `boolean` value which indicates whether the event is cancelled.
 - (API) Updated method `Entity.knockback()`. It now accepts a custom `additionalMotion` vector.
+- (API) Renamed class `BlockStateWithPos` to `Block`.
 - Commands `/op` and `/deop` now use player target parameter instead of string parameter.`
 - Refactored knockback related logic, it now better matches the vanilla.
 

@@ -39,7 +39,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * Disconnect the player.
      */
     default void disconnect() {
-        disconnect(TrKeys.M_DISCONNECT_CLOSED);
+        disconnect(TrKeys.M_DISCONNECT_DISCONNECTED);
     }
 
     /**

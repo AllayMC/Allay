@@ -57,7 +57,7 @@ public interface PlayerService {
      * Disconnect all players with the default reason.
      */
     default void disconnectAllPlayers() {
-        disconnectAllPlayers(TrKeys.M_DISCONNECT_CLOSED);
+        disconnectAllPlayers(TrKeys.M_DISCONNECT_DISCONNECTED);
     }
 
     /**
@@ -85,7 +85,6 @@ public interface PlayerService {
      * Find an online player by his name.
      *
      * @param playerName the name of the player.
-     *
      * @return the player if found, otherwise {@code null}.
      */
     default EntityPlayer getOnlinePlayerByName(String playerName) {
@@ -106,7 +105,6 @@ public interface PlayerService {
      * Check if the player is banned.
      *
      * @param uuidOrName the UUID or name of the player.
-     *
      * @return {@code true} if the player is banned, otherwise {@code false}.
      */
     boolean isBanned(String uuidOrName);
@@ -115,7 +113,6 @@ public interface PlayerService {
      * Ban the player.
      *
      * @param uuidOrName the UUID or name of the player.
-     *
      * @return {@code true} if the player is banned, otherwise {@code false}.
      */
     boolean ban(String uuidOrName);
@@ -124,7 +121,6 @@ public interface PlayerService {
      * Unban the player.
      *
      * @param uuidOrName the UUID or name of the player.
-     *
      * @return {@code true} if the player is unbanned, otherwise {@code false}.
      */
     boolean unban(String uuidOrName);
@@ -141,7 +137,6 @@ public interface PlayerService {
      * Check if the IP is banned.
      *
      * @param ip the IP to check.
-     *
      * @return {@code true} if the IP is banned, otherwise {@code false}.
      */
     boolean isIPBanned(String ip);
@@ -150,7 +145,6 @@ public interface PlayerService {
      * Ban the IP.
      *
      * @param ip the IP to ban.
-     *
      * @return {@code true} if the IP is banned, otherwise {@code false}.
      */
     boolean banIP(String ip);
@@ -159,7 +153,6 @@ public interface PlayerService {
      * Unban the IP.
      *
      * @param ip the IP to unban.
-     *
      * @return {@code true} if the IP is unbanned, otherwise {@code false}.
      */
     boolean unbanIP(String ip);
@@ -195,7 +188,6 @@ public interface PlayerService {
      * Check if the player is in the whitelist.
      *
      * @param player the player to check.
-     *
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     default boolean isWhitelisted(EntityPlayer player) {
@@ -206,7 +198,6 @@ public interface PlayerService {
      * Check if the player is in the whitelist.
      *
      * @param uuidOrName the UUID or name of the player.
-     *
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     boolean isWhitelisted(String uuidOrName);
@@ -215,7 +206,6 @@ public interface PlayerService {
      * Add the player to the whitelist.
      *
      * @param uuidOrName the UUID or name of the player.
-     *
      * @return {@code true} if the player is added to the whitelist, otherwise {@code false}.
      */
     boolean addToWhitelist(String uuidOrName);
@@ -224,7 +214,6 @@ public interface PlayerService {
      * Remove the player from the whitelist.
      *
      * @param uuidOrName the UUID or name of the player.
-     *
      * @return {@code true} if the player is removed from the whitelist, otherwise {@code false}.
      */
     boolean removeFromWhitelist(String uuidOrName);

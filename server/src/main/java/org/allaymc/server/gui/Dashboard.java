@@ -139,7 +139,7 @@ public final class Dashboard {
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
                     var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
-                    player.disconnect(TrKeys.M_DISCONNECT_CLOSED);
+                    player.disconnect(TrKeys.M_DISCONNECT_DISCONNECTED);
                 });
                 popupMenu.add(kickItem);
 
@@ -451,7 +451,9 @@ public final class Dashboard {
     /**
      *
      */
-    public JComponent $$$getRootComponent$$$() {return rootPane;}
+    public JComponent $$$getRootComponent$$$() {
+        return rootPane;
+    }
 
     private void createUIComponents() {
         // Init the three graph
@@ -495,7 +497,9 @@ public final class Dashboard {
     }
 
     private static class UneditableDefaultTableModel extends DefaultTableModel {
-        public UneditableDefaultTableModel(String[][] data, String[] title) {super(data, title);}
+        public UneditableDefaultTableModel(String[][] data, String[] title) {
+            super(data, title);
+        }
 
         @Override
         public boolean isCellEditable(int row, int column) {

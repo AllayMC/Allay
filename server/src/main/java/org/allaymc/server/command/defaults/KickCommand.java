@@ -4,6 +4,7 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerKickEvent;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class KickCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .playerTarget("player")
-                .str("reason", "You are kicked")
+                .str("reason")
                 .optional()
                 .exec(context -> {
                     List<EntityPlayer> players = context.getResult(0);
@@ -32,11 +33,17 @@ public class KickCommand extends SimpleCommand {
                     for (var player : players) {
                         var event = new PlayerKickEvent(player, reason);
                         if (!event.call()) {
-                            context.addError("PlayerKickEvent is cancelled");
                             return context.fail();
                         }
-                        player.disconnect(event.getReason());
-                        context.addOutput("Kicked " + name);
+
+                        reason = event.getReason();
+                        if (reason.isBlank()) {
+                            player.disconnect(I18n.get().tr(TrKeys.M_DISCONNECT_KICKED));
+                            context.addOutput(TrKeys.M_COMMANDS_KICK_SUCCESS);
+                        } else {
+                            player.disconnect(I18n.get().tr(TrKeys.M_DISCONNECT_KICKED_REASON, reason));
+                            context.addOutput(TrKeys.M_COMMANDS_KICK_SUCCESS_REASON, reason);
+                        }
                     }
                     return context.success();
                 });
