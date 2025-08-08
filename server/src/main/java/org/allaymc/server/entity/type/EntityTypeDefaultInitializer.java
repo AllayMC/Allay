@@ -147,6 +147,12 @@ public final class EntityTypeDefaultInitializer {
                     .vanillaEntity(EntityId.COMMAND_BLOCK_MINECART)
                     .build();
         }
+        if (EntityTypes.COPPER_GOLEM == null) {
+            EntityTypes.COPPER_GOLEM = AllayEntityType
+                    .builder(EntityCopperGolemImpl.class)
+                    .vanillaEntity(EntityId.COPPER_GOLEM)
+                    .build();
+        }
         if (EntityTypes.COW == null) {
             EntityTypes.COW = AllayEntityType
                     .builder(EntityCowImpl.class)

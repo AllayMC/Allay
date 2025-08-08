@@ -2464,6 +2464,8 @@ public interface Sound {
 
     String MOB_STRAY_AMBIENT = "mob.stray.ambient";
 
+    String RECORD_LAVA_CHICKEN = "record.lava_chicken";
+
     String HIT_SPONGE = "hit.sponge";
 
     String DIG_BASALT = "dig.basalt";

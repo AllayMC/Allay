@@ -118,6 +118,8 @@ public interface ItemTags {
 
     ItemTag SIGN = create("minecraft:sign");
 
+    ItemTag COPPER_TIER = create("minecraft:copper_tier");
+
     ItemTag STONE_TIER = create("minecraft:stone_tier");
 
     ItemTag WARPED_STEMS = create("minecraft:warped_stems");

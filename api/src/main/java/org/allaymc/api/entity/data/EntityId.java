@@ -55,6 +55,8 @@ public enum EntityId {
 
     COMMAND_BLOCK_MINECART("minecraft:command_block_minecart", 100),
 
+    COPPER_GOLEM("minecraft:copper_golem", 148),
+
     COW("minecraft:cow", 11),
 
     CREAKING("minecraft:creaking", 146),

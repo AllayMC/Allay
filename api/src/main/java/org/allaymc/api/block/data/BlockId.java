@@ -461,6 +461,8 @@ public enum BlockId {
 
     COPPER_BULB("minecraft:copper_bulb"),
 
+    COPPER_CHEST("minecraft:copper_chest"),
+
     COPPER_DOOR("minecraft:copper_door"),
 
     COPPER_GRATE("minecraft:copper_grate"),
@@ -1016,6 +1018,8 @@ public enum BlockId {
     EXPOSED_COPPER("minecraft:exposed_copper"),
 
     EXPOSED_COPPER_BULB("minecraft:exposed_copper_bulb"),
+
+    EXPOSED_COPPER_CHEST("minecraft:exposed_copper_chest"),
 
     EXPOSED_COPPER_DOOR("minecraft:exposed_copper_door"),
 
@@ -1664,6 +1668,8 @@ public enum BlockId {
     OXIDIZED_COPPER("minecraft:oxidized_copper"),
 
     OXIDIZED_COPPER_BULB("minecraft:oxidized_copper_bulb"),
+
+    OXIDIZED_COPPER_CHEST("minecraft:oxidized_copper_chest"),
 
     OXIDIZED_COPPER_DOOR("minecraft:oxidized_copper_door"),
 
@@ -2373,6 +2379,8 @@ public enum BlockId {
 
     WAXED_COPPER_BULB("minecraft:waxed_copper_bulb"),
 
+    WAXED_COPPER_CHEST("minecraft:waxed_copper_chest"),
+
     WAXED_COPPER_DOOR("minecraft:waxed_copper_door"),
 
     WAXED_COPPER_GRATE("minecraft:waxed_copper_grate"),
@@ -2392,6 +2400,8 @@ public enum BlockId {
     WAXED_EXPOSED_COPPER("minecraft:waxed_exposed_copper"),
 
     WAXED_EXPOSED_COPPER_BULB("minecraft:waxed_exposed_copper_bulb"),
+
+    WAXED_EXPOSED_COPPER_CHEST("minecraft:waxed_exposed_copper_chest"),
 
     WAXED_EXPOSED_COPPER_DOOR("minecraft:waxed_exposed_copper_door"),
 
@@ -2413,6 +2423,8 @@ public enum BlockId {
 
     WAXED_OXIDIZED_COPPER_BULB("minecraft:waxed_oxidized_copper_bulb"),
 
+    WAXED_OXIDIZED_COPPER_CHEST("minecraft:waxed_oxidized_copper_chest"),
+
     WAXED_OXIDIZED_COPPER_DOOR("minecraft:waxed_oxidized_copper_door"),
 
     WAXED_OXIDIZED_COPPER_GRATE("minecraft:waxed_oxidized_copper_grate"),
@@ -2433,6 +2445,8 @@ public enum BlockId {
 
     WAXED_WEATHERED_COPPER_BULB("minecraft:waxed_weathered_copper_bulb"),
 
+    WAXED_WEATHERED_COPPER_CHEST("minecraft:waxed_weathered_copper_chest"),
+
     WAXED_WEATHERED_COPPER_DOOR("minecraft:waxed_weathered_copper_door"),
 
     WAXED_WEATHERED_COPPER_GRATE("minecraft:waxed_weathered_copper_grate"),
@@ -2452,6 +2466,8 @@ public enum BlockId {
     WEATHERED_COPPER("minecraft:weathered_copper"),
 
     WEATHERED_COPPER_BULB("minecraft:weathered_copper_bulb"),
+
+    WEATHERED_COPPER_CHEST("minecraft:weathered_copper_chest"),
 
     WEATHERED_COPPER_DOOR("minecraft:weathered_copper_door"),
 

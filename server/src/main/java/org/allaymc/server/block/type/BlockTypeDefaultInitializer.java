@@ -1497,6 +1497,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
+        if (BlockTypes.COPPER_CHEST == null) {
+            BlockTypes.COPPER_CHEST = AllayBlockType
+                    .builder(BlockCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.COPPER_DOOR == null) {
             BlockTypes.COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
@@ -3253,6 +3260,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.EXPOSED_COPPER_CHEST == null) {
+            BlockTypes.EXPOSED_COPPER_CHEST = AllayBlockType
+                    .builder(BlockExposedCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.EXPOSED_COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
         }
         if (BlockTypes.EXPOSED_COPPER_DOOR == null) {
@@ -5334,6 +5348,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.OXIDIZED_COPPER_CHEST == null) {
+            BlockTypes.OXIDIZED_COPPER_CHEST = AllayBlockType
+                    .builder(BlockOxidizedCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.OXIDIZED_COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
         }
         if (BlockTypes.OXIDIZED_COPPER_DOOR == null) {
@@ -7710,6 +7731,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
+        if (BlockTypes.WAXED_COPPER_CHEST == null) {
+            BlockTypes.WAXED_COPPER_CHEST = AllayBlockType
+                    .builder(BlockWaxedCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WAXED_COPPER_DOOR == null) {
             BlockTypes.WAXED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
@@ -7774,6 +7802,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WAXED_EXPOSED_COPPER_CHEST == null) {
+            BlockTypes.WAXED_EXPOSED_COPPER_CHEST = AllayBlockType
+                    .builder(BlockWaxedExposedCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_DOOR == null) {
@@ -7842,6 +7877,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_CHEST == null) {
+            BlockTypes.WAXED_OXIDIZED_COPPER_CHEST = AllayBlockType
+                    .builder(BlockWaxedOxidizedCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_DOOR == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
@@ -7908,6 +7950,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
+        if (BlockTypes.WAXED_WEATHERED_COPPER_CHEST == null) {
+            BlockTypes.WAXED_WEATHERED_COPPER_CHEST = AllayBlockType
+                    .builder(BlockWaxedWeatheredCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WAXED_WEATHERED_COPPER_DOOR == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_DOOR = AllayBlockType
                     .builder(BlockCopperDoorBehaviorImpl.class)
@@ -7972,6 +8021,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WEATHERED_COPPER_CHEST == null) {
+            BlockTypes.WEATHERED_COPPER_CHEST = AllayBlockType
+                    .builder(BlockWeatheredCopperChestBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WEATHERED_COPPER_CHEST)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
         }
         if (BlockTypes.WEATHERED_COPPER_DOOR == null) {
