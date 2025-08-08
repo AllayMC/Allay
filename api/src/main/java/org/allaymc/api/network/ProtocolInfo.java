@@ -25,7 +25,7 @@ public final class ProtocolInfo {
     /**
      * The current minecraft version.
      */
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 100, 23, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 100, 6, 0);
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
