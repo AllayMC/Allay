@@ -10,7 +10,7 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.6.1 (API 0.10.0) - Unreleased
+## 0.7.0 (API 0.10.0) - Unreleased
 
 <small>[Compare with 0.6.0](https://github.com/AllayMC/Allay/compare/0.6.0...HEAD)</small>
 
