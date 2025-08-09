@@ -178,6 +178,11 @@ public interface TrKeys {
     String A_CREATIVEITEM_LOADING = "allay:creativeitem.loading";
 
     /**
+     * You have been IP banned from this server
+     */
+    String A_DISCONNECT_BANIP = "allay:disconnect.banIp";
+
+    /**
      * Loaded %1 effect types
      */
     String A_EFFECTTYPE_LOADED = "allay:effecttype.loaded";

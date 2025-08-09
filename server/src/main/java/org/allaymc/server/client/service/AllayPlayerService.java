@@ -47,6 +47,7 @@ public class AllayPlayerService implements PlayerService {
     protected final AllayPlayerStorage playerStorage;
     @Getter
     protected final AllayNetworkInterface networkInterface;
+
     protected final Map<UUID, EntityPlayer> players;
     protected final Map<UUID, PlayerListPacket.Entry> playerListEntries;
     protected final BanInfo banInfo;
@@ -78,13 +79,13 @@ public class AllayPlayerService implements PlayerService {
     }
 
     @Override
-    public void setMaxPlayerCount(int value) {
-        networkInterface.setMaxPlayerCount(value);
+    public int getMaxPlayerCount() {
+        return networkInterface.getMaxPlayerCount();
     }
 
     @Override
-    public int getMaxPlayerCount() {
-        return networkInterface.getMaxPlayerCount();
+    public void setMaxPlayerCount(int value) {
+        networkInterface.setMaxPlayerCount(value);
     }
 
     @Override
@@ -160,7 +161,7 @@ public class AllayPlayerService implements PlayerService {
         banInfo.bannedIps().add(ip);
         players.values().stream()
                 .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
-                .forEach(player -> player.disconnect("Your IP is banned!"));
+                .forEach(player -> player.disconnect(TrKeys.A_DISCONNECT_BANIP));
         return true;
     }
 
@@ -313,7 +314,7 @@ public class AllayPlayerService implements PlayerService {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
         playerListEntries.forEach((uuid, entry) -> {
-            if (uuid != player.getLoginData().getUuid()) {
+            if (!uuid.equals(player.getLoginData().getUuid())) {
                 playerListPacket.getEntries().add(entry);
             }
         });
@@ -321,6 +322,9 @@ public class AllayPlayerService implements PlayerService {
     }
 
     public void onSkinUpdate(EntityPlayer player) {
-        this.playerListEntries.get(player.getLoginData().getUuid()).setSkin(player.getSkin());
+        var entry = this.playerListEntries.get(player.getLoginData().getUuid());
+        if (entry != null) {
+            entry.setSkin(player.getSkin());
+        }
     }
 }

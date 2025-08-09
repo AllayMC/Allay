@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.LangCode;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -153,7 +152,7 @@ public class LangBuilder {
                 json = json.replace(" ", " ");
                 Files.deleteIfExists(path);
                 Files.createFile(path);
-                Files.writeString(path, json, StandardCharsets.UTF_8);
+                Utils.writeFileWithCRLF(path, json);
             } catch (IOException e) {
                 log.error("Failed to write lang file for lang code {}", langCode.name(), e);
             }

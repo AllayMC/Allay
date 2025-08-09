@@ -60,14 +60,22 @@ public class AllayNetworkInterface implements NetworkInterface {
     @SneakyThrows
     public void start() {
         var settings = Server.SETTINGS;
-        var networkThreadNumber = settings.networkSettings().networkThreadNumber();
-        Preconditions.checkArgument(networkThreadNumber >= 0);
+        var networkSettings = settings.networkSettings();
+
+        var networkThreadNumber = networkSettings.networkThreadNumber();
+        int port = networkSettings.port();
+        int portv6 = networkSettings.portv6();
+
+        Preconditions.checkArgument(networkThreadNumber >= 0, "networkThreadNumber must be >= 0");
+        Preconditions.checkArgument(port > 0 && port <= 65535, "The IPv4 port must be in the range 1–65535");
+        Preconditions.checkArgument(portv6 > 0 && portv6 <= 65535, "The IPv6 port must be in the range 1–65535");
 
         this.pong = initPong(settings);
-        this.address = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
-        this.addressv6 = new InetSocketAddress(settings.networkSettings().ipv6(), settings.networkSettings().portv6());
+        this.address = new InetSocketAddress(networkSettings.ip(), port);
+        this.addressv6 = new InetSocketAddress(networkSettings.ipv6(), portv6);
 
         var threadFactory = new ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").setDaemon(true).build();
+
         Class<? extends DatagramChannel> datagramChannelClass;
         IoHandlerFactory ioHandlerFactory;
         if (Epoll.isAvailable()) {
@@ -85,21 +93,20 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
                 // Integer.MAX_VALUE fixed localhost blocking address
-                .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : settings.networkSettings().raknetPacketLimit())
-                .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : settings.networkSettings().raknetGlobalPacketLimit())
+                .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : networkSettings.raknetPacketLimit())
+                .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : networkSettings.raknetGlobalPacketLimit())
                 .group(new MultiThreadIoEventLoopGroup(networkThreadNumber, threadFactory, ioHandlerFactory))
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
                         session.setCodec(ProtocolInfo.PACKET_CODEC);
-                        if (!Server.SETTINGS.networkSettings().enableEncodingProtection()) {
+                        if (!networkSettings.enableEncodingProtection()) {
                             session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
                         }
 
-                        var server = Server.getInstance();
-                        if (server.getPlayerService().isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
-                            // TODO: I18n
-                            session.disconnect("Your IP is banned!");
+                        var ip = AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0];
+                        if (server.getPlayerService().isIPBanned(ip)) {
+                            session.disconnect(I18n.get().tr(TrKeys.A_DISCONNECT_BANIP));
                             return;
                         }
 
@@ -162,18 +169,20 @@ public class AllayNetworkInterface implements NetworkInterface {
     }
 
     protected BedrockPong initPong(ServerSettings settings) {
+        var genericSettings = settings.genericSettings();
+        var networkSettings = settings.networkSettings();
         return new BedrockPong()
                 .edition("MCPE")
-                .motd(settings.genericSettings().motd())
-                .subMotd(settings.genericSettings().subMotd())
+                .motd(genericSettings.motd())
+                .subMotd(genericSettings.subMotd())
                 .playerCount(0)
-                .maximumPlayerCount(settings.genericSettings().maxPlayerCount())
-                .gameType(settings.genericSettings().defaultGameType().name())
+                .maximumPlayerCount(genericSettings.maxPlayerCount())
+                .gameType(genericSettings.defaultGameType().name())
                 .nintendoLimited(false)
                 .version(ProtocolInfo.getMinecraftVersionStr())
                 .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
-                .ipv4Port(settings.networkSettings().port())
-                .ipv6Port(settings.networkSettings().portv6());
+                .ipv4Port(networkSettings.port())
+                .ipv6Port(networkSettings.portv6());
     }
 
     protected void updatePong() {
