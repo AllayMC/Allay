@@ -142,11 +142,6 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
 
         this.blockToBreak = player.getDimension().getBlockState(x, y, z);
-        if (player.getGameType() != GameType.CREATIVE && this.blockToBreak.getBlockStateData().hardness() == -1) {
-            log.debug("Player {} tried to break an unbreakable block", player.getOriginName());
-            return;
-        }
-
         this.faceToBreak = BlockFace.fromIndex(blockFaceId);
         if (this.faceToBreak == null) {
             log.debug("Player {} tried to break a block with an invalid face {}", player.getOriginName(), blockFaceId);
