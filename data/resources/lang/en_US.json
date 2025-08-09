@@ -33,7 +33,7 @@
   "allay:command.world.unload.failed.default": "Default world can't be unloaded",
   "allay:creativeitem.loaded": "Creative items is loaded",
   "allay:creativeitem.loading": "Loading creative items...",
-  "allay:disconnect.banIp": "You have been IP banned from this server",
+  "allay:disconnect.banIp": "Your IP have been banned from this server",
   "allay:effecttype.loaded": "Loaded %1 effect types",
   "allay:effecttype.loading": "Loading effect types...",
   "allay:enchtype.loaded": "Loaded %1 enchantment types",

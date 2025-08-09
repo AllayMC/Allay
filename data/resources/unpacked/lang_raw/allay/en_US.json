@@ -33,7 +33,7 @@
   "command.world.unload.failed.default": "Default world can't be unloaded",
   "creativeitem.loaded": "Creative items is loaded",
   "creativeitem.loading": "Loading creative items...",
-  "disconnect.banIp": "You have been IP banned from this server",
+  "disconnect.banIp": "Your IP have been banned from this server",
   "effecttype.loaded": "Loaded %1 effect types",
   "effecttype.loading": "Loading effect types...",
   "enchtype.loaded": "Loaded %1 enchantment types",
