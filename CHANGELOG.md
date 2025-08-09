@@ -76,6 +76,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that client's offhand won't get updated when setting offhand item.
 - Fixed a possible NPE in method `ItemBaseComponent.isCorrectToolFor()`.
 - Fixed the bug that lava and fire won't ignite the entity
+- Fixed NPE when creative player breaks bedrock.
 
 ### Removed
 
