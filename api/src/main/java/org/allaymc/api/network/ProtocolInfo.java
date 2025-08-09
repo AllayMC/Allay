@@ -5,7 +5,7 @@ import org.allaymc.api.utils.SemVersion;
 import org.allaymc.updater.block.BlockStateUpdater;
 import org.allaymc.updater.block.BlockStateUpdater_1_21_60;
 import org.allaymc.updater.item.ItemStateUpdater;
-import org.allaymc.updater.item.ItemStateUpdater_1_21_50;
+import org.allaymc.updater.item.ItemStateUpdater_1_21_100;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
 
@@ -43,7 +43,7 @@ public final class ProtocolInfo {
     /**
      * The currently used item state updater instance.
      */
-    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_21_50.INSTANCE;
+    public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_21_100.INSTANCE;
 
     /**
      * The encoded version number of the block state version (without revision).
@@ -55,7 +55,7 @@ public final class ProtocolInfo {
     /**
      * The encoded version number of the block state version.
      */
-    public static final int BLOCK_STATE_VERSION_NUM = BLOCK_STATE_VERSION_NUM_NO_REVISION | BLOCK_STATE_VERSION.revision(); // 18168865
+    public static final int BLOCK_STATE_VERSION_NUM = BLOCK_STATE_VERSION_NUM_NO_REVISION | BLOCK_STATE_VERSION.revision();
 
     /**
      * Get the string style of the current minecraft version.
