@@ -316,6 +316,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         if (requireResendingAvailableCommands) {
             sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
+            requireResendingAvailableCommands = false;
         }
     }
 
