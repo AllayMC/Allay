@@ -64,6 +64,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
                 .addComponent(EntityPlayerDamageComponentImpl::new, EntityPlayerDamageComponentImpl.class)
+                .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
                 .build();
     }
 
@@ -73,6 +74,7 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.VILLAGER_V2)
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
+                .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
                 .build();
     }
 

@@ -31,6 +31,7 @@ import org.joml.Vector3d;
  * @author daoge_cmd
  */
 public class EntityDamageComponentImpl implements EntityDamageComponent {
+
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_damage_component");
 

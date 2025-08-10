@@ -168,13 +168,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void initMetadata() {
-        metadata.set(EntityDataTypes.PLAYER_INDEX, 0);
-        metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 300);
-        metadata.set(EntityDataTypes.AIR_SUPPLY_MAX, (short) 300);
-        metadata.set(EntityFlag.HAS_GRAVITY, true);
-        metadata.set(EntityFlag.HAS_COLLISION, true);
-        metadata.set(EntityFlag.CAN_CLIMB, true);
-        metadata.set(EntityFlag.BREATHING, true);
+        this.manager.callEvent(CEntityInitMetadataEvent.INSTANCE);
+        this.metadata.set(EntityDataTypes.PLAYER_INDEX, 0);
+        this.metadata.set(EntityFlag.HAS_GRAVITY, true);
+        this.metadata.set(EntityFlag.HAS_COLLISION, true);
+        this.metadata.set(EntityFlag.CAN_CLIMB, true);
         updateHitBoxAndCollisionBoxMetadata();
     }
 
@@ -216,7 +214,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void tick(long currentTick) {
         checkDead();
         tickEffects();
-        tickBreathe();
         computeAndNotifyCollidedBlocks();
 
         manager.callEvent(new CEntityTickEvent(currentTick));
@@ -513,28 +510,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.setLocation(newLocation);
         this.broadcastMoveToViewers(newLocation, false);
         return true;
-    }
-
-    protected void tickBreathe() {
-        if (!getMetadata().has(EntityDataTypes.AIR_SUPPLY)) {
-            return;
-        }
-
-        short airSupply = getMetadata().get(EntityDataTypes.AIR_SUPPLY);
-        short airSupplyMax = getMetadata().get(EntityDataTypes.AIR_SUPPLY_MAX);
-        short newAirSupply = airSupply;
-        if (!thisEntity.canBreathe()) {
-            newAirSupply = (short) (airSupply - 1);
-            if (newAirSupply <= -20) {
-                manager.callEvent(CEntityDrownEvent.INSTANCE);
-                newAirSupply = 0;
-            }
-        } else if (airSupply < airSupplyMax) {
-            newAirSupply = (short) (airSupply + 4);
-        }
-        if (airSupply != newAirSupply) {
-            setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, newAirSupply);
-        }
     }
 
     protected void tickEffects() {

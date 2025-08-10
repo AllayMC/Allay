@@ -14,6 +14,14 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.7.0](https://github.com/AllayMC/Allay/compare/0.7.0...HEAD)</small>
 
+### Added
+
+- Introduced component `EntityBreatheComponent` which handle the logic of entity breathe.
+
+### Fixed
+
+- Fixed client lag due to `AvailableCommandsPacket` being sent continuously.
+
 ## 0.7.0 (API 0.10.0) - 2025-8-10
 
 <small>[Compare with 0.6.0](https://github.com/AllayMC/Allay/compare/0.6.0...0.7.0)</small>
