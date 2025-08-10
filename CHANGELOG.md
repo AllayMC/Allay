@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - Introduced component `EntityBreatheComponent` which handle the logic of entity breathe.
+- Added armor component to the newly added copper armor items.
 
 ### Fixed
 

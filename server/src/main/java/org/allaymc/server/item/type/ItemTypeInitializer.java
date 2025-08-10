@@ -596,6 +596,7 @@ public final class ItemTypeInitializer {
         ItemTypes.IRON_HELMET = buildHelmet(ItemId.IRON_HELMET, ItemId.IRON_INGOT);
         ItemTypes.LEATHER_HELMET = buildHelmet(ItemId.LEATHER_HELMET, ItemId.LEATHER);
         ItemTypes.NETHERITE_HELMET = buildHelmet(ItemId.NETHERITE_HELMET, ItemId.NETHERITE_INGOT);
+        ItemTypes.COPPER_HELMET = buildHelmet(ItemId.COPPER_HELMET, ItemId.COPPER_INGOT);
         ItemTypes.TURTLE_HELMET = AllayItemType
                 .builder(ItemTurtleHelmetStackImpl.class)
                 .vanillaItem(ItemId.TURTLE_HELMET)
@@ -621,6 +622,7 @@ public final class ItemTypeInitializer {
         ItemTypes.IRON_CHESTPLATE = buildChestplate(ItemId.IRON_CHESTPLATE, ItemId.IRON_INGOT);
         ItemTypes.LEATHER_CHESTPLATE = buildChestplate(ItemId.LEATHER_CHESTPLATE, ItemId.LEATHER);
         ItemTypes.NETHERITE_CHESTPLATE = buildChestplate(ItemId.NETHERITE_CHESTPLATE, ItemId.NETHERITE_INGOT);
+        ItemTypes.COPPER_CHESTPLATE = buildChestplate(ItemId.COPPER_CHESTPLATE, ItemId.COPPER_INGOT);
         ItemTypes.ELYTRA = AllayItemType
                 .builder(ItemElytraStackImpl.class)
                 .vanillaItem(ItemId.ELYTRA)
@@ -646,6 +648,7 @@ public final class ItemTypeInitializer {
         ItemTypes.IRON_LEGGINGS = buildLeggings(ItemId.IRON_LEGGINGS, ItemId.IRON_INGOT);
         ItemTypes.LEATHER_LEGGINGS = buildLeggings(ItemId.LEATHER_LEGGINGS, ItemId.LEATHER);
         ItemTypes.NETHERITE_LEGGINGS = buildLeggings(ItemId.NETHERITE_LEGGINGS, ItemId.NETHERITE_INGOT);
+        ItemTypes.COPPER_LEGGINGS = buildLeggings(ItemId.COPPER_LEGGINGS, ItemId.COPPER_INGOT);
     }
 
     private static ItemType<ItemLeggingsStack> buildLeggings(ItemId itemId, ItemId repairItemId) {
@@ -665,6 +668,7 @@ public final class ItemTypeInitializer {
         ItemTypes.IRON_BOOTS = buildBoots(ItemId.IRON_BOOTS, ItemId.IRON_INGOT);
         ItemTypes.LEATHER_BOOTS = buildBoots(ItemId.LEATHER_BOOTS, ItemId.LEATHER);
         ItemTypes.NETHERITE_BOOTS = buildBoots(ItemId.NETHERITE_BOOTS, ItemId.NETHERITE_INGOT);
+        ItemTypes.COPPER_BOOTS = buildBoots(ItemId.COPPER_BOOTS, ItemId.COPPER_INGOT);
     }
 
     private static ItemType<ItemBootsStack> buildBoots(ItemId itemId, ItemId repairItemId) {
