@@ -335,7 +335,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         var itemComponentPacket = new ItemComponentPacket();
         itemComponentPacket.getItems().addAll(DeferredData.ITEM_DEFINITIONS.get());
-        sendPacket(itemComponentPacket);
+        sendPacketImmediately(itemComponentPacket);
 
         sendPacket(Registries.CREATIVE_ITEMS.getCreativeContentPacketFor(thisPlayer.getLoginData().getLangCode()));
 
