@@ -427,7 +427,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
         super.broadcastMoveToViewers(newLoc, teleporting);
         if (!teleporting) {
-            manager.callEvent(new CPlayerMoveEvent(newLoc));
+            manager.callEvent(CPlayerMoveEvent.INSTANCE);
         }
     }
 

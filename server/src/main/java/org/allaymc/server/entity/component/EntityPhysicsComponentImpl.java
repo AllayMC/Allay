@@ -69,13 +69,19 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected ComponentManager manager;
 
     @Getter
-    protected Vector3d motion = new Vector3d();
+    protected Vector3d motion;
     @Getter
-    protected Vector3d lastMotion = new Vector3d();
+    protected Vector3d lastMotion;
     @Getter
-    protected boolean onGround = true;
+    protected boolean onGround;
     @Getter
     protected double fallDistance;
+
+    public EntityPhysicsComponentImpl() {
+        this.motion = new Vector3d();
+        this.lastMotion = new Vector3d();
+        this.onGround = true;
+    }
 
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {

@@ -27,11 +27,11 @@ public class EntityPlayerPhysicsComponentImpl extends EntityPhysicsComponentImpl
 
     @Override
     public boolean computeMovementServerSide() {
-        // TODO: fake client
         return false;
     }
 
     public void setMotionValueOnly(Vector3dc motion) {
+        this.lastMotion = this.motion;
         this.motion = new Vector3d(motion);
     }
 

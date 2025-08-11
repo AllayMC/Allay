@@ -90,6 +90,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Getter
     protected final Location3d location;
+    @Getter
+    protected final Location3d lastLocation;
     protected final Location3d locationLastSent;
     @Getter
     protected final long runtimeId;
@@ -123,7 +125,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
-        this.locationLastSent = new Location3d(0, 0, 0, null);
+        this.lastLocation = new Location3d(this.location);
+        this.locationLastSent = new Location3d(this.location);
         this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
         this.metadata = new Metadata();
         this.entityType = info.getEntityType();
@@ -307,7 +310,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         this.manager.callEvent(new CEntitySetLocationEvent(location, calculateFallDistance));
-
+        this.lastLocation.set(this.location);
         this.location.set(location);
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());
@@ -606,6 +609,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (nbt.containsKey(TAG_POS)) {
             var pos = readVector3f(nbt, TAG_POS);
             location.set(pos.x, pos.y, pos.z);
+            lastLocation.set(location);
         }
 
         if (nbt.containsKey(TAG_ROTATION)) {

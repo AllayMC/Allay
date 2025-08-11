@@ -97,6 +97,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Gets the last location of this entity.
+     *
+     * @return the last location of this entity.
+     */
+    Location3dc getLastLocation();
+
+    /**
      * Gets the location of this entity.
      *
      * @return the location of this entity.
