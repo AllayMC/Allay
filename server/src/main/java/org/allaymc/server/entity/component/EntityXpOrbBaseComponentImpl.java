@@ -3,11 +3,13 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -24,6 +26,9 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     public static float MAX_MOVE_DISTANCE = 7.25f;
     public static float MAX_MOVE_DISTANCE_SQUARED = MAX_MOVE_DISTANCE * MAX_MOVE_DISTANCE;
 
+    @Dependency
+    protected EntityPhysicsComponent physicsComponent;
+
     protected int experienceValue;
 
     public EntityXpOrbBaseComponentImpl(EntityInitInfo info) {
@@ -33,15 +38,14 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @Override
     public void tick(long currentTick) {
         super.tick(currentTick);
-
         moveToNearestPlayer();
     }
 
     @Override
     public void onCollideWithEntity(Entity other) {
-        if (experienceValue == 0) return;
-        if (!canBePicked()) return;
-        if (!(other instanceof EntityPlayer player)) return;
+        if (experienceValue == 0 || !canBePicked() || !(other instanceof EntityPlayer player)) {
+            return;
+        }
 
         player.addExperience(experienceValue);
         experienceValue = 0;
@@ -61,7 +65,7 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
 
         if (diff > 0D) {
             diff = diff * diff;
-            addMotion(
+            physicsComponent.addMotion(
                     dX / d * diff * 0.1f,
                     dY / d * diff * 0.1f,
                     dZ / d * diff * 0.1f

@@ -2,7 +2,9 @@ package org.allaymc.api.entity.interfaces;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 
@@ -12,7 +14,9 @@ public interface EntityXpOrb extends
         Entity,
         EntityXpOrbBaseComponent,
         EntityDamageComponent,
-        EntityAttributeComponent {
+        EntityAttributeComponent,
+        EntityPhysicsComponent,
+        EntityAgeComponent {
 
     // This is indexed biggest to smallest so that we can return as soon as we found the biggest value
     int[] ORB_SPLIT_SIZES = {2477, 1237, 617, 307, 149, 73, 37, 17, 7, 3, 1};

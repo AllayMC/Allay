@@ -3,10 +3,11 @@ package org.allaymc.server.entity.component.projectile;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
+import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3dc;
@@ -14,14 +15,14 @@ import org.joml.Vector3dc;
 /**
  * @author daoge_cmd
  */
-public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseComponentImpl {
-    public EntityEnderPearlBaseComponentImpl(EntityInitInfo info) {
-        super(info);
-    }
+public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysicsComponentImpl {
+
+    @Dependency
+    protected EntityProjectileComponent projectileComponent;
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedNextTick()) {
             return;
         }
 
@@ -30,31 +31,34 @@ public class EntityEnderPearlBaseComponentImpl extends EntityProjectileBaseCompo
         }
 
         this.teleport();
-        this.despawn();
+        thisEntity.despawn();
     }
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedNextTick()) {
             return;
         }
 
         this.teleport();
-        this.despawn();
+        thisEntity.despawn();
     }
 
     protected void teleport() {
+        var shooter = projectileComponent.getShooter();
         if (shooter == null) {
             return;
         }
 
-        this.getDimension().addLevelSoundEvent(this.location, SoundEvent.TELEPORT);
-        if (!shooter.teleport(this.location, EntityTeleportEvent.Reason.PROJECTILE)) {
+        var location = thisEntity.getLocation();
+        var dimension = thisEntity.getDimension();
+        dimension.addLevelSoundEvent(location, SoundEvent.TELEPORT);
+        if (!shooter.teleport(location, EntityTeleportEvent.Reason.PROJECTILE)) {
             return;
         }
 
-        this.getDimension().addLevelSoundEvent(this.location, SoundEvent.TELEPORT);
-        this.getDimension().addLevelEvent(this.location, LevelEvent.PARTICLE_TELEPORT);
+        dimension.addLevelSoundEvent(location, SoundEvent.TELEPORT);
+        dimension.addLevelEvent(location, LevelEvent.PARTICLE_TELEPORT);
         if (shooter instanceof EntityDamageComponent damageComponent) {
             damageComponent.attack(DamageContainer.fall(5));
         }

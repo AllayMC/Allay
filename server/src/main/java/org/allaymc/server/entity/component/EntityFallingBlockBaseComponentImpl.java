@@ -9,9 +9,13 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -27,14 +31,14 @@ import java.util.Objects;
 @Getter
 @Setter
 public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl implements EntityFallingBlockBaseComponent {
+
+    @Dependency
+    protected EntityPhysicsComponent physicsComponent;
+
     protected BlockState blockState;
 
     public EntityFallingBlockBaseComponentImpl(EntityInitInfo info) {
         super(info);
-        // The initial onGround state for falling block is false
-        // And it will be either turned into block or item based
-        // on the block which the falling block fell on
-        this.onGround = false;
     }
 
     @Override
@@ -55,7 +59,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     protected void tickFalling() {
-        if (this.willBeDespawnedNextTick() || onGround) {
+        if (this.willBeDespawnedNextTick() || physicsComponent.isOnGround()) {
             // The falling block entity already became block
             return;
         }
@@ -71,10 +75,8 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         }
     }
 
-    @Override
-    public void onFall(double fallDistance) {
-        super.onFall(fallDistance);
-
+    @EventHandler
+    protected void onFall(CEntityFallEvent event) {
         var dimension = getDimension();
         // It is better to place the block when the Entity is removed, so that it looks visually normal.
         dimension.getEntityService().removeEntity(thisEntity, () -> {
@@ -82,7 +84,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
                 return;
             }
 
-            var damage = fallableComponent.calculateDamage(fallDistance);
+            var damage = fallableComponent.calculateDamage(event.getFallDistance());
             if (damage > 0) {
                 dimension.getEntityService().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
                         .stream()
@@ -91,12 +93,12 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
                         .forEach(entity -> entity.attack(DamageContainer.fallingBlock(damage)));
             }
 
-            if (!getBlockStateStandingOn().getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
+            if (!physicsComponent.getBlockStateStandingOn().getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
                 // Falling on a block which is not full in upper face, for example torch.
                 // In this case, the falling block should be turned into item instead of block
                 dimension.dropItem(blockState.toItemStack(), location);
             } else {
-                fallableComponent.onLanded(location, fallDistance, blockState);
+                fallableComponent.onLanded(location, event.getFallDistance(), blockState);
             }
         });
     }
@@ -120,11 +122,6 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     @Override
     public AABBdc getAABB() {
         return new AABBd(-0.49, 0, -0.49, 0.49, 0.98, 0.49);
-    }
-
-    @Override
-    public double getGravity() {
-        return 0.04;
     }
 
     @Override

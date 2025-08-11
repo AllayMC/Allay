@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.item.ItemStack;
@@ -373,7 +374,7 @@ public interface BlockBaseComponent extends BlockComponent {
             }
 
             // In air
-            if (!entity.isOnGround()) {
+            if (entity instanceof EntityPhysicsComponent physicsComponent && !physicsComponent.isOnGround()) {
                 speed /= 5d;
             }
         }

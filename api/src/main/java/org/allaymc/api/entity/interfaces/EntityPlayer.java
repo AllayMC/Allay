@@ -5,6 +5,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
@@ -27,7 +28,8 @@ public interface EntityPlayer extends
         EntityPlayerAttributeComponent,
         EntityPlayerContainerHolderComponent,
         EntityContainerViewerComponent,
-        EntityDamageComponent {
+        EntityDamageComponent,
+        EntityPhysicsComponent {
 
     /**
      * Returns the reachable container for the given full container type.

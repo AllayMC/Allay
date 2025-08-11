@@ -7,6 +7,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.MathUtils;
@@ -22,6 +23,7 @@ import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;
 import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.impl.ingame.PlayerAuthInputPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
@@ -85,35 +87,39 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         cacheEntityCollisionResult();
         var updatedEntities = new NonBlockingHashMapLong<Entity>();
         entities.values().parallelStream().forEach(entity -> {
-            if (!entity.computeMovementServerSide() ||
+            if (!(entity instanceof EntityPhysicsComponent physicsComponent)) {
+                return;
+            }
+
+            if (!physicsComponent.computeMovementServerSide() ||
                 !entity.isCurrentChunkLoaded() ||
                 entity.getLocation().y() < dimension.getDimensionInfo().minHeight()) {
                 return;
             }
 
             var collidedBlocks = dimension.getCollidingBlockStates(entity.getOffsetAABB());
-            if (collidedBlocks == null || !entity.computeBlockCollisionMotion()) {
+            if (collidedBlocks == null || !physicsComponent.computeBlockCollisionMotion()) {
                 // 1. The entity is not stuck in the block
-                if (entity.computeEntityCollisionMotion()) {
+                if (physicsComponent.computeEntityCollisionMotion()) {
                     computeEntityCollisionMotion(entity);
                 }
                 var hasLiquidMotion = false;
-                if (entity.computeLiquidMotion()) {
+                if (physicsComponent.computeLiquidMotion()) {
                     hasLiquidMotion = computeLiquidMotion(entity);
                 }
                 // We should always check threshold for motion after we modified it
-                entity.setMotion(checkMotionThreshold(new Vector3d(entity.getMotion())));
-                if (entity.applyMotion()) {
+                physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
+                if (physicsComponent.applyMotion()) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
 
                 // Update and set motion again
-                entity.setMotion(checkMotionThreshold(entity.updateMotion(hasLiquidMotion)));
-            } else if (entity.computeBlockCollisionMotion()) {
+                physicsComponent.setMotion(checkMotionThreshold(physicsComponent.updateMotion(hasLiquidMotion)));
+            } else if (physicsComponent.computeBlockCollisionMotion()) {
                 // 2. The entity is stuck in the block
                 // Do not calculate other motion exclude block collision motion
                 computeBlockCollisionMotion(entity, collidedBlocks);
-                entity.setMotion(checkMotionThreshold(new Vector3d(entity.getMotion())));
+                physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
                 if (forceApplyMotion(entity)) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
@@ -203,17 +209,17 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var mx = directionOffset.x();
         var my = directionOffset.y();
         var mz = directionOffset.z();
-        entity.setMotion(mx * BLOCK_COLLISION_MOTION, my * BLOCK_COLLISION_MOTION, mz * BLOCK_COLLISION_MOTION);
+        ((EntityPhysicsComponent) entity).setMotion(mx * BLOCK_COLLISION_MOTION, my * BLOCK_COLLISION_MOTION, mz * BLOCK_COLLISION_MOTION);
     }
 
     protected void computeEntityCollisionMotion(Entity entity) {
         var collidedEntities = getCachedEntityCollidingResult(entity);
-        collidedEntities.removeIf(e -> !e.computeEntityCollisionMotion());
+        collidedEntities.removeIf(e -> e instanceof EntityPhysicsComponent physicsComponent && !physicsComponent.computeEntityCollisionMotion());
 
         var collisionMotion = new Vector3d(0, 0, 0);
 
         var location = entity.getLocation();
-        var pushSpeedReduction = entity.getPushSpeedReduction();
+        var pushSpeedReduction = ((EntityPhysicsComponent) entity).getPushSpeedReduction();
         for (var other : collidedEntities) {
             // https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
             var ol = other.getLocation();
@@ -232,7 +238,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
 
         collisionMotion.setComponent(1, 0);
-        entity.addMotion(collisionMotion);
+        ((EntityPhysicsComponent) entity).addMotion(collisionMotion);
     }
 
     /**
@@ -290,7 +296,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
         }
 
-        entity.addMotion(finalMotion);
+        ((EntityPhysicsComponent) entity).addMotion(finalMotion);
         return true;
     }
 
@@ -303,7 +309,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean forceApplyMotion(Entity entity) {
         var loc = new Location3d(entity.getLocation());
-        loc.add(entity.getMotion());
+        loc.add(((EntityPhysicsComponent) entity).getMotion());
         return entity.trySetLocation(loc);
     }
 
@@ -337,7 +343,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
                 // Calculate delta pos (motion)
                 var motion = event.getTo().sub(player.getLocation(), new Vector3d());
-                baseComponent.setMotionValueOnly(motion);
+                var physicsComponent = ((EntityPlayerPhysicsComponentImpl) ((EntityPlayerImpl) player).getPhysicsComponent());
+                physicsComponent.setMotionValueOnly(motion);
                 if (player.trySetLocation(clientMove.newLoc())) {
                     entityAABBTree.update(player);
                 }
@@ -346,7 +353,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 var aabb = clientMove.player.getOffsetAABB();
                 // Here we should subtract twice FAT_AABB_MARGIN, because the client pos has an extra FAT_AABB_MARGIN in y coordinate
                 aabb.minY -= 2 * FAT_AABB_MARGIN;
-                ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).setOnGround(dimension.getCollidingBlockStates(aabb) != null);
+                physicsComponent.setOnGround(dimension.getCollidingBlockStates(aabb) != null);
             }
         }
     }

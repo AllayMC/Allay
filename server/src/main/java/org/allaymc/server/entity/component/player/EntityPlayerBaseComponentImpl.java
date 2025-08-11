@@ -26,7 +26,6 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
@@ -48,6 +47,7 @@ import org.allaymc.server.client.service.AllayPlayerService;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.event.CPlayerGameTypeChangeEvent;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
@@ -220,15 +220,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         gameType = event.getNewGameType();
         this.gameType = gameType;
-
-        this.fallDistance = 0;
-
+        this.manager.callEvent(new CPlayerGameTypeChangeEvent(gameType));
         this.adventureSettings.applyGameType(gameType);
         this.abilities.applyGameType(gameType);
 
         setAndSendEntityFlag(EntityFlag.SILENT, gameType == GameType.SPECTATOR);
         setAndSendEntityFlag(EntityFlag.HAS_COLLISION, gameType != GameType.SPECTATOR);
-        setHasGravity(gameType != GameType.SPECTATOR);
 
         var packet = new UpdatePlayerGameTypePacket();
         packet.setGameType(gameType);
@@ -428,19 +425,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
-        var loc = new Location3d(newLoc);
-        // base offset seems not being used in move packet
-        // loc.add(0, getBaseOffset(), 0f);
-
+        super.broadcastMoveToViewers(newLoc, teleporting);
         if (!teleporting) {
             manager.callEvent(new CPlayerMoveEvent(newLoc));
         }
-
-        super.broadcastMoveToViewers(loc, teleporting);
     }
 
     @Override
-    public BedrockPacket createSpawnPacket() {
+    public BedrockPacket createSpawnPacket0() {
         var packet = new AddPlayerPacket();
         packet.setRuntimeEntityId(runtimeId);
         packet.setUniqueEntityId(runtimeId);
@@ -448,7 +440,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         packet.setUsername(networkComponent.getOriginName());
         packet.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().deviceId());
         packet.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
-        packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
+        packet.setMotion(Vector3f.ZERO);
         packet.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         packet.setGameType(gameType);
         packet.getMetadata().putAll(metadata.getEntityDataMap());
@@ -514,12 +506,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         packet.setOldSkinName("");
         packet.setTrustedSkin(true);
         return packet;
-    }
-
-    @Override
-    public boolean computeMovementServerSide() {
-        // TODO: fake client
-        return false;
     }
 
     @Override
@@ -1017,21 +1003,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     protected void sendMobEffectPacket(MobEffectPacket packet) {
         super.sendMobEffectPacket(packet);
-        networkComponent.sendPacket(packet);
-    }
-
-    public void setMotionValueOnly(Vector3dc motion) {
-        this.motion = new Vector3d(motion);
-    }
-
-    @Override
-    public void setMotion(Vector3dc motion) {
-        // For player, motion effect is calculated by the client rather than the server
-        // We only need to send SetEntityMotionPacket to client when
-        // we want to apply motion on a player
-        var packet = new SetEntityMotionPacket();
-        packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
-        packet.setRuntimeEntityId(runtimeId);
         networkComponent.sendPacket(packet);
     }
 

@@ -3,11 +3,14 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
@@ -23,6 +26,12 @@ import static org.allaymc.api.item.ItemHelper.fromNBT;
 @Setter
 @Getter
 public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl implements EntityItemBaseComponent {
+
+    @Dependency
+    protected EntityPhysicsComponent physicsComponent;
+    @Dependency
+    protected EntityAgeComponent ageComponent;
+
     protected ItemStack itemStack;
 
     public EntityItemBaseComponentImpl(EntityInitInfo info) {
@@ -39,7 +48,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
 
     @Override
     public void onCollideWithEntity(Entity other) {
-        if (!this.isOnGround() || !other.isOnGround() || this.getAge() % 20 != 0) {
+        if (!physicsComponent.isOnGround() || (other instanceof EntityPhysicsComponent c && !c.isOnGround()) || ageComponent.getAge() % 20 != 0) {
             // Check for merge every second, and only when both entities are on the ground
             return;
         }
@@ -85,13 +94,13 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     }
 
     @Override
-    public BedrockPacket createSpawnPacket() {
+    public BedrockPacket createSpawnPacket0() {
         var packet = new AddItemEntityPacket();
         packet.setRuntimeEntityId(runtimeId);
         packet.setUniqueEntityId(runtimeId);
         packet.setItemInHand(itemStack.toNetworkItemData());
         packet.setPosition(Vector3f.from(location.x, location.y, location.z));
-        packet.setMotion(Vector3f.from(motion.x, motion.y, motion.z));
+        packet.setMotion(Vector3f.ZERO);
         packet.getMetadata().putAll(metadata.getEntityDataMap());
         return packet;
     }

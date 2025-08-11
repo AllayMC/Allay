@@ -3,8 +3,8 @@ package org.allaymc.server.entity.component.projectile;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.joml.Vector3d;
@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author daoge_cmd
  */
-public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseComponentImpl {
+public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsComponentImpl {
 
     protected static final byte[] PARTICLE_COUNTS = new byte[24];
     protected static int PARTICLE_INDEX = 0;
@@ -35,42 +35,40 @@ public class EntitySnowballBaseComponentImpl extends EntityProjectileBaseCompone
         return PARTICLE_COUNTS[index];
     }
 
-    public EntitySnowballBaseComponentImpl(EntityInitInfo info) {
-        super(info);
-    }
-
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedNextTick()) {
             return;
         }
 
         if (other instanceof EntityDamageComponent damageComponent) {
             var damage = DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0);
             damage.setHasKnockback(false);
-            // Use the last location as the knockback source
-            other.knockback(hitPos.sub(this.motion, new Vector3d()));
+            if (other instanceof EntityPhysicsComponent physicsComponent) {
+                // Use the last location as the knockback source
+                physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()));
+            }
             damageComponent.attack(damage);
         }
 
-        this.despawn();
+        thisEntity.despawn();
         this.addHitEffect();
     }
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedNextTick()) {
             return;
         }
 
-        this.despawn();
+        thisEntity.despawn();
         this.addHitEffect();
     }
 
     protected void addHitEffect() {
         var particleCount = nextParticleCount();
         for (var i = 0; i < particleCount; i++) {
-            this.location.dimension().addParticle(this.location, ParticleType.SNOWBALL_POOF);
+            thisEntity.getLocation().dimension().addParticle(thisEntity.getLocation(), ParticleType.SNOWBALL_POOF);
         }
     }
 }

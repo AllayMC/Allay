@@ -7,9 +7,7 @@ import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
-import org.allaymc.server.entity.component.projectile.EntityEnderPearlBaseComponentImpl;
-import org.allaymc.server.entity.component.projectile.EntitySnowballBaseComponentImpl;
-import org.allaymc.server.entity.component.projectile.EntitySplashPotionBaseComponentImpl;
+import org.allaymc.server.entity.component.projectile.*;
 import org.allaymc.server.entity.impl.*;
 
 import static org.allaymc.api.entity.component.attribute.EntityAttributeComponent.basicEntityAttributes;
@@ -25,6 +23,25 @@ public final class EntityTypeInitializer {
                 .builder(EntityFallingBlockImpl.class)
                 .vanillaEntity(EntityId.FALLING_BLOCK)
                 .addComponent(EntityFallingBlockBaseComponentImpl::new, EntityFallingBlockBaseComponentImpl.class)
+                .addComponent(() -> new EntityPhysicsComponentImpl() {
+                    {
+                        // The initial onGround state for falling block is false
+                        // And it will be either turned into block or item based
+                        // on the block which the falling block fell on
+                        this.onGround = false;
+                    }
+
+                    @Override
+                    public double getGravity() {
+                        return 0.04;
+                    }
+
+                    @Override
+                    public double getStepHeight() {
+                        // Entity tnt can't step
+                        return 0.0;
+                    }
+                }, EntityPhysicsComponentImpl.class)
                 .build();
     }
 
@@ -51,6 +68,13 @@ public final class EntityTypeInitializer {
                         ),
                         EntityAttributeComponentImpl.class
                 )
+                .addComponent(() -> new EntityPhysicsComponentImpl() {
+                    @Override
+                    public double getGravity() {
+                        return 0.04;
+                    }
+                }, EntityPhysicsComponentImpl.class)
+                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
                 .build();
     }
 
@@ -65,6 +89,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
                 .addComponent(EntityPlayerDamageComponentImpl::new, EntityPlayerDamageComponentImpl.class)
                 .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
+                .addComponent(EntityPlayerPhysicsComponentImpl::new, EntityPlayerPhysicsComponentImpl.class)
                 .build();
     }
 
@@ -75,6 +100,7 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
                 .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
+                .addComponent(EntityPhysicsComponentImpl::new, EntityPhysicsComponentImpl.class)
                 .build();
     }
 
@@ -90,6 +116,13 @@ public final class EntityTypeInitializer {
                         ),
                         EntityAttributeComponentImpl.class
                 )
+                .addComponent(() -> new EntityPhysicsComponentImpl() {
+                    @Override
+                    public double getGravity() {
+                        return 0.04;
+                    }
+                }, EntityPhysicsComponentImpl.class)
+                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
                 .build();
     }
 
@@ -98,6 +131,23 @@ public final class EntityTypeInitializer {
                 .builder(EntityTntImpl.class)
                 .vanillaEntity(EntityId.TNT)
                 .addComponent(EntityTntBaseComponentImpl::new, EntityTntBaseComponentImpl.class)
+                .addComponent(() -> new EntityPhysicsComponentImpl() {
+                    @Override
+                    public double getGravity() {
+                        return 0.04;
+                    }
+
+                    @Override
+                    public double getStepHeight() {
+                        // Entity tnt can't step
+                        return 0.0;
+                    }
+
+                    @Override
+                    public boolean computeEntityCollisionMotion() {
+                        return false;
+                    }
+                }, EntityPhysicsComponentImpl.class)
                 .build();
     }
 
@@ -105,17 +155,23 @@ public final class EntityTypeInitializer {
         EntityTypes.SNOWBALL = AllayEntityType
                 .builder(EntitySnowballImpl.class)
                 .vanillaEntity(EntityId.SNOWBALL)
-                .addComponent(EntitySnowballBaseComponentImpl::new, EntitySnowballBaseComponentImpl.class)
+                .addComponent(EntitySnowballPhysicsComponentImpl::new, EntitySnowballPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
                 .build();
         EntityTypes.SPLASH_POTION = AllayEntityType
                 .builder(EntitySplashPotionImpl.class)
                 .vanillaEntity(EntityId.SPLASH_POTION)
-                .addComponent(EntitySplashPotionBaseComponentImpl::new, EntitySplashPotionBaseComponentImpl.class)
+                .addComponent(EntitySplashPotionPhysicsComponentImpl::new, EntitySplashPotionPhysicsComponentImpl.class)
+                .addComponent(EntitySplashPotionProjectileComponentImpl::new, EntitySplashPotionProjectileComponentImpl.class)
+                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
                 .build();
         EntityTypes.ENDER_PEARL = AllayEntityType
                 .builder(EntityEnderPearlImpl.class)
                 .vanillaEntity(EntityId.ENDER_PEARL)
-                .addComponent(EntityEnderPearlBaseComponentImpl::new, EntityEnderPearlBaseComponentImpl.class)
+                .addComponent(EntityEnderPearlPhysicsComponentImpl::new, EntityEnderPearlPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
                 .build();
     }
 }

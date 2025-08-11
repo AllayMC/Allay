@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
@@ -102,7 +103,9 @@ public class DamageContainer {
      */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
         var damageContainer = new DamageContainer(attacker, ENTITY_ATTACK, sourceDamage);
-        damageContainer.setCritical(attacker.canCriticalAttack());
+        if (attacker instanceof EntityPhysicsComponent physicsComponent) {
+            damageContainer.setCritical(physicsComponent.canCriticalAttack());
+        }
         return damageContainer;
     }
 

@@ -7,6 +7,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -35,13 +36,14 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_damage_component");
 
+    @Manager
+    protected ComponentManager manager;
     @Dependency
     protected EntityBaseComponent baseComponent;
     @Dependency
     protected EntityAttributeComponent attributeComponent;
-    @Manager
-    protected ComponentManager manager;
-
+    @Dependency(optional = true)
+    protected EntityPhysicsComponent physicsComponent;
     @ComponentObject
     protected Entity thisEntity;
 
@@ -86,19 +88,21 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             return;
         }
 
-        var kb = EntityBaseComponent.DEFAULT_KNOCKBACK;
-        var kby = EntityBaseComponent.DEFAULT_KNOCKBACK;
-        var additionalMotion = new Vector3d();
-        if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(FullContainerType.PLAYER_INVENTORY)) {
-            var kbEnchantmentLevel = component.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
-            if (kbEnchantmentLevel != 0) {
-                kb /= 2.0;
-                additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
-                additionalMotion.mul(kbEnchantmentLevel * 0.5);
+        if (physicsComponent != null) {
+            var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
+            var kby = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
+            var additionalMotion = new Vector3d();
+            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(FullContainerType.PLAYER_INVENTORY)) {
+                var kbEnchantmentLevel = component.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+                if (kbEnchantmentLevel != 0) {
+                    kb /= 2.0;
+                    additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
+                    additionalMotion.mul(kbEnchantmentLevel * 0.5);
+                }
             }
-        }
 
-        baseComponent.knockback(entity.getLocation(), kb, kby, additionalMotion);
+            physicsComponent.knockback(entity.getLocation(), kb, kby, additionalMotion);
+        }
     }
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {
@@ -182,7 +186,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean hasFallDamage() {
-        return baseComponent.hasGravity() ||
+        return (physicsComponent != null && physicsComponent.hasGravity()) ||
                (!baseComponent.hasEffect(EffectTypes.LEVITATION) && !baseComponent.hasEffect(EffectTypes.SLOW_FALLING)) ||
                baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FALL_DAMAGE);
     }
@@ -252,7 +256,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             return;
         }
 
-        var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
+        // physics component won't be null here, because CEntityFallEvent is called in physics component
+        var blockStateStandingOn = physicsComponent.getBlockStateStandingOn();
         double rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
         if (damage > 0) {

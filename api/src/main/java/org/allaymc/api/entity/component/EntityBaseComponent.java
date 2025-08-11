@@ -3,7 +3,6 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.tag.BlockTags;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityStatus;
@@ -21,8 +20,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -39,7 +36,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.RoundingMode;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
@@ -53,9 +49,6 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder {
-
-    double DEFAULT_PUSH_SPEED_REDUCTION = 1;
-    double DEFAULT_KNOCKBACK = 0.4;
 
     /**
      * Gets the type of this entity.
@@ -342,40 +335,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if the entity has entity collision motion.
-     *
-     * @return {@code true} if the entity has entity collision motion.
-     */
-    default boolean computeEntityCollisionMotion() {
-        return hasEntityCollision();
-    }
-
-    /**
-     * Check if the entity has block collision motion.
-     * <p>
-     * If return {@code true}, the physics engine will calculate a specific motion for the entity when
-     * it is sticking in blocks to move the entity out of the blocks. When performing the above calculations,
-     * the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods will not be called.
-     * <p>
-     * If return {@code false}, the entity's {@link #applyMotion()} and {@link #updateMotion(boolean)} methods
-     * will always being called even if the entity is sticking in blocks.
-     *
-     * @return {@code true} if the entity has block collision motion.
-     */
-    default boolean computeBlockCollisionMotion() {
-        return true;
-    }
-
-    /**
-     * Check if the entity has liquid motion.
-     *
-     * @return {@code true} if the entity has liquid motion.
-     */
-    default boolean computeLiquidMotion() {
-        return true;
-    }
-
-    /**
      * Called when the entity collides with another entity.
      *
      * @param other the entity collides with.
@@ -421,64 +380,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     Map<Long, EntityPlayer> getViewers();
 
     /**
-     * Get the motion of this entity.
-     *
-     * @return the motion of this entity.
-     */
-    Vector3dc getMotion();
-
-    /**
-     * Set the motion of this entity.
-     *
-     * @param motion the motion to set.
-     */
-    void setMotion(Vector3dc motion);
-
-    /**
-     * Set the motion of this entity.
-     *
-     * @param mx the motion x to set.
-     * @param my the motion y to set.
-     * @param mz the motion z to set.
-     */
-    default void setMotion(double mx, double my, double mz) {
-        setMotion(new Vector3d(mx, my, mz));
-    }
-
-    /**
-     * Add the motion to this entity.
-     *
-     * @param add the motion to add.
-     */
-    default void addMotion(Vector3dc add) {
-        setMotion(getMotion().add(add, new Vector3d()));
-    }
-
-    /**
-     * Add the motion to this entity.
-     *
-     * @param mx the motion x to add.
-     * @param my the motion y to add.
-     * @param mz the motion z to add.
-     */
-    default void addMotion(double mx, double my, double mz) {
-        setMotion(getMotion().add(mx, my, mz, new Vector3d()));
-    }
-
-    /**
-     * Update the entity's motion. This method is used by physics engine, and allow
-     * entity to customize how its motion being updated.
-     * <p>
-     * This method should be safe to be called in multithread environment since physics
-     * engine may use parallel stream to handle all the entities.
-     *
-     * @param hasLiquidMotion whether this entity's motion is affected by liquid.
-     * @return the updated motion.
-     */
-    @ApiStatus.OverrideOnly
-    Vector3d updateMotion(boolean hasLiquidMotion);
-
-    /**
      * Try to set this entity's location. This method is intended to be called by physics engine,
      * and user is not expected to call it.
      * <p>
@@ -490,31 +391,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     @ApiStatus.OverrideOnly
     boolean trySetLocation(Location3dc newLocation);
-
-    /**
-     * Apply the entity's motion. Similar to {@link #updateMotion(boolean)}, this method
-     * is used by physics engine, and allow entity to customize how its motion being applied.
-     * <p>
-     * This method is also required to be safe called in multithread environment.
-     *
-     * @return {@code true} if the entity's position is updated, {@code false} otherwise.
-     */
-    @ApiStatus.OverrideOnly
-    boolean applyMotion();
-
-    /**
-     * Get the last motion of this entity.
-     *
-     * @return the last motion of this entity.
-     */
-    Vector3dc getLastMotion();
-
-    /**
-     * Check if the entity is on the ground.
-     *
-     * @return {@code true} if the entity is on the ground, otherwise {@code false}.
-     */
-    boolean isOnGround();
 
     /**
      * Spawn the entity to the specified player.
@@ -602,19 +478,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void loadNBT(NbtMap nbt);
 
     /**
-     * Get the fall distance of this entity.
-     *
-     * @return the fall distance of this entity.
-     */
-    double getFallDistance();
-
-    /**
-     * Called when the entity falls.
-     */
-    @ApiStatus.OverrideOnly
-    void onFall(double fallDistance);
-
-    /**
      * Called when the entity is splashed by a splash water bottle.
      */
     @ApiStatus.OverrideOnly
@@ -687,91 +550,12 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check whether the entity's movement should be computed server-side.
-     *
-     * @return {@code true} if the entity's movement should be computed server-side, otherwise {@code false}.
-     */
-    default boolean computeMovementServerSide() {
-        return true;
-    }
-
-    /**
-     * Get the step height of this entity.
-     *
-     * @return the step height of this entity.
-     */
-    default double getStepHeight() {
-        return 0.6;
-    }
-
-    /**
-     * Get the gravity of this entity.
-     *
-     * @return the gravity of this entity.
-     */
-    default double getGravity() {
-        return 0.08;
-    }
-
-    /**
-     * Get the drag factor when on ground of this entity.
-     * <p>
-     * This value represents the percentage of velocity lost by the entity per tick on the
-     * x and z axis. The bigger this value, the faster the entity stops.
-     *
-     * @return the drag factor when on ground of this entity.
-     */
-    default double getDragFactorOnGround() {
-        return 0.09;
-    }
-
-    /**
-     * Get the drag factor when in air of this entity.
-     * <p>
-     * This value is similar to {@link #getDragFactorOnGround}, however this value
-     * will be used to reduce motion along x-axis and z-axis when the entity is not on ground.
-     * This value will always be used for motion along y-axis.
-     *
-     * @return the drag factor when in air of this entity.
-     */
-    default double getDragFactorInAir() {
-        return 0.02;
-    }
-
-    /**
-     * Check if the entity has gravity.
-     *
-     * @return {@code true} if the entity has gravity, otherwise {@code false}.
-     */
-    default boolean hasGravity() {
-        return getMetadata().get(EntityFlag.HAS_GRAVITY);
-    }
-
-    /**
-     * Set if the entity has gravity.
-     *
-     * @param hasGravity {@code true} if the entity has gravity, otherwise {@code false}.
-     */
-    default void setHasGravity(boolean hasGravity) {
-        setAndSendEntityFlag(EntityFlag.HAS_GRAVITY, hasGravity);
-    }
-
-    /**
      * Get the eye height of this entity.
      *
      * @return the eye height of this entity.
      */
     default double getEyeHeight() {
         return (getAABB().maxY() - getAABB().minY()) * 0.9;
-    }
-
-    /**
-     * Get the push speed reduction of this entity.
-     *
-     * @return the push speed reduction of this entity.
-     */
-    default double getPushSpeedReduction() {
-        return DEFAULT_PUSH_SPEED_REDUCTION;
     }
 
     /**
@@ -838,45 +622,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
-     */
-    default void knockback(Vector3dc source) {
-        knockback(source, DEFAULT_KNOCKBACK);
-    }
-
-    /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
-     */
-    default void knockback(Vector3dc source, double kb) {
-        knockback(source, kb, kb);
-    }
-
-    /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
-     */
-    default void knockback(Vector3dc source, double kb, double kby) {
-        knockback(source, kb, kby, new Vector3d());
-    }
-
-    /**
-     * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
-     */
-    default void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion) {
-        knockback(source, kb, kby, additionalMotion, false);
-    }
-
-    /**
-     * Knockback the entity with specified kb value.
-     *
-     * @param source                    the source of the knockback.
-     * @param kb                        the knockback strength to apply.
-     * @param kby                       the knockback strength in y-axis.
-     * @param additionalMotion          the additional motion that will be appiled to the entity.
-     * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored.
-     */
-    void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance);
-
-    /**
      * Apply the entity event to the entity.
      *
      * @param event the entity event to apply.
@@ -911,15 +656,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         pk.setAction(action);
         pk.setRowingTime((float) rowingTime);
         sendPacketToViewers(pk);
-    }
-
-    /**
-     * Check if the entity can critical attack.
-     *
-     * @return {@code true} if the entity can critical attack, otherwise {@code false}.
-     */
-    default boolean canCriticalAttack() {
-        return !isOnGround() && getMotion().y() < 0 && !hasEffect(EffectTypes.BLINDNESS) && !hasEffect(EffectTypes.SLOW_FALLING);
     }
 
     /**
@@ -1010,56 +746,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
         return false;
-    }
-
-    /**
-     * Get the block which the entity is standing on.
-     *
-     * @return the block which the entity is standing on, or air if the entity is not standing on any block (and the pos will be {@code null}).
-     */
-    default Block getBlockStateStandingOn() {
-        var loc = getLocation();
-        var air = BlockTypes.AIR.getDefaultState();
-        if (!isOnGround()) {
-            return new Block(air, new Position3i(loc, RoundingMode.FLOOR, getDimension()));
-        }
-
-        var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
-        if (currentBlockState != air) {
-            return new Block(
-                    currentBlockState,
-                    new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y()), (int) Math.floor(loc.z()), getDimension())
-            );
-        } else {
-            return new Block(
-                    getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z()),
-                    new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y() - 1), (int) Math.floor(loc.z()), getDimension())
-            );
-        }
-    }
-
-    /**
-     * @see #canStandSafely(int, int, int, Dimension)
-     */
-    default boolean canStandSafely(Position3ic pos) {
-        return canStandSafely(pos.x(), pos.y(), pos.z(), getDimension());
-    }
-
-    /**
-     * Check if the specified position is a safe standing position.
-     *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
-     * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
-     */
-    default boolean canStandSafely(int x, int y, int z, Dimension dimension) {
-        var blockUnder = dimension.getBlockState(x, y - 1, z);
-        if (!blockUnder.getBlockStateData().isSolid()) {
-            return false;
-        }
-        var aabb = getAABB().translate(x + 0.5, y + 0.5, z + 0.5, new AABBd());
-        return dimension.getCollidingBlockStates(aabb) == null;
     }
 
     /**

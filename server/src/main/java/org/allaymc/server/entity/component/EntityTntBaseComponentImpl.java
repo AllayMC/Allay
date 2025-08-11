@@ -83,11 +83,6 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     }
 
     @Override
-    public double getGravity() {
-        return 0.04;
-    }
-
-    @Override
     public float getNetworkOffset() {
         return 0.49f;
     }
@@ -95,16 +90,5 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     @Override
     public AABBdc getAABB() {
         return new AABBd(-0.49, 0.0, -0.49, 0.49, 0.98, 0.49);
-    }
-
-    @Override
-    public double getStepHeight() {
-        // Entity tnt can't step
-        return 0.0;
-    }
-
-    @Override
-    public boolean computeEntityCollisionMotion() {
-        return false;
     }
 }

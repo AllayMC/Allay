@@ -14,10 +14,10 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 @Getter
 public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl implements EntityPickableBaseComponent {
 
-    protected static final int MAX_AGE = 6000;
     protected static final int DEFAULT_PICKUP_DELAY = 10;
 
-    protected int age;
+    protected static final String TAG_PICKUP_DELAY = "PickupDelay";
+
     protected int pickupDelay = DEFAULT_PICKUP_DELAY;
 
     public EntityPickableBaseComponentImpl(EntityInitInfo info) {
@@ -33,16 +33,9 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     @Override
     public void tick(long currentTick) {
         super.tick(currentTick);
-
-        if (age != -1) {
-            age++;
-            if (age >= MAX_AGE) {
-                despawn();
-                return;
-            }
+        if (pickupDelay > 0) {
+            pickupDelay--;
         }
-
-        if (pickupDelay > 0) pickupDelay--;
     }
 
     @Override
@@ -53,23 +46,13 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-
-        nbt.listenForShort("Age", age -> this.age = age);
-        nbt.listenForInt("PickupDelay", pickupDelay -> this.pickupDelay = pickupDelay);
+        nbt.listenForInt(TAG_PICKUP_DELAY, pickupDelay -> this.pickupDelay = pickupDelay);
     }
 
     @Override
     public NbtMap saveNBT() {
         var builder = super.saveNBT().toBuilder();
-
-        builder.putShort("Age", (short) age);
-        builder.putInt("PickupDelay", pickupDelay);
-
+        builder.putInt(TAG_PICKUP_DELAY, pickupDelay);
         return builder.build();
-    }
-
-    @Override
-    public double getGravity() {
-        return 0.04;
     }
 }

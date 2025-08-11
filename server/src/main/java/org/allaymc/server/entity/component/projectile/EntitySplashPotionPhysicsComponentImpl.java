@@ -5,11 +5,11 @@ import lombok.Setter;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntitySplashPotionBaseComponent;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.component.EntitySplashPotionProjectileComponent;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
@@ -21,13 +21,10 @@ import org.joml.Vector3i;
  */
 @Getter
 @Setter
-public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseComponentImpl implements EntitySplashPotionBaseComponent {
+public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhysicsComponentImpl {
 
-    protected PotionType potionType;
-
-    public EntitySplashPotionBaseComponentImpl(EntityInitInfo info) {
-        super(info);
-    }
+    @Dependency
+    protected EntitySplashPotionProjectileComponent splashPotionProjectileComponent;
 
     @Override
     public double getGravity() {
@@ -36,38 +33,40 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
 
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedNextTick()) {
             return;
         }
 
-        this.despawn();
+        thisEntity.despawn();
         this.splash(null, other, 1);
     }
 
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (this.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedNextTick()) {
             return;
         }
 
-        this.despawn();
+        thisEntity.despawn();
         this.splash(block, null, 1);
     }
 
     protected void splash(Block blockBeingHit, Entity entityBeingHit, float durationMultiplier) {
-        this.location.dimension().addLevelSoundEvent(this.location, SoundEvent.GLASS);
+        var dimension = thisEntity.getDimension();
+        dimension.addLevelSoundEvent(thisEntity.getLocation(), SoundEvent.GLASS);
+        var potionType = splashPotionProjectileComponent.getPotionType();
         if (potionType == null) {
             return;
         }
 
-        getDimension().addLevelEvent(this.location, LevelEvent.PARTICLE_POTION_SPLASH, potionType.getColor().getRGB());
+        dimension.addLevelEvent(thisEntity.getLocation(), LevelEvent.PARTICLE_POTION_SPLASH, potionType.getColor().getRGB());
         var effects = potionType.getEffects();
-        var aabb = MathUtils.grow(getOffsetAABB(), new Vector3d(4.125, 2.125, 4.125));
+        var aabb = MathUtils.grow(thisEntity.getOffsetAABB(), new Vector3d(4.125, 2.125, 4.125));
         if (!effects.isEmpty()) {
-            var entities = getDimension().getEntityService().getPhysicsService().computeCollidingEntities(aabb);
+            var entities = dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb);
             for (var entity : entities) {
                 var pos = entity.getLocation();
-                var distance = pos.distance(this.location);
+                var distance = pos.distance(thisEntity.getLocation());
                 if (distance > 4) {
                     continue;
                 }
@@ -87,15 +86,15 @@ public class EntitySplashPotionBaseComponentImpl extends EntityProjectileBaseCom
 
             // Splash the block at current pos
             var blockPos = new Vector3i();
-            blockPos.set(this.location.floor());
-            var block = getDimension().getBlockState(blockPos);
-            block.getBehavior().onSplash(new Block(block, new Position3i(blockPos, getDimension())));
+            blockPos.set(thisEntity.getLocation().floor(new Vector3d()));
+            var block = dimension.getBlockState(blockPos);
+            block.getBehavior().onSplash(new Block(block, new Position3i(blockPos, dimension)));
 
             // Splash horizontal neighbor blocks
             for (var face : BlockFace.getHorizontalBlockFaces()) {
                 var offsetPos = face.offsetPos(blockPos);
-                block = getDimension().getBlockState(offsetPos);
-                block.getBehavior().onSplash(new Block(block, new Position3i(offsetPos, getDimension())));
+                block = dimension.getBlockState(offsetPos);
+                block.getBehavior().onSplash(new Block(block, new Position3i(offsetPos, dimension)));
             }
 
             // Splash entities

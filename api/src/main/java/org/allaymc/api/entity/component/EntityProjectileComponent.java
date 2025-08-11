@@ -5,7 +5,7 @@ import org.allaymc.api.entity.Entity;
 /**
  * @author daoge_cmd
  */
-public interface EntityProjectileBaseComponent extends EntityBaseComponent {
+public interface EntityProjectileComponent extends EntityComponent {
     /**
      * Gets the entity that shots the projectile.
      *

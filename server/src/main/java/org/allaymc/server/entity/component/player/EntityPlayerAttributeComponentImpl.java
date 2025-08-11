@@ -230,6 +230,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @EventHandler
     protected void onMove(CPlayerMoveEvent event) {
+        // TODO: check if distance is always zero
         var distance = (float) thisPlayer.getLocation().distance(event.getNewLoc());
 
         if (thisPlayer.isSwimming()) {

@@ -5,6 +5,7 @@ import lombok.experimental.Delegate;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
@@ -28,6 +29,9 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     protected EntityContainerViewerComponent viewerComponent;
     @Delegate
     protected EntityDamageComponent damageComponent;
+    @Getter
+    @Delegate
+    protected EntityPhysicsComponent physicsComponent;
 
     public EntityPlayerImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {

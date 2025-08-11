@@ -1,0 +1,563 @@
+package org.allaymc.server.entity.component;
+
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
+import lombok.Getter;
+import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.component.interfaces.ComponentManager;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.attribute.AttributeType;
+import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
+import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
+import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.world.Dimension;
+import org.allaymc.server.component.annotation.ComponentObject;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.entity.component.event.*;
+import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.Range;
+import org.joml.RoundingMode;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.floor;
+import static org.allaymc.api.block.component.data.BlockStateData.DEFAULT_FRICTION;
+import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
+import static org.allaymc.server.world.service.AllayEntityPhysicsService.FAT_AABB_MARGIN;
+
+/**
+ * @author daoge_cmd
+ */
+public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
+
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_physics_component");
+
+    protected static final String TAG_MOTION = "Motion";
+    protected static final String TAG_ON_GROUND = "OnGround";
+
+    // Constants used in physics calculation
+    protected static final DoubleBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new DoubleBooleanImmutablePair(0, false);
+    protected static final double STEPPING_OFFSET = 0.05;
+    protected static final int X = 0;
+    protected static final int Y = 1;
+    protected static final int Z = 2;
+
+    @ComponentObject
+    protected Entity thisEntity;
+    @Dependency(optional = true)
+    protected EntityAttributeComponent attributeComponent;
+    @Manager
+    protected ComponentManager manager;
+
+    @Getter
+    protected Vector3d motion = new Vector3d();
+    @Getter
+    protected Vector3d lastMotion = new Vector3d();
+    @Getter
+    protected boolean onGround = true;
+    @Getter
+    protected double fallDistance;
+
+    @EventHandler
+    protected void onLoadNBT(CEntityLoadNBTEvent event) {
+        var nbt = event.getNbt();
+
+        if (nbt.containsKey(TAG_MOTION)) {
+            var motion = readVector3f(nbt, TAG_MOTION);
+            this.motion.set(motion);
+        }
+
+        nbt.listenForBoolean(TAG_ON_GROUND, onGround -> this.onGround = onGround);
+    }
+
+    @EventHandler
+    protected void onSaveNBT(CEntitySaveNBTEvent event) {
+        var builder = event.getNbt();
+        builder.putBoolean(TAG_ON_GROUND, onGround);
+        AllayNbtUtils.writeVector3f(builder, TAG_MOTION, (float) motion.x, (float) motion.y, (float) motion.z);
+    }
+
+    @EventHandler
+    protected void onBeforeTeleport(CEntityBeforeTeleportEvent event) {
+        this.fallDistance = 0;
+        this.setMotion(0, 0, 0);
+    }
+
+    @EventHandler
+    protected void onSetLocation(CEntitySetLocationEvent event) {
+        if (event.isCalculateFallDistance() && !this.onGround) {
+            if (this.fallDistance < 0) {
+                // Entity start falling
+                this.fallDistance = 0;
+            }
+            var location = thisEntity.getLocation();
+            var newLocation = event.getLocation();
+            // fall distance < 0 -> move up
+            // fall distance > 0 -> move down
+            this.fallDistance -= newLocation.y() - location.y();
+            tryResetFallDistance(newLocation);
+        }
+    }
+
+    @EventHandler
+    protected void onCreateMovePacket(CEntityCreateMovePacketEvent event) {
+        event.getPackets().add(createMotionPacket());
+        if (onGround) {
+            for (var packet : event.getPackets()) {
+                switch (packet) {
+                    case MoveEntityDeltaPacket deltaPacket ->
+                            deltaPacket.getFlags().add(MoveEntityDeltaPacket.Flag.ON_GROUND);
+                    case MoveEntityAbsolutePacket absolutePacket -> absolutePacket.setOnGround(true);
+                    case null, default -> {/* no-op */}
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    protected void onCreateSpawnPacket(CEntityCreateSpawnPacketEvent event) {
+        var vec = Vector3f.from(motion.x(), motion.y(), motion.z());
+        switch (event.getPacket()) {
+            case AddEntityPacket addEntityPacket -> addEntityPacket.setMotion(vec);
+            case AddPlayerPacket addPlayerPacket -> addPlayerPacket.setMotion(vec);
+            case AddItemEntityPacket addItemEntityPacket -> addItemEntityPacket.setMotion(vec);
+            case null, default -> {/* no-op */}
+        }
+    }
+
+    protected BedrockPacket createMotionPacket() {
+        var pk = new SetEntityMotionPacket();
+        pk.setRuntimeEntityId(thisEntity.getRuntimeId());
+        pk.setMotion(Vector3f.from(motion.x, motion.y, motion.z));
+        return pk;
+    }
+
+    protected void tryResetFallDistance(Location3dc location) {
+        var blockState0 = location.dimension().getBlockState(location);
+        var blockState1 = location.dimension().getBlockState(location, 1);
+        var newEntityAABB = thisEntity.getAABB().translate(location, new AABBd());
+
+        if (!blockState0.getBlockStateData().hasCollision() &&
+            blockState1.getBehavior().canResetFallDamage() &&
+            blockState1.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
+            this.fallDistance = 0;
+            return;
+        }
+
+        if (blockState0.getBehavior().canResetFallDamage() &&
+            blockState0.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
+            this.fallDistance = 0;
+        }
+    }
+
+    @Override
+    public boolean applyMotion() {
+        var location = thisEntity.getLocation();
+        if (motion.lengthSquared() == 0) {
+            return false;
+        }
+
+        var pos = new Location3d(location);
+        var mx = motion.x();
+        var my = motion.y();
+        var mz = motion.z();
+        var aabb = thisEntity.getOffsetAABB();
+
+        // First move along the Y axis
+        var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Y);
+        my = yResult.left();
+        var isOnGround = yResult.right();
+
+        if (abs(mx) >= abs(mz)) {
+            // First handle the X axis, then handle the Z axis
+            mx = applyMotion0(this.getStepHeight(), pos, mx, aabb, isOnGround, X);
+            mz = applyMotion0(this.getStepHeight(), pos, mz, aabb, isOnGround, Z);
+        } else {
+            mz = applyMotion0(this.getStepHeight(), pos, mz, aabb, isOnGround, Z);
+            mx = applyMotion0(this.getStepHeight(), pos, mx, aabb, isOnGround, X);
+        }
+
+        this.setMotion(new Vector3d(mx, my, mz));
+        if (!pos.equals(location) && thisEntity.trySetLocation(pos)) {
+            // Update onGround status after updated entity location
+            // to make sure that some block (for example: water) can reset
+            // entity's fallDistance before onFall() called
+            this.setOnGround(isOnGround);
+            return true;
+        }
+        return false;
+    }
+
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
+        if (onGround) {
+            this.onFall(this.fallDistance);
+        }
+    }
+
+    /**
+     * Applies motion to the object's position along the specified axis, considering potential collisions and intersections with other objects.
+     *
+     * @param stepHeight     The step height the object can overcome.
+     * @param pos            The current position of the object.
+     * @param motion         The component of the object's movement velocity along the specified axis (X or Z).
+     * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object.
+     * @param enableStepping Flag indicating whether the object can step over obstacles.
+     * @param axis           The axis along which the motion is applied (X or Z).
+     * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections.
+     */
+    private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, int axis) {
+        if (motion == 0) return motion;
+        checkAxis(axis);
+
+        var resultAABB = new AABBd(aabb);
+        var resultPos = new Vector3d(pos);
+
+        // The first time directly moves
+        var result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
+        if (Boolean.TRUE.equals(result.right())) {
+            // There is a collision, try to step over
+            // Calculate the remaining speed
+            motion -= resultPos.get(axis) - pos.get(axis);
+            if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, motion > 0, axis == X)) {
+                result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
+            }
+        }
+
+        motion = result.left();
+
+        aabb.set(resultAABB);
+        pos.set(resultPos);
+        return motion;
+    }
+
+    /**
+     * Moves an axis-aligned bounding box (AABB) along a specified axis direction and stops when a collision occurs.
+     *
+     * @param aabb     The axis-aligned bounding box to move.
+     * @param motion   The distance to move along the specified axis.
+     * @param recorder The vector to record the movement along the axis.
+     * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis.
+     * @return A pair containing the remaining movement distance along the axis after collision detection (Double)
+     * and a boolean indicating whether a collision occurred (Boolean) or whether the entity will be on ground (if axis == Y).
+     * If no movement was specified (motion = 0), an empty pair is returned.
+     * @throws IllegalArgumentException if an invalid axis is provided.
+     */
+    private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, @Range(from = X, to = Z) int axis) {
+        if (motion == 0) {
+            return EMPTY_FLOAT_BOOLEAN_PAIR;
+        }
+        checkAxis(axis);
+
+        // `extAABBInAxis` is the extended aabb in the axis which is used to check for block collision,
+        // and the direction of the axis is determined by the sign of `motion`
+        var extAABBInAxis = new AABBd(aabb);
+
+        // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
+        var shouldTowardsNegative = motion < 0;
+        switch (axis) {
+            case X -> {
+                var lengthX = extAABBInAxis.lengthX();
+                extAABBInAxis.minX += shouldTowardsNegative ? motion : lengthX;
+                extAABBInAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
+            }
+            case Y -> {
+                var lengthY = extAABBInAxis.lengthY();
+                extAABBInAxis.minY += shouldTowardsNegative ? motion : lengthY;
+                extAABBInAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
+            }
+            case Z -> {
+                var lengthZ = extAABBInAxis.lengthZ();
+                extAABBInAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
+                extAABBInAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
+            }
+            default -> throw new IllegalArgumentException("Invalid axis provided");
+        }
+
+        // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
+        if (notValidEntityArea(extAABBInAxis)) {
+            return EMPTY_FLOAT_BOOLEAN_PAIR;
+        }
+
+        // `deltaInAxis` is the actual movement distance along the axis direction, and if there is no collision, this distance is equal to `motion`
+        var deltaInAxis = motion;
+        var collision = false;
+
+        var blocks = thisEntity.getDimension().getCollidingBlockStates(extAABBInAxis);
+        if (blocks != null) {
+            // There is a collision if `blocks` is not null
+            if (axis == Y) {
+                // When the axis is Y, `collision` indicates whether the entity will be on the ground
+                collision = shouldTowardsNegative;
+            } else {
+                collision = true;
+            }
+
+            var extAABBStartCoordinate = shouldTowardsNegative ? extAABBInAxis.getMax(axis) : extAABBInAxis.getMin(axis);
+            var collisionCoordinate = computeCollisionCoordinate(aabb, extAABBInAxis, blocks, axis, shouldTowardsNegative);
+            // abs(collisionCoordinate) != Double.MAX_VALUE means that the entity is stuck into the blocks. Collision
+            // coordinate cannot being calculated because blocks that are intersected with the entity will be ignored
+            if (abs(collisionCoordinate) != Double.MAX_VALUE) {
+                deltaInAxis = abs(extAABBStartCoordinate - collisionCoordinate);
+            }
+
+            // Make a certain distance (FAT_AABB_MARGIN) between the entity and the blocks
+            if (deltaInAxis < FAT_AABB_MARGIN) {
+                deltaInAxis = 0;
+            } else {
+                deltaInAxis -= FAT_AABB_MARGIN;
+            }
+
+            // The actual movement distance should be negative if the entity moves towards the negative axis direction
+            if (shouldTowardsNegative) {
+                deltaInAxis = -deltaInAxis;
+            }
+
+            motion = 0;
+        }
+
+        if (deltaInAxis != 0) {
+            // Move the collision box
+            switch (axis) {
+                case X -> aabb.translate(deltaInAxis, 0, 0);
+                case Y -> aabb.translate(0, deltaInAxis, 0);
+                default -> aabb.translate(0, 0, deltaInAxis);
+            }
+            // Update the coordinates
+            recorder.setComponent(axis, recorder.get(axis) + deltaInAxis);
+        }
+
+        return new DoubleBooleanImmutablePair(motion, collision);
+    }
+
+    private void checkAxis(int axis) {
+        if (axis < X || axis > Z) {
+            throw new IllegalArgumentException("Invalid axis: " + axis);
+        }
+    }
+
+    private boolean notValidEntityArea(AABBd extendAABB) {
+        var dimension = thisEntity.getDimension();
+        return !(extendAABB.minY >= dimension.getDimensionInfo().minHeight()) &&
+               !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
+               !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
+    }
+
+    private boolean tryStepping(Vector3d pos, AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
+        var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
+        var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
+        var recorder = new Vector3d();
+        moveAlongAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder, Y);
+        moveAlongAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder, Y);
+        if (recorder.y == 0 || thisEntity.getDimension().getCollidingBlockStates(offsetAABB) != null) {
+            return false;
+        } else {
+            aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
+            pos.add(recorder);
+            return true;
+        }
+    }
+
+    private double computeCollisionCoordinate(AABBdc entityAABB, AABBdc extAABBInAxis, BlockState[][][] blocks, @Range(from = X, to = Z) int axis, boolean shouldTowardNegative) {
+        checkAxis(axis);
+        double coordinate = shouldTowardNegative ? -Double.MAX_VALUE : Double.MAX_VALUE;
+
+        for (int ox = 0; ox < blocks.length; ox++) {
+            var sub1 = blocks[ox];
+            for (int oy = 0; oy < sub1.length; oy++) {
+                var sub2 = sub1[oy];
+                for (int oz = 0; oz < sub2.length; oz++) {
+                    var blockState = sub2[oz];
+                    if (blockState == null) {
+                        continue;
+                    }
+
+                    var shape = blockState.getBlockStateData().computeOffsetCollisionShape(floor(extAABBInAxis.minX()) + ox, floor(extAABBInAxis.minY()) + oy, floor(extAABBInAxis.minZ()) + oz);
+                    if (shape.intersectsAABB(entityAABB)) {
+                        // Ignore the blocks that collided with the entity
+                        continue;
+                    }
+
+                    var solids = shape.getSolids();
+                    for (var solid : solids) {
+                        if (!solid.intersectsAABB(extAABBInAxis)) {
+                            // This solid part is not intersected with `extAABBInAxis`, ignore it
+                            continue;
+                        }
+
+                        double current;
+                        if (shouldTowardNegative) {
+                            current = solid.getMax(axis);
+                            if (current > coordinate) {
+                                coordinate = current;
+                            }
+                        } else {
+                            current = solid.getMin(axis);
+                            if (current < coordinate) {
+                                coordinate = current;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return coordinate;
+    }
+
+    @Override
+    public Vector3d updateMotion(boolean hasLiquidMotion) {
+        var blockStateStandingOn = getBlockStateStandingOn();
+        var slipperinessMultiplier = 1.0;
+        if (!hasLiquidMotion) {
+            // Entity that has liquid motion won't be affected by the friction of the block it stands on
+            slipperinessMultiplier = blockStateStandingOn != null ? blockStateStandingOn.getBlockStateData().friction() : DEFAULT_FRICTION;
+        }
+        return new Vector3d(
+                motion.x() * slipperinessMultiplier * (1 - this.getDragFactorOnGround()),
+                (motion.y() - (this.hasGravity() ? this.getGravity() : 0f)) * (1 - this.getDragFactorInAir()),
+                motion.z() * slipperinessMultiplier * (1 - this.getDragFactorOnGround())
+        );
+    }
+
+    @Override
+    public void setMotion(Vector3dc motion) {
+        if (MathUtils.hasNaN(motion)) {
+            throw new IllegalArgumentException("Trying to set the motion of entity " + thisEntity.getRuntimeId() + " to a new motion which contains NaN: " + motion);
+        }
+        this.lastMotion = this.motion;
+        this.motion = new Vector3d(motion);
+    }
+
+    @Override
+    public void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
+        setMotion(calculateKnockbackMotion(source, kb, kby, additionalMotion, ignoreKnockbackResistance));
+    }
+
+    protected Vector3d calculateKnockbackMotion(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
+        if (!ignoreKnockbackResistance) {
+            var resistance = 0.0;
+            if (attributeComponent != null && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
+                resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+            }
+            if (resistance > 0) {
+                var factor = 1 - resistance;
+                kb *= factor;
+                kby *= factor;
+                additionalMotion = additionalMotion.mul(factor, new Vector3d());
+            }
+        }
+        Vector3d vec;
+        var location = thisEntity.getLocation();
+        if (location.distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
+            // Generate a random kb direction if distance <= 0.01m
+            var rand = ThreadLocalRandom.current();
+            var rx = rand.nextDouble(1) - 0.5;
+            var rz = rand.nextDouble(1) - 0.5;
+            vec = MathUtils.normalizeIfNotZero(new Vector3d(rx, 0, rz)).mul(kb);
+        } else {
+            vec = location.sub(source, new Vector3d()).setComponent(1, 0).normalize().mul(kb);
+        }
+        vec.y = kby;
+        return motion.mul(0.5, new Vector3d()).add(vec).add(additionalMotion);
+    }
+
+    @Override
+    public void onFall(double fallDistance) {
+        var event = new EntityFallEvent(thisEntity, fallDistance);
+        if (!event.call()) {
+            this.fallDistance = 0;
+            return;
+        }
+
+        var blockUnder = getBlockStateStandingOn();
+        blockUnder.getBehavior().onEntityFallOn(thisEntity, blockUnder);
+
+        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
+        this.fallDistance = 0;
+    }
+
+    @Override
+    public Block getBlockStateStandingOn() {
+        var loc = thisEntity.getLocation();
+        var air = BlockTypes.AIR.getDefaultState();
+        var dimension = thisEntity.getDimension();
+        if (!isOnGround()) {
+            return new Block(air, new Position3i(loc, RoundingMode.FLOOR, dimension));
+        }
+
+        var currentBlockState = dimension.getBlockState(loc.x(), loc.y(), loc.z());
+        if (currentBlockState != air) {
+            return new Block(
+                    currentBlockState,
+                    new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y()), (int) Math.floor(loc.z()), dimension)
+            );
+        } else {
+            return new Block(
+                    dimension.getBlockState(loc.x(), loc.y() - 1, loc.z()),
+                    new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y() - 1), (int) Math.floor(loc.z()), dimension)
+            );
+        }
+    }
+
+    @Override
+    public boolean canStandSafely(int x, int y, int z, Dimension dimension) {
+        var blockUnder = dimension.getBlockState(x, y - 1, z);
+        if (!blockUnder.getBlockStateData().isSolid()) {
+            return false;
+        }
+        var aabb = thisEntity.getAABB().translate(x + 0.5, y + 0.5, z + 0.5, new AABBd());
+        return dimension.getCollidingBlockStates(aabb) == null;
+    }
+
+    @Override
+    public boolean canCriticalAttack() {
+        return !isOnGround() && getMotion().y() < 0 &&
+               !thisEntity.hasEffect(EffectTypes.BLINDNESS) &&
+               !thisEntity.hasEffect(EffectTypes.SLOW_FALLING);
+    }
+
+    @Override
+    public boolean hasGravity() {
+        return thisEntity.getMetadata().get(EntityFlag.HAS_GRAVITY);
+    }
+
+    @Override
+    public void setHasGravity(boolean hasGravity) {
+        thisEntity.setAndSendEntityFlag(EntityFlag.HAS_GRAVITY, hasGravity);
+    }
+
+    @Override
+    public boolean computeEntityCollisionMotion() {
+        return thisEntity.hasEntityCollision();
+    }
+
+    @Override
+    public boolean computeBlockCollisionMotion() {
+        return true;
+    }
+
+    @Override
+    public boolean computeLiquidMotion() {
+        return true;
+    }
+}

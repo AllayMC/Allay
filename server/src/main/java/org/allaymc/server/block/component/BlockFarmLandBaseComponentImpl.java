@@ -8,6 +8,7 @@ import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.eventbus.event.entity.EntityTrampleFarmlandEvent;
 import org.allaymc.api.item.ItemStack;
@@ -87,7 +88,8 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onEntityFallOn(Entity entity, Block block) {
-        if (ThreadLocalRandom.current().nextFloat() < entity.getFallDistance() - 0.5f) {
+        if (entity instanceof EntityPhysicsComponent physicsComponent &&
+            ThreadLocalRandom.current().nextFloat() < physicsComponent.getFallDistance() - 0.5f) {
             if (!VALID_ENTITIES.contains(entity.getEntityType().getIdentifier()) || entity.getMetadata().get(EntityFlag.BABY)) {
                 return;
             }

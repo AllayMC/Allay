@@ -10,18 +10,24 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.7.1 (API 0.10.0) - Unreleased
+## 0.7.1 (API 0.11.0) - Unreleased
 
 <small>[Compare with 0.7.0](https://github.com/AllayMC/Allay/compare/0.7.0...HEAD)</small>
 
 ### Added
 
+- (API) Introduced `EntityPhysicsComponent`, `EntityAgeComponent` and `EntityProjectileComponent` to split different logic 
+  to different components instead of all in base component.
 - Introduced component `EntityBreatheComponent` which handle the logic of entity breathe.
 - Added armor component to the newly added copper armor items.
 
 ### Fixed
 
 - Fixed client lag due to `AvailableCommandsPacket` being sent continuously.
+
+### Removed
+
+- (API) Removed `EntityPhysicsBaseComponent`.
 
 ## 0.7.0 (API 0.10.0) - 2025-8-10
 

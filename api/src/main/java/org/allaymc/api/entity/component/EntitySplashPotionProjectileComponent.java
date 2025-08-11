@@ -5,7 +5,7 @@ import org.allaymc.api.item.data.PotionType;
 /**
  * @author daoge_cmd
  */
-public interface EntitySplashPotionBaseComponent extends EntityProjectileBaseComponent {
+public interface EntitySplashPotionProjectileComponent extends EntityProjectileComponent {
 
     /**
      * Gets the potion type that this entity holds.

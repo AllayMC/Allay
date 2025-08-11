@@ -2,8 +2,10 @@ package org.allaymc.server.entity.impl;
 
 import lombok.experimental.Delegate;
 import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -17,6 +19,10 @@ public class EntityItemImpl extends EntityImpl implements EntityItem {
     protected EntityDamageComponent damageComponent;
     @Delegate
     protected EntityAttributeComponent attributeComponent;
+    @Delegate
+    protected EntityPhysicsComponent physicsComponent;
+    @Delegate
+    protected EntityAgeComponent ageComponent;
 
     public EntityItemImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
