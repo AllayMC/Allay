@@ -155,6 +155,7 @@ public final class EntityTypeInitializer {
         EntityTypes.SNOWBALL = AllayEntityType
                 .builder(EntitySnowballImpl.class)
                 .vanillaEntity(EntityId.SNOWBALL)
+                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntitySnowballPhysicsComponentImpl::new, EntitySnowballPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
@@ -162,6 +163,7 @@ public final class EntityTypeInitializer {
         EntityTypes.SPLASH_POTION = AllayEntityType
                 .builder(EntitySplashPotionImpl.class)
                 .vanillaEntity(EntityId.SPLASH_POTION)
+                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntitySplashPotionPhysicsComponentImpl::new, EntitySplashPotionPhysicsComponentImpl.class)
                 .addComponent(EntitySplashPotionProjectileComponentImpl::new, EntitySplashPotionProjectileComponentImpl.class)
                 .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
@@ -169,7 +171,16 @@ public final class EntityTypeInitializer {
         EntityTypes.ENDER_PEARL = AllayEntityType
                 .builder(EntityEnderPearlImpl.class)
                 .vanillaEntity(EntityId.ENDER_PEARL)
+                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntityEnderPearlPhysicsComponentImpl::new, EntityEnderPearlPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .build();
+        EntityTypes.XP_BOTTLE = AllayEntityType
+                .builder(EntityXpBottleImpl.class)
+                .vanillaEntity(EntityId.XP_BOTTLE)
+                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
+                .addComponent(EntityXpBottlePhysicsComponentImpl::new, EntityXpBottlePhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
                 .build();

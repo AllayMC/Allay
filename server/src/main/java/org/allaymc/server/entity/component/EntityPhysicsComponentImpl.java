@@ -171,11 +171,11 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     @Override
     public boolean applyMotion() {
-        var location = thisEntity.getLocation();
         if (motion.lengthSquared() == 0) {
             return false;
         }
 
+        var location = thisEntity.getLocation();
         var pos = new Location3d(location);
         var mx = motion.x();
         var my = motion.y();

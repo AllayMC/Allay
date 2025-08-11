@@ -822,6 +822,11 @@ public final class ItemTypeInitializer {
                     }
                 }, ItemProjectileComponentImpl.class)
                 .build();
+        ItemTypes.EXPERIENCE_BOTTLE = AllayItemType
+                .builder(ItemExperienceBottleStackImpl.class)
+                .vanillaItem(ItemId.EXPERIENCE_BOTTLE)
+                .addComponent(() -> new ItemProjectileComponentImpl(EntityId.XP_BOTTLE, 0.6), ItemProjectileComponentImpl.class)
+                .build();
     }
 
     public static void initPotion() {

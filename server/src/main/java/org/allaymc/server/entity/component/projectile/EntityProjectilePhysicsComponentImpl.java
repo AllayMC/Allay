@@ -61,6 +61,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
 
     @Override
     public boolean applyMotion() {
+        if (motion.lengthSquared() == 0) {
+            return false;
+        }
+
         // The position we expected to get to if no blocks/entities prevent us
         var location = thisEntity.getLocation();
         var newPos = new Location3d(location);
