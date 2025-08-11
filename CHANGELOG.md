@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Introduced `EntityPhysicsComponent`, `EntityAgeComponent` and `EntityProjectileComponent` to split different logic 
   to different components instead of all in base component.
+- (API) Introduced a new mutable field `throwForce` in `ProjectileLaunchEvent` which indicates the force of the projectile when it is launched.
 - Introduced component `EntityBreatheComponent` which handle the logic of entity breathe.
 - Added armor component to the newly added copper armor items.
 - Introduced a new optional arg for command `/enchant` which indicates whether the entered level should be checked to be in acceptable range.

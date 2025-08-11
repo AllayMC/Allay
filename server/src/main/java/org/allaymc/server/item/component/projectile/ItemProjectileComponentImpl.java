@@ -12,7 +12,6 @@ import org.allaymc.api.eventbus.event.entity.ProjectileLaunchEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemProjectileComponent;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3d;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -21,7 +20,6 @@ import org.allaymc.server.item.component.event.CItemInteractEntityEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
-import org.joml.Vector3dc;
 
 /**
  * @author daoge_cmd
@@ -61,11 +59,12 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
             return false;
         }
 
-        var event = new ProjectileLaunchEvent(projectile, shooter);
+        var event = new ProjectileLaunchEvent(projectile, shooter, getThrowForce());
         if (!event.call()) {
             return false;
         }
 
+        projectile.setMotion(MathUtils.getDirectionVector(shooter.getLocation()).mul(event.getThrowForce()));
         shooter.getDimension().getEntityService().addEntity(projectile);
         addShootSound(new Position3d(shootPos, location.dimension()));
         if (!(shooter instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
@@ -83,12 +82,7 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
         }
 
         projectile.setShooter(shooter);
-        projectile.setMotion(computeMotion(shooter.getLocation()));
         return projectile;
-    }
-
-    protected Vector3dc computeMotion(Location3dc location) {
-        return MathUtils.getDirectionVector(location).mul(getThrowForce());
     }
 
     @EventHandler
