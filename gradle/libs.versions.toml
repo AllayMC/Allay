@@ -2,7 +2,7 @@
 log4j = "2.25.1"
 commons-rng = "1.6"
 fastutil = "8.5.15"
-leveldb = "1.0.1"
+leveldb = "1.1.0"
 netty = "4.2.3.Final"
 
 [libraries]
@@ -102,6 +102,6 @@ leveldb = ["leveldb", "leveldb-api"]
 rng = ["rng-simple", "rng-sampling"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "8.3.8" }
+shadow = { id = "com.gradleup.shadow", version = "9.0.1" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.2" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
