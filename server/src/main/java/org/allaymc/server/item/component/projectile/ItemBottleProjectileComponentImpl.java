@@ -17,8 +17,8 @@ public class ItemBottleProjectileComponentImpl extends ItemProjectileComponentIm
     }
 
     @Override
-    protected Vector3dc computeMotion(Location3dc location) {
-        return MathUtils.getDirectionVector(addBottleOffset(location)).mul(getThrowForce());
+    protected Vector3dc computeMotion(Location3dc location, double throwForce) {
+        return MathUtils.getDirectionVector(addBottleOffset(location)).mul(throwForce);
     }
 
     /**
