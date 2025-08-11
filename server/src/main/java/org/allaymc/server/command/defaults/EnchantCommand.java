@@ -25,19 +25,23 @@ public class EnchantCommand extends SimpleCommand {
                 .playerTarget("player")
                 .enchantment("enchantmentName")
                 .intNum("level", 1).optional()
+                .bool("ignoreLimit", false).optional()
                 .exec(ctx -> {
                     Collection<EntityPlayer> players = ctx.getResult(0);
                     EnchantmentType enchantmentType = ctx.getResult(1);
                     int level = ctx.getResult(2);
+                    boolean ignoreLimit = ctx.getResult(3);
 
-                    if (level > enchantmentType.getMaxLevel()) {
-                        ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOBIG, level, enchantmentType.getMaxLevel());
-                        ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
-                        return ctx.fail();
-                    } else if (level < 1) {
-                        ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOSMALL, level, 1);
-                        ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
-                        return ctx.fail();
+                    if (!ignoreLimit) {
+                        if (level > enchantmentType.getMaxLevel()) {
+                            ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOBIG, level, enchantmentType.getMaxLevel());
+                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
+                            return ctx.fail();
+                        } else if (level < 1) {
+                            ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOSMALL, level, 1);
+                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
+                            return ctx.fail();
+                        }
                     }
 
                     for (var player : players) {
