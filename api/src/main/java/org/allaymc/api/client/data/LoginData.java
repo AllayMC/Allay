@@ -229,10 +229,10 @@ public class LoginData {
         return new PersonaPieceData(pieceId, pieceType, packId, isDefault, productId);
     }
 
-    private PersonaPieceTintData getPersonaPieceTint(JsonObject personaPiceTint) {
-        String pieceType = personaPiceTint.get("PieceType").getAsString();
+    private PersonaPieceTintData getPersonaPieceTint(JsonObject personaPieceTint) {
+        String pieceType = personaPieceTint.get("PieceType").getAsString();
         List<String> colors = new ArrayList<>();
-        for (JsonElement element : personaPiceTint.getAsJsonArray("Colors")) {
+        for (JsonElement element : personaPieceTint.getAsJsonArray("Colors")) {
             colors.add(element.getAsString());
         }
         return new PersonaPieceTintData(pieceType, colors);

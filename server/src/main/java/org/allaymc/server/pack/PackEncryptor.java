@@ -42,7 +42,7 @@ public final class PackEncryptor {
     private static final List<String> EXCLUDED_FILES = List.of("manifest.json", "pack_icon.png", "bug_pack_icon.png");
 
     public static String encrypt(Path inputPath, Path outputPath) {
-        var key = RandomStringUtils.randomAlphanumeric(KEY_LENGTH);
+        var key = RandomStringUtils.secure().nextAlphabetic(KEY_LENGTH);
         try (var inputZip = new ZipFile(inputPath.toString())) {
             encrypt0(inputZip, outputPath, key);
         } catch (Exception e) {
@@ -159,7 +159,7 @@ public final class PackEncryptor {
         byte[] bytes;
         bytes = inputZip.getInputStream(zipEntry).readAllBytes();
         // Init encryptor
-        var key = RandomStringUtils.randomAlphanumeric(KEY_LENGTH);
+        var key = RandomStringUtils.secure().nextAlphabetic(KEY_LENGTH);
         var secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
         var cipher = Cipher.getInstance("AES/CFB8/NoPadding");
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(key.substring(0, 16).getBytes(StandardCharsets.UTF_8)));

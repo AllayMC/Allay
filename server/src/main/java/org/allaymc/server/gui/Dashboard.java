@@ -3,8 +3,6 @@ package org.allaymc.server.gui;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
@@ -407,12 +405,11 @@ public final class Dashboard {
         cmdInput.setEnabled(false);
         consoleTab.add(cmdInput, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         perfTab = new JPanel();
-        perfTab.setLayout(new FormLayout("fill:d:grow", "center:d:grow"));
+        perfTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         rootTabbedPane.addTab("Performance", perfTab);
         perfTabbedPane = new JTabbedPane();
         perfTabbedPane.setAlignmentY(0.5f);
-        CellConstraints cc = new CellConstraints();
-        perfTab.add(perfTabbedPane, cc.xy(1, 1, CellConstraints.DEFAULT, CellConstraints.FILL));
+        perfTab.add(perfTabbedPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
         memoryTab = new JPanel();
         memoryTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         perfTabbedPane.addTab("Memory", memoryTab);
@@ -451,9 +448,7 @@ public final class Dashboard {
     /**
      *
      */
-    public JComponent $$$getRootComponent$$$() {
-        return rootPane;
-    }
+    public JComponent $$$getRootComponent$$$() {return rootPane;}
 
     private void createUIComponents() {
         // Init the three graph

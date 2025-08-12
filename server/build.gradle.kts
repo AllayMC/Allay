@@ -75,14 +75,19 @@ tasks.sourcesJar {
 
 tasks.runShadow {
     workingDir = file("${rootProject.projectDir}/.run/")
-    jarFile = file(
-        "build/libs/${getShadedJarName()}"
-    )
 }
 
 tasks.shadowJar {
-    transform(Log4j2PluginsCacheFileTransformer())
     archiveFileName = getShadedJarName()
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+    transform<Log4j2PluginsCacheFileTransformer>()
+    mergeServiceFiles()
+
+    exclude("META-INF/DEPENDENCIES")
+    exclude("META-INF/LICENSE")
+    exclude("META-INF/NOTICE")
+    exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
 }
 
 tasks.jacocoTestReport {
