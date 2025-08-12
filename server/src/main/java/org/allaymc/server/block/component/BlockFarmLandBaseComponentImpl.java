@@ -9,12 +9,10 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.data.EntityId;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityTrampleFarmlandEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.utils.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -25,9 +23,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.MOISTURIZED
  * @author daoge_cmd
  */
 public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
-    // TODO: add more entities or find a better way
-    protected static final Set<Identifier> VALID_ENTITIES = Set.of(EntityId.PLAYER.getIdentifier());
-
     public BlockFarmLandBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -90,13 +85,14 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     public void onEntityFallOn(Entity entity, Block block) {
         if (entity instanceof EntityPhysicsComponent physicsComponent &&
             ThreadLocalRandom.current().nextFloat() < physicsComponent.getFallDistance() - 0.5f) {
-            if (!VALID_ENTITIES.contains(entity.getEntityType().getIdentifier()) || entity.getMetadata().get(EntityFlag.BABY)) {
-                return;
-            }
-
-            var event = new EntityTrampleFarmlandEvent(entity, block);
-            if (event.call()) {
-                block.getDimension().setBlockState(block.getPos(), BlockTypes.DIRT.getDefaultState());
+            var aabb = entity.getAABB();
+            var width = aabb.maxX() - aabb.minX();
+            var height = aabb.maxY() - aabb.minY();
+            if (entity instanceof EntityPlayer || (width * width * height) > 0.512f) {
+                var event = new EntityTrampleFarmlandEvent(entity, block);
+                if (event.call()) {
+                    block.getDimension().setBlockState(block.getPos(), BlockTypes.DIRT.getDefaultState());
+                }
             }
         }
     }

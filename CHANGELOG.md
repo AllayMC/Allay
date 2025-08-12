@@ -36,6 +36,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed client sometime miss textures for some items like snowball, ender pearl, etc.
 - Fixed `ClassCastException` on `BlockChorusFlowerBaseComponentImpl`.
 - Fixed recursive wall updating.
+- Farmland trampling now correctly considers any entity whose bounding box exceeds a certain size threshold, instead of relying solely on a fixed entity whitelist.
 - Player movement now normally reduces satiety
 
 ### Removed
