@@ -175,7 +175,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
         current.getDimension().setBlockState(current.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
 
         var newPos = current.offsetPos(face).getPos();
-        var newBlockState = (BlockState) current;
+        var newBlockState = current.getBlockState();
         var currentAge = newBlockState.getPropertyValue(AGE_6);
         newBlockState = newBlockState.setPropertyValue(AGE_6, Math.min(AGE_6.getMax(), currentAge + addingAge));
         current.getDimension().setBlockState(newPos, newBlockState);

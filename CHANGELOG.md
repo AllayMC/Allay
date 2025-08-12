@@ -29,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Fixed client lag due to `AvailableCommandsPacket` being sent continuously.
 - Fixed client sometime miss textures for some items like snowball, ender pearl, etc.
+- Fixed `ClassCastException` on `BlockChorusFlowerBaseComponentImpl`.
 - Player movement now normally reduces satiety
 
 ### Removed
