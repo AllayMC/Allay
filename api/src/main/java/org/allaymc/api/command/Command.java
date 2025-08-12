@@ -28,11 +28,7 @@ public interface Command {
      * @return a new {@link Permission} instance representing the command permission.
      */
     static Permission createPermissionForCommand(String commandName) {
-        return Permission.create(ALLAY_BUILD_IN_COMMAND_PERMISSION_PREFIX + commandName, "The permission to use the command /" + commandName, (permissible, value) -> {
-            if (permissible instanceof EntityPlayer player) {
-                player.requireResendingAvailableCommands();
-            }
-        });
+        return Permission.create(ALLAY_BUILD_IN_COMMAND_PERMISSION_PREFIX + commandName, "The permission to use the command /" + commandName);
     }
 
     /**

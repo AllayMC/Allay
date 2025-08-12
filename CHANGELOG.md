@@ -28,6 +28,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - Refactored `EntityPhysicsComponentImpl` for readability.
+- Resending available commands is now the default behavior for `PermissionListener`.
 
 ### Fixed
 

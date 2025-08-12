@@ -1,6 +1,7 @@
 package org.allaymc.api.permission;
 
 import com.google.common.base.Preconditions;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.registry.Registries;
 
 /**
@@ -9,16 +10,20 @@ import org.allaymc.api.registry.Registries;
  * @author daoge_cmd
  */
 public final class Permission {
+    private static final PermissionListener DEFAULT_LISTENER = (permissible, value) -> {
+        if (permissible instanceof EntityPlayer player) {
+            player.requireResendingAvailableCommands();
+        }
+    };
+
     private final String name;
     private final String description;
     // Can be null if no listener is set
     private final PermissionListener listener;
 
     private Permission(String name, String description, PermissionListener listener) {
-        Preconditions.checkNotNull(name);
-        Preconditions.checkNotNull(description);
-        this.name = name;
-        this.description = description;
+        this.name = Preconditions.checkNotNull(name);
+        this.description = Preconditions.checkNotNull(description);
         this.listener = listener;
     }
 
@@ -33,7 +38,7 @@ public final class Permission {
      * @see #create(String, String, PermissionListener)
      */
     public static Permission create(String name, String description) {
-        return create(name, description, null);
+        return create(name, description, DEFAULT_LISTENER);
     }
 
     /**
