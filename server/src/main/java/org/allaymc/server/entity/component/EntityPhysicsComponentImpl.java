@@ -28,7 +28,6 @@ import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.jetbrains.annotations.Range;
 import org.joml.RoundingMode;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -55,11 +54,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected static final String TAG_ON_GROUND = "OnGround";
 
     // Constants used in physics calculation
-    protected static final DoubleBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new DoubleBooleanImmutablePair(0, false);
+    protected static final DoubleBooleanImmutablePair EMPTY_DOUBLE_BOOLEAN_PAIR = new DoubleBooleanImmutablePair(0, false);
     protected static final double STEPPING_OFFSET = 0.05;
-    protected static final int X = 0;
-    protected static final int Y = 1;
-    protected static final int Z = 2;
 
     @ComponentObject
     protected Entity thisEntity;
@@ -189,17 +185,18 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         var aabb = thisEntity.getOffsetAABB();
 
         // First move along the Y axis
-        var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Y);
+        var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Axis.Y);
         my = yResult.left();
         var isOnGround = yResult.right();
 
+        var stepHeight = this.getStepHeight();
         if (abs(mx) >= abs(mz)) {
             // First handle the X axis, then handle the Z axis
-            mx = applyMotion0(this.getStepHeight(), pos, mx, aabb, isOnGround, X);
-            mz = applyMotion0(this.getStepHeight(), pos, mz, aabb, isOnGround, Z);
+            mx = applyMotion0(stepHeight, pos, mx, aabb, isOnGround, Axis.X);
+            mz = applyMotion0(stepHeight, pos, mz, aabb, isOnGround, Axis.Z);
         } else {
-            mz = applyMotion0(this.getStepHeight(), pos, mz, aabb, isOnGround, Z);
-            mx = applyMotion0(this.getStepHeight(), pos, mx, aabb, isOnGround, X);
+            mz = applyMotion0(stepHeight, pos, mz, aabb, isOnGround, Axis.Z);
+            mx = applyMotion0(stepHeight, pos, mx, aabb, isOnGround, Axis.X);
         }
 
         this.setMotion(new Vector3d(mx, my, mz));
@@ -231,9 +228,10 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
      * @param axis           The axis along which the motion is applied (X or Z).
      * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections.
      */
-    private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, int axis) {
-        if (motion == 0) return motion;
-        checkAxis(axis);
+    private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, Axis axis) {
+        if (motion == 0) {
+            return motion;
+        }
 
         var resultAABB = new AABBd(aabb);
         var resultPos = new Vector3d(pos);
@@ -243,8 +241,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         if (Boolean.TRUE.equals(result.right())) {
             // There is a collision, try to step over
             // Calculate the remaining speed
-            motion -= resultPos.get(axis) - pos.get(axis);
-            if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, motion > 0, axis == X)) {
+            motion -= axis.getComponent(resultPos) - axis.getComponent(pos);
+            if (enableStepping && tryStepping(resultPos, resultAABB, stepHeight, motion > 0, axis == Axis.X)) {
                 result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
             }
         }
@@ -268,11 +266,10 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
      * If no movement was specified (motion = 0), an empty pair is returned.
      * @throws IllegalArgumentException if an invalid axis is provided.
      */
-    private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, @Range(from = X, to = Z) int axis) {
+    private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, Axis axis) {
         if (motion == 0) {
-            return EMPTY_FLOAT_BOOLEAN_PAIR;
+            return EMPTY_DOUBLE_BOOLEAN_PAIR;
         }
-        checkAxis(axis);
 
         // `extAABBInAxis` is the extended aabb in the axis which is used to check for block collision,
         // and the direction of the axis is determined by the sign of `motion`
@@ -280,28 +277,19 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
         // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
         var shouldTowardsNegative = motion < 0;
-        switch (axis) {
-            case X -> {
-                var lengthX = extAABBInAxis.lengthX();
-                extAABBInAxis.minX += shouldTowardsNegative ? motion : lengthX;
-                extAABBInAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
-            }
-            case Y -> {
-                var lengthY = extAABBInAxis.lengthY();
-                extAABBInAxis.minY += shouldTowardsNegative ? motion : lengthY;
-                extAABBInAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
-            }
-            case Z -> {
-                var lengthZ = extAABBInAxis.lengthZ();
-                extAABBInAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
-                extAABBInAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
-            }
-            default -> throw new IllegalArgumentException("Invalid axis provided");
+
+        var length = axis.getLength(aabb);
+        if (shouldTowardsNegative) {
+            axis.setMin(extAABBInAxis, axis.getMin(extAABBInAxis) + motion);
+            axis.setMax(extAABBInAxis, axis.getMax(extAABBInAxis) - length);
+        } else {
+            axis.setMin(extAABBInAxis, axis.getMin(extAABBInAxis) + length);
+            axis.setMax(extAABBInAxis, axis.getMax(extAABBInAxis) + motion);
         }
 
         // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
         if (notValidEntityArea(extAABBInAxis)) {
-            return EMPTY_FLOAT_BOOLEAN_PAIR;
+            return EMPTY_DOUBLE_BOOLEAN_PAIR;
         }
 
         // `deltaInAxis` is the actual movement distance along the axis direction, and if there is no collision, this distance is equal to `motion`
@@ -311,14 +299,14 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         var blocks = thisEntity.getDimension().getCollidingBlockStates(extAABBInAxis);
         if (blocks != null) {
             // There is a collision if `blocks` is not null
-            if (axis == Y) {
+            if (axis == Axis.Y) {
                 // When the axis is Y, `collision` indicates whether the entity will be on the ground
                 collision = shouldTowardsNegative;
             } else {
                 collision = true;
             }
 
-            var extAABBStartCoordinate = shouldTowardsNegative ? extAABBInAxis.getMax(axis) : extAABBInAxis.getMin(axis);
+            var extAABBStartCoordinate = shouldTowardsNegative ? axis.getMax(extAABBInAxis) : axis.getMin(extAABBInAxis);
             var collisionCoordinate = computeCollisionCoordinate(aabb, extAABBInAxis, blocks, axis, shouldTowardsNegative);
             // abs(collisionCoordinate) != Double.MAX_VALUE means that the entity is stuck into the blocks. Collision
             // coordinate cannot being calculated because blocks that are intersected with the entity will be ignored
@@ -343,22 +331,12 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
         if (deltaInAxis != 0) {
             // Move the collision box
-            switch (axis) {
-                case X -> aabb.translate(deltaInAxis, 0, 0);
-                case Y -> aabb.translate(0, deltaInAxis, 0);
-                default -> aabb.translate(0, 0, deltaInAxis);
-            }
+            axis.translate(aabb, deltaInAxis, aabb);
             // Update the coordinates
-            recorder.setComponent(axis, recorder.get(axis) + deltaInAxis);
+            axis.setComponent(recorder, axis.getComponent(recorder) + deltaInAxis);
         }
 
         return new DoubleBooleanImmutablePair(motion, collision);
-    }
-
-    private void checkAxis(int axis) {
-        if (axis < X || axis > Z) {
-            throw new IllegalArgumentException("Invalid axis: " + axis);
-        }
     }
 
     private boolean notValidEntityArea(AABBd extendAABB) {
@@ -372,8 +350,10 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
         var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
         var recorder = new Vector3d();
-        moveAlongAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder, Y);
-        moveAlongAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder, Y);
+
+        moveAlongAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder, Axis.Y);
+        moveAlongAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder, Axis.Y);
+
         if (recorder.y == 0 || thisEntity.getDimension().getCollidingBlockStates(offsetAABB) != null) {
             return false;
         } else {
@@ -383,8 +363,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         }
     }
 
-    private double computeCollisionCoordinate(AABBdc entityAABB, AABBdc extAABBInAxis, BlockState[][][] blocks, @Range(from = X, to = Z) int axis, boolean shouldTowardNegative) {
-        checkAxis(axis);
+    private double computeCollisionCoordinate(AABBdc entityAABB, AABBdc extAABBInAxis, BlockState[][][] blocks, Axis axis, boolean shouldTowardNegative) {
         double coordinate = shouldTowardNegative ? -Double.MAX_VALUE : Double.MAX_VALUE;
 
         for (int ox = 0; ox < blocks.length; ox++) {
@@ -410,17 +389,9 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
                             continue;
                         }
 
-                        double current;
-                        if (shouldTowardNegative) {
-                            current = solid.getMax(axis);
-                            if (current > coordinate) {
-                                coordinate = current;
-                            }
-                        } else {
-                            current = solid.getMin(axis);
-                            if (current < coordinate) {
-                                coordinate = current;
-                            }
+                        double current = shouldTowardNegative ? axis.getMax(solid) : axis.getMin(solid);
+                        if (shouldTowardNegative ? (current > coordinate) : (current < coordinate)) {
+                            coordinate = current;
                         }
                     }
                 }
@@ -438,10 +409,12 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             // Entity that has liquid motion won't be affected by the friction of the block it stands on
             slipperinessMultiplier = blockStateStandingOn != null ? blockStateStandingOn.getBlockStateData().friction() : DEFAULT_FRICTION;
         }
+
+        var slip = slipperinessMultiplier * (1 - this.getDragFactorOnGround());
         return new Vector3d(
-                motion.x() * slipperinessMultiplier * (1 - this.getDragFactorOnGround()),
+                motion.x() * slip,
                 (motion.y() - (this.hasGravity() ? this.getGravity() : 0f)) * (1 - this.getDragFactorInAir()),
-                motion.z() * slipperinessMultiplier * (1 - this.getDragFactorOnGround())
+                motion.z() * slip
         );
     }
 
@@ -472,6 +445,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
                 additionalMotion = additionalMotion.mul(factor, new Vector3d());
             }
         }
+
         Vector3d vec;
         var location = thisEntity.getLocation();
         if (location.distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
@@ -565,5 +539,147 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @Override
     public boolean computeLiquidMotion() {
         return true;
+    }
+
+    private enum Axis {
+        X {
+            @Override
+            double getMin(AABBdc aabb) {
+                return aabb.minX();
+            }
+
+            @Override
+            double getMax(AABBdc aabb) {
+                return aabb.maxX();
+            }
+
+            @Override
+            double getLength(AABBdc aabb) {
+                return aabb.lengthX();
+            }
+
+            @Override
+            double getComponent(Vector3dc vec) {
+                return vec.x();
+            }
+
+            @Override
+            void setComponent(Vector3d vec, double value) {
+                vec.setComponent(0, value);
+            }
+
+            @Override
+            void translate(AABBd aabb, double delta, AABBd dest) {
+                aabb.translate(delta, 0, 0, dest);
+            }
+
+            @Override
+            void setMin(AABBd aabb, double value) {
+                aabb.minX = value;
+            }
+
+            @Override
+            void setMax(AABBd aabb, double value) {
+                aabb.maxX = value;
+            }
+        },
+        Y {
+            @Override
+            double getMin(AABBdc aabb) {
+                return aabb.minY();
+            }
+
+            @Override
+            double getMax(AABBdc aabb) {
+                return aabb.maxY();
+            }
+
+            @Override
+            double getLength(AABBdc aabb) {
+                return aabb.lengthY();
+            }
+
+            @Override
+            double getComponent(Vector3dc vec) {
+                return vec.y();
+            }
+
+            @Override
+            void setComponent(Vector3d vec, double value) {
+                vec.setComponent(1, value);
+            }
+
+            @Override
+            void translate(AABBd aabb, double delta, AABBd dest) {
+                aabb.translate(0, delta, 0, dest);
+            }
+
+            @Override
+            void setMin(AABBd aabb, double value) {
+                aabb.minY = value;
+            }
+
+            @Override
+            void setMax(AABBd aabb, double value) {
+                aabb.maxY = value;
+            }
+        },
+        Z {
+            @Override
+            double getMin(AABBdc aabb) {
+                return aabb.minZ();
+            }
+
+            @Override
+            double getMax(AABBdc aabb) {
+                return aabb.maxZ();
+            }
+
+            @Override
+            double getLength(AABBdc aabb) {
+                return aabb.lengthZ();
+            }
+
+            @Override
+            double getComponent(Vector3dc vec) {
+                return vec.z();
+            }
+
+            @Override
+            void setComponent(Vector3d vec, double value) {
+                vec.setComponent(2, value);
+            }
+
+            @Override
+            void translate(AABBd aabb, double delta, AABBd dest) {
+                aabb.translate(0, 0, delta, dest);
+            }
+
+            @Override
+            void setMin(AABBd aabb, double value) {
+                aabb.minZ = value;
+            }
+
+            @Override
+            void setMax(AABBd aabb, double value) {
+                aabb.maxZ = value;
+            }
+        };
+
+        abstract double getMin(AABBdc aabb);
+
+        abstract double getMax(AABBdc aabb);
+
+        abstract double getLength(AABBdc aabb);
+
+        abstract double getComponent(Vector3dc vec);
+
+        abstract void setComponent(Vector3d vec, double value);
+
+        abstract void translate(AABBd aabb, double delta, AABBd dest);
+
+        abstract void setMin(AABBd aabb, double value);
+
+        abstract void setMax(AABBd aabb, double value);
     }
 }

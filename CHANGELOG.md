@@ -25,11 +25,16 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Introduced a new optional arg for command `/enchant` which indicates whether the entered level should be checked to be in acceptable range.
 - Implemented xp bottle.
 
+### Changed
+
+- Refactored `EntityPhysicsComponentImpl` for readability.
+
 ### Fixed
 
 - Fixed client lag due to `AvailableCommandsPacket` being sent continuously.
 - Fixed client sometime miss textures for some items like snowball, ender pearl, etc.
 - Fixed `ClassCastException` on `BlockChorusFlowerBaseComponentImpl`.
+- Fixed recursive wall updating.
 - Player movement now normally reduces satiety
 
 ### Removed
