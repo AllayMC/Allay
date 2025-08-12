@@ -35,7 +35,7 @@ public class BlockWallBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(block, neighbor, face);
 
         var updatedState = updateConnectionsAndPost(block);
-        if (!updatedState.equals(block)) {
+        if (!block.getBlockState().equals(updatedState)) {
             block.getDimension().setBlockState(block.getPos(), updatedState);
         }
     }
