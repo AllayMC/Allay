@@ -28,6 +28,7 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.joml.Vector3i;
 
 import java.util.*;
@@ -48,8 +49,8 @@ public final class AllayChunkService implements ChunkService {
 
     private static final int TICK_RADIUS_SQUARED = (int) Math.pow(Server.SETTINGS.worldSettings().tickRadius(), 2);
 
-    // NOTICE: this setter is made for testing
     @Setter
+    @VisibleForTesting
     private int removeUnneededChunkCycle;
 
     /**
@@ -59,7 +60,7 @@ public final class AllayChunkService implements ChunkService {
     private final Map<Long, CompletableFuture<Chunk>> chunks;
     private final Set<Long> keepLoadingChunks;
     private final Map<Long, Integer> unusedChunkClearCountDown;
-    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers;
+    private final Map<ChunkLoader, ChunkLoaderHolder> chunkLoaders;
 
     private final Dimension dimension;
     @Getter
@@ -74,7 +75,7 @@ public final class AllayChunkService implements ChunkService {
         this.chunks = new NonBlockingHashMapLong<>();
         this.keepLoadingChunks = new NonBlockingHashSet<>();
         this.unusedChunkClearCountDown = new NonBlockingHashMapLong<>();
-        this.chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
+        this.chunkLoaders = new Object2ObjectOpenHashMap<>();
     }
 
     public void startTick() {
@@ -132,11 +133,11 @@ public final class AllayChunkService implements ChunkService {
 
     private void tickChunkLoaders() {
         // NOTICE: There is no need to use parallel stream here
-        for (ChunkLoaderManager chunkLoaderManager : chunkLoaderManagers.values()) {
+        for (var chunkLoaderHolder : chunkLoaders.values()) {
             try {
-                chunkLoaderManager.tick();
+                chunkLoaderHolder.tick();
             } catch (Throwable t) {
-                log.error("Error while ticking chunk loader {}!", chunkLoaderManager.chunkLoader, t);
+                log.error("Error while ticking chunk loader {}!", chunkLoaderHolder.chunkLoader, t);
             }
         }
     }
@@ -297,17 +298,17 @@ public final class AllayChunkService implements ChunkService {
     @Override
     @UnmodifiableView
     public Set<ChunkLoader> getChunkLoaders() {
-        return Collections.unmodifiableSet(chunkLoaderManagers.keySet());
+        return Collections.unmodifiableSet(chunkLoaders.keySet());
     }
 
     @Override
     public void addChunkLoader(ChunkLoader chunkLoader) {
-        this.chunkLoaderManagers.put(chunkLoader, new ChunkLoaderManager(chunkLoader));
+        this.chunkLoaders.put(chunkLoader, new ChunkLoaderHolder(chunkLoader));
     }
 
     @Override
     public void removeChunkLoader(ChunkLoader chunkLoader) {
-        var removed = this.chunkLoaderManagers.remove(chunkLoader);
+        var removed = this.chunkLoaders.remove(chunkLoader);
         if (removed != null) removed.onRemoved();
     }
 
@@ -365,66 +366,39 @@ public final class AllayChunkService implements ChunkService {
         return CompletableFuture.allOf(chunks.keySet().stream().map(this::unloadChunk).toArray(CompletableFuture[]::new));
     }
 
-    private final class ChunkLoaderManager {
+    private final class ChunkLoaderHolder {
+
         private final ChunkLoader chunkLoader;
-        private final LongComparator chunkDistanceComparatorHashed = new LongComparator() {
-            @Override
-            public int compare(long chunkHash1, long chunkHash2) {
-                var floor = MathUtils.floor(chunkLoader.getLocation());
-                var loaderChunkX = floor.x >> 4;
-                var loaderChunkZ = floor.z >> 4;
-                var chunkDX1 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash1);
-                var chunkDZ1 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash1);
-                var chunkDX2 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash2);
-                var chunkDZ2 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash2);
-                // Compare distance to loader
-                return Integer.compare(
-                        chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
-                        chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
-                );
-            }
-        };
-        private final Comparator<Chunk> chunkDistanceComparator = new Comparator<>() {
-            @Override
-            public int compare(Chunk c1, Chunk c2) {
-                var floor = MathUtils.floor(chunkLoader.getLocation());
-                var loaderChunkX = floor.x >> 4;
-                var loaderChunkZ = floor.z >> 4;
-                var chunkDX1 = loaderChunkX - c1.getX();
-                var chunkDZ1 = loaderChunkZ - c1.getZ();
-                var chunkDX2 = loaderChunkX - c2.getX();
-                var chunkDZ2 = loaderChunkZ - c2.getZ();
-                // Compare distance to loader
-                return Integer.compare(
-                        chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
-                        chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
-                );
-            }
-        };
+        private final LongComparator chunkDistanceComparatorHashed;
+        private final Comparator<Chunk> chunkDistanceComparator;
         // Save all chunk hash values that have been sent in the last tick
-        private final LongOpenHashSet sentChunks = new LongOpenHashSet();
+        private final LongOpenHashSet sentChunks;
         // Save all chunk hash values that will be sent in this tick
-        private final LongOpenHashSet inRadiusChunks = new LongOpenHashSet();
+        private final LongOpenHashSet inRadiusChunks;
         private final int chunkTrySendCountPerTick;
         private final LongArrayFIFOQueue chunkSendingQueue;
-        private AsyncChunkSendingManager asyncChunkSendingManager;
-        private long lastLoaderChunkPosHashed = Long.MAX_VALUE;
+        private AsyncChunkSender asyncChunkSender;
+        private long lastLoaderChunkPosHashed;
 
-        ChunkLoaderManager(ChunkLoader chunkLoader) {
+        ChunkLoaderHolder(ChunkLoader chunkLoader) {
             this.chunkLoader = chunkLoader;
-            // S = pi * radius ^ 2
-            this.chunkSendingQueue = new LongArrayFIFOQueue((int) Math.ceil(chunkLoader.getChunkLoadingRadius() * chunkLoader.getChunkLoadingRadius() * Math.PI));
+            this.chunkDistanceComparatorHashed = new HashedChunkDistanceComparator();
+            this.chunkDistanceComparator = new ChunkDistanceComparator();
+            this.sentChunks = new LongOpenHashSet();
+            this.inRadiusChunks = new LongOpenHashSet();
             this.chunkTrySendCountPerTick = chunkLoader.getChunkTrySendCountPerTick();
+            this.chunkSendingQueue = new LongArrayFIFOQueue((int) Math.ceil(chunkLoader.getChunkLoadingRadius() * chunkLoader.getChunkLoadingRadius() * Math.PI));
             if (Server.SETTINGS.worldSettings().chunkSendingStrategy() == ASYNC) {
-                asyncChunkSendingManager = new AsyncChunkSendingManager();
+                this.asyncChunkSender = new AsyncChunkSender();
             }
+            this.lastLoaderChunkPosHashed = Long.MAX_VALUE;
         }
 
         public void onRemoved() {
             removeChunkLoaderInChunks(sentChunks);
             chunkLoader.onChunkOutOfRange(sentChunks);
-            if (asyncChunkSendingManager != null) {
-                asyncChunkSendingManager.stop();
+            if (asyncChunkSender != null) {
+                asyncChunkSender.stop();
             }
         }
 
@@ -473,15 +447,19 @@ public final class AllayChunkService implements ChunkService {
                     .forEach(chunk -> chunk.removeChunkLoader(chunkLoader));
         }
 
+        @SuppressWarnings("ALL")
         private void updateChunkSendingQueue() {
             chunkSendingQueue.clear();
             // Blocks that have already been sent will not be resent
             var difference = Sets.difference(inRadiusChunks, sentChunks);
-            difference.stream().sorted(chunkDistanceComparatorHashed).forEachOrdered(v -> chunkSendingQueue.enqueue(v.longValue()));
+            difference.stream().sorted(chunkDistanceComparatorHashed).forEachOrdered(chunkSendingQueue::enqueue);
         }
 
         private void loadAndSendQueuedChunks() {
-            if (chunkSendingQueue.isEmpty()) return;
+            if (chunkSendingQueue.isEmpty()) {
+                return;
+            }
+
             var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
             int triedSendChunkCount = 0;
             do {
@@ -504,7 +482,7 @@ public final class AllayChunkService implements ChunkService {
                 chunkLoader.beforeSendChunks();
                 var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
                 if (chunkSendingStrategy == ASYNC) {
-                    asyncChunkSendingManager.addChunkToSendingQueue(chunkReadyToSend.values());
+                    asyncChunkSender.addChunkToSendingQueue(chunkReadyToSend.values());
                 } else {
                     // Priority is given to sending chunks that are close to the chunk loader
                     var lcpStream = chunkReadyToSend.values().stream();
@@ -532,19 +510,20 @@ public final class AllayChunkService implements ChunkService {
             return chunkX * chunkX + chunkZ * chunkZ <= radius * radius;
         }
 
-        private class AsyncChunkSendingManager {
+        private class AsyncChunkSender {
 
             private static final int DEFAULT_INITIAL_CAPACITY = 11;
 
             private final PriorityBlockingQueue<Chunk> chunkSendingQueue;
             private final AtomicBoolean isRunning;
 
-            public AsyncChunkSendingManager() {
+            public AsyncChunkSender() {
                 this.chunkSendingQueue = new PriorityBlockingQueue<>(DEFAULT_INITIAL_CAPACITY, chunkDistanceComparator);
                 this.isRunning = new AtomicBoolean(true);
                 Thread.ofVirtual().start(() -> {
                     while (isRunning.get()) {
                         try {
+                            // PriorityBlockingQueue ensure that every time we take the closest chunk from the queue
                             var chunk = chunkSendingQueue.take();
                             chunkLoader.sendPacket(createLevelChunkPacket(chunk));
                             chunkLoader.onChunkInRangeSend(chunk);
@@ -561,6 +540,42 @@ public final class AllayChunkService implements ChunkService {
 
             public void stop() {
                 isRunning.set(false);
+            }
+        }
+
+        private final class HashedChunkDistanceComparator implements LongComparator {
+            @Override
+            public int compare(long chunkHash1, long chunkHash2) {
+                var floor = MathUtils.floor(chunkLoader.getLocation());
+                var loaderChunkX = floor.x >> 4;
+                var loaderChunkZ = floor.z >> 4;
+                var chunkDX1 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash1);
+                var chunkDZ1 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash1);
+                var chunkDX2 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash2);
+                var chunkDZ2 = loaderChunkZ - HashUtils.getZFromHashXZ(chunkHash2);
+                // Compare distance to loader
+                return Integer.compare(
+                        chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
+                        chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
+                );
+            }
+        }
+
+        private final class ChunkDistanceComparator implements Comparator<Chunk> {
+            @Override
+            public int compare(Chunk c1, Chunk c2) {
+                var floor = MathUtils.floor(chunkLoader.getLocation());
+                var loaderChunkX = floor.x >> 4;
+                var loaderChunkZ = floor.z >> 4;
+                var chunkDX1 = loaderChunkX - c1.getX();
+                var chunkDZ1 = loaderChunkZ - c1.getZ();
+                var chunkDX2 = loaderChunkX - c2.getX();
+                var chunkDZ2 = loaderChunkZ - c2.getZ();
+                // Compare distance to loader
+                return Integer.compare(
+                        chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
+                        chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
+                );
             }
         }
     }

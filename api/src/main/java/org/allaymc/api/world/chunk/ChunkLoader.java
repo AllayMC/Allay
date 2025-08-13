@@ -38,6 +38,7 @@ public interface ChunkLoader extends PacketReceiver {
      * Set the chunk loading radius.
      *
      * @param radius the chunk loading radius.
+     * @throws UnsupportedOperationException if the loading radius cannot be changed for this chunk loader.
      */
     void setChunkLoadingRadius(int radius);
 
