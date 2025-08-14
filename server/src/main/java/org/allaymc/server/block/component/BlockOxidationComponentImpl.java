@@ -70,7 +70,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         }
 
         var chance = (higherOxidizedBlocks + 1f) / (higherOxidizedBlocks + sameOxidizedBlocks + 1f);
-        chance *= currentLevel == 0 ? 0.75f : 1f;
+        chance *= currentLevel == OxidationLevel.UNAFFECTED.ordinal() ? 0.75f : 1f;
         chance *= chance;
         if (random.nextFloat() < chance) {
             var nextBlockType = getBlockWithOxidationLevel(OxidationLevel.values()[currentLevel + 1]);
