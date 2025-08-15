@@ -8,7 +8,6 @@
 .idea/**
 !/.idea/codeStyles
 !/.idea/codeStyles/*
-!/.idea/codeStyles/codeStyleConfig.xml
 !/.idea/codeStyles/Project.xml
 !/.idea/inspectionProfiles
 !/.idea/inspectionProfiles/Project_Default.xml
