@@ -24,6 +24,7 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.api.world.chunk.FakeChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
@@ -210,7 +211,13 @@ public class AllayWorld implements World {
         var overworld = getOverWorld();
         if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
-            overworld.getChunkService().addChunkLoader(new SpawnPointChunkLoader());
+            overworld.getChunkService().addChunkLoader(new FakeChunkLoader(
+                    () -> {
+                        var spawnPoint = worldData.getSpawnPoint();
+                        return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
+                    },
+                    Server.SETTINGS.worldSettings().spawnPointChunkRadius()
+            ));
         }
 
         // TODO: rewrite safe spawn point finder after we refactored chunk service

@@ -1,73 +1,58 @@
 package org.allaymc.api.world.generator;
 
-import org.allaymc.api.ApiInstanceHolder;
+import lombok.Getter;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.api.world.generator.function.PostProcessor;
-import org.jetbrains.annotations.ApiStatus;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * WorldGenerator is responsible for generating chunks.
- *
  * @author daoge_cmd
  */
-public interface WorldGenerator {
+public class WorldGenerator {
 
-    ApiInstanceHolder<WorldGeneratorBuilderFactory> BUILDER_FACTORY = ApiInstanceHolder.create();
+    @Getter
+    private final String name;
+    @Getter
+    private final WorldGeneratorType type;
+    @Getter
+    private final String preset;
+    @Getter
+    private final List<Noiser> noisers;
+    @Getter
+    private final List<Populator> populators;
+    @Getter
+    private final List<PostProcessor> postProcessors;
+    private final Consumer<Dimension> dimensionConsumer;
 
-    /**
-     * Create a new WorldGeneratorBuilder.
-     *
-     * @return the builder.
-     */
-    static WorldGeneratorBuilder builder() {
-        return BUILDER_FACTORY.get().create();
+    private WorldGenerator(
+            String name,
+            WorldGeneratorType type,
+            String preset,
+            List<Noiser> noisers,
+            List<Populator> populators,
+            List<PostProcessor> postProcessors,
+            Consumer<Dimension> dimensionConsumer
+    ) {
+        this.name = name;
+        this.type = type;
+        this.preset = preset;
+        this.noisers = Collections.unmodifiableList(noisers);
+        this.populators = Collections.unmodifiableList(populators);
+        this.postProcessors = Collections.unmodifiableList(postProcessors);
+        this.noisers.forEach(noiser -> noiser.init(preset));
+        this.populators.forEach(populator -> populator.init(preset));
+        this.postProcessors.forEach(postProcessor -> postProcessor.init(preset));
+        this.dimensionConsumer = dimensionConsumer;
     }
 
-    /**
-     * Generate a chunk.
-     * <p>
-     * This method may be called by any thread, so implementations should ensure thread safety.
-     *
-     * @param x chunk x coordinate.
-     * @param z chunk z coordinate.
-     *
-     * @return generated chunk.
-     */
-    CompletableFuture<Chunk> generateChunk(int x, int z);
-
-    /**
-     * Get the name of this generator.
-     *
-     * @return the name.
-     */
-    String getName();
-
-    /**
-     * Get the type of this generator.
-     *
-     * @return the type.
-     */
-    WorldGeneratorType getType();
-
-    /**
-     * Get the preset of this generator.
-     *
-     * @return the preset.
-     */
-    String getPreset();
-
-    /**
-     * Get the dimension of this generator.
-     *
-     * @return the dimension.
-     */
-    Dimension getDimension();
+    public static WorldGeneratorBuilder builder() {
+        return new WorldGeneratorBuilder();
+    }
 
     /**
      * Set the dimension of this generator.
@@ -79,13 +64,22 @@ public interface WorldGenerator {
      *
      * @throws IllegalStateException if the method is called twice.
      */
-    @ApiStatus.OverrideOnly
-    void setDimension(Dimension dimension);
+    public void setDimension(Dimension dimension) {
+        this.dimensionConsumer.accept(dimension);
+    }
 
-    /**
-     * WorldGeneratorBuilder is used to build a new WorldGenerator instance.
-     */
-    interface WorldGeneratorBuilder {
+    public static final class WorldGeneratorBuilder {
+
+        private String name;
+        private WorldGeneratorType type = WorldGeneratorType.INFINITE;
+        private String preset = "";
+        private List<Noiser> noisers = List.of();
+        private List<Populator> populators = List.of();
+        private List<PostProcessor> postProcessors = List.of();
+        private Consumer<Dimension> dimensionConsumer = $ -> {};
+
+        private WorldGeneratorBuilder() {}
+
         /**
          * Set the name of the generator.
          *
@@ -93,7 +87,10 @@ public interface WorldGenerator {
          *
          * @return the builder.
          */
-        WorldGeneratorBuilder name(String name);
+        public WorldGeneratorBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
 
         /**
          * Set the type of the generator.
@@ -102,7 +99,10 @@ public interface WorldGenerator {
          *
          * @return the builder.
          */
-        WorldGeneratorBuilder type(WorldGeneratorType type);
+        public WorldGeneratorBuilder type(WorldGeneratorType type) {
+            this.type = type;
+            return this;
+        }
 
         /**
          * Set the preset of the generator.
@@ -111,7 +111,10 @@ public interface WorldGenerator {
          *
          * @return the builder.
          */
-        WorldGeneratorBuilder preset(String preset);
+        public WorldGeneratorBuilder preset(String preset) {
+            this.preset = preset;
+            return this;
+        }
 
         /**
          * Set the noisers of the generator.
@@ -120,7 +123,10 @@ public interface WorldGenerator {
          *
          * @return the builder.
          */
-        WorldGeneratorBuilder noisers(Noiser... noisers);
+        public WorldGeneratorBuilder noisers(Noiser... noisers) {
+            this.noisers = List.of(noisers);
+            return this;
+        }
 
         /**
          * Set the populators of the generator.
@@ -129,7 +135,10 @@ public interface WorldGenerator {
          *
          * @return the builder.
          */
-        WorldGeneratorBuilder populators(Populator... populators);
+        public WorldGeneratorBuilder populators(Populator... populators) {
+            this.populators = List.of(populators);
+            return this;
+        }
 
         /**
          * Set the post processors of the generator.
@@ -138,26 +147,34 @@ public interface WorldGenerator {
          *
          * @return the builder.
          */
-        WorldGeneratorBuilder postProcessors(PostProcessor... postProcessors);
+        public WorldGeneratorBuilder postProcessors(PostProcessor... postProcessors) {
+            this.postProcessors = List.of(postProcessors);
+            return this;
+        }
 
         /**
-         * Set the callback which will be called when the dimension is set.
+         * Set a consumer that will be called when the dimension is set.
+         * This is used to set the dimension of the generator.
          *
-         * @param onDimensionSet the callback.
+         * @param dimensionConsumer the consumer to call with the dimension.
          *
          * @return the builder.
          */
-        WorldGeneratorBuilder onDimensionSet(Consumer<Dimension> onDimensionSet);
+        public WorldGeneratorBuilder onDimensionSet(Consumer<Dimension> dimensionConsumer) {
+            this.dimensionConsumer = dimensionConsumer;
+            return this;
+        }
 
         /**
          * Build the WorldGenerator instance.
          *
          * @return the WorldGenerator.
          */
-        WorldGenerator build();
-    }
-
-    interface WorldGeneratorBuilderFactory {
-        WorldGeneratorBuilder create();
+        public WorldGenerator build() {
+            if (name == null || name.isBlank()) {
+                throw new IllegalStateException("Name cannot be null or blank");
+            }
+            return new WorldGenerator(name, type, preset, noisers, populators, postProcessors, dimensionConsumer);
+        }
     }
 }

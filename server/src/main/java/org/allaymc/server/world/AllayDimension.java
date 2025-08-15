@@ -52,13 +52,13 @@ public class AllayDimension implements Dimension {
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
-        worldGenerator.setDimension(this);
         this.chunkService = new AllayChunkService(this, worldGenerator, world.getWorldStorage());
         this.entityService = new AllayEntityService(this, world.getWorldStorage());
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.lightService = new AllayLightService(this);
         this.players = new NonBlockingHashSet<>();
         this.debugShapes = new NonBlockingHashSet<>();
+        worldGenerator.setDimension(this);
     }
 
     public void startTick() {
@@ -83,7 +83,7 @@ public class AllayDimension implements Dimension {
         // Shutdown light service first, because when unloading chunks, chunk service
         // will send updates to light service which is meaningless
         this.lightService.shutdown();
-        this.chunkService.unloadAllChunks().join();
+        this.chunkService.shutdown();
         // EntityService should be shutdown after chunk service, because it requires
         // the callback AllayEntityService.onChunkUnload() to be called
         this.entityService.shutdown();

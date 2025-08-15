@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   to different components instead of all in base component.
 - (API) Introduced a new mutable field `throwForce` in `ProjectileLaunchEvent` which indicates the force of the projectile when it is launched.
 - (API) Introduced method `Entity.getLastLocation()` which returns the last tick location of the entity.
+- (API) Introduced a new configuration `ServerSettings.WorldSettings.removeUnusedProtoChunkCycle` which controls how long a proto chunk can remain in memory.
 - Introduced component `EntityBreatheComponent` which handle the logic of entity breathe.
 - Added armor component to the newly added copper armor items.
 - Introduced a new optional arg for command `/enchant` which indicates whether the entered level should be checked to be in acceptable range.
@@ -27,6 +28,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
+- (API) `ChunkLoadEvent` and `ChunkUnloadEvent` were uncancellable now. Consider using `FakeChunkLoader` instead.
+- (API) Refactored the chunk system, some APIs are changed.
+- (API) Renamed `ServerSettings.WorldSettings.removeUnneededChunkCycle` to `ServerSettings.WorldSettings.removeUnusedFullChunkCycle`
+  in corresponding to the new `removeUnusedProtoChunkCycle` configuration.
 - Refactored `EntityPhysicsComponentImpl` for readability.
 - Resending available commands is now the default behavior for `PermissionListener`.
 
@@ -42,6 +47,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Removed
 
 - (API) Removed `EntityPhysicsBaseComponent`.
+- (API) Removed `ChunkPreLoadEvent`.
+- (API) Removed keep loading chunk related methods in `ChunkService`. Consider using `FakeChunkLoader` instead.
 
 ## 0.7.0 (API 0.10.0) - 2025-8-10
 

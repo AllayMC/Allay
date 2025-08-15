@@ -324,7 +324,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
 
         // Load the current point chunk firstly so that we can add player entity into the chunk
-        dimension.getChunkService().getOrLoadChunkSync((int) currentPos.x() >> 4, (int) currentPos.z() >> 4);
+        dimension.getChunkService().loadChunk((int) currentPos.x() >> 4, (int) currentPos.z() >> 4).join();
         baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 

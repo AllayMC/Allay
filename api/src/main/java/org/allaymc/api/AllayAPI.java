@@ -11,7 +11,6 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.world.generator.WorldGenerator;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
@@ -162,9 +161,6 @@ public final class AllayAPI {
         requireImpl(Server.class, Server.INSTANCE::set);
         requireImpl(Scheduler.Factory.class, Scheduler.FACTORY::set);
         requireImpl(EventBus.Factory.class, EventBus.FACTORY::set);
-
-        // World
-        requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
 
         // Command
         requireImpl(EntitySelectorAPI.class, EntitySelectorAPI.API::set);

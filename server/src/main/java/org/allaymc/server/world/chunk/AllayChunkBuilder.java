@@ -31,7 +31,7 @@ public class AllayChunkBuilder {
     }
 
     public AllayChunkBuilder() {
-        this.state = ChunkState.FINISHED;
+        this.state = ChunkState.FULL;
         this.blockEntities = new NonBlockingHashMap<>();
         this.scheduledUpdates = new NonBlockingHashMap<>();
     }
@@ -113,7 +113,7 @@ public class AllayChunkBuilder {
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
                 new NonBlockingHashMap<>(),
-                ChunkState.FINISHED, new NonBlockingHashMap<>()
+                ChunkState.FULL, new NonBlockingHashMap<>()
         );
     }
 }

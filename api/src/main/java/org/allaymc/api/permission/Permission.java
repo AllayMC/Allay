@@ -10,7 +10,7 @@ import org.allaymc.api.registry.Registries;
  * @author daoge_cmd
  */
 public final class Permission {
-    private static final PermissionListener DEFAULT_LISTENER = (permissible, value) -> {
+    private static final PermissionListener COMMAND_PERMISSION_LISTENER = (permissible, value) -> {
         if (permissible instanceof EntityPlayer player) {
             player.requireResendingAvailableCommands();
         }
@@ -38,7 +38,22 @@ public final class Permission {
      * @see #create(String, String, PermissionListener)
      */
     public static Permission create(String name, String description) {
-        return create(name, description, DEFAULT_LISTENER);
+        return create(name, description, null);
+    }
+
+    /**
+     * Creates a new permission with the given name and description to be used for command.
+     * Different from {@link #create(String, String, PermissionListener)}, this method will
+     * create a permission with a listener that will resend the available commands to the
+     * player when the permission is changed.
+     *
+     * @param name        the name of the permission.
+     * @param description the description of the permission.
+     *
+     * @return a new permission instance.
+     */
+    public static Permission createForCommand(String name, String description) {
+        return create(name, description, COMMAND_PERMISSION_LISTENER);
     }
 
     /**
@@ -47,6 +62,7 @@ public final class Permission {
      *
      * @param name        the name of the permission.
      * @param description the description of the permission.
+     * @param listener    the listener of the permission, or {@code null} if no listener is set.
      *
      * @return a new permission instance.
      *
