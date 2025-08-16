@@ -206,7 +206,12 @@ public class AllayLightService implements LightService {
     protected void tryCalculateChunkLightAt(int chunkX, int chunkZ, Runnable afterCalculated) {
         if (this.getQueuedUpdateCount() > maxUpdateCount) {
             // We have too many light updates in the queue, so we need to wait for a while
-            chunkAndBlockUpdateQueue.offer(() -> tryCalculateChunkLightAt(chunkX, chunkZ, afterCalculated));
+            chunkAndBlockUpdateQueue.offer(() -> {
+                // Recheck is needed since there may be chunk load/unload
+                if (canCalculateLightInChunk(chunkX, chunkZ)) {
+                    tryCalculateChunkLightAt(chunkX, chunkZ, afterCalculated);
+                }
+            });
             return;
         }
 

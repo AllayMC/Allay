@@ -43,6 +43,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed recursive wall updating.
 - Farmland trampling now correctly considers any entity whose bounding box exceeds a certain size threshold, instead of relying solely on a fixed entity whitelist.
 - Player movement now normally reduces satiety
+- Fixed an NPE bug that could occur in extreme cases for the light engine.
 
 ### Removed
 
