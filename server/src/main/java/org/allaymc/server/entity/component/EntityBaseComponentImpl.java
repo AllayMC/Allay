@@ -414,8 +414,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void beforeTeleport(Location3dc target) {
         this.manager.callEvent(CEntityBeforeTeleportEvent.INSTANCE);
-        // Ensure that the new chunk is loaded
-        target.dimension().getChunkService().loadChunk((int) target.x() >> 4, (int) target.z() >> 4).join();
     }
 
     protected void teleportInDimension(Location3dc target) {

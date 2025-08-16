@@ -192,7 +192,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("Determines how long a proto chunk will remain in memory (gt)")
         @CustomKey("remove-unused-proto-chunk-cycle")
-        private int removeUnusedProtoChunkCycle = 300; // 15 seconds
+        private int removeUnusedProtoChunkCycle = 600; // 30 seconds
 
         @Comment("If set to true, the server will load chunks around the spawn point")
         @Comment("Which will reduce the time on joining server")

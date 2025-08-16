@@ -450,7 +450,12 @@ public final class AllayChunkService implements ChunkService {
     private void removeProtoChunk(int x, int z) {
         var hash = HashUtils.hashXZ(x, z);
         var chunk = this.protoChunks.remove(hash);
+        if (chunk == null) {
+            return;
+        }
+
         try {
+            // FIXME: NPE here
             this.protoChunkFutures.remove(hash).complete(chunk);
         } catch (CancellationException e) {
             // Expected behavior, ignore it

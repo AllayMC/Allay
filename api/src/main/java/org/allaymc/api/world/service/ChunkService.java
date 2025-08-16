@@ -98,7 +98,7 @@ public interface ChunkService extends ChunkSource {
     }
 
     /**
-     * Get the specified chunk or load it if it is not loaded.X
+     * Get the specified chunk or load it if it is not loaded.
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
