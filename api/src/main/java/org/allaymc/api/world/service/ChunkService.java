@@ -2,6 +2,7 @@ package org.allaymc.api.world.service;
 
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.chunk.ChunkSource;
@@ -30,8 +31,8 @@ public interface ChunkService extends ChunkSource {
 
     /**
      * Get the chunk future of the specified chunk. The return value of method {@link CompletableFuture#isDone}
-     * represents the chunk status: {@code true} if the chunk is loaded, {@code false} if the chunk is still loading.
-     * This method will return {@code null} if chunk is neither loading nor already loaded.
+     * represents the chunk status: {@code true} if the chunk is loaded or is cancelled, {@code false} if the
+     * chunk is still loading. This method will return {@code null} if chunk is neither loading nor already loaded.
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
@@ -54,7 +55,7 @@ public interface ChunkService extends ChunkSource {
     default Chunk getChunk(int x, int z) {
         var future = getChunkFuture(x, z);
 
-        if (future != null && future.isDone()) {
+        if (future != null && Utils.isDoneNormally(future)) {
             return future.resultNow();
         }
 
@@ -162,7 +163,7 @@ public interface ChunkService extends ChunkSource {
      */
     default boolean isChunkLoaded(long hashXZ) {
         var future = getChunkFuture(hashXZ);
-        return future != null && future.isDone();
+        return future != null && Utils.isDoneNormally(future);
     }
 
     /**

@@ -10,13 +10,13 @@ import org.allaymc.api.eventbus.event.world.ChunkUnloadEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
-import org.allaymc.server.utils.Utils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.generator.ChunkLocks;
 import org.allaymc.server.world.generator.ChunkPyramid;
@@ -450,7 +450,11 @@ public final class AllayChunkService implements ChunkService {
     private void removeProtoChunk(int x, int z) {
         var hash = HashUtils.hashXZ(x, z);
         var chunk = this.protoChunks.remove(hash);
-        this.protoChunkFutures.remove(hash).complete(chunk);
+        try {
+            this.protoChunkFutures.remove(hash).complete(chunk);
+        } catch (CancellationException e) {
+            // Expected behavior, ignore it
+        }
         this.unusedProtoChunkCountDown.remove(hash);
     }
 

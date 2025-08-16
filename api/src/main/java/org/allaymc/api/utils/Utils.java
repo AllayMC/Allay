@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author daoge_cmd
@@ -39,6 +40,7 @@ public class Utils {
      *
      * @param bytes1 the first byte array.
      * @param bytes2 the other byte arrays.
+     *
      * @return the merged byte array.
      */
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
@@ -62,6 +64,7 @@ public class Utils {
      * Calculates the number of bit that the specified value convert to binary.
      *
      * @param value the value.
+     *
      * @return the bits.
      */
     public byte computeRequiredBits(int value) {
@@ -78,6 +81,7 @@ public class Utils {
      * Convert a netty byte buffer to a byte array.
      *
      * @param buf the byte buffer.
+     *
      * @return the byte array.
      */
     public byte[] convertByteBuf2Array(ByteBuf buf) {
@@ -90,6 +94,7 @@ public class Utils {
      * Convert a {@code Object[]} array to a {@code String[]} array.
      *
      * @param objectArray the object array.
+     *
      * @return the string array.
      */
     public String[] objectArrayToStringArray(Object[] objectArray) {
@@ -100,7 +105,9 @@ public class Utils {
      * Read a string from the input stream.
      *
      * @param inputStream the input stream.
+     *
      * @return the string.
+     *
      * @throws IOException if an I/O error occurs.
      */
     public static String readString(InputStream inputStream) throws IOException {
@@ -111,7 +118,9 @@ public class Utils {
      * Read a string from the reader.
      *
      * @param reader the reader.
+     *
      * @return the string.
+     *
      * @throws IOException if an I/O error occurs.
      */
     public static String readString(Reader reader) throws IOException {
@@ -134,6 +143,7 @@ public class Utils {
      * Get a specified resource in the jar file.
      *
      * @param resourceName the resource name.
+     *
      * @return the input stream.
      */
     public static InputStream getResource(String resourceName) {
@@ -144,6 +154,7 @@ public class Utils {
      * Create a default config initializer.
      *
      * @param file the file path.
+     *
      * @return the config initializer.
      */
     public static OkaeriConfigInitializer createConfigInitializer(Path file) {
@@ -159,5 +170,33 @@ public class Utils {
             // Load and save to update comments/new fields
             it.load(true);
         };
+    }
+
+    /**
+     * Mirror the result of a CompletableFuture to another CompletableFuture.
+     *
+     * @param source the source CompletableFuture.
+     * @param target the target CompletableFuture.
+     * @param <T>    the type of the result.
+     */
+    public static <T> void mirror(CompletableFuture<T> source, CompletableFuture<T> target) {
+        source.whenComplete((result, ex) -> {
+            if (ex == null) {
+                target.complete(result);
+            } else {
+                target.completeExceptionally(ex);
+            }
+        });
+    }
+
+    /**
+     * Check if a CompletableFuture is done normally (not exceptionally or cancelled).
+     *
+     * @param future the CompletableFuture to check.
+     *
+     * @return true if the future is done normally, false otherwise.
+     */
+    public static boolean isDoneNormally(CompletableFuture<?> future) {
+        return future.isDone() && !future.isCompletedExceptionally() && !future.isCancelled();
     }
 }

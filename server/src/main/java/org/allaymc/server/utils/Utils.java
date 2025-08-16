@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author daoge_cmd
@@ -24,19 +23,5 @@ public class Utils {
             throw new IllegalArgumentException(name + ": " + n + " (expected: >= 0)");
         }
         return n;
-    }
-
-    public static <T> void mirror(CompletableFuture<T> source, CompletableFuture<T> target) {
-        source.whenComplete((result, ex) -> {
-            if (ex == null) {
-                target.complete(result);
-            } else {
-                target.completeExceptionally(ex);
-            }
-        });
-    }
-
-    public static boolean isDoneNormally(CompletableFuture<?> future) {
-        return future.isDone() && !future.isCompletedExceptionally() && !future.isCancelled();
     }
 }
