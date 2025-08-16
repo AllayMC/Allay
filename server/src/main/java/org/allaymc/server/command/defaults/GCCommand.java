@@ -21,13 +21,13 @@ public class GCCommand extends SimpleCommand {
         tree.getRoot()
                 .exec(context -> {
                     var memory = getCurrentMemoryUsage();
-                    System.gc();
                     for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
                         for (var dimension : world.getDimensions().values()) {
                             dimension.getChunkService().removeUnusedChunksImmediately();
                             dimension.getEntityService().checkAutoSaveImmediately();
                         }
                     }
+                    System.gc();
                     var freedMemory = memory - getCurrentMemoryUsage();
                     context.getSender().sendTr(TrKeys.A_COMMAND_GC_COMPLETED, freedMemory);
                     return context.success();

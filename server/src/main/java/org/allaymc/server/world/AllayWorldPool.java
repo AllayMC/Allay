@@ -134,7 +134,7 @@ public final class AllayWorldPool implements WorldPool {
         try {
             return factory.apply(settings.generatorPreset());
         } catch (Throwable t) {
-            log.error("Error while creating {} type world generator with the preset {}", settings.generatorType(), settings.generatorPreset());
+            log.error("Error while creating {} type world generator with the preset {}", settings.generatorType(), settings.generatorPreset(), t);
             return Registries.WORLD_GENERATOR_FACTORIES.get("VOID").apply(null);
         }
     }

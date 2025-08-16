@@ -179,7 +179,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return builder.build().toSafeChunk();
         }
 
-        builder.state(ChunkState.FINISHED);
+        builder.state(ChunkState.FULL);
         deserializeSections(this.db, builder);
         deserializeHeightAndBiome(this.db, builder);
         deserializeBlockEntities(this.db, builder);
@@ -199,7 +199,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     @Override
     public void writeChunkSync(Chunk chunk) {
-        if (chunk.getState() != ChunkState.FINISHED) {
+        if (chunk.getState() != ChunkState.FULL) {
             log.warn("Cannot save unfinished chunk at {}, {}", chunk.getX(), chunk.getZ());
             return;
         }
