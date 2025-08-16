@@ -29,6 +29,12 @@ public class WorldGenerator {
     private final List<PostProcessor> postProcessors;
     private final Consumer<Dimension> dimensionConsumer;
 
+    /**
+     * Dimension that this generator is associated with. Will be set later.
+     */
+    @Getter
+    private Dimension dimension;
+
     private WorldGenerator(
             String name,
             WorldGeneratorType type,
@@ -50,6 +56,11 @@ public class WorldGenerator {
         this.dimensionConsumer = dimensionConsumer;
     }
 
+    /**
+     * Create a new WorldGeneratorBuilder instance.
+     *
+     * @return a new WorldGeneratorBuilder.
+     */
     public static WorldGeneratorBuilder builder() {
         return new WorldGeneratorBuilder();
     }
@@ -65,6 +76,11 @@ public class WorldGenerator {
      * @throws IllegalStateException if the method is called twice.
      */
     public void setDimension(Dimension dimension) {
+        if (this.dimension != null) {
+            throw new IllegalStateException("Dimension has already been set for this generator: " + this.name);
+        }
+
+        this.dimension = dimension;
         this.dimensionConsumer.accept(dimension);
     }
 
