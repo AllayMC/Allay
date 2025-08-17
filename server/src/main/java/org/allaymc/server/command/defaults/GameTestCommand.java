@@ -2,7 +2,6 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
@@ -46,7 +45,7 @@ import java.util.function.Consumer;
 /**
  * @author daoge_cmd
  */
-public class GameTestCommand extends SimpleCommand {
+public class GameTestCommand extends VanillaCommand {
 
     public GameTestCommand() {
         super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
@@ -82,10 +81,8 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("trs")
                 .str("key")
-                .enumClass("langCode", LangCode.class)
-                .optional()
-                .remain("args")
-                .optional()
+                .enumClass("langCode", LangCode.class).optional()
+                .remain("args").optional()
                 .exec((context, player) -> {
                     String key = context.getResult(1);
                     LangCode langCode = context.getResultOr(2, I18n.FALLBACK_LANG);
@@ -370,10 +367,8 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("renderobj")
                 .str("filename")
-                .floatNum("scale", 1)
-                .optional()
-                .pos("pos")
-                .optional()
+                .floatNum("scale", 1).optional()
+                .pos("pos").optional()
                 .exec((context, player) -> {
                     String filename = context.getResult(1);
                     String objData;
@@ -510,8 +505,7 @@ public class GameTestCommand extends SimpleCommand {
                 }, SenderType.PLAYER)
                 .root()
                 .key("addcooldown")
-                .str("category", null)
-                .optional()
+                .str("category", null).optional()
                 .exec((context, player) -> {
                     String category = context.getResult(1);
                     if (category != null) {

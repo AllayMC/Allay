@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.TrKeys;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class TeleportCommand extends SimpleCommand {
+public class TeleportCommand extends VanillaCommand {
     public TeleportCommand() {
         super("teleport", TrKeys.M_COMMANDS_TP_DESCRIPTION);
         aliases.add("tp");
@@ -36,14 +35,13 @@ public class TeleportCommand extends SimpleCommand {
                 .target("destination")
                 .exec((context, sender) -> {
                     List<Entity> destination = context.getResult(0);
-
                     if (destination.isEmpty()) {
-                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
+                        context.addNoTargetMatchError();
                         return context.fail();
                     }
 
                     if (destination.size() > 1) {
-                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_TOOMANYTARGETS);
+                        context.addTooManyTargetsError();
                         return context.fail();
                     }
 
@@ -73,14 +71,13 @@ public class TeleportCommand extends SimpleCommand {
                 .exec(context -> {
                     List<Entity> victims = context.getResult(0);
                     List<Entity> destination = context.getResult(1);
-
                     if (destination.isEmpty()) {
-                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
+                        context.addNoTargetMatchError();
                         return context.fail();
                     }
 
                     if (destination.size() > 1) {
-                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_TOOMANYTARGETS);
+                        context.addTooManyTargetsError();
                         return context.fail();
                     }
 

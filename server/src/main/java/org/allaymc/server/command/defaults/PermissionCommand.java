@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.permission.Permission;
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class PermissionCommand extends SimpleCommand {
+public class PermissionCommand extends VanillaCommand {
 
     public PermissionCommand() {
         super("permission", "Manage player's permissions");

@@ -1,7 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.CommandResult;
-import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.TrKeys;
@@ -14,11 +14,12 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author daoge_cmd
  */
-public class ExecuteCommand extends SimpleCommand {
+public class ExecuteCommand extends VanillaCommand {
 
     public ExecuteCommand() {
         super("execute", TrKeys.M_COMMANDS_EXECUTE_DESCRIPTION);
@@ -31,23 +32,18 @@ public class ExecuteCommand extends SimpleCommand {
                 .target("origin")
                 .remain("subcommand")
                 .exec(context -> {
-                    List<Entity> origin = context.getResult(1);
-                    if (origin.isEmpty()) {
+                    List<Entity> targets = context.getResult(1);
+                    if (targets.isEmpty()) {
                         context.addNoTargetMatchError();
                         return context.fail();
                     }
 
                     List<String> remain = context.getResult(2);
-
-                    var successCount = 0;
-                    for (var target : origin) {
+                    return runForEachTarget(tree, context, targets, remain.toArray(String[]::new), target -> {
                         var proxySender = new ProxyCommandSender(target);
                         proxySender.setCmdExecuteLocation(context.getSender().getCommandExecuteLocation());
-                        var result = tree.parse(proxySender, remain.toArray(String[]::new));
-                        context.addOutputs(result.context().getOutputs());
-                        successCount += result.status();
-                    }
-                    return new CommandResult(successCount, context);
+                        return proxySender;
+                    });
                 })
                 .root()
                 .key("align")
@@ -57,45 +53,34 @@ public class ExecuteCommand extends SimpleCommand {
                     String axes = context.getResult(1);
                     List<String> remain = context.getResult(2);
 
+                    Location3d alignedLoc = new Location3d(context.getSender().getCommandExecuteLocation());
+                    Vector3d floored = alignedLoc.floor(new Vector3d());
+
+                    if (axes.contains("x")) alignedLoc.x = floored.x;
+                    if (axes.contains("y")) alignedLoc.y = floored.y;
+                    if (axes.contains("z")) alignedLoc.z = floored.z;
+
                     var proxySender = new ProxyCommandSender(context.getSender());
-                    var newLoc = new Location3d(context.getSender().getCommandExecuteLocation());
-                    var newLocFloor = newLoc.floor(new Vector3d());
-                    if (axes.contains("x")) {
-                        newLoc.x = newLocFloor.x;
-                    }
-                    if (axes.contains("y")) {
-                        newLoc.y = newLocFloor.y;
-                    }
-                    if (axes.contains("z")) {
-                        newLoc.z = newLocFloor.z;
-                    }
-                    proxySender.setCmdExecuteLocation(newLoc);
-                    var result = tree.parse(proxySender, remain.toArray(String[]::new));
-                    context.addOutputs(result.context().getOutputs());
-                    return new CommandResult(result.status(), context);
+                    proxySender.setCmdExecuteLocation(alignedLoc);
+                    return runSubcommand(tree, context, proxySender, remain);
                 })
                 .root()
                 .key("at")
                 .target("origin")
                 .remain("subcommand")
                 .exec(context -> {
-                    List<Entity> origin = context.getResult(1);
-                    if (origin.isEmpty()) {
+                    List<Entity> targets = context.getResult(1);
+                    if (targets.isEmpty()) {
                         context.addNoTargetMatchError();
                         return context.fail();
                     }
 
                     List<String> remain = context.getResult(2);
-
-                    var successCount = 0;
-                    for (var target : origin) {
+                    return runForEachTarget(tree, context, targets, remain.toArray(String[]::new), target -> {
                         var proxySender = new ProxyCommandSender(context.getSender());
                         proxySender.setCmdExecuteLocation(target.getLocation());
-                        var result = tree.parse(proxySender, remain.toArray(String[]::new));
-                        context.addOutputs(result.context().getOutputs());
-                        successCount += result.status();
-                    }
-                    return new CommandResult(successCount, context);
+                        return proxySender;
+                    });
                 })
                 .root()
                 .key("positioned")
@@ -104,15 +89,14 @@ public class ExecuteCommand extends SimpleCommand {
                 .exec(context -> {
                     Vector3dc pos = context.getResult(1);
                     List<String> remain = context.getResult(2);
-                    var sender = context.getSender();
-                    var proxySender = new ProxyCommandSender(sender);
-                    var loc = sender.getCommandExecuteLocation();
-                    var newLoc = new Location3d(loc);
+
+                    var proxy = new ProxyCommandSender(context.getSender());
+
+                    var newLoc = new Location3d(context.getSender().getCommandExecuteLocation());
                     newLoc.set(pos);
-                    proxySender.setCmdExecuteLocation(newLoc);
-                    var result = tree.parse(proxySender, remain.toArray(String[]::new));
-                    context.addOutputs(result.context().getOutputs());
-                    return new CommandResult(result.status(), context);
+                    proxy.setCmdExecuteLocation(newLoc);
+
+                    return runSubcommand(tree, context, proxy, remain);
                 })
                 .root()
                 .key("in")
@@ -123,6 +107,7 @@ public class ExecuteCommand extends SimpleCommand {
                     String worldName = context.getResult(1);
                     String dimName = context.getResult(2);
                     List<String> remain = context.getResult(3);
+
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
                         context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
@@ -138,13 +123,12 @@ public class ExecuteCommand extends SimpleCommand {
                     var dim = world.getDimension(dimInfo.dimensionId());
                     var sender = context.getSender();
                     var proxySender = new ProxyCommandSender(sender);
-                    var loc = sender.getCommandExecuteLocation();
-                    var newLoc = new Location3d(loc);
+
+                    var newLoc = new Location3d(sender.getCommandExecuteLocation());
                     newLoc.setDimension(dim);
                     proxySender.setCmdExecuteLocation(newLoc);
-                    var result = tree.parse(proxySender, remain.toArray(String[]::new));
-                    context.addOutputs(result.context().getOutputs());
-                    return new CommandResult(result.status(), context);
+
+                    return runSubcommand(tree, context, proxySender, remain);
                 })
                 .root()
                 .key("run")
@@ -158,5 +142,23 @@ public class ExecuteCommand extends SimpleCommand {
                     }
                     return new CommandResult(result.status(), context);
                 });
+    }
+
+    protected CommandResult runSubcommand(CommandTree tree, CommandContext context, ProxyCommandSender proxy, List<String> remain) {
+        var result = tree.parse(proxy, remain.toArray(String[]::new));
+        context.addOutputs(result.context().getOutputs());
+        return new CommandResult(result.status(), context);
+    }
+
+    private CommandResult runForEachTarget(CommandTree tree, CommandContext context, List<Entity> targets, String[] args, Function<Entity, ProxyCommandSender> proxyFactory) {
+        int successCount = 0;
+        for (var target : targets) {
+            var proxy = proxyFactory.apply(target);
+            var result = tree.parse(proxy, args);
+            context.addOutputs(result.context().getOutputs());
+            successCount += result.status();
+        }
+
+        return new CommandResult(successCount, context);
     }
 }

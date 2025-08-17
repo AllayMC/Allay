@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -11,7 +10,7 @@ import java.util.Collection;
 /**
  * @author IWareQ
  */
-public class EffectCommand extends SimpleCommand {
+public class EffectCommand extends VanillaCommand {
     public EffectCommand() {
         super("effect", TrKeys.M_COMMANDS_EFFECT_DESCRIPTION);
     }

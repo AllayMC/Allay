@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.utils.Structure;
 import org.cloudburstmc.nbt.NbtMap;
@@ -17,7 +16,7 @@ import java.nio.file.Path;
  *
  * @author daoge_cmd
  */
-public class StructureCommand extends SimpleCommand {
+public class StructureCommand extends VanillaCommand {
 
     private static final Path STRUCTURE_DIR = Path.of("structures");
     private static final String STRUCTURE_FILE_EXT = ".mcstructure";
@@ -38,14 +37,15 @@ public class StructureCommand extends SimpleCommand {
                     String fileName = context.getResult(1);
                     Vector3d start = ((Vector3d) context.getResult(2)).floor();
                     Vector3d end = ((Vector3d) context.getResult(3)).floor();
+
                     var sizeX = (int) (end.x - start.x + 1);
                     var sizeY = (int) (end.y - start.y + 1);
                     var sizeZ = (int) (end.z - start.z + 1);
-                    // SizeX|Y|Z should bigger than 0
                     if (sizeX <= 0 || sizeY <= 0 || sizeZ <= 0) {
                         context.addError("Invalid size");
                         return context.fail();
                     }
+
                     var structure = Structure.pick(
                             player.getDimension(),
                             (int) start.x, (int) start.y, (int) start.z,

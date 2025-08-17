@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.tree.CommandTree;
@@ -24,51 +23,10 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class ScoreboardCommand extends SimpleCommand {
+public class ScoreboardCommand extends VanillaCommand {
 
     public ScoreboardCommand() {
         super("scoreboard", TrKeys.M_COMMANDS_SCOREBOARD_DESCRIPTION);
-    }
-
-    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr) throws SelectorSyntaxException {
-        return parseScorers(sender, wildcardTargetStr, null);
-    }
-
-    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr, Scoreboard scoreboard) throws SelectorSyntaxException {
-        var service = Server.getInstance().getScoreboardService();
-        Set<Scorer> scorers = new HashSet<>();
-        EntityPlayer player;
-        if (wildcardTargetStr.equals("*")) {
-            if (scoreboard != null) {
-                scorers.addAll(scoreboard.getLines().keySet());
-                return scorers;
-            }
-
-            for (var sb : service.getScoreboards().values()) {
-                scorers.addAll(sb.getLines().keySet());
-            }
-
-            return scorers;
-        }
-
-        if (EntitySelectorAPI.getAPI().checkValid(wildcardTargetStr)) {
-            scorers = EntitySelectorAPI.getAPI()
-                    .matchEntities(sender, wildcardTargetStr)
-                    .stream()
-                    .map(e -> e instanceof EntityPlayer p ?
-                            new PlayerScorer(p) :
-                            new EntityScorer(e))
-                    .collect(Collectors.toSet());
-            return scorers;
-        }
-
-        if ((player = Server.getInstance().getPlayerService().getOnlinePlayerByName(wildcardTargetStr)) != null) {
-            scorers.add(new PlayerScorer(player));
-        } else {
-            scorers.add(new FakeScorer(wildcardTargetStr));
-        }
-
-        return scorers;
     }
 
     @Override
@@ -79,8 +37,7 @@ public class ScoreboardCommand extends SimpleCommand {
                 .key("add")
                 .str("objective")
                 .enums("criteria", "dummy")
-                .str("displayName")
-                .optional()
+                .str("displayName").optional()
                 .exec(context -> {
                     var service = Server.getInstance().getScoreboardService();
                     String objectiveName = context.getResult(2);
@@ -99,10 +56,8 @@ public class ScoreboardCommand extends SimpleCommand {
                 .up(4)
                 .key("setdisplay")
                 .enums("displaySlot", "sidebar", "list")
-                .str("objective")
-                .optional()
-                .enums("sortOrder", "ascending", new String[]{"ascending", "descending"})
-                .optional()
+                .str("objective").optional()
+                .enums("sortOrder", "ascending", new String[]{"ascending", "descending"}).optional()
                 .exec(context -> {
                     var service = Server.getInstance().getScoreboardService();
                     String slotName = context.getResult(2);
@@ -215,5 +170,46 @@ public class ScoreboardCommand extends SimpleCommand {
 
                     return context.fail();
                 });
+    }
+
+    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr) throws SelectorSyntaxException {
+        return parseScorers(sender, wildcardTargetStr, null);
+    }
+
+    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr, Scoreboard scoreboard) throws SelectorSyntaxException {
+        var service = Server.getInstance().getScoreboardService();
+        Set<Scorer> scorers = new HashSet<>();
+        EntityPlayer player;
+        if (wildcardTargetStr.equals("*")) {
+            if (scoreboard != null) {
+                scorers.addAll(scoreboard.getLines().keySet());
+                return scorers;
+            }
+
+            for (var sb : service.getScoreboards().values()) {
+                scorers.addAll(sb.getLines().keySet());
+            }
+
+            return scorers;
+        }
+
+        if (EntitySelectorAPI.getAPI().checkValid(wildcardTargetStr)) {
+            scorers = EntitySelectorAPI.getAPI()
+                    .matchEntities(sender, wildcardTargetStr)
+                    .stream()
+                    .map(e -> e instanceof EntityPlayer p ?
+                            new PlayerScorer(p) :
+                            new EntityScorer(e))
+                    .collect(Collectors.toSet());
+            return scorers;
+        }
+
+        if ((player = Server.getInstance().getPlayerService().getOnlinePlayerByName(wildcardTargetStr)) != null) {
+            scorers.add(new PlayerScorer(player));
+        } else {
+            scorers.add(new FakeScorer(wildcardTargetStr));
+        }
+
+        return scorers;
     }
 }

@@ -3,7 +3,6 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.joml.Vector3d;
@@ -13,7 +12,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class SetBlockCommand extends SimpleCommand {
+public class SetBlockCommand extends VanillaCommand {
     public SetBlockCommand() {
         super("setblock", TrKeys.M_COMMANDS_SETBLOCK_DESCRIPTION);
     }
@@ -23,8 +22,7 @@ public class SetBlockCommand extends SimpleCommand {
         tree.getRoot()
                 .pos("position")
                 .blockType("blockType")
-                .blockPropertyValues("blockPropertyValues")
-                .optional()
+                .blockPropertyValues("blockPropertyValues").optional()
                 .exec((context, entity) -> {
                     Vector3d pos = context.getResult(0);
                     BlockType<?> blockType = context.getResult(1);
@@ -35,6 +33,7 @@ public class SetBlockCommand extends SimpleCommand {
                         context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
                         return context.fail();
                     }
+
                     entity.getDimension().setBlockState(pos, blockState);
                     context.addOutput(TrKeys.M_COMMANDS_SETBLOCK_SUCCESS);
                     return context.success();

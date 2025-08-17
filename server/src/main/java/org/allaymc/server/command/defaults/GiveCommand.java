@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class GiveCommand extends SimpleCommand {
+public class GiveCommand extends VanillaCommand {
 
     public GiveCommand() {
         super("give", TrKeys.M_COMMANDS_GIVE_DESCRIPTION);
@@ -24,10 +23,8 @@ public class GiveCommand extends SimpleCommand {
         tree.getRoot()
                 .playerTarget("player")
                 .itemType("itemName")
-                .intNum("amount", 1)
-                .optional()
-                .intNum("data", 0)
-                .optional()
+                .intNum("amount", 1).optional()
+                .intNum("data", 0).optional()
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(0);
                     if (players.isEmpty()) {
@@ -50,22 +47,20 @@ public class GiveCommand extends SimpleCommand {
 
                     for (var player : players) {
                         var maxStackSize = itemType.getItemData().maxStackSize();
-                        var i = amount;
-                        while (i != 0) {
-                            int currentItemAmount;
-                            if (i > maxStackSize) {
-                                currentItemAmount = maxStackSize;
-                                i -= maxStackSize;
-                            } else {
-                                currentItemAmount = i;
-                                i = 0;
-                            }
-                            var itemStack = itemType.createItemStack(currentItemAmount, data);
+
+                        var remaining = amount;
+                        while (remaining > 0) {
+                            var giveCount = Math.min(remaining, maxStackSize);
+                            remaining -= giveCount;
+
+                            var itemStack = itemType.createItemStack(giveCount, data);
                             player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
-                            if (itemStack.getCount() != 0) {
+
+                            if (itemStack.getCount() > 0) {
                                 player.dropItemInPlayerPos(itemStack);
                             }
                         }
+
                         player.sendTr(TrKeys.M_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
                     }
                     context.addOutput(

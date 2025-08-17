@@ -29,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Refactored `EntityPhysicsComponentImpl` for readability.
 - Resending available commands is now the default behavior for `PermissionListener`.
+- Removed `Command.createPermissionForCommand()`, use `Permission.createForCommand()` instead. See commit history for details.
 
 ### Fixed
 
@@ -37,7 +38,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed `ClassCastException` on `BlockChorusFlowerBaseComponentImpl`.
 - Fixed recursive wall updating.
 - Farmland trampling now correctly considers any entity whose bounding box exceeds a certain size threshold, instead of relying solely on a fixed entity whitelist.
-- Player movement now normally reduces satiety
+- Player movement now normally reduces satiety.
+- `/world tp <world>` now teleports the player to (0, highest non-air block y, 0) instead of y=64.
 
 ### Removed
 

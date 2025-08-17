@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
@@ -13,7 +12,7 @@ import org.joml.Vector3dc;
 /**
  * @author daoge_cmd
  */
-public class SummonCommand extends SimpleCommand {
+public class SummonCommand extends VanillaCommand {
 
     public SummonCommand() {
         super("summon", TrKeys.M_COMMANDS_SUMMON_DESCRIPTION);
@@ -23,10 +22,8 @@ public class SummonCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .entityType("entityType")
-                .pos("pos")
-                .optional()
-                .intNum("count", 1)
-                .optional()
+                .pos("pos").optional()
+                .intNum("count", 1).optional()
                 .exec((context, sender) -> {
                     var dim = sender.getCommandExecuteLocation().dimension();
                     EntityType<?> entityType = context.getResult(0);
@@ -34,17 +31,19 @@ public class SummonCommand extends SimpleCommand {
                         context.addError("%" + TrKeys.M_COMMANDS_SUMMON_FAILED);
                         return context.fail();
                     }
+
                     Vector3dc pos = context.getResult(1);
                     if (pos == null) {
                         pos = sender.getCommandExecuteLocation();
                     }
+
                     var floorPos = pos.floor(new Vector3d());
                     if (dim.getChunkService().getChunkByDimensionPos((int) floorPos.x(), (int) floorPos.z()) == null) {
                         context.addError("%" + TrKeys.M_COMMANDS_SUMMON_OUTOFWORLD);
                         return context.fail();
                     }
-                    int count = context.getResult(2);
 
+                    int count = context.getResult(2);
                     for (var i = 1; i <= count; i++) {
                         var entity = entityType.createEntity(
                                 EntityInitInfo.builder()

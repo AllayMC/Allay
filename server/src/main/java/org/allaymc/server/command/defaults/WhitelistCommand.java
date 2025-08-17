@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
@@ -8,7 +7,7 @@ import org.allaymc.api.server.Server;
 /**
  * @author daoge_cmd
  */
-public class WhitelistCommand extends SimpleCommand {
+public class WhitelistCommand extends VanillaCommand {
     public WhitelistCommand() {
         super("whitelist", TrKeys.M_COMMANDS_ALLOWLIST_DESCRIPTION);
         aliases.add("allowlist");
