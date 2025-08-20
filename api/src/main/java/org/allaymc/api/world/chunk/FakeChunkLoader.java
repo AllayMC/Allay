@@ -54,7 +54,7 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     public void setChunkLoadingRadius(int radius) {}
 
     @Override
-    public void beforeSendChunks() {}
+    public void onChunkPosChanged() {}
 
     @Override
     public void onChunkInRangeSend(Chunk chunk) {}

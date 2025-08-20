@@ -63,7 +63,6 @@ public class AllayDimension implements Dimension {
 
     public void startTick() {
         this.lightService.startTick();
-        this.chunkService.startTick();
     }
 
     public void tick(long currentTick) {

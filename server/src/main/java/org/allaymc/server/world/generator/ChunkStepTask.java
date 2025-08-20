@@ -10,6 +10,7 @@ import org.allaymc.api.world.generator.context.PostProcessContext;
 /**
  * @author daoge_cmd
  */
+@FunctionalInterface
 public interface ChunkStepTask {
 
     int POPULATION_NEIGHBOR_ACCESS_RANGE = 1;

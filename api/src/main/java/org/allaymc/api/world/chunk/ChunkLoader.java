@@ -51,10 +51,10 @@ public interface ChunkLoader extends PacketReceiver {
     int getChunkTrySendCountPerTick();
 
     /**
-     * A method which will be called before sending chunks.
+     * A method which will be called when the chunk pos of the loader is changed.
      */
     @ApiStatus.OverrideOnly
-    void beforeSendChunks();
+    void onChunkPosChanged();
 
     /**
      * A method which will be called after a chunk is sent.

@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
 import it.unimi.dsi.fastutil.longs.LongComparator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import lombok.Getter;
+import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
@@ -29,6 +30,7 @@ import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingSt
 /**
  * @author daoge_cmd
  */
+@NotThreadSafe
 public final class ChunkLoaderHolder {
 
     private final ChunkService chunkService;
@@ -77,6 +79,7 @@ public final class ChunkLoaderHolder {
         var floor = MathUtils.floor(chunkLoader.getLocation());
         if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
             lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
+            chunkLoader.onChunkPosChanged();
             updateInRadiusChunks(floor);
             removeOutOfRadiusChunks();
             updateChunkSendingQueue();
@@ -151,7 +154,6 @@ public final class ChunkLoaderHolder {
         } while (!chunkSendingQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
 
         if (!chunkReadyToSend.isEmpty()) {
-            chunkLoader.beforeSendChunks();
             var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
             if (chunkSendingStrategy == ASYNC) {
                 asyncChunkSender.addChunkToSendingQueue(chunkReadyToSend.values());

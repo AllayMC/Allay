@@ -756,10 +756,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void beforeSendChunks() {
+    public void onChunkPosChanged() {
         var packet = new NetworkChunkPublisherUpdatePacket();
-        var loc = getLocation();
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3i.from(loc.x(), loc.y(), loc.z()));
+        packet.setPosition(org.cloudburstmc.math.vector.Vector3i.from(location.x(), location.y(), location.z()));
         packet.setRadius(getChunkLoadingRadius() << 4);
         networkComponent.sendPacket(packet);
     }

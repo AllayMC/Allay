@@ -9,6 +9,7 @@ import org.allaymc.api.utils.HashUtils;
  *
  * @author daoge_cmd
  */
+@FunctionalInterface
 public interface ChunkSource {
 
     /**

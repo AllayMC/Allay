@@ -499,7 +499,7 @@ public class AllayWorld implements World {
         }
 
         @Override
-        public void beforeSendChunks() {}
+        public void onChunkPosChanged() {}
 
         @Override
         public void onChunkInRangeSend(Chunk chunk) {}
