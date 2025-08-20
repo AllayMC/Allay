@@ -16,12 +16,28 @@ import java.util.List;
  */
 public abstract class SimpleCommand extends BaseCommand {
 
+    public static final String DEFAULT_COMMAND_PERMISSION_PREFIX = "command.";
+
     protected CommandTree commandTree;
 
+    /**
+     * Create a new SimpleCommand with the given name and description. The
+     * permission to execute this command is simply "command.&lt;command name&gt;".
+     *
+     * @param name        The name of the command.
+     * @param description The description of the command.
+     */
     public SimpleCommand(String name, @MayContainTrKey String description) {
-        this(name, description, List.of(Permission.createForCommand(name, name)));
+        this(name, description, List.of(Permission.createForCommand(name, DEFAULT_COMMAND_PERMISSION_PREFIX + name)));
     }
 
+    /**
+     * Create a new SimpleCommand with the given name, description and permissions.
+     *
+     * @param name        The name of the command.
+     * @param description The description of the command.
+     * @param permissions The permissions required to execute this command.
+     */
     public SimpleCommand(String name, @MayContainTrKey String description, List<Permission> permissions) {
         super(name, description, permissions);
         this.commandTree = CommandTree.create(this);

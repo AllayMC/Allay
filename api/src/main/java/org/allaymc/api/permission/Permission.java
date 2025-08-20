@@ -28,9 +28,8 @@ public final class Permission {
     }
 
     /**
-     * Creates a permission intended for commands.
-     * The created permission will be associated with a predefined listener
-     * that triggers a command list refresh for players.
+     * Creates a permission intended for commands. The created permission will be associated with a
+     * predefined listener that triggers a command list refresh for players.
      *
      * @param commandName the command name without the leading slash.
      * @param permission  the name of the permission.
@@ -55,21 +54,6 @@ public final class Permission {
      */
     public static Permission create(String name, String description) {
         return create(name, description, null);
-    }
-
-    /**
-     * Creates a new permission with the given name and description to be used for command.
-     * Different from {@link #create(String, String, PermissionListener)}, this method will
-     * create a permission with a listener that will resend the available commands to the
-     * player when the permission is changed.
-     *
-     * @param name        the name of the permission.
-     * @param description the description of the permission.
-     *
-     * @return a new permission instance.
-     */
-    public static Permission createForCommand(String name, String description) {
-        return create(name, description, COMMAND_PERMISSION_LISTENER);
     }
 
     /**
