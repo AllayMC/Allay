@@ -50,6 +50,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - `/world tp <world>` now teleports the player to the spawn point for overworld dimension.
 - Fixed the physics for some entities including TNT, and stepping is disabled by default now.
 - Fixed `WeatherChangeEvent` spamming.
+- Removed `Utils.convertByteBuf2Array()`. Use `ByteBufUtil.getBytes()` instead for better safety and reliability.
 
 ### Removed
 

@@ -3,11 +3,10 @@ package org.allaymc.server.datastruct.palette;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufInputStream;
-import org.allaymc.api.utils.Utils;
+import io.netty.buffer.ByteBufUtil;
 import org.allaymc.server.datastruct.bitarray.BitArrayVersion;
-import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -83,16 +82,14 @@ class PaletteTest {
         ByteBuf b1 = ByteBufAllocator.DEFAULT.buffer();
         p1.writeToStorage(b1, PDSerializerImpl.INSTANCE);
 
-        var bytes0 = Utils.convertByteBuf2Array(b0);
-        var bytes1 = Utils.convertByteBuf2Array(b1);
+        var bytes0 = ByteBufUtil.getBytes(b0);
+        var bytes1 = ByteBufUtil.getBytes(b1);
         assertArrayEquals(bytes0, bytes1);
     }
 
-    record Entry(int id) {
-    }
+    record Entry(int id) {}
 
     static class PDSerializerImpl implements NBTSerializer<Entry> {
-
         static PDSerializerImpl INSTANCE = new PDSerializerImpl();
 
         @Override
@@ -102,15 +99,12 @@ class PaletteTest {
     }
 
     static class PDDeserializerImpl implements NBTDeserializer<Entry> {
-
         static PDDeserializerImpl INSTANCE = new PDDeserializerImpl();
 
         @Override
         public Entry deserialize(ByteBuf buffer) {
-            try (var bufInputStream = new ByteBufInputStream(buffer);
-                 var input = new LittleEndianDataInputStream(bufInputStream);
-                 var nbtInputStream = new NBTInputStream(input)) {
-                var nbt = (NbtMap) nbtInputStream.readTag();
+            try (var reader = NbtUtils.createReaderLE(new ByteBufInputStream(buffer))) {
+                var nbt = (NbtMap) reader.readTag();
                 return new Entry(nbt.getInt("id"));
             } catch (IOException e) {
                 throw new PaletteException(e);

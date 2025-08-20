@@ -1,9 +1,7 @@
 package org.allaymc.api.utils;
 
-import com.google.common.base.Preconditions;
 import eu.okaeri.configs.OkaeriConfigInitializer;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
-import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.tag.BlockTag;
@@ -68,26 +66,7 @@ public class Utils {
      * @return the bits.
      */
     public byte computeRequiredBits(int value) {
-        Preconditions.checkArgument(value >= 0);
-        if (value <= 1) return 1;
-        byte bits = 1;
-        while (value >= (1 << bits)) {
-            bits++;
-        }
-        return bits;
-    }
-
-    /**
-     * Convert a netty byte buffer to a byte array.
-     *
-     * @param buf the byte buffer.
-     *
-     * @return the byte array.
-     */
-    public byte[] convertByteBuf2Array(ByteBuf buf) {
-        byte[] payload = new byte[buf.readableBytes()];
-        buf.readBytes(payload);
-        return payload;
+        return (byte) (Integer.SIZE - Integer.numberOfLeadingZeros(value));
     }
 
     /**
