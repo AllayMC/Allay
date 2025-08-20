@@ -27,7 +27,6 @@ import org.allaymc.api.registry.*;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
@@ -46,7 +45,6 @@ import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
-import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -151,9 +149,6 @@ public final class Allay {
         api.bind(Server.class, AllayServer::getInstance);
         api.bind(Scheduler.Factory.class, () -> AllayScheduler::new);
         api.bind(EventBus.Factory.class, () -> AllayEventBus::new);
-
-        // World
-        api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
 
         // Command
         api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);

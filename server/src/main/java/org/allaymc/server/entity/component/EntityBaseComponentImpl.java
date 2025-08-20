@@ -368,8 +368,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        Set<EntityPlayer> oldChunkPlayers = oldDimension != null ? oldDimension.getChunkService().getChunk(oldChunkX, oldChunkZ).getPlayerChunkLoaders() : Collections.emptySet();
-        Set<EntityPlayer> newChunkPlayers = newDimension != null ? newDimension.getChunkService().getChunk(newChunkX, newChunkZ).getPlayerChunkLoaders() : Collections.emptySet();
+        var oldChunk = oldDimension != null ? oldDimension.getChunkService().getChunk(oldChunkX, oldChunkZ) : null;
+        var newChunk = newDimension != null ? newDimension.getChunkService().getChunk(newChunkX, newChunkZ) : null;
+        Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
+        Set<EntityPlayer> newChunkPlayers = newChunk != null ? newChunk.getPlayerChunkLoaders() : Collections.emptySet();
         Set<EntityPlayer> oldChunkOnlyPlayers = new HashSet<>(oldChunkPlayers);
         oldChunkOnlyPlayers.removeAll(newChunkPlayers);
         Set<EntityPlayer> newChunkOnlyPlayers = new HashSet<>(newChunkPlayers);
@@ -412,8 +414,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void beforeTeleport(Location3dc target) {
         this.manager.callEvent(CEntityBeforeTeleportEvent.INSTANCE);
-        // Ensure that the new chunk is loaded
-        target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
     }
 
     protected void teleportInDimension(Location3dc target) {

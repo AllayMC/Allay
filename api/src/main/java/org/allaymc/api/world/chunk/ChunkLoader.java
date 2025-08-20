@@ -38,21 +38,23 @@ public interface ChunkLoader extends PacketReceiver {
      * Set the chunk loading radius.
      *
      * @param radius the chunk loading radius.
+     *
+     * @throws UnsupportedOperationException if the loading radius cannot be changed for this chunk loader.
      */
     void setChunkLoadingRadius(int radius);
 
     /**
-     * Get chunk try to send count per tick.
+     * Get the maximum chunk count try to send per tick.
      *
-     * @return the chunk try to send count per tick.
+     * @return the maximum chunk count try to send per tick.
      */
-    int getChunkTrySendCountPerTick();
+    int getChunkMaxSendCountPerTick();
 
     /**
-     * A method which will be called before sending chunks.
+     * A method which will be called when the chunk pos of the loader is changed.
      */
     @ApiStatus.OverrideOnly
-    void beforeSendChunks();
+    void onChunkPosChanged();
 
     /**
      * A method which will be called after a chunk is sent.

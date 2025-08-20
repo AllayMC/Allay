@@ -171,8 +171,8 @@ public class ServerSettings extends OkaeriConfig {
         private int viewDistance = 8;
 
         @Comment("Determines the maximum number of chunks that can be sent during a tick (per chunk loader)")
-        @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 16;
+        @CustomKey("chunk-max-send-count-per-tick")
+        private int chunkMaxSendCountPerTick = 16;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;
@@ -187,8 +187,12 @@ public class ServerSettings extends OkaeriConfig {
         private int fullyJoinChunkThreshold = 30;
 
         @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
-        @CustomKey("remove-unneeded-chunk-cycle")
-        private int removeUnneededChunkCycle = 1200;
+        @CustomKey("remove-unused-full-chunk-cycle")
+        private int removeUnusedFullChunkCycle = 1200; // 1 minute
+
+        @Comment("Determines how long a proto chunk will remain in memory (gt)")
+        @CustomKey("remove-unused-proto-chunk-cycle")
+        private int removeUnusedProtoChunkCycle = 600; // 30 seconds
 
         @Comment("If set to true, the server will load chunks around the spawn point")
         @Comment("Which will reduce the time on joining server")

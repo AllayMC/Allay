@@ -14,23 +14,6 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface Command {
-
-    /**
-     * Prefix of allay's build-in command permissions.
-     */
-    String ALLAY_BUILD_IN_COMMAND_PERMISSION_PREFIX = "allay.command.";
-
-    /**
-     * Helper method for creating a permission for the given command name.
-     *
-     * @param commandName the name of the command for which to create a permission.
-     *
-     * @return a new {@link Permission} instance representing the command permission.
-     */
-    static Permission createPermissionForCommand(String commandName) {
-        return Permission.create(ALLAY_BUILD_IN_COMMAND_PERMISSION_PREFIX + commandName, "The permission to use the command /" + commandName);
-    }
-
     /**
      * Executes this command with the given sender and arguments.
      *

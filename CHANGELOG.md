@@ -20,13 +20,20 @@ Unless otherwise specified, any version comparison below is the comparison of se
   to different components instead of all in base component.
 - (API) Introduced a new mutable field `throwForce` in `ProjectileLaunchEvent` which indicates the force of the projectile when it is launched.
 - (API) Introduced method `Entity.getLastLocation()` which returns the last tick location of the entity.
+- (API) Introduced a new configuration `ServerSettings.WorldSettings.removeUnusedProtoChunkCycle` which controls how long a proto chunk can remain in memory.
 - Introduced component `EntityBreatheComponent` which handle the logic of entity breathe.
 - Added armor component to the newly added copper armor items.
 - Introduced a new optional arg for command `/enchant` which indicates whether the entered level should be checked to be in acceptable range.
 - Implemented xp bottle.
+- Added back spawn point finding logic, and now the world will look for a suitable spawn point when it is first created.
 
 ### Changed
 
+- (API) `ChunkLoadEvent` and `ChunkUnloadEvent` were uncancellable now. Consider using `FakeChunkLoader` instead.
+- (API) Refactored the chunk system, some APIs are changed.
+- (API) Renamed `ServerSettings.WorldSettings.removeUnneededChunkCycle` to `ServerSettings.WorldSettings.removeUnusedFullChunkCycle`.
+- (API) Renamed `ServerSettings.WorldSettings.chunkTrySendCountPerTick` to `ServerSettings.WorldSettings.chunkMaxSendCountPerTick`.
+  in corresponding to the new `removeUnusedProtoChunkCycle` configuration.
 - Refactored `EntityPhysicsComponentImpl` for readability.
 - Resending available commands is now the default behavior for `PermissionListener`.
 - Removed `Command.createPermissionForCommand()`, use `Permission.createForCommand()` instead. See commit history for details.
@@ -38,12 +45,15 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed `ClassCastException` on `BlockChorusFlowerBaseComponentImpl`.
 - Fixed recursive wall updating.
 - Farmland trampling now correctly considers any entity whose bounding box exceeds a certain size threshold, instead of relying solely on a fixed entity whitelist.
-- Player movement now normally reduces satiety.
-- `/world tp <world>` now teleports the player to (0, highest non-air block y, 0) instead of y=64.
+- Player movement now normally reduces satiety
+- Fixed an NPE bug that could occur in extreme cases for the light engine.
+- `/world tp <world>` now teleports the player to the spawn point for overworld dimension.
 
 ### Removed
 
 - (API) Removed `EntityPhysicsBaseComponent`.
+- (API) Removed `ChunkPreLoadEvent`.
+- (API) Removed keep loading chunk related methods in `ChunkService`. Consider using `FakeChunkLoader` instead.
 
 ## 0.7.0 (API 0.10.0) - 2025-8-10
 

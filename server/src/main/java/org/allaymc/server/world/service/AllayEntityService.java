@@ -186,7 +186,10 @@ public class AllayEntityService implements EntityService {
         }
 
         physicsService.addEntity(entity);
-        entity.spawnTo(dimension.getChunkService().getChunk((int) entity.getLocation().x() >> 4, (int) entity.getLocation().z() >> 4).getPlayerChunkLoaders());
+        var chunk = entity.getCurrentChunk();
+        if (chunk != null) {
+            entity.spawnTo(chunk.getPlayerChunkLoaders());
+        }
         ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.ALIVE);
     }
 

@@ -17,19 +17,20 @@ public class GCCommand extends VanillaCommand {
 
     @Override
     public void prepareCommandTree(CommandTree tree) {
-        tree.getRoot().exec(context -> {
-            var memory = getCurrentMemoryUsage();
-            for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
-                for (var dimension : world.getDimensions().values()) {
-                    dimension.getChunkService().removeUnusedChunksImmediately();
-                    dimension.getEntityService().checkAutoSaveImmediately();
-                }
-            }
-            System.gc();
-            var freedMemory = memory - getCurrentMemoryUsage();
-            context.getSender().sendTr(TrKeys.A_COMMAND_GC_COMPLETED, freedMemory);
-            return context.success();
-        });
+        tree.getRoot()
+                .exec(context -> {
+                    var memory = getCurrentMemoryUsage();
+                    for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
+                        for (var dimension : world.getDimensions().values()) {
+                            dimension.getChunkService().removeUnusedChunksImmediately();
+                            dimension.getEntityService().checkAutoSaveImmediately();
+                        }
+                    }
+                    System.gc();
+                    var freedMemory = memory - getCurrentMemoryUsage();
+                    context.getSender().sendTr(TrKeys.A_COMMAND_GC_COMPLETED, freedMemory);
+                    return context.success();
+                });
     }
 
     protected double getCurrentMemoryUsage() {

@@ -28,9 +28,8 @@ public final class Permission {
     }
 
     /**
-     * Creates a permission intended for commands.
-     * The created permission will be associated with a predefined listener
-     * that triggers a command list refresh for players.
+     * Creates a permission intended for commands. The created permission will be associated with a
+     * predefined listener that triggers a command list refresh for players.
      *
      * @param commandName the command name without the leading slash.
      * @param permission  the name of the permission.
@@ -63,7 +62,7 @@ public final class Permission {
      *
      * @param name        the name of the permission.
      * @param description the description of the permission.
-     * @param listener    the permission listener, or {@code null} if none.
+     * @param listener    the listener of the permission, or {@code null} if no listener is set.
      *
      * @return a new permission instance.
      *

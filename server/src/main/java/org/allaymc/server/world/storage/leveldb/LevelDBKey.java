@@ -2,6 +2,7 @@ package org.allaymc.server.world.storage.leveldb;
 
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.chunk.ChunkState;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -91,7 +92,14 @@ public enum LevelDBKey {
      * Replaced by {@link #VERSION}. It is still used by vanilla to check compatibility, but vanilla no longer writes this tag.
      */
     LEGACY_VERSION(118),
-    AABB_VOLUMES(119);
+    AABB_VOLUMES(119),
+
+    // The following keys are only used in allay.
+
+    /**
+     * Stores a string which represents the state of the chunk. The string is consistent with the name in class {@link ChunkState}.
+     */
+    ALLAY_CHUNK_STATE(-1);
 
     /**
      * Used in the <a href="https://learn.microsoft.com/en-us/minecraft/creator/documents/actorstorage?view=minecraft-bedrock-stable">New Actor Storage</a>.

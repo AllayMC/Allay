@@ -4,7 +4,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.function.Noiser;
 
@@ -20,8 +19,8 @@ public class FlatNoiser implements Noiser {
     protected BlockState[] layers;
 
     @Override
-    public void init(WorldGenerator generator) {
-        parsePreset(generator.getPreset());
+    public void init(String preset) {
+        parsePreset(preset);
     }
 
     @Override
