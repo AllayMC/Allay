@@ -66,7 +66,12 @@ public class WorldCommand extends SimpleCommand {
                     }
                     var dim = world.getDimension(dimInfo.dimensionId());
 
-                    entity.teleport(new Location3d(0, 64, 0, dim));
+                    if (dim.getDimensionInfo() == DimensionInfo.OVERWORLD) {
+                        entity.teleport(world.getSpawnPoint());
+                    } else {
+                        // TODO: Find a safe location in nether and the_end
+                        entity.teleport(new Location3d(0, 64, 0, dim));
+                    }
                     context.addOutput(TrKeys.A_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
                     return context.success();
                 }, SenderType.ENTITY)

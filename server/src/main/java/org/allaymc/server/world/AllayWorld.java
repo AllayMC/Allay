@@ -14,6 +14,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
@@ -34,6 +35,7 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3i;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -220,22 +222,23 @@ public class AllayWorld implements World {
             ));
         }
 
-        // TODO: rewrite safe spawn point finder after we refactored chunk service
-//        // Find the spawn point only the first time the world is loaded
-//        if (this.worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
-//            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getDisplayName()).start(() -> {
-//                var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
-//                if (newSpawnPoint == null) {
-//                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getDisplayName());
-//                    newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
-//                }
-//                var finalNewSpawnPoint = newSpawnPoint;
-//                overworld.getWorld().getScheduler().runLater(this, () -> {
-//                    // Set new spawn point in world thread as world data object is not thread-safe
-//                    worldData.setSpawnPoint(finalNewSpawnPoint);
-//                });
-//            });
-//        }
+        // Find the spawn point only the first time the world is loaded
+        if (worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
+            Thread.ofVirtual().name("Spawn Point Finding Thread - " + name).start(() -> {
+                var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
+                if (newSpawnPoint == null) {
+                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", name);
+                    overworld.getChunkService().getOrLoadChunk(0, 0);
+                    newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
+                }
+                log.info("Spawn point for world {} is set to {}, {}, {}", name, newSpawnPoint.x(), newSpawnPoint.y(), newSpawnPoint.z());
+                var finalNewSpawnPoint = newSpawnPoint;
+                overworld.getWorld().getScheduler().runLater(this, () -> {
+                    // Set new spawn point in world thread as world data object is not thread-safe
+                    worldData.setSpawnPoint(finalNewSpawnPoint);
+                });
+            });
+        }
     }
 
     protected boolean isSafeStandingPos(Position3ic pos) {
@@ -351,20 +354,17 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public @UnmodifiableView Map<Integer, Dimension> getDimensions() {
+    @UnmodifiableView
+    public Map<Integer, Dimension> getDimensions() {
         return Collections.unmodifiableMap(dimensionMap);
     }
 
     @Override
+    @UnmodifiableView
     public Collection<EntityPlayer> getPlayers() {
-        return Collections.unmodifiableCollection(
-                getDimensions().values().stream()
-                        .map(Dimension::getPlayers)
-                        .reduce(new HashSet<>(), (entityPlayers, entityPlayers2) -> {
-                            entityPlayers.addAll(entityPlayers2);
-                            return entityPlayers;
-                        })
-        );
+        return dimensionMap.values().stream()
+                .flatMap(dimension -> dimension.getPlayers().stream())
+                .toList();
     }
 
     public void addDimension(Dimension dimension) {

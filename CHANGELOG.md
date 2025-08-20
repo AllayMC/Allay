@@ -25,6 +25,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Added armor component to the newly added copper armor items.
 - Introduced a new optional arg for command `/enchant` which indicates whether the entered level should be checked to be in acceptable range.
 - Implemented xp bottle.
+- Added back spawn point finding logic, and now the world will look for a suitable spawn point when it is first created.
 
 ### Changed
 

@@ -1,6 +1,8 @@
 package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -178,6 +180,16 @@ public interface World extends TaskCreator {
      * Set the weather to {@link Weather#CLEAR}.
      */
     void clearWeather();
+
+    /**
+     * Get the spawn point of the world.
+     *
+     * @return the spawn point of the world.
+     */
+    default Location3dc getSpawnPoint() {
+        var vec = getWorldData().getSpawnPoint();
+        return new Location3d(vec.x(), vec.y(), vec.z(), getOverWorld());
+    }
 
     @Override
     default boolean isValid() {
