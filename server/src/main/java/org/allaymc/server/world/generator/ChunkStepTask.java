@@ -8,6 +8,8 @@ import org.allaymc.api.world.generator.context.PopulateContext;
 import org.allaymc.api.world.generator.context.PostProcessContext;
 
 /**
+ * ChunkStepTask represents the task that needs to be executed for updating chunk to a higher state.
+ *
  * @author daoge_cmd
  */
 @FunctionalInterface

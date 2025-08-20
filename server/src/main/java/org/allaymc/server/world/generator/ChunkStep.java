@@ -15,11 +15,30 @@ import java.util.Map;
  */
 @Getter
 public final class ChunkStep {
+    /**
+     * The state of the chunk after this step is completed.
+     */
     private final ChunkState targetState;
-    // Can be null
+    /**
+     * The state of the chunk before this step is started.
+     */
     private final ChunkState parentState;
+    /**
+     * The dependencies for this step. The key is the required minimum state of the chunks around,
+     * and the value is the chunk range. For example, entry (NOISE, 1) means that the lowest state
+     * of the eight adjacent chunks surrounding the current chunk must be NOISE.
+     */
     private final Map<ChunkState, Integer> dependencies;
+    /**
+     * The range of chunks that the chunk step task may write to. For example, if the write range is 1,
+     * the task may write to the current chunk and the eight adjacent chunks surrounding it. When a chunk
+     * is being written to, it will be marked as `locked` and no other tasks can write to it until the current
+     * task is completed.
+     */
     private final int writeRange;
+    /**
+     * The task to be executed for completing the state updating.
+     */
     private final ChunkStepTask task;
 
     ChunkStep(ChunkState targetState, Map<ChunkState, Integer> dependencies, int writeRange, ChunkStepTask task) {

@@ -231,11 +231,11 @@ public class AllayWorld implements World {
                     overworld.getChunkService().getOrLoadChunk(0, 0);
                     newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
                 }
-                log.info("Spawn point for world {} is set to {}, {}, {}", name, newSpawnPoint.x(), newSpawnPoint.y(), newSpawnPoint.z());
                 var finalNewSpawnPoint = newSpawnPoint;
                 overworld.getWorld().getScheduler().runLater(this, () -> {
                     // Set new spawn point in world thread as world data object is not thread-safe
                     worldData.setSpawnPoint(finalNewSpawnPoint);
+                    log.info("Spawn point for world {} is set to {}, {}, {}", name, finalNewSpawnPoint.x(), finalNewSpawnPoint.y(), finalNewSpawnPoint.z());
                 });
             });
         }

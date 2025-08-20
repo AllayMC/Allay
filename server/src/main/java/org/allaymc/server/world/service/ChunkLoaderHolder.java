@@ -29,23 +29,51 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.ASYNC;
 
 /**
+ * ChunkLoaderHolder is a class that holds a chunk loader and manages the sending of chunks. It
+ * will also load the chunk which should be sent to the chunk loader if the chunk is not loaded.
+ *
  * @author daoge_cmd
  */
 @NotThreadSafe
 public final class ChunkLoaderHolder {
 
+    /**
+     * The chunk service that owns this chunk loader holder.
+     */
     private final ChunkService chunkService;
+    /**
+     * The chunk loader that this holder is holding.
+     */
     @Getter
     private final ChunkLoader chunkLoader;
+    /**
+     * A comparator that will decode chunk pos hash and compare chunk by its distance.
+     */
     private final LongComparator chunkDistanceComparatorHashed;
+    /**
+     * A comparator that will compare chunk by its distance.
+     */
     private final Comparator<Chunk> chunkDistanceComparator;
-    // Save all chunk hash values that have been sent in the last tick
+    /**
+     * Stores all chunks that is in radius and have been sent.
+     */
     private final LongOpenHashSet sentChunks;
-    // Save all chunk hash values that will be sent in this tick
+    /**
+     * Stores all chunks that is in radius.
+     */
     private final LongOpenHashSet inRadiusChunks;
-    private final int chunkMaxSendCountPerTick;
+    /**
+     * Stores all chunks that is waiting to be sent. The order is determined by their distance from the loader.
+     */
     private final LongArrayFIFOQueue chunkSendingQueue;
+    /**
+     * The async chunk sender. Can be {@code null} if async chunk sending is not enabled.
+     */
     private AsyncChunkSender asyncChunkSender;
+    /**
+     * A long value which is calculated based on the x and z coordinates of the loader's chunk pos using
+     * method {@link HashUtils#hashXZ(int, int)}.
+     */
     private long lastLoaderChunkPosHashed;
 
     ChunkLoaderHolder(ChunkService chunkService, ChunkLoader chunkLoader) {
@@ -55,7 +83,6 @@ public final class ChunkLoaderHolder {
         this.chunkDistanceComparator = new ChunkDistanceComparator();
         this.sentChunks = new LongOpenHashSet();
         this.inRadiusChunks = new LongOpenHashSet();
-        this.chunkMaxSendCountPerTick = chunkLoader.getChunkMaxSendCountPerTick();
         this.chunkSendingQueue = new LongArrayFIFOQueue((chunkLoader.getChunkLoadingRadius() * 2 + 1) * (chunkLoader.getChunkLoadingRadius() * 2 + 1));
         if (Server.SETTINGS.worldSettings().chunkSendingStrategy() == ASYNC) {
             this.asyncChunkSender = new AsyncChunkSender();
@@ -140,21 +167,22 @@ public final class ChunkLoaderHolder {
         }
 
         var chunkReadyToSend = new Long2ObjectOpenHashMap<Chunk>();
-        int triedSendChunkCount = 0;
+        int sentChunkCount = 0;
         do {
-            triedSendChunkCount++;
+            sentChunkCount++;
             var chunkHash = chunkSendingQueue.dequeueLong();
             var chunk = chunkService.getChunk(chunkHash);
             if (chunk == null) {
-                // Chunk must be sent from the middle to the outside, otherwise some chunks
-                // will not be shown client-side
+                // Chunk is not loaded yet, so put it back at the head of the queue
                 chunkSendingQueue.enqueueFirst(chunkHash);
+                // Chunk must be sent from the middle to the outside, otherwise some chunks
+                // will not be shown client-side. So break here
                 break;
             }
 
             chunk.addChunkLoader(chunkLoader);
             chunkReadyToSend.put(chunkHash, chunk);
-        } while (!chunkSendingQueue.isEmpty() && triedSendChunkCount < chunkMaxSendCountPerTick);
+        } while (!chunkSendingQueue.isEmpty() && sentChunkCount < chunkLoader.getChunkMaxSendCountPerTick());
 
         if (!chunkReadyToSend.isEmpty()) {
             var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();

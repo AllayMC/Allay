@@ -23,22 +23,43 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
+ * ChunkHolder is a class that holds a chunk and manages its state updating and unloading.
+ *
  * @author daoge_cmd
  */
 @Slf4j
 @NotThreadSafe
 public final class ChunkHolder {
 
+    /**
+     * The chunk service that owns this chunk holder.
+     */
     private final AllayChunkService chunkService;
+    /**
+     * The dimension that this chunk belongs to.
+     */
     private final Dimension dimension;
+    /**
+     * The world generator that used to generate the chunk.
+     */
     private final WorldGenerator worldGenerator;
+    /**
+     * The world storage that used to read and write the chunk.
+     */
     private final WorldStorage worldStorage;
+    /**
+     * The x coordinate of the chunk in the world.
+     */
     @Getter
     private final int x;
+    /**
+     * The z coordinate of the chunk in the world.
+     */
     @Getter
     private final int z;
     /**
-     * A future which will be completed when the chunk is fully loaded (state == full).
+     * A future which will be completed when the chunk is fully loaded (state == full). If the chunk
+     * is unloaded while the state is not {@link ChunkState#FULL}, the future will be cancelled.
      */
     @Getter
     private final CompletableFuture<Chunk> loadFuture;
@@ -57,11 +78,14 @@ public final class ChunkHolder {
      */
     private boolean locked;
     /**
-     * The target state that the chunk should be updated to.
+     * The target state that the chunk should be updated to. If the current state is lower than the target
+     * state, the chunk holder will try to update the chunk to the next state until it reaches the target state.
+     * Can be {@code null} if no target state is set.
      */
     private ChunkState targetState;
     /**
-     * The countdown for unload the chunk.
+     * The countdown for unload the chunk. When the countdown reaches 0, the chunk will be unloaded. Set
+     * this value to 0 manually will force the chunk to be unloaded in the next tick.
      */
     @Setter
     private int removeCountDown;
@@ -131,6 +155,7 @@ public final class ChunkHolder {
 
     public void tick() {
         if (isLocked()) {
+            // The chunk is locked, any operations on it should be skipped until the lock is released
             return;
         }
 
@@ -201,6 +226,7 @@ public final class ChunkHolder {
         }
 
         if (isUsed()) {
+            // Reset the countdown if the chunk is used
             this.removeCountDown = isFullChunk() ?
                     Server.SETTINGS.worldSettings().removeUnusedFullChunkCycle() :
                     Server.SETTINGS.worldSettings().removeUnusedProtoChunkCycle();
@@ -226,6 +252,8 @@ public final class ChunkHolder {
                 // Inform the dependency chunk that it should be updated to the target state
                 depChunk.setTargetState(state);
                 if (canUpdate.get() && (depChunk.isLocked() || depChunk.getCurrentState().isBefore(state))) {
+                    // The dependency chunk is locked or its current state is lower than the target state,
+                    // so we cannot update the current chunk
                     canUpdate.set(false);
                 }
             }, true);

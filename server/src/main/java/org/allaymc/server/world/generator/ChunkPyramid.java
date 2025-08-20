@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 
 /**
+ * ChunkPyramid represents the sequence of steps required to upgrade a chunk to {@link ChunkState#FULL} state.
+ *
  * @author daoge_cmd
  */
 public record ChunkPyramid(Map<ChunkState, ChunkStep> steps) {

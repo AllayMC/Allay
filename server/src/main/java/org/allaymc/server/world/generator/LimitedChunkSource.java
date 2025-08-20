@@ -5,6 +5,8 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkSource;
 
 /**
+ * A ChunkSource that limits access to chunks within a specified range from a center chunk.
+ *
  * @author daoge_cmd
  */
 @AllArgsConstructor
