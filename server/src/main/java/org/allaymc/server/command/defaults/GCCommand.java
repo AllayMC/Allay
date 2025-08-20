@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
@@ -11,7 +10,7 @@ import static org.allaymc.api.math.MathUtils.round;
 /**
  * @author daoge_cmd
  */
-public class GCCommand extends SimpleCommand {
+public class GCCommand extends VanillaCommand {
     public GCCommand() {
         super("gc", TrKeys.A_COMMAND_GC_DESCRIPTION);
     }

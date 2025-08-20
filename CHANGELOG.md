@@ -36,6 +36,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   in corresponding to the new `removeUnusedProtoChunkCycle` configuration.
 - Refactored `EntityPhysicsComponentImpl` for readability.
 - Resending available commands is now the default behavior for `PermissionListener`.
+- Removed `Command.createPermissionForCommand()`, use `Permission.createForCommand()` instead. See commit history for details.
 
 ### Fixed
 
@@ -46,6 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Farmland trampling now correctly considers any entity whose bounding box exceeds a certain size threshold, instead of relying solely on a fixed entity whitelist.
 - Player movement now normally reduces satiety
 - Fixed an NPE bug that could occur in extreme cases for the light engine.
+- `/world tp <world>` now teleports the player to the spawn point for overworld dimension.
 
 ### Removed
 

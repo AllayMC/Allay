@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -11,7 +10,7 @@ import java.util.Collection;
 /**
  * @author daoge_cmd
  */
-public class TitleCommand extends SimpleCommand {
+public class TitleCommand extends VanillaCommand {
     public TitleCommand() {
         super("title", TrKeys.M_COMMANDS_TITLE_DESCRIPTION);
     }
@@ -27,7 +26,7 @@ public class TitleCommand extends SimpleCommand {
                     Collection<EntityPlayer> players = context.getResult(1);
                     TitleType type = context.getResult(2);
                     String text = context.getResult(3);
-                    players.forEach(p -> sendTitle(p, text, type));
+                    players.forEach(p -> type.send(p, text));
                     context.addOutput(TrKeys.M_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
@@ -66,17 +65,26 @@ public class TitleCommand extends SimpleCommand {
                 });
     }
 
-    protected void sendTitle(EntityPlayer player, String text, TitleType type) {
-        switch (type) {
-            case TITLE -> player.sendTitle(text);
-            case SUBTITLE -> player.sendSubtitle(text);
-            case ACTIONBAR -> player.sendActionBar(text);
-        }
-    }
-
     protected enum TitleType {
-        TITLE,
-        SUBTITLE,
-        ACTIONBAR
+        TITLE {
+            @Override
+            public void send(EntityPlayer player, String text) {
+                player.sendTitle(text);
+            }
+        },
+        SUBTITLE {
+            @Override
+            public void send(EntityPlayer player, String text) {
+                player.sendSubtitle(text);
+            }
+        },
+        ACTIONBAR {
+            @Override
+            public void send(EntityPlayer player, String text) {
+                player.sendActionBar(text);
+            }
+        };
+
+        public abstract void send(EntityPlayer player, String text);
     }
 }

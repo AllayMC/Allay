@@ -6,11 +6,7 @@
 
 # Code style files and inspection profiles should be included
 .idea/**
-!/.idea/codeStyles
-!/.idea/codeStyles/*
-!/.idea/codeStyles/codeStyleConfig.xml
 !/.idea/codeStyles/Project.xml
-!/.idea/inspectionProfiles
 !/.idea/inspectionProfiles/Project_Default.xml
 
 # Files because of building the project

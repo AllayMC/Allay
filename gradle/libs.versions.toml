@@ -3,7 +3,7 @@ log4j = "2.25.1"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.1.0"
-netty = "4.2.3.Final"
+netty = "4.2.4.Final"
 
 [libraries]
 # NBT
@@ -69,22 +69,22 @@ netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", ve
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.9" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.2" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.3" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.1" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.23892.439" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.23892.525" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.13.4" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.13.4" }
-mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.18.0" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.19.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
 # Random generator
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.18.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.19.1" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 

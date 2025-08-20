@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.data.CommonEnums;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class GameModeCommand extends SimpleCommand {
+public class GameModeCommand extends VanillaCommand {
     public GameModeCommand() {
         super("gamemode", TrKeys.M_COMMANDS_GAMEMODE_DESCRIPTION);
         aliases.add("gm");
@@ -26,8 +25,7 @@ public class GameModeCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .gameMode()
-                .playerTarget("players")
-                .optional()
+                .playerTarget("players").optional()
                 .exec(context -> {
                     GameType gameType = context.getResult(0);
                     List<EntityPlayer> players = new ArrayList<>();
@@ -48,11 +46,11 @@ public class GameModeCommand extends SimpleCommand {
                         }
                     }
 
+                    var gameTypeName = I18n.get().tr(CommonEnums.getGameTypeTrKey(gameType), LangCode.en_US);
                     for (var player : players) {
-                        var gameTypeName = I18n.get().tr(CommonEnums.getGameTypeTrKey(gameType), LangCode.en_US);
                         player.setGameType(gameType);
 
-                        if (player == context.getSender()) {
+                        if (player.equals(context.getSender())) {
                             context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_SELF, gameTypeName);
                         } else {
                             context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_OTHER, gameTypeName, player.getDisplayName());

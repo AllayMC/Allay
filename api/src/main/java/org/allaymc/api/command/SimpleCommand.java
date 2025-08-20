@@ -19,7 +19,7 @@ public abstract class SimpleCommand extends BaseCommand {
     protected CommandTree commandTree;
 
     public SimpleCommand(String name, @MayContainTrKey String description) {
-        this(name, description, List.of(Command.createPermissionForCommand(name)));
+        this(name, description, List.of(Permission.createForCommand(name, name)));
     }
 
     public SimpleCommand(String name, @MayContainTrKey String description, List<Permission> permissions) {

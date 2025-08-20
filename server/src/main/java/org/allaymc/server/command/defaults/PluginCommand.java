@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
@@ -9,7 +8,7 @@ import org.allaymc.api.utils.TextFormat;
 /**
  * @author daoge_cmd
  */
-public class PluginCommand extends SimpleCommand {
+public class PluginCommand extends VanillaCommand {
 
     public PluginCommand() {
         super("plugin", TrKeys.A_COMMAND_PLUGIN_DESCRIPTION);

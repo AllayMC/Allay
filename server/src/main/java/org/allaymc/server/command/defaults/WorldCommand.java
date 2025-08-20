@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.i18n.I18n;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class WorldCommand extends SimpleCommand {
+public class WorldCommand extends VanillaCommand {
     public WorldCommand() {
         super("world", TrKeys.A_COMMAND_WORLD_DESCRIPTION);
     }
@@ -64,7 +63,6 @@ public class WorldCommand extends SimpleCommand {
                         context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWNDIM, dimName);
                         return context.fail();
                     }
-                    var dim = world.getDimension(dimInfo.dimensionId());
 
                     if (dim.getDimensionInfo() == DimensionInfo.OVERWORLD) {
                         entity.teleport(world.getSpawnPoint());
@@ -72,6 +70,7 @@ public class WorldCommand extends SimpleCommand {
                         // TODO: Find a safe location in nether and the_end
                         entity.teleport(new Location3d(0, 64, 0, dim));
                     }
+                    
                     context.addOutput(TrKeys.A_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
                     return context.success();
                 }, SenderType.ENTITY)

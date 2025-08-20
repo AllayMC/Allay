@@ -2,7 +2,6 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.joml.Vector3d;
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class FillCommand extends SimpleCommand {
+public class FillCommand extends VanillaCommand {
     public FillCommand() {
         super("fill", TrKeys.M_COMMANDS_FILL_DESCRIPTION);
     }
@@ -23,11 +22,11 @@ public class FillCommand extends SimpleCommand {
                 .pos("from")
                 .pos("to")
                 .blockType("blockType")
-                .blockPropertyValues("blockPropertyValues")
-                .optional()
+                .blockPropertyValues("blockPropertyValues").optional()
                 .exec(context -> {
                     var from = context.<Vector3d>getResult(0).floor();
                     var to = context.<Vector3d>getResult(1).floor();
+
                     var dim = context.getSender().getCommandExecuteLocation().dimension();
                     if (!dim.isInWorld(from.x(), from.y(), from.z()) || !dim.isInWorld(to.x(), to.y(), to.z())) {
                         context.addError("%" + TrKeys.M_COMMANDS_FILL_OUTOFWORLD);
@@ -61,7 +60,6 @@ public class FillCommand extends SimpleCommand {
                     }
 
                     context.addOutput(TrKeys.M_COMMANDS_FILL_SUCCESS, count);
-
                     return context.success();
                 });
     }

@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class SpawnPointCommand extends SimpleCommand {
+public class SpawnPointCommand extends VanillaCommand {
 
     public SpawnPointCommand() {
         super("spawnpoint", TrKeys.M_COMMANDS_SPAWNPOINT_DESCRIPTION);

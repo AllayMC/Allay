@@ -1,12 +1,13 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 
-public class StopCommand extends SimpleCommand {
-
+/**
+ * @author daoge_cmd
+ */
+public class StopCommand extends VanillaCommand {
     public StopCommand() {
         super("stop", TrKeys.M_COMMANDS_STOP_DESCRIPTION);
     }

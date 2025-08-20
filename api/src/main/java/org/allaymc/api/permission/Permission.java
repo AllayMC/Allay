@@ -28,6 +28,22 @@ public final class Permission {
     }
 
     /**
+     * Creates a permission intended for commands.
+     * The created permission will be associated with a predefined listener
+     * that triggers a command list refresh for players.
+     *
+     * @param commandName the command name without the leading slash.
+     * @param permission  the name of the permission.
+     *
+     * @return a new permission instance.
+     *
+     * @throws PermissionException if a permission with the same name already exists.
+     */
+    public static Permission createForCommand(String commandName, String permission) {
+        return create(permission, "The permission to use the command /" + commandName, COMMAND_PERMISSION_LISTENER);
+    }
+
+    /**
      * @see #create(String, String, PermissionListener)
      */
     public static Permission create(String name) {
@@ -57,8 +73,8 @@ public final class Permission {
     }
 
     /**
-     * Creates a new permission with the given name and description.The created permission
-     * will also be registered to {@link Registries#PERMISSIONS}.
+     * Creates a new permission with the given name, description, and optional listener.
+     * The created permission is also registered to {@link Registries#PERMISSIONS}.
      *
      * @param name        the name of the permission.
      * @param description the description of the permission.
@@ -66,7 +82,7 @@ public final class Permission {
      *
      * @return a new permission instance.
      *
-     * @throws PermissionException if the name is already exists.
+     * @throws PermissionException if a permission with the given name already exists.
      */
     public static Permission create(String name, String description, PermissionListener listener) {
         var permission = new Permission(name, description, listener);
@@ -94,7 +110,7 @@ public final class Permission {
     /**
      * Gets the name of this permission.
      *
-     * @return the name of this permission.
+     * @return the permission name.
      */
     public String getName() {
         return name;
@@ -103,16 +119,16 @@ public final class Permission {
     /**
      * Gets the description of this permission.
      *
-     * @return the description of this permission.
+     * @return the permission description.
      */
     public String getDescription() {
         return description;
     }
 
     /**
-     * Gets the listener of this permission.
+     * Gets the listener associated with this permission, if any.
      *
-     * @return the listener of this permission, or {@code null} if no listener is set.
+     * @return the permission listener, or {@code null} if none is set.
      */
     public PermissionListener getPermissionListener() {
         return listener;

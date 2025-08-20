@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.CommandResult;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
@@ -15,7 +14,7 @@ import static org.allaymc.api.command.data.CommonEnums.INT_GAMERULE_ENUM;
 /**
  * @author daoge_cmd
  */
-public class GameRuleCommand extends SimpleCommand {
+public class GameRuleCommand extends VanillaCommand {
 
     public GameRuleCommand() {
         super("gamerule", TrKeys.M_COMMANDS_GAMERULE_DESCRIPTION);
@@ -27,14 +26,12 @@ public class GameRuleCommand extends SimpleCommand {
         tree.getRoot()
                 .enumsIgnoreCase("rule", "", "BoolGameRule", BOOL_GAMERULE_ENUM)
                 .bool("value")
-                .defaultValue(null)
-                .optional()
+                .defaultValue(null).optional()
                 .exec(executor(true))
                 .root()
                 .enumsIgnoreCase("rule", "", "IntGameRule", INT_GAMERULE_ENUM)
                 .intNum("value")
-                .defaultValue(null)
-                .optional()
+                .defaultValue(null).optional()
                 .exec(executor(false));
     }
 

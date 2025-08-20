@@ -15,7 +15,7 @@ The next-generation Minecraft: Bedrock Edition server software aims to be reliab
 [![codecov](https://codecov.io/gh/AllayMC/Allay/graph/badge.svg?token=EI8EDEKI51)](https://codecov.io/gh/AllayMC/Allay)
 <a href="https://app.codacy.com/gh/AllayMC/Allay/dashboard"><img src="https://app.codacy.com/project/badge/Grade/30e264923da2425a8b777a84b4028334"></a>
 <a href="https://discord.gg/ngkkE4hPTU"><img src="https://img.shields.io/discord/1147136608290750526?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
-<a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-1.21.90%20(Bedrock)-green" /></a>
+<a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-1.21.100%20(Bedrock)-green" /></a>
 [![GitHub License](https://img.shields.io/github/license/allaymc/allay)](LICENSE)
 [![Ko-Fi](https://img.shields.io/badge/Buy_Me_a_Coffee-f37574?logo=kofi&logoColor=white)](https://ko-fi.com/AllayMC)
 
@@ -25,10 +25,6 @@ The next-generation Minecraft: Bedrock Edition server software aims to be reliab
 
 Allay is a third-party server software for Minecraft: Bedrock Edition written from scratch, with the goal of being
 reliable, fast and feature-rich.
-
-> [!IMPORTANT]
-> Please note that this project is still at a very early stage and has not yet been released officially, and interfaces
-> may be added or removed without notice. Please do not use Allay in a production environment!
 
 ## 🎯 Why Allay?
 

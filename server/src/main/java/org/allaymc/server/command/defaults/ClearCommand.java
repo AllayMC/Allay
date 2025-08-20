@@ -1,9 +1,9 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.impl.PlayerContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * @author daoge_cmd
  */
-public class ClearCommand extends SimpleCommand {
+public class ClearCommand extends VanillaCommand {
     public ClearCommand() {
         super("clear", TrKeys.M_COMMANDS_CLEAR_DESCRIPTION);
     }
@@ -26,14 +26,10 @@ public class ClearCommand extends SimpleCommand {
         tree.getRoot()
                 // Use null to mark that the sender
                 // want to clear all his items
-                .playerTarget("players", null)
-                .optional()
-                .itemType("item")
-                .optional()
-                .intNum("data", -1)
-                .optional()
-                .intNum("maxCount", -1)
-                .optional()
+                .playerTarget("players", null).optional()
+                .itemType("item").optional()
+                .intNum("data", -1).optional()
+                .intNum("maxCount", -1).optional()
                 .exec((context, sender) -> {
                     List<EntityPlayer> targets = context.getResult(0);
                     if (targets != null && targets.isEmpty()) {
@@ -53,47 +49,78 @@ public class ClearCommand extends SimpleCommand {
                     boolean success = true;
                     int status = 0;
                     for (var target : targets) {
-                        var containers = Stream.of(FullContainerType.PLAYER_INVENTORY, FullContainerType.OFFHAND, FullContainerType.ARMOR).map(target::getContainer).toList();
+                        var containers = Stream.of(
+                                FullContainerType.PLAYER_INVENTORY,
+                                FullContainerType.OFFHAND,
+                                FullContainerType.ARMOR
+                        ).map(target::getContainer).toList();
                         if (maxCount == 0) {
                             int count = containers.stream()
-                                    .mapToInt(container ->
-                                            container.getItemStacks()
-                                                    .stream()
-                                                    .filter(itemStack -> itemStack.getItemType() != ItemTypes.AIR && (itemType == null || itemStack.getItemType() == itemType) && (data == -1 || itemStack.getMeta() == data))
-                                                    .mapToInt(ItemStack::getCount)
-                                                    .sum())
+                                    .mapToInt(container -> countMatchingItems(container.getItemStacks(), itemType, data))
                                     .sum();
                             context.addOutput(TrKeys.M_COMMANDS_CLEAR_TESTING, target.getOriginName(), count);
                             status = count;
                         } else {
-                            int c = maxCount;
+                            int removed = 0;
+                            int remaining = maxCount;
                             for (var container : containers) {
-                                ItemStack[] itemStackArray = container.getItemStackArray();
-                                for (int slot = 0; slot < itemStackArray.length; slot++) {
-                                    var itemStack = itemStackArray[slot];
-                                    if (itemStack.getItemType() != ItemTypes.AIR && (itemType == null || itemStack.getItemType() == itemType) && (data == -1 || itemStack.getMeta() == data)) {
-                                        var itemStackCount = itemStack.getCount();
-                                        if (itemStackCount <= c) {
-                                            c -= itemStackCount;
-                                            container.clearSlot(slot);
-                                        } else {
-                                            itemStack.setCount(itemStackCount - c);
-                                            c = 0;
-                                            container.notifySlotChange(slot);
-                                        }
-                                    }
+                                removed += clearItemsFromContainer(container, itemType, data, remaining);
+                                remaining = maxCount - removed;
+                                if (remaining <= 0) {
+                                    break;
                                 }
                             }
-                            if (maxCount != c) {
-                                context.addOutput(TrKeys.M_COMMANDS_CLEAR_SUCCESS, target.getOriginName(), maxCount - c);
+
+                            if (removed > 0) {
+                                context.addOutput(TrKeys.M_COMMANDS_CLEAR_SUCCESS, target.getOriginName(), removed);
                             } else {
                                 context.addError("%" + TrKeys.M_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getOriginName());
                                 success = false;
                             }
-                            status = maxCount - c;
+
+                            status = removed;
                         }
                     }
+
                     return success ? context.success(status) : context.fail();
                 }, SenderType.PLAYER);
+    }
+
+    protected int clearItemsFromContainer(PlayerContainer container, ItemType<?> itemType, int data, int maxCount) {
+        int removed = 0;
+        var remaining = maxCount;
+
+        var itemStacks = container.getItemStackArray();
+        for (int slot = 0; slot < itemStacks.length; slot++) {
+            ItemStack itemStack = itemStacks[slot];
+            if (matchesItem(itemStack, itemType, data)) {
+                var count = itemStack.getCount();
+                if (count <= remaining) {
+                    remaining -= count;
+                    removed += count;
+                    container.clearSlot(slot);
+                } else {
+                    itemStack.setCount(count - remaining);
+                    container.notifySlotChange(slot);
+                    removed += remaining;
+                    break;
+                }
+            }
+        }
+
+        return removed;
+    }
+
+    protected int countMatchingItems(List<ItemStack> items, ItemType<?> itemType, int data) {
+        return items.stream()
+                .filter(item -> matchesItem(item, itemType, data))
+                .mapToInt(ItemStack::getCount)
+                .sum();
+    }
+
+    protected boolean matchesItem(ItemStack itemStack, ItemType<?> itemType, int data) {
+        return itemStack.getItemType() != ItemTypes.AIR
+               && (itemType == null || itemStack.getItemType() == itemType)
+               && (data == -1 || itemStack.getMeta() == data);
     }
 }

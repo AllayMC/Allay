@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -13,7 +12,7 @@ import java.util.Collection;
 /**
  * @author daoge_cmd
  */
-public class EnchantCommand extends SimpleCommand {
+public class EnchantCommand extends VanillaCommand {
 
     public EnchantCommand() {
         super("enchant", TrKeys.M_COMMANDS_ENCHANT_DESCRIPTION);
