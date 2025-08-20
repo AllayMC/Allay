@@ -30,7 +30,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) `ChunkLoadEvent` and `ChunkUnloadEvent` were uncancellable now. Consider using `FakeChunkLoader` instead.
 - (API) Refactored the chunk system, some APIs are changed.
-- (API) Renamed `ServerSettings.WorldSettings.removeUnneededChunkCycle` to `ServerSettings.WorldSettings.removeUnusedFullChunkCycle`
+- (API) Renamed `ServerSettings.WorldSettings.removeUnneededChunkCycle` to `ServerSettings.WorldSettings.removeUnusedFullChunkCycle`.
+- (API) Renamed `ServerSettings.WorldSettings.chunkTrySendCountPerTick` to `ServerSettings.WorldSettings.chunkMaxSendCountPerTick`.
   in corresponding to the new `removeUnusedProtoChunkCycle` configuration.
 - Refactored `EntityPhysicsComponentImpl` for readability.
 - Resending available commands is now the default behavior for `PermissionListener`.
