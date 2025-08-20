@@ -146,7 +146,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return CompletableFuture
                 .supplyAsync(() -> readChunkSync(chunkX, chunkZ, dimensionInfo), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(t -> {
-                    log.error("Failed to read chunk {}, {}", chunkX, chunkZ, t);
+                    log.error("Failed to read chunk ({}, {})", chunkX, chunkZ, t);
                     return AllayUnsafeChunk.builder().newChunk(chunkX, chunkZ, dimensionInfo).toSafeChunk();
                 });
     }
@@ -169,17 +169,28 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         if (versionValue == null) {
             // This might be a slightly-corrupted chunk with a missing version field
             // However we can still try to load it
-            log.warn("Chunk at {}, {} is missing version field", chunkX, chunkZ);
+            log.warn("Chunk at ({}, {}) is missing version field", chunkX, chunkZ);
         }
 
-        var chunkState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.createKey(chunkX, chunkZ, dimensionInfo));
-        if (chunkState != null && Unpooled.wrappedBuffer(chunkState).readByte() != VanillaChunkState.DONE.ordinal()) {
+        var chunkFinalizedState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.createKey(chunkX, chunkZ, dimensionInfo));
+        if (chunkFinalizedState != null && Unpooled.wrappedBuffer(chunkFinalizedState).readByte() != VanillaChunkState.DONE.ordinal()) {
             // Older versions didn't have CHUNK_FINALIZED_STATE data, so we still load this chunk
-            // TODO: check VANILLA_CHUNK_STATE_NEEDS_INSTA_TICK
             return builder.build().toSafeChunk();
         }
 
-        builder.state(ChunkState.FULL);
+        var chunkStateBytes = this.db.get(LevelDBKey.ALLAY_CHUNK_STATE.createKey(chunkX, chunkZ, dimensionInfo));
+        if (chunkStateBytes != null) {
+            var chunkStateName = new String(chunkStateBytes);
+            try {
+                builder.state(ChunkState.valueOf(chunkStateName));
+            } catch (IllegalArgumentException e) {
+                log.warn("Unknown chunk state {} for chunk at ({}, {})!", chunkStateName, chunkX, chunkZ);
+                builder.state(ChunkState.FULL);
+            }
+        } else {
+            builder.state(ChunkState.FULL);
+        }
+
         deserializeSections(this.db, builder);
         deserializeHeightAndBiome(this.db, builder);
         deserializeBlockEntities(this.db, builder);
@@ -192,25 +203,22 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return CompletableFuture
                 .runAsync(() -> writeChunkSync(chunk), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(t -> {
-                    log.error("Failed to write chunk {}, {}", chunk.getX(), chunk.getZ(), t);
+                    log.error("Failed to write chunk ({}, {})", chunk.getX(), chunk.getZ(), t);
                     return null;
                 });
     }
 
     @Override
     public void writeChunkSync(Chunk chunk) {
-        if (chunk.getState() != ChunkState.FULL) {
-            log.warn("Cannot save unfinished chunk at {}, {}", chunk.getX(), chunk.getZ());
-            return;
-        }
-
         try (var writeBatch = this.db.createWriteBatch()) {
             writeBatch.put(LevelDBKey.VERSION.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{(byte) CURRENT_CHUNK_VERSION});
             writeBatch.put(
                     LevelDBKey.CHUNK_FINALIZED_STATE.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
-                    Unpooled.buffer(1)
-                            .writeByte(VanillaChunkState.DONE.ordinal())
-                            .array()
+                    Unpooled.buffer(1).writeByte(VanillaChunkState.DONE.ordinal()).array()
+            );
+            writeBatch.put(
+                    LevelDBKey.ALLAY_CHUNK_STATE.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
+                    chunk.getState().name().getBytes()
             );
             chunk.applyOperation(c -> {
                 var allayUnsafeChunk = (AllayUnsafeChunk) c;
@@ -230,7 +238,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return CompletableFuture
                 .supplyAsync(() -> readEntitiesSync(chunkX, chunkZ, dimensionInfo), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(t -> {
-                    log.error("Failed to read entities in chunk {}, {}", chunkX, chunkZ, t);
+                    log.error("Failed to read entities in chunk ({}, {})", chunkX, chunkZ, t);
                     return Collections.emptyMap();
                 });
     }
@@ -255,7 +263,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
             var entity = EntityHelper.fromNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNbtUtils.bytesToNbtLE(nbt));
             if (entity == null) {
-                log.error("Failed to load entity from NBT {} in chunk {}, {}", nbt, chunkX, chunkZ);
+                log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
             }
 
@@ -275,7 +283,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         for (var nbt : AllayNbtUtils.bytesToNbtListLE(entityBytes)) {
             var entity = EntityHelper.fromNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
             if (entity == null) {
-                log.error("Failed to load entity from NBT {} in chunk {}, {}", nbt, chunkX, chunkZ);
+                log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
             }
 
@@ -333,7 +341,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return CompletableFuture
                     .runAsync(() -> this.db.write(writeBatch), Server.getInstance().getVirtualThreadPool())
                     .exceptionally(t -> {
-                        log.error("Failed to write entities in chunk {}, {}", chunkX, chunkZ, t);
+                        log.error("Failed to write entities in chunk ({}, {})", chunkX, chunkZ, t);
                         return null;
                     });
         } else {

@@ -22,7 +22,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.ASYNC;
@@ -42,7 +43,7 @@ public final class ChunkLoaderHolder {
     private final LongOpenHashSet sentChunks;
     // Save all chunk hash values that will be sent in this tick
     private final LongOpenHashSet inRadiusChunks;
-    private final int chunkTrySendCountPerTick;
+    private final int chunkMaxSendCountPerTick;
     private final LongArrayFIFOQueue chunkSendingQueue;
     private AsyncChunkSender asyncChunkSender;
     private long lastLoaderChunkPosHashed;
@@ -54,7 +55,7 @@ public final class ChunkLoaderHolder {
         this.chunkDistanceComparator = new ChunkDistanceComparator();
         this.sentChunks = new LongOpenHashSet();
         this.inRadiusChunks = new LongOpenHashSet();
-        this.chunkTrySendCountPerTick = chunkLoader.getChunkTrySendCountPerTick();
+        this.chunkMaxSendCountPerTick = chunkLoader.getChunkMaxSendCountPerTick();
         this.chunkSendingQueue = new LongArrayFIFOQueue((chunkLoader.getChunkLoadingRadius() * 2 + 1) * (chunkLoader.getChunkLoadingRadius() * 2 + 1));
         if (Server.SETTINGS.worldSettings().chunkSendingStrategy() == ASYNC) {
             this.asyncChunkSender = new AsyncChunkSender();
@@ -84,7 +85,7 @@ public final class ChunkLoaderHolder {
             removeOutOfRadiusChunks();
             updateChunkSendingQueue();
         }
-        loadAndSendQueuedChunks();
+        sendQueuedChunks();
     }
 
     private void updateInRadiusChunks(Vector3i currentPos) {
@@ -127,10 +128,13 @@ public final class ChunkLoaderHolder {
         chunkSendingQueue.clear();
         // Chunks that have already been sent will not be resent
         var difference = Sets.difference(inRadiusChunks, sentChunks);
-        difference.stream().sorted(chunkDistanceComparatorHashed).forEachOrdered(chunkSendingQueue::enqueue);
+        difference.stream().sorted(chunkDistanceComparatorHashed).forEachOrdered(chunkHash -> {
+            chunkService.loadChunk(chunkHash);
+            chunkSendingQueue.enqueue(chunkHash);
+        });
     }
 
-    private void loadAndSendQueuedChunks() {
+    private void sendQueuedChunks() {
         if (chunkSendingQueue.isEmpty()) {
             return;
         }
@@ -142,16 +146,15 @@ public final class ChunkLoaderHolder {
             var chunkHash = chunkSendingQueue.dequeueLong();
             var chunk = chunkService.getChunk(chunkHash);
             if (chunk == null) {
-                if (chunkService.isChunkUnloaded(chunkHash)) {
-                    chunkService.loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
-                }
-                chunkSendingQueue.enqueue(chunkHash);
-                continue;
+                // Chunk must be sent from the middle to the outside, otherwise some chunks
+                // will not be shown client-side
+                chunkSendingQueue.enqueueFirst(chunkHash);
+                break;
             }
 
             chunk.addChunkLoader(chunkLoader);
             chunkReadyToSend.put(chunkHash, chunk);
-        } while (!chunkSendingQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
+        } while (!chunkSendingQueue.isEmpty() && triedSendChunkCount < chunkMaxSendCountPerTick);
 
         if (!chunkReadyToSend.isEmpty()) {
             var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
@@ -186,18 +189,15 @@ public final class ChunkLoaderHolder {
 
     private class AsyncChunkSender {
 
-        private static final int DEFAULT_INITIAL_CAPACITY = 11;
-
-        private final PriorityBlockingQueue<Chunk> chunkSendingQueue;
+        private final BlockingQueue<Chunk> chunkSendingQueue;
         private final AtomicBoolean isRunning;
 
         public AsyncChunkSender() {
-            this.chunkSendingQueue = new PriorityBlockingQueue<>(DEFAULT_INITIAL_CAPACITY, chunkDistanceComparator);
+            this.chunkSendingQueue = new LinkedBlockingQueue<>();
             this.isRunning = new AtomicBoolean(true);
             Thread.ofVirtual().start(() -> {
                 while (isRunning.get()) {
                     try {
-                        // PriorityBlockingQueue ensure that every time we take the closest chunk from the queue
                         var chunk = chunkSendingQueue.take();
                         chunkLoader.sendPacket(createLevelChunkPacket(chunk));
                         chunkLoader.onChunkInRangeSend(chunk);

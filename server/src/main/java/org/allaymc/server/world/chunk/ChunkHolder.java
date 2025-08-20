@@ -136,19 +136,14 @@ public final class ChunkHolder {
 
         if (updateRemoveCountDown()) {
             lock();
-            if (!isFullChunk()) {
-                // Cancel the load future
-                this.loadFuture.cancel(true);
-                // Complete the unload future directly since the chunk is not a full chunk
-                this.unloadFuture.complete(null);
-                this.chunkService.removeChunkHolder(this.x, this.z);
-                unlock();
-                return;
-            }
-
             try {
-                new ChunkUnloadEvent(this.dimension, this.chunk).call();
-                ((AllayUnsafeChunk) this.chunk.toUnsafeChunk()).onChunkUnload(this.dimension);
+                if (isFullChunk()) {
+                    new ChunkUnloadEvent(this.dimension, this.chunk).call();
+                    ((AllayUnsafeChunk) this.chunk.toUnsafeChunk()).onChunkUnload(this.dimension);
+                } else {
+                    // Cancel the load future since the chunk haven't been fully loaded yet
+                    this.loadFuture.cancel(true);
+                }
                 return;
             } catch (Throwable t) {
                 log.error("Error while trying to unload chunk ({}, {}) !", this.x, this.z, t);

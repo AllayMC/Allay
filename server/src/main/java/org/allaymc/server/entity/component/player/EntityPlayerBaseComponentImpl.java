@@ -116,7 +116,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected int chunkLoadingRadius;
     @Getter
     @Setter
-    protected int chunkTrySendCountPerTick;
+    protected int chunkMaxSendCountPerTick;
     protected CommandOriginData commandOriginData;
     protected Location3ic spawnPoint;
     protected boolean awaitingDimensionChangeACK;
@@ -165,7 +165,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super(info);
         this.gameType = Server.SETTINGS.genericSettings().defaultGameType();
         this.chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
-        this.chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+        this.chunkMaxSendCountPerTick = Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
         this.startUsingItemInAirTime = -1;
         this.formIdCounter = new AtomicInteger(0);

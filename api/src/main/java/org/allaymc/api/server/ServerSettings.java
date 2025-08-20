@@ -171,8 +171,8 @@ public class ServerSettings extends OkaeriConfig {
         private int viewDistance = 8;
 
         @Comment("Determines the maximum number of chunks that can be sent during a tick (per chunk loader)")
-        @CustomKey("chunk-try-send-count-per-tick")
-        private int chunkTrySendCountPerTick = 16;
+        @CustomKey("chunk-max-send-count-per-tick")
+        private int chunkMaxSendCountPerTick = 16;
 
         @CustomKey("use-sub-chunk-sending-system")
         private boolean useSubChunkSendingSystem = false;

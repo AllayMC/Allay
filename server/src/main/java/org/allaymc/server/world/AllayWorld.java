@@ -487,8 +487,8 @@ public class AllayWorld implements World {
         public void setChunkLoadingRadius(int radius) {}
 
         @Override
-        public int getChunkTrySendCountPerTick() {
-            return Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+        public int getChunkMaxSendCountPerTick() {
+            return Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
         }
 
         @Override

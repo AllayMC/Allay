@@ -32,8 +32,8 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
-    public int getChunkTrySendCountPerTick() {
-        return Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+    public int getChunkMaxSendCountPerTick() {
+        return Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
     }
 
     @Override

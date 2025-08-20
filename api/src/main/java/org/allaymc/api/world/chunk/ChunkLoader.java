@@ -44,11 +44,11 @@ public interface ChunkLoader extends PacketReceiver {
     void setChunkLoadingRadius(int radius);
 
     /**
-     * Get chunk try to send count per tick.
+     * Get the maximum chunk count try to send per tick.
      *
-     * @return the chunk try to send count per tick.
+     * @return the maximum chunk count try to send per tick.
      */
-    int getChunkTrySendCountPerTick();
+    int getChunkMaxSendCountPerTick();
 
     /**
      * A method which will be called when the chunk pos of the loader is changed.

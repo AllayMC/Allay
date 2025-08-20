@@ -153,7 +153,9 @@ public interface ChunkService extends ChunkSource {
     }
 
     /**
-     * Check if the specified chunk is unloaded.
+     * Check if the specified chunk is unloaded. Please note that if the chunk is
+     * loading ({@link #isChunkLoading(int, int) return {@code true}}), this method
+     * will return {@code true} not {@code false}.
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.

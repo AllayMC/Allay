@@ -20,10 +20,7 @@ public record ChunkPyramid(Map<ChunkState, ChunkStep> steps) {
                     .dependency(ChunkState.NOISE, ChunkStepTask.POPULATION_NEIGHBOR_ACCESS_RANGE)
                     .writeRange(ChunkStepTask.POPULATION_NEIGHBOR_ACCESS_RANGE)
             )
-            .step(ChunkState.FULL, builder -> builder
-                    .task(ChunkStepTask::doPostProcess)
-                    .dependency(ChunkState.POPULATE, ChunkStepTask.POPULATION_NEIGHBOR_ACCESS_RANGE)
-            )
+            .step(ChunkState.FULL, builder -> builder.task(ChunkStepTask::doPostProcess))
             .build();
 
     public ChunkStep getStepTo(ChunkState state) {
