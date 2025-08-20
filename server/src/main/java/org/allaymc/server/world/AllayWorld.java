@@ -13,7 +13,6 @@ import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.scheduler.Scheduler;
@@ -23,8 +22,6 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldState;
-import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.chunk.FakeChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -33,7 +30,6 @@ import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentIm
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
@@ -48,7 +44,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class AllayWorld implements World {
 
-    // Send the time to client every 12 seconds
     protected static final int TIME_SENDING_INTERVAL = 12 * 20;
     protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
     protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = Server.SETTINGS.networkSettings().enableIndependentNetworkThread();
@@ -213,13 +208,10 @@ public class AllayWorld implements World {
         var overworld = getOverWorld();
         if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
-            overworld.getChunkService().addChunkLoader(new FakeChunkLoader(
-                    () -> {
-                        var spawnPoint = worldData.getSpawnPoint();
-                        return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
-                    },
-                    Server.SETTINGS.worldSettings().spawnPointChunkRadius()
-            ));
+            overworld.getChunkService().addChunkLoader(new FakeChunkLoader(() -> {
+                var spawnPoint = worldData.getSpawnPoint();
+                return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
+            }, Server.SETTINGS.worldSettings().spawnPointChunkRadius()));
         }
 
         // Find the spawn point only the first time the world is loaded
@@ -255,17 +247,19 @@ public class AllayWorld implements World {
     }
 
     protected void tickTime(long currentTick) {
-        if (currentTick >= nextTimeSendTick) {
-            if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
-                // Client will always keep time flowing, so we still need to send the
-                // same time uninterruptedly if the daylight cycle is disabled
-                worldData.sendTimeOfDay(getPlayers());
-            } else {
-                worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
-            }
-
-            nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
+        if (currentTick < nextTimeSendTick) {
+            return;
         }
+
+        if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
+            // Client will always keep time flowing, so we still need to send the
+            // same time uninterruptedly if the daylight cycle is disabled
+            worldData.sendTimeOfDay(getPlayers());
+        } else {
+            worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
+        }
+
+        nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
     }
 
     protected void tickWeather() {
@@ -273,21 +267,25 @@ public class AllayWorld implements World {
             return;
         }
 
-        Set<Weather> weatherAdded = new HashSet<>();
-        Set<Weather> weatherRemoved = new HashSet<>();
+        Set<Weather> added = new HashSet<>();
+        Set<Weather> removed = new HashSet<>();
+        boolean changed = false;
+
         rainTimer--;
         if (rainTimer == 0) {
             if (isRaining) {
                 isRaining = false;
                 rainTimer = Weather.CLEAR.generateRandomTimeLength();
-                weatherRemoved.add(Weather.RAIN);
+                removed.add(Weather.RAIN);
                 effectiveWeathers.remove(Weather.RAIN);
             } else {
                 isRaining = true;
                 rainTimer = Weather.RAIN.generateRandomTimeLength();
-                weatherAdded.add(Weather.RAIN);
+                added.add(Weather.RAIN);
                 effectiveWeathers.add(Weather.RAIN);
             }
+
+            changed = true;
         }
 
         thunderTimer--;
@@ -295,25 +293,21 @@ public class AllayWorld implements World {
             if (isThundering) {
                 isThundering = false;
                 thunderTimer = Weather.CLEAR.generateRandomTimeLength();
-                weatherRemoved.add(Weather.THUNDER);
+                removed.add(Weather.THUNDER);
                 effectiveWeathers.remove(Weather.THUNDER);
             } else {
                 isThundering = true;
                 thunderTimer = Weather.THUNDER.generateRandomTimeLength();
-                weatherAdded.add(Weather.THUNDER);
+                added.add(Weather.THUNDER);
                 effectiveWeathers.add(Weather.THUNDER);
             }
+
+            changed = true;
         }
 
-        var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
-        newEffectiveWeathers.removeAll(weatherRemoved);
-        newEffectiveWeathers.addAll(weatherAdded);
-        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
-        if (!event.call()) return;
-
-        effectiveWeathers.removeAll(weatherRemoved);
-        effectiveWeathers.addAll(weatherAdded);
-        onWeatherUpdate(weatherRemoved, weatherAdded);
+        if (changed) {
+            applyWeatherChange(removed, added);
+        }
     }
 
     @Override
@@ -338,13 +332,13 @@ public class AllayWorld implements World {
 
     public void startTick() {
         if (worldThread.getState() != Thread.State.NEW) {
-            throw new IllegalStateException("World is already start ticking!");
-        } else {
-            worldThread.start();
-            dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).startTick());
-            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-                networkThread.start();
-            }
+            throw new IllegalStateException("World " + name + " is already ticking!");
+        }
+
+        worldThread.start();
+        dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).startTick());
+        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+            networkThread.start();
         }
     }
 
@@ -413,15 +407,7 @@ public class AllayWorld implements World {
             return;
         }
 
-        var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
-        newEffectiveWeathers.add(weather);
-        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
-        if (!event.call()) {
-            return;
-        }
-
-        effectiveWeathers.add(weather);
-        onWeatherUpdate(Set.of(), Set.of(weather));
+        applyWeatherChange(Collections.emptySet(), Set.of(weather));
     }
 
     @Override
@@ -433,19 +419,28 @@ public class AllayWorld implements World {
             return;
         }
 
-        var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
-        newEffectiveWeathers.remove(weather);
-        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
-        if (!event.call()) return;
-
-        effectiveWeathers.remove(weather);
-        onWeatherUpdate(Set.of(weather), Set.of());
+        applyWeatherChange(Set.of(weather), Collections.emptySet());
     }
 
     @Override
     public void clearWeather() {
-        onWeatherUpdate(effectiveWeathers, Set.of());
+        applyWeatherChange(Set.copyOf(effectiveWeathers), Collections.emptySet());
+    }
+
+    private void applyWeatherChange(Set<Weather> toRemove, Set<Weather> toAdd) {
+        var newEffective = new HashSet<>(effectiveWeathers);
+        newEffective.removeAll(toRemove);
+        newEffective.addAll(toAdd);
+
+        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffective));
+        if (!event.call()) {
+            return;
+        }
+
         effectiveWeathers.clear();
+        effectiveWeathers.addAll(newEffective);
+
+        onWeatherUpdate(toRemove, toAdd);
     }
 
     public void clearWeather(EntityPlayer player) {
@@ -464,50 +459,4 @@ public class AllayWorld implements World {
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}
-
-    protected class SpawnPointChunkLoader implements ChunkLoader {
-
-        @Override
-        public Location3dc getLocation() {
-            var spawnPoint = worldData.getSpawnPoint();
-            return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
-        }
-
-        @Override
-        public boolean isLoaderActive() {
-            return true;
-        }
-
-        @Override
-        public int getChunkLoadingRadius() {
-            return Server.SETTINGS.worldSettings().spawnPointChunkRadius();
-        }
-
-        @Override
-        public void setChunkLoadingRadius(int radius) {}
-
-        @Override
-        public int getChunkMaxSendCountPerTick() {
-            return Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
-        }
-
-        @Override
-        public void sendPacket(BedrockPacket packet) {
-            if (packet instanceof LevelChunkPacket lcp) {
-                lcp.release();
-            }
-        }
-
-        @Override
-        public void onChunkPosChanged() {}
-
-        @Override
-        public void onChunkInRangeSend(Chunk chunk) {}
-
-        @Override
-        public void onChunkOutOfRange(Set<Long> chunkHashes) {}
-
-        @Override
-        public void sendPacketImmediately(BedrockPacket packet) {}
-    }
 }

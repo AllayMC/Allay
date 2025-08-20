@@ -1,9 +1,9 @@
 package org.allaymc.api.world.chunk;
 
+import io.netty.util.AbstractReferenceCounted;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 
 import java.util.Set;
 import java.util.function.Supplier;
@@ -32,26 +32,26 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
+    public void setChunkLoadingRadius(int radius) {}
+
+    @Override
     public int getChunkMaxSendCountPerTick() {
         return Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
     }
 
     @Override
     public void sendPacket(BedrockPacket packet) {
-        if (packet instanceof LevelChunkPacket lcp) {
+        if (packet instanceof AbstractReferenceCounted lcp) {
             lcp.release();
         }
     }
 
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
-        if (packet instanceof LevelChunkPacket lcp) {
+        if (packet instanceof AbstractReferenceCounted lcp) {
             lcp.release();
         }
     }
-
-    @Override
-    public void setChunkLoadingRadius(int radius) {}
 
     @Override
     public void onChunkPosChanged() {}
@@ -61,5 +61,4 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
 
     @Override
     public void onChunkOutOfRange(Set<Long> chunkHashes) {}
-
 }

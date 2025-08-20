@@ -54,8 +54,8 @@ public final class ChunkStep {
     }
 
     public static class ChunkStepBuilder {
+        private final Map<ChunkState, Integer> dependencies;
         private ChunkState targetState;
-        private Map<ChunkState, Integer> dependencies;
         private int writeRange;
         private ChunkStepTask task;
 

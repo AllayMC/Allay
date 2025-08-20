@@ -188,24 +188,21 @@ public final class ChunkHolder {
         var nextState = chunk.getState().getNext();
         var step = ChunkPyramid.PYRAMID.getStepTo(nextState);
         if (checkDependencies(step) && lock(this.x, this.z, step.getWriteRange())) {
-            CompletableFuture
-                    .runAsync(() -> step.getTask().doWork(
-                            this.worldGenerator,
-                            this.chunk.toUnsafeChunk(),
-                            // Should never be null here since we have locked the chunks that will be written
-                            (x, z) -> Preconditions.checkNotNull(this.chunkService.getChunkHolder(x, z).getChunk())
-                    ), Server.getInstance().getComputeThreadPool())
-                    .exceptionally(t -> {
-                        log.error("Error while process chunk task in chunk ({},{}) from state {} to state {}!", this.x, this.z, chunk.getState(), nextState, t);
-                        return null;
-                    })
-                    .thenRun(() -> {
-                        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(nextState);
-                        if (nextState == ChunkState.FULL) {
-                            onChunkLoad();
-                        }
-                        unlock(this.x, this.z, step.getWriteRange());
-                    });
+            CompletableFuture.runAsync(() -> step.getTask().doWork(
+                    this.worldGenerator,
+                    this.chunk.toUnsafeChunk(),
+                    // Should never be null here since we have locked the chunks that will be written
+                    (x, z) -> Preconditions.checkNotNull(this.chunkService.getChunkHolder(x, z).getChunk())
+            ), Server.getInstance().getComputeThreadPool()).exceptionally(t -> {
+                log.error("Error while process chunk task in chunk ({},{}) from state {} to state {}!", this.x, this.z, chunk.getState(), nextState, t);
+                return null;
+            }).thenRun(() -> {
+                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(nextState);
+                if (nextState == ChunkState.FULL) {
+                    onChunkLoad();
+                }
+                unlock(this.x, this.z, step.getWriteRange());
+            });
         }
     }
 
