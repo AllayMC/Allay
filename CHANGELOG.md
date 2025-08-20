@@ -48,6 +48,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Player movement now normally reduces satiety
 - Fixed an NPE bug that could occur in extreme cases for the light engine.
 - `/world tp <world>` now teleports the player to the spawn point for overworld dimension.
+- Fixed the physics for some entities including TNT, and stepping is disabled by default now.
 
 ### Removed
 

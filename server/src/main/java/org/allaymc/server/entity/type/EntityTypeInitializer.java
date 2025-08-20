@@ -35,12 +35,6 @@ public final class EntityTypeInitializer {
                     public double getGravity() {
                         return 0.04;
                     }
-
-                    @Override
-                    public double getStepHeight() {
-                        // Entity tnt can't step
-                        return 0.0;
-                    }
                 }, EntityPhysicsComponentImpl.class)
                 .build();
     }
@@ -100,7 +94,7 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
                 .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
-                .addComponent(EntityPhysicsComponentImpl::new, EntityPhysicsComponentImpl.class)
+                .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
                 .build();
     }
 
@@ -131,23 +125,7 @@ public final class EntityTypeInitializer {
                 .builder(EntityTntImpl.class)
                 .vanillaEntity(EntityId.TNT)
                 .addComponent(EntityTntBaseComponentImpl::new, EntityTntBaseComponentImpl.class)
-                .addComponent(() -> new EntityPhysicsComponentImpl() {
-                    @Override
-                    public double getGravity() {
-                        return 0.04;
-                    }
-
-                    @Override
-                    public double getStepHeight() {
-                        // Entity tnt can't step
-                        return 0.0;
-                    }
-
-                    @Override
-                    public boolean computeEntityCollisionMotion() {
-                        return false;
-                    }
-                }, EntityPhysicsComponentImpl.class)
+                .addComponent(EntityTntPhysicsComponentImpl::new, EntityTntPhysicsComponentImpl.class)
                 .build();
     }
 

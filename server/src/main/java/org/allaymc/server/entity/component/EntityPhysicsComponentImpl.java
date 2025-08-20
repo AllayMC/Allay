@@ -38,7 +38,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
-import static org.allaymc.api.block.component.data.BlockStateData.DEFAULT_FRICTION;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
 import static org.allaymc.server.world.service.AllayEntityPhysicsService.FAT_AABB_MARGIN;
 
@@ -347,6 +346,10 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     private boolean tryStepping(Vector3d pos, AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
+        if (stepHeight == 0) {
+            return false;
+        }
+
         var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
         var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
         var recorder = new Vector3d();
@@ -404,17 +407,18 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @Override
     public Vector3d updateMotion(boolean hasLiquidMotion) {
         var blockStateStandingOn = getBlockStateStandingOn();
+        var isOnGround = blockStateStandingOn.getBlockType() != BlockTypes.AIR;
         var slipperinessMultiplier = 1.0;
-        if (!hasLiquidMotion) {
-            // Entity that has liquid motion won't be affected by the friction of the block it stands on
-            slipperinessMultiplier = blockStateStandingOn != null ? blockStateStandingOn.getBlockStateData().friction() : DEFAULT_FRICTION;
+        // Entity that has liquid motion won't be affected by the friction of the block it stands on
+        if (!hasLiquidMotion && isOnGround) {
+            slipperinessMultiplier = blockStateStandingOn.getBlockStateData().friction();
         }
 
-        var slip = slipperinessMultiplier * (1 - this.getDragFactorOnGround());
+        var horizontalFactor = slipperinessMultiplier * (1 - (isOnGround ? getDragFactorOnGround() : getDragFactorInAir()));
         return new Vector3d(
-                motion.x() * slip,
-                (motion.y() - (this.hasGravity() ? this.getGravity() : 0f)) * (1 - this.getDragFactorInAir()),
-                motion.z() * slip
+                motion.x() * horizontalFactor,
+                (motion.y() - (hasGravity() ? getGravity() : 0f)) * (1 - getDragFactorInAir()),
+                motion.z() * horizontalFactor
         );
     }
 

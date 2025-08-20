@@ -54,7 +54,7 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
     public Vector3d updateMotion(boolean hasLiquidMotion) {
         return new Vector3d(
                 this.motion.x * (1 - this.getDragFactorInAir()),
-                this.motion.y - this.getGravity(),
+                (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
                 this.motion.z * (1 - this.getDragFactorInAir())
         );
     }

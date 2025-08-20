@@ -133,7 +133,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * @return the step height of this entity.
      */
     default double getStepHeight() {
-        return 0.6;
+        return 0.0;
     }
 
     /**
