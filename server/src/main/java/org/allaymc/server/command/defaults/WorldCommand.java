@@ -64,6 +64,7 @@ public class WorldCommand extends VanillaCommand {
                         return context.fail();
                     }
 
+                    var dim = world.getDimension(dimInfo.dimensionId());
                     if (dim.getDimensionInfo() == DimensionInfo.OVERWORLD) {
                         entity.teleport(world.getSpawnPoint());
                     } else {
