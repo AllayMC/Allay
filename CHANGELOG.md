@@ -14,6 +14,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.7.1](https://github.com/AllayMC/Allay/compare/0.7.1...HEAD)</small>
 
+### Fixed
+
+- Fixed the bug that snowball will always make knockback even if the entity being hit is in damage cool down.
+
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 
 <small>[Compare with 0.7.0](https://github.com/AllayMC/Allay/compare/0.7.0...0.7.1)</small>

@@ -44,11 +44,11 @@ public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsC
         if (other instanceof EntityDamageComponent damageComponent) {
             var damage = DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0);
             damage.setHasKnockback(false);
-            if (other instanceof EntityPhysicsComponent physicsComponent) {
+            if (damageComponent.attack(damage) && other instanceof EntityPhysicsComponent physicsComponent) {
                 // Use the last location as the knockback source
                 physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()));
             }
-            damageComponent.attack(damage);
+
         }
 
         thisEntity.despawn();
