@@ -162,5 +162,13 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
                 .build();
+        EntityTypes.ARROW = AllayEntityType
+                .builder(EntityArrowImpl.class)
+                .vanillaEntity(EntityId.ARROW)
+                .addComponent(EntityArrowBaseComponentImpl::new, EntityArrowBaseComponentImpl.class)
+                .addComponent(EntityArrowPhysicsComponentImpl::new, EntityArrowPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .build();
     }
 }
