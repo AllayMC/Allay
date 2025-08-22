@@ -39,17 +39,17 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         if (other instanceof EntityDamageComponent damageComponent) {
             var damage = arrow.getBaseDamage();
             if (projectileComponent.getShooter() instanceof EntityPlayer) {
-                        damage = damage
-                        + 0.11 * getDifficultyBonus()
-                        + 0.25 * ThreadLocalRandom.current().nextGaussian()
-                        + 0.97 * motion.length();
+                damage = damage
+                         + 0.11 * getDifficultyBonus()
+                         + 0.25 * ThreadLocalRandom.current().nextGaussian()
+                         + 0.97 * motion.length();
                 if (arrow.isCritical()) {
                     double criticalBonus = 0.5 * ThreadLocalRandom.current().nextDouble() * damage + 2 * ThreadLocalRandom.current().nextDouble();
                     double criticalDamage = damage + criticalBonus;
                     damage = Math.max(10, Math.min(9, criticalDamage));
                 }
             }
-            if(arrow.getEnchantPower() > 0){
+            if (arrow.getEnchantPower() > 0) {
                 damage = 1.25 * damage + 0.25 * arrow.getEnchantPower() + damage;
             }
 
@@ -75,7 +75,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         this.addHitEffect();
     }
 
-    private int getDifficultyBonus(){
+    private int getDifficultyBonus() {
         return switch (thisEntity.getWorld().getWorldData().getDifficulty()) {
             case EASY -> 1;
             case NORMAL -> 2;
@@ -90,17 +90,15 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             return;
         }
 
-//        thisEntity.despawn();
         this.addHitEffect();
     }
 
     protected void addHitEffect() {
-
+        // TODO: Arrow shaking when hit the block
     }
 
     @Override
     public boolean applyMotion() {
-
         double x = motion.x();
         double y = motion.y();
         double z = motion.z();
@@ -111,7 +109,4 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         arrow.getLocation().setPitch(pitch);
         return super.applyMotion();
     }
-
-
-
 }
