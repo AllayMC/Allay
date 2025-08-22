@@ -1,15 +1,25 @@
 package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.container.Container;
+import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.impl.PlayerOffhandContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.item.data.PotionType;
+import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.joml.Vector3d;
+import org.allaymc.api.item.interfaces.ItemArrowStack;
+import org.allaymc.api.math.MathUtils;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 
-
+/**
+ * @author harryxi | daoge_cmd
+ */
 @Slf4j
-public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl{
+public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
+
     public ItemBowBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
@@ -21,38 +31,93 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl{
 
     @Override
     public void releaseItem(EntityPlayer player, long usedTime) {
-        log.info("ItemBowBaseComponentImpl.releaseItem");
-        log.info("player use item stage {}", player.isUsingItemInAir());
-        log.info("start use time {}", player.getStartUsingItemInAirTime());
-        var dim = player.getDimension();
+        if (usedTime < 3) {
+            return;
+        }
+
+        var creative = player.getGameType() == GameType.CREATIVE;
+        var seconds = (double) usedTime / 20.0;
+        var force = Math.min((seconds * seconds + seconds * 2.0) / 3.0, 1.0);
+        if (force < 0.1) {
+            return;
+        }
+
+        var infinityLevel = getEnchantmentLevel(EnchantmentTypes.INFINITY);
+        PotionType potionType = null;
+        if (!creative) {
+            var arrow = findArrow(player, infinityLevel == 0);
+            if (arrow == null) {
+                return;
+            }
+
+            potionType = arrow.getPotionType();
+        }
+
+        var powerLevel = getEnchantmentLevel(EnchantmentTypes.POWER);
+        var punchLevel = getEnchantmentLevel(EnchantmentTypes.PUNCH);
+        var flameLevel = getEnchantmentLevel(EnchantmentTypes.FLAME);
+
+        var dimension = player.getDimension();
         var location = player.getLocation();
         var arrow = EntityTypes.ARROW.createEntity(
                 EntityInitInfo.builder()
-                        .dimension(dim)
-                        .pos(new Vector3d(location.x(), location.y() + player.getEyeHeight(), location.z()))
-                        .rot(location.headYaw(), location.pitch())
-                        .build());
-        arrow.setShooter(player);
-
-        double yawRad = Math.toRadians(location.headYaw());
-        double pitchRad = Math.toRadians(location.pitch());
-
-        double x = -Math.sin(yawRad) * Math.cos(pitchRad);
-        double y = -Math.sin(pitchRad);
-        double z = Math.cos(yawRad) * Math.cos(pitchRad);
-        Vector3d direction = new Vector3d(x, y, z).normalize();
-        log.info("usedTime: {}", usedTime);
-        log.info("{}", direction.length());
-        log.info("level: {}", Math.min(1d, (double) (usedTime * (usedTime + 40)) / 1200));
-        log.info("direction: {}", direction.mul(Math.min(1d, (double) (usedTime * (usedTime + 40)) / 1200)*3));
-        log.info(":speed: {}", direction.length());
-        arrow.setMotion(
-                new Vector3d(
-                        direction
-                )
+                        .dimension(dimension)
+                        .pos(location.x(), location.y() + player.getEyeHeight(), location.z())
+                        .rot(-location.yaw(), -location.pitch())
+                        .motion(MathUtils.getDirectionVector(location).mul(force * 5.0))
+                        .build()
         );
-        dim.getEntityService().addEntity(arrow);
+        arrow.setShooter(player);
+        arrow.setPotionType(potionType);
+        arrow.setInfinityLevel(infinityLevel);
+        arrow.setPowerLevel(powerLevel);
+        arrow.setPunchLevel(punchLevel);
+        arrow.setFlameLevel(flameLevel);
+        arrow.setCritical(force >= 1.0);
 
+        dimension.getEntityService().addEntity(arrow);
+        tryIncreaseDamage(1);
+    }
 
+    protected ItemArrowStack findArrow(EntityPlayer player, boolean consume) {
+        Container container;
+        int slot;
+        ItemArrowStack arrow = null;
+
+        // Find offhand arrow first
+        container = player.getContainer(FullContainerType.OFFHAND);
+        slot = PlayerOffhandContainer.OFFHAND_SLOT;
+        if (container.getItemStack(slot) instanceof ItemArrowStack a) {
+            arrow = a;
+        }
+
+        if (arrow == null) {
+            // Arrow is not in offhand, search in inventory again
+            container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+            var itemStacks = container.getItemStacks();
+            for (slot = 0; slot < itemStacks.size(); slot++) {
+                var item = itemStacks.get(slot);
+                if (item instanceof ItemArrowStack a) {
+                    arrow = a;
+                    break;
+                }
+            }
+        }
+
+        if (arrow == null) {
+            // No arrow found
+            return null;
+        }
+
+        if (consume) {
+            if (arrow.getCount() == 1) {
+                container.clearSlot(slot);
+            } else {
+                arrow.reduceCount(1);
+                container.notifySlotChange(slot);
+            }
+        }
+
+        return arrow;
     }
 }

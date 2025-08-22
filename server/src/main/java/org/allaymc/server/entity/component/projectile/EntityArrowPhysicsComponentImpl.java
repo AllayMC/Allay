@@ -10,13 +10,14 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.component.annotation.Dependency;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author harryxi
+ * @author harryxi | daoge_cmd
  */
 public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComponentImpl {
 
@@ -34,6 +35,11 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
         if (thisEntity.willBeDespawnedNextTick()) {
             return;
+        }
+
+        var potionType = arrowBaseComponent.getPotionType();
+        if (potionType != null) {
+            potionType.applyTo(other);
         }
 
         if (other instanceof EntityDamageComponent damageComponent) {
@@ -56,12 +62,13 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             if (damageComponent.attack(DamageContainer.projectile(thisEntity, (float) damage)) && other instanceof EntityPhysicsComponent physicsComponent) {
                 var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
                 var additionalMotion = new Vector3d();
-                var PunchEnchantmentLevel = arrowBaseComponent.getPunchLevel();
-                if (PunchEnchantmentLevel != 0) {
+                var punchLevel = arrowBaseComponent.getPunchLevel();
+                if (punchLevel != 0) {
                     kb /= 2.0;
                     additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(other.getLocation()).setComponent(1, 0));
-                    additionalMotion.mul(PunchEnchantmentLevel * 1);
-                    // Todo: This coefficient (1) is only obtained based on the relative knockback distance relationship between knockback and punch, and may not be accurate.
+                    // TODO: This factor (1) is only obtained based on the relative knockback distance relationship between knockback and punch, and may not be accurate.
+                    var factor = 1;
+                    additionalMotion.mul(punchLevel * factor);
                 }
                 physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()), kb, EntityPhysicsComponent.DEFAULT_KNOCKBACK, additionalMotion);
             }
@@ -72,7 +79,6 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         thisEntity.despawn();
-        this.addHitEffect();
     }
 
     private int getDifficultyBonus() {
@@ -90,23 +96,23 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             return;
         }
 
-        this.addHitEffect();
-    }
-
-    protected void addHitEffect() {
-        // TODO: Arrow shaking when hit the block
+        this.arrowBaseComponent.applyEntityEvent(
+                EntityEventType.ARROW_SHAKE,
+                7 // How many times the arrow shakes
+        );
     }
 
     @Override
     public boolean applyMotion() {
-        double x = motion.x();
-        double y = motion.y();
-        double z = motion.z();
-
-        double yaw = Math.toDegrees(Math.atan2(-x, z));
-        double pitch = Math.toDegrees(Math.atan2(-y, Math.sqrt(x * x + z * z)));
-        arrowBaseComponent.getLocation().setYaw(yaw);
-        arrowBaseComponent.getLocation().setPitch(pitch);
+        // TODO: check it
+//        double x = motion.x();
+//        double y = motion.y();
+//        double z = motion.z();
+//
+//        double yaw = Math.toDegrees(Math.atan2(-x, z));
+//        double pitch = Math.toDegrees(Math.atan2(-y, Math.sqrt(x * x + z * z)));
+//        this.arrowBaseComponent.getLocation().setYaw(yaw);
+//        this.arrowBaseComponent.getLocation().setPitch(pitch);
         return super.applyMotion();
     }
 }

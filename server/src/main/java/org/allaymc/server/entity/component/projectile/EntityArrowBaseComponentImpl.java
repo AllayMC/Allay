@@ -59,7 +59,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         nbt.listenForByte(TAG_PUNCH_LEVEL, b -> this.punchLevel = b);
         nbt.listenForByte(TAG_FLAME_LEVEL, b -> this.flameLevel = b);
         nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinityLevel = b);
-        nbt.listenForByte(TAG_POTION_ID, b -> this.potionType = PotionType.fromId(b - 1));
+        nbt.listenForByte(TAG_POTION_ID, b -> this.potionType = b > 0 ? PotionType.fromId(b - 1) : null);
     }
 
     @Override
