@@ -64,13 +64,17 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
 
     @Override
     public NbtMap saveNBT() {
-        return super.saveNBT()
+        var builder = super.saveNBT()
                 .toBuilder()
                 .putByte(TAG_POWER_LEVEL, (byte) powerLevel)
                 .putByte(TAG_PUNCH_LEVEL, (byte) punchLevel)
                 .putByte(TAG_FLAME_LEVEL, (byte) flameLevel)
-                .putByte(TAG_INFINITY_LEVEL, (byte) infinityLevel)
-                .putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1))
-                .build();
+                .putByte(TAG_INFINITY_LEVEL, (byte) infinityLevel);
+
+        if (potionType != null) {
+            builder.putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1));
+        }
+        
+        return builder.build();
     }
 }

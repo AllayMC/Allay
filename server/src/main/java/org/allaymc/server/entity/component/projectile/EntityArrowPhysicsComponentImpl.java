@@ -26,9 +26,27 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     @Dependency
     protected EntityProjectileComponent projectileComponent;
 
+    // Indicates whether the arrow has already hit a block
+    protected boolean hitBlock;
+
     @Override
     public double getGravity() {
         return 0.05;
+    }
+
+    @Override
+    public Vector3d updateMotion(boolean hasLiquidMotion) {
+        var collidedWithBlocks = arrowBaseComponent.getDimension().getCollidingBlockStates(arrowBaseComponent.getOffsetAABB()) != null;
+        if (!collidedWithBlocks) {
+            return new Vector3d(
+                    this.motion.x * (1 - this.getDragFactorInAir()),
+                    (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
+                    this.motion.z * (1 - this.getDragFactorInAir())
+            );
+        } else {
+            // Set motion to zero if collided with blocks
+            return new Vector3d(0, 0, 0);
+        }
     }
 
     @Override
@@ -83,18 +101,9 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         thisEntity.despawn();
     }
 
-    private int getDifficultyBonus() {
-        return switch (thisEntity.getWorld().getWorldData().getDifficulty()) {
-            case EASY -> 1;
-            case NORMAL -> 2;
-            case HARD -> 3;
-            default -> 0;
-        };
-    }
-
     @Override
     protected void onHitBlock(Block block, Vector3dc hitPos) {
-        if (thisEntity.willBeDespawnedNextTick()) {
+        if (thisEntity.willBeDespawnedNextTick() || this.hitBlock) {
             return;
         }
 
@@ -103,19 +112,15 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
                 7 // How many times the arrow shakes
         );
         this.arrowBaseComponent.setCritical(false);
+        this.hitBlock = true;
     }
 
-    @Override
-    public boolean applyMotion() {
-        // TODO: check it
-//        double x = motion.x();
-//        double y = motion.y();
-//        double z = motion.z();
-//
-//        double yaw = Math.toDegrees(Math.atan2(-x, z));
-//        double pitch = Math.toDegrees(Math.atan2(-y, Math.sqrt(x * x + z * z)));
-//        this.arrowBaseComponent.getLocation().setYaw(yaw);
-//        this.arrowBaseComponent.getLocation().setPitch(pitch);
-        return super.applyMotion();
+    private int getDifficultyBonus() {
+        return switch (thisEntity.getWorld().getWorldData().getDifficulty()) {
+            case EASY -> 1;
+            case NORMAL -> 2;
+            case HARD -> 3;
+            default -> 0;
+        };
     }
 }

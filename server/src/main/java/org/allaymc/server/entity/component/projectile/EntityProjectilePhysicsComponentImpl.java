@@ -120,9 +120,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
             newPos.add(motion.mul(rayCastResult.result, new Vector3d()));
         }
 
-        // Update rotation to match the motion
-        newPos.setYaw(-MathUtils.getYawFromVector(this.motion));
-        newPos.setPitch(-MathUtils.getPitchFromVector(this.motion));
+        if (newPos.distance(location) > 0) {
+            // Compute rotation based on the motion only when the projectile moved
+            computeRotationFromMotion(newPos, this.motion);
+        }
 
         if (!newPos.equals(location) && thisEntity.trySetLocation(newPos)) {
             if (rayCastResult.hit instanceof Block block && callHitEvent(newPos, null, block)) {
@@ -137,6 +138,11 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         }
 
         return false;
+    }
+
+    protected void computeRotationFromMotion(Location3d pos, Vector3dc motion) {
+        pos.setYaw(-MathUtils.getYawFromVector(motion));
+        pos.setPitch(-MathUtils.getPitchFromVector(motion));
     }
 
     protected boolean callHitEvent(Vector3dc hitPos, Entity victim, Block block) {
