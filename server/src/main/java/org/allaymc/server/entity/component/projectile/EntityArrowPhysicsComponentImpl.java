@@ -59,7 +59,9 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
                 damage = 1.25 * damage + 0.25 * arrowBaseComponent.getPowerLevel() + damage;
             }
 
-            if (damageComponent.attack(DamageContainer.projectile(thisEntity, (float) damage)) && other instanceof EntityPhysicsComponent physicsComponent) {
+            var damageContainer = DamageContainer.projectile(thisEntity, (float) damage);
+            damageContainer.setCritical(arrowBaseComponent.isCritical());
+            if (damageComponent.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
                 var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
                 var additionalMotion = new Vector3d();
                 var punchLevel = arrowBaseComponent.getPunchLevel();
@@ -100,6 +102,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
                 EntityEventType.ARROW_SHAKE,
                 7 // How many times the arrow shakes
         );
+        this.arrowBaseComponent.setCritical(false);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
 
     @Override
     public void setCritical(boolean critical) {
-        this.metadata.set(EntityFlag.CRITICAL, critical);
+        setAndSendEntityFlag(EntityFlag.CRITICAL, critical);
     }
 
     @Override

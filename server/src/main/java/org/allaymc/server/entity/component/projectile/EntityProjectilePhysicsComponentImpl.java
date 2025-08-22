@@ -6,6 +6,7 @@ import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.eventbus.event.entity.ProjectileHitEvent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -118,6 +119,10 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
             newPos = new Location3d(location);
             newPos.add(motion.mul(rayCastResult.result, new Vector3d()));
         }
+
+        // Update rotation to match the motion
+        newPos.setYaw(-MathUtils.getYawFromVector(this.motion));
+        newPos.setPitch(-MathUtils.getPitchFromVector(this.motion));
 
         if (!newPos.equals(location) && thisEntity.trySetLocation(newPos)) {
             if (rayCastResult.hit instanceof Block block && callHitEvent(newPos, null, block)) {

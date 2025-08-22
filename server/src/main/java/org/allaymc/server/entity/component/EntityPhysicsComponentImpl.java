@@ -459,7 +459,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             var rz = rand.nextDouble(1) - 0.5;
             vec = MathUtils.normalizeIfNotZero(new Vector3d(rx, 0, rz)).mul(kb);
         } else {
-            vec = location.sub(source, new Vector3d()).setComponent(1, 0).normalize().mul(kb);
+            vec = MathUtils.normalizeIfNotZero(location.sub(source, new Vector3d()).setComponent(1, 0)).mul(kb);
         }
         vec.y = kby;
         return motion.mul(0.5, new Vector3d()).add(vec).add(additionalMotion);
