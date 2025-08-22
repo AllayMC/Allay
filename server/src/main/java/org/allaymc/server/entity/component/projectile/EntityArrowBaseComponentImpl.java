@@ -74,7 +74,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         if (potionType != null) {
             builder.putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1));
         }
-        
+
         return builder.build();
     }
 }

@@ -47,7 +47,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         var infinityLevel = getEnchantmentLevel(EnchantmentTypes.INFINITY);
         PotionType potionType = null;
         if (!creative) {
-            var arrow = findArrow(player, infinityLevel == 0);
+            var arrow = findArrow(player, infinityLevel != 0);
             if (arrow == null) {
                 return;
             }
@@ -83,7 +83,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         player.getDimension().addLevelSoundEvent(shootPos, SoundEvent.BOW);
     }
 
-    protected ItemArrowStack findArrow(EntityPlayer player, boolean consume) {
+    protected ItemArrowStack findArrow(EntityPlayer player, boolean infinity) {
         Container container;
         int slot;
         ItemArrowStack arrow = null;
@@ -113,7 +113,8 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             return null;
         }
 
-        if (consume) {
+        // Bows with infinity enchantment do not consume normal types of arrows when shooting
+        if (!infinity || arrow.getPotionType() != null) {
             if (arrow.getCount() == 1) {
                 container.clearSlot(slot);
             } else {
