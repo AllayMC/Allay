@@ -1,5 +1,6 @@
 package org.allaymc.api.eventbus.event.player;
 
+import lombok.Getter;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
@@ -9,6 +10,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  *
  * @author daoge_cmd
  */
+@Getter
 public class PlayerInteractBlockEvent extends PlayerEvent implements CancellableEvent {
 
     /**

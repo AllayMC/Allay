@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor.impl.ingame;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerBookEditEvent;
 import org.allaymc.api.item.data.WrittenBookGeneration;
 import org.allaymc.api.item.interfaces.ItemWritableBookStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -35,6 +36,11 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
         var text = packet.getText();
         if (text != null && text.getBytes().length > 256) {
             log.warn("Text can not be longer than 256 bytes");
+            return;
+        }
+
+        var event = new PlayerBookEditEvent(player, book, packet.getAction());
+        if (!event.call()) {
             return;
         }
 

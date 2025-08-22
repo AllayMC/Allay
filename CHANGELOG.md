@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added PlayerInteractBlockEvent.
+- (API) Added PlayerBookEditEvent.
 
 ### Fixed
 
