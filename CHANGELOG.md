@@ -22,6 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed the bug that snowball will always make knockback even if the entity being hit is in damage cool down.
+- Fixed a bug where Ender Pearls would deal damage to Blazes.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

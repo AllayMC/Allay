@@ -5,7 +5,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
@@ -27,7 +26,7 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
         }
 
         if (other instanceof EntityDamageComponent damageComponent) {
-            damageComponent.attack(DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0));
+            damageComponent.attack(DamageContainer.projectile(thisEntity, 0));
         }
 
         this.teleport();
