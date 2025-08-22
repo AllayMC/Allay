@@ -1,49 +1,48 @@
 package org.allaymc.server.entity.component.projectile;
 
 import lombok.Getter;
-import org.allaymc.api.entity.effect.EffectInstance;
+import lombok.Setter;
+import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.item.data.PotionType;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author harryxi | daoge_cmd
  */
-public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentImpl {
+@Getter
+@Setter
+public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentImpl implements EntityArrowBaseComponent {
 
-    protected static final String TAG_ENCHANT_POWER = "enchantPower";
-    protected static final String TAG_ENCHANT_PUNCH = "enchantPunch";
-    protected static final String TAG_ENCHANT_FLAME = "enchantFlame";
-    protected static final String TAG_ENCHANT_INFINITY = "enchantInfinity";
-    protected static final String TAG_MOB_EFFECTS = "mobEffects";
+    protected static final int DEFAULT_BASE_DAMAGE = 1;
 
-    @Getter
-    protected double baseDamage = 1;
-    @Getter
-    protected byte enchantPower = 0;
-    @Getter
-    protected byte enchantPunch = 0;
-    @Getter
-    protected byte enchantFlame = 0;
-    @Getter
-    protected byte enchantInfinity = 0;
-    @Getter
-    protected List<EffectInstance> mobEffects = Collections.emptyList();
+    protected static final String TAG_POWER_LEVEL = "enchantPower";
+    protected static final String TAG_PUNCH_LEVEL = "enchantPunch";
+    protected static final String TAG_FLAME_LEVEL = "enchantFlame";
+    protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
+    protected static final String TAG_POTION_ID = "auxValue";
+
+    protected float baseDamage;
+    protected int powerLevel;
+    protected int punchLevel;
+    protected int flameLevel;
+    protected int infinityLevel;
+    protected PotionType potionType;
 
     public EntityArrowBaseComponentImpl(EntityInitInfo info) {
         super(info);
+        this.baseDamage = DEFAULT_BASE_DAMAGE;
     }
 
+    @Override
     public boolean isCritical() {
         return this.metadata.get(EntityFlag.CRITICAL);
     }
 
+    @Override
     public void setCritical(boolean critical) {
         this.metadata.set(EntityFlag.CRITICAL, critical);
     }
@@ -56,25 +55,22 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForByte(TAG_ENCHANT_POWER, enchantPower -> this.enchantPower = enchantPower);
-        nbt.listenForByte(TAG_ENCHANT_PUNCH, enchantPunch -> this.enchantPunch = enchantPunch);
-        nbt.listenForByte(TAG_ENCHANT_FLAME, enchantFlame -> this.enchantFlame = enchantFlame);
-        nbt.listenForByte(TAG_ENCHANT_INFINITY, enchantInfinity -> this.enchantInfinity = enchantInfinity);
-        nbt.listenForList(
-                TAG_MOB_EFFECTS, NbtType.COMPOUND,
-                list -> this.mobEffects = list.stream().map(EffectInstance::fromNBT).toList()
-        );
+        nbt.listenForByte(TAG_POWER_LEVEL, b -> this.powerLevel = b);
+        nbt.listenForByte(TAG_PUNCH_LEVEL, b -> this.punchLevel = b);
+        nbt.listenForByte(TAG_FLAME_LEVEL, b -> this.flameLevel = b);
+        nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinityLevel = b);
+        nbt.listenForByte(TAG_POTION_ID, b -> this.potionType = PotionType.fromId(b - 1));
     }
 
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT()
                 .toBuilder()
-                .putByte(TAG_ENCHANT_POWER, enchantPower)
-                .putByte(TAG_ENCHANT_PUNCH, enchantPunch)
-                .putByte(TAG_ENCHANT_FLAME, enchantFlame)
-                .putByte(TAG_ENCHANT_INFINITY, enchantInfinity)
-                .putList(TAG_MOB_EFFECTS, NbtType.COMPOUND, mobEffects.stream().map(EffectInstance::saveNBT).toList())
+                .putByte(TAG_POWER_LEVEL, (byte) powerLevel)
+                .putByte(TAG_PUNCH_LEVEL, (byte) punchLevel)
+                .putByte(TAG_FLAME_LEVEL, (byte) flameLevel)
+                .putByte(TAG_INFINITY_LEVEL, (byte) infinityLevel)
+                .putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1))
                 .build();
     }
 }

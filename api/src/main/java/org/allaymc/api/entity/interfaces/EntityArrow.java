@@ -1,4 +1,6 @@
 package org.allaymc.api.entity.interfaces;
 
-public interface EntityArrow extends EntityProjectile {
+import org.allaymc.api.entity.component.EntityArrowBaseComponent;
+
+public interface EntityArrow extends EntityProjectile, EntityArrowBaseComponent {
 }

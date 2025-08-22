@@ -2,6 +2,7 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
@@ -20,8 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComponentImpl {
 
     @Dependency
-    protected EntityArrowBaseComponentImpl arrow;
-
+    protected EntityArrowBaseComponent arrowBaseComponent;
     @Dependency
     protected EntityProjectileComponent projectileComponent;
 
@@ -37,26 +37,26 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         if (other instanceof EntityDamageComponent damageComponent) {
-            var damage = arrow.getBaseDamage();
+            double damage = arrowBaseComponent.getBaseDamage();
             if (projectileComponent.getShooter() instanceof EntityPlayer) {
                 damage = damage
                          + 0.11 * getDifficultyBonus()
                          + 0.25 * ThreadLocalRandom.current().nextGaussian()
                          + 0.97 * motion.length();
-                if (arrow.isCritical()) {
+                if (arrowBaseComponent.isCritical()) {
                     double criticalBonus = 0.5 * ThreadLocalRandom.current().nextDouble() * damage + 2 * ThreadLocalRandom.current().nextDouble();
                     double criticalDamage = damage + criticalBonus;
                     damage = Math.max(10, Math.min(9, criticalDamage));
                 }
             }
-            if (arrow.getEnchantPower() > 0) {
-                damage = 1.25 * damage + 0.25 * arrow.getEnchantPower() + damage;
+            if (arrowBaseComponent.getPowerLevel() > 0) {
+                damage = 1.25 * damage + 0.25 * arrowBaseComponent.getPowerLevel() + damage;
             }
 
             if (damageComponent.attack(DamageContainer.projectile(thisEntity, (float) damage)) && other instanceof EntityPhysicsComponent physicsComponent) {
                 var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
                 var additionalMotion = new Vector3d();
-                var PunchEnchantmentLevel = arrow.getEnchantPunch();
+                var PunchEnchantmentLevel = arrowBaseComponent.getPunchLevel();
                 if (PunchEnchantmentLevel != 0) {
                     kb /= 2.0;
                     additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(other.getLocation()).setComponent(1, 0));
@@ -66,7 +66,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
                 physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()), kb, EntityPhysicsComponent.DEFAULT_KNOCKBACK, additionalMotion);
             }
 
-            if (arrow.getEnchantFlame() > 0) {
+            if (arrowBaseComponent.getFlameLevel() > 0) {
                 damageComponent.setOnFireTicks(100);
             }
         }
@@ -105,8 +105,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
         double yaw = Math.toDegrees(Math.atan2(-x, z));
         double pitch = Math.toDegrees(Math.atan2(-y, Math.sqrt(x * x + z * z)));
-        arrow.getLocation().setYaw(yaw);
-        arrow.getLocation().setPitch(pitch);
+        arrowBaseComponent.getLocation().setYaw(yaw);
+        arrowBaseComponent.getLocation().setPitch(pitch);
         return super.applyMotion();
     }
 }
