@@ -8,6 +8,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerInteractBlockEvent;
 import org.allaymc.api.eventbus.event.player.PlayerInteractEntityEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.network.processor.PacketProcessor;
@@ -83,6 +84,11 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 clickPos, blockFace
                         );
 
+                        var event = new PlayerInteractBlockEvent(player, interactInfo, PlayerInteractBlockEvent.Action.RIGHT_CLICK);
+                        if (!event.call()) {
+                            break;
+                        }
+
                         player.setUsingItemInAir(false);
                         itemInHand.rightClickItemOn(dimension, placeBlockPos, interactInfo);
                         if (player.isUsingItemOnBlock()) {
@@ -90,9 +96,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 // Using item on the block successfully, no need to call BlockBehavior::onInteract()
                                 break;
                             }
+
                             if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
-                                // Player interaction with the block was unsuccessful, possibly because the plugin rolled back the event.
-                                // In that case, we need to override the client block change by sending block update
+                                // Player interaction with the block was unsuccessful, and we need to override the
+                                // client block change by sending block update
                                 var blockStateClicked = dimension.getBlockState(clickBlockPos);
                                 dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
 

@@ -10,9 +10,13 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.7.2 (API 0.11.0) - Unreleased
+## 0.7.2 (API 0.12.0) - Unreleased
 
 <small>[Compare with 0.7.1](https://github.com/AllayMC/Allay/compare/0.7.1...HEAD)</small>
+
+### Added
+
+- (API) Added PlayerInteractBlockEvent.
 
 ### Fixed
 
