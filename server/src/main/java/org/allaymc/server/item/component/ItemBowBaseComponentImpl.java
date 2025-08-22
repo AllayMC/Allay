@@ -13,6 +13,8 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.math.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.joml.Vector3d;
 
 /**
  * @author harryxi | daoge_cmd
@@ -59,10 +61,11 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
         var dimension = player.getDimension();
         var location = player.getLocation();
+        var shootPos = new Vector3d(location.x(), location.y() + player.getEyeHeight(), location.z());
         var arrow = EntityTypes.ARROW.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
-                        .pos(location.x(), location.y() + player.getEyeHeight(), location.z())
+                        .pos(shootPos)
                         .rot(-location.yaw(), -location.pitch())
                         .motion(MathUtils.getDirectionVector(location).mul(force * 5.0))
                         .build()
@@ -77,6 +80,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
         dimension.getEntityService().addEntity(arrow);
         tryIncreaseDamage(1);
+        player.getDimension().addLevelSoundEvent(shootPos, SoundEvent.BOW);
     }
 
     protected ItemArrowStack findArrow(EntityPlayer player, boolean consume) {

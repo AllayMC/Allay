@@ -10,6 +10,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.component.annotation.Dependency;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -55,6 +56,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             return;
         }
 
+        addHitSound(hitPos);
         var potionType = arrowBaseComponent.getPotionType();
         if (potionType != null) {
             potionType.applyTo(other);
@@ -107,12 +109,17 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             return;
         }
 
+        addHitSound(hitPos);
         this.arrowBaseComponent.applyEntityEvent(
                 EntityEventType.ARROW_SHAKE,
                 7 // How many times the arrow shakes
         );
         this.arrowBaseComponent.setCritical(false);
         this.hitBlock = true;
+    }
+
+    private void addHitSound(Vector3dc hitPos) {
+        this.arrowBaseComponent.getDimension().addLevelSoundEvent(hitPos, SoundEvent.BOW_HIT);
     }
 
     private int getDifficultyBonus() {
