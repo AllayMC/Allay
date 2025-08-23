@@ -7,6 +7,7 @@ import org.allaymc.api.container.impl.PlayerOffhandContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.entity.EntityShootBowEvent;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
@@ -52,8 +53,6 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             potionType = arrow.getPotionType();
         }
 
-        // TODO: event
-
         var powerLevel = getEnchantmentLevel(EnchantmentTypes.POWER);
         var punchLevel = getEnchantmentLevel(EnchantmentTypes.PUNCH);
         var flameLevel = getEnchantmentLevel(EnchantmentTypes.FLAME);
@@ -76,6 +75,11 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         arrow.setPunchLevel(punchLevel);
         arrow.setFlameLevel(flameLevel);
         arrow.setCritical(force >= 1.0);
+
+        var event = new EntityShootBowEvent(player, thisItemStack, arrow);
+        if (!event.call()) {
+            return;
+        }
 
         dimension.getEntityService().addEntity(arrow);
         tryIncreaseDamage(1);

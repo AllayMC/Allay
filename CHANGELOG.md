@@ -18,7 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added PlayerInteractBlockEvent.
 - (API) Added PlayerBookEditEvent.
-- (API) Implemented arrow and bow.
+- (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
 
 ### Fixed
 
