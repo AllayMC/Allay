@@ -46,7 +46,7 @@ public class KillCommand extends VanillaCommand {
                 if (target instanceof EntityAttributeComponent damageComponent) {
                     damageComponent.kill();
                 } else {
-                    target.despawn();
+                    target.remove();
                 }
 
                 killedEntities.merge(target.getCommandSenderName(), 1, Integer::sum);

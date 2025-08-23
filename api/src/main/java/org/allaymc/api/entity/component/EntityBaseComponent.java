@@ -24,6 +24,7 @@ import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.service.EntityService;
 import org.allaymc.api.world.service.HasAABB;
 import org.allaymc.api.world.service.HasLongId;
 import org.cloudburstmc.nbt.NbtMap;
@@ -423,27 +424,25 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Despawn the entity from the specified player.
-     * <p>
-     * This method will only remove the entity from the specific viewer, and it will still exist in the world.
+     * Despawn the entity from the specified player. This method will only remove the entity from the specific viewer,
+     * and it will still exist in the dimension.
      *
      * @param player the player to despawn the entity from.
      */
     void despawnFrom(EntityPlayer player);
 
     /**
-     * Despawn the entity from all viewers.
-     * <p>
-     * This method will only remove the entity from the viewers, and it will still exist in the world.
+     * Despawn the entity from all viewers. This method will only remove the entity from all the viewers, and it will
+     * still exist in the dimension.
      */
     void despawnFromAll();
 
     /**
-     * Despawn the entity.
-     * <p>
-     * Compared to {@link #despawnFromAll()}, this method will also remove the entity from the world.
+     * Remove the entity from the current dimension's {@link EntityService}. Compared to {@link #despawnFromAll()},
+     * this method will also remove the entity from the world, and {@link #willBeDespawnedNextTick()} will return
+     * {@code true} after this method is called.
      */
-    void despawn();
+    void remove();
 
     /**
      * Create the spawn packet of this entity.
@@ -774,7 +773,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * If you don't want the entity to be saved, or you want to save the entity by yourself, you can
      * override this method and return {@code false}.
      * <p>
-     * When return {@code false}, the entity will always be loaded, and {@link org.allaymc.api.world.service.EntityService}
+     * When return {@code false}, the entity will always be loaded, and {@link EntityService}
      * will not remove and save the entity even if the entity is in unloaded chunk. The entity can only be removed
      * manually in this case.
      * <p>

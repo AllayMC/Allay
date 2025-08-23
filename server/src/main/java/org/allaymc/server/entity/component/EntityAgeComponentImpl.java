@@ -44,7 +44,7 @@ public class EntityAgeComponentImpl implements EntityAgeComponent {
         if (age != -1) {
             age++;
             if (age >= maxAge) {
-                thisEntity.despawn();
+                thisEntity.remove();
             }
         }
     }

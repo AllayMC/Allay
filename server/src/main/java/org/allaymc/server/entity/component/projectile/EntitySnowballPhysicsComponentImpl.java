@@ -51,7 +51,7 @@ public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsC
 
         }
 
-        thisEntity.despawn();
+        thisEntity.remove();
         this.addHitEffect();
     }
 
@@ -61,7 +61,7 @@ public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsC
             return;
         }
 
-        thisEntity.despawn();
+        thisEntity.remove();
         this.addHitEffect();
     }
 

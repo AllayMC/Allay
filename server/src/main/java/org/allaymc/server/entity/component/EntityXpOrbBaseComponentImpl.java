@@ -48,7 +48,7 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
 
         player.addExperience(this.experienceValue);
         this.setExperienceValue(0);
-        despawn();
+        remove();
     }
 
     protected void moveToNearestPlayer() {

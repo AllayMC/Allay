@@ -37,7 +37,7 @@ public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhys
             return;
         }
 
-        thisEntity.despawn();
+        thisEntity.remove();
         this.splash(null, other, 1);
     }
 
@@ -47,7 +47,7 @@ public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhys
             return;
         }
 
-        thisEntity.despawn();
+        thisEntity.remove();
         this.splash(block, null, 1);
     }
 

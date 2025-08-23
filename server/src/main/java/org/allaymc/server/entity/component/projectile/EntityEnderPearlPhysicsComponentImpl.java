@@ -30,7 +30,7 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
         }
 
         this.teleport();
-        thisEntity.despawn();
+        thisEntity.remove();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
         }
 
         this.teleport();
-        thisEntity.despawn();
+        thisEntity.remove();
     }
 
     protected void teleport() {

@@ -47,7 +47,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     protected void tickTnt() {
         if (fuse <= 0) {
             if (!getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.TNT_EXPLODES)) {
-                this.despawn();
+                this.remove();
                 return;
             }
 
@@ -56,7 +56,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
             explosion.setEntity(thisEntity);
             var event = new EntityExplodeEvent(thisEntity, explosion);
             if (event.call()) {
-                this.despawn();
+                this.remove();
                 explosion.explode(getDimension(), location.x, location.y + 0.06125f, location.z);
             }
         } else {

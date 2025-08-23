@@ -100,7 +100,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             }
         }
 
-        thisEntity.despawn();
+        thisEntity.remove();
     }
 
     @Override

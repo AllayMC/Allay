@@ -27,7 +27,7 @@ public class EntityXpBottlePhysicsComponentImpl extends EntityProjectilePhysicsC
             return;
         }
 
-        thisEntity.despawn();
+        thisEntity.remove();
         spawnExp();
     }
 

@@ -21,6 +21,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
 - (API) Introduced methods `Entity.getOffsetAABBForCollisionCheck()` and `Entity.checkBlockCollision()`.
 
+### Changed
+
+- (API) Renamed method `Entity.despawn()` to `Entity.remove()` as a clarification with other methods like `Entity.despawnFrom()` and `Entity.despawnFromAll()`.
+
 ### Fixed
 
 - Fixed the bug that snowball will always make knockback even if the entity being hit is in damage cool down.

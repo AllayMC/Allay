@@ -60,7 +60,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
             if (otherItemStack != null && otherItemStack.canMerge(itemStack)) {
                 itemStack.setCount(itemStack.getCount() + otherItemStack.getCount());
                 otherEntityItem.setItemStack(null);
-                otherEntityItem.despawn();
+                otherEntityItem.remove();
             }
         }
     }

@@ -46,7 +46,6 @@ public interface EntityAttributeComponent extends EntityComponent {
      * Get attribute by type.
      *
      * @param attributeType attribute type
-     *
      * @return attribute, or {@code null} if type is not supported.
      */
     Attribute getAttribute(AttributeType attributeType);
@@ -62,7 +61,6 @@ public interface EntityAttributeComponent extends EntityComponent {
      * Get attribute value by type.
      *
      * @param attributeType attribute type.
-     *
      * @return attribute value.
      */
     float getAttributeValue(AttributeType attributeType);
@@ -79,7 +77,6 @@ public interface EntityAttributeComponent extends EntityComponent {
      * Check if entity support specified attribute type.
      *
      * @param attributeType the attribute type to check.
-     *
      * @return {@code true} if entity supports the specified attribute type, {@code false} otherwise.
      */
     default boolean supportAttribute(AttributeType attributeType) {
@@ -133,7 +130,7 @@ public interface EntityAttributeComponent extends EntityComponent {
     /**
      * Kill the entity.
      * <p>
-     * Compared to {@link EntityBaseComponent#despawn()} method, this method will set the health
+     * Compared to {@link EntityBaseComponent#remove()} method, this method will set the health
      * of this entity to zero, rather than remove the entity directly.
      */
     default void kill() {

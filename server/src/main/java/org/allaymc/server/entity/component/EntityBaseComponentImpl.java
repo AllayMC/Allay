@@ -324,7 +324,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void despawn() {
+    public void remove() {
         getDimension().getEntityService().removeEntity(thisEntity);
     }
 

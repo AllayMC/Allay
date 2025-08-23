@@ -360,7 +360,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 sendPickUpPacket(entityItem);
                 // Set item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
-                entityItem.despawn();
+                entityItem.remove();
             }
         }
 
@@ -383,7 +383,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
             if (entityArrow.isInfinite()) {
                 // Arrow shot by bow with infinity enchantment or shot by creative player can't be picked up
-                entityArrow.despawn();
+                entityArrow.remove();
                 continue;
             }
 
@@ -391,7 +391,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             arrow.setPotionType(entityArrow.getPotionType());
             if (thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(arrow) != -1) {
                 sendPickUpPacket(entityArrow);
-                entityArrow.despawn();
+                entityArrow.remove();
             }
         }
     }
