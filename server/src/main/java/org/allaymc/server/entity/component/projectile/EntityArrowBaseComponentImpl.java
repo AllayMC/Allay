@@ -1,0 +1,110 @@
+package org.allaymc.server.entity.component.projectile;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.allaymc.api.entity.component.EntityArrowBaseComponent;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.item.data.PotionType;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
+
+/**
+ * @author harryxi | daoge_cmd
+ */
+public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentImpl implements EntityArrowBaseComponent {
+
+    protected static final int DEFAULT_BASE_DAMAGE = 1;
+
+    protected static final String TAG_POWER_LEVEL = "enchantPower";
+    protected static final String TAG_PUNCH_LEVEL = "enchantPunch";
+    protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
+    protected static final String TAG_POTION_ID = "auxValue";
+    protected static final String TAG_SHOT_BY_PLAYER = "player";
+
+    @Getter
+    @Setter
+    protected float baseDamage;
+    @Getter
+    @Setter
+    protected int powerLevel;
+    @Getter
+    @Setter
+    protected int punchLevel;
+    @Getter
+    @Setter
+    protected boolean infinite;
+    @Getter
+    @Setter
+    protected boolean pickUpDisabled;
+
+    public EntityArrowBaseComponentImpl(EntityInitInfo info) {
+        super(info);
+        this.baseDamage = DEFAULT_BASE_DAMAGE;
+    }
+
+    @Override
+    public boolean isCritical() {
+        return this.metadata.get(EntityFlag.CRITICAL);
+    }
+
+    @Override
+    public void setCritical(boolean critical) {
+        setAndSendEntityFlag(EntityFlag.CRITICAL, critical);
+    }
+
+    @Override
+    public PotionType getPotionType() {
+        var idPlusOne = this.metadata.get(EntityDataTypes.CUSTOM_DISPLAY);
+        if (idPlusOne != null) {
+            return PotionType.fromId(idPlusOne - 1);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void setPotionType(PotionType potionType) {
+        setAndSendEntityData(EntityDataTypes.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
+    }
+
+    @Override
+    public AABBdc getAABB() {
+        return new AABBd(-0.025, 0.0, -0.025, 0.025, 0.05, 0.025);
+    }
+
+    @Override
+    public void loadNBT(NbtMap nbt) {
+        super.loadNBT(nbt);
+        nbt.listenForByte(TAG_POWER_LEVEL, b -> this.powerLevel = b);
+        nbt.listenForByte(TAG_PUNCH_LEVEL, b -> this.punchLevel = b);
+        nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinite = b != 0);
+        nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b -> this.pickUpDisabled = !b);
+    }
+
+    @Override
+    public NbtMap saveNBT() {
+        var builder = super.saveNBT()
+                .toBuilder()
+                .putByte(TAG_POWER_LEVEL, (byte) powerLevel)
+                .putByte(TAG_PUNCH_LEVEL, (byte) punchLevel)
+                .putByte(TAG_INFINITY_LEVEL, (byte) (infinite ? 1 : 0))
+                .putBoolean(TAG_SHOT_BY_PLAYER, !pickUpDisabled);
+
+        // Store this for vanilla map compatibility, although we don't need to save this
+        // again in nbt because it's already saved in metadata
+        var potionType = getPotionType();
+        if (potionType != null) {
+            builder.putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1));
+        }
+
+        return builder.build();
+    }
+
+    @Override
+    protected boolean hasDeadTimer() {
+        return false;
+    }
+}

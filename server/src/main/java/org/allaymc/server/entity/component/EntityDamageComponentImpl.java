@@ -205,7 +205,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean setOnFireTicks(int newOnFireTicks) {
-        if (!hasFireDamage()) {
+        if (this.isFireproof()) {
             return false;
         }
 

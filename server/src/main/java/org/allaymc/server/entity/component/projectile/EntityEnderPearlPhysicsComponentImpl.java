@@ -45,7 +45,7 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
 
     protected void teleport() {
         var shooter = projectileComponent.getShooter();
-        if (shooter == null) {
+        if (shooter == null || !shooter.isAlive()) {
             return;
         }
 

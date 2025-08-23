@@ -198,7 +198,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void computeAndNotifyCollidedBlocks() {
-        var aabb = getOffsetAABB().expand(2 * FAT_AABB_MARGIN);
+        var aabb = getOffsetAABBForCollisionCheck();
         var dimension = getDimension();
         dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
             var block = new Block(blockState, new Position3i(x, y, z, dimension), 0);
@@ -451,6 +451,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public AABBdc getAABB() {
         // Default aabb is player's aabb
         return new AABBd(-0.3, 0.0, -0.3, 0.3, 1.8, 0.3);
+    }
+
+    @Override
+    public AABBd getOffsetAABBForCollisionCheck() {
+        return getOffsetAABB().expand(2 * FAT_AABB_MARGIN);
     }
 
     @Override
@@ -792,5 +797,16 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @UnmodifiableView
     public Set<String> getTags() {
         return Collections.unmodifiableSet(tags);
+    }
+
+    @Override
+    public boolean checkBlockCollision() {
+        if (!this.isSpawned()) {
+            // Unspawned entity won't collide with blocks
+            return false;
+        }
+
+        var aabb = getOffsetAABBForCollisionCheck();
+        return getDimension().getCollidingBlockStates(aabb) != null;
     }
 }

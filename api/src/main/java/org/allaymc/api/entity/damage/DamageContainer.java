@@ -8,6 +8,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.utils.Utils;
@@ -341,10 +342,15 @@ public class DamageContainer {
         /**
          * Damage caused by being hit by a projectile such as an arrow
          */
-        public static DamageType PROJECTILE = fixedWithExtraSingleParam(TrKeys.M_DEATH_ATTACK_ARROW, attacker -> switch (attacker) {
-            case EntityPlayer player -> player.getDisplayName();
-            case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
-            default -> null;
+        public static DamageType PROJECTILE = fixedWithExtraSingleParam(TrKeys.M_DEATH_ATTACK_ARROW, projectile -> {
+            var attacker = ((EntityProjectile) projectile).getShooter();
+            String name;
+            if (attacker instanceof EntityPlayer player) {
+                name = player.getDisplayName();
+            } else {
+                name = attacker.getNameTag() == null ? attacker.getDisplayName() : attacker.getNameTag();
+            }
+            return name;
         });
         public static DamageType RAM_ATTACK = defaultFixed(); // TODO
         public static DamageType STALACTITE = fixed(TrKeys.M_DEATH_ATTACK_STALACTITE);

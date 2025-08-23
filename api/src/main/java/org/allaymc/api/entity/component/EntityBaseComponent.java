@@ -323,6 +323,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Get the offset aabb of this entity for collision check.
+     *
+     * @return the offset aabb of this entity for collision check.
+     */
+    AABBd getOffsetAABBForCollisionCheck();
+
+    /**
      * Check if this entity has entity collision. If return {@code true}, method {@link #onCollideWithEntity(Entity)}
      * will be called when this entity collide with another entity.
      *
@@ -696,6 +703,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     @UnmodifiableView
     Set<String> getTags();
+
+    /**
+     * Checks if the entity is colliding with any blocks.
+     *
+     * @return {@code true} if the entity is colliding with any blocks, otherwise {@code false}.
+     */
+    boolean checkBlockCollision();
 
     /**
      * Check if the entity's eyes is in water.

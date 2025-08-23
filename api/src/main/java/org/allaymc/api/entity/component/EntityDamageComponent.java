@@ -12,7 +12,6 @@ public interface EntityDamageComponent extends EntityComponent {
      *
      * @param damage         the damage container.
      * @param ignoreCoolDown {@code true} to ignore the attack cool down, {@code false} otherwise.
-     *
      * @return {@code true} if the entity was damaged, {@code false} otherwise.
      */
     boolean attack(DamageContainer damage, boolean ignoreCoolDown);
@@ -28,7 +27,6 @@ public interface EntityDamageComponent extends EntityComponent {
      * Attack this entity with the given damage.
      *
      * @param damage the damage.
-     *
      * @return {@code true} if the entity was damaged, {@code false} otherwise.
      */
     default boolean attack(float damage) {
@@ -40,7 +38,6 @@ public interface EntityDamageComponent extends EntityComponent {
      *
      * @param attacker the attacker.
      * @param damage   the damage.
-     *
      * @return {@code true} if the entity was damaged, {@code false} otherwise.
      */
     default boolean attack(Entity attacker, float damage) {
@@ -51,7 +48,6 @@ public interface EntityDamageComponent extends EntityComponent {
      * Check if this entity can be attacked with the given damage container.
      *
      * @param damage the damage container.
-     *
      * @return {@code true} if the entity can be attacked, {@code false} otherwise.
      */
     boolean canBeAttacked(DamageContainer damage);
@@ -92,10 +88,9 @@ public interface EntityDamageComponent extends EntityComponent {
     boolean hasDrowningDamage();
 
     /**
-     * Check if this entity can against fire damage even if
-     * it does not have fire resistance effect.
-     * <p>
-     * For example, netherite items.
+     * Check if this entity can against fire damage even if it does not have fire resistance
+     * effect. For example, netherite items. When return {@code true}, the entity will not be
+     * able to be set on fire and method {@link #setOnFireTicks(int)} will always return {@code false}.
      *
      * @return {@code true} if the entity is fireproof, {@code false} otherwise.
      */
@@ -115,8 +110,7 @@ public interface EntityDamageComponent extends EntityComponent {
      * Set the on fire ticks of the entity.
      *
      * @param onFireTicks the on fire ticks.
-     *
-     * @return {@code true} if the on fire ticks was set, {@code false} if the entity is fireproof or has fire resistance effect
+     * @return {@code true} if the on fire ticks was set, {@code false} if the entity is fireproof.
      */
     boolean setOnFireTicks(int onFireTicks);
 

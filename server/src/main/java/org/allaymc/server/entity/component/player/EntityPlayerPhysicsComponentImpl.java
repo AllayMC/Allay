@@ -2,6 +2,7 @@ package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityHumanPhysicsComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerGameTypeChangeEvent;
@@ -37,6 +38,10 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
 
     @Override
     public void setMotion(Vector3dc motion) {
+        if (MathUtils.hasNaN(motion)) {
+            throw new IllegalArgumentException("Trying to set the motion of player " + networkComponent.getOriginName() + " to a new motion which contains NaN: " + motion);
+        }
+        
         // For player, motion effect is calculated by the client rather than the server
         // We only need to send SetEntityMotionPacket to client when
         // we want to apply motion on a player

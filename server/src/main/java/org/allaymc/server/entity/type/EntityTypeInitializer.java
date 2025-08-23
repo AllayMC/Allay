@@ -56,10 +56,7 @@ public final class EntityTypeInitializer {
                     }
                 }, EntityDamageComponentImpl.class)
                 .addComponent(
-                        () -> new EntityAttributeComponentImpl(
-
-                                AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)
-                        ),
+                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
                         EntityAttributeComponentImpl.class
                 )
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
@@ -68,7 +65,7 @@ public final class EntityTypeInitializer {
                         return 0.04;
                     }
                 }, EntityPhysicsComponentImpl.class)
-                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
     }
 
@@ -105,9 +102,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
                 .addComponent(
-                        () -> new EntityAttributeComponentImpl(
-                                AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)
-                        ),
+                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
                         EntityAttributeComponentImpl.class
                 )
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
@@ -116,7 +111,7 @@ public final class EntityTypeInitializer {
                         return 0.04;
                     }
                 }, EntityPhysicsComponentImpl.class)
-                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
     }
 
@@ -136,7 +131,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntitySnowballPhysicsComponentImpl::new, EntitySnowballPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
-                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
         EntityTypes.SPLASH_POTION = AllayEntityType
                 .builder(EntitySplashPotionImpl.class)
@@ -144,7 +139,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntitySplashPotionPhysicsComponentImpl::new, EntitySplashPotionPhysicsComponentImpl.class)
                 .addComponent(EntitySplashPotionProjectileComponentImpl::new, EntitySplashPotionProjectileComponentImpl.class)
-                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
         EntityTypes.ENDER_PEARL = AllayEntityType
                 .builder(EntityEnderPearlImpl.class)
@@ -152,7 +147,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntityEnderPearlPhysicsComponentImpl::new, EntityEnderPearlPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
-                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
         EntityTypes.XP_BOTTLE = AllayEntityType
                 .builder(EntityXpBottleImpl.class)
@@ -160,7 +155,20 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntityXpBottlePhysicsComponentImpl::new, EntityXpBottlePhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
-                .addComponent(EntityAgeComponentImpl::new, EntityAgeComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .build();
+        EntityTypes.ARROW = AllayEntityType
+                .builder(EntityArrowImpl.class)
+                .vanillaEntity(EntityId.ARROW)
+                .addComponent(EntityArrowBaseComponentImpl::new, EntityArrowBaseComponentImpl.class)
+                .addComponent(EntityArrowPhysicsComponentImpl::new, EntityArrowPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .addComponent(EntityArrowDamageComponentImpl::new, EntityArrowDamageComponentImpl.class)
+                .addComponent(
+                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
+                        EntityAttributeComponentImpl.class
+                )
                 .build();
     }
 }

@@ -850,4 +850,13 @@ public final class ItemTypeInitializer {
                 }, ItemBottleProjectileComponentImpl.class)
                 .build();
     }
+
+    public static void initBow() {
+        ItemTypes.BOW = AllayItemType
+                .builder(ItemBowStackImpl.class)
+                .vanillaItem(ItemId.BOW)
+                .addComponent(ItemBowBaseComponentImpl::new, ItemBowBaseComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
+                .build();
+    }
 }
