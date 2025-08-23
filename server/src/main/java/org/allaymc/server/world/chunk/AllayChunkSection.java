@@ -58,6 +58,16 @@ public record AllayChunkSection(
         return blockLayers[0].oneEntryOnly();
     }
 
+    public boolean hasDirtyBlockLayer() {
+        for (var layer : blockLayers) {
+            if (layer.isDirty()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void writeToNetwork(ByteBuf byteBuf) {
         byteBuf.writeByte(CURRENT_CHUNK_SECTION_VERSION);
         // Block layer count

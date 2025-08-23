@@ -81,8 +81,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final AllayChunk safeChunk;
 
     @Setter
-    protected Runnable chunkSetCallback;
-    @Setter
     protected BlockChangeCallback blockChangeCallback;
     @Getter
     protected volatile boolean loaded;
@@ -223,10 +221,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public void onChunkLoad(Dimension dimension) {
-        if (chunkSetCallback != null) {
-            chunkSetCallback.run();
-        }
-
         ((AllayLightService) dimension.getLightService()).onChunkLoad(toSafeChunk());
         setBlockChangeCallback((x, y, z, blockState, layer) -> {
             if (layer == 0) {

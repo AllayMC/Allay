@@ -5,6 +5,8 @@ import com.google.common.base.Predicate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.server.datastruct.bitarray.BitArray;
 import org.allaymc.server.datastruct.bitarray.BitArrayVersion;
@@ -24,9 +26,15 @@ public final class Palette<V> {
 
     private static final int SECTION_SIZE = 16 * 16 * 16;
     private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V0;
-
+    
     private List<V> palette;
     private BitArray bitArray;
+    /**
+     * Determines whether this palette have been changed since last save.
+     */
+    @Getter
+    @Setter
+    private boolean dirty;
 
     public Palette(V first) {
         this(first, INITIAL_VERSION);
@@ -37,10 +45,11 @@ public final class Palette<V> {
     }
 
     public Palette(V first, List<V> palette, BitArrayVersion version) {
-        this.bitArray = version.createArray(SECTION_SIZE);
         this.palette = palette;
         // Please note that the first entry shouldn't be changed
         this.palette.add(first);
+        this.bitArray = version.createArray(SECTION_SIZE);
+        this.dirty = true;
     }
 
     public V get(int index) {
@@ -50,6 +59,7 @@ public final class Palette<V> {
     public void set(int index, V value) {
         var paletteIndex = this.paletteIndexFor(value);
         this.bitArray.set(index, paletteIndex);
+        this.dirty = true;
     }
 
     public void writeToNetwork(ByteBuf byteBuf, IntSerializer<V> serializer, Palette<V> last) {
@@ -78,6 +88,7 @@ public final class Palette<V> {
             throw new PaletteException("Reading nbt palette data with non-nbt method!");
         }
 
+        this.dirty = true;
         if (hasCopyLastFlag(header)) {
             if (last == null) {
                 throw new PaletteException("Find copy last flag but last palette is null!");
@@ -133,6 +144,7 @@ public final class Palette<V> {
             throw new PaletteException("Reading non-nbt palette data with nbt method!");
         }
 
+        this.dirty = true;
         this.palette.clear();
         var version = getVersionFromPaletteHeader(header);
         readWords(byteBuf, version);
@@ -176,6 +188,7 @@ public final class Palette<V> {
             throw new PaletteException("Reading nbt palette data with non-nbt method!");
         }
 
+        this.dirty = true;
         if (hasCopyLastFlag(header)) {
             if (last == null) {
                 throw new PaletteException("Find copy last flag but last palette is null!");
@@ -236,6 +249,7 @@ public final class Palette<V> {
         palette.bitArray = this.bitArray.copy();
         palette.palette.clear();
         palette.palette.addAll(this.palette);
+        palette.dirty = true;
     }
 
     public BitArrayVersion getVersion() {
@@ -266,6 +280,7 @@ public final class Palette<V> {
 
         this.palette = newPalette;
         this.bitArray = newbitArray;
+        this.dirty = true;
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
@@ -286,6 +301,7 @@ public final class Palette<V> {
         }
 
         this.bitArray = newBitArray;
+        this.dirty = true;
     }
 
     private int paletteIndexFor(V value) {

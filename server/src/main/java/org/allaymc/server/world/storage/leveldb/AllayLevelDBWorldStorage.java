@@ -525,6 +525,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static void serializeSections(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
             var section = chunk.getSection(ySection);
+            if (!section.hasDirtyBlockLayer()) {
+                continue;
+            }
+
             int finalYSection = ySection;
             writeBatch.put(
                     LevelDBKey.CHUNK_SECTION_PREFIX.createKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()),
@@ -533,8 +537,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                         buffer.writeByte(AllayChunkSection.LAYER_COUNT);
                         buffer.writeByte(finalYSection);
                         for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
-                            section.blockLayers()[i].compact();
-                            section.blockLayers()[i].writeToStorage(buffer, BlockState::getBlockStateTag);
+                            var palette = section.blockLayers()[i];
+                            palette.compact();
+                            palette.writeToStorage(buffer, BlockState::getBlockStateTag);
+                            palette.setDirty(false);
                         }
                     })
             );
@@ -580,7 +586,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                     }
 
                     for (int layer = 0; layer < layers; layer++) {
-                        section.blockLayers()[layer].readFromStorage(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
+                        var palette = section.blockLayers()[layer];
+                        palette.readFromStorage(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
+                        palette.setDirty(false);
                     }
                     sections[ySection - minSectionY] = section;
                     break;
