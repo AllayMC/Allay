@@ -82,7 +82,9 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         }
 
         dimension.getEntityService().addEntity(arrow);
-        tryIncreaseDamage(1);
+        if (!creative) {
+            tryIncreaseDamage(1);
+        }
         player.getDimension().addLevelSoundEvent(shootPos, SoundEvent.BOW);
     }
 
