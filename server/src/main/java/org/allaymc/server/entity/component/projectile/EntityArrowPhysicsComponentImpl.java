@@ -26,6 +26,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     protected EntityArrowBaseComponent arrowBaseComponent;
     @Dependency
     protected EntityProjectileComponent projectileComponent;
+    @Dependency
+    protected EntityDamageComponent damageComponent;
 
     // Indicates whether the arrow has already hit a block
     protected boolean hitBlock;
@@ -37,7 +39,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     public Vector3d updateMotion(boolean hasLiquidMotion) {
-        if (arrowBaseComponent.checkBlockCollision()) {
+        if (!arrowBaseComponent.checkBlockCollision()) {
             return new Vector3d(
                     this.motion.x * (1 - this.getDragFactorInAir()),
                     (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
@@ -61,7 +63,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             potionType.applyTo(other);
         }
 
-        if (other instanceof EntityDamageComponent damageComponent) {
+        if (other instanceof EntityDamageComponent otherDamageComponent) {
             double damage = arrowBaseComponent.getBaseDamage();
             if (projectileComponent.getShooter() instanceof EntityPlayer) {
                 damage = damage
@@ -80,7 +82,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
             var damageContainer = DamageContainer.projectile(thisEntity, (float) damage);
             damageContainer.setHasKnockback(false);
-            if (damageComponent.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
+            if (otherDamageComponent.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
                 var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
                 var additionalMotion = new Vector3d();
                 var punchLevel = arrowBaseComponent.getPunchLevel();
@@ -93,8 +95,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
                 physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()), kb, EntityPhysicsComponent.DEFAULT_KNOCKBACK, additionalMotion);
             }
 
-            if (arrowBaseComponent.getFlameLevel() > 0) {
-                damageComponent.setOnFireTicks(100);
+            if (this.damageComponent.isOnFire()) {
+                otherDamageComponent.setOnFireTicks(20 * 5);
             }
         }
 

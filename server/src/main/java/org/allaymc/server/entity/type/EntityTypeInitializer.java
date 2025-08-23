@@ -56,10 +56,7 @@ public final class EntityTypeInitializer {
                     }
                 }, EntityDamageComponentImpl.class)
                 .addComponent(
-                        () -> new EntityAttributeComponentImpl(
-
-                                AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)
-                        ),
+                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
                         EntityAttributeComponentImpl.class
                 )
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
@@ -105,9 +102,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
                 .addComponent(
-                        () -> new EntityAttributeComponentImpl(
-                                AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)
-                        ),
+                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
                         EntityAttributeComponentImpl.class
                 )
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
@@ -169,6 +164,11 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityArrowPhysicsComponentImpl::new, EntityArrowPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .addComponent(EntityArrowDamageComponentImpl::new, EntityArrowDamageComponentImpl.class)
+                .addComponent(
+                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
+                        EntityAttributeComponentImpl.class
+                )
                 .build();
     }
 }

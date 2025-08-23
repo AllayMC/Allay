@@ -2,11 +2,9 @@ package org.allaymc.server.entity.component.projectile;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -16,31 +14,31 @@ import org.joml.primitives.AABBdc;
 /**
  * @author harryxi | daoge_cmd
  */
-@Getter
-@Setter
 public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentImpl implements EntityArrowBaseComponent {
 
     protected static final int DEFAULT_BASE_DAMAGE = 1;
 
     protected static final String TAG_POWER_LEVEL = "enchantPower";
     protected static final String TAG_PUNCH_LEVEL = "enchantPunch";
-    protected static final String TAG_FLAME_LEVEL = "enchantFlame";
     protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
     protected static final String TAG_POTION_ID = "auxValue";
     protected static final String TAG_SHOT_BY_PLAYER = "player";
-    protected static final String TAG_SHOT_BY_CREATIVE_PLAYER = "isCreative";
 
-    @Dependency
-    protected EntityAgeComponent ageComponent;
-
+    @Getter
+    @Setter
     protected float baseDamage;
+    @Getter
+    @Setter
     protected int powerLevel;
+    @Getter
+    @Setter
     protected int punchLevel;
-    protected int flameLevel;
-    protected int infinityLevel;
-    protected PotionType potionType;
-    protected boolean shotByCreativePlayer;
-    protected boolean shotByPlayer;
+    @Getter
+    @Setter
+    protected boolean infinite;
+    @Getter
+    @Setter
+    protected boolean pickUpDisabled;
 
     public EntityArrowBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -58,8 +56,17 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     }
 
     @Override
+    public PotionType getPotionType() {
+        var idPlusOne = this.metadata.get(EntityDataTypes.CUSTOM_DISPLAY);
+        if (idPlusOne != null) {
+            return PotionType.fromId(idPlusOne - 1);
+        }
+
+        return null;
+    }
+
+    @Override
     public void setPotionType(PotionType potionType) {
-        this.potionType = potionType;
         setAndSendEntityData(EntityDataTypes.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
     }
 
@@ -73,11 +80,8 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         super.loadNBT(nbt);
         nbt.listenForByte(TAG_POWER_LEVEL, b -> this.powerLevel = b);
         nbt.listenForByte(TAG_PUNCH_LEVEL, b -> this.punchLevel = b);
-        nbt.listenForByte(TAG_FLAME_LEVEL, b -> this.flameLevel = b);
-        nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinityLevel = b);
-        nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b-> this.shotByPlayer = b);
-        nbt.listenForBoolean(TAG_SHOT_BY_CREATIVE_PLAYER, b-> this.shotByCreativePlayer = b);
-        nbt.listenForByte(TAG_POTION_ID, b -> this.potionType = b > 0 ? PotionType.fromId(b - 1) : null);
+        nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinite = b != 0);
+        nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b -> this.pickUpDisabled = !b);
     }
 
     @Override
@@ -86,15 +90,21 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
                 .toBuilder()
                 .putByte(TAG_POWER_LEVEL, (byte) powerLevel)
                 .putByte(TAG_PUNCH_LEVEL, (byte) punchLevel)
-                .putByte(TAG_FLAME_LEVEL, (byte) flameLevel)
-                .putByte(TAG_INFINITY_LEVEL, (byte) infinityLevel)
-                .putBoolean(TAG_SHOT_BY_PLAYER, shotByPlayer)
-                .putBoolean(TAG_SHOT_BY_CREATIVE_PLAYER, shotByCreativePlayer);
+                .putByte(TAG_INFINITY_LEVEL, (byte) (infinite ? 1 : 0))
+                .putBoolean(TAG_SHOT_BY_PLAYER, !pickUpDisabled);
 
+        // Store this for vanilla map compatibility, although we don't need to save this
+        // again in nbt because it's already saved in metadata
+        var potionType = getPotionType();
         if (potionType != null) {
             builder.putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1));
         }
 
         return builder.build();
+    }
+
+    @Override
+    protected boolean hasDeadTimer() {
+        return false;
     }
 }

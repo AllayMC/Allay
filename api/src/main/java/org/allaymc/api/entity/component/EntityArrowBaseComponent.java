@@ -64,32 +64,20 @@ public interface EntityArrowBaseComponent extends EntityBaseComponent {
     void setPunchLevel(int level);
 
     /**
-     * Gets the flame level of the arrow. Flame level determines whether the arrow sets targets on fire.
+     * Checks if the arrow is shot by a bow with infinity enchantment or the shooter is a creative player.
+     * An infinite arrow cannot be picked up after being shot.
      *
-     * @return the flame level of the arrow.
+     * @return {@code true} if the arrow is infinite, {@code false} otherwise.
      */
-    int getFlameLevel();
+    boolean isInfinite();
 
     /**
-     * Sets the flame level of the arrow. Flame level determines whether the arrow sets targets on fire.
+     * Sets whether the arrow is shot by a bow with infinity enchantment or the shooter is a creative player.
+     * An infinite arrow cannot be picked up after being shot.
      *
-     * @param level the flame level to set.
+     * @param infinite {@code true} to make the arrow infinite, {@code false} otherwise.
      */
-    void setFlameLevel(int level);
-
-    /**
-     * Gets the infinity level of the arrow. Infinity level determines whether the arrow is consumed on use.
-     *
-     * @return the infinity level of the arrow.
-     */
-    int getInfinityLevel();
-
-    /**
-     * Sets the infinity level of the arrow. Infinity level determines whether the arrow is consumed on use.
-     *
-     * @param level the infinity level to set.
-     */
-    void setInfinityLevel(int level);
+    void setInfinite(boolean infinite);
 
     /**
      * Gets the potion type of this arrow.
@@ -106,30 +94,16 @@ public interface EntityArrowBaseComponent extends EntityBaseComponent {
     void setPotionType(PotionType potionType);
 
     /**
-     * Checks if the arrow was shot by a player.
+     * Checks if the arrow can be picked up by players.
      *
-     * @return {@code true} if the arrow was shot by a player, {@code false} otherwise.
+     * @return {@code true} if the arrow cannot be picked up, {@code false} otherwise.
      */
-    boolean isShotByPlayer();
+    boolean isPickUpDisabled();
 
     /**
-     * Sets whether the arrow was shot by a player.
+     * Sets whether the arrow can be picked up by players.
      *
-     * @param shotByPlayer {@code true} if the arrow was shot by a player, {@code false} otherwise.
+     * @param disablePickUp {@code true} to disable picking up the arrow, {@code false} to enable it.
      */
-    void setShotByPlayer(boolean shotByPlayer);
-
-    /**
-     * Checks if the arrow was shot by a player in creative mode.
-     *
-     * @return {@code true} if the arrow was shot by a player in creative mode, {@code false} otherwise.
-     */
-    boolean isShotByCreativePlayer();
-
-    /**
-     * Sets whether the arrow was shot by a player in creative mode.
-     *
-     * @param shotByCreativePlayer {@code true} if the arrow was shot by a player in creative mode, {@code false} otherwise.
-     */
-    void setShotByCreativePlayer(boolean shotByCreativePlayer);
+    void setPickUpDisabled(boolean disablePickUp);
 }

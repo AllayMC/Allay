@@ -123,7 +123,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
                     try {
                         return (T) constructor.invoke(info, componentProviderList);
                     } catch (Throwable t) {
-                        throw new EntityTypeBuildException("Failed to create block entity instance!", t);
+                        throw new EntityTypeBuildException("Failed to create entity instance!", t);
                     }
                 };
             } catch (Exception e) {

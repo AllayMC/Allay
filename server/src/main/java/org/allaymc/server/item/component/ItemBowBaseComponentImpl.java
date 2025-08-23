@@ -70,12 +70,13 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         );
         arrow.setShooter(player);
         arrow.setPotionType(potionType);
-        arrow.setInfinityLevel(infinityLevel);
+        arrow.setInfinite(infinityLevel != 0);
         arrow.setPowerLevel(powerLevel);
         arrow.setPunchLevel(punchLevel);
-        arrow.setFlameLevel(flameLevel);
-        arrow.setShotByPlayer(true);
-        arrow.setShotByCreativePlayer(creative);
+        if (flameLevel != 0) {
+            arrow.setOnFireTicks(20 * 5);
+        }
+        arrow.setPickUpDisabled(true);
         arrow.setCritical(force >= 1.0);
 
         var event = new EntityShootBowEvent(player, thisItemStack, arrow);
