@@ -74,6 +74,8 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         arrow.setPowerLevel(powerLevel);
         arrow.setPunchLevel(punchLevel);
         arrow.setFlameLevel(flameLevel);
+        arrow.setShotByPlayer(true);
+        arrow.setShotByCreativePlayer(creative);
         arrow.setCritical(force >= 1.0);
 
         var event = new EntityShootBowEvent(player, thisItemStack, arrow);

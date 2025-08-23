@@ -104,4 +104,32 @@ public interface EntityArrowBaseComponent extends EntityBaseComponent {
      * @param potionType the potion type to set. Can be {@code null} to remove any potion effect.
      */
     void setPotionType(PotionType potionType);
+
+    /**
+     * Checks if the arrow was shot by a player.
+     *
+     * @return {@code true} if the arrow was shot by a player, {@code false} otherwise.
+     */
+    boolean isShotByPlayer();
+
+    /**
+     * Sets whether the arrow was shot by a player.
+     *
+     * @param shotByPlayer {@code true} if the arrow was shot by a player, {@code false} otherwise.
+     */
+    void setShotByPlayer(boolean shotByPlayer);
+
+    /**
+     * Checks if the arrow was shot by a player in creative mode.
+     *
+     * @return {@code true} if the arrow was shot by a player in creative mode, {@code false} otherwise.
+     */
+    boolean isShotByCreativePlayer();
+
+    /**
+     * Sets whether the arrow was shot by a player in creative mode.
+     *
+     * @param shotByCreativePlayer {@code true} if the arrow was shot by a player in creative mode, {@code false} otherwise.
+     */
+    void setShotByCreativePlayer(boolean shotByCreativePlayer);
 }

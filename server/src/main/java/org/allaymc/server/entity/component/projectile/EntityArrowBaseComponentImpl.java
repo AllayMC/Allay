@@ -27,6 +27,8 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected static final String TAG_FLAME_LEVEL = "enchantFlame";
     protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
     protected static final String TAG_POTION_ID = "auxValue";
+    protected static final String TAG_SHOT_BY_PLAYER = "player";
+    protected static final String TAG_SHOT_BY_CREATIVE_PLAYER = "isCreative";
 
     @Dependency
     protected EntityAgeComponent ageComponent;
@@ -37,6 +39,8 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected int flameLevel;
     protected int infinityLevel;
     protected PotionType potionType;
+    protected boolean shotByCreativePlayer;
+    protected boolean shotByPlayer;
 
     public EntityArrowBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -71,6 +75,8 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         nbt.listenForByte(TAG_PUNCH_LEVEL, b -> this.punchLevel = b);
         nbt.listenForByte(TAG_FLAME_LEVEL, b -> this.flameLevel = b);
         nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinityLevel = b);
+        nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b-> this.shotByPlayer = b);
+        nbt.listenForBoolean(TAG_SHOT_BY_CREATIVE_PLAYER, b-> this.shotByCreativePlayer = b);
         nbt.listenForByte(TAG_POTION_ID, b -> this.potionType = b > 0 ? PotionType.fromId(b - 1) : null);
     }
 
@@ -81,7 +87,9 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
                 .putByte(TAG_POWER_LEVEL, (byte) powerLevel)
                 .putByte(TAG_PUNCH_LEVEL, (byte) punchLevel)
                 .putByte(TAG_FLAME_LEVEL, (byte) flameLevel)
-                .putByte(TAG_INFINITY_LEVEL, (byte) infinityLevel);
+                .putByte(TAG_INFINITY_LEVEL, (byte) infinityLevel)
+                .putBoolean(TAG_SHOT_BY_PLAYER, shotByPlayer)
+                .putBoolean(TAG_SHOT_BY_CREATIVE_PLAYER, shotByCreativePlayer);
 
         if (potionType != null) {
             builder.putByte(TAG_POTION_ID, (byte) (potionType.ordinal() + 1));

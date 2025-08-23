@@ -377,8 +377,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 continue;
             }
 
-            if (entityArrow.getInfinityLevel() != 0) {
-                // Arrow shot by infinity bow can't be picked up
+            if (!entityArrow.isShotByPlayer()) {
+                // Arrow not shot by player can't be picked up and will keep existing
+                continue;
+            }
+
+            if (entityArrow.getInfinityLevel() != 0 || entityArrow.isShotByCreativePlayer()) {
+                // Arrow shot by infinity bow or shot by creative player can't be picked up
                 entityArrow.despawn();
                 continue;
             }
