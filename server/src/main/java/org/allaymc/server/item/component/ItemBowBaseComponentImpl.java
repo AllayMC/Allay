@@ -78,7 +78,6 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         if (flameLevel != 0) {
             arrow.setOnFireTicks(20 * 5);
         }
-        arrow.setPickUpDisabled(true);
         arrow.setCritical(force >= 1.0);
 
         var event = new EntityShootBowEvent(player, thisItemStack, arrow);
