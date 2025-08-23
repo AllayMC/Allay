@@ -38,11 +38,8 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         }
 
         var creative = player.getGameType() == GameType.CREATIVE;
-        var seconds = (double) usedTime / 20.0;
-        var force = Math.min((seconds * seconds + seconds * 2.0) / 3.0, 1.0);
-        if (force < 0.1) {
-            return;
-        }
+        var force = Math.min(usedTime * (usedTime + 40.0) / 1200.0, 1.0);
+        var speed = force * 5;
 
         var infinityLevel = getEnchantmentLevel(EnchantmentTypes.INFINITY);
         PotionType potionType = null;
@@ -55,19 +52,21 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             potionType = arrow.getPotionType();
         }
 
+        // TODO: event
+
         var powerLevel = getEnchantmentLevel(EnchantmentTypes.POWER);
         var punchLevel = getEnchantmentLevel(EnchantmentTypes.PUNCH);
         var flameLevel = getEnchantmentLevel(EnchantmentTypes.FLAME);
 
         var dimension = player.getDimension();
         var location = player.getLocation();
-        var shootPos = new Vector3d(location.x(), location.y() + player.getEyeHeight(), location.z());
+        var shootPos = new Vector3d(location.x(), location.y() + player.getEyeHeight() - 0.1, location.z());
         var arrow = EntityTypes.ARROW.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(shootPos)
                         .rot(-location.yaw(), -location.pitch())
-                        .motion(MathUtils.getDirectionVector(location).mul(force * 5.0))
+                        .motion(MathUtils.getDirectionVector(location).mul(speed))
                         .build()
         );
         arrow.setShooter(player);
