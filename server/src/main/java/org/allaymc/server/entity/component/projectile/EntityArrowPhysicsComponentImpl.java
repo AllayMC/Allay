@@ -81,17 +81,17 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
             var damageContainer = DamageContainer.projectile(thisEntity, (float) damage);
             damageContainer.setCritical(arrowBaseComponent.isCritical());
+            damageContainer.setHasKnockback(false);
             if (damageComponent.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
                 var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
                 var additionalMotion = new Vector3d();
                 var punchLevel = arrowBaseComponent.getPunchLevel();
                 if (punchLevel != 0) {
                     kb /= 2.0;
-                    additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(other.getLocation()).setComponent(1, 0));
-                    // TODO: This factor (1) is only obtained based on the relative knockback distance relationship between knockback and punch, and may not be accurate.
-                    var factor = 1;
-                    additionalMotion.mul(punchLevel * factor);
+                    additionalMotion = MathUtils.normalizeIfNotZero(this.motion).setComponent(1, 0);
+                    additionalMotion.mul(punchLevel * 0.5);
                 }
+                // Use the last location as the knockback source
                 physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()), kb, EntityPhysicsComponent.DEFAULT_KNOCKBACK, additionalMotion);
             }
 

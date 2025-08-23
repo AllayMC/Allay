@@ -83,7 +83,6 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
         player.removeAllEffects();
         player.resetHealth();
         player.resetFoodData();
-        player.setOnFireTicks(0);
         player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, player.getMetadata().get(EntityDataTypes.AIR_SUPPLY_MAX));
     }
 
