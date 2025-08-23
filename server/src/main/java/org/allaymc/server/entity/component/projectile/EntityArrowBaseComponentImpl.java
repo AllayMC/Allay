@@ -2,10 +2,13 @@ package org.allaymc.server.entity.component.projectile;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.item.data.PotionType;
+import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -24,6 +27,9 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected static final String TAG_FLAME_LEVEL = "enchantFlame";
     protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
     protected static final String TAG_POTION_ID = "auxValue";
+
+    @Dependency
+    protected EntityAgeComponent ageComponent;
 
     protected float baseDamage;
     protected int powerLevel;
@@ -45,6 +51,12 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     @Override
     public void setCritical(boolean critical) {
         setAndSendEntityFlag(EntityFlag.CRITICAL, critical);
+    }
+
+    @Override
+    public void setPotionType(PotionType potionType) {
+        this.potionType = potionType;
+        setAndSendEntityData(EntityDataTypes.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
     }
 
     @Override

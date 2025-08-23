@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
@@ -19,16 +18,16 @@ import org.joml.primitives.AABBdc;
 /**
  * @author daoge_cmd
  */
-@Getter
-@Setter
 public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImpl implements EntityXpOrbBaseComponent {
 
-    public static float MAX_MOVE_DISTANCE = 7.25f;
-    public static float MAX_MOVE_DISTANCE_SQUARED = MAX_MOVE_DISTANCE * MAX_MOVE_DISTANCE;
+    protected static final String TAG_EXPERIENCE_VALUE = "ExperienceValue";
+    protected static float MAX_MOVE_DISTANCE = 7.25f;
+    protected static float MAX_MOVE_DISTANCE_SQUARED = MAX_MOVE_DISTANCE * MAX_MOVE_DISTANCE;
 
     @Dependency
     protected EntityPhysicsComponent physicsComponent;
 
+    @Getter
     protected int experienceValue;
 
     public EntityXpOrbBaseComponentImpl(EntityInitInfo info) {
@@ -43,12 +42,12 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
 
     @Override
     public void onCollideWithEntity(Entity other) {
-        if (experienceValue == 0 || !canBePicked() || !(other instanceof EntityPlayer player)) {
+        if (this.experienceValue == 0 || !canBePicked() || !(other instanceof EntityPlayer player)) {
             return;
         }
 
-        player.addExperience(experienceValue);
-        experienceValue = 0;
+        player.addExperience(this.experienceValue);
+        this.setExperienceValue(0);
         despawn();
     }
 
@@ -88,19 +87,15 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-
-        nbt.listenForInt("ExperienceValue", experienceValue -> this.experienceValue = experienceValue);
-
-        setAndSendEntityData(EntityDataTypes.VALUE, experienceValue);
+        nbt.listenForInt(TAG_EXPERIENCE_VALUE, this::setExperienceValue);
     }
 
     @Override
     public NbtMap saveNBT() {
-        var builder = super.saveNBT().toBuilder();
-
-        builder.putInt("ExperienceValue", experienceValue);
-
-        return builder.build();
+        return super.saveNBT()
+                .toBuilder()
+                .putInt(TAG_EXPERIENCE_VALUE, this.experienceValue)
+                .build();
     }
 
     @Override
@@ -112,5 +107,11 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     protected void onDamage(CEntityTryDamageEvent event) {
         var damageType = event.getDamage().getDamageType();
         event.setCanAttack(damageType != DamageContainer.DamageType.FALL);
+    }
+
+    @Override
+    public void setExperienceValue(int experienceValue) {
+        this.experienceValue = experienceValue;
+        setAndSendEntityData(EntityDataTypes.VALUE, experienceValue);
     }
 }

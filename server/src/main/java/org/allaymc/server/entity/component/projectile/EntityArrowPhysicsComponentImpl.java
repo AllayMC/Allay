@@ -10,6 +10,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.joml.Vector3d;
@@ -37,8 +38,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     public Vector3d updateMotion(boolean hasLiquidMotion) {
-        var collidedWithBlocks = arrowBaseComponent.getDimension().getCollidingBlockStates(arrowBaseComponent.getOffsetAABB()) != null;
-        if (!collidedWithBlocks) {
+        var aabb = arrowBaseComponent.getOffsetAABB().expand(2 * AllayEntityPhysicsService.FAT_AABB_MARGIN);
+        if (arrowBaseComponent.getDimension().getCollidingBlockStates(aabb) == null) {
             return new Vector3d(
                     this.motion.x * (1 - this.getDragFactorInAir()),
                     (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
@@ -80,7 +81,6 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             }
 
             var damageContainer = DamageContainer.projectile(thisEntity, (float) damage);
-            damageContainer.setCritical(arrowBaseComponent.isCritical());
             damageContainer.setHasKnockback(false);
             if (damageComponent.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
                 var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;

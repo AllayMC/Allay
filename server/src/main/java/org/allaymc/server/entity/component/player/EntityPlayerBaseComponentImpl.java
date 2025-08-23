@@ -18,6 +18,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -26,6 +27,7 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
@@ -238,7 +240,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void tick(long currentTick) {
         super.tick(currentTick);
 
-        tryPickUpItems();
+        tryPickUpEntities();
         tickPlayerDataAutoSave();
 
         syncData();
@@ -317,13 +319,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
     }
 
-    protected void tryPickUpItems() {
+    protected void tryPickUpEntities() {
         if (isDead() || !isSpawned() || willBeDespawnedNextTick() || !isCurrentChunkLoaded()) {
             return;
         }
 
         var dimension = location.dimension();
-        // pick up items
         var pickUpArea = new AABBd(
                 location.x - 1.425,
                 location.y - 1.425,
@@ -332,6 +333,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 location.y + 1.425,
                 location.z + 1.425
         );
+
+        // Pick up items
         var entityItems = dimension.getEntityService().getPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
                 .filter(EntityItem.class::isInstance)
@@ -340,11 +343,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .toList();
         for (var entityItem : entityItems) {
             var item = entityItem.getItemStack();
-            if (item == null) continue; // Have been picked by others
+            if (item == null) {
+                // Have been picked by others
+                continue;
+            }
 
             var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
             var slot = inventory.tryAddItem(item);
-            if (slot == -1) continue;
+            if (slot == -1) {
+                // Player's inventory is full and cannot pick up the item
+                continue;
+            }
 
             if (item.getCount() == 0) {
                 var packet = new TakeItemEntityPacket();
@@ -355,9 +364,39 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 entityItem.setItemStack(null);
                 entityItem.despawn();
             }
-            // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
-            // It's much easier to just resend the inventory.
-            thisPlayer.sendContentsWithSpecificContainerId(inventory, UnopenedContainerId.PLAYER_INVENTORY, slot);
+//            // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
+//            // It's much easier to just resend the inventory.
+//            thisPlayer.sendContentsWithSpecificContainerId(inventory, UnopenedContainerId.PLAYER_INVENTORY, slot);
+        }
+
+        // Pick up arrows
+        var entityArrows = dimension.getEntityService().getPhysicsService().computeCollidingEntities(pickUpArea, true)
+                .stream()
+                .filter(EntityArrow.class::isInstance)
+                .map(EntityArrow.class::cast)
+                .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
+                .toList();
+        for (var entityArrow : entityArrows) {
+            if (entityArrow.willBeDespawnedNextTick()) {
+                // Have been picked by others
+                continue;
+            }
+
+            if (entityArrow.getInfinityLevel() != 0) {
+                // Arrow shot by infinity bow can't be picked up
+                entityArrow.despawn();
+                continue;
+            }
+
+            var arrow = ItemTypes.ARROW.createItemStack(1);
+            arrow.setPotionType(entityArrow.getPotionType());
+            if (thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(arrow) != -1) {
+                var packet = new TakeItemEntityPacket();
+                packet.setItemRuntimeEntityId(entityArrow.getRuntimeId());
+                packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
+                getCurrentChunk().addChunkPacket(packet);
+                entityArrow.despawn();
+            }
         }
     }
 
