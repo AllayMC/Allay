@@ -12,6 +12,7 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -356,17 +357,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             }
 
             if (item.getCount() == 0) {
-                var packet = new TakeItemEntityPacket();
-                packet.setRuntimeEntityId(runtimeId);
-                packet.setItemRuntimeEntityId(entityItem.getRuntimeId());
-                getCurrentChunk().sendChunkPacket(packet);
+                sendPickUpPacket(entityItem);
                 // Set item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
                 entityItem.despawn();
             }
-//            // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
-//            // It's much easier to just resend the inventory.
-//            thisPlayer.sendContentsWithSpecificContainerId(inventory, UnopenedContainerId.PLAYER_INVENTORY, slot);
         }
 
         // Pick up arrows
@@ -391,13 +386,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             var arrow = ItemTypes.ARROW.createItemStack(1);
             arrow.setPotionType(entityArrow.getPotionType());
             if (thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(arrow) != -1) {
-                var packet = new TakeItemEntityPacket();
-                packet.setItemRuntimeEntityId(entityArrow.getRuntimeId());
-                packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
-                getCurrentChunk().addChunkPacket(packet);
+                sendPickUpPacket(entityArrow);
                 entityArrow.despawn();
             }
         }
+    }
+
+    protected void sendPickUpPacket(Entity entity) {
+        var packet = new TakeItemEntityPacket();
+        packet.setRuntimeEntityId(this.runtimeId);
+        packet.setItemRuntimeEntityId(entity.getRuntimeId());
+        getCurrentChunk().addChunkPacket(packet);
     }
 
     @Override
