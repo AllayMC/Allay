@@ -42,10 +42,10 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         var force = Math.min(usedTime * (usedTime + 40.0) / 1200.0, 1.0);
         var speed = force * 5;
 
-        var infinityLevel = getEnchantmentLevel(EnchantmentTypes.INFINITY);
+        var infinity = getEnchantmentLevel(EnchantmentTypes.INFINITY) != 0;
         PotionType potionType = null;
         if (!creative) {
-            var arrow = findArrow(player, infinityLevel != 0);
+            var arrow = findArrow(player, infinity);
             if (arrow == null) {
                 return;
             }
@@ -70,7 +70,9 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         );
         arrow.setShooter(player);
         arrow.setPotionType(potionType);
-        arrow.setInfinite(infinityLevel != 0);
+        if (infinity || creative) {
+            arrow.setInfinite(true);
+        }
         arrow.setPowerLevel(powerLevel);
         arrow.setPunchLevel(punchLevel);
         if (flameLevel != 0) {
