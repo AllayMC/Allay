@@ -1754,4 +1754,14 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockFrameBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initBed() {
+        BlockTypes.BED = AllayBlockType
+                .builder(BlockBedBehaviorImpl.class)
+                .vanillaBlock(BlockId.BED)
+//      Todo:          .bindBlockEntity(BlockEntityTypes.BED)
+                .setProperties(BlockPropertyTypes.HEAD_PIECE_BIT,BlockPropertyTypes.OCCUPIED_BIT,BlockPropertyTypes.DIRECTION_4)
+                .setBaseComponentSupplier(BlockBedBaseComponentImpl::new)
+                .build();
+    }
 }
