@@ -6,6 +6,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.DeferredData;
+import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.processor.impl.ingame.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackClientResponsePacket;
@@ -30,7 +31,13 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                     player.sendPacket(pack.toNetwork());
                 }
             }
-            case HAVE_ALL_PACKS -> player.sendPacket(DeferredData.RESOURCES_PACK_STACK_PACKET.get());
+            case HAVE_ALL_PACKS -> {
+                if (MultiVersion.is1_21_80(player)) {
+                    player.sendPacket(MultiVersion.RESOURCES_PACK_STACK_PACKET_1_21_80.get());
+                } else {
+                    player.sendPacket(DeferredData.RESOURCES_PACK_STACK_PACKET.get());
+                }
+            }
             case COMPLETED ->
                     ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).initializePlayer();
             default -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);

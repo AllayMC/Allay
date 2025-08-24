@@ -13,7 +13,7 @@
   "command.status.description": "Get the status of the server",
   "command.tps.description": "Show TPS or MSPT of the current world",
   "command.version.description": "Query server version information",
-  "command.version.output": "This server is running §b%1§r §a%2§r with §ballay-api§r §a%3",
+  "command.version.output": "This server is running §b%1§r §a%2§r with §ballay-api§r §a%3§r. Supports version §a%4§r (protocol version §a%5§r)",
   "command.world.create.dropdown.generatorpreset.nether": "Nether Generator Preset",
   "command.world.create.dropdown.generatorpreset.overworld": "Overworld Generator Preset",
   "command.world.create.dropdown.generatorpreset.theend": "The End Generator Preset",

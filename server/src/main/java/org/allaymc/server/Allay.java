@@ -92,7 +92,9 @@ public final class Allay {
             }
         }
 
-        log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING, ProtocolInfo.getMinecraftVersionStr(), ProtocolInfo.PACKET_CODEC.getProtocolVersion()));
+        var versionStr = ProtocolInfo.getLowestCodec().getMinecraftVersion() + " - " + ProtocolInfo.getLatestCodec().getMinecraftVersion();
+        var protocolStr = ProtocolInfo.getLowestCodec().getProtocolVersion() + " - " + ProtocolInfo.getLatestCodec().getProtocolVersion();
+        log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING, versionStr, protocolStr));
 
         try {
             initAllay();
@@ -127,7 +129,8 @@ public final class Allay {
             var graphicsEnv = Class.forName("java.awt.GraphicsEnvironment");
             var isHeadless = graphicsEnv.getDeclaredMethod("isHeadless");
             return (boolean) isHeadless.invoke(null);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
         return true;
     }
 

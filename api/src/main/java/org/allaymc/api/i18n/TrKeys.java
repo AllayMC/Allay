@@ -78,7 +78,7 @@ public interface TrKeys {
     String A_COMMAND_VERSION_DESCRIPTION = "allay:command.version.description";
 
     /**
-     * This server is running §b%1§r §a%2§r with §ballay-api§r §a%3
+     * This server is running §b%1§r §a%2§r with §ballay-api§r §a%3§r. Supports version §a%4§r (protocol version §a%5§r)
      */
     String A_COMMAND_VERSION_OUTPUT = "allay:command.version.output";
 
@@ -178,7 +178,7 @@ public interface TrKeys {
     String A_CREATIVEITEM_LOADING = "allay:creativeitem.loading";
 
     /**
-     * You have been IP banned from this server
+     * Your IP have been banned from this server
      */
     String A_DISCONNECT_BANIP = "allay:disconnect.banIp";
 

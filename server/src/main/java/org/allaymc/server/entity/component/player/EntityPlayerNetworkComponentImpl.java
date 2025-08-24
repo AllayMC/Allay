@@ -32,6 +32,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.network.DeferredData;
+import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
@@ -376,7 +377,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setMultiplayerCorrelationId(UUID.randomUUID().toString());
         packet.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         packet.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
-        packet.setServerEngine(ProtocolInfo.getMinecraftVersionStr());
+        packet.setServerEngine(ProtocolInfo.getLatestCodec().getMinecraftVersion());
         packet.setBlockRegistryChecksum(0L);
         packet.setPlayerPropertyData(NbtMap.EMPTY);
         packet.setWorldTemplateId(new UUID(0, 0));
@@ -392,6 +393,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setScenarioId("");
         packet.setOwnerId("");
         packet.getExperiments().addAll(DeferredData.EXPERIMENT_DATA_LIST.get());
+        if (MultiVersion.is1_21_80(thisPlayer)) {
+            MultiVersion.addExperimentsFor1_21_80(packet.getExperiments());
+        }
         return packet;
     }
 

@@ -99,7 +99,6 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
-                        session.setCodec(ProtocolInfo.PACKET_CODEC);
                         if (!networkSettings.enableEncodingProtection()) {
                             session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
                         }
@@ -179,8 +178,8 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .maximumPlayerCount(genericSettings.maxPlayerCount())
                 .gameType(genericSettings.defaultGameType().name())
                 .nintendoLimited(false)
-                .version(ProtocolInfo.getMinecraftVersionStr())
-                .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
+                .version(ProtocolInfo.getLatestCodec().getMinecraftVersion())
+                .protocolVersion(ProtocolInfo.getLatestCodec().getProtocolVersion())
                 .ipv4Port(networkSettings.port())
                 .ipv6Port(networkSettings.portv6());
     }

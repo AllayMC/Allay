@@ -16,10 +16,11 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
     @Override
     public void handle(EntityPlayer player, RequestNetworkSettingsPacket packet) {
         var protocolVersion = packet.getProtocolVersion();
-        var supportedProtocolVersion = ProtocolInfo.PACKET_CODEC.getProtocolVersion();
-        if (protocolVersion != supportedProtocolVersion) {
+        var codec = ProtocolInfo.findCodec(protocolVersion);
+        if (codec == null) {
+            // Can not find a suitable codec for the client protocol version, let's check if it's too old or too new
             var loginFailedPacket = new PlayStatusPacket();
-            if (protocolVersion > supportedProtocolVersion) {
+            if (protocolVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
             } else {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
@@ -29,11 +30,13 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             return;
         }
 
+        player.getClientSession().setCodec(codec);
+
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(Server.SETTINGS.networkSettings().compressionAlgorithm());
-        // NOTICE: We don't need to set the compression threshold after MCBE 1.20.60
+        // NOTICE: We don't need to set the compression threshold after 1.20.60
         player.sendPacketImmediately(settingsPacket);
-        // NOTICE: The NetworkSettingsPacket shouldn't be compressed
+        // NOTICE: The NetworkSettingsPacket shouldn't be compressed, so we set the compression after sending the packet
         player.getClientSession().setCompression(settingsPacket.getCompressionAlgorithm());
     }
 
