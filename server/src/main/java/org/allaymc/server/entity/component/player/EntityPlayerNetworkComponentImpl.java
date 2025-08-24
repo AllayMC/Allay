@@ -192,7 +192,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected void onFullyJoin() {
         var server = Server.getInstance();
         var world = thisPlayer.getWorld();
-        // Load EntityPlayer's NBT
+        // Load EntityPlayer's NBT, player game type is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerService().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
 
         var setEntityDataPacket = new SetEntityDataPacket();
@@ -200,9 +200,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         setEntityDataPacket.getMetadata().putAll(thisPlayer.getMetadata().getEntityDataMap());
         setEntityDataPacket.setTick(world.getTick());
         sendPacket(setEntityDataPacket);
-
-        // Update abilities, adventure settings, entity flags that are related to game type
-        thisPlayer.setGameType(thisPlayer.getGameType());
 
         // Send other players' abilities data to this player
         Server.getInstance().getPlayerService().getPlayers().values().forEach(other -> sendPacket(other.getAbilities().encodeUpdateAbilitiesPacket()));
@@ -393,9 +390,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setScenarioId("");
         packet.setOwnerId("");
         packet.getExperiments().addAll(DeferredData.EXPERIMENT_DATA_LIST.get());
-        if (MultiVersion.is1_21_80(thisPlayer)) {
-            MultiVersion.addExperimentsFor1_21_80(packet.getExperiments());
-        }
+        MultiVersion.adaptExperimentData(thisPlayer, packet.getExperiments());
         return packet;
     }
 

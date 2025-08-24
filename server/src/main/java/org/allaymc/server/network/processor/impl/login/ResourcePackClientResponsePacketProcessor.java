@@ -32,11 +32,9 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                 }
             }
             case HAVE_ALL_PACKS -> {
-                if (MultiVersion.is1_21_80(player)) {
-                    player.sendPacket(MultiVersion.RESOURCES_PACK_STACK_PACKET_1_21_80.get());
-                } else {
-                    player.sendPacket(DeferredData.RESOURCES_PACK_STACK_PACKET.get());
-                }
+                var packetToSend = DeferredData.RESOURCES_PACK_STACK_PACKET.get();
+                MultiVersion.adaptExperimentData(player, packetToSend.getExperiments());
+                player.sendPacket(packetToSend);
             }
             case COMPLETED ->
                     ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).initializePlayer();

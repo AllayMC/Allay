@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor.impl.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.impl.ingame.ILoginPacketProcessor;
@@ -22,8 +23,14 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             var loginFailedPacket = new PlayStatusPacket();
             if (protocolVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
-            } else {
+            } else if (protocolVersion < ProtocolInfo.getLowestCodec().getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
+            } else {
+                // A version that is in the middle of the lowest and latest versions is not supported for
+                // some reason. Since we don't have compatible status in PlayStatusPacket.Status, let's
+                // disconnect the client with custom reason instead of sending PlayStatusPacket
+                player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_BODY_VERSIONNOTSUPPORTED);
+                return;
             }
 
             player.sendPacketImmediately(loginFailedPacket);

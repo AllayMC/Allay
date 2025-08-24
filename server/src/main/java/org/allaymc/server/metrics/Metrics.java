@@ -578,7 +578,9 @@ public class Metrics {
             var server = Server.getInstance();
             var settings = Server.SETTINGS.bStatsSettings();
             // Only start Metrics if it's enabled in the config
-            if (!settings.enable()) return;
+            if (!settings.enable()) {
+                return;
+            }
 
             Metrics metrics = new Metrics("Allay", settings.serverUUID(), settings.logFailedRequests());
 
