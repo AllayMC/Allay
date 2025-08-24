@@ -43,10 +43,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.ChatRestrictionLevel;
-import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
+import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -368,6 +365,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setPremiumWorldTemplateId("");
         packet.setInventoriesServerAuthoritative(true);
         packet.setServerAuthoritativeBlockBreaking(true);
+        // MultiVersion: set to ensure compatibility for client below 1.21.90
+        packet.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         packet.setCommandsEnabled(true);
         packet.setMultiplayerGame(true);
         packet.setBroadcastingToLan(true);
