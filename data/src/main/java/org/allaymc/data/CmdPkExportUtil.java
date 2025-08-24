@@ -19,7 +19,7 @@ import java.nio.file.Path;
  * @author daoge_cmd
  */
 public class CmdPkExportUtil {
-    private static final BedrockCodec CODEC = ProtocolInfo.PACKET_CODEC;
+    private static final BedrockCodec CODEC = ProtocolInfo.getLatestCodec();
 
     @SneakyThrows
     public static void main(String[] args) {

@@ -14,18 +14,41 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
     /**
      * Create a semantic version from an int[] array.
      * <p>
-     * The length of the array must be 5.
+     * The length of the array must be bigger than 3.
      *
      * @param versions the version array
-     *
      * @return the semantic version
      */
     public static SemVersion from(int[] versions) {
         if (versions.length == 0) {
             return new SemVersion(0, 0, 0, 0, 0);
         }
-        Preconditions.checkArgument(versions.length == 5);
-        return new SemVersion(versions[0], versions[1], versions[2], versions[3], versions[4]);
+        Preconditions.checkArgument(versions.length >= 3);
+        var major = versions[0];
+        var minor = versions[1];
+        var patch = versions[2];
+        var revision = versions.length >= 4 ? versions[3] : 0;
+        var build = versions.length >= 5 ? versions[4] : 0;
+        return new SemVersion(major, minor, patch, revision, build);
+    }
+
+    /**
+     * Create a semantic version from a string.
+     * <p>
+     * The string must be in the format of "major.minor.patch[.revision.build]".
+     *
+     * @param versionStr the version string
+     * @return the semantic version
+     */
+    public static SemVersion from(String versionStr) {
+        var versions = AllayStringUtils.fastSplit(versionStr, ".");
+        Preconditions.checkArgument(versions.size() >= 3);
+        var major = Integer.parseInt(versions.get(0));
+        var minor = Integer.parseInt(versions.get(1));
+        var patch = Integer.parseInt(versions.get(2));
+        var revision = versions.size() >= 4 ? Integer.parseInt(versions.get(3)) : 0;
+        var build = versions.size() >= 5 ? Integer.parseInt(versions.get(4)) : 0;
+        return new SemVersion(major, minor, patch, revision, build);
     }
 
     public int[] toArray() {

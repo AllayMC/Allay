@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor.impl.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.impl.ingame.ILoginPacketProcessor;
@@ -16,24 +17,33 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
     @Override
     public void handle(EntityPlayer player, RequestNetworkSettingsPacket packet) {
         var protocolVersion = packet.getProtocolVersion();
-        var supportedProtocolVersion = ProtocolInfo.PACKET_CODEC.getProtocolVersion();
-        if (protocolVersion != supportedProtocolVersion) {
+        var codec = ProtocolInfo.findCodec(protocolVersion);
+        if (codec == null) {
+            // Can not find a suitable codec for the client protocol version, let's check if it's too old or too new
             var loginFailedPacket = new PlayStatusPacket();
-            if (protocolVersion > supportedProtocolVersion) {
+            if (protocolVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
-            } else {
+            } else if (protocolVersion < ProtocolInfo.getLowestCodec().getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
+            } else {
+                // A version that is in the middle of the lowest and latest versions is not supported for
+                // some reason. Since we don't have compatible status in PlayStatusPacket.Status, let's
+                // disconnect the client with custom reason instead of sending PlayStatusPacket
+                player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_BODY_VERSIONNOTSUPPORTED);
+                return;
             }
 
             player.sendPacketImmediately(loginFailedPacket);
             return;
         }
 
+        player.getClientSession().setCodec(codec);
+
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(Server.SETTINGS.networkSettings().compressionAlgorithm());
-        // NOTICE: We don't need to set the compression threshold after MCBE 1.20.60
+        // NOTICE: We don't need to set the compression threshold after 1.20.60
         player.sendPacketImmediately(settingsPacket);
-        // NOTICE: The NetworkSettingsPacket shouldn't be compressed
+        // NOTICE: The NetworkSettingsPacket shouldn't be compressed, so we set the compression after sending the packet
         player.getClientSession().setCompression(settingsPacket.getCompressionAlgorithm());
     }
 
