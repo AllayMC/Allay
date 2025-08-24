@@ -295,10 +295,6 @@ public class AllayLightService implements LightService {
     protected boolean canCalculateLightInChunk(int chunkX, int chunkZ) {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                if (i == 0 && j == 0) {
-                    continue;
-                }
-
                 if (!chunks.contains(HashUtils.hashXZ(chunkX + i, chunkZ + j))) {
                     return false;
                 }

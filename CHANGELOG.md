@@ -31,6 +31,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Fixed the bug that snowball will always make knockback even if the entity being hit is in damage cool down.
 - Fixed a bug where Ender Pearls would deal damage to Blazes.
+- Fixed an NPE bug that could occur in extreme cases for the light engine.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 
@@ -68,7 +69,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed recursive wall updating.
 - Farmland trampling now correctly considers any entity whose bounding box exceeds a certain size threshold, instead of relying solely on a fixed entity whitelist.
 - Player movement now normally reduces satiety
-- Fixed an NPE bug that could occur in extreme cases for the light engine.
 - `/world tp <world>` now teleports the player to the spawn point for overworld dimension.
 - Fixed the physics for some entities including TNT, and stepping is disabled by default now.
 - Fixed `WeatherChangeEvent` spamming.
