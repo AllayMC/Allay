@@ -29,7 +29,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
     @Override
     public boolean canUseItemInAir(EntityPlayer player) {
-        return true;
+        return hasArrow(player);
     }
 
     @Override
@@ -90,6 +90,24 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             tryIncreaseDamage(1);
         }
         player.getDimension().addLevelSoundEvent(shootPos, SoundEvent.BOW);
+    }
+
+    protected boolean hasArrow(EntityPlayer player) {
+        // Find offhand arrow first
+        Container container = player.getContainer(FullContainerType.OFFHAND);
+        if (container.getItemStack(PlayerOffhandContainer.OFFHAND_SLOT) instanceof ItemArrowStack) {
+            return true;
+        }
+
+        // Arrow is not in offhand, search in inventory again
+        container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+        for (var itemStack : container.getItemStacks()) {
+            if (itemStack instanceof ItemArrowStack) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected ItemArrowStack findArrow(EntityPlayer player, boolean infinity) {
