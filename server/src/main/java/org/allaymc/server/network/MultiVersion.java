@@ -19,7 +19,8 @@ public final class MultiVersion {
             experiments.add(new ExperimentData("locator_bar", true));
             // Allows Vibrant Visuals to appear in the settings menu
             experiments.add(new ExperimentData("experimental_graphics", true));
-        } else if (!is1_21_100(player)) {
+        }
+        if (!is1_21_100(player)) {
             experiments.removeIf(experimentData -> experimentData.getName().equals("y_2025_drop_3"));
         }
     }
