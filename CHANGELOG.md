@@ -22,7 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced methods `Entity.getOffsetAABBForCollisionCheck()` and `Entity.checkBlockCollision()`.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
-- Added support for basic multi-version. The server now support 1.21.90 - 1.21.100 client to join.
+- Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
 
 ### Changed
 
