@@ -1,6 +1,5 @@
 package org.allaymc.server.item.component;
 
-import org.allaymc.api.block.component.BlockBedBaseComponent;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
