@@ -1759,7 +1759,7 @@ public final class BlockTypeInitializer {
         BlockTypes.BED = AllayBlockType
                 .builder(BlockBedBehaviorImpl.class)
                 .vanillaBlock(BlockId.BED)
-//      Todo:          .bindBlockEntity(BlockEntityTypes.BED)
+                .bindBlockEntity(BlockEntityTypes.BED)
                 .setProperties(BlockPropertyTypes.HEAD_PIECE_BIT,BlockPropertyTypes.OCCUPIED_BIT,BlockPropertyTypes.DIRECTION_4)
                 .setBaseComponentSupplier(BlockBedBaseComponentImpl::new)
                 .build();

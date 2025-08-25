@@ -1,6 +1,8 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockBedBaseComponent;
+import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -8,11 +10,13 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3ic;
 
 import java.util.Set;
@@ -20,7 +24,10 @@ import java.util.Set;
 /**
  * @author harry-xi
  */
-public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements BlockBedBaseComponent {
+
+    @Dependency
+    BlockEntityHolderComponent<BlockEntityBed> blockEntityHolderComponent;
 
     public BlockBedBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -78,17 +85,30 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(block, usedItem, entity);
+        return block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? Utils.EMPTY_ITEM_STACK_SET : createBedDrop(block);
     }
 
-    private Vector3ic posOfOtherPart(Block block) {
+
+    private Set<ItemStack> createBedDrop(Block blockState) {
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.getPos());
+        var drop = blockState.toItemStack();
+        drop.setMeta(blockEntity.getColor());
+        return Set.of(drop);
+    }
+
+    public static Block getPairBlock(Block block) {
+        var otherPos = posOfOtherPart(block);
+        return new Block(block.getDimension(), otherPos);
+    }
+
+    public static Vector3ic posOfOtherPart(Block block) {
         var head = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT);
         var face = BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4));
         assert face != null;
         return (head ? face.opposite() : face).offsetPos(block.getPos());
     }
 
-    private boolean posEqVec3ic(Position3ic pos, Vector3ic other) {
+    private static boolean posEqVec3ic(Position3ic pos, Vector3ic other) {
         return pos.x() == other.x() && pos.y() == other.y() && pos.z() == other.z();
     }
 }
