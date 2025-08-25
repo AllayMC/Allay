@@ -7,6 +7,7 @@ import org.allaymc.api.blockentity.interfaces.*;
  */
 public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityBarrel> BARREL;
+    public static BlockEntityType<BlockEntityBed> BED;
     public static BlockEntityType<BlockEntityChest> CHEST;
     public static BlockEntityType<BlockEntityShulkerBox> SHULKER_BOX;
     public static BlockEntityType<BlockEntityFurnace> FURNACE;

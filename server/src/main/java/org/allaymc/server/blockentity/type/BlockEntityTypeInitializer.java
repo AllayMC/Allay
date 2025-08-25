@@ -141,4 +141,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityItemFrameBaseComponentImpl::new, BlockEntityItemFrameBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initBed() {
+        BlockEntityTypes.BED = AllayBlockEntityType
+                .builder(BlockEntityBedImpl.class)
+                .name(BlockEntityId.BED)
+                .addComponent(BlockEntityBedBaseComponentImpl::new, BlockEntityBedBaseComponentImpl.class)
+                .build();
+    }
 }

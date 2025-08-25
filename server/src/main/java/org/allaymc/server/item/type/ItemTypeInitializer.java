@@ -859,4 +859,12 @@ public final class ItemTypeInitializer {
                 .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
                 .build();
     }
+
+    public static void initBed() {
+        ItemTypes.BED = AllayItemType
+                .builder(ItemBedStackImpl.class)
+                .addComponent(ItemBedBaseComponentImpl::new, ItemBedBaseComponentImpl.class)
+                .vanillaItem(ItemId.BED)
+                .build();
+    }
 }

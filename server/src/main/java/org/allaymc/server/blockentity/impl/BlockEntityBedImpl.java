@@ -1,0 +1,22 @@
+package org.allaymc.server.blockentity.impl;
+
+import lombok.experimental.Delegate;
+import org.allaymc.api.blockentity.component.BlockEntityBedBaseComponent;
+import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
+import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.server.component.interfaces.ComponentProvider;
+
+import java.util.List;
+
+/**
+ * @author harry-xi
+ */
+public class BlockEntityBedImpl extends BlockEntityImpl implements BlockEntityBed {
+    @Delegate
+    BlockEntityBedBaseComponent blockEntityBed;
+
+    public BlockEntityBedImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
+    }
+}
