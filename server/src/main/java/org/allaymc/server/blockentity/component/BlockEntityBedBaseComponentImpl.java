@@ -3,6 +3,7 @@ package org.allaymc.server.blockentity.component;
 import lombok.Getter;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.blockentity.component.BlockEntityBedBaseComponent;
+import org.allaymc.api.blockentity.data.BedColor;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.server.block.component.BlockBedBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
@@ -14,11 +15,14 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
 
     private static final String TAG_COLOR = "color";
 
-    @Getter
     protected byte color;
 
-    public void setColor(byte color) {
-        this.color = color;
+    public BedColor getColor() {
+        return BedColor.fromByte(color);
+    }
+
+    public void setColor(BedColor color) {
+        this.color = color.toByte();
         var pair = BlockBedBaseComponentImpl.getPairBlock(new Block(this.getDimension(),this.getPosition())).getBlockEntity();
         if(pair instanceof BlockEntityBedBaseComponent bed){
             if(bed.getColor() != color){

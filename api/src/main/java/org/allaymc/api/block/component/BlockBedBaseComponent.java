@@ -1,6 +1,6 @@
 package org.allaymc.api.block.component;
 
 
-public interface BlockBedBaseComponent {
+public interface BlockBedBaseComponent extends BlockBaseComponent {
 
 }

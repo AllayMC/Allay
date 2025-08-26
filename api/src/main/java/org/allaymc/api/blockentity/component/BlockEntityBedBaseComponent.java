@@ -1,15 +1,15 @@
 package org.allaymc.api.blockentity.component;
 
+import org.allaymc.api.blockentity.data.BedColor;
+
 public interface BlockEntityBedBaseComponent extends BlockEntityBaseComponent {
     /**
      * get the color of beds
-     * @return the data value of color
      */
-    byte getColor();
+    BedColor getColor();
 
     /**
      * set the color of beds
-     * @param color the data value of color
      */
-    void setColor(byte color);
+    void setColor(BedColor color);
 }
