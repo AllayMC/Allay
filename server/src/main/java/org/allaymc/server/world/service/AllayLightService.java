@@ -123,10 +123,10 @@ public class AllayLightService implements LightService {
 
     public void startTick() {
         var dimensionName = worldName + ":" + dimensionInfo.toString();
-        startCalculatingThread("Light Calculating Thread (Chunk & Block) - " + dimensionName, chunkAndBlockUpdateQueue);
-        startCalculatingThread("Light Calculating Thread (Block Light) - " + dimensionName, blockLightUpdateQueue);
+        startCalculatingThread("Light Calculating Thread (Chunk & Block) #" + dimensionName, chunkAndBlockUpdateQueue);
+        startCalculatingThread("Light Calculating Thread (Block Light) #" + dimensionName, blockLightUpdateQueue);
         if (dimensionInfo.hasSkyLight()) {
-            startCalculatingThread("Light Calculating Thread (Sky Light) - " + dimensionName, skyLightUpdateQueue);
+            startCalculatingThread("Light Calculating Thread (Sky Light) #" + dimensionName, skyLightUpdateQueue);
         }
     }
 

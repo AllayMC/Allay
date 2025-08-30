@@ -96,10 +96,10 @@ public class AllayWorld implements World {
                 .onStop(this::shutdownReally)
                 .build();
         this.worldThread = Thread.ofPlatform()
-                .name("World Thread - " + this.getName())
+                .name("World Thread #" + this.getName())
                 .unstarted(gameLoop::startLoop);
         this.networkThread = ENABLE_INDEPENDENT_NETWORK_THREAD ? Thread.ofPlatform()
-                .name("World Network Thread - " + this.getName())
+                .name("World Network Thread #" + this.getName())
                 .unstarted(this::networkThreadMain) : null;
         this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
         this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
@@ -216,7 +216,7 @@ public class AllayWorld implements World {
 
         // Find the spawn point only the first time the world is loaded
         if (worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
-            Thread.ofVirtual().name("Spawn Point Finding Thread - " + name).start(() -> {
+            Thread.ofVirtual().name("Spawn Point Finding Thread #" + name).start(() -> {
                 var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
                 if (newSpawnPoint == null) {
                     log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", name);
