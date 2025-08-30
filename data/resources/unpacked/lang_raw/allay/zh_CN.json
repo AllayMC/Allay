@@ -13,7 +13,7 @@
   "command.status.description": "获取服务器状态",
   "command.tps.description": "获取当前世界的TPS或MSPT",
   "command.version.description": "查询服务器版本信息",
-  "command.version.output": "此服务器正在运行§b%1§r §a%2§r, 实现§ballay-api§r §a%3",
+  "command.version.output": "此服务器正在运行§b%1§r §a%2§r（§ballay-api§r §a%3§r）。支持版本 §a%4§r（协议版本§a%5§r）",
   "command.world.create.dropdown.generatorpreset.nether": "地狱地形生成器预设",
   "command.world.create.dropdown.generatorpreset.overworld": "主世界地形生成器预设",
   "command.world.create.dropdown.generatorpreset.theend": "末地地形生成器预设",

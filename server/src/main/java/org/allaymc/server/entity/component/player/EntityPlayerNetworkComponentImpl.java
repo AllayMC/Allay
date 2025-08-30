@@ -32,6 +32,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.network.DeferredData;
+import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
@@ -42,10 +43,7 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.ChatRestrictionLevel;
-import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
+import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -191,7 +189,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected void onFullyJoin() {
         var server = Server.getInstance();
         var world = thisPlayer.getWorld();
-        // Load EntityPlayer's NBT
+        // Load EntityPlayer's NBT, player game type is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerService().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
 
         var setEntityDataPacket = new SetEntityDataPacket();
@@ -199,9 +197,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         setEntityDataPacket.getMetadata().putAll(thisPlayer.getMetadata().getEntityDataMap());
         setEntityDataPacket.setTick(world.getTick());
         sendPacket(setEntityDataPacket);
-
-        // Update abilities, adventure settings, entity flags that are related to game type
-        thisPlayer.setGameType(thisPlayer.getGameType());
 
         // Send other players' abilities data to this player
         Server.getInstance().getPlayerService().getPlayers().values().forEach(other -> sendPacket(other.getAbilities().encodeUpdateAbilitiesPacket()));
@@ -370,13 +365,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setPremiumWorldTemplateId("");
         packet.setInventoriesServerAuthoritative(true);
         packet.setServerAuthoritativeBlockBreaking(true);
+        // MultiVersion: set to ensure compatibility for client below 1.21.90
+        packet.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         packet.setCommandsEnabled(true);
         packet.setMultiplayerGame(true);
         packet.setBroadcastingToLan(true);
         packet.setMultiplayerCorrelationId(UUID.randomUUID().toString());
         packet.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         packet.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
-        packet.setServerEngine(ProtocolInfo.getMinecraftVersionStr());
+        packet.setServerEngine(ProtocolInfo.getLatestCodec().getMinecraftVersion());
         packet.setBlockRegistryChecksum(0L);
         packet.setPlayerPropertyData(NbtMap.EMPTY);
         packet.setWorldTemplateId(new UUID(0, 0));
@@ -392,6 +389,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setScenarioId("");
         packet.setOwnerId("");
         packet.getExperiments().addAll(DeferredData.EXPERIMENT_DATA_LIST.get());
+        MultiVersion.adaptExperimentData(thisPlayer, packet.getExperiments());
         return packet;
     }
 
@@ -402,7 +400,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return;
         }
 
-        var event = new PlayerLoginEvent(thisPlayer, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON, TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED);
+        var event = new PlayerLoginEvent(thisPlayer, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_JOINED);
         if (!event.call()) {
             disconnect(event.getDisconnectReason());
             return;

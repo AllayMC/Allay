@@ -60,7 +60,7 @@ public class WorldCommand extends VanillaCommand {
 
                     var dimInfo = DimensionInfo.fromName(dimName);
                     if (dimInfo == null) {
-                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWNDIM, dimName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_UNKNOWN, dimName);
                         return context.fail();
                     }
 

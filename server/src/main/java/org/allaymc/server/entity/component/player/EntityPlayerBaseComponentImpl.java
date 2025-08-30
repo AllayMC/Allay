@@ -221,20 +221,22 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
 
-        gameType = event.getNewGameType();
-        this.gameType = gameType;
-        this.manager.callEvent(new CPlayerGameTypeChangeEvent(gameType));
-        this.adventureSettings.applyGameType(gameType);
-        this.abilities.applyGameType(gameType);
+        this.gameType = event.getNewGameType();
+        this.manager.callEvent(new CPlayerGameTypeChangeEvent(this.gameType));
+        this.adventureSettings.applyGameType(this.gameType);
+        this.abilities.applyGameType(this.gameType);
 
-        setAndSendEntityFlag(EntityFlag.SILENT, gameType == GameType.SPECTATOR);
-        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, gameType != GameType.SPECTATOR);
+        setAndSendEntityFlag(EntityFlag.SILENT, this.gameType == GameType.SPECTATOR);
+        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, this.gameType != GameType.SPECTATOR);
 
-        var packet = new UpdatePlayerGameTypePacket();
-        packet.setGameType(gameType);
-        packet.setEntityId(runtimeId);
-        networkComponent.sendPacket(packet);
-        sendPacketToViewers(packet);
+        var packetToSelf = new SetPlayerGameTypePacket();
+        packetToSelf.setGamemode(this.gameType.ordinal());
+        networkComponent.sendPacket(packetToSelf);
+
+        var packetToViewers = new UpdatePlayerGameTypePacket();
+        packetToViewers.setGameType(this.gameType);
+        packetToViewers.setEntityId(this.runtimeId);
+        sendPacketToViewers(packetToViewers);
     }
 
     @Override

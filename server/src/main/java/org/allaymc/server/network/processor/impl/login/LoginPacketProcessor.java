@@ -25,7 +25,15 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
 
     @Override
     public void handle(EntityPlayer player, LoginPacket packet) {
-        var loginData = LoginData.decode(packet);
+        LoginData loginData;
+        try {
+            loginData = LoginData.decode(packet);
+        } catch (Throwable t) {
+            log.warn("Failed to decode login data of player {}", player.getOriginName(), t);
+            player.disconnect();
+            return;
+        }
+
         var networkComponent = (EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent();
         networkComponent.setLoginData(loginData);
 

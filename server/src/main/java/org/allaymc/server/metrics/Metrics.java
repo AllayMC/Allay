@@ -80,7 +80,6 @@ public class Metrics {
      * Sends the data to the bStats server.
      *
      * @param data The data to send.
-     *
      * @throws Exception If the request failed.
      */
     private static void sendData(JsonObject data) throws Exception {
@@ -115,9 +114,7 @@ public class Metrics {
      * G-zips the given String.
      *
      * @param str The string to gzip.
-     *
      * @return The gzipped String.
-     *
      * @throws IOException If the compression failed.
      */
     private static byte[] compress(final String str) throws IOException {
@@ -137,7 +134,6 @@ public class Metrics {
      * result is 0.
      *
      * @param <T> the type of the input elements
-     *
      * @return a {@code Collector} that counts the input elements
      */
     public static <T> Collector<T, ?, Integer> countingInt() {
@@ -582,12 +578,14 @@ public class Metrics {
             var server = Server.getInstance();
             var settings = Server.SETTINGS.bStatsSettings();
             // Only start Metrics if it's enabled in the config
-            if (!settings.enable()) return;
+            if (!settings.enable()) {
+                return;
+            }
 
             Metrics metrics = new Metrics("Allay", settings.serverUUID(), settings.logFailedRequests());
 
             metrics.addCustomChart(new Metrics.SingleLineChart("players", server.getPlayerService()::getPlayerCount));
-            metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", ProtocolInfo::getMinecraftVersionStr));
+            metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> ProtocolInfo.getLatestCodec().getMinecraftVersion()));
             metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", GitProperties::getBuildApiVersion));
             metrics.addCustomChart(new Metrics.SimplePie("allay_server_version", GitProperties::getBuildVersion));
             metrics.addCustomChart(new Metrics.SimplePie("max_memory", () -> String.format("%.2f", Runtime.getRuntime().maxMemory() / (1024d * 1024d * 1024d)) + "G"));

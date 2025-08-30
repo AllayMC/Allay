@@ -78,7 +78,7 @@ public interface TrKeys {
     String ALLAY_COMMAND_VERSION_DESCRIPTION = "allay:command.version.description";
 
     /**
-     * This server is running §b%1§r §a%2§r with §ballay-api§r §a%3
+     * This server is running §b%1§r §a%2§r with §ballay-api§r §a%3§r. Supports version §a%4§r (protocol version §a%5§r)
      */
     String ALLAY_COMMAND_VERSION_OUTPUT = "allay:command.version.output";
 

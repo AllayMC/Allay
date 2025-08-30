@@ -7,7 +7,12 @@ import org.allaymc.updater.block.BlockStateUpdater_1_21_60;
 import org.allaymc.updater.item.ItemStateUpdater;
 import org.allaymc.updater.item.ItemStateUpdater_1_21_100;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.codec.v800.Bedrock_v800;
+import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
+import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
+
+import java.util.List;
 
 /**
  * This class contains information about the current protocol version.
@@ -18,14 +23,15 @@ import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
 public final class ProtocolInfo {
 
     /**
-     * The current used packet codec.
+     * A list which contains the supported protocol versions, and the first element is the latest version.
      */
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v827.CODEC;
-
-    /**
-     * The current minecraft version.
-     */
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 100, 6, 0);
+    public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
+            // Order is important. The first codec is the latest supported version.
+            Bedrock_v827.CODEC,
+            Bedrock_v819.CODEC,
+            Bedrock_v818.CODEC,
+            Bedrock_v800.CODEC
+    );
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
@@ -58,11 +64,54 @@ public final class ProtocolInfo {
     public static final int BLOCK_STATE_VERSION_NUM = BLOCK_STATE_VERSION_NUM_NO_REVISION | BLOCK_STATE_VERSION.revision();
 
     /**
-     * Get the string style of the current minecraft version.
+     * Get the latest codec.
      *
-     * @return the string style of the current minecraft version.
+     * @return the latest codec.
      */
-    public static String getMinecraftVersionStr() {
-        return MINECRAFT_VERSION.major() + "." + MINECRAFT_VERSION.minor() + "." + MINECRAFT_VERSION.patch();
+    public static BedrockCodec getLatestCodec() {
+        return SUPPORTED_VERSIONS.getFirst();
+    }
+
+    /**
+     * Get the lowest codec.
+     *
+     * @return the lowest codec.
+     */
+    public static BedrockCodec getLowestCodec() {
+        return SUPPORTED_VERSIONS.getLast();
+    }
+
+    /**
+     * Find the codec by protocol version.
+     *
+     * @param protocolVersion the protocol version.
+     * @return the codec, or {@code null} if not found.
+     */
+    public static BedrockCodec findCodec(int protocolVersion) {
+        for (var codec : SUPPORTED_VERSIONS) {
+            if (codec.getProtocolVersion() == protocolVersion) {
+                return codec;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the latest minecraft version.
+     *
+     * @return the latest minecraft version.
+     */
+    public static SemVersion getLatestMinecraftVersion() {
+        return SemVersion.from(getLatestCodec().getMinecraftVersion());
+    }
+
+    /**
+     * Get the lowest minecraft version.
+     *
+     * @return the lowest minecraft version.
+     */
+    public static SemVersion getLowestMinecraftVersion() {
+        return SemVersion.from(getLowestCodec().getMinecraftVersion());
     }
 }

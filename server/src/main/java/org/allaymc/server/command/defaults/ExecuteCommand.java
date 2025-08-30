@@ -116,11 +116,16 @@ public class ExecuteCommand extends VanillaCommand {
 
                     var dimInfo = DimensionInfo.fromName(dimName);
                     if (dimInfo == null) {
-                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWNDIM, dimName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_UNKNOWN, dimName);
                         return context.fail();
                     }
 
                     var dim = world.getDimension(dimInfo.dimensionId());
+                    if (dim == null) {
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_DISABLED, dimName);
+                        return context.fail();
+                    }
+
                     var sender = context.getSender();
                     var proxySender = new ProxyCommandSender(sender);
 

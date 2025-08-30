@@ -13,7 +13,7 @@
   "allay:command.status.description": "Get the status of the server",
   "allay:command.tps.description": "Show TPS or MSPT of the current world",
   "allay:command.version.description": "Query server version information",
-  "allay:command.version.output": "This server is running §b%1§r §a%2§r with §ballay-api§r §a%3",
+  "allay:command.version.output": "This server is running §b%1§r §a%2§r with §ballay-api§r §a%3§r. Supports version §a%4§r (protocol version §a%5§r)",
   "allay:command.world.create.dropdown.generatorpreset.nether": "Nether Generator Preset",
   "allay:command.world.create.dropdown.generatorpreset.overworld": "Overworld Generator Preset",
   "allay:command.world.create.dropdown.generatorpreset.theend": "The End Generator Preset",
