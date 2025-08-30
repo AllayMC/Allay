@@ -36,10 +36,6 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (placementInfo.blockFace() != BlockFace.UP) {
-            return false;
-        }
-
         var playerFace = placementInfo.player().getHorizontalFace();
         var nextPos = playerFace.offsetPos(placeBlockPos);
         var nextBlockState = dimension.getBlockState(nextPos);
