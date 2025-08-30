@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added PlayerBookEditEvent.
 - (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
 - (API) Introduced methods `Entity.getOffsetAABBForCollisionCheck()` and `Entity.checkBlockCollision()`.
+- (API) Implemented bed.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 

@@ -1,5 +1,6 @@
 package org.allaymc.server.block.component;
 
+import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBedBaseComponent;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
@@ -35,23 +36,20 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-
-        if(placementInfo.blockFace() != BlockFace.UP) {
+        if (placementInfo.blockFace() != BlockFace.UP) {
             return false;
         }
 
         var playerFace = placementInfo.player().getHorizontalFace();
-
         var nextPos = playerFace.offsetPos(placeBlockPos);
-
         var nextBlockState = dimension.getBlockState(nextPos);
         if (!nextBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
             return false;
         }
 
-        blockState = blockState.setPropertyValue(BlockPropertyTypes.DIRECTION_4, playerFace.getHorizontalIndex())
+        blockState = blockState
+                .setPropertyValue(BlockPropertyTypes.DIRECTION_4, playerFace.getHorizontalIndex())
                 .setPropertyValue(BlockPropertyTypes.OCCUPIED_BIT, false);
-
 
         return dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
@@ -68,8 +66,8 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
-        if (posEqVec3ic(neighbor.getPos(),posOfOtherPart(block))
-                && neighbor.getBlockType() != getBlockType()) {
+        if (posEqVec3ic(neighbor.getPos(), posOfOtherPart(block))
+            && neighbor.getBlockType() != getBlockType()) {
             block.breakBlock();
         }
     }
@@ -88,11 +86,10 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
         return block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? Utils.EMPTY_ITEM_STACK_SET : createBedDrop(block);
     }
 
-
     private Set<ItemStack> createBedDrop(Block blockState) {
         var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.getPos());
         var drop = blockState.toItemStack();
-        drop.setMeta(blockEntity.getColor());
+        drop.setMeta(blockEntity.getColor().ordinal());
         return Set.of(drop);
     }
 
@@ -103,8 +100,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
 
     public static Vector3ic posOfOtherPart(Block block) {
         var head = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT);
-        var face = BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4));
-        assert face != null;
+        var face = Preconditions.checkNotNull(BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4)));
         return (head ? face.opposite() : face).offsetPos(block.getPos());
     }
 

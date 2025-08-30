@@ -1,12 +1,16 @@
 package org.allaymc.server.blockentity.component;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.blockentity.component.BlockEntityBedBaseComponent;
-import org.allaymc.api.blockentity.data.BedColor;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.utils.DyeColor;
 import org.allaymc.server.block.component.BlockBedBaseComponentImpl;
+import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
+
+import java.util.Optional;
 
 /**
  * @author harry-xi
@@ -15,21 +19,29 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
 
     private static final String TAG_COLOR = "color";
 
-    protected byte color;
+    @Getter
+    protected DyeColor color;
 
-    public BedColor getColor() {
-        return BedColor.fromByte(color);
+    @Override
+    public void onPlace(CBlockOnPlaceEvent event) {
+        super.onPlace(event);
+        var placementInfo = event.getPlacementInfo();
+        if (placementInfo == null) {
+            this.color = DyeColor.RED;
+        } else {
+            this.color = Preconditions.checkNotNull(DyeColor.from(placementInfo.player().getItemInHand().getMeta()));
+        }
     }
 
-    public void setColor(BedColor color) {
-        this.color = color.toByte();
-        var pair = BlockBedBaseComponentImpl.getPairBlock(new Block(this.getDimension(),this.getPosition())).getBlockEntity();
-        if(pair instanceof BlockEntityBedBaseComponent bed){
-            if(bed.getColor() != color){
+    public void setColor(DyeColor color) {
+        this.color = color;
+        var pair = BlockBedBaseComponentImpl.getPairBlock(new Block(this.getDimension(), this.getPosition())).getBlockEntity();
+        if (pair instanceof BlockEntityBedBaseComponent bed) {
+            if (bed.getColor() != color) {
                 bed.setColor(color);
             }
         }
-        sendBlockEntityDataPacketToViewers(); // I hope it can let player see the right color, but it seems not working.
+        sendBlockEntityDataPacketToViewers();
     }
 
     public BlockEntityBedBaseComponentImpl(BlockEntityInitInfo initInfo) {
@@ -39,13 +51,14 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForByte(TAG_COLOR, b -> this.color = b);
+        nbt.listenForByte(TAG_COLOR, b -> this.color = Optional.ofNullable(DyeColor.from(b)).orElse(DyeColor.RED));
     }
 
     @Override
     public NbtMap saveNBT() {
-        var builder=  super.saveNBT().toBuilder();
-        builder.putByte(TAG_COLOR, color);
-        return builder.build();
+        return super.saveNBT()
+                .toBuilder()
+                .putByte(TAG_COLOR, (byte) this.color.ordinal())
+                .build();
     }
 }
