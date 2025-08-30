@@ -27,9 +27,11 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     yield PacketSignal.HANDLED;
                 }
 
-                new PlayerRespawnEvent(player).call();
+                var event = new PlayerRespawnEvent(player);
+                event.setRespawnLocation(player.validateAndGetSpawnPoint());
+                event.call();
 
-                var spawnPoint = player.validateAndGetSpawnPoint();
+                var spawnPoint = event.getRespawnLocation();
                 var spawnDimension = spawnPoint.dimension();
                 var oldDimension = player.getDimension();
                 if (oldDimension != spawnDimension) {
