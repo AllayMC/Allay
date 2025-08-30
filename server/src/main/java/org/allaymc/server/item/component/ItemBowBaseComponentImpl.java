@@ -60,12 +60,16 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         var dimension = player.getDimension();
         var location = player.getLocation();
         var shootPos = new Vector3d(location.x(), location.y() + player.getEyeHeight() - 0.1, location.z());
+        var playerMotion = new Vector3d(player.getMotion());
+        if (player.isOnGround()) {
+            playerMotion.setComponent(1, 0);
+        }
         var arrow = EntityTypes.ARROW.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(shootPos)
                         .rot(-location.yaw(), -location.pitch())
-                        .motion(MathUtils.getDirectionVector(location).mul(speed))
+                        .motion(MathUtils.getDirectionVector(location).mul(speed).add(playerMotion))
                         .build()
         );
         arrow.setShooter(player);
