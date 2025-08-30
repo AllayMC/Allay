@@ -39,16 +39,16 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Override
     public Vector3d updateMotion(boolean hasLiquidMotion) {
-        if (!arrowBaseComponent.checkBlockCollision()) {
-            return new Vector3d(
-                    this.motion.x * (1 - this.getDragFactorInAir()),
-                    (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
-                    this.motion.z * (1 - this.getDragFactorInAir())
-            );
-        } else {
-            // Set motion to zero if collided with blocks
+        if (hitBlock && arrowBaseComponent.checkBlockCollision()) {
+            // Set motion to zero if collided with blocks after hit block
             return new Vector3d(0, 0, 0);
         }
+
+        return new Vector3d(
+                this.motion.x * (1 - this.getDragFactorInAir()),
+                (this.motion.y - this.getGravity()) * (1 - this.getDragFactorInAir()),
+                this.motion.z * (1 - this.getDragFactorInAir())
+        );
     }
 
     @Override
