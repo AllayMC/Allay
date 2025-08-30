@@ -15,7 +15,7 @@ import java.util.Collection;
 public class EnchantCommand extends VanillaCommand {
 
     public EnchantCommand() {
-        super("enchant", TrKeys.M_COMMANDS_ENCHANT_DESCRIPTION);
+        super("enchant", TrKeys.MC_COMMANDS_ENCHANT_DESCRIPTION);
     }
 
     @Override
@@ -33,12 +33,12 @@ public class EnchantCommand extends VanillaCommand {
 
                     if (!ignoreLimit) {
                         if (level > enchantmentType.getMaxLevel()) {
-                            ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOBIG, level, enchantmentType.getMaxLevel());
-                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
+                            ctx.addOutput(TrKeys.MC_COMMANDS_GENERIC_NUM_TOOBIG, level, enchantmentType.getMaxLevel());
+                            ctx.addOutput(TrKeys.MC_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
                             return ctx.fail();
                         } else if (level < 1) {
-                            ctx.addOutput(TrKeys.M_COMMANDS_GENERIC_NUM_TOOSMALL, level, 1);
-                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
+                            ctx.addOutput(TrKeys.MC_COMMANDS_GENERIC_NUM_TOOSMALL, level, 1);
+                            ctx.addOutput(TrKeys.MC_COMMANDS_ENCHANT_INVALIDLEVEL, enchantmentType.getIdentifier(), level);
                             return ctx.fail();
                         }
                     }
@@ -46,21 +46,21 @@ public class EnchantCommand extends VanillaCommand {
                     for (var player : players) {
                         var item = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
                         if (item == ItemAirStack.AIR_STACK) {
-                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_NOITEM, player.getDisplayName());
+                            ctx.addOutput(TrKeys.MC_COMMANDS_ENCHANT_NOITEM, player.getDisplayName());
                             return ctx.fail();
                         }
 
                         var incompatibleEnchantmentType = item.getIncompatibleEnchantmentTypes(enchantmentType);
                         if (!incompatibleEnchantmentType.isEmpty()) {
                             incompatibleEnchantmentType.forEach(incompatibleEnchantment -> {
-                                ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_CANTCOMBINE, incompatibleEnchantment.getIdentifier(), enchantmentType.getIdentifier());
+                                ctx.addOutput(TrKeys.MC_COMMANDS_ENCHANT_CANTCOMBINE, incompatibleEnchantment.getIdentifier(), enchantmentType.getIdentifier());
                             });
                             return ctx.fail();
                         }
 
                         item.addEnchantment(enchantmentType, level);
                         player.notifyItemInHandChange();
-                        ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_SUCCESS, enchantmentType.getIdentifier());
+                        ctx.addOutput(TrKeys.MC_COMMANDS_ENCHANT_SUCCESS, enchantmentType.getIdentifier());
                     }
 
                     return ctx.success();

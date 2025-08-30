@@ -20,7 +20,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
     public void handle(EntityPlayer player, SetLocalPlayerAsInitializedPacket packet) {
         var event = new PlayerJoinEvent(player);
         if (!event.call()) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
             return;
         }
 

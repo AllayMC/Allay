@@ -17,11 +17,11 @@ import org.allaymc.server.utils.Utils;
 public class ItemTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_ITEMTYPE_LOADING));
         InternalItemTypeData.init();
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
         ItemTypeDefaultInitializer.init();
-        log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADED, ItemId.values().length));
+        log.info(I18n.get().tr(TrKeys.ALLAY_ITEMTYPE_LOADED, ItemId.values().length));
     }
 }

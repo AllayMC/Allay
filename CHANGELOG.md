@@ -27,6 +27,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - (API) Renamed method `Entity.despawn()` to `Entity.remove()` as a clarification with other methods like `Entity.despawnFrom()` and `Entity.despawnFromAll()`.
+- (API) Renamed entries in class `TrKeys`. The old `M_XXX` is renamed to `MC_XXX` and `A_XXX` is renamed to `ALLAY_XXX`.
 
 ### Fixed
 

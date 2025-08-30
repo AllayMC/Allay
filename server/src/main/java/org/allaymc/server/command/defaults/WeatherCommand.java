@@ -10,7 +10,7 @@ import org.allaymc.api.world.Weather;
 public class WeatherCommand extends VanillaCommand {
 
     public WeatherCommand() {
-        super("weather", TrKeys.M_COMMANDS_WEATHER_DESCRIPTION);
+        super("weather", TrKeys.MC_COMMANDS_WEATHER_DESCRIPTION);
     }
 
     @Override
@@ -23,9 +23,9 @@ public class WeatherCommand extends VanillaCommand {
                 context.getSender().getCommandExecuteLocation().dimension().getWorld().addWeather(weather);
             }
             context.addOutput(switch (weather) {
-                case CLEAR -> TrKeys.M_COMMANDS_WEATHER_CLEAR;
-                case RAIN -> TrKeys.M_COMMANDS_WEATHER_RAIN;
-                case THUNDER -> TrKeys.M_COMMANDS_WEATHER_THUNDER;
+                case CLEAR -> TrKeys.MC_COMMANDS_WEATHER_CLEAR;
+                case RAIN -> TrKeys.MC_COMMANDS_WEATHER_RAIN;
+                case THUNDER -> TrKeys.MC_COMMANDS_WEATHER_THUNDER;
             });
             return context.success();
         }).root().key("query").exec(context -> {
@@ -37,7 +37,7 @@ public class WeatherCommand extends VanillaCommand {
                 currentWeather = Weather.RAIN;
             }
 
-            context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, currentWeather.name().toLowerCase());
+            context.getSender().sendTr(TrKeys.MC_COMMANDS_WEATHER_QUERY, currentWeather.name().toLowerCase());
             return context.success();
         });
     }

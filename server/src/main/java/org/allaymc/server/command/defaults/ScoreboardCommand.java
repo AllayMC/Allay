@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class ScoreboardCommand extends VanillaCommand {
 
     public ScoreboardCommand() {
-        super("scoreboard", TrKeys.M_COMMANDS_SCOREBOARD_DESCRIPTION);
+        super("scoreboard", TrKeys.MC_COMMANDS_SCOREBOARD_DESCRIPTION);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ScoreboardCommand extends VanillaCommand {
                     var service = Server.getInstance().getScoreboardService();
                     String objectiveName = context.getResult(2);
                     if (service.contain(objectiveName)) {
-                        context.addError("%" + TrKeys.M_COMMANDS_SCOREBOARD_OBJECTIVES_ADD_ALREADYEXISTS, objectiveName);
+                        context.addError("%" + TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_ADD_ALREADYEXISTS, objectiveName);
                         return context.fail();
                     }
 
@@ -50,7 +50,7 @@ public class ScoreboardCommand extends VanillaCommand {
                     String displayName = context.getResult(4);
                     if (displayName.isEmpty()) displayName = objectiveName;
                     service.add(new Scoreboard(objectiveName, displayName, criteriaName, SortOrder.ASCENDING));
-                    context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_OBJECTIVES_ADD_SUCCESS, objectiveName);
+                    context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_ADD_SUCCESS, objectiveName);
                     return context.success();
                 })
                 .up(4)
@@ -65,12 +65,12 @@ public class ScoreboardCommand extends VanillaCommand {
                     String objectiveName = context.getResult(3);
                     if (objectiveName.isEmpty()) {
                         service.clearDisplaySlot(slot);
-                        context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_OBJECTIVES_SETDISPLAY_SUCCESSCLEARED, slotName);
+                        context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_SETDISPLAY_SUCCESSCLEARED, slotName);
                         return context.success();
                     }
 
                     if (!service.contain(objectiveName)) {
-                        context.addError("%" + TrKeys.M_COMMANDS_SCOREBOARD_OBJECTIVENOTFOUND, objectiveName);
+                        context.addError("%" + TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVENOTFOUND, objectiveName);
                         return context.fail();
                     }
 
@@ -79,7 +79,7 @@ public class ScoreboardCommand extends VanillaCommand {
                     var order = orderName.equals("ascending") ? SortOrder.ASCENDING : SortOrder.DESCENDING;
                     scoreboard.setSortOrder(order);
                     service.setDisplaySlot(slot, scoreboard);
-                    context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_OBJECTIVES_SETDISPLAY_SUCCESSSET, slotName, objectiveName);
+                    context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_SETDISPLAY_SUCCESSSET, slotName, objectiveName);
                     return context.success();
                 })
                 .root()
@@ -97,7 +97,7 @@ public class ScoreboardCommand extends VanillaCommand {
                     String objectiveName = context.getResult(3);
                     int score = context.getResult(4);
                     if (!service.contain(objectiveName)) {
-                        context.addError("%" + TrKeys.M_COMMANDS_SCOREBOARD_OBJECTIVENOTFOUND, objectiveName);
+                        context.addError("%" + TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVENOTFOUND, objectiveName);
                         return context.fail();
                     }
 
@@ -111,7 +111,7 @@ public class ScoreboardCommand extends VanillaCommand {
                     }
 
                     if (scorers.isEmpty()) {
-                        context.addError("%" + TrKeys.M_COMMANDS_SCOREBOARD_PLAYERS_LIST_EMPTY);
+                        context.addError("%" + TrKeys.MC_COMMANDS_SCOREBOARD_PLAYERS_LIST_EMPTY);
                         return context.fail();
                     }
 
@@ -127,9 +127,9 @@ public class ScoreboardCommand extends VanillaCommand {
 
                             if (scorerCount == 1) {
                                 var scorer = scorers.iterator().next();
-                                context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_PLAYERS_ADD_SUCCESS, String.valueOf(score), objectiveName, scorer.getName(), String.valueOf(scoreboard.getLines().get(scorer).getScore()));
+                                context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_PLAYERS_ADD_SUCCESS, String.valueOf(score), objectiveName, scorer.getName(), String.valueOf(scoreboard.getLines().get(scorer).getScore()));
                             } else
-                                context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_PLAYERS_ADD_MULTIPLE_SUCCESS, String.valueOf(score), objectiveName, String.valueOf(scorerCount));
+                                context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_PLAYERS_ADD_MULTIPLE_SUCCESS, String.valueOf(score), objectiveName, String.valueOf(scorerCount));
 
                             return context.success();
                         }
@@ -144,9 +144,9 @@ public class ScoreboardCommand extends VanillaCommand {
 
                             if (scorerCount == 1) {
                                 var scorer = scorers.iterator().next();
-                                context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_PLAYERS_REMOVE_SUCCESS, String.valueOf(score), objectiveName, scorer.getName(), String.valueOf(scoreboard.getLines().get(scorer).getScore()));
+                                context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_PLAYERS_REMOVE_SUCCESS, String.valueOf(score), objectiveName, scorer.getName(), String.valueOf(scoreboard.getLines().get(scorer).getScore()));
                             } else
-                                context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_PLAYERS_REMOVE_MULTIPLE_SUCCESS, String.valueOf(score), objectiveName, String.valueOf(scorerCount));
+                                context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_PLAYERS_REMOVE_MULTIPLE_SUCCESS, String.valueOf(score), objectiveName, String.valueOf(scorerCount));
 
                             return context.success();
                         }
@@ -160,9 +160,9 @@ public class ScoreboardCommand extends VanillaCommand {
 
                             if (scorerCount == 1) {
                                 var scorer = scorers.iterator().next();
-                                context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_PLAYERS_SET_SUCCESS, objectiveName, scorer.getName(), String.valueOf(score));
+                                context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_PLAYERS_SET_SUCCESS, objectiveName, scorer.getName(), String.valueOf(score));
                             } else
-                                context.addOutput(TrKeys.M_COMMANDS_SCOREBOARD_PLAYERS_SET_MULTIPLE_SUCCESS, objectiveName, String.valueOf(scorerCount), String.valueOf(score));
+                                context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_PLAYERS_SET_MULTIPLE_SUCCESS, objectiveName, String.valueOf(scorerCount), String.valueOf(score));
 
                             return context.success();
                         }

@@ -9,7 +9,7 @@ import org.allaymc.api.server.Server;
  */
 public class WhitelistCommand extends VanillaCommand {
     public WhitelistCommand() {
-        super("whitelist", TrKeys.M_COMMANDS_ALLOWLIST_DESCRIPTION);
+        super("whitelist", TrKeys.MC_COMMANDS_ALLOWLIST_DESCRIPTION);
         aliases.add("allowlist");
     }
 
@@ -24,19 +24,19 @@ public class WhitelistCommand extends VanillaCommand {
                     switch (operation) {
                         case "add" -> {
                             if (Server.getInstance().getPlayerService().addToWhitelist(nameOrUUID)) {
-                                context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_ADD_SUCCESS, nameOrUUID);
+                                context.addOutput(TrKeys.MC_COMMANDS_ALLOWLIST_ADD_SUCCESS, nameOrUUID);
                                 return context.success();
                             } else {
-                                context.addError("%" + TrKeys.M_COMMANDS_ALLOWLIST_ADD_FAILED, nameOrUUID);
+                                context.addError("%" + TrKeys.MC_COMMANDS_ALLOWLIST_ADD_FAILED, nameOrUUID);
                                 return context.fail();
                             }
                         }
                         case "remove" -> {
                             if (Server.getInstance().getPlayerService().removeFromWhitelist(nameOrUUID)) {
-                                context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_REMOVE_SUCCESS, nameOrUUID);
+                                context.addOutput(TrKeys.MC_COMMANDS_ALLOWLIST_REMOVE_SUCCESS, nameOrUUID);
                                 return context.success();
                             } else {
-                                context.addError("%" + TrKeys.M_COMMANDS_ALLOWLIST_REMOVE_FAILED, nameOrUUID);
+                                context.addError("%" + TrKeys.MC_COMMANDS_ALLOWLIST_REMOVE_FAILED, nameOrUUID);
                                 return context.fail();
                             }
                         }
@@ -54,7 +54,7 @@ public class WhitelistCommand extends VanillaCommand {
                             .filter(player -> whitelist.contains(player.getLoginData().getUuid().toString()) ||
                                               whitelist.contains(player.getOriginName()))
                             .count();
-                    context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_LIST, whitelist.size(), onlineCount);
+                    context.addOutput(TrKeys.MC_COMMANDS_ALLOWLIST_LIST, whitelist.size(), onlineCount);
                     context.addOutput(String.join(", ", whitelist));
                     return context.success();
                 })
@@ -62,14 +62,14 @@ public class WhitelistCommand extends VanillaCommand {
                 .key("enable")
                 .exec(context -> {
                     Server.getInstance().getPlayerService().setWhitelistStatus(true);
-                    context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_ENABLED);
+                    context.addOutput(TrKeys.MC_COMMANDS_ALLOWLIST_ENABLED);
                     return context.success();
                 })
                 .root()
                 .key("disable")
                 .exec(context -> {
                     Server.getInstance().getPlayerService().setWhitelistStatus(false);
-                    context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_DISABLED);
+                    context.addOutput(TrKeys.MC_COMMANDS_ALLOWLIST_DISABLED);
                     return context.success();
                 });
     }

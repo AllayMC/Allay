@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 public class GameTestCommand extends VanillaCommand {
 
     public GameTestCommand() {
-        super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
+        super("gametest", TrKeys.MC_GAMETEST_DESCRIPTION);
         aliases.add("gt");
         flags.add(CommandData.Flag.TEST_USAGE);
     }

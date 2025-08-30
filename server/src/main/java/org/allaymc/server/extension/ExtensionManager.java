@@ -45,7 +45,7 @@ public final class ExtensionManager {
     }
 
     private void loadExtension(Path extensionPath, String[] args) {
-        log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath));
+        log.info(I18n.get().tr(TrKeys.ALLAY_EXTENSION_LOADING, extensionPath));
         Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
 
         // Try to load the main class of the extension if it exists
@@ -56,7 +56,7 @@ public final class ExtensionManager {
         }
 
         if (!Extension.class.isAssignableFrom(mainClass)) {
-            throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_MAINCLASS_TYPEINVALID, mainClass.getName()));
+            throw new ExtensionException(I18n.get().tr(TrKeys.ALLAY_EXTENSION_MAINCLASS_TYPEINVALID, mainClass.getName()));
         }
 
         Extension extensionInstance;
@@ -64,7 +64,7 @@ public final class ExtensionManager {
             extensionInstance = (Extension) mainClass.getConstructor().newInstance();
             extensionInstance.main(args);
         } catch (Exception e) {
-            throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_CONSTRUCT_INSTANCE_ERROR, extensionPath, e));
+            throw new ExtensionException(I18n.get().tr(TrKeys.ALLAY_EXTENSION_CONSTRUCT_INSTANCE_ERROR, extensionPath, e));
         }
 
         extensionInstances.add(extensionInstance);
@@ -84,7 +84,7 @@ public final class ExtensionManager {
             }
             return Allay.EXTRA_RESOURCE_CLASS_LOADER.loadClass(entrance);
         } catch (ClassNotFoundException e1) {
-            throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_ENTRANCE_MISSING, extensionPath));
+            throw new ExtensionException(I18n.get().tr(TrKeys.ALLAY_EXTENSION_ENTRANCE_MISSING, extensionPath));
         } catch (MalformedURLException e2) {
             throw new ExtensionException("Invalid URL: " + extensionPath.toUri());
         }

@@ -32,7 +32,7 @@ public class EntityTypeNode extends EnumNode {
         }
         var itemType = Registries.ENTITIES.get(new Identifier(arg));
         if (itemType == null) {
-            context.addError("%" + TrKeys.M_COMMANDS_GENERIC_ENTITY_NOTFOUND, arg);
+            context.addError("%" + TrKeys.MC_COMMANDS_GENERIC_ENTITY_NOTFOUND, arg);
             return false;
         }
         context.putResult(itemType);

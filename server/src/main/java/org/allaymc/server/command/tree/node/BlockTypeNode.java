@@ -28,7 +28,7 @@ public class BlockTypeNode extends BaseNode {
         }
         var itemType = Registries.BLOCKS.get(new Identifier(arg));
         if (itemType == null) {
-            context.addError("%" + TrKeys.M_COMMANDS_GIVE_BLOCK_NOTFOUND, arg);
+            context.addError("%" + TrKeys.MC_COMMANDS_GIVE_BLOCK_NOTFOUND, arg);
             return false;
         }
         context.putResult(itemType);

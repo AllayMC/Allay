@@ -55,7 +55,7 @@ public class JarPluginLoader implements PluginLoader {
         // Load the main class
         var mainClass = findMainClass();
         if (!Plugin.class.isAssignableFrom(mainClass)) {
-            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_JAR_ENTRANCE_TYPEINVALID, descriptor.getName()));
+            throw new PluginException(I18n.get().tr(TrKeys.ALLAY_PLUGIN_JAR_ENTRANCE_TYPEINVALID, descriptor.getName()));
         }
 
         // Try to construct plugin instance
@@ -63,7 +63,7 @@ public class JarPluginLoader implements PluginLoader {
         try {
             pluginInstance = (Plugin) mainClass.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName(), e));
+            throw new PluginException(I18n.get().tr(TrKeys.ALLAY_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName(), e));
         }
 
         // Load plugin's lang files
@@ -82,7 +82,7 @@ public class JarPluginLoader implements PluginLoader {
             var classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
             return classLoader.loadClass(descriptor.getEntrance());
         } catch (ClassNotFoundException e1) {
-            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_ENTRANCE_MISSING, descriptor.getName()));
+            throw new PluginException(I18n.get().tr(TrKeys.ALLAY_PLUGIN_ENTRANCE_MISSING, descriptor.getName()));
         } catch (MalformedURLException e2) {
             throw new PluginException("Invalid URL: " + pluginPath.toUri());
         }

@@ -28,7 +28,7 @@ import java.util.*;
 public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<NetworkRecipe>> {
     @Override
     public Int2ObjectMap<NetworkRecipe> load(Void $) {
-        log.info(I18n.get().tr(TrKeys.A_RECIPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_LOADING));
         var recipes = new Int2ObjectOpenHashMap<NetworkRecipe>();
         var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
 
@@ -58,7 +58,7 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
             recipes.put(recipe.getNetworkId(), recipe);
         }
 
-        log.info(I18n.get().tr(TrKeys.A_RECIPE_LOADED, recipes.size()));
+        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_LOADED, recipes.size()));
         return recipes;
     }
 

@@ -13,10 +13,14 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.eventbus.event.block.BlockExplodeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3ic;
 
@@ -58,6 +62,23 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
         );
     }
 
+    @Override
+    public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
+        if (dimension.getDimensionInfo() != DimensionInfo.OVERWORLD &&
+            dimension.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.RESPAWN_BLOCKS_EXPLODE)) {
+            var explosion = new Explosion(5, true);
+            var event = new BlockExplodeEvent(interactInfo.getClickedBlock(), explosion);
+            if (!event.call()) {
+                return false;
+            }
+
+            explosion.explode(dimension, interactInfo.clickedBlockPos());
+            return true;
+        }
+
+        // TODO: implement sleep logic
+        return false;
+    }
 
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
@@ -94,7 +115,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
         return new Block(block.getDimension(), otherPos);
     }
 
-    public static Vector3ic posOfOtherPart(Block block) {
+    private static Vector3ic posOfOtherPart(Block block) {
         var head = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT);
         var face = Preconditions.checkNotNull(BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4)));
         return (head ? face.opposite() : face).offsetPos(block.getPos());

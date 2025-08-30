@@ -11,7 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
  */
 public class MeCommand extends VanillaCommand {
     public MeCommand() {
-        super("me", TrKeys.M_COMMANDS_ME_DESCRIPTION);
+        super("me", TrKeys.MC_COMMANDS_ME_DESCRIPTION);
         flags.add(CommandData.Flag.MESSAGE_TYPE);
         getPermissions().forEach(PermissionGroups.MEMBER::addPermission);
     }
@@ -20,7 +20,7 @@ public class MeCommand extends VanillaCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().msg("message").optional().exec(context -> {
             Server.getInstance().broadcastTr(
-                    TrKeys.M_CHAT_TYPE_EMOTE,
+                    TrKeys.MC_CHAT_TYPE_EMOTE,
                     context.getSender().getCommandSenderName(),
                     context.getResult(0)
             );

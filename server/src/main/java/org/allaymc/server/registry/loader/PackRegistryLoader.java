@@ -48,7 +48,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
     @SneakyThrows
     @Override
     public Map<UUID, Pack> load(Void unused) {
-        log.info(I18n.get().tr(TrKeys.A_PACK_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_PACK_LOADING));
         var packs = new HashMap<UUID, Pack>();
 
         Preconditions.checkNotNull(PACKS_PATHS, "paths");
@@ -83,7 +83,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
                 continue;
             }
 
-            log.info(I18n.get().tr(TrKeys.A_PACK_LOADING_ENTRY, manifest.getHeader().getName()));
+            log.info(I18n.get().tr(TrKeys.ALLAY_PACK_LOADING_ENTRY, manifest.getHeader().getName()));
             loader2manifest.put(loader, manifest);
         }
 
@@ -101,9 +101,9 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
             var pack = factory.create(loader, manifest);
             packs.put(uuid, pack);
 
-            log.info(I18n.get().tr(TrKeys.A_PACK_LOADED_ENTRY, pack.getName()));
+            log.info(I18n.get().tr(TrKeys.ALLAY_PACK_LOADED_ENTRY, pack.getName()));
         });
-        log.info(I18n.get().tr(TrKeys.A_PACK_LOADED, packs.size()));
+        log.info(I18n.get().tr(TrKeys.ALLAY_PACK_LOADED, packs.size()));
         return packs;
     }
 
@@ -124,7 +124,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
 
     @SneakyThrows
     private void encryptPacks() {
-        log.info(I18n.get().tr(TrKeys.A_PACK_AUTOENCRYPT_ENABLED));
+        log.info(I18n.get().tr(TrKeys.ALLAY_PACK_AUTOENCRYPT_ENABLED));
         // Only encrypt packs in the normal packs path
         try (var stream = Files.newDirectoryStream(NORMAL_PACKS_PATH)) {
             for (var zipPack : stream) {
@@ -133,7 +133,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
                 var keyPath = NORMAL_PACKS_PATH.resolve(zipPack.getFileName().toString() + ".key");
                 if (Files.exists(keyPath)) continue;
 
-                log.info(I18n.get().tr(TrKeys.A_PACK_ENCRYPTING, zipPack.getFileName()));
+                log.info(I18n.get().tr(TrKeys.ALLAY_PACK_ENCRYPTING, zipPack.getFileName()));
                 var backupPath = NORMAL_PACKS_PATH.resolve(zipPack.getFileName().toString() + ".bak");
                 Files.copy(zipPack, backupPath, StandardCopyOption.REPLACE_EXISTING);
 
@@ -149,7 +149,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
                 }
 
                 Files.writeString(keyPath, key);
-                log.info(I18n.get().tr(TrKeys.A_PACK_ENCRYPTED, zipPack.getFileName(), key));
+                log.info(I18n.get().tr(TrKeys.ALLAY_PACK_ENCRYPTED, zipPack.getFileName(), key));
             }
         }
     }

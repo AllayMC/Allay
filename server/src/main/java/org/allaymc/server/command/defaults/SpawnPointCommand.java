@@ -17,7 +17,7 @@ import java.util.List;
 public class SpawnPointCommand extends VanillaCommand {
 
     public SpawnPointCommand() {
-        super("spawnpoint", TrKeys.M_COMMANDS_SPAWNPOINT_DESCRIPTION);
+        super("spawnpoint", TrKeys.MC_COMMANDS_SPAWNPOINT_DESCRIPTION);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SpawnPointCommand extends VanillaCommand {
                 .exec((context, sender) -> {
                     var senderLoc = sender.getLocation();
                     if (senderLoc.dimension().getDimensionInfo() != DimensionInfo.OVERWORLD) {
-                        context.addError("%" + TrKeys.M_COMMANDS_SPAWNPOINT_WRONGDIMENSION);
+                        context.addError("%" + TrKeys.MC_COMMANDS_SPAWNPOINT_WRONGDIMENSION);
                         return context.fail();
                     }
 
@@ -42,7 +42,7 @@ public class SpawnPointCommand extends VanillaCommand {
                                 senderLoc.dimension())
                         );
                         context.addOutput(
-                                TrKeys.M_COMMANDS_SPAWNPOINT_SUCCESS_SINGLE, player.getDisplayName(),
+                                TrKeys.MC_COMMANDS_SPAWNPOINT_SUCCESS_SINGLE, player.getDisplayName(),
                                 MathUtils.round(pos.x(), 2), MathUtils.round(pos.y(), 2), MathUtils.round(pos.z(), 2)
                         );
                     }

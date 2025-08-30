@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SetBlockCommand extends VanillaCommand {
     public SetBlockCommand() {
-        super("setblock", TrKeys.M_COMMANDS_SETBLOCK_DESCRIPTION);
+        super("setblock", TrKeys.MC_COMMANDS_SETBLOCK_DESCRIPTION);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class SetBlockCommand extends VanillaCommand {
 
                     var blockState = blockPropertyValues.isEmpty() ? blockType.getDefaultState() : blockType.ofState(blockPropertyValues);
                     if (blockState == null) {
-                        context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
+                        context.addError("%" + TrKeys.MC_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
                         return context.fail();
                     }
 
                     entity.getDimension().setBlockState(pos, blockState);
-                    context.addOutput(TrKeys.M_COMMANDS_SETBLOCK_SUCCESS);
+                    context.addOutput(TrKeys.MC_COMMANDS_SETBLOCK_SUCCESS);
                     return context.success();
                 }, SenderType.ENTITY);
     }

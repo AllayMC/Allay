@@ -10,7 +10,7 @@ import org.allaymc.api.server.Server;
 public class SetMaxPlayersCommand extends VanillaCommand {
 
     public SetMaxPlayersCommand() {
-        super("setmaxplayers", TrKeys.M_COMMANDS_SETMAXPLAYERS_DESCRIPTION);
+        super("setmaxplayers", TrKeys.MC_COMMANDS_SETMAXPLAYERS_DESCRIPTION);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class SetMaxPlayersCommand extends VanillaCommand {
 
             Server.SETTINGS.genericSettings().maxPlayerCount(maxPlayers);
             Server.getInstance().getPlayerService().setMaxPlayerCount(maxPlayers);
-            context.addOutput(TrKeys.M_COMMANDS_SETMAXPLAYERS_SUCCESS, maxPlayers);
+            context.addOutput(TrKeys.MC_COMMANDS_SETMAXPLAYERS_SUCCESS, maxPlayers);
             return context.success();
         });
     }

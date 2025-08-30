@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class XpCommand extends VanillaCommand {
 
     public XpCommand() {
-        super("xp", TrKeys.M_COMMANDS_XP_DESCRIPTION);
+        super("xp", TrKeys.MC_COMMANDS_XP_DESCRIPTION);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class XpCommand extends VanillaCommand {
                     .map(EntityPlayer::getOriginName)
                     .collect(Collectors.joining(", "));
             context.addOutput(
-                    isLevel ? TrKeys.M_COMMANDS_XP_SUCCESS_LEVELS : TrKeys.M_COMMANDS_XP_SUCCESS,
+                    isLevel ? TrKeys.MC_COMMANDS_XP_SUCCESS_LEVELS : TrKeys.MC_COMMANDS_XP_SUCCESS,
                     amount, playersName
             );
 

@@ -13,7 +13,7 @@ import org.allaymc.server.utils.GitProperties;
 public class VersionCommand extends VanillaCommand {
 
     public VersionCommand() {
-        super("version", TrKeys.A_COMMAND_VERSION_DESCRIPTION);
+        super("version", TrKeys.ALLAY_COMMAND_VERSION_DESCRIPTION);
         aliases.add("ver");
         aliases.add("about");
         getPermissions().forEach(PermissionGroups.MEMBER::addPermission);
@@ -23,13 +23,13 @@ public class VersionCommand extends VanillaCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
             context.addOutput(
-                    TrKeys.A_COMMAND_VERSION_OUTPUT,
+                    TrKeys.ALLAY_COMMAND_VERSION_OUTPUT,
                     AllayAPI.getInstance().getCoreName(),
                     GitProperties.getBuildVersion(),
                     GitProperties.getBuildApiVersion()
             );
             if (AllayAPI.getInstance().isDevBuild()) {
-                context.addOutput(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
+                context.addOutput(I18n.get().tr(TrKeys.ALLAY_SERVER_IS_DEV_VERSION));
             }
             return context.success();
         });

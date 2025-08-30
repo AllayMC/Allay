@@ -57,7 +57,7 @@ public interface PlayerService {
      * Disconnect all players with the default reason.
      */
     default void disconnectAllPlayers() {
-        disconnectAllPlayers(TrKeys.M_DISCONNECT_DISCONNECTED);
+        disconnectAllPlayers(TrKeys.MC_DISCONNECT_DISCONNECTED);
     }
 
     /**
@@ -180,7 +180,7 @@ public interface PlayerService {
         if (enable) {
             getPlayers().values().stream()
                     .filter(player -> !isWhitelisted(player))
-                    .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
+                    .forEach(player -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED));
         }
     }
 

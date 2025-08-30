@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class WorldCommand extends VanillaCommand {
     public WorldCommand() {
-        super("world", TrKeys.A_COMMAND_WORLD_DESCRIPTION);
+        super("world", TrKeys.ALLAY_COMMAND_WORLD_DESCRIPTION);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class WorldCommand extends VanillaCommand {
         tree.getRoot()
                 .key("list")
                 .exec(context -> {
-                    context.addOutput(TrKeys.A_COMMAND_WORLD_LIST);
+                    context.addOutput(TrKeys.ALLAY_COMMAND_WORLD_LIST);
                     for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
                         context.addOutput(
                                 "- " +
@@ -54,25 +54,28 @@ public class WorldCommand extends VanillaCommand {
                     String dimName = context.getResult(2);
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
 
                     var dimInfo = DimensionInfo.fromName(dimName);
                     if (dimInfo == null) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWNDIM, dimName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWNDIM, dimName);
                         return context.fail();
                     }
 
                     var dim = world.getDimension(dimInfo.dimensionId());
+                    if (dim == null) {
+
+                    }
                     if (dim.getDimensionInfo() == DimensionInfo.OVERWORLD) {
                         entity.teleport(world.getSpawnPoint());
                     } else {
                         // TODO: Find a safe location in nether and the_end
                         entity.teleport(new Location3d(0, 64, 0, dim));
                     }
-                    
-                    context.addOutput(TrKeys.A_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
+
+                    context.addOutput(TrKeys.ALLAY_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
                     return context.success();
                 }, SenderType.ENTITY)
                 .root()
@@ -82,11 +85,11 @@ public class WorldCommand extends VanillaCommand {
                     String worldName = context.getResult(1);
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
                     if (world == Server.getInstance().getWorldPool().getDefaultWorld()) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNLOAD_FAILED_DEFAULT);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNLOAD_FAILED_DEFAULT);
                         return context.fail();
                     }
 
@@ -105,18 +108,18 @@ public class WorldCommand extends VanillaCommand {
                     String worldName = context.getResult(1);
                     var worldSetting = Server.getInstance().getWorldPool().getWorldConfig().worlds().get(worldName);
                     if (worldSetting == null) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
                     if (Server.getInstance().getWorldPool().getWorld(worldName) != null) {
-                        context.addError("%" + TrKeys.A_WORLD_LOADED, worldName);
+                        context.addError("%" + TrKeys.ALLAY_WORLD_LOADED, worldName);
                         return context.fail();
                     }
 
                     worldSetting.enable(true);
-                    context.addOutput(TrKeys.A_WORLD_LOADING, worldName);
+                    context.addOutput(TrKeys.ALLAY_WORLD_LOADING, worldName);
                     Server.getInstance().getWorldPool().loadWorld(worldName, worldSetting);
-                    context.addOutput(TrKeys.A_WORLD_LOADED, worldName);
+                    context.addOutput(TrKeys.ALLAY_WORLD_LOADED, worldName);
                     return context.success();
                 })
                 .root()
@@ -126,20 +129,20 @@ public class WorldCommand extends VanillaCommand {
                     var storageTypes = new ArrayList<>(Registries.WORLD_STORAGE_FACTORIES.getContent().keySet());
                     var generatorTypes = new ArrayList<>(Registries.WORLD_GENERATOR_FACTORIES.getContent().keySet());
                     Forms.custom()
-                            .title(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TITLE))
-                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_INPUT_NAME))
-                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_STORAGETYPE), storageTypes)
+                            .title(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_TITLE))
+                            .input(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_INPUT_NAME))
+                            .dropdown(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_STORAGETYPE), storageTypes)
                             .divider()
-                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_OVERWORLD), generatorTypes)
-                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_OVERWORLD))
+                            .dropdown(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_OVERWORLD), generatorTypes)
+                            .input(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_OVERWORLD))
                             .divider()
-                            .toggle(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_NETHER))
-                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_NETHER), generatorTypes)
-                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_NETHER))
+                            .toggle(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_NETHER))
+                            .dropdown(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_NETHER), generatorTypes)
+                            .input(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_NETHER))
                             .divider()
-                            .toggle(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_THEEND))
-                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_THEEND), generatorTypes)
-                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_THEEND))
+                            .toggle(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_THEEND))
+                            .dropdown(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_THEEND), generatorTypes)
+                            .input(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_THEEND))
                             .onResponse(response -> {
                                 var name = response.get(0);
                                 var storageType = storageTypes.get(Integer.parseInt(response.get(1)));
@@ -172,9 +175,9 @@ public class WorldCommand extends VanillaCommand {
                                             .build());
                                 }
 
-                                player.sendTr(TrKeys.A_WORLD_LOADING, name);
+                                player.sendTr(TrKeys.ALLAY_WORLD_LOADING, name);
                                 Server.getInstance().getWorldPool().loadWorld(name, worldSettingBuilder.build());
-                                player.sendTr(TrKeys.A_WORLD_LOADED, name);
+                                player.sendTr(TrKeys.ALLAY_WORLD_LOADED, name);
                             })
                             .sendTo(player);
                     return context.success();

@@ -61,7 +61,7 @@ public final class AllayWorldPool implements WorldPool {
             return;
         }
 
-        log.info(I18n.get().tr(TrKeys.A_WORLD_LOADING, name));
+        log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADING, name));
         if (worlds.containsKey(name)) {
             throw new IllegalArgumentException("World " + name + " is already loaded");
         }
@@ -98,7 +98,7 @@ public final class AllayWorldPool implements WorldPool {
         }
 
         if (addWorld(world)) {
-            log.info(I18n.get().tr(TrKeys.A_WORLD_LOADED, name));
+            log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADED, name));
             if (setting.runtimeOnly() || worldConfig.worlds().containsKey(name)) {
                 // Runtime only world won't be saved to world-settings.yml
                 return;

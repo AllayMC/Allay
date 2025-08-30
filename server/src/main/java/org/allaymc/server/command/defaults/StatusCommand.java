@@ -68,7 +68,7 @@ public class StatusCommand extends VanillaCommand {
     }
 
     public StatusCommand() {
-        super("status", TrKeys.A_COMMAND_STATUS_DESCRIPTION);
+        super("status", TrKeys.ALLAY_COMMAND_STATUS_DESCRIPTION);
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class TeleportCommand extends VanillaCommand {
     public TeleportCommand() {
-        super("teleport", TrKeys.M_COMMANDS_TP_DESCRIPTION);
+        super("teleport", TrKeys.MC_COMMANDS_TP_DESCRIPTION);
         aliases.add("tp");
     }
 
@@ -27,7 +27,7 @@ public class TeleportCommand extends VanillaCommand {
                     var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCommandExecuteLocation().dimension());
 
                     sender.teleport(loc);
-                    context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
+                    context.addOutput(TrKeys.MC_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
 
                     return context.success();
                 }, SenderType.ENTITY)
@@ -48,7 +48,7 @@ public class TeleportCommand extends VanillaCommand {
                     var destEntity = destination.getFirst();
 
                     sender.teleport(destEntity.getLocation());
-                    context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, sender.getDisplayName(), destEntity.getDisplayName());
+                    context.addOutput(TrKeys.MC_COMMANDS_TP_SUCCESS, sender.getDisplayName(), destEntity.getDisplayName());
 
                     return context.success();
                 }, SenderType.ENTITY)
@@ -61,7 +61,7 @@ public class TeleportCommand extends VanillaCommand {
                     var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCommandExecuteLocation().dimension());
                     for (Entity victim : victims) {
                         victim.teleport(loc);
-                        context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, victim.getDisplayName(), pos.x, pos.y, pos.z);
+                        context.addOutput(TrKeys.MC_COMMANDS_TP_SUCCESS_COORDINATES, victim.getDisplayName(), pos.x, pos.y, pos.z);
                     }
 
                     return context.success();
@@ -84,7 +84,7 @@ public class TeleportCommand extends VanillaCommand {
                     var destEntity = destination.getFirst();
                     for (Entity victim : victims) {
                         victim.teleport(destEntity.getLocation());
-                        context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, victim.getDisplayName(), destEntity.getDisplayName());
+                        context.addOutput(TrKeys.MC_COMMANDS_TP_SUCCESS, victim.getDisplayName(), destEntity.getDisplayName());
                     }
 
                     return context.success();

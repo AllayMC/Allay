@@ -14,9 +14,9 @@ import org.allaymc.server.utils.Utils;
 public class BlockEntityTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_BLOCKENTITYTYPE_LOADING));
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockEntityTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
-        log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADED, initializers.size()));
+        log.info(I18n.get().tr(TrKeys.ALLAY_BLOCKENTITYTYPE_LOADED, initializers.size()));
     }
 }

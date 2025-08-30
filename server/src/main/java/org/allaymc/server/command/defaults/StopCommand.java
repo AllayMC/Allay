@@ -9,13 +9,13 @@ import org.allaymc.api.server.Server;
  */
 public class StopCommand extends VanillaCommand {
     public StopCommand() {
-        super("stop", TrKeys.M_COMMANDS_STOP_DESCRIPTION);
+        super("stop", TrKeys.MC_COMMANDS_STOP_DESCRIPTION);
     }
 
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            context.getSender().sendTr(TrKeys.M_COMMANDS_STOP_START);
+            context.getSender().sendTr(TrKeys.MC_COMMANDS_STOP_START);
             Server.getInstance().shutdown();
             return context.success();
         });

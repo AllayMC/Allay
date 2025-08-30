@@ -10,7 +10,7 @@ import org.allaymc.api.utils.TextFormat;
 public class TpsCommand extends VanillaCommand {
 
     public TpsCommand() {
-        super("tps", TrKeys.A_COMMAND_TPS_DESCRIPTION);
+        super("tps", TrKeys.ALLAY_COMMAND_TPS_DESCRIPTION);
     }
 
     @Override

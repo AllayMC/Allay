@@ -378,13 +378,13 @@ public class AllayWorld implements World {
     }
 
     protected void shutdownReally() {
-        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADING, name));
+        log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_UNLOADING, name));
         getPlayers().forEach(EntityPlayer::disconnect);
         scheduler.shutdown();
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
         worldStorage.shutdown();
-        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, name));
+        log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_UNLOADED, name));
         state.set(WorldState.STOPPED);
     }
 
@@ -458,5 +458,6 @@ public class AllayWorld implements World {
         });
     }
 
-    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}
+    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {
+    }
 }
