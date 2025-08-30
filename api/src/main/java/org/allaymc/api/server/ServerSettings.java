@@ -16,7 +16,7 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 import java.util.UUID;
 
 /**
- * ServerSettings is used to store the settings of the server.
+ * ServerSettings store the settings of the server.
  *
  * @author daoge_cmd
  */
@@ -96,12 +96,19 @@ public class ServerSettings extends OkaeriConfig {
     @Getter
     @Accessors(fluent = true)
     public static class NetworkSettings extends OkaeriConfig {
+        @Comment("The IPv4 address of this server")
         private String ip = "0.0.0.0";
 
-        private String ipv6 = "::";
-
+        @Comment("The IPv4 port of this server")
         private int port = 19132;
 
+        @Comment("Whether IPv6 is enabled")
+        private boolean enablev6 = true;
+
+        @Comment("The IPv6 address of this server. Works only when enablev6 is true")
+        private String ipv6 = "::";
+
+        @Comment("The IPv6 port of this server. Works only when enablev6 is true")
         private int portv6 = 19133;
 
         @CustomKey("xbox-auth")
@@ -111,12 +118,13 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("enable-network-encryption")
         private boolean enableNetworkEncryption = true;
 
-        @Comment("Possible values: ZLIB, SNAPPY")
+        @Comment("The compression algorithm used for network data streams. Possible values: ZLIB, SNAPPY")
+        @Comment("ZLIB has better compression ratios and SNAPPY has better compression performance")
         @CustomKey("compression-algorithm")
         private PacketCompressionAlgorithm compressionAlgorithm = PacketCompressionAlgorithm.ZLIB;
 
         @CustomKey("network-thread-number")
-        @Comment("0 == the server will automatically determine the number of netty threads")
+        @Comment("The number of network threads. If put zero here, the server will automatically determine the number of network threads")
         private int networkThreadNumber = 0;
 
         @CustomKey("max-synced-packets-handle-count-once")

@@ -28,11 +28,6 @@ public interface TrKeys {
     String ALLAY_BLOCKTYPE_LOADING = "allay:blocktype.loading";
 
     /**
-     * Class cache is loaded
-     */
-    String ALLAY_CACHE_LOAD = "allay:cache.load";
-
-    /**
      * Freed %1 MB of memory
      */
     String ALLAY_COMMAND_GC_COMPLETED = "allay:command.gc.completed";
@@ -446,6 +441,11 @@ public interface TrKeys {
      * Network interface started at %1:%2 and [%3]:%4 (%5 ms)
      */
     String ALLAY_NETWORK_INTERFACE_STARTED = "allay:network.interface.started";
+
+    /**
+     * Network interface started at %1:%2 (%3 ms)
+     */
+    String ALLAY_NETWORK_INTERFACE_STARTED_V4ONLY = "allay:network.interface.started.v4only";
 
     /**
      * Starting up network interface...

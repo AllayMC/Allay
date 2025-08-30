@@ -49,6 +49,7 @@ public class AllayNetworkInterface implements NetworkInterface {
     protected final Server server;
     protected final Set<Channel> channels;
     protected InetSocketAddress address;
+    // Can be null if ipv6 is not enabled
     protected InetSocketAddress addressv6;
     protected BedrockPong pong;
 
@@ -63,16 +64,20 @@ public class AllayNetworkInterface implements NetworkInterface {
         var networkSettings = settings.networkSettings();
 
         var networkThreadNumber = networkSettings.networkThreadNumber();
-        int port = networkSettings.port();
-        int portv6 = networkSettings.portv6();
-
         Preconditions.checkArgument(networkThreadNumber >= 0, "networkThreadNumber must be >= 0");
+
+        int port = networkSettings.port();
         Preconditions.checkArgument(port > 0 && port <= 65535, "The IPv4 port must be in the range 1–65535");
-        Preconditions.checkArgument(portv6 > 0 && portv6 <= 65535, "The IPv6 port must be in the range 1–65535");
+        this.address = new InetSocketAddress(networkSettings.ip(), port);
+
+        if (networkSettings.enablev6()) {
+            int portv6 = networkSettings.portv6();
+            Preconditions.checkArgument(portv6 > 0 && portv6 <= 65535, "The IPv6 port must be in the range 1–65535");
+            Preconditions.checkArgument(portv6 != port, "The IPv4 port cannot be the same as the IPv6 port");
+            this.addressv6 = new InetSocketAddress(networkSettings.ipv6(), portv6);
+        }
 
         this.pong = initPong(settings);
-        this.address = new InetSocketAddress(networkSettings.ip(), port);
-        this.addressv6 = new InetSocketAddress(networkSettings.ipv6(), portv6);
 
         var threadFactory = new ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").setDaemon(true).build();
 
@@ -122,7 +127,9 @@ public class AllayNetworkInterface implements NetworkInterface {
                 });
 
         this.channels.add(bootstrap.bind(address).syncUninterruptibly().channel());
-        this.channels.add(bootstrap.bind(addressv6).syncUninterruptibly().channel());
+        if (networkSettings.enablev6()) {
+            this.channels.add(bootstrap.bind(addressv6).syncUninterruptibly().channel());
+        }
     }
 
     public void shutdown() {
@@ -181,7 +188,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .version(ProtocolInfo.getLatestCodec().getMinecraftVersion())
                 .protocolVersion(ProtocolInfo.getLatestCodec().getProtocolVersion())
                 .ipv4Port(networkSettings.port())
-                .ipv6Port(networkSettings.portv6());
+                .ipv6Port(networkSettings.enablev6() ? networkSettings.portv6() : -1);
     }
 
     protected void updatePong() {

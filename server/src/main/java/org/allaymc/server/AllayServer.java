@@ -176,15 +176,25 @@ public final class AllayServer implements Server {
 
         sendTr(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
         ((AllayPlayerService) this.playerService).startNetworkInterface();
+
         this.startTime = System.currentTimeMillis();
-        sendTr(
-                TrKeys.ALLAY_NETWORK_INTERFACE_STARTED,
-                SETTINGS.networkSettings().ip(),
-                String.valueOf(SETTINGS.networkSettings().port()),
-                SETTINGS.networkSettings().ipv6(),
-                String.valueOf(SETTINGS.networkSettings().portv6()),
-                String.valueOf(startTime - initialTime)
-        );
+        if (SETTINGS.networkSettings().enablev6()) {
+            sendTr(
+                    TrKeys.ALLAY_NETWORK_INTERFACE_STARTED,
+                    SETTINGS.networkSettings().ip(),
+                    String.valueOf(SETTINGS.networkSettings().port()),
+                    SETTINGS.networkSettings().ipv6(),
+                    String.valueOf(SETTINGS.networkSettings().portv6()),
+                    String.valueOf(startTime - initialTime)
+            );
+        } else {
+            sendTr(
+                    TrKeys.ALLAY_NETWORK_INTERFACE_STARTED_V4ONLY,
+                    SETTINGS.networkSettings().ip(),
+                    String.valueOf(SETTINGS.networkSettings().port()),
+                    String.valueOf(startTime - initialTime)
+            );
+        }
 
         Metrics.AllayMetrics.startMetrics();
         if (SETTINGS.genericSettings().enableGui()) {
