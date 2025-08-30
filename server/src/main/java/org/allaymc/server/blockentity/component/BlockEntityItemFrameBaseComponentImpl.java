@@ -132,7 +132,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         } else {
             this.position.dimension().updateBlockProperty(BlockPropertyTypes.ITEM_FRAME_MAP_BIT, false, this.position);
         }
-        sendBlockEntityDataPacketToViewers();
+        sendBlockEntityToViewers();
     }
 
     @Override
@@ -144,6 +144,6 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     public void setItemRotation(@Range(from = 0, to = 7) int itemRotation) {
         Preconditions.checkArgument(itemRotation >= 0 && itemRotation <= 7, "Item rotation must be between 0 and 7");
         this.itemRotation = itemRotation;
-        sendBlockEntityDataPacketToViewers();
+        sendBlockEntityToViewers();
     }
 }

@@ -41,7 +41,7 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
                 bed.setColor(color);
             }
         }
-        sendBlockEntityDataPacketToViewers();
+        sendBlockEntityToViewers();
     }
 
     public BlockEntityBedBaseComponentImpl(BlockEntityInitInfo initInfo) {

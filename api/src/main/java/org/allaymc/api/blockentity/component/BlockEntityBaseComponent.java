@@ -92,22 +92,45 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     }
 
     /**
-     * Sends the BlockEntityDataPacket to the block entity's viewers.
+     * @see #sendBlockEntityToViewers(boolean)
      */
-    default void sendBlockEntityDataPacketToViewers() {
-        sendPacketToViewers(createBlockEntityDataPacket());
+    default void sendPacketToViewers(BedrockPacket packet) {
+        sendPacketToViewers(packet, true);
     }
 
     /**
      * Sends a packet to the block entity's viewers.
      *
-     * @param packet The packet to send.
+     * @param packet      the packet to send.
+     * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
+     *                    will be sent in the next tick of the chunk that the block entity is currently in.
      */
-    default void sendPacketToViewers(BedrockPacket packet) {
+    default void sendPacketToViewers(BedrockPacket packet, boolean immediately) {
         var pos = getPosition();
         var chunk = pos.dimension().getChunkService().getChunkByDimensionPos(pos.x(), pos.z());
         Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
-        chunk.sendChunkPacket(packet);
+        if (immediately) {
+            chunk.sendChunkPacket(packet);
+        } else {
+            chunk.addChunkPacket(packet);
+        }
+    }
+
+    /**
+     * @see #sendBlockEntityToViewers(boolean)
+     */
+    default void sendBlockEntityToViewers() {
+        sendBlockEntityToViewers(true);
+    }
+
+    /**
+     * Sends the block entity to its viewers.
+     *
+     * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
+     *                    will be sent in the next tick of the chunk that the block entity is currently in.
+     */
+    default void sendBlockEntityToViewers(boolean immediately) {
+        sendPacketToViewers(createBlockEntityDataPacket(), immediately);
     }
 
     /**

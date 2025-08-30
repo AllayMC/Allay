@@ -35,7 +35,7 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
         pairX = other.getPosition().x();
         pairZ = other.getPosition().z();
 
-        baseComponent.sendBlockEntityDataPacketToViewers();
+        baseComponent.sendBlockEntityToViewers();
 
         var pair = (BlockEntityPairableComponent) getPair();
         if (!pair.isPaired()) {
@@ -52,7 +52,7 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
         pairX = null;
         pairZ = null;
 
-        baseComponent.sendBlockEntityDataPacketToViewers();
+        baseComponent.sendBlockEntityToViewers();
     }
 
     @EventHandler
