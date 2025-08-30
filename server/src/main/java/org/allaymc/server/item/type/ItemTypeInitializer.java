@@ -863,6 +863,7 @@ public final class ItemTypeInitializer {
     public static void initBed() {
         ItemTypes.BED = AllayItemType
                 .builder(ItemBedStackImpl.class)
+                .addComponent(ItemBedBaseComponentImpl::new, ItemBedBaseComponentImpl.class)
                 .vanillaItem(ItemId.BED)
                 .build();
     }
