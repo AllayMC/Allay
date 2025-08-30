@@ -9,6 +9,9 @@ import org.cloudburstmc.nbt.NbtMap;
 import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 
 /**
+ * PlayerData represents the entry stores in {@link PlayerStorage}. It includes the player's nbt, and the world & dimension
+ * that the player is currently in.
+ *
  * @author daoge_cmd
  */
 @Getter
@@ -25,6 +28,11 @@ public class PlayerData {
     protected String world;
     protected int dimension;
 
+    /**
+     * Creates an empty player data.
+     *
+     * @return an empty player data.
+     */
     public static PlayerData createEmpty() {
         var server = Server.getInstance();
         var globalSpawnPoint = server.getWorldPool().getGlobalSpawnPoint();
@@ -39,6 +47,12 @@ public class PlayerData {
                 .build();
     }
 
+    /**
+     * Creates a {@link PlayerData} object from a nbt.
+     *
+     * @param nbt the nbt that holds the data.
+     * @return a {@link PlayerData} object.
+     */
     public static PlayerData fromNBT(NbtMap nbt) {
         var builder = builder();
         builder.nbt(nbt.getCompound("NBT"))
@@ -47,6 +61,11 @@ public class PlayerData {
         return builder.build();
     }
 
+    /**
+     * Saves this {@link PlayerData} object to a nbt.
+     *
+     * @return the saved nbt.
+     */
     public NbtMap toNBT() {
         var builder = NbtMap.builder()
                 .putCompound("NBT", nbt)
