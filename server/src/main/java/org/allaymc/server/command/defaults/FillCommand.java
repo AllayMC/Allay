@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class FillCommand extends VanillaCommand {
     public FillCommand() {
-        super("fill", TrKeys.M_COMMANDS_FILL_DESCRIPTION);
+        super("fill", TrKeys.MC_COMMANDS_FILL_DESCRIPTION);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class FillCommand extends VanillaCommand {
 
                     var dim = context.getSender().getCommandExecuteLocation().dimension();
                     if (!dim.isInWorld(from.x(), from.y(), from.z()) || !dim.isInWorld(to.x(), to.y(), to.z())) {
-                        context.addError("%" + TrKeys.M_COMMANDS_FILL_OUTOFWORLD);
+                        context.addError("%" + TrKeys.MC_COMMANDS_FILL_OUTOFWORLD);
                         return context.fail();
                     }
 
@@ -38,7 +38,7 @@ public class FillCommand extends VanillaCommand {
 
                     var blockState = blockPropertyValues.isEmpty() ? blockType.getDefaultState() : blockType.ofState(blockPropertyValues);
                     if (blockState == null) {
-                        context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
+                        context.addError("%" + TrKeys.MC_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
                         return context.fail();
                     }
 
@@ -59,7 +59,7 @@ public class FillCommand extends VanillaCommand {
                         }
                     }
 
-                    context.addOutput(TrKeys.M_COMMANDS_FILL_SUCCESS, count);
+                    context.addOutput(TrKeys.MC_COMMANDS_FILL_SUCCESS, count);
                     return context.success();
                 });
     }

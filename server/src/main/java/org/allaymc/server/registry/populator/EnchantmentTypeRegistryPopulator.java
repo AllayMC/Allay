@@ -12,8 +12,8 @@ import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 public class EnchantmentTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.A_ENCHTYPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_ENCHTYPE_LOADING));
         var $ = EnchantmentTypes.AQUA_AFFINITY;
-        log.info(I18n.get().tr(TrKeys.A_ENCHTYPE_LOADED, EnchantmentTypes.class.getFields().length));
+        log.info(I18n.get().tr(TrKeys.ALLAY_ENCHTYPE_LOADED, EnchantmentTypes.class.getFields().length));
     }
 }

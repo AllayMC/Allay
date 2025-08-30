@@ -107,7 +107,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     @Override
     public void setWaxed(boolean waxed) {
         this.waxed = waxed;
-        sendBlockEntityDataPacketToViewers();
+        sendBlockEntityToViewers();
     }
 
     @Override
@@ -225,7 +225,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         public void setText(String[] text) {
             sanitizeText(text);
             this.text = text;
-            sendBlockEntityDataPacketToViewers();
+            sendBlockEntityToViewers();
         }
 
         @Override
@@ -236,7 +236,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         @Override
         public void setGlowing(boolean glowing) {
             this.glowing = glowing;
-            sendBlockEntityDataPacketToViewers();
+            sendBlockEntityToViewers();
         }
 
         @Override

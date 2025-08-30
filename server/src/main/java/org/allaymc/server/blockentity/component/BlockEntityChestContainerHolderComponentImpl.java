@@ -14,7 +14,7 @@ import org.allaymc.server.component.annotation.Dependency;
 /**
  * @author IWareQ
  */
-public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityContainerHolderComponentImpl {
+public class  BlockEntityChestContainerHolderComponentImpl extends BlockEntityContainerHolderComponentImpl {
     @Getter
     protected final DoubleChestContainer doubleChestContainer;
 

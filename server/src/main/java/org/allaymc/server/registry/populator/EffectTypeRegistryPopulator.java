@@ -12,8 +12,8 @@ import org.allaymc.api.i18n.TrKeys;
 public class EffectTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.A_EFFECTTYPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_EFFECTTYPE_LOADING));
         var $ = EffectTypes.ABSORPTION;
-        log.info(I18n.get().tr(TrKeys.A_EFFECTTYPE_LOADED, EffectTypes.class.getFields().length));
+        log.info(I18n.get().tr(TrKeys.ALLAY_EFFECTTYPE_LOADED, EffectTypes.class.getFields().length));
     }
 }

@@ -105,7 +105,7 @@ public class AllayNetworkInterface implements NetworkInterface {
 
                         var ip = AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0];
                         if (server.getPlayerService().isIPBanned(ip)) {
-                            session.disconnect(I18n.get().tr(TrKeys.A_DISCONNECT_BANIP));
+                            session.disconnect(I18n.get().tr(TrKeys.ALLAY_DISCONNECT_BANIP));
                             return;
                         }
 
@@ -116,7 +116,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                         }
 
                         var player = EntityTypes.PLAYER.createEntity();
-                        log.info(I18n.get().tr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
+                        log.info(I18n.get().tr(TrKeys.ALLAY_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
                         ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientSession(session);
                     }
                 });

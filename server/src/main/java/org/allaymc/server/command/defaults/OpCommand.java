@@ -12,7 +12,7 @@ import java.util.Collection;
 public class OpCommand extends VanillaCommand {
 
     public OpCommand() {
-        super("op", TrKeys.M_COMMANDS_OP_DESCRIPTION);
+        super("op", TrKeys.MC_COMMANDS_OP_DESCRIPTION);
     }
 
     @Override
@@ -31,14 +31,14 @@ public class OpCommand extends VanillaCommand {
 
             var player = players.stream().findFirst().get();
             if (player.isOperator()) {
-                context.addError("%" + TrKeys.M_COMMANDS_OP_FAILED, player.getOriginName());
+                context.addError("%" + TrKeys.MC_COMMANDS_OP_FAILED, player.getOriginName());
                 return context.fail();
             }
 
             player.setOperator(true);
 
-            context.addOutput(TrKeys.M_COMMANDS_OP_SUCCESS, player.getOriginName());
-            player.sendTr(TrKeys.M_COMMANDS_OP_MESSAGE);
+            context.addOutput(TrKeys.MC_COMMANDS_OP_SUCCESS, player.getOriginName());
+            player.sendTr(TrKeys.MC_COMMANDS_OP_MESSAGE);
             return context.success();
         });
     }

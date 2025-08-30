@@ -12,7 +12,7 @@ import java.util.Collection;
 public class DeOpCommand extends VanillaCommand {
 
     public DeOpCommand() {
-        super("deop", TrKeys.M_COMMANDS_DEOP_DESCRIPTION);
+        super("deop", TrKeys.MC_COMMANDS_DEOP_DESCRIPTION);
     }
 
     @Override
@@ -31,14 +31,14 @@ public class DeOpCommand extends VanillaCommand {
 
             var player = players.stream().findFirst().get();
             if (!player.isOperator()) {
-                context.addError("%" + TrKeys.M_COMMANDS_DEOP_FAILED, player.getOriginName());
+                context.addError("%" + TrKeys.MC_COMMANDS_DEOP_FAILED, player.getOriginName());
                 return context.fail();
             }
 
             player.setOperator(false);
 
-            context.addOutput(TrKeys.M_COMMANDS_DEOP_SUCCESS, player.getOriginName());
-            player.sendTr(TrKeys.M_COMMANDS_DEOP_MESSAGE);
+            context.addOutput(TrKeys.MC_COMMANDS_DEOP_SUCCESS, player.getOriginName());
+            player.sendTr(TrKeys.MC_COMMANDS_DEOP_MESSAGE);
             return context.success();
         });
     }

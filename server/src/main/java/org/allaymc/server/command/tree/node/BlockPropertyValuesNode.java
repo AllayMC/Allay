@@ -47,14 +47,14 @@ public class BlockPropertyValuesNode extends BaseNode {
             var value = removeQuote(split[1]);
             var propertyType = blockType.getProperties().get(key);
             if (propertyType == null) {
-                context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_TYPEERROR, key);
+                context.addError("%" + TrKeys.MC_COMMANDS_BLOCKSTATE_TYPEERROR, key);
                 return false;
             }
             BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue;
             try {
                 propertyValue = propertyType.tryCreateValue(value);
             } catch (IllegalArgumentException e) {
-                context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_VALUEERROR, key + "=" + value);
+                context.addError("%" + TrKeys.MC_COMMANDS_BLOCKSTATE_VALUEERROR, key + "=" + value);
                 return false;
             }
             propertyValues.put(propertyType, propertyValue);

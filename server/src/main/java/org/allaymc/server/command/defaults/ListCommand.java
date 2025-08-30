@@ -11,7 +11,7 @@ import java.util.StringJoiner;
  */
 public class ListCommand extends VanillaCommand {
     public ListCommand() {
-        super("list", TrKeys.M_COMMANDS_LIST_DESCRIPTION);
+        super("list", TrKeys.MC_COMMANDS_LIST_DESCRIPTION);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class ListCommand extends VanillaCommand {
             var joiner = new StringJoiner(", ");
             players.forEach(player -> joiner.add(player.getDisplayName()));
 
-            context.getSender().sendTr(TrKeys.M_COMMANDS_PLAYERS_LIST, players.size(), playerService.getMaxPlayerCount());
+            context.getSender().sendTr(TrKeys.MC_COMMANDS_PLAYERS_LIST, players.size(), playerService.getMaxPlayerCount());
             context.getSender().sendText(joiner.toString());
             return context.success();
         });

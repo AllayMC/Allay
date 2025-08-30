@@ -261,34 +261,34 @@ public class DamageContainer {
     }
 
     public static class DamageType {
-        public static DamageType ANVIL = fixed(TrKeys.M_DEATH_ATTACK_ANVIL);
+        public static DamageType ANVIL = fixed(TrKeys.MC_DEATH_ATTACK_ANVIL);
         /**
          * Block explosion damage
          */
         public static DamageType BLOCK_EXPLOSION = dynamic(block -> {
-            if (block == BlockTypes.BED) return TrKeys.M_DEATH_ATTACK_EXPLOSION_BY_BED;
-            return TrKeys.M_DEATH_ATTACK_EXPLOSION;
+            if (block == BlockTypes.BED) return TrKeys.MC_DEATH_ATTACK_EXPLOSION_BY_BED;
+            return TrKeys.MC_DEATH_ATTACK_EXPLOSION;
         });
         public static DamageType CHARGING = defaultFixed(); // TODO
         /**
          * Damage caused by contact with a block such as a Cactus
          */
         public static DamageType CONTACT = dynamic(block -> {
-            if (block == BlockTypes.CACTUS) return TrKeys.M_DEATH_ATTACK_CACTUS;
-            if (block == BlockTypes.SWEET_BERRY_BUSH) return TrKeys.M_DEATH_ATTACK_SWEETBERRY;
-            return TrKeys.M_DEATH_ATTACK_GENERIC;
+            if (block == BlockTypes.CACTUS) return TrKeys.MC_DEATH_ATTACK_CACTUS;
+            if (block == BlockTypes.SWEET_BERRY_BUSH) return TrKeys.MC_DEATH_ATTACK_SWEETBERRY;
+            return TrKeys.MC_DEATH_ATTACK_GENERIC;
         });
         /**
          * Damage caused by running out of air underwater
          */
-        public static DamageType DROWN = fixed(TrKeys.M_DEATH_ATTACK_DROWN);
+        public static DamageType DROWN = fixed(TrKeys.MC_DEATH_ATTACK_DROWN);
         /**
          * Damage caused by being attacked by another entity
          */
         public static DamageType ENTITY_ATTACK = dynamicWithExtraSingleParam(attacker -> switch (attacker) {
-            case EntityPlayer $ -> TrKeys.M_DEATH_ATTACK_PLAYER;
-            case Entity $ -> TrKeys.M_DEATH_ATTACK_MOB;
-            default -> TrKeys.M_DEATH_ATTACK_GENERIC;
+            case EntityPlayer $ -> TrKeys.MC_DEATH_ATTACK_PLAYER;
+            case Entity $ -> TrKeys.MC_DEATH_ATTACK_MOB;
+            default -> TrKeys.MC_DEATH_ATTACK_GENERIC;
         }, attacker -> switch (attacker) {
             case EntityPlayer player -> player.getDisplayName();
             case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
@@ -298,8 +298,8 @@ public class DamageContainer {
          * Entity explosion damage
          */
         public static DamageType ENTITY_EXPLOSION = dynamicWithExtraSingleParam(attacker -> {
-            if (attacker instanceof Entity) return TrKeys.M_DEATH_ATTACK_EXPLOSION_PLAYER;
-            return TrKeys.M_DEATH_ATTACK_EXPLOSION;
+            if (attacker instanceof Entity) return TrKeys.MC_DEATH_ATTACK_EXPLOSION_PLAYER;
+            return TrKeys.MC_DEATH_ATTACK_EXPLOSION;
         }, attacker -> switch (attacker) {
             case EntityPlayer player -> player.getDisplayName();
             case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
@@ -308,41 +308,41 @@ public class DamageContainer {
         /**
          * Fall damage
          */
-        public static DamageType FALL = fixed(TrKeys.M_DEATH_ATTACK_FALL);
-        public static DamageType FALLING_BLOCK = fixed(TrKeys.M_DEATH_ATTACK_FALLINGBLOCK);
+        public static DamageType FALL = fixed(TrKeys.MC_DEATH_ATTACK_FALL);
+        public static DamageType FALLING_BLOCK = fixed(TrKeys.MC_DEATH_ATTACK_FALLINGBLOCK);
         /**
          * Damage caused by standing in fire
          */
-        public static DamageType FIRE = fixed(TrKeys.M_DEATH_ATTACK_ONFIRE);
-        public static DamageType FIREBALL = fixed(TrKeys.M_DEATH_ATTACK_FIREBALL);
+        public static DamageType FIRE = fixed(TrKeys.MC_DEATH_ATTACK_ONFIRE);
+        public static DamageType FIREBALL = fixed(TrKeys.MC_DEATH_ATTACK_FIREBALL);
         /**
          * Burn damage
          */
-        public static DamageType FIRE_TICK = fixed(TrKeys.M_DEATH_ATTACK_INFIRE);
-        public static DamageType FIREWORKS = fixed(TrKeys.M_DEATH_ATTACK_FIREWORKS);
-        public static DamageType FLY_INTO_WALL = fixed(TrKeys.M_DEATH_ATTACK_FLYINTOWALL);
-        public static DamageType FREEZING = fixed(TrKeys.M_DEATH_ATTACK_FREEZE);
+        public static DamageType FIRE_TICK = fixed(TrKeys.MC_DEATH_ATTACK_INFIRE);
+        public static DamageType FIREWORKS = fixed(TrKeys.MC_DEATH_ATTACK_FIREWORKS);
+        public static DamageType FLY_INTO_WALL = fixed(TrKeys.MC_DEATH_ATTACK_FLYINTOWALL);
+        public static DamageType FREEZING = fixed(TrKeys.MC_DEATH_ATTACK_FREEZE);
         /**
          * Damage caused by standing in lava
          */
-        public static DamageType LAVA = fixed(TrKeys.M_DEATH_ATTACK_LAVA);
+        public static DamageType LAVA = fixed(TrKeys.MC_DEATH_ATTACK_LAVA);
         /**
          * Damage caused by being struck by lightning
          */
-        public static DamageType LIGHTNING = fixed(TrKeys.M_DEATH_ATTACK_LIGHTNINGBOLT);
+        public static DamageType LIGHTNING = fixed(TrKeys.MC_DEATH_ATTACK_LIGHTNINGBOLT);
         /**
          * Potion or spell damage
          */
-        public static DamageType MAGIC = fixed(TrKeys.M_DEATH_ATTACK_MAGIC);
+        public static DamageType MAGIC = fixed(TrKeys.MC_DEATH_ATTACK_MAGIC);
         /**
          * Damage caused by standing on magma block
          */
-        public static DamageType MAGMA = fixed(TrKeys.M_DEATH_ATTACK_MAGMA);
+        public static DamageType MAGMA = fixed(TrKeys.MC_DEATH_ATTACK_MAGMA);
         public static DamageType PISTON = defaultFixed(); // TODO
         /**
          * Damage caused by being hit by a projectile such as an arrow
          */
-        public static DamageType PROJECTILE = fixedWithExtraSingleParam(TrKeys.M_DEATH_ATTACK_ARROW, projectile -> {
+        public static DamageType PROJECTILE = fixedWithExtraSingleParam(TrKeys.MC_DEATH_ATTACK_ARROW, projectile -> {
             var attacker = ((EntityProjectile) projectile).getShooter();
             String name;
             if (attacker instanceof EntityPlayer player) {
@@ -353,25 +353,25 @@ public class DamageContainer {
             return name;
         });
         public static DamageType RAM_ATTACK = defaultFixed(); // TODO
-        public static DamageType STALACTITE = fixed(TrKeys.M_DEATH_ATTACK_STALACTITE);
+        public static DamageType STALACTITE = fixed(TrKeys.MC_DEATH_ATTACK_STALACTITE);
         /**
          * Damage caused by hunger
          */
-        public static DamageType STARVE = fixed(TrKeys.M_DEATH_ATTACK_STARVE);
+        public static DamageType STARVE = fixed(TrKeys.MC_DEATH_ATTACK_STARVE);
         /**
          * Damage caused by being put in a block
          */
-        public static DamageType SUFFOCATION = fixed(TrKeys.M_DEATH_ATTACK_INWALL);
+        public static DamageType SUFFOCATION = fixed(TrKeys.MC_DEATH_ATTACK_INWALL);
         /**
          * Damage caused by submitting /kill command
          */
         public static DamageType COMMAND = defaultFixed();
-        public static DamageType SONIC_BOOM = fixed(TrKeys.M_DEATH_ATTACK_SONICBOOM);
+        public static DamageType SONIC_BOOM = fixed(TrKeys.MC_DEATH_ATTACK_SONICBOOM);
         public static DamageType TEMPERATURE = defaultFixed(); // TODO
         /**
          * Damage caused by thorns enchantment
          */
-        public static DamageType THORNS = fixedWithExtraSingleParam(TrKeys.M_DEATH_ATTACK_THORNS, attacker -> switch (attacker) {
+        public static DamageType THORNS = fixedWithExtraSingleParam(TrKeys.MC_DEATH_ATTACK_THORNS, attacker -> switch (attacker) {
             case EntityPlayer player -> player.getDisplayName();
             case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
             default -> null;
@@ -379,8 +379,8 @@ public class DamageContainer {
         /**
          * Damage caused by falling into the void
          */
-        public static DamageType VOID = fixed(TrKeys.M_DEATH_ATTACK_OUTOFWORLD);
-        public static DamageType WITHER = fixed(TrKeys.M_DEATH_ATTACK_WITHER);
+        public static DamageType VOID = fixed(TrKeys.MC_DEATH_ATTACK_OUTOFWORLD);
+        public static DamageType WITHER = fixed(TrKeys.MC_DEATH_ATTACK_WITHER);
         /**
          * Plugins
          */
@@ -425,7 +425,7 @@ public class DamageContainer {
         }
 
         public static DamageType defaultFixed() {
-            return new DamageType($ -> TrKeys.M_DEATH_ATTACK_GENERIC);
+            return new DamageType($ -> TrKeys.MC_DEATH_ATTACK_GENERIC);
         }
 
         public Pair<String, String[]> getDeathInfo(Entity victim, Object attacker) {

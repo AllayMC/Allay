@@ -20,6 +20,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added PlayerBookEditEvent.
 - (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
 - (API) Introduced methods `Entity.getOffsetAABBForCollisionCheck()` and `Entity.checkBlockCollision()`.
+- (API) Implemented basic bed feature.
+- (API) Introduced event `BlockExplodeEvent`.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
@@ -27,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - (API) Renamed method `Entity.despawn()` to `Entity.remove()` as a clarification with other methods like `Entity.despawnFrom()` and `Entity.despawnFromAll()`.
+- (API) Renamed entries in class `TrKeys`. The old `M_XXX` is renamed to `MC_XXX` and `A_XXX` is renamed to `ALLAY_XXX`.
 
 ### Fixed
 

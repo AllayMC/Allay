@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public class EffectCommand extends VanillaCommand {
     public EffectCommand() {
-        super("effect", TrKeys.M_COMMANDS_EFFECT_DESCRIPTION);
+        super("effect", TrKeys.MC_COMMANDS_EFFECT_DESCRIPTION);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class EffectCommand extends VanillaCommand {
                         players.forEach(player -> {
                             player.removeEffect(effectType);
                             context.addOutput(
-                                    TrKeys.M_COMMANDS_EFFECT_SUCCESS_REMOVED,
+                                    TrKeys.MC_COMMANDS_EFFECT_SUCCESS_REMOVED,
                                     effectType.getIdentifier().path(),
                                     player.getDisplayName()
                             );
@@ -46,7 +46,7 @@ public class EffectCommand extends VanillaCommand {
                     players.forEach(player -> {
                         player.addEffect(effectType.createInstance(amplifier, time, !hideParticles));
                         context.addOutput(
-                                TrKeys.M_COMMANDS_EFFECT_SUCCESS,
+                                TrKeys.MC_COMMANDS_EFFECT_SUCCESS,
                                 effectType.getIdentifier().path(),
                                 amplifier,
                                 player.getDisplayName(),
@@ -62,7 +62,7 @@ public class EffectCommand extends VanillaCommand {
                     Collection<EntityPlayer> players = context.getResult(0);
                     players.forEach(player -> {
                         player.removeAllEffects();
-                        context.addOutput(TrKeys.M_COMMANDS_EFFECT_SUCCESS_REMOVED_ALL, player.getDisplayName());
+                        context.addOutput(TrKeys.MC_COMMANDS_EFFECT_SUCCESS_REMOVED_ALL, player.getDisplayName());
                     });
                     return context.success();
                 });

@@ -97,7 +97,6 @@ public class AllayPluginManager implements PluginManager {
      * Find plugin paths from the given plugin sources.
      *
      * @param sources the plugin sources to find plugin paths from.
-     *
      * @return a set of plugin paths found from the given plugin sources.
      */
     protected Set<Path> findPluginPaths(Set<PluginSource> sources) {
@@ -126,13 +125,13 @@ public class AllayPluginManager implements PluginManager {
             try {
                 descriptor = loader.loadDescriptor();
             } catch (Throwable t) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DESCRIPTOR_ERROR, path.getFileName(), t.getMessage() != null ? t.getMessage() : ""), t);
+                log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DESCRIPTOR_ERROR, path.getFileName(), t.getMessage() != null ? t.getMessage() : ""), t);
                 continue;
             }
 
             var name = descriptor.getName();
             if (foundDescriptors.containsKey(name)) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DUPLICATE, name));
+                log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DUPLICATE, name));
                 continue;
             }
 
@@ -159,7 +158,7 @@ public class AllayPluginManager implements PluginManager {
                 try {
                     dag.setBefore(name, descriptor.getName());
                 } catch (DAGCycleException e) {
-                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage() != null ? e.getMessage() : ""));
+                    log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage() != null ? e.getMessage() : ""));
                     dag.remove(descriptor.getName());
                 }
             }
@@ -196,13 +195,13 @@ public class AllayPluginManager implements PluginManager {
                         continue start;
                     }
 
-                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
+                    log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
                     iterator.remove();
                     continue start;
                 }
 
                 if (isUnexpectedDependencyVersion(dependencyContainer.descriptor(), dependency)) {
-                    log.warn(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_VERSION_MISMATCH,
+                    log.warn(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DEPENDENCY_VERSION_MISMATCH,
                             descriptor.getName(),
                             dependency.name(),
                             RangeListFactory.create(dependency.version()),
@@ -210,14 +209,14 @@ public class AllayPluginManager implements PluginManager {
                 }
             }
 
-            log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
+            log.info(I18n.get().tr(TrKeys.ALLAY_PLUGIN_LOADING, descriptor.getName()));
 
             PluginContainer pluginContainer;
             try {
                 pluginContainer = loader.loadPlugin();
                 pluginContainer.plugin().onLoad();
             } catch (Throwable t) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName(), t.getMessage() != null ? t.getMessage() : ""), t);
+                log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_LOAD_ERROR, descriptor.getName(), t.getMessage() != null ? t.getMessage() : ""), t);
                 continue;
             }
 
@@ -260,13 +259,13 @@ public class AllayPluginManager implements PluginManager {
                 // Plugin failed to be loaded
                 continue;
             }
-            log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
+            log.info(I18n.get().tr(TrKeys.ALLAY_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
                 new PluginEnableEvent(plugin).call();
                 plugin.onEnable();
             } catch (Throwable t) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName(), t.getMessage() != null ? t.getMessage() : ""), t);
+                log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName(), t.getMessage() != null ? t.getMessage() : ""), t);
                 continue;
             }
 
@@ -283,13 +282,13 @@ public class AllayPluginManager implements PluginManager {
             if (!isPluginEnabled(pluginName)) continue;
 
             var pluginContainer = getPlugin(pluginName);
-            log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
+            log.info(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
                 new PluginDisableEvent(plugin).call();
                 plugin.onDisable();
             } catch (Throwable t) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), t);
+                log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), t);
             }
         }
 
@@ -351,7 +350,6 @@ public class AllayPluginManager implements PluginManager {
          * Ensure the state is not bigger than the given state.
          *
          * @param state the state to compare with.
-         *
          * @throws IllegalStateException if the state is bigger than the given state.
          */
         public void ensureNotBiggerThan(State state) {
@@ -364,7 +362,6 @@ public class AllayPluginManager implements PluginManager {
          * Ensure the state is equals to the given state.
          *
          * @param state the state to compare with.
-         *
          * @throws IllegalStateException if the state is not equals to the given state.
          */
         public void ensureEquals(State state) {

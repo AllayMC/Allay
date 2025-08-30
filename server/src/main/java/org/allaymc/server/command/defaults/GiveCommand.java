@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class GiveCommand extends VanillaCommand {
 
     public GiveCommand() {
-        super("give", TrKeys.M_COMMANDS_GIVE_DESCRIPTION);
+        super("give", TrKeys.MC_COMMANDS_GIVE_DESCRIPTION);
     }
 
     @Override
@@ -61,10 +61,10 @@ public class GiveCommand extends VanillaCommand {
                             }
                         }
 
-                        player.sendTr(TrKeys.M_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
+                        player.sendTr(TrKeys.MC_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
                     }
                     context.addOutput(
-                            TrKeys.M_COMMANDS_GIVE_SUCCESS, itemType.getIdentifier().toString(),
+                            TrKeys.MC_COMMANDS_GIVE_SUCCESS, itemType.getIdentifier().toString(),
                             amount, players.stream().map(EntityPlayer::getDisplayName).collect(Collectors.joining(", "))
                     );
                     return context.success();

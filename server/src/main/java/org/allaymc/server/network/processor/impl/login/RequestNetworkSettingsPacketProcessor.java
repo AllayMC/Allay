@@ -29,7 +29,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
                 // A version that is in the middle of the lowest and latest versions is not supported for
                 // some reason. Since we don't have compatible status in PlayStatusPacket.Status, let's
                 // disconnect the client with custom reason instead of sending PlayStatusPacket
-                player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_BODY_VERSIONNOTSUPPORTED);
+                player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_BODY_VERSIONNOTSUPPORTED);
                 return;
             }
 

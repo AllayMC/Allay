@@ -17,7 +17,7 @@ import static org.allaymc.api.command.data.CommonEnums.INT_GAMERULE_ENUM;
 public class GameRuleCommand extends VanillaCommand {
 
     public GameRuleCommand() {
-        super("gamerule", TrKeys.M_COMMANDS_GAMERULE_DESCRIPTION);
+        super("gamerule", TrKeys.MC_COMMANDS_GAMERULE_DESCRIPTION);
         aliases.add("gr");
     }
 
@@ -44,7 +44,7 @@ public class GameRuleCommand extends VanillaCommand {
                 value = isBoolGameRule ? (boolean) value : (int) value;
                 world.getWorldData().setGameRuleValue(gamerule, value);
 
-                context.addOutput(TrKeys.M_COMMANDS_GAMERULE_SUCCESS, gamerule.getName(), value);
+                context.addOutput(TrKeys.MC_COMMANDS_GAMERULE_SUCCESS, gamerule.getName(), value);
             } else {
                 value = world.getWorldData().getGameRuleValue(gamerule);
                 context.addOutput(gamerule.getName() + " = " + value);

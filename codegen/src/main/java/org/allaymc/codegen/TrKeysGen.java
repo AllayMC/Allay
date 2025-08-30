@@ -53,8 +53,8 @@ public class TrKeysGen {
 
     protected static String handleNamespace(String origin) {
         return switch (origin) {
-            case "minecraft" -> "M";
-            case "allay" -> "A";
+            case "minecraft" -> "MC";
+            case "allay" -> "ALLAY";
             default -> origin.toUpperCase();
         };
     }

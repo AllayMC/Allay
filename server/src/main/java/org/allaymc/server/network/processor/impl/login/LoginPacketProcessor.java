@@ -39,7 +39,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
 
         var server = Server.getInstance();
         if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.getPlayerService().isWhitelisted(player.getOriginName())) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED);
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED);
             return;
         }
 
@@ -50,24 +50,24 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         }
 
         if (!loginData.isXboxAuthenticated() && Server.SETTINGS.networkSettings().xboxAuth()) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
             return;
         }
 
         var name = loginData.getXname();
         if (!NAME_PATTERN.matcher(name).matches()) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDNAME);
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDNAME);
             return;
         }
 
         if (!loginData.getSkin().isValid()) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_INVALIDSKIN);
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_INVALIDSKIN);
             return;
         }
 
         var otherDevice = server.getPlayerService().getPlayers().get(loginData.getUuid());
         if (otherDevice != null) {
-            otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
+            otherDevice.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }
 
         if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {

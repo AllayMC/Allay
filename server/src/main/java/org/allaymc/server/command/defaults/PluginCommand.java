@@ -11,7 +11,7 @@ import org.allaymc.api.utils.TextFormat;
 public class PluginCommand extends VanillaCommand {
 
     public PluginCommand() {
-        super("plugin", TrKeys.A_COMMAND_PLUGIN_DESCRIPTION);
+        super("plugin", TrKeys.ALLAY_COMMAND_PLUGIN_DESCRIPTION);
         aliases.add("pl");
     }
 

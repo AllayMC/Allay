@@ -14,7 +14,9 @@ import org.allaymc.api.world.Explosion;
 @Getter
 @Setter
 public class EntityExplodeEvent extends EntityEvent implements CancellableEvent {
-
+    /**
+     * The explosion.
+     */
     protected Explosion explosion;
 
     public EntityExplodeEvent(Entity entity, Explosion explosion) {

@@ -36,7 +36,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
         var position = getPosition();
         var dimension = position.dimension();
         dimension.updateBlockProperty(BlockPropertyTypes.UPDATE_BIT, block != null, position);
-        sendBlockEntityDataPacketToViewers();
+        sendBlockEntityToViewers();
         return true;
     }
 

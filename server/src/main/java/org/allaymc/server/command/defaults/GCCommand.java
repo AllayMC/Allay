@@ -12,7 +12,7 @@ import static org.allaymc.api.math.MathUtils.round;
  */
 public class GCCommand extends VanillaCommand {
     public GCCommand() {
-        super("gc", TrKeys.A_COMMAND_GC_DESCRIPTION);
+        super("gc", TrKeys.ALLAY_COMMAND_GC_DESCRIPTION);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class GCCommand extends VanillaCommand {
             }
             System.gc();
             var freedMemory = memory - getCurrentMemoryUsage();
-            context.getSender().sendTr(TrKeys.A_COMMAND_GC_COMPLETED, freedMemory);
+            context.getSender().sendTr(TrKeys.ALLAY_COMMAND_GC_COMPLETED, freedMemory);
             return context.success();
         });
     }

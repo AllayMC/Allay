@@ -22,7 +22,7 @@ import java.util.Objects;
 public class FurnaceRecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier, FurnaceRecipe>> {
     @Override
     public Map<Identifier, FurnaceRecipe> load(Void $) {
-        log.info(I18n.get().tr(TrKeys.A_RECIPE_FURNACE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_FURNACE_LOADING));
         var furnaceRecipes = new Object2ObjectOpenHashMap<Identifier, FurnaceRecipe>();
         var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
 
@@ -34,7 +34,7 @@ public class FurnaceRecipeRegistryLoader implements RegistryLoader<Void, Map<Ide
             furnaceRecipes.put(recipe.getIdentifier(), recipe);
         }
 
-        log.info(I18n.get().tr(TrKeys.A_RECIPE_FURNACE_LOADED, furnaceRecipes.size()));
+        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_FURNACE_LOADED, furnaceRecipes.size()));
         return furnaceRecipes;
     }
 

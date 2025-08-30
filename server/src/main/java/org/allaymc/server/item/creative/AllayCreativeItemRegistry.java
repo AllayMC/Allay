@@ -51,7 +51,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
 
     @SneakyThrows
     protected void load() {
-        log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_CREATIVEITEM_LOADING));
 
         // Load groups
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("creative_groups.json")))) {
@@ -96,7 +96,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
             }
         }
 
-        log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADED));
+        log.info(I18n.get().tr(TrKeys.ALLAY_CREATIVEITEM_LOADED));
     }
 
     @Override

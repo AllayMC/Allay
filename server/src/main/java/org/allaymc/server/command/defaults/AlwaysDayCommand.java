@@ -11,7 +11,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 public class AlwaysDayCommand extends VanillaCommand {
 
     public AlwaysDayCommand() {
-        super("alwaysday", TrKeys.M_COMMANDS_ALWAYS_DAY);
+        super("alwaysday", TrKeys.MC_COMMANDS_ALWAYS_DAY);
     }
 
     @Override
@@ -24,9 +24,9 @@ public class AlwaysDayCommand extends VanillaCommand {
             world.getWorldData().setTimeOfDay(WorldData.TIME_NOON - 1000);
 
             if (lock) {
-                context.addOutput(TrKeys.M_COMMANDS_ALWAYS_DAY_LOCKED);
+                context.addOutput(TrKeys.MC_COMMANDS_ALWAYS_DAY_LOCKED);
             } else {
-                context.addOutput(TrKeys.M_COMMANDS_ALWAYS_DAY_UNLOCKED);
+                context.addOutput(TrKeys.MC_COMMANDS_ALWAYS_DAY_UNLOCKED);
             }
             return context.success();
         });

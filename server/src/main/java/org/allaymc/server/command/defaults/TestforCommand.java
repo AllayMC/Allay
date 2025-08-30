@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class TestforCommand extends VanillaCommand {
 
     public TestforCommand() {
-        super("testfor", TrKeys.M_COMMANDS_TESTFOR_DESCRIPTION);
+        super("testfor", TrKeys.MC_COMMANDS_TESTFOR_DESCRIPTION);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class TestforCommand extends VanillaCommand {
                 return context.fail();
             }
 
-            context.addOutput(TrKeys.M_COMMANDS_TESTFOR_SUCCESS, entities.stream().map(entity -> {
+            context.addOutput(TrKeys.MC_COMMANDS_TESTFOR_SUCCESS, entities.stream().map(entity -> {
                 var name = entity.getDisplayName();
                 if (name.isBlank()) {
                     name = entity.getEntityType().getIdentifier().toString();

@@ -33,10 +33,11 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
         var blockEntity = getBlockEntity(pos);
         ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onPlace(event);
 
-        // Send block entity to client after onPlace()
-        // because onPlace() method may make some changes on this block entity
+        // Send block entity to client after called onPlace() because onPlace() method may make some changes
+        // on this block entity
         if (blockEntity.sendToClient()) {
-            blockEntity.sendBlockEntityDataPacketToViewers();
+            // Send the block entity in the next chunk tick because we need to wait for the block being sent first
+            blockEntity.sendBlockEntityToViewers(false);
         }
     }
 

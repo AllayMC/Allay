@@ -60,7 +60,7 @@ public final class Dashboard {
     private Dashboard() {
         $$$setupUI$$$();
         wrapSystemOutputStreams();
-        JFrame frame = new JFrame(I18n.get().tr(TrKeys.A_GUI_NAME));
+        JFrame frame = new JFrame(I18n.get().tr(TrKeys.ALLAY_GUI_NAME));
         frame.setContentPane(rootPane);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.addWindowListener(new WindowAdapter() {
@@ -85,21 +85,21 @@ public final class Dashboard {
                 if (e.getButton() != MouseEvent.BUTTON3) return;
                 // Show the focused plugin's information
                 JPopupMenu popupMenu = new JPopupMenu();
-                JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));
+                JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.ALLAY_GUI_INFO));
                 infoItem.addActionListener($ -> {
                     if (pluginTable.getSelectedRow() == -1) return;
                     // Get the plugin
                     String pluginName = (String) pluginTable.getValueAt(pluginTable.getSelectedRow(), 0);
                     var pluginDescriptor = Server.getInstance().getPluginManager().getEnabledPlugin(pluginName).descriptor();
                     JOptionPane.showMessageDialog(null,
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME) + ": " + pluginDescriptor.getName() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION) + ": " + pluginDescriptor.getDescription() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION) + ": " + pluginDescriptor.getVersion() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS) + ": " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_DEPENDENCIES) + ": " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_WEBSITE) + ": " + pluginDescriptor.getWebsite(),
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_INFO),
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_NAME) + ": " + pluginDescriptor.getName() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_DESCRIPTION) + ": " + pluginDescriptor.getDescription() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_VERSION) + ": " + pluginDescriptor.getVersion() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_AUTHORS) + ": " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_DEPENDENCIES) + ": " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_WEBSITE) + ": " + pluginDescriptor.getWebsite(),
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
                 popupMenu.add(infoItem);
@@ -112,7 +112,7 @@ public final class Dashboard {
                 if (e.getButton() != MouseEvent.BUTTON3) return;
                 JPopupMenu popupMenu = new JPopupMenu();
 
-                JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));
+                JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.ALLAY_GUI_INFO));
                 infoItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
@@ -120,28 +120,28 @@ public final class Dashboard {
                     var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
                     var pos = player.getLocation();
                     JOptionPane.showMessageDialog(null,
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID) + ": " + player.getLoginData().getUuid().toString() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getDisplayName() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_INFO),
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_UUID) + ": " + player.getLoginData().getUuid().toString() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getDisplayName() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
                 popupMenu.add(infoItem);
 
-                JMenuItem kickItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_KICK));
+                JMenuItem kickItem = new JMenuItem(I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_KICK));
                 kickItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
                     var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
-                    player.disconnect(TrKeys.M_DISCONNECT_DISCONNECTED);
+                    player.disconnect(TrKeys.MC_DISCONNECT_DISCONNECTED);
                 });
                 popupMenu.add(kickItem);
 
-                JMenuItem banItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_BAN));
+                JMenuItem banItem = new JMenuItem(I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_BAN));
                 banItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
@@ -151,7 +151,7 @@ public final class Dashboard {
                 });
                 popupMenu.add(banItem);
 
-                JMenuItem banIpItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_BANIP));
+                JMenuItem banIpItem = new JMenuItem(I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_BANIP));
                 banIpItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
@@ -170,20 +170,20 @@ public final class Dashboard {
                 if (e.getButton() != MouseEvent.BUTTON3) return;
                 JPopupMenu popupMenu = new JPopupMenu();
 
-                JMenuItem changeFontSizeItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE));
+                JMenuItem changeFontSizeItem = new JMenuItem(I18n.get().tr(TrKeys.ALLAY_GUI_CONSOLE_CHANGEFONTSIZE));
                 changeFontSizeItem.addActionListener($ -> {
-                    String input = JOptionPane.showInputDialog(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE_DIALOG), consolePane.getFont().getSize());
+                    String input = JOptionPane.showInputDialog(I18n.get().tr(TrKeys.ALLAY_GUI_CONSOLE_CHANGEFONTSIZE_DIALOG), consolePane.getFont().getSize());
                     if (input == null) return;
                     try {
                         int fontSize = Integer.parseInt(input);
                         consolePane.setFont(consolePane.getFont().deriveFont((float) fontSize));
                     } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE_ERROR_DIALOG), I18n.get().tr(TrKeys.A_GUI_ERROR), JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, I18n.get().tr(TrKeys.ALLAY_GUI_CONSOLE_CHANGEFONTSIZE_ERROR_DIALOG), I18n.get().tr(TrKeys.ALLAY_GUI_ERROR), JOptionPane.ERROR_MESSAGE);
                     }
                 });
                 popupMenu.add(changeFontSizeItem);
 
-                JMenuItem clearItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CLEAR));
+                JMenuItem clearItem = new JMenuItem(I18n.get().tr(TrKeys.ALLAY_GUI_CONSOLE_CLEAR));
                 clearItem.addActionListener($ -> consolePane.setText(""));
                 popupMenu.add(clearItem);
 
@@ -202,16 +202,16 @@ public final class Dashboard {
 
     private void applyI18nTexts() {
         SwingUtilities.invokeLater(() -> {
-            rootTabbedPane.setTitleAt(0, I18n.get().tr(TrKeys.A_GUI_CONSOLE));
-            rootTabbedPane.setTitleAt(1, I18n.get().tr(TrKeys.A_GUI_PERFORMANCE));
-            rootTabbedPane.setTitleAt(2, I18n.get().tr(TrKeys.A_GUI_PLAYER));
-            rootTabbedPane.setTitleAt(3, I18n.get().tr(TrKeys.A_GUI_PLUGIN));
+            rootTabbedPane.setTitleAt(0, I18n.get().tr(TrKeys.ALLAY_GUI_CONSOLE));
+            rootTabbedPane.setTitleAt(1, I18n.get().tr(TrKeys.ALLAY_GUI_PERFORMANCE));
+            rootTabbedPane.setTitleAt(2, I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER));
+            rootTabbedPane.setTitleAt(3, I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN));
 
-            perfTabbedPane.setTitleAt(0, (I18n.get().tr(TrKeys.A_GUI_MEMORY)));
-            perfTabbedPane.setTitleAt(1, (I18n.get().tr(TrKeys.A_GUI_CHUNK)));
-            perfTabbedPane.setTitleAt(2, (I18n.get().tr(TrKeys.A_GUI_ENTITY)));
+            perfTabbedPane.setTitleAt(0, (I18n.get().tr(TrKeys.ALLAY_GUI_MEMORY)));
+            perfTabbedPane.setTitleAt(1, (I18n.get().tr(TrKeys.ALLAY_GUI_CHUNK)));
+            perfTabbedPane.setTitleAt(2, (I18n.get().tr(TrKeys.ALLAY_GUI_ENTITY)));
 
-            onlinePlayerCount.setText(I18n.get().tr(TrKeys.A_GUI_PLAYER_ONLINE, 0));
+            onlinePlayerCount.setText(I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ONLINE, 0));
         });
     }
 
@@ -251,7 +251,7 @@ public final class Dashboard {
             final long totalMemory = Runtime.getRuntime().totalMemory();
             final int freePercent = (int) (freeMemory * 100.0 / totalMemory + 0.5);
             ramValues.add(100 - freePercent);
-            ramGraph.setXLabel(I18n.get().tr(TrKeys.A_GUI_RAM_LABEL, String.format("%,d", (totalMemory - freeMemory) / MEGABYTE), freePercent));
+            ramGraph.setXLabel(I18n.get().tr(TrKeys.ALLAY_GUI_RAM_LABEL, String.format("%,d", (totalMemory - freeMemory) / MEGABYTE), freePercent));
             // Trim the list
             int k = ramValues.size();
             if (k > RAM_VALUE_COUNT)
@@ -274,7 +274,7 @@ public final class Dashboard {
                     )
                     .sum();
             chunkValues.add(loadedChunkCount);
-            chunkGraph.setXLabel(I18n.get().tr(TrKeys.A_GUI_CHUNK_LABEL, loadedChunkCount));
+            chunkGraph.setXLabel(I18n.get().tr(TrKeys.ALLAY_GUI_CHUNK_LABEL, loadedChunkCount));
             // Trim the list
             k = chunkValues.size();
             if (k > CHUNK_VALUE_COUNT)
@@ -297,7 +297,7 @@ public final class Dashboard {
                     )
                     .sum();
             entityValues.add(loadedEntityCount);
-            entityGraph.setXLabel(I18n.get().tr(TrKeys.A_GUI_ENTITY_LABEL, loadedEntityCount));
+            entityGraph.setXLabel(I18n.get().tr(TrKeys.ALLAY_GUI_ENTITY_LABEL, loadedEntityCount));
             // Trim the list
             k = entityValues.size();
             if (k > ENTITY_VALUE_COUNT)
@@ -339,11 +339,11 @@ public final class Dashboard {
     }
 
     private void updateOnlinePlayerCount() {
-        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText(I18n.get().tr(TrKeys.A_GUI_PLAYER_ONLINE, Server.getInstance().getPlayerService().getPlayerCount())));
+        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText(I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ONLINE, Server.getInstance().getPlayerService().getPlayerCount())));
     }
 
     private void updateOnlinePlayerTable() {
-        var title = new String[]{I18n.get().tr(TrKeys.A_GUI_PLAYER_NAME), I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS), I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID)};
+        var title = new String[]{I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_NAME), I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ADDRESS), I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_UUID)};
         var players = Server.getInstance().getPlayerService().getPlayers().values();
         String[][] data = new String[players.size()][3];
         int row = 0;
@@ -363,7 +363,7 @@ public final class Dashboard {
     }
 
     private void updatePluginTable() {
-        var title = new String[]{I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME), I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION), I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION), I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS)};
+        var title = new String[]{I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_NAME), I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_DESCRIPTION), I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_VERSION), I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_AUTHORS)};
         var plugins = Server.getInstance().getPluginManager().getEnabledPlugins().values();
         var data = new String[plugins.size()][4];
         int row = 0;
@@ -448,7 +448,9 @@ public final class Dashboard {
     /**
      *
      */
-    public JComponent $$$getRootComponent$$$() {return rootPane;}
+    public JComponent $$$getRootComponent$$$() {
+        return rootPane;
+    }
 
     private void createUIComponents() {
         // Init the three graph

@@ -10,7 +10,7 @@ import org.allaymc.api.world.Difficulty;
  */
 public class DifficultyCommand extends VanillaCommand {
     public DifficultyCommand() {
-        super("difficulty", TrKeys.M_COMMANDS_DIFFICULTY_DESCRIPTION);
+        super("difficulty", TrKeys.MC_COMMANDS_DIFFICULTY_DESCRIPTION);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class DifficultyCommand extends VanillaCommand {
         tree.getRoot().difficulty("difficulty").exec((context, entity) -> {
             Difficulty difficulty = context.getResult(0);
             entity.getWorld().getWorldData().setDifficulty(difficulty);
-            context.addOutput(TrKeys.M_COMMANDS_DIFFICULTY_SUCCESS, difficulty);
+            context.addOutput(TrKeys.MC_COMMANDS_DIFFICULTY_SUCCESS, difficulty);
             return context.success();
         }, SenderType.ENTITY);
     }

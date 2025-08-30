@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class KickCommand extends VanillaCommand {
     public KickCommand() {
-        super("kick", TrKeys.M_COMMANDS_KICK_DESCRIPTION);
+        super("kick", TrKeys.MC_COMMANDS_KICK_DESCRIPTION);
     }
 
     @Override
@@ -34,11 +34,11 @@ public class KickCommand extends VanillaCommand {
 
                 reason = event.getReason();
                 if (reason.isBlank()) {
-                    player.disconnect(I18n.get().tr(TrKeys.M_DISCONNECT_KICKED));
-                    context.addOutput(TrKeys.M_COMMANDS_KICK_SUCCESS);
+                    player.disconnect(I18n.get().tr(TrKeys.MC_DISCONNECT_KICKED));
+                    context.addOutput(TrKeys.MC_COMMANDS_KICK_SUCCESS);
                 } else {
-                    player.disconnect(I18n.get().tr(TrKeys.M_DISCONNECT_KICKED_REASON, reason));
-                    context.addOutput(TrKeys.M_COMMANDS_KICK_SUCCESS_REASON, reason);
+                    player.disconnect(I18n.get().tr(TrKeys.MC_DISCONNECT_KICKED_REASON, reason));
+                    context.addOutput(TrKeys.MC_COMMANDS_KICK_SUCCESS_REASON, reason);
                 }
             }
             return context.success();

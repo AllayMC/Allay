@@ -60,7 +60,7 @@ public class BlockEntityBeaconBaseComponentImpl extends BlockEntityBaseComponent
         var before = level;
         this.level = calculateLevel();
         if (this.level != before) {
-            sendBlockEntityDataPacketToViewers();
+            sendBlockEntityToViewers();
         }
         if (this.level != 0 && !isObstructed()) {
             broadcastBeaconEffects();

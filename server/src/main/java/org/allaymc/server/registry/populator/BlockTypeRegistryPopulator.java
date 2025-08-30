@@ -17,11 +17,11 @@ import org.allaymc.server.utils.Utils;
 public class BlockTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_BLOCKTYPE_LOADING));
         InternalBlockTypeData.init();
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
         BlockTypeDefaultInitializer.init();
-        log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADED, BlockId.values().length));
+        log.info(I18n.get().tr(TrKeys.ALLAY_BLOCKTYPE_LOADED, BlockId.values().length));
     }
 }

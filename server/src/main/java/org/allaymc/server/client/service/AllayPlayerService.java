@@ -161,7 +161,7 @@ public class AllayPlayerService implements PlayerService {
         banInfo.bannedIps().add(ip);
         players.values().stream()
                 .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
-                .forEach(player -> player.disconnect(TrKeys.A_DISCONNECT_BANIP));
+                .forEach(player -> player.disconnect(TrKeys.ALLAY_DISCONNECT_BANIP));
         return true;
     }
 
@@ -218,7 +218,7 @@ public class AllayPlayerService implements PlayerService {
         whitelist.whitelist().remove(uuidOrName);
         players.values().stream()
                 .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
-                .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
+                .forEach(player -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED));
         return true;
     }
 
@@ -241,11 +241,11 @@ public class AllayPlayerService implements PlayerService {
     }
 
     public synchronized void onDisconnect(EntityPlayer player) {
-        Server.getInstance().sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
+        Server.getInstance().sendTr(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
         // At this time the client have disconnected
         if (player.getLastClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal()) {
-            var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT);
+            var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
             Server.getInstance().broadcastTr(event.getQuitMessage(), player.getOriginName());
             players.remove(player.getLoginData().getUuid());

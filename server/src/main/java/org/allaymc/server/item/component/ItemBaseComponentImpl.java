@@ -365,9 +365,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo, true);
+    }
+
+    protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo, boolean checkEntityCollision) {
         EntityPlayer player = null;
         if (placementInfo != null) {
-            if (hasEntityCollision(dimension, placeBlockPos, blockState)) {
+            if (checkEntityCollision && hasEntityCollision(dimension, placeBlockPos, blockState)) {
                 return false;
             }
             player = placementInfo.player();

@@ -174,11 +174,11 @@ public final class AllayServer implements Server {
         this.scoreboardService.read();
         ((AllayPluginManager) this.pluginManager).enablePlugins();
 
-        sendTr(TrKeys.A_NETWORK_INTERFACE_STARTING);
+        sendTr(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
         ((AllayPlayerService) this.playerService).startNetworkInterface();
         this.startTime = System.currentTimeMillis();
         sendTr(
-                TrKeys.A_NETWORK_INTERFACE_STARTED,
+                TrKeys.ALLAY_NETWORK_INTERFACE_STARTED,
                 SETTINGS.networkSettings().ip(),
                 String.valueOf(SETTINGS.networkSettings().port()),
                 SETTINGS.networkSettings().ipv6(),
@@ -218,7 +218,7 @@ public final class AllayServer implements Server {
     @SneakyThrows
     private void shutdownReally() {
         // Disconnect all players
-        playerService.disconnectAllPlayers(TrKeys.A_SERVER_STOPPED);
+        playerService.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
         // Shutdown network server to prevent new client connecting to the server
         ((AllayPlayerService) this.playerService).shutdownNetworkInterface();
         this.scheduler.shutdown();

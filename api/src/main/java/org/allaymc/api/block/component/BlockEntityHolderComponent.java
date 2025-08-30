@@ -26,7 +26,6 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      * @param y         block entity's y coordinate.
      * @param z         block entity's z coordinate.
      * @param dimension the dimension which the block entity is in.
-     *
      * @return the block entity, or null if block entity is not found.
      */
     default T getBlockEntity(int x, int y, int z, Dimension dimension) {
@@ -94,7 +93,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         var blockEntity = getBlockEntityType().createBlockEntity(BlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
         chunk.addBlockEntity(blockEntity);
         if (sendToClient && blockEntity.sendToClient()) {
-            blockEntity.sendBlockEntityDataPacketToViewers();
+            blockEntity.sendBlockEntityToViewers();
         }
     }
 
@@ -112,7 +111,6 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      * @param y         block entity's y coordinate.
      * @param z         block entity's z coordinate.
      * @param dimension the dimension which the block entity is in.
-     *
      * @throws IllegalStateException if chunk isn't loaded or the block entity not exists.
      */
     default void removeBlockEntity(int x, int y, int z, Dimension dimension) {

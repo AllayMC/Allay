@@ -24,7 +24,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                 for (var packId : packet.getPackIds()) {
                     var pack = Registries.PACKS.get(UUID.fromString(packId.split("_")[0]));
                     if (pack == null) {
-                        player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
+                        player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_RESOURCEPACK);
                         return;
                     }
 
@@ -38,7 +38,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
             }
             case COMPLETED ->
                     ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).initializePlayer();
-            default -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
+            default -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         }
     }
 

@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public class TitleCommand extends VanillaCommand {
     public TitleCommand() {
-        super("title", TrKeys.M_COMMANDS_TITLE_DESCRIPTION);
+        super("title", TrKeys.MC_COMMANDS_TITLE_DESCRIPTION);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class TitleCommand extends VanillaCommand {
                     TitleType type = context.getResult(2);
                     String text = context.getResult(3);
                     players.forEach(p -> type.send(p, text));
-                    context.addOutput(TrKeys.M_COMMANDS_TITLE_SUCCESS);
+                    context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
                 .root()
@@ -36,7 +36,7 @@ public class TitleCommand extends VanillaCommand {
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(1);
                     players.forEach(EntityPlayerBaseComponent::clearTitle);
-                    context.addOutput(TrKeys.M_COMMANDS_TITLE_SUCCESS);
+                    context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
                 .root()
@@ -51,7 +51,7 @@ public class TitleCommand extends VanillaCommand {
                     int duration = context.getResult(3);
                     int fadeOutTime = context.getResult(4);
                     players.forEach(p -> p.setTitleSettings(fadeInTime, duration, fadeOutTime));
-                    context.addOutput(TrKeys.M_COMMANDS_TITLE_SUCCESS);
+                    context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
                 .root()
@@ -60,7 +60,7 @@ public class TitleCommand extends VanillaCommand {
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(1);
                     players.forEach(EntityPlayerBaseComponent::resetTitleSettings);
-                    context.addOutput(TrKeys.M_COMMANDS_TITLE_SUCCESS);
+                    context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 });
     }

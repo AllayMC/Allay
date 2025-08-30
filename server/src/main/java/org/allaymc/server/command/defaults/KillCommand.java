@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class KillCommand extends VanillaCommand {
 
     public KillCommand() {
-        super("kill", TrKeys.M_COMMANDS_KILL_DESCRIPTION);
+        super("kill", TrKeys.MC_COMMANDS_KILL_DESCRIPTION);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class KillCommand extends VanillaCommand {
             }
 
             if (targets.stream().allMatch(target -> target instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE)) {
-                context.addError("%" + TrKeys.M_COMMANDS_KILL_ATTEMPTKILLPLAYERCREATIVE);
+                context.addError("%" + TrKeys.MC_COMMANDS_KILL_ATTEMPTKILLPLAYERCREATIVE);
                 return context.fail();
             }
 
@@ -55,7 +55,7 @@ public class KillCommand extends VanillaCommand {
             var killedSummary = killedEntities.entrySet().stream()
                     .map(entry -> entry.getKey() + " * " + entry.getValue())
                     .collect(Collectors.joining(", "));
-            context.addOutput(TrKeys.M_COMMANDS_KILL_SUCCESSFUL, killedSummary);
+            context.addOutput(TrKeys.MC_COMMANDS_KILL_SUCCESSFUL, killedSummary);
             return context.success();
         }, SenderType.ENTITY);
     }

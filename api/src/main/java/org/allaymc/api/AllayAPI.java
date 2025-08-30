@@ -134,7 +134,7 @@ public final class AllayAPI {
         Objects.requireNonNull(i18nImpl);
         I18n.I18N.set(i18nImpl);
         i18nSet = true;
-        log.info(i18nImpl.tr(TrKeys.A_LANG_SET, i18nImpl.getDefaultLangCode().toString()));
+        log.info(i18nImpl.tr(TrKeys.ALLAY_LANG_SET, i18nImpl.getDefaultLangCode().toString()));
     }
 
     /**
@@ -143,9 +143,7 @@ public final class AllayAPI {
      * Each api class has only one implementation instance, so calling this method with the same parameters will return an identical object
      *
      * @param api the interface
-     *
      * @return the implementation instance of the specific interface
-     *
      * @throws APINotImplementedException if the interface has not been implemented
      */
     @ApiStatus.Internal
@@ -171,5 +169,6 @@ public final class AllayAPI {
         requireImpl(BossBar.Factory.class, BossBar.FACTORY::set);
     }
 
-    private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {}
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {
+    }
 }

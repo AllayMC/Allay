@@ -10,7 +10,7 @@ import org.allaymc.api.server.Server;
 public class BanIPCommand extends VanillaCommand {
 
     public BanIPCommand() {
-        super("ban-ip", TrKeys.M_COMMANDS_BANIP_DESCRIPTION);
+        super("ban-ip", TrKeys.MC_COMMANDS_BANIP_DESCRIPTION);
     }
 
     @Override
@@ -18,7 +18,7 @@ public class BanIPCommand extends VanillaCommand {
         tree.getRoot().str("ip").exec(context -> {
             String ip = context.getResult(0);
             if (Server.getInstance().getPlayerService().banIP(ip)) {
-                context.addOutput(TrKeys.M_COMMANDS_BANIP_SUCCESS, ip);
+                context.addOutput(TrKeys.MC_COMMANDS_BANIP_SUCCESS, ip);
                 return context.success();
             } else {
                 context.addError("Can't ban ip " + ip + ", which may already being banned, or the event is cancelled by plugin.");

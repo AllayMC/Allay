@@ -94,7 +94,7 @@ public final class Allay {
 
         var versionStr = ProtocolInfo.getLowestCodec().getMinecraftVersion() + " - " + ProtocolInfo.getLatestCodec().getMinecraftVersion();
         var protocolStr = ProtocolInfo.getLowestCodec().getProtocolVersion() + " - " + ProtocolInfo.getLatestCodec().getProtocolVersion();
-        log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING, versionStr, protocolStr));
+        log.info(I18n.get().tr(TrKeys.ALLAY_SERVER_STARTING, versionStr, protocolStr));
 
         try {
             initAllay();
@@ -118,7 +118,7 @@ public final class Allay {
             System.exit(1);
         }
 
-        log.info(I18n.get().tr(TrKeys.A_SERVER_STOPPED));
+        log.info(I18n.get().tr(TrKeys.ALLAY_SERVER_STOPPED));
         // Server has been shutdown
         // Call System.exit(0) to stop other non-daemon threads
         System.exit(0);
@@ -162,14 +162,16 @@ public final class Allay {
         api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
 
         api.implement("allay", GitProperties.isDevBuild());
+
+        var versionStr = ProtocolInfo.getLowestCodec().getMinecraftVersion() + " - " + ProtocolInfo.getLatestCodec().getMinecraftVersion();
+        var protocolStr = ProtocolInfo.getLowestCodec().getProtocolVersion() + " - " + ProtocolInfo.getLatestCodec().getProtocolVersion();
         log.info(I18n.get().tr(
-                TrKeys.A_COMMAND_VERSION_OUTPUT,
-                AllayAPI.getInstance().getCoreName(),
-                GitProperties.getBuildVersion(),
-                GitProperties.getBuildApiVersion()
+                TrKeys.ALLAY_COMMAND_VERSION_OUTPUT,
+                AllayAPI.getInstance().getCoreName(), GitProperties.getBuildVersion(),
+                GitProperties.getBuildApiVersion(), versionStr, protocolStr
         ));
         if (AllayAPI.getInstance().isDevBuild()) {
-            log.warn(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
+            log.warn(I18n.get().tr(TrKeys.ALLAY_SERVER_IS_DEV_VERSION));
         }
     }
 

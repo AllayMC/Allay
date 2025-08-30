@@ -10,7 +10,7 @@ import org.allaymc.api.server.Server;
 public class BanCommand extends VanillaCommand {
 
     public BanCommand() {
-        super("ban", TrKeys.M_COMMANDS_BAN_DESCRIPTION);
+        super("ban", TrKeys.MC_COMMANDS_BAN_DESCRIPTION);
     }
 
     @Override
@@ -18,10 +18,10 @@ public class BanCommand extends VanillaCommand {
         tree.getRoot().str("nameOrUUID").exec(context -> {
             String nameOrUUID = context.getResult(0);
             if (Server.getInstance().getPlayerService().ban(nameOrUUID)) {
-                context.addOutput(TrKeys.M_COMMANDS_BAN_SUCCESS, nameOrUUID);
+                context.addOutput(TrKeys.MC_COMMANDS_BAN_SUCCESS, nameOrUUID);
                 return context.success();
             } else {
-                context.addError("%" + TrKeys.M_COMMANDS_BAN_FAILED, nameOrUUID);
+                context.addError("%" + TrKeys.MC_COMMANDS_BAN_FAILED, nameOrUUID);
                 return context.fail();
             }
         });

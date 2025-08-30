@@ -117,7 +117,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 var status = getClientStatus();
                 if (status != ClientStatus.DISCONNECTED && status.ordinal() < ClientStatus.IN_GAME.ordinal()) {
                     log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress(), maxLoginTime / 20d);
-                    disconnect(TrKeys.M_DISCONNECTIONSCREEN_TIMEOUT);
+                    disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);
                 }
                 return true;
             }, maxLoginTime);
@@ -396,11 +396,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void completeLogin() {
         var playerService = Server.getInstance().getPlayerService();
         if (playerService.getPlayerCount() >= playerService.getMaxPlayerCount()) {
-            disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
+            disconnect(TrKeys.MC_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
             return;
         }
 
-        var event = new PlayerLoginEvent(thisPlayer, TrKeys.M_DISCONNECTIONSCREEN_NOREASON, TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED);
+        var event = new PlayerLoginEvent(thisPlayer, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_JOINED);
         if (!event.call()) {
             disconnect(event.getDisconnectReason());
             return;

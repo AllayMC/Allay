@@ -15,7 +15,7 @@ import org.joml.Vector3dc;
 public class SummonCommand extends VanillaCommand {
 
     public SummonCommand() {
-        super("summon", TrKeys.M_COMMANDS_SUMMON_DESCRIPTION);
+        super("summon", TrKeys.MC_COMMANDS_SUMMON_DESCRIPTION);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SummonCommand extends VanillaCommand {
                     var dim = sender.getCommandExecuteLocation().dimension();
                     EntityType<?> entityType = context.getResult(0);
                     if (entityType == EntityTypes.PLAYER) {
-                        context.addError("%" + TrKeys.M_COMMANDS_SUMMON_FAILED);
+                        context.addError("%" + TrKeys.MC_COMMANDS_SUMMON_FAILED);
                         return context.fail();
                     }
 
@@ -39,7 +39,7 @@ public class SummonCommand extends VanillaCommand {
 
                     var floorPos = pos.floor(new Vector3d());
                     if (dim.getChunkService().getChunkByDimensionPos((int) floorPos.x(), (int) floorPos.z()) == null) {
-                        context.addError("%" + TrKeys.M_COMMANDS_SUMMON_OUTOFWORLD);
+                        context.addError("%" + TrKeys.MC_COMMANDS_SUMMON_OUTOFWORLD);
                         return context.fail();
                     }
 
@@ -54,7 +54,7 @@ public class SummonCommand extends VanillaCommand {
                         dim.getEntityService().addEntity(entity);
                     }
 
-                    context.addOutput(TrKeys.M_COMMANDS_SUMMON_SUCCESS);
+                    context.addOutput(TrKeys.MC_COMMANDS_SUMMON_SUCCESS);
                     return context.success();
                 }, SenderType.ENTITY);
     }

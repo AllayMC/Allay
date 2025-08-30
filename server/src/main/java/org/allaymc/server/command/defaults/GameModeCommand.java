@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class GameModeCommand extends VanillaCommand {
     public GameModeCommand() {
-        super("gamemode", TrKeys.M_COMMANDS_GAMEMODE_DESCRIPTION);
+        super("gamemode", TrKeys.MC_COMMANDS_GAMEMODE_DESCRIPTION);
         aliases.add("gm");
     }
 
@@ -51,10 +51,10 @@ public class GameModeCommand extends VanillaCommand {
                         player.setGameType(gameType);
 
                         if (player.equals(context.getSender())) {
-                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_SELF, gameTypeName);
+                            context.addOutput(TrKeys.MC_COMMANDS_GAMEMODE_SUCCESS_SELF, gameTypeName);
                         } else {
-                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_OTHER, gameTypeName, player.getDisplayName());
-                            context.sendWhisperTo(player, TrKeys.M_GAMEMODE_CHANGED, gameTypeName);
+                            context.addOutput(TrKeys.MC_COMMANDS_GAMEMODE_SUCCESS_OTHER, gameTypeName, player.getDisplayName());
+                            context.sendWhisperTo(player, TrKeys.MC_GAMEMODE_CHANGED, gameTypeName);
                         }
                     }
 

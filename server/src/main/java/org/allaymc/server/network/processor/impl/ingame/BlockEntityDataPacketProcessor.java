@@ -16,7 +16,7 @@ public class BlockEntityDataPacketProcessor extends PacketProcessor<BlockEntityD
         var blockEntity = player.getDimension().getBlockEntity(pos.getX(), pos.getY(), pos.getZ());
         blockEntity.applyClientChange(player, packet.getData());
         // Send new data to other viewers
-        blockEntity.sendBlockEntityDataPacketToViewers();
+        blockEntity.sendBlockEntityToViewers();
     }
 
     @Override

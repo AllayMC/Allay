@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  */
 public class ClearCommand extends VanillaCommand {
     public ClearCommand() {
-        super("clear", TrKeys.M_COMMANDS_CLEAR_DESCRIPTION);
+        super("clear", TrKeys.MC_COMMANDS_CLEAR_DESCRIPTION);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ClearCommand extends VanillaCommand {
                             int count = containers.stream()
                                     .mapToInt(container -> countMatchingItems(container.getItemStacks(), itemType, data))
                                     .sum();
-                            context.addOutput(TrKeys.M_COMMANDS_CLEAR_TESTING, target.getOriginName(), count);
+                            context.addOutput(TrKeys.MC_COMMANDS_CLEAR_TESTING, target.getOriginName(), count);
                             status = count;
                         } else {
                             int removed = 0;
@@ -72,9 +72,9 @@ public class ClearCommand extends VanillaCommand {
                             }
 
                             if (removed > 0) {
-                                context.addOutput(TrKeys.M_COMMANDS_CLEAR_SUCCESS, target.getOriginName(), removed);
+                                context.addOutput(TrKeys.MC_COMMANDS_CLEAR_SUCCESS, target.getOriginName(), removed);
                             } else {
-                                context.addError("%" + TrKeys.M_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getOriginName());
+                                context.addError("%" + TrKeys.MC_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getOriginName());
                                 success = false;
                             }
 

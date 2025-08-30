@@ -17,7 +17,7 @@ public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcess
     public void handle(EntityPlayer player, ResourcePackChunkRequestPacket packet) {
         var pack = Registries.PACKS.get(packet.getPackId());
         if (pack == null) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
+            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_RESOURCEPACK);
             return;
         }
 

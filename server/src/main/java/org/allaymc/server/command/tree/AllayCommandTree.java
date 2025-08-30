@@ -72,7 +72,7 @@ public class AllayCommandTree implements CommandTree {
             context.addSyntaxError();
             return context.fail();
         } else if (!nextNode.checkPermissions(context.getSender())) {
-            context.addError("%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, context.queryArg(context.getCurrentArgIndex() - 1));
+            context.addError("%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, context.queryArg(context.getCurrentArgIndex() - 1));
             return context.fail();
         } else {
             return parse0(nextNode, context);

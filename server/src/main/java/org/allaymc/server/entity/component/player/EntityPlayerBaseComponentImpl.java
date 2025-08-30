@@ -751,7 +751,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             log.warn("Trying to set spawn point to a world which is not running");
             return;
         }
-        this.spawnPoint = spawnPoint;
+        this.spawnPoint = new Location3i(spawnPoint);
     }
 
     public void sendLocationToSelf() {

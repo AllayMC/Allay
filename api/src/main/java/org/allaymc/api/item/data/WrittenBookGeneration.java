@@ -11,10 +11,10 @@ import org.allaymc.api.i18n.TrKeys;
 @AllArgsConstructor
 @Getter
 public enum WrittenBookGeneration {
-    ORIGINAL_GENERATION(TrKeys.M_BOOK_GENERATION_0),
-    COPY_GENERATION(TrKeys.M_BOOK_GENERATION_1),
-    COPY_OF_COPY_GENERATION(TrKeys.M_BOOK_GENERATION_2),
-    TATTERED(TrKeys.M_BOOK_GENERATION_3);
+    ORIGINAL_GENERATION(TrKeys.MC_BOOK_GENERATION_0),
+    COPY_GENERATION(TrKeys.MC_BOOK_GENERATION_1),
+    COPY_OF_COPY_GENERATION(TrKeys.MC_BOOK_GENERATION_2),
+    TATTERED(TrKeys.MC_BOOK_GENERATION_3);
 
     private static final WrittenBookGeneration[] VALUES = values();
 
@@ -24,7 +24,6 @@ public enum WrittenBookGeneration {
      * Gets WrittenBookGeneration enum entry by generation value
      *
      * @param generation the generation value.
-     *
      * @return the WrittenBookGeneration enum entry.
      */
     public static WrittenBookGeneration fromGeneration(int generation) {

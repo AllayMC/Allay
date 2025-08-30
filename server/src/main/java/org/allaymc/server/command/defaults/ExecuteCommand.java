@@ -22,7 +22,7 @@ import java.util.function.Function;
 public class ExecuteCommand extends VanillaCommand {
 
     public ExecuteCommand() {
-        super("execute", TrKeys.M_COMMANDS_EXECUTE_DESCRIPTION);
+        super("execute", TrKeys.MC_COMMANDS_EXECUTE_DESCRIPTION);
     }
 
     @Override
@@ -110,17 +110,22 @@ public class ExecuteCommand extends VanillaCommand {
 
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
 
                     var dimInfo = DimensionInfo.fromName(dimName);
                     if (dimInfo == null) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWNDIM, dimName);
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_UNKNOWN, dimName);
                         return context.fail();
                     }
 
                     var dim = world.getDimension(dimInfo.dimensionId());
+                    if (dim == null) {
+                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_DIM_DISABLED, dimName);
+                        return context.fail();
+                    }
+
                     var sender = context.getSender();
                     var proxySender = new ProxyCommandSender(sender);
 
@@ -137,7 +142,7 @@ public class ExecuteCommand extends VanillaCommand {
                     String cmd = context.getResult(1);
                     var result = Registries.COMMANDS.execute(context.getSender(), cmd);
                     if (!result.isSuccess()) {
-                        context.addError("%" + TrKeys.M_COMMANDS_EXECUTE_FAILED, cmd, context.getSender().getCommandSenderName());
+                        context.addError("%" + TrKeys.MC_COMMANDS_EXECUTE_FAILED, cmd, context.getSender().getCommandSenderName());
                         context.addOutputs(result.context().getOutputs());
                     }
                     return new CommandResult(result.status(), context);

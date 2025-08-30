@@ -16,10 +16,10 @@ import org.allaymc.server.utils.Utils;
 public class EntityTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.ALLAY_ENTITYTYPE_LOADING));
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(EntityTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
         EntityTypeDefaultInitializer.init();
-        log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADED, EntityId.values().length));
+        log.info(I18n.get().tr(TrKeys.ALLAY_ENTITYTYPE_LOADED, EntityId.values().length));
     }
 }

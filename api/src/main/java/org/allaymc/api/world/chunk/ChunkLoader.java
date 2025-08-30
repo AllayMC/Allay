@@ -7,7 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Set;
 
 /**
- * ChunkLoader represents a loader that will load chunks in the dimension.
+ * ChunkLoader represents a loader that will load chunks in the dimension. A ChunkLoader is also a {@link PacketReceiver}
+ * since it needs to receive data packets that are bounded to the chunk which is loaded by itself.
  *
  * @author daoge_cmd
  */
@@ -38,7 +39,6 @@ public interface ChunkLoader extends PacketReceiver {
      * Set the chunk loading radius.
      *
      * @param radius the chunk loading radius.
-     *
      * @throws UnsupportedOperationException if the loading radius cannot be changed for this chunk loader.
      */
     void setChunkLoadingRadius(int radius);
