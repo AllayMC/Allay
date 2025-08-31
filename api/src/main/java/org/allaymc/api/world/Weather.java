@@ -28,7 +28,7 @@ public enum Weather {
     /**
      * Generate a random time length for this weather.
      *
-     * @return the random time length for this weather.
+     * @return the random time length for this weather
      */
     public int generateRandomTimeLength() {
         return ThreadLocalRandom.current().nextInt(minTime, maxTime + 1);
@@ -37,7 +37,7 @@ public enum Weather {
     /**
      * Create a start level event packet for this weather.
      *
-     * @return the start level event packet for this weather, or {@code null} if the start level event is {@code null}.
+     * @return the start level event packet for this weather, or {@code null} if the start level event is {@code null}
      */
     public LevelEventPacket createStartLevelEventPacket() {
         if (startLevelEvent == null) {
@@ -54,7 +54,7 @@ public enum Weather {
     /**
      * Create a stop level event packet for this weather.
      *
-     * @return the stop level event packet for this weather, or {@code null} if the stop level event is {@code null}.
+     * @return the stop level event packet for this weather, or {@code null} if the stop level event is {@code null}
      */
     public LevelEventPacket createStopLevelEventPacket() {
         if (stopLevelEvent == null) {

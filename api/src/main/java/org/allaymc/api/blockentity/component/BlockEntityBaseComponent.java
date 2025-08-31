@@ -24,21 +24,21 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Gets the type of block entity.
      *
-     * @return The type of block entity.
+     * @return The type of block entity
      */
     BlockEntityType<? extends BlockEntity> getBlockEntityType();
 
     /**
      * Gets the position of the block entity.
      *
-     * @return The position of the block entity.
+     * @return The position of the block entity
      */
     Position3ic getPosition();
 
     /**
      * Gets the dimension of the block entity.
      *
-     * @return The dimension of the block entity.
+     * @return The dimension of the block entity
      */
     default Dimension getDimension() {
         return getPosition().dimension();
@@ -47,7 +47,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Gets the world of the block entity.
      *
-     * @return The world of the block entity.
+     * @return The world of the block entity
      */
     default World getWorld() {
         return getDimension().getWorld();
@@ -56,22 +56,22 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Saves the NBT data of the block entity.
      *
-     * @return The NBT data of the block entity.
+     * @return The NBT data of the block entity
      */
     NbtMap saveNBT();
 
     /**
      * Loads the NBT data into the block entity.
      *
-     * @param nbt The NBT data to load.
+     * @param nbt The NBT data to load
      */
     void loadNBT(NbtMap nbt);
 
     /**
      * Applies a client change to the block entity.
      *
-     * @param player The player who made the change.
-     * @param nbt    The NBT data of the change.
+     * @param player The player who made the change
+     * @param nbt    The NBT data of the change
      */
     @ApiStatus.OverrideOnly
     default void applyClientChange(EntityPlayer player, NbtMap nbt) {
@@ -81,7 +81,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Creates a BlockEntityDataPacket for the block entity.
      *
-     * @return The BlockEntityDataPacket for the block entity.
+     * @return The BlockEntityDataPacket for the block entity
      */
     default BlockEntityDataPacket createBlockEntityDataPacket() {
         var packet = new BlockEntityDataPacket();
@@ -101,7 +101,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Sends a packet to the block entity's viewers.
      *
-     * @param packet      the packet to send.
+     * @param packet      the packet to send
      * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
      *                    will be sent in the next tick of the chunk that the block entity is currently in.
      */
@@ -136,7 +136,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Whether the block entity should be sent to the client.
      *
-     * @return Whether the block entity should be sent to the client.
+     * @return Whether the block entity should be sent to the client
      */
     default boolean sendToClient() {
         return true;
@@ -145,7 +145,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Gets the block state of the block entity.
      *
-     * @return The block state of the block entity.
+     * @return The block state of the block entity
      */
     default BlockState getBlockState() {
         var pos = getPosition();
@@ -155,21 +155,21 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     /**
      * Gets the custom name of the block entity.
      *
-     * @return The custom name of the block entity, null if not present.
+     * @return The custom name of the block entity, null if not present
      */
     String getCustomName();
 
     /**
      * Sets the custom name of the block entity.
      *
-     * @param customName The custom name of the block entity, can be null to remove the custom name.
+     * @param customName The custom name of the block entity, can be null to remove the custom name
      */
     void setCustomName(String customName);
 
     /**
      * Whether the block entity has a custom name.
      *
-     * @return Whether the block entity has a custom name.
+     * @return Whether the block entity has a custom name
      */
     default boolean hasCustomName() {
         return getCustomName() != null;

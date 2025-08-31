@@ -98,5 +98,6 @@ public class LightPropagator {
         propagateIncrease();
     }
 
-    protected record LightUpdateEntry(int x, int y, int z, int lightValue) {}
+    protected record LightUpdateEntry(int x, int y, int z, int lightValue) {
+    }
 }

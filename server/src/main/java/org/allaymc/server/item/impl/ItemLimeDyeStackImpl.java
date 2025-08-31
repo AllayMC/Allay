@@ -1,14 +1,15 @@
 package org.allaymc.server.item.impl;
 
-import java.util.List;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemLimeDyeStack;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 
+import java.util.List;
+
 public class ItemLimeDyeStackImpl extends ItemStackImpl implements ItemLimeDyeStack {
     public ItemLimeDyeStackImpl(ItemStackInitInfo initInfo,
-            List<ComponentProvider<? extends Component>> componentProviders) {
+                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

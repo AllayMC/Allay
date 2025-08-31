@@ -11,7 +11,7 @@ public interface TextReceiver {
     /**
      * Send a text to the receiver.
      *
-     * @param text the text.
+     * @param text the text
      */
     void sendText(String text);
 
@@ -32,18 +32,18 @@ public interface TextReceiver {
     /**
      * Send a text which may contains translation key to the receiver.
      *
-     * @param key                     the text which may contains translation key.
-     * @param forceTranslatedByClient whether the text should be translated by the client.
-     * @param args                    the arguments used in the translation.
+     * @param key                     the text which may contains translation key
+     * @param forceTranslatedByClient whether the text should be translated by the client
+     * @param args                    the arguments used in the translation
      */
     void sendTr(@MayContainTrKey String key, boolean forceTranslatedByClient, Object... args);
 
     /**
      * Send the command outputs to the receiver.
      *
-     * @param sender  the sender of the command.
-     * @param status  the status of the command.
-     * @param outputs the command outputs.
+     * @param sender  the sender of the command
+     * @param status  the status of the command
+     * @param outputs the command outputs
      */
     void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs);
 }

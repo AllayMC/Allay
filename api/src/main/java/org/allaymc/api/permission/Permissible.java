@@ -12,7 +12,7 @@ public interface Permissible {
     /**
      * Gets the permission group of this entity.
      *
-     * @return the permission group of this entity.
+     * @return the permission group of this entity
      */
     PermissionGroup getPermissionGroup();
 
@@ -20,7 +20,7 @@ public interface Permissible {
      * Override this method to return the actual permissible object. Useful when you want the
      * {@link PermissionListener} can get the actual permissible object.
      *
-     * @return the actual permissible object.
+     * @return the actual permissible object
      */
     default Permissible getPermissible() {
         return this;

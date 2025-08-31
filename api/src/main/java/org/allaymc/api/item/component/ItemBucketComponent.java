@@ -14,14 +14,14 @@ public interface ItemBucketComponent extends ItemComponent {
     /**
      * Get the liquid inside the bucket.
      *
-     * @return the liquid inside the bucket, or air type if the bucket is empty.
+     * @return the liquid inside the bucket, or air type if the bucket is empty
      */
     BlockType<?> getLiquidType();
 
     /**
      * Get the entity inside the bucket.
      *
-     * @return the entity inside the bucket, or {@code null} if the bucket does not hold an entity.
+     * @return the entity inside the bucket, or {@code null} if the bucket does not hold an entity
      */
     EntityType<?> getEntityType();
 

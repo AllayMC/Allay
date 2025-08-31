@@ -28,10 +28,10 @@ public abstract class OtherChunkAccessibleContext extends Context {
      * Sets the block state at the specified coordinates in the default layer. If the coordinates are in the current
      * chunk, sets it directly; otherwise, delegates to setBlockStateInOtherChunk.
      *
-     * @param x          The x-coordinate (world).
-     * @param y          The y-coordinate (world).
-     * @param z          The z-coordinate (world).
-     * @param blockState The block state to set.
+     * @param x          The x-coordinate (world)
+     * @param y          The y-coordinate (world)
+     * @param z          The z-coordinate (world)
+     * @param blockState The block state to set
      */
     public void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
@@ -41,11 +41,11 @@ public abstract class OtherChunkAccessibleContext extends Context {
      * Sets the block state at the specified coordinates and layer. If the coordinates are in the current chunk,
      * sets it directly; otherwise, delegates to setBlockStateInOtherChunk.
      *
-     * @param x          The x-coordinate (world).
-     * @param y          The y-coordinate (world).
-     * @param z          The z-coordinate (world).
-     * @param blockState The block state to set.
-     * @param layer      The block layer.
+     * @param x          The x-coordinate (world)
+     * @param y          The y-coordinate (world)
+     * @param z          The z-coordinate (world)
+     * @param blockState The block state to set
+     * @param layer      The block layer
      */
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
         if (isInCurrentChunk(x, y, z)) {
@@ -59,11 +59,11 @@ public abstract class OtherChunkAccessibleContext extends Context {
     /**
      * Gets the block state at the specified coordinates in the default layer.
      *
-     * @param x The x-coordinate (world).
-     * @param y The y-coordinate (world).
-     * @param z The z-coordinate (world).
+     * @param x The x-coordinate (world)
+     * @param y The y-coordinate (world)
+     * @param z The z-coordinate (world)
      *
-     * @return The block state at the given position.
+     * @return The block state at the given position
      */
     public BlockState getBlockState(int x, int y, int z) {
         return getBlockState(x, y, z, 0);
@@ -73,9 +73,9 @@ public abstract class OtherChunkAccessibleContext extends Context {
      * Gets the block state at the specified coordinates and layer. If the coordinates are in the current
      * chunk, gets it directly; otherwise, delegates to getBlockStateInOtherChunk.
      *
-     * @param x     The x-coordinate (world).
-     * @param y     The y-coordinate (world).
-     * @param z     The z-coordinate (world).
+     * @param x     The x-coordinate (world)
+     * @param y     The y-coordinate (world)
+     * @param z     The z-coordinate (world)
      * @param layer The block layer
      *
      * @return The block state at the given position and layer

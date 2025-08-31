@@ -43,7 +43,7 @@ public interface PersistentDataTypeRegistry {
      *
      * @return the wrapped tag instance
      *
-     * @throws IllegalArgumentException if no suitable tag type adapter is found for this type.
+     * @throws IllegalArgumentException if no suitable tag type adapter is found for this type
      */
     <T> Object wrap(PersistentDataType<T, ?> type, final T value);
 
@@ -56,7 +56,7 @@ public interface PersistentDataTypeRegistry {
      *
      * @return {@code true} if the tag value is an instance of the primitive type; {@code false} otherwise
      *
-     * @throws IllegalArgumentException if no suitable tag type adapter is found for this type.
+     * @throws IllegalArgumentException if no suitable tag type adapter is found for this type
      */
     <T> boolean isInstanceOf(PersistentDataType<T, ?> type, Object value);
 
@@ -69,7 +69,7 @@ public interface PersistentDataTypeRegistry {
      *
      * @return the corresponding tag adapter instance
      *
-     * @throws IllegalArgumentException if no adapter is found for the specified persistent data type.
+     * @throws IllegalArgumentException if no adapter is found for the specified persistent data type
      */
     <T, Z> TagAdapter<T, Z> getAdapter(PersistentDataType<T, ?> type);
 
@@ -83,7 +83,7 @@ public interface PersistentDataTypeRegistry {
      *
      * @return the extracted primitive value
      *
-     * @throws IllegalArgumentException if the tag representation doesn't match the expected type or if no suitable adapter is found.
+     * @throws IllegalArgumentException if the tag representation doesn't match the expected type or if no suitable adapter is found
      */
     <T, Z> T extract(PersistentDataType<T, ?> type, Z value);
 
@@ -111,7 +111,7 @@ public interface PersistentDataTypeRegistry {
          *
          * @return the extracted primitive value
          *
-         * @throws IllegalArgumentException if the provided tag representation is invalid.
+         * @throws IllegalArgumentException if the provided tag representation is invalid
          */
         public P extract(PersistentDataType<P, ?> dataType, T value) {
             Preconditions.checkArgument(this.isInstance(dataType, value), "Invalid type: " + value.getClass().getSimpleName());
@@ -126,7 +126,7 @@ public interface PersistentDataTypeRegistry {
          *
          * @return the constructed tag representation
          *
-         * @throws IllegalArgumentException if the provided value is of an invalid type.
+         * @throws IllegalArgumentException if the provided value is of an invalid type
          */
         public Object build(PersistentDataType<P, ?> dataType, final P value) {
             Preconditions.checkArgument(this.primitiveType.isInstance(value), "Invalid value type: " + value.getClass().getSimpleName());

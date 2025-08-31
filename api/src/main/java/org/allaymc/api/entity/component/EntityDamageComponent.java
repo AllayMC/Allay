@@ -10,8 +10,9 @@ public interface EntityDamageComponent extends EntityComponent {
     /**
      * Attack this entity with the given damage container.
      *
-     * @param damage         the damage container.
-     * @param ignoreCoolDown {@code true} to ignore the attack cool down, {@code false} otherwise.
+     * @param damage         the damage container
+     * @param ignoreCoolDown {@code true} to ignore the attack cool down, {@code false} otherwise
+     *
      * @return {@code true} if the entity was damaged, {@code false} otherwise.
      */
     boolean attack(DamageContainer damage, boolean ignoreCoolDown);
@@ -26,7 +27,8 @@ public interface EntityDamageComponent extends EntityComponent {
     /**
      * Attack this entity with the given damage.
      *
-     * @param damage the damage.
+     * @param damage the damage
+     *
      * @return {@code true} if the entity was damaged, {@code false} otherwise.
      */
     default boolean attack(float damage) {
@@ -36,8 +38,9 @@ public interface EntityDamageComponent extends EntityComponent {
     /**
      * Attack this entity with the given attacker and damage.
      *
-     * @param attacker the attacker.
-     * @param damage   the damage.
+     * @param attacker the attacker
+     * @param damage   the damage
+     *
      * @return {@code true} if the entity was damaged, {@code false} otherwise.
      */
     default boolean attack(Entity attacker, float damage) {
@@ -47,7 +50,8 @@ public interface EntityDamageComponent extends EntityComponent {
     /**
      * Check if this entity can be attacked with the given damage container.
      *
-     * @param damage the damage container.
+     * @param damage the damage container
+     *
      * @return {@code true} if the entity can be attacked, {@code false} otherwise.
      */
     boolean canBeAttacked(DamageContainer damage);
@@ -55,14 +59,14 @@ public interface EntityDamageComponent extends EntityComponent {
     /**
      * Get the last damage that was dealt to this entity.
      *
-     * @return the last damage container.
+     * @return the last damage container
      */
     DamageContainer getLastDamage();
 
     /**
      * Get the time when the last damage was dealt to this entity.
      *
-     * @return the time in milliseconds.
+     * @return the time in milliseconds
      */
     long getLastDamageTime();
 
@@ -102,14 +106,15 @@ public interface EntityDamageComponent extends EntityComponent {
     /**
      * Get the on fire ticks of the entity.
      *
-     * @return the on fire ticks, or zero if the entity is not on fire.
+     * @return the on fire ticks, or zero if the entity is not on fire
      */
     int getOnFireTicks();
 
     /**
      * Set the on fire ticks of the entity.
      *
-     * @param onFireTicks the on fire ticks.
+     * @param onFireTicks the on fire ticks
+     *
      * @return {@code true} if the on fire ticks was set, {@code false} if the entity is fireproof.
      */
     boolean setOnFireTicks(int onFireTicks);

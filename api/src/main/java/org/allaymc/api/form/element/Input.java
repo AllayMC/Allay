@@ -24,9 +24,9 @@ public final class Input implements CustomFormElement {
     /**
      * Create a new input.
      *
-     * @param text        the text of the input.
-     * @param placeholder the placeholder of the input.
-     * @param defaultText the default text of the input.
+     * @param text        the text of the input
+     * @param placeholder the placeholder of the input
+     * @param defaultText the default text of the input
      */
     public Input(String text, String placeholder, String defaultText) {
         this.text = text;

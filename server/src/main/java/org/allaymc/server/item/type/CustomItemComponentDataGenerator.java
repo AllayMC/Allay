@@ -146,8 +146,8 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
     /**
      * Store the render offsets of custom items.
      *
-     * @param mainHand the offsets for the main hand, can be {@code null}.
-     * @param offHand  the offsets for the offHand, can be {@code null}.
+     * @param mainHand the offsets for the main hand, can be {@code null}
+     * @param offHand  the offsets for the offHand, can be {@code null}
      */
     @Builder
     public record RenderOffsets(Hand mainHand, Hand offHand) {
@@ -155,8 +155,9 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
         /**
          * Creates a RenderOffsets instance with texture size applied to the offsets.
          *
-         * @param textureSize the size of the texture, must be greater than 0 and a multiple of 16.
-         * @return a RenderOffsets instance with scaled offsets based on the texture size.
+         * @param textureSize the size of the texture, must be greater than 0 and a multiple of 16
+         *
+         * @return a RenderOffsets instance with scaled offsets based on the texture size
          */
         public static RenderOffsets textureSize(int textureSize) {
             return scale(textureSize / 16f);
@@ -165,8 +166,9 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
         /**
          * Creates a RenderOffsets instance with scale applied to the offsets.
          *
-         * @param scale the scale factor to apply to the offsets, must be greater than 0.
-         * @return a RenderOffsets instance with scaled offsets.
+         * @param scale the scale factor to apply to the offsets, must be greater than 0
+         *
+         * @return a RenderOffsets instance with scaled offsets
          */
         public static RenderOffsets scale(float scale) {
             Preconditions.checkArgument(scale > 0, "Scale must be greater than 0");
@@ -189,11 +191,30 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
                     .build();
         }
 
+        public NbtMap toNBT() {
+            var builder = NbtMap.builder();
+
+            if (mainHand != null) {
+                NbtMap nbt = mainHand.toNBT();
+                if (nbt != null) {
+                    builder.putCompound("main_hand", nbt);
+                }
+            }
+            if (offHand != null) {
+                NbtMap nbt = offHand.toNBT();
+                if (nbt != null) {
+                    builder.putCompound("off_hand", nbt);
+                }
+            }
+
+            return builder.build();
+        }
+
         /**
          * The hand that is used for the offset.
          *
-         * @param firstPerson the offset for the first person view, can be {@code null}.
-         * @param thirdPerson the offset for the third person view, can be {@code null}.
+         * @param firstPerson the offset for the first person view, can be {@code null}
+         * @param thirdPerson the offset for the third person view, can be {@code null}
          */
         @Builder
         public record Hand(Offset firstPerson, Offset thirdPerson) {
@@ -217,12 +238,16 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
         /**
          * The offset of the item.
          *
-         * @param position the position, can be {@code null}.
-         * @param rotation the rotation, can be {@code null}.
-         * @param scale    the scale, can be {@code null}.
+         * @param position the position, can be {@code null}
+         * @param rotation the rotation, can be {@code null}
+         * @param scale    the scale, can be {@code null}
          */
         @Builder
         public record Offset(Vector3fc position, Vector3fc rotation, Vector3fc scale) {
+            private static List<Float> vecToList(Vector3fc xyz) {
+                return List.of(xyz.x(), xyz.y(), xyz.z());
+            }
+
             private NbtMap toNBT() {
                 if (position == null && rotation == null && scale == null) {
                     return null;
@@ -241,29 +266,6 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
 
                 return builder.build();
             }
-
-            private static List<Float> vecToList(Vector3fc xyz) {
-                return List.of(xyz.x(), xyz.y(), xyz.z());
-            }
-        }
-
-        public NbtMap toNBT() {
-            var builder = NbtMap.builder();
-
-            if (mainHand != null) {
-                NbtMap nbt = mainHand.toNBT();
-                if (nbt != null) {
-                    builder.putCompound("main_hand", nbt);
-                }
-            }
-            if (offHand != null) {
-                NbtMap nbt = offHand.toNBT();
-                if (nbt != null) {
-                    builder.putCompound("off_hand", nbt);
-                }
-            }
-
-            return builder.build();
         }
     }
 }

@@ -10,12 +10,12 @@ import org.joml.primitives.AABBdc;
 public interface HasAABB {
 
     /**
-     * @return the AABB of the object.
+     * @return the AABB of the object
      */
     AABBdc getAABB();
 
     /**
-     * @return the offset AABB of the object.
+     * @return the offset AABB of the object
      */
     AABBdc getOffsetAABB();
 }

@@ -11,7 +11,7 @@ public interface BaseRecipe extends Recipe<RecipeData> {
     /**
      * Get the type of this recipe.
      *
-     * @return the type of this recipe.
+     * @return the type of this recipe
      */
     CraftingDataType getType();
 }

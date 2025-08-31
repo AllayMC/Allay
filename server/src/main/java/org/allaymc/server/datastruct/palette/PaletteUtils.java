@@ -31,7 +31,8 @@ public class PaletteUtils {
             throw new IllegalArgumentException("NBT compound is too deeply nested");
         }
         switch (type.getEnum()) {
-            case END -> {}
+            case END -> {
+            }
             case BYTE -> input.skipBytes(1);
             case SHORT -> input.skipBytes(2);
             case INT, FLOAT -> input.skipBytes(4);

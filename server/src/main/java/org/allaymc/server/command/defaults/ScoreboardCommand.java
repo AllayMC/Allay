@@ -29,6 +29,47 @@ public class ScoreboardCommand extends VanillaCommand {
         super("scoreboard", TrKeys.MC_COMMANDS_SCOREBOARD_DESCRIPTION);
     }
 
+    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr) throws SelectorSyntaxException {
+        return parseScorers(sender, wildcardTargetStr, null);
+    }
+
+    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr, Scoreboard scoreboard) throws SelectorSyntaxException {
+        var service = Server.getInstance().getScoreboardService();
+        Set<Scorer> scorers = new HashSet<>();
+        EntityPlayer player;
+        if (wildcardTargetStr.equals("*")) {
+            if (scoreboard != null) {
+                scorers.addAll(scoreboard.getLines().keySet());
+                return scorers;
+            }
+
+            for (var sb : service.getScoreboards().values()) {
+                scorers.addAll(sb.getLines().keySet());
+            }
+
+            return scorers;
+        }
+
+        if (EntitySelectorAPI.getAPI().checkValid(wildcardTargetStr)) {
+            scorers = EntitySelectorAPI.getAPI()
+                    .matchEntities(sender, wildcardTargetStr)
+                    .stream()
+                    .map(e -> e instanceof EntityPlayer p ?
+                            new PlayerScorer(p) :
+                            new EntityScorer(e))
+                    .collect(Collectors.toSet());
+            return scorers;
+        }
+
+        if ((player = Server.getInstance().getPlayerService().getOnlinePlayerByName(wildcardTargetStr)) != null) {
+            scorers.add(new PlayerScorer(player));
+        } else {
+            scorers.add(new FakeScorer(wildcardTargetStr));
+        }
+
+        return scorers;
+    }
+
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -170,46 +211,5 @@ public class ScoreboardCommand extends VanillaCommand {
 
                     return context.fail();
                 });
-    }
-
-    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr) throws SelectorSyntaxException {
-        return parseScorers(sender, wildcardTargetStr, null);
-    }
-
-    private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr, Scoreboard scoreboard) throws SelectorSyntaxException {
-        var service = Server.getInstance().getScoreboardService();
-        Set<Scorer> scorers = new HashSet<>();
-        EntityPlayer player;
-        if (wildcardTargetStr.equals("*")) {
-            if (scoreboard != null) {
-                scorers.addAll(scoreboard.getLines().keySet());
-                return scorers;
-            }
-
-            for (var sb : service.getScoreboards().values()) {
-                scorers.addAll(sb.getLines().keySet());
-            }
-
-            return scorers;
-        }
-
-        if (EntitySelectorAPI.getAPI().checkValid(wildcardTargetStr)) {
-            scorers = EntitySelectorAPI.getAPI()
-                    .matchEntities(sender, wildcardTargetStr)
-                    .stream()
-                    .map(e -> e instanceof EntityPlayer p ?
-                            new PlayerScorer(p) :
-                            new EntityScorer(e))
-                    .collect(Collectors.toSet());
-            return scorers;
-        }
-
-        if ((player = Server.getInstance().getPlayerService().getOnlinePlayerByName(wildcardTargetStr)) != null) {
-            scorers.add(new PlayerScorer(player));
-        } else {
-            scorers.add(new FakeScorer(wildcardTargetStr));
-        }
-
-        return scorers;
     }
 }

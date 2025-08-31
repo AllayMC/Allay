@@ -61,7 +61,8 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
     /**
      * Check for water within 4 blocks in each direction from the farmland.
      *
-     * @param block The farmland block.
+     * @param block The farmland block
+     *
      * @return {@code true} if the farmland is hydrated, {@code false} otherwise.
      */
     protected boolean hydrated(Block block) {

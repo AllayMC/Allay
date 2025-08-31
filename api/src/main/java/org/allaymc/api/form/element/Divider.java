@@ -14,7 +14,8 @@ public final class Divider implements SimpleFormElement, CustomFormElement {
     /**
      * Create a new divider.
      */
-    public Divider() {}
+    public Divider() {
+    }
 
     @Override
     public void syncDefaultValueToResponse(String response) {

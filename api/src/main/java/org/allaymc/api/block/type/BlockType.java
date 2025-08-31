@@ -26,14 +26,14 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Get the block behavior associated with this block type.
      *
-     * @return the block behavior.
+     * @return the block behavior
      */
     T getBlockBehavior();
 
     /**
      * Get the properties of this block type.
      *
-     * @return an unmodifiable view of the map of block property types.
+     * @return an unmodifiable view of the map of block property types
      */
     @UnmodifiableView
     Map<String, BlockPropertyType<?>> getProperties();
@@ -41,7 +41,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Check if the block type has the specified property.
      *
-     * @param name the property name.
+     * @param name the property name
      *
      * @return {@code true} if the block type has the property, {@code false} otherwise.
      */
@@ -52,7 +52,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Check if the block type has the specified property.
      *
-     * @param propertyType the property type.
+     * @param propertyType the property type
      *
      * @return {@code true} if the block type has the property, {@code false} otherwise.
      */
@@ -63,7 +63,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Get all possible states of this block type.
      *
-     * @return an unmodifiable view of the collection of all block states.
+     * @return an unmodifiable view of the collection of all block states
      */
     @UnmodifiableView
     Collection<BlockState> getAllStates();
@@ -72,7 +72,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Get the hash map which contains all states of this block type.
      * The key is block state's hash.
      *
-     * @return an unmodifiable view of the map of block states by their hash.
+     * @return an unmodifiable view of the map of block states by their hash
      */
     @UnmodifiableView
     Map<Integer, BlockState> getBlockStateHashMap();
@@ -81,7 +81,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Get the special value map of block states.
      * The key is block state's special value.
      *
-     * @return an unmodifiable view of the map of block states by their special values.
+     * @return an unmodifiable view of the map of block states by their special values
      */
     @UnmodifiableView
     Map<Long, BlockState> getSpecialValueMap();
@@ -89,21 +89,21 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Get the number of bits used for special values.
      *
-     * @return the number of special value bits.
+     * @return the number of special value bits
      */
     byte getSpecialValueBits();
 
     /**
      * Get the default state of this block type.
      *
-     * @return the default block state.
+     * @return the default block state
      */
     BlockState getDefaultState();
 
     /**
      * Get the item identifier for this block type.
      *
-     * @return the item identifier.
+     * @return the item identifier
      */
     default Identifier getItemIdentifier() {
         return getItemType().getIdentifier();
@@ -112,14 +112,14 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Get the item type associated with this block type.
      *
-     * @return the item type.
+     * @return the item type
      */
     ItemType<?> getItemType();
 
     /**
      * Creates a block state from the given list of property values.
      *
-     * @param propertyValues the list of property values.
+     * @param propertyValues the list of property values
      *
      * @return the block state, or null if the given property values is invalid
      */
@@ -129,7 +129,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Creates a block state, the property values are copied from the given block state. <br>
      * The given block state's type must have same property types as this block type.
      *
-     * @param other the block state to copy property values from.
+     * @param other the block state to copy property values from
      *
      * @return the block state, or null if the given block state is invalid
      */
@@ -140,7 +140,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Creates a block state from the given block state hash.
      *
-     * @param blockStateHash the block state hash.
+     * @param blockStateHash the block state hash
      *
      * @return the block state, or null if the given block state hash is invalid
      */
@@ -151,7 +151,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Creates a block state from the given array of property values.
      *
-     * @param propertyValues the array of property values.
+     * @param propertyValues the array of property values
      *
      * @return the block state, or null if the given property values is invalid
      */
@@ -162,7 +162,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Registers this block type to the given registry.
      *
-     * @param registry the block type registry.
+     * @param registry the block type registry
      */
     default void register(SimpleMappedRegistry<Identifier, BlockType<?>> registry) {
         registry.register(getIdentifier(), this);
@@ -171,7 +171,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Registers all block states of this block type to the given palette.
      *
-     * @param registry the block state hash palette.
+     * @param registry the block state hash palette
      */
     default void register(IntMappedRegistry<BlockState> registry) {
         for (var s : getBlockStateHashMap().values()) {
@@ -182,7 +182,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Get the set of tags associated with this block type.
      *
-     * @return an unmodifiable set of block tags.
+     * @return an unmodifiable set of block tags
      */
     @Unmodifiable
     Set<BlockTag> getBlockTags();
@@ -190,7 +190,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     /**
      * Check if this block type has the specified tag.
      *
-     * @param blockTag the block tag.
+     * @param blockTag the block tag
      *
      * @return {@code true} if the block type has the tag, {@code false} otherwise.
      */

@@ -39,6 +39,64 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         super(blockType);
     }
 
+    protected static int getMaxFlameOddsOfNeighborsEncouragingFire(Block block) {
+        if (block.getBlockType() != BlockTypes.AIR) {
+            return 0;
+        } else {
+            int flameOdds = 0;
+            for (var face : BlockFace.values()) {
+                flameOdds = Math.max(flameOdds, block.offsetPos(face).getBlockStateData().flameOdds());
+            }
+            return flameOdds;
+        }
+    }
+
+    protected static boolean canNeighborBurn(Block block) {
+        for (BlockFace face : BlockFace.values()) {
+            if (block.offsetPos(face).getBlockStateData().flameOdds() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected static boolean willBeWipedOutByRain(Block block) {
+        var pos = block.getPos();
+        var dimension = pos.dimension();
+        var downBlockState = block.offsetPos(BlockFace.DOWN);
+        var burnForever = canFireBurnForever(downBlockState.getBlockState());
+
+        return !burnForever && dimension.getWorld().getWeathers().contains(Weather.RAIN) &&
+               (dimension.canPosSeeSky(pos) ||
+                dimension.canPosSeeSky(BlockFace.EAST.offsetPos(pos)) ||
+                dimension.canPosSeeSky(BlockFace.WEST.offsetPos(pos)) ||
+                dimension.canPosSeeSky(BlockFace.SOUTH.offsetPos(pos)) ||
+                dimension.canPosSeeSky(BlockFace.NORTH.offsetPos(pos)));
+    }
+
+    protected static boolean canFireBurnForever(BlockState blockState) {
+        var blockType = blockState.getBlockType();
+        var burnForever = blockType.hasBlockTag(BlockCustomTags.INFINITE_FIRE_SUPPORTER);
+        // INFINIBURN_BIT is used by bedrock
+        if (blockType.hasProperty(BlockPropertyTypes.INFINIBURN_BIT)) {
+            burnForever = blockState.getPropertyValue(BlockPropertyTypes.INFINIBURN_BIT);
+        }
+        return burnForever;
+    }
+
+    // This method is also used by ItemFlintAndSteelBaseComponentImpl
+    public static boolean canSupportFire(BlockState downBlockState) {
+        if (downBlockState.getBlockType() == BlockTypes.SOUL_SAND) {
+            // Soul sand can also support fire even
+            // its up surface is not full
+            return true;
+        }
+        // The block state below must be a solid block
+        // and the top surface of this block must be full
+        // to support the fire block
+        return downBlockState.getBlockStateData().collisionShape().isFull(BlockFace.UP);
+    }
+
     @Override
     public void onPlace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onPlace(block, newBlockState, placementInfo);
@@ -257,63 +315,5 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         if (event.call()) {
             damageComponent.setOnFireTicks(event.getOnFireTicks());
         }
-    }
-
-    protected static int getMaxFlameOddsOfNeighborsEncouragingFire(Block block) {
-        if (block.getBlockType() != BlockTypes.AIR) {
-            return 0;
-        } else {
-            int flameOdds = 0;
-            for (var face : BlockFace.values()) {
-                flameOdds = Math.max(flameOdds, block.offsetPos(face).getBlockStateData().flameOdds());
-            }
-            return flameOdds;
-        }
-    }
-
-    protected static boolean canNeighborBurn(Block block) {
-        for (BlockFace face : BlockFace.values()) {
-            if (block.offsetPos(face).getBlockStateData().flameOdds() > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected static boolean willBeWipedOutByRain(Block block) {
-        var pos = block.getPos();
-        var dimension = pos.dimension();
-        var downBlockState = block.offsetPos(BlockFace.DOWN);
-        var burnForever = canFireBurnForever(downBlockState.getBlockState());
-
-        return !burnForever && dimension.getWorld().getWeathers().contains(Weather.RAIN) &&
-               (dimension.canPosSeeSky(pos) ||
-                dimension.canPosSeeSky(BlockFace.EAST.offsetPos(pos)) ||
-                dimension.canPosSeeSky(BlockFace.WEST.offsetPos(pos)) ||
-                dimension.canPosSeeSky(BlockFace.SOUTH.offsetPos(pos)) ||
-                dimension.canPosSeeSky(BlockFace.NORTH.offsetPos(pos)));
-    }
-
-    protected static boolean canFireBurnForever(BlockState blockState) {
-        var blockType = blockState.getBlockType();
-        var burnForever = blockType.hasBlockTag(BlockCustomTags.INFINITE_FIRE_SUPPORTER);
-        // INFINIBURN_BIT is used by bedrock
-        if (blockType.hasProperty(BlockPropertyTypes.INFINIBURN_BIT)) {
-            burnForever = blockState.getPropertyValue(BlockPropertyTypes.INFINIBURN_BIT);
-        }
-        return burnForever;
-    }
-
-    // This method is also used by ItemFlintAndSteelBaseComponentImpl
-    public static boolean canSupportFire(BlockState downBlockState) {
-        if (downBlockState.getBlockType() == BlockTypes.SOUL_SAND) {
-            // Soul sand can also support fire even
-            // its up surface is not full
-            return true;
-        }
-        // The block state below must be a solid block
-        // and the top surface of this block must be full
-        // to support the fire block
-        return downBlockState.getBlockStateData().collisionShape().isFull(BlockFace.UP);
     }
 }

@@ -23,11 +23,11 @@ public enum SelectorType {
     /**
      * Parses a string to determine the corresponding {@code SelectorType}.
      *
-     * @param type The string representation of the selector type.
+     * @param type The string representation of the selector type
      *
-     * @return The corresponding {@code SelectorType}.
+     * @return The corresponding {@code SelectorType}
      *
-     * @throws SelectorSyntaxException If the provided type does not match any known selector type.
+     * @throws SelectorSyntaxException If the provided type does not match any known selector type
      */
     public static SelectorType parseSelectorType(String type) throws SelectorSyntaxException {
         return switch (type) {

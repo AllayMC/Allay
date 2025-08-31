@@ -17,8 +17,6 @@ public interface ChunkStepTask {
 
     int POPULATION_NEIGHBOR_ACCESS_RANGE = 1;
 
-    UnsafeChunk doWork(WorldGenerator worldGenerator, UnsafeChunk currentChunk, ChunkSource chunkSource);
-
     static UnsafeChunk doNoise(WorldGenerator worldGenerator, UnsafeChunk currentChunk, ChunkSource chunkSource) {
         var context = new NoiseContext(currentChunk);
         worldGenerator.getNoisers().forEach(noiser -> noiser.apply(context));
@@ -36,4 +34,6 @@ public interface ChunkStepTask {
         worldGenerator.getPostProcessors().forEach(postProcessor -> postProcessor.apply(context));
         return currentChunk;
     }
+
+    UnsafeChunk doWork(WorldGenerator worldGenerator, UnsafeChunk currentChunk, ChunkSource chunkSource);
 }

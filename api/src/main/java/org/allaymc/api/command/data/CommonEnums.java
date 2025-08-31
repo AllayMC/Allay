@@ -32,8 +32,9 @@ public interface CommonEnums {
     /**
      * Converts a string to a GameType.
      *
-     * @param str The string to convert.
-     * @return The GameType, or null if the string is not recognized.
+     * @param str The string to convert
+     *
+     * @return The GameType, or null if the string is not recognized
      */
     static GameType getGameTypeFromString(String str) {
         return switch (str.trim().toLowerCase()) {
@@ -48,8 +49,9 @@ public interface CommonEnums {
     /**
      * Get the translation key for the given GameType.
      *
-     * @param gameType The GameType.
-     * @return The translation key, or the GameType string if the GameType is not recognized.
+     * @param gameType The GameType
+     *
+     * @return The translation key, or the GameType string if the GameType is not recognized
      */
     @MayContainTrKey
     static String getGameTypeTrKey(GameType gameType) {
@@ -65,8 +67,9 @@ public interface CommonEnums {
     /**
      * Get the GameRule with the given name.
      *
-     * @param name The name of the GameRule.
-     * @return The GameRule, or null if the name is not recognized.
+     * @param name The name of the GameRule
+     *
+     * @return The GameRule, or null if the name is not recognized
      */
     static GameRule getGameRuleFromName(String name) {
         return GameRule.fromName(name);

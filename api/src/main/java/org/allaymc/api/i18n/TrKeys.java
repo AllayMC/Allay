@@ -1248,7 +1248,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_CURE = "minecraft:action.interact.cure";
 
     /**
-     * Cut 
+     * Cut
      */
     String MC_ACTION_INTERACT_CUT = "minecraft:action.interact.cut";
 
@@ -1343,7 +1343,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_READ = "minecraft:action.interact.read";
 
     /**
-     * Remove Carpet 
+     * Remove Carpet
      */
     String MC_ACTION_INTERACT_REMOVECARPET = "minecraft:action.interact.removecarpet";
 
@@ -1353,12 +1353,12 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_REMOVEHARNESS = "minecraft:action.interact.removeharness";
 
     /**
-     * Remove Horse Armor 
+     * Remove Horse Armor
      */
     String MC_ACTION_INTERACT_REMOVEHORSEARMOR = "minecraft:action.interact.removehorsearmor";
 
     /**
-     * Remove Saddle 
+     * Remove Saddle
      */
     String MC_ACTION_INTERACT_REMOVESADDLE = "minecraft:action.interact.removesaddle";
 
@@ -1378,7 +1378,7 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_REPAIRWOLFARMOR = "minecraft:action.interact.repairwolfarmor";
 
     /**
-     * Retrieve 
+     * Retrieve
      */
     String MC_ACTION_INTERACT_RETRIEVE = "minecraft:action.interact.retrieve";
 
@@ -1483,7 +1483,7 @@ public interface TrKeys {
     String MC_ADVMODE_COMMAND_CHARLIMITEXCEEDED = "minecraft:advMode.command.charLimitExceeded";
 
     /**
-     * @n = nearest entity 
+     * @n = nearest entity
      */
     String MC_ADVMODE_NEAREST = "minecraft:advMode.nearest";
 
@@ -3933,7 +3933,7 @@ public interface TrKeys {
     String MC_COMMANDS_GENERIC_ENTITY_NOTFOUND = "minecraft:commands.generic.entity.notFound";
 
     /**
-     * Incorrect permission level for command: %s.  
+     * Incorrect permission level for command: %s.
      */
     String MC_COMMANDS_GENERIC_ERROR_PERMISSIONS = "minecraft:commands.generic.error.permissions";
 
@@ -4313,7 +4313,7 @@ public interface TrKeys {
     String MC_COMMANDS_INPUTPERMISSION_DISABLED = "minecraft:commands.inputpermission.disabled";
 
     /**
-     * Dismount 
+     * Dismount
      */
     String MC_COMMANDS_INPUTPERMISSION_DISMOUNT = "minecraft:commands.inputpermission.dismount";
 
@@ -4328,12 +4328,12 @@ public interface TrKeys {
     String MC_COMMANDS_INPUTPERMISSION_JUMP = "minecraft:commands.inputpermission.jump";
 
     /**
-     * Lateral Movement 
+     * Lateral Movement
      */
     String MC_COMMANDS_INPUTPERMISSION_LATERAL_MOVEMENT = "minecraft:commands.inputpermission.lateral_movement";
 
     /**
-     * Mount 
+     * Mount
      */
     String MC_COMMANDS_INPUTPERMISSION_MOUNT = "minecraft:commands.inputpermission.mount";
 
@@ -4343,7 +4343,7 @@ public interface TrKeys {
     String MC_COMMANDS_INPUTPERMISSION_MOVE_BACKWARD = "minecraft:commands.inputpermission.move_backward";
 
     /**
-     * Move Forward 
+     * Move Forward
      */
     String MC_COMMANDS_INPUTPERMISSION_MOVE_FORWARD = "minecraft:commands.inputpermission.move_forward";
 
@@ -4388,12 +4388,12 @@ public interface TrKeys {
     String MC_COMMANDS_INPUTPERMISSION_SET_MISSINGSTATE = "minecraft:commands.inputpermission.set.missingstate";
 
     /**
-     * %s input %s for %d players  
+     * %s input %s for %d players
      */
     String MC_COMMANDS_INPUTPERMISSION_SET_OUTPUTMULTIPLEPLAYERS = "minecraft:commands.inputpermission.set.outputmultipleplayers";
 
     /**
-     * %s input %s for %s  
+     * %s input %s for %s
      */
     String MC_COMMANDS_INPUTPERMISSION_SET_OUTPUTONEPLAYER = "minecraft:commands.inputpermission.set.outputoneplayer";
 
@@ -8393,12 +8393,12 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_EDITOR_MISMATCHVANILLAWORLD = "minecraft:disconnectionScreen.editor.mismatchVanillaWorld";
 
     /**
-     * Error Code: 
+     * Error Code:
      */
     String MC_DISCONNECTIONSCREEN_ERRORCODE = "minecraft:disconnectionScreen.errorCode";
 
     /**
-     * There was a problem loading into the server. 
+     * There was a problem loading into the server.
      */
     String MC_DISCONNECTIONSCREEN_FAILEDASYNCCHECK = "minecraft:disconnectionScreen.failedAsyncCheck";
 
@@ -9803,7 +9803,7 @@ public interface TrKeys {
     String MC_DR_HEADER_CAPES = "minecraft:dr.header.capes";
 
     /**
-     * %s Featured  
+     * %s Featured
      */
     String MC_DR_HEADER_CATEGORYFEATUREDLIST = "minecraft:dr.header.categoryFeaturedList";
 
@@ -11558,7 +11558,7 @@ public interface TrKeys {
     String MC_GAMETEST_ERROR_FLAKYFAILED = "minecraft:gameTest.error.flakyFailed";
 
     /**
-     * , successes: %s (%s required)           
+     * , successes: %s (%s required)
      */
     String MC_GAMETEST_ERROR_FLAKYFAILEDSHOWSUCCESSES = "minecraft:gameTest.error.flakyFailedShowSuccesses";
 
@@ -11588,7 +11588,7 @@ public interface TrKeys {
     String MC_GAMETEST_ERROR_REPEATCOUNTTOOSMALL = "minecraft:gameTest.error.repeatCountTooSmall";
 
     /**
-     * Failed to spawn test structure with path '%s' 
+     * Failed to spawn test structure with path '%s'
      */
     String MC_GAMETEST_ERROR_STRUCTURENOTSPAWNED = "minecraft:gameTest.error.structureNotSpawned";
 
@@ -11633,7 +11633,7 @@ public interface TrKeys {
     String MC_GAMETEST_REPORT_ALLREQUIREDTESTSPASSED = "minecraft:gameTest.report.allRequiredTestsPassed";
 
     /**
-     * Game Test Report                                      
+     * Game Test Report
      */
     String MC_GAMETEST_REPORT_BOOKTITLE = "minecraft:gameTest.report.bookTitle";
 
@@ -11658,7 +11658,7 @@ public interface TrKeys {
     String MC_GAMETEST_REPORT_TESTLOCATION = "minecraft:gameTest.report.testLocation";
 
     /**
-     * Tick: %s                                              
+     * Tick: %s
      */
     String MC_GAMETEST_REPORT_TICKCOUNT = "minecraft:gameTest.report.tickCount";
 
@@ -11668,7 +11668,7 @@ public interface TrKeys {
     String MC_GAMETEST_SUCCESS_FLAKYPASSED = "minecraft:gameTest.success.flakyPassed";
 
     /**
-     * %s passed %s times of %s attempts.           
+     * %s passed %s times of %s attempts.
      */
     String MC_GAMETEST_SUCCESS_FLAKYPASSEDENOUGH = "minecraft:gameTest.success.flakyPassedEnough";
 
@@ -11708,7 +11708,7 @@ public interface TrKeys {
     String MC_IMMERSIVE_READER_ERROR_WEBVIEW_FAILURE = "minecraft:immersive_reader.error.webview_failure";
 
     /**
-     *  Page %1
+     * Page %1
      */
     String MC_IMMERSIVE_READER_PORTFOLIO_PAGE_HEADER = "minecraft:immersive_reader.portfolio_page_header";
 
@@ -15758,7 +15758,7 @@ public interface TrKeys {
     String MC_ITEM_BUCKETAXOLOTL_NAME = "minecraft:item.bucketAxolotl.name";
 
     /**
-     * Bucket of 
+     * Bucket of
      */
     String MC_ITEM_BUCKETCUSTOMFISH_NAME = "minecraft:item.bucketCustomFish.name";
 
@@ -19418,7 +19418,7 @@ public interface TrKeys {
     String MC_KEY_BACK = "minecraft:key.back";
 
     /**
-     * Cancel    
+     * Cancel
      */
     String MC_KEY_CANCELTOAST = "minecraft:key.cancelToast";
 
@@ -19498,7 +19498,7 @@ public interface TrKeys {
     String MC_KEY_CYCLEFIXEDINVENTORY = "minecraft:key.cyclefixedinventory";
 
     /**
-     * Decline    
+     * Decline
      */
     String MC_KEY_DECLINETOAST = "minecraft:key.declineToast";
 
@@ -19858,7 +19858,7 @@ public interface TrKeys {
     String MC_KEY_USE = "minecraft:key.use";
 
     /**
-     * View    
+     * View
      */
     String MC_KEY_VIEWTOAST = "minecraft:key.viewToast";
 
@@ -21805,7 +21805,7 @@ public interface TrKeys {
     String MC_RAID_VICTORY = "minecraft:raid.victory";
 
     /**
-     * We have detected that your device does not meet the system requirements to run this pack so you are unable to download this pack. You can review the minimum system requirements below: %s+ GPU: Hardware ray tracing capable GPU such as NVIDIA GeForce RTX 2060 or better. See our FAQ on minecraft.net for more details. %s+ RAM: 8GB or better %s+ CPU: Intel Core i5 or equivalent 
+     * We have detected that your device does not meet the system requirements to run this pack so you are unable to download this pack. You can review the minimum system requirements below: %s+ GPU: Hardware ray tracing capable GPU such as NVIDIA GeForce RTX 2060 or better. See our FAQ on minecraft.net for more details. %s+ RAM: 8GB or better %s+ CPU: Intel Core i5 or equivalent
      */
     String MC_RAYCASTING_PURCHASE_ERROR = "minecraft:raycasting.purchase.error";
 
@@ -22880,7 +22880,7 @@ public interface TrKeys {
     String MC_TILE_COBBLESTONE_WALL_NETHER_BRICK_NAME = "minecraft:tile.cobblestone_wall.nether_brick.name";
 
     /**
-     * Cobblestone Wall 
+     * Cobblestone Wall
      */
     String MC_TILE_COBBLESTONE_WALL_NORMAL_NAME = "minecraft:tile.cobblestone_wall.normal.name";
 

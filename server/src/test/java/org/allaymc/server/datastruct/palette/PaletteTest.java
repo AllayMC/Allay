@@ -87,7 +87,8 @@ class PaletteTest {
         assertArrayEquals(bytes0, bytes1);
     }
 
-    record Entry(int id) {}
+    record Entry(int id) {
+    }
 
     static class PDSerializerImpl implements NBTSerializer<Entry> {
         static PDSerializerImpl INSTANCE = new PDSerializerImpl();

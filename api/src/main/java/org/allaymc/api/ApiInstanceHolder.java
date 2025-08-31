@@ -18,9 +18,9 @@ public final class ApiInstanceHolder<T> {
     /**
      * Create a new empty api instance holder with the specific type.
      *
-     * @param <T> the type of the api instance that the holder will hold.
+     * @param <T> the type of the api instance that the holder will hold
      *
-     * @return the new api instance holder.
+     * @return the new api instance holder
      */
     public static <T> ApiInstanceHolder<T> create() {
         return new ApiInstanceHolder<>();
@@ -32,7 +32,7 @@ public final class ApiInstanceHolder<T> {
      * This method only works when the instance is null, which means that you can only set the instance once.'
      * Calls this method multiple times will not change the instance.
      *
-     * @param instance the instance of the api implementation.
+     * @param instance the instance of the api implementation
      */
     public void set(T instance) {
         if (this.instance == null) this.instance = instance;
@@ -41,7 +41,7 @@ public final class ApiInstanceHolder<T> {
     /**
      * Get the instance of the api implementation.
      *
-     * @return the instance of the api implementation.
+     * @return the instance of the api implementation
      */
     public T get() {
         return this.instance;

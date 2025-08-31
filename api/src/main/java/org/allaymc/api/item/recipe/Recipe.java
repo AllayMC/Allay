@@ -12,7 +12,7 @@ public interface Recipe<T> {
     /**
      * Check if the input matches the recipe.
      *
-     * @param input the input to check.
+     * @param input the input to check
      *
      * @return {@code true} if the input matches the recipe, {@code false} otherwise.
      */
@@ -21,14 +21,14 @@ public interface Recipe<T> {
     /**
      * Get the outputs of this recipe.
      *
-     * @return the outputs of this recipe.
+     * @return the outputs of this recipe
      */
     ItemStack[] getOutputs();
 
     /**
      * Create the network data of this recipe.
      *
-     * @return the network data of this recipe.
+     * @return the network data of this recipe
      */
     T toNetworkData();
 }

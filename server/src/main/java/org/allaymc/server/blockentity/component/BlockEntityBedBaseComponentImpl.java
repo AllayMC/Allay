@@ -22,6 +22,10 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
     @Getter
     protected DyeColor color;
 
+    public BlockEntityBedBaseComponentImpl(BlockEntityInitInfo initInfo) {
+        super(initInfo);
+    }
+
     @Override
     public void onPlace(CBlockOnPlaceEvent event) {
         super.onPlace(event);
@@ -42,10 +46,6 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
             }
         }
         sendBlockEntityToViewers();
-    }
-
-    public BlockEntityBedBaseComponentImpl(BlockEntityInitInfo initInfo) {
-        super(initInfo);
     }
 
     @Override

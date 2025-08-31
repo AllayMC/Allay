@@ -31,51 +31,51 @@ public interface World extends TaskCreator {
     /**
      * Get the thread which the world is running on.
      *
-     * @return the thread which the world is running on.
+     * @return the thread which the world is running on
      */
     Thread getWorldThread();
 
     /**
      * Get the tick of the world.
      *
-     * @return the tick of the world.
+     * @return the tick of the world
      */
     long getTick();
 
     /**
      * Get the TPS of the world.
      *
-     * @return the TPS of the world.
+     * @return the TPS of the world
      */
     float getTPS();
 
     /**
      * Get the MSPT of the world.
      *
-     * @return the MSPT of the world.
+     * @return the MSPT of the world
      */
     float getMSPT();
 
     /**
      * Get the tick usage of the world.
      *
-     * @return the tick usage of the world.
+     * @return the tick usage of the world
      */
     float getTickUsage();
 
     /**
      * Get the dimension by the dimension id in this world.
      *
-     * @param dimensionId the dimension id.
+     * @param dimensionId the dimension id
      *
-     * @return the dimension, or {@code null} if the dimension is not found.
+     * @return the dimension, or {@code null} if the dimension is not found
      */
     Dimension getDimension(int dimensionId);
 
     /**
      * Get the overworld dimension in this world.
      *
-     * @return the overworld dimension, {@code null} should never being returned.
+     * @return the overworld dimension, {@code null} should never being returned
      */
     default Dimension getOverWorld() {
         return getDimension(DimensionInfo.OVERWORLD.dimensionId());
@@ -84,7 +84,7 @@ public interface World extends TaskCreator {
     /**
      * Get the nether dimension in this world.
      *
-     * @return the nether dimension, or {@code null} if the nether dimension is not found.
+     * @return the nether dimension, or {@code null} if the nether dimension is not found
      */
     default Dimension getNether() {
         return getDimension(DimensionInfo.NETHER.dimensionId());
@@ -93,7 +93,7 @@ public interface World extends TaskCreator {
     /**
      * Get the end dimension in this world.
      *
-     * @return the end dimension, or {@code null} if the end dimension is not found.
+     * @return the end dimension, or {@code null} if the end dimension is not found
      */
     default Dimension getTheEnd() {
         return getDimension(DimensionInfo.THE_END.dimensionId());
@@ -102,7 +102,7 @@ public interface World extends TaskCreator {
     /**
      * Get all dimensions in this world.
      *
-     * @return all dimensions in this world.
+     * @return all dimensions in this world
      */
     @UnmodifiableView
     Map<Integer, Dimension> getDimensions();
@@ -110,7 +110,7 @@ public interface World extends TaskCreator {
     /**
      * Get the players in this world.
      *
-     * @return the players in this world.
+     * @return the players in this world
      */
     @UnmodifiableView
     Collection<EntityPlayer> getPlayers();
@@ -118,14 +118,14 @@ public interface World extends TaskCreator {
     /**
      * Get the scheduler of the world.
      *
-     * @return the scheduler of the world.
+     * @return the scheduler of the world
      */
     Scheduler getScheduler();
 
     /**
      * Get the world data of the world.
      *
-     * @return the world data of the world.
+     * @return the world data of the world
      */
     WorldData getWorldData();
 
@@ -137,14 +137,14 @@ public interface World extends TaskCreator {
     /**
      * Retrieves the current state of the world.
      *
-     * @return the world state.
+     * @return the world state
      */
     WorldState getState();
 
     /**
      * Broadcast a packet to all players in this world.
      *
-     * @param packet the packet to broadcast.
+     * @param packet the packet to broadcast
      */
     default void broadcastPacket(BedrockPacket packet) {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
@@ -153,7 +153,7 @@ public interface World extends TaskCreator {
     /**
      * Get the weathers of the world.
      *
-     * @return the weathers of the world.
+     * @return the weathers of the world
      */
     @UnmodifiableView
     Set<Weather> getWeathers();
@@ -161,18 +161,18 @@ public interface World extends TaskCreator {
     /**
      * Add a weather to the world.
      *
-     * @param weather the weather to add, {@link Weather#CLEAR} shouldn't be used here.
+     * @param weather the weather to add, {@link Weather#CLEAR} shouldn't be used here
      *
-     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}.
+     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}
      */
     void addWeather(Weather weather);
 
     /**
      * Remove a weather from the world.
      *
-     * @param weather the weather to remove, {@link Weather#CLEAR} shouldn't be used here.
+     * @param weather the weather to remove, {@link Weather#CLEAR} shouldn't be used here
      *
-     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}.
+     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}
      */
     void removeWeather(Weather weather);
 
@@ -184,7 +184,7 @@ public interface World extends TaskCreator {
     /**
      * Get the spawn point of the world.
      *
-     * @return the spawn point of the world.
+     * @return the spawn point of the world
      */
     default Location3dc getSpawnPoint() {
         var vec = getWorldData().getSpawnPoint();

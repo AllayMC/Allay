@@ -24,7 +24,7 @@ public interface ChunkService extends ChunkSource {
     /**
      * Get the world generator of this dimension.
      *
-     * @return the world generator.
+     * @return the world generator
      */
     WorldGenerator getWorldGenerator();
 
@@ -33,10 +33,10 @@ public interface ChunkService extends ChunkSource {
      * represents the chunk status: {@code true} if the chunk is loaded or is cancelled, {@code false} if the
      * chunk is still loading. This method will return {@code null} if chunk is unloaded.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
-     * @return the chunk future, or {@code null} if the chunk is unloaded.
+     * @return the chunk future, or {@code null} if the chunk is unloaded
      */
     CompletableFuture<Chunk> getChunkFuture(int x, int z);
 
@@ -50,10 +50,10 @@ public interface ChunkService extends ChunkSource {
     /**
      * Get the specified chunk or load it if it is not loaded.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
-     * @return the chunk future. The result of the future will become a {@link Chunk}.
+     * @return the chunk future. The result of the future will become a {@link Chunk}
      */
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
 
@@ -67,8 +67,8 @@ public interface ChunkService extends ChunkSource {
     /**
      * Get the specified chunk or load it if it is not loaded.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
      * @return the chunk future. The result of the future will become a {@link Chunk}
      * instance with state of {@link ChunkState#FULL} once the chunk is fully loaded.
@@ -88,10 +88,10 @@ public interface ChunkService extends ChunkSource {
     /**
      * Unload the specified chunk.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
-     * @return a future to represent the result of unloading. The future will be completed when the chunk is unloaded and saved.
+     * @return a future to represent the result of unloading. The future will be completed when the chunk is unloaded and saved
      */
     CompletableFuture<Void> unloadChunk(int x, int z);
 
@@ -108,15 +108,15 @@ public interface ChunkService extends ChunkSource {
     /**
      * Unload all loaded chunks.
      *
-     * @return a future, which will be completed when all chunks are unloaded.
+     * @return a future, which will be completed when all chunks are unloaded
      */
     CompletableFuture<Void> unloadAllChunks();
 
     /**
      * Check if the specified chunk is loaded.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
      * @return {@code true} if the chunk is loaded, otherwise {@code false}.
      */
@@ -135,8 +135,8 @@ public interface ChunkService extends ChunkSource {
     /**
      * Check if the specified chunk is loading.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
      * @return {@code true} if the chunk is loading, otherwise {@code false}.
      */
@@ -157,8 +157,8 @@ public interface ChunkService extends ChunkSource {
      * loading ({@link #isChunkLoading(int, int) return {@code true}}), this method
      * will return {@code true} not {@code false}.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
      * @return {@code true} if the chunk is unloaded, otherwise {@code false}.
      */
@@ -177,7 +177,7 @@ public interface ChunkService extends ChunkSource {
     /**
      * Get the chunk loaders in this service.
      *
-     * @return the chunk loaders.
+     * @return the chunk loaders
      */
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
@@ -185,28 +185,28 @@ public interface ChunkService extends ChunkSource {
     /**
      * Add a chunk loader to this service.
      *
-     * @param chunkLoader the chunk loader to add.
+     * @param chunkLoader the chunk loader to add
      */
     void addChunkLoader(ChunkLoader chunkLoader);
 
     /**
      * Remove a chunk loader from this service.
      *
-     * @param chunkLoader the chunk loader to remove.
+     * @param chunkLoader the chunk loader to remove
      */
     void removeChunkLoader(ChunkLoader chunkLoader);
 
     /**
      * For each loaded chunk, execute the specified action.
      *
-     * @param consumer the action to execute.
+     * @param consumer the action to execute
      */
     void forEachLoadedChunks(Consumer<Chunk> consumer);
 
     /**
      * Get the loaded chunks.
      *
-     * @return the loaded chunks.
+     * @return the loaded chunks
      */
     @UnmodifiableView
     Collection<Chunk> getLoadedChunks();

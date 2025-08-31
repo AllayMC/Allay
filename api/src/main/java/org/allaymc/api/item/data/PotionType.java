@@ -96,8 +96,9 @@ public enum PotionType {
     /**
      * Gets the potion type from id.
      *
-     * @param id the id of potion.
-     * @return the potion type.
+     * @param id the id of potion
+     *
+     * @return the potion type
      */
     public static PotionType fromId(int id) {
         return VALUES[id];
@@ -127,7 +128,7 @@ public enum PotionType {
     /**
      * Apply this potion type to a specific entity.
      *
-     * @param entity the entity that this potion type will be applied to.
+     * @param entity the entity that this potion type will be applied to
      */
     public void applyTo(Entity entity) {
         getEffects().forEach(entity::addEffect);
@@ -136,7 +137,7 @@ public enum PotionType {
     /**
      * Gets the effects that this potion type has.
      *
-     * @return the effects that this potion type has.
+     * @return the effects that this potion type has
      */
     public List<EffectInstance> getEffects() {
         return this.effects.stream().map(EffectInstance::new).toList();
@@ -146,7 +147,7 @@ public enum PotionType {
      * Gets the color of this potion type, which is a mix of all effect types that
      * this potion type has.
      *
-     * @return the color of this potion type.
+     * @return the color of this potion type
      */
     public Color getColor() {
         return this.color;

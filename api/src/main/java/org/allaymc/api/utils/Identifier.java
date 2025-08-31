@@ -68,5 +68,6 @@ public record Identifier(String namespace, String path) implements Cloneable {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
-    public @interface Component {}
+    public @interface Component {
+    }
 }

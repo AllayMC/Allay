@@ -35,9 +35,10 @@ public interface EntityPlayer extends
      * Returns the reachable container for the given full container type.
      * This includes opened containers and containers that the player holds.
      *
-     * @param slotType the full container type.
-     * @param <T>      the container type.
-     * @return the reachable container, or {@code null} if none.
+     * @param slotType the full container type
+     * @param <T>      the container type
+     *
+     * @return the reachable container, or {@code null} if none
      */
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);
@@ -49,9 +50,10 @@ public interface EntityPlayer extends
      * Returns the reachable container for the given container slot type.
      * This includes opened containers and containers that the player holds.
      *
-     * @param slotType the container slot type.
-     * @param <T>      the container type.
-     * @return the reachable container, or {@code null} if none.
+     * @param slotType the container slot type
+     * @param <T>      the container type
+     *
+     * @return the reachable container, or {@code null} if none
      */
     default <T extends Container> T getReachableContainerBySlotType(ContainerSlotType slotType) {
         var container = getOpenedContainerBySlotType(slotType);
@@ -63,7 +65,8 @@ public interface EntityPlayer extends
      * Attempts to add an item stack to the player's inventory.
      * If it cannot be fully added, the remaining items are dropped at the player's position.
      *
-     * @param itemStack the item stack to add.
+     * @param itemStack the item stack to add
+     *
      * @return {@code true} if all items were added successfully, {@code false} if some were dropped.
      */
     default boolean tryAddItem(ItemStack itemStack) {
@@ -79,7 +82,8 @@ public interface EntityPlayer extends
     /**
      * Attempts to drop the item currently held in hand.
      *
-     * @param count the number of items to drop.
+     * @param count the number of items to drop
+     *
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
     default boolean tryDropItemInHand(int count) {
@@ -89,9 +93,10 @@ public interface EntityPlayer extends
     /**
      * Attempts to drop an item from a specific slot in a container.
      *
-     * @param containerType the container type.
-     * @param slot          the slot index.
-     * @param count         the number of items to drop.
+     * @param containerType the container type
+     * @param slot          the slot index
+     * @param count         the number of items to drop
+     *
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
     default boolean tryDropItem(FullContainerType<?> containerType, int slot, int count) {
@@ -119,8 +124,8 @@ public interface EntityPlayer extends
      * user should be sure that the item in given slot is not an air and have enough
      * count.
      *
-     * @param container the container to drop from.
-     * @param slot      the slot index.
+     * @param container the container to drop from
+     * @param slot      the slot index
      * @param count     the number of items to drop. If the count is bigger than the item currently
      *                  has, the whole item stack will be dropped.
      */
@@ -148,7 +153,7 @@ public interface EntityPlayer extends
     /**
      * Drops the given item stack at the player's position with forward motion.
      *
-     * @param itemStack the item stack to drop.
+     * @param itemStack the item stack to drop
      */
     default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
@@ -164,7 +169,7 @@ public interface EntityPlayer extends
     /**
      * Gets the item currently held in the player's hand.
      *
-     * @return the item in hand.
+     * @return the item in hand
      */
     default ItemStack getItemInHand() {
         return getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
@@ -173,7 +178,7 @@ public interface EntityPlayer extends
     /**
      * Sets the item in the player's hand.
      *
-     * @param itemStack the item to set in hand.
+     * @param itemStack the item to set in hand
      */
     default void setItemInHand(ItemStack itemStack) {
         getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(itemStack);

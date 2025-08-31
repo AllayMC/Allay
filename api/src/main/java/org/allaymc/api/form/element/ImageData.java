@@ -18,8 +18,8 @@ public final class ImageData {
     /**
      * Create a new image data.
      *
-     * @param type the type of the image.
-     * @param data the data of the image.
+     * @param type the type of the image
+     * @param data the data of the image
      */
     public ImageData(ImageType type, String data) {
         this.type = type.getType();

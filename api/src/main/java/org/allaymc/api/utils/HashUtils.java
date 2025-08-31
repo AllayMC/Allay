@@ -26,15 +26,17 @@ public final class HashUtils {
     private static final int FNV1_32_INIT = 0x811c9dc5;
     private static final int FNV1_PRIME_32 = 0x01000193;
 
-    private HashUtils() {throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");}
+    private HashUtils() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     /**
      * Compute block state hash from the given identifier and property values.
      *
-     * @param identifier     the identifier.
-     * @param propertyValues the property values.
+     * @param identifier     the identifier
+     * @param propertyValues the property values
      *
-     * @return the hash.
+     * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
         if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
@@ -57,10 +59,10 @@ public final class HashUtils {
     /**
      * Compute block state hash from the given identifier and property values.
      *
-     * @param identifier     the identifier.
-     * @param propertyValues the property values.
+     * @param identifier     the identifier
+     * @param propertyValues the property values
      *
-     * @return the hash.
+     * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
         if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
@@ -83,9 +85,9 @@ public final class HashUtils {
     /**
      * FNV-1a 32-bit hash algorithm.
      *
-     * @param tag the tag to hash.
+     * @param tag the tag to hash
      *
-     * @return the hash.
+     * @return the hash
      */
     public static int fnv1a_32_nbt(NbtMap tag) {
         byte[] bytes;
@@ -104,9 +106,9 @@ public final class HashUtils {
     /**
      * FNV-1a 32-bit hash algorithm.
      *
-     * @param data the data to hash.
+     * @param data the data to hash
      *
-     * @return the hash.
+     * @return the hash
      */
     public static int fnv1a_32(byte[] data) {
         int hash = FNV1_32_INIT;
@@ -120,10 +122,10 @@ public final class HashUtils {
     /**
      * Shift int x to the left by 32 bits and int z to form a long value.
      *
-     * @param x the int x.
-     * @param z the int z.
+     * @param x the int x
+     * @param z the int z
      *
-     * @return the long.
+     * @return the long
      */
     public static long hashXZ(int x, int z) {
         return ((long) x << 32) | (z & 0xffffffffL);
@@ -132,7 +134,7 @@ public final class HashUtils {
     /**
      * Gets x from {@link #hashXZ(int, int)}.
      *
-     * @param hashXZ a long value.
+     * @param hashXZ a long value
      */
     public static int getXFromHashXZ(long hashXZ) {
         return (int) (hashXZ >> 32);
@@ -141,7 +143,7 @@ public final class HashUtils {
     /**
      * Gets z from {@link #hashXZ(int, int)}.
      *
-     * @param hashXZ a long value.
+     * @param hashXZ a long value
      */
     public static int getZFromHashXZ(long hashXZ) {
         return (int) hashXZ;
@@ -150,10 +152,10 @@ public final class HashUtils {
     /**
      * Calculate the hash of a pos in a chunk.
      *
-     * @param x the x coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the hash of a pos in a chunk.
+     * @return the hash of a pos in a chunk
      */
     public static int hashChunkXYZ(@Range(from = 0, to = 15) int x, @Range(from = -8388608, to = 8388607) int y, @Range(from = 0, to = 15) int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
@@ -167,9 +169,9 @@ public final class HashUtils {
      * Extract the value of x from the hash chunk xyz.
      * x occupies the highest 4 bits.
      *
-     * @param encoded Encoded int containing x, y, and z.
+     * @param encoded Encoded int containing x, y, and z
      *
-     * @return The value of x.
+     * @return The value of x
      */
     public static int getXFromHashChunkXYZ(int encoded) {
         return (encoded >>> 28);
@@ -179,9 +181,9 @@ public final class HashUtils {
      * Extract the value of y from the hash chunk xyz.
      * y occupies the middle 24 bits.
      *
-     * @param encoded Encoded int containing x, y, and z.
+     * @param encoded Encoded int containing x, y, and z
      *
-     * @return The value of y.
+     * @return The value of y
      */
     public static int getYFromHashChunkXYZ(int encoded) {
         return ((encoded >>> 4) & 0xFFFFFF) - 8388608;
@@ -191,9 +193,9 @@ public final class HashUtils {
      * Extract the value of z from the hash chunk xyz.
      * z occupies the lowest 4 bits.
      *
-     * @param encoded Encoded int containing x, y, and z.
+     * @param encoded Encoded int containing x, y, and z
      *
-     * @return The value of z.
+     * @return The value of z
      */
     public static int getZFromHashChunkXYZ(int encoded) {
         return encoded & 0xF;
@@ -202,11 +204,11 @@ public final class HashUtils {
     /**
      * Calculate the hash of a pos in a {@link ChunkSection}.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the hash of a pos in a {@link ChunkSection}.
+     * @return the hash of a pos in a {@link ChunkSection}
      */
     public static int hashChunkSectionXYZ(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);

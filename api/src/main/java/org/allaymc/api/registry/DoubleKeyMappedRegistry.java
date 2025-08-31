@@ -40,5 +40,6 @@ public class DoubleKeyMappedRegistry<K1, K2, VALUE> extends AbstractRegistry<Dou
         content.m2.put(k2, value);
     }
 
-    public record MapPair<K1, K2, VALUE>(Map<K1, VALUE> m1, Map<K2, VALUE> m2) {}
+    public record MapPair<K1, K2, VALUE>(Map<K1, VALUE> m1, Map<K2, VALUE> m2) {
+    }
 }

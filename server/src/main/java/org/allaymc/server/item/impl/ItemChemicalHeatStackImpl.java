@@ -1,14 +1,15 @@
 package org.allaymc.server.item.impl;
 
-import java.util.List;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemChemicalHeatStack;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 
+import java.util.List;
+
 public class ItemChemicalHeatStackImpl extends ItemStackImpl implements ItemChemicalHeatStack {
     public ItemChemicalHeatStackImpl(ItemStackInitInfo initInfo,
-            List<ComponentProvider<? extends Component>> componentProviders) {
+                                     List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

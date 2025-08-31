@@ -219,13 +219,14 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     /**
      * Applies motion to the object's position along the specified axis, considering potential collisions and intersections with other objects.
      *
-     * @param stepHeight     The step height the object can overcome.
-     * @param pos            The current position of the object.
-     * @param motion         The component of the object's movement velocity along the specified axis (X or Z).
-     * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object.
-     * @param enableStepping Flag indicating whether the object can step over obstacles.
-     * @param axis           The axis along which the motion is applied (X or Z).
-     * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections.
+     * @param stepHeight     The step height the object can overcome
+     * @param pos            The current position of the object
+     * @param motion         The component of the object's movement velocity along the specified axis (X or Z)
+     * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object
+     * @param enableStepping Flag indicating whether the object can step over obstacles
+     * @param axis           The axis along which the motion is applied (X or Z)
+     *
+     * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections
      */
     private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, Axis axis) {
         if (motion == 0) {
@@ -256,14 +257,16 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     /**
      * Moves an axis-aligned bounding box (AABB) along a specified axis direction and stops when a collision occurs.
      *
-     * @param aabb     The axis-aligned bounding box to move.
-     * @param motion   The distance to move along the specified axis.
-     * @param recorder The vector to record the movement along the axis.
-     * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis.
+     * @param aabb     The axis-aligned bounding box to move
+     * @param motion   The distance to move along the specified axis
+     * @param recorder The vector to record the movement along the axis
+     * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis
+     *
      * @return A pair containing the remaining movement distance along the axis after collision detection (Double)
      * and a boolean indicating whether a collision occurred (Boolean) or whether the entity will be on ground (if axis == Y).
      * If no movement was specified (motion = 0), an empty pair is returned.
-     * @throws IllegalArgumentException if an invalid axis is provided.
+     *
+     * @throws IllegalArgumentException if an invalid axis is provided
      */
     private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, Axis axis) {
         if (motion == 0) {

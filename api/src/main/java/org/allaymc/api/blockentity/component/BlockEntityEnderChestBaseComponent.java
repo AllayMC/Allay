@@ -7,14 +7,14 @@ public interface BlockEntityEnderChestBaseComponent extends BlockEntityBaseCompo
     /**
      * Get the viewers count of this ender chest.
      *
-     * @return the viewers count of this ender chest.
+     * @return the viewers count of this ender chest
      */
     int getViewersCount();
 
     /**
      * Set the viewers count of this ender chest.
      *
-     * @param count the viewers count of this ender chest.
+     * @param count the viewers count of this ender chest
      */
     void setViewersCount(int count);
 }

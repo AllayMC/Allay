@@ -16,14 +16,14 @@ public interface PackLoader extends AutoCloseable {
     /**
      * Get the location of the pack.
      *
-     * @return the location of the pack.
+     * @return the location of the pack
      */
     Path getLocation();
 
     /**
      * Check if the pack has a file.
      *
-     * @param name the name of the file.
+     * @param name the name of the file
      *
      * @return {@code true} if the pack has the file, {@code false} otherwise.
      */
@@ -32,25 +32,25 @@ public interface PackLoader extends AutoCloseable {
     /**
      * Get the input stream of a file.
      *
-     * @param name the name of the file.
+     * @param name the name of the file
      *
-     * @return the input stream of the file.
+     * @return the input stream of the file
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs
      */
     InputStream getFile(String name) throws IOException;
 
     /**
      * Get the content key.
      *
-     * @return the content key.
+     * @return the content key
      */
     String getContentKey();
 
     /**
      * Read all bytes of the pack.
      *
-     * @return bytes of the pack.
+     * @return bytes of the pack
      */
     byte[] readAllBytes();
 
@@ -64,7 +64,7 @@ public interface PackLoader extends AutoCloseable {
          * Check if the factory can load a pack. If return {@code true}, method
          * {@link #create(Path)} will then be called.
          *
-         * @param path the path of the pack.
+         * @param path the path of the pack
          *
          * @return {@code true} if the factory can load the pack, {@code false} otherwise.
          */
@@ -73,11 +73,11 @@ public interface PackLoader extends AutoCloseable {
         /**
          * Create a pack loader.
          *
-         * @param path the path of the pack.
+         * @param path the path of the pack
          *
-         * @return the pack loader.
+         * @return the pack loader
          *
-         * @throws IOException if an I/O error occurs.
+         * @throws IOException if an I/O error occurs
          */
         PackLoader create(Path path) throws IOException;
     }

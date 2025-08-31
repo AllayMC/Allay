@@ -17,19 +17,19 @@ public interface Command {
     /**
      * Executes this command with the given sender and arguments.
      *
-     * @param sender The sender of the command.
-     * @param args   The arguments provided to the command.
+     * @param sender The sender of the command
+     * @param args   The arguments provided to the command
      *
-     * @return The result of the command execution.
+     * @return The result of the command execution
      */
     CommandResult execute(CommandSender sender, String[] args);
 
     /**
      * Builds a network data representation of this command for the given player.
      *
-     * @param player The player to build the data for.
+     * @param player The player to build the data for
      *
-     * @return The network data representation of this command.
+     * @return The network data representation of this command
      */
     CommandData buildNetworkDataFor(EntityPlayer player);
 
@@ -40,7 +40,7 @@ public interface Command {
      * Some commands like `/help` are server-side only because in client-side these commands
      * are handled by the client itself and will not request the server to handle them.
      *
-     * @return Whether this command is only available on the server side.
+     * @return Whether this command is only available on the server side
      */
     default boolean isServerSideOnly() {
         return false;
@@ -49,14 +49,14 @@ public interface Command {
     /**
      * Get the name of this command.
      *
-     * @return The name of this command.
+     * @return The name of this command
      */
     String getName();
 
     /**
      * Get the aliases of this command.
      *
-     * @return The aliases of this command.
+     * @return The aliases of this command
      */
     @UnmodifiableView
     List<String> getAliases();
@@ -64,7 +64,7 @@ public interface Command {
     /**
      * Get the description of this command.
      *
-     * @return The description of this command.
+     * @return The description of this command
      */
     @MayContainTrKey
     String getDescription();
@@ -72,7 +72,7 @@ public interface Command {
     /**
      * Get the command overloads of this command.
      *
-     * @return The command overloads of this command.
+     * @return The command overloads of this command
      */
     @UnmodifiableView
     List<CommandParamData[]> getCommandOverloads();
@@ -80,7 +80,7 @@ public interface Command {
     /**
      * Get the flags of this command.
      *
-     * @return The flags of this command.
+     * @return The flags of this command
      */
     @UnmodifiableView
     Set<CommandData.Flag> getFlags();
@@ -88,7 +88,7 @@ public interface Command {
     /**
      * Get the permissions required to execute this command.
      *
-     * @return The permissions required to execute this command.
+     * @return The permissions required to execute this command
      */
     List<Permission> getPermissions();
 

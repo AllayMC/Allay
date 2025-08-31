@@ -20,14 +20,14 @@ public interface BlockEntityJukeboxBaseComponent extends BlockEntityBaseComponen
     /**
      * Get the music disc inside the jukebox.
      *
-     * @return the music disc item.
+     * @return the music disc item
      */
     ItemStack getMusicDiscItem();
 
     /**
      * Set the music disc inside the jukebox.
      *
-     * @param item the music disc item.
+     * @param item the music disc item
      */
     void setMusicDiscItem(ItemStack item);
 }

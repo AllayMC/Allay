@@ -117,10 +117,10 @@ public final class AllayAPI {
     /**
      * Bind an api with the specific api instance.
      *
-     * @param api           the api.
-     * @param bindingAction the supplier which provides the api instance.
-     * @param afterBound    the consumer which will be called after the api instance has been bound.
-     * @param <T>           the type of the api class.
+     * @param api           the api
+     * @param bindingAction the supplier which provides the api instance
+     * @param afterBound    the consumer which will be called after the api instance has been bound
+     * @param <T>           the type of the api class
      */
     @ApiStatus.Internal
     public <T> void bind(Class<T> api, Supplier<T> bindingAction, Consumer<T> afterBound) {
@@ -143,7 +143,9 @@ public final class AllayAPI {
      * Each api class has only one implementation instance, so calling this method with the same parameters will return an identical object
      *
      * @param api the interface
+     *
      * @return the implementation instance of the specific interface
+     *
      * @throws APINotImplementedException if the interface has not been implemented
      */
     @ApiStatus.Internal

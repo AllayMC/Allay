@@ -26,12 +26,13 @@ public interface Task {
      * Called when the task is canceled.
      */
     @ApiStatus.OverrideOnly
-    default void onCancel() {}
+    default void onCancel() {
+    }
 
     /**
      * Called when an error occurs while running the task.
      *
-     * @param error The error that occurred.
+     * @param error The error that occurred
      */
     @ApiStatus.OverrideOnly
     default void onError(Throwable error) {

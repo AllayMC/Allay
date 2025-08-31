@@ -9,7 +9,7 @@ public interface ItemMusicDiscBaseComponent extends ItemBaseComponent {
     /**
      * Get the sound of the music disc.
      *
-     * @return the sound of the music disc.
+     * @return the sound of the music disc
      */
     SoundEvent getSound();
 }

@@ -122,9 +122,12 @@ public final class GameLoop {
     }
 
     public static class GameLoopBuilder {
-        private Runnable onStart = () -> {};
-        private Consumer<GameLoop> onTick = gameLoop -> {};
-        private Runnable onStop = () -> {};
+        private Runnable onStart = () -> {
+        };
+        private Consumer<GameLoop> onTick = gameLoop -> {
+        };
+        private Runnable onStop = () -> {
+        };
         private int loopCountPerSec = 20;
         private long currentTick = 0;
 

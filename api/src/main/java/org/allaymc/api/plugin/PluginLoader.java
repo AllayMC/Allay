@@ -14,14 +14,14 @@ public interface PluginLoader {
     /**
      * Gets the path of the plugin.
      *
-     * @return the path of the plugin.
+     * @return the path of the plugin
      */
     Path getPluginPath();
 
     /**
      * Loads the plugin descriptor.
      *
-     * @return the plugin descriptor.
+     * @return the plugin descriptor
      */
     @ApiStatus.OverrideOnly
     PluginDescriptor loadDescriptor();
@@ -29,7 +29,7 @@ public interface PluginLoader {
     /**
      * Loads the plugin.
      *
-     * @return the plugin container.
+     * @return the plugin container
      */
     @ApiStatus.OverrideOnly
     PluginContainer loadPlugin();
@@ -46,7 +46,7 @@ public interface PluginLoader {
         /**
          * Check if the plugin loader factory can load the plugin file.
          *
-         * @param pluginPath the path of the plugin file.
+         * @param pluginPath the path of the plugin file
          *
          * @return {@code true} if the plugin loader factory can load the plugin file, {@code false} otherwise.
          */
@@ -55,9 +55,9 @@ public interface PluginLoader {
         /**
          * Create a plugin loader for the plugin file.
          *
-         * @param pluginPath the path of the plugin file.
+         * @param pluginPath the path of the plugin file
          *
-         * @return the plugin loader.
+         * @return the plugin loader
          */
         PluginLoader create(Path pluginPath);
     }

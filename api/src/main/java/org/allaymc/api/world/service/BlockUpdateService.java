@@ -23,16 +23,16 @@ public interface BlockUpdateService {
      * Schedule a block update at the specified position. Different from {@link #scheduleBlockUpdate(Vector3ic, long)},
      * this method will set the time of the scheduled update to the current world time plus the delay.
      *
-     * @param pos   The position of the block to update.
-     * @param delay The delay of the block update, in ticks.
+     * @param pos   The position of the block to update
+     * @param delay The delay of the block update, in ticks
      */
     void scheduleBlockUpdateInDelay(Vector3ic pos, long delay);
 
     /**
      * Schedule a block update at the specified position.
      *
-     * @param pos  The position of the block to update.
-     * @param time The time that the block update will be executed, in ticks.
+     * @param pos  The position of the block to update
+     * @param time The time that the block update will be executed, in ticks
      */
     void scheduleBlockUpdate(Vector3ic pos, long time);
 
@@ -51,26 +51,26 @@ public interface BlockUpdateService {
      * be divided by the random tick speed of the current world. For example, this method is used
      * by fire, so changing the random tick speed will also change the speed of fire spreading.
      *
-     * @param pos   The position of the block to update.
-     * @param delay The delay of the block update, in ticks.
+     * @param pos   The position of the block to update
+     * @param delay The delay of the block update, in ticks
      */
     void scheduleRandomBlockUpdateInDelay(Vector3ic pos, long delay);
 
     /**
      * Check if a block update is scheduled at the specified position.
      *
-     * @param pos The position of the block to check.
+     * @param pos The position of the block to check
      *
-     * @return Whether a block update is scheduled at the specified position.
+     * @return Whether a block update is scheduled at the specified position
      */
     boolean hasScheduledBlockUpdate(Vector3ic pos);
 
     /**
      * Add a neighbor block update at the specified position.
      *
-     * @param pos              The position of the block which will be updated.
-     * @param changedNeighbour The position of the block which causes the update.
-     * @param blockFace        The face which will be updated.
+     * @param pos              The position of the block which will be updated
+     * @param changedNeighbour The position of the block which causes the update
+     * @param blockFace        The face which will be updated
      */
     void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace);
 }

@@ -11,14 +11,14 @@ public interface ItemPotionComponent extends ItemComponent {
     /**
      * Gets the potion type of this potion item.
      *
-     * @return the potion type of this potion item.
+     * @return the potion type of this potion item
      */
     PotionType getPotionType();
 
     /**
      * Sets the potion type of this potion item.
      *
-     * @param potionType the potion type to set.
+     * @param potionType the potion type to set
      */
     void setPotionType(PotionType potionType);
 }

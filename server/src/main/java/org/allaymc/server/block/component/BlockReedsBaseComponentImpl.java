@@ -104,9 +104,10 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
     /**
      * Check if sugar cane can live/grow here.
      *
-     * @param dimension the dimension that the sugar cane is in.
-     * @param pos       the pos of the sugar cane.
-     * @param recursive whether to check the block below recursively.
+     * @param dimension the dimension that the sugar cane is in
+     * @param pos       the pos of the sugar cane
+     * @param recursive whether to check the block below recursively
+     *
      * @return {@code true} if sugar cane can live/grow here, {@code false} otherwise
      */
     protected boolean canGrowHere(Dimension dimension, Vector3ic pos, boolean recursive) {

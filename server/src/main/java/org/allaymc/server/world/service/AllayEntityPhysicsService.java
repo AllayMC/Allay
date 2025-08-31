@@ -244,7 +244,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     /**
      * Compute the liquid motion for the entity.
      *
-     * @param entity the entity to compute liquid motion.
+     * @param entity the entity to compute liquid motion
+     *
      * @return {@code true} if the entity has liquid motion, otherwise {@code false}.
      */
     protected boolean computeLiquidMotion(Entity entity) {

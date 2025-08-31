@@ -16,5 +16,5 @@ public class AllayForkJoinWorkerThreadFactory implements ForkJoinPool.ForkJoinWo
         thread.setName("AllayComputeThread-" + tid);
         return thread;
     }
-    
+
 }

@@ -62,7 +62,7 @@ public class RegistryLoaders {
      * @param <I> the input
      * @param <V> the value
      *
-     * @return a RegistryLoader that is yet to contain a value.
+     * @return a RegistryLoader that is yet to contain a value
      */
     public static <I, V> RegistryLoader<I, V> uninitialized() {
         return input -> null;

@@ -38,10 +38,24 @@ public final class EffectInstance {
     private boolean visible;
 
     /**
+     * A constructor that creates a copy of the given effect instance.
+     *
+     * @param effect the effect instance that based on
+     */
+    public EffectInstance(EffectInstance effect) {
+        this.type = effect.type;
+        this.amplifier = effect.amplifier;
+        this.duration = effect.duration;
+        this.ambient = effect.ambient;
+        this.visible = effect.visible;
+    }
+
+    /**
      * Creates a new effect instance from the given nbt.
      *
-     * @param nbt the nbt that contains the effect information.
-     * @return a new effect instance based on the given nbt.
+     * @param nbt the nbt that contains the effect information
+     *
+     * @return a new effect instance based on the given nbt
      */
     public static EffectInstance fromNBT(NbtMap nbt) {
         var effectType = Registries.EFFECTS.getByK1((int) nbt.getByte("Id"));
@@ -54,22 +68,9 @@ public final class EffectInstance {
     }
 
     /**
-     * A constructor that creates a copy of the given effect instance.
-     *
-     * @param effect the effect instance that based on.
-     */
-    public EffectInstance(EffectInstance effect) {
-        this.type = effect.type;
-        this.amplifier = effect.amplifier;
-        this.duration = effect.duration;
-        this.ambient = effect.ambient;
-        this.visible = effect.visible;
-    }
-
-    /**
      * Gets the level of this effect instance.
      *
-     * @return the level of this effect instance.
+     * @return the level of this effect instance
      */
     @Range(from = 1, to = Short.MAX_VALUE + 1)
     public int getLevel() {
@@ -79,7 +80,7 @@ public final class EffectInstance {
     /**
      * Saves this effect instance to nbt. The nbt can be used in {@link #fromNBT(NbtMap)} later.
      *
-     * @return the nbt that contains the information of this effect instance.
+     * @return the nbt that contains the information of this effect instance
      */
     public NbtMap saveNBT() {
         return NbtMap.builder()

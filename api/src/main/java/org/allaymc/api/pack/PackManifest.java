@@ -34,9 +34,9 @@ public class PackManifest {
     /**
      * Load pack manifest using the given loader.
      *
-     * @param loader the loader to be used for loading the manifest.
+     * @param loader the loader to be used for loading the manifest
      *
-     * @return the loaded pack manifest, or {@code null} if the manifest does not exist or could not be loaded.
+     * @return the loaded pack manifest, or {@code null} if the manifest does not exist or could not be loaded
      */
     public static PackManifest load(PackLoader loader) {
         Objects.requireNonNull(loader);

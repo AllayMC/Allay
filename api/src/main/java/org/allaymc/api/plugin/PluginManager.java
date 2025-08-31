@@ -18,32 +18,32 @@ public interface PluginManager {
     /**
      * Get a loaded plugin by name.
      *
-     * @param name the name of the plugin.
+     * @param name the name of the plugin
      *
-     * @return the plugin container, or {@code null} if not found.
+     * @return the plugin container, or {@code null} if not found
      */
     PluginContainer getPlugin(String name);
 
     /**
      * Get an enabled plugin by name.
      *
-     * @param name the name of the plugin.
+     * @param name the name of the plugin
      *
-     * @return the plugin container, or {@code null} if not found.
+     * @return the plugin container, or {@code null} if not found
      */
     PluginContainer getEnabledPlugin(String name);
 
     /**
      * Get all enabled plugins.
      *
-     * @return the enabled plugins.
+     * @return the enabled plugins
      */
     Map<String, PluginContainer> getEnabledPlugins();
 
     /**
      * Check if a plugin is enabled.
      *
-     * @param name the name of the plugin.
+     * @param name the name of the plugin
      *
      * @return {@code true} if the plugin is enabled, {@code false} otherwise.
      */
@@ -54,7 +54,7 @@ public interface PluginManager {
      * <p>
      * Plugin can register custom plugin source in {@link Plugin#onLoad()} method.
      *
-     * @param customPluginSource the custom plugin source to register.
+     * @param customPluginSource the custom plugin source to register
      */
     void registerCustomSource(PluginSource customPluginSource);
 
@@ -63,7 +63,7 @@ public interface PluginManager {
      * <p>
      * Plugin can register custom plugin loader factory in {@link Plugin#onLoad()} method.
      *
-     * @param customLoaderFactory the custom plugin loader factory to register.
+     * @param customLoaderFactory the custom plugin loader factory to register
      */
     void registerCustomLoaderFactory(PluginLoader.Factory customLoaderFactory);
 }

@@ -10,14 +10,14 @@ public interface EntitySplashPotionProjectileComponent extends EntityProjectileC
     /**
      * Gets the potion type that this entity holds.
      *
-     * @return the potion type that this entity holds.
+     * @return the potion type that this entity holds
      */
     PotionType getPotionType();
 
     /**
      * Sets the potion type of this entity.
      *
-     * @param potionType the potion type to set.
+     * @param potionType the potion type to set
      */
     void setPotionType(PotionType potionType);
 }

@@ -59,7 +59,7 @@ public class WorldGenerator {
     /**
      * Create a new WorldGeneratorBuilder instance.
      *
-     * @return a new WorldGeneratorBuilder.
+     * @return a new WorldGeneratorBuilder
      */
     public static WorldGeneratorBuilder builder() {
         return new WorldGeneratorBuilder();
@@ -71,9 +71,9 @@ public class WorldGenerator {
      * This method is called by the implementation and should only be called by the implementation. Calling
      * this method from outside the implementation will result in throwing {@link IllegalStateException}.
      *
-     * @param dimension the dimension.
+     * @param dimension the dimension
      *
-     * @throws IllegalStateException if the method is called twice.
+     * @throws IllegalStateException if the method is called twice
      */
     public void setDimension(Dimension dimension) {
         if (this.dimension != null) {
@@ -92,16 +92,18 @@ public class WorldGenerator {
         private List<Noiser> noisers = List.of();
         private List<Populator> populators = List.of();
         private List<PostProcessor> postProcessors = List.of();
-        private Consumer<Dimension> dimensionConsumer = $ -> {};
+        private Consumer<Dimension> dimensionConsumer = $ -> {
+        };
 
-        private WorldGeneratorBuilder() {}
+        private WorldGeneratorBuilder() {
+        }
 
         /**
          * Set the name of the generator.
          *
-         * @param name the name.
+         * @param name the name
          *
-         * @return the builder.
+         * @return the builder
          */
         public WorldGeneratorBuilder name(String name) {
             this.name = name;
@@ -111,9 +113,9 @@ public class WorldGenerator {
         /**
          * Set the type of the generator.
          *
-         * @param type the type.
+         * @param type the type
          *
-         * @return the builder.
+         * @return the builder
          */
         public WorldGeneratorBuilder type(WorldGeneratorType type) {
             this.type = type;
@@ -123,9 +125,9 @@ public class WorldGenerator {
         /**
          * Set the preset of the generator.
          *
-         * @param preset the preset.
+         * @param preset the preset
          *
-         * @return the builder.
+         * @return the builder
          */
         public WorldGeneratorBuilder preset(String preset) {
             this.preset = preset;
@@ -135,9 +137,9 @@ public class WorldGenerator {
         /**
          * Set the noisers of the generator.
          *
-         * @param noisers the noisers.
+         * @param noisers the noisers
          *
-         * @return the builder.
+         * @return the builder
          */
         public WorldGeneratorBuilder noisers(Noiser... noisers) {
             this.noisers = List.of(noisers);
@@ -147,9 +149,9 @@ public class WorldGenerator {
         /**
          * Set the populators of the generator.
          *
-         * @param populators the populators.
+         * @param populators the populators
          *
-         * @return the builder.
+         * @return the builder
          */
         public WorldGeneratorBuilder populators(Populator... populators) {
             this.populators = List.of(populators);
@@ -159,9 +161,9 @@ public class WorldGenerator {
         /**
          * Set the post processors of the generator.
          *
-         * @param postProcessors the post processors.
+         * @param postProcessors the post processors
          *
-         * @return the builder.
+         * @return the builder
          */
         public WorldGeneratorBuilder postProcessors(PostProcessor... postProcessors) {
             this.postProcessors = List.of(postProcessors);
@@ -172,9 +174,9 @@ public class WorldGenerator {
          * Set a consumer that will be called when the dimension is set.
          * This is used to set the dimension of the generator.
          *
-         * @param dimensionConsumer the consumer to call with the dimension.
+         * @param dimensionConsumer the consumer to call with the dimension
          *
-         * @return the builder.
+         * @return the builder
          */
         public WorldGeneratorBuilder onDimensionSet(Consumer<Dimension> dimensionConsumer) {
             this.dimensionConsumer = dimensionConsumer;
@@ -184,7 +186,7 @@ public class WorldGenerator {
         /**
          * Build the WorldGenerator instance.
          *
-         * @return the WorldGenerator.
+         * @return the WorldGenerator
          */
         public WorldGenerator build() {
             if (name == null || name.isBlank()) {

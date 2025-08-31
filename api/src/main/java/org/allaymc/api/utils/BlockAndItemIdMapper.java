@@ -19,9 +19,9 @@ public final class BlockAndItemIdMapper {
     /**
      * Try to get the block id of an item.
      *
-     * @param itemId the id of the item.
+     * @param itemId the id of the item
      *
-     * @return the block id, or {@code null} if the item does not have correspond block (`pure item`).
+     * @return the block id, or {@code null} if the item does not have correspond block (`pure item`)
      */
     public static Identifier itemIdToPossibleBlockId(Identifier itemId) {
         // Special case: sugar cane
@@ -38,9 +38,9 @@ public final class BlockAndItemIdMapper {
     /**
      * Get the `actual block item` id of a block.
      *
-     * @param blockId the id of the block.
+     * @param blockId the id of the block
      *
-     * @return the `actual block item` id.
+     * @return the `actual block item` id
      */
     public static Identifier blockIdToActualBlockItemId(Identifier blockId) {
         // Special case: sugar cane

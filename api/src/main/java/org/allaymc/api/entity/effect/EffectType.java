@@ -35,19 +35,20 @@ public interface EffectType {
     /**
      * Creates a new instance of this effect with the given amplifier, duration, ambient and visibility.
      *
-     * @param amplifier The amplifier of the effect. Note that amplifier 0 is level 1, and ambient 1 is level 2.
-     * @param duration  The duration of the effect in ticks.
-     * @param ambient   Whether the effect is ambient.
-     * @param visible   Whether the effect is visible.
-     * @return A new instance of this effect.
+     * @param amplifier The amplifier of the effect. Note that amplifier 0 is level 1, and ambient 1 is level 2
+     * @param duration  The duration of the effect in ticks
+     * @param ambient   Whether the effect is ambient
+     * @param visible   Whether the effect is visible
+     *
+     * @return A new instance of this effect
      */
     EffectInstance createInstance(int amplifier, int duration, boolean ambient, boolean visible);
 
     /**
      * Called every tick while the effect is active.
      *
-     * @param entity         The entity the effect is on.
-     * @param effectInstance The instance of the effect.
+     * @param entity         The entity the effect is on
+     * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
     default void onTick(Entity entity, EffectInstance effectInstance) {
@@ -56,8 +57,8 @@ public interface EffectType {
     /**
      * Called when the effect is added to an entity.
      *
-     * @param entity         The entity the effect is on.
-     * @param effectInstance The instance of the effect.
+     * @param entity         The entity the effect is on
+     * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
     default void onAdd(Entity entity, EffectInstance effectInstance) {
@@ -66,8 +67,8 @@ public interface EffectType {
     /**
      * Called when the effect is removed from an entity.
      *
-     * @param entity         The entity the effect is on.
-     * @param effectInstance The instance of the effect.
+     * @param entity         The entity the effect is on
+     * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
     default void onRemove(Entity entity, EffectInstance effectInstance) {
@@ -76,9 +77,9 @@ public interface EffectType {
     /**
      * Called when the entity owning the effect is damaged.
      *
-     * @param entity         The entity the effect is on.
-     * @param effectInstance The instance of the effect.
-     * @param lastDamage     The last damage taken by the entity.
+     * @param entity         The entity the effect is on
+     * @param effectInstance The instance of the effect
+     * @param lastDamage     The last damage taken by the entity
      */
     @ApiStatus.OverrideOnly
     default void onEntityDamage(Entity entity, EffectInstance effectInstance, DamageContainer lastDamage) {
@@ -87,8 +88,8 @@ public interface EffectType {
     /**
      * Called when the entity owning the effect dies.
      *
-     * @param entity         The entity the effect is on.
-     * @param effectInstance The instance of the effect.
+     * @param entity         The entity the effect is on
+     * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
     default void onEntityDies(Entity entity, EffectInstance effectInstance) {
@@ -97,28 +98,28 @@ public interface EffectType {
     /**
      * Gets the unique identifier of this effect type.
      *
-     * @return The unique identifier of this effect type.
+     * @return The unique identifier of this effect type
      */
     int getId();
 
     /**
      * Gets the identifier of this effect type.
      *
-     * @return The identifier of this effect type.
+     * @return The identifier of this effect type
      */
     Identifier getIdentifier();
 
     /**
      * Gets the color of this effect type.
      *
-     * @return the color of this effect type.
+     * @return the color of this effect type
      */
     Color getColor();
 
     /**
      * Whether this effect is considered "bad" or not.
      *
-     * @return Whether this effect is considered "bad" or not.
+     * @return Whether this effect is considered "bad" or not
      */
     default boolean isBad() {
         return false;

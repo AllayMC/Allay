@@ -35,19 +35,19 @@ public interface EntitySelectorAPI {
      * This method parses the selector token and returns a list of entities that
      * match the criteria specified by the token.
      *
-     * @param sender the command sender, used for context (e.g., location, permissions).
-     * @param token  the target selector token, such as {@code @a} or {@code @e[type=zombie]}.
+     * @param sender the command sender, used for context (e.g., location, permissions)
+     * @param token  the target selector token, such as {@code @a} or {@code @e[type=zombie]}
      *
-     * @return a list of entities that match the selector criteria.
+     * @return a list of entities that match the selector criteria
      *
-     * @throws SelectorSyntaxException if there is a syntax error in the selector token.
+     * @throws SelectorSyntaxException if there is a syntax error in the selector token
      */
     List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException;
 
     /**
      * Checks if the given token is a valid entity selector.
      *
-     * @param token the token to validate (e.g., {@code @a}, {@code @e}).
+     * @param token the token to validate (e.g., {@code @a}, {@code @e})
      *
      * @return {@code true} if the token is a valid target selector, {@code false} otherwise.
      */
@@ -59,7 +59,7 @@ public interface EntitySelectorAPI {
      * This allows for adding custom arguments to the entity selector system, such as
      * new filters or modifiers.
      *
-     * @param argument the selector argument to register.
+     * @param argument the selector argument to register
      *
      * @return {@code true} if the argument was successfully registered,
      * {@code false} if an argument with the same key already exists.

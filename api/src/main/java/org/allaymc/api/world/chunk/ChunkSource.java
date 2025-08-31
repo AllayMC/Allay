@@ -15,8 +15,8 @@ public interface ChunkSource {
     /**
      * Get the chunk at the specified chunk pos.
      *
-     * @param x the x coordinate of the chunk.
-     * @param z the z coordinate of the chunk.
+     * @param x the x coordinate of the chunk
+     * @param z the z coordinate of the chunk
      *
      * @return the chunk at the specified chunk coordinates, or {@code null} if not
      * found or is not accessible by this chunk source.
@@ -26,8 +26,8 @@ public interface ChunkSource {
     /**
      * Get the chunk which contains the specified dimension pos.
      *
-     * @param x the x coordinate of the dimension pos.
-     * @param z the z coordinate of the dimension pos.
+     * @param x the x coordinate of the dimension pos
+     * @param z the z coordinate of the dimension pos
      *
      * @return the chunk which the specified dimension pos is in, or {@code null} if not
      * found or is not accessible by this chunk source.
@@ -39,7 +39,7 @@ public interface ChunkSource {
     /**
      * Get the chunk by chunk hash.
      *
-     * @param chunkHash the hash of the chunk.
+     * @param chunkHash the hash of the chunk
      *
      * @return the chunk which has the specified hash, or {@code null} if not found
      * or is not accessible by this chunk source.

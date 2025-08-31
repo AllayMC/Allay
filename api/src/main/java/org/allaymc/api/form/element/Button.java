@@ -24,13 +24,14 @@ public final class Button implements SimpleFormElement {
     @Getter
     private ImageData image;
     @Getter
-    private transient Consumer<Button> onClick = button -> {};
+    private transient Consumer<Button> onClick = button -> {
+    };
     private transient SimpleForm form;
 
     /**
      * Create a new button.
      *
-     * @param text the text of the button.
+     * @param text the text of the button
      */
     public Button(String text) {
         this.text = text;
@@ -39,8 +40,8 @@ public final class Button implements SimpleFormElement {
     /**
      * Create a new button.
      *
-     * @param text  the text of the button.
-     * @param image the image of the button.
+     * @param text  the text of the button
+     * @param image the image of the button
      */
     public Button(String text, ImageData image) {
         this.text = text;
@@ -50,9 +51,9 @@ public final class Button implements SimpleFormElement {
     /**
      * Set the callback that will be called when the button is clicked.
      *
-     * @param onClick the callback.
+     * @param onClick the callback
      *
-     * @return the form.
+     * @return the form
      */
     public SimpleForm onClick(Consumer<Button> onClick) {
         this.onClick = onClick;

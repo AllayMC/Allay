@@ -222,5 +222,6 @@ public final class EnchantmentOptionGenerator {
             int requiredLapisLazuliCount,
             int requiredXpLevel,
             List<EnchantmentInstance> enchantments
-    ) {}
+    ) {
+    }
 }

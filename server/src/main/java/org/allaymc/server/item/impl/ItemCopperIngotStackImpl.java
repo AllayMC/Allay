@@ -1,14 +1,15 @@
 package org.allaymc.server.item.impl;
 
-import java.util.List;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemCopperIngotStack;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 
+import java.util.List;
+
 public class ItemCopperIngotStackImpl extends ItemStackImpl implements ItemCopperIngotStack {
     public ItemCopperIngotStackImpl(ItemStackInitInfo initInfo,
-            List<ComponentProvider<? extends Component>> componentProviders) {
+                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

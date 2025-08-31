@@ -17,7 +17,8 @@ public class AllayI18nLoader implements I18nLoader {
     @Override
     public Map<String, String> getLangMap(LangCode langCode) {
         try (var input = Objects.requireNonNull(AllayI18nLoader.class.getResourceAsStream("/lang/" + langCode.name() + ".json"))) {
-            TypeToken<HashMap<String, String>> typeToken = new TypeToken<>() {};
+            TypeToken<HashMap<String, String>> typeToken = new TypeToken<>() {
+            };
             var bytes = input.readAllBytes();
             return JSONUtils.fromLenient(new String(bytes, StandardCharsets.UTF_8), typeToken);
         } catch (IOException e) {

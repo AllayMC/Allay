@@ -67,13 +67,13 @@ public interface Dimension {
     /**
      * Create a block update packet.
      *
-     * @param newBlockState the new block state.
-     * @param x             the x coordinate of the block.
-     * @param y             the y coordinate of the block.
-     * @param z             the z coordinate of the block.
-     * @param layer         the layer which contains the block.
+     * @param newBlockState the new block state
+     * @param x             the x coordinate of the block
+     * @param y             the y coordinate of the block
+     * @param z             the z coordinate of the block
+     * @param layer         the layer which contains the block
      *
-     * @return the created block update packet.
+     * @return the created block update packet
      */
     private static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
         var updateBlockPacket = new UpdateBlockPacket();
@@ -87,42 +87,42 @@ public interface Dimension {
     /**
      * Get the chunk service of this dimension.
      *
-     * @return the chunk service.
+     * @return the chunk service
      */
     ChunkService getChunkService();
 
     /**
      * Get the block update service of this dimension.
      *
-     * @return the block update service.
+     * @return the block update service
      */
     BlockUpdateService getBlockUpdateService();
 
     /**
      * Get the entity service of this dimension.
      *
-     * @return the entity service.
+     * @return the entity service
      */
     EntityService getEntityService();
 
     /**
      * Adds a debug shape to the dimension.
      *
-     * @param debugShape the debug shape to add.
+     * @param debugShape the debug shape to add
      */
     void addDebugShape(DebugShape debugShape);
 
     /**
      * Removes a debug shape from the dimension.
      *
-     * @param debugShape the debug shape to remove.
+     * @param debugShape the debug shape to remove
      */
     void removeDebugShape(DebugShape debugShape);
 
     /**
      * Gets all debug shapes in the dimension.
      *
-     * @return a set of debug shapes, where the key is the debug shape ID and the value is the debug shape.
+     * @return a set of debug shapes, where the key is the debug shape ID and the value is the debug shape
      */
     @UnmodifiableView
     Set<DebugShape> getDebugShapes();
@@ -135,28 +135,28 @@ public interface Dimension {
     /**
      * Get the light service of this dimension.
      *
-     * @return the light service.
+     * @return the light service
      */
     LightService getLightService();
 
     /**
      * Get the dimension info of this dimension.
      *
-     * @return the dimension info.
+     * @return the dimension info
      */
     DimensionInfo getDimensionInfo();
 
     /**
      * Get the world which contains this dimension.
      *
-     * @return the world which contains this dimension.
+     * @return the world which contains this dimension
      */
     World getWorld();
 
     /**
      * Get all the entities in this dimension.
      *
-     * @return all the entities in this dimension.
+     * @return all the entities in this dimension
      */
     @Unmodifiable
     default Map<Long, Entity> getEntities() {
@@ -166,7 +166,7 @@ public interface Dimension {
     /**
      * Get the entity count of this dimension.
      *
-     * @return the entity count of this dimension.
+     * @return the entity count of this dimension
      */
     default int getEntityCount() {
         return getEntities().size();
@@ -183,8 +183,8 @@ public interface Dimension {
     /**
      * Add a player to this dimension.
      *
-     * @param player   the player to add.
-     * @param runnable the callback to run after the player is added.
+     * @param player   the player to add
+     * @param runnable the callback to run after the player is added
      */
     void addPlayer(EntityPlayer player, Runnable runnable);
 
@@ -199,15 +199,15 @@ public interface Dimension {
     /**
      * Remove a player from this dimension.
      *
-     * @param player   the player to remove.
-     * @param runnable the callback to run after the player is removed.
+     * @param player   the player to remove
+     * @param runnable the callback to run after the player is removed
      */
     void removePlayer(EntityPlayer player, Runnable runnable);
 
     /**
      * Get all the players in this dimension.
      *
-     * @return all the players in this dimension.
+     * @return all the players in this dimension
      */
     @UnmodifiableView
     Set<EntityPlayer> getPlayers();
@@ -335,17 +335,17 @@ public interface Dimension {
     /**
      * Set the block state at the specified pos. This method will have no effect if the chunk is not loaded.
      *
-     * @param x                 the x coordinate of the block.
-     * @param y                 the y coordinate of the block.
-     * @param z                 the z coordinate of the block.
-     * @param blockState        the block state to set.
-     * @param layer             the layer which contains the block.
-     * @param send              whether to send the block update packet.
-     * @param update            whether to update the blocks around the block.
-     * @param callBlockBehavior whether to call the block behavior.
-     * @param placementInfo     the placement info.
+     * @param x                 the x coordinate of the block
+     * @param y                 the y coordinate of the block
+     * @param z                 the z coordinate of the block
+     * @param blockState        the block state to set
+     * @param layer             the layer which contains the block
+     * @param send              whether to send the block update packet
+     * @param update            whether to update the blocks around the block
+     * @param callBlockBehavior whether to call the block behavior
+     * @param placementInfo     the placement info
      *
-     * @return whether the block state was set successfully. Return {@code false} when the block is failed to be set, usually because chunk is unloaded or event is being cancelled.
+     * @return whether the block state was set successfully. Return {@code false} when the block is failed to be set, usually because chunk is unloaded or event is being cancelled
      */
     boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
 
@@ -360,12 +360,12 @@ public interface Dimension {
      * Send block update in a specified pos to a specified player with the given block state.
      * This is useful for plugin to create fake block client side.
      *
-     * @param blockState the block state to send.
-     * @param x          the x coordinate of the block.
-     * @param y          the y coordinate of the block.
-     * @param z          the z coordinate of the block.
-     * @param layer      the layer which contains the block.
-     * @param player     the player to send the block update.
+     * @param blockState the block state to send
+     * @param x          the x coordinate of the block
+     * @param y          the y coordinate of the block
+     * @param z          the z coordinate of the block
+     * @param layer      the layer which contains the block
+     * @param player     the player to send the block update
      */
     default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
         player.sendPacket(createUpdateBlockPacket(blockState, x, y, z, layer));
@@ -424,12 +424,12 @@ public interface Dimension {
     /**
      * Get the block state at the specified pos.
      *
-     * @param x     the x coordinate of the block.
-     * @param y     the y coordinate of the block.
-     * @param z     the z coordinate of the block.
-     * @param layer the layer which contains the block.
+     * @param x     the x coordinate of the block
+     * @param y     the y coordinate of the block
+     * @param z     the z coordinate of the block
+     * @param layer the layer which contains the block
      *
-     * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found or the chunk is not loaded.
+     * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found or the chunk is not loaded
      */
     default BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
@@ -460,14 +460,14 @@ public interface Dimension {
     /**
      * For-each the block states at the specified region. Blocks in unloaded chunks won't be iterated.
      *
-     * @param x                  the start x coordinate of the region.
-     * @param y                  the start y coordinate of the region.
-     * @param z                  the start z coordinate of the region.
-     * @param sizeX              the size of the region in the x-axis.
-     * @param sizeY              the size of the region in the y-axis.
-     * @param sizeZ              the size of the region in the z-axis.
-     * @param layer              the layer which contains the block.
-     * @param blockStateConsumer the block state consumer. The consumer will be called with the global x, y, z coordinates of the pos, and the block state.
+     * @param x                  the start x coordinate of the region
+     * @param y                  the start y coordinate of the region
+     * @param z                  the start z coordinate of the region
+     * @param sizeX              the size of the region in the x-axis
+     * @param sizeY              the size of the region in the y-axis
+     * @param sizeZ              the size of the region in the z-axis
+     * @param layer              the layer which contains the block
+     * @param blockStateConsumer the block state consumer. The consumer will be called with the global x, y, z coordinates of the pos, and the block state
      */
     default void forEachBlockStates(
             int x, int y, int z,
@@ -499,15 +499,15 @@ public interface Dimension {
     /**
      * Get the block state at the specified region.
      *
-     * @param x     the start x coordinate of the region.
-     * @param y     the start y coordinate of the region.
-     * @param z     the start z coordinate of the region.
-     * @param sizeX the size of the region in the x-axis.
-     * @param sizeY the size of the region in the y-axis.
-     * @param sizeZ the size of the region in the z-axis.
-     * @param layer the layer which contains the block.
+     * @param x     the start x coordinate of the region
+     * @param y     the start y coordinate of the region
+     * @param z     the start z coordinate of the region
+     * @param sizeX the size of the region in the x-axis
+     * @param sizeY the size of the region in the y-axis
+     * @param sizeZ the size of the region in the z-axis
+     * @param layer the layer which contains the block
      *
-     * @return the block states at the specified region, or {@code null} if sizeX/Y/Z is smaller than 1.
+     * @return the block states at the specified region, or {@code null} if sizeX/Y/Z is smaller than 1
      */
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
         if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
@@ -570,12 +570,12 @@ public interface Dimension {
     /**
      * Set the block states at the specified region. Blocks in unloaded chunks won't be set.
      *
-     * @param x                  the start x coordinate of the region.
-     * @param y                  the start y coordinate of the region.
-     * @param z                  the start z coordinate of the region.
-     * @param sizeX              the size of the region in the x-axis.
-     * @param sizeY              the size of the region in the y-axis.
-     * @param sizeZ              the size of the region in the z-axis.
+     * @param x                  the start x coordinate of the region
+     * @param y                  the start y coordinate of the region
+     * @param z                  the start z coordinate of the region
+     * @param sizeX              the size of the region in the x-axis
+     * @param sizeY              the size of the region in the y-axis
+     * @param sizeZ              the size of the region in the z-axis
      * @param layer              the layer which the block will be set
      * @param blockStateSupplier the block state supplier. The supplier will be called with the global x, y, z coordinates of the pos,
      *                           and it should return the block state to set. If the supplier returns {@code null}, the block state will keep unchanged.
@@ -661,12 +661,12 @@ public interface Dimension {
     /**
      * Update a specific property of a specific block.
      *
-     * @param propertyType the property type needs to be updated.
-     * @param value        the new property value.
-     * @param x            block's x coordinate.
-     * @param y            block's y coordinate.
-     * @param z            block's z coordinate.
-     * @param layer        the layer which contains the block.
+     * @param propertyType the property type needs to be updated
+     * @param value        the new property value
+     * @param x            block's x coordinate
+     * @param y            block's y coordinate
+     * @param z            block's z coordinate
+     * @param layer        the layer which contains the block
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, int layer) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
@@ -703,11 +703,11 @@ public interface Dimension {
     /**
      * Get the block states that collide with the specified AABB.
      *
-     * @param aabb            the AABB to check.
-     * @param layer           the layer which contains the block.
-     * @param ignoreCollision include blocks that don't have collision.
+     * @param aabb            the AABB to check
+     * @param layer           the layer which contains the block
+     * @param ignoreCollision include blocks that don't have collision
      *
-     * @return the block states that collide with the specified AABB, or {@code null} if no block collides.
+     * @return the block states that collide with the specified AABB, or {@code null} if no block collides
      */
     default BlockState[][][] getCollidingBlockStates(AABBdc aabb, int layer, boolean ignoreCollision) {
         var maxX = (int) Math.ceil(aabb.maxX());
@@ -768,11 +768,11 @@ public interface Dimension {
     /**
      * Add a level event at the specified position.
      *
-     * @param x         the x coordinate of the position.
-     * @param y         the y coordinate of the position.
-     * @param z         the z coordinate of the position.
-     * @param eventType the level event type.
-     * @param data      the data of the level event.
+     * @param x         the x coordinate of the position
+     * @param y         the y coordinate of the position
+     * @param z         the z coordinate of the position
+     * @param eventType the level event type
+     * @param data      the data of the level event
      */
     default void addLevelEvent(double x, double y, double z, LevelEventType eventType, int data) {
         var chunk = getChunkService().getChunkByDimensionPos((int) x, (int) z);
@@ -830,14 +830,14 @@ public interface Dimension {
     /**
      * Add a level sound event at the specified position.
      *
-     * @param x                      the x coordinate of the position.
-     * @param y                      the y coordinate of the position.
-     * @param z                      the z coordinate of the position.
-     * @param soundEvent             the sound event.
-     * @param extraData              the extra data of the sound event.
-     * @param identifier             the identifier of the sound event.
-     * @param babySound              whether the sound is a baby sound.
-     * @param relativeVolumeDisabled whether the relative volume is disabled.
+     * @param x                      the x coordinate of the position
+     * @param y                      the y coordinate of the position
+     * @param z                      the z coordinate of the position
+     * @param soundEvent             the sound event
+     * @param extraData              the extra data of the sound event
+     * @param identifier             the identifier of the sound event
+     * @param babySound              whether the sound is a baby sound
+     * @param relativeVolumeDisabled whether the relative volume is disabled
      */
     default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
         var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
@@ -860,8 +860,8 @@ public interface Dimension {
     /**
      * Update the blocks around a pos, ignoring some faces.
      *
-     * @param pos         the specified pos.
-     * @param ignoreFaces the faces to ignore.
+     * @param pos         the specified pos
+     * @param ignoreFaces the faces to ignore
      */
     default void updateAroundIgnoreFace(Vector3ic pos, BlockFace... ignoreFaces) {
         for (var face : BlockFace.values()) {
@@ -877,9 +877,9 @@ public interface Dimension {
     /**
      * Update the blocks around a block.
      *
-     * @param x the x coordinate of the block.
-     * @param y the y coordinate of the block.
-     * @param z the z coordinate of the block.
+     * @param x the x coordinate of the block
+     * @param y the y coordinate of the block
+     * @param z the z coordinate of the block
      */
     default void updateAround(int x, int y, int z) {
         for (var face : BlockFace.values()) updateAtFace(x, y, z, face);
@@ -888,7 +888,7 @@ public interface Dimension {
     /**
      * Update the blocks around a block.
      *
-     * @param pos the pos.
+     * @param pos the pos
      */
     default void updateAround(Vector3ic pos) {
         for (var face : BlockFace.values()) updateAtFace(pos, face);
@@ -897,10 +897,10 @@ public interface Dimension {
     /**
      * Update the block which is at the specified face of the specified block.
      *
-     * @param x    the x coordinate of the block.
-     * @param y    the y coordinate of the block.
-     * @param z    the z coordinate of the block.
-     * @param face the face of the block.
+     * @param x    the x coordinate of the block
+     * @param y    the y coordinate of the block
+     * @param z    the z coordinate of the block
+     * @param face the face of the block
      */
     default void updateAtFace(int x, int y, int z, BlockFace face) {
         updateAtFace(new Vector3i(x, y, z), face);
@@ -909,8 +909,8 @@ public interface Dimension {
     /**
      * Update the block which is at the specified face of the specified block.
      *
-     * @param pos  the pos of the block.
-     * @param face the face of the block.
+     * @param pos  the pos of the block
+     * @param face the face of the block
      */
     default void updateAtFace(Vector3ic pos, BlockFace face) {
         var offsetPos = face.offsetPos(pos);
@@ -920,9 +920,9 @@ public interface Dimension {
     /**
      * Get blocks around a pos.
      *
-     * @param pos the pos.
+     * @param pos the pos
      *
-     * @return the blocks around the pos.
+     * @return the blocks around the pos
      */
     default Block[] getNeighborsBlocks(Vector3ic pos) {
         return getNeighborsBlocks(pos.x(), pos.y(), pos.z());
@@ -931,11 +931,11 @@ public interface Dimension {
     /**
      * Get blocks around a pos.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the blocks around the pos.
+     * @return the blocks around the pos
      */
     default Block[] getNeighborsBlocks(int x, int y, int z) {
         var result = new Block[6];
@@ -950,7 +950,7 @@ public interface Dimension {
     /**
      * Check if the y coordinate is in the range of this dimension.
      *
-     * @param y the y coordinate.
+     * @param y the y coordinate
      *
      * @return {@code true} if the y coordinate is in the range of this dimension, otherwise {@code false}.
      */
@@ -961,9 +961,9 @@ public interface Dimension {
     /**
      * Check if the specified pos is in a valid and loaded region.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
      * @return {@code true} if the pos is in a valid and loaded region, otherwise {@code false}.
      */
@@ -974,7 +974,7 @@ public interface Dimension {
     /**
      * Check if the aabb is in a valid and loaded region.
      *
-     * @param aabb the aabb.
+     * @param aabb the aabb
      *
      * @return {@code true} if the aabb is in a valid and loaded region, otherwise {@code false}.
      */
@@ -985,11 +985,11 @@ public interface Dimension {
     /**
      * Get the block entity at the specified pos.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the block entity at the specified pos. {@code null} will be returned if block entity is not found or the chunk is not loaded.
+     * @return the block entity at the specified pos. {@code null} will be returned if block entity is not found or the chunk is not loaded
      */
     default BlockEntity getBlockEntity(int x, int y, int z) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
@@ -1010,7 +1010,7 @@ public interface Dimension {
     /**
      * Get all block entities in this dimension.
      *
-     * @return a map of block entities, where the key is the block entity ID and the value is the block entity.
+     * @return a map of block entities, where the key is the block entity ID and the value is the block entity
      */
     @Unmodifiable
     default Map<Integer, BlockEntity> getBlockEntities() {
@@ -1022,7 +1022,7 @@ public interface Dimension {
     /**
      * Get the count of block entities in this dimension.
      *
-     * @return the count of block entities in this dimension.
+     * @return the count of block entities in this dimension
      */
     default int getBlockEntityCount() {
         return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getBlockEntities().size()).sum();
@@ -1066,11 +1066,11 @@ public interface Dimension {
     /**
      * Adds a particle at the specified position.
      *
-     * @param x            the x-coordinate of the position where the particle should be added.
-     * @param y            the y-coordinate of the position where the particle should be added.
-     * @param z            the z-coordinate of the position where the particle should be added.
-     * @param particleType the type of the particle to be added.
-     * @param data         the data associated with the particle.
+     * @param x            the x-coordinate of the position where the particle should be added
+     * @param y            the y-coordinate of the position where the particle should be added
+     * @param z            the z-coordinate of the position where the particle should be added
+     * @param particleType the type of the particle to be added
+     * @param data         the data associated with the particle
      */
     default void addParticle(double x, double y, double z, ParticleType particleType, int data) {
         addLevelEvent(x, y, z, particleType, data);
@@ -1079,7 +1079,7 @@ public interface Dimension {
     /**
      * Broadcast a packet to all players in this dimension.
      *
-     * @param packet the packet to broadcast.
+     * @param packet the packet to broadcast
      */
     default void broadcastPacket(BedrockPacket packet) {
         getPlayers().forEach(player -> player.sendPacket(packet));
@@ -1137,11 +1137,11 @@ public interface Dimension {
     /**
      * Add a sound at the specified pos.
      *
-     * @param x      the x coordinate of the pos.
-     * @param y      the y coordinate of the pos.
-     * @param z      the z coordinate of the pos.
-     * @param sound  the sound.
-     * @param volume the volume of the sound.
+     * @param x      the x coordinate of the pos
+     * @param y      the y coordinate of the pos
+     * @param z      the z coordinate of the pos
+     * @param sound  the sound
+     * @param volume the volume of the sound
      */
     default void addSound(double x, double y, double z, String sound, double volume) {
         addSound(x, y, z, sound, volume, 1);
@@ -1150,12 +1150,12 @@ public interface Dimension {
     /**
      * Add a sound at the specified pos.
      *
-     * @param x      the x coordinate of the pos.
-     * @param y      the y coordinate of the pos.
-     * @param z      the z coordinate of the pos.
-     * @param sound  the sound.
-     * @param volume the volume of the sound.
-     * @param pitch  the pitch of the sound.
+     * @param x      the x coordinate of the pos
+     * @param y      the y coordinate of the pos
+     * @param z      the z coordinate of the pos
+     * @param sound  the sound
+     * @param volume the volume of the sound
+     * @param pitch  the pitch of the sound
      */
     default void addSound(double x, double y, double z, String sound, double volume, double pitch) {
         Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
@@ -1188,10 +1188,10 @@ public interface Dimension {
     /**
      * Drop an item at the specified pos with the specified motion and pickup delay.
      *
-     * @param itemStack   the item stack to drop.
-     * @param pos         the pos to drop the item.
-     * @param motion      the motion of the item entity.
-     * @param pickupDelay the pickup delay of the item entity.
+     * @param itemStack   the item stack to drop
+     * @param pos         the pos to drop the item
+     * @param motion      the motion of the item entity
+     * @param pickupDelay the pickup delay of the item entity
      */
     default void dropItem(ItemStack itemStack, Vector3dc pos, Vector3dc motion, int pickupDelay) {
         var entityItem = EntityTypes.ITEM.createEntity(
@@ -1212,8 +1212,8 @@ public interface Dimension {
      * This method will split the xp into multiple xp orbs before dropping,
      * which means that it won't drop a single xp orb with a large amount of xp.
      *
-     * @param pos the pos to drop the xp orbs.
-     * @param xp  the amount of xp to drop.
+     * @param pos the pos to drop the xp orbs
+     * @param xp  the amount of xp to drop
      */
     default void splitAndDropXpOrb(Vector3dc pos, int xp) {
         for (var split : EntityXpOrb.splitIntoOrbSizes(xp)) {
@@ -1225,8 +1225,8 @@ public interface Dimension {
      * Drop a xp orb at the specified pos with the specified xp amount.
      * This method will add a random motion to the xp orb entity.
      *
-     * @param pos the pos to drop the xp orb.
-     * @param xp  the amount of xp to drop.
+     * @param pos the pos to drop the xp orb
+     * @param xp  the amount of xp to drop
      */
     default void dropXpOrb(Vector3dc pos, int xp) {
         var rand = ThreadLocalRandom.current();
@@ -1241,9 +1241,9 @@ public interface Dimension {
     /**
      * Drop a xp orb at the specified pos with the specified xp amount and motion. pickupDelay will be 10.
      *
-     * @param pos    the pos to drop the xp orb.
-     * @param xp     the amount of xp to drop.
-     * @param motion the motion of the xp orb entity.
+     * @param pos    the pos to drop the xp orb
+     * @param xp     the amount of xp to drop
+     * @param motion the motion of the xp orb entity
      */
     default void dropXpOrb(Vector3dc pos, int xp, Vector3dc motion) {
         dropXpOrb(pos, xp, motion, 10);
@@ -1252,10 +1252,10 @@ public interface Dimension {
     /**
      * Drop a xp orb at the specified pos with the specified xp amount, motion and pickup delay.
      *
-     * @param pos         the pos to drop the xp orb.
-     * @param xp          the amount of xp to drop.
-     * @param motion      the motion of the xp orb entity.
-     * @param pickupDelay the pickup delay of the xp orb entity.
+     * @param pos         the pos to drop the xp orb
+     * @param xp          the amount of xp to drop
+     * @param motion      the motion of the xp orb entity
+     * @param pickupDelay the pickup delay of the xp orb entity
      */
     default void dropXpOrb(Vector3dc pos, int xp, Vector3dc motion, int pickupDelay) {
         var rand = ThreadLocalRandom.current();
@@ -1310,14 +1310,14 @@ public interface Dimension {
     /**
      * Break a block at the specified position.
      *
-     * @param x            The x coordinate of the block.
-     * @param y            The y coordinate of the block.
-     * @param z            The z coordinate of the block.
-     * @param usedItem     The item used to break the block, can be {@code null}.
-     * @param entity       The player who breaks the block, can be {@code null}.
-     * @param sendParticle Whether to send the break particle.
+     * @param x            The x coordinate of the block
+     * @param y            The y coordinate of the block
+     * @param z            The z coordinate of the block
+     * @param usedItem     The item used to break the block, can be {@code null}
+     * @param entity       The player who breaks the block, can be {@code null}
+     * @param sendParticle Whether to send the break particle
      *
-     * @return Whether the block is successfully broken.
+     * @return Whether the block is successfully broken
      */
     boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity, boolean sendParticle);
 
@@ -1325,10 +1325,10 @@ public interface Dimension {
      * Get the height of the highest non-air block at the specified x and z coordinates.
      * If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
      *
-     * @param x the x coordinate.
-     * @param z the z coordinate.
+     * @param x the x coordinate
+     * @param z the z coordinate
      *
-     * @return the height of the highest non-air block at the specified x and z coordinates.
+     * @return the height of the highest non-air block at the specified x and z coordinates
      */
     default int getHeight(int x, int z) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
@@ -1342,10 +1342,10 @@ public interface Dimension {
     /**
      * Get the highest block at the specified x and z coordinates.
      *
-     * @param x the x coordinate.
-     * @param z the z coordinate.
+     * @param x the x coordinate
+     * @param z the z coordinate
      *
-     * @return the highest blockstate at the specified x and z coordinates.
+     * @return the highest blockstate at the specified x and z coordinates
      */
     default BlockState getHighestBlockState(int x, int z) {
         return getBlockState(x, getHeight(x, z), z);
@@ -1362,11 +1362,11 @@ public interface Dimension {
      * Find a safe standing position around the specified x and z coordinates. This method
      * will wait the necessary chunks being loaded and will block the current thread.
      *
-     * @param x     the x coordinate.
-     * @param z     the z coordinate.
-     * @param range the range to search.
+     * @param x     the x coordinate
+     * @param z     the z coordinate
+     * @param range the range to search
      *
-     * @return a safe standing position around the specified x and z coordinates, or {@code null} if not found.
+     * @return a safe standing position around the specified x and z coordinates, or {@code null} if not found
      */
     default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range, @Range(from = 0, to = Integer.MAX_VALUE) int attemptCount) {
         var rand = ThreadLocalRandom.current();
@@ -1394,9 +1394,9 @@ public interface Dimension {
     /**
      * Check if the specified pos can see the sky.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
      * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
      */
@@ -1414,11 +1414,11 @@ public interface Dimension {
     /**
      * Get the biome at the specified pos.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the biome at the specified pos.{@code BiomeId.PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded.
+     * @return the biome at the specified pos.{@code BiomeId.PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded
      */
     default BiomeType getBiome(int x, int y, int z) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
@@ -1442,10 +1442,10 @@ public interface Dimension {
     /**
      * Set the biome at the specified pos. This method will have no effect if the chunk is not loaded.
      *
-     * @param x     the x coordinate of the pos.
-     * @param y     the y coordinate of the pos.
-     * @param z     the z coordinate of the pos.
-     * @param biome the biome to set.
+     * @param x     the x coordinate of the pos
+     * @param y     the y coordinate of the pos
+     * @param z     the z coordinate of the pos
+     * @param biome the biome to set
      */
     default void setBiome(int x, int y, int z, BiomeType biome) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
@@ -1468,9 +1468,9 @@ public interface Dimension {
      * liquid may be in the foreground or in any other layer. If found,
      * the liquid is returned. If not, the boolean returned is false.
      *
-     * @param pos the position to check for a liquid block.
+     * @param pos the position to check for a liquid block
      *
-     * @return the liquid block at the position and the layer it is in, or {@link #PAIR_LIQUID_NOT_FOUND} if no liquid is found.
+     * @return the liquid block at the position and the layer it is in, or {@link #PAIR_LIQUID_NOT_FOUND} if no liquid is found
      */
     default IntObjectPair<BlockState> getLiquid(Vector3ic pos) {
         var layer0 = getBlockState(pos);
@@ -1505,8 +1505,8 @@ public interface Dimension {
      * overwritten. If null is passed for the liquid, any liquid currently present
      * will be removed.
      *
-     * @param pos    the position to set the Liquid at.
-     * @param liquid the liquid to set at the position, or {@code null} to remove any liquid.
+     * @param pos    the position to set the Liquid at
+     * @param liquid the liquid to set at the position, or {@code null} to remove any liquid
      */
     default void setLiquid(Vector3ic pos, BlockState liquid) {
         if (!isInWorld(pos.x(), pos.y(), pos.z())) {
@@ -1545,7 +1545,7 @@ public interface Dimension {
      * block position. The bool returned specifies if no blocks
      * were left on layer 0.
      *
-     * @param pos the position to remove the liquid from.
+     * @param pos the position to remove the liquid from
      *
      * @return {@code true} if no blocks were left on layer 0.
      */

@@ -19,10 +19,10 @@ public final class SectionHeightMap {
     /**
      * Get the height of the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the height of the pos.
+     * @return the height of the pos
      */
     public @Range(from = 0, to = 15) byte get(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
         int index = (x * 16 + z) / 2;
@@ -34,9 +34,9 @@ public final class SectionHeightMap {
     /**
      * Set the height of the specified position.
      *
-     * @param x      the x coordinate of the pos.
-     * @param z      the z coordinate of the pos.
-     * @param height the height of the pos.
+     * @param x      the x coordinate of the pos
+     * @param z      the z coordinate of the pos
+     * @param height the height of the pos
      */
     public void set(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) byte height) {
         int index = (x * 16 + z) / 2;

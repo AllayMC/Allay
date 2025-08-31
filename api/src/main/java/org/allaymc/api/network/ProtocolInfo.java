@@ -66,7 +66,7 @@ public final class ProtocolInfo {
     /**
      * Get the latest codec.
      *
-     * @return the latest codec.
+     * @return the latest codec
      */
     public static BedrockCodec getLatestCodec() {
         return SUPPORTED_VERSIONS.getFirst();
@@ -75,7 +75,7 @@ public final class ProtocolInfo {
     /**
      * Get the lowest codec.
      *
-     * @return the lowest codec.
+     * @return the lowest codec
      */
     public static BedrockCodec getLowestCodec() {
         return SUPPORTED_VERSIONS.getLast();
@@ -84,8 +84,9 @@ public final class ProtocolInfo {
     /**
      * Find the codec by protocol version.
      *
-     * @param protocolVersion the protocol version.
-     * @return the codec, or {@code null} if not found.
+     * @param protocolVersion the protocol version
+     *
+     * @return the codec, or {@code null} if not found
      */
     public static BedrockCodec findCodec(int protocolVersion) {
         for (var codec : SUPPORTED_VERSIONS) {
@@ -100,7 +101,7 @@ public final class ProtocolInfo {
     /**
      * Get the latest minecraft version.
      *
-     * @return the latest minecraft version.
+     * @return the latest minecraft version
      */
     public static SemVersion getLatestMinecraftVersion() {
         return SemVersion.from(getLatestCodec().getMinecraftVersion());
@@ -109,7 +110,7 @@ public final class ProtocolInfo {
     /**
      * Get the lowest minecraft version.
      *
-     * @return the lowest minecraft version.
+     * @return the lowest minecraft version
      */
     public static SemVersion getLowestMinecraftVersion() {
         return SemVersion.from(getLowestCodec().getMinecraftVersion());

@@ -22,18 +22,18 @@ public class AllayChunkBuilder {
     private NonBlockingHashMap<Integer, BlockEntity> blockEntities;
     private NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
 
+    public AllayChunkBuilder() {
+        this.state = ChunkState.FULL;
+        this.blockEntities = new NonBlockingHashMap<>();
+        this.scheduledUpdates = new NonBlockingHashMap<>();
+    }
+
     private static AllayChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
         var sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
         for (int i = 0; i < sections.length; i++) {
             sections[i] = new AllayChunkSection((byte) (i + dimensionInfo.minSectionY()));
         }
         return sections;
-    }
-
-    public AllayChunkBuilder() {
-        this.state = ChunkState.FULL;
-        this.blockEntities = new NonBlockingHashMap<>();
-        this.scheduledUpdates = new NonBlockingHashMap<>();
     }
 
     public AllayChunkBuilder chunkX(int chunkX) {

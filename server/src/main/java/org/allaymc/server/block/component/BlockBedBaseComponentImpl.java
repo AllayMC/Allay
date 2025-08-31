@@ -38,6 +38,21 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
         super(blockType);
     }
 
+    public static Block getPairBlock(Block block) {
+        var otherPos = posOfOtherPart(block);
+        return new Block(block.getDimension(), otherPos);
+    }
+
+    private static Vector3ic posOfOtherPart(Block block) {
+        var head = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT);
+        var face = Preconditions.checkNotNull(BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4)));
+        return (head ? face.opposite() : face).offsetPos(block.getPos());
+    }
+
+    private static boolean posEqVec3ic(Position3ic pos, Vector3ic other) {
+        return pos.x() == other.x() && pos.y() == other.y() && pos.z() == other.z();
+    }
+
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         var playerFace = placementInfo.player().getHorizontalFace();
@@ -108,20 +123,5 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
         var drop = blockState.toItemStack();
         drop.setMeta(blockEntity.getColor().ordinal());
         return Set.of(drop);
-    }
-
-    public static Block getPairBlock(Block block) {
-        var otherPos = posOfOtherPart(block);
-        return new Block(block.getDimension(), otherPos);
-    }
-
-    private static Vector3ic posOfOtherPart(Block block) {
-        var head = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT);
-        var face = Preconditions.checkNotNull(BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4)));
-        return (head ? face.opposite() : face).offsetPos(block.getPos());
-    }
-
-    private static boolean posEqVec3ic(Position3ic pos, Vector3ic other) {
-        return pos.x() == other.x() && pos.y() == other.y() && pos.z() == other.z();
     }
 }

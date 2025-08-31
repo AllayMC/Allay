@@ -22,49 +22,49 @@ public interface CommandContext {
     /**
      * Get the command object.
      *
-     * @return the command object.
+     * @return the command object
      */
     Command getCommand();
 
     /**
      * Get the sender of the command.
      *
-     * @return the sender of the command.
+     * @return the sender of the command
      */
     CommandSender getSender();
 
     /**
      * Set the sender of the command.
      *
-     * @param sender the sender of the command.
+     * @param sender the sender of the command
      */
     void setSender(CommandSender sender);
 
     /**
      * Get the current argument index.
      *
-     * @return the current argument index.
+     * @return the current argument index
      */
     int getCurrentArgIndex();
 
     /**
      * Get the current result index.
      *
-     * @return the current result index.
+     * @return the current result index
      */
     int getCurrentResultIndex();
 
     /**
      * Get the total argument count.
      *
-     * @return the total argument count.
+     * @return the total argument count
      */
     int getArgCount();
 
     /**
      * Get the command arguments.
      *
-     * @return the command arguments.
+     * @return the command arguments
      */
     String[] getArgs();
 
@@ -80,7 +80,7 @@ public interface CommandContext {
     /**
      * Get the left argument count.
      *
-     * @return the left argument count.
+     * @return the left argument count
      */
     default int getLeftArgCount() {
         return getArgCount() - getCurrentArgIndex();
@@ -89,22 +89,23 @@ public interface CommandContext {
     /**
      * Pops and returns the next argument in the list.
      *
-     * @return the next argument.
+     * @return the next argument
      */
     String popArg();
 
     /**
      * Return the argument at the specified index.
      *
-     * @param index the index of the argument to retrieve.
-     * @return the argument at the specified index.
+     * @param index the index of the argument to retrieve
+     *
+     * @return the argument at the specified index
      */
     String queryArg(int index);
 
     /**
      * Return the current argument being processed.
      *
-     * @return the current argument.
+     * @return the current argument
      */
     default String queryArg() {
         return queryArg(getCurrentArgIndex());
@@ -113,7 +114,7 @@ public interface CommandContext {
     /**
      * Put the result.
      *
-     * @param result the result to put.
+     * @param result the result to put
      */
     void putResult(Object result);
 
@@ -125,16 +126,16 @@ public interface CommandContext {
     /**
      * Add an output.
      *
-     * @param output the output to add.
-     * @param args   the arguments for the output.
+     * @param output the output to add
+     * @param args   the arguments for the output
      */
     void addOutput(@MayContainTrKey String output, Object... args);
 
     /**
      * Add an error.
      *
-     * @param output the error to add.
-     * @param args   the arguments for the error.
+     * @param output the error to add
+     * @param args   the arguments for the error
      */
     default void addError(@MayContainTrKey String output, Object... args) {
         addOutput(TextFormat.RED + output, args);
@@ -151,7 +152,7 @@ public interface CommandContext {
      * Adds a syntax error message to the output, indicating the argument position
      * where the error occurred.
      *
-     * @param errorIndex the index of the argument where the syntax error occurred.
+     * @param errorIndex the index of the argument where the syntax error occurred
      */
     default void addSyntaxError(int errorIndex) {
         var left = new StringBuilder(getCommand().getName());
@@ -175,7 +176,7 @@ public interface CommandContext {
     /**
      * Adds an error message indicating that the command was executed by an incorrect sender type.
      *
-     * @param correctSenderType the correct {@link SenderType} required to execute the command.
+     * @param correctSenderType the correct {@link SenderType} required to execute the command
      */
     default void addInvalidExecutorError(SenderType<?> correctSenderType) {
         addOutput(correctSenderType.errorMsg());
@@ -205,7 +206,8 @@ public interface CommandContext {
     /**
      * Checks if the specified argument index is valid.
      *
-     * @param index the index to check.
+     * @param index the index to check
+     *
      * @return {@code true} if the index is valid, {@code false} otherwise.
      */
     default boolean isValidArgIndex(int index) {
@@ -215,9 +217,9 @@ public interface CommandContext {
     /**
      * Sends a whisper message to a specified player.
      *
-     * @param player  the {@link EntityPlayer} to send the message to.
-     * @param message the message to send.
-     * @param args    optional format arguments for the message.
+     * @param player  the {@link EntityPlayer} to send the message to
+     * @param message the message to send
+     * @param args    optional format arguments for the message
      */
     default void sendWhisperTo(EntityPlayer player, @MayContainTrKey String message, Object... args) {
         if (player.getDimension().getWorld().getWorldData().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {
@@ -228,21 +230,21 @@ public interface CommandContext {
     /**
      * Return the list of translation containers that represent the output messages.
      *
-     * @return the list of {@link TrContainer} objects.
+     * @return the list of {@link TrContainer} objects
      */
     List<TrContainer> getOutputs();
 
     /**
      * Add a list of translation containers.
      *
-     * @param outputs the list of translation containers to add.
+     * @param outputs the list of translation containers to add
      */
     void addOutputs(Collection<TrContainer> outputs);
 
     /**
      * Return a successful command result.
      *
-     * @return a {@link CommandResult} representing success.
+     * @return a {@link CommandResult} representing success
      */
     default CommandResult success() {
         return CommandResult.success(this);
@@ -251,8 +253,9 @@ public interface CommandContext {
     /**
      * Return a successful command result with a specified status code.
      *
-     * @param status the status code.
-     * @return a {@link CommandResult} representing success with the given status.
+     * @param status the status code
+     *
+     * @return a {@link CommandResult} representing success with the given status
      */
     default CommandResult success(int status) {
         return new CommandResult(status, this);
@@ -261,7 +264,7 @@ public interface CommandContext {
     /**
      * Return a failed command result.
      *
-     * @return a {@link CommandResult} representing failure.
+     * @return a {@link CommandResult} representing failure
      */
     default CommandResult fail() {
         return CommandResult.fail(this);
@@ -270,19 +273,21 @@ public interface CommandContext {
     /**
      * Retrieves a result value by its index.
      *
-     * @param index the index of the result.
-     * @param <T>   the type of the result.
-     * @return the result at the specified index.
+     * @param index the index of the result
+     * @param <T>   the type of the result
+     *
+     * @return the result at the specified index
      */
     <T> T getResult(int index);
 
     /**
      * Retrieves a result value by its index, or returns a default value if the result is {@code null}.
      *
-     * @param index        the index of the result.
-     * @param defaultValue the default value to return if the result is {@code null}.
-     * @param <T>          the type of the result.
-     * @return the result at the specified index, or the default value if the result is {@code null}.
+     * @param index        the index of the result
+     * @param defaultValue the default value to return if the result is {@code null}
+     * @param <T>          the type of the result
+     *
+     * @return the result at the specified index, or the default value if the result is {@code null}
      */
     default <T> T getResultOr(int index, T defaultValue) {
         T result = getResult(index);

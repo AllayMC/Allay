@@ -40,7 +40,7 @@ public class ItemStackInitInfo implements ComponentInitInfo {
     /**
      * Get the count of the item stack.
      *
-     * @return the count of the item stack.
+     * @return the count of the item stack
      */
     public int count() {
         return count;
@@ -49,7 +49,7 @@ public class ItemStackInitInfo implements ComponentInitInfo {
     /**
      * Get the meta of the item stack.
      *
-     * @return the meta of the item stack.
+     * @return the meta of the item stack
      */
     public int meta() {
         return meta;
@@ -58,7 +58,7 @@ public class ItemStackInitInfo implements ComponentInitInfo {
     /**
      * Get the extra tag of the item stack.
      *
-     * @return the extra tag of the item stack.
+     * @return the extra tag of the item stack
      */
     public NbtMap extraTag() {
         return extraTag;
@@ -67,7 +67,7 @@ public class ItemStackInitInfo implements ComponentInitInfo {
     /**
      * Get the stack network id of the item stack.
      *
-     * @return the stack network id of the item stack.
+     * @return the stack network id of the item stack
      */
     public int stackNetworkId() {
         return stackNetworkId;
@@ -76,7 +76,7 @@ public class ItemStackInitInfo implements ComponentInitInfo {
     /**
      * Whether to auto assign the stack network id.
      *
-     * @return whether to auto assign the stack network id.
+     * @return whether to auto assign the stack network id
      */
     public boolean autoAssignStackNetworkId() {
         return autoAssignStackNetworkId;

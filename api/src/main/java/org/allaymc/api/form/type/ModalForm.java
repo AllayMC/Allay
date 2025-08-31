@@ -23,16 +23,19 @@ public final class ModalForm extends Form {
     private String trueButton = "";
     @SerializedName("button2")
     private String falseButton = "";
-    private transient Runnable onTrue = () -> {};
-    private transient Runnable onFalse = () -> {};
-    private transient Consumer<String> onResponse = type -> {};
+    private transient Runnable onTrue = () -> {
+    };
+    private transient Runnable onFalse = () -> {
+    };
+    private transient Consumer<String> onResponse = type -> {
+    };
 
     /**
      * Set the title of the form.
      *
-     * @param title the title.
+     * @param title the title
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm title(String title) {
         this.title = title;
@@ -42,9 +45,9 @@ public final class ModalForm extends Form {
     /**
      * Set the content of the form.
      *
-     * @param content the content.
+     * @param content the content
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm content(String content) {
         this.content = content;
@@ -54,9 +57,9 @@ public final class ModalForm extends Form {
     /**
      * Set the text of the true button.
      *
-     * @param trueButton the text of the true button.
+     * @param trueButton the text of the true button
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm trueButton(String trueButton) {
         this.trueButton = trueButton;
@@ -66,10 +69,10 @@ public final class ModalForm extends Form {
     /**
      * Set the text of the true button and the action to be performed when the player clicks the button.
      *
-     * @param trueButton the text of the true button.
-     * @param onTrue     the action to be performed when the player clicks the button.
+     * @param trueButton the text of the true button
+     * @param onTrue     the action to be performed when the player clicks the button
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm trueButton(String trueButton, Runnable onTrue) {
         this.trueButton = trueButton;
@@ -80,9 +83,9 @@ public final class ModalForm extends Form {
     /**
      * Set the action to be performed when the player clicks the true button.
      *
-     * @param onTrue the action to be performed when the player clicks the true button.
+     * @param onTrue the action to be performed when the player clicks the true button
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm onTrue(Runnable onTrue) {
         this.onTrue = onTrue;
@@ -92,9 +95,9 @@ public final class ModalForm extends Form {
     /**
      * Set the text of the false button.
      *
-     * @param falseButton the text of the false button.
+     * @param falseButton the text of the false button
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm falseButton(String falseButton) {
         this.falseButton = falseButton;
@@ -104,10 +107,10 @@ public final class ModalForm extends Form {
     /**
      * Set the text of the false button and the action to be performed when the player clicks the button.
      *
-     * @param falseButton the text of the false button.
-     * @param onFalse     the action to be performed when the player clicks the button.
+     * @param falseButton the text of the false button
+     * @param onFalse     the action to be performed when the player clicks the button
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm falseButton(String falseButton, Runnable onFalse) {
         this.falseButton = falseButton;
@@ -118,9 +121,9 @@ public final class ModalForm extends Form {
     /**
      * Set the action to be performed when the player clicks the false button.
      *
-     * @param onFalse the action to be performed when the player clicks the false button.
+     * @param onFalse the action to be performed when the player clicks the false button
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm onFalse(Runnable onFalse) {
         this.onFalse = onFalse;
@@ -130,9 +133,9 @@ public final class ModalForm extends Form {
     /**
      * Set the action to be performed when the player clicks the true or false button.
      *
-     * @param onResponse the action to be performed when the player clicks the true or false button.
+     * @param onResponse the action to be performed when the player clicks the true or false button
      *
-     * @return the form.
+     * @return the form
      */
     public ModalForm onResponse(Consumer<String> onResponse) {
         this.onResponse = onResponse;

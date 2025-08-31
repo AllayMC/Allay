@@ -15,9 +15,9 @@ public interface Scheduler {
     /**
      * Create a scheduler.
      *
-     * @param asyncTaskExecutor the async task executor.
+     * @param asyncTaskExecutor the async task executor
      *
-     * @return the scheduler.
+     * @return the scheduler
      */
     static Scheduler createScheduler(ExecutorService asyncTaskExecutor) {
         return FACTORY.get().create(asyncTaskExecutor);
@@ -38,8 +38,8 @@ public interface Scheduler {
      * <p>
      * This method will run the task in the next tick.
      *
-     * @param creator  the task creator.
-     * @param runnable the runnable.
+     * @param creator  the task creator
+     * @param runnable the runnable
      */
     default void runLater(TaskCreator creator, Runnable runnable) {
         scheduleDelayed(creator, () -> {
@@ -53,8 +53,8 @@ public interface Scheduler {
      * <p>
      * This method will run the task in the next tick.
      *
-     * @param creator  the task creator.
-     * @param runnable the runnable.
+     * @param creator  the task creator
+     * @param runnable the runnable
      */
     default void runLaterAsync(TaskCreator creator, Runnable runnable) {
         scheduleDelayed(creator, () -> {
@@ -66,9 +66,9 @@ public interface Scheduler {
     /**
      * Schedule a delayed task.
      *
-     * @param creator the task creator.
-     * @param task    the task.
-     * @param delay   the delay in ticks.
+     * @param creator the task creator
+     * @param task    the task
+     * @param delay   the delay in ticks
      */
     default void scheduleDelayed(TaskCreator creator, Task task, int delay) {
         scheduleDelayed(creator, task, delay, false);
@@ -77,19 +77,19 @@ public interface Scheduler {
     /**
      * Schedule a delayed task.
      *
-     * @param creator the task creator.
-     * @param task    the task.
-     * @param delay   the delay in ticks.
-     * @param async   whether to run the task asynchronously.
+     * @param creator the task creator
+     * @param task    the task
+     * @param delay   the delay in ticks
+     * @param async   whether to run the task asynchronously
      */
     void scheduleDelayed(TaskCreator creator, Task task, int delay, boolean async);
 
     /**
      * Schedule a repeating task.
      *
-     * @param creator the task creator.
-     * @param task    the task.
-     * @param period  the period in ticks.
+     * @param creator the task creator
+     * @param task    the task
+     * @param period  the period in ticks
      */
     default void scheduleRepeating(TaskCreator creator, Task task, int period) {
         scheduleRepeating(creator, task, period, false);
@@ -98,20 +98,20 @@ public interface Scheduler {
     /**
      * Schedule a repeating task.
      *
-     * @param creator the task creator.
-     * @param task    the task.
-     * @param period  the period in ticks.
-     * @param async   whether to run the task asynchronously.
+     * @param creator the task creator
+     * @param task    the task
+     * @param period  the period in ticks
+     * @param async   whether to run the task asynchronously
      */
     void scheduleRepeating(TaskCreator creator, Task task, int period, boolean async);
 
     /**
      * Schedule a delayed repeating task.
      *
-     * @param creator the task creator.
-     * @param task    the task.
-     * @param delay   the delay in ticks.
-     * @param period  the period in ticks.
+     * @param creator the task creator
+     * @param task    the task
+     * @param delay   the delay in ticks
+     * @param period  the period in ticks
      */
     default void scheduleDelayedRepeating(TaskCreator creator, Task task, int delay, int period) {
         scheduleDelayedRepeating(creator, task, delay, period, false);
@@ -120,11 +120,11 @@ public interface Scheduler {
     /**
      * Schedule a delayed repeating task.
      *
-     * @param creator the task creator.
-     * @param task    the task.
-     * @param delay   the delay in ticks.
-     * @param period  the period in ticks.
-     * @param async   whether to run the task asynchronously.
+     * @param creator the task creator
+     * @param task    the task
+     * @param delay   the delay in ticks
+     * @param period  the period in ticks
+     * @param async   whether to run the task asynchronously
      */
     default void scheduleDelayedRepeating(TaskCreator creator, Task task, int delay, int period, boolean async) {
         scheduleDelayed(creator, () -> {
@@ -136,14 +136,14 @@ public interface Scheduler {
     /**
      * Get the current tick.
      *
-     * @return the current tick.
+     * @return the current tick
      */
     long getTicks();
 
     /**
      * Get the running task count.
      *
-     * @return the running task count.
+     * @return the running task count
      */
     int getRunningTaskCount();
 

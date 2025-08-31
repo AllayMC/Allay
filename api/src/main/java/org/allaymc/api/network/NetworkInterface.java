@@ -12,30 +12,30 @@ package org.allaymc.api.network;
  */
 public interface NetworkInterface {
     /**
-     * Set the current motd of the server.
-     *
-     * @param motd the new motd.
-     */
-    void setMotd(String motd);
-
-    /**
      * Get the current motd of the server.
      *
-     * @return the current motd.
+     * @return the current motd
      */
     String getMotd();
 
     /**
-     * Set the current sub-motd of the server.
+     * Set the current motd of the server.
      *
-     * @param subMotd the new sub-motd.
+     * @param motd the new motd
      */
-    void setSubMotd(String subMotd);
+    void setMotd(String motd);
 
     /**
      * Get the current sub-motd of the server.
      *
-     * @return the current sub-motd.
+     * @return the current sub-motd
      */
     String getSubMotd();
+
+    /**
+     * Set the current sub-motd of the server.
+     *
+     * @param subMotd the new sub-motd
+     */
+    void setSubMotd(String subMotd);
 }

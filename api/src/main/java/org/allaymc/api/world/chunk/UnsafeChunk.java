@@ -43,7 +43,7 @@ public interface UnsafeChunk {
     /**
      * Get the chunk loaders that load this chunk
      *
-     * @return the chunk loaders.
+     * @return the chunk loaders
      */
     @UnmodifiableView
     Set<ChunkLoader> getChunkLoaders();
@@ -64,21 +64,21 @@ public interface UnsafeChunk {
     /**
      * Add a chunk loader to this chunk.
      *
-     * @param chunkLoader the chunk loader to add.
+     * @param chunkLoader the chunk loader to add
      */
     void addChunkLoader(ChunkLoader chunkLoader);
 
     /**
      * Remove a chunk loader from this chunk.
      *
-     * @param chunkLoader the chunk loader to remove.
+     * @param chunkLoader the chunk loader to remove
      */
     void removeChunkLoader(ChunkLoader chunkLoader);
 
     /**
      * Get the number of chunk loaders that load this chunk.
      *
-     * @return the number of chunk loaders.
+     * @return the number of chunk loaders
      */
     default int getChunkLoaderCount() {
         return getChunkLoaders().size();
@@ -87,15 +87,15 @@ public interface UnsafeChunk {
     /**
      * Add a chunk packet to the chunk. The packet will be sent to all chunk loaders the next tick.
      *
-     * @param packet the packet to add.
+     * @param packet the packet to add
      */
     void addChunkPacket(BedrockPacket packet);
 
     /**
      * Add a chunk packet to the chunk. The packet will be sent to chunk loaders that match the predicate the next tick.
      *
-     * @param packet               the packet to add.
-     * @param chunkLoaderPredicate the predicate to match chunk loaders.
+     * @param packet               the packet to add
+     * @param chunkLoaderPredicate the predicate to match chunk loaders
      */
     void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
@@ -103,7 +103,7 @@ public interface UnsafeChunk {
      * Send packet to all chunk loaders. Compared to {@link #addChunkPacket(BedrockPacket)}, this
      * method will send the packet immediately instead of sending it in the next tick.
      *
-     * @param packet the packet to send.
+     * @param packet the packet to send
      */
     void sendChunkPacket(BedrockPacket packet);
 
@@ -111,65 +111,69 @@ public interface UnsafeChunk {
      * Send packet to chunk loaders that match the predicate. Compared to {@link #addChunkPacket(BedrockPacket, Predicate)}, this
      * method will send the packet immediately instead of sending it in the next tick.
      *
-     * @param packet               the packet to send.
-     * @param chunkLoaderPredicate the predicate to match chunk loaders.
+     * @param packet               the packet to send
+     * @param chunkLoaderPredicate the predicate to match chunk loaders
      */
     void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     /**
      * Get the state of the chunk.
      *
-     * @return the state of the chunk.
+     * @return the state of the chunk
      */
     ChunkState getState();
 
     /**
      * Get the dimension info of the chunk.
      *
-     * @return the dimension info of the chunk.
+     * @return the dimension info of the chunk
      */
     DimensionInfo getDimensionInfo();
 
     /**
      * Get the x coordinate of the chunk.
      *
-     * @return the x coordinate of the chunk.
+     * @return the x coordinate of the chunk
      */
     int getX();
 
     /**
      * Get the z coordinate of the chunk.
      *
-     * @return the z coordinate of the chunk.
+     * @return the z coordinate of the chunk
      */
     int getZ();
 
     /**
      * Remove the block entity in this chunk.
      *
-     * @param x the x coordinate of the block entity.
-     * @param y the y coordinate of the block entity.
-     * @param z the z coordinate of the block entity.
-     * @return the removed block entity, or {@code null} if not found.
-     * @throws IllegalArgumentException if x, y or z is out of range.
+     * @param x the x coordinate of the block entity
+     * @param y the y coordinate of the block entity
+     * @param z the z coordinate of the block entity
+     *
+     * @return the removed block entity, or {@code null} if not found
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range
      */
     BlockEntity removeBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
      * Get the block entity in this chunk.
      *
-     * @param x the x coordinate of the block entity.
-     * @param y the y coordinate of the block entity.
-     * @param z the z coordinate of the block entity.
-     * @return the block entity in this chunk, or {@code null} if not found.
-     * @throws IllegalArgumentException if x, y or z is out of range.
+     * @param x the x coordinate of the block entity
+     * @param y the y coordinate of the block entity
+     * @param z the z coordinate of the block entity
+     *
+     * @return the block entity in this chunk, or {@code null} if not found
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range
      */
     BlockEntity getBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
      * Get all block entities in this chunk.
      *
-     * @return all block entities in this chunk.
+     * @return all block entities in this chunk
      */
     @UnmodifiableView
     Map<Integer, BlockEntity> getBlockEntities();
@@ -177,7 +181,7 @@ public interface UnsafeChunk {
     /**
      * Add a block entity to this chunk.
      *
-     * @param blockEntity the block entity to add.
+     * @param blockEntity the block entity to add
      */
     void addBlockEntity(BlockEntity blockEntity);
 
@@ -186,7 +190,8 @@ public interface UnsafeChunk {
      * <p>
      * Since the array index starts at 0, the maximum value is 59
      *
-     * @param sectionY the y value of the section.
+     * @param sectionY the y value of the section
+     *
      * @return the section
      */
     @UnmodifiableView
@@ -195,34 +200,38 @@ public interface UnsafeChunk {
     /**
      * Add a scheduled update to a pos in the chunk.
      *
-     * @param x    the x coordinate of the pos.
-     * @param y    the y coordinate of the pos.
-     * @param z    the z coordinate of the pos.
-     * @param time the scheduled time of the scheduled update.
-     * @throws IllegalArgumentException if x, y or z is out of range.
+     * @param x    the x coordinate of the pos
+     * @param y    the y coordinate of the pos
+     * @param z    the z coordinate of the pos
+     * @param time the scheduled time of the scheduled update
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range
      */
     void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, long time);
 
     /**
      * Check if a pos in the chunk has a scheduled update.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
+     *
      * @return {@code true} if the pos has a scheduled update, otherwise {@code false}.
-     * @throws IllegalArgumentException if x, y or z is out of range.
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range
      */
     boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
      * Set block state in this chunk.
      *
-     * @param x          the x coordinate of the block.
-     * @param y          the y coordinate of the block.
-     * @param z          the z coordinate of the block.
-     * @param blockState the block state to set.
-     * @param layer      the layer of the block.
-     * @throws IllegalArgumentException if x, y or z is out of range.
+     * @param x          the x coordinate of the block
+     * @param y          the y coordinate of the block
+     * @param z          the z coordinate of the block
+     * @param blockState the block state to set
+     * @param layer      the layer of the block
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range
      */
     void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer, boolean send);
 
@@ -243,12 +252,14 @@ public interface UnsafeChunk {
     /**
      * Get block state in this chunk.
      *
-     * @param x     the x coordinate of the block.
-     * @param y     the y coordinate of the block.
-     * @param z     the z coordinate of the block.
-     * @param layer the layer of the block.
-     * @return the block state in this chunk, or {@code BlockTypes.AIR.getDefaultState()} if y is out of range.
-     * @throws IllegalArgumentException if x or z is out of range.
+     * @param x     the x coordinate of the block
+     * @param y     the y coordinate of the block
+     * @param z     the z coordinate of the block
+     * @param layer the layer of the block
+     *
+     * @return the block state in this chunk, or {@code BlockTypes.AIR.getDefaultState()} if y is out of range
+     *
+     * @throws IllegalArgumentException if x or z is out of range
      */
     BlockState getBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer);
 
@@ -262,48 +273,55 @@ public interface UnsafeChunk {
     /**
      * Get height of the specified position. If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
      *
-     * @param x the x coordinate of the position.
-     * @param z the z coordinate of the position.
-     * @return the height.
-     * @throws IllegalArgumentException if x or z is out of range.
+     * @param x the x coordinate of the position
+     * @param z the z coordinate of the position
+     *
+     * @return the height
+     *
+     * @throws IllegalArgumentException if x or z is out of range
      */
     short getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 
     /**
      * Set biome of the specified position.
      *
-     * @param x         the x coordinate of the position.
-     * @param y         the y coordinate of the position.
-     * @param z         the z coordinate of the position.
-     * @param biomeType the biome type.
-     * @throws IllegalArgumentException if x, y or z is out of range.
+     * @param x         the x coordinate of the position
+     * @param y         the y coordinate of the position
+     * @param z         the z coordinate of the position
+     * @param biomeType the biome type
+     *
+     * @throws IllegalArgumentException if x, y or z is out of range
      */
     void setBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
 
     /**
      * Get biome of the specified position.
      *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
-     * @return the biome type, or {@link org.allaymc.api.world.biome.BiomeId#PLAINS} if y is out of range.
-     * @throws IllegalArgumentException if x or z is out of range.
+     * @param x the x coordinate of the position
+     * @param y the y coordinate of the position
+     * @param z the z coordinate of the position
+     *
+     * @return the biome type, or {@link org.allaymc.api.world.biome.BiomeId#PLAINS} if y is out of range
+     *
+     * @throws IllegalArgumentException if x or z is out of range
      */
     BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
      * Get a specific chunk section in this chunk.
      *
-     * @param sectionY the sectionY of the chunk section.
-     * @return the section, should never be {@code null}.
-     * @throws IllegalArgumentException if section y is out of range.
+     * @param sectionY the sectionY of the chunk section
+     *
+     * @return the section, should never be {@code null}
+     *
+     * @throws IllegalArgumentException if section y is out of range
      */
     ChunkSection getSection(int sectionY);
 
     /**
      * Get all chunk sections in this chunk.
      *
-     * @return all chunk sections in this chunk.
+     * @return all chunk sections in this chunk
      */
     @UnmodifiableView
     List<ChunkSection> getSections();
@@ -311,7 +329,7 @@ public interface UnsafeChunk {
     /**
      * Get the hash of the chunk.
      *
-     * @return the hash of the chunk.
+     * @return the hash of the chunk
      */
     default long computeChunkHash() {
         return HashUtils.hashXZ(getX(), getZ());
@@ -320,7 +338,7 @@ public interface UnsafeChunk {
     /**
      * Convert this unsafe chunk to a {@link Chunk} which is safe in multithreaded environment.
      *
-     * @return the safe chunk.
+     * @return the safe chunk
      */
     Chunk toSafeChunk();
 }

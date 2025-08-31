@@ -26,9 +26,9 @@ public final class Dropdown implements CustomFormElement {
     /**
      * Create a new dropdown.
      *
-     * @param text          the text of the dropdown.
-     * @param options       the options of the dropdown.
-     * @param defaultOption the default option of the dropdown.
+     * @param text          the text of the dropdown
+     * @param options       the options of the dropdown
+     * @param defaultOption the default option of the dropdown
      */
     public Dropdown(String text, List<String> options, int defaultOption) {
         this.text = text;

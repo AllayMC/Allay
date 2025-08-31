@@ -20,19 +20,22 @@ public abstract class Plugin implements TaskCreator {
      * Called when the plugin is loaded.
      */
     @ApiStatus.OverrideOnly
-    public void onLoad() {}
+    public void onLoad() {
+    }
 
     /**
      * Called when the plugin is enabled.
      */
     @ApiStatus.OverrideOnly
-    public void onEnable() {}
+    public void onEnable() {
+    }
 
     /**
      * Called when the plugin is disabled.
      */
     @ApiStatus.OverrideOnly
-    public void onDisable() {}
+    public void onDisable() {
+    }
 
     /**
      * @return {@code true} if the plugin is reloadable, otherwise {@code false}
@@ -55,7 +58,7 @@ public abstract class Plugin implements TaskCreator {
     /**
      * Get the plugin's logger.
      *
-     * @return the plugin's logger.
+     * @return the plugin's logger
      */
     public Logger getPluginLogger() {
         return pluginLogger;
@@ -64,7 +67,7 @@ public abstract class Plugin implements TaskCreator {
     /**
      * Get the plugin container.
      *
-     * @return the plugin container.
+     * @return the plugin container
      */
     public PluginContainer getPluginContainer() {
         return pluginContainer;
@@ -73,7 +76,7 @@ public abstract class Plugin implements TaskCreator {
     /**
      * Set the plugin container.
      *
-     * @param pluginContainer the plugin container.
+     * @param pluginContainer the plugin container
      */
     @ApiStatus.OverrideOnly
     public void setPluginContainer(PluginContainer pluginContainer) {

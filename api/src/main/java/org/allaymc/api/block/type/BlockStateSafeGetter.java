@@ -29,7 +29,7 @@ public final class BlockStateSafeGetter {
     /**
      * Get the block state from the block state NBT.
      *
-     * @param nbt the block state NBT.
+     * @param nbt the block state NBT
      *
      * @return the block state, or the default state of {@code BlockTypes.UNKNOWN}
      * if the block state is not found, or the block state version is too new.
@@ -70,9 +70,9 @@ public final class BlockStateSafeGetter {
     /**
      * Get a block type by its name.
      *
-     * @param name The name of the block type.
+     * @param name The name of the block type
      *
-     * @return The {@link BlockStateSafeGetter.Getter} object.
+     * @return The {@link BlockStateSafeGetter.Getter} object
      */
     public static Getter name(String name) {
         return new Getter(name);
@@ -92,10 +92,10 @@ public final class BlockStateSafeGetter {
         /**
          * Set the property of the block.
          *
-         * @param name  The name of the property.
-         * @param value The value of the property.
+         * @param name  The name of the property
+         * @param value The value of the property
          *
-         * @return The {@link Getter} object.
+         * @return The {@link Getter} object
          */
         public Getter property(String name, Object value) {
             if (nbtBuilder.containsKey("val")) {
@@ -111,9 +111,9 @@ public final class BlockStateSafeGetter {
         /**
          * Set the val of the block.
          *
-         * @param val The val of the block.
+         * @param val The val of the block
          *
-         * @return The {@link Getter} object.
+         * @return The {@link Getter} object
          */
         public Getter val(int val) {
             if (stateBuilder != null) {
@@ -126,7 +126,7 @@ public final class BlockStateSafeGetter {
         /**
          * Try to get the block state.
          *
-         * @return The block state.
+         * @return The block state
          */
         public BlockState blockState() {
             if (stateBuilder != null) {

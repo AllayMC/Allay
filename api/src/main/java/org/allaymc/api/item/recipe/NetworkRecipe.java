@@ -19,7 +19,7 @@ public interface NetworkRecipe extends BaseRecipe {
     /**
      * Get the unique network ID of the recipe, assigned using {@link #assignNetworkId()} internally.
      *
-     * @return The unique network ID of the recipe, assigned internally.
+     * @return The unique network ID of the recipe, assigned internally
      */
     int getNetworkId();
 }

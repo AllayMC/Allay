@@ -17,6 +17,7 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
      * The length of the array must be bigger than 3.
      *
      * @param versions the version array
+     *
      * @return the semantic version
      */
     public static SemVersion from(int[] versions) {
@@ -38,6 +39,7 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
      * The string must be in the format of "major.minor.patch[.revision.build]".
      *
      * @param versionStr the version string
+     *
      * @return the semantic version
      */
     public static SemVersion from(String versionStr) {

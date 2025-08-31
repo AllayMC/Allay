@@ -26,7 +26,7 @@ public final class Palette<V> {
 
     private static final int SECTION_SIZE = 16 * 16 * 16;
     private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V0;
-    
+
     private List<V> palette;
     private BitArray bitArray;
     /**
@@ -50,6 +50,33 @@ public final class Palette<V> {
         this.palette.add(first);
         this.bitArray = version.createArray(SECTION_SIZE);
         this.dirty = true;
+    }
+
+    private static boolean hasCopyLastFlag(short header) {
+        return (header >> 1) == 0x7F;
+    }
+
+    private static short createPaletteHeader(BitArrayVersion version, boolean nbt) {
+        return (short) ((version.bits << 1) | (nbt ? 0 : 1));
+    }
+
+    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
+        return BitArrayVersion.get(header >> 1, true);
+    }
+
+    private static void checkVersion(BitArrayVersion version, int paletteSize) {
+        if (version.maxEntryIndex < paletteSize - 1) {
+            throw new PaletteException("Palette (version " + version.name() + ") is too large. Max size " + version.maxEntryIndex + ". Actual size " + paletteSize);
+        }
+    }
+
+    private static boolean isNBT(short header) {
+        return (header & 1) == 0;
+    }
+
+    @SuppressWarnings("ALL")
+    private static byte createCopyLastFlag(boolean nbt) {
+        return (byte) ((0x7F << 1) | (nbt ? 0 : 1));
     }
 
     public V get(int index) {
@@ -324,33 +351,6 @@ public final class Palette<V> {
         }
 
         return index;
-    }
-
-    private static boolean hasCopyLastFlag(short header) {
-        return (header >> 1) == 0x7F;
-    }
-
-    private static short createPaletteHeader(BitArrayVersion version, boolean nbt) {
-        return (short) ((version.bits << 1) | (nbt ? 0 : 1));
-    }
-
-    private static BitArrayVersion getVersionFromPaletteHeader(short header) {
-        return BitArrayVersion.get(header >> 1, true);
-    }
-
-    private static void checkVersion(BitArrayVersion version, int paletteSize) {
-        if (version.maxEntryIndex < paletteSize - 1) {
-            throw new PaletteException("Palette (version " + version.name() + ") is too large. Max size " + version.maxEntryIndex + ". Actual size " + paletteSize);
-        }
-    }
-
-    private static boolean isNBT(short header) {
-        return (header & 1) == 0;
-    }
-
-    @SuppressWarnings("ALL")
-    private static byte createCopyLastFlag(boolean nbt) {
-        return (byte) ((0x7F << 1) | (nbt ? 0 : 1));
     }
 
     @Override

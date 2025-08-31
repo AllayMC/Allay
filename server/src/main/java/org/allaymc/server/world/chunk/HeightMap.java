@@ -28,10 +28,10 @@ public final class HeightMap {
     /**
      * Compute the index of the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the index of the pos.
+     * @return the index of the pos
      */
     public static int computeIndex(int x, int z) {
         return (x << 4) | z;
@@ -40,10 +40,10 @@ public final class HeightMap {
     /**
      * Get the height of the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the height of the pos.
+     * @return the height of the pos
      */
     public short get(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
         return heights[computeIndex(x, z)];
@@ -52,9 +52,9 @@ public final class HeightMap {
     /**
      * Get the height of the specified position.
      *
-     * @param index the index of the pos.
+     * @param index the index of the pos
      *
-     * @return the height of the pos.
+     * @return the height of the pos
      */
     public short get(int index) {
         return heights[index];
@@ -63,9 +63,9 @@ public final class HeightMap {
     /**
      * Set the height of the specified position.
      *
-     * @param x      the x coordinate of the pos.
-     * @param z      the z coordinate of the pos.
-     * @param height the height of the pos.
+     * @param x      the x coordinate of the pos
+     * @param z      the z coordinate of the pos
+     * @param height the height of the pos
      */
     public void set(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, short height) {
         heights[computeIndex(x, z)] = height;
@@ -74,8 +74,8 @@ public final class HeightMap {
     /**
      * Set the height of the specified position.
      *
-     * @param index  the index of the pos.
-     * @param height the height of the pos.
+     * @param index  the index of the pos
+     * @param height the height of the pos
      */
     public void set(int index, short height) {
         heights[index] = height;
@@ -84,7 +84,7 @@ public final class HeightMap {
     /**
      * Fill the height map with the specified heights.
      *
-     * @param heights the heights to fill.
+     * @param heights the heights to fill
      */
     public void fill(short[] heights) {
         System.arraycopy(heights, 0, this.heights, 0, 256);

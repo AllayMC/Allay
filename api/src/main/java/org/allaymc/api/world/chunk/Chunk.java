@@ -24,28 +24,28 @@ public interface Chunk extends UnsafeChunk {
     /**
      * Apply the chunk with the specified operation.
      *
-     * @param operation the operation to be applied in the chunk.
-     * @param block     the operation type of block.
-     * @param biome     the operation type of biome.
+     * @param operation the operation to be applied in the chunk
+     * @param block     the operation type of block
+     * @param biome     the operation type of biome
      */
     void applyOperation(Consumer<UnsafeChunk> operation, OperationType block, OperationType biome);
 
     /**
      * Apply the section in the chunk with the specified operation.
      *
-     * @param sectionY  the section y of the section.
-     * @param operation the operation to be applied in the chunk section.
-     * @param block     the operation type of block.
-     * @param biome     the operation type of biome.
+     * @param sectionY  the section y of the section
+     * @param operation the operation to be applied in the chunk section
+     * @param block     the operation type of block
+     * @param biome     the operation type of biome
      *
-     * @throws IllegalArgumentException if section y is out of range.
+     * @throws IllegalArgumentException if section y is out of range
      */
     void applyOperationInSection(int sectionY, Consumer<ChunkSection> operation, OperationType block, OperationType biome);
 
     /**
      * Convert this chunk to a {@link UnsafeChunk} which is unsafe in multithreaded environment.
      *
-     * @return the unsafe chunk.
+     * @return the unsafe chunk
      */
     UnsafeChunk toUnsafeChunk();
 }

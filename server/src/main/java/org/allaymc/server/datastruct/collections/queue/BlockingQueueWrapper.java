@@ -13,14 +13,14 @@ public final class BlockingQueueWrapper<E> {
     private final Queue<E> queue;
     private final Semaphore availableItems;
 
-    public static <E> BlockingQueueWrapper<E> wrap(Queue<E> queue) {
-        return new BlockingQueueWrapper<>(queue);
-    }
-
     private BlockingQueueWrapper(Queue<E> queue) {
         this.queue = queue;
         // Start with 0 permits since queue is initially empty
         this.availableItems = new Semaphore(0);
+    }
+
+    public static <E> BlockingQueueWrapper<E> wrap(Queue<E> queue) {
+        return new BlockingQueueWrapper<>(queue);
     }
 
     public void offer(E e) {

@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public record SingletonBitArray() implements BitArray {
-    public static SingletonBitArray INSTANCE = new SingletonBitArray();
     private static final int[] EMPTY_ARRAY = new int[0];
+    public static SingletonBitArray INSTANCE = new SingletonBitArray();
 
     @Override
     public void set(int index, int value) {

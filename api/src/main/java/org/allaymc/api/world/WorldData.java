@@ -30,28 +30,28 @@ public interface WorldData extends PersistentDataHolder {
     /**
      * Get the difficulty of the world.
      *
-     * @return the difficulty.
+     * @return the difficulty
      */
     Difficulty getDifficulty();
 
     /**
      * Set the difficulty of the world.
      *
-     * @param difficulty the difficulty to set.
+     * @param difficulty the difficulty to set
      */
     void setDifficulty(Difficulty difficulty);
 
     /**
      * Get the game type of the world.
      *
-     * @return the game type.
+     * @return the game type
      */
     GameType getGameType();
 
     /**
      * Set the game type of the world.
      *
-     * @param gameType the game type to set.
+     * @param gameType the game type to set
      */
     void setGameType(GameType gameType);
 
@@ -61,28 +61,28 @@ public interface WorldData extends PersistentDataHolder {
      * This field is just the display name of the world, which is
      * not equal to the name in world-settings.yml
      *
-     * @return the name of the world.
+     * @return the name of the world
      */
     String getDisplayName();
 
     /**
      * Set the display name of the world.
      *
-     * @param name the display name to set.
+     * @param name the display name to set
      */
     void setDisplayName(String name);
 
     /**
      * Get the spawn point of the world.
      *
-     * @return the spawn point of the world.
+     * @return the spawn point of the world
      */
     Vector3ic getSpawnPoint();
 
     /**
      * Set the spawn point of the world.
      *
-     * @param spawnPoint the spawn point of the world to set.
+     * @param spawnPoint the spawn point of the world to set
      */
     void setSpawnPoint(Vector3ic spawnPoint);
 
@@ -91,7 +91,7 @@ public interface WorldData extends PersistentDataHolder {
      * <p>
      * This is equal to {@code getTotalTime() % TIME_FULL}
      *
-     * @return the time of day.
+     * @return the time of day
      */
     int getTimeOfDay();
 
@@ -105,7 +105,7 @@ public interface WorldData extends PersistentDataHolder {
     /**
      * Send the time of day to a range of players.
      *
-     * @param players the players that will receive time update.
+     * @param players the players that will receive time update
      */
     default void sendTimeOfDay(Collection<EntityPlayer> players) {
         players.forEach(this::sendTimeOfDay);
@@ -114,7 +114,7 @@ public interface WorldData extends PersistentDataHolder {
     /**
      * Send the time of day to a certain player.
      *
-     * @param player the player that will receive time update.
+     * @param player the player that will receive time update
      */
     default void sendTimeOfDay(EntityPlayer player) {
         var setTimePk = new SetTimePacket();
@@ -125,7 +125,7 @@ public interface WorldData extends PersistentDataHolder {
     /**
      * Add a certain amount of time to the time of the day.
      *
-     * @param amount thr amount of time to add.
+     * @param amount thr amount of time to add
      */
     default void addTimeOfDay(int amount) {
         setTimeOfDay(getTimeOfDay() + amount);
@@ -136,31 +136,31 @@ public interface WorldData extends PersistentDataHolder {
      * <p>
      * Please note that the value of this field can be bigger than 24000 (the length of a day, 20min)
      *
-     * @return the total time.
+     * @return the total time
      */
     long getTotalTime();
 
     /**
      * Get the value of a certain game rule.
      *
-     * @param gameRule the game rule.
+     * @param gameRule the game rule
      *
-     * @return the value of the game rule provided.
+     * @return the value of the game rule provided
      */
     <V> V getGameRuleValue(GameRule gameRule);
 
     /**
      * Set the value of a certain game rule.
      *
-     * @param gameRule the game rule to set.
-     * @param value    the new value.
+     * @param gameRule the game rule to set
+     * @param value    the new value
      */
     void setGameRuleValue(GameRule gameRule, Object value);
 
     /**
      * Get all game rules of this world.
      *
-     * @return all game rules of this world.
+     * @return all game rules of this world
      */
     GameRules getGameRules();
 
@@ -170,7 +170,7 @@ public interface WorldData extends PersistentDataHolder {
      * Determines how many times the world has been closed since the world was created,
      * with its value decreasing by 1 each time.
      *
-     * @return the start count of the world.
+     * @return the start count of the world
      */
     long getWorldStartCount();
 }

@@ -177,7 +177,7 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
     /**
      * Get sections (and only sections) from provided path
      *
-     * @param key - config section path, if null or empty root path will be used.
+     * @param key - config section path, if null or empty root path will be used
      */
     public ConfigSection getSections(String key) {
         ConfigSection sections = new ConfigSection();

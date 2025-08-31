@@ -11,14 +11,14 @@ public interface PacketReceiver {
     /**
      * Send a packet.
      *
-     * @param packet the chunk packet to send.
+     * @param packet the chunk packet to send
      */
     void sendPacket(BedrockPacket packet);
 
     /**
      * Send a packet immediately.
      *
-     * @param packet the chunk packet to send.
+     * @param packet the chunk packet to send
      */
     void sendPacketImmediately(BedrockPacket packet);
 }

@@ -31,7 +31,7 @@ public class PlayerData {
     /**
      * Creates an empty player data.
      *
-     * @return an empty player data.
+     * @return an empty player data
      */
     public static PlayerData createEmpty() {
         var server = Server.getInstance();
@@ -50,8 +50,9 @@ public class PlayerData {
     /**
      * Creates a {@link PlayerData} object from a nbt.
      *
-     * @param nbt the nbt that holds the data.
-     * @return a {@link PlayerData} object.
+     * @param nbt the nbt that holds the data
+     *
+     * @return a {@link PlayerData} object
      */
     public static PlayerData fromNBT(NbtMap nbt) {
         var builder = builder();
@@ -64,7 +65,7 @@ public class PlayerData {
     /**
      * Saves this {@link PlayerData} object to a nbt.
      *
-     * @return the saved nbt.
+     * @return the saved nbt
      */
     public NbtMap toNBT() {
         var builder = NbtMap.builder()

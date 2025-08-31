@@ -14,7 +14,7 @@ public interface TaggedRecipe extends BaseRecipe {
      * The tag indicating the crafting type applicable to this recipe.
      * For example, a crafting table recipe should have the "crafting_table" tag.
      *
-     * @return the tag indicating the crafting type applicable to this recipe.
+     * @return the tag indicating the crafting type applicable to this recipe
      */
     String getTag();
 }

@@ -71,29 +71,6 @@ public class StatusCommand extends VanillaCommand {
         super("status", TrKeys.ALLAY_COMMAND_STATUS_DESCRIPTION);
     }
 
-    @Override
-    public void prepareCommandTree(CommandTree tree) {
-        tree.getRoot().bool("full", false).optional().exec(context -> {
-            boolean full = context.getResult(0);
-            var sender = context.getSender();
-
-            sender.sendText("--- Server Status ---");
-            printUpTimeInfo(sender);
-            printMemoryUsageInfo(sender);
-            printOnlinePlayerInfo(sender);
-            sender.sendText("\n");
-
-            printWorldInfo(sender);
-            if (full) {
-                printOperationSystemAndJVMInfo(sender);
-                printNetworkInfo(sender);
-                printCPUInfo(sender);
-                printOperationSystemMemoryInfo(sender);
-            }
-            return context.success();
-        });
-    }
-
     protected static void printOperationSystemMemoryInfo(CommandSender sender) {
         sender.sendText("--- Memory Info ---");
         var globalMemory = SYSTEM_INFO.getHardware().getMemory();
@@ -381,6 +358,29 @@ public class StatusCommand extends VanillaCommand {
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(uptime);
         return String.format(UPTIME_FORMAT, days, hours, minutes, seconds);
+    }
+
+    @Override
+    public void prepareCommandTree(CommandTree tree) {
+        tree.getRoot().bool("full", false).optional().exec(context -> {
+            boolean full = context.getResult(0);
+            var sender = context.getSender();
+
+            sender.sendText("--- Server Status ---");
+            printUpTimeInfo(sender);
+            printMemoryUsageInfo(sender);
+            printOnlinePlayerInfo(sender);
+            sender.sendText("\n");
+
+            printWorldInfo(sender);
+            if (full) {
+                printOperationSystemAndJVMInfo(sender);
+                printNetworkInfo(sender);
+                printCPUInfo(sender);
+                printOperationSystemMemoryInfo(sender);
+            }
+            return context.success();
+        });
     }
 
     protected enum ComputerSystemEntry {

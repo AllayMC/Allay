@@ -225,7 +225,9 @@ public final class PackEncryptor {
         outputStream.closeEntry();
     }
 
-    public record Content(List<ContentEntry> content) {}
+    public record Content(List<ContentEntry> content) {
+    }
 
-    public record ContentEntry(String path, String key) {}
+    public record ContentEntry(String path, String key) {
+    }
 }

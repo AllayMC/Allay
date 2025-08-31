@@ -15,21 +15,22 @@ public interface ItemProjectileComponent extends ItemComponent {
     /**
      * Get the projectile entity type of this item.
      *
-     * @return the projectile entity type of this item.
+     * @return the projectile entity type of this item
      */
     EntityType<?> getProjectileEntityType();
 
     /**
      * Get the initial throw force when an entity shoot this item.
      *
-     * @return the initial throw force when an entity shoot this item.
+     * @return the initial throw force when an entity shoot this item
      */
     double getThrowForce();
 
     /**
      * Try to shoot this item by a specific entity.
      *
-     * @param shooter the entity that shoots this item.
+     * @param shooter the entity that shoots this item
+     *
      * @return {@code true} if the projectile is shot successfully, {@code false} otherwise
      * (may because event {@link ProjectileLaunchEvent} being cancelled).
      */

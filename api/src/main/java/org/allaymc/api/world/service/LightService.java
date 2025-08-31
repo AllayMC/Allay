@@ -13,11 +13,11 @@ public interface LightService {
     /**
      * Get the skylight level at the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the skylight level at the specified position.
+     * @return the skylight level at the specified position
      */
     int getSkyLight(int x, int y, int z);
 
@@ -31,11 +31,11 @@ public interface LightService {
     /**
      * Get the internal light level at the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the internal light level at the specified position.
+     * @return the internal light level at the specified position
      */
     int getInternalLight(int x, int y, int z);
 
@@ -49,11 +49,11 @@ public interface LightService {
     /**
      * Get the internal skylight level at the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the internal skylight level at the specified position.
+     * @return the internal skylight level at the specified position
      */
     int getInternalSkyLight(int x, int y, int z);
 
@@ -67,11 +67,11 @@ public interface LightService {
     /**
      * Get the block light level at the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x the x coordinate of the pos
+     * @param y the y coordinate of the pos
+     * @param z the z coordinate of the pos
      *
-     * @return the block light level at the specified position.
+     * @return the block light level at the specified position
      */
     int getBlockLight(int x, int y, int z);
 
@@ -85,7 +85,7 @@ public interface LightService {
     /**
      * Get the queued update count.
      *
-     * @return the queued update count.
+     * @return the queued update count
      */
     int getQueuedUpdateCount();
 }

@@ -71,9 +71,9 @@ public class Block {
     /**
      * Creates a new {@code Block} instance with the specified block state, position, and layer.
      *
-     * @param blockState the state of the block, must not be null.
-     * @param pos        the position of the block in the world, must not be null.
-     * @param layer      the layer of the block, typically 0 for the main layer.
+     * @param blockState the state of the block, must not be null
+     * @param pos        the position of the block in the world, must not be null
+     * @param layer      the layer of the block, typically 0 for the main layer
      */
     public Block(BlockState blockState, Position3ic pos, int layer) {
         this.blockState = Preconditions.checkNotNull(blockState, "blockState cannot be null");
@@ -84,8 +84,9 @@ public class Block {
     /**
      * Sets the property values of the block state and returns a new {@code Block} instance with the updated block state.
      *
-     * @param propertyValues the list of property values to set for the block state.
-     * @return a new {@code Block} instance with the updated block state.
+     * @param propertyValues the list of property values to set for the block state
+     *
+     * @return a new {@code Block} instance with the updated block state
      */
     public Block setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
         return new Block(blockState.setPropertyValues(propertyValues), pos, layer);
@@ -94,8 +95,9 @@ public class Block {
     /**
      * Sets a property value and returns a new {@code Block} instance with the updated block state.
      *
-     * @param propertyValue the property value to set.
-     * @return a new {@code Block} instance with the updated block state.
+     * @param propertyValue the property value to set
+     *
+     * @return a new {@code Block} instance with the updated block state
      */
     public Block setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
         return new Block(blockState.setPropertyValue(propertyValue), pos, layer);
@@ -104,11 +106,12 @@ public class Block {
     /**
      * Sets a property value and returns a new {@code Block} instance with the updated block state.
      *
-     * @param property   the property to set.
-     * @param value      the value to set for the property.
-     * @param <DATATYPE> the type of the property value.
-     * @param <PROPERTY> the type of the block property.
-     * @return a new {@code Block} instance with the updated block state.
+     * @param property   the property to set
+     * @param value      the value to set for the property
+     * @param <DATATYPE> the type of the property value
+     * @param <PROPERTY> the type of the block property
+     *
+     * @return a new {@code Block} instance with the updated block state
      */
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> Block setPropertyValue(PROPERTY property, DATATYPE value) {
         return new Block(blockState.setPropertyValue(property, value), pos, layer);
@@ -124,8 +127,9 @@ public class Block {
     /**
      * Returns a new {@code BlockStateWithPos} offset from the current position in the specified direction.
      *
-     * @param blockFace the direction to offset.
-     * @return a new {@code BlockStateWithPos} at the offset position.
+     * @param blockFace the direction to offset
+     *
+     * @return a new {@code BlockStateWithPos} at the offset position
      */
     public Block offsetPos(BlockFace blockFace, int layer) {
         var offset = blockFace.getOffset();
@@ -142,11 +146,12 @@ public class Block {
     /**
      * Returns a new {@code BlockStateWithPos} offset from the current position by the given deltas.
      *
-     * @param x     the x-axis offset.
-     * @param y     the y-axis offset.
-     * @param z     the z-axis offset.
-     * @param layer the layer of the block.
-     * @return a new {@code BlockStateWithPos} at the offset position.
+     * @param x     the x-axis offset
+     * @param y     the y-axis offset
+     * @param z     the z-axis offset
+     * @param layer the layer of the block
+     *
+     * @return a new {@code BlockStateWithPos} at the offset position
      */
     public Block offsetPos(int x, int y, int z, int layer) {
         var newPos = pos.add(x, y, z, new Vector3i());
@@ -160,9 +165,9 @@ public class Block {
     /**
      * Updates a property of the block at the current position and layer.
      *
-     * @param <DATATYPE>   the type of the property value.
-     * @param propertyType the type of the block property to update.
-     * @param value        the new value of the block property.
+     * @param <DATATYPE>   the type of the property value
+     * @param propertyType the type of the block property to update
+     * @param value        the new value of the block property
      */
     public <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value) {
         getDimension().updateBlockProperty(propertyType, value, pos, layer);
@@ -171,7 +176,7 @@ public class Block {
     /**
      * Adds a sound event at the center of this block's position.
      *
-     * @param soundEvent the sound event to play.
+     * @param soundEvent the sound event to play
      */
     public void addLevelSoundEvent(SoundEvent soundEvent) {
         getDimension().addLevelSoundEvent(MathUtils.center(pos), soundEvent);
@@ -180,8 +185,8 @@ public class Block {
     /**
      * Adds a level event at the center of this block's position.
      *
-     * @param eventType the type of level event.
-     * @param data      additional event data.
+     * @param eventType the type of level event
+     * @param data      additional event data
      */
     public void addLevelEvent(LevelEventType eventType, int data) {
         getDimension().addLevelEvent(MathUtils.center(pos), eventType, data);
@@ -190,7 +195,7 @@ public class Block {
     /**
      * Adds a particle effect at the center of this block's position.
      *
-     * @param particleType the type of particle to spawn.
+     * @param particleType the type of particle to spawn
      */
     public void addParticle(ParticleType particleType) {
         getDimension().addParticle(MathUtils.center(pos), particleType, 0);
@@ -208,8 +213,9 @@ public class Block {
     /**
      * Breaks the block at the current position and layer using the specified item and entity.
      *
-     * @param usedItem the item used to break the block, can be {@code null}.
-     * @param entity   the entity that broke the block, can be {@code null}.
+     * @param usedItem the item used to break the block, can be {@code null}
+     * @param entity   the entity that broke the block, can be {@code null}
+     *
      * @return {@code true} if the block was successfully broken, {@code false} otherwise.
      */
     public boolean breakBlock(ItemStack usedItem, Entity entity) {
@@ -228,7 +234,7 @@ public class Block {
     /**
      * Retrieves the dimension in which this block state is located.
      *
-     * @return the {@link Dimension} of the block state.
+     * @return the {@link Dimension} of the block state
      */
     public Dimension getDimension() {
         return pos.dimension();
@@ -237,8 +243,9 @@ public class Block {
     /**
      * Retrieves the block entity at the current position.
      *
-     * @param <T> the type of the block entity.
-     * @return the block entity at the current position.
+     * @param <T> the type of the block entity
+     *
+     * @return the block entity at the current position
      */
     @SuppressWarnings("ALL")
     public <T extends BlockEntity> T getBlockEntity() {

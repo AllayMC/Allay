@@ -36,7 +36,7 @@ import java.util.*;
  * HashDirectedAcyclicGraph is an implementation of a <a href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>
  * that conforms to {@link Set}.
  *
- * @param <B> Node type.
+ * @param <B> Node type
  */
 public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedAcyclicGraph<B> {
     //~ Instance fields ========================================================
@@ -58,7 +58,7 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
      * Creates a new DAG object, which initially contains the members specified
      * its parameter list.
      *
-     * @param member list of members, which may be empty, which are initially contained by the DAG object.
+     * @param member list of members, which may be empty, which are initially contained by the DAG object
      */
     @SafeVarargs
     public HashDirectedAcyclicGraph(B... member) {
@@ -69,7 +69,7 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
      * Creates a new DAG object, which initially contains the members specified
      * its parameter list.
      *
-     * @param collection collection of members, which may be empty, which are initially contained by the DAG object.
+     * @param collection collection of members, which may be empty, which are initially contained by the DAG object
      */
     public HashDirectedAcyclicGraph(Collection<? extends B> collection) {
         this();

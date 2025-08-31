@@ -19,7 +19,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     /**
      * Get the login data of the player.
      *
-     * @return the login data of the player.
+     * @return the login data of the player
      */
     LoginData getLoginData();
 
@@ -29,7 +29,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * Origin name is the xbox id of a player, which won't be changed unless the player do changes in his xbox account
      * This name is used for identifying a player in the server. Check display name if you want to edit the appearance of player's name.
      *
-     * @return the origin name of the player.
+     * @return the origin name of the player
      */
     default String getOriginName() {
         return getLoginData().getXname();
@@ -45,21 +45,21 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     /**
      * Disconnect the player with the given reason.
      *
-     * @param reason the reason for disconnecting the player.
+     * @param reason the reason for disconnecting the player
      */
     void disconnect(@MayContainTrKey String reason);
 
     /**
      * Get the client status of this player.
      *
-     * @return the client status of this player.
+     * @return the client status of this player
      */
     ClientStatus getClientStatus();
 
     /**
      * Get the last client status of this player.
      *
-     * @return the last client status of this player.
+     * @return the last client status of this player
      */
     ClientStatus getLastClientStatus();
 
@@ -111,21 +111,21 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     /**
      * Get the encryption secret key for the player.
      *
-     * @return the encryption secret key for the player.
+     * @return the encryption secret key for the player
      */
     SecretKey getEncryptionSecretKey();
 
     /**
      * Get the client session for the player.
      *
-     * @return the client session for the player.
+     * @return the client session for the player
      */
     BedrockServerSession getClientSession();
 
     /**
      * Get the ping of the player.
      *
-     * @return the ping of the player.
+     * @return the ping of the player
      */
     int getPing();
 

@@ -26,6 +26,16 @@ public class StructureCommand extends VanillaCommand {
         aliases.add("struct");
     }
 
+    private static void checkStructureDirectory() {
+        if (!Files.exists(STRUCTURE_DIR)) {
+            try {
+                Files.createDirectory(STRUCTURE_DIR);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create structure directory", e);
+            }
+        }
+    }
+
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
@@ -114,15 +124,5 @@ public class StructureCommand extends VanillaCommand {
                     }
                     return context.success();
                 });
-    }
-
-    private static void checkStructureDirectory() {
-        if (!Files.exists(STRUCTURE_DIR)) {
-            try {
-                Files.createDirectory(STRUCTURE_DIR);
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create structure directory", e);
-            }
-        }
     }
 }

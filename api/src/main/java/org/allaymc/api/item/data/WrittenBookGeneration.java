@@ -23,8 +23,9 @@ public enum WrittenBookGeneration {
     /**
      * Gets WrittenBookGeneration enum entry by generation value
      *
-     * @param generation the generation value.
-     * @return the WrittenBookGeneration enum entry.
+     * @param generation the generation value
+     *
+     * @return the WrittenBookGeneration enum entry
      */
     public static WrittenBookGeneration fromGeneration(int generation) {
         return VALUES[generation];

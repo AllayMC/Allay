@@ -9,14 +9,14 @@ public interface EntityProjectileComponent extends EntityComponent {
     /**
      * Gets the entity that shots the projectile.
      *
-     * @return the entity that shots the projectile.
+     * @return the entity that shots the projectile
      */
     Entity getShooter();
 
     /**
      * Sets the entity that shots the projectile.
      *
-     * @param shooter the entity that shots the projectile.
+     * @param shooter the entity that shots the projectile
      */
     void setShooter(Entity shooter);
 }

@@ -17,7 +17,7 @@ public interface ChunkLoader extends PacketReceiver {
     /**
      * Get the location of the chunk loader.
      *
-     * @return the location of the chunk loader.
+     * @return the location of the chunk loader
      */
     Location3dc getLocation();
 
@@ -31,22 +31,23 @@ public interface ChunkLoader extends PacketReceiver {
     /**
      * Get the chunk loading radius.
      *
-     * @return the chunk loading radius.
+     * @return the chunk loading radius
      */
     int getChunkLoadingRadius();
 
     /**
      * Set the chunk loading radius.
      *
-     * @param radius the chunk loading radius.
-     * @throws UnsupportedOperationException if the loading radius cannot be changed for this chunk loader.
+     * @param radius the chunk loading radius
+     *
+     * @throws UnsupportedOperationException if the loading radius cannot be changed for this chunk loader
      */
     void setChunkLoadingRadius(int radius);
 
     /**
      * Get the maximum chunk count try to send per tick.
      *
-     * @return the maximum chunk count try to send per tick.
+     * @return the maximum chunk count try to send per tick
      */
     int getChunkMaxSendCountPerTick();
 
@@ -65,7 +66,7 @@ public interface ChunkLoader extends PacketReceiver {
     /**
      * A method which will be called when a chunk is out of range.
      *
-     * @param chunkHashes the chunk hashes that are out of range.
+     * @param chunkHashes the chunk hashes that are out of range
      */
     @ApiStatus.OverrideOnly
     void onChunkOutOfRange(Set<Long> chunkHashes);

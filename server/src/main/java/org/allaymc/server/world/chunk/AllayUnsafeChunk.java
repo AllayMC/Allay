@@ -68,18 +68,16 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final HeightMap heightMap;
     @Getter
     protected final NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
-    @Getter
-    @Setter
-    protected volatile ChunkState state;
     protected final NonBlockingHashMap<Integer, BlockEntity> blockEntities;
-
     protected final ChunkBitMap heightMapDirtyFlags;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<BlockChangeEntry> blockChangeEntries;
     protected final Queue<BlockChangeEntry> extraBlockChangeEntries;
     protected final Queue<ChunkPacketEntry> chunkPacketQueue;
     protected final AllayChunk safeChunk;
-
+    @Getter
+    @Setter
+    protected volatile ChunkState state;
     @Setter
     protected BlockChangeCallback blockChangeCallback;
     @Getter
@@ -90,14 +88,14 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     /**
      * Create a new {@link AllayUnsafeChunk}.
      *
-     * @param x                the x coordinate of the chunk.
-     * @param z                the z coordinate of the chunk.
-     * @param dimensionInfo    the dimension info.
-     * @param sections         the sections.
-     * @param heightMap        the height map.
-     * @param scheduledUpdates the scheduled updates.
-     * @param state            the state.
-     * @param blockEntities    the block entities in the chunk.
+     * @param x                the x coordinate of the chunk
+     * @param z                the z coordinate of the chunk
+     * @param dimensionInfo    the dimension info
+     * @param sections         the sections
+     * @param heightMap        the height map
+     * @param scheduledUpdates the scheduled updates
+     * @param state            the state
+     * @param blockEntities    the block entities in the chunk
      */
     AllayUnsafeChunk(
             int x, int z, DimensionInfo dimensionInfo,

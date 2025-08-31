@@ -46,9 +46,9 @@ public abstract class EnchantmentType {
     /**
      * Create an instance of the enchantment.
      *
-     * @param level The level of the instance.
+     * @param level The level of the instance
      *
-     * @return The instance of the enchantment.
+     * @return The instance of the enchantment
      */
     public EnchantmentInstance createInstance(int level) {
         return instances.computeIfAbsent(level, l -> new EnchantmentInstance(this, l));
@@ -57,7 +57,7 @@ public abstract class EnchantmentType {
     /**
      * Get the identifier of the enchantment.
      *
-     * @return The identifier of the enchantment.
+     * @return The identifier of the enchantment
      */
     public Identifier getIdentifier() {
         return identifier;
@@ -66,7 +66,7 @@ public abstract class EnchantmentType {
     /**
      * Get the id of the enchantment.
      *
-     * @return The id of the enchantment.
+     * @return The id of the enchantment
      */
     public int getId() {
         return id;
@@ -75,7 +75,7 @@ public abstract class EnchantmentType {
     /**
      * Get the max level of the enchantment.
      *
-     * @return The max level of the enchantment.
+     * @return The max level of the enchantment
      */
     public int getMaxLevel() {
         return maxLevel;
@@ -84,9 +84,9 @@ public abstract class EnchantmentType {
     /**
      * Get the minimum modified level of the enchantment.
      *
-     * @param level The level of the enchantment.
+     * @param level The level of the enchantment
      *
-     * @return The minimum modified level of the enchantment.
+     * @return The minimum modified level of the enchantment
      *
      * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
      */
@@ -97,9 +97,9 @@ public abstract class EnchantmentType {
     /**
      * Get the maximum modified level of the enchantment.
      *
-     * @param level The level of the enchantment.
+     * @param level The level of the enchantment
      *
-     * @return The maximum modified level of the enchantment.
+     * @return The maximum modified level of the enchantment
      *
      * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
      */
@@ -128,7 +128,7 @@ public abstract class EnchantmentType {
     /**
      * Check if the enchantment can be applied to an item type.
      *
-     * @param itemType The item type.
+     * @param itemType The item type
      *
      * @return {@code true} if the enchantment can be applied to the item type, {@code false} otherwise.
      */
@@ -144,7 +144,7 @@ public abstract class EnchantmentType {
     /**
      * Get the applicable type of the enchantment.
      *
-     * @return The applicable type of the enchantment.
+     * @return The applicable type of the enchantment
      */
     public ApplicableType getApplicableType() {
         return applicableType;
@@ -153,7 +153,7 @@ public abstract class EnchantmentType {
     /**
      * Get the rarity of the enchantment.
      *
-     * @return The rarity of the enchantment.
+     * @return The rarity of the enchantment
      */
     public Rarity getRarity() {
         return rarity;
@@ -162,7 +162,7 @@ public abstract class EnchantmentType {
     /**
      * Check if the enchantment is incompatible with another enchantment.
      *
-     * @param other The other enchantment.
+     * @param other The other enchantment
      *
      * @return {@code true} if the enchantments are incompatible, {@code false} otherwise.
      */

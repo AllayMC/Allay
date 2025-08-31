@@ -42,7 +42,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set the player's sprinting state.
      *
-     * @param sprinting Whether the player should be sprinting.
+     * @param sprinting Whether the player should be sprinting
      */
     void setSprinting(boolean sprinting);
 
@@ -58,7 +58,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set the player's sneaking state.
      *
-     * @param sneaking Whether the player should be sneaking.
+     * @param sneaking Whether the player should be sneaking
      */
     void setSneaking(boolean sneaking);
 
@@ -74,7 +74,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set the player's swimming state.
      *
-     * @param swimming Whether the player should be swimming.
+     * @param swimming Whether the player should be swimming
      */
     void setSwimming(boolean swimming);
 
@@ -90,7 +90,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set the player's gliding state.
      *
-     * @param gliding Whether the player should be gliding.
+     * @param gliding Whether the player should be gliding
      */
     void setGliding(boolean gliding);
 
@@ -106,7 +106,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set the player's crawling state.
      *
-     * @param crawling Whether the player should be crawling.
+     * @param crawling Whether the player should be crawling
      */
     void setCrawling(boolean crawling);
 
@@ -120,7 +120,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set whether the player is using an item on a block.
      *
-     * @param usingItemOnBlock Whether the player should be using an item on a block.
+     * @param usingItemOnBlock Whether the player should be using an item on a block
      */
     void setUsingItemOnBlock(boolean usingItemOnBlock);
 
@@ -136,7 +136,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set whether the player is using an item in the air.
      *
-     * @param value Whether the player should be using an item in the air.
+     * @param value Whether the player should be using an item in the air
      */
     default void setUsingItemInAir(boolean value) {
         setUsingItemInAir(value, getWorld().getTick());
@@ -145,23 +145,24 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set whether the player is using an item in the air.
      *
-     * @param value Whether the player should be using an item in the air.
-     * @param time  The current tick.
+     * @param value Whether the player should be using an item in the air
+     * @param time  The current tick
      */
     void setUsingItemInAir(boolean value, long time);
 
     /**
      * Get the time when the player most recently started using an item.
      *
-     * @return The time when the player most recently started using an item.
+     * @return The time when the player most recently started using an item
      */
     long getStartUsingItemInAirTime();
 
     /**
      * Get how long the player has been using the item, in game ticks.
      *
-     * @param currentTime The current time.
-     * @return How long the player has been using the item, in game ticks.
+     * @param currentTime The current time
+     *
+     * @return How long the player has been using the item, in game ticks
      */
     long getItemUsingInAirTime(long currentTime);
 
@@ -172,7 +173,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Get the hand slot of the player.
      *
-     * @return The hand slot of the player.
+     * @return The hand slot of the player
      */
     int getHandSlot();
 
@@ -183,15 +184,15 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set the hand slot of the player.
      *
-     * @param handSlot   The hand slot of the player.
-     * @param sendToSelf Whether the change should be sent to the self.
+     * @param handSlot   The hand slot of the player
+     * @param sendToSelf Whether the change should be sent to the self
      */
     void setHandSlot(int handSlot, boolean sendToSelf);
 
     /**
      * Get the base offset of the player.
      *
-     * @return The base offset of the player.
+     * @return The base offset of the player
      */
     @Override
     default float getNetworkOffset() {
@@ -213,63 +214,63 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * This is very useful for plugin especially if plugin wants to change the appearance of player name in chat
      * because origin name cannot be changed.
      *
-     * @return The display name of the player.
+     * @return The display name of the player
      */
     String getDisplayName();
 
     /**
      * Sets the display name of the player.
      *
-     * @param displayName The display name of the player.
+     * @param displayName The display name of the player
      */
     void setDisplayName(String displayName);
 
     /**
      * Get the skin of the player.
      *
-     * @return The skin of the player.
+     * @return The skin of the player
      */
     SerializedSkin getSkin();
 
     /**
      * Sets the skin of the player.
      *
-     * @param skin The skin to set.
+     * @param skin The skin to set
      */
     void setSkin(SerializedSkin skin);
 
     /**
      * Get the game type of the player.
      *
-     * @return The game type of the player.
+     * @return The game type of the player
      */
     GameType getGameType();
 
     /**
      * Sets the game type of the player.
      *
-     * @param gameType The game type to set.
+     * @param gameType The game type to set
      */
     void setGameType(GameType gameType);
 
     /**
      * Get the adventure settings of the player.
      *
-     * @return The adventure settings of the player.
+     * @return The adventure settings of the player
      */
     AdventureSettings getAdventureSettings();
 
     /**
      * Get the abilities of the player.
      *
-     * @return The abilities of the player.
+     * @return The abilities of the player
      */
     Abilities getAbilities();
 
     /**
      * Set the fly speed of the player.
      *
-     * @param flySpeed The fly speed to set.
+     * @param flySpeed The fly speed to set
      */
     default void setFlySpeed(float flySpeed) {
         getAbilities().setFlySpeed(flySpeed);
@@ -278,7 +279,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set the vertical fly speed of the player.
      *
-     * @param verticalFlySpeed The vertical fly speed to set.
+     * @param verticalFlySpeed The vertical fly speed to set
      */
     default void setVerticalFlySpeed(float verticalFlySpeed) {
         getAbilities().setVerticalFlySpeed(verticalFlySpeed);
@@ -287,7 +288,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Set whether the player is flying.
      *
-     * @param flying Whether the player is flying.
+     * @param flying Whether the player is flying
      */
     default void setFlying(boolean flying) {
         getAbilities().setFlying(flying);
@@ -296,7 +297,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Send a tip to the player.
      *
-     * @param message The message to send.
+     * @param message The message to send
      */
     void sendTip(String message);
 
@@ -311,15 +312,15 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Send a toast to the player. The toast will be displayed at the top of the screen
      * with a title and content in a period of time.
      *
-     * @param title   the title of the toast.
-     * @param content the content of the toast.
+     * @param title   the title of the toast
+     * @param content the content of the toast
      */
     void sendToast(String title, String content);
 
     /**
      * Send a title to the player which will be shown in the middle of the screen.
      *
-     * @param title the title to send.
+     * @param title the title to send
      */
     void sendTitle(String title);
 
@@ -328,23 +329,23 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * If no title is set, the subtitle won't be shown, in other words title must
      * be set before set subtitle.
      *
-     * @param subtitle the subtitle to send.
+     * @param subtitle the subtitle to send
      */
     void sendSubtitle(String subtitle);
 
     /**
      * Send an action bar message to the player which will be shown above player's hot bar.
      *
-     * @param actionBar the action bar message to send.
+     * @param actionBar the action bar message to send
      */
     void sendActionBar(String actionBar);
 
     /**
      * Set the title settings of this player. These settings will be used for the next title, subtitle and actionbar.
      *
-     * @param fadeInTime  the time in ticks for the title to fade in.
-     * @param duration    the time in ticks for the title to stay.
-     * @param fadeOutTime the time in ticks for the title to fade out.
+     * @param fadeInTime  the time in ticks for the title to fade in
+     * @param duration    the time in ticks for the title to stay
+     * @param fadeOutTime the time in ticks for the title to fade out
      */
     void setTitleSettings(int fadeInTime, int duration, int fadeOutTime);
 
@@ -361,7 +362,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Save the player's data.
      *
-     * @return The saved player data.
+     * @return The saved player data
      */
     PlayerData savePlayerData();
 
@@ -375,21 +376,21 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Please note that this method won't do extra checks like checking if the
      * bed is still exists, etc.
      *
-     * @return The spawn point of the player.
+     * @return The spawn point of the player
      */
     Location3ic validateAndGetSpawnPoint();
 
     /**
      * Set the spawn point of the player.
      *
-     * @param spawnPoint The spawn point to set.
+     * @param spawnPoint The spawn point to set
      */
     void setSpawnPoint(Location3ic spawnPoint);
 
     /**
      * Get the forms of the player.
      *
-     * @return The forms of the player.
+     * @return The forms of the player
      */
     @UnmodifiableView
     Map<Integer, Form> getForms();
@@ -397,30 +398,32 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Get a form by its ID.
      *
-     * @param id The ID of the form.
-     * @return The form.
+     * @param id The ID of the form
+     *
+     * @return The form
      */
     Form getForm(int id);
 
     /**
      * Remove a form by its ID.
      *
-     * @param id The ID of the form.
-     * @return The removed form.
+     * @param id The ID of the form
+     *
+     * @return The removed form
      */
     Form removeForm(int id);
 
     /**
      * Get the server setting form and its id.
      *
-     * @return The server setting form and its id.
+     * @return The server setting form and its id
      */
     Pair<Integer, CustomForm> getServerSettingForm();
 
     /**
      * Set a server setting form to the player.
      *
-     * @param form The form to add.
+     * @param form The form to add
      */
     void setServerSettingForm(CustomForm form);
 
@@ -432,7 +435,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Show a form to the player.
      *
-     * @param form The form to show.
+     * @param form The form to show
      */
     void showForm(Form form);
 
@@ -444,8 +447,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Check if the player can reach a block at the specified position.
      *
-     * @param pos The position of the block.
-     * @return Whether the player can reach the block.
+     * @param pos The position of the block
+     *
+     * @return Whether the player can reach the block
      */
     default boolean canReachBlock(Vector3ic pos) {
         return canReach(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f);
@@ -454,8 +458,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Check if the player can reach a point at the specified coordinates.
      *
-     * @param pos The position of the point.
-     * @return Whether the player can reach the point.
+     * @param pos The position of the point
+     *
+     * @return Whether the player can reach the point
      */
     default boolean canReach(Vector3dc pos) {
         return canReach(pos.x(), pos.y(), pos.z());
@@ -464,10 +469,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Check if the player can reach a point at the specified coordinates.
      *
-     * @param x The x coordinate of the point.
-     * @param y The y coordinate of the point.
-     * @param z The z coordinate of the point.
-     * @return Whether the player can reach the point.
+     * @param x The x coordinate of the point
+     * @param y The y coordinate of the point
+     * @param z The z coordinate of the point
+     *
+     * @return Whether the player can reach the point
      */
     default boolean canReach(double x, double y, double z) {
         if (isDead()) return false;
@@ -494,7 +500,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Get the maximum distance that the player can interact with blocks.
      *
-     * @return The maximum distance that the player can interact with blocks.
+     * @return The maximum distance that the player can interact with blocks
      */
     default double getMaxInteractDistance() {
         return getGameType() == GameType.CREATIVE ? 13d : 7d;
@@ -503,28 +509,28 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Get the movement speed of the player.
      *
-     * @return The movement speed of the player.
+     * @return The movement speed of the player
      */
     float getMovementSpeed();
 
     /**
      * Set the movement speed of the player.
      *
-     * @param speed The movement speed to set.
+     * @param speed The movement speed to set
      */
     void setMovementSpeed(float speed);
 
     /**
      * Get the enchantment seed of the player.
      *
-     * @return The enchantment seed of the player.
+     * @return The enchantment seed of the player
      */
     int getEnchantmentSeed();
 
     /**
      * Set the enchantment seed of the player.
      *
-     * @param seed The enchantment seed to set.
+     * @param seed The enchantment seed to set
      */
     void setEnchantmentSeed(int seed);
 
@@ -553,9 +559,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Sets cool down for a specific category.
      *
-     * @param category the category to set.
-     * @param duration the cool down tick.
-     * @param send     whether send packet to the client.
+     * @param category the category to set
+     * @param duration the cool down tick
+     * @param send     whether send packet to the client
      */
     void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send);
 
@@ -571,8 +577,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Sets cool down for a specific item type.
      *
-     * @param itemType the item type to set.
-     * @param duration the cool down tick.
+     * @param itemType the item type to set
+     * @param duration the cool down tick
      */
     default void setCooldown(ItemType<?> itemType, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
         setCooldown(itemType.getIdentifier().toString(), duration);
@@ -581,7 +587,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Checks if the cooldown for specific category has ended.
      *
-     * @param category the category to check.
+     * @param category the category to check
+     *
      * @return {@code true} if the cooldown has ended, {@code false} otherwise.
      */
     boolean isCooldownEnd(String category);
@@ -589,7 +596,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Checks if the cooldown for specific item type has ended.
      *
-     * @param itemType the item type to check.
+     * @param itemType the item type to check
+     *
      * @return {@code true} if the cooldown has ended, {@code false} otherwise.
      */
     default boolean isCooldownEnd(ItemType<?> itemType) {

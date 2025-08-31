@@ -30,11 +30,11 @@ public interface BlockPropertyProcessor {
     /**
      * Process the block state based on the placement information.
      *
-     * @param blockState    the block state to process.
-     * @param placeBlockPos the position where the block is placed.
-     * @param placementInfo the placement information.
+     * @param blockState    the block state to process
+     * @param placeBlockPos the position where the block is placed
+     * @param placementInfo the placement information
      *
-     * @return the processed block state.
+     * @return the processed block state
      */
     BlockState process(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 }

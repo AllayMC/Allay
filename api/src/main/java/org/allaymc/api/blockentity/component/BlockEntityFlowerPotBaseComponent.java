@@ -11,14 +11,14 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
     /**
      * Get the plant inside the flower pot.
      *
-     * @return the plant block state, or {@code null} if the plant is empty.
+     * @return the plant block state, or {@code null} if the plant is empty
      */
     BlockState getPlantBlock();
 
     /**
      * Set the plant inside the flower pot.
      *
-     * @param block the plant block state. Can be {@code null} to clear the plant inside the flower pot.
+     * @param block the plant block state. Can be {@code null} to clear the plant inside the flower pot
      *
      * @return {@code true} if it set successfully, otherwise {@code false}.
      */
@@ -27,7 +27,7 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
     /**
      * Get the plant as item inside the flower pot.
      *
-     * @return the plant item, or {@code null} if the plant is empty.
+     * @return the plant item, or {@code null} if the plant is empty
      */
     default ItemStack getPlantItem() {
         var block = getPlantBlock();
@@ -41,7 +41,7 @@ public interface BlockEntityFlowerPotBaseComponent extends BlockEntityBaseCompon
     /**
      * Set the plant inside the flower pot.
      *
-     * @param item the plant item. Can be {@code null} to clear the plant inside the flower pot.
+     * @param item the plant item. Can be {@code null} to clear the plant inside the flower pot
      *
      * @return {@code true} if it set successfully, otherwise {@code false}.
      */

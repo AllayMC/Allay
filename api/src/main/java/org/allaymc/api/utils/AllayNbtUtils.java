@@ -20,9 +20,9 @@ public final class AllayNbtUtils {
     /**
      * Convert NBT to Base64 (LE).
      *
-     * @param nbtMap the NBT map.
+     * @param nbtMap the NBT map
      *
-     * @return the Base64 string.
+     * @return the Base64 string
      */
     public static String nbtToBase64LE(NbtMap nbtMap) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream(); NBTOutputStream writer = org.cloudburstmc.nbt.NbtUtils.createWriterLE(stream)) {
@@ -38,9 +38,9 @@ public final class AllayNbtUtils {
     /**
      * Convert NBT to Base64.
      *
-     * @param nbtMap the NBT map.
+     * @param nbtMap the NBT map
      *
-     * @return the Base64 string.
+     * @return the Base64 string
      */
     public static String nbtToBase64(NbtMap nbtMap) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream(); NBTOutputStream writer = org.cloudburstmc.nbt.NbtUtils.createWriter(stream)) {
@@ -56,9 +56,9 @@ public final class AllayNbtUtils {
     /**
      * Convert Base64 to NBT (LE).
      *
-     * @param base64 the Base64 string.
+     * @param base64 the Base64 string
      *
-     * @return the NBT map.
+     * @return the NBT map
      */
     @SneakyThrows
     public static NbtMap base64ToNbtLE(String base64) {
@@ -68,9 +68,9 @@ public final class AllayNbtUtils {
     /**
      * Convert Base64 to NBT.
      *
-     * @param base64 the Base64 string.
+     * @param base64 the Base64 string
      *
-     * @return the NBT map.
+     * @return the NBT map
      */
     @SneakyThrows
     public static NbtMap base64ToNbt(String base64) {
@@ -80,9 +80,9 @@ public final class AllayNbtUtils {
     /**
      * Convert bytes to nbt list.
      *
-     * @param bytes the bytes.
+     * @param bytes the bytes
      *
-     * @return the nbt list.
+     * @return the nbt list
      */
     @SneakyThrows
     public static List<NbtMap> bytesToNbtListLE(byte[] bytes) {
@@ -100,9 +100,9 @@ public final class AllayNbtUtils {
     /**
      * Convert nbt list to bytes.
      *
-     * @param tags the nbt list.
+     * @param tags the nbt list
      *
-     * @return the bytes.
+     * @return the bytes
      */
     @SneakyThrows
     public static byte[] nbtListToBytesLE(List<NbtMap> tags) {
@@ -118,9 +118,9 @@ public final class AllayNbtUtils {
     /**
      * Convert bytes to nbt.
      *
-     * @param bytes the bytes.
+     * @param bytes the bytes
      *
-     * @return the nbt.
+     * @return the nbt
      */
     @SneakyThrows
     public static NbtMap bytesToNbtLE(byte[] bytes) {
@@ -133,9 +133,9 @@ public final class AllayNbtUtils {
     /**
      * Convert nbt to bytes.
      *
-     * @param nbt the nbt.
+     * @param nbt the nbt
      *
-     * @return the bytes.
+     * @return the bytes
      */
     @SneakyThrows
     public static byte[] nbtToBytesLE(NbtMap nbt) {
@@ -149,10 +149,10 @@ public final class AllayNbtUtils {
     /**
      * Read a vector3 from NBT.
      *
-     * @param nbt      the NBT map.
-     * @param rootName the root name.
+     * @param nbt      the NBT map
+     * @param rootName the root name
      *
-     * @return the vector3.
+     * @return the vector3
      */
     public static Vector3f readVector3f(NbtMap nbt, String rootName) {
         var pos = nbt.getList(rootName, NbtType.FLOAT);
@@ -165,9 +165,9 @@ public final class AllayNbtUtils {
     /**
      * Write a vector3 to NBT.
      *
-     * @param nbt      the NBT builder.
-     * @param rootName the root name.
-     * @param vector3f the vector3.
+     * @param nbt      the NBT builder
+     * @param rootName the root name
+     * @param vector3f the vector3
      */
     public static void writeVector3f(NbtMapBuilder nbt, String rootName, Vector3fc vector3f) {
         writeVector3f(nbt, rootName, vector3f.x(), vector3f.y(), vector3f.z());
@@ -176,11 +176,11 @@ public final class AllayNbtUtils {
     /**
      * Write a vector3 to NBT.
      *
-     * @param nbt      the NBT builder.
-     * @param rootName the root name.
-     * @param x        the x value.
-     * @param y        the y value.
-     * @param z        the z value.
+     * @param nbt      the NBT builder
+     * @param rootName the root name
+     * @param x        the x value
+     * @param y        the y value
+     * @param z        the z value
      */
     public static void writeVector3f(NbtMapBuilder nbt, String rootName, float x, float y, float z) {
         nbt.putList(rootName, NbtType.FLOAT, x, y, z);
@@ -189,10 +189,10 @@ public final class AllayNbtUtils {
     /**
      * Read a vector3 from NBT.
      *
-     * @param nbt      the NBT map.
-     * @param rootName the root name.
+     * @param nbt      the NBT map
+     * @param rootName the root name
      *
-     * @return the vector3.
+     * @return the vector3
      */
     public static Vector3i readVector3i(NbtMap nbt, String rootName) {
         var pos = nbt.getList(rootName, NbtType.INT);
@@ -205,9 +205,9 @@ public final class AllayNbtUtils {
     /**
      * Write a vector3 to NBT.
      *
-     * @param nbt      the NBT builder.
-     * @param rootName the root name.
-     * @param vector3i the vector3.
+     * @param nbt      the NBT builder
+     * @param rootName the root name
+     * @param vector3i the vector3
      */
     public static void writeVector3i(NbtMapBuilder nbt, String rootName, Vector3ic vector3i) {
         nbt.putList(rootName, NbtType.INT, vector3i.x(), vector3i.y(), vector3i.z());
@@ -216,10 +216,10 @@ public final class AllayNbtUtils {
     /**
      * Read a vector2 from NBT.
      *
-     * @param nbt      the NBT map.
-     * @param rootName the root name.
+     * @param nbt      the NBT map
+     * @param rootName the root name
      *
-     * @return the vector2.
+     * @return the vector2
      */
     public static Vector2f readVector2f(NbtMap nbt, String rootName) {
         var pos = nbt.getList(rootName, NbtType.FLOAT);
@@ -239,9 +239,9 @@ public final class AllayNbtUtils {
     /**
      * Write a vector2 to NBT.
      *
-     * @param nbt      the NBT builder.
-     * @param rootName the root name.
-     * @param vector2f the vector2.
+     * @param nbt      the NBT builder
+     * @param rootName the root name
+     * @param vector2f the vector2
      */
     public static void writeVector2f(NbtMapBuilder nbt, String rootName, Vector2fc vector2f) {
         nbt.putList(rootName, NbtType.FLOAT, vector2f.x(), vector2f.y());

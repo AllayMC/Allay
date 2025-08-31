@@ -116,7 +116,8 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         // For the player type selector that is determined, exclude entities that are not players
         switch (selectorType) {
             case ALL_PLAYERS, NEAREST_PLAYER -> entities.removeIf(e -> !(e instanceof EntityPlayer));
-            default -> {}
+            default -> {
+            }
         }
 
         // There is no entity that meets the condition, return

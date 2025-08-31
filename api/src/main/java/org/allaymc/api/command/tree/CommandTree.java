@@ -21,24 +21,24 @@ public interface CommandTree {
     /**
      * Parses the command tree with the given sender and arguments.
      *
-     * @param sender The command sender.
-     * @param args   The command arguments.
+     * @param sender The command sender
+     * @param args   The command arguments
      *
-     * @return The result of the command parsing.
+     * @return The result of the command parsing
      */
     CommandResult parse(CommandSender sender, String[] args);
 
     /**
      * Get the root node of the command tree.
      *
-     * @return The root node of the command tree.
+     * @return The root node of the command tree
      */
     CommandNode getRoot();
 
     /**
      * Get all leaf nodes of the command tree.
      *
-     * @return A list of all leaf nodes of the command tree.
+     * @return A list of all leaf nodes of the command tree
      */
     List<CommandNode> getLeaves();
 
@@ -46,9 +46,9 @@ public interface CommandTree {
         /**
          * Creates a new instance of {@link CommandTree} using the provided {@link Command}.
          *
-         * @param command The command to create the tree for.
+         * @param command The command to create the tree for
          *
-         * @return A new instance of {@link CommandTree}.
+         * @return A new instance of {@link CommandTree}
          */
         CommandTree create(Command command);
     }

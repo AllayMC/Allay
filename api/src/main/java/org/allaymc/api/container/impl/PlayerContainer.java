@@ -35,7 +35,7 @@ public abstract class PlayerContainer extends BaseContainer {
     /**
      * Get the unopened container id.
      *
-     * @return the unopened container id.
+     * @return the unopened container id
      */
     public abstract int getUnopenedContainerId();
 }

@@ -29,10 +29,10 @@ public class DebugBox extends DebugShape {
     /**
      * Creates a new DebugBox with the default position, color, scale and box bounds.
      *
-     * @param position  the position of the box in the world.
-     * @param color     the color of the box.
-     * @param scale     the scale of the box, which is a multiplier for the size of the box.
-     * @param boxBounds the bounds of the box, which is a vector representing the size of the box in each dimension (x, y and z).
+     * @param position  the position of the box in the world
+     * @param color     the color of the box
+     * @param scale     the scale of the box, which is a multiplier for the size of the box
+     * @param boxBounds the bounds of the box, which is a vector representing the size of the box in each dimension (x, y and z)
      */
     public DebugBox(Vector3fc position, Color color, Float scale, Vector3fc boxBounds) {
         super(position, color);
@@ -43,7 +43,7 @@ public class DebugBox extends DebugShape {
     /**
      * Gets the scale of the box.
      *
-     * @return the scale of the box.
+     * @return the scale of the box
      */
     public float getScale() {
         return scale != null ? scale : 1.0f;
@@ -52,7 +52,7 @@ public class DebugBox extends DebugShape {
     /**
      * Sets the scale of the box.
      *
-     * @param scale the scale of the box, which is a multiplier for the size of the box.
+     * @param scale the scale of the box, which is a multiplier for the size of the box
      */
     public void setScale(Float scale) {
         this.scale = scale;
@@ -62,7 +62,7 @@ public class DebugBox extends DebugShape {
     /**
      * Gets the bounds of the box.
      *
-     * @return the bounds of the box.
+     * @return the bounds of the box
      */
     public Vector3fc getBoxBounds() {
         return boxBounds != null ? boxBounds : DEFAULT_BOX_BOUNDS;
@@ -71,7 +71,7 @@ public class DebugBox extends DebugShape {
     /**
      * Sets the bounds of the box.
      *
-     * @param boxBounds the bounds of the box, which is a vector representing the size of the box in each dimension (x, y and z).
+     * @param boxBounds the bounds of the box, which is a vector representing the size of the box in each dimension (x, y and z)
      */
     public void setBoxBounds(Vector3fc boxBounds) {
         this.boxBounds = boxBounds;

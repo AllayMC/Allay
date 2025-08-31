@@ -11,14 +11,14 @@ public interface BlockEntityItemFrameBaseComponent extends BlockEntityBaseCompon
     /**
      * Gets the item stack in the item frame.
      *
-     * @return the item stack in the item frame, or {@link ItemAirStack#AIR_STACK} if there is no item.
+     * @return the item stack in the item frame, or {@link ItemAirStack#AIR_STACK} if there is no item
      */
     ItemStack getItemStack();
 
     /**
      * Sets the item stack in the item frame.
      *
-     * @param itemStack the item stack to set in the item frame, or {@link ItemAirStack#AIR_STACK} to remove the item.
+     * @param itemStack the item stack to set in the item frame, or {@link ItemAirStack#AIR_STACK} to remove the item
      */
     void setItemStack(ItemStack itemStack);
 
@@ -32,7 +32,7 @@ public interface BlockEntityItemFrameBaseComponent extends BlockEntityBaseCompon
     /**
      * Gets the rotation of the item in the item frame.
      *
-     * @return the rotation of the item, from 0 to 7, where 0 is no rotation and 7 is a full rotation.
+     * @return the rotation of the item, from 0 to 7, where 0 is no rotation and 7 is a full rotation
      */
     @Range(from = 0, to = 7)
     int getItemRotation();
@@ -40,7 +40,7 @@ public interface BlockEntityItemFrameBaseComponent extends BlockEntityBaseCompon
     /**
      * Sets the rotation of the item in the item frame.
      *
-     * @param itemRotation the rotation of the item, from 0 to 7, where 0 is no rotation and 7 is a full rotation.
+     * @param itemRotation the rotation of the item, from 0 to 7, where 0 is no rotation and 7 is a full rotation
      */
     void setItemRotation(@Range(from = 0, to = 7) int itemRotation);
 }

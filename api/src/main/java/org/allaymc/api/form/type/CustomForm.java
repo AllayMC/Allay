@@ -27,14 +27,15 @@ public final class CustomForm extends Form {
     private final List<CustomFormElement> content = new ArrayList<>();
     private String title = "";
     private ImageData icon;
-    private transient Consumer<List<String>> onResponse = responses -> {};
+    private transient Consumer<List<String>> onResponse = responses -> {
+    };
 
     /**
      * Set the title of the form.
      *
-     * @param title the title.
+     * @param title the title
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm title(String title) {
         this.title = title;
@@ -44,9 +45,9 @@ public final class CustomForm extends Form {
     /**
      * Set the icon of the form.
      *
-     * @param icon the icon.
+     * @param icon the icon
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm icon(ImageData icon) {
         this.icon = icon;
@@ -56,10 +57,10 @@ public final class CustomForm extends Form {
     /**
      * Set the icon of the form.
      *
-     * @param imageType the type of the image.
-     * @param data      the data of the image.
+     * @param imageType the type of the image
+     * @param data      the data of the image
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm icon(ImageData.ImageType imageType, String data) {
         return icon(new ImageData(imageType, data));
@@ -68,9 +69,9 @@ public final class CustomForm extends Form {
     /**
      * Set the icon of the form.
      *
-     * @param path the path of the image.
+     * @param path the path of the image
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm pathIcon(String path) {
         return icon(new ImageData(ImageData.ImageType.PATH, path));
@@ -79,9 +80,9 @@ public final class CustomForm extends Form {
     /**
      * Set the icon of the form.
      *
-     * @param url the URL of the image.
+     * @param url the URL of the image
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm urlIcon(String url) {
         return icon(new ImageData(ImageData.ImageType.URL, url));
@@ -90,9 +91,9 @@ public final class CustomForm extends Form {
     /**
      * Add an element to the form.
      *
-     * @param element the element.
+     * @param element the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm element(CustomFormElement element) {
         content.add(element);
@@ -102,9 +103,9 @@ public final class CustomForm extends Form {
     /**
      * Add a dropdown element to the form.
      *
-     * @param text the text of the element.
+     * @param text the text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm dropdown(String text) {
         return dropdown(text, new ArrayList<>());
@@ -113,10 +114,10 @@ public final class CustomForm extends Form {
     /**
      * Add a dropdown element to the form.
      *
-     * @param text    the text of the element.
-     * @param options the options of the element.
+     * @param text    the text of the element
+     * @param options the options of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm dropdown(String text, List<String> options) {
         return dropdown(text, options, 0);
@@ -125,10 +126,10 @@ public final class CustomForm extends Form {
     /**
      * Add a dropdown element to the form.
      *
-     * @param text    the text of the element.
-     * @param options the options of the element.
+     * @param text    the text of the element
+     * @param options the options of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm dropdown(String text, String... options) {
         return dropdown(text, new ArrayList<>(Arrays.asList(options)));
@@ -137,11 +138,11 @@ public final class CustomForm extends Form {
     /**
      * Add a dropdown element to the form.
      *
-     * @param text               the text of the element.
-     * @param options            the options of the element.
-     * @param defaultOptionIndex the index of the default option.
+     * @param text               the text of the element
+     * @param options            the options of the element
+     * @param defaultOptionIndex the index of the default option
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm dropdown(String text, List<String> options, int defaultOptionIndex) {
         return element(new Dropdown(text, options, defaultOptionIndex));
@@ -150,9 +151,9 @@ public final class CustomForm extends Form {
     /**
      * Add an input element to the form.
      *
-     * @param text the text of the element.
+     * @param text the text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm input(String text) {
         return input(text, "");
@@ -161,10 +162,10 @@ public final class CustomForm extends Form {
     /**
      * Add an input element to the form.
      *
-     * @param text        the text of the element.
-     * @param placeholder the placeholder of the element.
+     * @param text        the text of the element
+     * @param placeholder the placeholder of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm input(String text, String placeholder) {
         return input(text, placeholder, "");
@@ -173,11 +174,11 @@ public final class CustomForm extends Form {
     /**
      * Add an input element to the form.
      *
-     * @param text        the text of the element.
-     * @param placeholder the placeholder of the element.
-     * @param defaultText the default text of the element.
+     * @param text        the text of the element
+     * @param placeholder the placeholder of the element
+     * @param defaultText the default text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm input(String text, String placeholder, String defaultText) {
         return element(new Input(text, placeholder, defaultText));
@@ -186,9 +187,9 @@ public final class CustomForm extends Form {
     /**
      * Add a label element to the form.
      *
-     * @param text the text of the element.
+     * @param text the text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm label(String text) {
         return element(new Label(text));
@@ -197,9 +198,9 @@ public final class CustomForm extends Form {
     /**
      * Add a slider element to the form.
      *
-     * @param text the text of the element.
+     * @param text the text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm slider(String text, float min, float max) {
         return slider(text, min, max, 1);
@@ -208,12 +209,12 @@ public final class CustomForm extends Form {
     /**
      * Add a slider element to the form.
      *
-     * @param text the text of the element.
-     * @param min  the minimum value of the element.
-     * @param max  the maximum value of the element.
-     * @param step the step of the element.
+     * @param text the text of the element
+     * @param min  the minimum value of the element
+     * @param max  the maximum value of the element
+     * @param step the step of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm slider(String text, float min, float max, int step) {
         return slider(text, min, max, step, min);
@@ -222,13 +223,13 @@ public final class CustomForm extends Form {
     /**
      * Add a slider element to the form.
      *
-     * @param text         the text of the element.
-     * @param min          the minimum value of the element.
-     * @param max          the maximum value of the element.
-     * @param step         the step of the element.
-     * @param defaultValue the default value of the element.
+     * @param text         the text of the element
+     * @param min          the minimum value of the element
+     * @param max          the maximum value of the element
+     * @param step         the step of the element
+     * @param defaultValue the default value of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm slider(String text, float min, float max, int step, float defaultValue) {
         return element(new Slider(text, min, max, step, defaultValue));
@@ -237,9 +238,9 @@ public final class CustomForm extends Form {
     /**
      * Add a step slider element to the form.
      *
-     * @param text the text of the element.
+     * @param text the text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm stepSlider(String text) {
         return stepSlider(text, new ArrayList<>());
@@ -248,10 +249,10 @@ public final class CustomForm extends Form {
     /**
      * Add a step slider element to the form.
      *
-     * @param text  the text of the element.
-     * @param steps the steps of the element.
+     * @param text  the text of the element
+     * @param steps the steps of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm stepSlider(String text, String... steps) {
         return stepSlider(text, new ArrayList<>(Arrays.asList(steps)));
@@ -260,10 +261,10 @@ public final class CustomForm extends Form {
     /**
      * Add a step slider element to the form.
      *
-     * @param text  the text of the element.
-     * @param steps the steps of the element.
+     * @param text  the text of the element
+     * @param steps the steps of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm stepSlider(String text, List<String> steps) {
         return stepSlider(text, steps, 0);
@@ -272,11 +273,11 @@ public final class CustomForm extends Form {
     /**
      * Add a step slider element to the form.
      *
-     * @param text        the text of the element.
-     * @param steps       the steps of the element.
-     * @param defaultStep the default step of the element.
+     * @param text        the text of the element
+     * @param steps       the steps of the element
+     * @param defaultStep the default step of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm stepSlider(String text, List<String> steps, int defaultStep) {
         return element(new StepSlider(text, steps, defaultStep));
@@ -285,9 +286,9 @@ public final class CustomForm extends Form {
     /**
      * Add a toggle element to the form.
      *
-     * @param text the text of the element.
+     * @param text the text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm toggle(String text) {
         return toggle(text, false);
@@ -296,10 +297,10 @@ public final class CustomForm extends Form {
     /**
      * Add a toggle element to the form.
      *
-     * @param text         the text of the element.
-     * @param defaultValue the default value of the element.
+     * @param text         the text of the element
+     * @param defaultValue the default value of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm toggle(String text, boolean defaultValue) {
         return element(new Toggle(text, defaultValue));
@@ -308,9 +309,9 @@ public final class CustomForm extends Form {
     /**
      * Add a header element to the form.
      *
-     * @param text the text of the element.
+     * @param text the text of the element
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm header(String text) {
         return element(new Header(text));
@@ -319,7 +320,7 @@ public final class CustomForm extends Form {
     /**
      * Add a divider element to the form.
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm divider() {
         return element(new Divider());
@@ -328,9 +329,9 @@ public final class CustomForm extends Form {
     /**
      * Set the action to be performed when the form is submitted.
      *
-     * @param onResponse the action to be performed when the form is submitted.
+     * @param onResponse the action to be performed when the form is submitted
      *
-     * @return the form.
+     * @return the form
      */
     public CustomForm onResponse(Consumer<List<String>> onResponse) {
         this.onResponse = onResponse;
@@ -350,7 +351,8 @@ public final class CustomForm extends Form {
      */
     @Override
     public void handleResponse(String data) {
-        List<String> responses = GSON.fromJson(data, new TypeToken<List<String>>() {}.getType());
+        List<String> responses = GSON.fromJson(data, new TypeToken<List<String>>() {
+        }.getType());
         this.onResponse.accept(responses);
         this.response = responses;
     }

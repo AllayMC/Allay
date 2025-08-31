@@ -16,7 +16,7 @@ public final class Header implements SimpleFormElement, CustomFormElement {
     /**
      * Create a new header.
      *
-     * @param text the text of the header.
+     * @param text the text of the header
      */
     public Header(String text) {
         this.text = text;

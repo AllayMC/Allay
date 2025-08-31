@@ -121,6 +121,44 @@ public class AllayLightService implements LightService {
         this.lightDataAccessor = new CachedLightDataAccessor(dimensionInfo, skyLightInBorder, lightDampening, lightEmission);
     }
 
+    @VisibleForTesting
+    public static int calculateSkylightReduction(long time, Set<Weather> weathers) {
+        double d = 1.0 - ((weathers.contains(Weather.RAIN) ? 1 : 0) * 5.0) / 16.0;
+        double e = 1.0 - ((weathers.contains(Weather.THUNDER) ? 1 : 0) * 5.0) / 16.0;
+        double f = 0.5 + 2.0 * Math.clamp(MathUtils.fastCos(calculateCelestialAngle(time) * 6.2831855), -0.25, 0.25);
+        return (int) ((1.0 - f * d * e) * 11.0);
+    }
+
+    @VisibleForTesting
+    public static double calculateCelestialAngle(long time) {
+        double d = frac(((double) time) / 24000.0 - 0.25);
+        double e = 0.5 - Math.cos(d * Math.PI) / 2.0;
+        return (d * 2.0 + e) / 3.0F;
+    }
+
+    protected static double frac(double value) {
+        return value - (double) lfloor(value);
+    }
+
+    protected static long lfloor(double value) {
+        long l = (long) value;
+        return value < (double) l ? l - 1L : l;
+    }
+
+    protected static byte packLightData(@Range(from = 0, to = 16) int lightEmission, @Range(from = 0, to = 16) int lightDampening) {
+        Preconditions.checkArgument(lightEmission < 16, "lightEmission must be less than 16");
+        Preconditions.checkArgument(lightDampening < 16, "lightDampening must be less than 16");
+        return (byte) (lightEmission | (lightDampening << 4));
+    }
+
+    protected static byte unpackLightEmission(byte data) {
+        return (byte) (data & 0x0F);
+    }
+
+    protected static byte unpackLightDampening(byte data) {
+        return (byte) ((data >> 4) & 0x0F);
+    }
+
     public void startTick() {
         var dimensionName = worldName + ":" + dimensionInfo.toString();
         startCalculatingThread("Light Calculating Thread (Chunk & Block) #" + dimensionName, chunkAndBlockUpdateQueue);
@@ -565,43 +603,5 @@ public class AllayLightService implements LightService {
         } else if (currentLightHeight <= y) {
             setLightHeight(x, z, (short) (y + 1));
         }
-    }
-
-    @VisibleForTesting
-    public static int calculateSkylightReduction(long time, Set<Weather> weathers) {
-        double d = 1.0 - ((weathers.contains(Weather.RAIN) ? 1 : 0) * 5.0) / 16.0;
-        double e = 1.0 - ((weathers.contains(Weather.THUNDER) ? 1 : 0) * 5.0) / 16.0;
-        double f = 0.5 + 2.0 * Math.clamp(MathUtils.fastCos(calculateCelestialAngle(time) * 6.2831855), -0.25, 0.25);
-        return (int) ((1.0 - f * d * e) * 11.0);
-    }
-
-    @VisibleForTesting
-    public static double calculateCelestialAngle(long time) {
-        double d = frac(((double) time) / 24000.0 - 0.25);
-        double e = 0.5 - Math.cos(d * Math.PI) / 2.0;
-        return (d * 2.0 + e) / 3.0F;
-    }
-
-    protected static double frac(double value) {
-        return value - (double) lfloor(value);
-    }
-
-    protected static long lfloor(double value) {
-        long l = (long) value;
-        return value < (double) l ? l - 1L : l;
-    }
-
-    protected static byte packLightData(@Range(from = 0, to = 16) int lightEmission, @Range(from = 0, to = 16) int lightDampening) {
-        Preconditions.checkArgument(lightEmission < 16, "lightEmission must be less than 16");
-        Preconditions.checkArgument(lightDampening < 16, "lightDampening must be less than 16");
-        return (byte) (lightEmission | (lightDampening << 4));
-    }
-
-    protected static byte unpackLightEmission(byte data) {
-        return (byte) (data & 0x0F);
-    }
-
-    protected static byte unpackLightDampening(byte data) {
-        return (byte) ((data >> 4) & 0x0F);
     }
 }

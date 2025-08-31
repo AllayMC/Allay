@@ -14,7 +14,7 @@ public enum Difficulty {
     /**
      * Get difficulty from int value.
      *
-     * @param value int value of difficulty.
+     * @param value int value of difficulty
      *
      * @return difficulty, or {@code null} if not found.
      */
@@ -31,7 +31,7 @@ public enum Difficulty {
     /**
      * Get difficulty from string value.
      *
-     * @param value string value of difficulty.
+     * @param value string value of difficulty
      *
      * @return difficulty, or {@code null} if not found.
      */

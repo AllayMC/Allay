@@ -170,10 +170,10 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * Update the liquid block passed at a specific position in the world. Depending on the surroundings
      * and the liquid block, the liquid will either spread or decrease in depth.
      *
-     * @param dimension The dimension the block is in.
-     * @param pos       The position of the liquid block.
-     * @param liquid    The block state of the liquid.
-     * @param layer     The layer the liquid is in.
+     * @param dimension The dimension the block is in
+     * @param pos       The position of the liquid block
+     * @param liquid    The block state of the liquid
+     * @param layer     The layer the liquid is in
      */
     protected void updateLiquid(Dimension dimension, Vector3ic pos, BlockState liquid, int layer) {
         if (!isSource(liquid) && !hasSupplyLiquidAround(dimension, pos, liquid)) {
@@ -224,10 +224,10 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     /**
      * Spread the liquid outwards into the horizontal directions.
      *
-     * @param dimension       The dimension the block is in.
-     * @param src             The source position of the liquid.
-     * @param liquid          The block state of the liquid.
-     * @param liquidContainer The block state that contains this liquid block, can be {@code null} if the liquid is not contained.
+     * @param dimension       The dimension the block is in
+     * @param src             The source position of the liquid
+     * @param liquid          The block state of the liquid
+     * @param liquidContainer The block state that contains this liquid block, can be {@code null} if the liquid is not contained
      */
     protected void spreadOutwards(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
         for (var face : BlockFace.getHorizontalBlockFaces()) {
@@ -240,9 +240,10 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     /**
      * Check if there is a supply liquid in the blocks around the position passed.
      *
-     * @param dimension The dimension the block is in.
-     * @param pos       The position to check around.
-     * @return Whether there is a supply liquid around the position.
+     * @param dimension The dimension the block is in
+     * @param pos       The position to check around
+     *
+     * @return Whether there is a supply liquid around the position
      */
     protected boolean hasSupplyLiquidAround(Dimension dimension, Vector3ic pos, BlockState liquid) {
         for (var face : BlockFace.values()) {
@@ -282,13 +283,14 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * Make the liquid passed flow into the position passed in a world. If successful, the block at that
      * position will be broken and the liquid with a lower depth will replace it.
      *
-     * @param dimension The dimension the block is in.
-     * @param src       The position the liquid is flowing from.
-     * @param srcLayer  The layer the liquid is flowing from.
-     * @param liquid    The block state of the liquid.
-     * @param pos       The position to flow into.
-     * @param falling   Whether the liquid is falling or not.
-     * @return Whether the liquid successfully flowed into the position.
+     * @param dimension The dimension the block is in
+     * @param src       The position the liquid is flowing from
+     * @param srcLayer  The layer the liquid is flowing from
+     * @param liquid    The block state of the liquid
+     * @param pos       The position to flow into
+     * @param falling   Whether the liquid is falling or not
+     *
+     * @return Whether the liquid successfully flowed into the position
      */
     protected boolean flowInto(Dimension dimension, Vector3ic src, int srcLayer, BlockState liquid, Vector3ic pos, boolean falling) {
         var newDepth = getDepth(liquid);
@@ -366,11 +368,12 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * flow in to reach lower grounds, starting at the position passed.
      * If none of these paths can be found, the returned list has a length of 0.
      *
-     * @param dimension       The dimension the block is in.
-     * @param src             The position to start the flow from.
-     * @param liquid          The block state of the liquid.
-     * @param liquidContainer The block state that contains this liquid block, can be {@code null} if the liquid is not contained.
-     * @return A list of paths that the liquid can flow in.
+     * @param dimension       The dimension the block is in
+     * @param src             The position to start the flow from
+     * @param liquid          The block state of the liquid
+     * @param liquidContainer The block state that contains this liquid block, can be {@code null} if the liquid is not contained
+     *
+     * @return A list of paths that the liquid can flow in
      */
     protected List<Vector3ic[]> calculateLiquidPaths(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
         var queue = new LiquidQueue();
@@ -421,11 +424,12 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * spreadNeighbour attempts to spread a path node into the neighbour passed. Note that this
      * does not spread the liquid, it only spreads the node used to calculate flow paths.
      *
-     * @param dimension The dimension the block is in.
-     * @param source    The source position of the liquid.
-     * @param node      The node to spread.
-     * @param queue     The queue to push the node into if it can spread.
-     * @return Whether the node could spread into the neighbour.
+     * @param dimension The dimension the block is in
+     * @param source    The source position of the liquid
+     * @param node      The node to spread
+     * @param queue     The queue to push the node into if it can spread
+     *
+     * @return Whether the node could spread into the neighbour
      */
     protected boolean spreadNeighbor(Dimension dimension, Vector3ic source, LiquidNode node, LiquidQueue queue) {
         if (
@@ -463,12 +467,13 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     /**
      * Checks if a liquid can flow into the block present in the world at a specific block position.
      *
-     * @param dimension The dimension the block is in.
-     * @param x         The x coordinate of the block.
-     * @param y         The y coordinate of the block.
-     * @param z         The z coordinate of the block.
-     * @param sideways  Whether the flow is sideways or downwards.
-     * @return Whether the liquid can flow into the block.
+     * @param dimension The dimension the block is in
+     * @param x         The x coordinate of the block
+     * @param y         The y coordinate of the block
+     * @param z         The z coordinate of the block
+     * @param sideways  Whether the flow is sideways or downwards
+     *
+     * @return Whether the liquid can flow into the block
      */
     protected boolean canFlowInto(Dimension dimension, int x, int y, int z, boolean sideways) {
         var existing = dimension.getBlockState(x, y, z);
@@ -491,17 +496,18 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     /**
      * liquidNode represents a position that is part of a flow path for a liquid.
      *
-     * @param x        The x coordinate of the node.
-     * @param z        The z coordinate of the node.
-     * @param depth    The depth of the node. Byte is used to save memory.
-     * @param previous The previous node in the path.
+     * @param x        The x coordinate of the node
+     * @param z        The z coordinate of the node
+     * @param depth    The depth of the node. Byte is used to save memory
+     * @param previous The previous node in the path
      */
     protected record LiquidNode(int x, int z, byte depth, LiquidNode previous) {
         /**
          * neighbours returns the four horizontal neighbours of the node with decreased depth.
          *
-         * @param decay The amount to decrease the depth by.
-         * @return The neighbours of the node.
+         * @param decay The amount to decrease the depth by
+         *
+         * @return The neighbours of the node
          */
         public LiquidNode[] neighbors(int decay) {
             return new LiquidNode[]{
@@ -519,7 +525,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         /**
          * Get the length of the path created by the node.
          *
-         * @return The length of the path.
+         * @return The length of the path
          */
         public int length() {
             int i = 1;
@@ -536,7 +542,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         /**
          * Convert the liquid node into a path.
          *
-         * @return The path created by the node.
+         * @return The path created by the node
          */
         public Vector3ic[] path(Vector3ic sourcePos) {
             var node = this;

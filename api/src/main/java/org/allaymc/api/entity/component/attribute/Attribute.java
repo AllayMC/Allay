@@ -33,9 +33,9 @@ public class Attribute implements Cloneable {
     /**
      * Create an Attribute object from a NbtMap.
      *
-     * @param nbt the NbtMap.
+     * @param nbt the NbtMap
      *
-     * @return the Attribute object.
+     * @return the Attribute object
      */
     public static Attribute fromNBT(NbtMap nbt) {
         return new Attribute(
@@ -57,7 +57,7 @@ public class Attribute implements Cloneable {
     /**
      * Convert this attribute to an AttributeData object for network transmission.
      *
-     * @return the AttributeData object.
+     * @return the AttributeData object
      */
     public AttributeData toNetwork() {
         return new AttributeData(this.key, this.minValue, this.maxValue, this.currentValue, this.defaultValue);
@@ -66,7 +66,7 @@ public class Attribute implements Cloneable {
     /**
      * Convert this attribute to a NbtMap for storage.
      *
-     * @return the NbtMap.
+     * @return the NbtMap
      */
     public NbtMap toNBT() {
         return NbtMap.builder()

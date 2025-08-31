@@ -117,5 +117,6 @@ public class AllayBlockUpdateService implements BlockUpdateService {
         return new BlockNeighborUpdateEvent(block, neighborBlock, blockFace).call();
     }
 
-    protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace) {}
+    protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace) {
+    }
 }

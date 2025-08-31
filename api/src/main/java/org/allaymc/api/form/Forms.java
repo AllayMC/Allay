@@ -13,7 +13,7 @@ public interface Forms {
     /**
      * Create a simple form.
      *
-     * @return the simple form.
+     * @return the simple form
      */
     static SimpleForm simple() {
         return new SimpleForm();
@@ -22,7 +22,7 @@ public interface Forms {
     /**
      * Create a modal form.
      *
-     * @return the modal form.
+     * @return the modal form
      */
     static ModalForm modal() {
         return new ModalForm();
@@ -31,7 +31,7 @@ public interface Forms {
     /**
      * Create a custom form.
      *
-     * @return the custom form.
+     * @return the custom form
      */
     static CustomForm custom() {
         return new CustomForm();

@@ -53,8 +53,9 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     /**
      * Calculate the chance the crop will grow during a random tick.
      *
-     * @param block the block state to calculate the growth chance for.
-     * @return the chance the crop will grow.
+     * @param block the block state to calculate the growth chance for
+     *
+     * @return the chance the crop will grow
      */
     protected float calculateGrowthChance(Block block) {
         var points = 0.0f;

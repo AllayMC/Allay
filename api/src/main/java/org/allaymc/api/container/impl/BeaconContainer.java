@@ -16,7 +16,7 @@ public class BeaconContainer extends BlockContainer {
     /**
      * Get the item stack in the payment slot.
      *
-     * @return The item stack in the payment slot.
+     * @return The item stack in the payment slot
      */
     public ItemStack getBeaconPayment() {
         return this.getItemStack(BEACON_PAYMENT_SLOT);

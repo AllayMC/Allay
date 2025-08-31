@@ -29,8 +29,9 @@ public enum DyeColor {
     /**
      * Gets the dye color by its index.
      *
-     * @param index the index of the dye color.
-     * @return the correspond dye color, or {@code null} if the provided index is invalid.
+     * @param index the index of the dye color
+     *
+     * @return the correspond dye color, or {@code null} if the provided index is invalid
      */
     public static DyeColor from(int index) {
         return VALUES[index];

@@ -31,7 +31,7 @@ import java.util.Set;
  * DirectedAcyclicGraph is an implementation of a <a href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>
  * that conforms to {@link Set}.
  *
- * @param <B> Node type.
+ * @param <B> Node type
  */
 public interface DirectedAcyclicGraph<B> extends Set<B> {
 
@@ -54,7 +54,7 @@ public interface DirectedAcyclicGraph<B> extends Set<B> {
      *
      * @param member a node
      *
-     * @return all parent nodes of this node. Note that if this node is not in the graph, an {@link NullPointerException} will be thrown.
+     * @return all parent nodes of this node. Note that if this node is not in the graph, an {@link NullPointerException} will be thrown
      */
     Set<B> getBefore(B member);
 
@@ -64,12 +64,12 @@ public interface DirectedAcyclicGraph<B> extends Set<B> {
      * @param before the before node
      * @param after  the after node
      *
-     * @return Whether the "before" node is a parent node of the "after" node.
+     * @return Whether the "before" node is a parent node of the "after" node
      */
     boolean isBefore(B before, B after);
 
     /**
-     * @return The result of topological sorting of this directed acyclic graph (DAG).
+     * @return The result of topological sorting of this directed acyclic graph (DAG)
      */
     List<B> getSortedList();
 

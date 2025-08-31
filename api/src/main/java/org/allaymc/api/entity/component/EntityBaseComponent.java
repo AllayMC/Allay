@@ -54,28 +54,28 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Gets the type of this entity.
      *
-     * @return the type of this entity.
+     * @return the type of this entity
      */
     EntityType<? extends Entity> getEntityType();
 
     /**
      * Gets the display name of this entity.
      *
-     * @return the display name of this entity.
+     * @return the display name of this entity
      */
     String getDisplayName();
 
     /**
      * Sets the display name of this entity.
      *
-     * @param displayName the display name to set.
+     * @param displayName the display name to set
      */
     void setDisplayName(String displayName);
 
     /**
      * Gets the name tag of this entity.
      *
-     * @return the name tag of this entity.
+     * @return the name tag of this entity
      */
     default String getNameTag() {
         return getMetadata().get(EntityDataTypes.NAME);
@@ -84,7 +84,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Sets the name tag of this entity.
      *
-     * @param nameTag the name tag to set.
+     * @param nameTag the name tag to set
      */
     default void setNameTag(String nameTag) {
         setAndSendEntityData(EntityDataTypes.NAME, nameTag);
@@ -100,14 +100,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Gets the last location of this entity.
      *
-     * @return the last location of this entity.
+     * @return the last location of this entity
      */
     Location3dc getLastLocation();
 
     /**
      * Gets the location of this entity.
      *
-     * @return the location of this entity.
+     * @return the location of this entity
      */
     Location3dc getLocation();
 
@@ -117,22 +117,23 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * This method is usually used when you want to spawn the entity at a specific location.
      * Then you need to set the entity's location before spawn the entity.
      *
-     * @param location the location you want to set.
-     * @throws IllegalStateException if the entity is already spawned.
+     * @param location the location you want to set
+     *
+     * @throws IllegalStateException if the entity is already spawned
      */
     void setLocationBeforeSpawn(Location3dc location);
 
     /**
      * Gets the dimension of this entity.
      *
-     * @return the dimension of this entity.
+     * @return the dimension of this entity
      */
     Dimension getDimension();
 
     /**
      * Gets the world of this entity.
      *
-     * @return the world of this entity.
+     * @return the world of this entity
      */
     default World getWorld() {
         return getLocation().dimension() != null ? getLocation().dimension().getWorld() : null;
@@ -141,7 +142,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the status of the entity.
      *
-     * @return the status of the entity.
+     * @return the status of the entity
      */
     EntityStatus getStatus();
 
@@ -200,7 +201,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Teleport the entity to the specified location.
      *
-     * @param location the location to teleport the entity to.
+     * @param location the location to teleport the entity to
+     *
      * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
      */
     default boolean teleport(Location3dc location) {
@@ -210,8 +212,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Teleport the entity to the specified location.
      *
-     * @param location the location to teleport the entity to.
-     * @param reason   the reason of the teleport.
+     * @param location the location to teleport the entity to
+     * @param reason   the reason of the teleport
+     *
      * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
      */
     boolean teleport(Location3dc location, EntityTeleportEvent.Reason reason);
@@ -219,7 +222,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Teleport the entity to the specified location.
      *
-     * @param location the location to teleport the entity to.
+     * @param location the location to teleport the entity to
      */
     default boolean teleport(Location3ic location) {
         return teleport(new Location3d(location));
@@ -230,7 +233,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * <p>
      * This method is safe to be used in world thread.
      *
-     * @param location the location to teleport the entity to.
+     * @param location the location to teleport the entity to
      */
     default void teleportAsync(Location3dc location) {
         Thread.ofVirtual().start(() -> teleport(location));
@@ -241,7 +244,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * <p>
      * This method is safe to be used in world thread.
      *
-     * @param location the location to teleport the entity to.
+     * @param location the location to teleport the entity to
      */
     default void teleportAsync(Location3ic location) {
         teleportAsync(new Location3d(location));
@@ -250,7 +253,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the runtime id of this entity.
      *
-     * @return the runtime id of this entity.
+     * @return the runtime id of this entity
      */
     long getRuntimeId();
 
@@ -265,14 +268,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the unique id of this entity.
      *
-     * @return the unique id of this entity.
+     * @return the unique id of this entity
      */
     long getUniqueId();
 
     /**
      * Get the metadata of this entity.
      *
-     * @return the metadata of this entity.
+     * @return the metadata of this entity
      */
     Metadata getMetadata();
 
@@ -284,9 +287,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Set and send the entity data to the viewers.
      *
-     * @param dataType the data type to set.
-     * @param value    the value to set.
-     * @param <T>      the type of the value.
+     * @param dataType the data type to set
+     * @param value    the value to set
+     * @param <T>      the type of the value
      */
     default <T> void setAndSendEntityData(EntityDataType<T> dataType, T value) {
         getMetadata().set(dataType, value);
@@ -296,8 +299,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Set and send the entity flag to the viewers.
      *
-     * @param flag  the flag to set.
-     * @param value the value to set.
+     * @param flag  the flag to set
+     * @param value the value to set
      */
     default void setAndSendEntityFlag(EntityFlag flag, boolean value) {
         if (value == getMetadata().get(flag)) {
@@ -310,14 +313,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the aabb of this entity.
      *
-     * @return the aabb of this entity.
+     * @return the aabb of this entity
      */
     AABBdc getAABB();
 
     /**
      * Get the offset aabb of this entity.
      *
-     * @return the offset aabb of this entity.
+     * @return the offset aabb of this entity
      */
     default AABBd getOffsetAABB() {
         return getAABB().translate(getLocation(), new AABBd());
@@ -326,7 +329,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the offset aabb of this entity for collision check.
      *
-     * @return the offset aabb of this entity for collision check.
+     * @return the offset aabb of this entity for collision check
      */
     AABBd getOffsetAABBForCollisionCheck();
 
@@ -343,7 +346,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Set if the entity has collision.
      *
-     * @param hasEntityCollision {@code true} if the entity has collision, {@code false} otherwise.
+     * @param hasEntityCollision {@code true} if the entity has collision, {@code false} otherwise
      */
     default void setHasEntityCollision(boolean hasEntityCollision) {
         setAndSendEntityFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
@@ -352,7 +355,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Called when the entity collides with another entity.
      *
-     * @param other the entity collides with.
+     * @param other the entity collides with
      */
     @ApiStatus.OverrideOnly
     default void onCollideWithEntity(Entity other) {
@@ -361,7 +364,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Called when the entity is inside a block.
      *
-     * @param block the block that this entity inside.
+     * @param block the block that this entity inside
      */
     @ApiStatus.OverrideOnly
     default void onInsideBlock(Block block) {
@@ -370,7 +373,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Called when the entity collides with a block.
      *
-     * @param block the block that collides with this entity.
+     * @param block the block that collides with this entity
      */
     @ApiStatus.OverrideOnly
     default void onCollideWithBlock(Block block) {
@@ -379,8 +382,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Called when the entity is hit by a projectile.
      *
-     * @param projectile the projectile that hits the entity.
-     * @param hitPos     the hit pos.
+     * @param projectile the projectile that hits the entity
+     * @param hitPos     the hit pos
      */
     @ApiStatus.OverrideOnly
     default void onProjectileHit(EntityProjectile projectile, Vector3dc hitPos) {
@@ -389,7 +392,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the viewers of this entity.
      *
-     * @return the viewers of this entity.
+     * @return the viewers of this entity
      */
     @UnmodifiableView
     Map<Long, EntityPlayer> getViewers();
@@ -401,7 +404,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * The implementation will call {@link EntityMoveEvent}, and because this event is cancellable,
      * the method call may not be valid.
      *
-     * @param newLocation the new location that this entity moves to.
+     * @param newLocation the new location that this entity moves to
+     *
      * @return {@code true} if the method call is valid, {@code false} otherwise.
      */
     @ApiStatus.OverrideOnly
@@ -410,14 +414,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Spawn the entity to the specified player.
      *
-     * @param player the player to spawn the entity to.
+     * @param player the player to spawn the entity to
      */
     void spawnTo(EntityPlayer player);
 
     /**
      * Spawn the entity to the specified players.
      *
-     * @param players the players to spawn the entity to.
+     * @param players the players to spawn the entity to
      */
     default void spawnTo(Collection<EntityPlayer> players) {
         players.forEach(this::spawnTo);
@@ -427,7 +431,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Despawn the entity from the specified player. This method will only remove the entity from the specific viewer,
      * and it will still exist in the dimension.
      *
-     * @param player the player to despawn the entity from.
+     * @param player the player to despawn the entity from
      */
     void despawnFrom(EntityPlayer player);
 
@@ -447,35 +451,35 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Create the spawn packet of this entity.
      *
-     * @return the spawn packet of this entity.
+     * @return the spawn packet of this entity
      */
     BedrockPacket createSpawnPacket();
 
     /**
      * Send a packet to the viewers of this entity.
      *
-     * @param packet the packet to send.
+     * @param packet the packet to send
      */
     void sendPacketToViewers(BedrockPacket packet);
 
     /**
      * Send a packet to the viewers of this entity immediately.
      *
-     * @param packet the packet to send.
+     * @param packet the packet to send
      */
     void sendPacketToViewersImmediately(BedrockPacket packet);
 
     /**
      * Save the entity to NBT.
      *
-     * @return the NBT of this entity.
+     * @return the NBT of this entity
      */
     NbtMap saveNBT();
 
     /**
      * Save the entity to NBT without position.
      *
-     * @return the NBT of this entity without position.
+     * @return the NBT of this entity without position
      */
     default NbtMap saveNBTWithoutPos() {
         var builder = saveNBT().toBuilder();
@@ -486,7 +490,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Load the entity from NBT.
      *
-     * @param nbt the NBT to load.
+     * @param nbt the NBT to load
      */
     void loadNBT(NbtMap nbt);
 
@@ -500,7 +504,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get all the effects of the entity.
      *
-     * @return all the effects of the entity.
+     * @return all the effects of the entity
      */
     @UnmodifiableView
     Map<EffectType, EffectInstance> getAllEffects();
@@ -508,7 +512,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Check if the entity has the specified effect.
      *
-     * @param effectType the effect type to check.
+     * @param effectType the effect type to check
+     *
      * @return {@code true} if the entity has the specified effect, otherwise {@code false}.
      */
     boolean hasEffect(EffectType effectType);
@@ -516,15 +521,17 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the effect level of the specified effect.
      *
-     * @param effectType the effect type to get.
-     * @return the effect level of the specified effect.
+     * @param effectType the effect type to get
+     *
+     * @return the effect level of the specified effect
      */
     int getEffectLevel(EffectType effectType);
 
     /**
      * Add the specified effect to the entity.
      *
-     * @param effectInstance the effect instance to add.
+     * @param effectInstance the effect instance to add
+     *
      * @return {@code true} if the effect is added successfully, otherwise {@code false}.
      */
     boolean addEffect(EffectInstance effectInstance);
@@ -532,7 +539,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Remove the specified effect from the entity.
      *
-     * @param effectType the effect type to remove.
+     * @param effectType the effect type to remove
      */
     void removeEffect(EffectType effectType);
 
@@ -556,7 +563,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * The network offset is the additional offset in y coordinate when sent over network.
      * This is mostly the case for older entities such as players and TNT.
      *
-     * @return the base offset of this entity.
+     * @return the base offset of this entity
      */
     default float getNetworkOffset() {
         return 0;
@@ -565,7 +572,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the eye height of this entity.
      *
-     * @return the eye height of this entity.
+     * @return the eye height of this entity
      */
     default double getEyeHeight() {
         return (getAABB().maxY() - getAABB().minY()) * 0.9;
@@ -605,7 +612,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the current chunk of the entity.
      *
-     * @return the current chunk of the entity, or {@code null} if the chunk is not loaded.
+     * @return the current chunk of the entity, or {@code null} if the chunk is not loaded
      */
     default Chunk getCurrentChunk() {
         var loc = getLocation();
@@ -617,7 +624,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the horizontal face of the entity.
      *
-     * @return the horizontal face of the entity.
+     * @return the horizontal face of the entity
      */
     default BlockFace getHorizontalFace() {
         var rotation = getLocation().yaw() % 360;
@@ -637,8 +644,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Apply the entity event to the entity.
      *
-     * @param event the entity event to apply.
-     * @param data  the data of the entity event.
+     * @param event the entity event to apply
+     * @param data  the data of the entity event
      */
     default void applyEntityEvent(EntityEventType event, int data) {
         var pk = new EntityEventPacket();
@@ -651,7 +658,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Apply an action to the entity.
      *
-     * @param action the action to apply.
+     * @param action the action to apply
      */
     default void applyAction(AnimatePacket.Action action) {
         applyAction(action, 0);
@@ -660,8 +667,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Apply an action to the entity.
      *
-     * @param action     the action of the action.
-     * @param rowingTime the rowing time of the action.
+     * @param action     the action of the action
+     * @param rowingTime the rowing time of the action
      */
     default void applyAction(AnimatePacket.Action action, double rowingTime) {
         var pk = new AnimatePacket();
@@ -674,7 +681,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Add a tag to the entity.
      *
-     * @param tag the tag to add.
+     * @param tag the tag to add
+     *
      * @return {@code true} if the tag is added, otherwise {@code false}.
      */
     boolean addTag(String tag);
@@ -682,7 +690,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Remove a tag from the entity.
      *
-     * @param tag the tag to remove.
+     * @param tag the tag to remove
+     *
      * @return {@code true} if the tag is removed, otherwise {@code false}.
      */
     boolean removeTag(String tag);
@@ -690,7 +699,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Check if the entity has the specified tag.
      *
-     * @param tag the tag to check.
+     * @param tag the tag to check
+     *
      * @return {@code true} if the entity has the specified tag, otherwise {@code false}.
      */
     boolean hasTag(String tag);
@@ -698,7 +708,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the tags of the entity.
      *
-     * @return the tags of the entity.
+     * @return the tags of the entity
      */
     @UnmodifiableView
     Set<String> getTags();
@@ -751,6 +761,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the specific effect can apply on the entity.
      *
      * @param effectType the specific effect
+     *
      * @return {@code true} if the specific effect can apply on the entity, otherwise {@code false}.
      */
     default boolean canApplyEffect(EffectType effectType) {
@@ -762,6 +773,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param player    The player who interacted with the entity, can be null
      * @param itemStack The item used to interact with the entity
+     *
      * @return {@code true} if the interaction is successful
      */
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {

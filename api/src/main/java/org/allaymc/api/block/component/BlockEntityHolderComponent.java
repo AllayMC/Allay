@@ -15,18 +15,19 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
     /**
      * Get the block entity type.
      *
-     * @return the block entity type.
+     * @return the block entity type
      */
     BlockEntityType<?> getBlockEntityType();
 
     /**
      * Get the block entity in a specific location.
      *
-     * @param x         block entity's x coordinate.
-     * @param y         block entity's y coordinate.
-     * @param z         block entity's z coordinate.
-     * @param dimension the dimension which the block entity is in.
-     * @return the block entity, or null if block entity is not found.
+     * @param x         block entity's x coordinate
+     * @param y         block entity's y coordinate
+     * @param z         block entity's z coordinate
+     * @param dimension the dimension which the block entity is in
+     *
+     * @return the block entity, or null if block entity is not found
      */
     default T getBlockEntity(int x, int y, int z, Dimension dimension) {
         var blockEntity = dimension.getBlockEntity(x, y, z);
@@ -74,11 +75,11 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
     /**
      * Create block entity at a specific location.
      *
-     * @param x            block entity's x coordinate.
-     * @param y            block entity's y coordinate.
-     * @param z            block entity's z coordinate.
-     * @param dimension    the dimension which the block entity will be in.
-     * @param sendToClient whether to send the block entity data packet to the client.
+     * @param x            block entity's x coordinate
+     * @param y            block entity's y coordinate
+     * @param z            block entity's z coordinate
+     * @param dimension    the dimension which the block entity will be in
+     * @param sendToClient whether to send the block entity data packet to the client
      */
     default void createBlockEntity(int x, int y, int z, Dimension dimension, boolean sendToClient) {
         Objects.requireNonNull(dimension);
@@ -107,11 +108,12 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
     /**
      * Remove a block entity in a specific location.
      *
-     * @param x         block entity's x coordinate.
-     * @param y         block entity's y coordinate.
-     * @param z         block entity's z coordinate.
-     * @param dimension the dimension which the block entity is in.
-     * @throws IllegalStateException if chunk isn't loaded or the block entity not exists.
+     * @param x         block entity's x coordinate
+     * @param y         block entity's y coordinate
+     * @param z         block entity's z coordinate
+     * @param dimension the dimension which the block entity is in
+     *
+     * @throws IllegalStateException if chunk isn't loaded or the block entity not exists
      */
     default void removeBlockEntity(int x, int y, int z, Dimension dimension) {
         Objects.requireNonNull(dimension);

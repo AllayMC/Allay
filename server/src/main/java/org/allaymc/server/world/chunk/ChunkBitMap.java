@@ -13,6 +13,13 @@ public final class ChunkBitMap {
     // Each byte stores flags for 8 positions, so we need 32 bytes for 16x16 positions.
     private final byte[] bitMap = new byte[32];
 
+    private static void checkXZ(int x, int z) {
+        // Ensure (x, z) coordinates are within the valid range
+        if (x < 0 || x >= 16 || z < 0 || z >= 16) {
+            throw new IllegalArgumentException("Coordinates (x, z) must be between 0 and 15.");
+        }
+    }
+
     // Set the flag for position (x, z) in the chunk
     public void set(int x, int z, boolean value) {
         checkXZ(x, z);
@@ -42,12 +49,5 @@ public final class ChunkBitMap {
     // Clear all flags (set all bits to 0)
     public void clear() {
         Arrays.fill(bitMap, (byte) 0);
-    }
-
-    private static void checkXZ(int x, int z) {
-        // Ensure (x, z) coordinates are within the valid range
-        if (x < 0 || x >= 16 || z < 0 || z >= 16) {
-            throw new IllegalArgumentException("Coordinates (x, z) must be between 0 and 15.");
-        }
     }
 }

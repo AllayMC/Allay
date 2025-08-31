@@ -26,10 +26,10 @@ public class DebugCircle extends DebugShape {
     /**
      * Creates a new DebugCircle with the specified position, color, scale and segments.
      *
-     * @param position the position of the circle in the world.
-     * @param color    the color of the circle.
-     * @param scale    the scale of the circle, which is a multiplier for the size of the circle.
-     * @param segments the segments of the circle, which determines how many segments the circle will be divided into.
+     * @param position the position of the circle in the world
+     * @param color    the color of the circle
+     * @param scale    the scale of the circle, which is a multiplier for the size of the circle
+     * @param segments the segments of the circle, which determines how many segments the circle will be divided into
      */
     public DebugCircle(Vector3fc position, Color color, Float scale, Integer segments) {
         super(position, color);
@@ -40,7 +40,7 @@ public class DebugCircle extends DebugShape {
     /**
      * Gets the scale of the circle.
      *
-     * @return the scale of the circle.
+     * @return the scale of the circle
      */
     public float getScale() {
         return scale != null ? scale : 1.0f;
@@ -49,7 +49,7 @@ public class DebugCircle extends DebugShape {
     /**
      * Sets the scale of the circle.
      *
-     * @param scale the scale of the circle, which is a multiplier for the size of the circle.
+     * @param scale the scale of the circle, which is a multiplier for the size of the circle
      */
     public void setScale(Float scale) {
         this.scale = scale;
@@ -59,7 +59,7 @@ public class DebugCircle extends DebugShape {
     /**
      * Gets the segments of the circle.
      *
-     * @return the segments of the circle.
+     * @return the segments of the circle
      */
     public int getSegments() {
         return segments != null ? segments : 20;
@@ -68,7 +68,7 @@ public class DebugCircle extends DebugShape {
     /**
      * Sets the segments of the circle.
      *
-     * @param segments the segments of the circle, which determines how many segments the circle will be divided into.
+     * @param segments the segments of the circle, which determines how many segments the circle will be divided into
      */
     public void setSegments(Integer segments) {
         this.segments = segments;

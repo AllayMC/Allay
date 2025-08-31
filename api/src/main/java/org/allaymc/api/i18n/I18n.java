@@ -68,20 +68,20 @@ public interface I18n {
     /**
      * Translate the text which may contain translation key.
      *
-     * @param langCode the lang code used.
-     * @param tr       the text, which may contain translation key.
-     * @param args     the arguments used in the translation.
+     * @param langCode the lang code used
+     * @param tr       the text, which may contain translation key
+     * @param args     the arguments used in the translation
      *
-     * @return the translated text.
+     * @return the translated text
      */
     String tr(LangCode langCode, @MayContainTrKey String tr, Object... args);
 
     /**
      * Find the I18n key info in the string.
      *
-     * @param str the string.
+     * @param str the string
      *
-     * @return the I18n key info.
+     * @return the I18n key info
      */
     KeyInfo findI18nKey(@MayContainTrKey String str);
 
@@ -125,11 +125,11 @@ public interface I18n {
      * This method will find and remove "minecraft" namespace in the translation key, and does not translate
      * these text. Only translation key that does not in "minecraft" namespace will be translated.
      *
-     * @param langCode the lang code.
-     * @param tr       the translation key.
-     * @param args     the arguments.
+     * @param langCode the lang code
+     * @param tr       the translation key
+     * @param args     the arguments
      *
-     * @return the converted text and whether the translation key is vanilla.
+     * @return the converted text and whether the translation key is vanilla
      */
     default Pair<String, Boolean> toClientFriendlyStyle0(LangCode langCode, @MayContainTrKey String tr, Object... args) {
         var keyInfo = findI18nKey(tr);
@@ -146,25 +146,25 @@ public interface I18n {
     /**
      * Get the default lang code.
      *
-     * @return the default lang code.
+     * @return the default lang code
      */
     LangCode getDefaultLangCode();
 
     /**
      * Set the default lang code.
      *
-     * @param langCode the lang code.
+     * @param langCode the lang code
      */
     void setDefaultLangCode(LangCode langCode);
 
     /**
      * KeyInfo stores the information of the translation key in a string.
      *
-     * @param startIndex the start index of the translation key.
-     * @param endIndex   the end index of the translation key.
-     * @param colonIndex the colon (":" character) index of the translation key.
-     * @param key        the translation key.
-     * @param hasStarter whether the translation key has a starter character ("%" character).
+     * @param startIndex the start index of the translation key
+     * @param endIndex   the end index of the translation key
+     * @param colonIndex the colon (":" character) index of the translation key
+     * @param key        the translation key
+     * @param hasStarter whether the translation key has a starter character ("%" character)
      */
     record KeyInfo(int startIndex, int endIndex, int colonIndex, String key, boolean hasStarter) {
         public static final KeyInfo EMPTY = new KeyInfo(-1, -1, -1, null, false);

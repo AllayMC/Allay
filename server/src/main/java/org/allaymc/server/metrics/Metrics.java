@@ -63,9 +63,9 @@ public class Metrics {
     /**
      * Class constructor.
      *
-     * @param name              The name of the server software.
-     * @param serverUUID        The uuid of the server.
-     * @param logFailedRequests Whether failed requests should be logged or not.
+     * @param name              The name of the server software
+     * @param serverUUID        The uuid of the server
+     * @param logFailedRequests Whether failed requests should be logged or not
      */
     public Metrics(String name, String serverUUID, boolean logFailedRequests) {
         this.name = name;
@@ -79,8 +79,9 @@ public class Metrics {
     /**
      * Sends the data to the bStats server.
      *
-     * @param data The data to send.
-     * @throws Exception If the request failed.
+     * @param data The data to send
+     *
+     * @throws Exception If the request failed
      */
     private static void sendData(JsonObject data) throws Exception {
         if (data == null) {
@@ -113,9 +114,11 @@ public class Metrics {
     /**
      * G-zips the given String.
      *
-     * @param str The string to gzip.
-     * @return The gzipped String.
-     * @throws IOException If the compression failed.
+     * @param str The string to gzip
+     *
+     * @return The gzipped String
+     *
+     * @throws IOException If the compression failed
      */
     private static byte[] compress(final String str) throws IOException {
         if (str == null) {
@@ -134,6 +137,7 @@ public class Metrics {
      * result is 0.
      *
      * @param <T> the type of the input elements
+     *
      * @return a {@code Collector} that counts the input elements
      */
     public static <T> Collector<T, ?, Integer> countingInt() {
@@ -143,7 +147,7 @@ public class Metrics {
     /**
      * Adds a custom chart.
      *
-     * @param chart The chart to add.
+     * @param chart The chart to add
      */
     public void addCustomChart(CustomChart chart) {
         if (chart == null) {
@@ -176,7 +180,7 @@ public class Metrics {
     /**
      * Gets the plugin specific data.
      *
-     * @return The plugin specific data.
+     * @return The plugin specific data
      */
     private JsonObject getPluginData() {
         JsonObject data = new JsonObject();
@@ -199,7 +203,7 @@ public class Metrics {
     /**
      * Gets the server specific data.
      *
-     * @return The server specific data.
+     * @return The server specific data
      */
     private JsonObject getServerData() {
         // OS specific data
@@ -252,7 +256,7 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId The id of the chart.
+         * @param chartId The id of the chart
          */
         CustomChart(String chartId) {
             if (chartId == null || chartId.isEmpty()) {
@@ -293,8 +297,8 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId  The id of the chart.
-         * @param callable The callable which is used to request the chart data.
+         * @param chartId  The id of the chart
+         * @param callable The callable which is used to request the chart data
          */
         public SimplePie(String chartId, Callable<String> callable) {
             super(chartId);
@@ -324,8 +328,8 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId  The id of the chart.
-         * @param callable The callable which is used to request the chart data.
+         * @param chartId  The id of the chart
+         * @param callable The callable which is used to request the chart data
          */
         public AdvancedPie(String chartId, Callable<Map<String, Integer>> callable) {
             super(chartId);
@@ -369,8 +373,8 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId  The id of the chart.
-         * @param callable The callable which is used to request the chart data.
+         * @param chartId  The id of the chart
+         * @param callable The callable which is used to request the chart data
          */
         public DrilldownPie(String chartId, Callable<Map<String, Map<String, Integer>>> callable) {
             super(chartId);
@@ -418,8 +422,8 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId  The id of the chart.
-         * @param callable The callable which is used to request the chart data.
+         * @param chartId  The id of the chart
+         * @param callable The callable which is used to request the chart data
          */
         public SingleLineChart(String chartId, Callable<Integer> callable) {
             super(chartId);
@@ -450,8 +454,8 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId  The id of the chart.
-         * @param callable The callable which is used to request the chart data.
+         * @param chartId  The id of the chart
+         * @param callable The callable which is used to request the chart data
          */
         public MultiLineChart(String chartId, Callable<Map<String, Integer>> callable) {
             super(chartId);
@@ -496,8 +500,8 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId  The id of the chart.
-         * @param callable The callable which is used to request the chart data.
+         * @param chartId  The id of the chart
+         * @param callable The callable which is used to request the chart data
          */
         public SimpleBarChart(String chartId, Callable<Map<String, Integer>> callable) {
             super(chartId);
@@ -534,8 +538,8 @@ public class Metrics {
         /**
          * Class constructor.
          *
-         * @param chartId  The id of the chart.
-         * @param callable The callable which is used to request the chart data.
+         * @param chartId  The id of the chart
+         * @param callable The callable which is used to request the chart data
          */
         public AdvancedBarChart(String chartId, Callable<Map<String, int[]>> callable) {
             super(chartId);

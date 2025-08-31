@@ -156,7 +156,7 @@ public enum CompassRoseDirection {
     /**
      * Get the yaw that represents this direction.
      *
-     * @return The yaw value that can be used by entities to look at this direction.
+     * @return The yaw value that can be used by entities to look at this direction
      */
     public float getYaw() {
         return yaw;

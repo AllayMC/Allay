@@ -31,9 +31,9 @@ public final class MathUtils {
     /**
      * Convert cloudburst vector to joml vector.
      *
-     * @param cbVec cloudburst vector.
+     * @param cbVec cloudburst vector
      *
-     * @return joml vector, or {@code null} if the input is {@code null}.
+     * @return joml vector, or {@code null} if the input is {@code null}
      */
     public static Vector3ic CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
         if (cbVec == null) {
@@ -46,9 +46,9 @@ public final class MathUtils {
     /**
      * Convert cloudburst vector to joml vector.
      *
-     * @param cbVec cloudburst vector.
+     * @param cbVec cloudburst vector
      *
-     * @return joml vector, or {@code null} if the input is {@code null}.
+     * @return joml vector, or {@code null} if the input is {@code null}
      */
     public static Vector3dc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
         if (cbVec == null) {
@@ -61,9 +61,9 @@ public final class MathUtils {
     /**
      * Convert cloudburst vector to joml vector.
      *
-     * @param cbVec cloudburst vector.
+     * @param cbVec cloudburst vector
      *
-     * @return joml vector, or {@code null} if the input is {@code null}.
+     * @return joml vector, or {@code null} if the input is {@code null}
      */
     public static Vector3fc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
         if (cbVec == null) {
@@ -76,9 +76,9 @@ public final class MathUtils {
     /**
      * Convert joml vector to cloudburst vector.
      *
-     * @param JOMLVec joml vector.
+     * @param JOMLVec joml vector
      *
-     * @return cloudburst vector, or {@code null} if the input is {@code null}.
+     * @return cloudburst vector, or {@code null} if the input is {@code null}
      */
     public static org.cloudburstmc.math.vector.Vector3i JOMLVecToCBVec(Vector3ic JOMLVec) {
         if (JOMLVec == null) {
@@ -91,9 +91,9 @@ public final class MathUtils {
     /**
      * Convert joml vector to cloudburst vector.
      *
-     * @param JOMLVec joml vector.
+     * @param JOMLVec joml vector
      *
-     * @return cloudburst vector, or {@code null} if the input is {@code null}.
+     * @return cloudburst vector, or {@code null} if the input is {@code null}
      */
     public static org.cloudburstmc.math.vector.Vector3d JOMLVecToCBVec(Vector3dc JOMLVec) {
         if (JOMLVec == null) {
@@ -106,9 +106,9 @@ public final class MathUtils {
     /**
      * Convert joml vector to cloudburst vector.
      *
-     * @param JOMLVec joml vector.
+     * @param JOMLVec joml vector
      *
-     * @return cloudburst vector, or {@code null} if the input is {@code null}.
+     * @return cloudburst vector, or {@code null} if the input is {@code null}
      */
     public static org.cloudburstmc.math.vector.Vector3f JOMLVecToCBVec(Vector3fc JOMLVec) {
         if (JOMLVec == null) {
@@ -121,9 +121,9 @@ public final class MathUtils {
     /**
      * Floor a vector.
      *
-     * @param vector3d the vector to floor.
+     * @param vector3d the vector to floor
      *
-     * @return the floored vector.
+     * @return the floored vector
      */
     public static Vector3i floor(Vector3dc vector3d) {
         return new Vector3i((int) Math.floor(vector3d.x()), (int) Math.floor(vector3d.y()), (int) Math.floor(vector3d.z()));
@@ -132,9 +132,9 @@ public final class MathUtils {
     /**
      * Floor a vector.
      *
-     * @param vector3f the vector to floor.
+     * @param vector3f the vector to floor
      *
-     * @return the floored vector.
+     * @return the floored vector
      */
     public static Vector3i floor(Vector3fc vector3f) {
         return new Vector3i((int) Math.floor(vector3f.x()), (int) Math.floor(vector3f.y()), (int) Math.floor(vector3f.z()));
@@ -143,9 +143,9 @@ public final class MathUtils {
     /**
      * Ceil a vector.
      *
-     * @param vector3d the vector to ceil.
+     * @param vector3d the vector to ceil
      *
-     * @return the ceiled vector.
+     * @return the ceiled vector
      */
     public static Vector3i ceil(Vector3dc vector3d) {
         return new Vector3i((int) Math.ceil(vector3d.x()), (int) Math.ceil(vector3d.y()), (int) Math.ceil(vector3d.z()));
@@ -154,9 +154,9 @@ public final class MathUtils {
     /**
      * Ceil a vector.
      *
-     * @param vector3f the vector to ceil.
+     * @param vector3f the vector to ceil
      *
-     * @return the ceiled vector.
+     * @return the ceiled vector
      */
     public static Vector3i ceil(Vector3fc vector3f) {
         return new Vector3i((int) Math.ceil(vector3f.x()), (int) Math.ceil(vector3f.y()), (int) Math.ceil(vector3f.z()));
@@ -165,9 +165,9 @@ public final class MathUtils {
     /**
      * Center a vector (Adding 0.5 to the coordinates of the vector).
      *
-     * @param vector3i the vector to center.
+     * @param vector3i the vector to center
      *
-     * @return the centered vector.
+     * @return the centered vector
      */
     public static Vector3d center(Vector3ic vector3i) {
         return new Vector3d(vector3i.x() + 0.5, vector3i.y() + 0.5, vector3i.z() + 0.5);
@@ -176,10 +176,10 @@ public final class MathUtils {
     /**
      * Round a double to a certain precision.
      *
-     * @param d         the double to round.
-     * @param precision the precision.
+     * @param d         the double to round
+     * @param precision the precision
      *
-     * @return the rounded double.
+     * @return the rounded double
      */
     public static double round(double d, int precision) {
         double pow = Math.pow(10, precision);
@@ -189,9 +189,9 @@ public final class MathUtils {
     /**
      * Fast inverse square root (float).
      *
-     * @param x the value.
+     * @param x the value
      *
-     * @return the result.
+     * @return the result
      */
     public static float fastFloatInverseSqrt(float x) {
         float xHalf = 0.5f * x;
@@ -205,9 +205,9 @@ public final class MathUtils {
     /**
      * Fast inverse square root (double).
      *
-     * @param x the value.
+     * @param x the value
      *
-     * @return the result.
+     * @return the result
      */
     public static double fastDoubleInverseSqrt(double x) {
         double xHalf = 0.5d * x;
@@ -221,9 +221,9 @@ public final class MathUtils {
     /**
      * Check if the value is in the range.
      *
-     * @param l     the left.
-     * @param value the value to check.
-     * @param r     the right.
+     * @param l     the left
+     * @param value the value to check
+     * @param r     the right
      *
      * @return {@code true} if the value is in the range, otherwise {@code false}.
      */
@@ -241,10 +241,10 @@ public final class MathUtils {
     /**
      * Calculate equivalent normalized direction vector by yaw and pitch.
      *
-     * @param yaw   the yaw.
-     * @param pitch the pitch.
+     * @param yaw   the yaw
+     * @param pitch the pitch
      *
-     * @return the direction vector.
+     * @return the direction vector
      */
     public static Vector3d getDirectionVector(double yaw, double pitch) {
         var pitch0 = toRadians(pitch + 90);
@@ -258,9 +258,9 @@ public final class MathUtils {
     /**
      * Calculate yaw from the direction vector.
      *
-     * @param vector the direction vector.
+     * @param vector the direction vector
      *
-     * @return the yaw.
+     * @return the yaw
      */
     public static double getYawFromVector(Vector3dc vector) {
         double length = vector.x() * vector.x() + vector.z() * vector.z();
@@ -275,9 +275,9 @@ public final class MathUtils {
     /**
      * Calculate the pitch by the direction vector.
      *
-     * @param vector the direction vector.
+     * @param vector the direction vector
      *
-     * @return the pitch.
+     * @return the pitch
      */
     public static double getPitchFromVector(Vector3dc vector) {
         double length =
@@ -295,9 +295,9 @@ public final class MathUtils {
     /**
      * Calculate sin value quickly by looking up a pre-calculated table.
      *
-     * @param radian the radian.
+     * @param radian the radian
      *
-     * @return the sin value.
+     * @return the sin value
      */
     public static double fastSin(float radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
@@ -306,9 +306,9 @@ public final class MathUtils {
     /**
      * Calculate sin value quickly by looking up a pre-calculated table.
      *
-     * @param radian the radian.
+     * @param radian the radian
      *
-     * @return the sin value.
+     * @return the sin value
      */
     public static double fastSin(double radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
@@ -317,9 +317,9 @@ public final class MathUtils {
     /**
      * Calculate cos value quickly by looking up a pre-calculated table.
      *
-     * @param radian the radian.
+     * @param radian the radian
      *
-     * @return the cos value.
+     * @return the cos value
      */
     public static double fastCos(float radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
@@ -328,9 +328,9 @@ public final class MathUtils {
     /**
      * Calculate cos value quickly by looking up a pre-calculated table.
      *
-     * @param radian the radian.
+     * @param radian the radian
      *
-     * @return the cos value.
+     * @return the cos value
      */
     public static double fastCos(double radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
@@ -339,7 +339,7 @@ public final class MathUtils {
     /**
      * Check if the vector contains NaN.
      *
-     * @param v the vector to check.
+     * @param v the vector to check
      *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
@@ -350,7 +350,7 @@ public final class MathUtils {
     /**
      * Check if the vector contains NaN.
      *
-     * @param v the vector to check.
+     * @param v the vector to check
      *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
@@ -361,7 +361,7 @@ public final class MathUtils {
     /**
      * Check if the location contains NaN.
      *
-     * @param l the location to check.
+     * @param l the location to check
      *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
@@ -373,7 +373,7 @@ public final class MathUtils {
     /**
      * Check if the location contains NaN.
      *
-     * @param l the location to check.
+     * @param l the location to check
      *
      * @return {@code true} if the vector contains NaN, {@code false} otherwise.
      */
@@ -387,9 +387,9 @@ public final class MathUtils {
      * <p>
      * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
      *
-     * @param v the vector.
+     * @param v the vector
      *
-     * @return the normalized vector.
+     * @return the normalized vector
      */
     public static Vector3f normalizeIfNotZero(Vector3f v) {
         return v.lengthSquared() > 0 ? v.normalize(v) : v;
@@ -400,9 +400,9 @@ public final class MathUtils {
      * <p>
      * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
      *
-     * @param v the vector.
+     * @param v the vector
      *
-     * @return the normalized vector.
+     * @return the normalized vector
      */
     public static Vector3d normalizeIfNotZero(Vector3d v) {
         return v.lengthSquared() > 0 ? v.normalize(v) : v;
@@ -413,10 +413,10 @@ public final class MathUtils {
      * vec values are subtracted from the minimum values of the AABB and added
      * to maximum values of the AABB.
      *
-     * @param aabb   the AABB to grow.
-     * @param growth the vector.
+     * @param aabb   the AABB to grow
+     * @param growth the vector
      *
-     * @return the grown AABB.
+     * @return the grown AABB
      */
     public static AABBd grow(AABBd aabb, Vector3dc growth) {
         aabb.minX -= growth.x();
@@ -431,9 +431,9 @@ public final class MathUtils {
     /**
      * Get the maximum value from an int array.
      *
-     * @param array the int array to get the maximum value from.
+     * @param array the int array to get the maximum value from
      *
-     * @return the maximum int value.
+     * @return the maximum int value
      */
     public static int max(int[] array) {
         int max = Integer.MIN_VALUE;
@@ -448,12 +448,12 @@ public final class MathUtils {
     /**
      * Calculate the Chebyshev distance between two points in a 2D space.
      *
-     * @param x1 the x coordinate of the first point.
-     * @param y1 the y coordinate of the first point.
-     * @param x2 the x coordinate of the second point.
-     * @param y2 the y coordinate of the second point.
+     * @param x1 the x coordinate of the first point
+     * @param y1 the y coordinate of the first point
+     * @param x2 the x coordinate of the second point
+     * @param y2 the y coordinate of the second point
      *
-     * @return the Chebyshev distance between the two points.
+     * @return the Chebyshev distance between the two points
      */
     public static int calculateChebyshevDistance(int x1, int y1, int x2, int y2) {
         return Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2));
@@ -462,12 +462,12 @@ public final class MathUtils {
     /**
      * Calculate the Manhattan distance between two points in a 2D space.
      *
-     * @param x1 the x coordinate of the first point.
-     * @param y1 the y coordinate of the first point.
-     * @param x2 the x coordinate of the second point.
-     * @param y2 the y coordinate of the second point.
+     * @param x1 the x coordinate of the first point
+     * @param y1 the y coordinate of the first point
+     * @param x2 the x coordinate of the second point
+     * @param y2 the y coordinate of the second point
      *
-     * @return the Manhattan distance between the two points.
+     * @return the Manhattan distance between the two points
      */
     public static int calculateManhattanDistance(int x1, int y1, int x2, int y2) {
         return Math.abs(x1 - x2) + Math.abs(y1 - y2);
@@ -476,12 +476,12 @@ public final class MathUtils {
     /**
      * Calculate the Euclidean distance between two points in a 2D space.
      *
-     * @param x1 the x coordinate of the first point.
-     * @param y1 the y coordinate of the first point.
-     * @param x2 the x coordinate of the second point.
-     * @param y2 the y coordinate of the second point.
+     * @param x1 the x coordinate of the first point
+     * @param y1 the y coordinate of the first point
+     * @param x2 the x coordinate of the second point
+     * @param y2 the y coordinate of the second point
      *
-     * @return the Euclidean distance between the two points.
+     * @return the Euclidean distance between the two points
      */
     public static double calculateEuclideanDistance(int x1, int y1, int x2, int y2) {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));

@@ -47,14 +47,14 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
      * This method must be implemented by subclasses to define how the filter function is
      * generated based on the provided arguments.
      *
-     * @param selectorType the type of selector being used.
-     * @param sender       the command sender invoking the selector.
-     * @param basePos      the base position for relative coordinates (if required).
-     * @param arguments    the arguments used to compute the filter.
+     * @param selectorType the type of selector being used
+     * @param sender       the command sender invoking the selector
+     * @param basePos      the base position for relative coordinates (if required)
+     * @param arguments    the arguments used to compute the filter
      *
-     * @return a function that filters a list of entities.
+     * @return a function that filters a list of entities
      *
-     * @throws SelectorSyntaxException if there is an error parsing the arguments.
+     * @throws SelectorSyntaxException if there is an error parsing the arguments
      */
     protected abstract Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException;
 
@@ -65,7 +65,7 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
      * expiration time of 1 minute after the last access. Subclasses may override this method
      * to provide their own cache configurations if necessary.
      *
-     * @return a {@code Cache<Set<String>, Function<List<Entity>, List<Entity>>>} to store filter functions.
+     * @return a {@code Cache<Set<String>, Function<List<Entity>, List<Entity>>>} to store filter functions
      */
     protected Cache<Set<String>, Function<List<Entity>, List<Entity>>> provideCacheService() {
         return Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();

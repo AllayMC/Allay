@@ -60,13 +60,13 @@ public final class PermissionGroup {
      * Creates a new permission group with the given name, permissions, and parents. The created permission group
      * will also be registered to {@link Registries#PERMISSION_GROUPS}.
      *
-     * @param name        the name of the permission group.
-     * @param permissions the permissions associated with the permission group.
-     * @param parent      the parent permission group of this permission group. Can be {@code null}.
+     * @param name        the name of the permission group
+     * @param permissions the permissions associated with the permission group
+     * @param parent      the parent permission group of this permission group. Can be {@code null}
      *
-     * @return a new permission group instance.
+     * @return a new permission group instance
      *
-     * @throws PermissionException if the name is already exists.
+     * @throws PermissionException if the name is already exists
      */
     public static PermissionGroup create(String name, Set<Permission> permissions, PermissionGroup parent, boolean register) {
         var group = new PermissionGroup(name, permissions, parent);
@@ -83,9 +83,9 @@ public final class PermissionGroup {
     /**
      * Gets an existing permission group by its name.
      *
-     * @param name the name of the permission group.
+     * @param name the name of the permission group
      *
-     * @return the permission group with the given name, or {@code null} if it does not exist.
+     * @return the permission group with the given name, or {@code null} if it does not exist
      */
     public static PermissionGroup get(String name) {
         return Registries.PERMISSION_GROUPS.get(name);
@@ -94,7 +94,7 @@ public final class PermissionGroup {
     /**
      * Gets the name of this permission group.
      *
-     * @return the name of this permission group.
+     * @return the name of this permission group
      */
     public String getName() {
         return name;
@@ -103,7 +103,7 @@ public final class PermissionGroup {
     /**
      * Gets the permissions associated with this permission group.
      *
-     * @return a set of permissions associated with this permission group.
+     * @return a set of permissions associated with this permission group
      */
     @UnmodifiableView
     public Set<Permission> getPermissions() {
@@ -113,9 +113,9 @@ public final class PermissionGroup {
     /**
      * Gets the permissions associated with this permission group.
      *
-     * @param includeParentPermissions whether to include permissions from the parent permission group.
+     * @param includeParentPermissions whether to include permissions from the parent permission group
      *
-     * @return a set of permissions associated with this permission group.
+     * @return a set of permissions associated with this permission group
      */
     @UnmodifiableView
     public Set<Permission> getPermissions(boolean includeParentPermissions) {
@@ -132,16 +132,23 @@ public final class PermissionGroup {
     /**
      * Gets the parent permission group of this permission group.
      *
-     * @return the parent permission group.
+     * @return the parent permission group
      */
     public PermissionGroup getParent() {
         return parent;
     }
 
     /**
+     * @see #setParent(PermissionGroup, Permissible)
+     */
+    public PermissionGroup setParent(PermissionGroup parent) {
+        return setParent(parent, null);
+    }
+
+    /**
      * Checks if this permission group has the given permission.
      *
-     * @param permission the permission to check.
+     * @param permission the permission to check
      *
      * @return {@code true} if this permission group has the permission, {@code false} otherwise.
      */
@@ -162,7 +169,7 @@ public final class PermissionGroup {
     /**
      * Checks if this permission group has all the given permissions.
      *
-     * @param permissions the permissions to check.
+     * @param permissions the permissions to check
      *
      * @return {@code true} if this permission group has all the permissions, {@code false} otherwise.
      */
@@ -179,7 +186,7 @@ public final class PermissionGroup {
     /**
      * Checks if this permission group has all the given permissions.
      *
-     * @param permissions the permissions to check.
+     * @param permissions the permissions to check
      *
      * @return {@code true} if this permission group has all the permissions, {@code false} otherwise.
      */
@@ -196,8 +203,8 @@ public final class PermissionGroup {
     /**
      * Checks if this permission group has all permissions that are existing in the given permission group.
      *
-     * @param group                    the permission group to check.
-     * @param includeParentPermissions whether to include permissions from the parent permission group.
+     * @param group                    the permission group to check
+     * @param includeParentPermissions whether to include permissions from the parent permission group
      *
      * @return {@code true} if this permission group has all permissions that are existing in the given permission group, {@code false} otherwise.
      */
@@ -215,11 +222,11 @@ public final class PermissionGroup {
     /**
      * Adds a permission to this permission group.
      *
-     * @param permission  the permission to add.
-     * @param permissible the permissible entity that this permission group belongs to.
+     * @param permission  the permission to add
+     * @param permissible the permissible entity that this permission group belongs to
      *                    Can be {@code null} if the permission does not belong to any entity.
      *
-     * @return this permission group instance.
+     * @return this permission group instance
      */
     public PermissionGroup addPermission(Permission permission, Permissible permissible) {
         return setPermission(permission, true, permissible);
@@ -235,11 +242,11 @@ public final class PermissionGroup {
     /**
      * Removes a permission from this permission group.
      *
-     * @param permission  the permission to remove.
-     * @param permissible the permissible entity that this permission group belongs to.
+     * @param permission  the permission to remove
+     * @param permissible the permissible entity that this permission group belongs to
      *                    Can be {@code null} if the permission does not belong to any entity.
      *
-     * @return this permission group instance.
+     * @return this permission group instance
      */
     public PermissionGroup removePermission(Permission permission, Permissible permissible) {
         return setPermission(permission, false, permissible);
@@ -255,12 +262,12 @@ public final class PermissionGroup {
     /**
      * Sets a permission for this permission group.
      *
-     * @param permission  the permission to set.
-     * @param value       {@code true} to add the permission, {@code false} to remove it.
-     * @param permissible the permissible entity that this permission group belongs to.
+     * @param permission  the permission to set
+     * @param value       {@code true} to add the permission, {@code false} to remove it
+     * @param permissible the permissible entity that this permission group belongs to
      *                    Can be {@code null} if the permission does not belong to any entity.
      *
-     * @return this permission group instance.
+     * @return this permission group instance
      */
     public PermissionGroup setPermission(Permission permission, boolean value, Permissible permissible) {
         boolean success;
@@ -279,20 +286,13 @@ public final class PermissionGroup {
     }
 
     /**
-     * @see #setParent(PermissionGroup, Permissible)
-     */
-    public PermissionGroup setParent(PermissionGroup parent) {
-        return setParent(parent, null);
-    }
-
-    /**
      * Sets the parent permission group of this permission group.
      *
-     * @param parent      the parent permission group to set. Can be {@code null} if this permission group has no parent.
-     * @param permissible the permissible entity that this permission group belongs to.
+     * @param parent      the parent permission group to set. Can be {@code null} if this permission group has no parent
+     * @param permissible the permissible entity that this permission group belongs to
      *                    Can be {@code null} if the permission does not belong to any entity.
      *
-     * @return this permission group instance.
+     * @return this permission group instance
      */
     public PermissionGroup setParent(PermissionGroup parent, Permissible permissible) {
         var oldPermissions = this.parent != null ? this.parent.getPermissions(true) : Set.<Permission>of();
@@ -344,10 +344,10 @@ public final class PermissionGroup {
      * {@code setParent(PermissionGroups.OPERATOR, permissible)} and {@code setOperator(false, permissible)} is equivalent to
      * {@code setParent(PermissionGroups.MEMBER, permissible)}.
      *
-     * @param value       {@code true} to set this permission group as operator, {@code false} to remove the operator status.
-     * @param permissible the permissible entity that this permission group belongs to. Can be {@code null} if the permission does not belong to any entity.
+     * @param value       {@code true} to set this permission group as operator, {@code false} to remove the operator status
+     * @param permissible the permissible entity that this permission group belongs to. Can be {@code null} if the permission does not belong to any entity
      *
-     * @return this permission group instance.
+     * @return this permission group instance
      */
     public PermissionGroup setOperator(boolean value, Permissible permissible) {
         return setParent(value ? PermissionGroups.OPERATOR : PermissionGroups.MEMBER, permissible);
@@ -356,7 +356,7 @@ public final class PermissionGroup {
     /**
      * Saves this permission group to an NBT map.
      *
-     * @return an NBT map representing this permission group.
+     * @return an NBT map representing this permission group
      */
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
@@ -379,8 +379,8 @@ public final class PermissionGroup {
     /**
      * Loads permission group info from an NBT map.
      *
-     * @param nbt         the NBT map to load from.
-     * @param permissible the permissible entity that this permission group belongs to. Can be {@code null} if the permission does not belong to any entity.
+     * @param nbt         the NBT map to load from
+     * @param permissible the permissible entity that this permission group belongs to. Can be {@code null} if the permission does not belong to any entity
      */
     public PermissionGroup loadNBT(NbtMap nbt, Permissible permissible) {
         nbt.getList(TAG_PERMISSIONS, NbtType.STRING).forEach(name -> {

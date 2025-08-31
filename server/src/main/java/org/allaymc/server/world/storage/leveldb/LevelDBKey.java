@@ -133,18 +133,6 @@ public enum LevelDBKey {
         return Utils.appendBytes(ENTITY_DIGEST_PREFIX, indexChunk(chunkX, chunkZ, dimensionInfo));
     }
 
-    public byte[] createKey(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        return Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded});
-    }
-
-    public byte[] createKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimensionInfo) {
-        if (this != CHUNK_SECTION_PREFIX) {
-            throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
-        }
-
-        return Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded, (byte) chunkSectionY});
-    }
-
     private static byte[] intToBytes(int value) {
         return new byte[]{
                 (byte) (value & 0xff),
@@ -165,5 +153,17 @@ public enum LevelDBKey {
                 (byte) ((value >>> 48) & 0xff),
                 (byte) ((value >>> 56) & 0xff)
         };
+    }
+
+    public byte[] createKey(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
+        return Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded});
+    }
+
+    public byte[] createKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimensionInfo) {
+        if (this != CHUNK_SECTION_PREFIX) {
+            throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
+        }
+
+        return Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded, (byte) chunkSectionY});
     }
 }

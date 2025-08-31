@@ -24,8 +24,8 @@ public abstract class SimpleCommand extends BaseCommand {
      * Create a new SimpleCommand with the given name and description. The
      * permission to execute this command is simply "command.&lt;command name&gt;".
      *
-     * @param name        The name of the command.
-     * @param description The description of the command.
+     * @param name        The name of the command
+     * @param description The description of the command
      */
     public SimpleCommand(String name, @MayContainTrKey String description) {
         this(name, description, List.of(Permission.createForCommand(name, DEFAULT_COMMAND_PERMISSION_PREFIX + name)));
@@ -34,9 +34,9 @@ public abstract class SimpleCommand extends BaseCommand {
     /**
      * Create a new SimpleCommand with the given name, description and permissions.
      *
-     * @param name        The name of the command.
-     * @param description The description of the command.
-     * @param permissions The permissions required to execute this command.
+     * @param name        The name of the command
+     * @param description The description of the command
+     * @param permissions The permissions required to execute this command
      */
     public SimpleCommand(String name, @MayContainTrKey String description, List<Permission> permissions) {
         super(name, description, permissions);
@@ -48,7 +48,7 @@ public abstract class SimpleCommand extends BaseCommand {
     /**
      * Prepare the command tree for this command.
      *
-     * @param tree The command tree to prepare.
+     * @param tree The command tree to prepare
      */
     public abstract void prepareCommandTree(CommandTree tree);
 

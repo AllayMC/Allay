@@ -44,7 +44,7 @@ public interface Registry<CONTENT> {
     /**
      * Gets the underlying value held by this registry.
      *
-     * @return the underlying value held by this registry.
+     * @return the underlying value held by this registry
      */
     CONTENT getContent();
 

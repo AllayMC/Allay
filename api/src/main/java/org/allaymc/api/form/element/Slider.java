@@ -28,11 +28,11 @@ public final class Slider implements CustomFormElement {
     /**
      * Create a new slider.
      *
-     * @param text         the text of the slider.
-     * @param min          the minimum value of the slider.
-     * @param max          the maximum value of the slider.
-     * @param step         the step of the slider.
-     * @param defaultValue the default value of the slider.
+     * @param text         the text of the slider
+     * @param min          the minimum value of the slider
+     * @param max          the maximum value of the slider
+     * @param step         the step of the slider
+     * @param defaultValue the default value of the slider
      */
     public Slider(String text, float min, float max, int step, float defaultValue) {
         this.text = text;

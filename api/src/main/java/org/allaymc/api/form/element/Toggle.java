@@ -22,8 +22,8 @@ public final class Toggle implements CustomFormElement {
     /**
      * Create a new toggle.
      *
-     * @param text         the text of the toggle.
-     * @param defaultValue the default value of the toggle.
+     * @param text         the text of the toggle
+     * @param defaultValue the default value of the toggle
      */
     public Toggle(String text, boolean defaultValue) {
         this.text = text;

@@ -141,6 +141,333 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
+    private static AllayWorldData readWorldDataFromNBT(NbtMap nbt) {
+        var storageVersion = nbt.getInt(TAG_STORAGE_VERSION, Integer.MAX_VALUE);
+        if (storageVersion == Integer.MAX_VALUE) {
+            log.warn("Missing " + TAG_STORAGE_VERSION + " field in " + FILE_LEVEL_DAT);
+            storageVersion = CURRENT_STORAGE_VERSION;
+        }
+        if (storageVersion > CURRENT_STORAGE_VERSION) {
+            throw new WorldStorageException("LevelDB world storage version " + storageVersion + " is currently unsupported");
+        }
+
+        var networkVersion = nbt.getInt(TAG_NETWORK_VERSION, Integer.MAX_VALUE);
+        if (networkVersion == Integer.MAX_VALUE) {
+            log.warn("Missing " + TAG_NETWORK_VERSION + " field in " + FILE_LEVEL_DAT);
+            networkVersion = ProtocolInfo.getLatestCodec().getProtocolVersion();
+        }
+        if (networkVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
+            throw new WorldStorageException("LevelDB world storage network version " + networkVersion + " is currently unsupported");
+        }
+
+        var pdc = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+        nbt.listenForCompound(TAG_PDC, pdc::putAll);
+
+        return AllayWorldData.builder()
+                .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, Server.SETTINGS.genericSettings().defaultDifficulty().ordinal())))
+                .gameType(GameType.from(nbt.getInt(TAG_GAME_TYPE, Server.SETTINGS.genericSettings().defaultGameType().ordinal())))
+                .displayName(nbt.getString(TAG_DISPLAY_NAME, WorldData.DEFAULT_WORLD_DISPLAY_NAME))
+                .spawnPoint(new Vector3i(nbt.getInt(TAG_SPAWN_X, 0), nbt.getInt(TAG_SPAWN_Y, 64), nbt.getInt(TAG_SPAWN_Z, 0)))
+                .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))
+                .timeOfDay(nbt.getInt(TAG_TIME_OF_DAY, WorldData.TIME_SUNRISE))
+                .worldStartCount(nbt.getLong(TAG_WORLD_START_COUNT, 0))
+                .persistentDataContainer(pdc)
+                .gameRules(AllayGameRules.readFromNBT(nbt))
+                .build();
+    }
+
+    private static void serializeSections(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
+        for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
+            var section = chunk.getSection(ySection);
+            if (!section.hasDirtyBlockLayer()) {
+                continue;
+            }
+
+            int finalYSection = ySection;
+            writeBatch.put(
+                    LevelDBKey.CHUNK_SECTION_PREFIX.createKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()),
+                    withByteBufToArray(buffer -> {
+                        buffer.writeByte(AllayChunkSection.CURRENT_CHUNK_SECTION_VERSION);
+                        buffer.writeByte(AllayChunkSection.LAYER_COUNT);
+                        buffer.writeByte(finalYSection);
+                        for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
+                            var palette = section.blockLayers()[i];
+                            palette.compact();
+                            palette.writeToStorage(buffer, BlockState::getBlockStateTag);
+                            palette.setDirty(false);
+                        }
+                    })
+            );
+        }
+    }
+
+    private static void deserializeSections(DB db, AllayChunkBuilder builder) {
+        var dimensionInfo = builder.getDimensionInfo();
+        var sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
+        var minSectionY = dimensionInfo.minSectionY();
+
+        for (int ySection = minSectionY; ySection <= dimensionInfo.maxSectionY(); ySection++) {
+            var sectionData = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
+            if (sectionData == null) {
+                continue;
+            }
+
+            var byteBuf = Unpooled.wrappedBuffer(sectionData);
+            var subChunkVersion = byteBuf.readByte();
+            var layers = AllayChunkSection.LAYER_COUNT;
+
+            switch (subChunkVersion) {
+                case 9, 8:
+                    layers = byteBuf.readByte();
+                    if (subChunkVersion == 9) {
+                        // Extra section y value in version 9
+                        byteBuf.readByte();
+                    }
+                case 1:
+                    AllayChunkSection section;
+                    if (layers <= AllayChunkSection.LAYER_COUNT) {
+                        // This is the normal situation where the chunk section is loaded correctly,
+                        // and we use the single-arg constructor of ChunkSection directly to avoid
+                        // using Arrays.fill(), which will be slower
+                        section = new AllayChunkSection((byte) ySection);
+                    } else {
+                        // Currently only two layers are used in minecraft, so that might mean this chunk is corrupted
+                        // However we can still load it c:
+                        log.warn("Loading chunk section ({}, {}, {}) with {} layers, which might mean that this chunk is corrupted!", builder.getChunkX(), ySection, builder.getChunkZ(), layers);
+                        @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
+                        Arrays.fill(palettes, new Palette<>(BlockTypes.AIR.getDefaultState()));
+                        section = new AllayChunkSection((byte) ySection, palettes);
+                    }
+
+                    for (int layer = 0; layer < layers; layer++) {
+                        var palette = section.blockLayers()[layer];
+                        palette.readFromStorage(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
+                        palette.setDirty(false);
+                    }
+                    sections[ySection - minSectionY] = section;
+                    break;
+                default:
+                    log.warn("Unknown subchunk version {} at ({}, {}, {})", subChunkVersion, builder.getChunkX(), ySection, builder.getChunkZ());
+            }
+        }
+        builder.sections(fillNullSections(sections, dimensionInfo));
+    }
+
+    private static BlockState fastBlockStateDeserializer(ByteBuf buffer) {
+        int blockStateHash;
+        try (var bufInputStream = new ByteBufInputStream(buffer);
+             var input = new LittleEndianDataInputStream(bufInputStream);
+             var nbtInputStream = new NBTInputStream(input)) {
+            blockStateHash = PaletteUtils.fastReadBlockStateHash(input, buffer);
+            if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
+                var oldNbtMap = (NbtMap) nbtInputStream.readTag();
+                var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, ProtocolInfo.BLOCK_STATE_UPDATER.getVersion());
+                // Make sure that tree map is used
+                // If the map inside states nbt is not tree map
+                // the block state hash will be wrong!
+                var states = new TreeMap<>(newNbtMap.getCompound("states"));
+                // To calculate the hash of the block state
+                // "name" field must be in the first place
+                var tag = NbtMap.builder()
+                        .putString("name", newNbtMap.getString("name"))
+                        .putCompound("states", NbtMap.fromMap(states))
+                        .build();
+                blockStateHash = HashUtils.fnv1a_32_nbt(tag);
+            }
+        } catch (IOException e) {
+            throw new PaletteException(e);
+        }
+
+        BlockState blockState = Registries.BLOCK_STATE_PALETTE.get(blockStateHash);
+        if (blockState != null) {
+            return blockState;
+        }
+
+        log.error("Unknown block state hash {} while loading chunk section", blockStateHash);
+        return BlockTypes.UNKNOWN.getDefaultState();
+    }
+
+    private static AllayChunkSection[] fillNullSections(AllayChunkSection[] sections, DimensionInfo dimensionInfo) {
+        for (int i = 0; i < sections.length; i++) {
+            if (sections[i] == null) {
+                sections[i] = new AllayChunkSection((byte) (i + dimensionInfo.minSectionY()));
+            }
+        }
+        return sections;
+    }
+
+    /**
+     * Bedrock Edition 3d-data saves the height map starting from index 0,
+     * so adjustments are made here to accommodate the world's minimum height.
+     *
+     * @see <a href="https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115">Biome 3d</a>
+     */
+    private static void serializeHeightAndBiome(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
+        writeBatch.put(LevelDBKey.DATA_3D.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), withByteBufToArray(heightAndBiomesBuffer -> {
+            // Serialize height map
+            for (var height : chunk.calculateAndGetHeightMap().getHeights()) {
+                heightAndBiomesBuffer.writeShortLE(height - chunk.getDimensionInfo().minHeight());
+            }
+
+            // Serialize biomes
+            Palette<BiomeType> lastPalette = null;
+            for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
+                AllayChunkSection section = chunk.getSection(y);
+                section.biomes().compact();
+                section.biomes().writeToStorage(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
+                // TODO: Fix client crash due to biome copy flag
+                // lastPalette = section.biomes();
+            }
+        }));
+    }
+
+    private static void deserializeHeightAndBiome(DB db, AllayChunkBuilder builder) {
+        var data3d = db.get(LevelDBKey.DATA_3D.createKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
+        if (data3d == null) {
+            // Try load data_2d if data_3d is not found
+            deserializeHeightAndBiomeOld(db, builder);
+            return;
+        }
+
+        ByteBuf heightAndBiomesBuffer = Unpooled.wrappedBuffer(data3d);
+
+        // Height map
+        short[] heights = new short[HEIGHTMAP_SIZE];
+        for (int i = 0; i < HEIGHTMAP_SIZE; i++) {
+            heights[i] = (short) (heightAndBiomesBuffer.readUnsignedShortLE() + builder.getDimensionInfo().minHeight());
+        }
+        builder.heightMap(new HeightMap(heights));
+
+        // Biomes
+        Palette<BiomeType> lastPalette = null;
+        var minSectionY = builder.getDimensionInfo().minSectionY();
+        for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
+            AllayChunkSection section = builder.getSections()[y - minSectionY];
+            if (section == null) {
+                continue;
+            }
+
+            section.biomes().readFromStorage(heightAndBiomesBuffer, AllayLevelDBWorldStorage::getBiomeByIdNonNull, lastPalette);
+            lastPalette = section.biomes();
+        }
+    }
+
+    private static void deserializeHeightAndBiomeOld(DB db, AllayChunkBuilder builder) {
+        var bytes2D = db.get(LevelDBKey.DATA_2D.createKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
+        if (bytes2D == null) {
+            return;
+        }
+
+        ByteBuf heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes2D);
+        short[] heights = new short[HEIGHTMAP_SIZE];
+        for (int i = 0; i < HEIGHTMAP_SIZE; i++) {
+            heights[i] = heightAndBiomesBuffer.readShortLE();
+        }
+        builder.heightMap(new HeightMap(heights));
+
+        byte[] biomes = new byte[HEIGHTMAP_SIZE];
+        heightAndBiomesBuffer.readBytes(biomes);
+
+        var minSectionY = builder.getDimensionInfo().minSectionY();
+        for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
+            var section = builder.getSections()[y - minSectionY];
+            if (section == null) {
+                continue;
+            }
+
+            var biomePalette = section.biomes();
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    for (int sy = 0; sy < 16; sy++) {
+                        biomePalette.set(HashUtils.hashChunkSectionXYZ(x, sy, z), getBiomeByIdNonNull(biomes[x + 16 * z]));
+                    }
+                }
+            }
+        }
+    }
+
+    private static void serializeBlockEntities(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
+        var blockEntities = chunk.getBlockEntities().values();
+        var blockEntitiesKey = LevelDBKey.BLOCK_ENTITIES.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
+        if (blockEntities.isEmpty()) {
+            writeBatch.delete(blockEntitiesKey);
+            return;
+        }
+
+        writeBatch.put(blockEntitiesKey, withByteBufToArray(blockEntitiesBuffer -> {
+            try (var writerLE = NbtUtils.createWriterLE(new ByteBufOutputStream(blockEntitiesBuffer))) {
+                for (BlockEntity blockEntity : blockEntities) {
+                    writerLE.writeTag(blockEntity.saveNBT());
+                }
+            } catch (IOException e) {
+                throw new WorldStorageException(e);
+            }
+        }));
+    }
+
+    private static void serializeScheduledUpdates(WriteBatch writeBatch, AllayUnsafeChunk chunk, World world) {
+        var scheduledUpdates = chunk.getScheduledUpdates().values();
+        var key = LevelDBKey.PENDING_TICKS.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
+        if (scheduledUpdates.isEmpty()) {
+            writeBatch.delete(key);
+            return;
+        }
+
+        writeBatch.put(key, withByteBufToArray(scheduledUpdatesBuffer -> {
+            try (var writerLE = NbtUtils.createWriterLE(new ByteBufOutputStream(scheduledUpdatesBuffer))) {
+                var nbt = NbtMap.builder()
+                        .putInt(TAG_CURRENT_TICK, (int) world.getTick())
+                        .putList(TAG_TICK_LIST, NbtType.COMPOUND, scheduledUpdates.stream().map(ScheduledUpdateInfo::toNBT).toList())
+                        .build();
+                writerLE.writeTag(nbt);
+            } catch (IOException e) {
+                throw new WorldStorageException(e);
+            }
+        }));
+    }
+
+    private static void deserializeScheduledUpdates(DB db, AllayChunkBuilder builder) {
+        DimensionInfo dimensionInfo = builder.getDimensionInfo();
+        var scheduledUpdatesBytes = db.get(LevelDBKey.PENDING_TICKS.createKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
+        if (scheduledUpdatesBytes == null) {
+            return;
+        }
+
+        var nbt = AllayNbtUtils.bytesToNbtLE(scheduledUpdatesBytes);
+        var tickList = nbt.getList(TAG_TICK_LIST, NbtType.COMPOUND);
+        var scheduledUpdates = new NonBlockingHashMap<Integer, ScheduledUpdateInfo>(tickList.size());
+        for (var entry : tickList) {
+            var info = ScheduledUpdateInfo.fromNBT(entry);
+            var pos = info.getPos();
+            scheduledUpdates.put(HashUtils.hashChunkXYZ(pos.x() & 15, pos.y(), pos.z() & 15), info);
+        }
+
+        builder.scheduledUpdates(scheduledUpdates);
+    }
+
+    private static BiomeType getBiomeByIdNonNull(int id) {
+        try {
+            return BiomeId.fromId(id);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            log.warn("Unknown biome id: {}", id);
+            return BiomeId.PLAINS;
+        }
+    }
+
+    private static byte[] int2ByteArrayLE(int value) {
+        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
+    }
+
+    private static byte[] withByteBufToArray(Consumer<ByteBuf> writer) {
+        var buf = ByteBufAllocator.DEFAULT.buffer();
+        try {
+            writer.accept(buf);
+            return ByteBufUtil.getBytes(buf);
+        } finally {
+            buf.release();
+        }
+    }
+
     @Override
     public void setWorld(World world) {
         Preconditions.checkState(this.world == null, "World has already been set");
@@ -433,41 +760,6 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
-    private static AllayWorldData readWorldDataFromNBT(NbtMap nbt) {
-        var storageVersion = nbt.getInt(TAG_STORAGE_VERSION, Integer.MAX_VALUE);
-        if (storageVersion == Integer.MAX_VALUE) {
-            log.warn("Missing " + TAG_STORAGE_VERSION + " field in " + FILE_LEVEL_DAT);
-            storageVersion = CURRENT_STORAGE_VERSION;
-        }
-        if (storageVersion > CURRENT_STORAGE_VERSION) {
-            throw new WorldStorageException("LevelDB world storage version " + storageVersion + " is currently unsupported");
-        }
-
-        var networkVersion = nbt.getInt(TAG_NETWORK_VERSION, Integer.MAX_VALUE);
-        if (networkVersion == Integer.MAX_VALUE) {
-            log.warn("Missing " + TAG_NETWORK_VERSION + " field in " + FILE_LEVEL_DAT);
-            networkVersion = ProtocolInfo.getLatestCodec().getProtocolVersion();
-        }
-        if (networkVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
-            throw new WorldStorageException("LevelDB world storage network version " + networkVersion + " is currently unsupported");
-        }
-
-        var pdc = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
-        nbt.listenForCompound(TAG_PDC, pdc::putAll);
-
-        return AllayWorldData.builder()
-                .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, Server.SETTINGS.genericSettings().defaultDifficulty().ordinal())))
-                .gameType(GameType.from(nbt.getInt(TAG_GAME_TYPE, Server.SETTINGS.genericSettings().defaultGameType().ordinal())))
-                .displayName(nbt.getString(TAG_DISPLAY_NAME, WorldData.DEFAULT_WORLD_DISPLAY_NAME))
-                .spawnPoint(new Vector3i(nbt.getInt(TAG_SPAWN_X, 0), nbt.getInt(TAG_SPAWN_Y, 64), nbt.getInt(TAG_SPAWN_Z, 0)))
-                .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))
-                .timeOfDay(nbt.getInt(TAG_TIME_OF_DAY, WorldData.TIME_SUNRISE))
-                .worldStartCount(nbt.getLong(TAG_WORLD_START_COUNT, 0))
-                .persistentDataContainer(pdc)
-                .gameRules(AllayGameRules.readFromNBT(nbt))
-                .build();
-    }
-
     private NbtMap writeWorldDataToNBT(AllayWorldData worldData) {
         var builder = NbtMap.builder();
 
@@ -522,235 +814,6 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
-    private static void serializeSections(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
-        for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
-            var section = chunk.getSection(ySection);
-            if (!section.hasDirtyBlockLayer()) {
-                continue;
-            }
-
-            int finalYSection = ySection;
-            writeBatch.put(
-                    LevelDBKey.CHUNK_SECTION_PREFIX.createKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()),
-                    withByteBufToArray(buffer -> {
-                        buffer.writeByte(AllayChunkSection.CURRENT_CHUNK_SECTION_VERSION);
-                        buffer.writeByte(AllayChunkSection.LAYER_COUNT);
-                        buffer.writeByte(finalYSection);
-                        for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
-                            var palette = section.blockLayers()[i];
-                            palette.compact();
-                            palette.writeToStorage(buffer, BlockState::getBlockStateTag);
-                            palette.setDirty(false);
-                        }
-                    })
-            );
-        }
-    }
-
-    private static void deserializeSections(DB db, AllayChunkBuilder builder) {
-        var dimensionInfo = builder.getDimensionInfo();
-        var sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
-        var minSectionY = dimensionInfo.minSectionY();
-
-        for (int ySection = minSectionY; ySection <= dimensionInfo.maxSectionY(); ySection++) {
-            var sectionData = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.createKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
-            if (sectionData == null) {
-                continue;
-            }
-
-            var byteBuf = Unpooled.wrappedBuffer(sectionData);
-            var subChunkVersion = byteBuf.readByte();
-            var layers = AllayChunkSection.LAYER_COUNT;
-
-            switch (subChunkVersion) {
-                case 9, 8:
-                    layers = byteBuf.readByte();
-                    if (subChunkVersion == 9) {
-                        // Extra section y value in version 9
-                        byteBuf.readByte();
-                    }
-                case 1:
-                    AllayChunkSection section;
-                    if (layers <= AllayChunkSection.LAYER_COUNT) {
-                        // This is the normal situation where the chunk section is loaded correctly,
-                        // and we use the single-arg constructor of ChunkSection directly to avoid
-                        // using Arrays.fill(), which will be slower
-                        section = new AllayChunkSection((byte) ySection);
-                    } else {
-                        // Currently only two layers are used in minecraft, so that might mean this chunk is corrupted
-                        // However we can still load it c:
-                        log.warn("Loading chunk section ({}, {}, {}) with {} layers, which might mean that this chunk is corrupted!", builder.getChunkX(), ySection, builder.getChunkZ(), layers);
-                        @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
-                        Arrays.fill(palettes, new Palette<>(BlockTypes.AIR.getDefaultState()));
-                        section = new AllayChunkSection((byte) ySection, palettes);
-                    }
-
-                    for (int layer = 0; layer < layers; layer++) {
-                        var palette = section.blockLayers()[layer];
-                        palette.readFromStorage(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
-                        palette.setDirty(false);
-                    }
-                    sections[ySection - minSectionY] = section;
-                    break;
-                default:
-                    log.warn("Unknown subchunk version {} at ({}, {}, {})", subChunkVersion, builder.getChunkX(), ySection, builder.getChunkZ());
-            }
-        }
-        builder.sections(fillNullSections(sections, dimensionInfo));
-    }
-
-    private static BlockState fastBlockStateDeserializer(ByteBuf buffer) {
-        int blockStateHash;
-        try (var bufInputStream = new ByteBufInputStream(buffer);
-             var input = new LittleEndianDataInputStream(bufInputStream);
-             var nbtInputStream = new NBTInputStream(input)) {
-            blockStateHash = PaletteUtils.fastReadBlockStateHash(input, buffer);
-            if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
-                var oldNbtMap = (NbtMap) nbtInputStream.readTag();
-                var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, ProtocolInfo.BLOCK_STATE_UPDATER.getVersion());
-                // Make sure that tree map is used
-                // If the map inside states nbt is not tree map
-                // the block state hash will be wrong!
-                var states = new TreeMap<>(newNbtMap.getCompound("states"));
-                // To calculate the hash of the block state
-                // "name" field must be in the first place
-                var tag = NbtMap.builder()
-                        .putString("name", newNbtMap.getString("name"))
-                        .putCompound("states", NbtMap.fromMap(states))
-                        .build();
-                blockStateHash = HashUtils.fnv1a_32_nbt(tag);
-            }
-        } catch (IOException e) {
-            throw new PaletteException(e);
-        }
-
-        BlockState blockState = Registries.BLOCK_STATE_PALETTE.get(blockStateHash);
-        if (blockState != null) {
-            return blockState;
-        }
-
-        log.error("Unknown block state hash {} while loading chunk section", blockStateHash);
-        return BlockTypes.UNKNOWN.getDefaultState();
-    }
-
-    private static AllayChunkSection[] fillNullSections(AllayChunkSection[] sections, DimensionInfo dimensionInfo) {
-        for (int i = 0; i < sections.length; i++) {
-            if (sections[i] == null) {
-                sections[i] = new AllayChunkSection((byte) (i + dimensionInfo.minSectionY()));
-            }
-        }
-        return sections;
-    }
-
-    /**
-     * Bedrock Edition 3d-data saves the height map starting from index 0,
-     * so adjustments are made here to accommodate the world's minimum height.
-     *
-     * @see <a href="https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115">Biome 3d</a>
-     */
-    private static void serializeHeightAndBiome(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
-        writeBatch.put(LevelDBKey.DATA_3D.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), withByteBufToArray(heightAndBiomesBuffer -> {
-            // Serialize height map
-            for (var height : chunk.calculateAndGetHeightMap().getHeights()) {
-                heightAndBiomesBuffer.writeShortLE(height - chunk.getDimensionInfo().minHeight());
-            }
-
-            // Serialize biomes
-            Palette<BiomeType> lastPalette = null;
-            for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
-                AllayChunkSection section = chunk.getSection(y);
-                section.biomes().compact();
-                section.biomes().writeToStorage(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
-                // TODO: Fix client crash due to biome copy flag
-                // lastPalette = section.biomes();
-            }
-        }));
-    }
-
-    private static void deserializeHeightAndBiome(DB db, AllayChunkBuilder builder) {
-        var data3d = db.get(LevelDBKey.DATA_3D.createKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
-        if (data3d == null) {
-            // Try load data_2d if data_3d is not found
-            deserializeHeightAndBiomeOld(db, builder);
-            return;
-        }
-
-        ByteBuf heightAndBiomesBuffer = Unpooled.wrappedBuffer(data3d);
-
-        // Height map
-        short[] heights = new short[HEIGHTMAP_SIZE];
-        for (int i = 0; i < HEIGHTMAP_SIZE; i++) {
-            heights[i] = (short) (heightAndBiomesBuffer.readUnsignedShortLE() + builder.getDimensionInfo().minHeight());
-        }
-        builder.heightMap(new HeightMap(heights));
-
-        // Biomes
-        Palette<BiomeType> lastPalette = null;
-        var minSectionY = builder.getDimensionInfo().minSectionY();
-        for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
-            AllayChunkSection section = builder.getSections()[y - minSectionY];
-            if (section == null) {
-                continue;
-            }
-
-            section.biomes().readFromStorage(heightAndBiomesBuffer, AllayLevelDBWorldStorage::getBiomeByIdNonNull, lastPalette);
-            lastPalette = section.biomes();
-        }
-    }
-
-    private static void deserializeHeightAndBiomeOld(DB db, AllayChunkBuilder builder) {
-        var bytes2D = db.get(LevelDBKey.DATA_2D.createKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
-        if (bytes2D == null) {
-            return;
-        }
-
-        ByteBuf heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes2D);
-        short[] heights = new short[HEIGHTMAP_SIZE];
-        for (int i = 0; i < HEIGHTMAP_SIZE; i++) {
-            heights[i] = heightAndBiomesBuffer.readShortLE();
-        }
-        builder.heightMap(new HeightMap(heights));
-
-        byte[] biomes = new byte[HEIGHTMAP_SIZE];
-        heightAndBiomesBuffer.readBytes(biomes);
-
-        var minSectionY = builder.getDimensionInfo().minSectionY();
-        for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
-            var section = builder.getSections()[y - minSectionY];
-            if (section == null) {
-                continue;
-            }
-
-            var biomePalette = section.biomes();
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    for (int sy = 0; sy < 16; sy++) {
-                        biomePalette.set(HashUtils.hashChunkSectionXYZ(x, sy, z), getBiomeByIdNonNull(biomes[x + 16 * z]));
-                    }
-                }
-            }
-        }
-    }
-
-    private static void serializeBlockEntities(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
-        var blockEntities = chunk.getBlockEntities().values();
-        var blockEntitiesKey = LevelDBKey.BLOCK_ENTITIES.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
-        if (blockEntities.isEmpty()) {
-            writeBatch.delete(blockEntitiesKey);
-            return;
-        }
-
-        writeBatch.put(blockEntitiesKey, withByteBufToArray(blockEntitiesBuffer -> {
-            try (var writerLE = NbtUtils.createWriterLE(new ByteBufOutputStream(blockEntitiesBuffer))) {
-                for (BlockEntity blockEntity : blockEntities) {
-                    writerLE.writeTag(blockEntity.saveNBT());
-                }
-            } catch (IOException e) {
-                throw new WorldStorageException(e);
-            }
-        }));
-    }
-
     private void deserializeBlockEntities(DB db, AllayChunkBuilder builder) {
         byte[] tileBytes = db.get(LevelDBKey.BLOCK_ENTITIES.createKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
         if (tileBytes == null) {
@@ -778,68 +841,5 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
 
         builder.blockEntities(blockEntities);
-    }
-
-    private static void serializeScheduledUpdates(WriteBatch writeBatch, AllayUnsafeChunk chunk, World world) {
-        var scheduledUpdates = chunk.getScheduledUpdates().values();
-        var key = LevelDBKey.PENDING_TICKS.createKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
-        if (scheduledUpdates.isEmpty()) {
-            writeBatch.delete(key);
-            return;
-        }
-
-        writeBatch.put(key, withByteBufToArray(scheduledUpdatesBuffer -> {
-            try (var writerLE = NbtUtils.createWriterLE(new ByteBufOutputStream(scheduledUpdatesBuffer))) {
-                var nbt = NbtMap.builder()
-                        .putInt(TAG_CURRENT_TICK, (int) world.getTick())
-                        .putList(TAG_TICK_LIST, NbtType.COMPOUND, scheduledUpdates.stream().map(ScheduledUpdateInfo::toNBT).toList())
-                        .build();
-                writerLE.writeTag(nbt);
-            } catch (IOException e) {
-                throw new WorldStorageException(e);
-            }
-        }));
-    }
-
-    private static void deserializeScheduledUpdates(DB db, AllayChunkBuilder builder) {
-        DimensionInfo dimensionInfo = builder.getDimensionInfo();
-        var scheduledUpdatesBytes = db.get(LevelDBKey.PENDING_TICKS.createKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
-        if (scheduledUpdatesBytes == null) {
-            return;
-        }
-
-        var nbt = AllayNbtUtils.bytesToNbtLE(scheduledUpdatesBytes);
-        var tickList = nbt.getList(TAG_TICK_LIST, NbtType.COMPOUND);
-        var scheduledUpdates = new NonBlockingHashMap<Integer, ScheduledUpdateInfo>(tickList.size());
-        for (var entry : tickList) {
-            var info = ScheduledUpdateInfo.fromNBT(entry);
-            var pos = info.getPos();
-            scheduledUpdates.put(HashUtils.hashChunkXYZ(pos.x() & 15, pos.y(), pos.z() & 15), info);
-        }
-
-        builder.scheduledUpdates(scheduledUpdates);
-    }
-
-    private static BiomeType getBiomeByIdNonNull(int id) {
-        try {
-            return BiomeId.fromId(id);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            log.warn("Unknown biome id: {}", id);
-            return BiomeId.PLAINS;
-        }
-    }
-
-    private static byte[] int2ByteArrayLE(int value) {
-        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
-    }
-
-    private static byte[] withByteBufToArray(Consumer<ByteBuf> writer) {
-        var buf = ByteBufAllocator.DEFAULT.buffer();
-        try {
-            writer.accept(buf);
-            return ByteBufUtil.getBytes(buf);
-        } finally {
-            buf.release();
-        }
     }
 }

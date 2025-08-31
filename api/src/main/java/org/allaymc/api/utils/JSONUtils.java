@@ -68,10 +68,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (from reader) to an object.
      *
-     * @param reader the reader.
-     * @param type   the type of the object.
+     * @param reader the reader
+     * @param type   the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(Reader reader, Class<V> type) {
         JsonReader jsonReader = new JsonReader(Objects.requireNonNull(reader));
@@ -81,10 +81,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (from reader) to an object.
      *
-     * @param reader    the reader.
-     * @param typeToken the type of the object.
+     * @param reader    the reader
+     * @param typeToken the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(Reader reader, TypeToken<V> typeToken) {
         JsonReader jsonReader = new JsonReader(Objects.requireNonNull(reader));
@@ -94,10 +94,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (from input stream) to an object.
      *
-     * @param inputStream the input stream.
-     * @param type        the type of the object.
+     * @param inputStream the input stream
+     * @param type        the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -107,10 +107,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (from input stream) to an object.
      *
-     * @param inputStream the input stream.
-     * @param typeToken   the type of the object.
+     * @param inputStream the input stream
+     * @param typeToken   the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(InputStream inputStream, TypeToken<V> typeToken) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -120,10 +120,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (from input stream) to a list.
      *
-     * @param inputStream the input stream.
-     * @param type        the type of elements in the list.
+     * @param inputStream the input stream
+     * @param type        the type of elements in the list
      *
-     * @return the list.
+     * @return the list
      */
     public static <V> List<V> fromList(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -134,10 +134,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (in file) to an object.
      *
-     * @param file the file.
-     * @param type the type of the object.
+     * @param file the file
+     * @param type the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(File file, Class<V> type) {
         try {
@@ -151,10 +151,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (in file) to an object.
      *
-     * @param file      the file.
-     * @param typeToken the type of the object.
+     * @param file      the file
+     * @param typeToken the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(File file, TypeToken<V> typeToken) {
         try {
@@ -168,10 +168,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (in file) to a list.
      *
-     * @param file the file.
-     * @param type the type of elements in the list.
+     * @param file the file
+     * @param type the type of elements in the list
      *
-     * @return the list.
+     * @return the list
      */
     public static <V> List<V> fromList(File file, Class<V> type) {
         try {
@@ -186,10 +186,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object.
      *
-     * @param json the JSON string.
-     * @param type the type of the object.
+     * @param json the JSON string
+     * @param type the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(String json, Class<V> type) {
         return GSON.fromJson(json, type);
@@ -198,10 +198,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object.
      *
-     * @param json the JSON string.
-     * @param type the type of the object.
+     * @param json the JSON string
+     * @param type the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(String json, Type type) {
         return GSON.fromJson(json, type);
@@ -210,10 +210,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object.
      *
-     * @param json      the JSON string.
-     * @param typeToken the type of the object.
+     * @param json      the JSON string
+     * @param typeToken the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V from(String json, TypeToken<V> typeToken) {
         return GSON.fromJson(json, typeToken.getType());
@@ -222,10 +222,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to a list.
      *
-     * @param json the JSON string.
-     * @param type the type of elements in the list.
+     * @param json the JSON string
+     * @param type the type of elements in the list
      *
-     * @return the list.
+     * @return the list
      */
     public static <V> List<V> fromList(String json, Class<V> type) {
         TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
@@ -235,9 +235,9 @@ public class JSONUtils {
     /**
      * Parse a JSON string to a map.
      *
-     * @param json the JSON string.
+     * @param json the JSON string
      *
-     * @return the map.
+     * @return the map
      */
     public static Map<String, Object> fromMap(String json) {
         return GSON.fromJson(json, new TypeToken<HashMap<String, Object>>() {
@@ -247,10 +247,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (from input stream) to an object leniently.
      *
-     * @param inputStream the input stream.
-     * @param type        the type of the object.
+     * @param inputStream the input stream
+     * @param type        the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V fromLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -261,10 +261,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object leniently.
      *
-     * @param inputStream the input stream.
-     * @param type        the type of the object.
+     * @param inputStream the input stream
+     * @param type        the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V fromLenient(InputStream inputStream, TypeToken<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -275,10 +275,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to a list leniently.
      *
-     * @param inputStream the input stream.
-     * @param type        the type of elements in the list.
+     * @param inputStream the input stream
+     * @param type        the type of elements in the list
      *
-     * @return the list.
+     * @return the list
      */
     public static <V> List<V> fromListLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -290,10 +290,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (in file) to an object leniently.
      *
-     * @param file the file.
-     * @param type the type of the object.
+     * @param file the file
+     * @param type the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V fromLenient(File file, Class<V> type) {
         try {
@@ -308,10 +308,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string (in file) to a list leniently.
      *
-     * @param file the file.
-     * @param type the type of elements in the list.
+     * @param file the file
+     * @param type the type of elements in the list
      *
-     * @return the list.
+     * @return the list
      */
     public static <V> List<V> fromListLenient(File file, Class<V> type) {
         try {
@@ -327,10 +327,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object leniently.
      *
-     * @param json the JSON string.
-     * @param type the type of the object.
+     * @param json the JSON string
+     * @param type the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V fromLenient(String json, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -344,10 +344,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object leniently.
      *
-     * @param json the JSON string.
-     * @param type the type of the object.
+     * @param json the JSON string
+     * @param type the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V fromLenient(String json, Type type) {
         if (StringUtils.isEmpty(json)) {
@@ -361,10 +361,10 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object leniently.
      *
-     * @param json      the JSON string.
-     * @param typeToken the type of the object.
+     * @param json      the JSON string
+     * @param typeToken the type of the object
      *
-     * @return the object.
+     * @return the object
      */
     public static <V> V fromLenient(String json, TypeToken<V> typeToken) {
         if (StringUtils.isEmpty(json)) {
@@ -378,10 +378,10 @@ public class JSONUtils {
     /**
      * Read a list from a JSON string leniently.
      *
-     * @param json the JSON string.
-     * @param type the type of elements in the list.
+     * @param json the JSON string
+     * @param type the type of elements in the list
      *
-     * @return the list.
+     * @return the list
      */
     public static <V> List<V> fromListLenient(String json, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -396,9 +396,9 @@ public class JSONUtils {
     /**
      * Convert a list to a JSON string.
      *
-     * @param list the list.
+     * @param list the list
      *
-     * @return the JSON string.
+     * @return the JSON string
      */
     public static <V> String to(List<V> list) {
         return GSON.toJson(list);
@@ -407,9 +407,9 @@ public class JSONUtils {
     /**
      * Convert an object to a JSON string.
      *
-     * @param v the object.
+     * @param v the object
      *
-     * @return the JSON string.
+     * @return the JSON string
      */
     public static <V> String to(V v) {
         return GSON.toJson(v);
@@ -418,8 +418,8 @@ public class JSONUtils {
     /**
      * Write an object to a file.
      *
-     * @param path the file path.
-     * @param list the list.
+     * @param path the file path
+     * @param list the list
      */
     public static <V> void toFile(String path, List<V> list) {
         try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
@@ -434,8 +434,8 @@ public class JSONUtils {
     /**
      * Write an object to a file.
      *
-     * @param path the file path.
-     * @param v    the object.
+     * @param path the file path
+     * @param v    the object
      */
     public static <V> void toFile(String path, V v) {
         toFile(path, v, null);
@@ -444,9 +444,9 @@ public class JSONUtils {
     /**
      * Write an object to a file.
      *
-     * @param path                   the file path.
-     * @param v                      the object.
-     * @param jsonWriterConfigurator the JSON writer configurator.
+     * @param path                   the file path
+     * @param v                      the object
+     * @param jsonWriterConfigurator the JSON writer configurator
      */
     public static <V> void toFile(String path, V v, Consumer<JsonWriter> jsonWriterConfigurator) {
         try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
@@ -461,7 +461,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or {@code null} if the field does not exist.
+     * @return the value of the field, or {@code null} if the field does not exist
      */
     public static String getAsString(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -483,7 +483,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or zero if the field does not exist.
+     * @return the value of the field, or zero if the field does not exist
      */
     public static int getAsInt(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -503,7 +503,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or zero if the field does not exist.
+     * @return the value of the field, or zero if the field does not exist
      */
     public static long getAsLong(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -523,7 +523,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or zero if the field does not exist.
+     * @return the value of the field, or zero if the field does not exist
      */
     public static double getAsDouble(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -543,7 +543,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or zero if the field does not exist.
+     * @return the value of the field, or zero if the field does not exist
      */
     public static BigInteger getAsBigInteger(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -563,7 +563,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or zero if the field does not exist.
+     * @return the value of the field, or zero if the field does not exist
      */
     public static BigDecimal getAsBigDecimal(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -583,7 +583,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or {@code false} if the field does not exist.
+     * @return the value of the field, or {@code false} if the field does not exist
      */
     public static boolean getAsBoolean(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -616,7 +616,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or zero if the field does not exist.
+     * @return the value of the field, or zero if the field does not exist
      */
     public static byte getAsByte(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -636,7 +636,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or {@code null} if the field does not exist.
+     * @return the value of the field, or {@code null} if the field does not exist
      */
     public static <V> V getAsObject(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -656,7 +656,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the value of the field, or {@code null} if the field does not exist.
+     * @return the value of the field, or {@code null} if the field does not exist
      */
     public static <V> List<V> getAsList(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -678,7 +678,7 @@ public class JSONUtils {
     /**
      * Get the value of a field from a JSON string.
      *
-     * @return the field.
+     * @return the field
      */
     public static JsonElement getAsJsonObject(String json, String key) {
         try {
@@ -693,7 +693,7 @@ public class JSONUtils {
     /**
      * Add a field to a JSON string.
      *
-     * @return the JSON string with the field added.
+     * @return the JSON string with the field added
      */
     public static <V> String add(String json, String key, V value) {
         JsonElement element = JsonParser.parseString(json);
@@ -718,7 +718,7 @@ public class JSONUtils {
     /**
      * Remove a field from a JSON string.
      *
-     * @return the JSON string with the field removed.
+     * @return the JSON string with the field removed
      */
     public static String remove(String json, String key) {
         JsonElement element = JsonParser.parseString(json);
@@ -730,7 +730,7 @@ public class JSONUtils {
     /**
      * Update a field in a JSON string.
      *
-     * @return the JSON string with the field updated.
+     * @return the JSON string with the field updated
      */
     public static <V> String update(String json, String key, V value) {
         JsonElement element = JsonParser.parseString(json);
@@ -743,7 +743,7 @@ public class JSONUtils {
     /**
      * Format a JSON string.
      *
-     * @return the formatted JSON string.
+     * @return the formatted JSON string
      */
     public static String format(String json) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

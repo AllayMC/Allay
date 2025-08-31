@@ -20,9 +20,9 @@ public class DebugLine extends DebugShape {
     /**
      * Creates a new DebugLine with the specified position, color, and end position.
      *
-     * @param position    the starting position of the line.
-     * @param color       the color of the line.
-     * @param endPosition the end position of the line.
+     * @param position    the starting position of the line
+     * @param color       the color of the line
+     * @param endPosition the end position of the line
      */
     public DebugLine(Vector3fc position, Color color, Vector3fc endPosition) {
         super(position, color);
@@ -32,7 +32,7 @@ public class DebugLine extends DebugShape {
     /**
      * Gets the end position of the line.
      *
-     * @return the end position of the line.
+     * @return the end position of the line
      */
     public Vector3fc getEndPosition() {
         return endPosition != null ? endPosition : ZERO_VECTOR;
@@ -41,7 +41,7 @@ public class DebugLine extends DebugShape {
     /**
      * Sets the end position of the line.
      *
-     * @param endPosition the new end position of the line.
+     * @param endPosition the new end position of the line
      */
     public void setEndPosition(Vector3fc endPosition) {
         this.endPosition = endPosition;

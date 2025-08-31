@@ -46,9 +46,9 @@ public enum BlockFace {
     /**
      * Retrieves the block face by its index.
      *
-     * @param index the index of the block face.
+     * @param index the index of the block face
      *
-     * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range.
+     * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range
      */
     public static BlockFace fromIndex(int index) {
         if (index < 0 || index >= FACES.length) {
@@ -61,9 +61,9 @@ public enum BlockFace {
     /**
      * Retrieves the block face by its horizontal index.
      *
-     * @param index the horizontal index of the block face (0-3).
+     * @param index the horizontal index of the block face (0-3)
      *
-     * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range.
+     * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range
      */
     public static BlockFace fromHorizontalIndex(int index) {
         if (index < 0 || index >= HORIZONTAL_BLOCK_FACES.length) {
@@ -76,9 +76,9 @@ public enum BlockFace {
     /**
      * Converts a {@link MinecraftCardinalDirection} to a corresponding {@link BlockFace}.
      *
-     * @param direction the Minecraft cardinal direction to convert.
+     * @param direction the Minecraft cardinal direction to convert
      *
-     * @return the corresponding {@link BlockFace}.
+     * @return the corresponding {@link BlockFace}
      */
     @ApiStatus.Experimental
     public static BlockFace from(MinecraftCardinalDirection direction) {
@@ -93,7 +93,7 @@ public enum BlockFace {
     /**
      * Retrieves the horizontal block faces.
      *
-     * @return the horizontal block faces.
+     * @return the horizontal block faces
      */
     public static BlockFace[] getHorizontalBlockFaces() {
         return HORIZONTAL_BLOCK_FACES;
@@ -102,7 +102,7 @@ public enum BlockFace {
     /**
      * Retrieves the vertical block faces.
      *
-     * @return the vertical block faces.
+     * @return the vertical block faces
      */
     public static BlockFace[] getVerticalBlockFaces() {
         return VERTICAL_BLOCK_FACES;

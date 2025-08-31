@@ -11,14 +11,14 @@ public interface ItemSignBaseComponent extends ItemBaseComponent {
     /**
      * Get the wall sign block id.
      *
-     * @return The wall sign block id.
+     * @return The wall sign block id
      */
     BlockId getWallSignId();
 
     /**
      * Get the standing sign block id.
      *
-     * @return The standing sign block id.
+     * @return The standing sign block id
      */
     BlockId getStandingSignId();
 }

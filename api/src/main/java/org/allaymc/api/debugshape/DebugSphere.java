@@ -26,10 +26,10 @@ public class DebugSphere extends DebugShape {
     /**
      * Creates a new DebugSphere with the specified position, color, scale and segments.
      *
-     * @param position the position of the sphere in the world.
-     * @param color    the color of the sphere.
-     * @param scale    the scale of the sphere, which is a multiplier for the size of the sphere.
-     * @param segments the segments of the sphere, which determines how many segments the sphere will be divided into.
+     * @param position the position of the sphere in the world
+     * @param color    the color of the sphere
+     * @param scale    the scale of the sphere, which is a multiplier for the size of the sphere
+     * @param segments the segments of the sphere, which determines how many segments the sphere will be divided into
      */
     public DebugSphere(Vector3fc position, Color color, Float scale, Integer segments) {
         super(position, color);
@@ -40,7 +40,7 @@ public class DebugSphere extends DebugShape {
     /**
      * Gets the scale of the sphere.
      *
-     * @return the scale of the sphere.
+     * @return the scale of the sphere
      */
     public float getScale() {
         return scale != null ? scale : 1.0f;
@@ -49,7 +49,7 @@ public class DebugSphere extends DebugShape {
     /**
      * Sets the scale of the sphere.
      *
-     * @param scale the scale of the sphere, which is a multiplier for the size of the sphere.
+     * @param scale the scale of the sphere, which is a multiplier for the size of the sphere
      */
     public void setScale(Float scale) {
         this.scale = scale;
@@ -58,7 +58,7 @@ public class DebugSphere extends DebugShape {
     /**
      * Gets the segments of the sphere.
      *
-     * @return the segments of the sphere.
+     * @return the segments of the sphere
      */
     public int getSegments() {
         return segments != null ? segments : 20;
@@ -67,7 +67,7 @@ public class DebugSphere extends DebugShape {
     /**
      * Sets the segments of the sphere.
      *
-     * @param segments the segments of the sphere, which determines how many segments the sphere will be divided into.
+     * @param segments the segments of the sphere, which determines how many segments the sphere will be divided into
      */
     public void setSegments(Integer segments) {
         this.segments = segments;

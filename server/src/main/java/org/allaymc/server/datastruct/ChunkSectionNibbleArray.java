@@ -21,10 +21,6 @@ public final class ChunkSectionNibbleArray {
     private byte[] bytes;
     private int checkSum = 0;
 
-    public static int calculateIndex(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z) {
-        return y << 8 | z << 4 | x;
-    }
-
     public ChunkSectionNibbleArray() {
         this(null);
     }
@@ -37,6 +33,22 @@ public final class ChunkSectionNibbleArray {
         if (bytes.length != BYTES_LENGTH) {
             throw new IllegalArgumentException("Provided byte array should be " + BYTES_LENGTH + " long instead of " + bytes.length);
         }
+    }
+
+    public static int calculateIndex(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z) {
+        return y << 8 | z << 4 | x;
+    }
+
+    /**
+     * {@return if the nibble at {@code n} is stored in the less
+     * significant (smaller) 4 bits of the byte in the backing array}
+     */
+    private static int occupiesSmallerBits(int i) {
+        return i & 1;
+    }
+
+    private static int getArrayIndex(int i) {
+        return i >> 1;
     }
 
     /**
@@ -121,17 +133,5 @@ public final class ChunkSectionNibbleArray {
     public void reset() {
         checkSum = 0;
         bytes = null;
-    }
-
-    /**
-     * {@return if the nibble at {@code n} is stored in the less
-     * significant (smaller) 4 bits of the byte in the backing array}
-     */
-    private static int occupiesSmallerBits(int i) {
-        return i & 1;
-    }
-
-    private static int getArrayIndex(int i) {
-        return i >> 1;
     }
 }

@@ -140,7 +140,7 @@ public class BlockEntityBeaconBaseComponentImpl extends BlockEntityBaseComponent
     /**
      * Calculate the level of the beacon's pyramid and returns it. The level can be 0-4.
      *
-     * @return the level of the beacon's pyramid.
+     * @return the level of the beacon's pyramid
      */
     protected int calculateLevel() {
         var lvl = 0;

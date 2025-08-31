@@ -83,98 +83,6 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         this.mapId = UUID.randomUUID().getMostSignificantBits();
     }
 
-    @Override
-    public void setImage(BufferedImage image) {
-        if (image.getHeight() == IMAGE_HW && image.getWidth() == IMAGE_HW) {
-            this.image = image;
-        }
-
-        // Image size is not 128x128, and we need to resize it
-        var resizedImage = new BufferedImage(IMAGE_HW, IMAGE_HW, image.getType());
-
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(image, 0, 0, IMAGE_HW, IMAGE_HW, null);
-        g.dispose();
-        this.image = resizedImage;
-    }
-
-    @Override
-    public CompletableFuture<BufferedImage> renderMap(Dimension dimension, int startX, int startZ, int zoom) {
-        return CompletableFuture
-                .supplyAsync(() -> {
-                    int[] pixels = new int[IMAGE_HW * IMAGE_HW];
-                    for (int z = 0; z < IMAGE_HW * zoom; z += zoom) {
-                        for (int x = 0; x < IMAGE_HW * zoom; x += zoom) {
-                            pixels[(z * IMAGE_HW + x) / zoom] = getMapColor(dimension, startX + x, startZ + z).getRGB();
-                        }
-                    }
-
-                    var image = new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
-                    image.setRGB(0, 0, IMAGE_HW, IMAGE_HW, pixels, 0, IMAGE_HW);
-                    return image;
-                }, Server.getInstance().getVirtualThreadPool())
-                .exceptionally(t -> {
-                    log.error("Error while rendering map!", t);
-                    return new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
-                })
-                .thenApply(image -> this.image = image);
-    }
-
-    @Override
-    public void sendToPlayer(EntityPlayer player) {
-        if (image == null) {
-            throw new IllegalStateException("Image is not set for the filled map.");
-        }
-
-        var pk = new ClientboundMapItemDataPacket();
-        pk.setUniqueMapId(mapId);
-        // Required since 1.19.20
-        pk.setOrigin(Vector3i.ZERO);
-        // Required as of 1.19.50
-        pk.getTrackedEntityIds().add(mapId);
-        pk.setHeight(IMAGE_HW);
-        pk.setWidth(IMAGE_HW);
-        var colors = new int[IMAGE_HW * IMAGE_HW];
-        int index = 0;
-        for (int y = 0; y < IMAGE_HW; y++) {
-            for (int x = 0; x < IMAGE_HW; x++) {
-                colors[index++] = toABGR(image.getRGB(x, y));
-            }
-        }
-        pk.setColors(colors);
-        player.sendPacket(pk);
-    }
-
-    @Override
-    public void loadExtraTag(NbtMap extraTag) {
-        super.loadExtraTag(extraTag);
-        extraTag.listenForLong(TAG_MAP_UUID, mapId -> this.mapId = mapId);
-        extraTag.listenForByteArray(TAG_MAP_IMAGE, data -> {
-            try {
-                this.image = ImageIO.read(new ByteArrayInputStream(data));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
-    @Override
-    public NbtMap saveExtraTag() {
-        var extraTag = super.saveExtraTag();
-        var builder = extraTag != null ? extraTag.toBuilder() : NbtMap.builder();
-        builder.putLong(TAG_MAP_UUID, mapId);
-        if (image != null) {
-            try {
-                var out = new ByteArrayOutputStream();
-                ImageIO.write(image, "png", out);
-                builder.putByteArray(TAG_MAP_IMAGE, out.toByteArray());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return builder.build();
-    }
-
     protected static Color getMapColor(Dimension dimension, int x, int z) {
         var color = VOID;
         var block = getMapColoredBlock(dimension, x, z);
@@ -382,5 +290,97 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
                ((argb >> 8) & 0xFF) << 8 |  // Green
                ((argb) & 0xFF) << 16 |      // Red
                ((argb >> 24) & 0xFF) << 24; // Alpha
+    }
+
+    @Override
+    public void setImage(BufferedImage image) {
+        if (image.getHeight() == IMAGE_HW && image.getWidth() == IMAGE_HW) {
+            this.image = image;
+        }
+
+        // Image size is not 128x128, and we need to resize it
+        var resizedImage = new BufferedImage(IMAGE_HW, IMAGE_HW, image.getType());
+
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(image, 0, 0, IMAGE_HW, IMAGE_HW, null);
+        g.dispose();
+        this.image = resizedImage;
+    }
+
+    @Override
+    public CompletableFuture<BufferedImage> renderMap(Dimension dimension, int startX, int startZ, int zoom) {
+        return CompletableFuture
+                .supplyAsync(() -> {
+                    int[] pixels = new int[IMAGE_HW * IMAGE_HW];
+                    for (int z = 0; z < IMAGE_HW * zoom; z += zoom) {
+                        for (int x = 0; x < IMAGE_HW * zoom; x += zoom) {
+                            pixels[(z * IMAGE_HW + x) / zoom] = getMapColor(dimension, startX + x, startZ + z).getRGB();
+                        }
+                    }
+
+                    var image = new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
+                    image.setRGB(0, 0, IMAGE_HW, IMAGE_HW, pixels, 0, IMAGE_HW);
+                    return image;
+                }, Server.getInstance().getVirtualThreadPool())
+                .exceptionally(t -> {
+                    log.error("Error while rendering map!", t);
+                    return new BufferedImage(IMAGE_HW, IMAGE_HW, BufferedImage.TYPE_INT_ARGB);
+                })
+                .thenApply(image -> this.image = image);
+    }
+
+    @Override
+    public void sendToPlayer(EntityPlayer player) {
+        if (image == null) {
+            throw new IllegalStateException("Image is not set for the filled map.");
+        }
+
+        var pk = new ClientboundMapItemDataPacket();
+        pk.setUniqueMapId(mapId);
+        // Required since 1.19.20
+        pk.setOrigin(Vector3i.ZERO);
+        // Required as of 1.19.50
+        pk.getTrackedEntityIds().add(mapId);
+        pk.setHeight(IMAGE_HW);
+        pk.setWidth(IMAGE_HW);
+        var colors = new int[IMAGE_HW * IMAGE_HW];
+        int index = 0;
+        for (int y = 0; y < IMAGE_HW; y++) {
+            for (int x = 0; x < IMAGE_HW; x++) {
+                colors[index++] = toABGR(image.getRGB(x, y));
+            }
+        }
+        pk.setColors(colors);
+        player.sendPacket(pk);
+    }
+
+    @Override
+    public void loadExtraTag(NbtMap extraTag) {
+        super.loadExtraTag(extraTag);
+        extraTag.listenForLong(TAG_MAP_UUID, mapId -> this.mapId = mapId);
+        extraTag.listenForByteArray(TAG_MAP_IMAGE, data -> {
+            try {
+                this.image = ImageIO.read(new ByteArrayInputStream(data));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
+    @Override
+    public NbtMap saveExtraTag() {
+        var extraTag = super.saveExtraTag();
+        var builder = extraTag != null ? extraTag.toBuilder() : NbtMap.builder();
+        builder.putLong(TAG_MAP_UUID, mapId);
+        if (image != null) {
+            try {
+                var out = new ByteArrayOutputStream();
+                ImageIO.write(image, "png", out);
+                builder.putByteArray(TAG_MAP_IMAGE, out.toByteArray());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return builder.build();
     }
 }

@@ -41,16 +41,16 @@ public record Structure(
     /**
      * Pick a structure from the dimension.
      *
-     * @param dimension    the dimension to pick the structure from.
-     * @param x            the x coordinate of the structure.
-     * @param y            the y coordinate of the structure.
-     * @param z            the z coordinate of the structure.
-     * @param sizeX        the size of the structure in x direction.
-     * @param sizeY        the size of the structure in y direction.
-     * @param sizeZ        the size of the structure in z direction.
-     * @param saveEntities whether to save the entities in the structure.
+     * @param dimension    the dimension to pick the structure from
+     * @param x            the x coordinate of the structure
+     * @param y            the y coordinate of the structure
+     * @param z            the z coordinate of the structure
+     * @param sizeX        the size of the structure in x direction
+     * @param sizeY        the size of the structure in y direction
+     * @param sizeZ        the size of the structure in z direction
+     * @param saveEntities whether to save the entities in the structure
      *
-     * @return the picked structure.
+     * @return the picked structure
      */
     public static Structure pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
@@ -96,9 +96,9 @@ public record Structure(
     /**
      * Load structure data from nbt.
      *
-     * @param nbt the nbt data to load.
+     * @param nbt the nbt data to load
      *
-     * @return the loaded structure.
+     * @return the loaded structure
      */
     public static Structure formNBT(NbtMap nbt) {
         if (nbt.getInt("format_version") != FORMAT_VERSION) {
@@ -186,10 +186,10 @@ public record Structure(
     /**
      * Place the structure in the dimension.
      *
-     * @param dimension the dimension to place the structure in.
-     * @param x         the x coordinate to place the structure.
-     * @param y         the y coordinate to place the structure.
-     * @param z         the z coordinate to place the structure.
+     * @param dimension the dimension to place the structure in
+     * @param x         the x coordinate to place the structure
+     * @param y         the y coordinate to place the structure
+     * @param z         the z coordinate to place the structure
      */
     public void place(Dimension dimension, int x, int y, int z) {
         for (int lx = 0; lx < sizeX; lx++) {
@@ -240,7 +240,7 @@ public record Structure(
     /**
      * Save the structure data to nbt.
      *
-     * @return the nbt data of the structure.
+     * @return the nbt data of the structure
      */
     public NbtMap toNBT() {
         var capacity = sizeX * sizeY * sizeZ;

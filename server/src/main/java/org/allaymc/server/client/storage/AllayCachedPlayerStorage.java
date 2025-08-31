@@ -69,5 +69,6 @@ public class AllayCachedPlayerStorage extends AllayPlayerStorage {
         });
     }
 
-    protected record DataEntry(long createTick, PlayerData playerData) {}
+    protected record DataEntry(long createTick, PlayerData playerData) {
+    }
 }

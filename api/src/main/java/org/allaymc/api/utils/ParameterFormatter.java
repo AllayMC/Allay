@@ -48,9 +48,9 @@ final class ParameterFormatter {
     /**
      * Counts the number of unescaped placeholders in the given messagePattern.
      *
-     * @param messagePattern the message pattern to be analyzed.
+     * @param messagePattern the message pattern to be analyzed
      *
-     * @return the number of unescaped placeholders.
+     * @return the number of unescaped placeholders
      */
     static int countArgumentPlaceholders(final String messagePattern) {
         if (messagePattern == null) {
@@ -79,9 +79,9 @@ final class ParameterFormatter {
     /**
      * Counts the number of unescaped placeholders in the given messagePattern.
      *
-     * @param messagePattern the message pattern to be analyzed.
+     * @param messagePattern the message pattern to be analyzed
      *
-     * @return the number of unescaped placeholders.
+     * @return the number of unescaped placeholders
      */
     static int countArgumentPlaceholders2(final String messagePattern, final int[] indices) {
         if (messagePattern == null) {
@@ -113,9 +113,9 @@ final class ParameterFormatter {
     /**
      * Counts the number of unescaped placeholders in the given messagePattern.
      *
-     * @param messagePattern the message pattern to be analyzed.
+     * @param messagePattern the message pattern to be analyzed
      *
-     * @return the number of unescaped placeholders.
+     * @return the number of unescaped placeholders
      */
     static int countArgumentPlaceholders3(final char[] messagePattern, final int length, final int[] indices) {
         int result = 0;
@@ -141,10 +141,10 @@ final class ParameterFormatter {
     /**
      * Replace placeholders in the given messagePattern with arguments.
      *
-     * @param messagePattern the message pattern containing placeholders.
-     * @param arguments      the arguments to be used to replace placeholders.
+     * @param messagePattern the message pattern containing placeholders
+     * @param arguments      the arguments to be used to replace placeholders
      *
-     * @return the formatted message.
+     * @return the formatted message
      */
     static String format(final String messagePattern, final Object[] arguments) {
         final StringBuilder result = new StringBuilder();
@@ -157,8 +157,8 @@ final class ParameterFormatter {
      * Replace placeholders in the given messagePattern with arguments.
      *
      * @param buffer         the buffer to write the formatted message into
-     * @param messagePattern the message pattern containing placeholders.
-     * @param arguments      the arguments to be used to replace placeholders.
+     * @param messagePattern the message pattern containing placeholders
+     * @param arguments      the arguments to be used to replace placeholders
      */
     static void formatMessage2(final StringBuilder buffer, final String messagePattern,
                                final Object[] arguments, final int argCount, final int[] indices) {
@@ -179,8 +179,8 @@ final class ParameterFormatter {
      * Replace placeholders in the given messagePattern with arguments.
      *
      * @param buffer         the buffer to write the formatted message into
-     * @param messagePattern the message pattern containing placeholders.
-     * @param arguments      the arguments to be used to replace placeholders.
+     * @param messagePattern the message pattern containing placeholders
+     * @param arguments      the arguments to be used to replace placeholders
      */
     static void formatMessage3(final StringBuilder buffer, final char[] messagePattern, final int patternLength,
                                final Object[] arguments, final int argCount, final int[] indices) {
@@ -204,8 +204,8 @@ final class ParameterFormatter {
      * Replace placeholders in the given messagePattern with arguments.
      *
      * @param buffer         the buffer to write the formatted message into
-     * @param messagePattern the message pattern containing placeholders.
-     * @param arguments      the arguments to be used to replace placeholders.
+     * @param messagePattern the message pattern containing placeholders
+     * @param arguments      the arguments to be used to replace placeholders
      */
     static void formatMessage(final StringBuilder buffer, final String messagePattern,
                               final Object[] arguments, final int argCount) {
@@ -369,9 +369,9 @@ final class ParameterFormatter {
      * would produce a relatively hard-to-debug StackOverflowError.
      * </p>
      *
-     * @param o The object.
+     * @param o The object
      *
-     * @return The String representation.
+     * @return The String representation
      */
     static String deepToString(final Object o) {
         if (o == null) {
@@ -408,7 +408,7 @@ final class ParameterFormatter {
      *
      * @param o      the Object to convert into a String
      * @param str    the StringBuilder that o will be appended to
-     * @param dejaVu a list of container identities that were already used.
+     * @param dejaVu a list of container identities that were already used
      */
     private static void recursiveDeepToString(final Object o, final StringBuilder str, final Set<String> dejaVu) {
         if (appendSpecialTypes(o, str)) {
@@ -620,7 +620,7 @@ final class ParameterFormatter {
      * technique is not required by the Java&#8482; programming language.)
      * </blockquote>
      *
-     * @param obj the Object that is to be converted into an identity string.
+     * @param obj the Object that is to be converted into an identity string
      *
      * @return the identity string as also defined in Object.toString()
      */

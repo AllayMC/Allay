@@ -72,7 +72,7 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
      *
      * @param i the integer
      *
-     * @return the value registered by the given integer.
+     * @return the value registered by the given integer
      */
     public V get(int i) {
         return this.content.get(i);
@@ -116,7 +116,7 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
      * @param i     the key
      * @param value the value
      *
-     * @return a new value into this registry with the given key.
+     * @return a new value into this registry with the given key
      */
     public V register(int i, V value) {
         return this.content.put(i, value);

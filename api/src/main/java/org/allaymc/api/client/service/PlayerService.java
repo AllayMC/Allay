@@ -25,7 +25,7 @@ public interface PlayerService {
     /**
      * Get the online players.
      *
-     * @return the online players.
+     * @return the online players
      */
     @UnmodifiableView
     Map<UUID, EntityPlayer> getPlayers();
@@ -33,25 +33,25 @@ public interface PlayerService {
     /**
      * Get the online player count of the server.
      *
-     * @return the online player count of the server.
+     * @return the online player count of the server
      */
     default int getPlayerCount() {
         return getPlayers().size();
     }
 
     /**
-     * Set the maximum online player count of the server.
-     *
-     * @param value the maximum online player count of the server.
-     */
-    void setMaxPlayerCount(int value);
-
-    /**
      * Get the maximum online player count of the server.
      *
-     * @return the maximum online player count of the server.
+     * @return the maximum online player count of the server
      */
     int getMaxPlayerCount();
+
+    /**
+     * Set the maximum online player count of the server.
+     *
+     * @param value the maximum online player count of the server
+     */
+    void setMaxPlayerCount(int value);
 
     /**
      * Disconnect all players with the default reason.
@@ -63,7 +63,7 @@ public interface PlayerService {
     /**
      * Disconnect all players.
      *
-     * @param reason the reason of the disconnection.
+     * @param reason the reason of the disconnection
      */
     default void disconnectAllPlayers(@MayContainTrKey String reason) {
         getPlayers().values().forEach(player -> player.disconnect(reason));
@@ -72,7 +72,7 @@ public interface PlayerService {
     /**
      * Get the used player storage.
      *
-     * @return the used player storage.
+     * @return the used player storage
      */
     PlayerStorage getPlayerStorage();
 
@@ -84,8 +84,9 @@ public interface PlayerService {
     /**
      * Find an online player by his name.
      *
-     * @param playerName the name of the player.
-     * @return the player if found, otherwise {@code null}.
+     * @param playerName the name of the player
+     *
+     * @return the player if found, otherwise {@code null}
      */
     default EntityPlayer getOnlinePlayerByName(String playerName) {
         return getPlayers().values().stream()
@@ -97,14 +98,15 @@ public interface PlayerService {
     /**
      * Broadcast a packet to all online players.
      *
-     * @param packet the packet to broadcast.
+     * @param packet the packet to broadcast
      */
     void broadcastPacket(BedrockPacket packet);
 
     /**
      * Check if the player is banned.
      *
-     * @param uuidOrName the UUID or name of the player.
+     * @param uuidOrName the UUID or name of the player
+     *
      * @return {@code true} if the player is banned, otherwise {@code false}.
      */
     boolean isBanned(String uuidOrName);
@@ -112,7 +114,8 @@ public interface PlayerService {
     /**
      * Ban the player.
      *
-     * @param uuidOrName the UUID or name of the player.
+     * @param uuidOrName the UUID or name of the player
+     *
      * @return {@code true} if the player is banned, otherwise {@code false}.
      */
     boolean ban(String uuidOrName);
@@ -120,7 +123,8 @@ public interface PlayerService {
     /**
      * Unban the player.
      *
-     * @param uuidOrName the UUID or name of the player.
+     * @param uuidOrName the UUID or name of the player
+     *
      * @return {@code true} if the player is unbanned, otherwise {@code false}.
      */
     boolean unban(String uuidOrName);
@@ -128,7 +132,7 @@ public interface PlayerService {
     /**
      * Get the banned players.
      *
-     * @return the banned players.
+     * @return the banned players
      */
     @UnmodifiableView
     Set<String> getBannedPlayers();
@@ -136,7 +140,8 @@ public interface PlayerService {
     /**
      * Check if the IP is banned.
      *
-     * @param ip the IP to check.
+     * @param ip the IP to check
+     *
      * @return {@code true} if the IP is banned, otherwise {@code false}.
      */
     boolean isIPBanned(String ip);
@@ -144,7 +149,8 @@ public interface PlayerService {
     /**
      * Ban the IP.
      *
-     * @param ip the IP to ban.
+     * @param ip the IP to ban
+     *
      * @return {@code true} if the IP is banned, otherwise {@code false}.
      */
     boolean banIP(String ip);
@@ -152,7 +158,8 @@ public interface PlayerService {
     /**
      * Unban the IP.
      *
-     * @param ip the IP to unban.
+     * @param ip the IP to unban
+     *
      * @return {@code true} if the IP is unbanned, otherwise {@code false}.
      */
     boolean unbanIP(String ip);
@@ -160,7 +167,7 @@ public interface PlayerService {
     /**
      * Get the banned IPs.
      *
-     * @return the banned IPs.
+     * @return the banned IPs
      */
     @UnmodifiableView
     Set<String> getBannedIPs();
@@ -168,7 +175,7 @@ public interface PlayerService {
     /**
      * Set the whitelist status.
      *
-     * @param enable {@code true} to enable the whitelist, otherwise {@code false}.
+     * @param enable {@code true} to enable the whitelist, otherwise {@code false}
      */
     default void setWhitelistStatus(boolean enable) {
         var event = new WhitelistChangeEvent(enable);
@@ -187,7 +194,8 @@ public interface PlayerService {
     /**
      * Check if the player is in the whitelist.
      *
-     * @param player the player to check.
+     * @param player the player to check
+     *
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     default boolean isWhitelisted(EntityPlayer player) {
@@ -197,7 +205,8 @@ public interface PlayerService {
     /**
      * Check if the player is in the whitelist.
      *
-     * @param uuidOrName the UUID or name of the player.
+     * @param uuidOrName the UUID or name of the player
+     *
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     boolean isWhitelisted(String uuidOrName);
@@ -205,7 +214,8 @@ public interface PlayerService {
     /**
      * Add the player to the whitelist.
      *
-     * @param uuidOrName the UUID or name of the player.
+     * @param uuidOrName the UUID or name of the player
+     *
      * @return {@code true} if the player is added to the whitelist, otherwise {@code false}.
      */
     boolean addToWhitelist(String uuidOrName);
@@ -213,7 +223,8 @@ public interface PlayerService {
     /**
      * Remove the player from the whitelist.
      *
-     * @param uuidOrName the UUID or name of the player.
+     * @param uuidOrName the UUID or name of the player
+     *
      * @return {@code true} if the player is removed from the whitelist, otherwise {@code false}.
      */
     boolean removeFromWhitelist(String uuidOrName);
@@ -221,7 +232,7 @@ public interface PlayerService {
     /**
      * Get the whitelisted players.
      *
-     * @return the whitelisted players.
+     * @return the whitelisted players
      */
     @UnmodifiableView
     Set<String> getWhitelistedPlayers();
@@ -229,7 +240,7 @@ public interface PlayerService {
     /**
      * Get the network interface.
      *
-     * @return the network interface.
+     * @return the network interface
      */
     NetworkInterface getNetworkInterface();
 }

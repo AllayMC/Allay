@@ -16,9 +16,9 @@ public class EnchantmentHelper {
     /**
      * Create an enchantment instance from NBT.
      *
-     * @param nbtMap The NBT map to create the enchantment instance from.
+     * @param nbtMap The NBT map to create the enchantment instance from
      *
-     * @return The enchantment instance.
+     * @return The enchantment instance
      */
     public EnchantmentInstance fromNBT(NbtMap nbtMap) {
         var id = nbtMap.getShort("id");

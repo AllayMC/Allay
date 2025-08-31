@@ -8,10 +8,11 @@ import org.joml.Vector3ic;
 /**
  * Represents the information about a player interacting with a block.
  *
- * @param player          the player who is placing the block.
- * @param clickedBlockPos the block that the player clicked on.
- * @param clickedPos      the precise pos where the player clicked.
- * @param blockFace       the face of the block that the player clicked on.
+ * @param player          the player who is placing the block
+ * @param clickedBlockPos the block that the player clicked on
+ * @param clickedPos      the precise pos where the player clicked
+ * @param blockFace       the face of the block that the player clicked on
+ *
  * @author daoge_cmd
  */
 public record PlayerInteractInfo(
@@ -24,7 +25,7 @@ public record PlayerInteractInfo(
     /**
      * Returns the block that the player clicked on.
      *
-     * @return the clicked block.
+     * @return the clicked block
      */
     public Block getClickedBlock() {
         return new Block(player.getDimension(), clickedBlockPos);

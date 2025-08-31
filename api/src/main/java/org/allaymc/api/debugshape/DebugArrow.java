@@ -44,12 +44,12 @@ public class DebugArrow extends DebugShape {
     /**
      * Creates a new DebugArrow instance with the specified parameters.
      *
-     * @param position          the starting position of the arrow.
-     * @param color             the color of the arrow.
-     * @param endPosition       the end position of the arrow.
-     * @param arrowHeadLength   the length of the arrow head.
-     * @param arrowHeadRadius   the radius of the arrow head.
-     * @param arrowHeadSegments the number of segments in the arrow head.
+     * @param position          the starting position of the arrow
+     * @param color             the color of the arrow
+     * @param endPosition       the end position of the arrow
+     * @param arrowHeadLength   the length of the arrow head
+     * @param arrowHeadRadius   the radius of the arrow head
+     * @param arrowHeadSegments the number of segments in the arrow head
      */
     public DebugArrow(Vector3fc position, Color color, Vector3fc endPosition, Float arrowHeadLength, Float arrowHeadRadius, Integer arrowHeadSegments, Float arrowHeadScale) {
         super(position, color);
@@ -63,7 +63,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Gets the end position of the arrow.
      *
-     * @return the end position of the arrow.
+     * @return the end position of the arrow
      */
     public Vector3fc getEndPosition() {
         return endPosition != null ? endPosition : ZERO_VECTOR;
@@ -72,7 +72,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the end position of the arrow.
      *
-     * @param endPosition the end position of the arrow.
+     * @param endPosition the end position of the arrow
      */
     public void setEndPosition(Vector3fc endPosition) {
         this.endPosition = endPosition;
@@ -82,7 +82,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Gets the length of the arrow head.
      *
-     * @return the length of the arrow head.
+     * @return the length of the arrow head
      */
     public float getArrowHeadLength() {
         return arrowHeadLength != null ? arrowHeadLength : 1.0f;
@@ -91,7 +91,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the length of the arrow head.
      *
-     * @param arrowHeadLength the length of the arrow head.
+     * @param arrowHeadLength the length of the arrow head
      */
     public void setArrowHeadLength(Float arrowHeadLength) {
         this.arrowHeadLength = arrowHeadLength;
@@ -101,7 +101,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Gets the radius of the arrow head.
      *
-     * @return the radius of the arrow head.
+     * @return the radius of the arrow head
      */
     public float getArrowHeadRadius() {
         return arrowHeadRadius != null ? arrowHeadRadius : 0.5f;
@@ -110,7 +110,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the radius of the arrow head.
      *
-     * @param arrowHeadRadius the radius of the arrow head.
+     * @param arrowHeadRadius the radius of the arrow head
      */
     public void setArrowHeadRadius(Float arrowHeadRadius) {
         this.arrowHeadRadius = arrowHeadRadius;
@@ -120,7 +120,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Gets the segments of the arrow head.
      *
-     * @return the segments of the arrow head.
+     * @return the segments of the arrow head
      */
     public int getArrowHeadSegments() {
         return arrowHeadSegments != null ? arrowHeadSegments : 4;
@@ -129,7 +129,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the segments of the arrow head.
      *
-     * @param arrowHeadSegments the number of segments in the arrow head.
+     * @param arrowHeadSegments the number of segments in the arrow head
      */
     public void setArrowHeadSegments(Integer arrowHeadSegments) {
         this.arrowHeadSegments = arrowHeadSegments;
@@ -139,7 +139,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Gets the scale of the arrow head.
      *
-     * @return the scale of the arrow head.
+     * @return the scale of the arrow head
      */
     public float getArrowHeadScale() {
         return arrowHeadScale != null ? arrowHeadScale : 1.0f;
@@ -148,7 +148,7 @@ public class DebugArrow extends DebugShape {
     /**
      * Sets the scale of the arrow head.
      *
-     * @param arrowHeadScale the scale of the arrow head.
+     * @param arrowHeadScale the scale of the arrow head
      */
     public void setArrowHeadScale(Float arrowHeadScale) {
         this.arrowHeadScale = arrowHeadScale;

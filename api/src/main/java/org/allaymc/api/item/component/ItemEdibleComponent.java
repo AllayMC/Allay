@@ -12,7 +12,7 @@ public interface ItemEdibleComponent extends ItemComponent {
     /**
      * Called when the item is eaten.
      *
-     * @param player The player who eats the item.
+     * @param player The player who eats the item
      */
     @ApiStatus.OverrideOnly
     void onEaten(EntityPlayer player);
@@ -29,7 +29,7 @@ public interface ItemEdibleComponent extends ItemComponent {
     /**
      * Gets the time it takes to eat the item (unit: game tick).
      *
-     * @return The eating time in ticks (unit: game tick).
+     * @return The eating time in ticks (unit: game tick)
      */
     int getEatingTime();
 
@@ -45,14 +45,14 @@ public interface ItemEdibleComponent extends ItemComponent {
     /**
      * Get the food points.
      *
-     * @return The food points.
+     * @return The food points
      */
     int getFoodPoints();
 
     /**
      * Get the saturation points.
      *
-     * @return The saturation points.
+     * @return The saturation points
      */
     float getSaturationPoints();
 }

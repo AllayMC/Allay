@@ -14,7 +14,7 @@ public interface ItemStuffStorableComponent extends ItemComponent {
     /**
      * Get the stored items.
      *
-     * @return The stored items.
+     * @return The stored items
      */
     @UnmodifiableView
     List<NbtMap> getStoredItems();
@@ -22,7 +22,7 @@ public interface ItemStuffStorableComponent extends ItemComponent {
     /**
      * Set the stored items.
      *
-     * @param items The stored items.
+     * @param items The stored items
      */
     void setStoredItems(List<NbtMap> items);
 }

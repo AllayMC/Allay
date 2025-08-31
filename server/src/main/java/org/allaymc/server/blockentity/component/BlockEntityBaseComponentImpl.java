@@ -59,7 +59,8 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         loadNBT(initInfo.nbt());
     }
 
-    public void tick(long currentTick) {}
+    public void tick(long currentTick) {
+    }
 
     @Override
     public NbtMap saveNBT() {

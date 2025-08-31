@@ -32,8 +32,9 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * This method should be safe to be called in multithread environment since physics
      * engine may use parallel stream to handle all the entities.
      *
-     * @param hasLiquidMotion whether this entity's motion is affected by liquid.
-     * @return the updated motion.
+     * @param hasLiquidMotion whether this entity's motion is affected by liquid
+     *
+     * @return the updated motion
      */
     @ApiStatus.OverrideOnly
     Vector3d updateMotion(boolean hasLiquidMotion);
@@ -41,30 +42,30 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Get the motion of this entity.
      *
-     * @return the motion of this entity.
+     * @return the motion of this entity
      */
     Vector3dc getMotion();
 
     /**
+     * Set the motion of this entity.
+     *
+     * @param motion the motion to set
+     */
+    void setMotion(Vector3dc motion);
+
+    /**
      * Get the last motion of this entity.
      *
-     * @return the last motion of this entity.
+     * @return the last motion of this entity
      */
     Vector3dc getLastMotion();
 
     /**
      * Set the motion of this entity.
      *
-     * @param motion the motion to set.
-     */
-    void setMotion(Vector3dc motion);
-
-    /**
-     * Set the motion of this entity.
-     *
-     * @param mx the motion x to set.
-     * @param my the motion y to set.
-     * @param mz the motion z to set.
+     * @param mx the motion x to set
+     * @param my the motion y to set
+     * @param mz the motion z to set
      */
     default void setMotion(double mx, double my, double mz) {
         setMotion(new Vector3d(mx, my, mz));
@@ -73,7 +74,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Add the motion to this entity.
      *
-     * @param add the motion to add.
+     * @param add the motion to add
      */
     default void addMotion(Vector3dc add) {
         setMotion(getMotion().add(add, new Vector3d()));
@@ -82,9 +83,9 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Add the motion to this entity.
      *
-     * @param mx the motion x to add.
-     * @param my the motion y to add.
-     * @param mz the motion z to add.
+     * @param mx the motion x to add
+     * @param my the motion y to add
+     * @param mz the motion z to add
      */
     default void addMotion(double mx, double my, double mz) {
         setMotion(getMotion().add(mx, my, mz, new Vector3d()));
@@ -130,7 +131,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Get the step height of this entity.
      *
-     * @return the step height of this entity.
+     * @return the step height of this entity
      */
     default double getStepHeight() {
         return 0.0;
@@ -139,7 +140,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Get the gravity of this entity.
      *
-     * @return the gravity of this entity.
+     * @return the gravity of this entity
      */
     default double getGravity() {
         return 0.08;
@@ -151,7 +152,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * This value represents the percentage of velocity lost by the entity per tick on the
      * x and z axis. The bigger this value, the faster the entity stops.
      *
-     * @return the drag factor when on ground of this entity.
+     * @return the drag factor when on ground of this entity
      */
     default double getDragFactorOnGround() {
         return 0.09;
@@ -164,7 +165,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * will be used to reduce motion along x-axis and z-axis when the entity is not on ground.
      * This value will always be used for motion along y-axis.
      *
-     * @return the drag factor when in air of this entity.
+     * @return the drag factor when in air of this entity
      */
     default double getDragFactorInAir() {
         return 0.02;
@@ -173,7 +174,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Get the push speed reduction of this entity.
      *
-     * @return the push speed reduction of this entity.
+     * @return the push speed reduction of this entity
      */
     default double getPushSpeedReduction() {
         return 1;
@@ -189,7 +190,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Set if the entity has gravity.
      *
-     * @param hasGravity {@code true} if the entity has gravity, otherwise {@code false}.
+     * @param hasGravity {@code true} if the entity has gravity, otherwise {@code false}
      */
     void setHasGravity(boolean hasGravity);
 
@@ -203,7 +204,7 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Get the fall distance of this entity.
      *
-     * @return the fall distance of this entity.
+     * @return the fall distance of this entity
      */
     double getFallDistance();
 
@@ -244,18 +245,18 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Knockback the entity with specified kb value.
      *
-     * @param source                    the source of the knockback.
-     * @param kb                        the knockback strength to apply.
-     * @param kby                       the knockback strength in y-axis.
-     * @param additionalMotion          the additional motion that will be appiled to the entity.
-     * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored.
+     * @param source                    the source of the knockback
+     * @param kb                        the knockback strength to apply
+     * @param kby                       the knockback strength in y-axis
+     * @param additionalMotion          the additional motion that will be appiled to the entity
+     * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored
      */
     void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance);
 
     /**
      * Get the block which the entity is standing on.
      *
-     * @return the block which the entity is standing on, or air if the entity is not standing on any block (and the pos will be {@code null}).
+     * @return the block which the entity is standing on, or air if the entity is not standing on any block (and the pos will be {@code null})
      */
     Block getBlockStateStandingOn();
 
@@ -269,9 +270,10 @@ public interface EntityPhysicsComponent extends EntityComponent {
     /**
      * Check if the specified position is a safe standing position.
      *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     *
      * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
      */
     boolean canStandSafely(int x, int y, int z, Dimension dimension);

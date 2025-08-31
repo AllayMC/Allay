@@ -19,7 +19,7 @@ public interface BossBar {
     /**
      * Create a new boss bar.
      *
-     * @return the boss bar.
+     * @return the boss bar
      */
     static BossBar create() {
         return FACTORY.get().create();
@@ -28,14 +28,14 @@ public interface BossBar {
     /**
      * Add a viewer to the boss bar.
      *
-     * @param viewer the viewer to add.
+     * @param viewer the viewer to add
      */
     void addViewer(EntityPlayer viewer);
 
     /**
      * Remove a viewer from the boss bar.
      *
-     * @param viewer the viewer to remove.
+     * @param viewer the viewer to remove
      */
     void removeViewer(EntityPlayer viewer);
 
@@ -49,7 +49,7 @@ public interface BossBar {
     /**
      * Get the viewers of the boss bar.
      *
-     * @return the viewers of the boss bar.
+     * @return the viewers of the boss bar
      */
     @UnmodifiableView
     Collection<EntityPlayer> getViewers();
@@ -57,28 +57,28 @@ public interface BossBar {
     /**
      * Get the color of the boss bar.
      *
-     * @return the color of the boss bar.
+     * @return the color of the boss bar
      */
     BossBarColor getColor();
 
     /**
      * Set the color of the boss bar.
      *
-     * @param color the color to set.
+     * @param color the color to set
      */
     void setColor(BossBarColor color);
 
     /**
      * Get the style of the boss bar.
      *
-     * @return the style of the boss bar.
+     * @return the style of the boss bar
      */
     BossBarStyle getStyle();
 
     /**
      * Set the style of the boss bar.
      *
-     * @param style the style to set.
+     * @param style the style to set
      */
     void setStyle(BossBarStyle style);
 
@@ -92,14 +92,14 @@ public interface BossBar {
     /**
      * Set if the boss bar will darken the sky.
      *
-     * @param darkenSky {@code true} if the boss bar will darken the sky, otherwise {@code false}.
+     * @param darkenSky {@code true} if the boss bar will darken the sky, otherwise {@code false}
      */
     void setDarkenSky(boolean darkenSky);
 
     /**
      * Get the progress of the boss bar.
      *
-     * @return the progress of the boss bar, between 0 and 1.
+     * @return the progress of the boss bar, between 0 and 1
      */
     @Range(from = 0, to = 1)
     float getProgress();
@@ -107,21 +107,21 @@ public interface BossBar {
     /**
      * Set the progress of the boss bar.
      *
-     * @param progress the progress to set, between 0 and 1.
+     * @param progress the progress to set, between 0 and 1
      */
     void setProgress(@Range(from = 0, to = 1) float progress);
 
     /**
      * Get the title of the boss bar.
      *
-     * @return the title of the boss bar.
+     * @return the title of the boss bar
      */
     String getTitle();
 
     /**
      * Set the title of the boss bar.
      *
-     * @param name the title to set.
+     * @param name the title to set
      */
     void setTitle(String name);
 

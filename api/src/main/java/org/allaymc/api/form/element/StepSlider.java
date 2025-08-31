@@ -26,9 +26,9 @@ public final class StepSlider implements CustomFormElement {
     /**
      * Create a new step slider.
      *
-     * @param text        the text of the step slider.
-     * @param steps       the steps of the step slider.
-     * @param defaultStep the default step of the step slider.
+     * @param text        the text of the step slider
+     * @param steps       the steps of the step slider
+     * @param defaultStep the default step of the step slider
      */
     public StepSlider(String text, List<String> steps, int defaultStep) {
         this.text = text;

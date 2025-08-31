@@ -24,14 +24,15 @@ public final class SimpleForm extends Form {
     private final List<SimpleFormElement> elements = new ArrayList<>();
     private String title = "";
     private String content = "";
-    private transient Consumer<Button> onResponse = button -> {};
+    private transient Consumer<Button> onResponse = button -> {
+    };
 
     /**
      * Set the title of the form.
      *
-     * @param title the title.
+     * @param title the title
      *
-     * @return the form.
+     * @return the form
      */
     public SimpleForm title(String title) {
         this.title = title;
@@ -41,9 +42,9 @@ public final class SimpleForm extends Form {
     /**
      * Set the content of the form.
      *
-     * @param content the content.
+     * @param content the content
      *
-     * @return the form.
+     * @return the form
      */
     public SimpleForm content(String content) {
         this.content = content;
@@ -53,9 +54,9 @@ public final class SimpleForm extends Form {
     /**
      * Add a button to the form.
      *
-     * @param button the button.
+     * @param button the button
      *
-     * @return the button.
+     * @return the button
      */
     public Button button(Button button) {
         button.setForm(this);
@@ -66,9 +67,9 @@ public final class SimpleForm extends Form {
     /**
      * Add a button to the form.
      *
-     * @param text the text of the button.
+     * @param text the text of the button
      *
-     * @return the button.
+     * @return the button
      */
     public Button button(String text) {
         return button(new Button(text));
@@ -77,13 +78,13 @@ public final class SimpleForm extends Form {
     /**
      * Add a button to the form.
      *
-     * @param text      the text of the button.
-     * @param imageType the type of the image.
-     * @param data      the data of the image.
-     *                  If the type is {@code ImageData.ImageType.PATH}, it should be the path of the image.
-     *                  If the type is {@code ImageData.ImageType.URL}, it should be the URL of the image.
+     * @param text      the text of the button
+     * @param imageType the type of the image
+     * @param data      the data of the image
+     *                  If the type is {@code ImageData.ImageType.PATH}, it should be the path of the image
+     *                  If the type is {@code ImageData.ImageType.URL}, it should be the URL of the image
      *
-     * @return the button.
+     * @return the button
      */
     public Button button(String text, ImageData.ImageType imageType, String data) {
         return button(new Button(text, new ImageData(imageType, data)));
@@ -92,10 +93,10 @@ public final class SimpleForm extends Form {
     /**
      * Add a button to the form.
      *
-     * @param text the text of the button.
-     * @param path the path of the image.
+     * @param text the text of the button
+     * @param path the path of the image
      *
-     * @return the button.
+     * @return the button
      */
     public Button buttonWithPathImage(String text, String path) {
         return button(new Button(text, new ImageData(ImageData.ImageType.PATH, path)));
@@ -104,10 +105,10 @@ public final class SimpleForm extends Form {
     /**
      * Add a button to the form.
      *
-     * @param text the text of the button.
-     * @param url  the URL of the image.
+     * @param text the text of the button
+     * @param url  the URL of the image
      *
-     * @return the button.
+     * @return the button
      */
     public Button buttonWithUrlImage(String text, String url) {
         return button(new Button(text, new ImageData(ImageData.ImageType.URL, url)));
@@ -116,9 +117,9 @@ public final class SimpleForm extends Form {
     /**
      * Add a label to the form.
      *
-     * @param text the text of the label.
+     * @param text the text of the label
      *
-     * @return the form.
+     * @return the form
      */
     public SimpleForm label(String text) {
         this.elements.add(new Label(text));
@@ -128,9 +129,9 @@ public final class SimpleForm extends Form {
     /**
      * Add a header to the form.
      *
-     * @param text the text of the header.
+     * @param text the text of the header
      *
-     * @return the form.
+     * @return the form
      */
     public SimpleForm header(String text) {
         this.elements.add(new Header(text));
@@ -140,7 +141,7 @@ public final class SimpleForm extends Form {
     /**
      * Add a divider to the form.
      *
-     * @return the form.
+     * @return the form
      */
     public SimpleForm divider() {
         this.elements.add(new Divider());
@@ -150,9 +151,9 @@ public final class SimpleForm extends Form {
     /**
      * Add a callback that will be called when a button is clicked.
      *
-     * @param onResponse the callback.
+     * @param onResponse the callback
      *
-     * @return the form.
+     * @return the form
      */
     public SimpleForm onResponse(Consumer<Button> onResponse) {
         this.onResponse = onResponse;

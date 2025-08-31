@@ -9,7 +9,7 @@ public interface Identified {
     /**
      * Gets the identifier of this object.
      *
-     * @return the identifier.
+     * @return the identifier
      */
     Identifier getIdentifier();
 }

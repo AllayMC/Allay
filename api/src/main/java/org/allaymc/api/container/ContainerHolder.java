@@ -14,7 +14,7 @@ public interface ContainerHolder {
     /**
      * Returns a map of containers.
      *
-     * @return a map of containers.
+     * @return a map of containers
      */
     @UnmodifiableView
     Map<FullContainerType<?>, Container> getContainers();
@@ -22,7 +22,7 @@ public interface ContainerHolder {
     /**
      * Checks if the holder has a container of the specified type.
      *
-     * @param type the type of the container.
+     * @param type the type of the container
      *
      * @return {@code true} if the holder has a container of the specified type, {@code false} otherwise.
      */
@@ -31,8 +31,8 @@ public interface ContainerHolder {
     /**
      * Returns a container of the specified type.
      *
-     * @param type the type of the container.
-     * @param <T>  the type of the container.
+     * @param type the type of the container
+     * @param <T>  the type of the container
      *
      * @return the container
      */
@@ -41,8 +41,8 @@ public interface ContainerHolder {
     /**
      * Returns a container of the specified slot type.
      *
-     * @param slotType the type of the slot.
-     * @param <T>      the type of the container.
+     * @param slotType the type of the slot
+     * @param <T>      the type of the container
      *
      * @return the container
      */
@@ -51,7 +51,7 @@ public interface ContainerHolder {
     /**
      * Adds a container to the holder.
      *
-     * @param container the container to add.
+     * @param container the container to add
      */
     void addContainer(Container container);
 }

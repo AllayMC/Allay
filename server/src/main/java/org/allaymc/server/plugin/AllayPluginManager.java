@@ -96,8 +96,9 @@ public class AllayPluginManager implements PluginManager {
     /**
      * Find plugin paths from the given plugin sources.
      *
-     * @param sources the plugin sources to find plugin paths from.
-     * @return a set of plugin paths found from the given plugin sources.
+     * @param sources the plugin sources to find plugin paths from
+     *
+     * @return a set of plugin paths found from the given plugin sources
      */
     protected Set<Path> findPluginPaths(Set<PluginSource> sources) {
         return sources.stream().flatMap(source -> source.find().stream()).collect(Collectors.toSet());
@@ -106,10 +107,10 @@ public class AllayPluginManager implements PluginManager {
     /**
      * Try to find plugin loader for each plugin path. If found, try to load descriptor through the found plugin loader.
      *
-     * @param foundPaths       the plugin paths to find loaders and load descriptors from.
-     * @param foundDescriptors the map that to store the found plugin descriptors.
-     * @param foundLoaders     the map that to store the found plugin loaders.
-     * @param loaderFactories  the plugin loader factories to find loader from.
+     * @param foundPaths       the plugin paths to find loaders and load descriptors from
+     * @param foundDescriptors the map that to store the found plugin descriptors
+     * @param foundLoaders     the map that to store the found plugin loaders
+     * @param loaderFactories  the plugin loader factories to find loader from
      */
     protected void findLoadersAndLoadDescriptors(
             Set<Path> foundPaths, Map<String, PluginDescriptor> foundDescriptors,
@@ -144,8 +145,8 @@ public class AllayPluginManager implements PluginManager {
      * Add given descriptors to the dag and calculate the loading order. Circular dependencies
      * will also be checked. By the end, {@link #sortedPluginList} will be updated.
      *
-     * @param dag         the directed acyclic graph to store the plugin dependencies.
-     * @param descriptors the plugin descriptors that should be added to the directed acyclic graph.
+     * @param dag         the directed acyclic graph to store the plugin dependencies
+     * @param descriptors the plugin descriptors that should be added to the directed acyclic graph
      */
     protected void calculateLoadingOrder(DirectedAcyclicGraph<String> dag, Map<String, ? extends PluginDescriptor> descriptors) {
         // Add all plugin names to dag firstly
@@ -173,8 +174,8 @@ public class AllayPluginManager implements PluginManager {
      * The loading order is based on {@link #sortedPluginList}, so before calling this method, make sure to call
      * {@link #calculateLoadingOrder(DirectedAcyclicGraph, Map)}
      *
-     * @param descriptors  the descriptors of the plugins that need to be loaded.
-     * @param foundLoaders the loaders of the plugins that need to be loaded.
+     * @param descriptors  the descriptors of the plugins that need to be loaded
+     * @param foundLoaders the loaders of the plugins that need to be loaded
      */
     protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> foundLoaders) {
         var iterator = sortedPluginList.iterator();
@@ -349,8 +350,9 @@ public class AllayPluginManager implements PluginManager {
         /**
          * Ensure the state is not bigger than the given state.
          *
-         * @param state the state to compare with.
-         * @throws IllegalStateException if the state is bigger than the given state.
+         * @param state the state to compare with
+         *
+         * @throws IllegalStateException if the state is bigger than the given state
          */
         public void ensureNotBiggerThan(State state) {
             if (this.ordinal() > state.ordinal()) {
@@ -361,8 +363,9 @@ public class AllayPluginManager implements PluginManager {
         /**
          * Ensure the state is equals to the given state.
          *
-         * @param state the state to compare with.
-         * @throws IllegalStateException if the state is not equals to the given state.
+         * @param state the state to compare with
+         *
+         * @throws IllegalStateException if the state is not equals to the given state
          */
         public void ensureEquals(State state) {
             if (state != this) {

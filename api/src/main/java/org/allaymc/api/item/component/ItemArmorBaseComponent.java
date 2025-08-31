@@ -10,7 +10,7 @@ public interface ItemArmorBaseComponent extends ItemBaseComponent {
     /**
      * Returns the armor type of the item.
      *
-     * @return The armor type.
+     * @return The armor type
      */
     ArmorType getArmorType();
 }

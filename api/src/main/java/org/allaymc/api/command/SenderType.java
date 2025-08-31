@@ -9,10 +9,11 @@ import org.allaymc.api.server.Server;
 import java.util.function.Function;
 
 /**
- * @param validator     Validator function to check if the sender is of the correct type.
- * @param caster        Caster function to cast the sender to the correct type.
- * @param errorMsg      Error message to display if the sender is not of the correct type.
- * @param <SENDER_TYPE> The type of command sender.
+ * @param validator     Validator function to check if the sender is of the correct type
+ * @param caster        Caster function to cast the sender to the correct type
+ * @param errorMsg      Error message to display if the sender is not of the correct type
+ * @param <SENDER_TYPE> The type of command sender
+ *
  * @author daoge_cmd
  */
 public record SenderType<SENDER_TYPE extends CommandSender>(
@@ -44,8 +45,9 @@ public record SenderType<SENDER_TYPE extends CommandSender>(
     /**
      * Validates if the sender is of the correct type.
      *
-     * @param sender The command sender to validate.
-     * @return Whether the sender is of the correct type.
+     * @param sender The command sender to validate
+     *
+     * @return Whether the sender is of the correct type
      */
     public boolean validate(CommandSender sender) {
         return validator.apply(sender);

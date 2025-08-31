@@ -25,7 +25,7 @@ public abstract class AbstractMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY
      *
      * @param key the key
      *
-     * @return the value registered by the given key.
+     * @return the value registered by the given key
      */
     public VALUE get(KEY key) {
         return content.get(key);
@@ -65,7 +65,7 @@ public abstract class AbstractMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY
      * @param key   the key
      * @param value the value
      *
-     * @return a new value into this registry with the given key.
+     * @return a new value into this registry with the given key
      */
     public VALUE register(KEY key, VALUE value) {
         return content.put(key, value);

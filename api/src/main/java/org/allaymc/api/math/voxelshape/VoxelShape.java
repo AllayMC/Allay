@@ -40,7 +40,7 @@ public final class VoxelShape {
     /**
      * Calculate the minimum AABB that can contain this voxel shape.
      *
-     * @return the minimum AABB that can contain this voxel shape.
+     * @return the minimum AABB that can contain this voxel shape
      */
     public AABBd unionAABB() {
         double
@@ -68,8 +68,9 @@ public final class VoxelShape {
     /**
      * Rotate this voxel shape by the specified face.
      *
-     * @param face the face to rotate the voxel shape.
-     * @return the rotated voxel shape.
+     * @param face the face to rotate the voxel shape
+     *
+     * @return the rotated voxel shape
      */
     public VoxelShape rotate(BlockFace face) {
         Set<AABBdc> newSolids = solids.stream()
@@ -81,10 +82,11 @@ public final class VoxelShape {
     /**
      * Add a specified offset to this voxel shape.
      *
-     * @param x the x offset.
-     * @param y the y offset.
-     * @param z the z offset.
-     * @return the translated voxel shape.
+     * @param x the x offset
+     * @param y the y offset
+     * @param z the z offset
+     *
+     * @return the translated voxel shape
      */
     public VoxelShape translate(double x, double y, double z) {
         Set<AABBdc> newSolids = solids.stream()
@@ -96,8 +98,9 @@ public final class VoxelShape {
     /**
      * Add a specified offset to this voxel shape.
      *
-     * @param vec the offset vector.
-     * @return the translated voxel shape.
+     * @param vec the offset vector
+     *
+     * @return the translated voxel shape
      */
     public VoxelShape translate(Vector3dc vec) {
         // This method is frequently called in physics calculation,
@@ -116,8 +119,9 @@ public final class VoxelShape {
     /**
      * Check if this voxel shape intersects with the specified AABB.
      *
-     * @param other the AABB to check.
-     * @return true if this voxel shape intersects with the specified AABB, otherwise false.
+     * @param other the AABB to check
+     *
+     * @return true if this voxel shape intersects with the specified AABB, otherwise false
      */
     public boolean intersectsAABB(AABBdc other) {
         return solids.stream().anyMatch(solid -> solid.intersectsAABB(other));
@@ -126,7 +130,8 @@ public final class VoxelShape {
     /**
      * Check if this voxel shape intersects with the specified point.
      *
-     * @param vec the point to check.
+     * @param vec the point to check
+     *
      * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
      */
     public boolean intersectsPoint(Vector3dc vec) {
@@ -136,9 +141,10 @@ public final class VoxelShape {
     /**
      * Check if this voxel shape intersects with the specified point.
      *
-     * @param x the x coordinate of the point.
-     * @param y the y coordinate of the point.
-     * @param z the z coordinate of the point.
+     * @param x the x coordinate of the point
+     * @param y the y coordinate of the point
+     * @param z the z coordinate of the point
+     *
      * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
      */
     public boolean intersectsPoint(double x, double y, double z) {
@@ -150,7 +156,8 @@ public final class VoxelShape {
      * is completely covered.
      *
      * @param face the face to check
-     * @return true if the face is completely covered; otherwise, false.
+     *
+     * @return true if the face is completely covered; otherwise, false
      */
     public boolean isFull(BlockFace face) {
         List<double[]> uvRectangles = new ArrayList<>();
@@ -167,7 +174,8 @@ public final class VoxelShape {
      * [3/8, 5/8]×[3/8, 5/8].
      *
      * @param face the face to check
-     * @return true if the center region is completely covered; otherwise, false.
+     *
+     * @return true if the center region is completely covered; otherwise, false
      */
     public boolean isCenterFull(BlockFace face) {
         List<double[]> uvRectangles = new ArrayList<>();
@@ -186,7 +194,8 @@ public final class VoxelShape {
      * edgeWidth (here, 0.125).
      *
      * @param face the face to check
-     * @return true if all edge regions are completely covered; otherwise, false.
+     *
+     * @return true if all edge regions are completely covered; otherwise, false
      */
     public boolean isEdgeFull(BlockFace face) {
         double edgeWidth = 0.125;
@@ -215,7 +224,8 @@ public final class VoxelShape {
      * @param regionMinV   the minimum V coordinate of the target region
      * @param regionMaxV   the maximum V coordinate of the target region
      * @param uvRectangles a list of rectangles, each represented as [minU, maxU, minV, maxV]
-     * @return true if the union of the rectangles completely covers the target region; otherwise, false.
+     *
+     * @return true if the union of the rectangles completely covers the target region; otherwise, false
      */
     private boolean isRegionFullyCovered(double regionMinU, double regionMaxU,
                                          double regionMinV, double regionMaxV,
@@ -296,7 +306,8 @@ public final class VoxelShape {
     /**
      * Determine whether the given ray intersects this voxel shape.
      *
-     * @param ray the ray to check.
+     * @param ray the ray to check
+     *
      * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
      */
     public boolean intersectsRay(Raydc ray) {
@@ -321,10 +332,11 @@ public final class VoxelShape {
      * Determine whether the given ray intersects this voxel shape. This method is similar to
      * {@link #intersectsRay(Raydc)} but will save the intersection result.
      *
-     * @param ray    the ray to check.
+     * @param ray    the ray to check
      * @param result a vector which will hold the resulting values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i>
      *               of the near and far point of intersection if the ray intersects this VoxelShape. Notes that {@code result.y()} will be bigger
      *               than {@code result.x()}. If the ray does not intersect this VoxelShape, the result will be {@code (Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY)}.
+     *
      * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
      */
     public boolean intersectsRay(Raydc ray, Vector2d result) {
@@ -419,8 +431,9 @@ public final class VoxelShape {
         /**
          * Add a solid area to the voxel shape.
          *
-         * @param solid the solid area to add.
-         * @return this builder.
+         * @param solid the solid area to add
+         *
+         * @return this builder
          */
         public VoxelShapeBuilder solid(AABBdc solid) {
             solids.add(solid);
@@ -430,13 +443,14 @@ public final class VoxelShape {
         /**
          * Add a solid area to the voxel shape.
          *
-         * @param minX the minimum x coordinate of the solid area.
-         * @param minY the minimum y coordinate of the solid area.
-         * @param minZ the minimum z coordinate of the solid area.
-         * @param maxX the maximum x coordinate of the solid area.
-         * @param maxY the maximum y coordinate of the solid area.
-         * @param maxZ the maximum z coordinate of the solid area.
-         * @return this builder.
+         * @param minX the minimum x coordinate of the solid area
+         * @param minY the minimum y coordinate of the solid area
+         * @param minZ the minimum z coordinate of the solid area
+         * @param maxX the maximum x coordinate of the solid area
+         * @param maxY the maximum y coordinate of the solid area
+         * @param maxZ the maximum z coordinate of the solid area
+         *
+         * @return this builder
          */
         public VoxelShapeBuilder solid(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
             return solid(new AABBd(minX, minY, minZ, maxX, maxY, maxZ));
@@ -445,7 +459,7 @@ public final class VoxelShape {
         /**
          * Build the voxel shape.
          *
-         * @return the voxel shape.
+         * @return the voxel shape
          */
         public VoxelShape build() {
             return new VoxelShape(solids);

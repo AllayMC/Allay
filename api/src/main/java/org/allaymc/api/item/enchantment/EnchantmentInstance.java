@@ -19,7 +19,7 @@ public class EnchantmentInstance {
     /**
      * Get the type of the enchantment.
      *
-     * @return the type of the enchantment.
+     * @return the type of the enchantment
      */
     public EnchantmentType getType() {
         return type;
@@ -28,7 +28,7 @@ public class EnchantmentInstance {
     /**
      * Get the level of the enchantment.
      *
-     * @return the level of the enchantment.
+     * @return the level of the enchantment
      */
     public int getLevel() {
         return level;
@@ -37,9 +37,9 @@ public class EnchantmentInstance {
     /**
      * Set the level of the enchantment.
      *
-     * @param level the level of the enchantment.
+     * @param level the level of the enchantment
      *
-     * @return the enchantment instance with the new level.
+     * @return the enchantment instance with the new level
      */
     public EnchantmentInstance setLevel(int level) {
         return getType().createInstance(level);
@@ -48,7 +48,7 @@ public class EnchantmentInstance {
     /**
      * Save the enchantment instance to NBT.
      *
-     * @return the NBT representation of the enchantment instance.
+     * @return the NBT representation of the enchantment instance
      */
     public NbtMap saveNBT() {
         return NbtMap.builder()

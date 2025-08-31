@@ -13,7 +13,7 @@ public interface UniqueRecipe extends BaseRecipe {
     /**
      * Get the UUID of the recipe.
      *
-     * @return the UUID of the recipe.
+     * @return the UUID of the recipe
      */
     UUID getUuid();
 }

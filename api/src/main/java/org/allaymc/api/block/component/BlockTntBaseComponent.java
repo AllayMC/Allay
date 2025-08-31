@@ -18,7 +18,7 @@ public interface BlockTntBaseComponent extends BlockBaseComponent {
      * Primes the TNT with a custom fuse duration.
      *
      * @param block the {@link Block} to prime
-     * @param fuse              the fuse duration in ticks
+     * @param fuse  the fuse duration in ticks
      */
     void prime(Block block, int fuse);
 }

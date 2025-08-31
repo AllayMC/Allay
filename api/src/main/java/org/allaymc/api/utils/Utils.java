@@ -36,10 +36,10 @@ public class Utils {
     /**
      * Merge multiple byte arrays into one byte array.
      *
-     * @param bytes1 the first byte array.
-     * @param bytes2 the other byte arrays.
+     * @param bytes1 the first byte array
+     * @param bytes2 the other byte arrays
      *
-     * @return the merged byte array.
+     * @return the merged byte array
      */
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
         int length = bytes1.length;
@@ -61,9 +61,9 @@ public class Utils {
     /**
      * Calculates the number of bit that the specified value convert to binary.
      *
-     * @param value the value.
+     * @param value the value
      *
-     * @return the bits.
+     * @return the bits
      */
     public byte computeRequiredBits(int value) {
         return (byte) (Integer.SIZE - Integer.numberOfLeadingZeros(value));
@@ -72,9 +72,9 @@ public class Utils {
     /**
      * Convert a {@code Object[]} array to a {@code String[]} array.
      *
-     * @param objectArray the object array.
+     * @param objectArray the object array
      *
-     * @return the string array.
+     * @return the string array
      */
     public String[] objectArrayToStringArray(Object[] objectArray) {
         return Arrays.stream(objectArray).map(Object::toString).toArray(String[]::new);
@@ -83,11 +83,11 @@ public class Utils {
     /**
      * Read a string from the input stream.
      *
-     * @param inputStream the input stream.
+     * @param inputStream the input stream
      *
-     * @return the string.
+     * @return the string
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs
      */
     public static String readString(InputStream inputStream) throws IOException {
         return readString(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
@@ -96,11 +96,11 @@ public class Utils {
     /**
      * Read a string from the reader.
      *
-     * @param reader the reader.
+     * @param reader the reader
      *
-     * @return the string.
+     * @return the string
      *
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException if an I/O error occurs
      */
     public static String readString(Reader reader) throws IOException {
         try (BufferedReader br = new BufferedReader(reader)) {
@@ -121,9 +121,9 @@ public class Utils {
     /**
      * Get a specified resource in the jar file.
      *
-     * @param resourceName the resource name.
+     * @param resourceName the resource name
      *
-     * @return the input stream.
+     * @return the input stream
      */
     public static InputStream getResource(String resourceName) {
         return Objects.requireNonNull(Utils.class.getClassLoader().getResourceAsStream(resourceName));
@@ -132,9 +132,9 @@ public class Utils {
     /**
      * Create a default config initializer.
      *
-     * @param file the file path.
+     * @param file the file path
      *
-     * @return the config initializer.
+     * @return the config initializer
      */
     public static OkaeriConfigInitializer createConfigInitializer(Path file) {
         return it -> {
@@ -154,9 +154,9 @@ public class Utils {
     /**
      * Mirror the result of a CompletableFuture to another CompletableFuture.
      *
-     * @param source the source CompletableFuture.
-     * @param target the target CompletableFuture.
-     * @param <T>    the type of the result.
+     * @param source the source CompletableFuture
+     * @param target the target CompletableFuture
+     * @param <T>    the type of the result
      */
     public static <T> void mirror(CompletableFuture<T> source, CompletableFuture<T> target) {
         source.whenComplete((result, ex) -> {
@@ -171,9 +171,9 @@ public class Utils {
     /**
      * Check if a CompletableFuture is done normally (not exceptionally or cancelled).
      *
-     * @param future the CompletableFuture to check.
+     * @param future the CompletableFuture to check
      *
-     * @return true if the future is done normally, false otherwise.
+     * @return true if the future is done normally, false otherwise
      */
     public static boolean isDoneNormally(CompletableFuture<?> future) {
         return future.isDone() && !future.isCompletedExceptionally() && !future.isCancelled();

@@ -72,9 +72,9 @@ public class DamageContainer {
     /**
      * Creates a new damage container.
      *
-     * @param attacker     the attacker that cause the damage. Can be {@code null}.
-     * @param damageType   the type of this damage.
-     * @param sourceDamage the source amount of damage.
+     * @param attacker     the attacker that cause the damage. Can be {@code null}
+     * @param damageType   the type of this damage
+     * @param sourceDamage the source amount of damage
      */
     public DamageContainer(Object attacker, DamageType damageType, float sourceDamage) {
         this.attacker = attacker;
@@ -88,8 +88,9 @@ public class DamageContainer {
     /**
      * Create a simple attack damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer simpleAttack(float sourceDamage) {
         return new DamageContainer(null, API, sourceDamage);
@@ -98,9 +99,10 @@ public class DamageContainer {
     /**
      * Create an entity attack damage container.
      *
-     * @param attacker     the attacker.
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param attacker     the attacker
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
         var damageContainer = new DamageContainer(attacker, ENTITY_ATTACK, sourceDamage);
@@ -113,8 +115,9 @@ public class DamageContainer {
     /**
      * Create a starve damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer starve(float sourceDamage) {
         return new DamageContainer(null, STARVE, sourceDamage);
@@ -123,8 +126,9 @@ public class DamageContainer {
     /**
      * Create a fall damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer fall(float sourceDamage) {
         return new DamageContainer(null, FALL, sourceDamage);
@@ -133,8 +137,9 @@ public class DamageContainer {
     /**
      * Create a falling block damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer fallingBlock(float sourceDamage) {
         return new DamageContainer(null, FALLING_BLOCK, sourceDamage);
@@ -143,8 +148,9 @@ public class DamageContainer {
     /**
      * Create a magic effect damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer magicEffect(float sourceDamage) {
         return new DamageContainer(null, MAGIC, sourceDamage);
@@ -153,8 +159,9 @@ public class DamageContainer {
     /**
      * Create a magma damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer magma(float sourceDamage) {
         return new DamageContainer(null, MAGMA, sourceDamage);
@@ -163,8 +170,9 @@ public class DamageContainer {
     /**
      * Create a drown damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer drown(float sourceDamage) {
         return new DamageContainer(null, DROWN, sourceDamage);
@@ -173,8 +181,9 @@ public class DamageContainer {
     /**
      * Create a fire tick damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer fireTick(float sourceDamage) {
         return new DamageContainer(null, FIRE_TICK, sourceDamage);
@@ -183,8 +192,9 @@ public class DamageContainer {
     /**
      * Create a lava damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer lava(float sourceDamage) {
         return new DamageContainer(null, LAVA, sourceDamage);
@@ -193,8 +203,9 @@ public class DamageContainer {
     /**
      * Create a block explosion damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer blockExplosion(float sourceDamage) {
         return new DamageContainer(null, BLOCK_EXPLOSION, sourceDamage);
@@ -203,9 +214,10 @@ public class DamageContainer {
     /**
      * Create an entity explosion damage container.
      *
-     * @param attacker     the entity that exploded.
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param attacker     the entity that exploded
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer entityExplosion(Entity attacker, float sourceDamage) {
         return new DamageContainer(attacker, ENTITY_EXPLOSION, sourceDamage);
@@ -214,8 +226,9 @@ public class DamageContainer {
     /**
      * Create a contact damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer contact(float sourceDamage) {
         return new DamageContainer(null, CONTACT, sourceDamage);
@@ -224,8 +237,9 @@ public class DamageContainer {
     /**
      * Create a projectile damage container.
      *
-     * @param sourceDamage the source damage.
-     * @return the damage container.
+     * @param sourceDamage the source damage
+     *
+     * @return the damage container
      */
     public static DamageContainer projectile(Entity projectile, float sourceDamage) {
         return new DamageContainer(projectile, PROJECTILE, sourceDamage);
@@ -234,8 +248,9 @@ public class DamageContainer {
     /**
      * Get the attacker.
      *
-     * @param <T> the type of the attacker.
-     * @return the attacker, or {@code null} if the attacker is not present.
+     * @param <T> the type of the attacker
+     *
+     * @return the attacker, or {@code null} if the attacker is not present
      */
     public <T> T getAttacker() {
         // noinspection unchecked
@@ -245,7 +260,7 @@ public class DamageContainer {
     /**
      * Update the final damage using the given updater.
      *
-     * @param updater the updater.
+     * @param updater the updater
      */
     public void updateFinalDamage(UnaryOperator<Float> updater) {
         this.finalDamage = updater.apply(this.finalDamage);

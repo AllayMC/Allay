@@ -1760,7 +1760,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockBedBehaviorImpl.class)
                 .vanillaBlock(BlockId.BED)
                 .bindBlockEntity(BlockEntityTypes.BED)
-                .setProperties(BlockPropertyTypes.HEAD_PIECE_BIT,BlockPropertyTypes.OCCUPIED_BIT,BlockPropertyTypes.DIRECTION_4)
+                .setProperties(BlockPropertyTypes.HEAD_PIECE_BIT, BlockPropertyTypes.OCCUPIED_BIT, BlockPropertyTypes.DIRECTION_4)
                 .setBaseComponentSupplier(BlockBedBaseComponentImpl::new)
                 .build();
     }

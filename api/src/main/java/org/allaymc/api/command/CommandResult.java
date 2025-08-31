@@ -20,9 +20,9 @@ public record CommandResult(int status, CommandContext context) {
     /**
      * Creates a new CommandResult instance for a failed command execution.
      *
-     * @param context The command context.
+     * @param context The command context
      *
-     * @return A new CommandResult instance for a failed command execution.
+     * @return A new CommandResult instance for a failed command execution
      */
     public static CommandResult fail(CommandContext context) {
         return new CommandResult(FAIL_STATUS, context);
@@ -31,7 +31,7 @@ public record CommandResult(int status, CommandContext context) {
     /**
      * Creates a new CommandResult instance for a failed command execution with a null context.
      *
-     * @return A new CommandResult instance for a failed command execution with a null context.
+     * @return A new CommandResult instance for a failed command execution with a null context
      */
     public static CommandResult fail() {
         return fail(null);
@@ -40,9 +40,9 @@ public record CommandResult(int status, CommandContext context) {
     /**
      * Creates a new CommandResult instance for a successful command execution.
      *
-     * @param context The command context.
+     * @param context The command context
      *
-     * @return A new CommandResult instance for a successful command execution.
+     * @return A new CommandResult instance for a successful command execution
      */
     public static CommandResult success(CommandContext context) {
         return new CommandResult(SUCCESS_STATUS, context);

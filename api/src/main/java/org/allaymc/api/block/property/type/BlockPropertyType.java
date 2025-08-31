@@ -16,9 +16,9 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     /**
      * Get the property type by the class.
      *
-     * @param clazz the class.
+     * @param clazz the class
      *
-     * @return the property type.
+     * @return the property type
      */
     static Type getPropertyType(Class<?> clazz) {
         if (clazz == BooleanPropertyType.class) return Type.BOOLEAN;
@@ -30,48 +30,48 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     /**
      * Get the name of this property type.
      *
-     * @return the name.
+     * @return the name
      */
     String getName();
 
     /**
      * Get the default value of this property type.
      *
-     * @return the default value.
+     * @return the default value
      */
     DATATYPE getDefaultValue();
 
     /**
      * Get the valid values of this property type.
      *
-     * @return the valid values.
+     * @return the valid values
      */
     List<DATATYPE> getValidValues();
 
     /**
      * Get the type of this property type.
      *
-     * @return the type.
+     * @return the type
      */
     Type getType();
 
     /**
      * Create a new value for this property type.
      *
-     * @param value the value.
+     * @param value the value
      *
-     * @return the value.
+     * @return the value
      */
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createValue(DATATYPE value);
 
     /**
      * Try to create a new value for this property type.
      *
-     * @param value the value.
+     * @param value the value
      *
-     * @return the value.
+     * @return the value
      *
-     * @throws IllegalArgumentException if the value is invalid, such as pass a boolean value to an int property type.
+     * @throws IllegalArgumentException if the value is invalid, such as pass a boolean value to an int property type
      */
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> tryCreateValue(Object value);
 
@@ -87,14 +87,14 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     /**
      * Get the processor for this property type.
      *
-     * @return the processor, {@code null} if not present.
+     * @return the processor, {@code null} if not present
      */
     BlockPropertyProcessor getProcessor();
 
     /**
      * Set the processor for this property type.
      *
-     * @param processor the processor, or {@code null} to remove.
+     * @param processor the processor, or {@code null} to remove
      */
     void setProcessor(BlockPropertyProcessor processor);
 
@@ -103,7 +103,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
      * <p>
      * The bit size is used to calculate the special value for a block state.
      *
-     * @return the bit size.
+     * @return the bit size
      */
     byte getBitSize();
 
@@ -142,7 +142,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
          * Different from the value, the serialized value is the value that will be stored in the block state nbt.
          * For example, the value of a boolean property is a boolean, but the serialized value is a byte.
          *
-         * @return the serialized value.
+         * @return the serialized value
          */
         public abstract SERIALIZED_DATATYPE getSerializedValue();
 

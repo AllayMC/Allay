@@ -20,9 +20,9 @@ public class DebugText extends DebugShape {
     /**
      * Creates a DebugText with the specified position, color, and text.
      *
-     * @param position The position of the text in the world.
-     * @param color    The color of the text.
-     * @param text     The text to display.
+     * @param position The position of the text in the world
+     * @param color    The color of the text
+     * @param text     The text to display
      */
     public DebugText(Vector3fc position, Color color, String text) {
         super(position, color);
@@ -32,7 +32,7 @@ public class DebugText extends DebugShape {
     /**
      * Sets the text to display.
      *
-     * @param text The text to display.
+     * @param text The text to display
      */
     public void setText(String text) {
         this.text = text;

@@ -18,7 +18,7 @@ public final class Label implements SimpleFormElement, CustomFormElement {
     /**
      * Create a new label.
      *
-     * @param text the text of the label.
+     * @param text the text of the label
      */
     public Label(String text) {
         this.text = text;

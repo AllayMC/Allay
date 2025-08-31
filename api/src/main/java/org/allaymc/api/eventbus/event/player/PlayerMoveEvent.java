@@ -16,9 +16,9 @@ public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
 
     /**
      * If event is cancelled, player get teleported to specified location, which is defaults to original one.
-     *
+     * <p>
      * If set to null, no teleport would be issued; it up to user to handle client-server movement desync.
-     */ 
+     */
     @Setter
     protected Location3dc revertTo = from;
 

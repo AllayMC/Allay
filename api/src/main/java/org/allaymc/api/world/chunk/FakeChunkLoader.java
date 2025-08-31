@@ -32,7 +32,8 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
-    public void setChunkLoadingRadius(int radius) {}
+    public void setChunkLoadingRadius(int radius) {
+    }
 
     @Override
     public int getChunkMaxSendCountPerTick() {
@@ -54,11 +55,14 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
-    public void onChunkPosChanged() {}
+    public void onChunkPosChanged() {
+    }
 
     @Override
-    public void onChunkInRangeSend(Chunk chunk) {}
+    public void onChunkInRangeSend(Chunk chunk) {
+    }
 
     @Override
-    public void onChunkOutOfRange(Set<Long> chunkHashes) {}
+    public void onChunkOutOfRange(Set<Long> chunkHashes) {
+    }
 }

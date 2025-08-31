@@ -7,14 +7,14 @@ public interface EntityPickableBaseComponent extends EntityBaseComponent {
     /**
      * Get the pickup delay of this entity item.
      *
-     * @return the pickup delay.
+     * @return the pickup delay
      */
     int getPickupDelay();
 
     /**
      * Set the pickup delay of this entity item.
      *
-     * @param delay the pickup delay.
+     * @param delay the pickup delay
      */
     void setPickupDelay(int delay);
 

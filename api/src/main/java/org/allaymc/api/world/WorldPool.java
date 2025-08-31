@@ -15,23 +15,23 @@ public interface WorldPool {
     /**
      * Get the world settings of the server.
      *
-     * @return the world settings of the server.
+     * @return the world settings of the server
      */
     WorldSettings getWorldConfig();
 
     /**
      * Get the world by the name.
      *
-     * @param name the name of the world.
+     * @param name the name of the world
      *
-     * @return the world, or {@code null} if the world is not found.
+     * @return the world, or {@code null} if the world is not found
      */
     World getWorld(String name);
 
     /**
      * Get all worlds in the server.
      *
-     * @return all worlds in the server.
+     * @return all worlds in the server
      */
     @UnmodifiableView
     Map<String, World> getWorlds();
@@ -39,7 +39,7 @@ public interface WorldPool {
     /**
      * Get the default world.
      *
-     * @return the default world.
+     * @return the default world
      */
     World getDefaultWorld();
 
@@ -48,19 +48,19 @@ public interface WorldPool {
      * <p>
      * If the world is not exists in {@code WorldSettings}, the world will be added into the {@code WorldSettings}.
      *
-     * @param name         the name of the world.
-     * @param worldSetting the settings of the world.
+     * @param name         the name of the world
+     * @param worldSetting the settings of the world
      *
-     * @throws IllegalArgumentException if the world with the specific name already exists.
+     * @throws IllegalArgumentException if the world with the specific name already exists
      */
     void loadWorld(String name, WorldSettings.WorldSetting worldSetting);
 
     /**
      * Unload the world with the specific name.
      *
-     * @param name the name of the world.
+     * @param name the name of the world
      *
-     * @throws IllegalArgumentException if the world with the specific name is not exists, or the world is the default world.
+     * @throws IllegalArgumentException if the world with the specific name is not exists, or the world is the default world
      */
     void unloadWorld(String name);
 
@@ -69,7 +69,7 @@ public interface WorldPool {
      * <p>
      * Global spawn point is the location of the player who joins the server for the first time.
      *
-     * @return the global spawn point of the server.
+     * @return the global spawn point of the server
      */
     default Location3ic getGlobalSpawnPoint() {
         var vec = getDefaultWorld().getWorldData().getSpawnPoint();

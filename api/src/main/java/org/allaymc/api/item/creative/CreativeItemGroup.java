@@ -22,7 +22,7 @@ public interface CreativeItemGroup {
     /**
      * Register an item to this group.
      *
-     * @param itemStack the item to register.
+     * @param itemStack the item to register
      *
      * @return the assigned index of this item stack, can then be used to get the registered item stack
      * by using method {@link CreativeItemRegistry#getEntryByIndex(int)}. Client will send back the
@@ -33,7 +33,7 @@ public interface CreativeItemGroup {
     /**
      * Get the items in this group.
      *
-     * @return the items in this group.
+     * @return the items in this group
      */
     @UnmodifiableView
     Map<Integer, CreativeItemEntry> getItems();
@@ -41,28 +41,28 @@ public interface CreativeItemGroup {
     /**
      * Get the name of this group.
      *
-     * @return the name of this group.
+     * @return the name of this group
      */
     String getName();
 
     /**
      * Get the icon of this group. The icon will be shown if the group is collapsed.
      *
-     * @return the icon of this group.
+     * @return the icon of this group
      */
     ItemStack getIcon();
 
     /**
      * Get the index of this group. The index is used to identify this group.
      *
-     * @return the index of this group.
+     * @return the index of this group
      */
     int getIndex();
 
     /**
      * Get the category of this group.
      *
-     * @return the category of this group.
+     * @return the category of this group
      */
     CreativeItemCategory getCategory();
 

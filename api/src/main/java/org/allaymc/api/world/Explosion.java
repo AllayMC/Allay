@@ -136,11 +136,11 @@ public class Explosion {
     /**
      * Create an explosion.
      *
-     * @param size           the size of the explosion.
-     * @param spawnFire      whether fire should be spawned.
-     * @param itemDropChance the item drop chance.
-     * @param sound          the sound of the explosion.
-     * @param particle       the particle of the explosion.
+     * @param size           the size of the explosion
+     * @param spawnFire      whether fire should be spawned
+     * @param itemDropChance the item drop chance
+     * @param sound          the sound of the explosion
+     * @param particle       the particle of the explosion
      */
     public Explosion(float size, boolean spawnFire, float itemDropChance, SoundEvent sound, ParticleType particle) {
         this.size = size;
@@ -151,6 +151,120 @@ public class Explosion {
         this.entity = null;
         this.destroyBlocks = true;
         this.affectEntities = true;
+    }
+
+    /**
+     * Return the linear interpolation between a and b at t.
+     */
+    protected static double lerp(double a, double b, double t) {
+        return b + a * (t - b);
+    }
+
+    protected static void traverseBlocks(Vector3dc start, Vector3dc end, Predicate<Vector3ic> predicate) {
+        var dir = end.sub(start, new Vector3d());
+        if (Double.compare(dir.lengthSquared(), 0.0) == 0) {
+            throw new IllegalArgumentException("Start and end points are the same, giving a zero direction vector");
+        }
+
+        dir = dir.normalize();
+
+        var b = new Vector3i((int) Math.floor(start.x()), (int) Math.floor(start.y()), (int) Math.floor(start.z()));
+
+        var step = sign(dir);
+        var stepX = (int) step.x();
+        var stepY = (int) step.y();
+        var stepZ = (int) step.z();
+        Vector3d max = boundary(start, dir);
+
+        Vector3d delta = safeDivide(step, dir);
+
+        var r = start.sub(end, new Vector3d()).length();
+        while (true) {
+            if (!predicate.test(b)) {
+                return;
+            }
+
+            if (max.x < max.y && max.x < max.z) {
+                if (max.x > r) {
+                    return;
+                }
+
+                b.x += stepX;
+                max.x += delta.x;
+            } else if (max.y < max.z) {
+                if (max.y > r) {
+                    return;
+                }
+
+                b.y += stepY;
+                max.y += delta.y;
+            } else {
+                if (max.z > r) {
+                    return;
+                }
+
+                b.z += stepZ;
+                max.z += delta.z;
+            }
+        }
+    }
+
+    protected static Vector3d safeDivide(Vector3dc dividend, Vector3dc divisor) {
+        return new Vector3d(
+                safeDivide(dividend.x(), divisor.x()),
+                safeDivide(dividend.y(), divisor.y()),
+                safeDivide(dividend.z(), divisor.z())
+        );
+    }
+
+    protected static double safeDivide(double dividend, double divisor) {
+        if (divisor == 0.0) {
+            return 0.0;
+        }
+
+        return dividend / divisor;
+    }
+
+    protected static Vector3d boundary(Vector3dc v1, Vector3dc v2) {
+        return new Vector3d(
+                boundary(v1.x(), v2.x()),
+                boundary(v1.y(), v2.y()),
+                boundary(v1.z(), v2.z())
+        );
+    }
+
+    /**
+     * Return the distance that must be travelled on an axis from the start point with the direction vector
+     * component to cross a block boundary.
+     */
+    protected static double boundary(double start, double dir) {
+        if (dir == 0.0) {
+            return Double.POSITIVE_INFINITY;
+        }
+
+        if (dir < 0.0) {
+            start = -start;
+            dir = -dir;
+            if (Math.floor(start) == start) {
+                return 0.0;
+            }
+        }
+
+        return (1 - (start - Math.floor(start))) / dir;
+    }
+
+    protected static Vector3dc sign(Vector3dc vec) {
+        return new Vector3d(sign(vec.x()), sign(vec.y()), sign(vec.z()));
+    }
+
+    protected static double sign(double f) {
+        if (f > 0.0) {
+            return 1.0;
+        } else if (f < 0.0) {
+            return -1.0;
+        } else {
+            return 0.0;
+        }
     }
 
     /**
@@ -170,10 +284,10 @@ public class Explosion {
     /**
      * Perform the explosion at a pos in a dimension.
      *
-     * @param dimension the dimension which the explosion will be performed in.
-     * @param x         the x coordinate of the explosion.
-     * @param y         the y coordinate of the explosion.
-     * @param z         the z coordinate of the explosion.
+     * @param dimension the dimension which the explosion will be performed in
+     * @param x         the x coordinate of the explosion
+     * @param y         the y coordinate of the explosion
+     * @param z         the z coordinate of the explosion
      */
     public void explode(Dimension dimension, double x, double y, double z) {
         var explosionPos = new Vector3d(x, y, z);
@@ -370,119 +484,5 @@ public class Explosion {
         }
 
         return misses / checks;
-    }
-
-    /**
-     * Return the linear interpolation between a and b at t.
-     */
-    protected static double lerp(double a, double b, double t) {
-        return b + a * (t - b);
-    }
-
-    protected static void traverseBlocks(Vector3dc start, Vector3dc end, Predicate<Vector3ic> predicate) {
-        var dir = end.sub(start, new Vector3d());
-        if (Double.compare(dir.lengthSquared(), 0.0) == 0) {
-            throw new IllegalArgumentException("Start and end points are the same, giving a zero direction vector");
-        }
-
-        dir = dir.normalize();
-
-        var b = new Vector3i((int) Math.floor(start.x()), (int) Math.floor(start.y()), (int) Math.floor(start.z()));
-
-        var step = sign(dir);
-        var stepX = (int) step.x();
-        var stepY = (int) step.y();
-        var stepZ = (int) step.z();
-        Vector3d max = boundary(start, dir);
-
-        Vector3d delta = safeDivide(step, dir);
-
-        var r = start.sub(end, new Vector3d()).length();
-        while (true) {
-            if (!predicate.test(b)) {
-                return;
-            }
-
-            if (max.x < max.y && max.x < max.z) {
-                if (max.x > r) {
-                    return;
-                }
-
-                b.x += stepX;
-                max.x += delta.x;
-            } else if (max.y < max.z) {
-                if (max.y > r) {
-                    return;
-                }
-
-                b.y += stepY;
-                max.y += delta.y;
-            } else {
-                if (max.z > r) {
-                    return;
-                }
-
-                b.z += stepZ;
-                max.z += delta.z;
-            }
-        }
-    }
-
-    protected static Vector3d safeDivide(Vector3dc dividend, Vector3dc divisor) {
-        return new Vector3d(
-                safeDivide(dividend.x(), divisor.x()),
-                safeDivide(dividend.y(), divisor.y()),
-                safeDivide(dividend.z(), divisor.z())
-        );
-    }
-
-    protected static double safeDivide(double dividend, double divisor) {
-        if (divisor == 0.0) {
-            return 0.0;
-        }
-
-        return dividend / divisor;
-    }
-
-    protected static Vector3d boundary(Vector3dc v1, Vector3dc v2) {
-        return new Vector3d(
-                boundary(v1.x(), v2.x()),
-                boundary(v1.y(), v2.y()),
-                boundary(v1.z(), v2.z())
-        );
-    }
-
-    /**
-     * Return the distance that must be travelled on an axis from the start point with the direction vector
-     * component to cross a block boundary.
-     */
-    protected static double boundary(double start, double dir) {
-        if (dir == 0.0) {
-            return Double.POSITIVE_INFINITY;
-        }
-
-        if (dir < 0.0) {
-            start = -start;
-            dir = -dir;
-            if (Math.floor(start) == start) {
-                return 0.0;
-            }
-        }
-
-        return (1 - (start - Math.floor(start))) / dir;
-    }
-
-    protected static Vector3dc sign(Vector3dc vec) {
-        return new Vector3d(sign(vec.x()), sign(vec.y()), sign(vec.z()));
-    }
-
-    protected static double sign(double f) {
-        if (f > 0.0) {
-            return 1.0;
-        } else if (f < 0.0) {
-            return -1.0;
-        } else {
-            return 0.0;
-        }
     }
 }

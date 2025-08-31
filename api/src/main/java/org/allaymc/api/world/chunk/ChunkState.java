@@ -29,7 +29,7 @@ public enum ChunkState {
     /**
      * Returns the parent state of the state, or {@code null} if this is the first state.
      *
-     * @return The parent state, or {@code null} if there is no parent state.
+     * @return The parent state, or {@code null} if there is no parent state
      */
     public ChunkState getParent() {
         var parentIndex = ordinal() - 1;
@@ -39,7 +39,7 @@ public enum ChunkState {
     /**
      * Returns the next state of the state, or {@code null} if this is the last state.
      *
-     * @return The next state, or {@code null} if there is no next state.
+     * @return The next state, or {@code null} if there is no next state
      */
     public ChunkState getNext() {
         var nextIndex = ordinal() + 1;
@@ -49,7 +49,7 @@ public enum ChunkState {
     /**
      * Check if this state is the same or after the given state.
      *
-     * @param state The state to compare to.
+     * @param state The state to compare to
      *
      * @return {@code true} if this state is the same or after the given state, {@code false} otherwise.
      */
@@ -60,7 +60,7 @@ public enum ChunkState {
     /**
      * Check if this state is after the given state.
      *
-     * @param state The state to compare to.
+     * @param state The state to compare to
      *
      * @return {@code true} if this state is after the given state, {@code false} otherwise.
      */
@@ -71,7 +71,7 @@ public enum ChunkState {
     /**
      * Check if this state is the same or before the given state.
      *
-     * @param state The state to compare to.
+     * @param state The state to compare to
      *
      * @return {@code true} if this state is the same or before the given state, {@code false} otherwise.
      */
@@ -82,7 +82,7 @@ public enum ChunkState {
     /**
      * Check if this state is before the given state.
      *
-     * @param state The state to compare to.
+     * @param state The state to compare to
      *
      * @return {@code true} if this state is before the given state, {@code false} otherwise.
      */

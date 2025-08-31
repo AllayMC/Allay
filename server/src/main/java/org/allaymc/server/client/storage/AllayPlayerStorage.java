@@ -6,7 +6,9 @@ import org.allaymc.api.client.storage.PlayerStorage;
  * @author daoge_cmd
  */
 public abstract class AllayPlayerStorage implements PlayerStorage {
-    public void tick(long currentTick) {}
+    public void tick(long currentTick) {
+    }
 
-    public void shutdown() {}
+    public void shutdown() {
+    }
 }
