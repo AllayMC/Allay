@@ -80,7 +80,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         if (!dropItemWhenBreak()) return;
 
         var current = event.getCurrentBlock();
-        var pos = current.getPos();
+        var pos = current.getPosition();
         var rand = ThreadLocalRandom.current();
 
         container.removeAllViewers();

@@ -144,7 +144,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
 
-        if (block.getDimension().getLightService().getInternalLight(block.getPos()) < 8) {
+        if (block.getDimension().getLightService().getInternalLight(block.getPosition()) < 8) {
             var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
                 block.breakBlock();
@@ -155,7 +155,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
                 var newCrop = block.setPropertyValue(GROWTH, growth + 1);
                 var event = new BlockGrowEvent(block, newCrop.getBlockState());
                 if (event.call()) {
-                    block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
                 }
             }
         }

@@ -29,7 +29,7 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
-        var pos = block.getPos();
+        var pos = block.getPosition();
         var dimension = block.getDimension();
 
         var upperBlockState = block.offsetPos(BlockFace.UP);

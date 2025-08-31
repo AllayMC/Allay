@@ -115,7 +115,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             return;
         }
 
-        var dropPos = MathUtils.center(block.getPos());
+        var dropPos = MathUtils.center(block.getPosition());
         var dimension = block.getDimension();
         if (usedItem != null && usedItem.hasEnchantment(EnchantmentTypes.SILK_TOUCH)) {
             // Silk Touch, directly drop the block itself

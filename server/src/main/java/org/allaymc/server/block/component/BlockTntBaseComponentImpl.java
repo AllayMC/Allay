@@ -51,7 +51,7 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
     @Override
     public void prime(Block block, int fuse) {
         var dimension = block.getDimension();
-        var pos = block.getPos();
+        var pos = block.getPosition();
         dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
 
         var angle = ThreadLocalRandom.current().nextFloat() * Math.PI * 2;

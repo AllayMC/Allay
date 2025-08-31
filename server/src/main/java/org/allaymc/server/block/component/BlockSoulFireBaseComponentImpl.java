@@ -18,7 +18,7 @@ public class BlockSoulFireBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         var downBlockType = block.offsetPos(BlockFace.DOWN).getBlockType();
         if (downBlockType != BlockTypes.SOUL_SAND && downBlockType != BlockTypes.SOUL_SOIL) {
-            block.getDimension().setBlockState(block.getPos(), BlockTypes.FIRE.copyPropertyValuesFrom(block.getBlockState()));
+            block.getDimension().setBlockState(block.getPosition(), BlockTypes.FIRE.copyPropertyValuesFrom(block.getBlockState()));
         }
     }
 }

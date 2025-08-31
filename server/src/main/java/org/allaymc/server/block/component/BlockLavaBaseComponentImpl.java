@@ -79,13 +79,13 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     @Override
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
-        tryHarden(new Block(newBlockState, oldBlock.getPos(), oldBlock.getLayer()), null);
+        tryHarden(new Block(newBlockState, oldBlock.getPosition(), oldBlock.getLayer()), null);
     }
 
     @Override
     public boolean tryHarden(Block block, Block flownIntoBy) {
         var dimension = block.getDimension();
-        var pos = block.getPos();
+        var pos = block.getPosition();
         BlockState hardenedBlockState = null;
         if (flownIntoBy == null) {
             BlockState waterBlockState = null;
@@ -115,7 +115,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             }
 
             if (hardenedBlockState != null) {
-                var event = new LiquidHardenEvent(block, waterBlockState, hardenedBlockState);
+                var event = new LiquidHardenEvent(block, waterBlockState, hardenedBlockState, pos);
                 if (!event.call()) {
                     return false;
                 }
@@ -139,7 +139,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
         }
 
-        var event = new LiquidHardenEvent(block, flownIntoBy.getBlockState(), hardenedBlockState);
+        var event = new LiquidHardenEvent(block, flownIntoBy.getBlockState(), hardenedBlockState, pos);
         if (!event.call()) {
             return false;
         }
@@ -156,7 +156,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return;
         }
 
-        var pos = block.getPos();
+        var pos = block.getPosition();
         var dimension = block.getDimension();
         var random = ThreadLocalRandom.current();
         var i = random.nextInt(3);

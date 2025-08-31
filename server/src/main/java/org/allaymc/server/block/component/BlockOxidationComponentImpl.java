@@ -76,7 +76,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
             var nextBlockType = getBlockWithOxidationLevel(OxidationLevel.values()[currentLevel + 1]);
             var blockFadeEvent = new BlockFadeEvent(current, nextBlockType.copyPropertyValuesFrom(current.getBlockState()));
             if (blockFadeEvent.call()) {
-                current.getDimension().setBlockState(current.getPos(), blockFadeEvent.getNewBlockState());
+                current.getDimension().setBlockState(current.getPosition(), blockFadeEvent.getNewBlockState());
             }
         }
     }

@@ -41,7 +41,7 @@ public class Block {
     /**
      * The position of the block in the world.
      */
-    private final Position3ic pos;
+    private final Position3ic position;
     /**
      * The layer of the block.
      */
@@ -50,34 +50,34 @@ public class Block {
     /**
      * @see #Block(BlockState, Position3ic, int)
      */
-    public Block(Dimension dimension, Vector3ic pos) {
-        this(dimension, pos, 0);
+    public Block(Dimension dimension, Vector3ic position) {
+        this(dimension, position, 0);
     }
 
     /**
      * @see #Block(BlockState, Position3ic, int)
      */
-    public Block(Dimension dimension, Vector3ic pos, int layer) {
-        this(dimension.getBlockState(pos), new Position3i(pos, dimension), layer);
+    public Block(Dimension dimension, Vector3ic position, int layer) {
+        this(dimension.getBlockState(position), new Position3i(position, dimension), layer);
     }
 
     /**
      * @see #Block(BlockState, Position3ic, int)
      */
-    public Block(BlockState blockState, Position3ic pos) {
-        this(blockState, pos, 0);
+    public Block(BlockState blockState, Position3ic position) {
+        this(blockState, position, 0);
     }
 
     /**
      * Creates a new {@code Block} instance with the specified block state, position, and layer.
      *
      * @param blockState the state of the block, must not be null
-     * @param pos        the position of the block in the world, must not be null
+     * @param position   the position of the block in the world, must not be null
      * @param layer      the layer of the block, typically 0 for the main layer
      */
-    public Block(BlockState blockState, Position3ic pos, int layer) {
+    public Block(BlockState blockState, Position3ic position, int layer) {
         this.blockState = Preconditions.checkNotNull(blockState, "blockState cannot be null");
-        this.pos = Preconditions.checkNotNull(pos, "pos cannot be null");
+        this.position = Preconditions.checkNotNull(position, "position cannot be null");
         this.layer = layer;
     }
 
@@ -89,7 +89,7 @@ public class Block {
      * @return a new {@code Block} instance with the updated block state
      */
     public Block setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        return new Block(blockState.setPropertyValues(propertyValues), pos, layer);
+        return new Block(blockState.setPropertyValues(propertyValues), position, layer);
     }
 
     /**
@@ -100,7 +100,7 @@ public class Block {
      * @return a new {@code Block} instance with the updated block state
      */
     public Block setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
-        return new Block(blockState.setPropertyValue(propertyValue), pos, layer);
+        return new Block(blockState.setPropertyValue(propertyValue), position, layer);
     }
 
     /**
@@ -114,7 +114,7 @@ public class Block {
      * @return a new {@code Block} instance with the updated block state
      */
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> Block setPropertyValue(PROPERTY property, DATATYPE value) {
-        return new Block(blockState.setPropertyValue(property, value), pos, layer);
+        return new Block(blockState.setPropertyValue(property, value), position, layer);
     }
 
     /**
@@ -154,10 +154,10 @@ public class Block {
      * @return a new {@code BlockStateWithPos} at the offset position
      */
     public Block offsetPos(int x, int y, int z, int layer) {
-        var newPos = pos.add(x, y, z, new Vector3i());
+        var newPos = position.add(x, y, z, new Vector3i());
         return new Block(
-                pos.dimension().getBlockState(newPos, layer),
-                new Position3i(newPos, pos.dimension()),
+                position.dimension().getBlockState(newPos, layer),
+                new Position3i(newPos, position.dimension()),
                 layer
         );
     }
@@ -170,7 +170,7 @@ public class Block {
      * @param value        the new value of the block property
      */
     public <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value) {
-        getDimension().updateBlockProperty(propertyType, value, pos, layer);
+        getDimension().updateBlockProperty(propertyType, value, position, layer);
     }
 
     /**
@@ -179,7 +179,7 @@ public class Block {
      * @param soundEvent the sound event to play
      */
     public void addLevelSoundEvent(SoundEvent soundEvent) {
-        getDimension().addLevelSoundEvent(MathUtils.center(pos), soundEvent);
+        getDimension().addLevelSoundEvent(MathUtils.center(position), soundEvent);
     }
 
     /**
@@ -189,7 +189,7 @@ public class Block {
      * @param data      additional event data
      */
     public void addLevelEvent(LevelEventType eventType, int data) {
-        getDimension().addLevelEvent(MathUtils.center(pos), eventType, data);
+        getDimension().addLevelEvent(MathUtils.center(position), eventType, data);
     }
 
     /**
@@ -198,7 +198,7 @@ public class Block {
      * @param particleType the type of particle to spawn
      */
     public void addParticle(ParticleType particleType) {
-        getDimension().addParticle(MathUtils.center(pos), particleType, 0);
+        getDimension().addParticle(MathUtils.center(position), particleType, 0);
     }
 
     /**
@@ -219,7 +219,7 @@ public class Block {
      * @return {@code true} if the block was successfully broken, {@code false} otherwise.
      */
     public boolean breakBlock(ItemStack usedItem, Entity entity) {
-        return getDimension().breakBlock(pos, usedItem, entity);
+        return getDimension().breakBlock(position, usedItem, entity);
     }
 
     /**
@@ -237,7 +237,7 @@ public class Block {
      * @return the {@link Dimension} of the block state
      */
     public Dimension getDimension() {
-        return pos.dimension();
+        return position.dimension();
     }
 
     /**
@@ -249,19 +249,19 @@ public class Block {
      */
     @SuppressWarnings("ALL")
     public <T extends BlockEntity> T getBlockEntity() {
-        return (T) getDimension().getBlockEntity(pos);
+        return (T) getDimension().getBlockEntity(position);
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Block that)) return false;
         return blockState.equals(that.blockState) &&
-               pos.equals(that.pos) &&
+               position.equals(that.position) &&
                layer == that.layer;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(blockState, pos, layer);
+        return Objects.hash(blockState, position, layer);
     }
 }

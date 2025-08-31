@@ -51,7 +51,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
         }
 
         var current = event.getCurrentBlock();
-        current.getDimension().dropItem(plantBlock.toItemStack(), MathUtils.center(current.getPos()));
+        current.getDimension().dropItem(plantBlock.toItemStack(), MathUtils.center(current.getPosition()));
         plantBlock = null;
     }
 

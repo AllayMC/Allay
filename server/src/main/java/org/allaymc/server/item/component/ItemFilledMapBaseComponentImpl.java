@@ -100,10 +100,10 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             var finalGreen = color.getGreen();
             var finalBlue = color.getBlue();
             // TODO: mix neighbor biomes' water color
-            var waterColor = BiomeData.getBiomeData(dimension.getBiome(block.getPos())).mapWaterColor();
-            if (block.getPos().y() < SEA_LEVEL) {
+            var waterColor = BiomeData.getBiomeData(dimension.getBiome(block.getPosition())).mapWaterColor();
+            if (block.getPosition().y() < SEA_LEVEL) {
                 // Under sea level, the farther away from sea level, the closer the color is to the ocean color
-                var depth = SEA_LEVEL - block.getPos().y();
+                var depth = SEA_LEVEL - block.getPosition().y();
                 if (depth > 15) {
                     return waterColor;
                 }
@@ -130,8 +130,8 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             return color;
         }
 
-        var blockY = block.getPos().y();
-        var neighborBlockY = neighborBlock.getPos().y();
+        var blockY = block.getPosition().y();
+        var neighborBlockY = neighborBlock.getPosition().y();
         if (blockY < neighborBlockY) {
             return darker(color, 0.85);
         }
@@ -191,7 +191,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             return EVERGREEN_FOLIAGE;
         }
 
-        var biomeType = block.getDimension().getBiome(block.getPos());
+        var biomeType = block.getDimension().getBiome(block.getPosition());
         if (biomeType == BiomeId.SWAMPLAND || biomeType == BiomeId.SWAMPLAND_MUTATED || biomeType == BiomeId.MANGROVE_SWAMP) {
             if (tintMethod == TintMethod.DRY_FOLIAGE) {
                 return DRY_FOLIAGE_SPECIAL_A;

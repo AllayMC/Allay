@@ -38,7 +38,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
     @Override
     public void onScheduledUpdate(Block block) {
-        var pos = block.getPos();
+        var pos = block.getPosition();
         var dimension = block.getDimension();
         if (canFormSource() && getDepth(block.getBlockState()) == 7) {
             // Attempt to form new water source blocks.
@@ -81,8 +81,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
     protected void tryScheduleLiquidUpdate(Block current) {
         var blockUpdateService = current.getDimension().getBlockUpdateService();
-        if (!blockUpdateService.hasScheduledBlockUpdate(current.getPos())) {
-            blockUpdateService.scheduleBlockUpdateInDelay(current.getPos(), getFlowSpeed(current.getDimension().getDimensionInfo()));
+        if (!blockUpdateService.hasScheduledBlockUpdate(current.getPosition())) {
+            blockUpdateService.scheduleBlockUpdateInDelay(current.getPosition(), getFlowSpeed(current.getDimension().getDimensionInfo()));
         }
     }
 

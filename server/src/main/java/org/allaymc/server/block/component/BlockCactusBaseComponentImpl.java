@@ -42,7 +42,7 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        if (!canGrowHere(block.getDimension(), block.getPos(), true)) {
+        if (!canGrowHere(block.getDimension(), block.getPosition(), true)) {
             block.breakBlock();
         }
     }
@@ -55,12 +55,12 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
             block = block.setPropertyValue(AGE_16, age + 1);
         } else if (age == AGE_16.getMax()) {
             block = block.setPropertyValue(AGE_16, 0);
-            if (canGrowHere(dimension, block.getPos(), false)) {
+            if (canGrowHere(dimension, block.getPosition(), false)) {
                 for (var y = 1; y < 3; y++) {
                     var upperBlock = block.offsetPos(0, y, 0);
                     var blockType = upperBlock.getBlockType();
                     if (blockType == BlockTypes.AIR) {
-                        dimension.setBlockState(upperBlock.getPos(), BlockTypes.CACTUS.getDefaultState());
+                        dimension.setBlockState(upperBlock.getPosition(), BlockTypes.CACTUS.getDefaultState());
                         break;
                     } else if (blockType != BlockTypes.CACTUS) {
                         break;
@@ -69,7 +69,7 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        dimension.setBlockState(block.getPos(), block.getBlockState());
+        dimension.setBlockState(block.getPosition(), block.getBlockState());
     }
 
     /**

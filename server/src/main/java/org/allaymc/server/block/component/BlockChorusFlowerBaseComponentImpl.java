@@ -80,13 +80,13 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
             }
 
             if (grew) {
-                block.getDimension().setBlockState(block.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
+                block.getDimension().setBlockState(block.getPosition(), BlockTypes.CHORUS_PLANT.getDefaultState());
                 return;
             }
         }
 
         // Growth failed — kill flower
-        block.getDimension().setBlockState(block.getPos(), block.getBlockState().setPropertyValue(AGE_6, AGE_6.getMax()));
+        block.getDimension().setBlockState(block.getPosition(), block.getBlockState().setPropertyValue(AGE_6, AGE_6.getMax()));
     }
 
     @Override
@@ -172,9 +172,9 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected void growInDirection(Block current, BlockFace face, int addingAge) {
-        current.getDimension().setBlockState(current.getPos(), BlockTypes.CHORUS_PLANT.getDefaultState());
+        current.getDimension().setBlockState(current.getPosition(), BlockTypes.CHORUS_PLANT.getDefaultState());
 
-        var newPos = current.offsetPos(face).getPos();
+        var newPos = current.offsetPos(face).getPosition();
         var newBlockState = current.getBlockState();
         var currentAge = newBlockState.getPropertyValue(AGE_6);
         newBlockState = newBlockState.setPropertyValue(AGE_6, Math.min(AGE_6.getMax(), currentAge + addingAge));

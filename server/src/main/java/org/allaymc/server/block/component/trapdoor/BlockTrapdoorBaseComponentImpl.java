@@ -50,7 +50,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         var isOpen = !clickedBlockState.getPropertyValue(OPEN_BIT);
         clickedBlockState.updateBlockProperty(OPEN_BIT, isOpen);
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
-        dimension.addSound(MathUtils.center(clickedBlockState.getPos()), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
+        dimension.addSound(MathUtils.center(clickedBlockState.getPosition()), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
         return true;
     }
 }

@@ -27,10 +27,10 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
 
-        if (isNeighborBlockLightBiggerThan(block.getDimension(), block.getPos())) {
+        if (isNeighborBlockLightBiggerThan(block.getDimension(), block.getPosition())) {
             var event = new BlockFadeEvent(block, BlockTypes.WATER.getDefaultState());
             if (event.call()) {
-                block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
+                block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
             }
         }
     }
@@ -49,7 +49,7 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         if (block.offsetPos(BlockFace.DOWN).getBlockType() != BlockTypes.AIR) {
-            block.getDimension().setBlockState(block.getPos(), BlockTypes.WATER.getDefaultState());
+            block.getDimension().setBlockState(block.getPosition(), BlockTypes.WATER.getDefaultState());
         }
 
         return Utils.EMPTY_ITEM_STACK_SET;

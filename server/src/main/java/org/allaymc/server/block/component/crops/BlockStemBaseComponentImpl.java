@@ -55,20 +55,20 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
         if (fruitBlock.getBlockType() != fruitId.getBlockType()) {
             // Fruit block is not connected to the stem,
             // so reset the stem direction to BlockFace.DOWN
-            block.getDimension().setBlockState(block.getPos(), block.getBlockState().setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal()));
+            block.getDimension().setBlockState(block.getPosition(), block.getBlockState().setPropertyValue(FACING_DIRECTION, BlockFace.DOWN.ordinal()));
         }
     }
 
     @Override
     public void onRandomUpdate(Block block) {
         if (ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(block) &&
-            block.getDimension().getLightService().getInternalLight(block.getPos()) >= 8) {
+            block.getDimension().getLightService().getInternalLight(block.getPosition()) >= 8) {
             var growth = block.getPropertyValue(GROWTH);
             if (growth < GROWTH.getMax()) {
                 var newCrop = block.setPropertyValue(GROWTH, growth + 1);
                 var event = new BlockGrowEvent(block, newCrop.getBlockState());
                 if (event.call()) {
-                    block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
                 }
                 return;
             }
@@ -91,15 +91,15 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
                 }
 
                 var event = new BlockGrowEvent(
-                        new Block(BlockTypes.AIR.getDefaultState(), new Position3i(fruitBlock.getPos(), block.getDimension())),
+                        new Block(BlockTypes.AIR.getDefaultState(), new Position3i(fruitBlock.getPosition(), block.getDimension())),
                         fruitId.getBlockType().getDefaultState()
                 );
                 if (event.call()) {
                     // Melon block can only be placed on farmland, dirt, or grass block
                     // Update stem direction
-                    block.getDimension().setBlockState(block.getPos(), block.getBlockState().setPropertyValue(FACING_DIRECTION, face.ordinal()));
+                    block.getDimension().setBlockState(block.getPosition(), block.getBlockState().setPropertyValue(FACING_DIRECTION, face.ordinal()));
                     // Place melon block
-                    block.getDimension().setBlockState(fruitBlock.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(fruitBlock.getPosition(), event.getNewBlockState());
                 }
             }
         }

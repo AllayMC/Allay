@@ -84,10 +84,10 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         var dimension = event.getCurrentBlock().getDimension();
         if (!(event.getEntity() instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
             // Item won't drop if the entity is a dropItem in creative mode
-            dimension.dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPos()));
+            dimension.dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPosition()));
         }
         clearItemStack();
-        dimension.addLevelEvent(MathUtils.center(event.getCurrentBlock().getPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_REMOVE);
+        dimension.addLevelEvent(MathUtils.center(event.getCurrentBlock().getPosition()), LevelEvent.SOUND_ITEMFRAME_ITEM_REMOVE);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
 
         if (this.itemStack != ItemAirStack.AIR_STACK) {
             // Drop the item in the frame when the frame is replaced
-            event.getCurrentBlock().getDimension().dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPos()));
+            event.getCurrentBlock().getDimension().dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPosition()));
             this.itemStack = ItemAirStack.AIR_STACK;
         }
     }

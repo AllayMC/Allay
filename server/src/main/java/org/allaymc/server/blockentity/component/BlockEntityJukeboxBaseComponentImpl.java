@@ -44,7 +44,7 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     public void onReplace(CBlockOnReplaceEvent event) {
         if (this.musicDiscItem != null) {
             var current = event.getCurrentBlock();
-            var pos = current.getPos();
+            var pos = current.getPosition();
             var rand = ThreadLocalRandom.current();
 
             current.getDimension().dropItem(this.musicDiscItem, new Vector3d(

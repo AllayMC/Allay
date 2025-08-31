@@ -94,7 +94,7 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
 
     /**
      * Check if the block should harden when looking at the surrounding blocks and sets the position
-     * to the hardened block when adequate. If the block was hardened, the method returns true.
+     * to the hardened block when adequate. If the block was hardened, the method returns {@code true}.
      *
      * @param block       the current block
      * @param flownIntoBy the block flown into by, can be {@code null}

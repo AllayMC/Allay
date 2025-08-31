@@ -46,7 +46,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
     private static Vector3ic posOfOtherPart(Block block) {
         var head = block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT);
         var face = Preconditions.checkNotNull(BlockFace.fromHorizontalIndex(block.getPropertyValue(BlockPropertyTypes.DIRECTION_4)));
-        return (head ? face.opposite() : face).offsetPos(block.getPos());
+        return (head ? face.opposite() : face).offsetPos(block.getPosition());
     }
 
     private static boolean posEqVec3ic(Position3ic pos, Vector3ic other) {
@@ -98,7 +98,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
-        if (posEqVec3ic(neighbor.getPos(), posOfOtherPart(block))
+        if (posEqVec3ic(neighbor.getPosition(), posOfOtherPart(block))
             && neighbor.getBlockType() != getBlockType()) {
             block.breakBlock();
         }
@@ -119,7 +119,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl implements
     }
 
     private Set<ItemStack> createBedDrop(Block blockState) {
-        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.getPos());
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.getPosition());
         var drop = blockState.toItemStack();
         drop.setMeta(blockEntity.getColor().ordinal());
         return Set.of(drop);

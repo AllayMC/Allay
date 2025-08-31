@@ -32,7 +32,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
         super.onNeighborUpdate(block, neighbor, face);
 
         if (face == BlockFace.UP && neighbor.getBlockStateData().isSolid()) {
-            block.getDimension().setBlockState(block.getPos(), BlockTypes.DIRT.getDefaultState());
+            block.getDimension().setBlockState(block.getPosition(), BlockTypes.DIRT.getDefaultState());
         }
     }
 
@@ -41,7 +41,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
         super.onRandomUpdate(block);
 
         var dimension = block.getDimension();
-        var pos = block.getPos();
+        var pos = block.getPosition();
         var moisture = block.getPropertyValue(MOISTURIZED_AMOUNT);
         if (!hydrated(block)) {
             if (moisture > 0) {
@@ -67,7 +67,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
      */
     protected boolean hydrated(Block block) {
         var dimension = block.getDimension();
-        var pos = block.getPos();
+        var pos = block.getPosition();
         for (var y = 0; y <= 1; y++) {
             for (var x = -4; x <= 4; x++) {
                 for (var z = -4; z <= 4; z++) {
@@ -92,7 +92,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
             if (entity instanceof EntityPlayer || (width * width * height) > 0.512f) {
                 var event = new EntityTrampleFarmlandEvent(entity, block);
                 if (event.call()) {
-                    block.getDimension().setBlockState(block.getPos(), BlockTypes.DIRT.getDefaultState());
+                    block.getDimension().setBlockState(block.getPosition(), BlockTypes.DIRT.getDefaultState());
                 }
             }
         }

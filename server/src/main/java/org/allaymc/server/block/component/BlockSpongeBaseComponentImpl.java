@@ -39,7 +39,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
 
     protected void tryAbsorbWater(Block center) {
         if (performAbsorbWater(center)) {
-            center.getDimension().setBlockState(center.getPos(), BlockTypes.WET_SPONGE.getDefaultState());
+            center.getDimension().setBlockState(center.getPosition(), BlockTypes.WET_SPONGE.getDefaultState());
             center.addLevelEvent(LevelEvent.PARTICLE_DESTROY_BLOCK, BlockTypes.WATER.getDefaultState().blockStateHash());
             center.addLevelSoundEvent(SoundEvent.SPONGE_ABSORB);
         }
@@ -63,7 +63,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
                 var neighborType = neighbor.getBlockType();
 
                 if (neighborType.hasBlockTag(BlockCustomTags.WATER)) {
-                    center.getDimension().setBlockState(neighbor.getPos(), BlockTypes.AIR.getDefaultState());
+                    center.getDimension().setBlockState(neighbor.getPosition(), BlockTypes.AIR.getDefaultState());
                     removedWaterCount++;
                     if (currentDistance < MAX_ABSORB_DISTANCE) {
                         queue.add(new Entry(neighbor, currentDistance + 1));

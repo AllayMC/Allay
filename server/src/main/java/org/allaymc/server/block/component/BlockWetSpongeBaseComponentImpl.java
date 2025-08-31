@@ -24,7 +24,7 @@ public class BlockWetSpongeBaseComponentImpl extends BlockBaseComponentImpl {
 
         var dimension = oldBlock.getDimension();
         if (dimension.getDimensionInfo() == DimensionInfo.NETHER) {
-            dimension.setBlockState(oldBlock.getPos(), BlockTypes.SPONGE.getDefaultState());
+            dimension.setBlockState(oldBlock.getPosition(), BlockTypes.SPONGE.getDefaultState());
             oldBlock.addLevelSoundEvent(SoundEvent.FIZZ);
             oldBlock.addParticle(ParticleType.EXPLODE);
         }

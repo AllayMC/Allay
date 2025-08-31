@@ -61,7 +61,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected static boolean willBeWipedOutByRain(Block block) {
-        var pos = block.getPos();
+        var pos = block.getPosition();
         var dimension = pos.dimension();
         var downBlockState = block.offsetPos(BlockFace.DOWN);
         var burnForever = canFireBurnForever(downBlockState.getBlockState());
@@ -100,7 +100,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onPlace(Block block, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onPlace(block, newBlockState, placementInfo);
-        block.getDimension().getBlockUpdateService().scheduleRandomBlockUpdateInDelay(block.getPos(), FIRE_SCHEDULED_UPDATE_DELAY);
+        block.getDimension().getBlockUpdateService().scheduleRandomBlockUpdateInDelay(block.getPosition(), FIRE_SCHEDULED_UPDATE_DELAY);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var pos = block.getPos();
+        var pos = block.getPosition();
         var dimension = block.getDimension();
         var downBlockState = block.offsetPos(BlockFace.DOWN);
         if (!canSupportFire(downBlockState.getBlockState()) && !canNeighborBurn(block)) {
@@ -132,7 +132,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var pos = block.getPos();
+        var pos = block.getPosition();
         var dimension = block.getDimension();
         var downBlockState = block.offsetPos(BlockFace.DOWN);
         if (!canSupportFire(downBlockState.getBlockState()) && !canNeighborBurn(block)) {
@@ -167,7 +167,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
                 var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
                 if (event.call()) {
-                    block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
                     return;
                 }
             }
@@ -175,7 +175,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             if (!(downBlockState.getBlockStateData().burnOdds() > 0) && age == AGE_16.getMax() && random.nextInt(4) == 0) {
                 var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
                 if (event.call()) {
-                    block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
+                    block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
                     return;
                 }
             }
@@ -189,7 +189,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     public void onSplash(Block block) {
         var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
         if (event.call()) {
-            block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
+            block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
         }
     }
 
@@ -209,7 +209,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         // normal fire to soul fire, and the soul fire will
         // transform back to normal block when block below change
         if (downBlockType.hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER)) {
-            block.getDimension().setBlockState(block.getPos(), BlockTypes.SOUL_FIRE.copyPropertyValuesFrom(block.getBlockState()));
+            block.getDimension().setBlockState(block.getPosition(), BlockTypes.SOUL_FIRE.copyPropertyValuesFrom(block.getBlockState()));
             return true;
         }
 
@@ -218,7 +218,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
     protected void spreadFire(Block source) {
         var random = ThreadLocalRandom.current();
-        var pos = source.getPos();
+        var pos = source.getPosition();
         var x = pos.x();
         var z = pos.z();
         var y = pos.y();
@@ -272,13 +272,13 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
                 var event = new BlockIgniteEvent(target, source, null, BlockIgniteEvent.BlockIgniteCause.SPREAD);
                 if (event.call()) {
-                    dimension.setBlockState(target.getPos(), BlockTypes.FIRE.ofState(AGE_16.createValue(currentFireAge)));
-                    dimension.getBlockUpdateService().scheduleRandomBlockUpdateInDelay(target.getPos(), FIRE_SCHEDULED_UPDATE_DELAY);
+                    dimension.setBlockState(target.getPosition(), BlockTypes.FIRE.ofState(AGE_16.createValue(currentFireAge)));
+                    dimension.getBlockUpdateService().scheduleRandomBlockUpdateInDelay(target.getPosition(), FIRE_SCHEDULED_UPDATE_DELAY);
                 }
             } else {
                 var event = new BlockBurnEvent(target);
                 if (event.call()) {
-                    dimension.setBlockState(target.getPos(), BlockTypes.AIR.getDefaultState());
+                    dimension.setBlockState(target.getPosition(), BlockTypes.AIR.getDefaultState());
                 }
             }
 
@@ -292,7 +292,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         if (willBeWipedOutByRain(block)) {
             var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
-                block.getDimension().setBlockState(block.getPos(), event.getNewBlockState());
+                block.getDimension().setBlockState(block.getPosition(), event.getNewBlockState());
                 return true;
             }
         }

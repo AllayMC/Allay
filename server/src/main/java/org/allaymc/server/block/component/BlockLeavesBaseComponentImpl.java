@@ -58,7 +58,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected void onNeighborOrScheduledUpdate(Block current) {
-        var pos = current.getPos();
+        var pos = current.getPosition();
         if (!current.getPropertyValue(UPDATE_BIT)) {
             current = current.setPropertyValue(UPDATE_BIT, true);
             pos.dimension().setBlockState(pos, current.getBlockState(), 0, true, false, false);
@@ -69,7 +69,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             var sideBlockState = current.offsetPos(face);
             if (sideBlockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
                 if (!sideBlockState.getPropertyValue(UPDATE_BIT)) {
-                    pos.dimension().getBlockUpdateService().scheduleBlockUpdateInDelay(sideBlockState.getPos(), 2);
+                    pos.dimension().getBlockUpdateService().scheduleBlockUpdateInDelay(sideBlockState.getPosition(), 2);
                 }
             }
         }
@@ -82,7 +82,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var pos = block.getPos();
+        var pos = block.getPosition();
         if (block.getPropertyValue(BlockPropertyTypes.PERSISTENT_BIT) || findLog(block, 7, null)) {
             block = block.setPropertyValue(UPDATE_BIT, false);
             pos.dimension().setBlockState(pos, block.getBlockState(), 0, true, false, false);
@@ -106,7 +106,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var pos = current.getPos();
+        var pos = current.getPosition();
         long hash = hashBlockXYZ(pos.x(), pos.y(), pos.z());
         if (visited.get(hash) >= distance) {
             return false;

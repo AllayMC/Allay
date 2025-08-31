@@ -36,7 +36,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
-        if (!canGrowHere(block.getDimension(), block.getPos(), true)) {
+        if (!canGrowHere(block.getDimension(), block.getPosition(), true)) {
             block.breakBlock();
         }
     }
@@ -44,7 +44,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onRandomUpdate(Block block) {
         var dimension = block.getDimension();
-        var pos = block.getPos();
+        var pos = block.getPosition();
         if (!canGrowHere(dimension, pos, true)) {
             dimension.breakBlock(pos, null, null);
             return;

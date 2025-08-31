@@ -28,7 +28,7 @@ public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         var dimension = block.getDimension();
-        var pos = block.getPos();
+        var pos = block.getPosition();
         if (dimension.getWorld().getWorldData().getGameRuleValue(GameRule.DO_TILE_DROPS)) {
             dimension.getEntityService().addEntity(EntityTypes.SILVERFISH.createEntity(
                     EntityInitInfo.builder()
