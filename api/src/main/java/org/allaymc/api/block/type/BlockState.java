@@ -4,6 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -12,7 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Represents a block state.
+ * BlockState represents a state of a {@link BlockType}. Each {@link BlockState} is a singleton which means you can directly
+ * use `==` to compare whether two block state are equal. All the known block state can be found in {@link Registries#BLOCK_STATE_PALETTE}.
  *
  * @author daoge_cmd
  */
