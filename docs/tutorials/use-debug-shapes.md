@@ -11,7 +11,7 @@ different types of shapes client-side, which would be very useful.
 
 To add a debug shape to a dimension, use the `addDebugShape` method provided by the `Dimension` interface. Here's an example of adding a debug box:
 
-```java linenums="1" hl_lines="9"
+```java linenums="1" hl_lines="10"
 // Create a DebugBox
 DebugBox debugBox = new DebugBox(
     new Vector3f(100, 64, 100), // Position
@@ -80,7 +80,8 @@ DebugArrow debugArrow = new DebugArrow(
     new Vector3f(110, 64, 110),
     1.0f, // Arrowhead length
     0.5f, // Arrowhead radius
-    4     // Arrowhead segments
+    4,    // Arrowhead segments
+    1.0f  // Arrowhead scale
 );
 ```
 
