@@ -42,6 +42,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed a bug where Ender Pearls would deal damage to Blazes.
 - Fixed an NPE bug that could occur in extreme cases for the light engine.
 - Fixed incorrect hardened block pos when lava flow to the water from above.
+- Fixed a bug where plugins lacking soft dependencies could not be loaded.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

@@ -193,7 +193,8 @@ public class AllayPluginManager implements PluginManager {
 
                 if (dependencyContainer == null) {
                     if (dependency.optional()) {
-                        continue start;
+                        // This dependency is optional, so we can still load this plugin
+                        continue;
                     }
 
                     log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
