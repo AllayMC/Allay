@@ -4,9 +4,9 @@ package org.allaymc.api.network;
  * NetworkInterface is used to open an interface on the network that the client can connect to.
  * It also holds the information that will be shown to the client in the server list.
  * <p>
- * Please note that the changes in network interface won't be saved to server settings.
- * For example if you set the motd on network interface, it will only put into effect before stop the server.
- * That make it suitable for making dynamic motd and dynamic max player count.
+ * Please note that the changes in network interface won't be saved to server settings. For example,
+ * if you set the motd on network interface, it will only put into effect before stop the server.
+ * That make it suitable for making dynamic motd.
  *
  * @author daoge_cmd
  */
