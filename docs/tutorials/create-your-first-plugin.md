@@ -65,14 +65,49 @@ Open the project in IntelliJ IDEA and follow these steps:
    rootProject.name = "MyPlugin"
    ```
 5. **Edit `plugin.json`:**
-   ```json
+   ```json linenums="1"
    {
      "name": "MyPlugin",
      "entrance": "your.group.name.myplugin.MyPlugin",
-     "authors": ["yourname"]
+     "authors": ["yourname"],
+     "version": "0.1.0",
+     "description": "The description of your plugin",
+     "website": "The website of your plugin",
+     "dependencies": [
+        {
+            "name": "AnotherPlugin1"
+        },
+        {
+            "name": "AnotherPlugin2",
+            "version": "0.1.0",
+            "optional": true
+        }
+    ]
    }
    ```
 6. **Reload the Gradle project.**
+
+When editing the plugin.json, there are a few things worth noting:
+
+- Fields `description`, `website` and `dependencies` can be missing.
+- The version of your plugin must be a valid [Semantic Version](https://semver.org/spec/v2.0.0.html), otherwise the plugin won't be loaded.
+- The version used in the entry of field `dependencies` can be an expression, and here are some examples:
+  - Single version
+    - `1.2.3`
+  - NPM Style
+    - `>1.2.2`
+    - `1.1.1 || 1.2.3 - 2.0.0`
+    - `1.1.*`
+    - `~1.2.1`
+    - `^1.1.1`
+  - COCOAPODS Style
+    - `> 1.2.2`
+    - `~> 1.2.1`
+    - `<= 1.1.1`
+  - IVY Style
+    - `1.2.+`
+    - `(,1.8.9]`
+    - `[0.2,1.4]`
 
 ## Building and Installing the Plugin
 
