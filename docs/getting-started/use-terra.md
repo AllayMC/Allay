@@ -16,6 +16,7 @@ Introducing [Terra](https://github.com/PolyhedralDev/Terra), the best solution t
     with an advanced API, tightly integrated with a powerful configuration system.
 
     Terra consists of several parts:
+
     - A voxel world generation API with emphasis on configuration and extensibility
     - Several platform implementations, the layer between the API and the platform it's running on
     - An addon loader, which allows addons to interface with the Terra API in a platform-agnostic setting
