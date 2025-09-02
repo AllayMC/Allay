@@ -39,18 +39,23 @@ public class WorldSettings extends OkaeriConfig {
     @Getter
     @Accessors(fluent = true)
     public static class WorldSetting extends OkaeriConfig {
+        /**
+         * A field indicates whether the world is runtime only, which means that the world will not be saved
+         * to `world-settings.yml` when the server shutdown. Therefore, it won't be loaded after the server
+         * restarted because the setting for this world is not exist in `world-settings.yml`.
+         * <p>
+         * This is useful for world created for game room which will be deleted when shutdown.
+         */
+        @Setter
+        @Exclude
+        private boolean runtimeOnly;
+
         @Setter
         @Comment("If set to false, the world will not be loaded")
         @CustomKey("enable")
         @Builder.Default
         private boolean enable = true;
 
-        @Setter
-        @Comment("If set to true, the information of this world will not be saved to world-settings.yml,")
-        @Comment("therefore it won't be loaded after the server restarted. This is useful for world created")
-        @Comment("for game room by plugin and will be deleted when shutdown")
-        @CustomKey("runtime-only")
-        private boolean runtimeOnly;
 
         @CustomKey("storage-type")
         private String storageType;
