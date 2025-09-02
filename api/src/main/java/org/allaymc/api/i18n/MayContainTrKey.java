@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  *
  * @author daoge_cmd
  */
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER, ElementType.RECORD_COMPONENT, ElementType.LOCAL_VARIABLE})
 public @interface MayContainTrKey {
 }
