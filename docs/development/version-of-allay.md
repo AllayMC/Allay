@@ -64,5 +64,5 @@ Packages:
 
 Although they may not change frequently, we make no immutability guarantees on them,
 and they are not protected by API versions. However, we decided to keep them in the
-api to make the developers who believe that they are able to update their plugins during
+API to make the developers who believe that they are able to update their plugins during
 version updating timely to develop plugins easier.
