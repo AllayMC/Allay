@@ -69,6 +69,21 @@ li.md-tabs__item.md-tabs__item--active {
     text-align: initial;
 }
 
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+    font-weight: normal;
+}
+
+.md-typeset h2 {
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    padding-bottom: 0.2em;
+    margin-bottom: 0.6em;
+}
+
 /* Show tabs */
 @media screen and (min-width: 76.25em) {
     .md-header {
