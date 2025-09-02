@@ -2,6 +2,7 @@ package org.allaymc.api.i18n;
 
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * I18n is used to translate the text which contains translation key in the game.
@@ -16,9 +17,14 @@ public interface I18n {
      * Fallback lang code is used when the translation key is not found in the specified lang code.
      */
     LangCode FALLBACK_LANG = LangCode.en_US;
-
+    /**
+     * A holder which holds the implementation of {@link I18n}.
+     */
     ApiInstanceHolder<I18n> I18N = ApiInstanceHolder.create();
-    String VANILLA_LANG_NAMESPACE = "minecraft";
+    /**
+     * The namespace used in vanilla translation key.
+     */
+    String VANILLA_LANG_NAMESPACE = Identifier.DEFAULT_NAMESPACE;
 
     /**
      * Get the I18n instance.
