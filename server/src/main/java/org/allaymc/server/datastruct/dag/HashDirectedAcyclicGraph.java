@@ -171,13 +171,13 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
         //~ Constructors =======================================================
 
         /**
-         * Make a copy of an initialNode
+         * Constructs a copy of a node.
          *
-         * @param node
+         * @param node the node to copy
          */
         protected Node(Node node) {
-            beforeSet = node.beforeSet;
-            afterSet = node.afterSet;
+            beforeSet = new HashSet<>(node.beforeSet);
+            afterSet = new HashSet<>(node.afterSet);
             self = node.self;
         }
 

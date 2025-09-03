@@ -368,6 +368,8 @@ public class HashDirectedAcyclicGraphTest {
         List<Base> sortedList = instance.getSortedList();
         assertEquals(Base.C, sortedList.getLast());
         assertEquals(Base.B, sortedList.get(sortedList.size() - 2));
+        // Multiple method calls should return the same result
+        assertEquals(sortedList, instance.getSortedList());
     }
 
     enum Base {A, B, C, D, E, F, G, H}

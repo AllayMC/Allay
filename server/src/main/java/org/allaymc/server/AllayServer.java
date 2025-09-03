@@ -16,7 +16,6 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
-import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardService;
 import org.allaymc.api.server.Server;
@@ -75,7 +74,7 @@ public final class AllayServer implements Server {
     @Getter
     private final ScoreboardService scoreboardService;
     @Getter
-    private final PluginManager pluginManager;
+    private final AllayPluginManager pluginManager;
     @Getter
     private final Scheduler scheduler;
     private final Supplier<PermissionGroup> permissionGroup;
@@ -169,10 +168,10 @@ public final class AllayServer implements Server {
             }
         });
 
-        ((AllayPluginManager) this.pluginManager).loadPlugins();
+        this.pluginManager.loadPlugins();
         this.worldPool.loadWorlds();
         this.scoreboardService.read();
-        ((AllayPluginManager) this.pluginManager).enablePlugins();
+        this.pluginManager.enablePlugins();
 
         sendTr(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
         ((AllayPlayerService) this.playerService).startNetworkInterface();
@@ -236,7 +235,7 @@ public final class AllayServer implements Server {
         new ServerStopEvent().call();
 
         // Disable all plugins
-        ((AllayPluginManager) this.pluginManager).disablePlugins();
+        this.pluginManager.disablePlugins();
 
         // Save all configurations & data
         Server.SETTINGS.save();

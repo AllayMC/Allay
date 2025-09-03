@@ -39,10 +39,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed the bug that snowball will always make knockback even if the entity being hit is in damage cool down.
-- Fixed a bug where Ender Pearls would deal damage to Blazes.
+- Fixed the bug where Ender Pearls would deal damage to Blazes.
 - Fixed an NPE bug that could occur in extreme cases for the light engine.
 - Fixed incorrect hardened block pos when lava flow to the water from above.
-- Fixed a bug where plugins lacking soft dependencies could not be loaded.
+- Fixed the bug where plugins lacking soft dependencies could not be loaded.
+- Fixed the bug where plugins which have dependencies will only be loaded but not enabled.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

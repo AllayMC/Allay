@@ -97,7 +97,6 @@ public class AllayPluginManager implements PluginManager {
      * Find plugin paths from the given plugin sources.
      *
      * @param sources the plugin sources to find plugin paths from
-     *
      * @return a set of plugin paths found from the given plugin sources
      */
     protected Set<Path> findPluginPaths(Set<PluginSource> sources) {
@@ -154,7 +153,7 @@ public class AllayPluginManager implements PluginManager {
         for (var descriptor : descriptors.values()) {
             for (var dependency : descriptor.getDependencies()) {
                 var name = dependency.name();
-                // add dependency plugin to DAG
+                // Add dependency plugin to DAG
                 dag.add(name);
                 try {
                     dag.setBefore(name, descriptor.getName());
@@ -203,16 +202,17 @@ public class AllayPluginManager implements PluginManager {
                 }
 
                 if (isUnexpectedDependencyVersion(dependencyContainer.descriptor(), dependency)) {
-                    log.warn(I18n.get().tr(TrKeys.ALLAY_PLUGIN_DEPENDENCY_VERSION_MISMATCH,
-                            descriptor.getName(),
-                            dependency.name(),
-                            RangeListFactory.create(dependency.version()),
-                            dependencyContainer.descriptor().getVersion()));
+                    // Mismatched dependency version, skip this plugin
+                    log.error(I18n.get().tr(
+                            TrKeys.ALLAY_PLUGIN_DEPENDENCY_VERSION_MISMATCH, descriptor.getName(), dependency.name(),
+                            RangeListFactory.create(dependency.version()), dependencyContainer.descriptor().getVersion()
+                    ));
+                    iterator.remove();
+                    continue start;
                 }
             }
 
             log.info(I18n.get().tr(TrKeys.ALLAY_PLUGIN_LOADING, descriptor.getName()));
-
             PluginContainer pluginContainer;
             try {
                 pluginContainer = loader.loadPlugin();
@@ -234,7 +234,7 @@ public class AllayPluginManager implements PluginManager {
         // findLoadersAndLoadDescriptors will only find loader in this.customLoaderFactories,
         // so already loaded plugin won't be loaded twice
         findLoadersAndLoadDescriptors(paths, foundDescriptors, foundLoaders, this.customLoaderFactories);
-        calculateLoadingOrder(dag, foundDescriptors);
+        calculateLoadingOrder(dag, foundDescriptors); // FIXME
         onLoad(foundDescriptors, foundLoaders);
     }
 
@@ -261,6 +261,7 @@ public class AllayPluginManager implements PluginManager {
                 // Plugin failed to be loaded
                 continue;
             }
+
             log.info(I18n.get().tr(TrKeys.ALLAY_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
@@ -352,7 +353,6 @@ public class AllayPluginManager implements PluginManager {
          * Ensure the state is not bigger than the given state.
          *
          * @param state the state to compare with
-         *
          * @throws IllegalStateException if the state is bigger than the given state
          */
         public void ensureNotBiggerThan(State state) {
@@ -365,7 +365,6 @@ public class AllayPluginManager implements PluginManager {
          * Ensure the state is equals to the given state.
          *
          * @param state the state to compare with
-         *
          * @throws IllegalStateException if the state is not equals to the given state
          */
         public void ensureEquals(State state) {
