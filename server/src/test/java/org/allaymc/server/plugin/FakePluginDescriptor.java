@@ -40,6 +40,11 @@ public class FakePluginDescriptor implements PluginDescriptor {
     }
 
     @Override
+    public String getAPIVersion() {
+        return "";
+    }
+
+    @Override
     public String getWebsite() {
         return "";
     }

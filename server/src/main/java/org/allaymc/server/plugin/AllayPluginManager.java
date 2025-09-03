@@ -1,6 +1,5 @@
 package org.allaymc.server.plugin;
 
-import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.plugin.PluginDisableEvent;
 import org.allaymc.api.eventbus.event.plugin.PluginEnableEvent;
@@ -11,6 +10,7 @@ import org.allaymc.server.datastruct.dag.DAGCycleException;
 import org.allaymc.server.datastruct.dag.DirectedAcyclicGraph;
 import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
+import org.allaymc.server.utils.GitProperties;
 import org.semver4j.Semver;
 import org.semver4j.range.RangeListFactory;
 
@@ -135,6 +135,17 @@ public class AllayPluginManager implements PluginManager {
                 continue;
             }
 
+            if (!descriptor.getAPIVersion().isBlank()) {
+                // Replace the possible dev suffix in the api version string to make it strictly meet the semver rules
+                var apiVersion = Semver.coerce(GitProperties.getBuildApiVersion().replace("-dev", ""));
+                var apiVersionRange = RangeListFactory.create(descriptor.getAPIVersion());
+                // noinspection all
+                if (!apiVersion.satisfies(apiVersionRange)) {
+                    log.error(I18n.get().tr(TrKeys.ALLAY_PLUGIN_API_VERSION_MISMATCH, apiVersion, name, apiVersionRange));
+                    continue;
+                }
+            }
+
             foundDescriptors.put(name, descriptor);
             foundLoaders.put(name, loader);
         }
@@ -205,7 +216,7 @@ public class AllayPluginManager implements PluginManager {
                     // Mismatched dependency version, skip this plugin
                     log.error(I18n.get().tr(
                             TrKeys.ALLAY_PLUGIN_DEPENDENCY_VERSION_MISMATCH, descriptor.getName(), dependency.name(),
-                            RangeListFactory.create(dependency.version()), dependencyContainer.descriptor().getVersion()
+                            dependency.version(), dependencyContainer.descriptor().getVersion()
                     ));
                     iterator.remove();
                     continue start;
@@ -234,21 +245,20 @@ public class AllayPluginManager implements PluginManager {
         // findLoadersAndLoadDescriptors will only find loader in this.customLoaderFactories,
         // so already loaded plugin won't be loaded twice
         findLoadersAndLoadDescriptors(paths, foundDescriptors, foundLoaders, this.customLoaderFactories);
-        calculateLoadingOrder(dag, foundDescriptors); // FIXME
+        calculateLoadingOrder(dag, foundDescriptors);
         onLoad(foundDescriptors, foundLoaders);
     }
 
     protected boolean isUnexpectedDependencyVersion(PluginDescriptor dependency, PluginDependency requirement) {
         var requireVersion = requirement.version();
-        if (requireVersion == null || requireVersion.isBlank()) {
+        if (requireVersion == null) {
             return false;
         }
 
         var dependencyVersion = dependency.getVersion();
         var dependencySemver = Semver.coerce(dependencyVersion);
         var versionRanges = RangeListFactory.create(requireVersion);
-        // Already checked at org.allaymc.api.plugin.PluginDescriptor.checkDescriptorValid
-        Preconditions.checkNotNull(dependencySemver);
+        // noinspection all
         return !dependencySemver.satisfies(versionRanges);
     }
 

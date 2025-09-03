@@ -124,7 +124,6 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
 
     @SneakyThrows
     private void encryptPacks() {
-        log.info(I18n.get().tr(TrKeys.ALLAY_PACK_AUTOENCRYPT_ENABLED));
         // Only encrypt packs in the normal packs path
         try (var stream = Files.newDirectoryStream(NORMAL_PACKS_PATH)) {
             for (var zipPack : stream) {

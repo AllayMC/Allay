@@ -71,6 +71,7 @@ Open the project in IntelliJ IDEA and follow these steps:
      "entrance": "your.group.name.myplugin.MyPlugin",
      "authors": ["yourname"],
      "version": "0.1.0",
+     "api_version": ">=0.1.0",
      "description": "The description of your plugin",
      "website": "The website of your plugin",
      "dependencies": [
@@ -79,7 +80,7 @@ Open the project in IntelliJ IDEA and follow these steps:
         },
         {
             "name": "AnotherPlugin2",
-            "version": "0.1.0",
+            "version": ">=0.1.0",
             "optional": true
         }
     ]
@@ -89,9 +90,9 @@ Open the project in IntelliJ IDEA and follow these steps:
 
 When editing the plugin.json, there are a few things worth noting:
 
-- Fields `description`, `website` and `dependencies` can be missing.
-- The version of your plugin must be a valid [Semantic Version](https://semver.org/spec/v2.0.0.html), otherwise the plugin won't be loaded.
-- The version used in the entry of field `dependencies` can be an expression, and here are some examples:
+- Fields `api_version`, `description`, `website` and `dependencies` can be missing.
+- The `version` of your plugin must be a valid [Semantic Version](https://semver.org/spec/v2.0.0.html), otherwise the plugin won't be loaded.
+- The `api_version` of your plugin and the `version` of entries in `dependencies` can be an expression, and here are some examples:
   - Single version
     - `1.2.3`
   - NPM Style
