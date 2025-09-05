@@ -38,7 +38,7 @@ This tutorial introduces the core concepts of Allay’s Blocks API and shows pra
 
 There are two common ways to obtain a BlockType.
 
-### 1) From the global registry
+### 1. From the global registry
 
 ```java linenums="1"
 import org.allaymc.api.registry.Registries;
@@ -51,7 +51,7 @@ if (stone == null) {
 }
 ```
 
-### 2) From the generated BlockTypes class
+### 2. From the generated BlockTypes class
 
 ```java linenums="1"
 import org.allaymc.api.block.type.BlockTypes;
@@ -62,7 +62,7 @@ BlockType<?> stone = BlockTypes.STONE; // Convenience access
 
 ## Getting a BlockState
 
-### 1) From a BlockType
+### 1. From a BlockType
 
 - Default state:
 
@@ -100,7 +100,7 @@ BlockState oakLogX = BlockTypes.OAK_LOG.ofState(
 );
 ```
 
-### 2) Using BlockStateSafeGetter (version-safe)
+### 2. Using BlockStateSafeGetter (version-safe)
 
 BlockStateSafeGetter helps you build or parse states in a way that remains compatible across protocol versions.
 
@@ -134,7 +134,7 @@ NbtMap stateNbt = NbtMap.builder()
 BlockState oakLogY = BlockStateSafeGetter.fromNBT(stateNbt);
 ```
 
-### 3) From the BlockState palette (by hash)
+### 3. From the BlockState palette (by hash)
 
 If you already know the block state hash, you can get the instance from the global palette:
 
@@ -146,9 +146,9 @@ int hash = /* a known block state hash */;
 BlockState state = Registries.BLOCK_STATE_PALETTE.get(hash);
 ```
 
-## Read/Write blocks in a Dimension
+## Read/Set block states in a Dimension
 
-Use Dimension to query and modify blocks at world positions.
+Use Dimension to query and modify block states at positions.
 
 ### Reading the block state at a position
 

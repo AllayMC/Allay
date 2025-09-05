@@ -142,6 +142,7 @@ nav:
       - Use Scoreboards: tutorials/use-scoreboards.md
       - Use Debug Shapes: tutorials/use-debug-shapes.md
       - Block: tutorials/block.md
+      - Item and Container: tutorials/item-and-container.md
       - Persistent Data Container: tutorials/persistent-data-container.md
 
   - Advanced:
