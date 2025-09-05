@@ -141,6 +141,7 @@ nav:
       - Use Forms: tutorials/use-forms.md
       - Use Scoreboards: tutorials/use-scoreboards.md
       - Use Debug Shapes: tutorials/use-debug-shapes.md
+      - Block: tutorials/block.md
       - Persistent Data Container: tutorials/persistent-data-container.md
 
   - Advanced:
