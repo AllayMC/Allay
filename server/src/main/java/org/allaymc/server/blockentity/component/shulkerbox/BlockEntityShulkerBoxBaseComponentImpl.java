@@ -33,7 +33,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         ShulkerBoxContainer container = containerHolderComponent.getContainer();
-        container.addOnOpenListener(viewer -> {
+        container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 BlockEventPacket pk = new BlockEventPacket();
                 pk.setBlockPosition(position.toNetwork());
@@ -49,7 +49,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
                 sendPacketToViewers(pk);
             }
         });
-        container.addOnCloseListener(viewer -> {
+        container.addCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
                 BlockEventPacket pk = new BlockEventPacket();
                 pk.setBlockPosition(position.toNetwork());

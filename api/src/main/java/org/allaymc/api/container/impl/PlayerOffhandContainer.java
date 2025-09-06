@@ -17,7 +17,7 @@ public class PlayerOffhandContainer extends PlayerContainer {
 
     public PlayerOffhandContainer(Supplier<EntityPlayer> playerSupplier) {
         super(FullContainerType.OFFHAND, playerSupplier);
-        addOnSlotChangeListener(0, this::onOffhandChange);
+        addSlotChangeListener(0, this::onOffhandChange);
     }
 
     public void sendEquipmentPacketTo(EntityPlayer player) {

@@ -19,10 +19,10 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author daoge_cmd
@@ -44,8 +44,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     protected BiMap<FullContainerType<?>, Container> typeToContainer = HashBiMap.create(new Object2ObjectOpenHashMap<>());
     protected Map<ContainerSlotType, FullContainerType<?>> slotTypeToFullType = new HashMap<>();
 
-    @Override
-    public byte assignContainerId() {
+    protected byte assignContainerId() {
         if (idCounter + 1 >= 100) {
             idCounter = 1;
         }
@@ -54,17 +53,21 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public void sendContents(Container container) {
-        var id = idToContainer.inverse().get(container);
-        if (id == null) {
-            throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
+    public void viewContents(Container container) {
+        if (container instanceof PlayerContainer playerContainer) {
+            viewContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId());
+            return;
         }
 
-        sendContentsWithSpecificContainerId(container, id);
+        var id = idToContainer.inverse().get(container);
+        if (id == null) {
+            throw new IllegalStateException("This viewer did not open the container " + container.getContainerType());
+        }
+
+        viewContentsWithSpecificContainerId(container, id);
     }
 
-    @Override
-    public void sendContentsWithSpecificContainerId(Container container, int containerId) {
+    protected void viewContentsWithSpecificContainerId(Container container, int containerId) {
         var packet = new InventoryContentPacket();
         packet.setContainerId(containerId);
         // Client expects both zero if we do not use FullContainerName
@@ -75,7 +78,28 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public void sendContentsWithSpecificContainerId(Container container, int containerId, int slot) {
+    public void viewSlot(Container container, int slot) {
+        if (container instanceof PlayerContainer playerContainer) {
+            if (playerContainer.getContainerType() == FullContainerType.OFFHAND) {
+                // HACK: for unknown reason, we should send InventoryContentPacket instead of InventorySlotPacket
+                // for offhand container, otherwise the client will not update the offhand item
+                // TODO: replace this hack when we find the reason and have better solution
+                viewContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId());
+            } else {
+                viewSlotWithSpecificContainerId(playerContainer, slot, playerContainer.getUnopenedContainerId());
+            }
+            return;
+        }
+
+        var id = idToContainer.inverse().get(container);
+        if (id == null) {
+            throw new IllegalStateException("This viewer did not open the container " + container.getContainerType());
+        }
+
+        viewSlotWithSpecificContainerId(container, slot, id);
+    }
+
+    protected void viewSlotWithSpecificContainerId(Container container, int slot, int containerId) {
         var packet = new InventorySlotPacket();
         packet.setContainerId(containerId);
         packet.setSlot(container.toNetworkSlotIndex(slot));
@@ -85,25 +109,22 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public void sendContent(Container container, int slot) {
-        var id = idToContainer.inverse().get(container);
-        if (id == null) {
-            throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
+    public byte viewOpen(Container container) {
+        if (idToContainer.inverse().containsKey(container)) {
+            throw new IllegalStateException("The container " + container.getContainerType() + " have been opened by this viewer");
         }
 
-        sendContentsWithSpecificContainerId(container, id, slot);
-    }
-
-    @Override
-    public void onOpen(byte assignedId, Container container) {
+        var assignedId = assignContainerId();
         sendContainerOpenPacket(assignedId, container);
         registerOpenedContainer(assignedId, container);
 
         var containerType = container.getContainerType();
         // We should send the container's contents to client if the container is not held by the entity
         if (containerHolderComponent.getContainer(containerType) == null) {
-            sendContents(container);
+            viewContents(container);
         }
+
+        return assignedId;
     }
 
     protected void registerOpenedContainer(byte assignedId, Container container) {
@@ -112,7 +133,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
     }
 
-    private void sendContainerOpenPacket(byte assignedId, Container container) {
+    protected void sendContainerOpenPacket(byte assignedId, Container container) {
         var packet = new ContainerOpenPacket();
         packet.setId(assignedId);
         packet.setType(container.getContainerType().toNetworkType());
@@ -126,9 +147,12 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public void onClose(byte assignedId, Container container) {
-        if (!idToContainer.containsKey(assignedId))
-            throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
+    public void viewClose(Container container) {
+        var assignedId = idToContainer.inverse().get(container);
+        if (assignedId == null) {
+            throw new IllegalStateException("Trying to close a container which is not opened! Type: " + container.getContainerType());
+        }
+
         sendContainerClosePacket(assignedId, container);
         unregisterOpenedContainer(assignedId, container);
     }
@@ -146,25 +170,18 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public void notifySlotChange(Container container, int slot) {
-        var id = idToContainer.inverse().get(container);
-        if (id == null) {
-            if (!(container instanceof PlayerContainer playerContainer)) {
-                return;
-            }
-
-            // PlayerContainer is always opened
-            if (playerContainer.getContainerType() == FullContainerType.OFFHAND) {
-                // HACK: for unknown reason, we should send InventoryContentPacket instead of InventorySlotPacket
-                // for offhand container, otherwise the client will not update the offhand item
-                // TODO: replace this hack when we find the reason and have better solution
-                sendContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId());
-            } else {
-                sendContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId(), slot);
-            }
-            return;
+    public void viewContainerData(Container container, int property, int value) {
+        var assignedId = idToContainer.inverse().get(container);
+        if (assignedId == null) {
+            throw new IllegalStateException("This viewer did not open the container " + container.getContainerType());
         }
-        sendContentsWithSpecificContainerId(container, id, slot);
+
+        var packet = new ContainerSetDataPacket();
+        packet.setWindowId(assignedId);
+        packet.setProperty(property);
+        packet.setValue(value);
+
+        networkComponent.sendPacket(packet);
     }
 
     @Override
@@ -172,11 +189,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         // Special case: If the player opens their inventory, they also implicitly open a series of other containers, even if not registered
         Container container = null;
         if (isPlayerInventoryOpened()) {
-            if (
-                    type == FullContainerType.ARMOR ||
-                    type == FullContainerType.OFFHAND ||
-                    type == FullContainerType.CRAFTING_GRID
-            ) {
+            if (type == FullContainerType.ARMOR || type == FullContainerType.OFFHAND || type == FullContainerType.CRAFTING_GRID) {
                 container = containerHolderComponent.getContainer(type);
             }
         }
@@ -188,7 +201,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType) {
+    public <T extends Container> T getOpenedContainer(ContainerSlotType slotType) {
         // Similarly, special case handling needed
         FullContainerType<?> fullType = null;
         if (isPlayerInventoryOpened()) {
@@ -216,22 +229,14 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public @UnmodifiableView BiMap<Byte, Container> getIdToContainerMap() {
-        return idToContainer;
+    public Set<Container> getOpenedContainers() {
+        return this.idToContainer.values();
     }
 
     @Override
-    public @UnmodifiableView BiMap<FullContainerType<?>, Container> getTypeToContainerMap() {
-        return typeToContainer;
-    }
-
-    @Override
-    public void sendContainerData(byte assignedId, int property, int value) {
-        var packet = new ContainerSetDataPacket();
-        packet.setWindowId(assignedId);
-        packet.setProperty(property);
-        packet.setValue(value);
-
-        networkComponent.sendPacket(packet);
+    public void closeAllOpenedContainers() {
+        for (var container : getOpenedContainers()) {
+            container.removeViewer(this);
+        }
     }
 }

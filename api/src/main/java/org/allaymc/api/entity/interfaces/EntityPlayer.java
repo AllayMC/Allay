@@ -52,9 +52,9 @@ public interface EntityPlayer extends
      * @param <T>      the container type
      * @return the reachable container, or {@code null} if none
      */
-    default <T extends Container> T getReachableContainerBySlotType(ContainerSlotType slotType) {
-        var container = getOpenedContainerBySlotType(slotType);
-        if (container == null) container = getContainerBySlotType(slotType);
+    default <T extends Container> T getReachableContainer(ContainerSlotType slotType) {
+        var container = getOpenedContainer(slotType);
+        if (container == null) container = getContainer(slotType);
         return (T) container;
     }
 

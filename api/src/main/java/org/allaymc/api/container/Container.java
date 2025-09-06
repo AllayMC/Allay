@@ -5,7 +5,6 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Represents a container.
+ * Container represents an object that can hold items, and it can be viewed by {@link ContainerViewer}.
  *
  * @author daoge_cmd
  */
@@ -27,48 +26,32 @@ public interface Container {
     FullContainerType<?> getContainerType();
 
     /**
-     * Called when the container is opened.
-     *
-     * @param viewer the viewer
-     */
-    @ApiStatus.OverrideOnly
-    void onOpen(ContainerViewer viewer);
-
-    /**
-     * Called when the container is closed.
-     *
-     * @param viewer the viewer
-     */
-    @ApiStatus.OverrideOnly
-    void onClose(ContainerViewer viewer);
-
-    /**
      * Add a listener to be called when the container is opened.
      *
      * @param listener the listener
      */
-    void addOnOpenListener(Consumer<ContainerViewer> listener);
+    void addOpenListener(Consumer<ContainerViewer> listener);
 
     /**
      * Remove a listener to be called when the container is opened.
      *
      * @param listener the listener
      */
-    void removeOnOpenListener(Consumer<ContainerViewer> listener);
+    void removeOpenListener(Consumer<ContainerViewer> listener);
 
     /**
      * Add a listener to be called when the container is closed.
      *
      * @param listener the listener
      */
-    void addOnCloseListener(Consumer<ContainerViewer> listener);
+    void addCloseListener(Consumer<ContainerViewer> listener);
 
     /**
      * Remove a listener to be called when the container is closed.
      *
      * @param listener the listener
      */
-    void removeOnCloseListener(Consumer<ContainerViewer> listener);
+    void removeCloseListener(Consumer<ContainerViewer> listener);
 
     /**
      * Add a listener to be called when the slot is changed.
@@ -76,7 +59,7 @@ public interface Container {
      * @param slot     the slot
      * @param listener the listener
      */
-    void addOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
+    void addSlotChangeListener(int slot, Consumer<ItemStack> listener);
 
     /**
      * Remove a listener to be called when the slot is changed.
@@ -84,13 +67,12 @@ public interface Container {
      * @param slot     the slot
      * @param listener the listener
      */
-    void removeOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
+    void removeSlotChangeListener(int slot, Consumer<ItemStack> listener);
 
     /**
      * Get the slot type of the slot.
      *
      * @param slot the slot
-     *
      * @return the slot type
      */
     default ContainerSlotType getSlotType(int slot) {
@@ -108,7 +90,6 @@ public interface Container {
      * Get the item stack of the slot.
      *
      * @param slot the slot
-     *
      * @return the item stack
      */
     ItemStack getItemStack(int slot);
@@ -117,7 +98,6 @@ public interface Container {
      * Check if the slot is empty.
      *
      * @param slot the slot
-     *
      * @return {@code true} if the slot is empty, otherwise {@code false}.
      */
     default boolean isEmpty(int slot) {
@@ -175,7 +155,6 @@ public interface Container {
      * @param itemStack the {@link ItemStack} to set
      *                  If {@link ItemAirStack#AIR_STACK}, clears the slot.
      * @param send      whether to send an update packet to viewers
-     *
      * @throws NullPointerException if {@code itemStack} is {@code null}
      */
     void setItemStack(int slot, ItemStack itemStack, boolean send);
@@ -219,15 +198,6 @@ public interface Container {
      * @param viewer the {@link ContainerViewer} to remove
      */
     void removeViewer(ContainerViewer viewer);
-
-    /**
-     * Removes a viewer by their ID and returns the removed viewer.
-     *
-     * @param viewerId the ID of the viewer to remove
-     *
-     * @return the removed {@link ContainerViewer}, or {@code null} if not found
-     */
-    ContainerViewer removeViewer(byte viewerId);
 
     /**
      * Removes all viewers from this container.
@@ -282,7 +252,6 @@ public interface Container {
      * Get the slot index from the network slot index.
      *
      * @param index the network slot index
-     *
      * @return the slot index
      */
     default int toNetworkSlotIndex(int index) {
@@ -293,7 +262,6 @@ public interface Container {
      * Get the network slot index from the slot index.
      *
      * @param index the slot index
-     *
      * @return the network slot index
      */
     default int fromNetworkSlotIndex(int index) {
@@ -306,7 +274,7 @@ public interface Container {
      * @param viewer the viewer
      */
     default void sendContents(ContainerViewer viewer) {
-        viewer.sendContents(this);
+        viewer.viewContents(this);
     }
 
     /**
@@ -316,7 +284,7 @@ public interface Container {
      * @param slot   the slot
      */
     default void sendContent(ContainerViewer viewer, int slot) {
-        viewer.sendContent(this, slot);
+        viewer.viewSlot(this, slot);
     }
 
     /**
@@ -325,7 +293,6 @@ public interface Container {
      * @param itemStack    the item stack
      * @param minSlotIndex the min slot index
      * @param maxSlotIndex the max slot index
-     *
      * @return the slot index where the item is added, or {@code -1} if the item is failed to be added
      */
     default int tryAddItem(ItemStack itemStack, int minSlotIndex, int maxSlotIndex) {
@@ -379,7 +346,6 @@ public interface Container {
      * Try to add an item to the container.
      *
      * @param itemStack the item stack
-     *
      * @return the slot index where the item is added, or {@code -1} if the item is failed to be added
      */
     default int tryAddItem(ItemStack itemStack) {
@@ -394,6 +360,6 @@ public interface Container {
      * @param value    the value
      */
     default void sendContainerData(int property, int value) {
-        getViewers().forEach((id, viewer) -> viewer.sendContainerData(id, property, value));
+        getViewers().forEach(($, viewer) -> viewer.viewContainerData(this, property, value));
     }
 }

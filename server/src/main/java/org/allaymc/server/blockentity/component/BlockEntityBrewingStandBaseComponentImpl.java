@@ -57,7 +57,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         BrewingStandContainer container = containerHolderComponent.getContainer();
         for (int i = 1; i < 4; i++) {
             int finalI = i;
-            container.addOnSlotChangeListener(finalI, item -> {
+            container.addSlotChangeListener(finalI, item -> {
                 var currentBlockState = getDimension().getBlockState(position);
                 var values = currentBlockState.getBlockType().getProperties().values();
                 //noinspection unchecked
@@ -69,7 +69,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             });
         }
 
-        container.addOnSlotChangeListener(BrewingStandContainer.REAGENT_SLOT, item -> {
+        container.addSlotChangeListener(BrewingStandContainer.REAGENT_SLOT, item -> {
             brewTime = item == ItemAirStack.AIR_STACK ? 0 : MAX_BREW_TIME;
         });
     }

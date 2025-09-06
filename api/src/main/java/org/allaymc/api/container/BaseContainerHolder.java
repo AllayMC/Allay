@@ -36,7 +36,7 @@ public class BaseContainerHolder implements ContainerHolder {
     }
 
     @Override
-    public <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {
+    public <T extends Container> T getContainer(ContainerSlotType slotType) {
         return (T) getContainer(slotTypeToFullType.get(slotType));
     }
 

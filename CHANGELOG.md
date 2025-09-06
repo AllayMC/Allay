@@ -47,6 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed class `PlayerService` to `PlayerManager`.
 - (API) Renamed class `ScoreboardService` to `ScoreboardManager`.
 - (API) Renamed package `org.allaymc.api(server).client` to `org.allaymc.api(server).player`.
+- (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details. 
 
 ### Fixed
 

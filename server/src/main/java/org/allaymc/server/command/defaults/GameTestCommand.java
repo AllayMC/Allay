@@ -4,7 +4,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.debugshape.DebugLine;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -72,9 +71,9 @@ public class GameTestCommand extends VanillaCommand {
                 .root()
                 .key("rfinv")
                 .exec((context, player) -> {
-                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), UnopenedContainerId.PLAYER_INVENTORY);
-                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), UnopenedContainerId.ARMOR);
-                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), UnopenedContainerId.OFFHAND);
+                    player.viewContents(player.getContainer(FullContainerType.PLAYER_INVENTORY));
+                    player.viewContents(player.getContainer(FullContainerType.ARMOR));
+                    player.viewContents(player.getContainer(FullContainerType.OFFHAND));
                     context.addOutput("Inventory is refreshed!");
                     return context.success();
                 }, SenderType.PLAYER)

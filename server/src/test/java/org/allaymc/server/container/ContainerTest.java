@@ -44,7 +44,7 @@ public class ContainerTest {
     void testContainerOpenAndCloseListener() {
         // Open listener
         AtomicBoolean openFlag = new AtomicBoolean(false);
-        container.addOnOpenListener(viewer -> {
+        container.addOpenListener(viewer -> {
             openFlag.set(true);
         });
         container.onOpen(null);
@@ -52,7 +52,7 @@ public class ContainerTest {
 
         // Close listener
         AtomicBoolean closeFlag = new AtomicBoolean(false);
-        container.addOnCloseListener(viewer -> {
+        container.addCloseListener(viewer -> {
             closeFlag.set(true);
         });
         container.onClose(null);
@@ -62,10 +62,10 @@ public class ContainerTest {
     @Test
     void testContainerSlotListener() {
         AtomicBoolean slotFlag = new AtomicBoolean(false);
-        container.addOnSlotChangeListener(0, newItem -> {
+        container.addSlotChangeListener(0, newItem -> {
             slotFlag.set(true);
         });
-        container.addOnSlotChangeListener(1, newItem -> {
+        container.addSlotChangeListener(1, newItem -> {
             slotFlag.set(false);
         });
         container.setItemStack(0, AIR_STACK);

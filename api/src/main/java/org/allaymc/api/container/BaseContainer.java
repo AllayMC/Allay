@@ -33,17 +33,17 @@ public class BaseContainer implements Container {
     protected final FullContainerType<? extends Container> containerType;
     protected final BiMap<Byte, ContainerViewer> viewers;
     protected final ItemStack[] content;
-    protected final Set<Consumer<ContainerViewer>> onOpenListeners;
-    protected final Set<Consumer<ContainerViewer>> onCloseListeners;
-    protected final Int2ObjectMap<Set<Consumer<ItemStack>>> onSlotChangeListeners;
+    protected final Set<Consumer<ContainerViewer>> openListeners;
+    protected final Set<Consumer<ContainerViewer>> closeListeners;
+    protected final Int2ObjectMap<Set<Consumer<ItemStack>>> slotChangeListeners;
 
     public BaseContainer(FullContainerType<? extends Container> containerType) {
         this.containerType = containerType;
         this.viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
         this.content = new ItemStack[containerType.size()];
-        this.onOpenListeners = new HashSet<>();
-        this.onCloseListeners = new HashSet<>();
-        this.onSlotChangeListeners = new Int2ObjectOpenHashMap<>();
+        this.openListeners = new HashSet<>();
+        this.closeListeners = new HashSet<>();
+        this.slotChangeListeners = new Int2ObjectOpenHashMap<>();
         Arrays.fill(this.content, ItemAirStack.AIR_STACK);
     }
 
@@ -97,40 +97,37 @@ public class BaseContainer implements Container {
             addViewer(viewer);
             return;
         }
-        var assignedId = viewer.assignContainerId();
+        var assignedId = viewer.viewOpen(this);
         if (viewers.containsKey(assignedId)) {
             removeViewer(viewers.get(assignedId));
         }
         viewers.put(assignedId, viewer);
-        viewer.onOpen(assignedId, this);
         onOpen(viewer);
     }
 
     @Override
     public void removeViewer(ContainerViewer viewer) {
         var event = new ContainerCloseEvent(viewer, this);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
-        viewer.onClose(viewers.inverse().remove(viewer), this);
-        onClose(viewer);
-    }
-
-    @Override
-    public ContainerViewer removeViewer(byte assignedId) {
-        var removed = viewers.remove(assignedId);
-        if (removed != null) removed.onClose(assignedId, this);
-        return removed;
+        var removed = viewers.inverse().remove(viewer);
+        if (removed != null) {
+            viewer.viewClose(this);
+            onClose(viewer);
+        }
     }
 
     @Override
     public void notifySlotChange(int slot, boolean send) {
         if (send) {
             for (var viewer : viewers.values()) {
-                viewer.notifySlotChange(this, slot);
+                viewer.viewSlot(this, slot);
             }
         }
 
-        var listeners = onSlotChangeListeners.get(slot);
+        var listeners = slotChangeListeners.get(slot);
         if (listeners == null || listeners.isEmpty()) {
             return;
         }
@@ -140,44 +137,42 @@ public class BaseContainer implements Container {
         }
     }
 
-    @Override
-    public void onOpen(ContainerViewer viewer) {
-        onOpenListeners.forEach(listener -> listener.accept(viewer));
+    protected void onOpen(ContainerViewer viewer) {
+        openListeners.forEach(listener -> listener.accept(viewer));
+    }
+
+    protected void onClose(ContainerViewer viewer) {
+        closeListeners.forEach(listener -> listener.accept(viewer));
     }
 
     @Override
-    public void onClose(ContainerViewer viewer) {
-        onCloseListeners.forEach(listener -> listener.accept(viewer));
+    public void addOpenListener(Consumer<ContainerViewer> listener) {
+        openListeners.add(listener);
     }
 
     @Override
-    public void addOnOpenListener(Consumer<ContainerViewer> listener) {
-        onOpenListeners.add(listener);
+    public void removeOpenListener(Consumer<ContainerViewer> listener) {
+        openListeners.remove(listener);
     }
 
     @Override
-    public void removeOnOpenListener(Consumer<ContainerViewer> listener) {
-        onOpenListeners.remove(listener);
+    public void addCloseListener(Consumer<ContainerViewer> listener) {
+        closeListeners.add(listener);
     }
 
     @Override
-    public void addOnCloseListener(Consumer<ContainerViewer> listener) {
-        onCloseListeners.add(listener);
+    public void removeCloseListener(Consumer<ContainerViewer> listener) {
+        closeListeners.remove(listener);
     }
 
     @Override
-    public void removeOnCloseListener(Consumer<ContainerViewer> listener) {
-        onCloseListeners.remove(listener);
+    public void addSlotChangeListener(int slot, Consumer<ItemStack> listener) {
+        slotChangeListeners.computeIfAbsent(slot, k -> new HashSet<>()).add(listener);
     }
 
     @Override
-    public void addOnSlotChangeListener(int slot, Consumer<ItemStack> listener) {
-        onSlotChangeListeners.computeIfAbsent(slot, k -> new HashSet<>()).add(listener);
-    }
-
-    @Override
-    public void removeOnSlotChangeListener(int slot, Consumer<ItemStack> listener) {
-        onSlotChangeListeners.computeIfAbsent(slot, k -> new HashSet<>()).remove(listener);
+    public void removeSlotChangeListener(int slot, Consumer<ItemStack> listener) {
+        slotChangeListeners.computeIfAbsent(slot, k -> new HashSet<>()).remove(listener);
     }
 
     @Override

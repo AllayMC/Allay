@@ -102,7 +102,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @Override
-    public <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {
+    public <T extends Container> T getContainer(ContainerSlotType slotType) {
         // BlockEntityContainerHolder can only hold one container in its lifetime
         // So we only need to check the slotType which caller provided
         if (!container.getContainerType().heldSlotTypes().contains(slotType)) {

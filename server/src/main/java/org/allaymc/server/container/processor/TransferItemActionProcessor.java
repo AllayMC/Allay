@@ -25,8 +25,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
     @Override
     public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var source = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
-        var destination = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
+        var source = player.getReachableContainer(action.getSource().getContainerName().getContainer());
+        var destination = player.getReachableContainer(action.getDestination().getContainerName().getContainer());
 
         int sourceSlot = source.fromNetworkSlotIndex(action.getSource().getSlot());
         int sourceStackNetworkId = action.getSource().getStackNetworkId();

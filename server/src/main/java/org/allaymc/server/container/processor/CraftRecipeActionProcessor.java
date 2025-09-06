@@ -43,7 +43,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
 
             if (recipe instanceof CraftingRecipe craftingRecipe) {
-                var openedContainer = player.getIdToContainerMap().values().toArray(new Container[0])[0];
+                var openedContainer = player.getOpenedContainers().toArray(Container[]::new)[0];
                 if (openedContainer instanceof RecipeContainer recipeContainer) {
                     var recipeInput = recipeContainer.createRecipeInput();
                     if (!recipe.match(recipeInput)) {

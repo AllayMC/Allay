@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
@@ -271,7 +270,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     protected void onDisconnect(String disconnectReason) {
         new ClientDisconnectEvent(clientSession, disconnectReason).call();
-        thisPlayer.closeAllContainers();
+        thisPlayer.closeAllOpenedContainers();
         ((AllayPlayerManager) Server.getInstance().getPlayerManager()).onDisconnect(thisPlayer);
     }
 
@@ -284,9 +283,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void sendInventories() {
-        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY), UnopenedContainerId.PLAYER_INVENTORY);
-        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.OFFHAND), UnopenedContainerId.OFFHAND);
-        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.ARMOR), UnopenedContainerId.ARMOR);
+        thisPlayer.viewContents(thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY));
+        thisPlayer.viewContents(thisPlayer.getContainer(FullContainerType.OFFHAND));
+        thisPlayer.viewContents(thisPlayer.getContainer(FullContainerType.ARMOR));
         // No need to send cursor's content to client because there is nothing in cursor
     }
 

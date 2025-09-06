@@ -69,7 +69,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         FurnaceContainer container = containerHolderComponent.getContainer();
-        container.addOnSlotChangeListener(FurnaceContainer.RESULT_SLOT, item -> {
+        container.addSlotChangeListener(FurnaceContainer.RESULT_SLOT, item -> {
             if (item != ItemAirStack.AIR_STACK) return;
             tryDropStoredXP();
         });

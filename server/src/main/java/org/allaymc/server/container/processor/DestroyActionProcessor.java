@@ -22,7 +22,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 public class DestroyActionProcessor implements ContainerActionProcessor<DestroyAction> {
     @Override
     public ActionResponse handle(DestroyAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getContainerBySlotType(action.getSource().getContainerName().getContainer());
+        var container = player.getContainer(action.getSource().getContainerName().getContainer());
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
 

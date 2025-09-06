@@ -31,7 +31,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new EnderChestContainer()
         );
         var enchantTableContainer = new EnchantTableContainer();
-        enchantTableContainer.addOnSlotChangeListener(EnchantTableContainer.INPUT_SLOT, item -> {
+        enchantTableContainer.addSlotChangeListener(EnchantTableContainer.INPUT_SLOT, item -> {
             var blockPos = enchantTableContainer.getBlockPos();
             if (blockPos != null) {
                 onEnchantTableContainerInputItemChange(item, new Position3i(blockPos, thisPlayer.getDimension()));

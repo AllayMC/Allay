@@ -23,7 +23,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
     @Override
     public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
-        var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
+        var sourceContainer = player.getReachableContainer(action.getSource().getContainerName().getContainer());
         var sourceStackNetworkId = action.getSource().getStackNetworkId();
         var slot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
 

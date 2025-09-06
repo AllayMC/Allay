@@ -3,6 +3,8 @@ package org.allaymc.api.container;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 
 /**
+ * RecipeContainer represents a type of container that is used to craft item.
+ *
  * @author IWareQ
  */
 public interface RecipeContainer {

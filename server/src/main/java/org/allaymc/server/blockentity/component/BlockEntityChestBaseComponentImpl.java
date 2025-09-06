@@ -30,13 +30,13 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
 
         if (containerHolderComponent instanceof BlockEntityChestContainerHolderComponentImpl containerHolder) {
             var doubleChestContainer = containerHolder.getDoubleChestContainer();
-            doubleChestContainer.addOnOpenListener(viewer -> {
+            doubleChestContainer.addOpenListener(viewer -> {
                 if (doubleChestContainer.getViewers().size() == 1) {
                     playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTOPEN, 2);
                     playSoundAndSendPacket(pairableComponent.getPair().getPosition(), Sound.RANDOM_CHESTOPEN, 2);
                 }
             });
-            doubleChestContainer.addOnCloseListener(viewer -> {
+            doubleChestContainer.addCloseListener(viewer -> {
                 if (doubleChestContainer.getViewers().isEmpty()) {
                     playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTCLOSED, 0);
                     playSoundAndSendPacket(pairableComponent.getPair().getPosition(), Sound.RANDOM_CHESTCLOSED, 0);
@@ -45,12 +45,12 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
         }
 
         var container = containerHolderComponent.getContainer();
-        container.addOnOpenListener(viewer -> {
+        container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTOPEN, 2);
             }
         });
-        container.addOnCloseListener(viewer -> {
+        container.addCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
                 playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTCLOSED, 0);
             }

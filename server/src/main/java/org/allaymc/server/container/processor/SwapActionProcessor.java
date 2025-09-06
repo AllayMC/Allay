@@ -20,8 +20,8 @@ import java.util.Map;
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
     public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
-        var destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
+        var sourceContainer = player.getReachableContainer(action.getSource().getContainerName().getContainer());
+        var destinationContainer = player.getReachableContainer(action.getDestination().getContainerName().getContainer());
 
         var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
         var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());

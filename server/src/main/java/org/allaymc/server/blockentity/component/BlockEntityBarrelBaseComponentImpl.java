@@ -23,7 +23,7 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         BarrelContainer container = containerHolderComponent.getContainer();
-        container.addOnOpenListener(viewer -> {
+        container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 position.dimension().updateBlockProperty(
                         BlockPropertyTypes.OPEN_BIT,
@@ -34,7 +34,7 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
                 );
             }
         });
-        container.addOnCloseListener(viewer -> {
+        container.addCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
                 position.dimension().updateBlockProperty(
                         BlockPropertyTypes.OPEN_BIT,

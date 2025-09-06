@@ -6,7 +6,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Represents an object that can hold multiple containers.
+ * ContainerHolder represents an object that can hold multiple containers.
  *
  * @author daoge_cmd
  */
@@ -23,7 +23,6 @@ public interface ContainerHolder {
      * Checks if the holder has a container of the specified type.
      *
      * @param type the type of the container
-     *
      * @return {@code true} if the holder has a container of the specified type, {@code false} otherwise.
      */
     boolean hasContainer(FullContainerType<?> type);
@@ -33,7 +32,6 @@ public interface ContainerHolder {
      *
      * @param type the type of the container
      * @param <T>  the type of the container
-     *
      * @return the container
      */
     <T extends Container> T getContainer(FullContainerType<T> type);
@@ -43,10 +41,9 @@ public interface ContainerHolder {
      *
      * @param slotType the type of the slot
      * @param <T>      the type of the container
-     *
      * @return the container
      */
-    <T extends Container> T getContainerBySlotType(ContainerSlotType slotType);
+    <T extends Container> T getContainer(ContainerSlotType slotType);
 
     /**
      * Adds a container to the holder.

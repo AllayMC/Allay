@@ -26,10 +26,10 @@ public class PlayerArmorContainer extends PlayerContainer {
 
     public PlayerArmorContainer(Supplier<EntityPlayer> playerSupplier) {
         super(FullContainerType.ARMOR, playerSupplier);
-        addOnSlotChangeListener(0, this::onArmorChange);
-        addOnSlotChangeListener(1, this::onArmorChange);
-        addOnSlotChangeListener(2, this::onArmorChange);
-        addOnSlotChangeListener(3, this::onArmorChange);
+        addSlotChangeListener(0, this::onArmorChange);
+        addSlotChangeListener(1, this::onArmorChange);
+        addSlotChangeListener(2, this::onArmorChange);
+        addSlotChangeListener(3, this::onArmorChange);
     }
 
     protected void onArmorChange(ItemStack newItemStack) {

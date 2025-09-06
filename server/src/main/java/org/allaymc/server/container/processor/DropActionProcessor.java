@@ -21,7 +21,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
     @Override
     public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
+        var container = player.getReachableContainer(action.getSource().getContainerName().getContainer());
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
 
