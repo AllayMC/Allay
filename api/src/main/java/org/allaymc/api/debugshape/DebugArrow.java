@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
 import java.awt.*;
@@ -153,20 +152,5 @@ public class DebugArrow extends DebugShape {
     public void setArrowHeadScale(Float arrowHeadScale) {
         this.arrowHeadScale = arrowHeadScale;
         this.onChange();
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape.Type getType() {
-        return org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.ARROW;
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData() {
-        return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                id, getType(), MathUtils.JOMLVecToCBVec(position), arrowHeadScale,
-                null, null, color,
-                null, null, MathUtils.JOMLVecToCBVec(endPosition),
-                arrowHeadLength, arrowHeadRadius, arrowHeadSegments
-        );
     }
 }

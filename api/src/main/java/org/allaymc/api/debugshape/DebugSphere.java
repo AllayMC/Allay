@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
 import java.awt.*;
@@ -71,20 +70,5 @@ public class DebugSphere extends DebugShape {
      */
     public void setSegments(Integer segments) {
         this.segments = segments;
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape.Type getType() {
-        return org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.SPHERE;
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData() {
-        return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                id, getType(), MathUtils.JOMLVecToCBVec(position), scale,
-                null, null, color,
-                null, null, null,
-                null, null, segments
-        );
     }
 }

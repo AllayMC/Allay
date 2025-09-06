@@ -1,15 +1,12 @@
 package org.allaymc.api.debugshape;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.cloudburstmc.protocol.bedrock.data.DebugShape.Type;
-import org.cloudburstmc.protocol.bedrock.packet.ServerScriptDebugDrawerPacket;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import java.awt.*;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -31,7 +28,7 @@ public abstract class DebugShape {
      * The viewers of this debug shape.
      */
     @Getter
-    protected final Map<Long, EntityPlayer> viewers;
+    protected final Set<DebugShapeViewer> viewers;
     /**
      * The position of the shape. For most shapes this is the centre of the shape, except
      * {@link DebugLine} and {@link DebugArrow} where this represents the start point of the line.
@@ -54,7 +51,7 @@ public abstract class DebugShape {
      */
     public DebugShape(Vector3fc position, Color color) {
         this.id = DEBUG_SHAPE_ID_COUNTER.getAndIncrement();
-        this.viewers = new Long2ObjectOpenHashMap<>();
+        this.viewers = new HashSet<>();
         this.position = position;
         this.color = color;
     }
@@ -98,45 +95,41 @@ public abstract class DebugShape {
     }
 
     /**
-     * @see #addViewer(EntityPlayer, boolean)
+     * @see #addViewer(DebugShapeViewer, boolean)
      */
-    public void addViewer(EntityPlayer player) {
-        this.addViewer(player, true);
+    public void addViewer(DebugShapeViewer viewer) {
+        this.addViewer(viewer, true);
     }
 
     /**
-     * Adds this shape to the specified player's side, so that the player will see it.
-     * Further changes to this shape will be sent to the player automatically.
+     * Adds this shape to the specified viewer's side, so that the viewer will see it.
+     * Further changes to this shape will be sent to the viewer automatically.
      *
-     * @param player                the player to add this shape to
-     * @param sendPacketImmediately whether to send the data of this debug shape to the player immediately
+     * @param viewer          the viewer to add this debug shape to
+     * @param viewImmediately whether to view this debug shape immediately
      */
-    public void addViewer(EntityPlayer player, boolean sendPacketImmediately) {
-        if (this.viewers.put(player.getRuntimeId(), player) == null && sendPacketImmediately) {
-            var packet = new ServerScriptDebugDrawerPacket();
-            packet.getShapes().add(this.toNetworkData());
-            player.sendPacket(packet);
+    public void addViewer(DebugShapeViewer viewer, boolean viewImmediately) {
+        if (this.viewers.add(viewer) && viewImmediately) {
+            viewer.viewDebugShape(this);
         }
     }
 
     /**
-     * @see #removeViewer(EntityPlayer, boolean)
+     * @see #removeViewer(DebugShapeViewer, boolean)
      */
-    public void removeViewer(EntityPlayer player) {
-        this.removeViewer(player, true);
+    public void removeViewer(DebugShapeViewer viewer) {
+        this.removeViewer(viewer, true);
     }
 
     /**
-     * Removes this shape from the specified player's side. The player will no longer see it.
+     * Removes this shape from the specified viewer's side. The viewer will no longer see it.
      *
-     * @param player                the player to remove this shape from
-     * @param sendPacketImmediately whether to remove this debug shape from the player immediately
+     * @param viewer            the viewer to remove this debug shape from
+     * @param removeImmediately whether to remove this debug shape from the viewer immediately
      */
-    public void removeViewer(EntityPlayer player, boolean sendPacketImmediately) {
-        if (this.viewers.remove(player.getRuntimeId()) != null && sendPacketImmediately) {
-            var packet = new ServerScriptDebugDrawerPacket();
-            packet.getShapes().add(createRemovalNotice());
-            player.sendPacket(packet);
+    public void removeViewer(DebugShapeViewer viewer, boolean removeImmediately) {
+        if (this.viewers.remove(viewer) && removeImmediately) {
+            viewer.removeDebugShape(this);
         }
     }
 
@@ -145,39 +138,8 @@ public abstract class DebugShape {
      * It will send the updated data to all viewers of this debug shape.
      */
     protected void onChange() {
-        for (EntityPlayer viewer : this.viewers.values()) {
-            var packet = new ServerScriptDebugDrawerPacket();
-            packet.getShapes().add(this.toNetworkData());
-            viewer.sendPacket(packet);
+        for (DebugShapeViewer viewer : this.viewers) {
+            viewer.viewDebugShape(this);
         }
     }
-
-    /**
-     * Gets the type of this debug shape.
-     *
-     * @return the type of this debug shape
-     */
-    public abstract Type getType();
-
-    /**
-     * Creates a removal notice for this debug shape.
-     * This is used to notify the client that this debug shape should be removed.
-     *
-     * @return a removal notice for this debug shape
-     */
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape createRemovalNotice() {
-        return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                this.id, null, null,
-                null, null, null,
-                null, null, null,
-                null, null, null, null
-        );
-    }
-
-    /**
-     * Converts this debug shape to a network data representation.
-     *
-     * @return the network data representation of this debug shape
-     */
-    public abstract org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData();
 }

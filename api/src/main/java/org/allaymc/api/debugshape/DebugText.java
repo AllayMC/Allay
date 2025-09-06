@@ -1,7 +1,6 @@
 package org.allaymc.api.debugshape;
 
 import lombok.Getter;
-import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
 import java.awt.*;
@@ -37,20 +36,5 @@ public class DebugText extends DebugShape {
     public void setText(String text) {
         this.text = text;
         this.onChange();
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape.Type getType() {
-        return org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.TEXT;
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData() {
-        return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                id, getType(), MathUtils.JOMLVecToCBVec(position), null,
-                null, null, color,
-                text, null, null,
-                null, null, null
-        );
     }
 }

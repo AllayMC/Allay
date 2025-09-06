@@ -6,6 +6,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.debugshape.DebugShapeViewer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
@@ -24,7 +25,6 @@ import org.allaymc.server.world.manager.AllayEntityManager;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ServerScriptDebugDrawerPacket;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -106,14 +106,12 @@ public class AllayDimension implements Dimension {
     /**
      * Set this method to public because it is used in {@link SetLocalPlayerAsInitializedPacketProcessor}
      */
-    public void addDebugShapesTo(EntityPlayer player) {
-        var packet = new ServerScriptDebugDrawerPacket();
+    public void addDebugShapesTo(DebugShapeViewer viewer) {
         for (var debugShape : debugShapes) {
             // Let's send all the debug shapes in one packet to improve performance
-            debugShape.addViewer(player, false);
-            packet.getShapes().add(debugShape.toNetworkData());
+            debugShape.addViewer(viewer, false);
         }
-        player.sendPacket(packet);
+        viewer.viewDebugShapes(debugShapes);
     }
 
     @Override
@@ -133,14 +131,12 @@ public class AllayDimension implements Dimension {
         removeDebugShapesFrom(player);
     }
 
-    protected void removeDebugShapesFrom(EntityPlayer player) {
-        var packet = new ServerScriptDebugDrawerPacket();
+    protected void removeDebugShapesFrom(DebugShapeViewer viewer) {
         for (var debugShape : debugShapes) {
             // Let's send all the remove notices in one packet to improve performance
-            debugShape.removeViewer(player, false);
-            packet.getShapes().add(debugShape.createRemovalNotice());
+            debugShape.removeViewer(viewer, false);
         }
-        player.sendPacket(packet);
+        viewer.removeDebugShapes(debugShapes);
     }
 
     @Override

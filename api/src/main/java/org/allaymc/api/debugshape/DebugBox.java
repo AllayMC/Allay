@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -76,20 +75,5 @@ public class DebugBox extends DebugShape {
     public void setBoxBounds(Vector3fc boxBounds) {
         this.boxBounds = boxBounds;
         this.onChange();
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape.Type getType() {
-        return org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.BOX;
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData() {
-        return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                id, getType(), MathUtils.JOMLVecToCBVec(position), scale,
-                null, null, color,
-                null, MathUtils.JOMLVecToCBVec(boxBounds), null,
-                null, null, null
-        );
     }
 }

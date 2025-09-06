@@ -1,6 +1,5 @@
 package org.allaymc.api.debugshape;
 
-import org.allaymc.api.math.MathUtils;
 import org.joml.Vector3fc;
 
 import java.awt.*;
@@ -46,20 +45,5 @@ public class DebugLine extends DebugShape {
     public void setEndPosition(Vector3fc endPosition) {
         this.endPosition = endPosition;
         this.onChange();
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape.Type getType() {
-        return org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.LINE;
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData() {
-        return new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                id, getType(), MathUtils.JOMLVecToCBVec(position), null,
-                null, null, color,
-                null, null, MathUtils.JOMLVecToCBVec(endPosition),
-                null, null, null
-        );
     }
 }
