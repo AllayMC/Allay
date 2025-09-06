@@ -16,6 +16,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -80,9 +81,9 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     protected void tryScheduleLiquidUpdate(Block current) {
-        var blockUpdateService = current.getDimension().getBlockUpdateService();
-        if (!blockUpdateService.hasScheduledBlockUpdate(current.getPosition())) {
-            blockUpdateService.scheduleBlockUpdateInDelay(current.getPosition(), getFlowSpeed(current.getDimension().getDimensionInfo()));
+        var blockUpdateManager = current.getDimension().getBlockUpdateManager();
+        if (!blockUpdateManager.hasScheduledBlockUpdate(current.getPosition())) {
+            blockUpdateManager.scheduleBlockUpdateInDelay(current.getPosition(), getFlowSpeed(current.getDimension().getDimensionInfo()));
         }
     }
 
@@ -97,7 +98,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
-     * This method is used in {@link org.allaymc.server.world.service.AllayEntityPhysicsService}
+     * This method is used in {@link AllayEntityPhysicsEngine}
      */
     public Vector3d calculateFlowVector(Dimension dimension, int x, int y, int z, BlockState current) {
         // TODO: cache the flow vector for better performance
@@ -242,7 +243,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      *
      * @param dimension The dimension the block is in
      * @param pos       The position to check around
-     *
      * @return Whether there is a supply liquid around the position
      */
     protected boolean hasSupplyLiquidAround(Dimension dimension, Vector3ic pos, BlockState liquid) {
@@ -289,7 +289,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * @param liquid    The block state of the liquid
      * @param pos       The position to flow into
      * @param falling   Whether the liquid is falling or not
-     *
      * @return Whether the liquid successfully flowed into the position
      */
     protected boolean flowInto(Dimension dimension, Vector3ic src, int srcLayer, BlockState liquid, Vector3ic pos, boolean falling) {
@@ -372,7 +371,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * @param src             The position to start the flow from
      * @param liquid          The block state of the liquid
      * @param liquidContainer The block state that contains this liquid block, can be {@code null} if the liquid is not contained
-     *
      * @return A list of paths that the liquid can flow in
      */
     protected List<Vector3ic[]> calculateLiquidPaths(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
@@ -428,7 +426,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * @param source    The source position of the liquid
      * @param node      The node to spread
      * @param queue     The queue to push the node into if it can spread
-     *
      * @return Whether the node could spread into the neighbour
      */
     protected boolean spreadNeighbor(Dimension dimension, Vector3ic source, LiquidNode node, LiquidQueue queue) {
@@ -472,7 +469,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * @param y         The y coordinate of the block
      * @param z         The z coordinate of the block
      * @param sideways  Whether the flow is sideways or downwards
-     *
      * @return Whether the liquid can flow into the block
      */
     protected boolean canFlowInto(Dimension dimension, int x, int y, int z, boolean sideways) {
@@ -506,7 +502,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
          * neighbours returns the four horizontal neighbours of the node with decreased depth.
          *
          * @param decay The amount to decrease the depth by
-         *
          * @return The neighbours of the node
          */
         public LiquidNode[] neighbors(int decay) {

@@ -26,7 +26,6 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      * @param y         block entity's y coordinate
      * @param z         block entity's z coordinate
      * @param dimension the dimension which the block entity is in
-     *
      * @return the block entity, or null if block entity is not found
      */
     default T getBlockEntity(int x, int y, int z, Dimension dimension) {
@@ -83,7 +82,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      */
     default void createBlockEntity(int x, int y, int z, Dimension dimension, boolean sendToClient) {
         Objects.requireNonNull(dimension);
-        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = dimension.getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             throw new IllegalStateException("Trying to create a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
@@ -112,12 +111,11 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      * @param y         block entity's y coordinate
      * @param z         block entity's z coordinate
      * @param dimension the dimension which the block entity is in
-     *
      * @throws IllegalStateException if chunk isn't loaded or the block entity not exists
      */
     default void removeBlockEntity(int x, int y, int z, Dimension dimension) {
         Objects.requireNonNull(dimension);
-        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = dimension.getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             throw new IllegalStateException("Trying to remove a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }

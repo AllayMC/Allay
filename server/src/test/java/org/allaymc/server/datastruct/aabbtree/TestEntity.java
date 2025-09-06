@@ -1,8 +1,8 @@
 package org.allaymc.server.datastruct.aabbtree;
 
 import lombok.Getter;
-import org.allaymc.api.world.service.HasAABB;
-import org.allaymc.api.world.service.HasLongId;
+import org.allaymc.api.world.physics.HasAABB;
+import org.allaymc.api.world.physics.HasLongId;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 

@@ -5,9 +5,6 @@ import it.unimi.dsi.fastutil.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.data.Abilities;
-import org.allaymc.api.client.data.AdventureSettings;
-import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.FullContainerType;
@@ -33,6 +30,9 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.permission.PermissionGroup;
+import org.allaymc.api.player.data.Abilities;
+import org.allaymc.api.player.data.AdventureSettings;
+import org.allaymc.api.player.storage.PlayerData;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
@@ -46,7 +46,6 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.client.service.AllayPlayerService;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -55,6 +54,7 @@ import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.player.manager.AllayPlayerManager;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -304,7 +304,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
         if (currentServerTick >= nextSavePlayerDataTime) {
-            Server.getInstance().getPlayerService().getPlayerStorage().savePlayerData(thisPlayer);
+            Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
             nextSavePlayerDataTime = currentServerTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
         }
     }
@@ -338,7 +338,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         );
 
         // Pick up items
-        var entityItems = dimension.getEntityService().getPhysicsService().computeCollidingEntities(pickUpArea, true)
+        var entityItems = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
                 .filter(EntityItem.class::isInstance)
                 .map(EntityItem.class::cast)
@@ -367,7 +367,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         // Pick up arrows
-        var entityArrows = dimension.getEntityService().getPhysicsService().computeCollidingEntities(pickUpArea, true)
+        var entityArrows = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
                 .filter(EntityArrow.class::isInstance)
                 .map(EntityArrow.class::cast)
@@ -537,8 +537,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setSkin(SerializedSkin skin) {
         this.skin = skin;
         var server = Server.getInstance();
-        server.getPlayerService().broadcastPacket(createSkinPacket(skin));
-        ((AllayPlayerService) server.getPlayerService()).onSkinUpdate(thisPlayer);
+        server.getPlayerManager().broadcastPacket(createSkinPacket(skin));
+        ((AllayPlayerManager) server.getPlayerManager()).onSkinUpdate(thisPlayer);
     }
 
     protected PlayerSkinPacket createSkinPacket(SerializedSkin skin) {
@@ -815,7 +815,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // This method will be called in non-ticking thread if async chunk sending is enabled. Let's
         // send the entities in this chunk to the player next tick in the main thread: use forEachEntitiesInChunk()
         // instead of forEachEntitiesInChunkImmediately()
-        getDimension().getEntityService().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
+        getDimension().getEntityManager().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
         ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSend();
     }
 
@@ -832,7 +832,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void onChunkOutOfRange(Set<Long> chunkHashes) {
         for (var hash : chunkHashes) {
-            getDimension().getEntityService().forEachEntitiesInChunk(HashUtils.getXFromHashXZ(hash), HashUtils.getZFromHashXZ(hash), entity -> entity.despawnFrom(thisPlayer));
+            getDimension().getEntityManager().forEachEntitiesInChunk(HashUtils.getXFromHashXZ(hash), HashUtils.getZFromHashXZ(hash), entity -> entity.despawnFrom(thisPlayer));
         }
     }
 

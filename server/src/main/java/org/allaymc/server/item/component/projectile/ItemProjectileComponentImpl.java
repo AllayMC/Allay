@@ -67,7 +67,7 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
         }
 
         projectile.setMotion(computeMotion(shooter.getLocation(), event.getThrowForce()));
-        shooter.getDimension().getEntityService().addEntity(projectile);
+        shooter.getDimension().getEntityManager().addEntity(projectile);
         addShootSound(new Position3d(shootPos, location.dimension()));
         if (!(shooter instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
             thisItemStack.reduceCount(1);

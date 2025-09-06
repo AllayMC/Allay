@@ -145,7 +145,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case ITEM_USE_ON_ENTITY -> {
-                var target = player.getDimension().getEntityService().getEntity(packet.getRuntimeEntityId());
+                var target = player.getDimension().getEntityManager().getEntity(packet.getRuntimeEntityId());
                 // In some cases, for example when a falling block entity solidifies, latency may allow attacking an entity that
                 // no longer exists server side. This is expected, so we shouldn't throw NullPointerException.
                 if (target == null) {

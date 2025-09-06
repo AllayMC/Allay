@@ -29,8 +29,8 @@ import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.datastruct.palette.Palette;
-import org.allaymc.server.world.service.AllayEntityService;
-import org.allaymc.server.world.service.AllayLightService;
+import org.allaymc.server.world.light.AllayLightEngine;
+import org.allaymc.server.world.manager.AllayEntityManager;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.BlockChangeEntry;
@@ -219,20 +219,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public void onChunkLoad(Dimension dimension) {
-        ((AllayLightService) dimension.getLightService()).onChunkLoad(toSafeChunk());
+        ((AllayLightEngine) dimension.getLightEngine()).onChunkLoad(toSafeChunk());
         setBlockChangeCallback((x, y, z, blockState, layer) -> {
             if (layer == 0) {
-                ((AllayLightService) dimension.getLightService()).onBlockChange(x + (this.x << 4), y, z + (this.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+                ((AllayLightEngine) dimension.getLightEngine()).onBlockChange(x + (this.x << 4), y, z + (this.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
             }
         });
-        ((AllayEntityService) dimension.getEntityService()).onChunkLoad(this.x, this.z);
+        ((AllayEntityManager) dimension.getEntityManager()).onChunkLoad(this.x, this.z);
 
         loaded = true;
     }
 
     public void onChunkUnload(Dimension dimension) {
-        ((AllayLightService) dimension.getLightService()).onChunkUnload(safeChunk);
-        ((AllayEntityService) dimension.getEntityService()).onChunkUnload(this.x, this.z);
+        ((AllayLightEngine) dimension.getLightEngine()).onChunkUnload(safeChunk);
+        ((AllayEntityManager) dimension.getEntityManager()).onChunkUnload(this.x, this.z);
         blockChangeCallback = null;
     }
 

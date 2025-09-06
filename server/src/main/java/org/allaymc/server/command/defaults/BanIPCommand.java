@@ -17,7 +17,7 @@ public class BanIPCommand extends VanillaCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().str("ip").exec(context -> {
             String ip = context.getResult(0);
-            if (Server.getInstance().getPlayerService().banIP(ip)) {
+            if (Server.getInstance().getPlayerManager().banIP(ip)) {
                 context.addOutput(TrKeys.MC_COMMANDS_BANIP_SUCCESS, ip);
                 return context.success();
             } else {

@@ -17,10 +17,10 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.network.processor.impl.login.SetLocalPlayerAsInitializedPacketProcessor;
-import org.allaymc.server.world.service.AllayBlockUpdateService;
-import org.allaymc.server.world.service.AllayChunkService;
-import org.allaymc.server.world.service.AllayEntityService;
-import org.allaymc.server.world.service.AllayLightService;
+import org.allaymc.server.world.light.AllayLightEngine;
+import org.allaymc.server.world.manager.AllayBlockUpdateManager;
+import org.allaymc.server.world.manager.AllayChunkManager;
+import org.allaymc.server.world.manager.AllayEntityManager;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
@@ -42,57 +42,57 @@ public class AllayDimension implements Dimension {
 
     protected final AllayWorld world;
     protected final DimensionInfo dimensionInfo;
-    protected final AllayChunkService chunkService;
-    protected final AllayEntityService entityService;
-    protected final AllayBlockUpdateService blockUpdateService;
-    protected final AllayLightService lightService;
+    protected final AllayChunkManager chunkManager;
+    protected final AllayEntityManager entityManager;
+    protected final AllayBlockUpdateManager blockUpdateManager;
+    protected final AllayLightEngine lightEngine;
     protected final Set<EntityPlayer> players;
     protected final Set<DebugShape> debugShapes;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
-        this.chunkService = new AllayChunkService(this, worldGenerator, world.getWorldStorage());
-        this.entityService = new AllayEntityService(this, world.getWorldStorage());
-        this.blockUpdateService = new AllayBlockUpdateService(this);
-        this.lightService = new AllayLightService(this);
+        this.chunkManager = new AllayChunkManager(this, worldGenerator, world.getWorldStorage());
+        this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
+        this.blockUpdateManager = new AllayBlockUpdateManager(this);
+        this.lightEngine = new AllayLightEngine(this);
         this.players = new NonBlockingHashSet<>();
         this.debugShapes = new NonBlockingHashSet<>();
         worldGenerator.setDimension(this);
     }
 
     public void startTick() {
-        this.lightService.startTick();
+        this.lightEngine.startTick();
     }
 
     public void tick(long currentTick) {
         // There may be new chunk packets during sleeping, let's send them first
-        this.chunkService.sendChunkPackets();
+        this.chunkManager.sendChunkPackets();
 
         // Ticking
-        this.entityService.tick(currentTick);
-        this.chunkService.tick(currentTick);
-        this.blockUpdateService.tick();
+        this.entityManager.tick(currentTick);
+        this.chunkManager.tick(currentTick);
+        this.blockUpdateManager.tick();
 
         // Send the new chunk packets again after most of the work is done
-        this.chunkService.sendChunkPackets();
+        this.chunkManager.sendChunkPackets();
     }
 
     public void shutdown() {
         // Shutdown light service first, because when unloading chunks, chunk service
         // will send updates to light service which is meaningless
-        this.lightService.shutdown();
-        this.chunkService.shutdown();
+        this.lightEngine.shutdown();
+        this.chunkManager.shutdown();
         // EntityService should be shutdown after chunk service, because it requires
         // the callback AllayEntityService.onChunkUnload() to be called
-        this.entityService.shutdown();
+        this.entityManager.shutdown();
     }
 
     @Override
     public void addPlayer(EntityPlayer player, Runnable runnable) {
         this.players.add(player);
-        this.chunkService.addChunkLoader(player);
-        this.entityService.addEntity(player, runnable);
+        this.chunkManager.addChunkLoader(player);
+        this.entityManager.addEntity(player, runnable);
         if (player.getClientStatus() == ClientStatus.IN_GAME) {
             // Only send debug shapes to the players when they are in-game. This
             // solves the issue that debug shapes won't be displayed if the player
@@ -121,11 +121,11 @@ public class AllayDimension implements Dimension {
         if (player.isSpawned()) {
             // When the player respawns to another dimension after death, the player entity has already been unloaded
             // Therefore, when unloading the player entity, we need to check if the player entity has been spawned
-            this.entityService.removeEntity(player, runnable);
-            this.chunkService.removeChunkLoader(player);
+            this.entityManager.removeEntity(player, runnable);
+            this.chunkManager.removeChunkLoader(player);
             this.players.remove(player);
         } else {
-            this.chunkService.removeChunkLoader(player);
+            this.chunkManager.removeChunkLoader(player);
             this.players.remove(player);
             // Run the callback directly
             runnable.run();
@@ -181,7 +181,7 @@ public class AllayDimension implements Dimension {
 
     @Override
     public boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             return false;
         }
@@ -239,7 +239,7 @@ public class AllayDimension implements Dimension {
             pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
             pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
             pk.setData(block.blockStateHash());
-            getChunkService().getChunkByDimensionPos(x, z).addChunkPacket(pk);
+            getChunkManager().getChunkByDimensionPos(x, z).addChunkPacket(pk);
         }
 
         block.getBehavior().onBreak(

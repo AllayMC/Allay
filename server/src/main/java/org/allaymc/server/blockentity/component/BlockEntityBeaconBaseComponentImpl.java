@@ -166,6 +166,6 @@ public class BlockEntityBeaconBaseComponentImpl extends BlockEntityBaseComponent
      * @return {@code true} if the beacon is obstructed, {@code false} otherwise.
      */
     protected boolean isObstructed() {
-        return position.dimension().getLightService().getSkyLight(position.x(), position.y() + 1, position.z()) != 15;
+        return position.dimension().getLightEngine().getSkyLight(position.x(), position.y() + 1, position.z()) != 15;
     }
 }

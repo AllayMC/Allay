@@ -38,7 +38,7 @@ public class EffectInfestedType extends AbstractEffectType {
                     .motion(motion)
                     .build();
             var silverFishEntity = EntityTypes.SILVERFISH.createEntity(entityInfo);
-            dimension.getEntityService().addEntity(silverFishEntity);
+            dimension.getEntityManager().addEntity(silverFishEntity);
             dimension.addSound(location, "entity.silverfish.hurt");
         }
     }

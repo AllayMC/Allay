@@ -64,6 +64,6 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
                         .nbt(NbtMap.builder().putShort(EntityTntBaseComponentImpl.TAG_FUSE, (short) fuse).build())
                         .build()
         );
-        dimension.getEntityService().addEntity(entity);
+        dimension.getEntityManager().addEntity(entity);
     }
 }

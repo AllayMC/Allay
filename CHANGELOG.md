@@ -37,6 +37,14 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed entries in class `TrKeys`. The old `M_XXX` is renamed to `MC_XXX` and `A_XXX` is renamed to `ALLAY_XXX`.
 - (API) Renamed field `Block.pos` to `Block.position`.
 - (API) Moved class `ComponentManager` from api to server module since it is useless in api module.
+- (API) Renamed class `BlockUpdateService` to `BlockUpdateManager`.
+- (API) Renamed class `ChunkService` to `ChunkManager`.
+- (API) Renamed class `EntityService` to `EntityManager`.
+- (API) Renamed class `EntityPhysicsService` to `EntityPhysicsEngine`, and physics engine related classes are now moved to package `org.allaymc.api(server).world.physics`.
+- (API) Renamed class `LightService` to `LightEngine`, and light engine related classes are now moved to package `org.allaymc.api(server).world.light`.
+- (API) Renamed class `PlayerService` to `PlayerManager`.
+- (API) Renamed class `ScoreboardService` to `ScoreboardManager`.
+- (API) Renamed package `org.allaymc.api(server).client` to `org.allaymc.api(server).player`.
 
 ### Fixed
 

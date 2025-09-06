@@ -49,7 +49,6 @@ public record Structure(
      * @param sizeY        the size of the structure in y direction
      * @param sizeZ        the size of the structure in z direction
      * @param saveEntities whether to save the entities in the structure
-     *
      * @return the picked structure
      */
     public static Structure pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
@@ -97,7 +96,6 @@ public record Structure(
      * Load structure data from nbt.
      *
      * @param nbt the nbt data to load
-     *
      * @return the loaded structure
      */
     public static Structure formNBT(NbtMap nbt) {
@@ -233,7 +231,7 @@ public record Structure(
                     oldPos.y - this.y + y,
                     oldPos.z - this.z + z
             );
-            dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension, builder.build()));
+            dimension.getEntityManager().addEntity(EntityHelper.fromNBT(dimension, builder.build()));
         }
     }
 

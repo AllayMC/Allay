@@ -63,7 +63,7 @@ public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhys
         var effects = potionType.getEffects();
         var aabb = MathUtils.grow(thisEntity.getOffsetAABB(), new Vector3d(4.125, 2.125, 4.125));
         if (!effects.isEmpty()) {
-            var entities = dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb);
+            var entities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
             for (var entity : entities) {
                 var pos = entity.getLocation();
                 var distance = pos.distance(thisEntity.getLocation());

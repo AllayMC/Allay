@@ -54,7 +54,6 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
      * Calculate the chance the crop will grow during a random tick.
      *
      * @param block the block state to calculate the growth chance for
-     *
      * @return the chance the crop will grow
      */
     protected float calculateGrowthChance(Block block) {
@@ -144,7 +143,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
     public void onRandomUpdate(Block block) {
         super.onRandomUpdate(block);
 
-        if (block.getDimension().getLightService().getInternalLight(block.getPosition()) < 8) {
+        if (block.getDimension().getLightEngine().getInternalLight(block.getPosition()) < 8) {
             var event = new BlockFadeEvent(block, BlockTypes.AIR.getDefaultState());
             if (event.call()) {
                 block.breakBlock();

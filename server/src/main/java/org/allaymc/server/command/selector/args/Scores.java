@@ -85,7 +85,7 @@ public class Scores extends CachedSimpleSelectorArgument {
 
     protected record ScoreCondition(String objectiveName, int min, int max, boolean reversed) {
         boolean test(Entity entity) {
-            var scoreboard = Server.getInstance().getScoreboardService().get(objectiveName);
+            var scoreboard = Server.getInstance().getScoreboardManager().get(objectiveName);
             if (scoreboard == null) {
                 return false;
             }

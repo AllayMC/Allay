@@ -299,7 +299,7 @@ public class Explosion {
         ).expand(2);
 
         if (affectEntities) {
-            var affectedEntities = dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb);
+            var affectedEntities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
             // Skip the entity that caused the explosion
             affectedEntities.remove(entity);
             var impactMap = affectedEntities.parallelStream()

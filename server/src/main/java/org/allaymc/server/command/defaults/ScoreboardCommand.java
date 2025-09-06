@@ -34,7 +34,7 @@ public class ScoreboardCommand extends VanillaCommand {
     }
 
     private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr, Scoreboard scoreboard) throws SelectorSyntaxException {
-        var service = Server.getInstance().getScoreboardService();
+        var manager = Server.getInstance().getScoreboardManager();
         Set<Scorer> scorers = new HashSet<>();
         EntityPlayer player;
         if (wildcardTargetStr.equals("*")) {
@@ -43,7 +43,7 @@ public class ScoreboardCommand extends VanillaCommand {
                 return scorers;
             }
 
-            for (var sb : service.getScoreboards().values()) {
+            for (var sb : manager.getScoreboards().values()) {
                 scorers.addAll(sb.getLines().keySet());
             }
 
@@ -61,7 +61,7 @@ public class ScoreboardCommand extends VanillaCommand {
             return scorers;
         }
 
-        if ((player = Server.getInstance().getPlayerService().getOnlinePlayerByName(wildcardTargetStr)) != null) {
+        if ((player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(wildcardTargetStr)) != null) {
             scorers.add(new PlayerScorer(player));
         } else {
             scorers.add(new FakeScorer(wildcardTargetStr));
@@ -80,9 +80,9 @@ public class ScoreboardCommand extends VanillaCommand {
                 .enums("criteria", "dummy")
                 .str("displayName").optional()
                 .exec(context -> {
-                    var service = Server.getInstance().getScoreboardService();
+                    var manager = Server.getInstance().getScoreboardManager();
                     String objectiveName = context.getResult(2);
-                    if (service.contain(objectiveName)) {
+                    if (manager.contain(objectiveName)) {
                         context.addError("%" + TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_ADD_ALREADYEXISTS, objectiveName);
                         return context.fail();
                     }
@@ -90,7 +90,7 @@ public class ScoreboardCommand extends VanillaCommand {
                     String criteriaName = context.getResult(3);
                     String displayName = context.getResult(4);
                     if (displayName.isEmpty()) displayName = objectiveName;
-                    service.add(new Scoreboard(objectiveName, displayName, criteriaName, SortOrder.ASCENDING));
+                    manager.add(new Scoreboard(objectiveName, displayName, criteriaName, SortOrder.ASCENDING));
                     context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_ADD_SUCCESS, objectiveName);
                     return context.success();
                 })
@@ -100,26 +100,26 @@ public class ScoreboardCommand extends VanillaCommand {
                 .str("objective").optional()
                 .enums("sortOrder", "ascending", new String[]{"ascending", "descending"}).optional()
                 .exec(context -> {
-                    var service = Server.getInstance().getScoreboardService();
+                    var manager = Server.getInstance().getScoreboardManager();
                     String slotName = context.getResult(2);
                     var slot = slotName.equals("list") ? DisplaySlot.LIST : DisplaySlot.SIDEBAR;
                     String objectiveName = context.getResult(3);
                     if (objectiveName.isEmpty()) {
-                        service.clearDisplaySlot(slot);
+                        manager.clearDisplaySlot(slot);
                         context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_SETDISPLAY_SUCCESSCLEARED, slotName);
                         return context.success();
                     }
 
-                    if (!service.contain(objectiveName)) {
+                    if (!manager.contain(objectiveName)) {
                         context.addError("%" + TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVENOTFOUND, objectiveName);
                         return context.fail();
                     }
 
-                    var scoreboard = service.get(objectiveName);
+                    var scoreboard = manager.get(objectiveName);
                     var orderName = context.getResult(4);
                     var order = orderName.equals("ascending") ? SortOrder.ASCENDING : SortOrder.DESCENDING;
                     scoreboard.setSortOrder(order);
-                    service.setDisplaySlot(slot, scoreboard);
+                    manager.setDisplaySlot(slot, scoreboard);
                     context.addOutput(TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVES_SETDISPLAY_SUCCESSSET, slotName, objectiveName);
                     return context.success();
                 })
@@ -132,17 +132,17 @@ public class ScoreboardCommand extends VanillaCommand {
                 .str("targetObjective")
                 .intNum("count")
                 .exec(context -> {
-                    var service = Server.getInstance().getScoreboardService();
+                    var manager = Server.getInstance().getScoreboardManager();
                     String action = context.getResult(1);
                     String wildcardTargetStr = context.getResult(2);
                     String objectiveName = context.getResult(3);
                     int score = context.getResult(4);
-                    if (!service.contain(objectiveName)) {
+                    if (!manager.contain(objectiveName)) {
                         context.addError("%" + TrKeys.MC_COMMANDS_SCOREBOARD_OBJECTIVENOTFOUND, objectiveName);
                         return context.fail();
                     }
 
-                    var scoreboard = service.get(objectiveName);
+                    var scoreboard = manager.get(objectiveName);
                     Set<Scorer> scorers;
                     try {
                         scorers = parseScorers(context.getSender(), wildcardTargetStr, scoreboard);

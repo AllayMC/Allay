@@ -62,7 +62,7 @@ public class BlockStemBaseComponentImpl extends BlockCropsBaseComponentImpl {
     @Override
     public void onRandomUpdate(Block block) {
         if (ThreadLocalRandom.current().nextFloat() <= calculateGrowthChance(block) &&
-            block.getDimension().getLightService().getInternalLight(block.getPosition()) >= 8) {
+            block.getDimension().getLightEngine().getInternalLight(block.getPosition()) >= 8) {
             var growth = block.getPropertyValue(GROWTH);
             if (growth < GROWTH.getMax()) {
                 var newCrop = block.setPropertyValue(GROWTH, growth + 1);

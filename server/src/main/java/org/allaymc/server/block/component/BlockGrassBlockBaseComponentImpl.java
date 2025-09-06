@@ -51,7 +51,7 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
         // For a dirt block to accept grass from a nearby grass block, the following requirements must be met:
 
         // The source block must have a light level of 9 or brighter directly above it.
-        if (dimension.getLightService().getInternalLight(pos.x(), pos.y() + 1, pos.z()) >= MINIMUM_LIGHT_LEVEL_FOR_SPREADING) {
+        if (dimension.getLightEngine().getInternalLight(pos.x(), pos.y() + 1, pos.z()) >= MINIMUM_LIGHT_LEVEL_FOR_SPREADING) {
             // The dirt block receiving grass must be within a 3×5×3 range of the source block
             // where the source block is in the center of the second topmost layer of that range.
             ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -61,7 +61,7 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
             var blockState = dimension.getBlockState(x, y, z);
             if (blockState.getBlockType() == BlockTypes.DIRT &&
                 // The dirt block must have a light level of at least 4 above it.
-                dimension.getLightService().getInternalLight(x, y + 1, z) >= 4 &&
+                dimension.getLightEngine().getInternalLight(x, y + 1, z) >= 4 &&
                 // Any block directly above the dirt block must not reduce light by 2 levels or more.
                 dimension.getBlockState(x, y + 1, z).getBlockStateData().lightDampening() < 2) {
                 var spreadBlock = new Block(BlockTypes.GRASS_BLOCK.getDefaultState(), new Position3i(x, y, z, dimension), 0);

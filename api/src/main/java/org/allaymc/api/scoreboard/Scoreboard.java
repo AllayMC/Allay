@@ -77,7 +77,6 @@ public final class Scoreboard {
 
     /**
      * @param slot Target slot
-     *
      * @return Viewers of the target slot of this scoreboard
      */
     public Set<ScoreboardViewer> getViewers(DisplaySlot slot) {
@@ -89,7 +88,6 @@ public final class Scoreboard {
      *
      * @param viewer Target viewer
      * @param slot   Target slot
-     *
      * @return Whether the removal was successful
      */
     public boolean removeViewer(ScoreboardViewer viewer, DisplaySlot slot) {
@@ -103,7 +101,6 @@ public final class Scoreboard {
      *
      * @param viewer Target viewer
      * @param slot   Target slot
-     *
      * @return Whether the addition was successful
      */
     public boolean addViewer(ScoreboardViewer viewer, DisplaySlot slot) {
@@ -130,7 +127,6 @@ public final class Scoreboard {
      *
      * @param viewer Target viewer
      * @param slot   Target slot
-     *
      * @return Whether it exists
      */
     public boolean containViewer(ScoreboardViewer viewer, DisplaySlot slot) {
@@ -141,7 +137,6 @@ public final class Scoreboard {
      * Get the line corresponding to the tracker in this scoreboard (if it exists)
      *
      * @param scorer Tracker
-     *
      * @return Corresponding line
      */
     public ScoreboardLine getLine(Scorer scorer) {
@@ -152,7 +147,6 @@ public final class Scoreboard {
      * Add a line to this scoreboard
      *
      * @param line Target line
-     *
      * @return Whether the addition was successful
      */
     public boolean addLine(ScoreboardLine line) {
@@ -172,7 +166,6 @@ public final class Scoreboard {
      *
      * @param scorer Tracker
      * @param score  Score
-     *
      * @return Whether the addition was successful
      */
     public boolean addLine(Scorer scorer, int score) {
@@ -184,7 +177,6 @@ public final class Scoreboard {
      *
      * @param text  Name of FakeScorer
      * @param score Score
-     *
      * @return Whether the addition was successful
      */
     public boolean addLine(String text, int score) {
@@ -196,7 +188,6 @@ public final class Scoreboard {
      * Remove the line corresponding to the tracker in this scoreboard (if it exists)
      *
      * @param scorer Target tracker
-     *
      * @return Whether the removal was successful
      */
     public boolean removeLine(Scorer scorer) {
@@ -220,7 +211,6 @@ public final class Scoreboard {
      * Remove all lines from the scoreboard
      *
      * @param send Whether to send to viewers
-     *
      * @return Whether the removal was successful
      */
     public boolean removeAllLines(boolean send) {
@@ -240,7 +230,6 @@ public final class Scoreboard {
      * Check if the tracker has a record in this scoreboard
      *
      * @param scorer Target tracker
-     *
      * @return Whether it exists
      */
     public boolean containLine(Scorer scorer) {
@@ -308,6 +297,6 @@ public final class Scoreboard {
      * @return Whether changes to this scoreboard will trigger events
      */
     public boolean wouldCallEvent() {
-        return Server.getInstance().getScoreboardService().contain(this);
+        return Server.getInstance().getScoreboardManager().contain(this);
     }
 }

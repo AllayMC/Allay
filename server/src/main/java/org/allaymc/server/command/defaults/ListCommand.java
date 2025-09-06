@@ -17,13 +17,13 @@ public class ListCommand extends VanillaCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            var playerService = Server.getInstance().getPlayerService();
-            var players = playerService.getPlayers().values();
+            var playerManager = Server.getInstance().getPlayerManager();
+            var players = playerManager.getPlayers().values();
 
             var joiner = new StringJoiner(", ");
             players.forEach(player -> joiner.add(player.getDisplayName()));
 
-            context.getSender().sendTr(TrKeys.MC_COMMANDS_PLAYERS_LIST, players.size(), playerService.getMaxPlayerCount());
+            context.getSender().sendTr(TrKeys.MC_COMMANDS_PLAYERS_LIST, players.size(), playerManager.getMaxPlayerCount());
             context.getSender().sendText(joiner.toString());
             return context.success();
         });

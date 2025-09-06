@@ -21,8 +21,8 @@ public class GCCommand extends VanillaCommand {
             var memory = getCurrentMemoryUsage();
             for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
                 for (var dimension : world.getDimensions().values()) {
-                    dimension.getChunkService().removeUnusedChunksImmediately();
-                    dimension.getEntityService().checkAutoSaveImmediately();
+                    dimension.getChunkManager().removeUnusedChunksImmediately();
+                    dimension.getEntityManager().checkAutoSaveImmediately();
                 }
             }
             System.gc();

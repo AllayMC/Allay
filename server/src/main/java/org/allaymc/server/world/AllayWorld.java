@@ -208,7 +208,7 @@ public class AllayWorld implements World {
         var overworld = getOverWorld();
         if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
-            overworld.getChunkService().addChunkLoader(new FakeChunkLoader(() -> {
+            overworld.getChunkManager().addChunkLoader(new FakeChunkLoader(() -> {
                 var spawnPoint = worldData.getSpawnPoint();
                 return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
             }, Server.SETTINGS.worldSettings().spawnPointChunkRadius()));
@@ -220,7 +220,7 @@ public class AllayWorld implements World {
                 var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
                 if (newSpawnPoint == null) {
                     log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", name);
-                    overworld.getChunkService().getOrLoadChunk(0, 0);
+                    overworld.getChunkManager().getOrLoadChunk(0, 0);
                     newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
                 }
                 var finalNewSpawnPoint = newSpawnPoint;

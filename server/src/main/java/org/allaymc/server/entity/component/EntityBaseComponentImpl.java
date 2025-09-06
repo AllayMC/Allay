@@ -62,7 +62,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static java.lang.Math.abs;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector2f;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
-import static org.allaymc.server.world.service.AllayEntityPhysicsService.FAT_AABB_MARGIN;
+import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
@@ -258,10 +258,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 if (deadTimer == 0) {
                     // Spawn dead particle
                     spawnDeadParticle();
-                    getDimension().getEntityService().removeEntity(thisEntity);
+                    getDimension().getEntityManager().removeEntity(thisEntity);
                 }
             } else {
-                getDimension().getEntityService().removeEntity(thisEntity);
+                getDimension().getEntityManager().removeEntity(thisEntity);
             }
         }
     }
@@ -325,7 +325,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void remove() {
-        getDimension().getEntityService().removeEntity(thisEntity);
+        getDimension().getEntityManager().removeEntity(thisEntity);
     }
 
     public synchronized boolean setStatus(EntityStatus status) {
@@ -368,8 +368,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        var oldChunk = oldDimension != null ? oldDimension.getChunkService().getChunk(oldChunkX, oldChunkZ) : null;
-        var newChunk = newDimension != null ? newDimension.getChunkService().getChunk(newChunkX, newChunkZ) : null;
+        var oldChunk = oldDimension != null ? oldDimension.getChunkManager().getChunk(oldChunkX, oldChunkZ) : null;
+        var newChunk = newDimension != null ? newDimension.getChunkManager().getChunk(newChunkX, newChunkZ) : null;
         Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
         Set<EntityPlayer> newChunkPlayers = newChunk != null ? newChunk.getPlayerChunkLoaders() : Collections.emptySet();
         Set<EntityPlayer> oldChunkOnlyPlayers = new HashSet<>(oldChunkPlayers);
@@ -424,9 +424,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void teleportOverDimension(Location3dc target) {
         // Teleporting to another dimension, there will be more works to be done
-        this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
+        this.location.dimension().getEntityManager().removeEntity(thisEntity, () -> {
             setLocationBeforeSpawn(target);
-            target.dimension().getEntityService().addEntity(thisEntity);
+            target.dimension().getEntityManager().addEntity(thisEntity);
         });
     }
 

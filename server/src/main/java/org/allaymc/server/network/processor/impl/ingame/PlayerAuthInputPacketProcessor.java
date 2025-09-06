@@ -12,7 +12,7 @@ import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
-import org.allaymc.server.world.service.AllayEntityPhysicsService;
+import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
@@ -65,7 +65,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
         var world = player.getLocation().dimension();
-        ((AllayEntityPhysicsService) world.getEntityService().getPhysicsService()).offerClientMove(player, new Location3d(
+        ((AllayEntityPhysicsEngine) world.getEntityManager().getPhysicsService()).offerClientMove(player, new Location3d(
                 newPos.getX(), newPos.getY(), newPos.getZ(),
                 newRot.getX(), newRot.getY(), newRot.getZ(),
                 world
@@ -161,7 +161,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
         this.stopBreakingTime = startBreakingTime + this.timeNeededToBreak * 20.0d;
 
-        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(breakingPosX, breakingPosZ);
+        var chunk = player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ);
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
         pk.setPosition(Vector3f.from(x, y, z));
@@ -181,7 +181,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
-        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(breakingPosX, breakingPosZ);
+        var chunk = player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ);
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_STOP_BREAK);
         pk.setPosition(Vector3f.from(this.breakingPosX, this.breakingPosY, this.breakingPosZ));
@@ -232,7 +232,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             case WEST -> PARTICLE_BREAK_BLOCK_WEST;
             case EAST -> PARTICLE_BREAK_BLOCK_EAST;
         };
-        var chunk = player.getDimension().getChunkService().getChunkByDimensionPos(breakingPosX, breakingPosZ);
+        var chunk = player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ);
         pk1.setType(type);
         pk1.setPosition(Vector3f.from(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f));
         pk1.setData(this.blockToBreak.blockStateHash());

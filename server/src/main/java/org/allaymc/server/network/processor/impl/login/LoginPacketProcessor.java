@@ -1,9 +1,9 @@
 package org.allaymc.server.network.processor.impl.login;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.player.data.LoginData;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -38,12 +38,12 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         networkComponent.setLoginData(loginData);
 
         var server = Server.getInstance();
-        if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.getPlayerService().isWhitelisted(player.getOriginName())) {
+        if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED);
             return;
         }
 
-        if (server.getPlayerService().isBanned(player.getLoginData().getUuid().toString()) || server.getPlayerService().isBanned(player.getOriginName())) {
+        if (server.getPlayerManager().isBanned(player.getLoginData().getUuid().toString()) || server.getPlayerManager().isBanned(player.getOriginName())) {
             // TODO: I18n
             player.disconnect("You are banned!");
             return;
@@ -65,7 +65,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var otherDevice = server.getPlayerService().getPlayers().get(loginData.getUuid());
+        var otherDevice = server.getPlayerManager().getPlayers().get(loginData.getUuid());
         if (otherDevice != null) {
             otherDevice.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }

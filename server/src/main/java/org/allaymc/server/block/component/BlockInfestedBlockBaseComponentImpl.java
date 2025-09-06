@@ -30,7 +30,7 @@ public class BlockInfestedBlockBaseComponentImpl extends BlockBaseComponentImpl 
         var dimension = block.getDimension();
         var pos = block.getPosition();
         if (dimension.getWorld().getWorldData().getGameRuleValue(GameRule.DO_TILE_DROPS)) {
-            dimension.getEntityService().addEntity(EntityTypes.SILVERFISH.createEntity(
+            dimension.getEntityManager().addEntity(EntityTypes.SILVERFISH.createEntity(
                     EntityInitInfo.builder()
                             .dimension(dimension)
                             .pos(pos.x() + 0.5f, pos.y(), pos.z() + 0.5f)

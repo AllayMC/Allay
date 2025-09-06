@@ -100,7 +100,7 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
         });
 
         // Ray cast entities
-        dimension.getEntityService().getPhysicsService().computeCollidingEntities(aabb).forEach(entity -> {
+        dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb).forEach(entity -> {
             if (entity == thisEntity || (ageComponent.getAge() <= 10 && entity == projectileComponent.getShooter())) {
                 return;
             }

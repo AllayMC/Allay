@@ -280,7 +280,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("entity-auto-save-cycle")
         @Comment("Determines the cycle of entity auto saving. When entity auto saving is triggered, the")
-        @Comment("entity service will find all savable entities in unloaded chunks and save them")
+        @Comment("entity manager will find all savable entities in unloaded chunks and save them")
         private int entityAutoSaveCycle = 20 * 60;
     }
 

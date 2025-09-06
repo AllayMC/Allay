@@ -17,7 +17,7 @@ public class BanCommand extends VanillaCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().str("nameOrUUID").exec(context -> {
             String nameOrUUID = context.getResult(0);
-            if (Server.getInstance().getPlayerService().ban(nameOrUUID)) {
+            if (Server.getInstance().getPlayerManager().ban(nameOrUUID)) {
                 context.addOutput(TrKeys.MC_COMMANDS_BAN_SUCCESS, nameOrUUID);
                 return context.success();
             } else {

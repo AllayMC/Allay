@@ -79,14 +79,14 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     protected void onFall(CEntityFallEvent event) {
         var dimension = getDimension();
         // It is better to place the block when the Entity is removed, so that it looks visually normal.
-        dimension.getEntityService().removeEntity(thisEntity, () -> {
+        dimension.getEntityManager().removeEntity(thisEntity, () -> {
             if (!(blockState.getBehavior() instanceof BlockFallableComponent fallableComponent)) {
                 return;
             }
 
             var damage = fallableComponent.calculateDamage(event.getFallDistance());
             if (damage > 0) {
-                dimension.getEntityService().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
+                dimension.getEntityManager().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
                         .stream()
                         .filter(entity -> entity instanceof EntityDamageComponent)
                         .map(EntityDamageComponent.class::cast)

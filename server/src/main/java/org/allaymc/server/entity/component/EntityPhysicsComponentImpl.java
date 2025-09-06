@@ -39,7 +39,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
-import static org.allaymc.server.world.service.AllayEntityPhysicsService.FAT_AABB_MARGIN;
+import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
 
 /**
  * @author daoge_cmd
@@ -341,8 +341,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     private boolean notValidEntityArea(AABBd extendAABB) {
         var dimension = thisEntity.getDimension();
         return !(extendAABB.minY >= dimension.getDimensionInfo().minHeight()) &&
-               !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
-               !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
+               !dimension.getChunkManager().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
+               !dimension.getChunkManager().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
 
     private boolean tryStepping(Vector3d pos, AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {

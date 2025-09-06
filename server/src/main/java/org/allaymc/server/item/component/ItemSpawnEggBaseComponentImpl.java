@@ -38,7 +38,7 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl {
                         )
                         .build()
         );
-        dimension.getEntityService().addEntity(entity);
+        dimension.getEntityManager().addEntity(entity);
         return true;
     }
 }

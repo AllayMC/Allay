@@ -21,12 +21,13 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
+import org.allaymc.api.player.storage.PlayerStorage;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.service.EntityService;
-import org.allaymc.api.world.service.HasAABB;
-import org.allaymc.api.world.service.HasLongId;
+import org.allaymc.api.world.manager.EntityManager;
+import org.allaymc.api.world.physics.HasAABB;
+import org.allaymc.api.world.physics.HasLongId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -118,7 +119,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Then you need to set the entity's location before spawn the entity.
      *
      * @param location the location you want to set
-     *
      * @throws IllegalStateException if the entity is already spawned
      */
     void setLocationBeforeSpawn(Location3dc location);
@@ -202,7 +202,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Teleport the entity to the specified location.
      *
      * @param location the location to teleport the entity to
-     *
      * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
      */
     default boolean teleport(Location3dc location) {
@@ -214,7 +213,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param location the location to teleport the entity to
      * @param reason   the reason of the teleport
-     *
      * @return {@code true} if the operation is valid, {@code false} otherwise (event being cancelled).
      */
     boolean teleport(Location3dc location, EntityTeleportEvent.Reason reason);
@@ -405,7 +403,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * the method call may not be valid.
      *
      * @param newLocation the new location that this entity moves to
-     *
      * @return {@code true} if the method call is valid, {@code false} otherwise.
      */
     @ApiStatus.OverrideOnly
@@ -442,7 +439,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void despawnFromAll();
 
     /**
-     * Remove the entity from the current dimension's {@link EntityService}. Compared to {@link #despawnFromAll()},
+     * Remove the entity from the current dimension's {@link EntityManager}. Compared to {@link #despawnFromAll()},
      * this method will also remove the entity from the world, and {@link #willBeDespawnedNextTick()} will return
      * {@code true} after this method is called.
      */
@@ -513,7 +510,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the entity has the specified effect.
      *
      * @param effectType the effect type to check
-     *
      * @return {@code true} if the entity has the specified effect, otherwise {@code false}.
      */
     boolean hasEffect(EffectType effectType);
@@ -522,7 +518,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Get the effect level of the specified effect.
      *
      * @param effectType the effect type to get
-     *
      * @return the effect level of the specified effect
      */
     int getEffectLevel(EffectType effectType);
@@ -531,7 +526,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Add the specified effect to the entity.
      *
      * @param effectInstance the effect instance to add
-     *
      * @return {@code true} if the effect is added successfully, otherwise {@code false}.
      */
     boolean addEffect(EffectInstance effectInstance);
@@ -587,7 +581,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         var loc = getLocation();
         var cx = (int) loc.x() >> 4;
         var cz = (int) loc.z() >> 4;
-        return loc.dimension().getChunkService().isChunkLoaded(cx, cz);
+        return loc.dimension().getChunkManager().isChunkLoaded(cx, cz);
     }
 
     /**
@@ -618,7 +612,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         var loc = getLocation();
         var cx = (int) loc.x() >> 4;
         var cz = (int) loc.z() >> 4;
-        return loc.dimension().getChunkService().getChunk(cx, cz);
+        return loc.dimension().getChunkManager().getChunk(cx, cz);
     }
 
     /**
@@ -682,7 +676,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Add a tag to the entity.
      *
      * @param tag the tag to add
-     *
      * @return {@code true} if the tag is added, otherwise {@code false}.
      */
     boolean addTag(String tag);
@@ -691,7 +684,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Remove a tag from the entity.
      *
      * @param tag the tag to remove
-     *
      * @return {@code true} if the tag is removed, otherwise {@code false}.
      */
     boolean removeTag(String tag);
@@ -700,7 +692,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the entity has the specified tag.
      *
      * @param tag the tag to check
-     *
      * @return {@code true} if the entity has the specified tag, otherwise {@code false}.
      */
     boolean hasTag(String tag);
@@ -761,7 +752,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the specific effect can apply on the entity.
      *
      * @param effectType the specific effect
-     *
      * @return {@code true} if the specific effect can apply on the entity, otherwise {@code false}.
      */
     default boolean canApplyEffect(EffectType effectType) {
@@ -773,7 +763,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param player    The player who interacted with the entity, can be null
      * @param itemStack The item used to interact with the entity
-     *
      * @return {@code true} if the interaction is successful
      */
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
@@ -785,11 +774,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * If you don't want the entity to be saved, or you want to save the entity by yourself, you can
      * override this method and return {@code false}.
      * <p>
-     * When return {@code false}, the entity will always be loaded, and {@link EntityService}
+     * When return {@code false}, the entity will always be loaded, and {@link EntityManager}
      * will not remove and save the entity even if the entity is in unloaded chunk. The entity can only be removed
      * manually in this case.
      * <p>
-     * For example, {@link EntityPlayer} is handled by {@link org.allaymc.api.client.storage.PlayerStorage},
+     * For example, {@link EntityPlayer} is handled by {@link PlayerStorage},
      * and this method is override to return {@code false} in {@link EntityPlayer}.
      *
      * @return {@code true} if the entity will be saved, otherwise {@code false}.

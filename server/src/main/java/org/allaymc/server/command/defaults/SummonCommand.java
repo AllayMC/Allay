@@ -38,7 +38,7 @@ public class SummonCommand extends VanillaCommand {
                     }
 
                     var floorPos = pos.floor(new Vector3d());
-                    if (dim.getChunkService().getChunkByDimensionPos((int) floorPos.x(), (int) floorPos.z()) == null) {
+                    if (dim.getChunkManager().getChunkByDimensionPos((int) floorPos.x(), (int) floorPos.z()) == null) {
                         context.addError("%" + TrKeys.MC_COMMANDS_SUMMON_OUTOFWORLD);
                         return context.fail();
                     }
@@ -51,7 +51,7 @@ public class SummonCommand extends VanillaCommand {
                                         .pos(pos)
                                         .build()
                         );
-                        dim.getEntityService().addEntity(entity);
+                        dim.getEntityManager().addEntity(entity);
                     }
 
                     context.addOutput(TrKeys.MC_COMMANDS_SUMMON_SUCCESS);

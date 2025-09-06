@@ -2,9 +2,9 @@ package org.allaymc.server.datastruct.aabb;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
-import org.allaymc.api.world.service.AABBOverlapFilter;
-import org.allaymc.api.world.service.HasAABB;
-import org.allaymc.api.world.service.HasLongId;
+import org.allaymc.api.world.physics.AABBOverlapFilter;
+import org.allaymc.api.world.physics.HasAABB;
+import org.allaymc.api.world.physics.HasLongId;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4fc;
 import org.joml.RayAabIntersection;

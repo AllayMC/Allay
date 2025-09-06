@@ -3,11 +3,11 @@ package org.allaymc.server.metrics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.data.Device;
-import org.allaymc.api.client.data.DeviceInfo;
-import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.api.player.data.Device;
+import org.allaymc.api.player.data.DeviceInfo;
+import org.allaymc.api.player.data.LoginData;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.server.utils.GitProperties;
@@ -80,7 +80,6 @@ public class Metrics {
      * Sends the data to the bStats server.
      *
      * @param data The data to send
-     *
      * @throws Exception If the request failed
      */
     private static void sendData(JsonObject data) throws Exception {
@@ -115,9 +114,7 @@ public class Metrics {
      * G-zips the given String.
      *
      * @param str The string to gzip
-     *
      * @return The gzipped String
-     *
      * @throws IOException If the compression failed
      */
     private static byte[] compress(final String str) throws IOException {
@@ -137,7 +134,6 @@ public class Metrics {
      * result is 0.
      *
      * @param <T> the type of the input elements
-     *
      * @return a {@code Collector} that counts the input elements
      */
     public static <T> Collector<T, ?, Integer> countingInt() {
@@ -588,20 +584,20 @@ public class Metrics {
 
             Metrics metrics = new Metrics("Allay", settings.serverUUID(), settings.logFailedRequests());
 
-            metrics.addCustomChart(new Metrics.SingleLineChart("players", server.getPlayerService()::getPlayerCount));
+            metrics.addCustomChart(new Metrics.SingleLineChart("players", server.getPlayerManager()::getPlayerCount));
             metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", () -> ProtocolInfo.getLatestCodec().getMinecraftVersion()));
             metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", GitProperties::getBuildApiVersion));
             metrics.addCustomChart(new Metrics.SimplePie("allay_server_version", GitProperties::getBuildVersion));
             metrics.addCustomChart(new Metrics.SimplePie("max_memory", () -> String.format("%.2f", Runtime.getRuntime().maxMemory() / (1024d * 1024d * 1024d)) + "G"));
             metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> Server.SETTINGS.networkSettings().xboxAuth() ? "Required" : "Not required"));
 
-            metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getPlayerService().getPlayers().values().stream()
+            metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getPlayerManager().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)
                     .map(LoginData::getDeviceInfo)
                     .map(DeviceInfo::device)
                     .collect(groupingBy(Device::getName, countingInt()))));
 
-            metrics.addCustomChart(new Metrics.AdvancedPie("player_game_version", () -> server.getPlayerService().getPlayers().values().stream()
+            metrics.addCustomChart(new Metrics.AdvancedPie("player_game_version", () -> server.getPlayerManager().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)
                     .collect(groupingBy(LoginData::getGameVersion, countingInt()))));
 

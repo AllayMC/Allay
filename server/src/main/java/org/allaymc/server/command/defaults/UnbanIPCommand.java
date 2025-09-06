@@ -17,7 +17,7 @@ public class UnbanIPCommand extends VanillaCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().str("ip").exec(context -> {
             String ip = context.getResult(0);
-            if (Server.getInstance().getPlayerService().unbanIP(ip)) {
+            if (Server.getInstance().getPlayerManager().unbanIP(ip)) {
                 context.addOutput(TrKeys.MC_COMMANDS_UNBANIP_SUCCESS, ip);
                 return context.success();
             } else {

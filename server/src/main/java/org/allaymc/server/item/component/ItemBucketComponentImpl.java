@@ -104,7 +104,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         var entity = getEntityType();
         if (entity != null) {
             var entityInstance = entity.createEntity(EntityInitInfo.builder().dimension(dimension).pos(MathUtils.center(liquidPlacedPos)).build());
-            dimension.getEntityService().addEntity(entityInstance);
+            dimension.getEntityManager().addEntity(entityInstance);
         }
 
         player.tryConsumeItemInHand();

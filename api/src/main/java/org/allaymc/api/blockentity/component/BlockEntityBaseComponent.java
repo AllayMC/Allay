@@ -107,7 +107,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
      */
     default void sendPacketToViewers(BedrockPacket packet, boolean immediately) {
         var pos = getPosition();
-        var chunk = pos.dimension().getChunkService().getChunkByDimensionPos(pos.x(), pos.z());
+        var chunk = pos.dimension().getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
         Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
         if (immediately) {
             chunk.sendChunkPacket(packet);

@@ -61,7 +61,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         var clickedBlockState = interactInfo.getClickedBlock();
         if (!clickedBlockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
             clickedBlockState.updateBlockProperty(BUTTON_PRESSED_BIT, true);
-            dimension.getBlockUpdateService().scheduleBlockUpdateInDelay(clickedBlockState.getPosition(), getActivationTime());
+            dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(clickedBlockState.getPosition(), getActivationTime());
             clickedBlockState.addLevelSoundEvent(SoundEvent.BUTTON_CLICK_ON);
         }
         return true;

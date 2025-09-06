@@ -4,7 +4,6 @@ import com.google.common.base.Suppliers;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.service.PlayerService;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.server.ServerStopEvent;
@@ -16,18 +15,19 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.player.manager.PlayerManager;
 import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.scoreboard.ScoreboardService;
+import org.allaymc.api.scoreboard.ScoreboardManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.server.client.service.AllayPlayerService;
-import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
-import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.metrics.Metrics;
 import org.allaymc.server.network.AllayNetworkInterface;
+import org.allaymc.server.player.manager.AllayPlayerManager;
+import org.allaymc.server.player.storage.AllayEmptyPlayerStorage;
+import org.allaymc.server.player.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.scroreboard.storage.JsonScoreboardStorage;
@@ -64,7 +64,7 @@ public final class AllayServer implements Server {
     @Getter
     private final AllayWorldPool worldPool;
     @Getter
-    private final PlayerService playerService;
+    private final PlayerManager playerManager;
     @Getter
     private final ExecutorService computeThreadPool;
     @Getter
@@ -72,7 +72,7 @@ public final class AllayServer implements Server {
     @Getter
     private final EventBus eventBus;
     @Getter
-    private final ScoreboardService scoreboardService;
+    private final ScoreboardManager scoreboardManager;
     @Getter
     private final AllayPluginManager pluginManager;
     @Getter
@@ -86,12 +86,12 @@ public final class AllayServer implements Server {
 
     private AllayServer() {
         this.state = new AtomicReference<>(ServerState.STARTING);
-        this.playerService = new AllayPlayerService(Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE, new AllayNetworkInterface(this));
+        this.playerManager = new AllayPlayerManager(Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE, new AllayNetworkInterface(this));
         this.worldPool = new AllayWorldPool();
         this.computeThreadPool = createComputeThreadPool();
         this.virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
         this.eventBus = new AllayEventBus(virtualThreadPool);
-        this.scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
+        this.scoreboardManager = new ScoreboardManager(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
         this.pluginManager = new AllayPluginManager();
         this.scheduler = new AllayScheduler(virtualThreadPool);
         // Initialize the permission group with a memoized supplier to avoid NPE during server startup
@@ -170,11 +170,11 @@ public final class AllayServer implements Server {
 
         this.pluginManager.loadPlugins();
         this.worldPool.loadWorlds();
-        this.scoreboardService.read();
+        this.scoreboardManager.read();
         this.pluginManager.enablePlugins();
 
         sendTr(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
-        ((AllayPlayerService) this.playerService).startNetworkInterface();
+        ((AllayPlayerManager) this.playerManager).startNetworkInterface();
 
         this.startTime = System.currentTimeMillis();
         if (SETTINGS.networkSettings().enablev6()) {
@@ -205,7 +205,7 @@ public final class AllayServer implements Server {
 
     private void tick(long currentTick) {
         this.scheduler.tick();
-        ((AllayPlayerService) this.playerService).tick(currentTick);
+        ((AllayPlayerManager) this.playerManager).tick(currentTick);
     }
 
     @Override
@@ -227,9 +227,9 @@ public final class AllayServer implements Server {
     @SneakyThrows
     private void shutdownReally() {
         // Disconnect all players
-        playerService.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
+        playerManager.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
         // Shutdown network server to prevent new client connecting to the server
-        ((AllayPlayerService) this.playerService).shutdownNetworkInterface();
+        ((AllayPlayerManager) this.playerManager).shutdownNetworkInterface();
         this.scheduler.shutdown();
 
         new ServerStopEvent().call();
@@ -239,8 +239,8 @@ public final class AllayServer implements Server {
 
         // Save all configurations & data
         Server.SETTINGS.save();
-        this.scoreboardService.save();
-        ((AllayPlayerService) this.playerService).shutdown();
+        this.scoreboardManager.save();
+        ((AllayPlayerManager) this.playerManager).shutdown();
 
         // Shutdown all worlds
         this.worldPool.shutdown();
@@ -259,7 +259,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void broadcastTr(@MayContainTrKey String tr, Object... args) {
-        playerService.getPlayers().values().forEach(player -> player.sendTr(tr, args));
+        playerManager.getPlayers().values().forEach(player -> player.sendTr(tr, args));
         sendTr(tr, args);
     }
 

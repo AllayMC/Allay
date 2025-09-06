@@ -16,10 +16,10 @@ public class SetMaxPlayersCommand extends VanillaCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().intNum("maxPlayers").exec(context -> {
-            var maxPlayers = Math.max(Server.getInstance().getPlayerService().getPlayerCount(), context.getResult(0));
+            var maxPlayers = Math.max(Server.getInstance().getPlayerManager().getPlayerCount(), context.getResult(0));
 
             Server.SETTINGS.genericSettings().maxPlayerCount(maxPlayers);
-            Server.getInstance().getPlayerService().setMaxPlayerCount(maxPlayers);
+            Server.getInstance().getPlayerManager().setMaxPlayerCount(maxPlayers);
             context.addOutput(TrKeys.MC_COMMANDS_SETMAXPLAYERS_SUCCESS, maxPlayers);
             return context.success();
         });

@@ -183,7 +183,7 @@ public class StatusCommand extends VanillaCommand {
             sender.sendText("  TickUsage: " + TextFormat.GREEN + (world.getTickUsage() * 100f) + "%");
 
             var dims = world.getDimensions().values();
-            var chunks = dims.stream().mapToInt(d -> d.getChunkService().getLoadedChunks().size()).sum();
+            var chunks = dims.stream().mapToInt(d -> d.getChunkManager().getLoadedChunks().size()).sum();
             var entities = dims.stream().mapToInt(Dimension::getEntityCount).sum();
             var blockEntities = dims.stream().mapToInt(Dimension::getBlockEntityCount).sum();
 
@@ -213,7 +213,7 @@ public class StatusCommand extends VanillaCommand {
 
     protected static void printOnlinePlayerInfo(CommandSender sender) {
         var server = Server.getInstance();
-        var ps = server.getPlayerService();
+        var ps = server.getPlayerManager();
 
         var online = ps.getPlayerCount();
         var maxPlayerCount = ps.getMaxPlayerCount();

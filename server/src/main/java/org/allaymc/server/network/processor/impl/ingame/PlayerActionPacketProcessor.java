@@ -42,7 +42,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     });
                 } else {
                     prepareForRespawn(player, spawnPoint);
-                    spawnDimension.getEntityService().addEntity(player, () -> afterRespawn(player, spawnPoint));
+                    spawnDimension.getEntityManager().addEntity(player, () -> afterRespawn(player, spawnPoint));
                 }
                 yield PacketSignal.HANDLED;
             }

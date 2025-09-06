@@ -17,7 +17,7 @@ public class UnbanCommand extends VanillaCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().str("nameOrUUID").exec(context -> {
             String nameOrUUID = context.getResult(0);
-            if (Server.getInstance().getPlayerService().unban(nameOrUUID)) {
+            if (Server.getInstance().getPlayerManager().unban(nameOrUUID)) {
                 context.addOutput(TrKeys.MC_COMMANDS_UNBAN_SUCCESS, nameOrUUID);
                 return context.success();
             } else {

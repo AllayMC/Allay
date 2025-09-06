@@ -2,15 +2,15 @@ package org.allaymc.api.server;
 
 import eu.okaeri.configs.ConfigManager;
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.client.service.PlayerService;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
+import org.allaymc.api.player.manager.PlayerManager;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
-import org.allaymc.api.scoreboard.ScoreboardService;
+import org.allaymc.api.scoreboard.ScoreboardManager;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -56,7 +56,6 @@ public interface Server extends TaskCreator, CommandSender {
      * when modifying worlds.</p>
      *
      * @return the server scheduler
-     *
      * @see World#getScheduler()
      */
     Scheduler getScheduler();
@@ -109,11 +108,11 @@ public interface Server extends TaskCreator, CommandSender {
     ExecutorService getVirtualThreadPool();
 
     /**
-     * Retrieves the player service for managing players on the server.
+     * Retrieves the player manager for managing players on the server.
      *
-     * @return the player service instance
+     * @return the player manager
      */
-    PlayerService getPlayerService();
+    PlayerManager getPlayerManager();
 
     /**
      * Broadcasts a text message to all players and the server console.
@@ -121,7 +120,7 @@ public interface Server extends TaskCreator, CommandSender {
      * @param text the text message to broadcast
      */
     default void broadcastText(String text) {
-        getPlayerService().getPlayers().values().forEach(player -> player.sendText(text));
+        getPlayerManager().getPlayers().values().forEach(player -> player.sendText(text));
         sendText(text);
     }
 
@@ -151,7 +150,7 @@ public interface Server extends TaskCreator, CommandSender {
      */
     default void broadcastCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         sendCommandOutputs(sender, status, outputs);
-        getPlayerService().getPlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
+        getPlayerManager().getPlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
     }
 
     /**
@@ -162,9 +161,9 @@ public interface Server extends TaskCreator, CommandSender {
     EventBus getEventBus();
 
     /**
-     * Retrieves the scoreboard service.
+     * Retrieves the scoreboard manager.
      *
-     * @return the scoreboard service instance
+     * @return the scoreboard manager instance
      */
-    ScoreboardService getScoreboardService();
+    ScoreboardManager getScoreboardManager();
 }

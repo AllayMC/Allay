@@ -109,7 +109,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                         }
 
                         var ip = AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0];
-                        if (server.getPlayerService().isIPBanned(ip)) {
+                        if (server.getPlayerManager().isIPBanned(ip)) {
                             session.disconnect(I18n.get().tr(TrKeys.ALLAY_DISCONNECT_BANIP));
                             return;
                         }

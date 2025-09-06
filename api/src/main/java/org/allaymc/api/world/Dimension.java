@@ -23,10 +23,10 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.OperationType;
-import org.allaymc.api.world.service.BlockUpdateService;
-import org.allaymc.api.world.service.ChunkService;
-import org.allaymc.api.world.service.EntityService;
-import org.allaymc.api.world.service.LightService;
+import org.allaymc.api.world.light.LightEngine;
+import org.allaymc.api.world.manager.BlockUpdateManager;
+import org.allaymc.api.world.manager.ChunkManager;
+import org.allaymc.api.world.manager.EntityManager;
 import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
@@ -72,7 +72,6 @@ public interface Dimension {
      * @param y             the y coordinate of the block
      * @param z             the z coordinate of the block
      * @param layer         the layer which contains the block
-     *
      * @return the created block update packet
      */
     private static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
@@ -85,25 +84,25 @@ public interface Dimension {
     }
 
     /**
-     * Get the chunk service of this dimension.
+     * Get the chunk manager of this dimension.
      *
-     * @return the chunk service
+     * @return the chunk manager
      */
-    ChunkService getChunkService();
+    ChunkManager getChunkManager();
 
     /**
-     * Get the block update service of this dimension.
+     * Get the block update manager of this dimension.
      *
-     * @return the block update service
+     * @return the block update manager
      */
-    BlockUpdateService getBlockUpdateService();
+    BlockUpdateManager getBlockUpdateManager();
 
     /**
-     * Get the entity service of this dimension.
+     * Get the entity manager of this dimension.
      *
-     * @return the entity service
+     * @return the entity manager
      */
-    EntityService getEntityService();
+    EntityManager getEntityManager();
 
     /**
      * Adds a debug shape to the dimension.
@@ -133,11 +132,11 @@ public interface Dimension {
     void removeAllDebugShapes();
 
     /**
-     * Get the light service of this dimension.
+     * Get the light engine of this dimension.
      *
-     * @return the light service
+     * @return the light engine
      */
-    LightService getLightService();
+    LightEngine getLightEngine();
 
     /**
      * Get the dimension info of this dimension.
@@ -160,7 +159,7 @@ public interface Dimension {
      */
     @Unmodifiable
     default Map<Long, Entity> getEntities() {
-        return getEntityService().getEntities();
+        return getEntityManager().getEntities();
     }
 
     /**
@@ -344,7 +343,6 @@ public interface Dimension {
      * @param update            whether to update the blocks around the block
      * @param callBlockBehavior whether to call the block behavior
      * @param placementInfo     the placement info
-     *
      * @return whether the block state was set successfully. Return {@code false} when the block is failed to be set, usually because chunk is unloaded or event is being cancelled
      */
     boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
@@ -428,7 +426,6 @@ public interface Dimension {
      * @param y     the y coordinate of the block
      * @param z     the z coordinate of the block
      * @param layer the layer which contains the block
-     *
      * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found or the chunk is not loaded
      */
     default BlockState getBlockState(int x, int y, int z, int layer) {
@@ -436,7 +433,7 @@ public interface Dimension {
             return AIR.getDefaultState();
         }
 
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             return AIR.getDefaultState();
         }
@@ -506,7 +503,6 @@ public interface Dimension {
      * @param sizeY the size of the region in the y-axis
      * @param sizeZ the size of the region in the z-axis
      * @param layer the layer which contains the block
-     *
      * @return the block states at the specified region, or {@code null} if sizeX/Y/Z is smaller than 1
      */
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
@@ -532,7 +528,7 @@ public interface Dimension {
                 var localStartZ = Math.max(z - cZ, 0);
                 var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
-                var chunk = getChunkService().getChunk(chunkX, chunkZ);
+                var chunk = getChunkManager().getChunk(chunkX, chunkZ);
                 if (chunk == null) {
                     // Chunk is not loaded.
                     continue;
@@ -602,7 +598,7 @@ public interface Dimension {
                 var localStartZ = Math.max(z - cZ, 0);
                 var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
-                var chunk = getChunkService().getChunk(chunkX, chunkZ);
+                var chunk = getChunkManager().getChunk(chunkX, chunkZ);
                 if (chunk == null) {
                     // Chunk is not loaded
                     continue;
@@ -669,7 +665,7 @@ public interface Dimension {
      * @param layer        the layer which contains the block
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, int layer) {
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             return;
         }
@@ -706,7 +702,6 @@ public interface Dimension {
      * @param aabb            the AABB to check
      * @param layer           the layer which contains the block
      * @param ignoreCollision include blocks that don't have collision
-     *
      * @return the block states that collide with the specified AABB, or {@code null} if no block collides
      */
     default BlockState[][][] getCollidingBlockStates(AABBdc aabb, int layer, boolean ignoreCollision) {
@@ -775,7 +770,7 @@ public interface Dimension {
      * @param data      the data of the level event
      */
     default void addLevelEvent(double x, double y, double z, LevelEventType eventType, int data) {
-        var chunk = getChunkService().getChunkByDimensionPos((int) x, (int) z);
+        var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
         if (chunk == null) return;
 
         var packet = new LevelEventPacket();
@@ -840,7 +835,7 @@ public interface Dimension {
      * @param relativeVolumeDisabled whether the relative volume is disabled
      */
     default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
-        var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
+        var chunk = getChunkManager().getChunk((int) x >> 4, (int) z >> 4);
         if (chunk == null) return;
 
         var packet = new LevelSoundEventPacket();
@@ -914,14 +909,13 @@ public interface Dimension {
      */
     default void updateAtFace(Vector3ic pos, BlockFace face) {
         var offsetPos = face.offsetPos(pos);
-        getBlockUpdateService().neighborBlockUpdate(offsetPos, pos, face.opposite());
+        getBlockUpdateManager().neighborBlockUpdate(offsetPos, pos, face.opposite());
     }
 
     /**
      * Get blocks around a pos.
      *
      * @param pos the pos
-     *
      * @return the blocks around the pos
      */
     default Block[] getNeighborsBlocks(Vector3ic pos) {
@@ -934,7 +928,6 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     *
      * @return the blocks around the pos
      */
     default Block[] getNeighborsBlocks(int x, int y, int z) {
@@ -951,7 +944,6 @@ public interface Dimension {
      * Check if the y coordinate is in the range of this dimension.
      *
      * @param y the y coordinate
-     *
      * @return {@code true} if the y coordinate is in the range of this dimension, otherwise {@code false}.
      */
     default boolean isYInRange(double y) {
@@ -964,18 +956,16 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     *
      * @return {@code true} if the pos is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isInWorld(double x, double y, double z) {
-        return isYInRange(y) && getChunkService().isChunkLoaded((int) x >> 4, (int) z >> 4);
+        return isYInRange(y) && getChunkManager().isChunkLoaded((int) x >> 4, (int) z >> 4);
     }
 
     /**
      * Check if the aabb is in a valid and loaded region.
      *
      * @param aabb the aabb
-     *
      * @return {@code true} if the aabb is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isAABBInWorld(AABBdc aabb) {
@@ -988,11 +978,10 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     *
      * @return the block entity at the specified pos. {@code null} will be returned if block entity is not found or the chunk is not loaded
      */
     default BlockEntity getBlockEntity(int x, int y, int z) {
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             return null;
         }
@@ -1014,7 +1003,7 @@ public interface Dimension {
      */
     @Unmodifiable
     default Map<Integer, BlockEntity> getBlockEntities() {
-        return getChunkService().getLoadedChunks().stream()
+        return getChunkManager().getLoadedChunks().stream()
                 .flatMap(chunk -> chunk.getBlockEntities().entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -1025,7 +1014,7 @@ public interface Dimension {
      * @return the count of block entities in this dimension
      */
     default int getBlockEntityCount() {
-        return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getBlockEntities().size()).sum();
+        return getChunkManager().getLoadedChunks().stream().mapToInt(chunk -> chunk.getBlockEntities().size()).sum();
     }
 
     /**
@@ -1167,7 +1156,7 @@ public interface Dimension {
         packet.setPitch((float) pitch);
         packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
 
-        getChunkService().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
+        getChunkManager().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
     }
 
     /**
@@ -1203,7 +1192,7 @@ public interface Dimension {
         );
         entityItem.setItemStack(itemStack);
         entityItem.setPickupDelay(pickupDelay);
-        getEntityService().addEntity(entityItem);
+        getEntityManager().addEntity(entityItem);
     }
 
     /**
@@ -1269,7 +1258,7 @@ public interface Dimension {
         );
         entityXpOrb.setExperienceValue(xp);
         entityXpOrb.setPickupDelay(pickupDelay);
-        getEntityService().addEntity(entityXpOrb);
+        getEntityManager().addEntity(entityXpOrb);
     }
 
     /**
@@ -1316,7 +1305,6 @@ public interface Dimension {
      * @param usedItem     The item used to break the block, can be {@code null}
      * @param entity       The player who breaks the block, can be {@code null}
      * @param sendParticle Whether to send the break particle
-     *
      * @return Whether the block is successfully broken
      */
     boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity, boolean sendParticle);
@@ -1327,11 +1315,10 @@ public interface Dimension {
      *
      * @param x the x coordinate
      * @param z the z coordinate
-     *
      * @return the height of the highest non-air block at the specified x and z coordinates
      */
     default int getHeight(int x, int z) {
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             return getDimensionInfo().minHeight();
         }
@@ -1344,7 +1331,6 @@ public interface Dimension {
      *
      * @param x the x coordinate
      * @param z the z coordinate
-     *
      * @return the highest blockstate at the specified x and z coordinates
      */
     default BlockState getHighestBlockState(int x, int z) {
@@ -1365,7 +1351,6 @@ public interface Dimension {
      * @param x     the x coordinate
      * @param z     the z coordinate
      * @param range the range to search
-     *
      * @return a safe standing position around the specified x and z coordinates, or {@code null} if not found
      */
     default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range, @Range(from = 0, to = Integer.MAX_VALUE) int attemptCount) {
@@ -1375,7 +1360,7 @@ public interface Dimension {
             var px = x + rand.nextInt(-range, range + 1);
             var pz = z + rand.nextInt(-range, range + 1);
             // Load the chunk if it is not loaded
-            getChunkService().getOrLoadChunk(px >> 4, pz >> 4).join();
+            getChunkManager().getOrLoadChunk(px >> 4, pz >> 4).join();
             var py = getHeight(px, pz) + 1;
             if (predicate.test(new Position3i(px, py, pz, this))) {
                 return new Vector3i(px, py, pz);
@@ -1397,7 +1382,6 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     *
      * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
      */
     default boolean canPosSeeSky(int x, int y, int z) {
@@ -1417,14 +1401,13 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     *
      * @return the biome at the specified pos.{@code BiomeId.PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded
      */
     default BiomeType getBiome(int x, int y, int z) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
             return BiomeId.PLAINS;
 
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             return BiomeId.PLAINS;
         }
@@ -1448,7 +1431,7 @@ public interface Dimension {
      * @param biome the biome to set
      */
     default void setBiome(int x, int y, int z, BiomeType biome) {
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             return;
         }
@@ -1469,7 +1452,6 @@ public interface Dimension {
      * the liquid is returned. If not, the boolean returned is false.
      *
      * @param pos the position to check for a liquid block
-     *
      * @return the liquid block at the position and the layer it is in, or {@link #PAIR_LIQUID_NOT_FOUND} if no liquid is found
      */
     default IntObjectPair<BlockState> getLiquid(Vector3ic pos) {
@@ -1546,7 +1528,6 @@ public interface Dimension {
      * were left on layer 0.
      *
      * @param pos the position to remove the liquid from
-     *
      * @return {@code true} if no blocks were left on layer 0.
      */
     default boolean removeLiquid(Vector3ic pos) {

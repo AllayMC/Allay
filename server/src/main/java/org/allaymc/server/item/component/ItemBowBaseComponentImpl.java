@@ -89,7 +89,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             return;
         }
 
-        dimension.getEntityService().addEntity(arrow);
+        dimension.getEntityManager().addEntity(arrow);
         if (!creative) {
             tryIncreaseDamage(1);
         }

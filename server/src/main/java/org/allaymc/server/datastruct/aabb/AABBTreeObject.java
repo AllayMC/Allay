@@ -1,7 +1,7 @@
 package org.allaymc.server.datastruct.aabb;
 
 import lombok.AllArgsConstructor;
-import org.allaymc.api.world.service.HasLongId;
+import org.allaymc.api.world.physics.HasLongId;
 
 import java.util.Objects;
 

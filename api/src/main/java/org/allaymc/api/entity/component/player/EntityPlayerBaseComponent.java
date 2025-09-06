@@ -1,14 +1,14 @@
 package org.allaymc.api.entity.component.player;
 
 import it.unimi.dsi.fastutil.Pair;
-import org.allaymc.api.client.data.Abilities;
-import org.allaymc.api.client.data.AdventureSettings;
-import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.player.data.Abilities;
+import org.allaymc.api.player.data.AdventureSettings;
+import org.allaymc.api.player.storage.PlayerData;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -161,7 +161,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Get how long the player has been using the item, in game ticks.
      *
      * @param currentTime The current time
-     *
      * @return How long the player has been using the item, in game ticks
      */
     long getItemUsingInAirTime(long currentTime);
@@ -399,7 +398,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Get a form by its ID.
      *
      * @param id The ID of the form
-     *
      * @return The form
      */
     Form getForm(int id);
@@ -408,7 +406,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Remove a form by its ID.
      *
      * @param id The ID of the form
-     *
      * @return The removed form
      */
     Form removeForm(int id);
@@ -448,7 +445,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Check if the player can reach a block at the specified position.
      *
      * @param pos The position of the block
-     *
      * @return Whether the player can reach the block
      */
     default boolean canReachBlock(Vector3ic pos) {
@@ -459,7 +455,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Check if the player can reach a point at the specified coordinates.
      *
      * @param pos The position of the point
-     *
      * @return Whether the player can reach the point
      */
     default boolean canReach(Vector3dc pos) {
@@ -472,7 +467,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @param x The x coordinate of the point
      * @param y The y coordinate of the point
      * @param z The z coordinate of the point
-     *
      * @return Whether the player can reach the point
      */
     default boolean canReach(double x, double y, double z) {
@@ -588,7 +582,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Checks if the cooldown for specific category has ended.
      *
      * @param category the category to check
-     *
      * @return {@code true} if the cooldown has ended, {@code false} otherwise.
      */
     boolean isCooldownEnd(String category);
@@ -597,7 +590,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * Checks if the cooldown for specific item type has ended.
      *
      * @param itemType the item type to check
-     *
      * @return {@code true} if the cooldown has ended, {@code false} otherwise.
      */
     default boolean isCooldownEnd(ItemType<?> itemType) {

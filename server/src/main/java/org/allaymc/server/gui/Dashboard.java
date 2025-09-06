@@ -117,7 +117,7 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
                     var pos = player.getLocation();
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
@@ -136,7 +136,7 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
                     player.disconnect(TrKeys.MC_DISCONNECT_DISCONNECTED);
                 });
                 popupMenu.add(kickItem);
@@ -146,8 +146,8 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
-                    Server.getInstance().getPlayerService().ban(player.getLoginData().getUuid().toString());
+                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
+                    Server.getInstance().getPlayerManager().ban(player.getLoginData().getUuid().toString());
                 });
                 popupMenu.add(banItem);
 
@@ -156,8 +156,8 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerService().getOnlinePlayerByName(playerName);
-                    Server.getInstance().getPlayerService().banIP(AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0]);
+                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
+                    Server.getInstance().getPlayerManager().banIP(AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0]);
                 });
                 popupMenu.add(banIpItem);
 
@@ -269,7 +269,7 @@ public final class Dashboard {
                             world.getDimensions()
                                     .values()
                                     .stream()
-                                    .mapToInt(dimension -> dimension.getChunkService().getLoadedChunks().size())
+                                    .mapToInt(dimension -> dimension.getChunkManager().getLoadedChunks().size())
                                     .sum()
                     )
                     .sum();
@@ -339,12 +339,12 @@ public final class Dashboard {
     }
 
     private void updateOnlinePlayerCount() {
-        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText(I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ONLINE, Server.getInstance().getPlayerService().getPlayerCount())));
+        SwingUtilities.invokeLater(() -> onlinePlayerCount.setText(I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ONLINE, Server.getInstance().getPlayerManager().getPlayerCount())));
     }
 
     private void updateOnlinePlayerTable() {
         var title = new String[]{I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_NAME), I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ADDRESS), I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_UUID)};
-        var players = Server.getInstance().getPlayerService().getPlayers().values();
+        var players = Server.getInstance().getPlayerManager().getPlayers().values();
         String[][] data = new String[players.size()][3];
         int row = 0;
         for (var player : players) {

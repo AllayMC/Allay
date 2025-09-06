@@ -15,7 +15,7 @@ import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.world.generator.ChunkPyramid;
 import org.allaymc.server.world.generator.ChunkStep;
-import org.allaymc.server.world.service.AllayChunkService;
+import org.allaymc.server.world.manager.AllayChunkManager;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -32,9 +32,9 @@ import java.util.function.Predicate;
 public final class ChunkHolder {
 
     /**
-     * The chunk service that owns this chunk holder.
+     * The chunk manager that owns this chunk holder.
      */
-    private final AllayChunkService chunkService;
+    private final AllayChunkManager chunkManager;
     /**
      * The dimension that this chunk belongs to.
      */
@@ -90,11 +90,11 @@ public final class ChunkHolder {
     @Setter
     private int removeCountDown;
 
-    public ChunkHolder(AllayChunkService chunkService, int x, int z, CompletableFuture<Chunk> chunkReadFuture) {
-        this.chunkService = chunkService;
-        this.dimension = chunkService.getDimension();
-        this.worldGenerator = chunkService.getWorldGenerator();
-        this.worldStorage = chunkService.getWorldStorage();
+    public ChunkHolder(AllayChunkManager chunkManager, int x, int z, CompletableFuture<Chunk> chunkReadFuture) {
+        this.chunkManager = chunkManager;
+        this.dimension = chunkManager.getDimension();
+        this.worldGenerator = chunkManager.getWorldGenerator();
+        this.worldStorage = chunkManager.getWorldStorage();
         this.x = x;
         this.z = z;
         this.loadFuture = new CompletableFuture<>();
@@ -175,7 +175,7 @@ public final class ChunkHolder {
             } finally {
                 worldStorage.writeChunk(this.chunk).thenRun(() -> {
                     this.unloadFuture.complete(null);
-                    this.chunkService.removeChunkHolder(this.x, this.z);
+                    this.chunkManager.removeChunkHolder(this.x, this.z);
                     unlock();
                 });
             }
@@ -192,7 +192,7 @@ public final class ChunkHolder {
                     this.worldGenerator,
                     this.chunk.toUnsafeChunk(),
                     // Should never be null here since we have locked the chunks that will be written
-                    (x, z) -> Preconditions.checkNotNull(this.chunkService.getChunkHolder(x, z).getChunk())
+                    (x, z) -> Preconditions.checkNotNull(this.chunkManager.getChunkHolder(x, z).getChunk())
             ), Server.getInstance().getComputeThreadPool()).exceptionally(t -> {
                 log.error("Error while process chunk task in chunk ({},{}) from state {} to state {}!", this.x, this.z, chunk.getState(), nextState, t);
                 return null;
@@ -264,7 +264,7 @@ public final class ChunkHolder {
     }
 
     private boolean isLocked(int chunkX, int chunkZ) {
-        return Preconditions.checkNotNull(chunkService.getChunkHolder(chunkX, chunkZ)).isLocked();
+        return Preconditions.checkNotNull(chunkManager.getChunkHolder(chunkX, chunkZ)).isLocked();
     }
 
     private boolean lock() {
@@ -305,7 +305,7 @@ public final class ChunkHolder {
 
     private void forEachChunkRanged(int chunkX, int chunkZ, int range, Consumer<ChunkHolder> consumer, boolean load) {
         if (range == 0) {
-            var chunkHolder = load ? chunkService.getOrCreateChunkHolder(chunkX, chunkZ) : chunkService.getChunkHolder(chunkX, chunkZ);
+            var chunkHolder = load ? chunkManager.getOrCreateChunkHolder(chunkX, chunkZ) : chunkManager.getChunkHolder(chunkX, chunkZ);
             consumer.accept(Preconditions.checkNotNull(chunkHolder));
             return;
         }
@@ -313,8 +313,8 @@ public final class ChunkHolder {
         for (int i = -range; i <= range; i++) {
             for (int j = -range; j <= range; j++) {
                 var chunkHolder = load ?
-                        chunkService.getOrCreateChunkHolder(chunkX + i, chunkZ + j) :
-                        chunkService.getChunkHolder(chunkX + i, chunkZ + j);
+                        chunkManager.getOrCreateChunkHolder(chunkX + i, chunkZ + j) :
+                        chunkManager.getChunkHolder(chunkX + i, chunkZ + j);
                 consumer.accept(Preconditions.checkNotNull(chunkHolder));
             }
         }
@@ -322,12 +322,12 @@ public final class ChunkHolder {
 
     private boolean checkChunkRanged(int chunkX, int chunkZ, int range, Predicate<ChunkHolder> predicator) {
         if (range == 0) {
-            return predicator.test(Preconditions.checkNotNull(chunkService.getChunkHolder(chunkX, chunkZ)));
+            return predicator.test(Preconditions.checkNotNull(chunkManager.getChunkHolder(chunkX, chunkZ)));
         }
 
         for (int i = -range; i <= range; i++) {
             for (int j = -range; j <= range; j++) {
-                if (!predicator.test(Preconditions.checkNotNull(chunkService.getChunkHolder(chunkX + i, chunkZ + j)))) {
+                if (!predicator.test(Preconditions.checkNotNull(chunkManager.getChunkHolder(chunkX + i, chunkZ + j)))) {
                     return false;
                 }
             }

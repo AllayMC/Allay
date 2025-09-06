@@ -144,7 +144,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
     }
 
     protected static Block getMapColoredBlock(Dimension dimension, int x, int z) {
-        var chunk = dimension.getChunkService().loadChunk(x >> 4, z >> 4).join();
+        var chunk = dimension.getChunkManager().loadChunk(x >> 4, z >> 4).join();
         Preconditions.checkArgument(chunk != null);
 
         var chunkX = x & 0xF;

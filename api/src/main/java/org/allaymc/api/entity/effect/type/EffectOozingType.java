@@ -26,7 +26,7 @@ public class EffectOozingType extends AbstractEffectType {
 
         for (var i = 0; i < 2; i++) {
             var slimeEntity = EntityTypes.SLIME.createEntity(slimeEntityInitInfo);
-            entity.getDimension().getEntityService().addEntity(slimeEntity);
+            entity.getDimension().getEntityManager().addEntity(slimeEntity);
         }
     }
 }

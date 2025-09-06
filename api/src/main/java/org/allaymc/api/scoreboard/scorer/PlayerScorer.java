@@ -33,7 +33,7 @@ public final class PlayerScorer implements Scorer {
 
     public EntityPlayer getPlayer() {
         if (uuid == null) return null;
-        return Server.getInstance().getPlayerService().getPlayers().get(uuid);
+        return Server.getInstance().getPlayerManager().getPlayers().get(uuid);
     }
 
     public boolean isOnline() {
@@ -60,14 +60,14 @@ public final class PlayerScorer implements Scorer {
 
     @Override
     public String getName() {
-        var player = Server.getInstance().getPlayerService().getPlayers().get(uuid);
+        var player = Server.getInstance().getPlayerManager().getPlayers().get(uuid);
         return player == null ? String.valueOf(uuid.getMostSignificantBits()) : player.getOriginName();
     }
 
     @Override
     public ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line) {
         if (uuid == null) return null;
-        var player = Server.getInstance().getPlayerService().getPlayers().get(uuid);
+        var player = Server.getInstance().getPlayerManager().getPlayers().get(uuid);
         return player != null ? new ScoreInfo(
                 line.getLineId(),
                 scoreboard.getObjectiveName(),

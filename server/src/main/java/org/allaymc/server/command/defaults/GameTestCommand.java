@@ -181,7 +181,7 @@ public class GameTestCommand extends VanillaCommand {
                                     )
                                     .build()
                     );
-                    player.getDimension().getEntityService().addEntity(entity);
+                    player.getDimension().getEntityManager().addEntity(entity);
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -282,12 +282,12 @@ public class GameTestCommand extends VanillaCommand {
                     int x = (int) floorLoc.x;
                     int y = (int) floorLoc.y;
                     int z = (int) floorLoc.z;
-                    var lightService = player.getDimension().getLightService();
-                    player.sendText("InternalLight: " + lightService.getInternalLight(x, y, z));
-                    player.sendText("BlockLight: " + lightService.getBlockLight(x, y, z));
-                    player.sendText("SkyLight: " + lightService.getSkyLight(x, y, z));
-                    player.sendText("InternalSkyLight: " + lightService.getInternalSkyLight(x, y, z));
-                    player.sendText("QueuedUpdateCount: " + lightService.getQueuedUpdateCount());
+                    var lightEngine = player.getDimension().getLightEngine();
+                    player.sendText("InternalLight: " + lightEngine.getInternalLight(x, y, z));
+                    player.sendText("BlockLight: " + lightEngine.getBlockLight(x, y, z));
+                    player.sendText("SkyLight: " + lightEngine.getSkyLight(x, y, z));
+                    player.sendText("InternalSkyLight: " + lightEngine.getInternalSkyLight(x, y, z));
+                    player.sendText("QueuedUpdateCount: " + lightEngine.getQueuedUpdateCount());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

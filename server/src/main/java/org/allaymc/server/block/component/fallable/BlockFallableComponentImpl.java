@@ -63,7 +63,7 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
             return;
         }
 
-        dimension.getEntityService().addEntity(createFallingBlock(dimension, pos, blockState), () -> {
+        dimension.getEntityManager().addEntity(createFallingBlock(dimension, pos, blockState), () -> {
             // Set the block state to air immediately if the falling block
             // entity will be spawned, so multiple neighbor updates won't
             // cause the falling block entity being spawned multiple times
