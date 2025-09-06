@@ -20,11 +20,12 @@ public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
      * If set to null, no teleport would be issued; it up to user to handle client-server movement desync.
      */
     @Setter
-    protected Location3dc revertTo = from;
+    protected Location3dc revertTo;
 
     public PlayerMoveEvent(EntityPlayer player, Location3dc from, Location3dc to) {
         super(player);
         this.from = from;
         this.to = to;
+        this.revertTo = from;
     }
 }
