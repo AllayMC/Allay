@@ -9,7 +9,6 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.data.Abilities;
 import org.allaymc.api.player.data.AdventureSettings;
 import org.allaymc.api.player.storage.PlayerData;
-import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -23,7 +22,7 @@ import org.joml.Vector3ic;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
     /**
      * The default movement speed of a player.

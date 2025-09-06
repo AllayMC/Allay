@@ -34,11 +34,6 @@ import org.allaymc.api.player.data.Abilities;
 import org.allaymc.api.player.data.AdventureSettings;
 import org.allaymc.api.player.storage.PlayerData;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.scoreboard.Scoreboard;
-import org.allaymc.api.scoreboard.ScoreboardLine;
-import org.allaymc.api.scoreboard.data.DisplaySlot;
-import org.allaymc.api.scoreboard.data.SortOrder;
-import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.HashUtils;
@@ -82,8 +77,6 @@ import org.joml.primitives.AABBd;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCORE;
 
 /**
  * @author daoge_cmd
@@ -954,93 +947,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     protected int assignFormId() {
         return formIdCounter.getAndIncrement();
-    }
-
-    @Override
-    public void displayScoreboard(Scoreboard scoreboard, DisplaySlot slot) {
-        var setDisplayObjectivePacket = new SetDisplayObjectivePacket();
-        setDisplayObjectivePacket.setDisplaySlot(slot.getSlotName());
-        setDisplayObjectivePacket.setObjectiveId(scoreboard.getObjectiveName());
-        setDisplayObjectivePacket.setDisplayName(scoreboard.getDisplayName());
-        setDisplayObjectivePacket.setCriteria(scoreboard.getCriteriaName());
-        setDisplayObjectivePacket.setSortOrder(scoreboard.getSortOrder().ordinal());
-        networkComponent.sendPacket(setDisplayObjectivePacket);
-
-        //client won't storage the score of a scoreboard,so we should send the score to client
-        var setScorePacket = new SetScorePacket();
-        setScorePacket.setInfos(
-                scoreboard.getLines().values()
-                        .stream()
-                        .map(ScoreboardLine::toNetworkInfo)
-                        .filter(Objects::nonNull)
-                        .toList()
-        );
-        setScorePacket.setAction(SetScorePacket.Action.SET);
-        networkComponent.sendPacket(setScorePacket);
-
-        var scorer = new PlayerScorer(thisPlayer);
-        var line = scoreboard.getLine(scorer);
-        if (slot == DisplaySlot.BELOW_NAME && line != null) {
-            setAndSendEntityData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
-        }
-    }
-
-    @Override
-    public void hideScoreboardSlot(DisplaySlot slot) {
-        var packet = new SetDisplayObjectivePacket();
-        packet.setDisplaySlot(slot.getSlotName());
-        packet.setObjectiveId("");
-        packet.setDisplayName("");
-        packet.setCriteria("");
-        packet.setSortOrder(SortOrder.ASCENDING.ordinal());
-        networkComponent.sendPacket(packet);
-
-        if (slot == DisplaySlot.BELOW_NAME) {
-            setAndSendEntityData(SCORE, "");
-        }
-    }
-
-    @Override
-    public void removeScoreboard(Scoreboard scoreboard) {
-        var packet = new RemoveObjectivePacket();
-        packet.setObjectiveId(scoreboard.getObjectiveName());
-
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void removeScoreboardLine(ScoreboardLine line) {
-        var packet = new SetScorePacket();
-        packet.setAction(SetScorePacket.Action.REMOVE);
-        var networkInfo = line.toNetworkInfo();
-        if (networkInfo != null)
-            packet.getInfos().add(networkInfo);
-        networkComponent.sendPacket(packet);
-
-        var scorer = new PlayerScorer(thisPlayer);
-        if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisPlayer)) {
-            setAndSendEntityData(SCORE, "");
-        }
-    }
-
-    @Override
-    public void updateScore(ScoreboardLine line) {
-        var packet = new SetScorePacket();
-        packet.setAction(SetScorePacket.Action.SET);
-        var networkInfo = line.toNetworkInfo();
-        if (networkInfo != null)
-            packet.getInfos().add(networkInfo);
-        networkComponent.sendPacket(packet);
-
-        var scorer = new PlayerScorer(thisPlayer);
-        if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
-            setAndSendEntityData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
-        }
-    }
-
-    @Override
-    public boolean isScoreboardViewerValid() {
-        return !networkComponent.isDisconnected();
     }
 
     @Override

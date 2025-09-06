@@ -6,10 +6,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.entity.component.player.*;
 import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -29,7 +26,8 @@ public interface EntityPlayer extends
         EntityPlayerContainerHolderComponent,
         EntityContainerViewerComponent,
         EntityDamageComponent,
-        EntityPhysicsComponent {
+        EntityPhysicsComponent,
+        EntityPlayerScoreboardViewerComponent {
 
     /**
      * Returns the reachable container for the given full container type.
@@ -37,7 +35,6 @@ public interface EntityPlayer extends
      *
      * @param slotType the full container type
      * @param <T>      the container type
-     *
      * @return the reachable container, or {@code null} if none
      */
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
@@ -52,7 +49,6 @@ public interface EntityPlayer extends
      *
      * @param slotType the container slot type
      * @param <T>      the container type
-     *
      * @return the reachable container, or {@code null} if none
      */
     default <T extends Container> T getReachableContainerBySlotType(ContainerSlotType slotType) {
@@ -66,7 +62,6 @@ public interface EntityPlayer extends
      * If it cannot be fully added, the remaining items are dropped at the player's position.
      *
      * @param itemStack the item stack to add
-     *
      * @return {@code true} if all items were added successfully, {@code false} if some were dropped.
      */
     default boolean tryAddItem(ItemStack itemStack) {
@@ -83,7 +78,6 @@ public interface EntityPlayer extends
      * Attempts to drop the item currently held in hand.
      *
      * @param count the number of items to drop
-     *
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
     default boolean tryDropItemInHand(int count) {
@@ -96,7 +90,6 @@ public interface EntityPlayer extends
      * @param containerType the container type
      * @param slot          the slot index
      * @param count         the number of items to drop
-     *
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
     default boolean tryDropItem(FullContainerType<?> containerType, int slot, int count) {

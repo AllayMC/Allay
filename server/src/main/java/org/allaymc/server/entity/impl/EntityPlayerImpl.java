@@ -6,10 +6,7 @@ import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.entity.component.player.*;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.component.interfaces.ComponentProvider;
@@ -32,6 +29,8 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Getter
     @Delegate
     protected EntityPhysicsComponent physicsComponent;
+    @Delegate
+    protected EntityPlayerScoreboardViewerComponent playerScoreboardViewerComponent;
 
     public EntityPlayerImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
