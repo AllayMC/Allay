@@ -57,6 +57,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed incorrect hardened block pos when lava flow to the water from above.
 - Fixed the bug where plugins lacking soft dependencies could not be loaded.
 - Fixed the bug where plugins which have dependencies will only be loaded but not enabled.
+- Fixed the sub chunk sending system.
 
 ### Removed
 

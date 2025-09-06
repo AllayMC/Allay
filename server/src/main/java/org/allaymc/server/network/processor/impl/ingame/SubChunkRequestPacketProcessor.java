@@ -64,8 +64,8 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
             log.warn("Player {} requested sub-chunk at y={} which is out of bounds ({}, {})", player.getOriginName(), sectionY, dimensionInfo.minSectionY(), dimensionInfo.maxSectionY());
             subChunkData.setResult(SubChunkRequestResult.INDEX_OUT_OF_BOUNDS);
-            subChunkData.setData(Unpooled.EMPTY_BUFFER);
             subChunkData.setHeightMapType(HeightMapDataType.NO_DATA);
+            subChunkData.setRenderHeightMapType(HeightMapDataType.NO_DATA);
             return subChunkData;
         }
 
@@ -75,8 +75,8 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         if (chunk == null) {
             log.warn("Player {} requested sub-chunk in a non-loaded chunk at ({}, {})", player.getOriginName(), chunkX, chunkZ);
             subChunkData.setResult(SubChunkRequestResult.CHUNK_NOT_FOUND);
-            subChunkData.setData(Unpooled.EMPTY_BUFFER);
             subChunkData.setHeightMapType(HeightMapDataType.NO_DATA);
+            subChunkData.setRenderHeightMapType(HeightMapDataType.NO_DATA);
             return subChunkData;
         }
 
@@ -120,6 +120,8 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             }
             subChunkData.setHeightMapType(hMapType);
             subChunkData.setHeightMapData(heightMapData);
+            subChunkData.setRenderHeightMapType(hMapType);
+            subChunkData.setRenderHeightMapData(heightMapData);
         }, OperationType.READ, OperationType.NONE);
 
         // Blocks and block entities
