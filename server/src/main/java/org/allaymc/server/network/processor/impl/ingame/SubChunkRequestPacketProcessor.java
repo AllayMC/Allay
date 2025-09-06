@@ -73,7 +73,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         int chunkZ = center.getZ() + offset.getZ();
         var chunk = player.getDimension().getChunkManager().getChunk(chunkX, chunkZ);
         if (chunk == null) {
-            log.warn("Player {} requested sub-chunk in a non-loaded chunk at ({}, {})", player.getOriginName(), chunkX, chunkZ);
+            // This is possible since the chunk may still remain loading
             subChunkData.setResult(SubChunkRequestResult.CHUNK_NOT_FOUND);
             subChunkData.setHeightMapType(HeightMapDataType.NO_DATA);
             subChunkData.setRenderHeightMapType(HeightMapDataType.NO_DATA);
