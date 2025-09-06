@@ -2,6 +2,7 @@ package org.allaymc.server.container;
 
 import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.Container;
+import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -24,8 +25,8 @@ public class ContainerTest {
             // Here may throw an exception if we implemented lab table in the future
             .mapAllSlotToType(ContainerSlotType.LAB_TABLE_INPUT)
             .build();
-
     static BaseContainer container = new BaseContainer(testContainerType);
+    static ContainerViewer viewer = new FakeContainerViewer();
 
     @Test
     void testEmptySlotPlaceHolder() {
@@ -47,7 +48,7 @@ public class ContainerTest {
         container.addOpenListener(viewer -> {
             openFlag.set(true);
         });
-        container.onOpen(null);
+        container.addViewer(viewer);
         assertTrue(openFlag.get());
 
         // Close listener
@@ -55,7 +56,7 @@ public class ContainerTest {
         container.addCloseListener(viewer -> {
             closeFlag.set(true);
         });
-        container.onClose(null);
+        container.removeViewer(viewer);
         assertTrue(closeFlag.get());
     }
 
