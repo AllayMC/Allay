@@ -24,7 +24,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
             return;
         }
 
-        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).getPacketProcessorHolder().setClientStatus(ClientStatus.IN_GAME);
+        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientStatus(ClientStatus.IN_GAME);
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground

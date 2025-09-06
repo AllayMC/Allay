@@ -170,7 +170,7 @@ public class AllayWorld implements World {
 
                 var playerImpl = (EntityPlayerImpl) entry.player;
                 var networkComponent = (EntityPlayerNetworkComponentImpl) playerImpl.getPlayerNetworkComponent();
-                networkComponent.handleDataPacket(entry.packet(), entry.time());
+                networkComponent.handlePacketSync(entry.packet(), entry.time());
                 count++;
             } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);
         } catch (Throwable throwable) {

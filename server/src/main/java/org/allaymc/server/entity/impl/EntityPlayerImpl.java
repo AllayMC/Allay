@@ -26,7 +26,7 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Delegate
     protected EntityPlayerContainerHolderComponent playerContainerHolderComponent;
     @Delegate
-    protected EntityContainerViewerComponent viewerComponent;
+    protected EntityContainerViewerComponent containerViewerComponent;
     @Delegate
     protected EntityDamageComponent damageComponent;
     @Getter

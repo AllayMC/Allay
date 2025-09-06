@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
-import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
@@ -22,6 +21,7 @@ import org.allaymc.server.component.ComponentClass;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;

@@ -36,6 +36,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed method `Entity.despawn()` to `Entity.remove()` as a clarification with other methods like `Entity.despawnFrom()` and `Entity.despawnFromAll()`.
 - (API) Renamed entries in class `TrKeys`. The old `M_XXX` is renamed to `MC_XXX` and `A_XXX` is renamed to `ALLAY_XXX`.
 - (API) Renamed field `Block.pos` to `Block.position`.
+- (API) Moved class `ComponentManager` from api to server module since it is useless in api module.
 
 ### Fixed
 
@@ -45,6 +46,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed incorrect hardened block pos when lava flow to the water from above.
 - Fixed the bug where plugins lacking soft dependencies could not be loaded.
 - Fixed the bug where plugins which have dependencies will only be loaded but not enabled.
+
+### Removed
+
+- Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerNetworkComponent` because
+  these methods are not very useful as APIs.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

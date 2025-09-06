@@ -360,7 +360,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
-        Objects.requireNonNull(((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).getPacketProcessorHolder().getProcessor(pk)).handleSync(player, pk, receiveTime);
+        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).handlePacketSync(pk, receiveTime);
     }
 
     protected boolean notReadyForInput(EntityPlayer player) {

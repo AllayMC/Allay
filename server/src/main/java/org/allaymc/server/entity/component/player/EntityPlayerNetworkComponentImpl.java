@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
-import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
@@ -30,6 +29,7 @@ import org.allaymc.server.client.service.AllayPlayerService;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.network.DeferredData;
 import org.allaymc.server.network.MultiVersion;
@@ -52,7 +52,6 @@ import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 
-import javax.crypto.SecretKey;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -67,44 +66,45 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
-    @Getter
-    protected final PacketProcessorHolder packetProcessorHolder;
+
     @Manager
     protected ComponentManager manager;
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
+
+    protected final PacketProcessorHolder packetProcessorHolder;
+    protected final AtomicInteger fullyJoinChunkThreshold;
+
+    @Getter
+    @Setter
+    protected LoginData loginData;
     @Getter
     @Setter
     protected boolean networkEncryptionEnabled;
     @Getter
     @Setter
     protected boolean clientCacheEnabled;
-    protected AtomicInteger fullyJoinChunkThreshold;
-    @Getter
-    @Setter
-    protected LoginData loginData;
-    @Getter
-    @Setter
-    protected SecretKey encryptionSecretKey;
     @Getter
     protected BedrockServerSession clientSession;
 
     public EntityPlayerNetworkComponentImpl() {
         this.packetProcessorHolder = new PacketProcessorHolder();
-        // Client cache is enabled in most cases
-        this.clientCacheEnabled = true;
         this.fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
     }
 
-    public void handleDataPacket(BedrockPacket packet, long time) {
+    public void handlePacketSync(BedrockPacket packet, long receiveTime) {
         var processor = packetProcessorHolder.getProcessor(packet);
         if (processor == null) {
             log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientStatus());
             return;
         }
-        processor.handleSync(thisPlayer, packet, time);
+        processor.handleSync(thisPlayer, packet, receiveTime);
+    }
+
+    public void setClientStatus(ClientStatus status) {
+        this.packetProcessorHolder.setClientStatus(status);
     }
 
     public void setClientSession(BedrockServerSession session) {

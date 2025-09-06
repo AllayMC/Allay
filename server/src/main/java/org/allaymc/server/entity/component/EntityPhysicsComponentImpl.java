@@ -6,7 +6,6 @@ import lombok.Getter;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
@@ -24,6 +23,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -225,7 +225,6 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
      * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object
      * @param enableStepping Flag indicating whether the object can step over obstacles
      * @param axis           The axis along which the motion is applied (X or Z)
-     *
      * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections
      */
     private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, Axis axis) {
@@ -261,11 +260,9 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
      * @param motion   The distance to move along the specified axis
      * @param recorder The vector to record the movement along the axis
      * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis
-     *
      * @return A pair containing the remaining movement distance along the axis after collision detection (Double)
      * and a boolean indicating whether a collision occurred (Boolean) or whether the entity will be on ground (if axis == Y).
      * If no movement was specified (motion = 0), an empty pair is returned.
-     *
      * @throws IllegalArgumentException if an invalid axis is provided
      */
     private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, Axis axis) {

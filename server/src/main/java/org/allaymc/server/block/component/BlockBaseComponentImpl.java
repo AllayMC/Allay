@@ -8,7 +8,6 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
@@ -19,6 +18,7 @@ import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.interfaces.ComponentManager;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 

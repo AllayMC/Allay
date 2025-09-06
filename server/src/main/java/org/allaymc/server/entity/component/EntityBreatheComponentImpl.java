@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component;
 
-import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityComponent;
@@ -9,6 +8,7 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.CEntityDrownEvent;
 import org.allaymc.server.entity.component.event.CEntityInitMetadataEvent;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;

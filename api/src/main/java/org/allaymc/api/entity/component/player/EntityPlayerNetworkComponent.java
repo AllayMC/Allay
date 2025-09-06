@@ -8,8 +8,6 @@ import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.PacketReceiver;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
-import javax.crypto.SecretKey;
-
 /**
  * EntityPlayerNetworkComponent is the component that manages network related things of a player.
  *
@@ -102,20 +100,6 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     }
 
     /**
-     * Check if network encryption is enabled for the player.
-     *
-     * @return {@code true} if network encryption is enabled, {@code false} otherwise.
-     */
-    boolean isNetworkEncryptionEnabled();
-
-    /**
-     * Get the encryption secret key for the player.
-     *
-     * @return the encryption secret key for the player
-     */
-    SecretKey getEncryptionSecretKey();
-
-    /**
      * Get the client session for the player.
      *
      * @return the client session for the player
@@ -128,11 +112,4 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return the ping of the player
      */
     int getPing();
-
-    /**
-     * Check if the client cache is enabled.
-     *
-     * @return {@code true} if the client cache is enabled, {@code false} otherwise.
-     */
-    boolean isClientCacheEnabled();
 }
