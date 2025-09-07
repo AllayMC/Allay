@@ -92,4 +92,12 @@ public interface Permissible {
         getPermissionGroup().setOperator(value, getPermissible());
         return this;
     }
+
+    /**
+     * @see PermissionGroup#setParent(PermissionGroup, Permissible)
+     */
+    default Permissible setParent(PermissionGroup parent) {
+        getPermissionGroup().setParent(parent, this);
+        return this;
+    }
 }
