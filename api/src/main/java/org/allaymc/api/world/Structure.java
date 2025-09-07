@@ -1,4 +1,4 @@
-package org.allaymc.api.utils;
+package org.allaymc.api.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +7,7 @@ import org.allaymc.api.block.type.BlockStateSafeGetter;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.world.Dimension;
+import org.allaymc.api.utils.AllayNbtUtils;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;

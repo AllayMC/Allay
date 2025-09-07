@@ -2,7 +2,7 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.utils.Structure;
+import org.allaymc.api.world.Structure;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.joml.Vector3d;
