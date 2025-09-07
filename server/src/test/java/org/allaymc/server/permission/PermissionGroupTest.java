@@ -50,7 +50,7 @@ public class PermissionGroupTest {
                 .addPermission(cmdAbc);
         var group = PermissionGroup
                 .create("test", Set.of(), null, false)
-                .setParent(parent)
+                .addParent(parent)
                 .addPermission(b);
 
         assertTrue(group.hasPermission(a));

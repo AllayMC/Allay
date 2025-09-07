@@ -39,8 +39,9 @@ public class MyPlugin extends Plugin {
 
 ## Add permissions
 
-By the default, only the one who has `operator` permission is able to use the newly created commands.
-Since we are creating a simple command here, we might want to change its permission for everyone to use.
+By the default, permissions of the newly created commands are only being added to `PermissionGroups.OPERATOR` so
+only operators can use these commands. Since we are creating a simple command here, we might want to change its
+permission for everyone to use.
 
 Let's make the following changes to our code:
 

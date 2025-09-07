@@ -155,7 +155,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void initPermissionGroup() {
-        this.permissionGroup = PermissionGroup.create("Permission group for entity " + uniqueId, Set.of(), PermissionGroups.OPERATOR, false);
+        this.permissionGroup = PermissionGroup.create("Permission group for entity " + uniqueId, Set.of(), Set.of(PermissionGroups.OPERATOR), false);
     }
 
     @Override

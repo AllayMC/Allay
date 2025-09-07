@@ -95,7 +95,7 @@ public final class AllayServer implements Server {
         this.pluginManager = new AllayPluginManager();
         this.scheduler = new AllayScheduler(virtualThreadPool);
         // Initialize the permission group with a memoized supplier to avoid NPE during server startup
-        this.permissionGroup = Suppliers.memoize(() -> PermissionGroup.create("Permission group for server instance", Set.of(), PermissionGroups.OPERATOR, false));
+        this.permissionGroup = Suppliers.memoize(() -> PermissionGroup.create("Permission group for server instance", Set.of(), Set.of(PermissionGroups.OPERATOR), false));
         this.terminalConsole = new AllayTerminalConsole(AllayServer.this);
         this.gameLoop = GameLoop.builder()
                 .loopCountPerSec(20)

@@ -185,9 +185,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.adventureSettings = new AdventureSettings(thisPlayer);
         this.abilities = new Abilities(thisPlayer);
         // Do not register player's permission group
-        this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), null, false);
-        // Set parent permission group alone, so that adventure settings and abilities will also be updated
-        this.permissionGroup.setParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission().name()), thisPlayer);
+        this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
+        // Add parent permission group alone, so that adventure settings and abilities will also be updated
+        this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission().name()), thisPlayer);
     }
 
     @Override

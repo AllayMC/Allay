@@ -1,6 +1,7 @@
 package org.allaymc.api.permission;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Represents an entity that can have permissions.
@@ -79,6 +80,27 @@ public interface Permissible {
     }
 
     /**
+     * @see PermissionGroup#getPermissions()
+     */
+    default Set<Permission> getPermissions() {
+        return getPermissionGroup().getPermissions();
+    }
+
+    /**
+     * @see PermissionGroup#getPermissions(boolean)
+     */
+    default Set<Permission> getPermissions(boolean includeParentPermissions) {
+        return getPermissionGroup().getPermissions(includeParentPermissions);
+    }
+
+    /**
+     * @see PermissionGroup#getParentPermissions()
+     */
+    default Set<Permission> getParentPermissions() {
+        return getPermissionGroup().getParentPermissions();
+    }
+
+    /**
      * @see PermissionGroup#isOperator()
      */
     default boolean isOperator() {
@@ -94,10 +116,32 @@ public interface Permissible {
     }
 
     /**
-     * @see PermissionGroup#setParent(PermissionGroup, Permissible)
+     * @see PermissionGroup#addParent(PermissionGroup, Permissible)
      */
-    default Permissible setParent(PermissionGroup parent) {
-        getPermissionGroup().setParent(parent, this);
+    default Permissible addParent(PermissionGroup parent) {
+        getPermissionGroup().addParent(parent, this);
         return this;
+    }
+
+    /**
+     * @see PermissionGroup#removeParent(PermissionGroup, Permissible)
+     */
+    default Permissible removeParent(PermissionGroup parent) {
+        getPermissionGroup().removeParent(parent, this);
+        return this;
+    }
+
+    /**
+     * @see PermissionGroup#hasParent(PermissionGroup)
+     */
+    default boolean hasParent(PermissionGroup parent) {
+        return getPermissionGroup().hasParent(parent);
+    }
+
+    /**
+     * @see PermissionGroup#getParents()
+     */
+    default Set<PermissionGroup> getParents() {
+        return getPermissionGroup().getParents();
     }
 }

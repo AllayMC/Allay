@@ -3,10 +3,12 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.permission.Permission;
+import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.TextFormat;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author daoge_cmd
@@ -55,7 +57,7 @@ public class PermissionCommand extends VanillaCommand {
                             .stream()
                             .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
                             .forEach(permission -> context.getSender().sendText(" - " + permission.getName() + ": " + TextFormat.GREEN + permission.getDescription()));
-                    context.getSender().sendText("Parent: " + TextFormat.GREEN + target.getPermissionGroup().getParent().getName());
+                    context.getSender().sendText("Parents: " + TextFormat.GREEN + target.getPermissionGroup().getParents().stream().map(PermissionGroup::getName).collect(Collectors.joining(", ")));
 
                     return context.success();
                 })
