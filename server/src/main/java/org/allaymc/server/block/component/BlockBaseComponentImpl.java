@@ -19,6 +19,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.interfaces.ComponentManager;
+import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 
@@ -71,7 +72,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     protected BlockState processBlockProperties(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         for (var propertyType : blockState.getBlockType().getProperties().values()) {
-            var processor = propertyType.getProcessor();
+            var processor = InternalRegistries.BLOCK_PROPERTY_PROCESSORS.get(propertyType);
             if (processor != null) {
                 blockState = processor.process(blockState, placeBlockPos, placementInfo);
             }

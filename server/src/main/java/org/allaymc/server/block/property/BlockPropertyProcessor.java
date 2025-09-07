@@ -1,11 +1,8 @@
-package org.allaymc.api.block.property;
+package org.allaymc.server.block.property;
 
-import org.allaymc.api.block.BlockPlaceHelper;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
-
-import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
  * Represents a processor for a specific block property.
@@ -19,21 +16,12 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  */
 @FunctionalInterface
 public interface BlockPropertyProcessor {
-    static void init() {
-        PILLAR_AXIS.setProcessor(BlockPlaceHelper::processPillarAxisProperty);
-        MINECRAFT_CARDINAL_DIRECTION.setProcessor(BlockPlaceHelper::processMinecraftCardinalDirectionProperty);
-        FACING_DIRECTION.setProcessor(BlockPlaceHelper::processFacingDirectionProperty);
-        GROUND_SIGN_DIRECTION.setProcessor(BlockPlaceHelper::processGroundSignDirectionProperty);
-        UPSIDE_DOWN_BIT.setProcessor(BlockPlaceHelper::processUpsideDownBitProperty);
-    }
-
     /**
      * Process the block state based on the placement information.
      *
      * @param blockState    the block state to process
      * @param placeBlockPos the position where the block is placed
      * @param placementInfo the placement information
-     *
      * @return the processed block state
      */
     BlockState process(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);

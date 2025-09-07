@@ -1,4 +1,4 @@
-package org.allaymc.api.block;
+package org.allaymc.server.block;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

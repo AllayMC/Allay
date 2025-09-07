@@ -48,6 +48,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed class `ScoreboardService` to `ScoreboardManager`.
 - (API) Renamed package `org.allaymc.api(server).client` to `org.allaymc.api(server).player`.
 - (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details. 
+- (API) Moved classes `BlockPropertyProcessor`, `BlockPlaceHelper` and `FortuneDropHelper` from api to server.
+- (API) Removed methods `BlockPropertyType.getProcessor()` and `BlockPropertyType.setProcessor()`.
 
 ### Fixed
 

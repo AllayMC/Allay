@@ -2,7 +2,6 @@ package org.allaymc.api.block.property.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.block.property.BlockPropertyProcessor;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
      * Get the property type by the class.
      *
      * @param clazz the class
-     *
      * @return the property type
      */
     static Type getPropertyType(Class<?> clazz) {
@@ -59,7 +57,6 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
      * Create a new value for this property type.
      *
      * @param value the value
-     *
      * @return the value
      */
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createValue(DATATYPE value);
@@ -68,9 +65,7 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
      * Try to create a new value for this property type.
      *
      * @param value the value
-     *
      * @return the value
-     *
      * @throws IllegalArgumentException if the value is invalid, such as pass a boolean value to an int property type
      */
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> tryCreateValue(Object value);
@@ -83,20 +78,6 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     default BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createDefaultValue() {
         return createValue(getDefaultValue());
     }
-
-    /**
-     * Get the processor for this property type.
-     *
-     * @return the processor, {@code null} if not present
-     */
-    BlockPropertyProcessor getProcessor();
-
-    /**
-     * Set the processor for this property type.
-     *
-     * @param processor the processor, or {@code null} to remove
-     */
-    void setProcessor(BlockPropertyProcessor processor);
 
     /**
      * Get the bit size of this property type.

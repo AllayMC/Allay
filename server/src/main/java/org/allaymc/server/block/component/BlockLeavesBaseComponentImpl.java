@@ -3,7 +3,6 @@ package org.allaymc.server.block.component;
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.FortuneDropHelper;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -15,6 +14,7 @@ import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.block.FortuneDropHelper;
 
 import java.util.HashSet;
 import java.util.Set;

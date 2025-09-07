@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.MissingImplementationException;
-import org.allaymc.api.block.property.BlockPropertyProcessor;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.bossbar.BossBar;
@@ -205,7 +204,7 @@ public final class Allay {
                 r -> Registries.BLOCKS = r,
                 new BlockTypeRegistryPopulator()
         );
-        BlockPropertyProcessor.init();
+        InternalRegistries.BLOCK_PROPERTY_PROCESSORS = SimpleMappedRegistry.create(new BlockPropertyProcessorRegistryLoader());
 
         // Entity
         DoubleKeyMappedRegistry.create(
