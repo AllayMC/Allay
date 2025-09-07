@@ -15,12 +15,12 @@ import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemData;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.server.registry.InternalRegistries;
+import org.allaymc.server.utils.BlockAndItemIdMapper;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 

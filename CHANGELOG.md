@@ -52,6 +52,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed methods `BlockPropertyType.getProcessor()` and `BlockPropertyType.setProcessor()`.
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
 - (API) Moved classes `Structure` and `StructureException` from `utils` to `world` package.
+- (API) Moved class `BlockAndItemIdMapper` from api to server module.
 
 ### Fixed
 

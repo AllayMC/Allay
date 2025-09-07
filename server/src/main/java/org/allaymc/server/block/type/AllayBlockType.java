@@ -19,7 +19,6 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -29,6 +28,7 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.item.impl.ItemBlockImpl;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.registry.InternalRegistries;
+import org.allaymc.server.utils.BlockAndItemIdMapper;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;

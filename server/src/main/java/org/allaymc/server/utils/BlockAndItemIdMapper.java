@@ -1,7 +1,8 @@
-package org.allaymc.api.utils;
+package org.allaymc.server.utils;
 
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * A class that handle the mapping relation between block and item id.
@@ -20,7 +21,6 @@ public final class BlockAndItemIdMapper {
      * Try to get the block id of an item.
      *
      * @param itemId the id of the item
-     *
      * @return the block id, or {@code null} if the item does not have correspond block (`pure item`)
      */
     public static Identifier itemIdToPossibleBlockId(Identifier itemId) {
@@ -39,7 +39,6 @@ public final class BlockAndItemIdMapper {
      * Get the `actual block item` id of a block.
      *
      * @param blockId the id of the block
-     *
      * @return the `actual block item` id
      */
     public static Identifier blockIdToActualBlockItemId(Identifier blockId) {
