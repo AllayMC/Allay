@@ -105,6 +105,7 @@ public final class PacketProcessorHolder {
         this.registerProcessor(ClientStatus.IN_GAME, new RespawnPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new SetDefaultGameTypePacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new SetPlayerGameTypePacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new SetDifficultyPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new SubChunkRequestPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new TextPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new SettingsCommandPacketProcessor());
