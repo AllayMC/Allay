@@ -159,7 +159,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void exhaust(float level) {
-        if (thisPlayer.getGameType() == GameType.CREATIVE) {
+        if (thisPlayer.getGameType() == GameType.CREATIVE || thisPlayer.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL) {
             return;
         }
 
