@@ -17,7 +17,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.utils.BlockAndItemIdMapper;
@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
+import static org.allaymc.server.component.ComponentProvider.toMap;
 
 /**
  * @author daoge_cmd

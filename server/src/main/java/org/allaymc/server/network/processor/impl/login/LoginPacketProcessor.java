@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor.impl.login;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.player.data.LoginData;
+import org.allaymc.api.player.LoginData;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;

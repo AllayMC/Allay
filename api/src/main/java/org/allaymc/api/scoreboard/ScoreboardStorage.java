@@ -1,7 +1,6 @@
-package org.allaymc.api.scoreboard.storage;
+package org.allaymc.api.scoreboard;
 
 
-import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 
 import java.util.Collection;
@@ -45,7 +44,6 @@ public interface ScoreboardStorage {
      * Read the scoreboard from the storage.
      *
      * @param name The target scoreboard name
-     *
      * @return The scoreboard
      */
     Scoreboard read(String name);
@@ -73,7 +71,6 @@ public interface ScoreboardStorage {
      * Check if the storage contains the scoreboard.
      *
      * @param name The target scoreboard name
-     *
      * @return true if the storage contains the scoreboard
      */
     boolean contain(String name);

@@ -1,4 +1,4 @@
-package org.allaymc.api.player.data;
+package org.allaymc.api.player;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -97,7 +97,7 @@ public class LoginData {
             long clientId = skinMap.get("ClientRandomId").getAsLong();
             int deviceOS = skinMap.get("DeviceOS").getAsInt();
             int uiProfile = skinMap.get("UIProfile").getAsInt();
-            this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.getDevice(deviceOS), UIProfile.getById(uiProfile));
+            this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
         }
 
         if (skinMap.has("LanguageCode")) {
@@ -236,5 +236,72 @@ public class LoginData {
             colors.add(element.getAsString());
         }
         return new PersonaPieceTintData(pieceType, colors);
+    }
+
+    public enum UIProfile {
+        CLASSIC,
+        POCKET;
+
+        /**
+         * Looks up UIProfile from the id passed.
+         *
+         * @param id the id to looks up.
+         * @return the UIProfile correspond to the id passed, or {@code null} if the id is invalid
+         */
+        public static UIProfile from(int id) {
+            var values = values();
+            if (id < 0 || id > values.length) {
+                return null;
+            }
+
+            return values[id];
+        }
+    }
+
+    public record DeviceInfo(
+            String deviceName,
+            String deviceId,
+            long clientId,
+            Device device,
+            UIProfile UIProfile
+    ) {
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum Device {
+        UNKNOWN(-1, "Unknown"),
+        ANDROID(1, "Android"),
+        IOS(2, "iOS"),
+        OSX(3, "macOS"),
+        AMAZON(4, "Fire OS"),
+        GEAR_VR(5, "Gear VR"),
+        HOLOLENS(6, "HoloLens"),
+        WINDOWS(7, "Windows 10"),
+        WINDOWS_32(8, "Windows"),
+        DEDICATED(9, "Dedicated"),
+        TVOS(10, "tvOS"),
+        PLAYSTATION(11, "PlayStation"),
+        NINTENDO(12, "Switch"),
+        XBOX(13, "Xbox"),
+        WINDOWS_PHONE(14, "Windows Phone");
+
+        private final int id;
+        private final String name;
+
+        /**
+         * Get device by id.
+         *
+         * @param id the id of the device
+         * @return the device, or {@code null} if the device id passed is unknown
+         */
+        public static Device from(int id) {
+            var values = values();
+            if (id < 1 || id > values.length) {
+                return null;
+            }
+
+            return values[id];
+        }
     }
 }

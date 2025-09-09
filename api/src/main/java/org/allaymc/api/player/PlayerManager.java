@@ -1,11 +1,10 @@
-package org.allaymc.api.player.manager;
+package org.allaymc.api.player;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
-import org.allaymc.api.player.storage.PlayerStorage;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;

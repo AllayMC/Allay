@@ -6,7 +6,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.player.manager.PlayerManager;
+import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;

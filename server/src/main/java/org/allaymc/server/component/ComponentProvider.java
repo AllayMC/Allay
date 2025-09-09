@@ -1,9 +1,9 @@
-package org.allaymc.server.component.interfaces;
+package org.allaymc.server.component;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.Component;
+import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.api.utils.Identifier;
 
 import java.util.HashMap;

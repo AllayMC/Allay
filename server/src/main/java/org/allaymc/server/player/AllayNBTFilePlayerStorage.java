@@ -1,8 +1,8 @@
-package org.allaymc.server.player.storage;
+package org.allaymc.server.player;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.player.storage.PlayerData;
+import org.allaymc.api.player.PlayerData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 

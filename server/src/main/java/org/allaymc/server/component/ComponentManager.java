@@ -1,4 +1,4 @@
-package org.allaymc.server.component.interfaces;
+package org.allaymc.server.component;
 
 import org.allaymc.api.eventbus.event.Event;
 import org.jetbrains.annotations.ApiStatus;

@@ -13,9 +13,9 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
+import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
-import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 

@@ -1,5 +1,7 @@
 package org.allaymc.server.component.annotation;
 
+import org.allaymc.api.component.ComponentInitInfo;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -10,7 +12,7 @@ import java.lang.annotation.Target;
  *
  * <p>
  * Methods with this annotation are called post-initialization with a single
- * {@link org.allaymc.api.component.interfaces.ComponentInitInfo} parameter. Must be public, return void,
+ * {@link ComponentInitInfo} parameter. Must be public, return void,
  * and take exactly one parameter. Useful for setup or validation after dependency injection.
  * </p>
  *

@@ -16,7 +16,7 @@ import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.component.Component;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.HashUtils;
@@ -24,7 +24,7 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.item.impl.ItemBlockImpl;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.registry.InternalRegistries;
@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.allaymc.server.component.interfaces.ComponentProvider.findComponentIdentifierInClass;
+import static org.allaymc.server.component.ComponentProvider.findComponentIdentifierInClass;
 
 /**
  * @author daoge_cmd | Cool_Loong

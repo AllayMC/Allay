@@ -12,7 +12,7 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
+import static org.allaymc.server.component.ComponentProvider.toMap;
 
 /**
  * @author daoge_cmd

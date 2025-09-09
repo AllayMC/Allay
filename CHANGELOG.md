@@ -59,6 +59,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed classes `BlockStateSafeGetter` and `ItemTypeSafeGetter` to `BlockStateGetter` and `ItemTypeGetter`.
 - (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
 - (API) Renamed method `EntityBaseComponent.applyEntityEvent()` to `EntityBaseComponent.applyEvent()`.
+- (API) Moved classes under package `component.interfaces` to `component` package.
+- (API) Moved class `ScoreboardStorage` form package `scoreboard.storage` to `scoreboard` package.
+- (API) Made classes `UIProfile`, `DeviceInfo` and `Device` as the inner classes of `LoginData`.
+- (API) Flattened all classes under `player` package.
 
 ### Fixed
 

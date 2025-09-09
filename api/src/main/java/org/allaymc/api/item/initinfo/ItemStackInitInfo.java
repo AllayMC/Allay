@@ -3,7 +3,7 @@ package org.allaymc.api.item.initinfo;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;

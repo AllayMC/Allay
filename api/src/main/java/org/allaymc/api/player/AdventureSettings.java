@@ -1,4 +1,4 @@
-package org.allaymc.api.player.data;
+package org.allaymc.api.player;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 /**
  * @author daoge_cmd
  */
+// TODO: remove it from api?
 @Getter
 @Accessors(fluent = true)
 public final class AdventureSettings {

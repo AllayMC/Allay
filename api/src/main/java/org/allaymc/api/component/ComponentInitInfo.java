@@ -1,4 +1,4 @@
-package org.allaymc.api.component.interfaces;
+package org.allaymc.api.component;
 
 /**
  * Represents an initialization data holder for a component.

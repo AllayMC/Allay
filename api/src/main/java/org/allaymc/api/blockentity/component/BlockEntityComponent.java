@@ -1,6 +1,6 @@
 package org.allaymc.api.blockentity.component;
 
-import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.component.Component;
 
 /**
  * @author daoge_cmd

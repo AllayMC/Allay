@@ -20,7 +20,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
-import org.allaymc.api.player.storage.PlayerStorage;
+import org.allaymc.api.player.PlayerStorage;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;

@@ -1,4 +1,4 @@
-package org.allaymc.api.component.interfaces;
+package org.allaymc.api.component;
 
 /**
  * Defines the contract for a component implementation.

@@ -12,7 +12,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.component.ComponentProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;

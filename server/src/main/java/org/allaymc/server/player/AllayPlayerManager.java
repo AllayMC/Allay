@@ -1,4 +1,4 @@
-package org.allaymc.server.player.manager;
+package org.allaymc.server.player;
 
 import eu.okaeri.configs.ConfigManager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -13,8 +13,8 @@ import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.ClientStatus;
-import org.allaymc.api.player.data.DeviceInfo;
-import org.allaymc.api.player.manager.PlayerManager;
+import org.allaymc.api.player.LoginData;
+import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.BanInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.Whitelist;
@@ -22,7 +22,6 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.network.AllayNetworkInterface;
-import org.allaymc.server.player.storage.AllayPlayerStorage;
 import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
@@ -279,7 +278,7 @@ public class AllayPlayerManager implements PlayerManager {
         );
     }
 
-    private void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, SerializedSkin skin) {
+    private void addToPlayerList(UUID uuid, long entityId, String name, LoginData.DeviceInfo deviceInfo, String xuid, SerializedSkin skin) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
 

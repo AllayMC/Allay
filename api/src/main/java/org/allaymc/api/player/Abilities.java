@@ -1,4 +1,4 @@
-package org.allaymc.api.player.data;
+package org.allaymc.api.player;
 
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -20,6 +20,7 @@ import java.util.Set;
 /**
  * @author daoge_cmd
  */
+// TODO: remove it from api?
 @Getter
 public final class Abilities {
 

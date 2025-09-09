@@ -1,6 +1,6 @@
-package org.allaymc.server.player.storage;
+package org.allaymc.server.player;
 
-import org.allaymc.api.player.storage.PlayerStorage;
+import org.allaymc.api.player.PlayerStorage;
 
 /**
  * @author daoge_cmd

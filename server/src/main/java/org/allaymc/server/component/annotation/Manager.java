@@ -1,6 +1,6 @@
 package org.allaymc.server.component.annotation;
 
-import org.allaymc.server.component.interfaces.ComponentManager;
+import org.allaymc.server.component.ComponentManager;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

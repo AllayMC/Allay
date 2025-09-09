@@ -1,14 +1,14 @@
-package org.allaymc.server.scroreboard.storage;
+package org.allaymc.server.scroreboard;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
+import org.allaymc.api.scoreboard.ScoreboardStorage;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.FakeScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
-import org.allaymc.api.scoreboard.storage.ScoreboardStorage;
 import org.allaymc.api.utils.config.Config;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 

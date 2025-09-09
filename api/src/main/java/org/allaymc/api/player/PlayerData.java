@@ -1,4 +1,4 @@
-package org.allaymc.api.player.storage;
+package org.allaymc.api.player;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,8 @@
-package org.allaymc.server.player.storage;
+package org.allaymc.server.player;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.allaymc.api.player.storage.PlayerData;
+import org.allaymc.api.player.PlayerData;
 
 import java.util.UUID;
 

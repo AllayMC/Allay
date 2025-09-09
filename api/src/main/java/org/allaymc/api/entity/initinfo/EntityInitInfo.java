@@ -2,7 +2,7 @@ package org.allaymc.api.entity.initinfo;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.world.Dimension;

@@ -5,7 +5,7 @@ import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.PacketReceiver;
-import org.allaymc.api.player.data.LoginData;
+import org.allaymc.api.player.LoginData;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
 /**
