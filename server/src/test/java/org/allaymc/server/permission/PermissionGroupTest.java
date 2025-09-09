@@ -29,7 +29,7 @@ public class PermissionGroupTest {
 
     @Test
     void testAddAndRemove() {
-        var group = PermissionGroup.create("test", Set.of(), null, false);
+        var group = PermissionGroup.create("test", Set.of(), Set.of(), false);
 
         group.addPermission(cmdTell);
         group.addPermission(cmdSay);
@@ -45,11 +45,11 @@ public class PermissionGroupTest {
     @Test
     void testExtend() {
         var parent = PermissionGroup
-                .create("test parent", Set.of(), null, false)
+                .create("test parent", Set.of(), Set.of(), false)
                 .addPermission(a)
                 .addPermission(cmdAbc);
         var group = PermissionGroup
-                .create("test", Set.of(), null, false)
+                .create("test", Set.of(), Set.of(), false)
                 .addParent(parent)
                 .addPermission(b);
 
@@ -68,7 +68,7 @@ public class PermissionGroupTest {
     void testListener() {
         AtomicBoolean f1 = new AtomicBoolean(false);
         Permission a1 = Permission.create("test.a1", "", (p, b) -> f1.set(b));
-        PermissionGroup.create("test", Set.of(), null, false)
+        PermissionGroup.create("test", Set.of(), Set.of(), false)
                 .addPermission(a1);
         assertTrue(f1.get());
     }
@@ -76,20 +76,20 @@ public class PermissionGroupTest {
     @Test
     void testHasPermissions() {
         var full = PermissionGroup
-                .create("test", Set.of(), null, false)
+                .create("test", Set.of(), Set.of(), false)
                 .addPermission(a)
                 .addPermission(cmdAbc);
         var sub1 = PermissionGroup
-                .create("test", Set.of(), null, false)
+                .create("test", Set.of(), Set.of(), false)
                 .addPermission(a);
         var sub2 = PermissionGroup
-                .create("test", Set.of(), null, false)
+                .create("test", Set.of(), Set.of(), false)
                 .addPermission(cmdAbc);
         var invalidSub1 = PermissionGroup
-                .create("test", Set.of(), null, false)
+                .create("test", Set.of(), Set.of(), false)
                 .addPermission(b);
         var invalidSub2 = PermissionGroup
-                .create("test", Set.of(), null, false)
+                .create("test", Set.of(), Set.of(), false)
                 .addPermission(cmdHello);
         assertTrue(full.hasPermissions(sub1, false));
         assertTrue(full.hasPermissions(sub2, false));
@@ -100,7 +100,7 @@ public class PermissionGroupTest {
     @Test
     void testOp() {
         var group = PermissionGroup
-                .create("test", Set.of(), null, false);
+                .create("test", Set.of(), Set.of(), false);
         assertFalse(group.isOperator());
         group.setOperator(true);
         assertTrue(group.isOperator());
