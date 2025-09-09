@@ -56,7 +56,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("default-game-type")
         @Comment("Determines the default game type of a world when it is created")
-        @Comment("Possible values: SURVIVAL, CREATIVE, SPECTATOR")
+        @Comment("Possible values: SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR")
         private GameType defaultGameType = GameType.CREATIVE;
 
         @CustomKey("default-difficulty")
