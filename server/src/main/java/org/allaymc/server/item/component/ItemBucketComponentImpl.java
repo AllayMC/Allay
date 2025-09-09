@@ -18,9 +18,9 @@ import org.allaymc.api.item.component.ItemBucketComponent;
 import org.allaymc.api.item.interfaces.ItemBucketStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 
 /**
@@ -108,7 +108,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         }
 
         player.tryConsumeItemInHand();
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             // Because the max stack size of bucket is 1
             // So we can just set the item in player's hand
             player.setItemInHand(ItemTypes.BUCKET.createItemStack(1));

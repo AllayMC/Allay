@@ -10,8 +10,8 @@ import org.allaymc.api.eventbus.event.block.AnvilDamageEvent;
 import org.allaymc.api.eventbus.event.container.AnvilTakeResultEvent;
 import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Sound;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -184,7 +184,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             totalCost = ANVIL_COST_LIMIT;
         }
 
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             if (totalCost > ANVIL_COST_LIMIT) {
                 log.warn("Repair cost exceeds anvil limit of {}", ANVIL_COST_LIMIT);
                 return error();

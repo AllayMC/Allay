@@ -9,12 +9,12 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerExperienceLevelChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerExperienceProgressChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.event.*;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 /**
@@ -49,8 +49,8 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
         if (thisPlayer.isDead() ||
-            thisPlayer.getGameType() == GameType.CREATIVE ||
-            thisPlayer.getGameType() == GameType.SPECTATOR) {
+            thisPlayer.getGameMode() == GameMode.CREATIVE ||
+            thisPlayer.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
 
@@ -105,7 +105,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public boolean canEat() {
         return getFoodLevel() < (int) AttributeType.PLAYER_HUNGER.getMaxValue() ||
-               thisPlayer.getGameType() == GameType.CREATIVE ||
+               thisPlayer.getGameMode() == GameMode.CREATIVE ||
                thisPlayer.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
     }
 
@@ -159,7 +159,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void exhaust(float level) {
-        if (thisPlayer.getGameType() == GameType.CREATIVE) {
+        if (thisPlayer.getGameMode() == GameMode.CREATIVE) {
             return;
         }
 

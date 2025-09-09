@@ -30,6 +30,7 @@ import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
+import org.allaymc.server.utils.Utils;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.*;
 import org.allaymc.server.world.gamerule.AllayGameRules;
@@ -60,6 +61,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+
+import static org.allaymc.server.utils.Utils.toGameType;
 
 /**
  * An implementation of {@link WorldStorage} which add support for the LevelDB world
@@ -165,7 +168,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
         return AllayWorldData.builder()
                 .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, Server.SETTINGS.genericSettings().defaultDifficulty().ordinal())))
-                .gameType(GameType.from(nbt.getInt(TAG_GAME_TYPE, Server.SETTINGS.genericSettings().defaultGameType().ordinal())))
+                .gameMode(Utils.toGameMode(GameType.from(nbt.getInt(TAG_GAME_TYPE, toGameType(Server.SETTINGS.genericSettings().defaultGameMode()).ordinal()))))
                 .displayName(nbt.getString(TAG_DISPLAY_NAME, WorldData.DEFAULT_WORLD_DISPLAY_NAME))
                 .spawnPoint(new Vector3i(nbt.getInt(TAG_SPAWN_X, 0), nbt.getInt(TAG_SPAWN_Y, 64), nbt.getInt(TAG_SPAWN_Z, 0)))
                 .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))
@@ -764,7 +767,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         var builder = NbtMap.builder();
 
         builder.putInt(TAG_DIFFICULTY, worldData.getDifficulty().ordinal());
-        builder.putInt(TAG_GAME_TYPE, worldData.getGameType().ordinal());
+        builder.putInt(TAG_GAME_TYPE, toGameType(worldData.getGameMode()).ordinal());
         builder.putString(TAG_DISPLAY_NAME, worldData.getDisplayName());
         builder.putInt(TAG_SPAWN_X, worldData.getSpawnPoint().x());
         builder.putInt(TAG_SPAWN_Y, worldData.getSpawnPoint().y());

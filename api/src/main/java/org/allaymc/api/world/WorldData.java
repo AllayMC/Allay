@@ -2,9 +2,9 @@ package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.pdc.PersistentDataHolder;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.joml.Vector3ic;
 
@@ -42,18 +42,18 @@ public interface WorldData extends PersistentDataHolder {
     void setDifficulty(Difficulty difficulty);
 
     /**
-     * Get the game type of the world.
+     * Get the game mode of the world.
      *
-     * @return the game type
+     * @return the game mode
      */
-    GameType getGameType();
+    GameMode getGameMode();
 
     /**
-     * Set the game type of the world.
+     * Set the game mode of the world.
      *
-     * @param gameType the game type to set
+     * @param gameMode the game mode to set
      */
-    void setGameType(GameType gameType);
+    void setGameMode(GameMode gameMode);
 
     /**
      * Get the display name of the world.
@@ -144,7 +144,6 @@ public interface WorldData extends PersistentDataHolder {
      * Get the value of a certain game rule.
      *
      * @param gameRule the game rule
-     *
      * @return the value of the game rule provided
      */
     <V> V getGameRuleValue(GameRule gameRule);

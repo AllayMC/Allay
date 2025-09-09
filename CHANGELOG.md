@@ -63,6 +63,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved class `ScoreboardStorage` form package `scoreboard.storage` to `scoreboard` package.
 - (API) Made classes `UIProfile`, `DeviceInfo` and `Device` as the inner classes of `LoginData`.
 - (API) Flattened all classes under `player` package.
+- (API) Moved classes `Abilities` and `AdventureSettings` from api module to server module. Since most of the abilities/settings have corresponded permission,
+  consider using permission instead.
+- (API) Introduced new `GameMode` enum, and the old `GameType` used in protocol lib is unused since it has many game types which only exist in vanilla.
 
 ### Fixed
 
@@ -80,6 +83,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   these methods are not very useful as APIs.
 - (API) Removed class `CustomBlockComponent` since it is never used.
 - (API) Removed class `Metadata` which is used in entity. Using the getter/setter methods for entity data and flag in `EntityBaseComponent` directly.
+- (API) Removed adventure settings related permissions in `Permissions` since adventure settings should only change when the game mode change.
+- (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

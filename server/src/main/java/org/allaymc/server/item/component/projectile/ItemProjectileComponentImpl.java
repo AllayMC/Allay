@@ -14,11 +14,11 @@ import org.allaymc.api.item.component.ItemProjectileComponent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3d;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemClickInAirEvent;
 import org.allaymc.server.item.component.event.CItemInteractEntityEvent;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -69,7 +69,7 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
         projectile.setMotion(computeMotion(shooter.getLocation(), event.getThrowForce()));
         shooter.getDimension().getEntityManager().addEntity(projectile);
         addShootSound(new Position3d(shootPos, location.dimension()));
-        if (!(shooter instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
+        if (!(shooter instanceof EntityPlayer player) || player.getGameMode() != GameMode.CREATIVE) {
             thisItemStack.reduceCount(1);
         }
 

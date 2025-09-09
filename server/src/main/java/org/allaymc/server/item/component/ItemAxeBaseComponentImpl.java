@@ -9,8 +9,8 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
@@ -91,7 +91,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         var event = new BlockFadeEvent(oldBlock, newBlockState);
         if (event.call()) {
             dimension.setBlockState(clickedBlockPos, event.getNewBlockState());
-            if (interactInfo.player().getGameType() != GameType.CREATIVE) {
+            if (interactInfo.player().getGameMode() != GameMode.CREATIVE) {
                 tryIncreaseDamage(1);
             }
             postBlockPlace.run();

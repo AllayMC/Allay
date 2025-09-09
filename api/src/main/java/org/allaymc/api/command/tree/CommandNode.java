@@ -13,8 +13,8 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.permission.Permission;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Difficulty;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -86,7 +86,6 @@ public interface CommandNode {
      * Set a default value for this node and marks it as optional.
      *
      * @param defaultValue the default value to set
-     *
      * @return the current {@code CommandNode}
      */
     CommandNode defaultValue(Object defaultValue);
@@ -153,7 +152,6 @@ public interface CommandNode {
      * Moves up a certain number of levels in the command tree.
      *
      * @param count the number of levels to move up
-     *
      * @return the {@code CommandNode} after moving up
      */
     CommandNode up(int count);
@@ -181,7 +179,6 @@ public interface CommandNode {
      * will not be checked in this method.
      *
      * @param context the command context
-     *
      * @return {@code true} if the node matches, {@code false} otherwise.
      */
     boolean match(CommandContext context);
@@ -191,7 +188,6 @@ public interface CommandNode {
      * Notes that permission will not be checked in this method.
      *
      * @param context the command context
-     *
      * @return the next {@code CommandNode}
      */
     CommandNode nextNode(CommandContext context);
@@ -214,7 +210,6 @@ public interface CommandNode {
      * Add a leaf node to this command node.
      *
      * @param leaf the leaf node to add
-     *
      * @return the passed {@code CommandNode}
      */
     CommandNode addLeaf(CommandNode leaf);
@@ -226,7 +221,6 @@ public interface CommandNode {
      *                     node will be passed to the provider, and the provider should return
      *                     the leaf node. This is helpful for keeping chain calls when using
      *                     custom command node.
-     *
      * @return the passed {@code CommandNode}
      */
     default CommandNode addLeaf(Function<CommandNode, CommandNode> leafProvider) {
@@ -239,7 +233,6 @@ public interface CommandNode {
      * @param <SENDER_TYPE> the type of the command sender
      * @param executor      the executor function to apply
      * @param senderType    the sender type for this executor
-     *
      * @return the current {@code CommandNode}
      */
     <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType<SENDER_TYPE> senderType);
@@ -248,7 +241,6 @@ public interface CommandNode {
      * Set the executor for this node.
      *
      * @param executor the executor function to apply
-     *
      * @return the current {@code CommandNode}
      */
     default CommandNode exec(Function<CommandContext, CommandResult> executor) {
@@ -261,7 +253,6 @@ public interface CommandNode {
      * the is useful for commands like /execute, which has multiple subcommands.
      *
      * @param onRedirect Called when redirecting
-     *
      * @return the root node
      */
     CommandNode redirect(Consumer<CommandContext> onRedirect);
@@ -272,7 +263,6 @@ public interface CommandNode {
      * under this node will not be executable for the command sender.
      *
      * @param permission the permissions to check
-     *
      * @return the current {@code CommandNode}
      */
     CommandNode permission(Permission permission);
@@ -289,7 +279,6 @@ public interface CommandNode {
      * Check if the command sender has all the required permissions for accessing this node.
      *
      * @param sender the command sender
-     *
      * @return {@code true} if the sender has all permissions, {@code false} otherwise.
      */
     default boolean checkPermissions(CommandSender sender) {
@@ -314,7 +303,6 @@ public interface CommandNode {
      * Add a parameter option to this command node.
      *
      * @param option the parameter option to add
-     *
      * @return the current {@code CommandNode}
      */
     CommandNode addParamOption(CommandParamOption option);
@@ -358,7 +346,6 @@ public interface CommandNode {
      *
      * @param key          the key of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode key(String key, String defaultValue) {
@@ -369,7 +356,6 @@ public interface CommandNode {
      * Add a key parameter to this command node with an empty default value.
      *
      * @param key the key of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode key(String key) {
@@ -381,7 +367,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode str(String name, String defaultValue) {
@@ -392,7 +377,6 @@ public interface CommandNode {
      * Add a string parameter to this command node with an empty default value.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode str(String name) {
@@ -404,7 +388,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode shortNum(String name, short defaultValue) {
@@ -415,7 +398,6 @@ public interface CommandNode {
      * Add a short integer parameter to this command node with a default value of zero.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode shortNum(String name) {
@@ -427,7 +409,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode intNum(String name, int defaultValue) {
@@ -438,7 +419,6 @@ public interface CommandNode {
      * Add an integer parameter to this command node with a default value of zero.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode intNum(String name) {
@@ -450,7 +430,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode longNum(String name, long defaultValue) {
@@ -461,7 +440,6 @@ public interface CommandNode {
      * Add a long integer parameter to this command node with a default value of zero.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode longNum(String name) {
@@ -473,7 +451,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode floatNum(String name, float defaultValue) {
@@ -484,7 +461,6 @@ public interface CommandNode {
      * Add a float parameter to this command node with a default value of zero.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode floatNum(String name) {
@@ -496,7 +472,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode doubleNum(String name, double defaultValue) {
@@ -507,7 +482,6 @@ public interface CommandNode {
      * Add a double parameter to this command node with a default value of zero.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode doubleNum(String name) {
@@ -519,7 +493,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode bool(String name, boolean defaultValue) {
@@ -530,7 +503,6 @@ public interface CommandNode {
      * Add a boolean parameter to this command node with a default value of false.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode bool(String name) {
@@ -543,7 +515,6 @@ public interface CommandNode {
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
      * @param values       the allowed values for the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode enums(String name, String defaultValue, String[] values) {
@@ -557,7 +528,6 @@ public interface CommandNode {
      * @param defaultValue the default value of the parameter
      * @param enumName     the name of the enum
      * @param values       the allowed values for the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode enums(String name, String defaultValue, String enumName, String[] values) {
@@ -569,7 +539,6 @@ public interface CommandNode {
      *
      * @param name   the name of the parameter
      * @param values the allowed values for the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode enums(String name, String... values) {
@@ -589,7 +558,6 @@ public interface CommandNode {
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
      * @param enumClass    the class of the enum type
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default <T extends Enum<?>> CommandNode enumClass(String name, T defaultValue, Class<T> enumClass) {
@@ -606,7 +574,6 @@ public interface CommandNode {
      * @param defaultValue the default value of the parameter
      * @param enumName     the name of the enum
      * @param enumClass    the class of the enum type
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default <T extends Enum<?>> CommandNode enumClass(String name, T defaultValue, String enumName, Class<T> enumClass) {
@@ -619,7 +586,6 @@ public interface CommandNode {
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
      * @param enums        the allowed values for the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode enumsIgnoreCase(String name, String defaultValue, String[] enums) {
@@ -633,7 +599,6 @@ public interface CommandNode {
      * @param defaultValue the default value of the parameter
      * @param enumName     the name of the enum
      * @param enums        the allowed values for the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode enumsIgnoreCase(String name, String defaultValue, String enumName, String[] enums) {
@@ -644,7 +609,6 @@ public interface CommandNode {
      * Add a message parameter to this command node with an empty default value.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode msg(String name) {
@@ -656,7 +620,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode msg(String name, String defaultValue) {
@@ -667,7 +630,6 @@ public interface CommandNode {
      * Add a remaining parameters node to this command node with an empty default value.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode remain(String name) {
@@ -679,7 +641,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode remain(String name, List<String> defaultValue) {
@@ -690,7 +651,6 @@ public interface CommandNode {
      * Add a target parameter to this command node with an empty default value.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode target(String name) {
@@ -702,7 +662,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode target(String name, List<Entity> defaultValue) {
@@ -713,7 +672,6 @@ public interface CommandNode {
      * Add a player target parameter to this command node with an empty default value.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode playerTarget(String name) {
@@ -725,7 +683,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode playerTarget(String name, List<EntityPlayer> defaultValue) {
@@ -745,7 +702,6 @@ public interface CommandNode {
      * Add a game mode parameter to this command node with a specified name.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode gameMode(String name) {
@@ -757,10 +713,9 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
-    default CommandNode gameMode(String name, GameType defaultValue) {
+    default CommandNode gameMode(String name, GameMode defaultValue) {
         return addLeaf(getFactory().gameMode(name, this, defaultValue));
     }
 
@@ -768,7 +723,6 @@ public interface CommandNode {
      * Add a position parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode pos(String name) {
@@ -780,7 +734,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode pos(String name, Vector3fc defaultValue) {
@@ -791,7 +744,6 @@ public interface CommandNode {
      * Add a wildcard target parameter to this command node with an empty default value.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode wildcardTarget(String name) {
@@ -803,7 +755,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode wildcardTarget(String name, String defaultValue) {
@@ -814,7 +765,6 @@ public interface CommandNode {
      * Add an enchantment parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode enchantment(String name) {
@@ -826,7 +776,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode enchantment(String name, EnchantmentType defaultValue) {
@@ -837,7 +786,6 @@ public interface CommandNode {
      * Add an effect parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode effect(String name) {
@@ -849,7 +797,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode effect(String name, EffectType defaultValue) {
@@ -860,7 +807,6 @@ public interface CommandNode {
      * Add an item type parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode itemType(String name) {
@@ -872,7 +818,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode itemType(String name, ItemType<?> defaultValue) {
@@ -883,7 +828,6 @@ public interface CommandNode {
      * Add a block type parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode blockType(String name) {
@@ -895,7 +839,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode blockType(String name, BlockType<?> defaultValue) {
@@ -906,7 +849,6 @@ public interface CommandNode {
      * Add an entity type parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode entityType(String name) {
@@ -918,7 +860,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode entityType(String name, EntityType<?> defaultValue) {
@@ -929,7 +870,6 @@ public interface CommandNode {
      * Add a difficulty parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode difficulty(String name) {
@@ -941,7 +881,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode difficulty(String name, Difficulty defaultValue) {
@@ -952,7 +891,6 @@ public interface CommandNode {
      * Add a block property values parameter to this command node with an empty default value.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode blockPropertyValues(String name) {
@@ -964,7 +902,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode blockPropertyValues(String name, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue) {
@@ -975,7 +912,6 @@ public interface CommandNode {
      * Add a command parameter to this command node with a default value of {@code null}.
      *
      * @param name the name of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode cmd(String name) {
@@ -987,7 +923,6 @@ public interface CommandNode {
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
-     *
      * @return the {@code CommandNode} that created by this method
      */
     default CommandNode cmd(String name, String defaultValue) {

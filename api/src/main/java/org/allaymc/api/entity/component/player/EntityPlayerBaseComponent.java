@@ -6,11 +6,9 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.player.Abilities;
-import org.allaymc.api.player.AdventureSettings;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.world.chunk.ChunkLoader;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -171,6 +169,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     void setHandSlot(int handSlot);
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     default boolean isHeadYawEnabled() {
         return true;
@@ -191,60 +192,39 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSkin(SerializedSkin skin);
 
     /**
-     * Get the game type of the player.
+     * Get the game mode of the player.
      *
-     * @return The game type of the player
+     * @return The game mode of the player
      */
-    // TODO: replace with our custom game mode
-    GameType getGameType();
+    GameMode getGameMode();
 
     /**
-     * Sets the game type of the player.
+     * Sets the game mode of the player.
      *
-     * @param gameType The game type to set
+     * @param gameMode The game mode to set
      */
-    void setGameType(GameType gameType);
-
-    /**
-     * Get the adventure settings of the player.
-     *
-     * @return The adventure settings of the player
-     */
-    AdventureSettings getAdventureSettings();
-
-    /**
-     * Get the abilities of the player.
-     *
-     * @return The abilities of the player
-     */
-    Abilities getAbilities();
+    void setGameMode(GameMode gameMode);
 
     /**
      * Set the fly speed of the player.
      *
      * @param flySpeed The fly speed to set
      */
-    default void setFlySpeed(float flySpeed) {
-        getAbilities().setFlySpeed(flySpeed);
-    }
+    void setFlySpeed(float flySpeed);
 
     /**
      * Set the vertical fly speed of the player.
      *
      * @param verticalFlySpeed The vertical fly speed to set
      */
-    default void setVerticalFlySpeed(float verticalFlySpeed) {
-        getAbilities().setVerticalFlySpeed(verticalFlySpeed);
-    }
+    void setVerticalFlySpeed(float verticalFlySpeed);
 
     /**
      * Set whether the player is flying.
      *
      * @param flying Whether the player is flying
      */
-    default void setFlying(boolean flying) {
-        getAbilities().setFlying(flying);
-    }
+    void setFlying(boolean flying);
 
     /**
      * Send a tip to the player.
@@ -434,7 +414,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @return The maximum distance that the player can interact with blocks
      */
     default double getMaxInteractDistance() {
-        return getGameType() == GameType.CREATIVE ? 13d : 7d;
+        return getGameMode() == GameMode.CREATIVE ? 13d : 7d;
     }
 
     /**

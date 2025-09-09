@@ -13,6 +13,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import static org.allaymc.server.utils.Utils.toGameType;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
@@ -83,7 +85,7 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
                 p.setPosition(Vector3f.from(l.x(), l.y(), l.z()));
                 p.setMotion(motion);
                 p.setRotation(Vector3f.from(l.pitch(), l.yaw(), l.headYaw()));
-                p.setGameType(player.getGameType());
+                p.setGameType(toGameType(player.getGameMode()));
                 p.getMetadata().putAll(getMetadata(entity));
                 p.setDeviceId(loginData.getDeviceInfo().deviceId());
                 p.setHand(player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());
@@ -117,19 +119,28 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
     @Override
     public void removeEntity(Entity entity) {
         var packet = new RemoveEntityPacket();
-        packet.setUniqueEntityId(entity.getRuntimeId());
+        packet.setUniqueEntityId(entity.getUniqueId());
         this.networkComponent.sendPacket(packet);
     }
 
     @Override
-    public void viewPlayerGameType(EntityPlayer player) {
+    public void viewPlayerGameMode(EntityPlayer player) {
+        var gameMode = thisPlayer.getGameMode();
         if (player == thisPlayer) {
-            var packet = new SetPlayerGameTypePacket();
-            packet.setGamemode(thisPlayer.getGameType().ordinal());
-            this.networkComponent.sendPacket(packet);
+            var packet1 = new SetPlayerGameTypePacket();
+            packet1.setGamemode(toGameType(thisPlayer.getGameMode()).ordinal());
+            this.networkComponent.sendPacket(packet1);
+
+            var packet2 = new UpdateAdventureSettingsPacket();
+            packet2.setNoPvM(gameMode == GameMode.SPECTATOR);
+            packet2.setNoMvP(gameMode == GameMode.SPECTATOR);
+            packet2.setShowNameTags(gameMode != GameMode.SPECTATOR);
+            packet2.setImmutableWorld(gameMode == GameMode.SPECTATOR);
+            packet2.setAutoJump(true);
+            this.networkComponent.sendPacket(packet2);
         } else {
             var packet = new UpdatePlayerGameTypePacket();
-            packet.setGameType(thisPlayer.getGameType());
+            packet.setGameType(toGameType(thisPlayer.getGameMode()));
             packet.setEntityId(thisPlayer.getRuntimeId());
             this.networkComponent.sendPacket(packet);
         }

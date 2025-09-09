@@ -24,6 +24,7 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataContainer;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -35,7 +36,6 @@ import org.allaymc.server.item.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3ic;
@@ -417,7 +417,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected void tryConsumeItem(EntityPlayer player) {
-        if (player == null || player.getGameType() != GameType.CREATIVE) {
+        if (player == null || player.getGameMode() != GameMode.CREATIVE) {
             thisItemStack.reduceCount(1);
         }
     }

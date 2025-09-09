@@ -9,9 +9,9 @@ import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockFireBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 
@@ -29,11 +29,11 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
 
         var player = interactInfo.player();
 
-        if (player.getGameType() == GameType.ADVENTURE) {
+        if (player.getGameMode() == GameMode.ADVENTURE) {
             return false;
         }
 
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             // The durability will always be reduced
             // no matter if the fire is spawned successfully
             tryIncreaseDamage(1);

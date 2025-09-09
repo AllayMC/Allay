@@ -13,6 +13,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
@@ -20,7 +21,6 @@ import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.registry.InternalRegistries;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 
 import java.util.Set;
@@ -137,7 +137,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean isDroppable(Block block, ItemStack usedItem, Entity entity) {
-        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) {
+        if (entity instanceof EntityPlayer player && player.getGameMode() == GameMode.CREATIVE) {
             return false;
         }
 

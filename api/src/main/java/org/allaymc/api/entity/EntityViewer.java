@@ -29,11 +29,11 @@ public interface EntityViewer {
     void removeEntity(Entity entity);
 
     /**
-     * Views the gametype of an {@link EntityPlayer}.
+     * Views the game mode of an {@link EntityPlayer}.
      *
      * @param player the player to view
      */
-    void viewPlayerGameType(EntityPlayer player);
+    void viewPlayerGameMode(EntityPlayer player);
 
     /**
      * Views the location of the entity passed.

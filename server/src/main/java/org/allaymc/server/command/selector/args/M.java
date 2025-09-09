@@ -26,7 +26,7 @@ public class M extends CachedSimpleSelectorArgument {
         }
 
         var gm = ParseUtils.parseGameMode(rawGm);
-        return entity -> entity instanceof EntityPlayer player && (reversed != (player.getGameType().ordinal() == gm));
+        return entity -> entity instanceof EntityPlayer player && (reversed != (player.getGameMode().ordinal() == gm));
     }
 
     @Override

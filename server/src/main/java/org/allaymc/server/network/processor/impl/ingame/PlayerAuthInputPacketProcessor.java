@@ -8,13 +8,13 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
 import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
@@ -60,8 +60,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         // Creative mode player can break blocks just like they are in
         // survival mode if "delayed block breaking" option is enabled
         // TODO: implement canBreak & canPlace feature
-        return player.getGameType() == GameType.ADVENTURE ||
-               player.getGameType() == GameType.SPECTATOR;
+        return player.getGameMode() == GameMode.ADVENTURE ||
+               player.getGameMode() == GameMode.SPECTATOR;
     }
 
     protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
@@ -154,7 +154,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.breakingPosY = y;
         this.breakingPosZ = z;
         this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new Block(blockToBreak, new Position3i(x, y, z, player.getDimension())), faceToBreak, player.getItemInHand(), player);
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             this.timeNeededToBreak = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
         } else {
             // Creative mode players can break blocks instantly

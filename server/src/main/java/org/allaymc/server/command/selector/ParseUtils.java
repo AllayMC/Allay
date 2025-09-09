@@ -15,7 +15,6 @@ public class ParseUtils {
      *
      * @param value Text
      * @param base  Base value
-     *
      * @return Offset value
      */
     public static int parseOffsetInt(String value, int base) throws SelectorSyntaxException {
@@ -35,7 +34,6 @@ public class ParseUtils {
      *
      * @param value Text
      * @param base  Base value
-     *
      * @return Offset value
      */
     public static float parseOffsetFloat(String value, float base) throws SelectorSyntaxException {
@@ -55,7 +53,6 @@ public class ParseUtils {
      *
      * @param value Text
      * @param base  Base value
-     *
      * @return Offset value
      */
     public static double parseOffsetDouble(String value, double base) throws SelectorSyntaxException {
@@ -74,7 +71,6 @@ public class ParseUtils {
      * Check if the parameter is reversed
      *
      * @param value Given string
-     *
      * @return Whether it is reversed
      */
     public static boolean checkReversed(String value) {
@@ -110,7 +106,6 @@ public class ParseUtils {
      * @param bound1 Boundary 1
      * @param bound2 Boundary 2
      * @param value  The value
-     *
      * @return Whether the given value is between the given two numbers
      */
     public static boolean checkBetween(double bound1, double bound2, double value) {
@@ -125,7 +120,6 @@ public class ParseUtils {
      * This method matches the parameter with the predefined value of the original selector parameter m
      *
      * @param token String
-     *
      * @return Game mode number
      */
     public static int parseGameMode(String token) throws SelectorSyntaxException {
@@ -134,7 +128,7 @@ public class ParseUtils {
             case "c", "creative", "1" -> 1;
             case "a", "adventure", "2" -> 2;
             case "spectator", "6" -> 6;
-            case "d", "default" -> Server.SETTINGS.genericSettings().defaultGameType().ordinal();
+            case "d", "default" -> Server.SETTINGS.genericSettings().defaultGameMode().ordinal();
             default -> throw new SelectorSyntaxException("Unknown GameMode token: " + token);
         };
     }

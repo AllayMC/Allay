@@ -29,8 +29,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.player.Abilities;
-import org.allaymc.api.player.AdventureSettings;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -43,11 +42,12 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
-import org.allaymc.server.entity.component.event.CPlayerGameTypeChangeEvent;
+import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.player.Abilities;
 import org.allaymc.server.player.AllayPlayerManager;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
@@ -77,6 +77,9 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static org.allaymc.server.utils.Utils.toGameMode;
+import static org.allaymc.server.utils.Utils.toGameType;
+
 /**
  * @author daoge_cmd
  */
@@ -100,11 +103,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected EntityPlayerNetworkComponent networkComponent;
 
     @Getter
-    protected GameType gameType;
+    protected GameMode gameMode;
     @Getter
     protected SerializedSkin skin;
-    @Getter
-    protected AdventureSettings adventureSettings;
     @Getter
     protected Abilities abilities;
     @Getter
@@ -158,7 +159,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
-        this.gameType = Server.SETTINGS.genericSettings().defaultGameType();
+        this.gameMode = Server.SETTINGS.genericSettings().defaultGameMode();
         this.chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
         this.chunkMaxSendCountPerTick = Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
@@ -181,7 +182,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     protected void initPermissionGroup() {
-        this.adventureSettings = new AdventureSettings(thisPlayer);
         this.abilities = new Abilities(thisPlayer);
         // Do not register player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
@@ -206,23 +206,36 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Do nothing, as the uniqueId will be set in method onPlayerLoggedIn()
     }
 
-    @Override
-    public void setGameType(GameType gameType) {
-        var event = new PlayerGameTypeChangeEvent(thisPlayer, this.gameType, gameType);
+    public void setGameMode(GameMode gameMode) {
+        var event = new PlayerGameModeChangeEvent(thisPlayer, this.gameMode, gameMode);
         if (!event.call()) {
             return;
         }
 
-        this.gameType = event.getNewGameType();
-        this.manager.callEvent(new CPlayerGameTypeChangeEvent(this.gameType));
-        this.adventureSettings.applyGameType(this.gameType);
-        this.abilities.applyGameType(this.gameType);
+        this.gameMode = event.getNewGameMode();
+        this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
+        this.abilities.applyGameMode(this.gameMode);
 
-        setFlag(EntityFlag.SILENT, this.gameType == GameType.SPECTATOR);
-        setFlag(EntityFlag.HAS_COLLISION, this.gameType != GameType.SPECTATOR);
+        setFlag(EntityFlag.SILENT, this.gameMode == GameMode.SPECTATOR);
+        setFlag(EntityFlag.HAS_COLLISION, this.gameMode != GameMode.SPECTATOR);
 
-        thisPlayer.viewPlayerGameType(thisPlayer);
-        forEachViewers(viewer -> viewer.viewPlayerGameType(thisPlayer));
+        thisPlayer.viewPlayerGameMode(thisPlayer);
+        forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
+    }
+
+    @Override
+    public void setFlySpeed(float flySpeed) {
+        this.abilities.setFlySpeed(flySpeed);
+    }
+
+    @Override
+    public void setVerticalFlySpeed(float verticalFlySpeed) {
+        this.abilities.setVerticalFlySpeed(verticalFlySpeed);
+    }
+
+    @Override
+    public void setFlying(boolean flying) {
+        this.abilities.setFlying(flying);
     }
 
     @Override
@@ -299,12 +312,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // These data are checked every tick, and are sent to client if changed
         // We don't send these data immediately after changed, because they may be changed multiple times in a tick
         // and sending these data will take up a lot of bandwidth
-        abilities.sync();
-        adventureSettings.sync();
+        this.abilities.sync();
 
         if (requireResendingAvailableCommands) {
             sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
-            requireResendingAvailableCommands = false;
+            this.requireResendingAvailableCommands = false;
         }
     }
 
@@ -523,7 +535,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).saveNBT())
                 .putInt(TAG_ENCHANTMENT_SEED, enchantmentSeed)
-                .putInt(TAG_GAME_TYPE, gameType.ordinal())
+                .putInt(TAG_GAME_TYPE, toGameType(gameMode).ordinal())
                 .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
                 .build();
     }
@@ -553,7 +565,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameType(GameType.from(id)));
+        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(toGameMode(GameType.from(id))));
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
             loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
         } else {

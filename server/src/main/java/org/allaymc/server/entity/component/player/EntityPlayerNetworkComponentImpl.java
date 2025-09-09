@@ -29,10 +29,12 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.DeferredData;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.player.AllayPlayerManager;
+import org.allaymc.server.utils.Utils;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -188,11 +190,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected void onFullyJoin() {
         var server = Server.getInstance();
         var world = thisPlayer.getWorld();
-        // Load EntityPlayer's NBT, player game type is also updated in loadNBT()
+        // Load EntityPlayer's NBT, player game mode is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
         thisPlayer.viewEntityMetadata(thisPlayer);
         // Send other players' abilities data to this player
-        Server.getInstance().getPlayerManager().getPlayers().values().forEach(other -> sendPacket(other.getAbilities().encodeUpdateAbilitiesPacket()));
+        Server.getInstance().getPlayerManager().getPlayers().values().forEach(other -> {
+            var abilities = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).getAbilities();
+            sendPacket(abilities.encodeUpdateAbilitiesPacket());
+        });
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
         ((AllayPlayerManager) server.getPlayerManager()).addToPlayerList(thisPlayer);
@@ -212,18 +217,30 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void sendPacket(BedrockPacket packet) {
-        var event = new PacketSendEvent(thisPlayer, packet);
-        if (!event.call()) return;
+        if (!getClientStatus().canHandlePackets()) {
+            return;
+        }
 
-        clientSession.sendPacket(event.getPacket());
+        var event = new PacketSendEvent(thisPlayer, packet);
+        if (!event.call()) {
+            return;
+        }
+
+        this.clientSession.sendPacket(event.getPacket());
     }
 
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
-        var event = new PacketSendEvent(thisPlayer, packet);
-        if (!event.call()) return;
+        if (!getClientStatus().canHandlePackets()) {
+            return;
+        }
 
-        clientSession.sendPacketImmediately(event.getPacket());
+        var event = new PacketSendEvent(thisPlayer, packet);
+        if (!event.call()) {
+            return;
+        }
+
+        this.clientSession.sendPacketImmediately(event.getPacket());
     }
 
     @Override
@@ -330,7 +347,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.getGamerules().addAll(((AllayGameRules) spawnWorld.getWorldData().getGameRules()).toNetworkGameRuleData());
         packet.setUniqueEntityId(thisPlayer.getRuntimeId());
         packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", spawnWorld.getWorldData().getGameType().ordinal())));
+        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", Utils.toGameType(spawnWorld.getWorldData().getGameMode()).ordinal())));
         var loc = thisPlayer.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
@@ -340,7 +357,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setSeed(0L);
         packet.setDimensionId(dimension.getDimensionInfo().dimensionId());
         packet.setGeneratorId(dimension.getChunkManager().getWorldGenerator().getType().getId());
-        packet.setLevelGameType(spawnWorld.getWorldData().getGameType());
+        packet.setLevelGameType(Utils.toGameType(spawnWorld.getWorldData().getGameMode()));
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         packet.setTrustingPlayers(true);
         packet.setLevelName(Server.SETTINGS.genericSettings().motd());

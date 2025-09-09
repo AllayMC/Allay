@@ -37,24 +37,20 @@ public enum GameMode {
      */
     SPECTATOR(TrKeys.MC_GAMEMODE_SPECTATOR);
 
+    private static final GameMode[] VALUES = values();
+
     /**
      * The translation key for the game mode.
      */
     private final @MayContainTrKey String translationKey;
 
     /**
-     * Looks up a game mode by the str passed.
+     * Looks up a game mode by the id passed.
      *
-     * @param str the str to look up
+     * @param id the id to look up
      * @return the game mode, or {@code null} if failed to find a game mode
      */
-    public static GameMode from(String str) {
-        return switch (str.trim().toLowerCase()) {
-            case "0", "survival", "s" -> SURVIVAL;
-            case "1", "creative", "c" -> CREATIVE;
-            case "2", "adventure", "a" -> ADVENTURE;
-            case "3", "spectator", "spc" -> SPECTATOR;
-            default -> null;
-        };
+    public static GameMode from(int id) {
+        return VALUES[id];
     }
 }
