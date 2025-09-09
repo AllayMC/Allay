@@ -33,6 +33,8 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     protected EntityPlayerScoreboardViewerComponent playerScoreboardViewerComponent;
     @Delegate
     protected EntityPlayerDebugShapeViewerComponent playerDebugShapeViewerComponent;
+    @Delegate
+    protected EntityPlayerEntityViewerComponent playerEntityViewerComponent;
 
     public EntityPlayerImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {

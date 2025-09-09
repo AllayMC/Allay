@@ -18,6 +18,9 @@ import org.joml.Vector3d;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
+/**
+ * EntityPlayer represents a player.
+ */
 public interface EntityPlayer extends
         Entity,
         EntityPlayerBaseComponent,
@@ -28,7 +31,8 @@ public interface EntityPlayer extends
         EntityDamageComponent,
         EntityPhysicsComponent,
         EntityPlayerScoreboardViewerComponent,
-        EntityPlayerDebugShapeViewerComponent {
+        EntityPlayerDebugShapeViewerComponent,
+        EntityPlayerEntityViewerComponent {
 
     /**
      * Returns the reachable container for the given full container type.

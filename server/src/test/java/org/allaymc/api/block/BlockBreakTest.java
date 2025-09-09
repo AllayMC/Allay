@@ -3,7 +3,7 @@ package org.allaymc.api.block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.PlayerArmorContainer;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;

@@ -28,6 +28,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `api_version` for plugin descriptor, which can set the api version requirement of a plugin.
 - (API) Introduced component `EntityPlayerScoreboardViewerComponent` for player.
 - (API) Introduced component `EntityPlayerDebugShapeViewerComponent` for player.
+- (API) Introduced a bunch of  `XXXViewer` (e.g. `EntityViewer`) interfaces which is a tiny wrapper for packet operations. This is
+  inspired by df-mc/dragonfly to reduce the code associated with network packet contained in api module.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
@@ -53,6 +55,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
 - (API) Moved classes `Structure` and `StructureException` from `utils` to `world` package.
 - (API) Moved class `BlockAndItemIdMapper` from api to server module.
+- (API) Moved all effect implementations from api to server module.
+- (API) Renamed classes `BlockStateSafeGetter` and `ItemTypeSafeGetter` to `BlockStateGetter` and `ItemTypeGetter`.
+- (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
+- (API) Renamed method `EntityBaseComponent.applyEntityEvent()` to `EntityBaseComponent.applyEvent()`.
 
 ### Fixed
 
@@ -66,8 +72,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
-- Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerNetworkComponent` because
+- (API) Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerNetworkComponent` because
   these methods are not very useful as APIs.
+- (API) Removed class `CustomBlockComponent` since it is never used.
+- (API) Removed class `Metadata` which is used in entity. Using the getter/setter methods for entity data and flag in `EntityBaseComponent` directly.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

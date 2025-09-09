@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component;
 
-import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,13 +9,13 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityStatus;
 import org.allaymc.api.entity.component.EntityBaseComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
@@ -29,7 +28,6 @@ import org.allaymc.api.permission.Permissible;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -40,7 +38,6 @@ import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
-import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -48,10 +45,9 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.data.entity.*;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.MobEffectPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -59,11 +55,9 @@ import org.joml.primitives.AABBdc;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static java.lang.Math.abs;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector2f;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
 import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
  * @author daoge_cmd
@@ -96,7 +90,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected final long runtimeId;
     @Getter
-    protected final Metadata metadata;
+    protected final EntityDataMap metadata;
     @Getter
     protected PermissionGroup permissionGroup;
     // Will be reset in method loadUniqueId()
@@ -128,7 +122,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.lastLocation = new Location3d(this.location);
         this.locationLastSent = new Location3d(this.location);
         this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
-        this.metadata = new Metadata();
+        this.metadata = new EntityDataMap();
         this.entityType = info.getEntityType();
         this.viewers = new Long2ObjectOpenHashMap<>();
         this.effects = new HashMap<>();
@@ -147,10 +141,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void initMetadata() {
         this.manager.callEvent(CEntityInitMetadataEvent.INSTANCE);
-        this.metadata.set(EntityDataTypes.PLAYER_INDEX, 0);
-        this.metadata.set(EntityFlag.HAS_GRAVITY, true);
-        this.metadata.set(EntityFlag.HAS_COLLISION, true);
-        this.metadata.set(EntityFlag.CAN_CLIMB, true);
+        setData(EntityDataTypes.PLAYER_INDEX, 0);
+        setFlag(EntityFlag.HAS_GRAVITY, true);
+        setFlag(EntityFlag.HAS_COLLISION, true);
+        setFlag(EntityFlag.CAN_CLIMB, true);
         updateHitBoxAndCollisionBoxMetadata();
     }
 
@@ -179,14 +173,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void updateHitBoxAndCollisionBoxMetadata() {
-        metadata.set(EntityDataTypes.HITBOX, buildAABBTag());
         var aabb = getAABB();
-        metadata.set(EntityDataTypes.COLLISION_BOX,
-                Vector3f.from(
-                        aabb.maxX() - aabb.minX(),
-                        aabb.maxY() - aabb.minY(),
-                        aabb.maxZ() - aabb.minZ())
-        );
+        setData(EntityDataTypes.HITBOX, buildAABBTag());
+        setData(EntityDataTypes.COLLISION_BOX, Vector3f.from(
+                aabb.maxX() - aabb.minX(),
+                aabb.maxY() - aabb.minY(),
+                aabb.maxZ() - aabb.minZ()
+        ));
     }
 
     public void tick(long currentTick) {
@@ -279,7 +272,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             deadTimer = DEFAULT_DEAD_TIMER;
         }
 
-        applyEntityEvent(EntityEventType.DEATH, 0);
+        applyEvent(EntityEventType.DEATH, 0);
         effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         removeAllEffects();
     }
@@ -431,23 +424,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendMetadata() {
-        if (viewers.isEmpty()) {
-            return;
-        }
-
-        sendPacketToViewers(createSetEntityDataPacket());
-    }
-
-    protected SetEntityDataPacket createSetEntityDataPacket() {
-        var packet = new SetEntityDataPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setMetadata(this.metadata.getEntityDataMap());
-        packet.setTick(this.getWorld().getTick());
-        return packet;
-    }
-
-    @Override
     public AABBdc getAABB() {
         // Default aabb is player's aabb
         return new AABBd(-0.3, 0.0, -0.3, 0.3, 1.8, 0.3);
@@ -466,41 +442,19 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void spawnTo(EntityPlayer player) {
-        player.sendPacket(createSpawnPacket());
+        player.viewEntity(thisEntity);
         viewers.put(player.getRuntimeId(), player);
     }
 
     @Override
     public void despawnFrom(EntityPlayer player) {
-        var pk = new RemoveEntityPacket();
-        pk.setUniqueEntityId(runtimeId);
-        player.sendPacket(pk);
+        player.removeEntity(thisEntity);
         viewers.remove(player.getRuntimeId());
     }
 
     @Override
     public void despawnFromAll() {
         viewers.values().forEach(this::despawnFrom);
-    }
-
-    @Override
-    public BedrockPacket createSpawnPacket() {
-        var packet = createSpawnPacket0();
-        var event = new CEntityCreateSpawnPacketEvent(packet);
-        this.manager.callEvent(event);
-        return event.getPacket();
-    }
-
-    protected BedrockPacket createSpawnPacket0() {
-        var packet = new AddEntityPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setUniqueEntityId(runtimeId);
-        packet.setIdentifier(entityType.getIdentifier().toString());
-        packet.setPosition(Vector3f.from(location.x(), location.y() + getNetworkOffset(), location.z()));
-        packet.setMotion(Vector3f.ZERO);
-        packet.setRotation(Vector2f.from(location.pitch(), location.yaw()));
-        packet.getMetadata().putAll(metadata.getEntityDataMap());
-        return packet;
     }
 
     @Override
@@ -513,75 +467,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         viewers.values().forEach(client -> client.sendPacketImmediately(packet));
     }
 
-    public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
-        var event = new CEntityCreateMovePacketEvent(Lists.newArrayList(createMovePacket(newLoc, teleporting)));
-        manager.callEvent(event);
-        event.getPackets().forEach(this::sendPacketToViewers);
-    }
-
-    protected BedrockPacket createMovePacket(Location3dc newLoc, boolean teleporting) {
-        return Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket() ?
-                createDeltaMovePacket(newLoc, teleporting) :
-                createAbsoluteMovePacket(newLoc, teleporting);
-    }
-
-    protected BedrockPacket createAbsoluteMovePacket(Location3dc newLoc, boolean teleporting) {
-        var pk = new MoveEntityAbsolutePacket();
-        pk.setRuntimeEntityId(getRuntimeId());
-        pk.setPosition(Vector3f.from(newLoc.x(), newLoc.y() + getNetworkOffset(), newLoc.z()));
-        pk.setRotation(Vector3f.from(newLoc.pitch(), newLoc.yaw(), newLoc.headYaw()));
-        pk.setTeleported(teleporting);
-        return pk;
-    }
-
-    protected BedrockPacket createDeltaMovePacket(Location3dc newLoc, boolean teleporting) {
-        var pk = new MoveEntityDeltaPacket();
-        pk.setRuntimeEntityId(getRuntimeId());
-        var moveFlags = computeMoveFlags(newLoc);
-        pk.getFlags().addAll(moveFlags);
-        if (moveFlags.contains(HAS_X)) {
-            pk.setX((float) newLoc.x());
-            locationLastSent.x = newLoc.x();
+    public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {
+        forEachViewers(viewer -> viewer.viewEntityLocation(thisEntity, locationLastSent, newLocation, teleporting));
+        if (thisEntity instanceof EntityPhysicsComponent physicsComponent) {
+            forEachViewers(viewer -> viewer.viewEntityMotion((Entity & EntityPhysicsComponent) thisEntity, physicsComponent.getMotion()));
         }
-        if (moveFlags.contains(HAS_Y)) {
-            pk.setY((float) newLoc.y());
-            locationLastSent.y = newLoc.y() + getNetworkOffset();
-        }
-        if (moveFlags.contains(HAS_Z)) {
-            pk.setZ((float) newLoc.z());
-            locationLastSent.z = newLoc.z();
-        }
-        if (moveFlags.contains(HAS_PITCH)) {
-            pk.setPitch((float) newLoc.pitch());
-            locationLastSent.pitch = newLoc.pitch();
-        }
-        if (moveFlags.contains(HAS_YAW)) {
-            pk.setYaw((float) newLoc.yaw());
-            locationLastSent.yaw = newLoc.yaw();
-        }
-        if (moveFlags.contains(HAS_HEAD_YAW)) {
-            pk.setHeadYaw((float) newLoc.headYaw());
-            locationLastSent.headYaw = newLoc.headYaw();
-        }
-        if (teleporting) {
-            pk.getFlags().add(TELEPORTING);
-        }
-        return pk;
-    }
-
-    protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Location3dc newLoc) {
-        var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
-        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
-        var diffPositionThreshold = settings.diffPositionThreshold();
-        var diffRotationThreshold = settings.diffRotationThreshold();
-        if (abs(locationLastSent.x() - newLoc.x()) > diffPositionThreshold) flags.add(HAS_X);
-        if (abs(locationLastSent.y() - newLoc.y()) > diffPositionThreshold) flags.add(HAS_Y);
-        if (abs(locationLastSent.z() - newLoc.z()) > diffPositionThreshold) flags.add(HAS_Z);
-        if (abs(locationLastSent.yaw() - newLoc.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
-        if (abs(locationLastSent.pitch() - newLoc.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
-        if (enableHeadYaw() && abs(locationLastSent.headYaw() - newLoc.headYaw()) > diffRotationThreshold)
-            flags.add(HAS_HEAD_YAW);
-        return flags;
     }
 
     @Override
@@ -735,7 +625,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
         }
 
-        setAndSendEntityData(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);
+        setData(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);
     }
 
     @Override
@@ -808,5 +698,35 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
         var aabb = getOffsetAABBForCollisionCheck();
         return getDimension().getCollidingBlockStates(aabb) != null;
+    }
+
+    @Override
+    public <T> T getData(EntityDataType<T> dataType) {
+        return this.metadata.get(dataType);
+    }
+
+    @Override
+    public <T> void setData(EntityDataType<T> dataType, T value) {
+        if (this.metadata.get(dataType) != value) {
+            this.metadata.put(dataType, value);
+            sendMetadata();
+        }
+    }
+
+    @Override
+    public boolean getFlag(EntityFlag flag) {
+        return this.metadata.getOrCreateFlags().contains(flag);
+    }
+
+    @Override
+    public void setFlag(EntityFlag flag, boolean value) {
+        if (this.metadata.getOrCreateFlags().contains(flag) != value) {
+            this.metadata.setFlag(flag, value);
+            sendMetadata();
+        }
+    }
+
+    protected void sendMetadata() {
+        forEachViewers(viewer -> viewer.viewEntityMetadata(thisEntity));
     }
 }

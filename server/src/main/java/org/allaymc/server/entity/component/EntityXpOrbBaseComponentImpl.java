@@ -112,6 +112,6 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @Override
     public void setExperienceValue(int experienceValue) {
         this.experienceValue = experienceValue;
-        setAndSendEntityData(EntityDataTypes.VALUE, experienceValue);
+        setData(EntityDataTypes.VALUE, experienceValue);
     }
 }

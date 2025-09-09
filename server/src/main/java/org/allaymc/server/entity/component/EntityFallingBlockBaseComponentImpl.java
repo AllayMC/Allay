@@ -44,12 +44,11 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     @Override
     protected void initMetadata() {
         Objects.requireNonNull(blockState, "blockState");
-
         updateHitBoxAndCollisionBoxMetadata();
-        metadata.set(EntityFlag.HAS_GRAVITY, true);
-        metadata.set(EntityFlag.FIRE_IMMUNE, true);
-        metadata.set(EntityFlag.HAS_COLLISION, false);
-        metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
+        setFlag(EntityFlag.HAS_GRAVITY, true);
+        setFlag(EntityFlag.FIRE_IMMUNE, true);
+        setFlag(EntityFlag.HAS_COLLISION, false);
+        setData(EntityDataTypes.VARIANT, blockState.blockStateHash());
     }
 
     @Override
@@ -124,8 +123,4 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         return new AABBd(-0.49, 0, -0.49, 0.49, 0.98, 0.49);
     }
 
-    @Override
-    public float getNetworkOffset() {
-        return 0.49f;
-    }
 }

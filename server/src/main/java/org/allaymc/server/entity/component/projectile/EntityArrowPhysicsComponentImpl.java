@@ -110,7 +110,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         addHitSound(hitPos);
-        this.arrowBaseComponent.applyEntityEvent(
+        this.arrowBaseComponent.applyEvent(
                 EntityEventType.ARROW_SHAKE,
                 7 // How many times the arrow shakes
         );

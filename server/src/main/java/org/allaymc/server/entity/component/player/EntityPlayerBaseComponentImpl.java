@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
@@ -194,7 +193,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void initMetadata() {
         super.initMetadata();
         // Player name is always shown
-        this.metadata.set(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
+        setData(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
     }
 
     @Override
@@ -219,17 +218,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.adventureSettings.applyGameType(this.gameType);
         this.abilities.applyGameType(this.gameType);
 
-        setAndSendEntityFlag(EntityFlag.SILENT, this.gameType == GameType.SPECTATOR);
-        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, this.gameType != GameType.SPECTATOR);
+        setFlag(EntityFlag.SILENT, this.gameType == GameType.SPECTATOR);
+        setFlag(EntityFlag.HAS_COLLISION, this.gameType != GameType.SPECTATOR);
 
-        var packetToSelf = new SetPlayerGameTypePacket();
-        packetToSelf.setGamemode(this.gameType.ordinal());
-        networkComponent.sendPacket(packetToSelf);
-
-        var packetToViewers = new UpdatePlayerGameTypePacket();
-        packetToViewers.setGameType(this.gameType);
-        packetToViewers.setEntityId(this.runtimeId);
-        sendPacketToViewers(packetToViewers);
+        thisPlayer.viewPlayerGameType(thisPlayer);
+        forEachViewers(viewer -> viewer.viewPlayerGameType(thisPlayer));
     }
 
     @Override
@@ -444,12 +437,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void spawnTo(EntityPlayer player) {
         if (thisPlayer != player) {
             super.spawnTo(player);
-            containerHolderComponent.getContainer(FullContainerType.ARMOR).sendArmorEquipmentPacketTo(player);
-            containerHolderComponent.getContainer(FullContainerType.OFFHAND).sendEquipmentPacketTo(player);
-            // Skin should be sent to the player
-            // Otherwise player's skin will become steve
-            // in other player's eyes after respawn
-            player.sendPacket(createSkinPacket(skin));
+            player.viewEntityArmors(thisPlayer);
+            player.viewEntityHand(thisPlayer);
+            player.viewEntityOffhand(thisPlayer);
+            // Skin should be sent to the player, otherwise player's skin will become Steve in other player's eyes after respawn
+            player.viewPlayerSkin(thisPlayer);
         }
     }
 
@@ -461,29 +453,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
-        super.broadcastMoveToViewers(newLoc, teleporting);
+    public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {
+        super.broadcastMoveToViewers(newLocation, teleporting);
         if (!teleporting) {
             manager.callEvent(CPlayerMoveEvent.INSTANCE);
         }
-    }
-
-    @Override
-    public BedrockPacket createSpawnPacket0() {
-        var packet = new AddPlayerPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setUniqueEntityId(runtimeId);
-        packet.setUuid(networkComponent.getLoginData().getUuid());
-        packet.setUsername(networkComponent.getOriginName());
-        packet.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().deviceId());
-        packet.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
-        packet.setMotion(Vector3f.ZERO);
-        packet.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
-        packet.setGameType(gameType);
-        packet.getMetadata().putAll(metadata.getEntityDataMap());
-        packet.setDeviceId(networkComponent.getLoginData().getDeviceInfo().deviceId());
-        packet.setHand(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());
-        return packet;
     }
 
     public long getStartUsingItemInAirTime() {
@@ -504,45 +478,28 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public void setHandSlot(int handSlot) {
+        setHandSlot(handSlot, true);
+    }
+
     public void setHandSlot(int handSlot, boolean sendToSelf) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
 
-        var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
-        inv.setHandSlot(handSlot);
-        var itemStack = inv.getItemStack(handSlot);
-
-        new PlayerItemHeldEvent(thisPlayer, itemStack, handSlot).call();
-
-        var packet = new MobEquipmentPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
-        packet.setItem(itemStack.toNetworkItemData());
-        packet.setInventorySlot(handSlot);
-        packet.setHotbarSlot(handSlot);
-
+        var container = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
+        container.setHandSlot(handSlot);
+        new PlayerItemHeldEvent(thisPlayer, container.getItemInHand(), handSlot).call();
         if (sendToSelf) {
-            sendPacket(packet);
+            thisPlayer.viewEntityHand(thisPlayer);
         }
-        sendPacketToViewers(packet);
+        forEachViewers(viewer -> viewer.viewEntityHand(thisPlayer));
     }
 
     @Override
     public void setSkin(SerializedSkin skin) {
         this.skin = skin;
         var server = Server.getInstance();
-        server.getPlayerManager().broadcastPacket(createSkinPacket(skin));
+        server.getPlayerManager().getPlayers().values().forEach(player -> player.viewPlayerSkin(thisPlayer));
         ((AllayPlayerManager) server.getPlayerManager()).onSkinUpdate(thisPlayer);
-    }
-
-    protected PlayerSkinPacket createSkinPacket(SerializedSkin skin) {
-        var packet = new PlayerSkinPacket();
-        packet.setUuid(networkComponent.getLoginData().getUuid());
-        packet.setSkin(skin);
-        packet.setNewSkinName(skin.getSkinId());
-        // It seems that old skin name is unused
-        packet.setOldSkinName("");
-        packet.setTrustedSkin(true);
-        return packet;
     }
 
     @Override
@@ -748,19 +705,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     public void sendLocationToSelf() {
-        // NOTICE: do not use MovePlayerPacket. Sometimes this packet does not have any effect,
-        // especially when teleporting player to another world or a far away place.
-        networkComponent.sendPacket(createMovePacket(location, true));
+        // NOTICE: do not use MovePlayerPacket. Sometimes this packet does not have any
+        // effect especially when teleporting player to another world or a far away place.
+        thisPlayer.viewEntityLocation(thisPlayer, locationLastSent, location, true);
     }
 
     @Override
     public boolean isUsingItemInAir() {
-        return getMetadata().get(EntityFlag.USING_ITEM);
+        return getFlag(EntityFlag.USING_ITEM);
     }
 
     @Override
     public void setUsingItemInAir(boolean value, long time) {
-        setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
+        setFlag(EntityFlag.USING_ITEM, value);
         if (value) {
             startUsingItemInAirTime = time;
         }
@@ -856,7 +813,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void applyEntityEvent(EntityEventType event, int data) {
+    public void applyEvent(EntityEventType event, int data) {
         var packet = new EntityEventPacket();
         packet.setRuntimeEntityId(getRuntimeId());
         packet.setType(event);
@@ -892,12 +849,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         return Collections.unmodifiableMap(forms);
     }
 
-    @Override
-    public Form getForm(int id) {
-        return forms.get(id);
-    }
-
-    @Override
     public Form removeForm(int id) {
         return forms.remove(id);
     }
@@ -965,10 +916,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.setLocationBeforeSpawn(location);
     }
 
-    @Override
-    public void sendMetadata() {
+    protected void sendMetadata() {
         super.sendMetadata();
-        networkComponent.sendPacket(createSetEntityDataPacket());
+        // The current player should also view his metadata
+        thisPlayer.viewEntityMetadata(thisPlayer);
     }
 
     public void onJump() {
@@ -977,43 +928,68 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public boolean isSprinting() {
+        return getFlag(EntityFlag.SPRINTING);
+    }
+
+    @Override
     public void setSprinting(boolean sprinting) {
-        if (sprinting == isSprinting()) return;
+        if (sprinting != isSprinting()) {
+            new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
+            var speed = getMovementSpeed();
+            if (sprinting) {
+                speed *= 1.3f;
+            } else {
+                speed /= 1.3f;
+            }
 
-        new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
+            setMovementSpeed(speed);
+            setFlag(EntityFlag.SPRINTING, sprinting);
+        }
+    }
 
-        var speed = getMovementSpeed();
-        if (sprinting) speed *= 1.3f;
-        else speed /= 1.3f;
-        setMovementSpeed(speed);
-        setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
+    @Override
+    public boolean isSneaking() {
+        return getFlag(EntityFlag.SNEAKING);
     }
 
     @Override
     public void setSneaking(boolean sneaking) {
-        if (sneaking == isSneaking()) return;
+        if (sneaking != isSneaking()) {
+            new PlayerToggleSneakEvent(thisPlayer, sneaking).call();
+            setFlag(EntityFlag.SNEAKING, sneaking);
+        }
+    }
 
-        new PlayerToggleSneakEvent(thisPlayer, sneaking).call();
-
-        setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
+    @Override
+    public boolean isSwimming() {
+        return getFlag(EntityFlag.SWIMMING);
     }
 
     @Override
     public void setSwimming(boolean swimming) {
-        if (swimming == isSwimming()) return;
+        if (swimming != isSwimming()) {
+            new PlayerToggleSwimEvent(thisPlayer, swimming).call();
+            setFlag(EntityFlag.SWIMMING, swimming);
+        }
+    }
 
-        new PlayerToggleSwimEvent(thisPlayer, swimming).call();
-
-        setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
+    @Override
+    public boolean isGliding() {
+        return getFlag(EntityFlag.GLIDING);
     }
 
     @Override
     public void setGliding(boolean gliding) {
-        if (gliding == isGliding()) return;
+        if (gliding != isGliding()) {
+            new PlayerToggleGlideEvent(thisPlayer, gliding).call();
+            setFlag(EntityFlag.GLIDING, gliding);
+        }
+    }
 
-        new PlayerToggleGlideEvent(thisPlayer, gliding).call();
-
-        setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
+    @Override
+    public boolean isCrawling() {
+        return getFlag(EntityFlag.CRAWLING);
     }
 
     @Override
@@ -1022,7 +998,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
 
-        setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
+        setFlag(EntityFlag.CRAWLING, crawling);
     }
 
     public boolean isAwaitingTeleportACK() {

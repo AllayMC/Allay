@@ -10,7 +10,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
@@ -69,7 +69,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param blockState    the block state to be placed
      * @param placeBlockPos the position at which the block is being placed
      * @param placementInfo information about the player's placement, can be {@code null}
-     *
      * @return {@code true} if the block is successfully placed, {@code false} otherwise.
      */
     boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
@@ -82,7 +81,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param blockState      the block to be combined
      * @param combineBlockPos the position of the block being combined
      * @param placementInfo   the player placement information, can be {@code null}
-     *
      * @return {@code true} if the block is successfully combined, {@code false} otherwise.
      */
     default boolean combine(Dimension dimension, BlockState blockState, Vector3ic combineBlockPos, PlayerInteractInfo placementInfo) {
@@ -120,7 +118,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param block    the block being broken
      * @param usedItem the item used to break the block, can be {@code null}
      * @param entity   the entity breaking the block, can be {@code null}
-     *
      * @return {@code true} if the block will drop as an item, {@code false} otherwise.
      */
     boolean isDroppable(Block block, ItemStack usedItem, Entity entity);
@@ -131,7 +128,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param itemStack    the item in the player's hand
      * @param dimension    the dimension where the interaction occurs
      * @param interactInfo information about the interaction
-     *
      * @return {@code true} if the interaction is valid, {@code false} otherwise.
      */
     @ApiStatus.OverrideOnly
@@ -203,7 +199,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param block    the block being broken
      * @param usedItem the item used to break the block, can be {@code null}
      * @param entity   the entity breaking the block, can be {@code null}
-     *
      * @return a set of {@link ItemStack} representing the drops
      */
     Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity);
@@ -212,7 +207,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * Retrieves the drops of the block when it is broken with a silk touch enchantment.
      *
      * @param block the block being broken
-     *
      * @return the silk touch drop as an {@link ItemStack}
      */
     default ItemStack getSilkTouchDrop(Block block) {
@@ -225,7 +219,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param block    the block being broken
      * @param usedItem the item used to break the block
      * @param entity   the entity breaking the block
-     *
      * @return the amount of XP to drop
      */
     default int getDropXpAmount(Block block, ItemStack usedItem, Entity entity) {
@@ -236,7 +229,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * Determines if the block can damage the item used to break it.
      *
      * @param itemStack the item being damaged
-     *
      * @return {@code true} if the block can damage the item, {@code false} otherwise.
      */
     default boolean canDamageItem(ItemStack itemStack) {
@@ -318,9 +310,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param blockState the specific block state to be broken
      * @param usedItem   the item used to break the block, can be {@code null}
      * @param entity     the entity breaking the block, can be {@code null}
-     *
      * @return the time in seconds required to break the block
-     *
      * @see <a href="https://minecraft.wiki/w/Breaking#Calculation">Breaking Calculation</a>
      */
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
@@ -399,7 +389,6 @@ public interface BlockBaseComponent extends BlockComponent {
      *
      * @param blockState the block to check
      * @param blockFace  the side of the block to check
-     *
      * @return {@code true} if the side is closed, {@code false} otherwise.
      */
     default boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {

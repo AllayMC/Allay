@@ -32,10 +32,9 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
      * Calculates the required experience for a given level.
      *
      * @param level the level
-     *
      * @return the required experience
      */
-    static int calculateRequireExperience(int level) {
+    static int calculateRequiredExperience(int level) {
         if (level >= 30) {
             return 112 + (level - 30) * 9;
         } else if (level >= 15) {
@@ -80,13 +79,13 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
      */
     default void addExperience(int addition) {
         var currentLevel = getExperienceLevel();
-        var requiredExpCurrentLevel = calculateRequireExperience(currentLevel);
+        var requiredExpCurrentLevel = calculateRequiredExperience(currentLevel);
         var total = getExperienceProgress() * requiredExpCurrentLevel + addition;
 
         while (total >= requiredExpCurrentLevel) {
             total -= requiredExpCurrentLevel;
             currentLevel++;
-            requiredExpCurrentLevel = calculateRequireExperience(currentLevel);
+            requiredExpCurrentLevel = calculateRequiredExperience(currentLevel);
         }
 
         setExperienceProgress(total / requiredExpCurrentLevel);
@@ -98,8 +97,8 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
      *
      * @return the required experience
      */
-    default int getRequireExperienceForCurrentLevel() {
-        return calculateRequireExperience(getExperienceLevel());
+    default int getRequiredExperienceForCurrentLevel() {
+        return calculateRequiredExperience(getExperienceLevel());
     }
 
     /**
@@ -108,7 +107,7 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
      * @return the experience in the current level
      */
     default int getExperienceInCurrentLevel() {
-        return (int) (getExperienceProgress() * getRequireExperienceForCurrentLevel());
+        return (int) (getExperienceProgress() * getRequiredExperienceForCurrentLevel());
     }
 
     /**

@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerScoreboardViewerComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
@@ -27,8 +26,6 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_player_scoreboard_viewer_component");
 
-    @Dependency
-    protected EntityPlayerBaseComponent baseComponent;
     @Dependency
     protected EntityPlayerNetworkComponentImpl networkComponent;
 
@@ -60,7 +57,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         var scorer = new PlayerScorer(thisPlayer);
         var line = scoreboard.getLine(scorer);
         if (slot == DisplaySlot.BELOW_NAME && line != null) {
-            baseComponent.setAndSendEntityData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
+            thisPlayer.setData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
         }
     }
 
@@ -75,7 +72,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         networkComponent.sendPacket(packet);
 
         if (slot == DisplaySlot.BELOW_NAME) {
-            baseComponent.setAndSendEntityData(SCORE, "");
+            thisPlayer.setData(SCORE, "");
         }
     }
 
@@ -98,7 +95,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisPlayer)) {
-            baseComponent.setAndSendEntityData(SCORE, "");
+            thisPlayer.setData(SCORE, "");
         }
     }
 
@@ -113,7 +110,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
-            baseComponent.setAndSendEntityData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
+            thisPlayer.setData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
         }
     }
 

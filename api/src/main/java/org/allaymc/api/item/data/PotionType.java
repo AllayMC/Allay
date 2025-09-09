@@ -2,7 +2,7 @@ package org.allaymc.api.item.data;
 
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 
 import java.awt.*;
 import java.util.List;
@@ -97,7 +97,6 @@ public enum PotionType {
      * Gets the potion type from id.
      *
      * @param id the id of potion
-     *
      * @return the potion type
      */
     public static PotionType fromId(int id) {

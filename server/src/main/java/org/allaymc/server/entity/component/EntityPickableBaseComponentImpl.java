@@ -27,7 +27,7 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     @Override
     protected void initMetadata() {
         super.initMetadata();
-        metadata.set(EntityFlag.HAS_COLLISION, false);
+        setFlag(EntityFlag.HAS_COLLISION, false);
     }
 
     @Override

@@ -42,9 +42,8 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
             throw new IllegalArgumentException("Trying to set the motion of player " + networkComponent.getOriginName() + " to a new motion which contains NaN: " + motion);
         }
 
-        // For player, motion effect is calculated by the client rather than the server
-        // We only need to send SetEntityMotionPacket to client when
-        // we want to apply motion on a player
+        // For player, motion effect is calculated by the client rather than the server. We only
+        // need to send SetEntityMotionPacket to client when we want to apply motion on a player
         var packet = new SetEntityMotionPacket();
         packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         packet.setRuntimeEntityId(thisEntity.getRuntimeId());

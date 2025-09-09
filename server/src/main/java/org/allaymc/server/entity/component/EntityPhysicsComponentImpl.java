@@ -10,7 +10,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
 import org.allaymc.api.math.MathUtils;
@@ -25,9 +25,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.*;
-import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.RoundingMode;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -117,39 +115,6 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             this.fallDistance -= newLocation.y() - location.y();
             tryResetFallDistance(newLocation);
         }
-    }
-
-    @EventHandler
-    protected void onCreateMovePacket(CEntityCreateMovePacketEvent event) {
-        event.getPackets().add(createMotionPacket());
-        if (onGround) {
-            for (var packet : event.getPackets()) {
-                switch (packet) {
-                    case MoveEntityDeltaPacket deltaPacket ->
-                            deltaPacket.getFlags().add(MoveEntityDeltaPacket.Flag.ON_GROUND);
-                    case MoveEntityAbsolutePacket absolutePacket -> absolutePacket.setOnGround(true);
-                    case null, default -> {/* no-op */}
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    protected void onCreateSpawnPacket(CEntityCreateSpawnPacketEvent event) {
-        var vec = Vector3f.from(motion.x(), motion.y(), motion.z());
-        switch (event.getPacket()) {
-            case AddEntityPacket addEntityPacket -> addEntityPacket.setMotion(vec);
-            case AddPlayerPacket addPlayerPacket -> addPlayerPacket.setMotion(vec);
-            case AddItemEntityPacket addItemEntityPacket -> addItemEntityPacket.setMotion(vec);
-            case null, default -> {/* no-op */}
-        }
-    }
-
-    protected BedrockPacket createMotionPacket() {
-        var pk = new SetEntityMotionPacket();
-        pk.setRuntimeEntityId(thisEntity.getRuntimeId());
-        pk.setMotion(Vector3f.from(motion.x, motion.y, motion.z));
-        return pk;
     }
 
     protected void tryResetFallDistance(Location3dc location) {
@@ -522,12 +487,12 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     @Override
     public boolean hasGravity() {
-        return thisEntity.getMetadata().get(EntityFlag.HAS_GRAVITY);
+        return thisEntity.getFlag(EntityFlag.HAS_GRAVITY);
     }
 
     @Override
     public void setHasGravity(boolean hasGravity) {
-        thisEntity.setAndSendEntityFlag(EntityFlag.HAS_GRAVITY, hasGravity);
+        thisEntity.setFlag(EntityFlag.HAS_GRAVITY, hasGravity);
     }
 
     @Override

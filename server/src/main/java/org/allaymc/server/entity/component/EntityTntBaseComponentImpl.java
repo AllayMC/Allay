@@ -32,9 +32,8 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     @Override
     protected void initMetadata() {
         super.initMetadata();
-        metadata.set(EntityFlag.IGNITED, true);
-        metadata.set(EntityDataTypes.FUSE_TIME, fuse);
-
+        setFlag(EntityFlag.IGNITED, true);
+        setData(EntityDataTypes.FUSE_TIME, fuse);
         getDimension().addLevelEvent(location, LevelEvent.SOUND_FUSE);
     }
 
@@ -63,7 +62,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
             fuse--;
             if (fuse % 5 == 0) {
                 // Reduce the number of packets sent to the client
-                setAndSendEntityData(EntityDataTypes.FUSE_TIME, fuse);
+                setData(EntityDataTypes.FUSE_TIME, fuse);
             }
         }
     }
@@ -80,11 +79,6 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
                 .toBuilder()
                 .putShort(TAG_FUSE, (short) fuse)
                 .build();
-    }
-
-    @Override
-    public float getNetworkOffset() {
-        return 0.49f;
     }
 
     @Override

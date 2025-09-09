@@ -47,17 +47,17 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
 
     @Override
     public boolean isCritical() {
-        return this.metadata.get(EntityFlag.CRITICAL);
+        return getFlag(EntityFlag.CRITICAL);
     }
 
     @Override
     public void setCritical(boolean critical) {
-        setAndSendEntityFlag(EntityFlag.CRITICAL, critical);
+        setFlag(EntityFlag.CRITICAL, critical);
     }
 
     @Override
     public PotionType getPotionType() {
-        var idPlusOne = this.metadata.get(EntityDataTypes.CUSTOM_DISPLAY);
+        var idPlusOne = getData(EntityDataTypes.CUSTOM_DISPLAY);
         if (idPlusOne != null) {
             return PotionType.fromId(idPlusOne - 1);
         }
@@ -67,7 +67,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
 
     @Override
     public void setPotionType(PotionType potionType) {
-        setAndSendEntityData(EntityDataTypes.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
+        setData(EntityDataTypes.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
     }
 
     @Override

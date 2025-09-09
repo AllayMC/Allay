@@ -4,7 +4,6 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
 
 import java.util.function.Supplier;
 
@@ -18,10 +17,6 @@ public class PlayerOffhandContainer extends PlayerContainer {
     public PlayerOffhandContainer(Supplier<EntityPlayer> playerSupplier) {
         super(FullContainerType.OFFHAND, playerSupplier);
         addSlotChangeListener(0, this::onOffhandChange);
-    }
-
-    public void sendEquipmentPacketTo(EntityPlayer player) {
-        player.sendPacket(buildEquipmentPacket());
     }
 
     public ItemStack getOffhand() {
@@ -38,18 +33,7 @@ public class PlayerOffhandContainer extends PlayerContainer {
     }
 
     protected void onOffhandChange(ItemStack newItemStack) {
-        playerSupplier.get().sendPacketToViewers(buildEquipmentPacket());
-    }
-
-    protected MobEquipmentPacket buildEquipmentPacket() {
-        var pk = new MobEquipmentPacket();
-        pk.setRuntimeEntityId(playerSupplier.get().getRuntimeId());
-        pk.setContainerId(UnopenedContainerId.OFFHAND);
-        // Network slot index for offhand is 1
-        // See FullContainerType.OFFHAND
-        // And hotbar slot is unused
-        pk.setInventorySlot(1);
-        pk.setItem(getOffhand().toNetworkItemData());
-        return pk;
+        var player = playerSupplier.get();
+        player.forEachViewers(viewer -> viewer.viewEntityOffhand(player));
     }
 }

@@ -33,7 +33,7 @@ public class XpCommand extends VanillaCommand {
             for (EntityPlayer player : players) {
                 if (isLevel) {
                     for (int i = 1; i <= amount; i++) {
-                        player.addExperience(player.getRequireExperienceForCurrentLevel());
+                        player.addExperience(player.getRequiredExperienceForCurrentLevel());
                     }
                 } else {
                     player.addExperience(amount);

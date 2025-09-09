@@ -42,6 +42,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     // It is hard for us to calculate the exact breaking time when player keep jumping
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
+    protected static final float PLAYER_NETWORK_OFFSET = 1.62f;
 
     protected int breakingPosX = Integer.MAX_VALUE;
     protected int breakingPosY = Integer.MAX_VALUE;
@@ -302,7 +303,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
         if (baseComponent.isAwaitingTeleportACK()) {
-            var clientPos = MathUtils.CBVecToJOMLVec(packet.getPosition().sub(0, player.getNetworkOffset(), 0));
+            var clientPos = MathUtils.CBVecToJOMLVec(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();
             if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
                 // The player has moved before it received the teleport packet. Ignore this movement entirely and
@@ -320,7 +321,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         if (isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
             // The pos which client sends to the server is higher than the actual coordinates (one base offset)
-            handleMovement(player, packet.getPosition().sub(0, player.getNetworkOffset(), 0), packet.getRotation());
+            handleMovement(player, packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0), packet.getRotation());
         }
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
         if (isBreakingBlock()) {
@@ -345,7 +346,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected boolean isLocationChanged(EntityPlayer player, Vector3f pos, Vector3f rot) {
         // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
         var location = player.getLocation();
-        return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + player.getNetworkOffset(), pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
+        return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + PLAYER_NETWORK_OFFSET, pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
                Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0 || Double.compare(location.headYaw(), rot.getZ()) != 0;
     }
 

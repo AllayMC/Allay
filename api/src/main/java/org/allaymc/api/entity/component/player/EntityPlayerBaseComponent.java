@@ -11,7 +11,6 @@ import org.allaymc.api.player.data.AdventureSettings;
 import org.allaymc.api.player.storage.PlayerData;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -34,9 +33,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is sprinting, {@code false} otherwise.
      */
-    default boolean isSprinting() {
-        return getMetadata().get(EntityFlag.SPRINTING);
-    }
+    boolean isSprinting();
 
     /**
      * Set the player's sprinting state.
@@ -50,9 +47,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is sneaking, {@code false} otherwise.
      */
-    default boolean isSneaking() {
-        return getMetadata().get(EntityFlag.SNEAKING);
-    }
+    boolean isSneaking();
 
     /**
      * Set the player's sneaking state.
@@ -66,9 +61,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is swimming, {@code false} otherwise.
      */
-    default boolean isSwimming() {
-        return getMetadata().get(EntityFlag.SWIMMING);
-    }
+    boolean isSwimming();
 
     /**
      * Set the player's swimming state.
@@ -82,9 +75,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is gliding, {@code false} otherwise.
      */
-    default boolean isGliding() {
-        return getMetadata().get(EntityFlag.GLIDING);
-    }
+    boolean isGliding();
 
     /**
      * Set the player's gliding state.
@@ -98,9 +89,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is crawling, {@code false} otherwise.
      */
-    default boolean isCrawling() {
-        return getMetadata().get(EntityFlag.CRAWLING);
-    }
+    boolean isCrawling();
 
     /**
      * Set the player's crawling state.
@@ -175,53 +164,17 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     int getHandSlot();
 
-    default void setHandSlot(int handSlot) {
-        setHandSlot(handSlot, true);
-    }
-
     /**
      * Set the hand slot of the player.
      *
-     * @param handSlot   The hand slot of the player
-     * @param sendToSelf Whether the change should be sent to the self
+     * @param handSlot the hand slot of the player
      */
-    void setHandSlot(int handSlot, boolean sendToSelf);
-
-    /**
-     * Get the base offset of the player.
-     *
-     * @return The base offset of the player
-     */
-    @Override
-    default float getNetworkOffset() {
-        return 1.62f;
-    }
+    void setHandSlot(int handSlot);
 
     @Override
-    default boolean enableHeadYaw() {
+    default boolean isHeadYawEnabled() {
         return true;
     }
-
-    /**
-     * Get the display name of the player.
-     * <p>
-     * Display name is used in chat, damage message etc.
-     * Normally, it is equal to the origin name, however you can change the display name
-     * compared to the origin name.
-     * <p>
-     * This is very useful for plugin especially if plugin wants to change the appearance of player name in chat
-     * because origin name cannot be changed.
-     *
-     * @return The display name of the player
-     */
-    String getDisplayName();
-
-    /**
-     * Sets the display name of the player.
-     *
-     * @param displayName The display name of the player
-     */
-    void setDisplayName(String displayName);
 
     /**
      * Get the skin of the player.
@@ -242,6 +195,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return The game type of the player
      */
+    // TODO: replace with our custom game mode
     GameType getGameType();
 
     /**
@@ -386,40 +340,24 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSpawnPoint(Location3ic spawnPoint);
 
     /**
-     * Get the forms of the player.
+     * Get the forms send to the player that are waiting for response.
      *
-     * @return The forms of the player
+     * @return the forms send to the player that are waiting for response
      */
     @UnmodifiableView
     Map<Integer, Form> getForms();
 
     /**
-     * Get a form by its ID.
-     *
-     * @param id The ID of the form
-     * @return The form
-     */
-    Form getForm(int id);
-
-    /**
-     * Remove a form by its ID.
-     *
-     * @param id The ID of the form
-     * @return The removed form
-     */
-    Form removeForm(int id);
-
-    /**
      * Get the server setting form and its id.
      *
-     * @return The server setting form and its id
+     * @return the server setting form and its id
      */
     Pair<Integer, CustomForm> getServerSettingForm();
 
     /**
      * Set a server setting form to the player.
      *
-     * @param form The form to add
+     * @param form the form to add
      */
     void setServerSettingForm(CustomForm form);
 
@@ -431,7 +369,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Show a form to the player.
      *
-     * @param form The form to show
+     * @param form the form to show
      */
     void showForm(Form form);
 

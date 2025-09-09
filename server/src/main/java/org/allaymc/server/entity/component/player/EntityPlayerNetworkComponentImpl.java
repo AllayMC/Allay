@@ -190,35 +190,22 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT, player game type is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
-
-        var setEntityDataPacket = new SetEntityDataPacket();
-        setEntityDataPacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        setEntityDataPacket.getMetadata().putAll(thisPlayer.getMetadata().getEntityDataMap());
-        setEntityDataPacket.setTick(world.getTick());
-        sendPacket(setEntityDataPacket);
-
+        thisPlayer.viewEntityMetadata(thisPlayer);
         // Send other players' abilities data to this player
         Server.getInstance().getPlayerManager().getPlayers().values().forEach(other -> sendPacket(other.getAbilities().encodeUpdateAbilitiesPacket()));
-
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
-
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
         ((AllayPlayerManager) server.getPlayerManager()).addToPlayerList(thisPlayer);
         if (server.getPlayerManager().getPlayerCount() > 1) {
             ((AllayPlayerManager) server.getPlayerManager()).sendFullPlayerListInfoTo(thisPlayer);
         }
-
         thisPlayer.sendAttributesToClient();
-
         sendInventories();
-
         var playStatusPacket = new PlayStatusPacket();
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
-
         world.getWorldData().sendTimeOfDay(thisPlayer);
         ((AllayWorld) world).sendWeather(thisPlayer);
-
         // Save player data the first time it joins
         server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
     }

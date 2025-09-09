@@ -8,10 +8,9 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityStatus;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
-import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
@@ -46,6 +45,7 @@ import org.joml.primitives.AABBdc;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * @author daoge_cmd
@@ -60,9 +60,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     EntityType<? extends Entity> getEntityType();
 
     /**
-     * Gets the display name of this entity.
+     * Get the display name of the entity.
+     * <p>
+     * Display name is used in chat, damage message etc. Normally, it is equal to the origin name,
+     * however you can change the display name compared to the origin name. This is very useful for
+     * plugin especially if plugin wants to change the appearance of entity name in chat because
+     * origin name cannot be changed.
      *
-     * @return the display name of this entity
+     * @return The display name of the player
      */
     String getDisplayName();
 
@@ -79,7 +84,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return the name tag of this entity
      */
     default String getNameTag() {
-        return getMetadata().get(EntityDataTypes.NAME);
+        return getData(EntityDataTypes.NAME);
     }
 
     /**
@@ -88,14 +93,34 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param nameTag the name tag to set
      */
     default void setNameTag(String nameTag) {
-        setAndSendEntityData(EntityDataTypes.NAME, nameTag);
+        setData(EntityDataTypes.NAME, nameTag);
     }
 
     /**
      * Clears the name tag of this entity.
      */
     default void clearNameTag() {
-        setAndSendEntityData(EntityDataTypes.NAME, "");
+        setData(EntityDataTypes.NAME, "");
+    }
+
+    /**
+     * Checks whether this entity is visible to its viewers.
+     *
+     * @return whether this entity is visible to its viewers
+     */
+    default boolean isInvisible() {
+        return getFlag(EntityFlag.INVISIBLE);
+    }
+
+    /**
+     * Sets whether this entity is invisible to its viewers. When set to {@code true}, this
+     * entity will not be visible to its viewers, however the item in its hand/offhand, the
+     * armor it wears and the effect particle around this entity will still remain visible.
+     *
+     * @param visible whether the body of this entity is visible to its viewers
+     */
+    default void setInvisible(boolean visible) {
+        setFlag(EntityFlag.INVISIBLE, visible);
     }
 
     /**
@@ -271,42 +296,46 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     long getUniqueId();
 
     /**
-     * Get the metadata of this entity.
+     * Get the value of the entity data type passed.
      *
-     * @return the metadata of this entity
+     * @param dataType the entity data type to get
+     * @return the value of the entity data type passed, or {@code null} if this entity data type is never set
      */
-    Metadata getMetadata();
+    <T> T getData(EntityDataType<T> dataType);
 
     /**
-     * Send the entity metadata to the viewers.
-     */
-    void sendMetadata();
-
-    /**
-     * Set and send the entity data to the viewers.
+     * Check if the entity data type passed is set.
      *
-     * @param dataType the data type to set
-     * @param value    the value to set
-     * @param <T>      the type of the value
+     * @param dataType the entity data type to set
+     * @return {@code true} if the entity data type passed is set, otherwise {@code false}
      */
-    default <T> void setAndSendEntityData(EntityDataType<T> dataType, T value) {
-        getMetadata().set(dataType, value);
-        sendMetadata();
+    default boolean hasData(EntityDataType<?> dataType) {
+        return getData(dataType) == null;
     }
 
     /**
-     * Set and send the entity flag to the viewers.
+     * Set the value of the entity data type passed.
      *
-     * @param flag  the flag to set
-     * @param value the value to set
+     * @param dataType the entity data type to set
+     * @param value    the value of the entity data type passed
      */
-    default void setAndSendEntityFlag(EntityFlag flag, boolean value) {
-        if (value == getMetadata().get(flag)) {
-            return;
-        }
-        getMetadata().set(flag, value);
-        sendMetadata();
-    }
+    <T> void setData(EntityDataType<T> dataType, T value);
+
+    /**
+     * Get the value of the entity flag passed.
+     *
+     * @param flag the entity flag to get
+     * @return the value of the entity flag passed
+     */
+    boolean getFlag(EntityFlag flag);
+
+    /**
+     * Set the value of the entity flag passed.
+     *
+     * @param flag  the entity flag to set
+     * @param value the value of the entity flag passed
+     */
+    void setFlag(EntityFlag flag, boolean value);
 
     /**
      * Get the aabb of this entity.
@@ -338,7 +367,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity has entity collision.
      */
     default boolean hasEntityCollision() {
-        return getMetadata().get(EntityFlag.HAS_COLLISION);
+        return getFlag(EntityFlag.HAS_COLLISION);
     }
 
     /**
@@ -347,7 +376,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param hasEntityCollision {@code true} if the entity has collision, {@code false} otherwise
      */
     default void setHasEntityCollision(boolean hasEntityCollision) {
-        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
+        setFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
     }
 
     /**
@@ -394,6 +423,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     @UnmodifiableView
     Map<Long, EntityPlayer> getViewers();
+
+    /**
+     * Foreach the viewers of this entity.
+     *
+     * @param consumer the consumer to be called
+     */
+    default void forEachViewers(Consumer<EntityPlayer> consumer) {
+        getViewers().values().forEach(consumer);
+    }
 
     /**
      * Try to set this entity's location. This method is intended to be called by physics engine,
@@ -444,13 +482,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * {@code true} after this method is called.
      */
     void remove();
-
-    /**
-     * Create the spawn packet of this entity.
-     *
-     * @return the spawn packet of this entity
-     */
-    BedrockPacket createSpawnPacket();
 
     /**
      * Send a packet to the viewers of this entity.
@@ -547,20 +578,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return {@code true} if the entity has head yaw, otherwise {@code false}.
      */
-    default boolean enableHeadYaw() {
+    default boolean isHeadYawEnabled() {
         return false;
-    }
-
-    /**
-     * Get the network offset of this entity.
-     * <p>
-     * The network offset is the additional offset in y coordinate when sent over network.
-     * This is mostly the case for older entities such as players and TNT.
-     *
-     * @return the base offset of this entity
-     */
-    default float getNetworkOffset() {
-        return 0;
     }
 
     /**
@@ -636,12 +655,12 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Apply the entity event to the entity.
+     * Apply an event to the entity.
      *
-     * @param event the entity event to apply
+     * @param event the event to apply
      * @param data  the data of the entity event
      */
-    default void applyEntityEvent(EntityEventType event, int data) {
+    default void applyEvent(EntityEventType event, int data) {
         var pk = new EntityEventPacket();
         pk.setRuntimeEntityId(getRuntimeId());
         pk.setType(event);

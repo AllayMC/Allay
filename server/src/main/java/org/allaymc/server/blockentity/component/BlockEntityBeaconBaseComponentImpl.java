@@ -7,7 +7,7 @@ import org.allaymc.api.blockentity.component.BlockEntityBeaconBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
