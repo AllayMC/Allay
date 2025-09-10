@@ -1,10 +1,10 @@
 package org.allaymc.api.world.storage;
 
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;

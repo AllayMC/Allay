@@ -9,8 +9,8 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldSettings;
+import org.allaymc.api.world.data.DimensionInfo;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;

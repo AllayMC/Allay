@@ -5,13 +5,13 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -112,6 +112,6 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @Override
     public void setExperienceValue(int experienceValue) {
         this.experienceValue = experienceValue;
-        setData(EntityDataTypes.VALUE, experienceValue);
+        setData(EntityData.VALUE, experienceValue);
     }
 }

@@ -1,4 +1,4 @@
-package org.allaymc.api.world;
+package org.allaymc.api.world.data;
 
 import com.google.common.base.Preconditions;
 

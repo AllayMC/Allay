@@ -2,13 +2,13 @@ package org.allaymc.api.entity;
 
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.ServerSettings;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.joml.Vector3dc;
 
 import java.util.UUID;
@@ -101,7 +101,7 @@ public interface EntityViewer {
      * @param event  the event that is happening
      * @param data   the data of this event
      */
-    void viewEntityEvent(Entity entity, EntityEventType event, int data);
+    void viewEntityEvent(Entity entity, EntityEvent event, int data);
 
     /**
      * Views an action that is happening on the entity passed.
@@ -110,7 +110,7 @@ public interface EntityViewer {
      * @param action     the action that is happening
      * @param rowingTime the rowing time of the action
      */
-    void viewEntityAction(Entity entity, AnimatePacket.Action action, double rowingTime);
+    void viewEntityAction(Entity entity, AnimateAction action, double rowingTime);
 
     /**
      * Views an emote being performed by a player.

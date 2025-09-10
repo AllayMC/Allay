@@ -1,7 +1,7 @@
 package org.allaymc.server;
 
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;

@@ -15,7 +15,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.network.processor.impl.login.SetLocalPlayerAsInitializedPacketProcessor;
 import org.allaymc.server.world.light.AllayLightEngine;

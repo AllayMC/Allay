@@ -1,11 +1,14 @@
 package org.allaymc.server.entity.component.player;
 
+import com.google.common.collect.BiMap;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerEntityViewerComponent;
+import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -21,11 +24,11 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.utils.ReflectionUtils;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.EmoteFlag;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3dc;
@@ -48,6 +51,8 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
      * y coordinate when sent over network.This is mostly the case for older entities such as player and TNT.
      */
     protected static final Map<EntityType<?>, Float> NETWORK_OFFSETS;
+    protected static final BiMap<EntityEvent, org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType> EVENT_TYPE_MAP;
+    protected static final BiMap<AnimateAction, AnimatePacket.Action> ANIMATE_ACTION_MAP;
 
     static {
         NETWORK_OFFSETS = new HashMap<>();
@@ -55,6 +60,9 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
         NETWORK_OFFSETS.put(EntityTypes.FALLING_BLOCK, 0.49f);
         NETWORK_OFFSETS.put(EntityTypes.ITEM, 0.125f);
         NETWORK_OFFSETS.put(EntityTypes.TNT, 0.49f);
+
+        EVENT_TYPE_MAP = ReflectionUtils.mapStaticFields(EntityEvent.class, org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType.class);
+        ANIMATE_ACTION_MAP = ReflectionUtils.mapStaticFields(AnimateAction.class, AnimatePacket.Action.class);
     }
 
     @ComponentObject
@@ -292,19 +300,19 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
     }
 
     @Override
-    public void viewEntityEvent(Entity entity, EntityEventType event, int data) {
+    public void viewEntityEvent(Entity entity, EntityEvent event, int data) {
         var packet = new EntityEventPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setType(event);
+        packet.setType(EVENT_TYPE_MAP.get(event));
         packet.setData(data);
         this.networkComponent.sendPacket(packet);
     }
 
     @Override
-    public void viewEntityAction(Entity entity, AnimatePacket.Action action, double rowingTime) {
+    public void viewEntityAction(Entity entity, AnimateAction action, double rowingTime) {
         var packet = new AnimatePacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setAction(action);
+        packet.setAction(ANIMATE_ACTION_MAP.get(action));
         packet.setRowingTime((float) rowingTime);
         this.networkComponent.sendPacket(packet);
     }
@@ -339,6 +347,6 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
     }
 
     protected EntityDataMap getMetadata(Entity entity) {
-        return ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).getMetadata();
+        return ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).getMetadata().getNetworkMetadata();
     }
 }

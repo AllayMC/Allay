@@ -14,6 +14,10 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityEvent;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityArrow;
@@ -63,9 +67,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jctools.maps.NonBlockingHashMap;
@@ -194,7 +195,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void initMetadata() {
         super.initMetadata();
         // Player name is always shown
-        setData(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
+        setData(EntityData.NAMETAG_ALWAYS_SHOW, (byte) 1);
     }
 
     @Override
@@ -826,25 +827,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void applyEvent(EntityEventType event, int data) {
-        var packet = new EntityEventPacket();
-        packet.setRuntimeEntityId(getRuntimeId());
-        packet.setType(event);
-        packet.setData(data);
-        sendPacketToViewers(packet);
-        // Player should also send the packet to itself
-        networkComponent.sendPacket(packet);
+    public void applyEvent(EntityEvent event, int data) {
+        super.applyEvent(event, data);
+        forEachViewers(viewer -> viewer.viewEntityEvent(thisEntity, event, data));
+        thisPlayer.viewEntityEvent(thisPlayer, event, data);
     }
 
     @Override
-    public void applyAction(AnimatePacket.Action action, double rowingTime) {
-        var packet = new AnimatePacket();
-        packet.setRuntimeEntityId(getRuntimeId());
-        packet.setAction(action);
-        packet.setRowingTime((float) rowingTime);
-        sendPacketToViewers(packet);
-        // Player should also send the packet to itself
-        networkComponent.sendPacket(packet);
+    public void applyAction(AnimateAction action, double rowingTime) {
+        super.applyAction(action, rowingTime);
+        thisPlayer.viewEntityAction(thisPlayer, action, rowingTime);
     }
 
     @Override

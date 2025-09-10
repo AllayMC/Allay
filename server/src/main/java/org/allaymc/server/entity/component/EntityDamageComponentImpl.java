@@ -9,6 +9,9 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityEvent;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
@@ -22,9 +25,6 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.joml.Vector3d;
 
 /**
@@ -70,9 +70,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyDamage(DamageContainer damage) {
         this.attributeComponent.setHealth(this.attributeComponent.getHealth() - damage.getFinalDamage());
-        thisEntity.applyEvent(EntityEventType.HURT, 2);
+        thisEntity.applyEvent(EntityEvent.HURT, 2);
         if (damage.isCritical()) {
-            thisEntity.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+            thisEntity.applyAction(AnimateAction.CRITICAL_HIT);
         }
         this.manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 

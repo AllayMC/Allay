@@ -1,6 +1,7 @@
 package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.entity.component.player.EntityPlayerScoreboardViewerComponent;
+import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
@@ -15,8 +16,6 @@ import org.cloudburstmc.protocol.bedrock.packet.SetDisplayObjectivePacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetScorePacket;
 
 import java.util.Objects;
-
-import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCORE;
 
 /**
  * @author daoge_cmd
@@ -57,7 +56,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         var scorer = new PlayerScorer(thisPlayer);
         var line = scoreboard.getLine(scorer);
         if (slot == DisplaySlot.BELOW_NAME && line != null) {
-            thisPlayer.setData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
+            thisPlayer.setData(EntityData.SCORE, line.getScore() + " " + scoreboard.getDisplayName());
         }
     }
 
@@ -72,7 +71,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         networkComponent.sendPacket(packet);
 
         if (slot == DisplaySlot.BELOW_NAME) {
-            thisPlayer.setData(SCORE, "");
+            thisPlayer.setData(EntityData.SCORE, "");
         }
     }
 
@@ -95,7 +94,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisPlayer)) {
-            thisPlayer.setData(SCORE, "");
+            thisPlayer.setData(EntityData.SCORE, "");
         }
     }
 
@@ -110,7 +109,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
-            thisPlayer.setData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
+            thisPlayer.setData(EntityData.SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
         }
     }
 

@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,10 @@ import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
+import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityEvent;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -36,19 +41,18 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.entity.Metadata;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
-import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.data.entity.*;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3f;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -68,8 +72,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
-    // This tag is also used in EntityPlayerNetworkComponentImpl, so make it public for reuse
-    public static final String TAG_POS = "Pos";
+    protected static final String TAG_POS = "Pos";
     protected static final String TAG_IDENTIFIER = "identifier";
     protected static final String TAG_ROTATION = "Rotation";
     protected static final String TAG_TAGS = "Tags";
@@ -90,7 +93,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected final long runtimeId;
     @Getter
-    protected final EntityDataMap metadata;
+    protected final Metadata metadata;
     @Getter
     protected PermissionGroup permissionGroup;
     // Will be reset in method loadUniqueId()
@@ -122,7 +125,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.lastLocation = new Location3d(this.location);
         this.locationLastSent = new Location3d(this.location);
         this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
-        this.metadata = new EntityDataMap();
+        this.metadata = new Metadata();
         this.entityType = info.getEntityType();
         this.viewers = new Long2ObjectOpenHashMap<>();
         this.effects = new HashMap<>();
@@ -141,7 +144,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void initMetadata() {
         this.manager.callEvent(CEntityInitMetadataEvent.INSTANCE);
-        setData(EntityDataTypes.PLAYER_INDEX, 0);
+        setData(EntityData.PLAYER_INDEX, 0);
         setFlag(EntityFlag.HAS_GRAVITY, true);
         setFlag(EntityFlag.HAS_COLLISION, true);
         setFlag(EntityFlag.CAN_CLIMB, true);
@@ -174,11 +177,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void updateHitBoxAndCollisionBoxMetadata() {
         var aabb = getAABB();
-        setData(EntityDataTypes.HITBOX, buildAABBTag());
-        setData(EntityDataTypes.COLLISION_BOX, Vector3f.from(
-                aabb.maxX() - aabb.minX(),
-                aabb.maxY() - aabb.minY(),
-                aabb.maxZ() - aabb.minZ()
+        setData(EntityData.HITBOX, buildAABBTag());
+        setData(EntityData.COLLISION_BOX, new Vector3f(
+                (float) (aabb.maxX() - aabb.minX()),
+                (float) (aabb.maxY() - aabb.minY()),
+                (float) (aabb.maxZ() - aabb.minZ())
         ));
     }
 
@@ -272,7 +275,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             deadTimer = DEFAULT_DEAD_TIMER;
         }
 
-        applyEvent(EntityEventType.DEATH, 0);
+        applyEvent(EntityEvent.DEATH, 0);
         effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         removeAllEffects();
     }
@@ -621,7 +624,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
         }
 
-        setData(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);
+        setData(EntityData.VISIBLE_MOB_EFFECTS, visibleEffects);
     }
 
     @Override
@@ -697,27 +700,28 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public <T> T getData(EntityDataType<T> dataType) {
+    public <T> T getData(EntityData<T> dataType) {
         return this.metadata.get(dataType);
     }
 
     @Override
-    public <T> void setData(EntityDataType<T> dataType, T value) {
+    public <T> void setData(EntityData<T> dataType, T value) {
+        Preconditions.checkArgument(dataType.type().isInstance(value));
         if (this.metadata.get(dataType) != value) {
-            this.metadata.put(dataType, value);
+            this.metadata.set(dataType, value);
             sendMetadata();
         }
     }
 
     @Override
     public boolean getFlag(EntityFlag flag) {
-        return this.metadata.getOrCreateFlags().contains(flag);
+        return this.metadata.get(flag);
     }
 
     @Override
     public void setFlag(EntityFlag flag, boolean value) {
-        if (this.metadata.getOrCreateFlags().contains(flag) != value) {
-            this.metadata.setFlag(flag, value);
+        if (this.metadata.get(flag) != value) {
+            this.metadata.set(flag, value);
             sendMetadata();
         }
     }
@@ -727,12 +731,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void applyAction(AnimatePacket.Action action, double rowingTime) {
+    public void applyAction(AnimateAction action, double rowingTime) {
         forEachViewers(viewer -> viewer.viewEntityAction(thisEntity, action, rowingTime));
     }
 
     @Override
-    public void applyEvent(EntityEventType event, int data) {
+    public void applyEvent(EntityEvent event, int data) {
         forEachViewers(viewer -> viewer.viewEntityEvent(thisEntity, event, data));
     }
 }

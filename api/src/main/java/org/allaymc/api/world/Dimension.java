@@ -25,6 +25,7 @@ import org.allaymc.api.utils.function.TriFunction;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.OperationType;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.api.world.manager.BlockUpdateManager;
 import org.allaymc.api.world.manager.ChunkManager;

@@ -6,6 +6,10 @@ import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityStatus;
+import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityEvent;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
@@ -28,11 +32,6 @@ import org.allaymc.api.world.manager.EntityManager;
 import org.allaymc.api.world.physics.HasAABB;
 import org.allaymc.api.world.physics.HasLongId;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -83,7 +82,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return the name tag of this entity
      */
     default String getNameTag() {
-        return getData(EntityDataTypes.NAME);
+        return getData(EntityData.NAME);
     }
 
     /**
@@ -92,14 +91,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param nameTag the name tag to set
      */
     default void setNameTag(String nameTag) {
-        setData(EntityDataTypes.NAME, nameTag);
+        setData(EntityData.NAME, nameTag);
     }
 
     /**
      * Clears the name tag of this entity.
      */
     default void clearNameTag() {
-        setData(EntityDataTypes.NAME, "");
+        setData(EntityData.NAME, "");
     }
 
     /**
@@ -300,7 +299,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param dataType the entity data type to get
      * @return the value of the entity data type passed, or {@code null} if this entity data type is never set
      */
-    <T> T getData(EntityDataType<T> dataType);
+    <T> T getData(EntityData<T> dataType);
 
     /**
      * Check if the entity data type passed is set.
@@ -308,7 +307,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param dataType the entity data type to set
      * @return {@code true} if the entity data type passed is set, otherwise {@code false}
      */
-    default boolean hasData(EntityDataType<?> dataType) {
+    default boolean hasData(EntityData<?> dataType) {
         return getData(dataType) == null;
     }
 
@@ -317,8 +316,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param dataType the entity data type to set
      * @param value    the value of the entity data type passed
+     * @throws IllegalArgumentException if value type is not the same to the type defined in {@link EntityData}
      */
-    <T> void setData(EntityDataType<T> dataType, T value);
+    <T> void setData(EntityData<T> dataType, T value);
 
     /**
      * Get the value of the entity flag passed.
@@ -659,14 +659,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param event the event to apply
      * @param data  the data of the entity event
      */
-    void applyEvent(EntityEventType event, int data);
+    void applyEvent(EntityEvent event, int data);
 
     /**
      * Apply an action to the entity.
      *
      * @param action the action to apply
      */
-    default void applyAction(AnimatePacket.Action action) {
+    default void applyAction(AnimateAction action) {
         applyAction(action, 0);
     }
 
@@ -676,7 +676,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param action     the action of the action
      * @param rowingTime the rowing time of the action
      */
-    void applyAction(AnimatePacket.Action action, double rowingTime);
+    void applyAction(AnimateAction action, double rowingTime);
 
     /**
      * Add a tag to the entity.

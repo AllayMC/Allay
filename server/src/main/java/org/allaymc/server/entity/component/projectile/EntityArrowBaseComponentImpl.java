@@ -3,11 +3,11 @@ package org.allaymc.server.entity.component.projectile;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.item.data.PotionType;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -57,7 +57,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
 
     @Override
     public PotionType getPotionType() {
-        var idPlusOne = getData(EntityDataTypes.CUSTOM_DISPLAY);
+        var idPlusOne = getData(EntityData.CUSTOM_DISPLAY);
         if (idPlusOne != null) {
             return PotionType.fromId(idPlusOne - 1);
         }
@@ -67,7 +67,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
 
     @Override
     public void setPotionType(PotionType potionType) {
-        setData(EntityDataTypes.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
+        setData(EntityData.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
     }
 
     @Override

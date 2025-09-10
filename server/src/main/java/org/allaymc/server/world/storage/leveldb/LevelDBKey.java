@@ -1,7 +1,7 @@
 package org.allaymc.server.world.storage.leveldb;
 
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.ChunkState;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.utils.Utils;
 import org.jetbrains.annotations.Range;
 

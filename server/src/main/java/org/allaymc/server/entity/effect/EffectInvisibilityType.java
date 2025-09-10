@@ -1,10 +1,10 @@
 package org.allaymc.server.entity.effect;
 
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
 import java.awt.*;
 

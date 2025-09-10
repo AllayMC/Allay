@@ -3,14 +3,14 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.component.EntityTntBaseComponent;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
 import org.allaymc.api.world.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -33,7 +33,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     protected void initMetadata() {
         super.initMetadata();
         setFlag(EntityFlag.IGNITED, true);
-        setData(EntityDataTypes.FUSE_TIME, fuse);
+        setData(EntityData.FUSE_TIME, fuse);
         getDimension().addLevelEvent(location, LevelEvent.SOUND_FUSE);
     }
 
@@ -62,7 +62,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
             fuse--;
             if (fuse % 5 == 0) {
                 // Reduce the number of packets sent to the client
-                setData(EntityDataTypes.FUSE_TIME, fuse);
+                setData(EntityData.FUSE_TIME, fuse);
             }
         }
     }
