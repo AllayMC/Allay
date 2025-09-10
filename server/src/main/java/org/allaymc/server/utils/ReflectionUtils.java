@@ -71,8 +71,7 @@ public class ReflectionUtils {
 
         for (var field : classA.getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers()) &&
-                Modifier.isPublic(field.getModifiers()) &&
-                classA.isAssignableFrom(field.getType())) {
+                Modifier.isPublic(field.getModifiers())) {
                 field.setAccessible(true);
                 try {
                     @SuppressWarnings("unchecked")
@@ -89,8 +88,7 @@ public class ReflectionUtils {
 
         for (var field : classB.getDeclaredFields()) {
             if (Modifier.isStatic(field.getModifiers()) &&
-                Modifier.isPublic(field.getModifiers()) &&
-                classB.isAssignableFrom(field.getType())) {
+                Modifier.isPublic(field.getModifiers())) {
                 field.setAccessible(true);
                 try {
                     @SuppressWarnings("unchecked")

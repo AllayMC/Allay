@@ -7,11 +7,11 @@ import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.utils.ReflectionUtils;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.Objects;
@@ -23,7 +23,7 @@ public final class Metadata {
     private static final BiMap<EntityFlag, org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag> FLAG_MAP =
             ReflectionUtils.mapStaticFields(EntityFlag.class, org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag.class);
     private static final BiMap<EntityData<?>, org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType<?>> DATA_MAP =
-            ReflectionUtils.mapStaticFields(EntityData.class, org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType.class);
+            ReflectionUtils.mapStaticFields(EntityData.class, org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.class);
 
     @Getter
     private final EntityDataMap networkMetadata;
@@ -45,28 +45,29 @@ public final class Metadata {
         this.networkMetadata.setFlag(Objects.requireNonNull(FLAG_MAP.get(flag)), value);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> void set(EntityData<T> type, T data) {
         this.networkMetadata.put(Objects.requireNonNull(DATA_MAP.get(type)), toNetwork(data));
     }
 
     private Object fromNetwork(Object data) {
         return switch (data) {
-            case Vector3f v -> new org.joml.Vector3f(v.getX(), v.getY(), v.getZ());
-            case Vector3i v -> new org.joml.Vector3i(v.getX(), v.getY(), v.getZ());
+            case null -> null;
+            case org.cloudburstmc.math.vector.Vector3f v -> new Vector3f(v.getX(), v.getY(), v.getZ());
+            case org.cloudburstmc.math.vector.Vector3i v -> new Vector3i(v.getX(), v.getY(), v.getZ());
             case BlockDefinition b -> Registries.BLOCK_STATE_PALETTE.get(b.getRuntimeId());
             // TODO: particle type
-            default -> throw new IllegalArgumentException();
+            default -> data;
         };
     }
 
     private Object toNetwork(Object data) {
         return switch (data) {
-            case Vector3fc v -> Vector3f.from(v.x(), v.y(), v.z());
-            case Vector3ic v -> Vector3i.from(v.x(), v.y(), v.z());
+            case null -> null;
+            case Vector3fc v -> org.cloudburstmc.math.vector.Vector3f.from(v.x(), v.y(), v.z());
+            case Vector3ic v -> org.cloudburstmc.math.vector.Vector3i.from(v.x(), v.y(), v.z());
             case BlockState b -> (BlockDefinition) b::blockStateHash;
             // TODO: particle type
-            default -> throw new IllegalArgumentException();
+            default -> data;
         };
     }
 }
