@@ -164,7 +164,7 @@ public class AllayWorld implements World {
                 }
                 // The player may have been disconnected,
                 // which is possible because this is a synced packet
-                if (!entry.player.getClientStatus().canHandlePackets()) {
+                if (!entry.player.getClientState().canHandlePackets()) {
                     continue;
                 }
 

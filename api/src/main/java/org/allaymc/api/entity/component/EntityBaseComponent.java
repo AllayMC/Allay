@@ -5,7 +5,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityStatus;
+import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.data.AnimateAction;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityEvent;
@@ -163,11 +163,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the status of the entity.
+     * Get the state of the entity.
      *
-     * @return the status of the entity
+     * @return the state of the entity
      */
-    EntityStatus getStatus();
+    EntityState getState();
 
     /**
      * Check if the entity will be spawned in the next tick.
@@ -175,7 +175,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity will be spawned in the next tick.
      */
     default boolean willBeSpawnedNextTick() {
-        return getStatus() == EntityStatus.SPAWNED_NEXT_TICK;
+        return getState() == EntityState.SPAWNED_NEXT_TICK;
     }
 
     /**
@@ -184,7 +184,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity will be despawned in the next tick.
      */
     default boolean willBeDespawnedNextTick() {
-        return getStatus() == EntityStatus.DESPAWNED_NEXT_TICK;
+        return getState() == EntityState.DESPAWNED_NEXT_TICK;
     }
 
     /**
@@ -193,7 +193,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity is dead.
      */
     default boolean isDead() {
-        return getStatus() == EntityStatus.DEAD;
+        return getState() == EntityState.DEAD;
     }
 
     /**
@@ -202,7 +202,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity is spawned.
      */
     default boolean isSpawned() {
-        return getStatus().isSpawned();
+        return getState().isSpawned();
     }
 
     /**
@@ -211,7 +211,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity is alive.
      */
     default boolean isAlive() {
-        return getStatus() == EntityStatus.ALIVE;
+        return getState() == EntityState.ALIVE;
     }
 
     /**

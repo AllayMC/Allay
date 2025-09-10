@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityStatus;
+import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
@@ -110,7 +110,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected Map<Long, EntityPlayer> viewers;
     protected Map<EffectType, EffectInstance> effects;
     @Getter
-    protected EntityStatus status;
+    protected EntityState state;
     protected int deadTimer;
     @Getter
     @Setter
@@ -129,7 +129,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.entityType = info.getEntityType();
         this.viewers = new Long2ObjectOpenHashMap<>();
         this.effects = new HashMap<>();
-        this.status = EntityStatus.DESPAWNED;
+        this.state = EntityState.DESPAWNED;
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
         setDisplayName(entityType.getIdentifier().toString());
@@ -270,7 +270,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         new EntityDieEvent(thisEntity).call();
 
         manager.callEvent(CEntityDieEvent.INSTANCE);
-        setStatus(EntityStatus.DEAD);
+        setState(EntityState.DEAD);
         if (hasDeadTimer()) {
             deadTimer = DEFAULT_DEAD_TIMER;
         }
@@ -324,13 +324,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         getDimension().getEntityManager().removeEntity(thisEntity);
     }
 
-    public synchronized boolean setStatus(EntityStatus status) {
-        if (!status.getPreviousStatuses().isEmpty() && !status.getPreviousStatuses().contains(this.status)) {
-            log.warn("Trying to set status of entity {} to {} but the current status is {}", thisEntity, status, this.status);
+    public synchronized boolean setState(EntityState status) {
+        if (!status.getPreviousStates().isEmpty() && !status.getPreviousStates().contains(this.state)) {
+            log.warn("Trying to set status of entity {} to {} but the current status is {}", thisEntity, status, this.state);
             return false;
         }
 
-        this.status = status;
+        this.state = status;
         return true;
     }
 
@@ -344,7 +344,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected boolean canBeSpawnedIgnoreLocation() {
-        return status == EntityStatus.DESPAWNED;
+        return state == EntityState.DESPAWNED;
     }
 
     protected void setLocation(Location3dc newLoc) {

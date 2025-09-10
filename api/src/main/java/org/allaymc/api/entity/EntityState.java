@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Represents the status of an entity.
+ * Represents the state of an entity.
  *
  * @author daoge_cmd
  */
-public enum EntityStatus {
+public enum EntityState {
     /**
      * The entity is despawned.
      */
@@ -36,14 +36,14 @@ public enum EntityStatus {
     @Getter
     private final boolean spawned;
     /**
-     * The possible previous statuses of the entity. Can be {@code null} if previous status is not exist.
+     * The possible previous statuses of the entity. Can be {@code null} if previous state is not exist.
      */
     @Getter
-    private final Set<EntityStatus> previousStatuses;
+    private final Set<EntityState> previousStates;
 
-    EntityStatus(boolean spawned, EntityStatus... previousStatuses) {
+    EntityState(boolean spawned, EntityState... previousStates) {
         this.spawned = spawned;
-        this.previousStatuses = new HashSet<>();
-        this.previousStatuses.addAll(Arrays.asList(previousStatuses));
+        this.previousStates = new HashSet<>();
+        this.previousStates.addAll(Arrays.asList(previousStates));
     }
 }

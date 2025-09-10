@@ -17,6 +17,9 @@ import org.joml.Vector3ic;
 import java.util.Objects;
 
 /**
+ * Metadata is a wrapper around the {@link EntityDataMap} in protocol library to allow us using {@link EntityData} and
+ * {@link EntityFlag} in allay api.
+ *
  * @author daoge_cmd
  */
 public final class Metadata {
@@ -46,11 +49,17 @@ public final class Metadata {
     }
 
     public <T> void set(EntityData<T> type, T data) {
-        this.networkMetadata.put(Objects.requireNonNull(DATA_MAP.get(type)), toNetwork(data));
+        var networkType = Objects.requireNonNull(DATA_MAP.get(type));
+        if (data != null) {
+            this.networkMetadata.put(networkType, toNetwork(data));
+        } else {
+            this.networkMetadata.remove(networkType);
+        }
     }
 
     private Object fromNetwork(Object data) {
         return switch (data) {
+            // Null value is possible here
             case null -> null;
             case org.cloudburstmc.math.vector.Vector3f v -> new Vector3f(v.getX(), v.getY(), v.getZ());
             case org.cloudburstmc.math.vector.Vector3i v -> new Vector3i(v.getX(), v.getY(), v.getZ());
@@ -62,7 +71,6 @@ public final class Metadata {
 
     private Object toNetwork(Object data) {
         return switch (data) {
-            case null -> null;
             case Vector3fc v -> org.cloudburstmc.math.vector.Vector3f.from(v.x(), v.y(), v.z());
             case Vector3ic v -> org.cloudburstmc.math.vector.Vector3i.from(v.x(), v.y(), v.z());
             case BlockState b -> (BlockDefinition) b::blockStateHash;

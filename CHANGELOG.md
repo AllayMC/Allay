@@ -76,6 +76,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed class `ApiInstanceHolder` to `APIInstanceHolder`.
 - (API) Made classes `APINotImplementedException`, `MissingImplementationException`, `MissingRequirementException` and `APIInstanceHolder` as the private subclasses of `AllayAPI`.
 - (API) Moved class `NPCCommandSender` from api module to server module.
+- (API) Moved class `ClientStatus` from package `network` to package `player` and renamed it to `ClientState`.
+- (API) Renamed class `EntityStatus` to `EntityState`.
 
 ### Fixed
 

@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-// TODO: move it to server
+// TODO: move it from api to server
 @UtilityClass
 public final class ProtocolInfo {
 

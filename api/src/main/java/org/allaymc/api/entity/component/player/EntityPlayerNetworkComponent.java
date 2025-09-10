@@ -3,8 +3,8 @@ package org.allaymc.api.entity.component.player;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.PacketReceiver;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.LoginData;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
@@ -48,18 +48,18 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     void disconnect(@MayContainTrKey String reason);
 
     /**
-     * Get the client status of this player.
+     * Get the client state of this player.
      *
-     * @return the client status of this player
+     * @return the client state of this player
      */
-    ClientStatus getClientStatus();
+    ClientState getClientState();
 
     /**
-     * Get the last client status of this player.
+     * Get the last client state of this player.
      *
-     * @return the last client status of this player
+     * @return the last client state of this player
      */
-    ClientStatus getLastClientStatus();
+    ClientState getLastClientState();
 
     /**
      * Check if the player is connected.
@@ -67,7 +67,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return {@code true} if the player is connected, {@code false} otherwise.
      */
     default boolean isConnected() {
-        return getClientStatus().ordinal() >= ClientStatus.CONNECTED.ordinal();
+        return getClientState().ordinal() >= ClientState.CONNECTED.ordinal();
     }
 
     /**
@@ -76,7 +76,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return {@code true} if the player is logged in, {@code false} otherwise.
      */
     default boolean isLoggedIn() {
-        return getClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal();
+        return getClientState().ordinal() >= ClientState.LOGGED_IN.ordinal();
     }
 
     /**
@@ -87,7 +87,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return {@code true} if the player has been fully initialized, {@code false} otherwise.
      */
     default boolean isInitialized() {
-        return getClientStatus().ordinal() >= ClientStatus.IN_GAME.ordinal();
+        return getClientState().ordinal() >= ClientState.IN_GAME.ordinal();
     }
 
     /**
@@ -96,7 +96,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return {@code true} if the player is disconnected, {@code false} otherwise.
      */
     default boolean isDisconnected() {
-        return getClientStatus() == ClientStatus.DISCONNECTED;
+        return getClientState() == ClientState.DISCONNECTED;
     }
 
     /**

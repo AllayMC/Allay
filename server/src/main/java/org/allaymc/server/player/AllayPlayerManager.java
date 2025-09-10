@@ -12,7 +12,7 @@ import org.allaymc.api.eventbus.event.player.PlayerUnbanEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.network.ClientStatus;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.BanInfo;
@@ -243,7 +243,7 @@ public class AllayPlayerManager implements PlayerManager {
         Server.getInstance().sendTr(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
         // At this time the client have disconnected
-        if (player.getLastClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal()) {
+        if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
             Server.getInstance().broadcastTr(event.getQuitMessage(), player.getOriginName());

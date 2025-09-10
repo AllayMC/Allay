@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.network.ClientStatus;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -93,7 +93,7 @@ public class AllayDimension implements Dimension {
         this.players.add(player);
         this.chunkManager.addChunkLoader(player);
         this.entityManager.addEntity(player, runnable);
-        if (player.getClientStatus() == ClientStatus.IN_GAME) {
+        if (player.getClientState() == ClientState.IN_GAME) {
             // Only send debug shapes to the players when they are in-game. This
             // solves the issue that debug shapes won't be displayed if the player
             // haven't fully joined. When the player join, the debug shapes will be

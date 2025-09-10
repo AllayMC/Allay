@@ -752,7 +752,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public boolean isLoaderActive() {
-        return status.isSpawned();
+        return state.isSpawned();
     }
 
     @Override

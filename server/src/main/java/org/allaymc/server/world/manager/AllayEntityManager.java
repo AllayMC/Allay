@@ -4,7 +4,7 @@ import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityStatus;
+import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
 import org.allaymc.api.server.Server;
@@ -170,7 +170,7 @@ public class AllayEntityManager implements EntityManager {
             return;
         }
 
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.SPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.SPAWNED_NEXT_TICK)) {
             queue.add(() -> {
                 addEntityImmediately(entity);
                 callback.run();
@@ -191,12 +191,12 @@ public class AllayEntityManager implements EntityManager {
         if (chunk != null) {
             entity.spawnTo(chunk.getPlayerChunkLoaders());
         }
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.ALIVE);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.ALIVE);
     }
 
     @Override
     public void removeEntity(Entity entity, Runnable callback) {
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.DESPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED_NEXT_TICK)) {
             queue.add(() -> {
                 removeEntityImmediately(entity);
                 callback.run();
@@ -211,7 +211,7 @@ public class AllayEntityManager implements EntityManager {
         physicsService.removeEntity(entity);
         entity.despawnFromAll();
 
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.DESPAWNED);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED);
     }
 
     @Override

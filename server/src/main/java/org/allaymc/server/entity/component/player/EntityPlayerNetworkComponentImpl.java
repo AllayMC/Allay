@@ -14,8 +14,8 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.registry.Registries;
@@ -98,25 +98,25 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
         var processor = packetProcessorHolder.getProcessor(packet);
         if (processor == null) {
-            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientStatus());
+            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
             return;
         }
         processor.handleSync(thisPlayer, packet, receiveTime);
     }
 
-    public void setClientStatus(ClientStatus status) {
-        this.packetProcessorHolder.setClientStatus(status);
+    public void setClientStatus(ClientState status) {
+        this.packetProcessorHolder.setClientState(status);
     }
 
     public void setClientSession(BedrockServerSession session) {
         this.clientSession = session;
-        this.packetProcessorHolder.setClientStatus(ClientStatus.CONNECTED);
+        this.packetProcessorHolder.setClientState(ClientState.CONNECTED);
 
         var maxLoginTime = Server.SETTINGS.networkSettings().maxLoginTime();
         if (maxLoginTime > 0) {
             Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
-                var status = getClientStatus();
-                if (status != ClientStatus.DISCONNECTED && status.ordinal() < ClientStatus.IN_GAME.ordinal()) {
+                var status = getClientState();
+                if (status != ClientState.DISCONNECTED && status.ordinal() < ClientState.IN_GAME.ordinal()) {
                     log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress(), maxLoginTime / 20d);
                     disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);
                 }
@@ -127,7 +127,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
-                if (!getClientStatus().canHandlePackets()) {
+                if (!getClientState().canHandlePackets()) {
                     return PacketSignal.HANDLED;
                 }
 
@@ -140,7 +140,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
                 var processor = packetProcessorHolder.getProcessor(packet);
                 if (processor == null) {
-                    log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientStatus());
+                    log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
                     return PacketSignal.HANDLED;
                 }
 
@@ -169,7 +169,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                if (!packetProcessorHolder.setClientStatus(ClientStatus.DISCONNECTED, false)) {
+                if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED, false)) {
                     // Failed to set disconnected field from false to true
                     // Which means the client may be disconnected by server
                     // by calling EntityPlayerNetworkComponentImpl::disconnect() method
@@ -217,7 +217,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void sendPacket(BedrockPacket packet) {
-        if (!getClientStatus().canHandlePackets()) {
+        if (!getClientState().canHandlePackets()) {
             return;
         }
 
@@ -231,7 +231,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
-        if (!getClientStatus().canHandlePackets()) {
+        if (!getClientState().canHandlePackets()) {
             return;
         }
 
@@ -245,7 +245,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void disconnect(@MayContainTrKey String reason) {
-        if (!packetProcessorHolder.setClientStatus(ClientStatus.DISCONNECTED)) {
+        if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED)) {
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
@@ -263,13 +263,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
-    public ClientStatus getClientStatus() {
-        return packetProcessorHolder.getClientStatus();
+    public ClientState getClientState() {
+        return packetProcessorHolder.getClientState();
     }
 
     @Override
-    public ClientStatus getLastClientStatus() {
-        return packetProcessorHolder.getLastClientStatus();
+    public ClientState getLastClientState() {
+        return packetProcessorHolder.getLastClientState();
     }
 
     protected void onDisconnect(String disconnectReason) {
@@ -409,7 +409,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return;
         }
 
-        this.packetProcessorHolder.setClientStatus(ClientStatus.LOGGED_IN);
+        this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
 
         var playStatusPacket = new PlayStatusPacket();
         playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
