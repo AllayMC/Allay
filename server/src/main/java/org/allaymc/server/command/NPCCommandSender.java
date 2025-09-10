@@ -1,6 +1,7 @@
-package org.allaymc.api.command;
+package org.allaymc.server.command;
 
 import lombok.Getter;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityNpc;
 import org.allaymc.api.entity.interfaces.EntityPlayer;

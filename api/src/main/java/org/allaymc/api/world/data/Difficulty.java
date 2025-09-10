@@ -26,20 +26,4 @@ public enum Difficulty {
             default -> null;
         };
     }
-
-    /**
-     * Get difficulty from string value.
-     *
-     * @param value string value of difficulty
-     * @return difficulty, or {@code null} if not found.
-     */
-    public static Difficulty from(String value) {
-        return switch (value) {
-            case "peaceful", "p" -> Difficulty.PEACEFUL;
-            case "easy", "e" -> Difficulty.EASY;
-            case "normal", "n" -> Difficulty.NORMAL;
-            case "hard", "h" -> Difficulty.HARD;
-            default -> null;
-        };
-    }
 }

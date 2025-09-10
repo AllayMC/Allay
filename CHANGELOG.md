@@ -74,6 +74,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved class `Difficulty`, `Sound` and `Weather` from package `world` to package `world.data`.
 - (API) Renamed class `ApiInstanceHolder` to `APIInstanceHolder`.
 - (API) Made classes `APINotImplementedException`, `MissingImplementationException`, `MissingRequirementException` and `APIInstanceHolder` as the private subclasses of `AllayAPI`.
+- (API) Moved class `NPCCommandSender` from api module to server module.
 
 ### Fixed
 
@@ -94,6 +95,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed adventure settings related permissions in `Permissions` since adventure settings should only change when the game mode change.
 - (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
 - (API) Removed field `networkId` in `EntityId` since it is never used.
+- (API) Removed method `Difficulty.from(String)`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

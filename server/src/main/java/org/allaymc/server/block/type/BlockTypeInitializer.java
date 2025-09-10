@@ -3,15 +3,17 @@ package org.allaymc.server.block.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
+import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.item.data.ItemId;
-import org.allaymc.api.math.voxelshape.VoxelShapes;
+import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
@@ -1032,14 +1034,14 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBaseComponentSupplier(BlockWaterBaseComponentImpl::new)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(BlockTypeInitializer::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_WATER = AllayBlockType
                 .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBaseComponentSupplier(BlockWaterBaseComponentImpl::new)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(BlockTypeInitializer::buildLiquidShape))
                 .build();
     }
 
@@ -1049,14 +1051,23 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBaseComponentSupplier(BlockLavaBaseComponentImpl::new)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(BlockTypeInitializer::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_LAVA = AllayBlockType
                 .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBaseComponentSupplier(BlockLavaBaseComponentImpl::new)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(BlockTypeInitializer::buildLiquidShape))
+                .build();
+    }
+
+    private static VoxelShape buildLiquidShape(BlockState liquidBlockState) {
+        if (!(liquidBlockState.getBehavior() instanceof BlockLiquidBaseComponent)) {
+            throw new IllegalArgumentException("The liquidBlockState must implement BlockLiquidBaseComponent!");
+        }
+        return VoxelShape.builder()
+                .solid(0, 0, 0, 1, 0.125f * BlockLiquidBaseComponent.getDepth(liquidBlockState), 1)
                 .build();
     }
 
