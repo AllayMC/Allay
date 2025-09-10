@@ -2,11 +2,16 @@ package org.allaymc.api.entity;
 
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.ServerSettings;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
+import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.joml.Vector3dc;
+
+import java.util.UUID;
 
 /**
  * EntityViewer represents an object that can view entities.
@@ -55,37 +60,72 @@ public interface EntityViewer {
     <T extends Entity & EntityPhysicsComponent> void viewEntityMotion(T entity, Vector3dc motion);
 
     /**
-     * View the metadata of the entity passed.
+     * Views the metadata of the entity passed.
      *
      * @param entity the entity to view
      */
     void viewEntityMetadata(Entity entity);
 
     /**
-     * View the item in main hand of the entity passed.
+     * Views the item in main hand of the entity passed.
      *
      * @param entity the entity to view
      */
     <T extends Entity & EntityContainerHolderComponent> void viewEntityHand(T entity);
 
     /**
-     * View the item in offhand of the entity passed.
+     * Views the item in offhand of the entity passed.
      *
      * @param entity the entity to view
      */
     <T extends Entity & EntityContainerHolderComponent> void viewEntityOffhand(T entity);
 
     /**
-     * View the armors of the entity passed.
+     * Views the armors of the entity passed.
      *
      * @param entity the entity to view
      */
     <T extends Entity & EntityContainerHolderComponent> void viewEntityArmors(T entity);
 
     /**
-     * View the skin of the player passed.
+     * Views the skin of the player passed.
      *
      * @param player the player to view
      */
     void viewPlayerSkin(EntityPlayer player);
+
+    /**
+     * Views an event that is happening on the entity passed.
+     *
+     * @param entity the entity to view
+     * @param event  the event that is happening
+     * @param data   the data of this event
+     */
+    void viewEntityEvent(Entity entity, EntityEventType event, int data);
+
+    /**
+     * Views an action that is happening on the entity passed.
+     *
+     * @param entity     the entity to view
+     * @param action     the action that is happening
+     * @param rowingTime the rowing time of the action
+     */
+    void viewEntityAction(Entity entity, AnimatePacket.Action action, double rowingTime);
+
+    /**
+     * Views an emote being performed by a player.
+     *
+     * @param player  the player who performed the emote
+     * @param emoteId the id of the emote
+     */
+    void viewPlayerEmote(EntityPlayer player, UUID emoteId);
+
+    /**
+     * Views an effect change in the entity passed.
+     *
+     * @param entity    the entity to view
+     * @param newEffect the new effect instance. Can be {@code null} if the effect is removed
+     * @param oldEffect the old effect instance. Can be {@code null} if the effect is not exist in the entity before
+     */
+    void viewEntityEffectChange(Entity entity, EffectInstance newEffect, EffectInstance oldEffect);
 }

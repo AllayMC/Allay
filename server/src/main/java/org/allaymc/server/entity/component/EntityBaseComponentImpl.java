@@ -46,8 +46,8 @@ import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.entity.*;
+import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.MobEffectPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -557,54 +557,50 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public boolean addEffect(EffectInstance effectInstance) {
-        if (!canApplyEffect(effectInstance.getType())) return false;
+        if (!canApplyEffect(effectInstance.getType())) {
+            return false;
+        }
 
         var event = new EntityEffectAddEvent(thisEntity, effectInstance);
-        if (!event.call()) return false;
+        if (!event.call()) {
+            return false;
+        }
 
         effectInstance = event.getEffect();
-
         var old = effects.put(effectInstance.getType(), effectInstance);
-        if (old != null) old.getType().onRemove(thisEntity, old);
+        if (old != null && old.getType() != effectInstance.getType()) {
+            old.getType().onRemove(thisEntity, old);
+            effectInstance.getType().onAdd(thisEntity, effectInstance);
+        }
 
-        effectInstance.getType().onAdd(thisEntity, effectInstance);
+        sendMobEffect(effectInstance, old);
+        if (old == null) {
+            syncVisibleEffects();
+        }
 
-        var packet = new MobEffectPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setEffectId(effectInstance.getType().getId());
-        packet.setAmplifier(effectInstance.getAmplifier());
-        packet.setParticles(effectInstance.isVisible());
-        packet.setDuration(effectInstance.getDuration());
-        packet.setEvent(old == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
-        sendMobEffectPacket(packet);
-
-        if (old == null) syncVisibleEffects();
         return true;
     }
 
     @Override
     public void removeEffect(EffectType effectType) {
         var removed = effects.get(effectType);
-        if (removed == null) return;
+        if (removed == null) {
+            return;
+        }
 
         var event = new EntityEffectRemoveEvent(thisEntity, removed);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         effects.remove(effectType);
-
         effectType.onRemove(thisEntity, removed);
-
-        var packet = new MobEffectPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setEffectId(effectType.getId());
-        packet.setEvent(MobEffectPacket.Event.REMOVE);
-        sendMobEffectPacket(packet);
-
+        sendMobEffect(null, removed);
         syncVisibleEffects();
     }
 
-    protected void sendMobEffectPacket(MobEffectPacket packet) {
-        sendPacketToViewers(packet);
+    protected void sendMobEffect(EffectInstance newEffect, EffectInstance oldEffect) {
+        forEachViewers(viewer -> viewer.viewEntityEffectChange(thisEntity, newEffect, oldEffect));
     }
 
     @Override
@@ -728,5 +724,15 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void sendMetadata() {
         forEachViewers(viewer -> viewer.viewEntityMetadata(thisEntity));
+    }
+
+    @Override
+    public void applyAction(AnimatePacket.Action action, double rowingTime) {
+        forEachViewers(viewer -> viewer.viewEntityAction(thisEntity, action, rowingTime));
+    }
+
+    @Override
+    public void applyEvent(EntityEventType event, int data) {
+        forEachViewers(viewer -> viewer.viewEntityEvent(thisEntity, event, data));
     }
 }

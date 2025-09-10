@@ -7,6 +7,8 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.EmotePacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
+import java.util.UUID;
+
 /**
  * @author daoge_cmd
  */
@@ -19,26 +21,25 @@ public class EmotePacketProcessor extends PacketProcessor<EmotePacket> {
 
     @Override
     public PacketSignal handleAsync(EntityPlayer player, EmotePacket packet, long receiveTime) {
-        if (receiveTime - lastEmoteTime < EMOTE_TIME_LIMIT) {
+        if (receiveTime - this.lastEmoteTime < EMOTE_TIME_LIMIT) {
             // Emote too fast
             return PacketSignal.HANDLED;
         }
-        lastEmoteTime = receiveTime;
+        this.lastEmoteTime = receiveTime;
 
         if (packet.getRuntimeEntityId() != player.getRuntimeId()) {
             log.warn("Player {} tried to send emote packet with wrong runtime entity id", player.getOriginName());
+            return PacketSignal.HANDLED;
         }
-        if (isInvalidEmoteId(packet)) {
+
+        try {
+            var emoteId = UUID.fromString(packet.getEmoteId());
+            player.forEachViewers(viewer -> viewer.viewPlayerEmote(player, emoteId));
+        } catch (Throwable t) {
             log.warn("Player {} tried to send emote packet with invalid emote id {}", player.getOriginName(), packet.getEmoteId());
         }
 
-        player.sendPacketToViewers(packet);
-
         return PacketSignal.HANDLED;
-    }
-
-    protected boolean isInvalidEmoteId(EmotePacket packet) {
-        return packet.getEmoteId() == null || packet.getEmoteId().isEmpty() || packet.getEmoteId().length() > 100;
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -913,9 +914,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void sendMobEffectPacket(MobEffectPacket packet) {
-        super.sendMobEffectPacket(packet);
-        networkComponent.sendPacket(packet);
+    protected void sendMobEffect(EffectInstance newEffect, EffectInstance oldEffect) {
+        forEachViewers(viewer -> viewer.viewEntityEffectChange(thisEntity, newEffect, oldEffect));
+        thisPlayer.viewEntityEffectChange(thisPlayer, newEffect, oldEffect);
     }
 
     @Override

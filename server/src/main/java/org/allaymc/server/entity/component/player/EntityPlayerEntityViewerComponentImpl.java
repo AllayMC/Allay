@@ -6,6 +6,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerEntityViewerComponent;
+import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
@@ -22,14 +23,14 @@ import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
+import org.cloudburstmc.protocol.bedrock.data.EmoteFlag;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3dc;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.allaymc.server.utils.Utils.toGameType;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
@@ -287,6 +288,53 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
         // It seems that old skin name is unused
         packet.setOldSkinName("");
         packet.setTrustedSkin(true);
+        this.networkComponent.sendPacket(packet);
+    }
+
+    @Override
+    public void viewEntityEvent(Entity entity, EntityEventType event, int data) {
+        var packet = new EntityEventPacket();
+        packet.setRuntimeEntityId(entity.getRuntimeId());
+        packet.setType(event);
+        packet.setData(data);
+        this.networkComponent.sendPacket(packet);
+    }
+
+    @Override
+    public void viewEntityAction(Entity entity, AnimatePacket.Action action, double rowingTime) {
+        var packet = new AnimatePacket();
+        packet.setRuntimeEntityId(entity.getRuntimeId());
+        packet.setAction(action);
+        packet.setRowingTime((float) rowingTime);
+        this.networkComponent.sendPacket(packet);
+    }
+
+    @Override
+    public void viewPlayerEmote(EntityPlayer player, UUID emoteId) {
+        var packet = new EmotePacket();
+        packet.setRuntimeEntityId(player.getRuntimeId());
+        packet.setEmoteId(emoteId.toString());
+        packet.getFlags().add(EmoteFlag.SERVER_SIDE);
+        this.networkComponent.sendPacket(packet);
+    }
+
+    @Override
+    public void viewEntityEffectChange(Entity entity, EffectInstance newEffect, EffectInstance oldEffect) {
+        var packet = new MobEffectPacket();
+        if (newEffect == null) {
+            Preconditions.checkNotNull(oldEffect);
+            // Effect is removed
+            packet.setRuntimeEntityId(entity.getRuntimeId());
+            packet.setEffectId(oldEffect.getType().getId());
+            packet.setEvent(MobEffectPacket.Event.REMOVE);
+        } else {
+            packet.setRuntimeEntityId(entity.getRuntimeId());
+            packet.setEffectId(newEffect.getType().getId());
+            packet.setAmplifier(newEffect.getAmplifier());
+            packet.setParticles(newEffect.isVisible());
+            packet.setDuration(newEffect.getDuration());
+            packet.setEvent(oldEffect == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
+        }
         this.networkComponent.sendPacket(packet);
     }
 

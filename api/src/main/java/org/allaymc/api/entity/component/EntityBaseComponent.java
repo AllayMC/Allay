@@ -34,7 +34,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -660,13 +659,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param event the event to apply
      * @param data  the data of the entity event
      */
-    default void applyEvent(EntityEventType event, int data) {
-        var pk = new EntityEventPacket();
-        pk.setRuntimeEntityId(getRuntimeId());
-        pk.setType(event);
-        pk.setData(data);
-        sendPacketToViewers(pk);
-    }
+    void applyEvent(EntityEventType event, int data);
 
     /**
      * Apply an action to the entity.
@@ -683,13 +676,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param action     the action of the action
      * @param rowingTime the rowing time of the action
      */
-    default void applyAction(AnimatePacket.Action action, double rowingTime) {
-        var pk = new AnimatePacket();
-        pk.setRuntimeEntityId(getRuntimeId());
-        pk.setAction(action);
-        pk.setRowingTime((float) rowingTime);
-        sendPacketToViewers(pk);
-    }
+    void applyAction(AnimatePacket.Action action, double rowingTime);
 
     /**
      * Add a tag to the entity.
