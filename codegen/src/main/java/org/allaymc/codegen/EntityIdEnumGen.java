@@ -50,15 +50,9 @@ public class EntityIdEnumGen {
                         .builder(identifierClassName, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(ClassNames.GETTER)
                         .build())
-                .addField(FieldSpec
-                        .builder(int.class, "networkId", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(ClassNames.GETTER)
-                        .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(ClassNames.STRING, "identifier")
-                        .addParameter(int.class, "networkId")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClassName, "identifier")
-                        .addStatement("this.$N = $N", "networkId", "networkId")
                         .build()
                 )
                 .addMethod(MethodSpec.methodBuilder("getEntityType")
@@ -72,7 +66,7 @@ public class EntityIdEnumGen {
                     entry.getKey(),
                     ":",
                     "")[1].toUpperCase();
-            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue()).build());
+            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
         }
 
         var javaFile = JavaFile.builder(packageName, codeBuilder.build())
@@ -91,15 +85,9 @@ public class EntityIdEnumGen {
                         .builder(identifierClassName, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(ClassNames.GETTER)
                         .build())
-                .addField(FieldSpec
-                        .builder(int.class, "networkId", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(ClassNames.GETTER)
-                        .build())
                 .addMethod(MethodSpec.constructorBuilder()
                         .addParameter(ClassNames.STRING, "identifier")
-                        .addParameter(int.class, "networkId")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClassName, "identifier")
-                        .addStatement("this.$N = $N", "networkId", "networkId")
                         .build()
                 );
         for (var entry : ENTITY_ID_MAP.entrySet()) {
@@ -107,7 +95,7 @@ public class EntityIdEnumGen {
                     entry.getKey(),
                     ":",
                     "")[1].toUpperCase();
-            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue()).build());
+            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
         }
 
         var javaFile = JavaFile.builder(packageName, codeBuilder.build())

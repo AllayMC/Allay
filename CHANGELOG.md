@@ -85,6 +85,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed class `Metadata` which is used in entity. Using the getter/setter methods for entity data and flag in `EntityBaseComponent` directly.
 - (API) Removed adventure settings related permissions in `Permissions` since adventure settings should only change when the game mode change.
 - (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
+- (API) Removed field `networkId` in `EntityId` since it is never used.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 
