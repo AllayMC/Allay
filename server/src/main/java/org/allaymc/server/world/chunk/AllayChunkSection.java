@@ -10,7 +10,7 @@ import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.world.storage.leveldb.ChunkSectionVersion;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
-import static org.allaymc.api.utils.HashUtils.hashChunkSectionXYZ;
+import static org.allaymc.api.utils.hash.HashUtils.hashChunkSectionXYZ;
 
 /**
  * @author Cool_Loong | daoge_cmd

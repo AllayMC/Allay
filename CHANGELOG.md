@@ -30,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced component `EntityPlayerDebugShapeViewerComponent` for player.
 - (API) Introduced a bunch of  `XXXViewer` (e.g. `EntityViewer`) interfaces which is a tiny wrapper for packet operations. This is
   inspired by df-mc/dragonfly to reduce the code associated with network packet contained in api module.
+- (API) Introduced a bunch of functional interfaces in package `utils.funtion`.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
@@ -66,6 +67,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved classes `Abilities` and `AdventureSettings` from api module to server module. Since most of the abilities/settings have corresponded permission,
   consider using permission instead.
 - (API) Introduced new `GameMode` enum, and the old `GameType` used in protocol lib is unused since it has many game types which only exist in vanilla.
+- (API) Moved classes `HashUtils` and `HashException` from package `utils` to `utils.hash`.
+- (API) Moved classes `Identified`, `Identifier`, `IdentifierUtils` and `InvalidIdentifierException` from package `utils` to `utils.identifier`.
+- (API) Moved class `GameLoop` from api module to server module.
+- (API) Moved class `JSONUtils` and the classes only used by this util from api module to server module.
+- (API) Moved class `Difficulty`, `Sound` and `Weather` from package `world` to package `world.data`.
+- (API) Renamed class `ApiInstanceHolder` to `APIInstanceHolder`.
+- (API) Made classes `APINotImplementedException`, `MissingImplementationException`, `MissingRequirementException` and `APIInstanceHolder` as the private subclasses of `AllayAPI`.
 
 ### Fixed
 

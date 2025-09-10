@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.world.Difficulty;
+import org.allaymc.api.world.data.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 

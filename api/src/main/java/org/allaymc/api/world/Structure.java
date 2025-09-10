@@ -1,6 +1,7 @@
 package org.allaymc.api.world;
 
 import lombok.Getter;
+import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockStateGetter;
@@ -307,5 +308,9 @@ public record Structure(
                 return index;
             }
         }
+    }
+
+    @StandardException
+    private static class StructureException extends RuntimeException {
     }
 }

@@ -20,6 +20,8 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.utils.function.QuadConsumer;
+import org.allaymc.api.utils.function.TriFunction;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.OperationType;
@@ -27,7 +29,6 @@ import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.api.world.manager.BlockUpdateManager;
 import org.allaymc.api.world.manager.ChunkManager;
 import org.allaymc.api.world.manager.EntityManager;
-import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -442,9 +443,9 @@ public interface Dimension {
     }
 
     /**
-     * @see #forEachBlockStates(int, int, int, int, int, int, int, PosAndBlockStateConsumer)
+     * @see #forEachBlockStates(int, int, int, int, int, int, int, QuadConsumer)
      */
-    default void forEachBlockStates(AABBdc aabb, int layer, PosAndBlockStateConsumer blockStateConsumer) {
+    default void forEachBlockStates(AABBdc aabb, int layer, QuadConsumer<Integer, Integer, Integer, BlockState> blockStateConsumer) {
         var maxX = (int) Math.ceil(aabb.maxX());
         var maxY = (int) Math.ceil(aabb.maxY());
         var maxZ = (int) Math.ceil(aabb.maxZ());
@@ -471,7 +472,7 @@ public interface Dimension {
             @Range(from = 1, to = Integer.MAX_VALUE) int sizeX,
             @Range(from = 1, to = Integer.MAX_VALUE) int sizeY,
             @Range(from = 1, to = Integer.MAX_VALUE) int sizeZ,
-            int layer, PosAndBlockStateConsumer blockStateConsumer) {
+            int layer, QuadConsumer<Integer, Integer, Integer, BlockState> blockStateConsumer) {
         var blockStates = getBlockStates(x, y, z, sizeX, sizeY, sizeZ, layer);
         if (blockStates == null) {
             return;
@@ -487,7 +488,7 @@ public interface Dimension {
                         continue;
                     }
 
-                    blockStateConsumer.apply(x + offsetX, y + offsetY, z + offsetZ, blockState);
+                    blockStateConsumer.accept(x + offsetX, y + offsetY, z + offsetZ, blockState);
                 }
             }
         }

@@ -3,8 +3,8 @@ package org.allaymc.server.datastruct.palette;
 import io.netty.buffer.ByteBuf;
 import lombok.SneakyThrows;
 import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.SemVersion;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 

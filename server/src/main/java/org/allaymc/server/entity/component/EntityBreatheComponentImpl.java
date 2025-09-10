@@ -3,7 +3,7 @@ package org.allaymc.server.entity.component;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;

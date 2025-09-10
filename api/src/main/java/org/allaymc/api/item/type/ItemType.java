@@ -4,7 +4,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
-import org.allaymc.api.utils.Identified;
+import org.allaymc.api.utils.identifier.Identified;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.jetbrains.annotations.Unmodifiable;
 

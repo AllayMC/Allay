@@ -3,7 +3,7 @@ package org.allaymc.api.item.enchantment.type;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.Rarity;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * @author daoge_cmd

@@ -4,7 +4,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.awt.*;
 

@@ -9,7 +9,7 @@ import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.ComponentProvider;

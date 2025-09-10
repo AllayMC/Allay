@@ -1,6 +1,6 @@
 package org.allaymc.data;
 
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;

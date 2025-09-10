@@ -18,7 +18,7 @@ import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeId;

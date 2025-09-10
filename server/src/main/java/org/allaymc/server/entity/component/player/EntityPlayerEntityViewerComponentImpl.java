@@ -16,7 +16,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;

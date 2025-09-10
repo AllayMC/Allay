@@ -1,4 +1,4 @@
-package org.allaymc.api.utils;
+package org.allaymc.server.utils;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +49,6 @@ final class ParameterFormatter {
      * Counts the number of unescaped placeholders in the given messagePattern.
      *
      * @param messagePattern the message pattern to be analyzed
-     *
      * @return the number of unescaped placeholders
      */
     static int countArgumentPlaceholders(final String messagePattern) {
@@ -80,7 +79,6 @@ final class ParameterFormatter {
      * Counts the number of unescaped placeholders in the given messagePattern.
      *
      * @param messagePattern the message pattern to be analyzed
-     *
      * @return the number of unescaped placeholders
      */
     static int countArgumentPlaceholders2(final String messagePattern, final int[] indices) {
@@ -114,7 +112,6 @@ final class ParameterFormatter {
      * Counts the number of unescaped placeholders in the given messagePattern.
      *
      * @param messagePattern the message pattern to be analyzed
-     *
      * @return the number of unescaped placeholders
      */
     static int countArgumentPlaceholders3(final char[] messagePattern, final int length, final int[] indices) {
@@ -143,7 +140,6 @@ final class ParameterFormatter {
      *
      * @param messagePattern the message pattern containing placeholders
      * @param arguments      the arguments to be used to replace placeholders
-     *
      * @return the formatted message
      */
     static String format(final String messagePattern, final Object[] arguments) {
@@ -370,7 +366,6 @@ final class ParameterFormatter {
      * </p>
      *
      * @param o The object
-     *
      * @return The String representation
      */
     static String deepToString(final Object o) {
@@ -621,7 +616,6 @@ final class ParameterFormatter {
      * </blockquote>
      *
      * @param obj the Object that is to be converted into an identity string
-     *
      * @return the identity string as also defined in Object.toString()
      */
     static String identityToString(final Object obj) {

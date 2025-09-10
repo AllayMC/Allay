@@ -11,7 +11,7 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.world.Difficulty;
+import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.server.command.tree.node.*;
 import org.joml.Vector3fc;
 

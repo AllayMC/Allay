@@ -3,7 +3,7 @@ package org.allaymc.api.world;
 import com.google.common.base.Preconditions;
 
 /**
- * DimensionInfo contains some information about a dimension.
+ * DimensionInfo contains the information about a dimension.
  *
  * @author Cool_Loong | daoge_cmd
  */

@@ -1,9 +1,10 @@
-package org.allaymc.api.utils;
+package org.allaymc.api.utils.hash;
 
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.chunk.ChunkSection;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -35,7 +36,6 @@ public final class HashUtils {
      *
      * @param identifier     the identifier
      * @param propertyValues the property values
-     *
      * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
@@ -61,7 +61,6 @@ public final class HashUtils {
      *
      * @param identifier     the identifier
      * @param propertyValues the property values
-     *
      * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
@@ -86,7 +85,6 @@ public final class HashUtils {
      * FNV-1a 32-bit hash algorithm.
      *
      * @param tag the tag to hash
-     *
      * @return the hash
      */
     public static int fnv1a_32_nbt(NbtMap tag) {
@@ -107,7 +105,6 @@ public final class HashUtils {
      * FNV-1a 32-bit hash algorithm.
      *
      * @param data the data to hash
-     *
      * @return the hash
      */
     public static int fnv1a_32(byte[] data) {
@@ -124,7 +121,6 @@ public final class HashUtils {
      *
      * @param x the int x
      * @param z the int z
-     *
      * @return the long
      */
     public static long hashXZ(int x, int z) {
@@ -154,7 +150,6 @@ public final class HashUtils {
      *
      * @param x the x coordinate of the pos
      * @param z the z coordinate of the pos
-     *
      * @return the hash of a pos in a chunk
      */
     public static int hashChunkXYZ(@Range(from = 0, to = 15) int x, @Range(from = -8388608, to = 8388607) int y, @Range(from = 0, to = 15) int z) {
@@ -170,7 +165,6 @@ public final class HashUtils {
      * x occupies the highest 4 bits.
      *
      * @param encoded Encoded int containing x, y, and z
-     *
      * @return The value of x
      */
     public static int getXFromHashChunkXYZ(int encoded) {
@@ -182,7 +176,6 @@ public final class HashUtils {
      * y occupies the middle 24 bits.
      *
      * @param encoded Encoded int containing x, y, and z
-     *
      * @return The value of y
      */
     public static int getYFromHashChunkXYZ(int encoded) {
@@ -194,7 +187,6 @@ public final class HashUtils {
      * z occupies the lowest 4 bits.
      *
      * @param encoded Encoded int containing x, y, and z
-     *
      * @return The value of z
      */
     public static int getZFromHashChunkXYZ(int encoded) {
@@ -207,7 +199,6 @@ public final class HashUtils {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     *
      * @return the hash of a pos in a {@link ChunkSection}
      */
     public static int hashChunkSectionXYZ(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z) {

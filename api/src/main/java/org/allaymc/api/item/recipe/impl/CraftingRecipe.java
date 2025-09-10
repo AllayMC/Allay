@@ -8,7 +8,7 @@ import org.allaymc.api.item.recipe.IdentifiedRecipe;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.recipe.TaggedRecipe;
 import org.allaymc.api.item.recipe.UniqueRecipe;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 

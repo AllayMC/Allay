@@ -8,7 +8,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;

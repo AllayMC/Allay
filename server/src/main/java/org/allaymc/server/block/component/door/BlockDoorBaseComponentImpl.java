@@ -10,9 +10,8 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -115,6 +114,6 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return block.getPropertyValue(UPPER_BLOCK_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(block, usedItem, entity);
+        return block.getPropertyValue(UPPER_BLOCK_BIT) ? Set.of() : super.getDrops(block, usedItem, entity);
     }
 }

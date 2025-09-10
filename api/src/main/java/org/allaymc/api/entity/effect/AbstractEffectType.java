@@ -2,7 +2,7 @@ package org.allaymc.api.entity.effect;
 
 import lombok.Getter;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.awt.*;
 

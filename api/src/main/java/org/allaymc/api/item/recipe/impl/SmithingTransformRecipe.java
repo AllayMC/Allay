@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.SmithingTransformRecipeData;

@@ -8,7 +8,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;

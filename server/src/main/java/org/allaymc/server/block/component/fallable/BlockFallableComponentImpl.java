@@ -16,7 +16,7 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFallEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.CBlockAfterPlacedEvent;
 import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;

@@ -8,7 +8,7 @@ import org.allaymc.api.entity.EntityStatus;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.manager.EntityManager;

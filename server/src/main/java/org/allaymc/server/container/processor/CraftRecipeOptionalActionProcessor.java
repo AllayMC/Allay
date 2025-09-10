@@ -11,7 +11,7 @@ import org.allaymc.api.eventbus.event.container.AnvilTakeResultEvent;
 import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;

@@ -65,6 +65,6 @@ public interface ClassNames {
 
     ClassName TR_KEYS = ClassName.get("org.allaymc.api.i18n", "TrKeys");
     ClassName MINECRAFT_VERSION_SENSITIVE = ClassName.get("org.allaymc.api.annotation", "MinecraftVersionSensitive");
-    ClassName SOUND = ClassName.get("org.allaymc.api.world", "Sound");
+    ClassName SOUND = ClassName.get("org.allaymc.api.world.data", "Sound");
     ClassName CREATIVE_ITEM_GROUPS = ClassName.get("org.allaymc.api.item.creative", "CreativeItemGroups");
 }

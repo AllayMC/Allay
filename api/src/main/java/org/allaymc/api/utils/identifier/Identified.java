@@ -1,4 +1,4 @@
-package org.allaymc.api.utils;
+package org.allaymc.api.utils.identifier;
 
 /**
  * Identified represents an object that has an {@link Identifier}.

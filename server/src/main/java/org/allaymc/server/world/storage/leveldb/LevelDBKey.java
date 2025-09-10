@@ -1,8 +1,8 @@
 package org.allaymc.server.world.storage.leveldb;
 
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.ChunkState;
+import org.allaymc.server.utils.Utils;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -119,18 +119,18 @@ public enum LevelDBKey {
 
     public static byte[] indexChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         if (dimensionInfo == DimensionInfo.OVERWORLD) {
-            return Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ));
+            return org.allaymc.server.utils.Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ));
         }
 
-        return Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ), intToBytes(dimensionInfo.dimensionId()));
+        return org.allaymc.server.utils.Utils.appendBytes(intToBytes(chunkX), intToBytes(chunkZ), intToBytes(dimensionInfo.dimensionId()));
     }
 
     public static byte[] indexEntity(long entityUniqueId) {
-        return Utils.appendBytes(ENTITY_PREFIX, longToBytes(entityUniqueId));
+        return org.allaymc.server.utils.Utils.appendBytes(ENTITY_PREFIX, longToBytes(entityUniqueId));
     }
 
     public static byte[] createEntityIdsKey(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        return Utils.appendBytes(ENTITY_DIGEST_PREFIX, indexChunk(chunkX, chunkZ, dimensionInfo));
+        return org.allaymc.server.utils.Utils.appendBytes(ENTITY_DIGEST_PREFIX, indexChunk(chunkX, chunkZ, dimensionInfo));
     }
 
     private static byte[] intToBytes(int value) {
@@ -156,7 +156,7 @@ public enum LevelDBKey {
     }
 
     public byte[] createKey(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        return Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded});
+        return org.allaymc.server.utils.Utils.appendBytes(indexChunk(chunkX, chunkZ, dimensionInfo), new byte[]{this.encoded});
     }
 
     public byte[] createKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimensionInfo) {

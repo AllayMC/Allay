@@ -1,4 +1,4 @@
-package org.allaymc.api.utils;
+package org.allaymc.api.utils.identifier;
 
 import org.allaymc.api.plugin.Plugin;
 
@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 import java.util.Objects;
 
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
-import static org.allaymc.api.utils.IdentifierUtils.isNamespaceValid;
-import static org.allaymc.api.utils.IdentifierUtils.isPathValid;
+import static org.allaymc.api.utils.identifier.IdentifierUtils.isNamespaceValid;
+import static org.allaymc.api.utils.identifier.IdentifierUtils.isPathValid;
 
 /**
  * Represents an identifier consisting of a namespace and a path.

@@ -12,7 +12,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.math.voxelshape.VoxelShapes;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;

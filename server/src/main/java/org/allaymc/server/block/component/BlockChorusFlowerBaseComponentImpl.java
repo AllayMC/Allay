@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.joml.Vector3ic;
 
 import java.util.ArrayList;

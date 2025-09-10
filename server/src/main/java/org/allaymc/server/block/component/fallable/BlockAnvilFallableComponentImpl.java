@@ -4,7 +4,7 @@ import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 
 import java.util.concurrent.ThreadLocalRandom;
 

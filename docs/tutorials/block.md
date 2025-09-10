@@ -42,7 +42,7 @@ There are two common ways to obtain a BlockType.
 
 ```java linenums="1"
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.block.type.BlockType;
 
 BlockType<?> stone = Registries.BLOCKS.get(new Identifier("minecraft:stone"));

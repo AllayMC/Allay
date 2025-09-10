@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.util.Locale;
 

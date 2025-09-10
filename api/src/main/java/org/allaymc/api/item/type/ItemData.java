@@ -1,10 +1,11 @@
 package org.allaymc.api.item.type;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.allaymc.api.utils.JSONUtils;
 
 /**
  * @author daoge_cmd
@@ -14,6 +15,9 @@ import org.allaymc.api.utils.JSONUtils;
 @Builder
 @EqualsAndHashCode
 public class ItemData {
+
+    protected static final Gson GSON = new GsonBuilder().create();
+
     public static ItemData DEFAULT = ItemData.builder().build();
 
     @Builder.Default
@@ -36,6 +40,6 @@ public class ItemData {
     protected float furnaceXPMultiplier = 0;
 
     public static ItemData fromJson(String json) {
-        return JSONUtils.from(json, ItemData.class);
+        return GSON.fromJson(json, ItemData.class);
     }
 }

@@ -61,7 +61,7 @@ Implement the `ItemComponent` interface and define an identifier:
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemBreakBlockEvent;
 

@@ -1,7 +1,7 @@
 package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandNode;
-import org.allaymc.api.world.Difficulty;
+import org.allaymc.api.world.data.Difficulty;
 
 /**
  * @author IWareQ

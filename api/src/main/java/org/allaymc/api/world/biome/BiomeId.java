@@ -2,7 +2,7 @@ package org.allaymc.api.world.biome;
 
 import lombok.Getter;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.util.HashMap;
 

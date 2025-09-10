@@ -3,7 +3,7 @@ package org.allaymc.server.entity.component.player;
 import org.allaymc.api.debugshape.*;
 import org.allaymc.api.entity.component.player.EntityPlayerDebugShapeViewerComponent;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.packet.ServerScriptDebugDrawerPacket;
 

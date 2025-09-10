@@ -6,9 +6,9 @@ import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.function.TriFunction;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.registry.InternalRegistries;
-import org.apache.commons.lang3.function.TriFunction;
 import org.jctools.maps.NonBlockingHashMap;
 
 import java.util.HashMap;
@@ -45,7 +45,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Creates a static block state data component that always returns the same data.
      *
      * @param attributes the static {@link BlockStateData} to return
-     *
      * @return a new static data component instance
      */
     public static BlockStateDataComponentImpl ofGlobalStatic(BlockStateData attributes) {
@@ -56,7 +55,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Creates a data component using a direct dynamic accessor.
      *
      * @param accessor a function to dynamically compute {@link BlockStateData}
-     *
      * @return a new dynamic data component instance
      */
     public static BlockStateDataComponentImpl ofDirectDynamic(Function<BlockState, BlockStateData> accessor) {
@@ -67,7 +65,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Creates a data component with caching support using a dynamic accessor.
      *
      * @param accessor the underlying data computation function
-     *
      * @return a cached data component instance
      */
     public static BlockStateDataComponentImpl ofCachedDynamic(Function<BlockState, BlockStateData> accessor) {
@@ -78,7 +75,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Creates a data component using a provided block state hash map supplier.
      *
      * @param supplier supplies the attribute map
-     *
      * @return a mapped data component instance
      */
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Supplier<Map<Integer, BlockStateData>> supplier) {
@@ -89,7 +85,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Creates a data component using a provided block state hash map.
      *
      * @param attributeMap a map from block state hash to attribute data
-     *
      * @return a mapped data component instance
      */
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap) {
@@ -101,7 +96,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      *
      * @param attributeMap a map from block state hash to attribute data
      * @param defaultData  the default data if no match is found
-     *
      * @return a mapped data component instance
      */
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap, BlockStateData defaultData) {
@@ -112,7 +106,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Creates a lazily loaded block state data component from a block type loader.
      *
      * @param loader the function loading maps per block type
-     *
      * @return a lazy-loaded data component instance
      */
     public static BlockStateDataComponentImpl ofMappedBlockStateHashLazyLoad(Function<BlockType<?>, Map<Integer, BlockStateData>> loader) {
@@ -123,7 +116,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Redefines the collision shape using the given function.
      *
      * @param shapeFunction a function to compute the new collision shape
-     *
      * @return a new data component instance with overridden collision shape
      */
     public static BlockStateDataComponentImpl ofRedefinedCollisionShape(Function<BlockState, VoxelShape> shapeFunction) {
@@ -136,7 +128,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Redefines the visual shape using the given function.
      *
      * @param shapeFunction a function to compute the new shape
-     *
      * @return a new data component instance with overridden shape
      */
     public static BlockStateDataComponentImpl ofRedefinedShape(Function<BlockState, VoxelShape> shapeFunction) {
@@ -149,7 +140,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * Redefines full {@link BlockStateData} using a custom tri-function.
      *
      * @param redefiner the redefining function that customizes each state's builder
-     *
      * @return a new redefined data component instance
      */
     public static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {

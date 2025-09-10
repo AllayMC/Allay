@@ -10,7 +10,7 @@ import org.allaymc.api.container.impl.AnvilContainer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;

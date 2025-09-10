@@ -1,12 +1,10 @@
 package org.allaymc.server.extension;
 
-import org.allaymc.api.utils.FormativeException;
+import lombok.experimental.StandardException;
 
 /**
  * @author daoge_cmd
  */
-public class ExtensionException extends FormativeException {
-    public ExtensionException(String format, Object... arguments) {
-        super(format, arguments);
-    }
+@StandardException
+public class ExtensionException extends RuntimeException {
 }

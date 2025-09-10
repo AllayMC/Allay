@@ -8,7 +8,7 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockRandomUpdateEvent;
 import org.allaymc.server.component.annotation.ComponentObject;
 

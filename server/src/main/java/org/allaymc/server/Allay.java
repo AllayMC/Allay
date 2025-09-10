@@ -5,7 +5,6 @@ import io.sentry.Sentry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.bossbar.BossBar;
@@ -25,7 +24,7 @@ import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.registry.*;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
@@ -138,12 +137,12 @@ public final class Allay {
      * which means that you should call initI18n() before call initAllay()!
      */
     @VisibleForTesting
-    public static void initAllay() throws MissingImplementationException {
+    public static void initAllay() {
         initAllayAPI();
         initRegistries();
     }
 
-    private static void initAllayAPI() throws MissingImplementationException {
+    private static void initAllayAPI() {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
 

@@ -29,7 +29,7 @@ import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;

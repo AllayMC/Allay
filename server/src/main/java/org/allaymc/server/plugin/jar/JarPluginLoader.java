@@ -8,10 +8,11 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
-import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.I18nLoader;
 import org.allaymc.server.plugin.SimplePluginDescriptor;
+import org.allaymc.server.utils.JSONUtils;
+import org.allaymc.server.utils.Utils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -45,7 +46,7 @@ public class JarPluginLoader implements PluginLoader {
     @Override
     public PluginDescriptor loadDescriptor() {
         descriptor = JSONUtils.from(Files.newBufferedReader(jarFileSystem.getPath("plugin.json")), SimplePluginDescriptor.class);
-        PluginDescriptor.checkDescriptorValid(descriptor);
+        Utils.checkDescriptorValid(descriptor);
         return descriptor;
     }
 

@@ -3,8 +3,8 @@ package org.allaymc.server.registry.loader;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.server.utils.JSONUtils;
 import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 
 import java.util.HashSet;

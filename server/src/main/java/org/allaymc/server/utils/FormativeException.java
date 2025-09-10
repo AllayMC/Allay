@@ -1,4 +1,4 @@
-package org.allaymc.api.utils;
+package org.allaymc.server.utils;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 

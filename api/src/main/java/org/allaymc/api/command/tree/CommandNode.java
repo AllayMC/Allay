@@ -14,7 +14,7 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.world.Difficulty;
+import org.allaymc.api.world.data.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 import org.jetbrains.annotations.UnmodifiableView;

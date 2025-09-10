@@ -18,7 +18,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;

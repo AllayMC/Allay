@@ -26,7 +26,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;

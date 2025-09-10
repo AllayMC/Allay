@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;

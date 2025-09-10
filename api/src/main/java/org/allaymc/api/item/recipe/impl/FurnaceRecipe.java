@@ -9,7 +9,7 @@ import org.allaymc.api.item.recipe.TaggedRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.FurnaceRecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;

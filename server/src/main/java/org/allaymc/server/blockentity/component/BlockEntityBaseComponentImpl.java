@@ -9,7 +9,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;

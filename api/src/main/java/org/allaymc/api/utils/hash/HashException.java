@@ -1,4 +1,4 @@
-package org.allaymc.api;
+package org.allaymc.api.utils.hash;
 
 import lombok.experimental.StandardException;
 
@@ -6,5 +6,5 @@ import lombok.experimental.StandardException;
  * @author daoge_cmd
  */
 @StandardException
-public class APINotImplementedException extends RuntimeException {
+public class HashException extends RuntimeException {
 }

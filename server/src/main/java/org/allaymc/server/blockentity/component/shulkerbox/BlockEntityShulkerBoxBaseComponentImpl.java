@@ -4,7 +4,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.container.impl.ShulkerBoxContainer;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;

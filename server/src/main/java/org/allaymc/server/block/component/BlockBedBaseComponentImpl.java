@@ -15,7 +15,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockExplodeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.Explosion;
@@ -114,7 +113,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? Utils.EMPTY_ITEM_STACK_SET : createBedDrop(block);
+        return block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? Set.of() : createBedDrop(block);
     }
 
     private Set<ItemStack> createBedDrop(Block blockState) {

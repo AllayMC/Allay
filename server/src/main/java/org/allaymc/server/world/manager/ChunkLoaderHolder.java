@@ -9,7 +9,7 @@ import lombok.Getter;
 import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.chunk.OperationType;

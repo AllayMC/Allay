@@ -45,7 +45,7 @@ There are two common ways to obtain an ItemType.
 
 ```java linenums="1"
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.item.type.ItemType;
 
 ItemType<?> diamond = Registries.ITEMS.get(new Identifier("minecraft:diamond"));

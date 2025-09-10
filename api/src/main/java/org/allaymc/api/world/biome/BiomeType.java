@@ -1,6 +1,6 @@
 package org.allaymc.api.world.biome;
 
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * @author daoge_cmd

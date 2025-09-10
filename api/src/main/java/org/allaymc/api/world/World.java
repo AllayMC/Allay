@@ -5,6 +5,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
+import org.allaymc.api.world.data.Weather;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -67,7 +68,6 @@ public interface World extends TaskCreator {
      * Get the dimension by the dimension id in this world.
      *
      * @param dimensionId the dimension id
-     *
      * @return the dimension, or {@code null} if the dimension is not found
      */
     Dimension getDimension(int dimensionId);
@@ -162,7 +162,6 @@ public interface World extends TaskCreator {
      * Add a weather to the world.
      *
      * @param weather the weather to add, {@link Weather#CLEAR} shouldn't be used here
-     *
      * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}
      */
     void addWeather(Weather weather);
@@ -171,7 +170,6 @@ public interface World extends TaskCreator {
      * Remove a weather from the world.
      *
      * @param weather the weather to remove, {@link Weather#CLEAR} shouldn't be used here
-     *
      * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}
      */
     void removeWeather(Weather weather);

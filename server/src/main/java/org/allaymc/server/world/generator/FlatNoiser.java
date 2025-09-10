@@ -3,7 +3,7 @@ package org.allaymc.server.world.generator;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.function.Noiser;
 

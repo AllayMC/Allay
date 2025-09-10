@@ -11,7 +11,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.utils.Utils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -89,7 +88,6 @@ public class DamageContainer {
      * Create a simple attack damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer simpleAttack(float sourceDamage) {
@@ -101,7 +99,6 @@ public class DamageContainer {
      *
      * @param attacker     the attacker
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
@@ -116,7 +113,6 @@ public class DamageContainer {
      * Create a starve damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer starve(float sourceDamage) {
@@ -127,7 +123,6 @@ public class DamageContainer {
      * Create a fall damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer fall(float sourceDamage) {
@@ -138,7 +133,6 @@ public class DamageContainer {
      * Create a falling block damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer fallingBlock(float sourceDamage) {
@@ -149,7 +143,6 @@ public class DamageContainer {
      * Create a magic effect damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer magicEffect(float sourceDamage) {
@@ -160,7 +153,6 @@ public class DamageContainer {
      * Create a magma damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer magma(float sourceDamage) {
@@ -171,7 +163,6 @@ public class DamageContainer {
      * Create a drown damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer drown(float sourceDamage) {
@@ -182,7 +173,6 @@ public class DamageContainer {
      * Create a fire tick damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer fireTick(float sourceDamage) {
@@ -193,7 +183,6 @@ public class DamageContainer {
      * Create a lava damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer lava(float sourceDamage) {
@@ -204,7 +193,6 @@ public class DamageContainer {
      * Create a block explosion damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer blockExplosion(float sourceDamage) {
@@ -216,7 +204,6 @@ public class DamageContainer {
      *
      * @param attacker     the entity that exploded
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer entityExplosion(Entity attacker, float sourceDamage) {
@@ -227,7 +214,6 @@ public class DamageContainer {
      * Create a contact damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer contact(float sourceDamage) {
@@ -238,7 +224,6 @@ public class DamageContainer {
      * Create a projectile damage container.
      *
      * @param sourceDamage the source damage
-     *
      * @return the damage container
      */
     public static DamageContainer projectile(Entity projectile, float sourceDamage) {
@@ -249,7 +234,6 @@ public class DamageContainer {
      * Get the attacker.
      *
      * @param <T> the type of the attacker
-     *
      * @return the attacker, or {@code null} if the attacker is not present
      */
     public <T> T getAttacker() {
@@ -405,7 +389,7 @@ public class DamageContainer {
         protected Function<Object, String[]> deathInfoExtraParamsProvider;
 
         private DamageType(Function<Object, String> deathInfoProvider) {
-            this(deathInfoProvider, $ -> Utils.EMPTY_STRING_ARRAY);
+            this(deathInfoProvider, $ -> new String[0]);
         }
 
         private DamageType(Function<Object, String> deathInfoProvider, Function<Object, String[]> deathInfoExtraParamsProvider) {
@@ -428,14 +412,14 @@ public class DamageContainer {
         public static DamageType dynamicWithExtraSingleParam(Function<Object, String> deathInfoProvider, Function<Object, String> deathInfoExtraSingleParamProvider) {
             return new DamageType(deathInfoProvider, attacker -> {
                 var singleParam = deathInfoExtraSingleParamProvider.apply(attacker);
-                return singleParam != null ? new String[]{singleParam} : Utils.EMPTY_STRING_ARRAY;
+                return singleParam != null ? new String[]{singleParam} : new String[0];
             });
         }
 
         public static DamageType fixedWithExtraSingleParam(@MayContainTrKey String deathInfo, Function<Object, String> deathInfoExtraSingleParamProvider) {
             return new DamageType($ -> deathInfo, attacker -> {
                 var singleParam = deathInfoExtraSingleParamProvider.apply(attacker);
-                return singleParam != null ? new String[]{singleParam} : Utils.EMPTY_STRING_ARRAY;
+                return singleParam != null ? new String[]{singleParam} : new String[0];
             });
         }
 

@@ -1,6 +1,6 @@
 package org.allaymc.api.command.selector;
 
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.allaymc.api.entity.Entity;
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public interface EntitySelectorAPI {
 
-    ApiInstanceHolder<EntitySelectorAPI> API = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<EntitySelectorAPI> API = AllayAPI.APIInstanceHolder.create();
 
     /**
      * Pattern for matching entity selector tokens (e.g., @a, @e, etc.).
@@ -37,9 +37,7 @@ public interface EntitySelectorAPI {
      *
      * @param sender the command sender, used for context (e.g., location, permissions)
      * @param token  the target selector token, such as {@code @a} or {@code @e[type=zombie]}
-     *
      * @return a list of entities that match the selector criteria
-     *
      * @throws SelectorSyntaxException if there is a syntax error in the selector token
      */
     List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException;
@@ -48,7 +46,6 @@ public interface EntitySelectorAPI {
      * Checks if the given token is a valid entity selector.
      *
      * @param token the token to validate (e.g., {@code @a}, {@code @e})
-     *
      * @return {@code true} if the token is a valid target selector, {@code false} otherwise.
      */
     boolean checkValid(String token);
@@ -60,7 +57,6 @@ public interface EntitySelectorAPI {
      * new filters or modifiers.
      *
      * @param argument the selector argument to register
-     *
      * @return {@code true} if the argument was successfully registered,
      * {@code false} if an argument with the same key already exists.
      */

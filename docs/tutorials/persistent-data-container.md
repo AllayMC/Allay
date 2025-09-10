@@ -33,7 +33,7 @@ data itself.
 ```java linenums="1" hl_lines="8 12"
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataType;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 public class Example {
     public void example() {
@@ -64,7 +64,7 @@ To get data from the PDC, you need to know the `Identifier` and the `PersistentD
 ```java linenums="1" hl_lines="13-14"
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataType;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 public class Example {
     public void example() {

@@ -1,6 +1,6 @@
 package org.allaymc.api.command.tree;
 
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
@@ -10,7 +10,7 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.world.Difficulty;
+import org.allaymc.api.world.data.Difficulty;
 import org.joml.Vector3fc;
 
 import java.util.List;
@@ -20,14 +20,14 @@ import java.util.List;
  * command nodes. Each command node can hold a specific type of data, such as strings, numbers,
  * game elements, and entities, and it defines how arguments are processed in the command execution tree.
  * <p>
- * This factory is held as an {@link ApiInstanceHolder} and can be accessed using {@link #getFactory()}.
+ * This factory is held as an {@link AllayAPI.APIInstanceHolder} and can be accessed using {@link #getFactory()}.
  * The factory allows users to create nodes with different types, and their default values, which are
  * used in command arguments parsing.
  *
  * @author daoge_cmd
  */
 public interface CommandNodeFactory {
-    ApiInstanceHolder<CommandNodeFactory> FACTORY = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<CommandNodeFactory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
     static CommandNodeFactory getFactory() {
         return FACTORY.get();

@@ -1,6 +1,5 @@
 package org.allaymc.server;
 
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -25,7 +24,7 @@ public class ChunkJMHTest {
     private Chunk chunk;
 
     @Setup
-    public void init() throws MissingImplementationException {
+    public void init() {
         Allay.initI18n();
         Allay.initAllay();
         chunk = AllayUnsafeChunk.builder().voidChunk(0, 0, DimensionInfo.OVERWORLD).toSafeChunk();

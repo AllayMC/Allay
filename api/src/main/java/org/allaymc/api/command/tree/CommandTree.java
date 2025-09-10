@@ -1,6 +1,6 @@
 package org.allaymc.api.command.tree;
 
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface CommandTree {
 
-    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<Factory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
     static CommandTree create(Command command) {
         return FACTORY.get().create(command);
@@ -23,7 +23,6 @@ public interface CommandTree {
      *
      * @param sender The command sender
      * @param args   The command arguments
-     *
      * @return The result of the command parsing
      */
     CommandResult parse(CommandSender sender, String[] args);
@@ -47,7 +46,6 @@ public interface CommandTree {
          * Creates a new instance of {@link CommandTree} using the provided {@link Command}.
          *
          * @param command The command to create the tree for
-         *
          * @return A new instance of {@link CommandTree}
          */
         CommandTree create(Command command);

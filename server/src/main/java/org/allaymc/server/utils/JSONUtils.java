@@ -1,4 +1,4 @@
-package org.allaymc.api.utils;
+package org.allaymc.server.utils;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -7,8 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.pack.Pack;
-import org.allaymc.api.pack.PackManifest;
+import org.allaymc.api.utils.SemVersion;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -55,14 +54,8 @@ public class JSONUtils {
         gsonBuilder.registerTypeAdapter(double.class, new NumberTypeAdapter<>(double.class));
         gsonBuilder.registerTypeAdapter(Double.class, new NumberTypeAdapter<>(Double.class));
         gsonBuilder.registerTypeAdapter(BigDecimal.class, new NumberTypeAdapter<>(BigDecimal.class));
-
-        // Custom type adapters
         gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Serializer());
         gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Deserializer());
-        gsonBuilder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Deserializer());
-        gsonBuilder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Serializer());
-        gsonBuilder.registerTypeAdapter(PackManifest.Capability.class, new PackManifest.Capability.Deserializer());
-        gsonBuilder.registerTypeAdapter(PackManifest.Capability.class, new PackManifest.Capability.Serializer());
     }
 
     /**
@@ -70,7 +63,6 @@ public class JSONUtils {
      *
      * @param reader the reader
      * @param type   the type of the object
-     *
      * @return the object
      */
     public static <V> V from(Reader reader, Class<V> type) {
@@ -83,7 +75,6 @@ public class JSONUtils {
      *
      * @param reader    the reader
      * @param typeToken the type of the object
-     *
      * @return the object
      */
     public static <V> V from(Reader reader, TypeToken<V> typeToken) {
@@ -96,7 +87,6 @@ public class JSONUtils {
      *
      * @param inputStream the input stream
      * @param type        the type of the object
-     *
      * @return the object
      */
     public static <V> V from(InputStream inputStream, Class<V> type) {
@@ -109,7 +99,6 @@ public class JSONUtils {
      *
      * @param inputStream the input stream
      * @param typeToken   the type of the object
-     *
      * @return the object
      */
     public static <V> V from(InputStream inputStream, TypeToken<V> typeToken) {
@@ -122,7 +111,6 @@ public class JSONUtils {
      *
      * @param inputStream the input stream
      * @param type        the type of elements in the list
-     *
      * @return the list
      */
     public static <V> List<V> fromList(InputStream inputStream, Class<V> type) {
@@ -136,7 +124,6 @@ public class JSONUtils {
      *
      * @param file the file
      * @param type the type of the object
-     *
      * @return the object
      */
     public static <V> V from(File file, Class<V> type) {
@@ -153,7 +140,6 @@ public class JSONUtils {
      *
      * @param file      the file
      * @param typeToken the type of the object
-     *
      * @return the object
      */
     public static <V> V from(File file, TypeToken<V> typeToken) {
@@ -170,7 +156,6 @@ public class JSONUtils {
      *
      * @param file the file
      * @param type the type of elements in the list
-     *
      * @return the list
      */
     public static <V> List<V> fromList(File file, Class<V> type) {
@@ -188,7 +173,6 @@ public class JSONUtils {
      *
      * @param json the JSON string
      * @param type the type of the object
-     *
      * @return the object
      */
     public static <V> V from(String json, Class<V> type) {
@@ -200,7 +184,6 @@ public class JSONUtils {
      *
      * @param json the JSON string
      * @param type the type of the object
-     *
      * @return the object
      */
     public static <V> V from(String json, Type type) {
@@ -212,7 +195,6 @@ public class JSONUtils {
      *
      * @param json      the JSON string
      * @param typeToken the type of the object
-     *
      * @return the object
      */
     public static <V> V from(String json, TypeToken<V> typeToken) {
@@ -224,7 +206,6 @@ public class JSONUtils {
      *
      * @param json the JSON string
      * @param type the type of elements in the list
-     *
      * @return the list
      */
     public static <V> List<V> fromList(String json, Class<V> type) {
@@ -236,7 +217,6 @@ public class JSONUtils {
      * Parse a JSON string to a map.
      *
      * @param json the JSON string
-     *
      * @return the map
      */
     public static Map<String, Object> fromMap(String json) {
@@ -249,7 +229,6 @@ public class JSONUtils {
      *
      * @param inputStream the input stream
      * @param type        the type of the object
-     *
      * @return the object
      */
     public static <V> V fromLenient(InputStream inputStream, Class<V> type) {
@@ -263,7 +242,6 @@ public class JSONUtils {
      *
      * @param inputStream the input stream
      * @param type        the type of the object
-     *
      * @return the object
      */
     public static <V> V fromLenient(InputStream inputStream, TypeToken<V> type) {
@@ -277,7 +255,6 @@ public class JSONUtils {
      *
      * @param inputStream the input stream
      * @param type        the type of elements in the list
-     *
      * @return the list
      */
     public static <V> List<V> fromListLenient(InputStream inputStream, Class<V> type) {
@@ -292,7 +269,6 @@ public class JSONUtils {
      *
      * @param file the file
      * @param type the type of the object
-     *
      * @return the object
      */
     public static <V> V fromLenient(File file, Class<V> type) {
@@ -310,7 +286,6 @@ public class JSONUtils {
      *
      * @param file the file
      * @param type the type of elements in the list
-     *
      * @return the list
      */
     public static <V> List<V> fromListLenient(File file, Class<V> type) {
@@ -329,7 +304,6 @@ public class JSONUtils {
      *
      * @param json the JSON string
      * @param type the type of the object
-     *
      * @return the object
      */
     public static <V> V fromLenient(String json, Class<V> type) {
@@ -346,7 +320,6 @@ public class JSONUtils {
      *
      * @param json the JSON string
      * @param type the type of the object
-     *
      * @return the object
      */
     public static <V> V fromLenient(String json, Type type) {
@@ -363,7 +336,6 @@ public class JSONUtils {
      *
      * @param json      the JSON string
      * @param typeToken the type of the object
-     *
      * @return the object
      */
     public static <V> V fromLenient(String json, TypeToken<V> typeToken) {
@@ -380,7 +352,6 @@ public class JSONUtils {
      *
      * @param json the JSON string
      * @param type the type of elements in the list
-     *
      * @return the list
      */
     public static <V> List<V> fromListLenient(String json, Class<V> type) {
@@ -397,7 +368,6 @@ public class JSONUtils {
      * Convert a list to a JSON string.
      *
      * @param list the list
-     *
      * @return the JSON string
      */
     public static <V> String to(List<V> list) {
@@ -408,7 +378,6 @@ public class JSONUtils {
      * Convert an object to a JSON string.
      *
      * @param v the object
-     *
      * @return the JSON string
      */
     public static <V> String to(V v) {

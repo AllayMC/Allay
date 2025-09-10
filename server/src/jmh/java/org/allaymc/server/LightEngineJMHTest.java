@@ -1,8 +1,7 @@
 package org.allaymc.server;
 
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.Weather;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.openjdk.jmh.annotations.*;
@@ -24,7 +23,7 @@ public class LightEngineJMHTest {
     private AllayLightEngine lightEngine;
 
     @Setup
-    public void setup() throws MissingImplementationException {
+    public void setup() {
         Allay.initI18n();
         Allay.initAllay();
         lightEngine = new AllayLightEngine(DimensionInfo.THE_END, "test_world", () -> 0, () -> Set.of(Weather.CLEAR));

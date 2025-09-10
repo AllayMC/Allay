@@ -17,8 +17,7 @@ import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.Utils;
-import org.allaymc.api.world.Weather;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.world.biome.BiomeData;
 import org.joml.Vector3i;
@@ -302,7 +301,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Set.of();
     }
 
     @Override

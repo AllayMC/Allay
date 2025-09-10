@@ -17,8 +17,6 @@ dependencies {
     api(libs.guava)
     api(libs.gson)
     api(libs.annotations)
-    api(libs.commonslang3)
-    api(libs.semver4j)
     api(libs.joml) {
         // NOTICE: this is an accident that joml marked kotlin-stdlib as its dependency
         // in the recent version, see https://github.com/JOML-CI/JOML/pull/357 for more

@@ -14,8 +14,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.component.ComponentManager;
@@ -58,7 +57,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             return Set.of(getSilkTouchDrop(block));
         }
 
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Set.of();
     }
 
     @Override

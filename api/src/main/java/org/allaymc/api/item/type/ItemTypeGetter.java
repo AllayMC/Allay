@@ -3,7 +3,7 @@ package org.allaymc.api.item.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.updater.item.ItemStateUpdaters;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;

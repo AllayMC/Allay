@@ -1,4 +1,4 @@
-package org.allaymc.api.utils;
+package org.allaymc.server.utils;
 
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

@@ -2,8 +2,8 @@ package org.allaymc.api.eventbus.event.world;
 
 import lombok.Getter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.data.Weather;
 
 import java.util.Set;
 

@@ -4,8 +4,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.Allay;
+import org.allaymc.server.utils.JSONUtils;
 
 import java.net.MalformedURLException;
 import java.nio.file.FileSystems;

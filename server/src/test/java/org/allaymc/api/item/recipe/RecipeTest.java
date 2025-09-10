@@ -12,7 +12,7 @@ import org.allaymc.api.item.recipe.impl.ShapedRecipe;
 import org.allaymc.api.item.recipe.impl.ShapelessRecipe;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

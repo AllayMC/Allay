@@ -51,7 +51,6 @@ public interface WorldStorage {
      * @param chunkX        the x coordinate of the chunk
      * @param chunkZ        the z coordinate of the chunk
      * @param dimensionInfo the dimension info of the chunk
-     *
      * @return a chunk future
      */
     CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
@@ -65,7 +64,6 @@ public interface WorldStorage {
      * Write a chunk to the storage.
      *
      * @param chunk the chunk to write
-     *
      * @return a future which will be completed when the chunk is written
      */
     CompletableFuture<Void> writeChunk(Chunk chunk);
@@ -81,7 +79,6 @@ public interface WorldStorage {
      * @param chunkX        the x coordinate of the chunk
      * @param chunkZ        the z coordinate of the chunk
      * @param dimensionInfo the dimension info of the chunk
-     *
      * @return the entities in the chunk
      */
     CompletableFuture<Map<Long, Entity>> readEntities(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
@@ -99,7 +96,6 @@ public interface WorldStorage {
      * @param dimensionInfo the dimension info of the chunk
      * @param entities      the entities to write. Note that the key is the unique id of the entity, not the runtime id
      *                      If an empty map is passed, all existing entities in the chunk will be removed.
-     *
      * @return a future which will be completed when the entities are written
      */
     CompletableFuture<Void> writeEntities(int chunkX, int chunkZ, DimensionInfo dimensionInfo, Map<Long, Entity> entities);
@@ -115,7 +111,6 @@ public interface WorldStorage {
      * @param chunkX        the x coordinate of the chunk
      * @param chunkZ        the z coordinate of the chunk
      * @param dimensionInfo the dimension info of the chunk
-     *
      * @return {@code true} if the storage contains the chunk, {@code false} otherwise
      */
     boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);

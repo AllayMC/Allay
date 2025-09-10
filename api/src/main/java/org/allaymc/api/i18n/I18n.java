@@ -1,8 +1,8 @@
 package org.allaymc.api.i18n;
 
 import it.unimi.dsi.fastutil.Pair;
-import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.AllayAPI;
+import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * I18n is used to translate the text which contains translation key in the game.
@@ -20,7 +20,7 @@ public interface I18n {
     /**
      * A holder which holds the implementation of {@link I18n}.
      */
-    ApiInstanceHolder<I18n> I18N = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<I18n> I18N = AllayAPI.APIInstanceHolder.create();
     /**
      * The namespace used in vanilla translation key.
      */
@@ -39,7 +39,6 @@ public interface I18n {
      * Check if the character is a valid key character.
      *
      * @param character the character
-     *
      * @return true if the character is a valid key character, otherwise false
      */
     static boolean isValidKeyCharacter(char character) {
@@ -77,7 +76,6 @@ public interface I18n {
      * @param langCode the lang code used
      * @param tr       the text, which may contain translation key
      * @param args     the arguments used in the translation
-     *
      * @return the translated text
      */
     String tr(LangCode langCode, @MayContainTrKey String tr, Object... args);
@@ -86,7 +84,6 @@ public interface I18n {
      * Find the I18n key info in the string.
      *
      * @param str the string
-     *
      * @return the I18n key info
      */
     KeyInfo findI18nKey(@MayContainTrKey String str);
@@ -134,7 +131,6 @@ public interface I18n {
      * @param langCode the lang code
      * @param tr       the translation key
      * @param args     the arguments
-     *
      * @return the converted text and whether the translation key is vanilla
      */
     default Pair<String, Boolean> toClientFriendlyStyle0(LangCode langCode, @MayContainTrKey String tr, Object... args) {

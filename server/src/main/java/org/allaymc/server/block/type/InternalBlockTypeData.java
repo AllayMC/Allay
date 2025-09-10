@@ -7,8 +7,8 @@ import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.tag.BlockTags;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
@@ -48,7 +48,7 @@ public final class InternalBlockTypeData {
                     }
                     BLOCK_TAGS.put(id, blockTags);
                 } else {
-                    BLOCK_TAGS.put(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
+                    BLOCK_TAGS.put(id, new BlockTag[0]);
                 }
                 // Default state
                 BLOCK_DEFAULT_STATES.put(id, (int) obj.get("defaultBlockStateHash").getAsLong());
@@ -77,7 +77,7 @@ public final class InternalBlockTypeData {
                 BLOCK_TAGS_CUSTOM.put(id, blockTags);
             });
             for (var id : BlockId.values()) {
-                BLOCK_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
+                BLOCK_TAGS_CUSTOM.putIfAbsent(id, new BlockTag[0]);
             }
         }
     }

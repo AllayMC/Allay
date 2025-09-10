@@ -13,7 +13,7 @@ import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;

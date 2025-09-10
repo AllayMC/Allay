@@ -3,6 +3,7 @@ package org.allaymc.api.world;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;

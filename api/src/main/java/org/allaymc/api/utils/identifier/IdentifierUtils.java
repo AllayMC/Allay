@@ -1,4 +1,6 @@
-package org.allaymc.api.utils;
+package org.allaymc.api.utils.identifier;
+
+import org.allaymc.api.utils.AllayStringUtils;
 
 /**
  * IdentifierUtils provides some helper methods for {@link Identifier}.

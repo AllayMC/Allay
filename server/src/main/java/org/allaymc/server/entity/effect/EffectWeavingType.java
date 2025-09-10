@@ -7,7 +7,7 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 
 import java.awt.*;

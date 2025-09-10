@@ -3,7 +3,7 @@ package org.allaymc.server.item.component;
 import lombok.Getter;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.item.component.event.CItemLoadExtraTagEvent;
 import org.allaymc.server.item.component.event.CItemSaveExtraTagEvent;
 import org.allaymc.server.registry.InternalRegistries;

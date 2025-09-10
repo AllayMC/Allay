@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.component.ComponentInitInfo;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.util.HashMap;
 import java.util.List;

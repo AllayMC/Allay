@@ -7,7 +7,7 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.packet.RemoveObjectivePacket;

@@ -6,7 +6,7 @@ import com.google.gson.Strictness;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.pack.PackManifest;
-import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.server.utils.JSONUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.crypto.Cipher;

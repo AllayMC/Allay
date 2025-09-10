@@ -35,9 +35,9 @@ import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -599,7 +599,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 packet.getMessages().add(new CommandOutputMessage(
                         status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
                         I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()),
-                        Utils.EMPTY_STRING_ARRAY));
+                        new String[0]));
             }
             packet.setSuccessCount(status);
             networkComponent.sendPacket(packet);

@@ -6,8 +6,8 @@ import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.IntMappedRegistry;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.utils.Identified;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identified;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
