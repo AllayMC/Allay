@@ -144,7 +144,6 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
 
     @Override
     public void viewGameRules(GameRules gameRules) {
-
     }
 
     @Override

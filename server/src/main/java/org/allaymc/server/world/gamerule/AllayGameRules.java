@@ -16,9 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * GameRules is a container for storing and managing game rules.
- *
- * @author Jukebox | Cool_Loong
+ * @author daoge_cmd
  */
 public class AllayGameRules implements GameRules {
 
@@ -68,36 +66,18 @@ public class AllayGameRules implements GameRules {
         return new AllayGameRules(gameRules);
     }
 
-    /**
-     * Get the game rules.
-     *
-     * @return the game rules
-     */
     @Override
     @UnmodifiableView
     public Map<GameRule, Object> getGameRules() {
         return Collections.unmodifiableMap(gameRules);
     }
 
-    /**
-     * Set a game rule's value.
-     *
-     * @param gameRule the game rule
-     * @param value    the value
-     */
     @Override
     public void set(GameRule gameRule, Object value) {
         this.gameRules.put(gameRule, value);
         this.world.getPlayers().forEach(player -> player.viewGameRules(this));
     }
 
-    /**
-     * Get a game rule's value.
-     *
-     * @param gameRule the game rule
-     * @param <V>      the type of the value
-     * @return the value
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <V> V get(GameRule gameRule) {
