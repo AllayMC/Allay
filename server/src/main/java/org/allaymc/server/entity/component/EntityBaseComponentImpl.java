@@ -717,7 +717,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public <T> void setData(EntityData<T> dataType, T value) {
-        Preconditions.checkArgument(dataType.type().isInstance(value));
+        Preconditions.checkArgument(dataType.getType().isInstance(value));
         if (this.metadata.get(dataType) != value) {
             this.metadata.set(dataType, value);
             sendMetadata();

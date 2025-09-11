@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.data;
 
+import lombok.Getter;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
@@ -10,11 +11,11 @@ import org.joml.Vector3ic;
 /**
  * EntityData contains all the available data types in {@link Entity}.
  *
- * @param type the supported value type of this data entry
  * @author daoge_cmd
  */
+@SuppressWarnings("ALL")
 @MinecraftVersionSensitive
-public record EntityData<T>(Class<?> type) {
+public final class EntityData<T> {
     public static final EntityData<Integer> STRUCTURAL_INTEGRITY = new EntityData<>(Integer.class);
     public static final EntityData<Integer> VARIANT = new EntityData<>(Integer.class);
     public static final EntityData<BlockState> BLOCK = new EntityData<>(BlockState.class);
@@ -151,4 +152,19 @@ public record EntityData<T>(Class<?> type) {
     public static final EntityData<Vector3fc> BED_ENTER_POSITION = new EntityData<>(Vector3fc.class);
     public static final EntityData<Float> SEAT_THIRD_PERSON_CAMERA_RADIUS = new EntityData<>(Float.class);
     public static final EntityData<Float> SEAT_CAMERA_RELAX_DISTANCE_SMOOTHING = new EntityData<>(Float.class);
+
+    /**
+     * The supported value type of this data entry.
+     */
+    @Getter
+    private final Class<?> type;
+
+    private EntityData(Class<?> type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "EntityData[" + "type=" + type + ']';
+    }
 }

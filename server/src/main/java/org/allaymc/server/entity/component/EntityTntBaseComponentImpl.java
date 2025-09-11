@@ -60,7 +60,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
             }
         } else {
             fuse--;
-            if (fuse % 5 == 0) {
+            if (fuse % 5 == 0 || fuse < 20) {
                 // Reduce the number of packets sent to the client
                 setData(EntityData.FUSE_TIME, fuse);
             }
