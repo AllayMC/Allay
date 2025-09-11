@@ -8,8 +8,8 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
-import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -19,7 +19,7 @@ import org.joml.Vector3ic;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
     /**
      * The default movement speed of a player.
@@ -453,11 +453,12 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
-     * Require encoding and resending {@link org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket} to
-     * the player next tick. This method is usually called when command permissions change, and you don't need to
-     * call this method manually, because the permission listener does it.
+     * Require encoding and resending all commands to the player next tick. This method should be called when
+     * command permissions change, but usually you don't need to call this method manually since the permission
+     * listener does it.
      */
-    void requireResendingAvailableCommands();
+    @ApiStatus.Experimental
+    void requireResendingCommands();
 
     /**
      * {@inheritDoc}
@@ -480,9 +481,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @see #setCooldown(String, int, boolean)
      */
     default void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
-        // NOTICE: No need to send PlayerStartItemCooldownPacket to the client since the
-        // client will display cooldown automatically if the item/category has cool down
-        setCooldown(category, duration, false);
+        setCooldown(category, duration, true);
     }
 
     /**
@@ -490,9 +489,17 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @param itemType the item type to set
      * @param duration the cool down tick
+     * @param send     whether send packet to the client
+     */
+    default void setCooldown(ItemType<?> itemType, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send) {
+        setCooldown(itemType.getIdentifier().toString(), duration, send);
+    }
+
+    /**
+     * @see #setCooldown(ItemType, int, boolean)
      */
     default void setCooldown(ItemType<?> itemType, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
-        setCooldown(itemType.getIdentifier().toString(), duration);
+        setCooldown(itemType, duration, false);
     }
 
     /**

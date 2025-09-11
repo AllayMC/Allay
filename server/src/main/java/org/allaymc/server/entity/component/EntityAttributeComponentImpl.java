@@ -64,6 +64,17 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         }
     }
 
+    public static AttributeType[] basicEntityAttributes() {
+        return new AttributeType[]{
+                AttributeType.ABSORPTION,
+                AttributeType.KNOCKBACK_RESISTANCE,
+                AttributeType.HEALTH,
+                AttributeType.MOVEMENT_SPEED,
+                AttributeType.UNDER_WATER_MOVEMENT_SPEED,
+                AttributeType.LAVA_MOVEMENT_SPEED
+        };
+    }
+
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         var nbt = event.getNbt();

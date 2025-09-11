@@ -99,6 +99,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
 - (API) Removed field `networkId` in `EntityId` since it is never used.
 - (API) Removed method `Difficulty.from(String)`.
+- (API) Removed methods `EntityAttributeComponent.basicEntityAttributes()` and `EntityPlayerAttributeComponent.basicPlayerAttributes()`. 
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

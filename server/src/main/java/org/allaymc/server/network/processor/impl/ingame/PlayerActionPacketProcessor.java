@@ -6,8 +6,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
@@ -44,10 +42,6 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     prepareForRespawn(player, spawnPoint);
                     spawnDimension.getEntityManager().addEntity(player, () -> afterRespawn(player, spawnPoint));
                 }
-                yield PacketSignal.HANDLED;
-            }
-            case DIMENSION_CHANGE_SUCCESS -> {
-                ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).sendDimensionChangeSuccess();
                 yield PacketSignal.HANDLED;
             }
             case START_ITEM_USE_ON -> {

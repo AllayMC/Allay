@@ -2,17 +2,16 @@ package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.network.PacketReceiver;
+import org.allaymc.api.world.WorldViewer;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Set;
-
 /**
- * ChunkLoader represents a loader that will load chunks in the dimension. A ChunkLoader is also a {@link PacketReceiver}
- * since it needs to receive data packets that are bounded to the chunk which is loaded by itself.
+ * ChunkLoader represents a loader that will load chunks in the dimension. A chunk loader
+ * is also a {@link WorldViewer}.
  *
  * @author daoge_cmd
  */
-public interface ChunkLoader extends PacketReceiver {
+public interface ChunkLoader extends WorldViewer, PacketReceiver {
 
     /**
      * Get the location of the chunk loader.
@@ -39,7 +38,6 @@ public interface ChunkLoader extends PacketReceiver {
      * Set the chunk loading radius.
      *
      * @param radius the chunk loading radius
-     *
      * @throws UnsupportedOperationException if the loading radius cannot be changed for this chunk loader
      */
     void setChunkLoadingRadius(int radius);
@@ -66,8 +64,8 @@ public interface ChunkLoader extends PacketReceiver {
     /**
      * A method which will be called when a chunk is out of range.
      *
-     * @param chunkHashes the chunk hashes that are out of range
+     * @param chunkHash pos hash of the chunk
      */
     @ApiStatus.OverrideOnly
-    void onChunkOutOfRange(Set<Long> chunkHashes);
+    void onChunkOutOfRange(long chunkHash);
 }

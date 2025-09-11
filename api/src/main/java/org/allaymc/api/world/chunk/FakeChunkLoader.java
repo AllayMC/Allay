@@ -5,7 +5,6 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -63,6 +62,6 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
-    public void onChunkOutOfRange(Set<Long> chunkHashes) {
+    public void onChunkOutOfRange(long chunkHash) {
     }
 }

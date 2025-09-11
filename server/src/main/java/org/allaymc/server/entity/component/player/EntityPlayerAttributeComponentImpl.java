@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import com.google.common.collect.Lists;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
@@ -16,6 +17,8 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
+
+import java.util.Arrays;
 
 /**
  * @author daoge_cmd
@@ -44,6 +47,18 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     public EntityPlayerAttributeComponentImpl(AttributeType... attributeTypes) {
         super(attributeTypes);
+    }
+
+    public static AttributeType[] basicPlayerAttributes() {
+        var list = Lists.newArrayList(
+                AttributeType.PLAYER_HUNGER,
+                AttributeType.PLAYER_SATURATION,
+                AttributeType.PLAYER_EXHAUSTION,
+                AttributeType.PLAYER_EXPERIENCE_LEVEL,
+                AttributeType.PLAYER_EXPERIENCE_PROGRESS
+        );
+        list.addAll(Arrays.asList(EntityAttributeComponentImpl.basicEntityAttributes()));
+        return list.toArray(AttributeType[]::new);
     }
 
     @EventHandler

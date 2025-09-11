@@ -92,7 +92,7 @@ public final class ChunkLoaderHolder {
 
     public void onRemoved() {
         removeChunkLoaderInChunks(sentChunks);
-        chunkLoader.onChunkOutOfRange(sentChunks);
+        sentChunks.forEach(chunkLoader::onChunkOutOfRange);
         if (asyncChunkSender != null) {
             asyncChunkSender.stop();
         }
@@ -134,11 +134,12 @@ public final class ChunkLoaderHolder {
         }
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private void removeOutOfRadiusChunks() {
         var difference = Sets.difference(sentChunks, inRadiusChunks);
         removeChunkLoaderInChunks(difference);
         // Unload chunks out of range
-        chunkLoader.onChunkOutOfRange(difference);
+        difference.forEach(chunkLoader::onChunkOutOfRange);
         // The intersection of sentChunks and inRadiusChunks
         sentChunks.removeAll(difference);
     }

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
@@ -28,6 +29,7 @@ import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.DeferredData;
@@ -181,7 +183,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         });
     }
 
-    public void onChunkInRangeSend() {
+    @EventHandler
+    protected void onChunkInRangeSend(CPlayerChunkInRangeSendEvent event) {
         if (fullyJoinChunkThreshold.get() > 0 && fullyJoinChunkThreshold.decrementAndGet() == 0) {
             onFullyJoin();
         }

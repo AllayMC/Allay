@@ -41,9 +41,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.WorldState;
-import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -51,7 +49,6 @@ import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.player.Abilities;
 import org.allaymc.server.player.AllayPlayerManager;
 import org.allaymc.server.world.AllayWorld;
@@ -110,15 +107,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected SerializedSkin skin;
     @Getter
     protected Abilities abilities;
-    @Getter
-    protected int chunkLoadingRadius;
-    @Getter
-    @Setter
-    protected int chunkMaxSendCountPerTick;
     protected CommandOriginData commandOriginData;
     protected Location3ic spawnPoint;
-    protected boolean awaitingDimensionChangeACK;
-    protected boolean requireResendingAvailableCommands;
+    protected boolean requireResendingCommands;
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
@@ -162,8 +153,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
         this.gameMode = Server.SETTINGS.genericSettings().defaultGameMode();
-        this.chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
-        this.chunkMaxSendCountPerTick = Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
         this.startUsingItemInAirTime = -1;
         this.formIdCounter = new AtomicInteger(0);
@@ -208,9 +197,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Do nothing, as the uniqueId will be set in method onPlayerLoggedIn()
     }
 
+    @Override
     public void setGameMode(GameMode gameMode) {
         var event = new PlayerGameModeChangeEvent(thisPlayer, this.gameMode, gameMode);
-        if (!event.call()) {
+        if (!event.call() || this.gameMode == event.getNewGameMode()) {
             return;
         }
 
@@ -251,8 +241,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void requireResendingAvailableCommands() {
-        this.requireResendingAvailableCommands = true;
+    public void requireResendingCommands() {
+        this.requireResendingCommands = true;
     }
 
     @Override
@@ -316,9 +306,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // and sending these data will take up a lot of bandwidth
         this.abilities.sync();
 
-        if (requireResendingAvailableCommands) {
-            sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
-            this.requireResendingAvailableCommands = false;
+        if (requireResendingCommands) {
+            this.networkComponent.sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
+            this.requireResendingCommands = false;
         }
     }
 
@@ -436,12 +426,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         location.dimension().removePlayer(thisPlayer, () -> {
             setLocationBeforeSpawn(target);
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
-                awaitingDimensionChangeACK = true;
-                var packet = new ChangeDimensionPacket();
-                packet.setDimension(targetDim.getDimensionInfo().dimensionId());
-                packet.setPosition(Vector3f.from(target.x(), target.y(), target.z()));
-                packet.setRespawn(!thisPlayer.isAlive());
-                networkComponent.sendPacket(packet);
+                // TODO: implement boolean changingDimension here
+                var packet1 = new ChangeDimensionPacket();
+                packet1.setDimension(targetDim.getDimensionInfo().dimensionId());
+                packet1.setPosition(Vector3f.from(target.x(), target.y() + 1.62f, target.z()));
+                networkComponent.sendPacket(packet1);
+
+                // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server. The client
+                // still sends the ack, but after the server has sent it. Thanks to Mojang for another groundbreaking change.
+                var packet2 = new PlayerActionPacket();
+                packet2.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
+                packet2.setRuntimeEntityId(this.runtimeId);
+                packet2.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
+                packet2.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
+                networkComponent.sendPacket(packet2);
             }
             targetDim.addPlayer(thisPlayer, this::sendLocationToSelf);
         });
@@ -635,7 +633,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         ToastRequestPacket pk = new ToastRequestPacket();
         pk.setTitle(title);
         pk.setContent(content);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -645,7 +643,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.TITLE);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -655,7 +653,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.SUBTITLE);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -665,7 +663,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.ACTIONBAR);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -675,21 +673,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setFadeInTime(fadeInTime);
         pk.setFadeOutTime(fadeOutTime);
         pk.setStayTime(duration);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
     public void resetTitleSettings() {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.RESET);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
     public void clearTitle() {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.CLEAR);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -748,66 +746,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         packet.setXuid(networkComponent.getLoginData().getXuid());
         packet.setMessage(message);
         networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public boolean isLoaderActive() {
-        return state.isSpawned();
-    }
-
-    @Override
-    public void setChunkLoadingRadius(int radius) {
-        chunkLoadingRadius = Math.min(radius, Server.SETTINGS.worldSettings().viewDistance());
-        var chunkRadiusUpdatedPacket = new ChunkRadiusUpdatedPacket();
-        chunkRadiusUpdatedPacket.setRadius(chunkLoadingRadius);
-        networkComponent.sendPacket(chunkRadiusUpdatedPacket);
-    }
-
-    @Override
-    public void onChunkPosChanged() {
-        var packet = new NetworkChunkPublisherUpdatePacket();
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3i.from(location.x(), location.y(), location.z()));
-        packet.setRadius(getChunkLoadingRadius() << 4);
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void onChunkInRangeSend(Chunk chunk) {
-        if (awaitingDimensionChangeACK) {
-            sendDimensionChangeSuccess();
-        }
-        // This method will be called in non-ticking thread if async chunk sending is enabled. Let's
-        // send the entities in this chunk to the player next tick in the main thread: use forEachEntitiesInChunk()
-        // instead of forEachEntitiesInChunkImmediately()
-        getDimension().getEntityManager().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
-        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSend();
-    }
-
-    public void sendDimensionChangeSuccess() {
-        var packet = new PlayerActionPacket();
-        packet.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-        packet.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-        networkComponent.sendPacket(packet);
-        awaitingDimensionChangeACK = false;
-    }
-
-    @Override
-    public void onChunkOutOfRange(Set<Long> chunkHashes) {
-        for (var hash : chunkHashes) {
-            getDimension().getEntityManager().forEachEntitiesInChunk(HashUtils.getXFromHashXZ(hash), HashUtils.getZFromHashXZ(hash), entity -> entity.despawnFrom(thisPlayer));
-        }
-    }
-
-    @Override
-    public void sendPacket(BedrockPacket packet) {
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void sendPacketImmediately(BedrockPacket packet) {
-        networkComponent.sendPacketImmediately(packet);
     }
 
     @Override
