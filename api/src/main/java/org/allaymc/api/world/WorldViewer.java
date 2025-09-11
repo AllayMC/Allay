@@ -14,6 +14,7 @@ import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Sound;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.gamerule.GameRules;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -156,6 +157,13 @@ public interface WorldViewer {
      * @param timeOfDay the time to view
      */
     void viewTime(int timeOfDay);
+
+    /**
+     * Views the game rules passed.
+     *
+     * @param gameRules the game rules to view
+     */
+    void viewGameRules(GameRules gameRules);
 
     /**
      * Views a single block update.

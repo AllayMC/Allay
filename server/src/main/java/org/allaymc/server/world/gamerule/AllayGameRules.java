@@ -7,7 +7,6 @@ import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
-import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
@@ -53,7 +52,6 @@ public class AllayGameRules implements GameRules {
      * Reads game rules from NBT.
      *
      * @param nbt the NBT to read from
-     *
      * @return the game rules
      */
     public static AllayGameRules readFromNBT(NbtMap nbt) {
@@ -89,8 +87,8 @@ public class AllayGameRules implements GameRules {
      */
     @Override
     public void set(GameRule gameRule, Object value) {
-        gameRules.put(gameRule, value);
-        world.broadcastPacket(buildPacket());
+        this.gameRules.put(gameRule, value);
+        this.world.getPlayers().forEach(player -> player.viewGameRules(this));
     }
 
     /**
@@ -98,24 +96,12 @@ public class AllayGameRules implements GameRules {
      *
      * @param gameRule the game rule
      * @param <V>      the type of the value
-     *
      * @return the value
      */
     @Override
     @SuppressWarnings("unchecked")
     public <V> V get(GameRule gameRule) {
         return (V) gameRules.getOrDefault(gameRule, gameRule.getDefaultValue());
-    }
-
-    /**
-     * Builds a GameRulesChangedPacket from the game rules.
-     *
-     * @return the packet
-     */
-    public GameRulesChangedPacket buildPacket() {
-        var pk = new GameRulesChangedPacket();
-        pk.getGameRules().addAll(toNetworkGameRuleData());
-        return pk;
     }
 
     /**

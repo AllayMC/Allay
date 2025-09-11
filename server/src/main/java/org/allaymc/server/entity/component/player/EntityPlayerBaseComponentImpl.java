@@ -52,7 +52,6 @@ import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
 import org.allaymc.server.player.Abilities;
 import org.allaymc.server.player.AllayPlayerManager;
-import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -425,7 +424,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             // Send new world's time
             thisPlayer.viewTime(targetDim.getWorld().getWorldData().getTimeOfDay());
             // Send new world's game rules
-            networkComponent.sendPacket(((AllayGameRules) targetDim.getWorld().getWorldData().getGameRules()).buildPacket());
+            thisPlayer.viewGameRules(targetDim.getWorld().getWorldData().getGameRules());
             thisPlayer.viewWeather(targetDim.getWorld().getWeather());
         }
         location.dimension().removePlayer(thisPlayer, () -> {

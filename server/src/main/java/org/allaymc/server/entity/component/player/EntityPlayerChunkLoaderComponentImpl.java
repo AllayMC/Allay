@@ -29,6 +29,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -39,6 +40,7 @@ import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.utils.ReflectionUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkEncoder;
+import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -503,6 +505,13 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     public void viewTime(int timeOfDay) {
         var packet = new SetTimePacket();
         packet.setTime(timeOfDay);
+        this.networkComponent.sendPacket(packet);
+    }
+
+    @Override
+    public void viewGameRules(GameRules gameRules) {
+        var packet = new GameRulesChangedPacket();
+        packet.getGameRules().addAll(((AllayGameRules) gameRules).toNetworkGameRuleData());
         this.networkComponent.sendPacket(packet);
     }
 
