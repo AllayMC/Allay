@@ -28,7 +28,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `api_version` for plugin descriptor, which can set the api version requirement of a plugin.
 - (API) Introduced component `EntityPlayerScoreboardViewerComponent` for player.
 - (API) Introduced component `EntityPlayerDebugShapeViewerComponent` for player.
-- (API) Introduced a bunch of  `XXXViewer` (e.g. `EntityViewer`) interfaces which is a tiny wrapper for packet operations. This is
+- (API) Introduced a bunch of  `XXXViewer` (e.g. `WorldViewer`) interfaces which is a tiny wrapper for packet operations. This is
   inspired by df-mc/dragonfly to reduce the code associated with network packet contained in api module.
 - (API) Introduced a bunch of functional interfaces in package `utils.funtion`.
 - (API) Introduced classes `AnimateAction`, `EntityEvent`, `EntityFlag` and `EntityData`, and they correspond to classes in the protocol library.
@@ -78,6 +78,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved class `NPCCommandSender` from api module to server module.
 - (API) Moved class `ClientStatus` from package `network` to package `player` and renamed it to `ClientState`.
 - (API) Renamed class `EntityStatus` to `EntityState`.
+- (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
 
 ### Fixed
 
@@ -99,7 +100,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
 - (API) Removed field `networkId` in `EntityId` since it is never used.
 - (API) Removed method `Difficulty.from(String)`.
-- (API) Removed methods `EntityAttributeComponent.basicEntityAttributes()` and `EntityPlayerAttributeComponent.basicPlayerAttributes()`. 
+- (API) Removed methods `EntityAttributeComponent.basicEntityAttributes()` and `EntityPlayerAttributeComponent.basicPlayerAttributes()`.
+- (API) Removed methods `ChunkLoader.onChunkInRangeSend()` and `ChunkLoader.onChunkOutOfRange()`, they are replaced by `WorldViewer.viewChunk()` and `WorldViewer.removeChunk()`.
+- (API) Removed method `WorldData.sendTimeOfDay()`.
+- (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

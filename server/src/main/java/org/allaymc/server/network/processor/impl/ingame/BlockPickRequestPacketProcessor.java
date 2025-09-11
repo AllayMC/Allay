@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
     public void handleSync(EntityPlayer player, BlockPickRequestPacket packet, long receiveTime) {
-        var blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
+        var blockPos = MathUtils.toJOMLVec(packet.getBlockPosition());
         if (!player.canReachBlock(blockPos) || player.getGameMode() != GameMode.CREATIVE) {
             return;
         }

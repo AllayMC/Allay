@@ -1,15 +1,11 @@
 package org.allaymc.api.world;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
-import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.joml.Vector3ic;
-
-import java.util.Collection;
 
 /**
  * The information for a world, usually shouldn't be edited by the user.
@@ -102,26 +98,6 @@ public interface WorldData extends PersistentDataHolder {
      * @param timeOfDay the time
      */
     void setTimeOfDay(int timeOfDay);
-
-    /**
-     * Send the time of day to a range of players.
-     *
-     * @param players the players that will receive time update
-     */
-    default void sendTimeOfDay(Collection<EntityPlayer> players) {
-        players.forEach(this::sendTimeOfDay);
-    }
-
-    /**
-     * Send the time of day to a certain player.
-     *
-     * @param player the player that will receive time update
-     */
-    default void sendTimeOfDay(EntityPlayer player) {
-        var setTimePk = new SetTimePacket();
-        setTimePk.setTime(getTimeOfDay());
-        player.sendPacket(setTimePk);
-    }
 
     /**
      * Add a certain amount of time to the time of the day.

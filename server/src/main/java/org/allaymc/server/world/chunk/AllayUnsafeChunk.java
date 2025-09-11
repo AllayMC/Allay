@@ -2,10 +2,6 @@ package org.allaymc.server.world.chunk;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +16,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
@@ -28,15 +25,9 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
-import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.allaymc.server.world.manager.AllayEntityManager;
-import org.cloudburstmc.math.vector.Vector3i;
-import org.cloudburstmc.nbt.NbtUtils;
-import org.cloudburstmc.protocol.bedrock.data.BlockChangeEntry;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.cloudburstmc.protocol.bedrock.packet.UpdateSubChunkBlocksPacket;
 import org.jctools.maps.NonBlockingHashMap;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -54,12 +45,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     protected static final int LCG_CONSTANT = 1013904223;
 
-    // Constants used in UpdateSubChunkBlocksPacket
-    protected static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
-    protected static final int BLOCK_UPDATE_NETWORK = 0b0010;
-    protected static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
-    protected static final int BLOCK_UPDATE_PRIORITY = 0b1000;
-
     @Getter
     protected final int x, z;
     @Getter
@@ -71,8 +56,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final NonBlockingHashMap<Integer, BlockEntity> blockEntities;
     protected final ChunkBitMap heightMapDirtyFlags;
     protected final Set<ChunkLoader> chunkLoaders;
-    protected final Queue<BlockChangeEntry> blockChangeEntries;
-    protected final Queue<BlockChangeEntry> extraBlockChangeEntries;
+    protected final Queue<WorldViewer.BlockUpdate> blockUpdates;
+    protected final Queue<WorldViewer.BlockUpdate> extraBlockUpdates;
     protected final Queue<ChunkPacketEntry> chunkPacketQueue;
     protected final AllayChunk safeChunk;
     @Getter
@@ -112,8 +97,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.blockEntities = blockEntities;
         this.heightMapDirtyFlags = new ChunkBitMap();
         this.chunkLoaders = Sets.newConcurrentHashSet();
-        this.blockChangeEntries = PlatformDependent.newMpscQueue();
-        this.extraBlockChangeEntries = PlatformDependent.newMpscQueue();
+        this.blockUpdates = PlatformDependent.newMpscQueue();
+        this.extraBlockUpdates = PlatformDependent.newMpscQueue();
         this.chunkPacketQueue = PlatformDependent.newMpscQueue();
         this.safeChunk = new AllayChunk(this);
     }
@@ -294,15 +279,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
 
         if (send && loaded) {
-            // updateFlags is a combination of flags that specify the way the block is updated client-side. It is a
-            // combination of the flags above, but typically sending only the BLOCK_UPDATE_NETWORK flag is sufficient.
-            var changeEntry = new BlockChangeEntry(
-                    Vector3i.from((this.x << 4) + x, y, (this.z << 4) + z), blockState.toNetworkBlockDefinition(),
-                    BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
-            );
+            var update = new WorldViewer.BlockUpdate((this.x << 4) + x, y, (this.z << 4) + z, blockState);
             switch (layer) {
-                case 0 -> blockChangeEntries.offer(changeEntry);
-                case 1 -> extraBlockChangeEntries.offer(changeEntry);
+                case 0 -> blockUpdates.offer(update);
+                case 1 -> extraBlockUpdates.offer(update);
                 default -> throw new IllegalArgumentException("Unsupported layer: " + layer);
             }
         }
@@ -376,43 +356,24 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public void clearBlockChanges() {
-        blockChangeEntries.clear();
-        extraBlockChangeEntries.clear();
+        blockUpdates.clear();
+        extraBlockUpdates.clear();
     }
 
-    public UpdateSubChunkBlocksPacket[] encodeAndClearBlockChanges() {
-        if (blockChangeEntries.isEmpty() && extraBlockChangeEntries.isEmpty()) {
-            return null;
-        }
-
-        var pks = new UpdateSubChunkBlocksPacket[sections.length];
-        encodeBlockChangesInLayer(pks, blockChangeEntries, false);
-        encodeBlockChangesInLayer(pks, extraBlockChangeEntries, true);
-
-        return pks;
+    protected void sendBlockUpdates() {
+        var collectedBlockUpdates = collectUpdates(blockUpdates);
+        var collectedExtraBlockUpdates = collectUpdates(extraBlockUpdates);
+        this.chunkLoaders.forEach(chunkLoader -> chunkLoader.viewBlockUpdates(this.toSafeChunk(), collectedBlockUpdates, collectedExtraBlockUpdates));
     }
 
-    protected void encodeBlockChangesInLayer(UpdateSubChunkBlocksPacket[] pks, Queue<BlockChangeEntry> queue, boolean isExtraLayer) {
-        BlockChangeEntry entry;
-        while ((entry = queue.poll()) != null) {
-            var sectionY = entry.getPosition().getY() >> 4;
-            var index = sectionY - dimensionInfo.minSectionY();
-            UpdateSubChunkBlocksPacket pk;
-
-            if ((pk = pks[index]) == null) {
-                pk = new UpdateSubChunkBlocksPacket();
-                pk.setChunkX(this.x << 4);
-                pk.setChunkY(sectionY << 4);
-                pk.setChunkZ(this.z << 4);
-                pks[index] = pk;
-            }
-
-            if (isExtraLayer) {
-                pk.getExtraBlocks().add(entry);
-            } else {
-                pk.getStandardBlocks().add(entry);
-            }
+    protected Collection<WorldViewer.BlockUpdate> collectUpdates(Queue<WorldViewer.BlockUpdate> queue) {
+        var list = new ArrayList<WorldViewer.BlockUpdate>();
+        WorldViewer.BlockUpdate update;
+        while ((update = queue.poll()) != null) {
+            list.add(update);
         }
+
+        return list;
     }
 
     @Override
@@ -469,26 +430,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             return;
         }
 
-        // Send block updates
-        var pks = encodeAndClearBlockChanges();
-        // pks == null -> no block changes
-        if (pks != null) {
-            for (var pk : pks) {
-                if (pk == null) {
-                    continue;
-                }
-
-                sendChunkPacket(pk);
+        sendBlockUpdates();
+        if (!chunkPacketQueue.isEmpty()) {
+            ChunkPacketEntry entry;
+            while ((entry = chunkPacketQueue.poll()) != null) {
+                sendChunkPacket(entry.packet(), entry.chunkLoaderPredicate());
             }
-        }
-
-        // Send other chunk packets
-        if (chunkPacketQueue.isEmpty()) {
-            return;
-        }
-        ChunkPacketEntry entry;
-        while ((entry = chunkPacketQueue.poll()) != null) {
-            sendChunkPacket(entry.packet(), entry.chunkLoaderPredicate());
         }
     }
 
@@ -527,99 +474,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         chunkLoaders.stream()
                 .filter(chunkLoader -> chunkLoaderPredicate == null || chunkLoaderPredicate.test(chunkLoader))
                 .forEach(chunkLoader -> chunkLoader.sendPacket(packet));
-    }
-
-    public LevelChunkPacket createSubChunkLevelChunkPacket() {
-        var packet = new LevelChunkPacket();
-        packet.setDimension(getDimensionInfo().dimensionId());
-        packet.setChunkX(this.getX());
-        packet.setChunkZ(this.getZ());
-        packet.setCachingEnabled(false);
-        packet.setRequestSubChunks(true);
-        // NOTICE: Sub chunk limit is bigger than zero
-        packet.setSubChunkLimit(findHighestNonAirSectionY() - dimensionInfo.minSectionY());
-        packet.setData(writeToNetworkBiomeOnly());
-        return packet;
-    }
-
-    private int findHighestNonAirSectionY() {
-        for (int highest = dimensionInfo.maxSectionY(); highest > dimensionInfo.minSectionY(); highest--) {
-            if (!getSection(highest).isAirSection()) {
-                return highest;
-            }
-        }
-
-        return dimensionInfo.minSectionY();
-    }
-
-    public LevelChunkPacket createFullLevelChunkPacketChunk() {
-        var packet = new LevelChunkPacket();
-        packet.setDimension(getDimensionInfo().dimensionId());
-        packet.setChunkX(this.getX());
-        packet.setChunkZ(this.getZ());
-        packet.setCachingEnabled(false);
-        packet.setRequestSubChunks(false);
-        packet.setSubChunksLength(getDimensionInfo().chunkSectionCount());
-        packet.setData(writeToNetwork());
-        return packet;
-    }
-
-    private ByteBuf writeToNetwork() {
-        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
-        try {
-            writeBlocks(byteBuf);
-            writeBiomes(byteBuf);
-            // Length of 1 byte for the border block count
-            byteBuf.writeByte(0);
-            writeBlockEntities(byteBuf);
-            return byteBuf;
-        } catch (Throwable t) {
-            log.error("Error while encoding chunk(x={}, z={})!", getX(), getZ(), t);
-            byteBuf.release();
-            return Unpooled.EMPTY_BUFFER;
-        }
-    }
-
-    private ByteBuf writeToNetworkBiomeOnly() {
-        var byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
-        try {
-            writeBiomes(byteBuf);
-            // Length of 1 byte for the border block count
-            byteBuf.writeByte(0);
-            return byteBuf;
-        } catch (Throwable t) {
-            log.error("Error while encoding chunk(x={}, z={})!", getX(), getZ(), t);
-            byteBuf.release();
-            return Unpooled.EMPTY_BUFFER;
-        }
-    }
-
-    private void writeBlocks(ByteBuf byteBuf) {
-        for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
-            getSection(i).writeToNetwork(byteBuf);
-        }
-    }
-
-    private void writeBiomes(ByteBuf byteBuf) {
-        Palette<BiomeType> last = null;
-        for (var section : sections) {
-            section.biomes().writeToNetwork(byteBuf, BiomeType::getId, last);
-            // TODO: fix copy last flag
-//            last = section.biomes();
-        }
-    }
-
-    private void writeBlockEntities(ByteBuf byteBuf) {
-        var blockEntities = getBlockEntities().values();
-        if (!blockEntities.isEmpty()) {
-            try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {
-                for (var blockEntity : blockEntities) {
-                    writer.writeTag(blockEntity.saveNBT());
-                }
-            } catch (Throwable t) {
-                log.error("Error while encoding block entities in chunk {}, {}", x, z, t);
-            }
-        }
     }
 
     protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {

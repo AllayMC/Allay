@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component;
 
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +35,8 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.WorldViewer;
+import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -107,7 +108,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected EntityAttributeComponent attributeComponent;
     @Getter
     protected EntityType<? extends Entity> entityType;
-    protected Map<Long, EntityPlayer> viewers;
+    protected Set<WorldViewer> viewers;
     protected Map<EffectType, EffectInstance> effects;
     @Getter
     protected EntityState state;
@@ -127,7 +128,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
         this.metadata = new Metadata();
         this.entityType = info.getEntityType();
-        this.viewers = new Long2ObjectOpenHashMap<>();
+        this.viewers = new HashSet<>();
         this.effects = new HashMap<>();
         this.state = EntityState.DESPAWNED;
         this.tags = new HashSet<>();
@@ -366,15 +367,15 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
         var oldChunk = oldDimension != null ? oldDimension.getChunkManager().getChunk(oldChunkX, oldChunkZ) : null;
         var newChunk = newDimension != null ? newDimension.getChunkManager().getChunk(newChunkX, newChunkZ) : null;
-        Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
-        Set<EntityPlayer> newChunkPlayers = newChunk != null ? newChunk.getPlayerChunkLoaders() : Collections.emptySet();
-        Set<EntityPlayer> oldChunkOnlyPlayers = new HashSet<>(oldChunkPlayers);
-        oldChunkOnlyPlayers.removeAll(newChunkPlayers);
-        Set<EntityPlayer> newChunkOnlyPlayers = new HashSet<>(newChunkPlayers);
-        newChunkOnlyPlayers.removeAll(oldChunkPlayers);
+        Set<ChunkLoader> oldChunkLoaders = oldChunk != null ? oldChunk.getChunkLoaders() : Collections.emptySet();
+        Set<ChunkLoader> newChunkLoaders = newChunk != null ? newChunk.getChunkLoaders() : Collections.emptySet();
+        Set<ChunkLoader> oldChunkOnlyLoaders = new HashSet<>(oldChunkLoaders);
+        oldChunkOnlyLoaders.removeAll(newChunkLoaders);
+        Set<ChunkLoader> newChunkOnlyLoaders = new HashSet<>(newChunkLoaders);
+        newChunkOnlyLoaders.removeAll(oldChunkLoaders);
 
-        oldChunkOnlyPlayers.stream().filter(player -> player != thisEntity).forEach(this::despawnFrom);
-        newChunkOnlyPlayers.stream().filter(player -> player != thisEntity).forEach(this::spawnTo);
+        oldChunkOnlyLoaders.stream().filter(loader -> loader != thisEntity).forEach(this::despawnFrom);
+        newChunkOnlyLoaders.stream().filter(loader -> loader != thisEntity).forEach(this::spawnTo);
     }
 
     @Override
@@ -439,35 +440,45 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     @UnmodifiableView
-    public Map<Long, EntityPlayer> getViewers() {
-        return Collections.unmodifiableMap(viewers);
+    public Set<WorldViewer> getViewers() {
+        return Collections.unmodifiableSet(viewers);
     }
 
     @Override
-    public void spawnTo(EntityPlayer player) {
-        player.viewEntity(thisEntity);
-        viewers.put(player.getRuntimeId(), player);
+    public void spawnTo(WorldViewer viewer) {
+        viewers.add(viewer);
+        viewer.viewEntity(thisEntity);
     }
 
     @Override
-    public void despawnFrom(EntityPlayer player) {
-        player.removeEntity(thisEntity);
-        viewers.remove(player.getRuntimeId());
+    public void despawnFrom(WorldViewer viewer) {
+        viewers.remove(viewer);
+        viewer.removeEntity(thisEntity);
     }
 
     @Override
     public void despawnFromAll() {
-        viewers.values().forEach(this::despawnFrom);
+        viewers.forEach(this::despawnFrom);
     }
 
     @Override
     public void sendPacketToViewers(BedrockPacket packet) {
-        viewers.values().forEach(client -> client.sendPacket(packet));
+        // TODO: remove it
+        viewers.forEach(viewer -> {
+            if (viewer instanceof EntityPlayer player) {
+                player.sendPacket(packet);
+            }
+        });
     }
 
     @Override
     public void sendPacketToViewersImmediately(BedrockPacket packet) {
-        viewers.values().forEach(client -> client.sendPacketImmediately(packet));
+        // TODO: remove it
+        viewers.forEach(viewer -> {
+            if (viewer instanceof EntityPlayer player) {
+                player.sendPacket(packet);
+            }
+        });
     }
 
     public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {

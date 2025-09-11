@@ -13,7 +13,6 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.joml.Vector3d;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
@@ -32,7 +31,6 @@ public interface EntityPlayer extends
         EntityPhysicsComponent,
         EntityPlayerScoreboardViewerComponent,
         EntityPlayerDebugShapeViewerComponent,
-        EntityPlayerEntityViewerComponent,
         EntityPlayerChunkLoaderComponent {
 
     /**
@@ -219,18 +217,6 @@ public interface EntityPlayer extends
         } else {
             inv.setItemInHand(ItemAirStack.AIR_STACK);
         }
-    }
-
-    /**
-     * Sends a swing arm animation packet to the player and nearby viewers.
-     */
-    default void swingArm() {
-        var packet = new AnimatePacket();
-        packet.setAction(AnimatePacket.Action.SWING_ARM);
-        packet.setRuntimeEntityId(getRuntimeId());
-
-        sendPacket(packet);
-        sendPacketToViewers(packet);
     }
 }
 

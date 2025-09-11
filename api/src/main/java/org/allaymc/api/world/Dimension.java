@@ -33,7 +33,10 @@ import org.allaymc.api.world.manager.EntityManager;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
+import org.cloudburstmc.protocol.bedrock.packet.LevelSoundEventPacket;
+import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -773,7 +776,9 @@ public interface Dimension {
      */
     default void addLevelEvent(double x, double y, double z, LevelEventType eventType, int data) {
         var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
-        if (chunk == null) return;
+        if (chunk == null) {
+            return;
+        }
 
         var packet = new LevelEventPacket();
         packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
@@ -838,7 +843,9 @@ public interface Dimension {
      */
     default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
         var chunk = getChunkManager().getChunk((int) x >> 4, (int) z >> 4);
-        if (chunk == null) return;
+        if (chunk == null) {
+            return;
+        }
 
         var packet = new LevelSoundEventPacket();
         packet.setSound(soundEvent);
@@ -1151,14 +1158,8 @@ public interface Dimension {
     default void addSound(double x, double y, double z, String sound, double volume, double pitch) {
         Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
         Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0");
-
-        var packet = new PlaySoundPacket();
-        packet.setSound(sound);
-        packet.setVolume((float) volume);
-        packet.setPitch((float) pitch);
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
-
-        getChunkManager().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
+        getChunkManager().getChunkByDimensionPos((int) x, (int) z)
+                .forEachChunkLoaders(loader -> loader.viewSound(new Vector3d(x, y, z), sound, volume, pitch));
     }
 
     /**

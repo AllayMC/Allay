@@ -4,7 +4,7 @@ import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.entity.Entity;
 
 /**
- * EntityDataType contains all the available events in {@link Entity}.
+ * EntityEvent contains all the available events in {@link Entity}.
  *
  * @author daoge_cmd
  */

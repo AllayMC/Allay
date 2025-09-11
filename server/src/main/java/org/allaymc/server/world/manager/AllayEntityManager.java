@@ -189,7 +189,7 @@ public class AllayEntityManager implements EntityManager {
         physicsService.addEntity(entity);
         var chunk = entity.getCurrentChunk();
         if (chunk != null) {
-            entity.spawnTo(chunk.getPlayerChunkLoaders());
+            entity.spawnTo(chunk.getChunkLoaders());
         }
         ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.ALIVE);
     }

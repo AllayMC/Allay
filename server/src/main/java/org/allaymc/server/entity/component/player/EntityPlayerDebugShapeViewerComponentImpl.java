@@ -66,37 +66,37 @@ public class EntityPlayerDebugShapeViewerComponentImpl implements EntityPlayerDe
     protected static org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData(DebugShape shape) {
         return switch (shape) {
             case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    arrow.getId(), ARROW, MathUtils.JOMLVecToCBVec(arrow.getPosition()), arrow.getArrowHeadScale(),
+                    arrow.getId(), ARROW, MathUtils.toCBVec(arrow.getPosition()), arrow.getArrowHeadScale(),
                     null, null, arrow.getColor(),
-                    null, null, MathUtils.JOMLVecToCBVec(arrow.getEndPosition()),
+                    null, null, MathUtils.toCBVec(arrow.getEndPosition()),
                     arrow.getArrowHeadLength(), arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments()
             );
             case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    box.getId(), BOX, MathUtils.JOMLVecToCBVec(box.getPosition()), box.getScale(),
+                    box.getId(), BOX, MathUtils.toCBVec(box.getPosition()), box.getScale(),
                     null, null, box.getColor(),
-                    null, MathUtils.JOMLVecToCBVec(box.getBoxBounds()), null,
+                    null, MathUtils.toCBVec(box.getBoxBounds()), null,
                     null, null, null
             );
             case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    circle.getId(), CIRCLE, MathUtils.JOMLVecToCBVec(circle.getPosition()), circle.getScale(),
+                    circle.getId(), CIRCLE, MathUtils.toCBVec(circle.getPosition()), circle.getScale(),
                     null, null, circle.getColor(),
                     null, null, null,
                     null, null, circle.getSegments()
             );
             case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    line.getId(), LINE, MathUtils.JOMLVecToCBVec(line.getPosition()), null,
+                    line.getId(), LINE, MathUtils.toCBVec(line.getPosition()), null,
                     null, null, line.getColor(),
-                    null, null, MathUtils.JOMLVecToCBVec(line.getEndPosition()),
+                    null, null, MathUtils.toCBVec(line.getEndPosition()),
                     null, null, null
             );
             case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    sphere.getId(), SPHERE, MathUtils.JOMLVecToCBVec(sphere.getPosition()), sphere.getScale(),
+                    sphere.getId(), SPHERE, MathUtils.toCBVec(sphere.getPosition()), sphere.getScale(),
                     null, null, sphere.getColor(),
                     null, null, null,
                     null, null, sphere.getSegments()
             );
             case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    text.getId(), TEXT, MathUtils.JOMLVecToCBVec(text.getPosition()), null,
+                    text.getId(), TEXT, MathUtils.toCBVec(text.getPosition()), null,
                     null, null, text.getColor(),
                     text.getText(), null, null,
                     null, null, null

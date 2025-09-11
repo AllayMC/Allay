@@ -212,7 +212,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var playStatusPacket = new PlayStatusPacket();
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
-        world.getWorldData().sendTimeOfDay(thisPlayer);
+        thisPlayer.viewTime(world);
         ((AllayWorld) world).sendWeather(thisPlayer);
         // Save player data the first time it joins
         server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);

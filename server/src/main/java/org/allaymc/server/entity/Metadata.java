@@ -5,13 +5,12 @@ import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.utils.ReflectionUtils;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
-import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.Objects;
@@ -61,8 +60,8 @@ public final class Metadata {
         return switch (data) {
             // Null value is possible here
             case null -> null;
-            case org.cloudburstmc.math.vector.Vector3f v -> new Vector3f(v.getX(), v.getY(), v.getZ());
-            case org.cloudburstmc.math.vector.Vector3i v -> new Vector3i(v.getX(), v.getY(), v.getZ());
+            case org.cloudburstmc.math.vector.Vector3f v -> MathUtils.toJOMLVec(v);
+            case org.cloudburstmc.math.vector.Vector3i v -> MathUtils.toJOMLVec(v);
             case BlockDefinition b -> Registries.BLOCK_STATE_PALETTE.get(b.getRuntimeId());
             // TODO: particle type
             default -> data;
@@ -71,8 +70,8 @@ public final class Metadata {
 
     private Object toNetwork(Object data) {
         return switch (data) {
-            case Vector3fc v -> org.cloudburstmc.math.vector.Vector3f.from(v.x(), v.y(), v.z());
-            case Vector3ic v -> org.cloudburstmc.math.vector.Vector3i.from(v.x(), v.y(), v.z());
+            case Vector3fc v -> MathUtils.toCBVec(v);
+            case Vector3ic v -> MathUtils.toCBVec(v);
             case BlockState b -> (BlockDefinition) b::blockStateHash;
             // TODO: particle type
             default -> data;

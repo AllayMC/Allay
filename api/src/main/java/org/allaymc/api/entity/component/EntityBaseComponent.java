@@ -27,6 +27,7 @@ import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.player.PlayerStorage;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.manager.EntityManager;
 import org.allaymc.api.world.physics.HasAABB;
@@ -421,15 +422,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return the viewers of this entity
      */
     @UnmodifiableView
-    Map<Long, EntityPlayer> getViewers();
+    Set<WorldViewer> getViewers();
 
     /**
      * Foreach the viewers of this entity.
      *
      * @param consumer the consumer to be called
      */
-    default void forEachViewers(Consumer<EntityPlayer> consumer) {
-        getViewers().values().forEach(consumer);
+    default void forEachViewers(Consumer<WorldViewer> consumer) {
+        getViewers().forEach(consumer);
     }
 
     /**
@@ -446,28 +447,36 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     boolean trySetLocation(Location3dc newLocation);
 
     /**
-     * Spawn the entity to the specified player.
+     * Spawn the entity to the specified viewer.
      *
-     * @param player the player to spawn the entity to
+     * @param viewer the viewer to spawn the entity to
      */
-    void spawnTo(EntityPlayer player);
+    void spawnTo(WorldViewer viewer);
 
     /**
-     * Spawn the entity to the specified players.
+     * Spawn the entity to a number of specified viewers.
      *
-     * @param players the players to spawn the entity to
+     * @param viewers the viewers to spawn the entity to
      */
-    default void spawnTo(Collection<EntityPlayer> players) {
-        players.forEach(this::spawnTo);
+    default void spawnTo(Collection<? extends WorldViewer> viewers) {
+        viewers.forEach(this::spawnTo);
     }
 
     /**
-     * Despawn the entity from the specified player. This method will only remove the entity from the specific viewer,
-     * and it will still exist in the dimension.
+     * Despawn the entity from the specified viewer.
      *
-     * @param player the player to despawn the entity from
+     * @param viewer the viewer to despawn the entity from
      */
-    void despawnFrom(EntityPlayer player);
+    void despawnFrom(WorldViewer viewer);
+
+    /**
+     * Despawn the entity from a number of specified viewers.
+     *
+     * @param viewers the viewers to spawn the entity to
+     */
+    default void despawnFrom(Collection<? extends WorldViewer> viewers) {
+        viewers.forEach(this::despawnFrom);
+    }
 
     /**
      * Despawn the entity from all viewers. This method will only remove the entity from all the viewers, and it will

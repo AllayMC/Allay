@@ -10,6 +10,7 @@ import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.world.chunk.AllayChunkSection;
+import org.allaymc.server.world.chunk.ChunkEncoder;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
@@ -134,7 +135,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 subChunkData.setResult(SubChunkRequestResult.SUCCESS);
 
                 var buffer = ByteBufAllocator.DEFAULT.ioBuffer();
-                subChunk.writeToNetwork(buffer);
+                ChunkEncoder.writeToNetwork(subChunk, buffer);
 
                 var blockEntities = chunk.getSectionBlockEntities(sectionY);
                 if (!blockEntities.isEmpty()) {

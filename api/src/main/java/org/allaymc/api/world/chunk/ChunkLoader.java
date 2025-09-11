@@ -53,19 +53,5 @@ public interface ChunkLoader extends WorldViewer, PacketReceiver {
      * A method which will be called when the chunk pos of the loader is changed.
      */
     @ApiStatus.OverrideOnly
-    void onChunkPosChanged();
-
-    /**
-     * A method which will be called after a chunk is sent.
-     */
-    @ApiStatus.OverrideOnly
-    void onChunkInRangeSend(Chunk chunk);
-
-    /**
-     * A method which will be called when a chunk is out of range.
-     *
-     * @param chunkHash pos hash of the chunk
-     */
-    @ApiStatus.OverrideOnly
-    void onChunkOutOfRange(long chunkHash);
+    void onLoaderChunkPosChange();
 }

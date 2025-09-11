@@ -79,7 +79,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.canReachBlock(MathUtils.CBVecToJOMLVec(pos))) {
+                    if (!player.canReachBlock(MathUtils.toJOMLVec(pos))) {
                         log.debug("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -303,7 +303,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
         if (baseComponent.isAwaitingTeleportACK()) {
-            var clientPos = MathUtils.CBVecToJOMLVec(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
+            var clientPos = MathUtils.toJOMLVec(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();
             if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
                 // The player has moved before it received the teleport packet. Ignore this movement entirely and

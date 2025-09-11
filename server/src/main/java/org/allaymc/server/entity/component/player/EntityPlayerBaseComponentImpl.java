@@ -42,6 +42,7 @@ import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.WorldState;
+import org.allaymc.api.world.WorldViewer;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -423,7 +424,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
             // Send new world's time
-            targetDim.getWorld().getWorldData().sendTimeOfDay(thisPlayer);
+            thisPlayer.viewTime(targetDim.getWorld());
             // Send new world's game rules
             networkComponent.sendPacket(((AllayGameRules) targetDim.getWorld().getWorldData().getGameRules()).buildPacket());
             // Clear old world's weather
@@ -454,21 +455,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void spawnTo(EntityPlayer player) {
-        if (thisPlayer != player) {
-            super.spawnTo(player);
-            player.viewEntityArmors(thisPlayer);
-            player.viewEntityHand(thisPlayer);
-            player.viewEntityOffhand(thisPlayer);
+    public void spawnTo(WorldViewer viewer) {
+        if (thisPlayer != viewer) {
+            super.spawnTo(viewer);
+            viewer.viewEntityArmors(thisPlayer);
+            viewer.viewEntityHand(thisPlayer);
+            viewer.viewEntityOffhand(thisPlayer);
             // Skin should be sent to the player, otherwise player's skin will become Steve in other player's eyes after respawn
-            player.viewPlayerSkin(thisPlayer);
+            viewer.viewPlayerSkin(thisPlayer);
         }
     }
 
     @Override
-    public void despawnFrom(EntityPlayer player) {
-        if (thisPlayer != player) {
-            super.despawnFrom(player);
+    public void despawnFrom(WorldViewer viewer) {
+        if (thisPlayer != viewer) {
+            super.despawnFrom(viewer);
         }
     }
 

@@ -34,8 +34,6 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Delegate
     protected EntityPlayerDebugShapeViewerComponent playerDebugShapeViewerComponent;
     @Delegate
-    protected EntityPlayerEntityViewerComponent playerEntityViewerComponent;
-    @Delegate
     protected EntityPlayerChunkLoaderComponent playerChunkLoaderComponent;
 
     public EntityPlayerImpl(EntityInitInfo initInfo,

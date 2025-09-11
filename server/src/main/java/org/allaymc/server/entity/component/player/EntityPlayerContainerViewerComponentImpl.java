@@ -138,7 +138,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         packet.setId(assignedId);
         packet.setType(container.getContainerType().toNetworkType());
         if (container instanceof BlockContainer blockContainer) {
-            packet.setBlockPosition(MathUtils.JOMLVecToCBVec(blockContainer.getBlockPos()));
+            packet.setBlockPosition(MathUtils.toCBVec(blockContainer.getBlockPos()));
         } else {
             var location = baseComponent.getLocation();
             packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
