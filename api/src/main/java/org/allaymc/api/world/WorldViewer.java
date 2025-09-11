@@ -13,6 +13,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.data.Weather;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -152,9 +153,9 @@ public interface WorldViewer {
     /**
      * Views time in the world passed.
      *
-     * @param world the world to view
+     * @param timeOfDay the time to view
      */
-    void viewTime(World world);
+    void viewTime(int timeOfDay);
 
     /**
      * Views a single block update.
@@ -193,6 +194,13 @@ public interface WorldViewer {
      * @param volume the volume of the sound
      * @param pitch  the pitch of the sound
      */
+    // TODO: update it
     void viewSound(Vector3dc pos, String sound, double volume, double pitch);
-    // TODO: void viewWeatherChange
+
+    /**
+     * Views the weather passed.
+     *
+     * @param weather the weather to view
+     */
+    void viewWeather(Weather weather);
 }

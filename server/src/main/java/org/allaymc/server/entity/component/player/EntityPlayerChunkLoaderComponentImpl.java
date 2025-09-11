@@ -26,9 +26,9 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -44,6 +44,7 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.BlockChangeEntry;
 import org.cloudburstmc.protocol.bedrock.data.EmoteFlag;
+import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -499,9 +500,9 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     }
 
     @Override
-    public void viewTime(World world) {
+    public void viewTime(int timeOfDay) {
         var packet = new SetTimePacket();
-        packet.setTime(world.getWorldData().getTimeOfDay());
+        packet.setTime(timeOfDay);
         this.networkComponent.sendPacket(packet);
     }
 
@@ -571,5 +572,26 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setPitch((float) pitch);
         packet.setPosition(Vector3f.from(pos.x(), pos.y(), pos.z()));
         this.networkComponent.sendPacket(packet);
+    }
+
+    @Override
+    public void viewWeather(Weather weather) {
+        var packet1 = new LevelEventPacket();
+        packet1.setPosition(Vector3f.ZERO);
+        packet1.setType(LevelEvent.STOP_RAINING);
+        if (weather != Weather.CLEAR) {
+            packet1.setType(LevelEvent.START_RAINING);
+            packet1.setData(65535);
+        }
+        this.networkComponent.sendPacket(packet1);
+
+        var packet2 = new LevelEventPacket();
+        packet2.setPosition(Vector3f.ZERO);
+        packet2.setType(LevelEvent.STOP_THUNDERSTORM);
+        if (weather != Weather.RAIN) {
+            packet2.setType(LevelEvent.START_THUNDERSTORM);
+            packet2.setData(65535);
+        }
+        this.networkComponent.sendPacket(packet2);
     }
 }

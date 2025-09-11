@@ -65,7 +65,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         var downBlockState = block.offsetPos(BlockFace.DOWN);
         var burnForever = canFireBurnForever(downBlockState.getBlockState());
 
-        return !burnForever && dimension.getWorld().getWeathers().contains(Weather.RAIN) &&
+        return !burnForever && dimension.getWorld().getWeather() != Weather.CLEAR &&
                (dimension.canPosSeeSky(pos) ||
                 dimension.canPosSeeSky(BlockFace.EAST.offsetPos(pos)) ||
                 dimension.canPosSeeSky(BlockFace.WEST.offsetPos(pos)) ||

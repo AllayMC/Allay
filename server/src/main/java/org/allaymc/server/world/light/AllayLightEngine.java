@@ -37,7 +37,7 @@ public class AllayLightEngine implements LightEngine {
     protected final String worldName;
     protected final AtomicBoolean isRunning;
     protected final Supplier<Integer> timeSupplier;
-    protected final Supplier<Set<Weather>> weatherSupplier;
+    protected final Supplier<Weather> weatherSupplier;
     protected final int maxUpdateCount;
     protected final BlockingQueueWrapper<Runnable> chunkAndBlockUpdateQueue;
     protected final BlockingQueueWrapper<Runnable> blockLightUpdateQueue;
@@ -85,15 +85,15 @@ public class AllayLightEngine implements LightEngine {
     protected LightPropagator skyLightPropagator;
 
     public AllayLightEngine(Dimension dimension) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers, Server.SETTINGS.worldSettings().maxLightUpdateCountPerDimension());
+        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeather, Server.SETTINGS.worldSettings().maxLightUpdateCountPerDimension());
     }
 
     @VisibleForTesting
-    public AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
+    public AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier) {
         this(dimensionInfo, worldName, timeSupplier, weatherSupplier, Integer.MAX_VALUE);
     }
 
-    protected AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier, int maxUpdateCount) {
+    protected AllayLightEngine(DimensionInfo dimensionInfo, String worldName, Supplier<Integer> timeSupplier, Supplier<Weather> weatherSupplier, int maxUpdateCount) {
         this.dimensionInfo = dimensionInfo;
         this.worldName = worldName;
         this.isRunning = new AtomicBoolean(true);
@@ -122,9 +122,9 @@ public class AllayLightEngine implements LightEngine {
     }
 
     @VisibleForTesting
-    public static int calculateSkylightReduction(long time, Set<Weather> weathers) {
-        double d = 1.0 - ((weathers.contains(Weather.RAIN) ? 1 : 0) * 5.0) / 16.0;
-        double e = 1.0 - ((weathers.contains(Weather.THUNDER) ? 1 : 0) * 5.0) / 16.0;
+    public static int calculateSkylightReduction(long time, Weather weather) {
+        double d = 1.0 - ((weather != Weather.CLEAR ? 1 : 0) * 5.0) / 16.0;
+        double e = 1.0 - ((weather == Weather.THUNDER ? 1 : 0) * 5.0) / 16.0;
         double f = 0.5 + 2.0 * Math.clamp(MathUtils.fastCos(calculateCelestialAngle(time) * 6.2831855), -0.25, 0.25);
         return (int) ((1.0 - f * d * e) * 11.0);
     }

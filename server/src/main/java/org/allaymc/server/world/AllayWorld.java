@@ -33,7 +33,9 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -67,15 +69,16 @@ public class AllayWorld implements World {
     protected final Thread worldThread;
     protected final Thread networkThread;
 
-    protected final Set<Weather> effectiveWeathers;
-
     protected long nextTimeSendTick;
+
+    @Getter
+    protected Weather weather;
     protected int rainTimer;
     protected int thunderTimer;
+    protected boolean isRaining;
+    protected boolean isThundering;
 
-    protected boolean isRaining = false;
-    protected boolean isThundering = false;
-    protected boolean isFirstTick = true;
+    protected boolean isFirstTick;
 
     public AllayWorld(String name, WorldStorage worldStorage) {
         this.name = name;
@@ -101,9 +104,10 @@ public class AllayWorld implements World {
         this.networkThread = ENABLE_INDEPENDENT_NETWORK_THREAD ? Thread.ofPlatform()
                 .name("World Network Thread #" + this.getName())
                 .unstarted(this::networkThreadMain) : null;
+        this.weather = Weather.CLEAR;
         this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
         this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
-        this.effectiveWeathers = new HashSet<>();
+        this.isFirstTick = true;
     }
 
     protected void onWorldStart() {
@@ -254,7 +258,7 @@ public class AllayWorld implements World {
         if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
             // Client will always keep time flowing, so we still need to send the
             // same time uninterruptedly if the daylight cycle is disabled
-            getPlayers().forEach(player -> player.viewTime(this));
+            getPlayers().forEach(player -> player.viewTime(this.worldData.getTimeOfDay()));
         } else {
             worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
         }
@@ -267,47 +271,30 @@ public class AllayWorld implements World {
             return;
         }
 
-        Set<Weather> added = new HashSet<>();
-        Set<Weather> removed = new HashSet<>();
-        boolean changed = false;
-
-        rainTimer--;
-        if (rainTimer == 0) {
-            if (isRaining) {
-                isRaining = false;
-                rainTimer = Weather.CLEAR.generateRandomTimeLength();
-                removed.add(Weather.RAIN);
-                effectiveWeathers.remove(Weather.RAIN);
+        var newWeather = this.weather;
+        if (--this.rainTimer == 0) {
+            if (this.isRaining) {
+                newWeather = Weather.CLEAR;
+                this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
             } else {
-                isRaining = true;
-                rainTimer = Weather.RAIN.generateRandomTimeLength();
-                added.add(Weather.RAIN);
-                effectiveWeathers.add(Weather.RAIN);
+                newWeather = isThundering ? Weather.THUNDER : Weather.RAIN;
+                this.rainTimer = Weather.RAIN.generateRandomTimeLength();
             }
-
-            changed = true;
+            this.isRaining = !this.isRaining;
         }
 
-        thunderTimer--;
-        if (thunderTimer == 0) {
-            if (isThundering) {
-                isThundering = false;
-                thunderTimer = Weather.CLEAR.generateRandomTimeLength();
-                removed.add(Weather.THUNDER);
-                effectiveWeathers.remove(Weather.THUNDER);
+        if (--this.thunderTimer == 0) {
+            if (this.isThundering) {
+                newWeather = isRaining ? Weather.RAIN : Weather.CLEAR;
+                this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
             } else {
-                isThundering = true;
-                thunderTimer = Weather.THUNDER.generateRandomTimeLength();
-                added.add(Weather.THUNDER);
-                effectiveWeathers.add(Weather.THUNDER);
+                newWeather = isRaining ? Weather.THUNDER : Weather.CLEAR;
+                this.thunderTimer = Weather.THUNDER.generateRandomTimeLength();
             }
-
-            changed = true;
+            this.isThundering = !this.isThundering;
         }
 
-        if (changed) {
-            applyWeatherChange(removed, added);
-        }
+        setWeather(newWeather);
     }
 
     @Override
@@ -394,68 +381,18 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public Set<Weather> getWeathers() {
-        return effectiveWeathers.isEmpty() ? Set.of(Weather.CLEAR) : Collections.unmodifiableSet(effectiveWeathers);
-    }
-
-    @Override
-    public void addWeather(Weather weather) {
-        if (weather == Weather.CLEAR) {
-            throw new IllegalArgumentException("Weather.CLEAR shouldn't be used here.");
-        }
-        if (effectiveWeathers.contains(weather)) {
+    public void setWeather(Weather weather) {
+        if (this.weather == weather) {
             return;
         }
 
-        applyWeatherChange(Collections.emptySet(), Set.of(weather));
-    }
-
-    @Override
-    public void removeWeather(Weather weather) {
-        if (weather == Weather.CLEAR) {
-            throw new IllegalArgumentException("Weather.CLEAR shouldn't be used here.");
-        }
-        if (!effectiveWeathers.contains(weather)) {
-            return;
-        }
-
-        applyWeatherChange(Set.of(weather), Collections.emptySet());
-    }
-
-    @Override
-    public void clearWeather() {
-        applyWeatherChange(Set.copyOf(effectiveWeathers), Collections.emptySet());
-    }
-
-    private void applyWeatherChange(Set<Weather> toRemove, Set<Weather> toAdd) {
-        var newEffective = new HashSet<>(effectiveWeathers);
-        newEffective.removeAll(toRemove);
-        newEffective.addAll(toAdd);
-
-        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffective));
+        var event = new WeatherChangeEvent(this, this.weather, weather);
         if (!event.call()) {
             return;
         }
 
-        effectiveWeathers.clear();
-        effectiveWeathers.addAll(newEffective);
-
-        onWeatherUpdate(toRemove, toAdd);
-    }
-
-    public void clearWeather(EntityPlayer player) {
-        effectiveWeathers.forEach(weather -> player.sendPacket(weather.createStopLevelEventPacket()));
-    }
-
-    public void sendWeather(EntityPlayer player) {
-        effectiveWeathers.forEach(weather -> player.sendPacket(weather.createStartLevelEventPacket()));
-    }
-
-    protected void onWeatherUpdate(Set<Weather> weatherRemoved, Set<Weather> weatherAdded) {
-        getPlayers().forEach(player -> {
-            weatherRemoved.forEach(weather -> player.sendPacket(weather.createStopLevelEventPacket()));
-            weatherAdded.forEach(weather -> player.sendPacket(weather.createStartLevelEventPacket()));
-        });
+        this.weather = weather;
+        getPlayers().forEach(player -> player.viewWeather(this.weather));
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {

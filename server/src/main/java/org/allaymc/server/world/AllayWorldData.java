@@ -77,7 +77,7 @@ public final class AllayWorldData implements WorldData {
         }
 
         this.timeOfDay = event.getNewTime();
-        this.world.getPlayers().forEach(player -> player.viewTime(this.world));
+        this.world.getPlayers().forEach(player -> player.viewTime(this.world.getWorldData().getTimeOfDay()));
     }
 
     private int rollbackTimeOfDay(int time) {

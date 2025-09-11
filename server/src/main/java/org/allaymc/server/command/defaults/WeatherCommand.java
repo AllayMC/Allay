@@ -17,11 +17,7 @@ public class WeatherCommand extends VanillaCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().enumClass("weather", Weather.class).exec(context -> {
             Weather weather = context.getResult(0);
-            if (weather == Weather.CLEAR) {
-                context.getSender().getCommandExecuteLocation().dimension().getWorld().clearWeather();
-            } else {
-                context.getSender().getCommandExecuteLocation().dimension().getWorld().addWeather(weather);
-            }
+            context.getSender().getCommandExecuteLocation().dimension().getWorld().setWeather(weather);
             context.addOutput(switch (weather) {
                 case CLEAR -> TrKeys.MC_COMMANDS_WEATHER_CLEAR;
                 case RAIN -> TrKeys.MC_COMMANDS_WEATHER_RAIN;
@@ -29,15 +25,8 @@ public class WeatherCommand extends VanillaCommand {
             });
             return context.success();
         }).root().key("query").exec(context -> {
-            var weathers = context.getSender().getCommandExecuteLocation().dimension().getWorld().getWeathers();
-            var currentWeather = Weather.CLEAR;
-            if (weathers.contains(Weather.THUNDER)) {
-                currentWeather = Weather.THUNDER;
-            } else if (weathers.contains(Weather.RAIN)) {
-                currentWeather = Weather.RAIN;
-            }
-
-            context.getSender().sendTr(TrKeys.MC_COMMANDS_WEATHER_QUERY, currentWeather.name().toLowerCase());
+            var weather = context.getSender().getCommandExecuteLocation().dimension().getWorld().getWeather();
+            context.getSender().sendTr(TrKeys.MC_COMMANDS_WEATHER_QUERY, weather.name().toLowerCase());
             return context.success();
         });
     }

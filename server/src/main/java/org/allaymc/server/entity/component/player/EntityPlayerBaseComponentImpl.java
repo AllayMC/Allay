@@ -52,7 +52,6 @@ import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
 import org.allaymc.server.player.Abilities;
 import org.allaymc.server.player.AllayPlayerManager;
-import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
@@ -424,13 +423,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
             // Send new world's time
-            thisPlayer.viewTime(targetDim.getWorld());
+            thisPlayer.viewTime(targetDim.getWorld().getWorldData().getTimeOfDay());
             // Send new world's game rules
             networkComponent.sendPacket(((AllayGameRules) targetDim.getWorld().getWorldData().getGameRules()).buildPacket());
-            // Clear old world's weather
-            ((AllayWorld) currentDim.getWorld()).clearWeather(thisPlayer);
-            // Send new world's weather
-            ((AllayWorld) targetDim.getWorld()).sendWeather(thisPlayer);
+            thisPlayer.viewWeather(targetDim.getWorld().getWeather());
         }
         location.dimension().removePlayer(thisPlayer, () -> {
             setLocationBeforeSpawn(target);

@@ -12,7 +12,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Represents a world in the server.
@@ -152,33 +151,25 @@ public interface World extends TaskCreator {
     }
 
     /**
-     * Get the weathers of the world.
+     * Get the weather of the world.
      *
      * @return the weathers of the world
      */
-    @UnmodifiableView
-    Set<Weather> getWeathers();
+    Weather getWeather();
 
     /**
-     * Add a weather to the world.
+     * Set the weather of the world.
      *
-     * @param weather the weather to add, {@link Weather#CLEAR} shouldn't be used here
-     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}
+     * @param weather the weather to set
      */
-    void addWeather(Weather weather);
-
-    /**
-     * Remove a weather from the world.
-     *
-     * @param weather the weather to remove, {@link Weather#CLEAR} shouldn't be used here
-     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}
-     */
-    void removeWeather(Weather weather);
+    void setWeather(Weather weather);
 
     /**
      * Set the weather to {@link Weather#CLEAR}.
      */
-    void clearWeather();
+    default void clearWeather() {
+        setWeather(Weather.CLEAR);
+    }
 
     /**
      * Get the spawn point of the world.

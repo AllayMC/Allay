@@ -6,7 +6,6 @@ import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.openjdk.jmh.annotations.*;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,7 +25,7 @@ public class LightEngineJMHTest {
     public void setup() {
         Allay.initI18n();
         Allay.initAllay();
-        lightEngine = new AllayLightEngine(DimensionInfo.THE_END, "test_world", () -> 0, () -> Set.of(Weather.CLEAR));
+        lightEngine = new AllayLightEngine(DimensionInfo.THE_END, "test_world", () -> 0, () -> Weather.CLEAR);
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 lightEngine.onChunkLoad(

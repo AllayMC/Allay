@@ -79,6 +79,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved class `ClientStatus` from package `network` to package `player` and renamed it to `ClientState`.
 - (API) Renamed class `EntityStatus` to `EntityState`.
 - (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
+- (API) Refactored the weather system. Removed network related code in `Weather`, and world will hold only one `Weather` instance now.
 
 ### Fixed
 
