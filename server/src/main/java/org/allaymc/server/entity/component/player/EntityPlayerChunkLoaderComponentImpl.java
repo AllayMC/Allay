@@ -561,8 +561,8 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             // updateFlags is a combination of flags that specify the way the block is updated client-side. It is a
             // combination of the flags above, but typically sending only the BLOCK_UPDATE_NETWORK flag is sufficient.
             var entry = new BlockChangeEntry(
-                    Vector3i.from((chunk.getX() << 4) + update.x(), update.y(), (chunk.getZ() << 4) + update.z()),
-                    update.blockState()::blockStateHash, BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
+                    Vector3i.from(update.x(), update.y(), update.z()), update.blockState()::blockStateHash,
+                    BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
             );
 
             if (isExtraLayer) {
