@@ -134,10 +134,11 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
 
     @Override
     public void viewPlayerGameMode(EntityPlayer player) {
-        var gameMode = thisPlayer.getGameMode();
-        if (player == thisPlayer) {
+        var gameMode = player.getGameMode();
+        if (thisPlayer == player) {
+            // todo
             var packet1 = new SetPlayerGameTypePacket();
-            packet1.setGamemode(toGameType(thisPlayer.getGameMode()).ordinal());
+            packet1.setGamemode(toGameType(player.getGameMode()).ordinal());
             this.networkComponent.sendPacket(packet1);
 
             var packet2 = new UpdateAdventureSettingsPacket();
@@ -149,8 +150,8 @@ public class EntityPlayerEntityViewerComponentImpl implements EntityPlayerEntity
             this.networkComponent.sendPacket(packet2);
         } else {
             var packet = new UpdatePlayerGameTypePacket();
-            packet.setGameType(toGameType(thisPlayer.getGameMode()));
-            packet.setEntityId(thisPlayer.getRuntimeId());
+            packet.setGameType(toGameType(player.getGameMode()));
+            packet.setEntityId(player.getRuntimeId());
             this.networkComponent.sendPacket(packet);
         }
     }

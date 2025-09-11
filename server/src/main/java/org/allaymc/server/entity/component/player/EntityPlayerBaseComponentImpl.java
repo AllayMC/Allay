@@ -199,12 +199,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void setGameMode(GameMode gameMode) {
-        var event = new PlayerGameModeChangeEvent(thisPlayer, this.gameMode, gameMode);
-        if (!event.call() || this.gameMode == event.getNewGameMode()) {
-            return;
+        setGameMode(gameMode, false);
+    }
+
+    protected void setGameMode(GameMode gameMode, boolean internal) {
+        if (!internal) {
+            var event = new PlayerGameModeChangeEvent(thisPlayer, this.gameMode, gameMode);
+            if (!event.call() || this.gameMode == event.getNewGameMode()) {
+                return;
+            }
+
+            gameMode = event.getNewGameMode();
         }
 
-        this.gameMode = event.getNewGameMode();
+        this.gameMode = gameMode;
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
         this.abilities.applyGameMode(this.gameMode);
 
@@ -565,7 +573,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(toGameMode(GameType.from(id))));
+        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(toGameMode(GameType.from(id)), true));
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
             loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
         } else {

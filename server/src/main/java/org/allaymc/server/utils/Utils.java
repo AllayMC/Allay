@@ -23,13 +23,6 @@ public class Utils {
         }
     }
 
-    public static int assertPositiveOrZero(int n, String name) {
-        if (n < 0) {
-            throw new IllegalArgumentException(name + ": " + n + " (expected: >= 0)");
-        }
-        return n;
-    }
-
     public static GameType toGameType(GameMode gameMode) {
         return switch (gameMode) {
             case SURVIVAL -> GameType.SURVIVAL;
