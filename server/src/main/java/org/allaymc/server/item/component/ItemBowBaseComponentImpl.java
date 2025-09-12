@@ -9,7 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.entity.EntityShootBowEvent;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.math.MathUtils;

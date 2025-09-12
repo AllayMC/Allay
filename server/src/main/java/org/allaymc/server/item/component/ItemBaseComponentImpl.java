@@ -19,7 +19,7 @@ import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;

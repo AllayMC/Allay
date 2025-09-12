@@ -15,7 +15,7 @@ import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;

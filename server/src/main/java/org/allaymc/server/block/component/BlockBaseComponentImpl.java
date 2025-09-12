@@ -8,10 +8,14 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -23,6 +27,8 @@ import org.allaymc.server.registry.InternalRegistries;
 import org.joml.Vector3ic;
 
 import java.util.Set;
+
+import static org.allaymc.api.item.ItemHelper.isSword;
 
 /**
  * @author daoge_cmd
@@ -58,6 +64,87 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         }
 
         return Set.of();
+    }
+
+    @Override
+    public double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
+        if (blockState.getBlockType() != getBlockType()) {
+            throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + blockState.getBlockType().getIdentifier());
+        }
+        
+        if (usedItem.canInstantBreak(blockState)) {
+            return 0;
+        }
+
+        var blockHardness = blockState.getBlockStateData().hardness();
+        if (blockHardness == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        var isCorrectTool = usedItem.isCorrectToolFor(blockState);
+        var requiresCorrectToolForDrops = blockState.getBlockStateData().requiresCorrectToolForDrops();
+
+        var baseTime = ((isCorrectTool || !requiresCorrectToolForDrops) ? 1.5d : 5d) * blockHardness;
+        var speed = 1d / baseTime;
+
+        double efficiency = 1d;
+        if (isCorrectTool) {
+            // Tool level (wooden, stone, iron, etc...) bonus
+            efficiency = usedItem.getBreakTimeBonus(blockState);
+            // Tool efficiency enchantment bonus
+            efficiency += speedBonusByEfficiency(usedItem.getEnchantmentLevel(EnchantmentTypes.EFFICIENCY));
+        }
+
+        if (isSword(usedItem.getItemType())) { // Special case
+            efficiency *= 1.5d;
+        }
+
+        speed *= efficiency;
+
+        if (entity != null) {
+            if (entity.hasEffect(EffectTypes.HASTE) || entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
+                var level = Math.max(entity.getEffectLevel(EffectTypes.HASTE), entity.getEffectLevel(EffectTypes.CONDUIT_POWER));
+                speed *= (0.2d * level + 1) * Math.pow(1.2d, level);
+            }
+
+            // Entity mining fatigue effect negative bonus
+            if (entity.hasEffect(EffectTypes.MINING_FATIGUE)) {
+                // speedMultiplier *= 0.3 ^ miningFatigueLevel
+                // damage *= 0.7 ^ miningFatigueLevel
+                // 0.3 + 0.7 = 0.21 ^ miningFatigueLevel
+                speed *= Math.pow(0.21d, entity.getEffectLevel(EffectTypes.MINING_FATIGUE));
+            }
+
+            var hasAquaAffinity = false;
+            if (entity instanceof EntityContainerHolderComponent containerHolder) {
+                if (containerHolder.hasContainer(FullContainerType.ARMOR)) {
+                    hasAquaAffinity = containerHolder
+                            .getContainer(FullContainerType.ARMOR)
+                            .getHelmet()
+                            .hasEnchantment(EnchantmentTypes.AQUA_AFFINITY);
+                }
+            }
+
+            // In water but no underwater speed mining effect
+            if (entity.isEyesInWater() && !hasAquaAffinity) {
+                speed /= 5d;
+            }
+
+            // In air
+            if (entity instanceof EntityPhysicsComponent physicsComponent && !physicsComponent.isOnGround()) {
+                speed /= 5d;
+            }
+        }
+
+        return Math.ceil(1d / speed * 20d) / 20d;
+    }
+
+    protected double speedBonusByEfficiency(int efficiencyLevel) {
+        if (efficiencyLevel == 0) {
+            return 0;
+        }
+
+        return (efficiencyLevel * efficiencyLevel) + 1;
     }
 
     @Override

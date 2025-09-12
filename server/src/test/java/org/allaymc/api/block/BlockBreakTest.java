@@ -6,7 +6,7 @@ import org.allaymc.api.container.impl.PlayerArmorContainer;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.testutils.AllayTestExtension;
