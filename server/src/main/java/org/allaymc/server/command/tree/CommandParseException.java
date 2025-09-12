@@ -1,4 +1,4 @@
-package org.allaymc.api.command.exception;
+package org.allaymc.server.command.tree;
 
 import lombok.experimental.StandardException;
 

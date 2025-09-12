@@ -81,6 +81,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
 - (API) Refactored the weather system. Removed network related code in `Weather`, and world will hold only one `Weather` instance now.
 - (API) Moved the implementations of `EnchantmentType` from api module to server module.
+- (API) Moved class `CommandParseException` from api module to server module.
 
 ### Fixed
 
