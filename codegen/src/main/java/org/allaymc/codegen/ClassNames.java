@@ -18,7 +18,7 @@ public interface ClassNames {
     ClassName DELEGATE = ClassName.get("lombok.experimental", "Delegate");
 
     // allay
-    ClassName API_IDENTIFIER = ClassName.get("org.allaymc.api.utils", "Identifier");
+    ClassName API_IDENTIFIER = ClassName.get("org.allaymc.api.utils.identifier", "Identifier");
     ClassName DEP_IDENTIFIER = ClassName.get("org.allaymc.dependence", "Identifier");
 
     ClassName COMPONENT = ClassName.get("org.allaymc.api.component.interfaces", "Component");

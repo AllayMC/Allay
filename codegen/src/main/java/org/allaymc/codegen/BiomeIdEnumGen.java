@@ -70,19 +70,19 @@ public class BiomeIdEnumGen {
                         .builder(ClassNames.STRING, "type", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(ClassNames.API_IDENTIFIER, "identifier")
+                        .addParameter(ClassNames.STRING, "identifier")
                         .addParameter(int.class, "id")
                         .addParameter(ClassNames.STRING, "type")
-                        .addStatement("this.identifier = identifier")
+                        .addStatement("this.identifier = new $T(identifier)", ClassNames.API_IDENTIFIER)
                         .addStatement("this.id = id")
                         .addStatement("this.type = type")
                         .build()
                 );
         for (var entry : BIOME_DATA.entrySet()) {
-            var identifier = "new Identifier(\"minecraft:%s\")".formatted(entry.getKey());
+            var identifier = "minecraft:" + entry.getKey();
             var id = entry.getValue().id;
             var type = entry.getValue().type;
-            codeBuilder.addEnumConstant(entry.getKey().toUpperCase(), TypeSpec.anonymousClassBuilder("$L, $L, $S", identifier, id, type).build());
+            codeBuilder.addEnumConstant(entry.getKey().toUpperCase(), TypeSpec.anonymousClassBuilder("$S, $L, $S", identifier, id, type).build());
         }
         codeBuilder.addSuperinterface(ClassNames.BIOME_TYPE);
 
