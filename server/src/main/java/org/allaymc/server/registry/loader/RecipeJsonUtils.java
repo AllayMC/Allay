@@ -10,7 +10,7 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.ArrayList;

@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
 import java.util.Collection;

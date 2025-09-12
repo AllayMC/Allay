@@ -28,6 +28,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `api_version` for plugin descriptor, which can set the api version requirement of a plugin.
 - (API) Introduced component `EntityPlayerScoreboardViewerComponent` for player.
 - (API) Introduced component `EntityPlayerDebugShapeViewerComponent` for player.
+- (API) Introduced a bunch of  `XXXViewer` (e.g. `WorldViewer`) interfaces which is a tiny wrapper for packet operations. This is
+  inspired by df-mc/dragonfly to reduce the code associated with network packet contained in api module.
+- (API) Introduced a bunch of functional interfaces in package `utils.funtion`.
+- (API) Introduced classes `AnimateAction`, `EntityEvent`, `EntityFlag` and `EntityData`, and they correspond to classes in the protocol library.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
@@ -53,6 +57,31 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
 - (API) Moved classes `Structure` and `StructureException` from `utils` to `world` package.
 - (API) Moved class `BlockAndItemIdMapper` from api to server module.
+- (API) Moved all effect implementations from api to server module.
+- (API) Renamed classes `BlockStateSafeGetter` and `ItemTypeSafeGetter` to `BlockStateGetter` and `ItemTypeGetter`.
+- (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
+- (API) Renamed method `EntityBaseComponent.applyEntityEvent()` to `EntityBaseComponent.applyEvent()`.
+- (API) Moved classes under package `component.interfaces` to `component` package.
+- (API) Moved class `ScoreboardStorage` form package `scoreboard.storage` to `scoreboard` package.
+- (API) Made classes `UIProfile`, `DeviceInfo` and `Device` as the inner classes of `LoginData`.
+- (API) Flattened all classes under `player` package.
+- (API) Moved classes `Abilities` and `AdventureSettings` from api module to server module. Since most of the abilities/settings have corresponded permission,
+  consider using permission instead.
+- (API) Introduced new `GameMode` enum, and the old `GameType` used in protocol lib is unused since it has many game types which only exist in vanilla.
+- (API) Moved classes `HashUtils` and `HashException` from package `utils` to `utils.hash`.
+- (API) Moved classes `Identified`, `Identifier`, `IdentifierUtils` and `InvalidIdentifierException` from package `utils` to `utils.identifier`.
+- (API) Moved class `GameLoop` from api module to server module.
+- (API) Moved class `JSONUtils` and the classes only used by this util from api module to server module.
+- (API) Moved class `Difficulty`, `DimensionInfo`, `Sound` and `Weather` from package `world` to package `world.data`.
+- (API) Renamed class `ApiInstanceHolder` to `APIInstanceHolder`.
+- (API) Made classes `APINotImplementedException`, `MissingImplementationException`, `MissingRequirementException` and `APIInstanceHolder` as the private subclasses of `AllayAPI`.
+- (API) Moved class `NPCCommandSender` from api module to server module.
+- (API) Moved class `ClientStatus` from package `network` to package `player` and renamed it to `ClientState`.
+- (API) Renamed class `EntityStatus` to `EntityState`.
+- (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
+- (API) Refactored the weather system. Removed network related code in `Weather`, and world will hold only one `Weather` instance now.
+- (API) Moved the implementations of `EnchantmentType` from api module to server module.
+- (API) Moved class `CommandParseException` from api module to server module.
 
 ### Fixed
 
@@ -66,8 +95,18 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
-- Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerNetworkComponent` because
+- (API) Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerNetworkComponent` because
   these methods are not very useful as APIs.
+- (API) Removed class `CustomBlockComponent` since it is never used.
+- (API) Removed class `Metadata` which is used in entity. Using the getter/setter methods for entity data and flag in `EntityBaseComponent` directly.
+- (API) Removed adventure settings related permissions in `Permissions` since adventure settings should only change when the game mode change.
+- (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
+- (API) Removed field `networkId` in `EntityId` since it is never used.
+- (API) Removed method `Difficulty.from(String)`.
+- (API) Removed methods `EntityAttributeComponent.basicEntityAttributes()` and `EntityPlayerAttributeComponent.basicPlayerAttributes()`.
+- (API) Removed methods `ChunkLoader.onChunkInRangeSend()` and `ChunkLoader.onChunkOutOfRange()`, they are replaced by `WorldViewer.viewChunk()` and `WorldViewer.removeChunk()`.
+- (API) Removed method `WorldData.sendTimeOfDay()`.
+- (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

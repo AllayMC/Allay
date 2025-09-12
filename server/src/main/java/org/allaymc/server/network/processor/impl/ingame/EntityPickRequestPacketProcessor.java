@@ -2,8 +2,8 @@ package org.allaymc.server.network.processor.impl.ingame;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.network.processor.PacketProcessor;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.EntityPickRequestPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -15,7 +15,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class EntityPickRequestPacketProcessor extends PacketProcessor<EntityPickRequestPacket> {
     @Override
     public PacketSignal handleAsync(EntityPlayer player, EntityPickRequestPacket packet, long receiveTime) {
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             log.warn("Player {} tried to pick an entity in a non-creative gamemode", player.getOriginName());
             return PacketSignal.UNHANDLED;
         }

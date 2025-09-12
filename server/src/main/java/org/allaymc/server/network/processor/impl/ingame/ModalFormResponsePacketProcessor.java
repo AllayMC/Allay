@@ -3,6 +3,8 @@ package org.allaymc.server.network.processor.impl.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.type.CustomForm;
+import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ModalFormResponsePacket;
@@ -16,7 +18,8 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
     @Override
     public void handleSync(EntityPlayer player, ModalFormResponsePacket packet, long receiveTime) {
         var id = packet.getFormId();
-        var form = player.removeForm(id);
+        var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
+        var form = baseComponent.removeForm(id);
         var isServerSettingsForm = false;
         if (form == null) {
             var serverSettingForm = player.getServerSettingForm();

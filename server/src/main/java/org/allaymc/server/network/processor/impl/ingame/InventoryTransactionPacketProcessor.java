@@ -68,10 +68,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
-                        var clickBlockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
-                        var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
+                        var clickBlockPos = MathUtils.toJOMLVec(packet.getBlockPosition());
+                        var clickPos = MathUtils.toJOMLVec(packet.getClickPosition());
                         // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
-                        if (isSpamClick(clickPos, clickBlockPos, MathUtils.CBVecToJOMLVec(packet.getPlayerPosition()))) {
+                        if (isSpamClick(clickPos, clickBlockPos, MathUtils.toJOMLVec(packet.getPlayerPosition()))) {
                             break;
                         }
 
@@ -158,7 +158,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
-                        var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
+                        var clickPos = MathUtils.toJOMLVec(packet.getClickPosition());
                         var event = new PlayerInteractEntityEvent(player, target, itemInHand, clickPos);
                         if (!event.call()) {
                             return;

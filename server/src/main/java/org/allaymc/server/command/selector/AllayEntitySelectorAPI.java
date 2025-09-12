@@ -4,7 +4,6 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Lists;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.NPCCommandSender;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.args.SelectorArgument;
@@ -12,6 +11,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.server.command.NPCCommandSender;
 import org.allaymc.server.command.selector.args.*;
 
 import java.util.*;

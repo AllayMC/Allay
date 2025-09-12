@@ -3,7 +3,7 @@ package org.allaymc.server.block;
 import com.google.common.base.Preconditions;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Random;

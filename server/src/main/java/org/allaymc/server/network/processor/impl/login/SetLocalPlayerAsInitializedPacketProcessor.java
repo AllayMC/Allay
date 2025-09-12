@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor.impl.login;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.network.ClientStatus;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -24,7 +24,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
             return;
         }
 
-        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientStatus(ClientStatus.IN_GAME);
+        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientStatus(ClientState.IN_GAME);
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground

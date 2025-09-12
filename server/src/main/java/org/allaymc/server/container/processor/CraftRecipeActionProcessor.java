@@ -13,10 +13,10 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.impl.CraftingRecipe;
 import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.allaymc.server.registry.InternalRegistries;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -113,7 +113,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         enchantments = event.getEnchantments();
         requiredLapisLazuliCount = event.getRequiredLapisLazuliCount();
 
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             var material = enchantTableContainer.getMaterial();
             if (material.getItemType() != ItemTypes.LAPIS_LAZULI || material.getCount() < requiredLapisLazuliCount) {
                 log.warn("Not enough lapis lazuli! Need: {}, Current: {}", requiredLapisLazuliCount, enchantTableContainer.getMaterial().getCount());

@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.blockentity.component.BlockEntityEnderChestBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**

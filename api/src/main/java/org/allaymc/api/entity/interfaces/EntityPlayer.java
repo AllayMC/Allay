@@ -11,13 +11,15 @@ import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.allaymc.api.player.GameMode;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.joml.Vector3d;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
+/**
+ * EntityPlayer represents a player.
+ */
 public interface EntityPlayer extends
         Entity,
         EntityPlayerBaseComponent,
@@ -28,7 +30,8 @@ public interface EntityPlayer extends
         EntityDamageComponent,
         EntityPhysicsComponent,
         EntityPlayerScoreboardViewerComponent,
-        EntityPlayerDebugShapeViewerComponent {
+        EntityPlayerDebugShapeViewerComponent,
+        EntityPlayerChunkLoaderComponent {
 
     /**
      * Returns the reachable container for the given full container type.
@@ -190,7 +193,7 @@ public interface EntityPlayer extends
      * Does nothing in Creative mode.
      */
     default void tryConsumeItemInHand() {
-        if (getGameType() == GameType.CREATIVE) {
+        if (getGameMode() == GameMode.CREATIVE) {
             return;
         }
 
@@ -214,18 +217,6 @@ public interface EntityPlayer extends
         } else {
             inv.setItemInHand(ItemAirStack.AIR_STACK);
         }
-    }
-
-    /**
-     * Sends a swing arm animation packet to the player and nearby viewers.
-     */
-    default void swingArm() {
-        var packet = new AnimatePacket();
-        packet.setAction(AnimatePacket.Action.SWING_ARM);
-        packet.setRuntimeEntityId(getRuntimeId());
-
-        sendPacket(packet);
-        sendPacketToViewers(packet);
     }
 }
 

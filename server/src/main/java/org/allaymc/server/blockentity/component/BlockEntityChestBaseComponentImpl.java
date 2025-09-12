@@ -5,7 +5,7 @@ import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;

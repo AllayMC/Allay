@@ -1,14 +1,14 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerScoreboardViewerComponent;
+import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.packet.RemoveObjectivePacket;
@@ -16,8 +16,6 @@ import org.cloudburstmc.protocol.bedrock.packet.SetDisplayObjectivePacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetScorePacket;
 
 import java.util.Objects;
-
-import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCORE;
 
 /**
  * @author daoge_cmd
@@ -27,8 +25,6 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_player_scoreboard_viewer_component");
 
-    @Dependency
-    protected EntityPlayerBaseComponent baseComponent;
     @Dependency
     protected EntityPlayerNetworkComponentImpl networkComponent;
 
@@ -60,7 +56,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         var scorer = new PlayerScorer(thisPlayer);
         var line = scoreboard.getLine(scorer);
         if (slot == DisplaySlot.BELOW_NAME && line != null) {
-            baseComponent.setAndSendEntityData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
+            thisPlayer.setData(EntityData.SCORE, line.getScore() + " " + scoreboard.getDisplayName());
         }
     }
 
@@ -75,7 +71,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         networkComponent.sendPacket(packet);
 
         if (slot == DisplaySlot.BELOW_NAME) {
-            baseComponent.setAndSendEntityData(SCORE, "");
+            thisPlayer.setData(EntityData.SCORE, "");
         }
     }
 
@@ -98,7 +94,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisPlayer)) {
-            baseComponent.setAndSendEntityData(SCORE, "");
+            thisPlayer.setData(EntityData.SCORE, "");
         }
     }
 
@@ -113,7 +109,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
-            baseComponent.setAndSendEntityData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
+            thisPlayer.setData(EntityData.SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
         }
     }
 

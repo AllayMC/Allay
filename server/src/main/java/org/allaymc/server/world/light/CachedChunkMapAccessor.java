@@ -1,6 +1,6 @@
 package org.allaymc.server.world.light;
 
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.jctools.maps.NonBlockingHashMapLong;
 
 /**

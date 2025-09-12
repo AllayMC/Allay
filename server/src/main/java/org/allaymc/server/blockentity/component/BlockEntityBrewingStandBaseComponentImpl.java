@@ -17,7 +17,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.impl.PotionMixRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;

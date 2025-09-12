@@ -2,7 +2,7 @@ package org.allaymc.server.utils;
 
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.item.data.ItemId;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * A class that handle the mapping relation between block and item id.

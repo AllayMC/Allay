@@ -8,7 +8,7 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEatEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemEdibleComponent;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
 import org.allaymc.server.item.component.event.CItemUsedInAirEvent;

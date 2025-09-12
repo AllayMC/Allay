@@ -815,7 +815,9 @@ public final class ItemTypeInitializer {
                                 return false;
                             }
 
-                            player.setCooldown(ItemTypes.ENDER_PEARL, 20);
+                            // NOTICE: No need to send cooldown to the client since the client will display cooldown
+                            // automatically if the item/category has cool down after used it
+                            player.setCooldown(ItemTypes.ENDER_PEARL, 20, false);
                         }
 
                         return super.shoot(shooter);

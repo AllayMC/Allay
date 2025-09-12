@@ -1,6 +1,6 @@
 package org.allaymc.api.bossbar;
 
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public interface BossBar {
 
-    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<Factory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
     /**
      * Create a new boss bar.

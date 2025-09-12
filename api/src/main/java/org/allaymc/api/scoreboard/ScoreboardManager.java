@@ -13,7 +13,6 @@ import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.scoreboard.scorer.Scorer;
-import org.allaymc.api.scoreboard.storage.ScoreboardStorage;
 import org.allaymc.api.server.Server;
 
 import java.util.ArrayList;

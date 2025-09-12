@@ -8,13 +8,13 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
 import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
@@ -42,6 +42,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     // It is hard for us to calculate the exact breaking time when player keep jumping
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
+    protected static final float PLAYER_NETWORK_OFFSET = 1.62f;
 
     protected int breakingPosX = Integer.MAX_VALUE;
     protected int breakingPosY = Integer.MAX_VALUE;
@@ -59,8 +60,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         // Creative mode player can break blocks just like they are in
         // survival mode if "delayed block breaking" option is enabled
         // TODO: implement canBreak & canPlace feature
-        return player.getGameType() == GameType.ADVENTURE ||
-               player.getGameType() == GameType.SPECTATOR;
+        return player.getGameMode() == GameMode.ADVENTURE ||
+               player.getGameMode() == GameMode.SPECTATOR;
     }
 
     protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
@@ -78,7 +79,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.canReachBlock(MathUtils.CBVecToJOMLVec(pos))) {
+                    if (!player.canReachBlock(MathUtils.toJOMLVec(pos))) {
                         log.debug("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -153,7 +154,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.breakingPosY = y;
         this.breakingPosZ = z;
         this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new Block(blockToBreak, new Position3i(x, y, z, player.getDimension())), faceToBreak, player.getItemInHand(), player);
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             this.timeNeededToBreak = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
         } else {
             // Creative mode players can break blocks instantly
@@ -302,7 +303,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
         if (baseComponent.isAwaitingTeleportACK()) {
-            var clientPos = MathUtils.CBVecToJOMLVec(packet.getPosition().sub(0, player.getNetworkOffset(), 0));
+            var clientPos = MathUtils.toJOMLVec(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();
             if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
                 // The player has moved before it received the teleport packet. Ignore this movement entirely and
@@ -320,7 +321,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         if (isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
             // The pos which client sends to the server is higher than the actual coordinates (one base offset)
-            handleMovement(player, packet.getPosition().sub(0, player.getNetworkOffset(), 0), packet.getRotation());
+            handleMovement(player, packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0), packet.getRotation());
         }
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
         if (isBreakingBlock()) {
@@ -345,7 +346,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected boolean isLocationChanged(EntityPlayer player, Vector3f pos, Vector3f rot) {
         // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
         var location = player.getLocation();
-        return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + player.getNetworkOffset(), pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
+        return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + PLAYER_NETWORK_OFFSET, pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
                Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0 || Double.compare(location.headYaw(), rot.getZ()) != 0;
     }
 

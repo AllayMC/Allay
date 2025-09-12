@@ -18,7 +18,7 @@ import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;

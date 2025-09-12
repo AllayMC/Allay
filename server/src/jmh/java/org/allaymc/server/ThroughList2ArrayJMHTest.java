@@ -1,6 +1,5 @@
 package org.allaymc.server;
 
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -24,7 +23,7 @@ public class ThroughList2ArrayJMHTest {
     private final ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>> data2 = new ArrayList<>(3);
 
     @Setup
-    public void setup() throws MissingImplementationException {
+    public void setup() {
         Allay.initI18n();
         Allay.initAllay();
         data1[0] = BlockPropertyTypes.AGE_16.createValue(5);

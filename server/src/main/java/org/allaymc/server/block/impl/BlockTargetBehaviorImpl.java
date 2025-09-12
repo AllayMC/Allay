@@ -1,8 +1,8 @@
 package org.allaymc.server.block.impl;
 
 import org.allaymc.api.block.interfaces.BlockTargetBehavior;
-import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.api.component.Component;
+import org.allaymc.server.component.ComponentProvider;
 
 import java.util.List;
 

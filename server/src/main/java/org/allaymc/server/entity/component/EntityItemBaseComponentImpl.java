@@ -11,10 +11,7 @@ import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -88,20 +85,4 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
         return new AABBd(-0.125, 0.0, -0.125, 0.125, 0.25, 0.125);
     }
 
-    @Override
-    public float getNetworkOffset() {
-        return 0.125f;
-    }
-
-    @Override
-    public BedrockPacket createSpawnPacket0() {
-        var packet = new AddItemEntityPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setUniqueEntityId(runtimeId);
-        packet.setItemInHand(itemStack.toNetworkItemData());
-        packet.setPosition(Vector3f.from(location.x, location.y, location.z));
-        packet.setMotion(Vector3f.ZERO);
-        packet.getMetadata().putAll(metadata.getEntityDataMap());
-        return packet;
-    }
 }

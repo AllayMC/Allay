@@ -8,8 +8,8 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBlockPickEvent;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.network.processor.PacketProcessor;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
 
@@ -23,8 +23,8 @@ import java.util.stream.IntStream;
 public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
     public void handleSync(EntityPlayer player, BlockPickRequestPacket packet, long receiveTime) {
-        var blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
-        if (!player.canReachBlock(blockPos) || player.getGameType() != GameType.CREATIVE) {
+        var blockPos = MathUtils.toJOMLVec(packet.getBlockPosition());
+        if (!player.canReachBlock(blockPos) || player.getGameMode() != GameMode.CREATIVE) {
             return;
         }
 

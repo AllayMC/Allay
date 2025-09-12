@@ -11,23 +11,6 @@ import java.util.List;
  * @author daoge_cmd
  */
 public interface EntityAttributeComponent extends EntityComponent {
-
-    /**
-     * Get basic entity attributes.
-     *
-     * @return basic entity attributes
-     */
-    static AttributeType[] basicEntityAttributes() {
-        return new AttributeType[]{
-                AttributeType.ABSORPTION,
-                AttributeType.KNOCKBACK_RESISTANCE,
-                AttributeType.HEALTH,
-                AttributeType.MOVEMENT_SPEED,
-                AttributeType.UNDER_WATER_MOVEMENT_SPEED,
-                AttributeType.LAVA_MOVEMENT_SPEED
-        };
-    }
-
     /**
      * Add attribute to entity.
      *
@@ -46,7 +29,6 @@ public interface EntityAttributeComponent extends EntityComponent {
      * Get attribute by type.
      *
      * @param attributeType attribute type
-     *
      * @return attribute, or {@code null} if type is not supported.
      */
     Attribute getAttribute(AttributeType attributeType);
@@ -62,7 +44,6 @@ public interface EntityAttributeComponent extends EntityComponent {
      * Get attribute value by type.
      *
      * @param attributeType attribute type
-     *
      * @return attribute value
      */
     float getAttributeValue(AttributeType attributeType);
@@ -79,7 +60,6 @@ public interface EntityAttributeComponent extends EntityComponent {
      * Check if entity support specified attribute type.
      *
      * @param attributeType the attribute type to check
-     *
      * @return {@code true} if entity supports the specified attribute type, {@code false} otherwise.
      */
     default boolean supportAttribute(AttributeType attributeType) {

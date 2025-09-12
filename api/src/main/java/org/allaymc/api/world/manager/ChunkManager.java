@@ -1,7 +1,7 @@
 package org.allaymc.api.world.manager;
 
 import org.allaymc.api.server.ServerSettings;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.chunk.ChunkSource;

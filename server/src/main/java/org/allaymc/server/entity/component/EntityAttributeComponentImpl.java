@@ -7,10 +7,10 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
@@ -62,6 +62,17 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         for (Attribute attribute : attributes) {
             this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
         }
+    }
+
+    public static AttributeType[] basicEntityAttributes() {
+        return new AttributeType[]{
+                AttributeType.ABSORPTION,
+                AttributeType.KNOCKBACK_RESISTANCE,
+                AttributeType.HEALTH,
+                AttributeType.MOVEMENT_SPEED,
+                AttributeType.UNDER_WATER_MOVEMENT_SPEED,
+                AttributeType.LAVA_MOVEMENT_SPEED
+        };
     }
 
     @EventHandler

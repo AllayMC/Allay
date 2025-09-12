@@ -18,7 +18,7 @@ public interface ClassNames {
     ClassName DELEGATE = ClassName.get("lombok.experimental", "Delegate");
 
     // allay
-    ClassName API_IDENTIFIER = ClassName.get("org.allaymc.api.utils", "Identifier");
+    ClassName API_IDENTIFIER = ClassName.get("org.allaymc.api.utils.identifier", "Identifier");
     ClassName DEP_IDENTIFIER = ClassName.get("org.allaymc.dependence", "Identifier");
 
     ClassName COMPONENT = ClassName.get("org.allaymc.api.component.interfaces", "Component");
@@ -65,6 +65,6 @@ public interface ClassNames {
 
     ClassName TR_KEYS = ClassName.get("org.allaymc.api.i18n", "TrKeys");
     ClassName MINECRAFT_VERSION_SENSITIVE = ClassName.get("org.allaymc.api.annotation", "MinecraftVersionSensitive");
-    ClassName SOUND = ClassName.get("org.allaymc.api.world", "Sound");
+    ClassName SOUND = ClassName.get("org.allaymc.api.world.data", "Sound");
     ClassName CREATIVE_ITEM_GROUPS = ClassName.get("org.allaymc.api.item.creative", "CreativeItemGroups");
 }

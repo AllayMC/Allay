@@ -2,11 +2,12 @@ package org.allaymc.api.pack;
 
 import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.SemVersion;
 
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +23,19 @@ import java.util.UUID;
 public class PackManifest {
 
     private static final String FILE_NAME = "manifest.json";
+    private static final Gson GSON;
+
+    static {
+        var builder = new GsonBuilder();
+        builder.disableHtmlEscaping();
+        builder.registerTypeAdapter(SemVersion.class, new SemVersion.Serializer());
+        builder.registerTypeAdapter(SemVersion.class, new SemVersion.Deserializer());
+        builder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Deserializer());
+        builder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Serializer());
+        builder.registerTypeAdapter(PackManifest.Capability.class, new PackManifest.Capability.Deserializer());
+        builder.registerTypeAdapter(PackManifest.Capability.class, new PackManifest.Capability.Serializer());
+        GSON = builder.create();
+    }
 
     @SerializedName("format_version")
     private String formatVersion;
@@ -35,7 +49,6 @@ public class PackManifest {
      * Load pack manifest using the given loader.
      *
      * @param loader the loader to be used for loading the manifest
-     *
      * @return the loaded pack manifest, or {@code null} if the manifest does not exist or could not be loaded
      */
     public static PackManifest load(PackLoader loader) {
@@ -46,7 +59,8 @@ public class PackManifest {
         }
 
         try {
-            return JSONUtils.from(loader.getFile(FILE_NAME), PackManifest.class);
+            JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(loader.getFile(FILE_NAME))));
+            return GSON.fromJson(reader, PackManifest.class);
         } catch (Throwable t) {
             log.error("Failed to load {}", loader.getLocation(), t);
             return null;

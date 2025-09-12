@@ -3,6 +3,8 @@ package org.allaymc.api.command;
 import org.allaymc.api.command.tree.CommandContext;
 
 /**
+ * CommandResult represents the result of a command execution.
+ *
  * @author daoge_cmd
  */
 public record CommandResult(int status, CommandContext context) {
@@ -21,7 +23,6 @@ public record CommandResult(int status, CommandContext context) {
      * Creates a new CommandResult instance for a failed command execution.
      *
      * @param context The command context
-     *
      * @return A new CommandResult instance for a failed command execution
      */
     public static CommandResult fail(CommandContext context) {
@@ -41,7 +42,6 @@ public record CommandResult(int status, CommandContext context) {
      * Creates a new CommandResult instance for a successful command execution.
      *
      * @param context The command context
-     *
      * @return A new CommandResult instance for a successful command execution
      */
     public static CommandResult success(CommandContext context) {

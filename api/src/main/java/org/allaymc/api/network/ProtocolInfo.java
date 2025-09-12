@@ -19,6 +19,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
+// TODO: move it from api to server
 @UtilityClass
 public final class ProtocolInfo {
 
@@ -52,16 +53,11 @@ public final class ProtocolInfo {
     public static final ItemStateUpdater ITEM_STATE_UPDATER = ItemStateUpdater_1_21_100.INSTANCE;
 
     /**
-     * The encoded version number of the block state version (without revision).
-     */
-    public static final int BLOCK_STATE_VERSION_NUM_NO_REVISION = (BLOCK_STATE_VERSION.major() << 24) |
-                                                                  (BLOCK_STATE_VERSION.minor() << 16) |
-                                                                  (BLOCK_STATE_VERSION.patch() << 8);
-
-    /**
      * The encoded version number of the block state version.
      */
-    public static final int BLOCK_STATE_VERSION_NUM = BLOCK_STATE_VERSION_NUM_NO_REVISION | BLOCK_STATE_VERSION.revision();
+    public static final int BLOCK_STATE_VERSION_NUM = (BLOCK_STATE_VERSION.major() << 24) |
+                                                      (BLOCK_STATE_VERSION.minor() << 16) |
+                                                      (BLOCK_STATE_VERSION.patch() << 8) | BLOCK_STATE_VERSION.revision();
 
     /**
      * Get the latest codec.
@@ -85,7 +81,6 @@ public final class ProtocolInfo {
      * Find the codec by protocol version.
      *
      * @param protocolVersion the protocol version
-     *
      * @return the codec, or {@code null} if not found
      */
     public static BedrockCodec findCodec(int protocolVersion) {

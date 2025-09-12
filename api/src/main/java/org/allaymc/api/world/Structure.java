@@ -1,9 +1,10 @@
 package org.allaymc.api.world;
 
 import lombok.Getter;
+import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockStateSafeGetter;
+import org.allaymc.api.block.type.BlockStateGetter;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -130,7 +131,7 @@ public record Structure(
         var layer1 = (List<Integer>) blockIndices.get(1);
         var palette = structureNBT.getCompound("palette").getCompound("default");
         var blockEntityNBT = palette.getCompound("block_position_data");
-        var blockPalette = palette.getList("block_palette", NbtType.COMPOUND).stream().map(BlockStateSafeGetter::fromNBT).toList();
+        var blockPalette = palette.getList("block_palette", NbtType.COMPOUND).stream().map(BlockStateGetter::fromNBT).toList();
 
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
         for (int lx = 0; lx < sizeX; lx++) {
@@ -307,5 +308,9 @@ public record Structure(
                 return index;
             }
         }
+    }
+
+    @StandardException
+    private static class StructureException extends RuntimeException {
     }
 }

@@ -1,12 +1,12 @@
 package org.allaymc.api.server;
 
 import eu.okaeri.configs.ConfigManager;
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.player.manager.PlayerManager;
+import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutorService;
  */
 public interface Server extends TaskCreator, CommandSender {
 
-    ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<Server> INSTANCE = AllayAPI.APIInstanceHolder.create();
 
     String SETTINGS_FILE_NAME = "server-settings.yml";
 

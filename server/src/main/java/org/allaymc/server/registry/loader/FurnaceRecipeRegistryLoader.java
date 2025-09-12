@@ -8,8 +8,8 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
 import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.io.InputStreamReader;
 import java.util.Map;

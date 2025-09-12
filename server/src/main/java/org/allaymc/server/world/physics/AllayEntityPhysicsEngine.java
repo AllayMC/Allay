@@ -16,7 +16,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
 import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;

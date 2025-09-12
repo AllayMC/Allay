@@ -8,7 +8,6 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
@@ -52,7 +51,7 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
             block.getDimension().setBlockState(block.getPosition(), BlockTypes.WATER.getDefaultState());
         }
 
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Set.of();
     }
 
     @Override

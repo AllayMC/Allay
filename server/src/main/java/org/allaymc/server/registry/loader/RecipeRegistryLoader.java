@@ -15,8 +15,8 @@ import org.allaymc.api.item.recipe.impl.ShapelessRecipe;
 import org.allaymc.api.item.recipe.impl.SmithingTransformRecipe;
 import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
 import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.io.InputStreamReader;
 import java.util.*;

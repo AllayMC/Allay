@@ -3,7 +3,7 @@ package org.allaymc.server.item.component.edible;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.ItemPotionComponent;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 
 /**

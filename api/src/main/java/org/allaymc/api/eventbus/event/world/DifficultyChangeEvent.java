@@ -3,8 +3,8 @@ package org.allaymc.api.eventbus.event.world;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.data.Difficulty;
 
 /**
  * @author daoge_cmd

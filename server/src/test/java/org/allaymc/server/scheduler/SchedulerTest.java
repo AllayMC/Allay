@@ -2,7 +2,7 @@ package org.allaymc.server.scheduler;
 
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
-import org.allaymc.api.utils.GameLoop;
+import org.allaymc.server.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.Executors;

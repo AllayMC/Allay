@@ -8,8 +8,6 @@ import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ArmorTier;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.cloudburstmc.protocol.bedrock.packet.MobArmorEquipmentPacket;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -43,22 +41,7 @@ public class PlayerArmorContainer extends PlayerContainer {
         var player = playerSupplier.get();
         player.setAttributeValue(AttributeType.KNOCKBACK_RESISTANCE, knockbackResistance);
         // Send armor to viewers
-        player.sendPacketToViewers(buildArmorEquipmentPacket(player.getRuntimeId()));
-    }
-
-    public void sendArmorEquipmentPacketTo(EntityPlayer player) {
-        player.sendPacket(buildArmorEquipmentPacket(playerSupplier.get().getRuntimeId()));
-    }
-
-    private @NotNull MobArmorEquipmentPacket buildArmorEquipmentPacket(long runtimeId) {
-        var packet = new MobArmorEquipmentPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setBody(ItemAirStack.AIR_STACK.toNetworkItemData());
-        packet.setHelmet(getHelmet().toNetworkItemData());
-        packet.setChestplate(getChestplate().toNetworkItemData());
-        packet.setLeggings(getLeggings().toNetworkItemData());
-        packet.setBoots(getBoots().toNetworkItemData());
-        return packet;
+        player.forEachViewers(viewer -> viewer.viewEntityArmors(player));
     }
 
     public ItemStack getHelmet() {

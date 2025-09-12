@@ -2,7 +2,7 @@ package org.allaymc.server.i18n;
 
 import com.google.gson.reflect.TypeToken;
 import org.allaymc.api.i18n.LangCode;
-import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.server.utils.JSONUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

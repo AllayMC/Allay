@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;

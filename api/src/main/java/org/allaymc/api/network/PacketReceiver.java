@@ -7,6 +7,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
  *
  * @author daoge_cmd
  */
+// TODO: remove it
 public interface PacketReceiver {
     /**
      * Send a packet.

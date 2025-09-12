@@ -8,8 +8,8 @@ import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.recipe.input.PotionMixRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
-import org.allaymc.api.utils.Identified;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identified;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
 
 /**

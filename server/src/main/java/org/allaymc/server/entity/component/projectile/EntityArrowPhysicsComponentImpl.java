@@ -7,11 +7,11 @@ import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -110,8 +110,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         addHitSound(hitPos);
-        this.arrowBaseComponent.applyEntityEvent(
-                EntityEventType.ARROW_SHAKE,
+        this.arrowBaseComponent.applyEvent(
+                EntityEvent.ARROW_SHAKE,
                 7 // How many times the arrow shakes
         );
         this.arrowBaseComponent.setCritical(false);

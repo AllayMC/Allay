@@ -5,13 +5,16 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityStatus;
+import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityEvent;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
-import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
@@ -21,21 +24,16 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
-import org.allaymc.api.player.storage.PlayerStorage;
+import org.allaymc.api.player.PlayerStorage;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.manager.EntityManager;
 import org.allaymc.api.world.physics.HasAABB;
 import org.allaymc.api.world.physics.HasLongId;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -46,6 +44,7 @@ import org.joml.primitives.AABBdc;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * @author daoge_cmd
@@ -60,9 +59,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     EntityType<? extends Entity> getEntityType();
 
     /**
-     * Gets the display name of this entity.
+     * Get the display name of the entity.
+     * <p>
+     * Display name is used in chat, damage message etc. Normally, it is equal to the origin name,
+     * however you can change the display name compared to the origin name. This is very useful for
+     * plugin especially if plugin wants to change the appearance of entity name in chat because
+     * origin name cannot be changed.
      *
-     * @return the display name of this entity
+     * @return The display name of the player
      */
     String getDisplayName();
 
@@ -79,7 +83,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return the name tag of this entity
      */
     default String getNameTag() {
-        return getMetadata().get(EntityDataTypes.NAME);
+        return getData(EntityData.NAME);
     }
 
     /**
@@ -88,14 +92,34 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param nameTag the name tag to set
      */
     default void setNameTag(String nameTag) {
-        setAndSendEntityData(EntityDataTypes.NAME, nameTag);
+        setData(EntityData.NAME, nameTag);
     }
 
     /**
      * Clears the name tag of this entity.
      */
     default void clearNameTag() {
-        setAndSendEntityData(EntityDataTypes.NAME, "");
+        setData(EntityData.NAME, "");
+    }
+
+    /**
+     * Checks whether this entity is visible to its viewers.
+     *
+     * @return whether this entity is visible to its viewers
+     */
+    default boolean isInvisible() {
+        return getFlag(EntityFlag.INVISIBLE);
+    }
+
+    /**
+     * Sets whether this entity is invisible to its viewers. When set to {@code true}, this
+     * entity will not be visible to its viewers, however the item in its hand/offhand, the
+     * armor it wears and the effect particle around this entity will still remain visible.
+     *
+     * @param visible whether the body of this entity is visible to its viewers
+     */
+    default void setInvisible(boolean visible) {
+        setFlag(EntityFlag.INVISIBLE, visible);
     }
 
     /**
@@ -140,11 +164,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the status of the entity.
+     * Get the state of the entity.
      *
-     * @return the status of the entity
+     * @return the state of the entity
      */
-    EntityStatus getStatus();
+    EntityState getState();
 
     /**
      * Check if the entity will be spawned in the next tick.
@@ -152,7 +176,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity will be spawned in the next tick.
      */
     default boolean willBeSpawnedNextTick() {
-        return getStatus() == EntityStatus.SPAWNED_NEXT_TICK;
+        return getState() == EntityState.SPAWNED_NEXT_TICK;
     }
 
     /**
@@ -161,7 +185,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity will be despawned in the next tick.
      */
     default boolean willBeDespawnedNextTick() {
-        return getStatus() == EntityStatus.DESPAWNED_NEXT_TICK;
+        return getState() == EntityState.DESPAWNED_NEXT_TICK;
     }
 
     /**
@@ -170,7 +194,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity is dead.
      */
     default boolean isDead() {
-        return getStatus() == EntityStatus.DEAD;
+        return getState() == EntityState.DEAD;
     }
 
     /**
@@ -179,7 +203,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity is spawned.
      */
     default boolean isSpawned() {
-        return getStatus().isSpawned();
+        return getState().isSpawned();
     }
 
     /**
@@ -188,7 +212,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity is alive.
      */
     default boolean isAlive() {
-        return getStatus() == EntityStatus.ALIVE;
+        return getState() == EntityState.ALIVE;
     }
 
     /**
@@ -271,42 +295,47 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     long getUniqueId();
 
     /**
-     * Get the metadata of this entity.
+     * Get the value of the entity data type passed.
      *
-     * @return the metadata of this entity
+     * @param dataType the entity data type to get
+     * @return the value of the entity data type passed, or {@code null} if this entity data type is never set
      */
-    Metadata getMetadata();
+    <T> T getData(EntityData<T> dataType);
 
     /**
-     * Send the entity metadata to the viewers.
-     */
-    void sendMetadata();
-
-    /**
-     * Set and send the entity data to the viewers.
+     * Check if the entity data type passed is set.
      *
-     * @param dataType the data type to set
-     * @param value    the value to set
-     * @param <T>      the type of the value
+     * @param dataType the entity data type to set
+     * @return {@code true} if the entity data type passed is set, otherwise {@code false}
      */
-    default <T> void setAndSendEntityData(EntityDataType<T> dataType, T value) {
-        getMetadata().set(dataType, value);
-        sendMetadata();
+    default boolean hasData(EntityData<?> dataType) {
+        return getData(dataType) == null;
     }
 
     /**
-     * Set and send the entity flag to the viewers.
+     * Set the value of the entity data type passed.
      *
-     * @param flag  the flag to set
-     * @param value the value to set
+     * @param dataType the entity data type to set
+     * @param value    the value of the entity data type passed
+     * @throws IllegalArgumentException if value type is not the same to the type defined in {@link EntityData}
      */
-    default void setAndSendEntityFlag(EntityFlag flag, boolean value) {
-        if (value == getMetadata().get(flag)) {
-            return;
-        }
-        getMetadata().set(flag, value);
-        sendMetadata();
-    }
+    <T> void setData(EntityData<T> dataType, T value);
+
+    /**
+     * Get the value of the entity flag passed.
+     *
+     * @param flag the entity flag to get
+     * @return the value of the entity flag passed
+     */
+    boolean getFlag(EntityFlag flag);
+
+    /**
+     * Set the value of the entity flag passed.
+     *
+     * @param flag  the entity flag to set
+     * @param value the value of the entity flag passed
+     */
+    void setFlag(EntityFlag flag, boolean value);
 
     /**
      * Get the aabb of this entity.
@@ -338,7 +367,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity has entity collision.
      */
     default boolean hasEntityCollision() {
-        return getMetadata().get(EntityFlag.HAS_COLLISION);
+        return getFlag(EntityFlag.HAS_COLLISION);
     }
 
     /**
@@ -347,7 +376,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param hasEntityCollision {@code true} if the entity has collision, {@code false} otherwise
      */
     default void setHasEntityCollision(boolean hasEntityCollision) {
-        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
+        setFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
     }
 
     /**
@@ -393,7 +422,16 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return the viewers of this entity
      */
     @UnmodifiableView
-    Map<Long, EntityPlayer> getViewers();
+    Set<WorldViewer> getViewers();
+
+    /**
+     * Foreach the viewers of this entity.
+     *
+     * @param consumer the consumer to be called
+     */
+    default void forEachViewers(Consumer<WorldViewer> consumer) {
+        getViewers().forEach(consumer);
+    }
 
     /**
      * Try to set this entity's location. This method is intended to be called by physics engine,
@@ -409,28 +447,36 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     boolean trySetLocation(Location3dc newLocation);
 
     /**
-     * Spawn the entity to the specified player.
+     * Spawn the entity to the specified viewer.
      *
-     * @param player the player to spawn the entity to
+     * @param viewer the viewer to spawn the entity to
      */
-    void spawnTo(EntityPlayer player);
+    void spawnTo(WorldViewer viewer);
 
     /**
-     * Spawn the entity to the specified players.
+     * Spawn the entity to a number of specified viewers.
      *
-     * @param players the players to spawn the entity to
+     * @param viewers the viewers to spawn the entity to
      */
-    default void spawnTo(Collection<EntityPlayer> players) {
-        players.forEach(this::spawnTo);
+    default void spawnTo(Collection<? extends WorldViewer> viewers) {
+        viewers.forEach(this::spawnTo);
     }
 
     /**
-     * Despawn the entity from the specified player. This method will only remove the entity from the specific viewer,
-     * and it will still exist in the dimension.
+     * Despawn the entity from the specified viewer.
      *
-     * @param player the player to despawn the entity from
+     * @param viewer the viewer to despawn the entity from
      */
-    void despawnFrom(EntityPlayer player);
+    void despawnFrom(WorldViewer viewer);
+
+    /**
+     * Despawn the entity from a number of specified viewers.
+     *
+     * @param viewers the viewers to spawn the entity to
+     */
+    default void despawnFrom(Collection<? extends WorldViewer> viewers) {
+        viewers.forEach(this::despawnFrom);
+    }
 
     /**
      * Despawn the entity from all viewers. This method will only remove the entity from all the viewers, and it will
@@ -444,13 +490,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * {@code true} after this method is called.
      */
     void remove();
-
-    /**
-     * Create the spawn packet of this entity.
-     *
-     * @return the spawn packet of this entity
-     */
-    BedrockPacket createSpawnPacket();
 
     /**
      * Send a packet to the viewers of this entity.
@@ -547,20 +586,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return {@code true} if the entity has head yaw, otherwise {@code false}.
      */
-    default boolean enableHeadYaw() {
+    default boolean isHeadYawEnabled() {
         return false;
-    }
-
-    /**
-     * Get the network offset of this entity.
-     * <p>
-     * The network offset is the additional offset in y coordinate when sent over network.
-     * This is mostly the case for older entities such as players and TNT.
-     *
-     * @return the base offset of this entity
-     */
-    default float getNetworkOffset() {
-        return 0;
     }
 
     /**
@@ -636,25 +663,19 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Apply the entity event to the entity.
+     * Apply an event to the entity.
      *
-     * @param event the entity event to apply
+     * @param event the event to apply
      * @param data  the data of the entity event
      */
-    default void applyEntityEvent(EntityEventType event, int data) {
-        var pk = new EntityEventPacket();
-        pk.setRuntimeEntityId(getRuntimeId());
-        pk.setType(event);
-        pk.setData(data);
-        sendPacketToViewers(pk);
-    }
+    void applyEvent(EntityEvent event, int data);
 
     /**
      * Apply an action to the entity.
      *
      * @param action the action to apply
      */
-    default void applyAction(AnimatePacket.Action action) {
+    default void applyAction(AnimateAction action) {
         applyAction(action, 0);
     }
 
@@ -664,13 +685,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param action     the action of the action
      * @param rowingTime the rowing time of the action
      */
-    default void applyAction(AnimatePacket.Action action, double rowingTime) {
-        var pk = new AnimatePacket();
-        pk.setRuntimeEntityId(getRuntimeId());
-        pk.setAction(action);
-        pk.setRowingTime((float) rowingTime);
-        sendPacketToViewers(pk);
-    }
+    void applyAction(AnimateAction action, double rowingTime);
 
     /**
      * Add a tag to the entity.

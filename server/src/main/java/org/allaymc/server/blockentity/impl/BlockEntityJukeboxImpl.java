@@ -4,8 +4,8 @@ import lombok.experimental.Delegate;
 import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityJukebox;
-import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.api.component.Component;
+import org.allaymc.server.component.ComponentProvider;
 
 import java.util.List;
 

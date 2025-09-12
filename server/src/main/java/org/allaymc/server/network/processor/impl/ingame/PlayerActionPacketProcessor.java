@@ -1,14 +1,12 @@
 package org.allaymc.server.network.processor.impl.ingame;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -46,10 +44,6 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 }
                 yield PacketSignal.HANDLED;
             }
-            case DIMENSION_CHANGE_SUCCESS -> {
-                ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).sendDimensionChangeSuccess();
-                yield PacketSignal.HANDLED;
-            }
             case START_ITEM_USE_ON -> {
                 if (player.isUsingItemOnBlock()) {
                     log.debug("Player {} tried to start item use on without stopping", player.getOriginName());
@@ -85,7 +79,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
         player.removeAllEffects();
         player.resetHealth();
         player.resetFoodData();
-        player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, player.getMetadata().get(EntityDataTypes.AIR_SUPPLY_MAX));
+        player.setData(EntityData.AIR_SUPPLY, player.getData(EntityData.AIR_SUPPLY_MAX));
     }
 
     @Override

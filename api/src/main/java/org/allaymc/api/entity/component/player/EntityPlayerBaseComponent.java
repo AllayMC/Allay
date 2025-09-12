@@ -6,13 +6,10 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.player.data.Abilities;
-import org.allaymc.api.player.data.AdventureSettings;
-import org.allaymc.api.player.storage.PlayerData;
-import org.allaymc.api.world.chunk.ChunkLoader;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.PlayerData;
 import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -22,7 +19,7 @@ import org.joml.Vector3ic;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
     /**
      * The default movement speed of a player.
@@ -34,9 +31,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is sprinting, {@code false} otherwise.
      */
-    default boolean isSprinting() {
-        return getMetadata().get(EntityFlag.SPRINTING);
-    }
+    boolean isSprinting();
 
     /**
      * Set the player's sprinting state.
@@ -50,9 +45,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is sneaking, {@code false} otherwise.
      */
-    default boolean isSneaking() {
-        return getMetadata().get(EntityFlag.SNEAKING);
-    }
+    boolean isSneaking();
 
     /**
      * Set the player's sneaking state.
@@ -66,9 +59,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is swimming, {@code false} otherwise.
      */
-    default boolean isSwimming() {
-        return getMetadata().get(EntityFlag.SWIMMING);
-    }
+    boolean isSwimming();
 
     /**
      * Set the player's swimming state.
@@ -82,9 +73,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is gliding, {@code false} otherwise.
      */
-    default boolean isGliding() {
-        return getMetadata().get(EntityFlag.GLIDING);
-    }
+    boolean isGliding();
 
     /**
      * Set the player's gliding state.
@@ -98,9 +87,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return {@code true} if the player is crawling, {@code false} otherwise.
      */
-    default boolean isCrawling() {
-        return getMetadata().get(EntityFlag.CRAWLING);
-    }
+    boolean isCrawling();
 
     /**
      * Set the player's crawling state.
@@ -175,53 +162,20 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     int getHandSlot();
 
-    default void setHandSlot(int handSlot) {
-        setHandSlot(handSlot, true);
-    }
-
     /**
      * Set the hand slot of the player.
      *
-     * @param handSlot   The hand slot of the player
-     * @param sendToSelf Whether the change should be sent to the self
+     * @param handSlot the hand slot of the player
      */
-    void setHandSlot(int handSlot, boolean sendToSelf);
+    void setHandSlot(int handSlot);
 
     /**
-     * Get the base offset of the player.
-     *
-     * @return The base offset of the player
+     * {@inheritDoc}
      */
     @Override
-    default float getNetworkOffset() {
-        return 1.62f;
-    }
-
-    @Override
-    default boolean enableHeadYaw() {
+    default boolean isHeadYawEnabled() {
         return true;
     }
-
-    /**
-     * Get the display name of the player.
-     * <p>
-     * Display name is used in chat, damage message etc.
-     * Normally, it is equal to the origin name, however you can change the display name
-     * compared to the origin name.
-     * <p>
-     * This is very useful for plugin especially if plugin wants to change the appearance of player name in chat
-     * because origin name cannot be changed.
-     *
-     * @return The display name of the player
-     */
-    String getDisplayName();
-
-    /**
-     * Sets the display name of the player.
-     *
-     * @param displayName The display name of the player
-     */
-    void setDisplayName(String displayName);
 
     /**
      * Get the skin of the player.
@@ -238,59 +192,39 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSkin(SerializedSkin skin);
 
     /**
-     * Get the game type of the player.
+     * Get the game mode of the player.
      *
-     * @return The game type of the player
+     * @return The game mode of the player
      */
-    GameType getGameType();
+    GameMode getGameMode();
 
     /**
-     * Sets the game type of the player.
+     * Sets the game mode of the player.
      *
-     * @param gameType The game type to set
+     * @param gameMode The game mode to set
      */
-    void setGameType(GameType gameType);
-
-    /**
-     * Get the adventure settings of the player.
-     *
-     * @return The adventure settings of the player
-     */
-    AdventureSettings getAdventureSettings();
-
-    /**
-     * Get the abilities of the player.
-     *
-     * @return The abilities of the player
-     */
-    Abilities getAbilities();
+    void setGameMode(GameMode gameMode);
 
     /**
      * Set the fly speed of the player.
      *
      * @param flySpeed The fly speed to set
      */
-    default void setFlySpeed(float flySpeed) {
-        getAbilities().setFlySpeed(flySpeed);
-    }
+    void setFlySpeed(float flySpeed);
 
     /**
      * Set the vertical fly speed of the player.
      *
      * @param verticalFlySpeed The vertical fly speed to set
      */
-    default void setVerticalFlySpeed(float verticalFlySpeed) {
-        getAbilities().setVerticalFlySpeed(verticalFlySpeed);
-    }
+    void setVerticalFlySpeed(float verticalFlySpeed);
 
     /**
      * Set whether the player is flying.
      *
      * @param flying Whether the player is flying
      */
-    default void setFlying(boolean flying) {
-        getAbilities().setFlying(flying);
-    }
+    void setFlying(boolean flying);
 
     /**
      * Send a tip to the player.
@@ -386,40 +320,24 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSpawnPoint(Location3ic spawnPoint);
 
     /**
-     * Get the forms of the player.
+     * Get the forms send to the player that are waiting for response.
      *
-     * @return The forms of the player
+     * @return the forms send to the player that are waiting for response
      */
     @UnmodifiableView
     Map<Integer, Form> getForms();
 
     /**
-     * Get a form by its ID.
-     *
-     * @param id The ID of the form
-     * @return The form
-     */
-    Form getForm(int id);
-
-    /**
-     * Remove a form by its ID.
-     *
-     * @param id The ID of the form
-     * @return The removed form
-     */
-    Form removeForm(int id);
-
-    /**
      * Get the server setting form and its id.
      *
-     * @return The server setting form and its id
+     * @return the server setting form and its id
      */
     Pair<Integer, CustomForm> getServerSettingForm();
 
     /**
      * Set a server setting form to the player.
      *
-     * @param form The form to add
+     * @param form the form to add
      */
     void setServerSettingForm(CustomForm form);
 
@@ -431,7 +349,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Show a form to the player.
      *
-     * @param form The form to show
+     * @param form the form to show
      */
     void showForm(Form form);
 
@@ -496,7 +414,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @return The maximum distance that the player can interact with blocks
      */
     default double getMaxInteractDistance() {
-        return getGameType() == GameType.CREATIVE ? 13d : 7d;
+        return getGameMode() == GameMode.CREATIVE ? 13d : 7d;
     }
 
     /**
@@ -535,11 +453,12 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
-     * Require encoding and resending {@link org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket} to
-     * the player next tick. This method is usually called when command permissions change, and you don't need to
-     * call this method manually, because the permission listener does it.
+     * Require encoding and resending all commands to the player next tick. This method should be called when
+     * command permissions change, but usually you don't need to call this method manually since the permission
+     * listener does it.
      */
-    void requireResendingAvailableCommands();
+    @ApiStatus.Experimental
+    void requireResendingCommands();
 
     /**
      * {@inheritDoc}
@@ -562,9 +481,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @see #setCooldown(String, int, boolean)
      */
     default void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
-        // NOTICE: No need to send PlayerStartItemCooldownPacket to the client since the
-        // client will display cooldown automatically if the item/category has cool down
-        setCooldown(category, duration, false);
+        setCooldown(category, duration, true);
     }
 
     /**
@@ -572,9 +489,17 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @param itemType the item type to set
      * @param duration the cool down tick
+     * @param send     whether send packet to the client
+     */
+    default void setCooldown(ItemType<?> itemType, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send) {
+        setCooldown(itemType.getIdentifier().toString(), duration, send);
+    }
+
+    /**
+     * @see #setCooldown(ItemType, int, boolean)
      */
     default void setCooldown(ItemType<?> itemType, @Range(from = 0, to = Integer.MAX_VALUE) int duration) {
-        setCooldown(itemType.getIdentifier().toString(), duration);
+        setCooldown(itemType, duration, false);
     }
 
     /**

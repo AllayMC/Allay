@@ -16,7 +16,7 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
 

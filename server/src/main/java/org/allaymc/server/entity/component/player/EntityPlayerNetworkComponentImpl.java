@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
@@ -14,25 +15,28 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.player.data.LoginData;
-import org.allaymc.api.player.storage.PlayerData;
+import org.allaymc.api.player.ClientState;
+import org.allaymc.api.player.LoginData;
+import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.interfaces.ComponentManager;
+import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.DeferredData;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
-import org.allaymc.server.player.manager.AllayPlayerManager;
+import org.allaymc.server.player.AllayPlayerManager;
+import org.allaymc.server.utils.Utils;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -96,25 +100,25 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
         var processor = packetProcessorHolder.getProcessor(packet);
         if (processor == null) {
-            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientStatus());
+            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
             return;
         }
         processor.handleSync(thisPlayer, packet, receiveTime);
     }
 
-    public void setClientStatus(ClientStatus status) {
-        this.packetProcessorHolder.setClientStatus(status);
+    public void setClientStatus(ClientState status) {
+        this.packetProcessorHolder.setClientState(status);
     }
 
     public void setClientSession(BedrockServerSession session) {
         this.clientSession = session;
-        this.packetProcessorHolder.setClientStatus(ClientStatus.CONNECTED);
+        this.packetProcessorHolder.setClientState(ClientState.CONNECTED);
 
         var maxLoginTime = Server.SETTINGS.networkSettings().maxLoginTime();
         if (maxLoginTime > 0) {
             Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
-                var status = getClientStatus();
-                if (status != ClientStatus.DISCONNECTED && status.ordinal() < ClientStatus.IN_GAME.ordinal()) {
+                var status = getClientState();
+                if (status != ClientState.DISCONNECTED && status.ordinal() < ClientState.IN_GAME.ordinal()) {
                     log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress(), maxLoginTime / 20d);
                     disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);
                 }
@@ -125,7 +129,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
-                if (!getClientStatus().canHandlePackets()) {
+                if (!getClientState().canHandlePackets()) {
                     return PacketSignal.HANDLED;
                 }
 
@@ -138,7 +142,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
                 var processor = packetProcessorHolder.getProcessor(packet);
                 if (processor == null) {
-                    log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientStatus());
+                    log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
                     return PacketSignal.HANDLED;
                 }
 
@@ -167,7 +171,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                if (!packetProcessorHolder.setClientStatus(ClientStatus.DISCONNECTED, false)) {
+                if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED, false)) {
                     // Failed to set disconnected field from false to true
                     // Which means the client may be disconnected by server
                     // by calling EntityPlayerNetworkComponentImpl::disconnect() method
@@ -179,7 +183,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         });
     }
 
-    public void onChunkInRangeSend() {
+    @EventHandler
+    protected void onChunkInRangeSend(CPlayerChunkInRangeSendEvent event) {
         if (fullyJoinChunkThreshold.get() > 0 && fullyJoinChunkThreshold.decrementAndGet() == 0) {
             onFullyJoin();
         }
@@ -188,60 +193,62 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected void onFullyJoin() {
         var server = Server.getInstance();
         var world = thisPlayer.getWorld();
-        // Load EntityPlayer's NBT, player game type is also updated in loadNBT()
+        // Load EntityPlayer's NBT, player game mode is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
-
-        var setEntityDataPacket = new SetEntityDataPacket();
-        setEntityDataPacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        setEntityDataPacket.getMetadata().putAll(thisPlayer.getMetadata().getEntityDataMap());
-        setEntityDataPacket.setTick(world.getTick());
-        sendPacket(setEntityDataPacket);
-
+        thisPlayer.viewEntityMetadata(thisPlayer);
         // Send other players' abilities data to this player
-        Server.getInstance().getPlayerManager().getPlayers().values().forEach(other -> sendPacket(other.getAbilities().encodeUpdateAbilitiesPacket()));
-
+        Server.getInstance().getPlayerManager().getPlayers().values().forEach(other -> {
+            var abilities = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).getAbilities();
+            sendPacket(abilities.encodeUpdateAbilitiesPacket());
+        });
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
-
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
         ((AllayPlayerManager) server.getPlayerManager()).addToPlayerList(thisPlayer);
         if (server.getPlayerManager().getPlayerCount() > 1) {
             ((AllayPlayerManager) server.getPlayerManager()).sendFullPlayerListInfoTo(thisPlayer);
         }
-
         thisPlayer.sendAttributesToClient();
-
         sendInventories();
-
         var playStatusPacket = new PlayStatusPacket();
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
-
-        world.getWorldData().sendTimeOfDay(thisPlayer);
-        ((AllayWorld) world).sendWeather(thisPlayer);
-
+        thisPlayer.viewTime(world.getWorldData().getTimeOfDay());
+        thisPlayer.viewWeather(world.getWeather());
         // Save player data the first time it joins
         server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
     }
 
     @Override
     public void sendPacket(BedrockPacket packet) {
-        var event = new PacketSendEvent(thisPlayer, packet);
-        if (!event.call()) return;
+        if (!getClientState().canHandlePackets()) {
+            return;
+        }
 
-        clientSession.sendPacket(event.getPacket());
+        var event = new PacketSendEvent(thisPlayer, packet);
+        if (!event.call()) {
+            return;
+        }
+
+        this.clientSession.sendPacket(event.getPacket());
     }
 
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
-        var event = new PacketSendEvent(thisPlayer, packet);
-        if (!event.call()) return;
+        if (!getClientState().canHandlePackets()) {
+            return;
+        }
 
-        clientSession.sendPacketImmediately(event.getPacket());
+        var event = new PacketSendEvent(thisPlayer, packet);
+        if (!event.call()) {
+            return;
+        }
+
+        this.clientSession.sendPacketImmediately(event.getPacket());
     }
 
     @Override
     public void disconnect(@MayContainTrKey String reason) {
-        if (!packetProcessorHolder.setClientStatus(ClientStatus.DISCONNECTED)) {
+        if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED)) {
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
@@ -259,13 +266,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
-    public ClientStatus getClientStatus() {
-        return packetProcessorHolder.getClientStatus();
+    public ClientState getClientState() {
+        return packetProcessorHolder.getClientState();
     }
 
     @Override
-    public ClientStatus getLastClientStatus() {
-        return packetProcessorHolder.getLastClientStatus();
+    public ClientState getLastClientState() {
+        return packetProcessorHolder.getLastClientState();
     }
 
     protected void onDisconnect(String disconnectReason) {
@@ -307,14 +314,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
             // The old pos stored in playerNBT is invalid, we should replace it with the new one!
             var builder = playerData.getNbt().toBuilder();
-            writeVector3f(builder, EntityPlayerBaseComponentImpl.TAG_POS, currentPos);
+            writeVector3f(builder, "Pos", currentPos);
             playerData.setNbt(builder.build());
             // Save new player data back to storage
             server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer.getLoginData().getUuid(), playerData);
         } else {
             dimension = logOffWorld.getDimension(playerData.getDimension());
             // Read current pos from playerNBT
-            currentPos = readVector3f(playerData.getNbt(), EntityPlayerBaseComponentImpl.TAG_POS);
+            currentPos = readVector3f(playerData.getNbt(), "Pos");
         }
 
         baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
@@ -343,7 +350,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.getGamerules().addAll(((AllayGameRules) spawnWorld.getWorldData().getGameRules()).toNetworkGameRuleData());
         packet.setUniqueEntityId(thisPlayer.getRuntimeId());
         packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", spawnWorld.getWorldData().getGameType().ordinal())));
+        packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", Utils.toGameType(spawnWorld.getWorldData().getGameMode()).ordinal())));
         var loc = thisPlayer.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
@@ -353,7 +360,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setSeed(0L);
         packet.setDimensionId(dimension.getDimensionInfo().dimensionId());
         packet.setGeneratorId(dimension.getChunkManager().getWorldGenerator().getType().getId());
-        packet.setLevelGameType(spawnWorld.getWorldData().getGameType());
+        packet.setLevelGameType(Utils.toGameType(spawnWorld.getWorldData().getGameMode()));
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         packet.setTrustingPlayers(true);
         packet.setLevelName(Server.SETTINGS.genericSettings().motd());
@@ -405,7 +412,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return;
         }
 
-        this.packetProcessorHolder.setClientStatus(ClientStatus.LOGGED_IN);
+        this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
 
         var playStatusPacket = new PlayStatusPacket();
         playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);

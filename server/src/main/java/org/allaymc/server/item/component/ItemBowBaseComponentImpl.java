@@ -9,11 +9,11 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.entity.EntityShootBowEvent;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.math.MathUtils;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.allaymc.api.player.GameMode;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 
@@ -38,7 +38,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             return;
         }
 
-        var creative = player.getGameType() == GameType.CREATIVE;
+        var creative = player.getGameMode() == GameMode.CREATIVE;
         var force = Math.min(usedTime * (usedTime + 40.0) / 1200.0, 1.0);
         var speed = force * 5;
 

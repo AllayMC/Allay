@@ -11,7 +11,6 @@ import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
@@ -135,7 +134,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         }
 
         try {
-            var result = command.execute(sender, spilt.toArray(Utils.EMPTY_STRING_ARRAY));
+            var result = command.execute(sender, spilt.toArray(new String[0]));
             sender.handleResult(result);
             return result;
         } catch (Throwable t) {

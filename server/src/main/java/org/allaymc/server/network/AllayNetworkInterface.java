@@ -183,7 +183,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .subMotd(genericSettings.subMotd())
                 .playerCount(0)
                 .maximumPlayerCount(genericSettings.maxPlayerCount())
-                .gameType(genericSettings.defaultGameType().name())
+                .gameType(genericSettings.defaultGameMode().name())
                 .nintendoLimited(false)
                 .version(ProtocolInfo.getLatestCodec().getMinecraftVersion())
                 .protocolVersion(ProtocolInfo.getLatestCodec().getProtocolVersion())

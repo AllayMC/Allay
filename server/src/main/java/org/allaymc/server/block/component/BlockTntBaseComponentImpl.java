@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;

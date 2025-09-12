@@ -11,7 +11,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.enchantment.type.AbstractEnchantmentProtectionType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataHolder;
@@ -127,7 +126,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * May be ignored based on unbreaking enchantment.
      *
      * @param increase the amount to increase
-     *
      * @return {@code true} if increased, {@code false} if ignored
      */
     boolean tryIncreaseDamage(int increase);
@@ -245,7 +243,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Copies the item stack with optional new network ID.
      *
      * @param newStackNetworkId whether to generate a new ID
-     *
      * @return the copied {@link ItemStack}
      */
     ItemStack copy(boolean newStackNetworkId);
@@ -282,7 +279,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @param dimension     the {@link Dimension}
      * @param placeBlockPos the block position ({@link Vector3ic})
      * @param interactInfo  the {@link PlayerInteractInfo}
-     *
      * @return {@code true} if used, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
@@ -294,7 +290,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @param dimension     the {@link Dimension}
      * @param placeBlockPos the placement position ({@link Vector3ic})
      * @param placementInfo the {@link PlayerInteractInfo}, may be {@code null}
-     *
      * @return {@code true} if placed, {@code false} otherwise
      */
     default boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
@@ -315,7 +310,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * mouse button or screen).
      *
      * @param player the {@link EntityPlayer} that try to use this item in air
-     *
      * @return {@code true} if usable, {@code false} otherwise
      */
     boolean canUseItemInAir(EntityPlayer player);
@@ -327,7 +321,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @param player   the {@link EntityPlayer}
      * @param usedTime the usage duration
-     *
      * @return {@code true} if used, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
@@ -350,7 +343,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks if this item can merge with another.
      *
      * @param itemStack the {@link ItemStack} to check
-     *
      * @return {@code true} if mergeable, {@code false} otherwise
      */
     default boolean canMerge(ItemStack itemStack) {
@@ -362,7 +354,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @param itemStack   the {@link ItemStack} to check
      * @param ignoreCount whether to ignore count in comparison
-     *
      * @return {@code true} if mergeable, {@code false} otherwise
      */
     boolean canMerge(ItemStack itemStack, boolean ignoreCount);
@@ -385,7 +376,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks for a specific enchantment.
      *
      * @param enchantmentType the {@link EnchantmentType}
-     *
      * @return {@code true} if present, {@code false} otherwise
      */
     boolean hasEnchantment(EnchantmentType enchantmentType);
@@ -400,25 +390,14 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Checks for protection enchantments.
-     *
-     * @return {@code true} if present, {@code false} otherwise
-     */
-    default boolean hasProtectionEnchantment() {
-        return getEnchantments().stream().anyMatch(enchantmentInstance -> enchantmentInstance.getType() instanceof AbstractEnchantmentProtectionType);
-    }
-
-    /**
      * Gets the protection factor for a damage type.
      *
      * @param damageType the {@link DamageContainer.DamageType}
-     *
      * @return the total protection factor
      */
     default int getEnchantmentProtectionFactor(DamageContainer.DamageType damageType) {
         return getEnchantments().stream()
-                .filter(enchantmentInstance -> enchantmentInstance.getType() instanceof AbstractEnchantmentProtectionType)
-                .mapToInt(enchantmentInstance -> ((AbstractEnchantmentProtectionType) enchantmentInstance.getType()).getProtectionFactor(damageType, enchantmentInstance.getLevel()))
+                .mapToInt(enchantmentInstance -> enchantmentInstance.getType().getProtectionFactor(damageType, enchantmentInstance.getLevel()))
                 .sum();
     }
 
@@ -426,7 +405,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Gets the level of an enchantment.
      *
      * @param enchantmentType the {@link EnchantmentType}
-     *
      * @return the level, or 0 if absent
      */
     int getEnchantmentLevel(EnchantmentType enchantmentType);
@@ -457,7 +435,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Removes an enchantment from the item.
      *
      * @param enchantmentType the {@link EnchantmentType}
-     *
      * @return the removed {@link EnchantmentInstance}, or {@code null} if absent
      */
     EnchantmentInstance removeEnchantment(EnchantmentType enchantmentType);
@@ -490,7 +467,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @param performer the {@link Entity} performing the interaction
      * @param victim    the {@link Entity} being interacted with
-     *
      * @return {@code true} if successful, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
@@ -500,7 +476,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Gets the break time bonus for a block.
      *
      * @param blockState the {@link BlockState} to break
-     *
      * @return the bonus multiplier
      */
     default double getBreakTimeBonus(BlockState blockState) {
@@ -534,7 +509,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks if this is the correct tool for a block.
      *
      * @param blockState the {@link BlockState} to break
-     *
      * @return {@code true} if correct, {@code false} otherwise
      */
     boolean isCorrectToolFor(BlockState blockState);
@@ -543,7 +517,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks if this item can instantly break a block.
      *
      * @param blockState the {@link BlockState} to break
-     *
      * @return {@code true} if instant, {@code false} otherwise
      */
     default boolean canInstantBreak(BlockState blockState) {
@@ -574,7 +547,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks compatibility with an enchantment type.
      *
      * @param type the {@link EnchantmentType} to check
-     *
      * @return {@code true} if compatible, {@code false} otherwise
      */
     default boolean checkEnchantmentCompatibility(EnchantmentType type) {
@@ -585,7 +557,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Gets incompatible enchantment types.
      *
      * @param type the {@link EnchantmentType} to check
-     *
      * @return the {@link Set} of incompatible {@link EnchantmentType}
      */
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {

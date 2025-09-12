@@ -4,7 +4,7 @@ import org.allaymc.api.block.component.BlockConcretePowderBaseComponent;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 
 /**
  * @author IWareQ

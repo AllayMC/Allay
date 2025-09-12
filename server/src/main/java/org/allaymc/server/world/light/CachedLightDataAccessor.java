@@ -1,6 +1,6 @@
 package org.allaymc.server.world.light;
 
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.jctools.maps.NonBlockingHashMapLong;
 

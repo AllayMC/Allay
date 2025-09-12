@@ -68,7 +68,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     @Override
     public void openSignEditorFor(EntityPlayer player, boolean frontSide) {
         var pk = new OpenSignPacket();
-        pk.setPosition(MathUtils.JOMLVecToCBVec(getPosition()));
+        pk.setPosition(MathUtils.toCBVec(getPosition()));
         pk.setFrontSide(frontSide);
 
         player.sendPacket(pk);

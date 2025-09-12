@@ -7,7 +7,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.block.BlockPlaceHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;

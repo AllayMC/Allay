@@ -11,11 +11,11 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPunchEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.jetbrains.annotations.Range;
 
@@ -82,7 +82,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         }
 
         var dimension = event.getCurrentBlock().getDimension();
-        if (!(event.getEntity() instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE) {
+        if (!(event.getEntity() instanceof EntityPlayer player) || player.getGameMode() != GameMode.CREATIVE) {
             // Item won't drop if the entity is a dropItem in creative mode
             dimension.dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPosition()));
         }

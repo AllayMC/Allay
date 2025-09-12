@@ -1,6 +1,5 @@
 package org.allaymc.server.world.chunk;
 
-import io.netty.buffer.ByteBuf;
 import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.world.biome.BiomeId;
@@ -10,7 +9,7 @@ import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.world.storage.leveldb.ChunkSectionVersion;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
-import static org.allaymc.api.utils.HashUtils.hashChunkSectionXYZ;
+import static org.allaymc.api.utils.hash.HashUtils.hashChunkSectionXYZ;
 
 /**
  * @author Cool_Loong | daoge_cmd
@@ -21,7 +20,6 @@ public record AllayChunkSection(
         Palette<BlockState>[] blockLayers,
         Palette<BiomeType> biomes
 ) implements ChunkSection {
-
     public static final int LAYER_COUNT = 2;
     public static final int CURRENT_CHUNK_SECTION_VERSION = ChunkSectionVersion.PALETTED_MULTI_WITH_OFFSET.ordinal();
 
@@ -54,6 +52,7 @@ public record AllayChunkSection(
         biomes.set(hashChunkSectionXYZ(x, y, z), biomeType);
     }
 
+    @Override
     public boolean isAirSection() {
         return blockLayers[0].oneEntryOnly();
     }
@@ -66,17 +65,5 @@ public record AllayChunkSection(
         }
 
         return false;
-    }
-
-    public void writeToNetwork(ByteBuf byteBuf) {
-        byteBuf.writeByte(CURRENT_CHUNK_SECTION_VERSION);
-        // Block layer count
-        byteBuf.writeByte(LAYER_COUNT);
-        // Extra byte since version 9
-        byteBuf.writeByte(sectionY);
-
-        for (var blockLayer : blockLayers) {
-            blockLayer.writeToNetwork(byteBuf, BlockState::blockStateHash, null);
-        }
     }
 }

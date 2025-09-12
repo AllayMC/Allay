@@ -15,6 +15,7 @@ import java.util.Set;
  *
  * @author daoge_cmd
  */
+// TODO: rename it to ContainerType and use registry
 public record FullContainerType<T extends Container>(
         int id,
         ContainerSlotType[] slotTypeTable,
