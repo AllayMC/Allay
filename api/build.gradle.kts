@@ -21,7 +21,7 @@ dependencies {
         // NOTICE: this is an accident that joml marked kotlin-stdlib as its dependency
         // in the recent version, see https://github.com/JOML-CI/JOML/pull/357 for more
         // information. And this is a quick workaround that we just exclude kotlin-stdlib
-        // TODO: remove this workaround when joml fixed this issue
+        // TODO: remove this workaround when joml release 1.10.9
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk7")
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk8")
