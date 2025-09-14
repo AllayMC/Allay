@@ -1,5 +1,6 @@
 package org.allaymc.api.item.recipe.input;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
@@ -9,12 +10,8 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public class FurnaceRecipeInput implements RecipeInput {
     protected ItemStack ingredient;
     protected String tag;
-
-    public FurnaceRecipeInput(ItemStack ingredient, String tag) {
-        this.ingredient = ingredient;
-        this.tag = tag;
-    }
 }

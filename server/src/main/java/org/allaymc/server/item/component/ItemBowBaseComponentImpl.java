@@ -2,8 +2,7 @@ package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerOffhandContainer;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -14,6 +13,7 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.server.container.impl.PlayerOffhandContainerImpl;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 
@@ -98,13 +98,13 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
     protected boolean hasArrow(EntityPlayer player) {
         // Find offhand arrow first
-        Container container = player.getContainer(FullContainerType.OFFHAND);
-        if (container.getItemStack(PlayerOffhandContainer.OFFHAND_SLOT) instanceof ItemArrowStack) {
+        Container container = player.getContainer(ContainerType.OFFHAND);
+        if (container.getItemStack(PlayerOffhandContainerImpl.OFFHAND_SLOT) instanceof ItemArrowStack) {
             return true;
         }
 
         // Arrow is not in offhand, search in inventory again
-        container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+        container = player.getContainer(ContainerType.PLAYER_INVENTORY);
         for (var itemStack : container.getItemStacks()) {
             if (itemStack instanceof ItemArrowStack) {
                 return true;
@@ -120,15 +120,15 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         ItemArrowStack arrow = null;
 
         // Find offhand arrow first
-        container = player.getContainer(FullContainerType.OFFHAND);
-        slot = PlayerOffhandContainer.OFFHAND_SLOT;
+        container = player.getContainer(ContainerType.OFFHAND);
+        slot = PlayerOffhandContainerImpl.OFFHAND_SLOT;
         if (container.getItemStack(slot) instanceof ItemArrowStack a) {
             arrow = a;
         }
 
         if (arrow == null) {
             // Arrow is not in offhand, search in inventory again
-            container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+            container = player.getContainer(ContainerType.PLAYER_INVENTORY);
             var itemStacks = container.getItemStacks();
             for (slot = 0; slot < itemStacks.size(); slot++) {
                 var item = itemStacks.get(slot);

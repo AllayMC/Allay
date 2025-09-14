@@ -21,9 +21,9 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
     @Override
     public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getReachableContainer(action.getSource().getContainerName().getContainer());
+        var container = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
         var count = action.getCount();
-        var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
+        var slot = ContainerActionProcessor.fromNetworkSlotIndex(container, action.getSource().getSlot());
 
         var item = container.getItemStack(slot);
         if (failToValidateStackNetworkId(item.getStackNetworkId(), action.getSource().getStackNetworkId())) {
@@ -47,11 +47,11 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                 true,
                 Collections.singletonList(
                         new ItemStackResponseContainer(
-                                container.getSlotType(slot),
+                                ContainerActionProcessor.getSlotType(container, slot),
                                 Collections.singletonList(
                                         new ItemStackResponseSlot(
-                                                container.toNetworkSlotIndex(slot),
-                                                container.toNetworkSlotIndex(slot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(container, slot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(container, slot),
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
                                                 item.getCustomName(),
@@ -59,7 +59,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                                 ""
                                         )
                                 ),
-                                new FullContainerName(container.getSlotType(slot), null)
+                                new FullContainerName(ContainerActionProcessor.getSlotType(container, slot), null)
                         )
                 )
         );

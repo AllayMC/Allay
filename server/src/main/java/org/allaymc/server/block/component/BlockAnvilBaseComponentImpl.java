@@ -6,11 +6,12 @@ import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.impl.AnvilContainer;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.data.Sound;
+import org.allaymc.server.container.impl.BlockContainerImpl;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
@@ -52,8 +53,8 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
             return false;
         }
 
-        var anvilContainer = new AnvilContainer();
-        anvilContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+        var anvilContainer = player.getContainer(ContainerType.ANVIL);
+        ((BlockContainerImpl) anvilContainer).setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         anvilContainer.addViewer(player);
         return true;
     }

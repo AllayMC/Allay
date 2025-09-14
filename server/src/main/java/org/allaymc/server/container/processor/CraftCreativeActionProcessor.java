@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
@@ -31,7 +31,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
 
         item = item.copy(true);
         item.setCount(item.getItemType().getItemData().maxStackSize());
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(item);
+        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, item, false);
         // Taking items from the creative inventory does not require a response
         return null;
     }

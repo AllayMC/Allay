@@ -4,26 +4,26 @@ import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
-import org.allaymc.api.container.impl.ChestContainer;
-import org.allaymc.api.container.impl.DoubleChestContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.container.impl.ChestContainerImpl;
+import org.allaymc.server.container.impl.DoubleChestContainerImpl;
 
 /**
  * @author IWareQ
  */
 public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityContainerHolderComponentImpl {
     @Getter
-    protected final DoubleChestContainer doubleChestContainer;
+    protected final DoubleChestContainerImpl doubleChestContainer;
 
     @Dependency
     protected BlockEntityPairableComponent pairableComponent;
 
     public BlockEntityChestContainerHolderComponentImpl() {
-        super(ChestContainer::new);
-        this.doubleChestContainer = new DoubleChestContainer();
+        super(ChestContainerImpl::new);
+        this.doubleChestContainer = new DoubleChestContainerImpl();
     }
 
     @EventHandler

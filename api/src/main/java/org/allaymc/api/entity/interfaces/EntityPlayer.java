@@ -1,8 +1,9 @@
 package org.allaymc.api.entity.interfaces;
 
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -12,7 +13,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3d;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
@@ -25,7 +25,7 @@ public interface EntityPlayer extends
         EntityPlayerBaseComponent,
         EntityPlayerNetworkComponent,
         EntityPlayerAttributeComponent,
-        EntityPlayerContainerHolderComponent,
+        EntityContainerHolderComponent,
         EntityContainerViewerComponent,
         EntityDamageComponent,
         EntityPhysicsComponent,
@@ -34,31 +34,17 @@ public interface EntityPlayer extends
         EntityPlayerChunkLoaderComponent {
 
     /**
-     * Returns the reachable container for the given full container type.
-     * This includes opened containers and containers that the player holds.
+     * Returns the reachable container for the given full container type. This
+     * includes opened containers and containers that the player holds.
      *
      * @param slotType the full container type
      * @param <T>      the container type
      * @return the reachable container, or {@code null} if none
      */
-    default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
+    default <T extends Container> T getReachableContainer(ContainerType<T> slotType) {
         var container = getOpenedContainer(slotType);
         if (container == null) container = getContainer(slotType);
-        return (T) container;
-    }
-
-    /**
-     * Returns the reachable container for the given container slot type.
-     * This includes opened containers and containers that the player holds.
-     *
-     * @param slotType the container slot type
-     * @param <T>      the container type
-     * @return the reachable container, or {@code null} if none
-     */
-    default <T extends Container> T getReachableContainer(ContainerSlotType slotType) {
-        var container = getOpenedContainer(slotType);
-        if (container == null) container = getContainer(slotType);
-        return (T) container;
+        return container;
     }
 
     /**
@@ -69,7 +55,7 @@ public interface EntityPlayer extends
      * @return {@code true} if all items were added successfully, {@code false} if some were dropped.
      */
     default boolean tryAddItem(ItemStack itemStack) {
-        getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
+        getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
         if (itemStack.getCount() != 0) {
             dropItemInPlayerPos(itemStack);
             return false;
@@ -85,7 +71,7 @@ public interface EntityPlayer extends
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
     default boolean tryDropItemInHand(int count) {
-        return tryDropItem(FullContainerType.PLAYER_INVENTORY, getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot(), count);
+        return tryDropItem(ContainerType.PLAYER_INVENTORY, getContainer(ContainerType.PLAYER_INVENTORY).getHandSlot(), count);
     }
 
     /**
@@ -96,7 +82,7 @@ public interface EntityPlayer extends
      * @param count         the number of items to drop
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
-    default boolean tryDropItem(FullContainerType<?> containerType, int slot, int count) {
+    default boolean tryDropItem(ContainerType<?> containerType, int slot, int count) {
         var container = getReachableContainer(containerType);
         if (container == null) {
             return false;
@@ -169,7 +155,7 @@ public interface EntityPlayer extends
      * @return the item in hand
      */
     default ItemStack getItemInHand() {
-        return getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
+        return getContainer(ContainerType.PLAYER_INVENTORY).getItemInHand();
     }
 
     /**
@@ -178,14 +164,14 @@ public interface EntityPlayer extends
      * @param itemStack the item to set in hand
      */
     default void setItemInHand(ItemStack itemStack) {
-        getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(itemStack);
+        getContainer(ContainerType.PLAYER_INVENTORY).setItemInHand(itemStack);
     }
 
     /**
      * Clears the item in the player's hand.
      */
     default void clearItemInHand() {
-        getContainer(FullContainerType.PLAYER_INVENTORY).clearItemInHand();
+        getContainer(ContainerType.PLAYER_INVENTORY).clearItemInHand();
     }
 
     /**
@@ -210,7 +196,7 @@ public interface EntityPlayer extends
      * Will update the inventory slot or clear it if the item count is zero.
      */
     default void notifyItemInHandChange() {
-        var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
+        var inv = getContainer(ContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();
         if (itemStack.getCount() != 0) {
             inv.notifySlotChange(inv.getHandSlot());

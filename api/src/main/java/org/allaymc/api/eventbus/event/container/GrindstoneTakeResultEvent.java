@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.container.ContainerViewer;
-import org.allaymc.api.container.impl.GrindstoneContainer;
+import org.allaymc.api.container.interfaces.GrindstoneContainer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 

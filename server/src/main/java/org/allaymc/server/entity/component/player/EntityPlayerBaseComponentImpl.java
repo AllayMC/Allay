@@ -7,12 +7,12 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.data.AnimateAction;
 import org.allaymc.api.entity.data.EntityData;
@@ -96,7 +96,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_ENDER_ITEMS = "EnderItems";
 
     @Dependency
-    protected EntityPlayerContainerHolderComponent containerHolderComponent;
+    protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
 
@@ -348,7 +348,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 continue;
             }
 
-            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
+            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY));
             var slot = inventory.tryAddItem(item);
             if (slot == -1) {
                 // Player's inventory is full and cannot pick up the item
@@ -388,7 +388,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
             var arrow = ItemTypes.ARROW.createItemStack(1);
             arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(arrow) != -1) {
+            if (thisPlayer.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(arrow) != -1) {
                 sendPickUpPacket(entityArrow);
                 entityArrow.remove();
             }
@@ -490,7 +490,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public int getHandSlot() {
-        return containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot();
+        return containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY).getHandSlot();
     }
 
     @Override
@@ -501,7 +501,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setHandSlot(int handSlot, boolean sendToSelf) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
 
-        var container = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
+        var container = containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY);
         container.setHandSlot(handSlot);
         new PlayerItemHeldEvent(thisPlayer, container.getItemInHand(), handSlot).call();
         if (sendToSelf) {
@@ -525,19 +525,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putList(
                         TAG_OFFHAND,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.OFFHAND).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.OFFHAND).saveNBT())
                 .putList(
                         TAG_INVENTORY,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY).saveNBT())
                 .putList(
                         TAG_ARMOR,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.ARMOR).saveNBT())
                 .putList(
                         TAG_ENDER_ITEMS,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).saveNBT())
                 .putInt(TAG_ENCHANTMENT_SEED, enchantmentSeed)
                 .putInt(TAG_GAME_TYPE, toGameType(gameMode).ordinal())
                 .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
@@ -557,16 +557,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.loadNBT(nbt);
         nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionGroup.loadNBT(permNbt, thisPlayer));
         nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
-                containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(offhandNbt)
+                containerHolderComponent.getContainer(ContainerType.OFFHAND).loadNBT(offhandNbt)
         );
         nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt ->
-                containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).loadNBT(inventoryNbt)
+                containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY).loadNBT(inventoryNbt)
         );
         nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
-                containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
+                containerHolderComponent.getContainer(ContainerType.ARMOR).loadNBT(armorNbt)
         );
         nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt ->
-                containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
+                containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
         nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(toGameMode(GameType.from(id)), true));

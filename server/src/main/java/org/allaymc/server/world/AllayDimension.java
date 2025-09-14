@@ -17,7 +17,7 @@ import org.allaymc.api.player.ClientState;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.network.processor.impl.login.SetLocalPlayerAsInitializedPacketProcessor;
+import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.allaymc.server.world.manager.AllayBlockUpdateManager;
 import org.allaymc.server.world.manager.AllayChunkManager;

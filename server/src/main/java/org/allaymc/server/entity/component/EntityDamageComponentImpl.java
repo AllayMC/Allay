@@ -1,7 +1,7 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
@@ -89,8 +89,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var kby = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var additionalMotion = new Vector3d();
-            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(FullContainerType.PLAYER_INVENTORY)) {
-                var kbEnchantmentLevel = component.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerType.PLAYER_INVENTORY)) {
+                var kbEnchantmentLevel = component.getContainer(ContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
                 if (kbEnchantmentLevel != 0) {
                     kb /= 2.0;
                     additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));

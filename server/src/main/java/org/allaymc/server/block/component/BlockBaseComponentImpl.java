@@ -8,7 +8,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -71,7 +71,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         if (blockState.getBlockType() != getBlockType()) {
             throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + blockState.getBlockType().getIdentifier());
         }
-        
+
         if (usedItem.canInstantBreak(blockState)) {
             return 0;
         }
@@ -117,9 +117,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
             var hasAquaAffinity = false;
             if (entity instanceof EntityContainerHolderComponent containerHolder) {
-                if (containerHolder.hasContainer(FullContainerType.ARMOR)) {
+                if (containerHolder.hasContainer(ContainerType.ARMOR)) {
                     hasAquaAffinity = containerHolder
-                            .getContainer(FullContainerType.ARMOR)
+                            .getContainer(ContainerType.ARMOR)
                             .getHelmet()
                             .hasEnchantment(EnchantmentTypes.AQUA_AFFINITY);
                 }

@@ -2,9 +2,8 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.RecipeContainer;
-import org.allaymc.api.container.impl.CraftingContainer;
+import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.interfaces.RecipeContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
@@ -25,6 +24,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * @author daoge_cmd
@@ -70,7 +70,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                     // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
                     var output = craftingRecipe.getOutputs()[0].copy(false);
                     output.setCount(output.getCount() * numberOfRequestedCrafts);
-                    player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(output);
+                    player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, output, false);
                 } else {
                     if (numberOfRequestedCrafts != 1) {
                         log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
@@ -95,7 +95,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var enchantTableContainer = player.getOpenedContainer(FullContainerType.ENCHANT_TABLE);
+        var enchantTableContainer = player.getOpenedContainer(ContainerType.ENCHANT_TABLE);
         var inputItem = enchantTableContainer.getInput();
         if (inputItem.getItemType() == ItemTypes.AIR) {
             log.warn("Input item is air!");
@@ -132,17 +132,17 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         enchantedItem.addEnchantments(enchantments);
         // Copy the enchanted item to CREATED_OUTPUT, and client will send a PlaceAction
         // to move the enchanted item back to the input slot of the enchant table container
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(enchantedItem);
+        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, enchantedItem, false);
         player.regenerateEnchantmentSeed();
 
         return null;
     }
 
     protected ActionResponse handleCraftingTable(EntityPlayer player, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
-        CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
+        RecipeContainer craftingContainer = player.getOpenedContainer(ContainerType.CRAFTING_TABLE);
         if (craftingContainer == null) {
             // The player is not opening a crafting table, using crafting grid instead
-            craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
+            craftingContainer = player.getContainer(ContainerType.CRAFTING_GRID);
         }
 
         // Validate if the player has provided enough ingredients
@@ -163,7 +163,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         // Validate the consume action count which client sent
         // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
         var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
-        var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemSlotCount();
+        var consumeActionCountNeeded = calculateNonEmptySlotCount(craftingContainer);
         if (consumeActions.size() != consumeActionCountNeeded) {
             log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
             return error();
@@ -172,8 +172,12 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         return null;
     }
 
+    protected int calculateNonEmptySlotCount(Container container) {
+        return (int) IntStream.range(0, container.getContainerType().getSize()).filter(i -> !container.isEmpty(i)).count();
+    }
+
     protected ActionResponse handleSmithingTableTrim(EntityPlayer player) {
-        var container = player.getOpenedContainer(FullContainerType.SMITHING_TABLE);
+        var container = player.getOpenedContainer(ContainerType.SMITHING_TABLE);
         if (container == null) {
             log.warn("Received a CraftRecipeActionProcessor without an opened container!");
             return error();
@@ -206,7 +210,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         }
 
         trimComponent.trim(trimPattern, trimMaterial);
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(result);
+        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, result, false);
         return null;
     }
 

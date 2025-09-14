@@ -3,12 +3,12 @@ package org.allaymc.server.blockentity.component.shulkerbox;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
-import org.allaymc.api.container.impl.ShulkerBoxContainer;
 import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.container.impl.ShulkerBoxContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
@@ -32,7 +32,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     @OnInitFinish
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        ShulkerBoxContainer container = containerHolderComponent.getContainer();
+        ShulkerBoxContainerImpl container = containerHolderComponent.getContainer();
         container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 BlockEventPacket pk = new BlockEventPacket();

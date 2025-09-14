@@ -1,14 +1,14 @@
 package org.allaymc.api.block;
 
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerArmorContainer;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.container.impl.PlayerArmorContainerImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -93,12 +93,12 @@ public class BlockBreakTest {
 
     @Test
     void testCalculatingBreakTime_with_aqua_affinity() {
-        var armorContainer = mock(PlayerArmorContainer.class);
+        var armorContainer = mock(PlayerArmorContainerImpl.class);
         var helmet = ItemTypes.DIAMOND_HELMET.createItemStack();
         helmet.addEnchantment(EnchantmentTypes.AQUA_AFFINITY, 1);
 
-        when(player.hasContainer(FullContainerType.ARMOR)).thenReturn(true);
-        when(player.getContainer(FullContainerType.ARMOR)).thenReturn(armorContainer);
+        when(player.hasContainer(ContainerType.ARMOR)).thenReturn(true);
+        when(player.getContainer(ContainerType.ARMOR)).thenReturn(armorContainer);
 
         when(armorContainer.getHelmet()).thenReturn(helmet);
 
@@ -110,7 +110,7 @@ public class BlockBreakTest {
         testCalculatingBreakTime(10, cobblestone, usedItem, true, false);
         testCalculatingBreakTime(50, cobblestone, usedItem, false, false);
 
-        when(player.hasContainer(FullContainerType.ARMOR)).thenReturn(false);
+        when(player.hasContainer(ContainerType.ARMOR)).thenReturn(false);
     }
 
     @Test

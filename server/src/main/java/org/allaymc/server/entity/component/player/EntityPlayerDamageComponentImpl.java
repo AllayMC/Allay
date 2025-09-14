@@ -1,6 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -42,7 +42,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         if (!damage.canBeReducedByArmor()) return;
 
         int durabilityIncreased = Math.max(1, (int) (damage.getSourceDamage() / 4f));
-        var armorContainer = thisPlayer.getContainer(FullContainerType.ARMOR);
+        var armorContainer = thisPlayer.getContainer(ContainerType.ARMOR);
         var itemStackArray = armorContainer.getItemStackArray();
         for (int slot = 0; slot < itemStackArray.length; slot++) {
             var item = itemStackArray[slot];
@@ -97,7 +97,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     protected void applyArmorWhenFall(DamageContainer damage) {
         var enchantmentProtectionFactor = 0;
 
-        for (var item : thisPlayer.getContainer(FullContainerType.ARMOR).getItemStacks()) {
+        for (var item : thisPlayer.getContainer(ContainerType.ARMOR).getItemStacks()) {
             if (item == ItemAirStack.AIR_STACK) continue;
             enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
         }

@@ -2,8 +2,8 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerContainer;
+import org.allaymc.api.container.Container;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
@@ -50,9 +50,9 @@ public class ClearCommand extends VanillaCommand {
                     int status = 0;
                     for (var target : targets) {
                         var containers = Stream.of(
-                                FullContainerType.PLAYER_INVENTORY,
-                                FullContainerType.OFFHAND,
-                                FullContainerType.ARMOR
+                                ContainerType.PLAYER_INVENTORY,
+                                ContainerType.OFFHAND,
+                                ContainerType.ARMOR
                         ).map(target::getContainer).toList();
                         if (maxCount == 0) {
                             int count = containers.stream()
@@ -86,7 +86,7 @@ public class ClearCommand extends VanillaCommand {
                 }, SenderType.PLAYER);
     }
 
-    protected int clearItemsFromContainer(PlayerContainer container, ItemType<?> itemType, int data, int maxCount) {
+    protected int clearItemsFromContainer(Container container, ItemType<?> itemType, int data, int maxCount) {
         int removed = 0;
         var remaining = maxCount;
 

@@ -171,8 +171,8 @@ container.getItemStack(0) == ItemAirStack.AIR_STACK
 
 ```java linenums="1"
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerContainer;
+import org.allaymc.server.container.impl.ContainerTypeInfo;
+import org.allaymc.server.container.impl.AbstractPlayerContainer;
 
 ContainerHolder holder = /* obtain a container holder (e.g., player) */;
 // Get a specific container type
@@ -185,8 +185,8 @@ boolean hasContainer = holder.hasContainer(FullContainerType.PLAYER);
 
 ```java linenums="1"
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerContainer;
+import org.allaymc.server.container.impl.ContainerTypeInfo;
+import org.allaymc.server.container.impl.AbstractPlayerContainer;
 
 Container container = /* obtain a container */;
 ContainerViewer viewer = /* obtain a container viewer */;

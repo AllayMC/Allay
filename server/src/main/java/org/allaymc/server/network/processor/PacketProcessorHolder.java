@@ -2,8 +2,8 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.player.ClientState;
-import org.allaymc.server.network.processor.impl.ingame.*;
-import org.allaymc.server.network.processor.impl.login.*;
+import org.allaymc.server.network.processor.ingame.*;
+import org.allaymc.server.network.processor.login.*;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 

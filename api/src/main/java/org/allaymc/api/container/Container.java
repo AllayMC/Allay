@@ -3,7 +3,6 @@ package org.allaymc.api.container;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -23,7 +22,7 @@ public interface Container {
      *
      * @return the container type
      */
-    FullContainerType<?> getContainerType();
+    ContainerType<?> getContainerType();
 
     /**
      * Add a listener to be called when the container is opened.
@@ -68,16 +67,6 @@ public interface Container {
      * @param listener the listener
      */
     void removeSlotChangeListener(int slot, Consumer<ItemStack> listener);
-
-    /**
-     * Get the slot type of the slot.
-     *
-     * @param slot the slot
-     * @return the slot type
-     */
-    default ContainerSlotType getSlotType(int slot) {
-        return getContainerType().getSlotType(slot);
-    }
 
     /**
      * Get the viewers of the container.
@@ -247,26 +236,6 @@ public interface Container {
      * @param nbtList the NBT list
      */
     void loadNBT(List<NbtMap> nbtList);
-
-    /**
-     * Get the slot index from the network slot index.
-     *
-     * @param index the network slot index
-     * @return the slot index
-     */
-    default int toNetworkSlotIndex(int index) {
-        return getContainerType().networkSlotIndexMapper().inverse().get(index);
-    }
-
-    /**
-     * Get the network slot index from the slot index.
-     *
-     * @param index the slot index
-     * @return the network slot index
-     */
-    default int fromNetworkSlotIndex(int index) {
-        return getContainerType().networkSlotIndexMapper().get(index);
-    }
 
     /**
      * Send the contents of the container to the viewer.

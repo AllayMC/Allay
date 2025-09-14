@@ -1,7 +1,7 @@
 package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
@@ -52,12 +52,12 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
 
     protected void equipArmor(EntityPlayer player, ItemStack itemStack) {
         var armorType = getArmorType();
-        var armorContainer = player.getContainer(FullContainerType.ARMOR);
+        var armorContainer = player.getContainer(ContainerType.ARMOR);
         if (armorContainer.isEmpty(armorType.ordinal())) {
-            player.getContainer(FullContainerType.PLAYER_INVENTORY).clearItemInHand();
+            player.getContainer(ContainerType.PLAYER_INVENTORY).clearItemInHand();
         } else {
             // Swap armor
-            player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(armorContainer.getItemStack(armorType.ordinal()));
+            player.getContainer(ContainerType.PLAYER_INVENTORY).setItemInHand(armorContainer.getItemStack(armorType.ordinal()));
         }
         armorContainer.setItemStack(getArmorType().ordinal(), itemStack);
         playerEquipSound(player, itemStack.getItemType());

@@ -7,7 +7,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
@@ -73,11 +73,11 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             var blockType = clickedBlockState.getBlockType();
             if (blockType == BlockTypes.WATER || blockType == BlockTypes.FLOWING_WATER) {
                 player.tryConsumeItemInHand();
-                player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
+                player.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             } else if (blockType == BlockTypes.LAVA || blockType == BlockTypes.FLOWING_LAVA) {
                 player.tryConsumeItemInHand();
-                player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.LAVA_BUCKET.createItemStack(1));
+                player.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.LAVA_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             }
             event.setCanBeUsed(true);

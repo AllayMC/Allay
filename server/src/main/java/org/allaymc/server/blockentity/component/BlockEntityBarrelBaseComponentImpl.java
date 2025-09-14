@@ -3,9 +3,9 @@ package org.allaymc.server.blockentity.component;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
-import org.allaymc.api.container.impl.BarrelContainer;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.container.impl.BarrelContainerImpl;
 
 /**
  * @author daoge_cmd
@@ -22,7 +22,7 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        BarrelContainer container = containerHolderComponent.getContainer();
+        BarrelContainerImpl container = containerHolderComponent.getContainer();
         container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 position.dimension().updateBlockProperty(

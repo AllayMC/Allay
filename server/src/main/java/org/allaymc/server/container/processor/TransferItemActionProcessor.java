@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.container.ContainerItemMoveEvent;
 import org.allaymc.api.item.ItemStack;
@@ -25,13 +25,13 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
     @Override
     public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var source = player.getReachableContainer(action.getSource().getContainerName().getContainer());
-        var destination = player.getReachableContainer(action.getDestination().getContainerName().getContainer());
+        var source = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
+        var destination = ContainerActionProcessor.getContainerFrom(player, action.getDestination().getContainerName());
 
-        int sourceSlot = source.fromNetworkSlotIndex(action.getSource().getSlot());
+        int sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(source, action.getSource().getSlot());
         int sourceStackNetworkId = action.getSource().getStackNetworkId();
 
-        int destinationSlot = destination.fromNetworkSlotIndex(action.getDestination().getSlot());
+        int destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destination, action.getDestination().getSlot());
         int destinationStackNetworkId = action.getDestination().getStackNetworkId();
 
         var sourItem = source.getItemStack(sourceSlot);
@@ -89,7 +89,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 destination.notifySlotChange(destinationSlot, false);
             } else {
                 // Destination item is empty, move the original stack to the new position, and use the source item's stack network id (like changing positions)
-                if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
+                if (source.getContainerType() == ContainerType.CREATED_OUTPUT) {
                     // HACK: If taken from CREATED_OUTPUT, the server needs to create a new stack network id
                     sourItem = sourItem.copy(true);
                 }
@@ -115,11 +115,11 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         }
 
         var destItemStackResponseSlot = new ItemStackResponseContainer(
-                destination.getSlotType(destinationSlot),
+                ContainerActionProcessor.getSlotType(destination, destinationSlot),
                 List.of(
                         new ItemStackResponseSlot(
-                                destination.toNetworkSlotIndex(destinationSlot),
-                                destination.toNetworkSlotIndex(destinationSlot),
+                                ContainerActionProcessor.toNetworkSlotIndex(destination, destinationSlot),
+                                ContainerActionProcessor.toNetworkSlotIndex(destination, destinationSlot),
                                 resultDestItem.getCount(),
                                 resultDestItem.getStackNetworkId(),
                                 resultDestItem.getCustomName(),
@@ -127,22 +127,22 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 ""
                         )
                 ),
-                new FullContainerName(destination.getSlotType(destinationSlot), null)
+                new FullContainerName(ContainerActionProcessor.getSlotType(destination, destinationSlot), null)
         );
 
-        // Special case: no need to respond to CREATED_OUTPUT (mj's strange hack)
-        if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
+        // Special case: no need to respond to CREATED_OUTPUT
+        if (source.getContainerType() == ContainerType.CREATED_OUTPUT) {
             return new ActionResponse(true, List.of(destItemStackResponseSlot));
         }
 
         return new ActionResponse(
                 true,
                 List.of(new ItemStackResponseContainer(
-                        source.getSlotType(sourceSlot),
+                        ContainerActionProcessor.getSlotType(source, sourceSlot),
                         List.of(
                                 new ItemStackResponseSlot(
-                                        source.toNetworkSlotIndex(sourceSlot),
-                                        source.toNetworkSlotIndex(sourceSlot),
+                                        ContainerActionProcessor.toNetworkSlotIndex(source, sourceSlot),
+                                        ContainerActionProcessor.toNetworkSlotIndex(source, sourceSlot),
                                         resultSourItem.getCount(),
                                         resultSourItem.getStackNetworkId(),
                                         resultSourItem.getCustomName(),
@@ -150,7 +150,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                         ""
                                 )
                         ),
-                        new FullContainerName(source.getSlotType(sourceSlot), null)
+                        new FullContainerName(ContainerActionProcessor.getSlotType(source, sourceSlot), null)
                 ), destItemStackResponseSlot)
         );
     }

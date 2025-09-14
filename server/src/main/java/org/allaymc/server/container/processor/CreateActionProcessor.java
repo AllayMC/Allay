@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.recipe.Recipe;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CreateAction;
@@ -27,7 +27,7 @@ public class CreateActionProcessor implements ContainerActionProcessor<CreateAct
 
         // No need to copy because when we get item from created output, we will copy it
         var output = recipe.getOutputs()[action.getSlot()];
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(output);
+        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, output, false);
         return null;
     }
 

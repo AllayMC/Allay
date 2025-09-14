@@ -8,7 +8,6 @@ import org.allaymc.api.blockentity.component.BlockEntityBrewingStandBaseComponen
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBrewingStand;
-import org.allaymc.api.container.impl.BrewingStandContainer;
 import org.allaymc.api.eventbus.event.container.BrewingStandBrewEvent;
 import org.allaymc.api.eventbus.event.container.BrewingStandConsumeFuelEvent;
 import org.allaymc.api.eventbus.event.container.BrewingStandStartBrewEvent;
@@ -21,6 +20,7 @@ import org.allaymc.api.world.data.Sound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.container.impl.BrewingStandContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 
@@ -54,7 +54,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        BrewingStandContainer container = containerHolderComponent.getContainer();
+        BrewingStandContainerImpl container = containerHolderComponent.getContainer();
         for (int i = 1; i < 4; i++) {
             int finalI = i;
             container.addSlotChangeListener(finalI, item -> {
@@ -69,20 +69,20 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             });
         }
 
-        container.addSlotChangeListener(BrewingStandContainer.REAGENT_SLOT, item -> {
+        container.addSlotChangeListener(BrewingStandContainerImpl.REAGENT_SLOT, item -> {
             brewTime = item == ItemAirStack.AIR_STACK ? 0 : MAX_BREW_TIME;
         });
     }
 
     @Override
     public void tick(long currentTick) {
-        BrewingStandContainer container = containerHolderComponent.getContainer();
+        BrewingStandContainerImpl container = containerHolderComponent.getContainer();
         tickBrewingStand(container);
         container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_FUEL_AMOUNT, fuelAmount);
         container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_FUEL_TOTAL, fuelTotal);
     }
 
-    protected void tickBrewingStand(BrewingStandContainer container) {
+    protected void tickBrewingStand(BrewingStandContainerImpl container) {
         if (!checkFuel(container)) {
             return;
         }
@@ -116,7 +116,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             return;
         }
 
-        if (container.isEmpty(BrewingStandContainer.REAGENT_SLOT)) {
+        if (container.isEmpty(BrewingStandContainerImpl.REAGENT_SLOT)) {
             return;
         }
 
@@ -139,16 +139,16 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
 
         if (reagent.getCount() > 1) {
             reagent.reduceCount(1);
-            container.notifySlotChange(BrewingStandContainer.REAGENT_SLOT);
+            container.notifySlotChange(BrewingStandContainerImpl.REAGENT_SLOT);
         } else {
-            container.clearSlot(BrewingStandContainer.REAGENT_SLOT);
+            container.clearSlot(BrewingStandContainerImpl.REAGENT_SLOT);
         }
 
         fuelAmount--;
         getDimension().addSound(position, Sound.RANDOM_POTION_BREWED);
     }
 
-    protected boolean checkFuel(BrewingStandContainer container) {
+    protected boolean checkFuel(BrewingStandContainerImpl container) {
         if (fuelAmount > 0) {
             return true;
         }
@@ -165,9 +165,9 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
 
         if (fuel.getCount() > 1) {
             fuel.reduceCount(1);
-            container.notifySlotChange(BrewingStandContainer.FUEL_SLOT);
+            container.notifySlotChange(BrewingStandContainerImpl.FUEL_SLOT);
         } else {
-            container.clearSlot(BrewingStandContainer.FUEL_SLOT);
+            container.clearSlot(BrewingStandContainerImpl.FUEL_SLOT);
         }
 
         fuelAmount = 20;

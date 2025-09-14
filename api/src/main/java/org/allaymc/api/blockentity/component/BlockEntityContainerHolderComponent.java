@@ -2,7 +2,7 @@ package org.allaymc.api.blockentity.component;
 
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -13,13 +13,13 @@ import java.util.Map;
 public interface BlockEntityContainerHolderComponent extends ContainerHolder, BlockEntityComponent {
     @Override
     @UnmodifiableView
-    default Map<FullContainerType<?>, Container> getContainers() {
+    default Map<ContainerType<?>, Container> getContainers() {
         Container container = getContainer();
         return Map.of(container.getContainerType(), container);
     }
 
     @Override
-    default <T extends Container> T getContainer(FullContainerType<T> type) {
+    default <T extends Container> T getContainer(ContainerType<T> type) {
         return getContainer();
     }
 
@@ -32,7 +32,6 @@ public interface BlockEntityContainerHolderComponent extends ContainerHolder, Bl
      * Gets the container.
      *
      * @param <T> the type of the container
-     *
      * @return the container
      */
     <T extends Container> T getContainer();

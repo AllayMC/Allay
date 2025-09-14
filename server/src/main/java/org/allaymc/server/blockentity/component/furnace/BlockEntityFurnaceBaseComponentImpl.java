@@ -9,7 +9,7 @@ import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent
 import org.allaymc.api.blockentity.component.BlockEntityFurnaceBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
-import org.allaymc.api.container.impl.FurnaceContainer;
+import org.allaymc.api.container.interfaces.FurnaceContainer;
 import org.allaymc.api.eventbus.event.container.FurnaceConsumeFuelEvent;
 import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
@@ -23,6 +23,7 @@ import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.container.impl.FurnaceContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 import org.joml.Vector3d;
@@ -68,7 +69,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        FurnaceContainer container = containerHolderComponent.getContainer();
+        FurnaceContainerImpl container = containerHolderComponent.getContainer();
         container.addSlotChangeListener(FurnaceContainer.RESULT_SLOT, item -> {
             if (item != ItemAirStack.AIR_STACK) return;
             tryDropStoredXP();
@@ -151,7 +152,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected void tickFurnace() {
         if (burnTime > 0) burnTime--;
 
-        FurnaceContainer container = containerHolderComponent.getContainer();
+        FurnaceContainerImpl container = containerHolderComponent.getContainer();
         if (container.isEmpty(FurnaceContainer.INGREDIENT_SLOT)) {
             cookTime = 0;
             return;
@@ -267,7 +268,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected boolean checkFuel() {
         if (burnTime > 0) return true;
 
-        FurnaceContainer container = containerHolderComponent.getContainer();
+        FurnaceContainerImpl container = containerHolderComponent.getContainer();
 
         var fuel = container.getFuel();
         if (!isFuel(fuel)) {

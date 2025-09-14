@@ -3,7 +3,7 @@ package org.allaymc.server.entity.component.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -290,9 +290,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void sendInventories() {
-        thisPlayer.viewContents(thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY));
-        thisPlayer.viewContents(thisPlayer.getContainer(FullContainerType.OFFHAND));
-        thisPlayer.viewContents(thisPlayer.getContainer(FullContainerType.ARMOR));
+        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.PLAYER_INVENTORY));
+        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.OFFHAND));
+        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.ARMOR));
         // No need to send cursor's content to client because there is nothing in cursor
     }
 

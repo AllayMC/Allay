@@ -3,7 +3,7 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.debugshape.DebugLine;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -65,15 +65,15 @@ public class GameTestCommand extends VanillaCommand {
                         return context.fail();
                     }
 
-                    player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
+                    player.getContainer(ContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("rfinv")
                 .exec((context, player) -> {
-                    player.viewContents(player.getContainer(FullContainerType.PLAYER_INVENTORY));
-                    player.viewContents(player.getContainer(FullContainerType.ARMOR));
-                    player.viewContents(player.getContainer(FullContainerType.OFFHAND));
+                    player.viewContents(player.getContainer(ContainerType.PLAYER_INVENTORY));
+                    player.viewContents(player.getContainer(ContainerType.ARMOR));
+                    player.viewContents(player.getContainer(ContainerType.OFFHAND));
                     context.addOutput("Inventory is refreshed!");
                     return context.success();
                 }, SenderType.PLAYER)

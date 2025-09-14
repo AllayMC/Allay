@@ -25,7 +25,7 @@ import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
-import org.allaymc.server.network.processor.impl.ingame.PlayerAuthInputPacketProcessor;
+import org.allaymc.server.network.processor.ingame.PlayerAuthInputPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.joml.Vector3d;
