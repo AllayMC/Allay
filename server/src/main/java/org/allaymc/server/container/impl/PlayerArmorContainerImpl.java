@@ -16,6 +16,8 @@ import java.util.function.Supplier;
  */
 public class PlayerArmorContainerImpl extends AbstractPlayerContainer implements PlayerArmorContainer {
 
+    protected static final float KNOCKBACK_RESISTANCE_PER_NETHERITE_ARMOR = 0.1f;
+
     public PlayerArmorContainerImpl(Supplier<EntityPlayer> playerSupplier) {
         super(ContainerType.ARMOR, playerSupplier);
         addSlotChangeListener(0, this::onArmorChange);
@@ -29,8 +31,11 @@ public class PlayerArmorContainerImpl extends AbstractPlayerContainer implements
         // Recalculate knockback resistance
         var knockbackResistance = AttributeType.KNOCKBACK_RESISTANCE.getDefaultValue();
         for (var itemStack : content) {
-            if (itemStack == ItemAirStack.AIR_STACK) continue;
-            if (ItemHelper.getArmorTier(itemStack.getItemType()) != ArmorTier.NETHERITE) continue;
+            if (itemStack == ItemAirStack.AIR_STACK ||
+                ItemHelper.getArmorTier(itemStack.getItemType()) != ArmorTier.NETHERITE) {
+                continue;
+            }
+
             knockbackResistance += KNOCKBACK_RESISTANCE_PER_NETHERITE_ARMOR;
         }
         var player = playerSupplier.get();
