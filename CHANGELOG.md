@@ -82,6 +82,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Refactored the weather system. Removed network related code in `Weather`, and world will hold only one `Weather` instance now.
 - (API) Moved the implementations of `EnchantmentType` from api module to server module.
 - (API) Moved class `CommandParseException` from api module to server module.
+- (API) Refactored the container system. All container implementations are moved to server module now.
+- (API) Renamed `FullContainerType` to `ContainerType`. All the network related code inside are moved to server module.
 
 ### Fixed
 
