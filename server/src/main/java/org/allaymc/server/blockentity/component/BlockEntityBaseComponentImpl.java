@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataContainer;
@@ -100,23 +101,30 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         manager.callEvent(event);
     }
 
-    public void onNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
+    /**
+     * Called when client send back BlockEntityDataPacket.
+     */
+    public void applyClientChange(EntityPlayer player, NbtMap nbt) {
+        loadNBT(nbt);
+    }
+
+    public void onBlockNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
         manager.callEvent(event);
     }
 
-    public void onPlace(CBlockOnPlaceEvent event) {
+    public void onBlockPlace(CBlockOnPlaceEvent event) {
         manager.callEvent(event);
     }
 
-    public void onReplace(CBlockOnReplaceEvent event) {
+    public void onBlockReplace(CBlockOnReplaceEvent event) {
         manager.callEvent(event);
     }
 
-    public void onInteract(CBlockOnInteractEvent event) {
+    public void onBlockInteract(CBlockOnInteractEvent event) {
         manager.callEvent(event);
     }
 
-    public void onPunch(CBlockOnPunchEvent event) {
+    public void onBlockPunch(CBlockOnPunchEvent event) {
         manager.callEvent(event);
     }
 }

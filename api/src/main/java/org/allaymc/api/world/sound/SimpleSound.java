@@ -82,14 +82,22 @@ public enum SimpleSound implements Sound {
     SIGN_WAXED,
     // WAXED_SIGN_FAILED_INTERACTION is a sound played when a player tries to interact with a waxed sign.
     WAXED_SIGN_FAILED_INTERACTION,
+    // GLOW_INK_SAC_USED is a sound played when a player used glow ink sac in a sign.
+    GLOW_INK_SAC_USED,
     // WAX_REMOVED is a sound played when wax is removed from a block.
     WAX_REMOVED,
     // COPPER_SCRAPED is a sound played when a player scrapes a copper block to reduce its oxidation level.
     COPPER_SCRAPED,
     // DECORATED_POT_INSERT_FAILED is a sound played when an item fails to be inserted into a decorated pot.
     DECORATED_POT_INSERT_FAILED,
-    // SPONGE_ABSORB is a sound played when sponge block absorbing water around
+    // SPONGE_ABSORB is a sound played when sponge block absorbing water around.
     SPONGE_ABSORB,
+    // CHORUS_FLOWER_GROW is a sound played when chorus flower grow.
+    CHORUS_FLOWER_GROW,
+    // END_PORTAL_FRAME_FILLED is a sound player when player fill an end portal.
+    END_PORTAL_FRAME_FILLED,
+    // END_PORTAL_SPAWN is a sound when end portal is activated.
+    END_PORTAL_SPAWN,
 
     /* Item */
 

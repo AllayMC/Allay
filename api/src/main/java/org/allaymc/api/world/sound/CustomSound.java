@@ -11,4 +11,7 @@ package org.allaymc.api.world.sound;
  * @author daoge_cmd
  */
 public record CustomSound(String soundName, float volume, float pitch) implements Sound {
+    public CustomSound(String soundName) {
+        this(soundName, 1, 1);
+    }
 }

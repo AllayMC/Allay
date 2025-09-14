@@ -13,6 +13,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.ItemUseOnBlockSound;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3ic;
 
@@ -60,7 +61,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         if (oxidationComponent.isWaxed()) {
             var nextBlockType = oxidationComponent.getBlockWithWaxed(false);
             tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
-                dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_OFF);
+                dimension.addSound(clickedBlockPos, SimpleSound.WAX_REMOVED);
             });
 
             return true;

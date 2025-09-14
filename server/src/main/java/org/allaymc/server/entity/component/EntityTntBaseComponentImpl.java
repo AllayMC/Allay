@@ -9,8 +9,8 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
 import org.allaymc.api.world.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -34,7 +34,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
         super.initMetadata();
         setFlag(EntityFlag.IGNITED, true);
         setData(EntityData.FUSE_TIME, fuse);
-        getDimension().addLevelEvent(location, LevelEvent.SOUND_FUSE);
+        getDimension().addSound(location, SimpleSound.TNT);
     }
 
     @Override

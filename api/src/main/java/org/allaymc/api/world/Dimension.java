@@ -757,13 +757,6 @@ public interface Dimension {
     }
 
     /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(double x, double y, double z, LevelEventType eventType) {
-        addLevelEvent(x, y, z, eventType, 0);
-    }
-
-    /**
      * Add a level event at the specified position.
      *
      * @param x         the x coordinate of the position

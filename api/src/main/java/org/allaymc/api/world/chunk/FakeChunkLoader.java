@@ -14,6 +14,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
+import org.allaymc.api.world.sound.Sound;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
@@ -155,7 +156,7 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
-    public void viewSound(Vector3dc pos, String sound, double volume, double pitch) {
+    public void viewSound(Sound sound, Vector3dc pos, boolean relative) {
     }
 
     @Override

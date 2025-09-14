@@ -12,11 +12,11 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPunchEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.jetbrains.annotations.Range;
 
 /**
@@ -37,8 +37,8 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @Override
-    public void onInteract(CBlockOnInteractEvent event) {
-        super.onInteract(event);
+    public void onBlockInteract(CBlockOnInteractEvent event) {
+        super.onBlockInteract(event);
 
         if (itemStack != ItemAirStack.AIR_STACK) {
             var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlock(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.ROTATE);
@@ -49,7 +49,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
 
             // Rotate the item in the frame
             setItemRotation((itemRotation + 1) % 8);
-            event.getDimension().addLevelEvent(MathUtils.center(event.getInteractInfo().clickedBlockPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_ROTATE);
+            event.getDimension().addSound(MathUtils.center(event.getInteractInfo().clickedBlockPos()), SimpleSound.ITEM_FRAME_ROTATE);
         } else {
             var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlock(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.PUT);
             if (!e.call()) {
@@ -62,15 +62,15 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
             itemStack.setCount(1);
             setItemStack(itemStack);
             event.getInteractInfo().player().tryConsumeItemInHand();
-            event.getDimension().addLevelEvent(MathUtils.center(event.getInteractInfo().clickedBlockPos()), LevelEvent.SOUND_ITEMFRAME_ITEM_ADD);
+            event.getDimension().addSound(MathUtils.center(event.getInteractInfo().clickedBlockPos()), SimpleSound.ITEM_ADD);
         }
 
         event.setSuccess(true);
     }
 
     @Override
-    public void onPunch(CBlockOnPunchEvent event) {
-        super.onPunch(event);
+    public void onBlockPunch(CBlockOnPunchEvent event) {
+        super.onBlockPunch(event);
 
         if (itemStack == ItemAirStack.AIR_STACK) {
             return;
@@ -87,12 +87,12 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
             dimension.dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPosition()));
         }
         clearItemStack();
-        dimension.addLevelEvent(MathUtils.center(event.getCurrentBlock().getPosition()), LevelEvent.SOUND_ITEMFRAME_ITEM_REMOVE);
+        dimension.addSound(MathUtils.center(event.getCurrentBlock().getPosition()), SimpleSound.ITEM_FRAME_REMOVE);
     }
 
     @Override
-    public void onReplace(CBlockOnReplaceEvent event) {
-        super.onReplace(event);
+    public void onBlockReplace(CBlockOnReplaceEvent event) {
+        super.onBlockReplace(event);
 
         if (this.itemStack != ItemAirStack.AIR_STACK) {
             // Drop the item in the frame when the frame is replaced

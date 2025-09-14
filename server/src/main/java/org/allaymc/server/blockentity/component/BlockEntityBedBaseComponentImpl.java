@@ -27,8 +27,8 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
     }
 
     @Override
-    public void onPlace(CBlockOnPlaceEvent event) {
-        super.onPlace(event);
+    public void onBlockPlace(CBlockOnPlaceEvent event) {
+        super.onBlockPlace(event);
         var placementInfo = event.getPlacementInfo();
         if (placementInfo == null) {
             this.color = DyeColor.RED;

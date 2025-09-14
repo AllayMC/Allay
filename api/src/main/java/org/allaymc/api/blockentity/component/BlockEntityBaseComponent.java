@@ -3,7 +3,6 @@ package org.allaymc.api.blockentity.component;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
@@ -12,7 +11,6 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;
 
@@ -66,17 +64,6 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
      * @param nbt The NBT data to load
      */
     void loadNBT(NbtMap nbt);
-
-    /**
-     * Applies a client change to the block entity.
-     *
-     * @param player The player who made the change
-     * @param nbt    The NBT data of the change
-     */
-    @ApiStatus.OverrideOnly
-    default void applyClientChange(EntityPlayer player, NbtMap nbt) {
-        loadNBT(nbt);
-    }
 
     /**
      * Creates a BlockEntityDataPacket for the block entity.

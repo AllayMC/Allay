@@ -6,7 +6,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3ic;
 
 /**
@@ -40,7 +40,7 @@ public class ItemHoneycombBaseComponentImpl extends ItemBaseComponentImpl {
         );
         dimension.setBlockState(clickedBlockPos, nextBlockType.copyPropertyValuesFrom(oldBlock.getBlockState()));
         interactInfo.player().tryConsumeItemInHand();
-        dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_ON);
+        dimension.addSound(clickedBlockPos, SimpleSound.SIGN_WAXED);
         return true;
     }
 }

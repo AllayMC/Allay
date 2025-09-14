@@ -30,7 +30,7 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         }
 
         clickedBlockState.updateBlockProperty(END_PORTAL_EYE_BIT, true);
-        clickedBlockState.addSound(SimpleSound.BLOCK_END_PORTAL_FRAME_FILL);
+        clickedBlockState.addSound(SimpleSound.END_PORTAL_FRAME_FILLED);
         interactInfo.player().tryConsumeItemInHand();
         return true;
     }

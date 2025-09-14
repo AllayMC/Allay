@@ -246,8 +246,8 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     @Override
-    public void onReplace(CBlockOnReplaceEvent event) {
-        super.onReplace(event);
+    public void onBlockReplace(CBlockOnReplaceEvent event) {
+        super.onBlockReplace(event);
         tryDropStoredXP();
     }
 

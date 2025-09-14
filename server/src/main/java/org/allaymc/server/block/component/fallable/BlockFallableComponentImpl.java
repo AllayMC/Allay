@@ -18,6 +18,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.server.block.component.event.CBlockAfterPlacedEvent;
 import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.cloudburstmc.nbt.NbtMap;
@@ -36,7 +37,7 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
     @Override
     public void onLanded(Location3d location, double fallDistance, BlockState blockState) {
         location.dimension().setBlockState(location, blockState);
-        location.dimension().addSound(location, landingSound);
+        location.dimension().addSound(location, new CustomSound(landingSound));
     }
 
     @EventHandler

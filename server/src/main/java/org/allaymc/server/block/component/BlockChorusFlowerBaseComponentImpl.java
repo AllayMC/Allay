@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.SoundNames;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3ic;
 
 import java.util.ArrayList;
@@ -179,6 +179,6 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
         var currentAge = newBlockState.getPropertyValue(AGE_6);
         newBlockState = newBlockState.setPropertyValue(AGE_6, Math.min(AGE_6.getMax(), currentAge + addingAge));
         current.getDimension().setBlockState(newPos, newBlockState);
-        current.getDimension().addSound(newPos, SoundNames.BLOCK_CHORUSFLOWER_GROW);
+        current.getDimension().addSound(newPos, SimpleSound.CHORUS_FLOWER_GROW);
     }
 }

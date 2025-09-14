@@ -10,7 +10,7 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.SoundNames;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.container.impl.BlockContainerImpl;
 import org.joml.Vector3ic;
 
@@ -33,7 +33,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
             return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
-        dimension.addSound(placeBlockPos, SoundNames.RANDOM_ANVIL_LAND);
+        dimension.addSound(placeBlockPos, SimpleSound.ANVIL_LAND);
 
         blockState = blockState.setPropertyValue(
                 MINECRAFT_CARDINAL_DIRECTION,

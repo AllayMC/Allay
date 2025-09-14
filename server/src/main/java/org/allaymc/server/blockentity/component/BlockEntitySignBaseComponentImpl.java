@@ -13,10 +13,10 @@ import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 
 /**
@@ -89,7 +89,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         }
 
         var event = new SignTextChangeEvent(new Block(getBlockState(), position, 0), newText, player);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
+
         newText = event.getText();
 
         if (isFrontSide) {
@@ -111,8 +114,8 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     }
 
     @Override
-    public void onInteract(CBlockOnInteractEvent event) {
-        super.onInteract(event);
+    public void onBlockInteract(CBlockOnInteractEvent event) {
+        super.onBlockInteract(event);
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
         // If a sign is waxed, it cannot be modified.
@@ -127,7 +130,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
             setWaxed(true);
             player.tryConsumeItemInHand();
-            player.getDimension().addLevelEvent(position.x(), position.y(), position.z(), LevelEvent.PARTICLE_WAX_ON);
+            player.getDimension().addSound(position.x(), position.y(), position.z(), SimpleSound.SIGN_WAXED);
             event.setSuccess(true);
             return;
         }
@@ -139,7 +142,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
                 backText.setGlowing(true);
             }
             player.tryConsumeItemInHand();
-            player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
+            player.getDimension().addSound(player.getLocation(), SimpleSound.GLOW_INK_SAC_USED);
             event.setSuccess(true);
             return;
         }
@@ -151,7 +154,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
                 backText.setGlowing(false);
             }
             player.tryConsumeItemInHand();
-            player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
+            player.getDimension().addSound(player.getLocation(), SimpleSound.GLOW_INK_SAC_USED);
             event.setSuccess(true);
             return;
         }
@@ -161,8 +164,8 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     }
 
     @Override
-    public void onPlace(CBlockOnPlaceEvent event) {
-        super.onPlace(event);
+    public void onBlockPlace(CBlockOnPlaceEvent event) {
+        super.onBlockPlace(event);
         if (event.getPlacementInfo() == null) return;
         openSignEditorFor(event.getPlacementInfo().player(), true);
     }

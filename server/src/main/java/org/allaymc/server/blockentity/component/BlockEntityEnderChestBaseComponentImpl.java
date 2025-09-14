@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.blockentity.component.BlockEntityEnderChestBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.world.sound.SoundNames;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**
@@ -29,7 +29,7 @@ public class BlockEntityEnderChestBaseComponentImpl extends BlockEntityBaseCompo
             packet.setEventData(2);
             sendPacketToViewers(packet);
 
-            position.dimension().addSound(MathUtils.center(position), SoundNames.RANDOM_ENDERCHESTOPEN);
+            position.dimension().addSound(MathUtils.center(position), SimpleSound.ENDER_CHEST_OPEN);
         } else if (viewersCount == 0) {
             BlockEventPacket packet = new BlockEventPacket();
             packet.setBlockPosition(position.toNetwork());
@@ -37,7 +37,7 @@ public class BlockEntityEnderChestBaseComponentImpl extends BlockEntityBaseCompo
             packet.setEventData(0);
             sendPacketToViewers(packet);
 
-            position.dimension().addSound(MathUtils.center(position), SoundNames.RANDOM_ENDERCHESTCLOSED);
+            position.dimension().addSound(MathUtils.center(position), SimpleSound.ENDER_CHEST_CLOSE);
         }
     }
 }

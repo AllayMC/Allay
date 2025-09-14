@@ -31,7 +31,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
         createBlockEntity(pos, false);
         var blockEntity = getBlockEntity(pos);
-        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onPlace(event);
+        getBaseComponentImpl(blockEntity).onBlockPlace(event);
 
         // Send block entity to client after called onPlace() because onPlace() method may make some changes
         // on this block entity
@@ -49,7 +49,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
             log.warn("Block entity not found at pos: {}", pos);
             return;
         }
-        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onReplace(event);
+        getBaseComponentImpl(blockEntity).onBlockReplace(event);
         removeBlockEntity(pos);
     }
 
@@ -57,19 +57,23 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().getPosition());
         var blockEntity = getBlockEntity(pos);
-        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onNeighborUpdate(event);
+        getBaseComponentImpl(blockEntity).onBlockNeighborUpdate(event);
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickedBlockPos();
         var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
-        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onInteract(event);
+        getBaseComponentImpl(blockEntity).onBlockInteract(event);
     }
 
     @EventHandler
     protected void onPunch(CBlockOnPunchEvent event) {
         var blockEntity = getBlockEntity(event.getCurrentBlock().getPosition());
-        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onPunch(event);
+        getBaseComponentImpl(blockEntity).onBlockPunch(event);
+    }
+
+    protected BlockEntityBaseComponentImpl getBaseComponentImpl(BlockEntity blockEntity) {
+        return (BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent();
     }
 }

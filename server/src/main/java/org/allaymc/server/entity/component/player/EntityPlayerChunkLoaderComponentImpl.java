@@ -629,6 +629,16 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case SimpleSound.TELEPORT -> pk.setSound(SoundEvent.TELEPORT);
             case SimpleSound.DECORATED_POT_INSERT_FAILED -> pk.setSound(SoundEvent.DECORATED_POT_INSERT_FAILED);
             case SimpleSound.ITEM_BREAK -> pk.setSound(SoundEvent.BREAK);
+            case SimpleSound.CHORUS_FLOWER_GROW -> pk.setSound(SoundEvent.CHORUS_GROW);
+            case SimpleSound.END_PORTAL_FRAME_FILLED -> pk.setSound(SoundEvent.BLOCK_END_PORTAL_FRAME_FILL);
+            case SimpleSound.END_PORTAL_SPAWN -> pk.setSound(SoundEvent.BLOCK_END_PORTAL_SPAWN);
+            case SimpleSound.GLOW_INK_SAC_USED -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_INK_SACE_USED);
+                levelEvent.setPosition(pos.toFloat());
+                this.networkComponent.sendPacket(levelEvent);
+                return;
+            }
             case SimpleSound.DOOR_CRASH -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ZOMBIE_DOOR_CRASH);

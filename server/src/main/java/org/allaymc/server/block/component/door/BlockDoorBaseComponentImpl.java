@@ -11,7 +11,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.SoundNames;
+import org.allaymc.api.world.sound.DoorCloseSound;
+import org.allaymc.api.world.sound.DoorOpenSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -100,7 +101,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
 
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
-        dimension.addSound(MathUtils.center(pos), isOpen ? SoundNames.RANDOM_DOOR_OPEN : SoundNames.RANDOM_DOOR_CLOSE);
+        dimension.addSound(MathUtils.center(pos), isOpen ? new DoorOpenSound(blockState) : new DoorCloseSound(blockState));
         return true;
     }
 
