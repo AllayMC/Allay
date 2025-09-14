@@ -11,7 +11,7 @@ import org.allaymc.api.eventbus.event.container.AnvilTakeResultEvent;
 import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.sound.SoundNames;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -203,7 +203,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                     var event = new AnvilDamageEvent(new Block(anvilState, anvilPos), newAnvilState);
                     if (event.call()) {
                         if (newAnvilState.getBlockType() == BlockTypes.AIR) {
-                            player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_BREAK);
+                            player.getDimension().addSound(anvilPos, SoundNames.RANDOM_ANVIL_BREAK);
                         }
 
                         player.getDimension().setBlockState(anvilPos, event.getNewState());
@@ -211,7 +211,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 }
             }
 
-            player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_USE);
+            player.getDimension().addSound(anvilPos, SoundNames.RANDOM_ANVIL_USE);
 
             player.setExperienceLevel(player.getExperienceLevel() - totalCost);
         }

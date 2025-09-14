@@ -3,16 +3,13 @@ package org.allaymc.server.item.component;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
 import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.sound.EquipItemSound;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -60,25 +57,7 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
             player.getContainer(ContainerType.PLAYER_INVENTORY).setItemInHand(armorContainer.getItemStack(armorType.ordinal()));
         }
         armorContainer.setItemStack(getArmorType().ordinal(), itemStack);
-        playerEquipSound(player, itemStack.getItemType());
-    }
-
-    protected void playerEquipSound(EntityPlayer player, ItemType<?> itemType) {
-        var pos = player.getLocation();
-        var dimension = player.getDimension();
-        if (itemType == ItemTypes.ELYTRA) {
-            dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_ELYTRA);
-            return;
-        }
-        var tier = ItemHelper.getArmorTier(itemType);
-        switch (tier) {
-            case LEATHER -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_LEATHER);
-            case IRON -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_IRON);
-            case CHAIN -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_CHAIN);
-            case GOLD -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_GOLD);
-            case DIAMOND, NETHERITE -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_DIAMOND);
-            case null, default -> dimension.addLevelSoundEvent(pos, SoundEvent.ARMOR_EQUIP_GENERIC);
-        }
+        player.getDimension().addSound(player.getLocation(), new EquipItemSound(itemStack.getItemType()));
     }
 
     @Override

@@ -10,8 +10,8 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -119,7 +119,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     }
 
     private void addHitSound(Vector3dc hitPos) {
-        this.arrowBaseComponent.getDimension().addLevelSoundEvent(hitPos, SoundEvent.BOW_HIT);
+        this.arrowBaseComponent.getDimension().addSound(hitPos, SimpleSound.ARROW_HIT);
     }
 
     private int getDifficultyBonus() {

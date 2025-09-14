@@ -9,10 +9,10 @@ import org.allaymc.api.eventbus.event.player.PlayerEatEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
 import org.allaymc.server.item.component.event.CItemUsedInAirEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
  * @author IWareQ
@@ -50,7 +50,7 @@ public class ItemEdibleComponentImpl implements ItemEdibleComponent {
     public void onEaten(EntityPlayer player) {
         player.saturate(this.foodPoints, this.saturationPoints);
         var pos = player.getLocation();
-        player.getDimension().addLevelSoundEvent(pos.x(), pos.y(), pos.z(), SoundEvent.BURP);
+        player.getDimension().addSound(pos.x(), pos.y(), pos.z(), SimpleSound.BURP);
     }
 
     @EventHandler

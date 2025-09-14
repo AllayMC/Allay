@@ -28,6 +28,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.BlockPlaceSound;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
@@ -36,7 +37,6 @@ import org.allaymc.server.item.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3ic;
 
@@ -385,7 +385,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var result = blockBehavior.place(dimension, blockState, placeBlockPos, placementInfo);
         if (result) {
-            dimension.addLevelSoundEvent(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, SoundEvent.PLACE, blockState.blockStateHash());
+            dimension.addSound(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, new BlockPlaceSound(blockState));
             tryApplyBlockEntityNBT(dimension, placeBlockPos);
             if (player != null) {
                 tryConsumeItem(player);

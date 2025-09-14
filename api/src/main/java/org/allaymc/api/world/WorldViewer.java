@@ -12,9 +12,9 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.data.Sound;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
+import org.allaymc.api.world.sound.Sound;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -197,13 +197,15 @@ public interface WorldViewer {
     /**
      * Views a sound with the specific volume and pitch at the pos passed.
      *
-     * @param pos    the pos of the sound
-     * @param sound  the name of the sound, can be got from {@link Sound}
-     * @param volume the volume of the sound
-     * @param pitch  the pitch of the sound
+     * @param sound    the sound to view
+     * @param pos      the pos of the sound
+     * @param relative whether the sound is relative. If set to {@code true}, the sound will have full volume,
+     *                 regardless of where the Position is, whereas if set to {@code false}, the sound's volume
+     *                 will be based on the distance to the pos passed
      */
-    // TODO: update it
-    void viewSound(Vector3dc pos, String sound, double volume, double pitch);
+    void viewSound(Sound sound, Vector3dc pos, boolean relative);
+
+    // TODO: viewParticle
 
     /**
      * Views the weather passed.

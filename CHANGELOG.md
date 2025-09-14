@@ -32,6 +32,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   inspired by df-mc/dragonfly to reduce the code associated with network packet contained in api module.
 - (API) Introduced a bunch of functional interfaces in package `utils.funtion`.
 - (API) Introduced classes `AnimateAction`, `EntityEvent`, `EntityFlag` and `EntityData`, and they correspond to classes in the protocol library.
+- (API) Introduced enum `DiscType` for music disc.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
@@ -84,6 +85,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved class `CommandParseException` from api module to server module.
 - (API) Refactored the container system. All container implementations are moved to server module now.
 - (API) Renamed `FullContainerType` to `ContainerType`. All the network related code inside are moved to server module.
+- (API) Refactored the sound and particle system, now each sound and particle instance is a pure data object or an enum of `SimpleSound`/`SimpleParticle` if it doesn't require
+  additional parameters.
 
 ### Fixed
 
@@ -109,6 +112,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed methods `ChunkLoader.onChunkInRangeSend()` and `ChunkLoader.onChunkOutOfRange()`, they are replaced by `WorldViewer.viewChunk()` and `WorldViewer.removeChunk()`.
 - (API) Removed method `WorldData.sendTimeOfDay()`.
 - (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
+- (API) Removed methods `Dimension.addLevelSoundEvent` and `Dimension.addLevelEvent` due to the new sound/particle system.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

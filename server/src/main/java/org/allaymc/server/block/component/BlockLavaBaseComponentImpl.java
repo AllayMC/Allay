@@ -20,7 +20,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -121,7 +121,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                 }
 
                 dimension.setBlockState(pos, event.getHardenedBlockState());
-                block.addLevelSoundEvent(SoundEvent.FIZZ);
+                block.addSound(SimpleSound.FIZZ);
                 return true;
             }
 
@@ -145,7 +145,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
 
         dimension.setBlockState(pos, event.getHardenedBlockState());
-        dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
+        dimension.addSound(MathUtils.center(pos), SimpleSound.FIZZ);
         return true;
     }
 

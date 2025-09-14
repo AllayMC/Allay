@@ -2,8 +2,8 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3dc;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -36,7 +36,7 @@ public class EntityXpBottlePhysicsComponentImpl extends EntityProjectilePhysicsC
         var dimension = thisEntity.getDimension();
         // Spawn experience orbs with a value of 3-11
         dimension.splitAndDropXpOrb(location, ThreadLocalRandom.current().nextInt(9) + 3);
-        dimension.addLevelSoundEvent(location, SoundEvent.GLASS);
+        dimension.addSound(location, SimpleSound.GLASS_BREAK);
         // Spawn blue potion splash particle
         dimension.addLevelEvent(location, LevelEvent.PARTICLE_POTION_SPLASH, 0x00385dc6);
     }

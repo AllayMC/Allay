@@ -16,7 +16,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.impl.PotionMixRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
@@ -145,7 +145,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         }
 
         fuelAmount--;
-        getDimension().addSound(position, Sound.RANDOM_POTION_BREWED);
+        getDimension().addSound(position, SoundNames.RANDOM_POTION_BREWED);
     }
 
     protected boolean checkFuel(BrewingStandContainerImpl container) {

@@ -1,6 +1,6 @@
 package org.allaymc.api.item.component;
 
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.sound.Sound;
 
 /**
  * @author IWareQ
@@ -11,5 +11,5 @@ public interface ItemMusicDiscBaseComponent extends ItemBaseComponent {
      *
      * @return the sound of the music disc
      */
-    SoundEvent getSound();
+    Sound getSound();
 }

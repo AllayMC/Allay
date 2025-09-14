@@ -13,8 +13,8 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.container.impl.PlayerOffhandContainerImpl;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 
 /**
@@ -93,7 +93,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         if (!creative) {
             tryIncreaseDamage(1);
         }
-        player.getDimension().addLevelSoundEvent(shootPos, SoundEvent.BOW);
+        player.getDimension().addSound(shootPos, SimpleSound.BOW_SHOOT);
     }
 
     protected boolean hasArrow(EntityPlayer player) {

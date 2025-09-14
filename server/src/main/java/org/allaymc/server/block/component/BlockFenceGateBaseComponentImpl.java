@@ -10,8 +10,9 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.FenceGateCloseSound;
+import org.allaymc.api.world.sound.FenceGateOpenSound;
 import org.allaymc.server.block.BlockPlaceHelper;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
@@ -56,7 +57,7 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         clickedBlockState.updateBlockProperty(OPEN_BIT, open);
-        clickedBlockState.addLevelSoundEvent(open ? SoundEvent.FENCE_GATE_OPEN : SoundEvent.FENCE_GATE_CLOSE);
+        clickedBlockState.addSound(open ? new FenceGateOpenSound(clickedBlockState.getBlockState()) : new FenceGateCloseSound(clickedBlockState.getBlockState()));
         return true;
     }
 

@@ -3,7 +3,7 @@ package org.allaymc.server.blockentity.component.shulkerbox;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
-import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
@@ -44,7 +44,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
                         position.x() + 0.5f,
                         position.y() + 0.5f,
                         position.z() + 0.5f,
-                        Sound.RANDOM_SHULKERBOXOPEN
+                        SimpleSound.SHULKER_BOX_OPEN
                 );
                 sendPacketToViewers(pk);
             }
@@ -60,7 +60,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
                         position.x() + 0.5f,
                         position.y() + 0.5f,
                         position.z() + 0.5f,
-                        Sound.RANDOM_SHULKERBOXCLOSED
+                        SimpleSound.SHULKER_BOX_CLOSE
                 );
                 sendPacketToViewers(pk);
             }

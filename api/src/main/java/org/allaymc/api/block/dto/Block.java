@@ -15,9 +15,9 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.Sound;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -85,7 +85,6 @@ public class Block {
      * Sets the property values of the block state and returns a new {@code Block} instance with the updated block state.
      *
      * @param propertyValues the list of property values to set for the block state
-     *
      * @return a new {@code Block} instance with the updated block state
      */
     public Block setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
@@ -96,7 +95,6 @@ public class Block {
      * Sets a property value and returns a new {@code Block} instance with the updated block state.
      *
      * @param propertyValue the property value to set
-     *
      * @return a new {@code Block} instance with the updated block state
      */
     public Block setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue) {
@@ -110,7 +108,6 @@ public class Block {
      * @param value      the value to set for the property
      * @param <DATATYPE> the type of the property value
      * @param <PROPERTY> the type of the block property
-     *
      * @return a new {@code Block} instance with the updated block state
      */
     public <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> Block setPropertyValue(PROPERTY property, DATATYPE value) {
@@ -128,7 +125,6 @@ public class Block {
      * Returns a new {@code BlockStateWithPos} offset from the current position in the specified direction.
      *
      * @param blockFace the direction to offset
-     *
      * @return a new {@code BlockStateWithPos} at the offset position
      */
     public Block offsetPos(BlockFace blockFace, int layer) {
@@ -150,7 +146,6 @@ public class Block {
      * @param y     the y-axis offset
      * @param z     the z-axis offset
      * @param layer the layer of the block
-     *
      * @return a new {@code BlockStateWithPos} at the offset position
      */
     public Block offsetPos(int x, int y, int z, int layer) {
@@ -174,15 +169,6 @@ public class Block {
     }
 
     /**
-     * Adds a sound event at the center of this block's position.
-     *
-     * @param soundEvent the sound event to play
-     */
-    public void addLevelSoundEvent(SoundEvent soundEvent) {
-        getDimension().addLevelSoundEvent(MathUtils.center(position), soundEvent);
-    }
-
-    /**
      * Adds a level event at the center of this block's position.
      *
      * @param eventType the type of level event
@@ -190,6 +176,15 @@ public class Block {
      */
     public void addLevelEvent(LevelEventType eventType, int data) {
         getDimension().addLevelEvent(MathUtils.center(position), eventType, data);
+    }
+
+    /**
+     * Adds a sound at the center of this block's position.
+     *
+     * @param sound the sound to add
+     */
+    public void addSound(Sound sound) {
+        getDimension().addSound(MathUtils.center(position), sound);
     }
 
     /**
@@ -215,7 +210,6 @@ public class Block {
      *
      * @param usedItem the item used to break the block, can be {@code null}
      * @param entity   the entity that broke the block, can be {@code null}
-     *
      * @return {@code true} if the block was successfully broken, {@code false} otherwise.
      */
     public boolean breakBlock(ItemStack usedItem, Entity entity) {
@@ -244,7 +238,6 @@ public class Block {
      * Retrieves the block entity at the current position.
      *
      * @param <T> the type of the block entity
-     *
      * @return the block entity at the current position
      */
     @SuppressWarnings("ALL")

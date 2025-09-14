@@ -28,6 +28,15 @@ public final class MathUtils {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
+    /**
+     * Converts the double vector passed to float vector
+     *
+     * @param vec the double vector to convert
+     * @return the float vector
+     */
+    public static Vector3fc toVec3f(Vector3dc vec) {
+        return vec.get(new Vector3f());
+    }
 
     /**
      * Convert cloudburst vector to joml vector.

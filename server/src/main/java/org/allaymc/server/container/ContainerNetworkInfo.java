@@ -12,8 +12,7 @@ import java.util.*;
  * @author daoge_cmd
  */
 public record ContainerNetworkInfo(
-        int networkId,
-        ContainerType<?> type,
+        int networkId, ContainerType<?> type,
         ContainerSlotType[] slotTypeTable,
         Set<ContainerSlotType> heldSlotTypes,
         // The slot range provided by vanilla for some containers does not match the design of Allay.

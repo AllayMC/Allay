@@ -9,9 +9,9 @@ import org.allaymc.api.entity.component.EntitySplashPotionProjectileComponent;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3i;
@@ -53,7 +53,7 @@ public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhys
 
     protected void splash(Block blockBeingHit, Entity entityBeingHit, float durationMultiplier) {
         var dimension = thisEntity.getDimension();
-        dimension.addLevelSoundEvent(thisEntity.getLocation(), SoundEvent.GLASS);
+        dimension.addSound(thisEntity.getLocation(), SimpleSound.GLASS_BREAK);
         var potionType = splashPotionProjectileComponent.getPotionType();
         if (potionType == null) {
             return;

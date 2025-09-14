@@ -6,7 +6,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.sound.SimpleSound;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.END_PORTAL_EYE_BIT;
 
@@ -30,7 +30,7 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         }
 
         clickedBlockState.updateBlockProperty(END_PORTAL_EYE_BIT, true);
-        clickedBlockState.addLevelSoundEvent(SoundEvent.BLOCK_END_PORTAL_FRAME_FILL);
+        clickedBlockState.addSound(SimpleSound.BLOCK_END_PORTAL_FRAME_FILL);
         interactInfo.player().tryConsumeItemInHand();
         return true;
     }

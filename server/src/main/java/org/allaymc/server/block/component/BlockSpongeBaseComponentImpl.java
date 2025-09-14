@@ -8,8 +8,8 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -41,7 +41,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         if (performAbsorbWater(center)) {
             center.getDimension().setBlockState(center.getPosition(), BlockTypes.WET_SPONGE.getDefaultState());
             center.addLevelEvent(LevelEvent.PARTICLE_DESTROY_BLOCK, BlockTypes.WATER.getDefaultState().blockStateHash());
-            center.addLevelSoundEvent(SoundEvent.SPONGE_ABSORB);
+            center.addSound(SimpleSound.SPONGE_ABSORB);
         }
     }
 

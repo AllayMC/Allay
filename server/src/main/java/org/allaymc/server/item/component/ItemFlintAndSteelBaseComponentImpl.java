@@ -11,8 +11,8 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.BlockFireBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 
 /**
@@ -58,7 +58,7 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
                     // In that case, we should place a soul fire instead of a normal fire
                     var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
                     dimension.setBlockState(placeBlockPos, fireBlockState);
-                    dimension.addLevelSoundEvent(MathUtils.center(placeBlockPos), SoundEvent.IGNITE);
+                    dimension.addSound(MathUtils.center(placeBlockPos), SimpleSound.IGNITE);
                 }
             }
         } else {

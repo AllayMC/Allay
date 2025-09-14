@@ -7,7 +7,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.block.BlockPlaceHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
@@ -50,7 +50,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         var isOpen = !clickedBlockState.getPropertyValue(OPEN_BIT);
         clickedBlockState.updateBlockProperty(OPEN_BIT, isOpen);
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
-        dimension.addSound(MathUtils.center(clickedBlockState.getPosition()), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
+        dimension.addSound(MathUtils.center(clickedBlockState.getPosition()), isOpen ? SoundNames.RANDOM_DOOR_OPEN : SoundNames.RANDOM_DOOR_CLOSE);
         return true;
     }
 }

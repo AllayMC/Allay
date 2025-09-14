@@ -14,7 +14,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
@@ -233,17 +233,17 @@ public final class BlockTypeInitializer {
                 .builder(BlockGravelBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAVEL)
                 .setBaseComponentSupplier(BlockGravelBaseComponentImpl::new)
-                .addComponent(new BlockFallableComponentImpl(Sound.LAND_GRAVEL))
+                .addComponent(new BlockFallableComponentImpl(SoundNames.LAND_GRAVEL))
                 .build();
         BlockTypes.SAND = AllayBlockType
                 .builder(BlockSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.SAND)
-                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SAND))
+                .addComponent(new BlockFallableComponentImpl(SoundNames.LAND_SAND))
                 .build();
         BlockTypes.RED_SAND = AllayBlockType
                 .builder(BlockRedSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SAND)
-                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SAND))
+                .addComponent(new BlockFallableComponentImpl(SoundNames.LAND_SAND))
                 .build();
     }
 
@@ -1610,7 +1610,7 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.SNOW_LAYER)
                 .setProperties(BlockPropertyTypes.COVERED_BIT, BlockPropertyTypes.HEIGHT)
                 .setBaseComponentSupplier(BlockSnowLayerBaseComponentImpl::new)
-                .addComponent(new BlockFallableComponentImpl(Sound.LAND_SNOW))
+                .addComponent(new BlockFallableComponentImpl(SoundNames.LAND_SNOW))
                 .build();
     }
 
@@ -1628,7 +1628,7 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.SCAFFOLDING)
                 .setProperties(BlockPropertyTypes.STABILITY, BlockPropertyTypes.STABILITY_CHECK)
                 .setBaseComponentSupplier(BlockScaffoldingBaseComponentImpl::new)
-                .addComponent(new BlockFallableComponentImpl(Sound.BLOCK_SCAFFOLDING_FALL))
+                .addComponent(new BlockFallableComponentImpl(SoundNames.BLOCK_SCAFFOLDING_FALL))
                 .build();
     }
 

@@ -9,8 +9,9 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.ButtonPressSound;
+import org.allaymc.api.world.sound.ButtonReleaseSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 
 import java.time.Duration;
@@ -62,7 +63,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         if (!clickedBlockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
             clickedBlockState.updateBlockProperty(BUTTON_PRESSED_BIT, true);
             dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(clickedBlockState.getPosition(), getActivationTime());
-            clickedBlockState.addLevelSoundEvent(SoundEvent.BUTTON_CLICK_ON);
+            clickedBlockState.addSound(new ButtonPressSound(clickedBlockState.getBlockState()));
         }
         return true;
     }
@@ -71,7 +72,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     public void onScheduledUpdate(Block block) {
         if (block.getPropertyValue(BUTTON_PRESSED_BIT)) {
             block.updateBlockProperty(BUTTON_PRESSED_BIT, false);
-            block.addLevelSoundEvent(SoundEvent.BUTTON_CLICK_OFF);
+            block.addSound(new ButtonReleaseSound(block.getBlockState()));
         }
     }
 }

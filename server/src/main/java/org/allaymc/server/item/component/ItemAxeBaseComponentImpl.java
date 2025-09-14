@@ -12,8 +12,8 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.ItemUseOnBlockSound;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 
 /**
@@ -42,8 +42,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         tryFadeBlock(dimension, interactInfo, strippedBlockState, () -> {
             // Idk why mojang does not use UsingItemOnBlock for player
             interactInfo.player().applyAction(AnimateAction.SWING_ARM);
-
-            dimension.addLevelSoundEvent(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), SoundEvent.ITEM_USE_ON, clickedBlockState.blockStateHash());
+            dimension.addSound(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), new ItemUseOnBlockSound(clickedBlockState));
         });
     }
 

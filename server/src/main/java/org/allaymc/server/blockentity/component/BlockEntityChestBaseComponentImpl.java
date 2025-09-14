@@ -5,7 +5,7 @@ import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
@@ -32,14 +32,14 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
             var doubleChestContainer = containerHolder.getDoubleChestContainer();
             doubleChestContainer.addOpenListener(viewer -> {
                 if (doubleChestContainer.getViewers().size() == 1) {
-                    playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTOPEN, 2);
-                    playSoundAndSendPacket(pairableComponent.getPair().getPosition(), Sound.RANDOM_CHESTOPEN, 2);
+                    playSoundAndSendPacket(getPosition(), SoundNames.RANDOM_CHESTOPEN, 2);
+                    playSoundAndSendPacket(pairableComponent.getPair().getPosition(), SoundNames.RANDOM_CHESTOPEN, 2);
                 }
             });
             doubleChestContainer.addCloseListener(viewer -> {
                 if (doubleChestContainer.getViewers().isEmpty()) {
-                    playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTCLOSED, 0);
-                    playSoundAndSendPacket(pairableComponent.getPair().getPosition(), Sound.RANDOM_CHESTCLOSED, 0);
+                    playSoundAndSendPacket(getPosition(), SoundNames.RANDOM_CHESTCLOSED, 0);
+                    playSoundAndSendPacket(pairableComponent.getPair().getPosition(), SoundNames.RANDOM_CHESTCLOSED, 0);
                 }
             });
         }
@@ -47,12 +47,12 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
         var container = containerHolderComponent.getContainer();
         container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
-                playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTOPEN, 2);
+                playSoundAndSendPacket(getPosition(), SoundNames.RANDOM_CHESTOPEN, 2);
             }
         });
         container.addCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
-                playSoundAndSendPacket(getPosition(), Sound.RANDOM_CHESTCLOSED, 0);
+                playSoundAndSendPacket(getPosition(), SoundNames.RANDOM_CHESTCLOSED, 0);
             }
         });
     }

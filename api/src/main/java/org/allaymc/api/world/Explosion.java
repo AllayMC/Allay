@@ -13,8 +13,9 @@ import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.api.world.sound.Sound;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3i;
@@ -77,7 +78,7 @@ public class Explosion {
     /**
      * The sound to play when the explosion is created.
      */
-    protected SoundEvent sound;
+    protected Sound sound;
     /**
      * The particle to spawn when the explosion is created.
      */
@@ -99,37 +100,37 @@ public class Explosion {
     protected boolean affectEntities;
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, ParticleType)
      */
     public Explosion() {
         this(4);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, ParticleType)
      */
     public Explosion(float size) {
         this(size, false);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, ParticleType)
      */
     public Explosion(float size, boolean spawnFire) {
         this(size, spawnFire, 1.0f / size);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, ParticleType)
      */
     public Explosion(float size, boolean spawnFire, float itemDropChance) {
-        this(size, spawnFire, itemDropChance, SoundEvent.EXPLODE);
+        this(size, spawnFire, itemDropChance, SimpleSound.EXPLOSION);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, ParticleType)
      */
-    public Explosion(float size, boolean spawnFire, float itemDropChance, SoundEvent sound) {
+    public Explosion(float size, boolean spawnFire, float itemDropChance, Sound sound) {
         this(size, spawnFire, itemDropChance, sound, ParticleType.HUGE_EXPLOSION);
     }
 
@@ -142,7 +143,7 @@ public class Explosion {
      * @param sound          the sound of the explosion
      * @param particle       the particle of the explosion
      */
-    public Explosion(float size, boolean spawnFire, float itemDropChance, SoundEvent sound, ParticleType particle) {
+    public Explosion(float size, boolean spawnFire, float itemDropChance, Sound sound, ParticleType particle) {
         this.size = size;
         this.spawnFire = spawnFire;
         this.itemDropChance = itemDropChance;
@@ -433,7 +434,7 @@ public class Explosion {
         }
 
         dimension.addParticle(x, y, z, particle);
-        dimension.addLevelSoundEvent(x, y, z, sound);
+        dimension.addSound(x, y, z, sound);
     }
 
     /**

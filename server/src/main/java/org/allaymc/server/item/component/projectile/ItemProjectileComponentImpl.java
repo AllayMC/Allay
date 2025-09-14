@@ -16,10 +16,10 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3d;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemClickInAirEvent;
 import org.allaymc.server.item.component.event.CItemInteractEntityEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -102,6 +102,6 @@ public class ItemProjectileComponentImpl implements ItemProjectileComponent {
     }
 
     protected void addShootSound(Position3d pos) {
-        pos.dimension().addLevelSoundEvent(pos.x, pos.y, pos.z, SoundEvent.THROW, -1, "minecraft:player", false, false);
+        pos.dimension().addSound(pos.x, pos.y, pos.z, SimpleSound.BOW_SHOOT);
     }
 }

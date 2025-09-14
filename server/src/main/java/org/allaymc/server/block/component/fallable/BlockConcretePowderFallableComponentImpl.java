@@ -4,14 +4,14 @@ import org.allaymc.api.block.component.BlockConcretePowderBaseComponent;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.world.data.Sound;
+import org.allaymc.api.world.sound.SoundNames;
 
 /**
  * @author IWareQ
  */
 public class BlockConcretePowderFallableComponentImpl extends BlockFallableComponentImpl {
     public BlockConcretePowderFallableComponentImpl() {
-        super(Sound.LAND_SAND);
+        super(SoundNames.LAND_SAND);
     }
 
     @Override

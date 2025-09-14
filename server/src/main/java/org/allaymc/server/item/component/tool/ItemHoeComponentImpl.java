@@ -5,8 +5,8 @@ import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.world.sound.ItemUseOnBlockSound;
 import org.allaymc.server.item.component.event.CItemRightClickOnBlockEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
  * @author daoge_cmd
@@ -27,7 +27,7 @@ public class ItemHoeComponentImpl extends ItemToolComponentImpl {
         }
 
         event.getDimension().setBlockState(blockPos, BlockTypes.FARMLAND.ofState(BlockPropertyTypes.MOISTURIZED_AMOUNT.createValue(0)));
-        event.getDimension().addLevelSoundEvent(MathUtils.center(blockPos), SoundEvent.ITEM_USE_ON, clickedBlock.blockStateHash());
+        event.getDimension().addSound(MathUtils.center(blockPos), new ItemUseOnBlockSound(clickedBlock.getBlockState()));
         event.getInteractInfo().player().getItemInHand().tryIncreaseDamage(1);
     }
 }

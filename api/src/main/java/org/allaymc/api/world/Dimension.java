@@ -1,6 +1,5 @@
 package org.allaymc.api.world;
 
-import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
 import it.unimi.dsi.fastutil.ints.IntObjectPair;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
@@ -30,12 +29,11 @@ import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.api.world.manager.BlockUpdateManager;
 import org.allaymc.api.world.manager.ChunkManager;
 import org.allaymc.api.world.manager.EntityManager;
+import org.allaymc.api.world.sound.Sound;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelSoundEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
@@ -788,75 +786,8 @@ public interface Dimension {
     }
 
     /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
+     * @see #updateAroundIgnoreFace(Vector3ic, BlockFace...)
      */
-    default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent, int extraData) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(Vector3dc pos, SoundEvent soundEvent) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(Vector3dc pos, SoundEvent soundEvent, int extraData) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent) {
-        addLevelSoundEvent(x, y, z, soundEvent, -1);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData) {
-        addLevelSoundEvent(x, y, z, soundEvent, extraData, "", false, false);
-    }
-
-    /**
-     * Add a level sound event at the specified position.
-     *
-     * @param x                      the x coordinate of the position
-     * @param y                      the y coordinate of the position
-     * @param z                      the z coordinate of the position
-     * @param soundEvent             the sound event
-     * @param extraData              the extra data of the sound event
-     * @param identifier             the identifier of the sound event
-     * @param babySound              whether the sound is a baby sound
-     * @param relativeVolumeDisabled whether the relative volume is disabled
-     */
-    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
-        var chunk = getChunkManager().getChunk((int) x >> 4, (int) z >> 4);
-        if (chunk == null) {
-            return;
-        }
-
-        var packet = new LevelSoundEventPacket();
-        packet.setSound(soundEvent);
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
-        packet.setExtraData(extraData);
-        packet.setIdentifier(identifier);
-        packet.setBabySound(babySound);
-        packet.setRelativeVolumeDisabled(relativeVolumeDisabled);
-        chunk.sendChunkPacket(packet);
-    }
-
     default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {
         updateAroundIgnoreFace(new Vector3i(x, y, z), ignoreFaces);
     }
@@ -879,11 +810,7 @@ public interface Dimension {
     }
 
     /**
-     * Update the blocks around a block.
-     *
-     * @param x the x coordinate of the block
-     * @param y the y coordinate of the block
-     * @param z the z coordinate of the block
+     * @see #updateAround(Vector3ic)
      */
     default void updateAround(int x, int y, int z) {
         for (var face : BlockFace.values()) updateAtFace(x, y, z, face);
@@ -892,7 +819,7 @@ public interface Dimension {
     /**
      * Update the blocks around a block.
      *
-     * @param pos the pos
+     * @param pos the pos where the block is in
      */
     default void updateAround(Vector3ic pos) {
         for (var face : BlockFace.values()) updateAtFace(pos, face);
@@ -1084,82 +1011,54 @@ public interface Dimension {
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3dc pos, String sound) {
-        addSound(pos, sound, 1);
+    default void addSound(Vector3dc pos, Sound sound) {
+        addSound(pos, sound, true);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3dc pos, String sound, double volume) {
-        addSound(pos, sound, volume, 1);
+    default void addSound(Vector3dc pos, Sound sound, boolean relative) {
+        addSound(pos.x(), pos.y(), pos.z(), sound, relative);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3dc pos, String sound, double volume, double pitch) {
-        addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
+    default void addSound(Vector3ic pos, Sound sound) {
+        addSound(pos, sound, true);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3ic pos, String sound) {
-        addSound(pos, sound, 1);
+    default void addSound(Vector3ic pos, Sound sound, boolean relative) {
+        addSound(pos.x(), pos.y(), pos.z(), sound, relative);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3ic pos, String sound, double volume) {
-        addSound(pos, sound, volume, 1);
-    }
-
-    /**
-     * @see #addSound(double, double, double, String, double)
-     */
-    default void addSound(Vector3ic pos, String sound, double volume, double pitch) {
-        addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
-    }
-
-    /**
-     * @see #addSound(double, double, double, String, double)
-     */
-    default void addSound(double x, double y, double z, String sound) {
-        addSound(x, y, z, sound, 1);
+    default void addSound(double x, double y, double z, Sound sound) {
+        addSound(x, y, z, sound, true);
     }
 
     /**
      * Add a sound at the specified pos.
      *
-     * @param x      the x coordinate of the pos
-     * @param y      the y coordinate of the pos
-     * @param z      the z coordinate of the pos
-     * @param sound  the sound
-     * @param volume the volume of the sound
+     * @param x        the x coordinate of the pos
+     * @param y        the y coordinate of the pos
+     * @param z        the z coordinate of the pos
+     * @param sound    the sound
+     * @param relative whether the sound is relative. If set to {@code true}, the sound will have full volume,
+     *                 regardless of where the Position is, whereas if set to {@code false}, the sound's volume
+     *                 will be based on the distance to the pos passed
      */
-    default void addSound(double x, double y, double z, String sound, double volume) {
-        addSound(x, y, z, sound, volume, 1);
-    }
-
-    /**
-     * Add a sound at the specified pos.
-     *
-     * @param x      the x coordinate of the pos
-     * @param y      the y coordinate of the pos
-     * @param z      the z coordinate of the pos
-     * @param sound  the sound
-     * @param volume the volume of the sound
-     * @param pitch  the pitch of the sound
-     */
-    default void addSound(double x, double y, double z, String sound, double volume, double pitch) {
-        Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
-        Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0");
+    default void addSound(double x, double y, double z, Sound sound, boolean relative) {
         getChunkManager().getChunkByDimensionPos((int) x, (int) z)
-                .forEachChunkLoaders(loader -> loader.viewSound(new Vector3d(x, y, z), sound, volume, pitch));
+                .forEachChunkLoaders(loader -> loader.viewSound(sound, new Vector3d(x, y, z), relative));
     }
 
     /**
