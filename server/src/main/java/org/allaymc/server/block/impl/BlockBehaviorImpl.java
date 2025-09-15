@@ -3,7 +3,7 @@ package org.allaymc.server.block.impl;
 import lombok.experimental.Delegate;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
-import org.allaymc.api.block.component.data.BlockStateDataComponent;
+import org.allaymc.api.block.component.BlockStateDataComponent;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.server.component.ComponentClass;

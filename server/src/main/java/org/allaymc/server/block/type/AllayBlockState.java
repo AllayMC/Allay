@@ -43,11 +43,6 @@ public record AllayBlockState(
     }
 
     @Override
-    public long unsignedBlockStateHash() {
-        return Integer.toUnsignedLong(blockStateHash);
-    }
-
-    @Override
     public NbtMap getBlockStateTag() {
         return blockStateTag;
     }

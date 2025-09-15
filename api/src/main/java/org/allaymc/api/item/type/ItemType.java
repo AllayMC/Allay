@@ -2,6 +2,7 @@ package org.allaymc.api.item.type;
 
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.data.ItemData;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.utils.identifier.Identified;
@@ -20,7 +21,6 @@ public interface ItemType<T extends ItemStack> extends Identified {
      * Create an {@link ItemStack} with the given {@link ItemStackInitInfo}.
      *
      * @param info The {@link ItemStackInitInfo} to create the {@link ItemStack} with
-     *
      * @return The created {@link ItemStack}
      */
     T createItemStack(ItemStackInitInfo info);
@@ -38,7 +38,6 @@ public interface ItemType<T extends ItemStack> extends Identified {
      * Create an {@link ItemStack} with the given count and a meta of 0.
      *
      * @param count The count of the {@link ItemStack}
-     *
      * @return The created {@link ItemStack}
      */
     default T createItemStack(int count) {
@@ -50,7 +49,6 @@ public interface ItemType<T extends ItemStack> extends Identified {
      *
      * @param count The count of the {@link ItemStack}
      * @param meta  The meta of the {@link ItemStack}
-     *
      * @return The created {@link ItemStack}
      */
     default T createItemStack(int count, int meta) {
@@ -93,7 +91,6 @@ public interface ItemType<T extends ItemStack> extends Identified {
      * Check if the item has the given item tag.
      *
      * @param itemTag The item tag to check
-     *
      * @return {@code true} if the item has the item tag, {@code false} otherwise.
      */
     default boolean hasItemTag(ItemTag itemTag) {

@@ -955,6 +955,15 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case SimpleParticle.LAVA -> packet.setType(ParticleType.LAVA);
             case SimpleParticle.DUST_PLUME -> packet.setType(ParticleType.DUST_PLUME);
             case SimpleParticle.WHITE_SMOKE -> packet.setType(ParticleType.WHITE_SMOKE);
+            case CustomParticle pa -> {
+                var pk = new SpawnParticleEffectPacket();
+                pk.setDimensionId(thisPlayer.getDimension().getDimensionInfo().dimensionId());
+                pk.setIdentifier(pa.particleName());
+                pk.setMolangVariablesJson(Optional.ofNullable(pa.moLangVariables()));
+                pk.setPosition(pos);
+                this.networkComponent.sendPacket(pk);
+                return;
+            }
             case DragonEggTeleportParticle pa -> {
                 int xSign = pa.diff().x() < 0 ? 1 << 24 : 0;
                 int ySign = pa.diff().y() < 0 ? 1 << 25 : 0;

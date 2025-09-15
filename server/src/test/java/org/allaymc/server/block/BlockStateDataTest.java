@@ -1,11 +1,11 @@
 package org.allaymc.server.block;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.registry.InternalRegistries;
+import org.allaymc.server.registry.loader.BlockStateDataLoader;
 import org.allaymc.testutils.AllayTestExtension;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ class BlockStateDataTest {
 
     @Test
     void testDeserialization() {
-        var blockStateData = BlockStateData.fromJson(json);
+        var blockStateData = BlockStateDataLoader.fromJson(json);
         assertEquals(0, blockStateData.burnOdds());
         assertFalse(blockStateData.canContainLiquidSource());
         var unionAABB = blockStateData.collisionShape().unionAABB();

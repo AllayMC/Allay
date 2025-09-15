@@ -1,22 +1,16 @@
-package org.allaymc.api.block.component.data;
+package org.allaymc.api.block.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonObject;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
-import org.joml.primitives.AABBd;
 
 import java.awt.*;
 
@@ -28,7 +22,6 @@ import java.awt.*;
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 @EqualsAndHashCode
-@Slf4j
 public class BlockStateData {
 
     /**
@@ -37,70 +30,6 @@ public class BlockStateData {
     public static final float DEFAULT_FRICTION = 0.6f;
 
     public static final BlockStateData DEFAULT = BlockStateData.builder().build();
-
-    protected static final Gson SERIALIZER = new GsonBuilder()
-            .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
-                var array = json.getAsJsonArray();
-                if (array.isEmpty() || array.get(0).isJsonArray()) {
-                    // collisionShape field is a list of AABBs, and can be an empty array
-                    var builder = VoxelShape.builder();
-                    array.forEach(e -> {
-                        var a = e.getAsJsonArray();
-                        var minX = a.get(0).getAsDouble();
-                        var minY = a.get(1).getAsDouble();
-                        var minZ = a.get(2).getAsDouble();
-                        var maxX = a.get(3).getAsDouble();
-                        var maxY = a.get(4).getAsDouble();
-                        var maxZ = a.get(5).getAsDouble();
-
-                        builder.solid(minX, minY, minZ, maxX, maxY, maxZ);
-                    });
-                    return builder.build();
-                } else {
-                    var minX = array.get(0).getAsDouble();
-                    var minY = array.get(1).getAsDouble();
-                    var minZ = array.get(2).getAsDouble();
-                    var maxX = array.get(3).getAsDouble();
-                    var maxY = array.get(4).getAsDouble();
-                    var maxZ = array.get(5).getAsDouble();
-
-                    if (minX == 0 && minY == 0 && minZ == 0 && maxX == 0 && maxY == 0 && maxZ == 0) {
-                        return VoxelShape.EMPTY;
-                    }
-
-                    return VoxelShape.builder().solid(new AABBd(minX, minY, minZ, maxX, maxY, maxZ)).build();
-                }
-            })
-            .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
-                // Example: #4c4c4cff
-                var str = json.getAsString();
-                var color = Color.decode(str.substring(0, 7));
-                return new Color(
-                        color.getRed(),
-                        color.getGreen(),
-                        color.getBlue(),
-                        Integer.parseInt(str.substring(7), 16));
-            })
-            .registerTypeAdapter(LiquidReactionOnTouch.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> LiquidReactionOnTouch.valueOf(json.getAsString()))
-            .registerTypeAdapter(TintMethod.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
-                var str = json.getAsString();
-                return switch (str) {
-                    case "None" -> TintMethod.NONE;
-                    case "DefaultFoliage" -> TintMethod.DEFAULT_FOLIAGE;
-                    case "BirchFoliage" -> TintMethod.BIRCH_FOLIAGE;
-                    case "EvergreenFoliage" -> TintMethod.EVERGREEN_FOLIAGE;
-                    case "DryFoliage" -> TintMethod.DRY_FOLIAGE;
-                    case "Grass" -> TintMethod.GRASS;
-                    case "Water" -> TintMethod.WATER;
-                    case "Stem" -> TintMethod.STEM;
-                    case "RedStoneWire" -> TintMethod.RED_STONE_WIRE;
-                    default -> {
-                        log.warn("Unknown tint method: {}", str);
-                        yield TintMethod.NONE;
-                    }
-                };
-            })
-            .create();
 
     /**
      * The burnOdds of this block state.
@@ -209,14 +138,6 @@ public class BlockStateData {
      */
     @Builder.Default
     protected float translucency = 0.0f;
-
-    public static BlockStateData fromJson(String json) {
-        return SERIALIZER.fromJson(json, BlockStateData.class);
-    }
-
-    public static BlockStateData fromJson(JsonObject json) {
-        return SERIALIZER.fromJson(json, BlockStateData.class);
-    }
 
     public boolean hasCollision() {
         return !collisionShape.getSolids().isEmpty();

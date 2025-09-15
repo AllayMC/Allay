@@ -86,6 +86,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed `FullContainerType` to `ContainerType`. All the network related code inside are moved to server module.
 - (API) Refactored the sound and particle system, now each sound and particle instance is a pure data object or an enum of `SimpleSound`/`SimpleParticle` if it doesn't require
   additional parameters.
+- (API) Moved methods `BlockStateData.fromJson()` to class `BlockStateDataLoader`.
+- (API) Moved several data classes for block and item to packages `block.data` and `item.data`.
 
 ### Fixed
 

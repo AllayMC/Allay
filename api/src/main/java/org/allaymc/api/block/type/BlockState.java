@@ -1,7 +1,7 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.data.BlockStateData;
+import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.registry.Registries;
@@ -28,9 +28,11 @@ public interface BlockState {
     BlockType<?> getBlockType();
 
     /**
-     * Gets the hash of this block state.
+     * Gets the hash of this block state. The block state hash is a 32-bit integer with completely
+     * different hash values for different block states, and this value does not change as long as
+     * the held {@link BlockPropertyType} do not change (e.g. rename, delete, add).
      *
-     * @return the hash value as an integer
+     * @return the hash value
      */
     int blockStateHash();
 
@@ -56,9 +58,7 @@ public interface BlockState {
      * Creates a new state with updated property values.
      *
      * @param propertyValues list of {@link BlockPropertyType.BlockPropertyValue} to set
-     *
      * @return new {@link BlockState} with applied values
-     *
      * @throws IllegalArgumentException if any value is unsupported by this block type
      */
     BlockState setPropertyValues(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
@@ -69,9 +69,7 @@ public interface BlockState {
      * @param property   the {@link BlockPropertyType} to query
      * @param <DATATYPE> property value type
      * @param <PROPERTY> property type subtype
-     *
      * @return the property value
-     *
      * @throws IllegalArgumentException if property is unsupported by this block type
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY property);
@@ -80,9 +78,7 @@ public interface BlockState {
      * Creates a new state with an updated property value.
      *
      * @param propertyValue the {@link BlockPropertyType.BlockPropertyValue} to apply
-     *
      * @return new {@link BlockState} with the updated value
-     *
      * @throws IllegalArgumentException if value is unsupported by this block type
      */
     BlockState setPropertyValue(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
@@ -94,19 +90,19 @@ public interface BlockState {
      * @param value      the value to set
      * @param <DATATYPE> property value type
      * @param <PROPERTY> property type subtype
-     *
      * @return new {@link BlockState} with the updated value
-     *
      * @throws IllegalArgumentException if property or value is unsupported by this block type
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setPropertyValue(PROPERTY property, DATATYPE value);
 
     /**
-     * Gets the unsigned hash of this block state.
+     * Gets the unsigned version of the block state hash.
      *
-     * @return the hash value as an unsigned long
+     * @return the unsigned version of the block state hash
      */
-    long unsignedBlockStateHash();
+    default long unsignedBlockStateHash() {
+        return Integer.toUnsignedLong(blockStateHash());
+    }
 
     /**
      * Gets the NBT representation of this state.

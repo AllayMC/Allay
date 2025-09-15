@@ -1,6 +1,6 @@
 package org.allaymc.server.block.type;
 
-import org.allaymc.api.block.component.data.BlockStateData;
+import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.property.enums.WallConnectionType;
 import org.allaymc.api.block.property.type.*;
 import org.allaymc.api.block.type.BlockType;
