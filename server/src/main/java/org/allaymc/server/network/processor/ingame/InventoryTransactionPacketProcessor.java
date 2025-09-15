@@ -101,7 +101,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 // Player interaction with the block was unsuccessful, and we need to override the
                                 // client block change by sending block update
                                 var blockStateClicked = dimension.getBlockState(clickBlockPos);
-                                dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
+                                player.viewBlockUpdate(clickBlockPos, 0, blockStateClicked);
 
                                 // Player places a block
                                 if (itemInHand.getItemType() == AIR) {
@@ -110,7 +110,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                                 if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
                                     var blockStateReplaced = dimension.getBlockState(placeBlockPos);
-                                    dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
+                                    player.viewBlockUpdate(placeBlockPos, 0, blockStateReplaced);
                                 }
                             }
                         }

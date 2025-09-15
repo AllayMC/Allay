@@ -15,9 +15,8 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.Sound;
-import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -169,16 +168,6 @@ public class Block {
     }
 
     /**
-     * Adds a level event at the center of this block's position.
-     *
-     * @param eventType the type of level event
-     * @param data      additional event data
-     */
-    public void addLevelEvent(LevelEventType eventType, int data) {
-        getDimension().addLevelEvent(MathUtils.center(position), eventType, data);
-    }
-
-    /**
      * Adds a sound at the center of this block's position.
      *
      * @param sound the sound to add
@@ -190,10 +179,10 @@ public class Block {
     /**
      * Adds a particle effect at the center of this block's position.
      *
-     * @param particleType the type of particle to spawn
+     * @param particle the particle to spawn
      */
-    public void addParticle(ParticleType particleType) {
-        getDimension().addParticle(MathUtils.center(position), particleType, 0);
+    public void addParticle(Particle particle) {
+        getDimension().addParticle(MathUtils.center(position), particle);
     }
 
     /**

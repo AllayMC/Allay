@@ -2,6 +2,7 @@ package org.allaymc.api.world.chunk;
 
 import io.netty.util.AbstractReferenceCounted;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -14,12 +15,14 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
+import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.Sound;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -160,6 +163,26 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
+    public void viewParticle(Particle particle, Vector3dc pos) {
+    }
+
+    @Override
     public void viewWeather(Weather weather) {
+    }
+
+    @Override
+    public void viewDebugShape(DebugShape debugShape) {
+    }
+
+    @Override
+    public void viewDebugShapes(Set<DebugShape> debugShapes) {
+    }
+
+    @Override
+    public void removeDebugShape(DebugShape debugShape) {
+    }
+
+    @Override
+    public void removeDebugShapes(Set<DebugShape> debugShapes) {
     }
 }

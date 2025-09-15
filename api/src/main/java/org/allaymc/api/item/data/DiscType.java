@@ -1,4 +1,4 @@
-package org.allaymc.api.world.sound;
+package org.allaymc.api.item.data;
 
 import lombok.Getter;
 import org.allaymc.api.i18n.MayContainTrKey;

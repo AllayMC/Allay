@@ -1,6 +1,7 @@
 package org.allaymc.api.world;
 
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -14,15 +15,17 @@ import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
+import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.Sound;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 /**
- * WorldViewer represents an object that can view entities and changes made in a world.
+ * WorldViewer represents an object that can view objects and changes made in a world.
  *
  * @author daoge_cmd
  */
@@ -205,7 +208,13 @@ public interface WorldViewer {
      */
     void viewSound(Sound sound, Vector3dc pos, boolean relative);
 
-    // TODO: viewParticle
+    /**
+     * Views a particle at the pos passed.
+     *
+     * @param particle the particle to view
+     * @param pos      the pos of the particle
+     */
+    void viewParticle(Particle particle, Vector3dc pos);
 
     /**
      * Views the weather passed.
@@ -213,4 +222,37 @@ public interface WorldViewer {
      * @param weather the weather to view
      */
     void viewWeather(Weather weather);
+
+    /**
+     * View a debug shape, which will make a specific debug shape being
+     * displayed for this viewer. This method is also used to update a
+     * debug shape in viewer's side when the debug shape is changed.
+     *
+     * @param debugShape the debug shape to view
+     */
+    void viewDebugShape(DebugShape debugShape);
+
+    /**
+     * View multiple debug shapes. This method is similar to {@link #viewDebugShape(DebugShape)}
+     * but can view multiple debug shapes at once.
+     *
+     * @param debugShapes the debug shapes to view
+     */
+    void viewDebugShapes(Set<DebugShape> debugShapes);
+
+    /**
+     * Remove a debug shape, which will make a specific debug shape being
+     * removed from this viewer.
+     *
+     * @param debugShape the debug shape to remove.
+     */
+    void removeDebugShape(DebugShape debugShape);
+
+    /**
+     * Remove multiple debug shapes. This method is similar to {@link #removeDebugShape(DebugShape)}
+     * but can remove multiple debug shapes at once.
+     *
+     * @param debugShapes the debug shapes to remove.
+     */
+    void removeDebugShapes(Set<DebugShape> debugShapes);
 }

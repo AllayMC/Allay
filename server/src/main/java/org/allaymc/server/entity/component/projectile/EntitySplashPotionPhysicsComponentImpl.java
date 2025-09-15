@@ -9,9 +9,9 @@ import org.allaymc.api.entity.component.EntitySplashPotionProjectileComponent;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.world.particle.SplashParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3i;
@@ -59,7 +59,7 @@ public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhys
             return;
         }
 
-        dimension.addLevelEvent(thisEntity.getLocation(), LevelEvent.PARTICLE_POTION_SPLASH, potionType.getColor().getRGB());
+        dimension.addParticle(thisEntity.getLocation(), new SplashParticle(potionType.getColor()));
         var effects = potionType.getEffects();
         var aabb = MathUtils.grow(thisEntity.getOffsetAABB(), new Vector3d(4.125, 2.125, 4.125));
         if (!effects.isEmpty()) {

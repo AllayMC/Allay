@@ -6,7 +6,6 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.debugshape.DebugShape;
-import org.allaymc.api.debugshape.DebugShapeViewer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
@@ -15,16 +14,15 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.allaymc.server.world.manager.AllayBlockUpdateManager;
 import org.allaymc.server.world.manager.AllayChunkManager;
 import org.allaymc.server.world.manager.AllayEntityManager;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -106,7 +104,7 @@ public class AllayDimension implements Dimension {
     /**
      * Set this method to public because it is used in {@link SetLocalPlayerAsInitializedPacketProcessor}
      */
-    public void addDebugShapesTo(DebugShapeViewer viewer) {
+    public void addDebugShapesTo(WorldViewer viewer) {
         for (var debugShape : debugShapes) {
             // Let's send all the debug shapes in one packet to improve performance
             debugShape.addViewer(viewer, false);
@@ -131,7 +129,7 @@ public class AllayDimension implements Dimension {
         removeDebugShapesFrom(player);
     }
 
-    protected void removeDebugShapesFrom(DebugShapeViewer viewer) {
+    protected void removeDebugShapesFrom(WorldViewer viewer) {
         for (var debugShape : debugShapes) {
             // Let's send all the remove notices in one packet to improve performance
             debugShape.removeViewer(viewer, false);
@@ -231,11 +229,7 @@ public class AllayDimension implements Dimension {
         }
 
         if (sendParticle) {
-            var pk = new LevelEventPacket();
-            pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
-            pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
-            pk.setData(block.blockStateHash());
-            getChunkManager().getChunkByDimensionPos(x, z).addChunkPacket(pk);
+            addParticle(x + 0.5f, y + 0.5f, z + 0.5f, new BlockBreakParticle(block));
         }
 
         block.getBehavior().onBreak(

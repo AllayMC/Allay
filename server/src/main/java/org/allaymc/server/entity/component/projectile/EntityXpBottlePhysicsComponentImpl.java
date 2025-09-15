@@ -2,10 +2,11 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.world.particle.SplashParticle;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3dc;
 
+import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -38,6 +39,6 @@ public class EntityXpBottlePhysicsComponentImpl extends EntityProjectilePhysicsC
         dimension.splitAndDropXpOrb(location, ThreadLocalRandom.current().nextInt(9) + 3);
         dimension.addSound(location, SimpleSound.GLASS_BREAK);
         // Spawn blue potion splash particle
-        dimension.addLevelEvent(location, LevelEvent.PARTICLE_POTION_SPLASH, 0x00385dc6);
+        dimension.addParticle(location, new SplashParticle(new Color(0x00385dc6)));
     }
 }

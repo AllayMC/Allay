@@ -27,7 +27,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced field `LiquidHardenEvent.hardenedBlockPosition` which is the position of the hardened block.
 - (API) Introduced `api_version` for plugin descriptor, which can set the api version requirement of a plugin.
 - (API) Introduced component `EntityPlayerScoreboardViewerComponent` for player.
-- (API) Introduced component `EntityPlayerDebugShapeViewerComponent` for player.
 - (API) Introduced a bunch of  `XXXViewer` (e.g. `WorldViewer`) interfaces which is a tiny wrapper for packet operations. This is
   inspired by df-mc/dragonfly to reduce the code associated with network packet contained in api module.
 - (API) Introduced a bunch of functional interfaces in package `utils.funtion`.
@@ -112,7 +111,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed methods `ChunkLoader.onChunkInRangeSend()` and `ChunkLoader.onChunkOutOfRange()`, they are replaced by `WorldViewer.viewChunk()` and `WorldViewer.removeChunk()`.
 - (API) Removed method `WorldData.sendTimeOfDay()`.
 - (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
-- (API) Removed methods `Dimension.addLevelSoundEvent` and `Dimension.addLevelEvent` due to the new sound/particle system.
+- (API) Removed methods `Dimension.addLevelSoundEvent()` and `Dimension.addLevelEvent()` due to the new sound/particle system.
+- (API) Removed methods `Dimension.sendBlockUpdateTo()`, please use `WorldViewer.viewBlockUpdate()` instead.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

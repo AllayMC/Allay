@@ -30,7 +30,6 @@ public interface EntityPlayer extends
         EntityDamageComponent,
         EntityPhysicsComponent,
         EntityPlayerScoreboardViewerComponent,
-        EntityPlayerDebugShapeViewerComponent,
         EntityPlayerChunkLoaderComponent {
 
     /**

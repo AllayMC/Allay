@@ -12,7 +12,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.AGE_16;
@@ -89,7 +89,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
                 }
             }
 
-            dimension.addLevelEvent(MathUtils.center(pos), LevelEvent.PARTICLE_CROP_GROWTH);
+            dimension.addParticle(MathUtils.center(pos), SimpleParticle.BONE_MEAL);
             return true;
         }
 
@@ -107,7 +107,6 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
      * @param dimension the dimension that the sugar cane is in
      * @param pos       the pos of the sugar cane
      * @param recursive whether to check the block below recursively
-     *
      * @return {@code true} if sugar cane can live/grow here, {@code false} otherwise
      */
     protected boolean canGrowHere(Dimension dimension, Vector3ic pos, boolean recursive) {

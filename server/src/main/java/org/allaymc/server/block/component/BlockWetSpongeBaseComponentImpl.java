@@ -7,8 +7,8 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 
 /**
  * @author daoge_cmd
@@ -26,7 +26,7 @@ public class BlockWetSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         if (dimension.getDimensionInfo() == DimensionInfo.NETHER) {
             dimension.setBlockState(oldBlock.getPosition(), BlockTypes.SPONGE.getDefaultState());
             oldBlock.addSound(SimpleSound.FIZZ);
-            oldBlock.addParticle(ParticleType.EXPLODE);
+            oldBlock.addParticle(SimpleParticle.EXPLODE);
         }
     }
 }

@@ -2,18 +2,18 @@ package org.allaymc.server.item.component;
 
 import lombok.Getter;
 import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
+import org.allaymc.api.item.data.DiscType;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.world.sound.Sound;
 
 /**
  * @author IWareQ | daoge_cmd
  */
 @Getter
 public class ItemMusicDiscBaseComponentImpl extends ItemBaseComponentImpl implements ItemMusicDiscBaseComponent {
-    private final Sound sound;
+    private final DiscType discType;
 
-    public ItemMusicDiscBaseComponentImpl(ItemStackInitInfo initInfo, Sound sound) {
+    public ItemMusicDiscBaseComponentImpl(ItemStackInitInfo initInfo, DiscType discType) {
         super(initInfo);
-        this.sound = sound;
+        this.discType = discType;
     }
 }

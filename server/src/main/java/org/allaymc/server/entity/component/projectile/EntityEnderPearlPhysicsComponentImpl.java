@@ -6,9 +6,9 @@ import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3dc;
 
 /**
@@ -57,7 +57,7 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
         }
 
         dimension.addSound(location, SimpleSound.TELEPORT);
-        dimension.addLevelEvent(location, LevelEvent.PARTICLE_TELEPORT);
+        dimension.addParticle(location, SimpleParticle.ENDERMAN_TELEPORT);
         if (shooter instanceof EntityDamageComponent damageComponent) {
             damageComponent.attack(DamageContainer.fall(5));
         }

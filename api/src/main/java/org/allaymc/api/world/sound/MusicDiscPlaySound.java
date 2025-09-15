@@ -1,5 +1,7 @@
 package org.allaymc.api.world.sound;
 
+import org.allaymc.api.item.data.DiscType;
+
 /**
  * Sound sent when a music disc starts playing in a jukebox.
  *

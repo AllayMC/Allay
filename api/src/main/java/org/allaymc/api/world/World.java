@@ -7,7 +7,6 @@ import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -140,15 +139,6 @@ public interface World extends TaskCreator {
      * @return the world state
      */
     WorldState getState();
-
-    /**
-     * Broadcast a packet to all players in this world.
-     *
-     * @param packet the packet to broadcast
-     */
-    default void broadcastPacket(BedrockPacket packet) {
-        getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
-    }
 
     /**
      * Get the weather of the world.

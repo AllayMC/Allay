@@ -9,6 +9,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -25,7 +26,6 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
@@ -33,6 +33,7 @@ import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
 /**
  * @author Cool_Loong
  */
+// TODO: Replace raw level event packet with viewBlockAction()
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
@@ -224,27 +225,16 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected void sendBreakingPracticeAndTime(EntityPlayer player, long currentTime) {
         updateBreakingTime(player, currentTime);
 
-        var pk1 = new LevelEventPacket();
-        var type = switch (Objects.requireNonNull(this.faceToBreak)) {
-            case UP -> PARTICLE_BREAK_BLOCK_UP;
-            case DOWN -> PARTICLE_BREAK_BLOCK_DOWN;
-            case NORTH -> PARTICLE_BREAK_BLOCK_NORTH;
-            case SOUTH -> PARTICLE_BREAK_BLOCK_SOUTH;
-            case WEST -> PARTICLE_BREAK_BLOCK_WEST;
-            case EAST -> PARTICLE_BREAK_BLOCK_EAST;
-        };
-        var chunk = player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ);
-        pk1.setType(type);
-        pk1.setPosition(Vector3f.from(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f));
-        pk1.setData(this.blockToBreak.blockStateHash());
-        chunk.addChunkPacket(pk1);
+        player.getDimension().addParticle(
+                this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
+                new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
+        );
 
         var pk2 = new LevelEventPacket();
         pk2.setType(BLOCK_UPDATE_BREAK);
         pk2.setPosition(Vector3f.from(this.breakingPosX, this.breakingPosY, this.breakingPosZ));
         pk2.setData(toNetworkBreakTime(this.timeNeededToBreak));
-
-        chunk.addChunkPacket(pk2);
+        player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ).sendChunkPacket(pk2);
     }
 
     protected void checkInteractDistance(EntityPlayer player) {

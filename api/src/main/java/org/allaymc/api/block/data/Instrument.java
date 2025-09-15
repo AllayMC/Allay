@@ -1,4 +1,4 @@
-package org.allaymc.api.world.sound;
+package org.allaymc.api.block.data;
 
 /**
  * Instrument represents a note block instrument.

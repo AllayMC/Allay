@@ -1,15 +1,15 @@
 package org.allaymc.api.item.component;
 
-import org.allaymc.api.world.sound.Sound;
+import org.allaymc.api.item.data.DiscType;
 
 /**
  * @author IWareQ
  */
 public interface ItemMusicDiscBaseComponent extends ItemBaseComponent {
     /**
-     * Get the sound of the music disc.
+     * Get the type of the music disc.
      *
-     * @return the sound of the music disc
+     * @return the type of the music disc
      */
-    Sound getSound();
+    DiscType getDiscType();
 }

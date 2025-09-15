@@ -1,6 +1,7 @@
 package org.allaymc.api.debugshape;
 
 import lombok.Getter;
+import org.allaymc.api.world.WorldViewer;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
@@ -28,7 +29,7 @@ public abstract class DebugShape {
      * The viewers of this debug shape.
      */
     @Getter
-    protected final Set<DebugShapeViewer> viewers;
+    protected final Set<WorldViewer> viewers;
     /**
      * The position of the shape. For most shapes this is the centre of the shape, except
      * {@link DebugLine} and {@link DebugArrow} where this represents the start point of the line.
@@ -95,9 +96,9 @@ public abstract class DebugShape {
     }
 
     /**
-     * @see #addViewer(DebugShapeViewer, boolean)
+     * @see #addViewer(WorldViewer, boolean)
      */
-    public void addViewer(DebugShapeViewer viewer) {
+    public void addViewer(WorldViewer viewer) {
         this.addViewer(viewer, true);
     }
 
@@ -108,16 +109,16 @@ public abstract class DebugShape {
      * @param viewer          the viewer to add this debug shape to
      * @param viewImmediately whether to view this debug shape immediately
      */
-    public void addViewer(DebugShapeViewer viewer, boolean viewImmediately) {
+    public void addViewer(WorldViewer viewer, boolean viewImmediately) {
         if (this.viewers.add(viewer) && viewImmediately) {
             viewer.viewDebugShape(this);
         }
     }
 
     /**
-     * @see #removeViewer(DebugShapeViewer, boolean)
+     * @see #removeViewer(WorldViewer, boolean)
      */
-    public void removeViewer(DebugShapeViewer viewer) {
+    public void removeViewer(WorldViewer viewer) {
         this.removeViewer(viewer, true);
     }
 
@@ -127,7 +128,7 @@ public abstract class DebugShape {
      * @param viewer            the viewer to remove this debug shape from
      * @param removeImmediately whether to remove this debug shape from the viewer immediately
      */
-    public void removeViewer(DebugShapeViewer viewer, boolean removeImmediately) {
+    public void removeViewer(WorldViewer viewer, boolean removeImmediately) {
         if (this.viewers.remove(viewer) && removeImmediately) {
             viewer.removeDebugShape(this);
         }
@@ -138,7 +139,7 @@ public abstract class DebugShape {
      * It will send the updated data to all viewers of this debug shape.
      */
     protected void onChange() {
-        for (DebugShapeViewer viewer : this.viewers) {
+        for (WorldViewer viewer : this.viewers) {
             viewer.viewDebugShape(this);
         }
     }

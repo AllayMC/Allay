@@ -29,12 +29,8 @@ import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.api.world.manager.BlockUpdateManager;
 import org.allaymc.api.world.manager.ChunkManager;
 import org.allaymc.api.world.manager.EntityManager;
+import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.Sound;
-import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
-import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -66,25 +62,6 @@ public interface Dimension {
      * The return value of {@link #getLiquid(int, int, int)} if no liquid is found.
      */
     IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
-
-    /**
-     * Create a block update packet.
-     *
-     * @param newBlockState the new block state
-     * @param x             the x coordinate of the block
-     * @param y             the y coordinate of the block
-     * @param z             the z coordinate of the block
-     * @param layer         the layer which contains the block
-     * @return the created block update packet
-     */
-    private static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
-        var updateBlockPacket = new UpdateBlockPacket();
-        updateBlockPacket.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.from(x, y, z));
-        updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinition());
-        updateBlockPacket.setDataLayer(layer);
-        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
-        return updateBlockPacket;
-    }
 
     /**
      * Get the chunk manager of this dimension.
@@ -349,28 +326,6 @@ public interface Dimension {
      * @return whether the block state was set successfully. Return {@code false} when the block is failed to be set, usually because chunk is unloaded or event is being cancelled
      */
     boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
-
-    /**
-     * @see #sendBlockUpdateTo(BlockState, int, int, int, int, EntityPlayer)
-     */
-    default void sendBlockUpdateTo(BlockState blockState, Vector3ic pos, int layer, EntityPlayer player) {
-        sendBlockUpdateTo(blockState, pos.x(), pos.y(), pos.z(), layer, player);
-    }
-
-    /**
-     * Send block update in a specified pos to a specified player with the given block state.
-     * This is useful for plugin to create fake block client side.
-     *
-     * @param blockState the block state to send
-     * @param x          the x coordinate of the block
-     * @param y          the y coordinate of the block
-     * @param z          the z coordinate of the block
-     * @param layer      the layer which contains the block
-     * @param player     the player to send the block update
-     */
-    default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
-        player.sendPacket(createUpdateBlockPacket(blockState, x, y, z, layer));
-    }
 
     /**
      * @see #getBlockState(int, int, int, int)
@@ -729,56 +684,6 @@ public interface Dimension {
     }
 
     /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(Vector3ic pos, LevelEventType eventType) {
-        addLevelEvent(pos, eventType, 0);
-    }
-
-    /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(Vector3ic pos, LevelEventType eventType, int data) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
-    }
-
-    /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(Vector3dc pos, LevelEventType eventType) {
-        addLevelEvent(pos, eventType, 0);
-    }
-
-    /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(Vector3dc pos, LevelEventType eventType, int data) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
-    }
-
-    /**
-     * Add a level event at the specified position.
-     *
-     * @param x         the x coordinate of the position
-     * @param y         the y coordinate of the position
-     * @param z         the z coordinate of the position
-     * @param eventType the level event type
-     * @param data      the data of the level event
-     */
-    default void addLevelEvent(double x, double y, double z, LevelEventType eventType, int data) {
-        var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
-        if (chunk == null) {
-            return;
-        }
-
-        var packet = new LevelEventPacket();
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
-        packet.setType(eventType);
-        packet.setData(data);
-        chunk.sendChunkPacket(packet);
-    }
-
-    /**
      * @see #updateAroundIgnoreFace(Vector3ic, BlockFace...)
      */
     default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {
@@ -947,60 +852,30 @@ public interface Dimension {
     }
 
     /**
-     * @see #addParticle(double, double, double, ParticleType, int)
+     * @see #addParticle(double, double, double, Particle)
      */
-    default void addParticle(Vector3ic pos, ParticleType particleType) {
-        addParticle(pos, particleType, 0);
+    default void addParticle(Vector3ic pos, Particle particle) {
+        addParticle(pos.x(), pos.y(), pos.z(), particle);
     }
 
     /**
-     * @see #addParticle(double, double, double, ParticleType, int)
+     * @see #addParticle(double, double, double, Particle)
      */
-    default void addParticle(Vector3ic pos, ParticleType particleType, int data) {
-        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
-    }
-
-    /**
-     * @see #addParticle(double, double, double, ParticleType, int)
-     */
-    default void addParticle(Vector3dc pos, ParticleType particleType) {
-        addParticle(pos, particleType, 0);
-    }
-
-    /**
-     * @see #addParticle(double, double, double, ParticleType, int)
-     */
-    default void addParticle(Vector3dc pos, ParticleType particleType, int data) {
-        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
-    }
-
-    /**
-     * @see #addParticle(double, double, double, ParticleType, int)
-     */
-    default void addParticle(double x, double y, double z, ParticleType particleType) {
-        this.addParticle(x, y, z, particleType, 0);
+    default void addParticle(Vector3dc pos, Particle particle) {
+        addParticle(pos.x(), pos.y(), pos.z(), particle);
     }
 
     /**
      * Adds a particle at the specified position.
      *
-     * @param x            the x-coordinate of the position where the particle should be added
-     * @param y            the y-coordinate of the position where the particle should be added
-     * @param z            the z-coordinate of the position where the particle should be added
-     * @param particleType the type of the particle to be added
-     * @param data         the data associated with the particle
+     * @param x        the x-coordinate of the particle
+     * @param y        the y-coordinate of the particle
+     * @param z        the z-coordinate of the particle
+     * @param particle the particle to be added
      */
-    default void addParticle(double x, double y, double z, ParticleType particleType, int data) {
-        addLevelEvent(x, y, z, particleType, data);
-    }
-
-    /**
-     * Broadcast a packet to all players in this dimension.
-     *
-     * @param packet the packet to broadcast
-     */
-    default void broadcastPacket(BedrockPacket packet) {
-        getPlayers().forEach(player -> player.sendPacket(packet));
+    default void addParticle(double x, double y, double z, Particle particle) {
+        getChunkManager().getChunkByDimensionPos((int) x, (int) z)
+                .forEachChunkLoaders(loader -> loader.viewParticle(particle, new Vector3d(x, y, z)));
     }
 
     /**

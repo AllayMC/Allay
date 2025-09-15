@@ -1,5 +1,7 @@
 package org.allaymc.api.world.sound;
 
+import org.allaymc.api.block.data.Instrument;
+
 /**
  * Sound produced by a note block.
  *

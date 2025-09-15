@@ -37,6 +37,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -48,7 +49,6 @@ import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -286,7 +286,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         for (double x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5) {
             for (double z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5) {
                 for (double y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5) {
-                    this.getDimension().addParticle(x, y, z, ParticleType.EXPLODE);
+                    this.getDimension().addParticle(x, y, z, SimpleParticle.EXPLODE);
                 }
             }
         }

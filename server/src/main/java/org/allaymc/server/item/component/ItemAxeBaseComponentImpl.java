@@ -14,7 +14,6 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.ItemUseOnBlockSound;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3ic;
 
 /**
@@ -75,7 +74,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         oxidationLevel = OxidationLevel.values()[oxidationLevel.ordinal() - 1];
         var nextBlockType = oxidationComponent.getBlockWithOxidationLevel(oxidationLevel);
         tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
-            dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_SCRAPE);
+            dimension.addSound(clickedBlockPos, SimpleSound.COPPER_SCRAPED);
         });
 
         return true;

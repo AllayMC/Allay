@@ -8,14 +8,12 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySplashPotion;
 import org.allaymc.api.item.data.ArmorType;
+import org.allaymc.api.item.data.DiscType;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.world.sound.DiscType;
-import org.allaymc.api.world.sound.MusicDiscPlaySound;
-import org.allaymc.api.world.sound.Sound;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.edible.*;
 import org.allaymc.server.item.component.projectile.ItemBottleProjectileComponentImpl;
@@ -46,34 +44,34 @@ public final class ItemTypeInitializer {
     }
 
     public static void initMusicDiscs() {
-        ItemTypes.MUSIC_DISC_13 = buildMusicDisc(ItemId.MUSIC_DISC_13, new MusicDiscPlaySound(DiscType.DISC_13));
-        ItemTypes.MUSIC_DISC_CAT = buildMusicDisc(ItemId.MUSIC_DISC_CAT, new MusicDiscPlaySound(DiscType.DISC_CAT));
-        ItemTypes.MUSIC_DISC_BLOCKS = buildMusicDisc(ItemId.MUSIC_DISC_BLOCKS, new MusicDiscPlaySound(DiscType.DISC_BLOCKS));
-        ItemTypes.MUSIC_DISC_CHIRP = buildMusicDisc(ItemId.MUSIC_DISC_CHIRP, new MusicDiscPlaySound(DiscType.DISC_CHIRP));
-        ItemTypes.MUSIC_DISC_FAR = buildMusicDisc(ItemId.MUSIC_DISC_FAR, new MusicDiscPlaySound(DiscType.DISC_FAR));
-        ItemTypes.MUSIC_DISC_LAVA_CHICKEN = buildMusicDisc(ItemId.MUSIC_DISC_LAVA_CHICKEN, new MusicDiscPlaySound(DiscType.DISC_LAVA_CHICKEN));
-        ItemTypes.MUSIC_DISC_MALL = buildMusicDisc(ItemId.MUSIC_DISC_MALL, new MusicDiscPlaySound(DiscType.DISC_MALL));
-        ItemTypes.MUSIC_DISC_MELLOHI = buildMusicDisc(ItemId.MUSIC_DISC_MELLOHI, new MusicDiscPlaySound(DiscType.DISC_MELLOHI));
-        ItemTypes.MUSIC_DISC_STAL = buildMusicDisc(ItemId.MUSIC_DISC_STAL, new MusicDiscPlaySound(DiscType.DISC_STAL));
-        ItemTypes.MUSIC_DISC_STRAD = buildMusicDisc(ItemId.MUSIC_DISC_STRAD, new MusicDiscPlaySound(DiscType.DISC_STRAD));
-        ItemTypes.MUSIC_DISC_TEARS = buildMusicDisc(ItemId.MUSIC_DISC_TEARS, new MusicDiscPlaySound(DiscType.DISC_TEARS));
-        ItemTypes.MUSIC_DISC_WARD = buildMusicDisc(ItemId.MUSIC_DISC_WARD, new MusicDiscPlaySound(DiscType.DISC_WARD));
-        ItemTypes.MUSIC_DISC_11 = buildMusicDisc(ItemId.MUSIC_DISC_11, new MusicDiscPlaySound(DiscType.DISC_11));
-        ItemTypes.MUSIC_DISC_WAIT = buildMusicDisc(ItemId.MUSIC_DISC_WAIT, new MusicDiscPlaySound(DiscType.DISC_WAIT));
-        ItemTypes.MUSIC_DISC_OTHERSIDE = buildMusicDisc(ItemId.MUSIC_DISC_OTHERSIDE, new MusicDiscPlaySound(DiscType.DISC_OTHERSIDE));
-        ItemTypes.MUSIC_DISC_5 = buildMusicDisc(ItemId.MUSIC_DISC_5, new MusicDiscPlaySound(DiscType.DISC_5));
-        ItemTypes.MUSIC_DISC_PIGSTEP = buildMusicDisc(ItemId.MUSIC_DISC_PIGSTEP, new MusicDiscPlaySound(DiscType.DISC_PIGSTEP));
-        ItemTypes.MUSIC_DISC_RELIC = buildMusicDisc(ItemId.MUSIC_DISC_RELIC, new MusicDiscPlaySound(DiscType.DISC_RELIC));
-        ItemTypes.MUSIC_DISC_CREATOR = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR, new MusicDiscPlaySound(DiscType.DISC_CREATOR));
-        ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR_MUSIC_BOX, new MusicDiscPlaySound(DiscType.DISC_CREATOR_MUSIC_BOX));
-        ItemTypes.MUSIC_DISC_PRECIPICE = buildMusicDisc(ItemId.MUSIC_DISC_PRECIPICE, new MusicDiscPlaySound(DiscType.DISC_PRECIPICE));
+        ItemTypes.MUSIC_DISC_13 = buildMusicDisc(ItemId.MUSIC_DISC_13, DiscType.DISC_13);
+        ItemTypes.MUSIC_DISC_CAT = buildMusicDisc(ItemId.MUSIC_DISC_CAT, DiscType.DISC_CAT);
+        ItemTypes.MUSIC_DISC_BLOCKS = buildMusicDisc(ItemId.MUSIC_DISC_BLOCKS, DiscType.DISC_BLOCKS);
+        ItemTypes.MUSIC_DISC_CHIRP = buildMusicDisc(ItemId.MUSIC_DISC_CHIRP, DiscType.DISC_CHIRP);
+        ItemTypes.MUSIC_DISC_FAR = buildMusicDisc(ItemId.MUSIC_DISC_FAR, DiscType.DISC_FAR);
+        ItemTypes.MUSIC_DISC_LAVA_CHICKEN = buildMusicDisc(ItemId.MUSIC_DISC_LAVA_CHICKEN, DiscType.DISC_LAVA_CHICKEN);
+        ItemTypes.MUSIC_DISC_MALL = buildMusicDisc(ItemId.MUSIC_DISC_MALL, DiscType.DISC_MALL);
+        ItemTypes.MUSIC_DISC_MELLOHI = buildMusicDisc(ItemId.MUSIC_DISC_MELLOHI, DiscType.DISC_MELLOHI);
+        ItemTypes.MUSIC_DISC_STAL = buildMusicDisc(ItemId.MUSIC_DISC_STAL, DiscType.DISC_STAL);
+        ItemTypes.MUSIC_DISC_STRAD = buildMusicDisc(ItemId.MUSIC_DISC_STRAD, DiscType.DISC_STRAD);
+        ItemTypes.MUSIC_DISC_TEARS = buildMusicDisc(ItemId.MUSIC_DISC_TEARS, DiscType.DISC_TEARS);
+        ItemTypes.MUSIC_DISC_WARD = buildMusicDisc(ItemId.MUSIC_DISC_WARD, DiscType.DISC_WARD);
+        ItemTypes.MUSIC_DISC_11 = buildMusicDisc(ItemId.MUSIC_DISC_11, DiscType.DISC_11);
+        ItemTypes.MUSIC_DISC_WAIT = buildMusicDisc(ItemId.MUSIC_DISC_WAIT, DiscType.DISC_WAIT);
+        ItemTypes.MUSIC_DISC_OTHERSIDE = buildMusicDisc(ItemId.MUSIC_DISC_OTHERSIDE, DiscType.DISC_OTHERSIDE);
+        ItemTypes.MUSIC_DISC_5 = buildMusicDisc(ItemId.MUSIC_DISC_5, DiscType.DISC_5);
+        ItemTypes.MUSIC_DISC_PIGSTEP = buildMusicDisc(ItemId.MUSIC_DISC_PIGSTEP, DiscType.DISC_PIGSTEP);
+        ItemTypes.MUSIC_DISC_RELIC = buildMusicDisc(ItemId.MUSIC_DISC_RELIC, DiscType.DISC_RELIC);
+        ItemTypes.MUSIC_DISC_CREATOR = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR, DiscType.DISC_CREATOR);
+        ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR_MUSIC_BOX, DiscType.DISC_CREATOR_MUSIC_BOX);
+        ItemTypes.MUSIC_DISC_PRECIPICE = buildMusicDisc(ItemId.MUSIC_DISC_PRECIPICE, DiscType.DISC_PRECIPICE);
     }
 
-    private static ItemType<ItemMusicDiscStack> buildMusicDisc(ItemId itemId, Sound sound) {
+    private static ItemType<ItemMusicDiscStack> buildMusicDisc(ItemId itemId, DiscType discType) {
         return AllayItemType
                 .builder(ItemMusicDiscStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(initInfo -> new ItemMusicDiscBaseComponentImpl(initInfo, sound), ItemMusicDiscBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemMusicDiscBaseComponentImpl(initInfo, discType), ItemMusicDiscBaseComponentImpl.class)
                 .build();
     }
 
