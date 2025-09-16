@@ -3,7 +3,7 @@ package org.allaymc.server.container.impl;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.container.interfaces.PlayerInventoryContainer;
+import org.allaymc.api.container.interfaces.InventoryContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 
@@ -13,13 +13,13 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 @Getter
-public class PlayerInventoryContainerImpl extends AbstractPlayerContainer implements PlayerInventoryContainer {
+public class InventoryContainerImpl extends AbstractPlayerContainer implements InventoryContainer {
 
     @Setter
     protected int handSlot = 0;
 
-    public PlayerInventoryContainerImpl(Supplier<EntityPlayer> playerSupplier) {
-        super(ContainerType.PLAYER_INVENTORY, playerSupplier);
+    public InventoryContainerImpl(Supplier<EntityPlayer> playerSupplier) {
+        super(ContainerType.INVENTORY, playerSupplier);
     }
 
     @Override

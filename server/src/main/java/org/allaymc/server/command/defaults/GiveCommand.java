@@ -54,7 +54,7 @@ public class GiveCommand extends VanillaCommand {
                             remaining -= giveCount;
 
                             var itemStack = itemType.createItemStack(giveCount, data);
-                            player.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
+                            player.getContainer(ContainerType.INVENTORY).tryAddItem(itemStack);
 
                             if (itemStack.getCount() > 0) {
                                 player.dropItemInPlayerPos(itemStack);

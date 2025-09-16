@@ -16,8 +16,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- (API) Added PlayerInteractBlockEvent.
-- (API) Added PlayerBookEditEvent.
+- (API) Introduced PlayerInteractBlockEvent.
+- (API) Introduced PlayerBookEditEvent.
 - (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
 - (API) Introduced methods `Entity.getOffsetAABBForCollisionCheck()` and `Entity.checkBlockCollision()`.
 - (API) Implemented basic bed feature.
@@ -30,10 +30,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced a bunch of  `XXXViewer` (e.g. `WorldViewer`) interfaces which is a tiny wrapper for packet operations. This is
   inspired by df-mc/dragonfly to reduce the code associated with network packet contained in api module.
 - (API) Introduced a bunch of functional interfaces in package `utils.funtion`.
-- (API) Introduced classes `AnimateAction`, `EntityEvent`, `EntityFlag` and `EntityData`, and they correspond to classes in the protocol library.
+- (API) Introduced classes `EntityFlag` and `EntityData` which are correspond to classes in the protocol library.
 - (API) Introduced enum `DiscType` for music disc.
 - (API) Introduced method `Chunk.addChunkTask()` that adds a task which will be performed later in the chunk tick.
 - (API) Introduced method `EntityBaaeComponent.applyAnimation()` and class `EntityAnimation`.
+- (API) Introduced classes `EntityAction` and `BlockAction`.
+- Implemented sharpness enchantment.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
@@ -62,7 +64,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved all effect implementations from api to server module.
 - (API) Renamed classes `BlockStateSafeGetter` and `ItemTypeSafeGetter` to `BlockStateGetter` and `ItemTypeGetter`.
 - (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
-- (API) Renamed method `EntityBaseComponent.applyEntityEvent()` to `EntityBaseComponent.applyEvent()`.
 - (API) Moved classes under package `component.interfaces` to `component` package.
 - (API) Moved class `ScoreboardStorage` form package `scoreboard.storage` to `scoreboard` package.
 - (API) Made classes `UIProfile`, `DeviceInfo` and `Device` as the inner classes of `LoginData`.
@@ -90,6 +91,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   additional parameters.
 - (API) Moved methods `BlockStateData.fromJson()` to class `BlockStateDataLoader`.
 - (API) Moved several data classes for block and item to packages `block.data` and `item.data`.
+- (API) Renamed classes `PlayerArmorContainer`, `PlayerInventoryContainer` and `PlayerOffhandContainer` to `ArmorContainer`, `InventoryContainer` and `OffhandContainer`.
 
 ### Fixed
 
@@ -117,9 +119,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
 - (API) Removed methods `Dimension.addLevelSoundEvent()` and `Dimension.addLevelEvent()` due to the new sound/particle system.
 - (API) Removed methods `Dimension.sendBlockUpdateTo()`, please use `WorldViewer.viewBlockUpdate()` instead.
-- (API) Removed network related methods in class `BlockEntityBaseComponent`.
+- (API) Removed network related methods in class `BlockEntityBaseComponent`, use the newly introduced world viewer interface instead.
 - (API) Removed methods `BlockEntityHolderComponent.createBlockEntity()` and `BlockEntityHolderComponent.removeBlockEntity()` since these methods are not expected
   to be touched by the user.
+- (API) Removed method `EntityBaseComponent.applyEntityEvent()` which is replaced by the new entity action system.
+- (API) Removed method `EntityBaseComponent.saveNBTWithoutPos()` which is never used.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

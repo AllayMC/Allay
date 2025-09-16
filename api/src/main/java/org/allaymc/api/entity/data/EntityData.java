@@ -80,8 +80,8 @@ public final class EntityData<T> {
     public static final EntityData<Float> SEAT_ROTATION_OFFSET_DEGREES = new EntityData<>(Float.class);
     public static final EntityData<Float> AREA_EFFECT_CLOUD_RADIUS = new EntityData<>(Float.class);
     public static final EntityData<Integer> AREA_EFFECT_CLOUD_WAITING = new EntityData<>(Integer.class);
-    // TODO: implement it
-//    public static final EntityDataType<ParticleType> AREA_EFFECT_CLOUD_PARTICLE = new EntityDataType<>(ParticleType.class);
+    // TODO: find a proper way to implement it
+//    public static final EntityDataType<Particle> AREA_EFFECT_CLOUD_PARTICLE = new EntityDataType<>(Particle.class);
     public static final EntityData<Integer> SHULKER_PEEK_AMOUNT = new EntityData<>(Integer.class);
     public static final EntityData<Integer> SHULKER_ATTACH_FACE = new EntityData<>(Integer.class);
     public static final EntityData<Boolean> SHULKER_ATTACHED = new EntityData<>(Boolean.class);

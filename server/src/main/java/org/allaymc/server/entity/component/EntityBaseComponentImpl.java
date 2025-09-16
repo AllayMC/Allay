@@ -8,16 +8,18 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.action.EntityAction;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
-import org.allaymc.api.entity.data.*;
-import org.allaymc.api.entity.data.EntityEvent;
+import org.allaymc.api.entity.data.EntityAnimation;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
@@ -49,7 +51,6 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBd;
@@ -274,7 +275,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             deadTimer = DEFAULT_DEAD_TIMER;
         }
 
-        applyEvent(EntityEvent.DEATH, 0);
+        applyAction(SimpleEntityAction.DEATH);
         effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         removeAllEffects();
     }
@@ -457,26 +458,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void despawnFromAll() {
         viewers.forEach(this::despawnFrom);
-    }
-
-    @Override
-    public void sendPacketToViewers(BedrockPacket packet) {
-        // TODO: remove it
-        viewers.forEach(viewer -> {
-            if (viewer instanceof EntityPlayer player) {
-                player.sendPacket(packet);
-            }
-        });
-    }
-
-    @Override
-    public void sendPacketToViewersImmediately(BedrockPacket packet) {
-        // TODO: remove it
-        viewers.forEach(viewer -> {
-            if (viewer instanceof EntityPlayer player) {
-                player.sendPacket(packet);
-            }
-        });
     }
 
     public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {
@@ -740,8 +721,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void applyAction(AnimateAction action, double rowingTime) {
-        forEachViewers(viewer -> viewer.viewEntityAction(thisEntity, action, rowingTime));
+    public void applyAction(EntityAction action) {
+        forEachViewers(viewer -> viewer.viewEntityAction(thisEntity, action));
     }
 
     @Override
@@ -749,8 +730,4 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         forEachViewers(viewer -> viewer.viewEntityAnimation(thisEntity, animation));
     }
 
-    @Override
-    public void applyEvent(EntityEvent event, int data) {
-        forEachViewers(viewer -> viewer.viewEntityEvent(thisEntity, event, data));
-    }
 }

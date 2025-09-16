@@ -14,7 +14,7 @@ import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.server.container.impl.PlayerOffhandContainerImpl;
+import org.allaymc.server.container.impl.OffhandContainerImpl;
 import org.joml.Vector3d;
 
 /**
@@ -99,12 +99,12 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
     protected boolean hasArrow(EntityPlayer player) {
         // Find offhand arrow first
         Container container = player.getContainer(ContainerType.OFFHAND);
-        if (container.getItemStack(PlayerOffhandContainerImpl.OFFHAND_SLOT) instanceof ItemArrowStack) {
+        if (container.getItemStack(OffhandContainerImpl.OFFHAND_SLOT) instanceof ItemArrowStack) {
             return true;
         }
 
         // Arrow is not in offhand, search in inventory again
-        container = player.getContainer(ContainerType.PLAYER_INVENTORY);
+        container = player.getContainer(ContainerType.INVENTORY);
         for (var itemStack : container.getItemStacks()) {
             if (itemStack instanceof ItemArrowStack) {
                 return true;
@@ -121,14 +121,14 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
         // Find offhand arrow first
         container = player.getContainer(ContainerType.OFFHAND);
-        slot = PlayerOffhandContainerImpl.OFFHAND_SLOT;
+        slot = OffhandContainerImpl.OFFHAND_SLOT;
         if (container.getItemStack(slot) instanceof ItemArrowStack a) {
             arrow = a;
         }
 
         if (arrow == null) {
             // Arrow is not in offhand, search in inventory again
-            container = player.getContainer(ContainerType.PLAYER_INVENTORY);
+            container = player.getContainer(ContainerType.INVENTORY);
             var itemStacks = container.getItemStacks();
             for (slot = 0; slot < itemStacks.size(); slot++) {
                 var item = itemStacks.get(slot);

@@ -50,7 +50,7 @@ public class ClearCommand extends VanillaCommand {
                     int status = 0;
                     for (var target : targets) {
                         var containers = Stream.of(
-                                ContainerType.PLAYER_INVENTORY,
+                                ContainerType.INVENTORY,
                                 ContainerType.OFFHAND,
                                 ContainerType.ARMOR
                         ).map(target::getContainer).toList();

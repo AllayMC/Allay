@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.i18n.MayContainTrKey;
@@ -67,6 +67,12 @@ public class DamageContainer {
      */
     @Setter
     protected boolean critical;
+    /**
+     * Whether this damage is enchanted. If this value is {@code true}, action {@link SimpleEntityAction#ENCHANTED_HIT} will
+     * be applied to the victim.
+     */
+    @Setter
+    protected boolean enchanted;
 
     /**
      * Creates a new damage container.
@@ -102,11 +108,7 @@ public class DamageContainer {
      * @return the damage container
      */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
-        var damageContainer = new DamageContainer(attacker, ENTITY_ATTACK, sourceDamage);
-        if (attacker instanceof EntityPhysicsComponent physicsComponent) {
-            damageContainer.setCritical(physicsComponent.canCriticalAttack());
-        }
-        return damageContainer;
+        return new DamageContainer(attacker, ENTITY_ATTACK, sourceDamage);
     }
 
     /**

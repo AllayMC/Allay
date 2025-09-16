@@ -25,7 +25,7 @@ public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoReques
         // Try to find the map item in the player's offhand and inventory
         ItemFilledMapStack mapItem = findMapItemIn(mapId, player.getContainer(ContainerType.OFFHAND));
         if (mapItem == null) {
-            mapItem = findMapItemIn(mapId, player.getContainer(ContainerType.PLAYER_INVENTORY));
+            mapItem = findMapItemIn(mapId, player.getContainer(ContainerType.INVENTORY));
         }
 
         // Try to find the map item in item frames

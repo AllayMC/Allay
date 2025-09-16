@@ -7,9 +7,7 @@ import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.data.AnimateAction;
 import org.allaymc.api.entity.data.EntityAnimation;
-import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
@@ -108,14 +106,6 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
 
     @Override
     public void viewEntityAnimation(Entity entity, EntityAnimation animation) {
-    }
-
-    @Override
-    public void viewEntityEvent(Entity entity, EntityEvent event, int data) {
-    }
-
-    @Override
-    public void viewEntityAction(Entity entity, AnimateAction action, double rowingTime) {
     }
 
     @Override

@@ -44,7 +44,7 @@ public class EnchantCommand extends VanillaCommand {
                     }
 
                     for (var player : players) {
-                        var item = player.getContainer(ContainerType.PLAYER_INVENTORY).getItemInHand();
+                        var item = player.getContainer(ContainerType.INVENTORY).getItemInHand();
                         if (item == ItemAirStack.AIR_STACK) {
                             ctx.addOutput(TrKeys.MC_COMMANDS_ENCHANT_NOITEM, player.getDisplayName());
                             return ctx.fail();

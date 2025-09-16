@@ -50,7 +50,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
             }
         }
 
-        var inventory = player.getContainer(ContainerType.PLAYER_INVENTORY);
+        var inventory = player.getContainer(ContainerType.INVENTORY);
         // Step 1: Search for an existing item in the hotbar
         for (int slot = 0; slot < 9; slot++) {
             var hotBarItem = inventory.getItemStack(slot);
@@ -61,7 +61,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         }
 
         // Step 2: Search in the main inventory and swap
-        for (int slot = 9; slot < ContainerType.PLAYER_INVENTORY.getSize(); slot++) {
+        for (int slot = 9; slot < ContainerType.INVENTORY.getSize(); slot++) {
             var hotBarItem = inventory.getItemStack(slot);
             if (hotBarItem.getItemType() == item.getItemType()) {
                 var emptySlot = findFirstEmptyHotbarSlot(inventory);

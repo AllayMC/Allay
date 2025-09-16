@@ -73,11 +73,11 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             var blockType = clickedBlockState.getBlockType();
             if (blockType == BlockTypes.WATER || blockType == BlockTypes.FLOWING_WATER) {
                 player.tryConsumeItemInHand();
-                player.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
+                player.getContainer(ContainerType.INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             } else if (blockType == BlockTypes.LAVA || blockType == BlockTypes.FLOWING_LAVA) {
                 player.tryConsumeItemInHand();
-                player.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.LAVA_BUCKET.createItemStack(1));
+                player.getContainer(ContainerType.INVENTORY).tryAddItem(ItemTypes.LAVA_BUCKET.createItemStack(1));
                 dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             }
             event.setCanBeUsed(true);

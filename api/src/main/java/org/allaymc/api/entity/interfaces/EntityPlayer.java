@@ -54,7 +54,7 @@ public interface EntityPlayer extends
      * @return {@code true} if all items were added successfully, {@code false} if some were dropped.
      */
     default boolean tryAddItem(ItemStack itemStack) {
-        getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
+        getContainer(ContainerType.INVENTORY).tryAddItem(itemStack);
         if (itemStack.getCount() != 0) {
             dropItemInPlayerPos(itemStack);
             return false;
@@ -70,7 +70,7 @@ public interface EntityPlayer extends
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
     default boolean tryDropItemInHand(int count) {
-        return tryDropItem(ContainerType.PLAYER_INVENTORY, getContainer(ContainerType.PLAYER_INVENTORY).getHandSlot(), count);
+        return tryDropItem(ContainerType.INVENTORY, getContainer(ContainerType.INVENTORY).getHandSlot(), count);
     }
 
     /**
@@ -154,7 +154,7 @@ public interface EntityPlayer extends
      * @return the item in hand
      */
     default ItemStack getItemInHand() {
-        return getContainer(ContainerType.PLAYER_INVENTORY).getItemInHand();
+        return getContainer(ContainerType.INVENTORY).getItemInHand();
     }
 
     /**
@@ -163,14 +163,14 @@ public interface EntityPlayer extends
      * @param itemStack the item to set in hand
      */
     default void setItemInHand(ItemStack itemStack) {
-        getContainer(ContainerType.PLAYER_INVENTORY).setItemInHand(itemStack);
+        getContainer(ContainerType.INVENTORY).setItemInHand(itemStack);
     }
 
     /**
      * Clears the item in the player's hand.
      */
     default void clearItemInHand() {
-        getContainer(ContainerType.PLAYER_INVENTORY).clearItemInHand();
+        getContainer(ContainerType.INVENTORY).clearItemInHand();
     }
 
     /**
@@ -195,7 +195,7 @@ public interface EntityPlayer extends
      * Will update the inventory slot or clear it if the item count is zero.
      */
     default void notifyItemInHandChange() {
-        var inv = getContainer(ContainerType.PLAYER_INVENTORY);
+        var inv = getContainer(ContainerType.INVENTORY);
         var itemStack = inv.getItemInHand();
         if (itemStack.getCount() != 0) {
             inv.notifySlotChange(inv.getHandSlot());

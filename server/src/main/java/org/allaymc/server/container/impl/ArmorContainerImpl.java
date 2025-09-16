@@ -1,7 +1,7 @@
 package org.allaymc.server.container.impl;
 
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.container.interfaces.PlayerArmorContainer;
+import org.allaymc.api.container.interfaces.ArmorContainer;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
@@ -14,11 +14,11 @@ import java.util.function.Supplier;
 /**
  * @author daoge_cmd
  */
-public class PlayerArmorContainerImpl extends AbstractPlayerContainer implements PlayerArmorContainer {
+public class ArmorContainerImpl extends AbstractPlayerContainer implements ArmorContainer {
 
     protected static final float KNOCKBACK_RESISTANCE_PER_NETHERITE_ARMOR = 0.1f;
 
-    public PlayerArmorContainerImpl(Supplier<EntityPlayer> playerSupplier) {
+    public ArmorContainerImpl(Supplier<EntityPlayer> playerSupplier) {
         super(ContainerType.ARMOR, playerSupplier);
         addSlotChangeListener(0, this::onArmorChange);
         addSlotChangeListener(1, this::onArmorChange);

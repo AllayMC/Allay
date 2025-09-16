@@ -20,7 +20,7 @@ import java.util.Map;
 public class MineBlockActionProcessor implements ContainerActionProcessor<MineBlockAction> {
     @Override
     public ActionResponse handle(MineBlockAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getContainer(ContainerType.PLAYER_INVENTORY);
+        var container = player.getContainer(ContainerType.INVENTORY);
         int handSlot = player.getHandSlot();
         if (handSlot != action.getHotbarSlot()) {
             log.warn("The held Item Index on the server side does not match the client side!");

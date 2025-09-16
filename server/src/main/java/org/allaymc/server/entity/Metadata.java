@@ -13,6 +13,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
+import java.awt.*;
 import java.util.Objects;
 
 /**
@@ -63,7 +64,6 @@ public final class Metadata {
             case org.cloudburstmc.math.vector.Vector3f v -> MathUtils.toJOMLVec(v);
             case org.cloudburstmc.math.vector.Vector3i v -> MathUtils.toJOMLVec(v);
             case BlockDefinition b -> Registries.BLOCK_STATE_PALETTE.get(b.getRuntimeId());
-            // TODO: particle type
             default -> data;
         };
     }
@@ -73,7 +73,7 @@ public final class Metadata {
             case Vector3fc v -> MathUtils.toCBVec(v);
             case Vector3ic v -> MathUtils.toCBVec(v);
             case BlockState b -> (BlockDefinition) b::blockStateHash;
-            // TODO: particle type
+            case Color c -> c.getRGB();
             default -> data;
         };
     }

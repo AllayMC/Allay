@@ -8,15 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.action.EntityAction;
+import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.entity.data.AnimateAction;
 import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -348,7 +347,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 continue;
             }
 
-            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY));
+            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerType.INVENTORY));
             var slot = inventory.tryAddItem(item);
             if (slot == -1) {
                 // Player's inventory is full and cannot pick up the item
@@ -356,7 +355,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             }
 
             if (item.getCount() == 0) {
-                sendPickUpPacket(entityItem);
+                entityItem.applyAction(new PickedUpAction(thisPlayer));
                 // Set item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
                 entityItem.remove();
@@ -388,18 +387,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
             var arrow = ItemTypes.ARROW.createItemStack(1);
             arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(arrow) != -1) {
-                sendPickUpPacket(entityArrow);
+            if (thisPlayer.getContainer(ContainerType.INVENTORY).tryAddItem(arrow) != -1) {
+                entityArrow.applyAction(new PickedUpAction(thisPlayer));
                 entityArrow.remove();
             }
         }
-    }
-
-    protected void sendPickUpPacket(Entity entity) {
-        var packet = new TakeItemEntityPacket();
-        packet.setRuntimeEntityId(this.runtimeId);
-        packet.setItemRuntimeEntityId(entity.getRuntimeId());
-        getCurrentChunk().addChunkPacket(packet);
     }
 
     @Override
@@ -490,7 +482,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public int getHandSlot() {
-        return containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY).getHandSlot();
+        return containerHolderComponent.getContainer(ContainerType.INVENTORY).getHandSlot();
     }
 
     @Override
@@ -501,7 +493,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setHandSlot(int handSlot, boolean sendToSelf) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
 
-        var container = containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY);
+        var container = containerHolderComponent.getContainer(ContainerType.INVENTORY);
         container.setHandSlot(handSlot);
         new PlayerItemHeldEvent(thisPlayer, container.getItemInHand(), handSlot).call();
         if (sendToSelf) {
@@ -529,7 +521,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putList(
                         TAG_INVENTORY,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.INVENTORY).saveNBT())
                 .putList(
                         TAG_ARMOR,
                         NbtType.COMPOUND,
@@ -560,7 +552,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 containerHolderComponent.getContainer(ContainerType.OFFHAND).loadNBT(offhandNbt)
         );
         nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt ->
-                containerHolderComponent.getContainer(ContainerType.PLAYER_INVENTORY).loadNBT(inventoryNbt)
+                containerHolderComponent.getContainer(ContainerType.INVENTORY).loadNBT(inventoryNbt)
         );
         nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
                 containerHolderComponent.getContainer(ContainerType.ARMOR).loadNBT(armorNbt)
@@ -769,16 +761,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void applyEvent(EntityEvent event, int data) {
-        super.applyEvent(event, data);
-        forEachViewers(viewer -> viewer.viewEntityEvent(thisEntity, event, data));
-        thisPlayer.viewEntityEvent(thisPlayer, event, data);
-    }
-
-    @Override
-    public void applyAction(AnimateAction action, double rowingTime) {
-        super.applyAction(action, rowingTime);
-        thisPlayer.viewEntityAction(thisPlayer, action, rowingTime);
+    public void applyAction(EntityAction action) {
+        super.applyAction(action);
+        thisPlayer.viewEntityAction(thisPlayer, action);
     }
 
     @Override

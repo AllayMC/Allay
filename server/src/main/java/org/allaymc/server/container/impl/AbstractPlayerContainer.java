@@ -7,9 +7,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import java.util.function.Supplier;
 
 /**
- * PlayerContainer is a type of container that is always opened to the player, including the
- * player's inventory, armor and offhand containers. These container types have their special
- * "unopened container id" which can be found in {@link UnopenedContainerId}.
+ * PlayerContainer is a type of container that is always opened to the player, including the inventory,
+ * armor and offhand containers. These container types have their special "unopened container id" which
+ * can be found in {@link UnopenedContainerId}.
  *
  * @author daoge_cmd
  * @see UnopenedContainerId
@@ -30,7 +30,8 @@ public abstract class AbstractPlayerContainer extends BaseContainer {
             // Because even if the client has not opened player container, they can always see their own hot bar.
             // Therefore, we need to send an inventory packet to the client as well.
             var player = playerSupplier.get();
-            if (!viewers.containsValue(player)) {
+            // The player object we get may be empty because some container types can be used by non-player entities (e.g. zombie)
+            if (player != null && !viewers.containsValue(player)) {
                 player.viewSlot(this, slot);
             }
         }

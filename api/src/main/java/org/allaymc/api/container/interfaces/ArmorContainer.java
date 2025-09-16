@@ -4,11 +4,11 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * PlayerArmorContainer represents a container that holds a player's armor items.
+ * ArmorContainer represents a container that holds armor items.
  *
  * @author daoge_cmd
  */
-public interface PlayerArmorContainer extends Container {
+public interface ArmorContainer extends Container {
     /**
      * The constant representing the helmet slot index in the armor container.
      */

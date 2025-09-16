@@ -18,7 +18,7 @@ public class ItemEmptyMapBaseComponentImpl extends ItemBaseComponentImpl {
     public void clickItemInAir(EntityPlayer player) {
         player.tryConsumeItemInHand();
         var itemStack = ItemTypes.FILLED_MAP.createItemStack();
-        player.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
+        player.getContainer(ContainerType.INVENTORY).tryAddItem(itemStack);
         if (itemStack.getCount() != 0) {
             player.dropItemInPlayerPos(itemStack);
         }

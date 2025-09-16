@@ -2,12 +2,12 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -110,10 +110,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         addHitSound(hitPos);
-        this.arrowBaseComponent.applyEvent(
-                EntityEvent.ARROW_SHAKE,
-                7 // How many times the arrow shakes
-        );
+        this.arrowBaseComponent.applyAction(new ArrowShakeAction(7));
         this.arrowBaseComponent.setCritical(false);
         this.hitBlock = true;
     }

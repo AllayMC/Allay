@@ -6,7 +6,10 @@ import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
-import org.allaymc.api.entity.data.*;
+import org.allaymc.api.entity.action.EntityAction;
+import org.allaymc.api.entity.data.EntityAnimation;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
@@ -30,7 +33,6 @@ import org.allaymc.api.world.manager.EntityManager;
 import org.allaymc.api.world.physics.HasAABB;
 import org.allaymc.api.world.physics.HasLongId;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
@@ -489,36 +491,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void remove();
 
     /**
-     * Send a packet to the viewers of this entity.
-     *
-     * @param packet the packet to send
-     */
-    void sendPacketToViewers(BedrockPacket packet);
-
-    /**
-     * Send a packet to the viewers of this entity immediately.
-     *
-     * @param packet the packet to send
-     */
-    void sendPacketToViewersImmediately(BedrockPacket packet);
-
-    /**
      * Save the entity to NBT.
      *
      * @return the NBT of this entity
      */
     NbtMap saveNBT();
-
-    /**
-     * Save the entity to NBT without position.
-     *
-     * @return the NBT of this entity without position
-     */
-    default NbtMap saveNBTWithoutPos() {
-        var builder = saveNBT().toBuilder();
-        builder.remove("Pos");
-        return builder.build();
-    }
 
     /**
      * Load the entity from NBT.
@@ -660,29 +637,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Apply an event to the entity.
-     *
-     * @param event the event to apply
-     * @param data  the data of the entity event
-     */
-    void applyEvent(EntityEvent event, int data);
-
-    /**
      * Apply an action to the entity.
      *
      * @param action the action to apply
      */
-    default void applyAction(AnimateAction action) {
-        applyAction(action, 0);
-    }
-
-    /**
-     * Apply an action to the entity.
-     *
-     * @param action     the action to apply
-     * @param rowingTime the rowing time of the action
-     */
-    void applyAction(AnimateAction action, double rowingTime);
+    void applyAction(EntityAction action);
 
     /**
      * Apply an animation to the entity.

@@ -229,7 +229,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     protected boolean isPlayerInventoryOpened() {
-        return typeToContainer.get(ContainerType.PLAYER_INVENTORY) != null;
+        return typeToContainer.get(ContainerType.INVENTORY) != null;
     }
 
     @Override

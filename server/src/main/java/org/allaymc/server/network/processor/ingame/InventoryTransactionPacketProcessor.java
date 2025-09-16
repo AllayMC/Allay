@@ -211,7 +211,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 var dropSlot = containerAction.getSlot();
                 var dropCount = containerAction.getFromItem().getCount() - containerAction.getToItem().getCount();
-                if (!player.tryDropItem(ContainerType.PLAYER_INVENTORY, dropSlot, dropCount)) {
+                if (!player.tryDropItem(ContainerType.INVENTORY, dropSlot, dropCount)) {
                     log.warn("Failed to drop item from slot {} with count {}", dropSlot, dropCount);
                 }
             }

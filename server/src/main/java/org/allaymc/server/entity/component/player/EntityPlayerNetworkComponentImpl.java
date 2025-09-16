@@ -290,7 +290,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void sendInventories() {
-        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.PLAYER_INVENTORY));
+        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.INVENTORY));
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.OFFHAND));
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.ARMOR));
         // No need to send cursor's content to client because there is nothing in cursor

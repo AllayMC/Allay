@@ -1,9 +1,9 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.network.processor.PacketProcessor;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -23,13 +23,7 @@ public class EntityEventPacketProcessor extends PacketProcessor<EntityEventPacke
                     yield PacketSignal.HANDLED;
                 }
 
-                var forwardPacket = new EntityEventPacket();
-                forwardPacket.setRuntimeEntityId(player.getRuntimeId());
-                forwardPacket.setType(EntityEventType.EATING_ITEM);
-                forwardPacket.setData(packet.getData());
-                player.sendPacket(forwardPacket);
-                player.sendPacketToViewers(forwardPacket);
-
+                player.applyAction(SimpleEntityAction.EAT);
                 yield PacketSignal.HANDLED;
             }
             default -> PacketSignal.UNHANDLED;

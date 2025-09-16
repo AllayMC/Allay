@@ -13,7 +13,7 @@ public class InteractPacketProcessor extends PacketProcessor<InteractPacket> {
     @Override
     public void handleSync(EntityPlayer player, InteractPacket packet, long receiveTime) {
         if (packet.getAction() == InteractPacket.Action.OPEN_INVENTORY) {
-            player.getContainer(ContainerType.PLAYER_INVENTORY).addViewer(player);
+            player.getContainer(ContainerType.INVENTORY).addViewer(player);
         }
     }
 

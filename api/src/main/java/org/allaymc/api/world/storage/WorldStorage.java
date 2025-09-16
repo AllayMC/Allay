@@ -42,6 +42,7 @@ public interface WorldStorage {
     /**
      * Shutdown the storage.
      */
+    @ApiStatus.OverrideOnly
     default void shutdown() {
     }
 

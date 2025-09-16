@@ -6,7 +6,7 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
@@ -41,7 +41,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         var strippedBlockState = strippableComponent.getStrippedBlockState(clickedBlockState);
         tryFadeBlock(dimension, interactInfo, strippedBlockState, () -> {
             // Idk why mojang does not use UsingItemOnBlock for player
-            interactInfo.player().applyAction(AnimateAction.SWING_ARM);
+            interactInfo.player().applyAction(SimpleEntityAction.SWING_ARM);
             dimension.addSound(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), new ItemUseOnBlockSound(clickedBlockState));
         });
     }

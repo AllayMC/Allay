@@ -51,10 +51,10 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
         var armorType = getArmorType();
         var armorContainer = player.getContainer(ContainerType.ARMOR);
         if (armorContainer.isEmpty(armorType.ordinal())) {
-            player.getContainer(ContainerType.PLAYER_INVENTORY).clearItemInHand();
+            player.getContainer(ContainerType.INVENTORY).clearItemInHand();
         } else {
             // Swap armor
-            player.getContainer(ContainerType.PLAYER_INVENTORY).setItemInHand(armorContainer.getItemStack(armorType.ordinal()));
+            player.getContainer(ContainerType.INVENTORY).setItemInHand(armorContainer.getItemStack(armorType.ordinal()));
         }
         armorContainer.setItemStack(getArmorType().ordinal(), itemStack);
         player.getDimension().addSound(player.getLocation(), new EquipItemSound(itemStack.getItemType()));

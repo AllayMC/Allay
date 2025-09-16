@@ -8,7 +8,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.server.container.impl.PlayerArmorContainerImpl;
+import org.allaymc.server.container.impl.ArmorContainerImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -93,7 +93,7 @@ public class BlockBreakTest {
 
     @Test
     void testCalculatingBreakTime_with_aqua_affinity() {
-        var armorContainer = mock(PlayerArmorContainerImpl.class);
+        var armorContainer = mock(ArmorContainerImpl.class);
         var helmet = ItemTypes.DIAMOND_HELMET.createItemStack();
         helmet.addEnchantment(EnchantmentTypes.AQUA_AFFINITY, 1);
 

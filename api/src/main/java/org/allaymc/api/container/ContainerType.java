@@ -14,7 +14,7 @@ import org.allaymc.api.container.interfaces.*;
 public class ContainerType<T extends Container> {
 
     public static final ContainerType<AnvilContainer> ANVIL = new ContainerType<>(3);
-    public static final ContainerType<PlayerArmorContainer> ARMOR = new ContainerType<>(4);
+    public static final ContainerType<ArmorContainer> ARMOR = new ContainerType<>(4);
     public static final ContainerType<BlockContainer> BARREL = new ContainerType<>(27);
     public static final ContainerType<BeaconContainer> BEACON = new ContainerType<>(1);
     public static final ContainerType<FurnaceContainer> BLAST_FURNACE = new ContainerType<>(3);
@@ -31,13 +31,13 @@ public class ContainerType<T extends Container> {
     public static final ContainerType<FurnaceContainer> FURNACE = new ContainerType<>(3);
     public static final ContainerType<GrindstoneContainer> GRINDSTONE = new ContainerType<>(3);
     public static final ContainerType<LoomContainer> LOOM = new ContainerType<>(4);
-    public static final ContainerType<PlayerOffhandContainer> OFFHAND = new ContainerType<>(1);
-    public static final ContainerType<PlayerInventoryContainer> PLAYER_INVENTORY = new ContainerType<>(36);
+    public static final ContainerType<OffhandContainer> OFFHAND = new ContainerType<>(1);
+    public static final ContainerType<InventoryContainer> INVENTORY = new ContainerType<>(36);
     public static final ContainerType<BlockContainer> SHULKER_BOX = new ContainerType<>(27);
     public static final ContainerType<SmithingTableContainer> SMITHING_TABLE = new ContainerType<>(4);
     public static final ContainerType<FurnaceContainer> SMOKER = new ContainerType<>(3);
     public static final ContainerType<StonecutterContainer> STONECUTTER = new ContainerType<>(2);
-    
+
     @Getter
     private final int size;
 

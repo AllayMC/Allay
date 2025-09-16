@@ -1,16 +1,16 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
+import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.data.AnimateAction;
-import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
@@ -70,9 +70,12 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyDamage(DamageContainer damage) {
         this.attributeComponent.setHealth(this.attributeComponent.getHealth() - damage.getFinalDamage());
-        thisEntity.applyEvent(EntityEvent.HURT, 2);
+        thisEntity.applyAction(SimpleEntityAction.HURT);
         if (damage.isCritical()) {
-            thisEntity.applyAction(AnimateAction.CRITICAL_HIT);
+            thisEntity.applyAction(SimpleEntityAction.CRITICAL_HIT);
+        }
+        if (damage.isEnchanted()) {
+            thisEntity.applyAction(SimpleEntityAction.ENCHANTED_HIT);
         }
         this.manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 
@@ -89,8 +92,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var kby = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var additionalMotion = new Vector3d();
-            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerType.PLAYER_INVENTORY)) {
-                var kbEnchantmentLevel = component.getContainer(ContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerType.INVENTORY)) {
+                var kbEnchantmentLevel = component.getContainer(ContainerType.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
                 if (kbEnchantmentLevel != 0) {
                     kb /= 2.0;
                     additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
@@ -154,9 +157,20 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
                     return (float) (d * pow + ((pow - 1) / 0.4));
                 });
             }
-        }
 
-        // TODO: Sharpness enchantment
+            if (attacker instanceof ContainerHolder holder && holder.hasContainer(ContainerType.INVENTORY)) {
+                var item = holder.getContainer(ContainerType.INVENTORY).getItemInHand();
+                var sharpnessLevel = item.getEnchantmentLevel(EnchantmentTypes.SHARPNESS);
+                if (sharpnessLevel > 0) {
+                    damage.updateFinalDamage(d -> d + sharpnessLevel * 1.25f);
+                    damage.setEnchanted(true);
+                }
+            }
+
+            if (attacker instanceof EntityPhysicsComponent component) {
+                damage.setCritical(component.canCriticalAttack());
+            }
+        }
 
         if (damage.isCritical()) {
             damage.updateFinalDamage(d -> d * 1.5f);

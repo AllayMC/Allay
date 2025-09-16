@@ -1,7 +1,7 @@
 package org.allaymc.server.container.impl;
 
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.container.interfaces.PlayerOffhandContainer;
+import org.allaymc.api.container.interfaces.OffhandContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 
@@ -10,9 +10,9 @@ import java.util.function.Supplier;
 /**
  * @author daoge_cmd
  */
-public class PlayerOffhandContainerImpl extends AbstractPlayerContainer implements PlayerOffhandContainer {
+public class OffhandContainerImpl extends AbstractPlayerContainer implements OffhandContainer {
 
-    public PlayerOffhandContainerImpl(Supplier<EntityPlayer> playerSupplier) {
+    public OffhandContainerImpl(Supplier<EntityPlayer> playerSupplier) {
         super(ContainerType.OFFHAND, playerSupplier);
         addSlotChangeListener(0, this::onOffhandChange);
     }

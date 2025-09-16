@@ -75,7 +75,7 @@ public class BlockFlowerPotBaseComponentImpl extends BlockBaseComponentImpl {
             flowerPot.clearPlant();
             // When the flower is pulled, the item will place to the player's first empty slot instead of hand.
             // And the player needs to be empty-handed to pull out, there is no such thing as a failure.
-            player.getContainer(ContainerType.PLAYER_INVENTORY).tryAddItem(plant);
+            player.getContainer(ContainerType.INVENTORY).tryAddItem(plant);
             return true;
         } else if (plant == null && flowerPot.setPlantItem(itemStack)) {
             player.tryConsumeItemInHand();

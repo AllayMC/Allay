@@ -42,7 +42,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo PLAYER_INVENTORY = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.INVENTORY)
-            .type(ContainerType.PLAYER_INVENTORY)
+            .type(ContainerType.INVENTORY)
             .mapRangedSlotToType(0, 8, ContainerSlotType.HOTBAR)
             .mapRangedSlotToType(9, 35, ContainerSlotType.INVENTORY)
             .holdSlotType(ContainerSlotType.HOTBAR_AND_INVENTORY)

@@ -1,21 +1,23 @@
 package org.allaymc.server.entity.component.player;
 
-import com.google.common.collect.BiMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.debugshape.*;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.action.ArrowShakeAction;
+import org.allaymc.api.entity.action.EntityAction;
+import org.allaymc.api.entity.action.PickedUpAction;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerChunkLoaderComponent;
-import org.allaymc.api.entity.data.AnimateAction;
 import org.allaymc.api.entity.data.EntityAnimation;
-import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -48,7 +50,6 @@ import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
 import org.allaymc.server.entity.impl.EntityImpl;
-import org.allaymc.server.utils.ReflectionUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkEncoder;
 import org.allaymc.server.world.gamerule.AllayGameRules;
@@ -88,8 +89,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
      * y coordinate when sent over network.This is mostly the case for older entities such as player and TNT.
      */
     protected static final Map<EntityType<?>, Float> NETWORK_OFFSETS;
-    protected static final BiMap<EntityEvent, EntityEventType> EVENT_TYPE_MAP;
-    protected static final BiMap<AnimateAction, AnimatePacket.Action> ANIMATE_ACTION_MAP;
 
     static {
         NETWORK_OFFSETS = new HashMap<>();
@@ -97,9 +96,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         NETWORK_OFFSETS.put(EntityTypes.FALLING_BLOCK, 0.49f);
         NETWORK_OFFSETS.put(EntityTypes.ITEM, 0.125f);
         NETWORK_OFFSETS.put(EntityTypes.TNT, 0.49f);
-
-        EVENT_TYPE_MAP = ReflectionUtils.mapStaticFields(EntityEvent.class, org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType.class);
-        ANIMATE_ACTION_MAP = ReflectionUtils.mapStaticFields(AnimateAction.class, AnimatePacket.Action.class);
     }
 
     @ComponentObject
@@ -149,7 +145,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.setGameType(toGameType(player.getGameMode()));
                 p.getMetadata().putAll(getMetadata(entity));
                 p.setDeviceId(loginData.getDeviceInfo().deviceId());
-                p.setHand(player.getContainer(ContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());
+                p.setHand(player.getContainer(ContainerType.INVENTORY).getItemInHand().toNetworkItemData());
                 yield p;
             }
             case EntityItem item -> {
@@ -302,7 +298,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityHand(T entity) {
-        var container = entity.getContainer(ContainerType.PLAYER_INVENTORY);
+        var container = entity.getContainer(ContainerType.INVENTORY);
         var handSlot = container.getHandSlot();
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
@@ -363,21 +359,88 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     }
 
     @Override
-    public void viewEntityEvent(Entity entity, EntityEvent event, int data) {
-        var packet = new EntityEventPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setType(EVENT_TYPE_MAP.get(event));
-        packet.setData(data);
-        this.networkComponent.sendPacket(packet);
-    }
+    public void viewEntityAction(Entity entity, EntityAction action) {
+        switch (action) {
+            case SimpleEntityAction.SWING_ARM -> {
+                if (entity instanceof EntityPlayer player) {
+                    if (thisPlayer == player) {
+                        return;
+                    }
 
-    @Override
-    public void viewEntityAction(Entity entity, AnimateAction action, double rowingTime) {
-        var packet = new AnimatePacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setAction(ANIMATE_ACTION_MAP.get(action));
-        packet.setRowingTime((float) rowingTime);
-        this.networkComponent.sendPacket(packet);
+                    var packet = new AnimatePacket();
+                    packet.setAction(AnimatePacket.Action.SWING_ARM);
+                    packet.setRuntimeEntityId(entity.getRuntimeId());
+                    this.networkComponent.sendPacket(packet);
+
+                } else {
+                    var packet = new EntityEventPacket();
+                    packet.setType(EntityEventType.ATTACK_START);
+                    packet.setRuntimeEntityId(entity.getRuntimeId());
+                    this.networkComponent.sendPacket(packet);
+                }
+            }
+            case SimpleEntityAction.HURT -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.HURT);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                this.networkComponent.sendPacket(packet);
+            }
+            case SimpleEntityAction.CRITICAL_HIT -> {
+                var packet = new AnimatePacket();
+                packet.setAction(AnimatePacket.Action.CRITICAL_HIT);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                this.networkComponent.sendPacket(packet);
+            }
+            case SimpleEntityAction.ENCHANTED_HIT -> {
+                var packet = new AnimatePacket();
+                packet.setAction(AnimatePacket.Action.MAGIC_CRITICAL_HIT);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                this.networkComponent.sendPacket(packet);
+            }
+            case SimpleEntityAction.DEATH -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.DEATH);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                this.networkComponent.sendPacket(packet);
+            }
+            case SimpleEntityAction.EAT -> {
+                if (entity instanceof ContainerHolder holder && holder.hasContainer(ContainerType.INVENTORY)) {
+                    var item = holder.getContainer(ContainerType.INVENTORY).getItemInHand();
+                    var packet = new EntityEventPacket();
+                    packet.setType(EntityEventType.EATING_ITEM);
+                    packet.setRuntimeEntityId(entity.getRuntimeId());
+                    packet.setData((item.getItemType().getRuntimeId() << 16) | item.getMeta());
+                    this.networkComponent.sendPacket(packet);
+                }
+            }
+            case SimpleEntityAction.FIREWORK_EXPLOSION -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.FIREWORK_EXPLODE);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                this.networkComponent.sendPacket(packet);
+            }
+            case SimpleEntityAction.TOTEM_USE -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.CONSUME_TOTEM);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                this.networkComponent.sendPacket(packet);
+            }
+            case PickedUpAction(Entity picker) -> {
+                var packet = new TakeItemEntityPacket();
+                packet.setRuntimeEntityId(picker.getRuntimeId());
+                packet.setItemRuntimeEntityId(entity.getRuntimeId());
+                this.networkComponent.sendPacket(packet);
+            }
+            case ArrowShakeAction(int times) -> {
+                var packet = new EntityEventPacket();
+                packet.setType(EntityEventType.ARROW_SHAKE);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                packet.setData(times);
+                this.networkComponent.sendPacket(packet);
+            }
+            default ->
+                    throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
+        }
     }
 
     @Override
@@ -431,7 +494,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     public void onLoaderChunkPosChange() {
         var location = thisPlayer.getLocation();
         var packet = new NetworkChunkPublisherUpdatePacket();
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3i.from(location.x(), location.y(), location.z()));
+        packet.setPosition(Vector3i.from(location.x(), location.y(), location.z()));
         packet.setRadius(getChunkLoadingRadius() << 4);
         networkComponent.sendPacket(packet);
     }

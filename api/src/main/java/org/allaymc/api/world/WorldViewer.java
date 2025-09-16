@@ -4,11 +4,10 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.data.AnimateAction;
 import org.allaymc.api.entity.data.EntityAnimation;
-import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
@@ -102,22 +101,12 @@ public interface WorldViewer {
     void viewEntityAnimation(Entity entity, EntityAnimation animation);
 
     /**
-     * Views an event that is happening on the entity passed.
-     *
-     * @param entity the entity to view
-     * @param event  the event that is happening
-     * @param data   the data of this event
-     */
-    void viewEntityEvent(Entity entity, EntityEvent event, int data);
-
-    /**
      * Views an action that is happening on the entity passed.
      *
-     * @param entity     the entity to view
-     * @param action     the action that is happening
-     * @param rowingTime the rowing time of the action
+     * @param entity the entity to view
+     * @param action the action that is performed
      */
-    void viewEntityAction(Entity entity, AnimateAction action, double rowingTime);
+    void viewEntityAction(Entity entity, EntityAction action);
 
     /**
      * Views an effect change in the entity passed.

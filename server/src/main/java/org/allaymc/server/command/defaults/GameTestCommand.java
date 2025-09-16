@@ -65,13 +65,13 @@ public class GameTestCommand extends VanillaCommand {
                         return context.fail();
                     }
 
-                    player.getContainer(ContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
+                    player.getContainer(ContainerType.INVENTORY).setItemInHand(blockState.toItemStack());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("rfinv")
                 .exec((context, player) -> {
-                    player.viewContents(player.getContainer(ContainerType.PLAYER_INVENTORY));
+                    player.viewContents(player.getContainer(ContainerType.INVENTORY));
                     player.viewContents(player.getContainer(ContainerType.ARMOR));
                     player.viewContents(player.getContainer(ContainerType.OFFHAND));
                     context.addOutput("Inventory is refreshed!");

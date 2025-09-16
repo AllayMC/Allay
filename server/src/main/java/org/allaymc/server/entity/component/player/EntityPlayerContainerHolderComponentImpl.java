@@ -40,9 +40,9 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         addContainer(enchantTableContainer);
         // We shouldn't provide thisPlayer object directly
         // because at that time thisPlayer is null
-        addContainer(new PlayerArmorContainerImpl(() -> thisPlayer));
-        addContainer(new PlayerInventoryContainerImpl(() -> thisPlayer));
-        addContainer(new PlayerOffhandContainerImpl(() -> thisPlayer));
+        addContainer(new ArmorContainerImpl(() -> thisPlayer));
+        addContainer(new InventoryContainerImpl(() -> thisPlayer));
+        addContainer(new OffhandContainerImpl(() -> thisPlayer));
         addContainer(new PlayerCursorContainerImpl(() -> thisPlayer));
     }
 

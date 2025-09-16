@@ -8,23 +8,23 @@ import org.allaymc.api.item.ItemStack;
  *
  * @author daoge_cmd
  */
-public interface PlayerInventoryContainer extends Container {
+public interface InventoryContainer extends Container {
     /**
-     * Gets the item currently in the player's hand.
+     * Gets the item currently in the hand.
      *
-     * @return the ItemStack in the player's hand
+     * @return the ItemStack in the hand
      */
     ItemStack getItemInHand();
 
     /**
-     * Sets the item in the player's hand.
+     * Sets the item in the hand.
      *
-     * @param itemStack the ItemStack to set in the player's hand
+     * @param itemStack the ItemStack to set in the hand
      */
     void setItemInHand(ItemStack itemStack);
 
     /**
-     * Clears the item in the player's hand, effectively removing it.
+     * Clears the item in the hand, effectively removing it.
      */
     void clearItemInHand();
 
