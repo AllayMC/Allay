@@ -7,12 +7,15 @@ import org.allaymc.api.block.action.StartBreakAction;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.particle.PunchBlockParticle;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -132,6 +135,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void startBreak(EntityPlayer player, int x, int y, int z, int blockFaceId, long startBreakingTime) {
+        var dimension = player.getDimension();
         if (this.blockToBreak != null) {
             log.debug("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
             stopBreak(player);
@@ -142,7 +146,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
-        this.blockToBreak = player.getDimension().getBlockState(x, y, z);
+        this.blockToBreak = dimension.getBlockState(x, y, z);
         this.faceToBreak = BlockFace.fromIndex(blockFaceId);
         if (this.faceToBreak == null) {
             log.debug("Player {} tried to break a block with an invalid face {}", player.getOriginName(), blockFaceId);
@@ -150,10 +154,24 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
+        // If there is fire in the face, try extinguishing it
+        var sidePos = this.faceToBreak.offsetPos(x, y, z);
+        var sideBlock = dimension.getBlockState(sidePos);
+        if (sideBlock.getBlockType() == BlockTypes.FIRE || sideBlock.getBlockType() == BlockTypes.SOUL_FIRE) {
+            var event = new BlockBreakEvent(new Block(sideBlock, new Position3i(sidePos, dimension)), player.getItemInHand(), player);
+            if (!event.call()) {
+                // Resend the block because on client side that was extinguished
+                player.viewBlockUpdate(sidePos, 0, sideBlock);
+            } else {
+                dimension.setBlockState(sidePos, BlockTypes.AIR.getDefaultState());
+                dimension.addSound(MathUtils.center(sidePos), SimpleSound.FIRE_EXTINGUISH);
+            }
+        }
+
         this.breakingPosX = x;
         this.breakingPosY = y;
         this.breakingPosZ = z;
-        this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new Block(blockToBreak, new Position3i(x, y, z, player.getDimension())), faceToBreak, player.getItemInHand(), player);
+        this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new Block(blockToBreak, new Position3i(x, y, z, dimension)), faceToBreak, player.getItemInHand(), player);
         if (player.getGameMode() != GameMode.CREATIVE) {
             this.breakTime = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
         } else {
@@ -162,8 +180,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
         this.stopBreakingTime = startBreakingTime + this.breakTime * 20.0d;
 
-        player.getDimension().addBlockAction(x, y, z, new StartBreakAction(this.breakTime));
-        player.getDimension().addParticle(
+        dimension.addBlockAction(x, y, z, new StartBreakAction(this.breakTime));
+        dimension.addParticle(
                 this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
                 new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
         );

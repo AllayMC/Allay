@@ -36,6 +36,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced method `EntityBaaeComponent.applyAnimation()` and class `EntityAnimation`.
 - (API) Introduced classes `EntityAction` and `BlockAction`.
 - Implemented sharpness enchantment.
+- Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
