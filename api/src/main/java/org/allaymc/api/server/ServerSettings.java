@@ -56,7 +56,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("default-game-mode")
         @Comment("Determines the default game mode of a world when it is created")
-        @Comment("Possible values: SURVIVAL, CREATIVE, SPECTATOR")
+        @Comment("Possible values: SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR")
         private GameMode defaultGameMode = GameMode.CREATIVE;
 
         @CustomKey("default-difficulty")

@@ -24,18 +24,10 @@ import java.util.Map;
  */
 @MinecraftVersionSensitive
 public record BiomeData(
-        float ashDensity,
-        float blueSporeDensity,
-        float depth,
-        float downfall,
-        @SerializedName("mapWaterColour")
-        Color mapWaterColor,
-        boolean rain,
-        float redSporeDensity,
-        float scale,
-        List<String> tags,
-        float temperature,
-        float whiteAshDensity
+        float ashDensity, float blueSporeDensity, float depth,
+        float downfall, @SerializedName("mapWaterColour") Color mapWaterColor,
+        boolean rain, float redSporeDensity, float scale, List<String> tags,
+        float temperature, float whiteAshDensity
 ) {
     private static final Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {

@@ -45,6 +45,8 @@ public final class Registries {
     public static DoubleKeyMappedRegistry<Integer, Identifier, EffectType> EFFECTS;
     public static SimpleMappedRegistry<Identifier, EntityType<?>> ENTITIES;
 
+    // TODO: Biome
+
     // World
     public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;
     public static SimpleMappedRegistry<String, Function<String, WorldGenerator>> WORLD_GENERATOR_FACTORIES;

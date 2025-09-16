@@ -363,7 +363,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setNewSkinName(skin.getSkinId());
         // It seems that old skin name is unused
         packet.setOldSkinName("");
-        packet.setTrustedSkin(true);
+        packet.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
         this.networkComponent.sendPacket(packet);
     }
 

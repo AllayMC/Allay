@@ -42,7 +42,6 @@ public class BiomeIdEnumGen {
         TypeSpec.Builder codeBuilder = TypeSpec.enumBuilder("BiomeId")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(ClassNames.GETTER)
-                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE)
                 .addStaticBlock(
                         CodeBlock.builder()
                                 .addStatement("MAP1 = $L", "new BiomeId[256]")
