@@ -12,10 +12,8 @@ import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
-import org.allaymc.api.entity.data.AnimateAction;
-import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.*;
 import org.allaymc.api.entity.data.EntityEvent;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -744,6 +742,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void applyAction(AnimateAction action, double rowingTime) {
         forEachViewers(viewer -> viewer.viewEntityAction(thisEntity, action, rowingTime));
+    }
+
+    @Override
+    public void applyAnimation(EntityAnimation animation) {
+        forEachViewers(viewer -> viewer.viewEntityAnimation(thisEntity, animation));
     }
 
     @Override

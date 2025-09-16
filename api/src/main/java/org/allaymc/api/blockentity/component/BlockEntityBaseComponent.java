@@ -78,9 +78,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
         return packet;
     }
 
-    /**
-     * @see #sendBlockEntityToViewers(boolean)
-     */
+    // TODO: remove it
     default void sendPacketToViewers(BedrockPacket packet) {
         sendPacketToViewers(packet, true);
     }
@@ -92,6 +90,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
      * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
      *                    will be sent in the next tick of the chunk that the block entity is currently in.
      */
+    // TODO: remove it
     default void sendPacketToViewers(BedrockPacket packet, boolean immediately) {
         var pos = getPosition();
         var chunk = pos.dimension().getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
@@ -101,32 +100,6 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
         } else {
             chunk.addChunkPacket(packet);
         }
-    }
-
-    /**
-     * @see #sendBlockEntityToViewers(boolean)
-     */
-    default void sendBlockEntityToViewers() {
-        sendBlockEntityToViewers(true);
-    }
-
-    /**
-     * Sends the block entity to its viewers.
-     *
-     * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
-     *                    will be sent in the next tick of the chunk that the block entity is currently in.
-     */
-    default void sendBlockEntityToViewers(boolean immediately) {
-        sendPacketToViewers(createBlockEntityDataPacket(), immediately);
-    }
-
-    /**
-     * Whether the block entity should be sent to the client.
-     *
-     * @return Whether the block entity should be sent to the client
-     */
-    default boolean sendToClient() {
-        return true;
     }
 
     /**

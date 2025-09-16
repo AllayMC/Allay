@@ -119,10 +119,6 @@ public final class AllayChunkManager implements ChunkManager {
         return shouldTick;
     }
 
-    public void sendChunkPackets() {
-        forEachLoadedChunks(chunk -> ((AllayUnsafeChunk) chunk.toUnsafeChunk()).sendChunkPackets());
-    }
-
     @Override
     public void removeUnusedChunksImmediately() {
         this.chunkHolders.values().forEach(chunkHolder -> {

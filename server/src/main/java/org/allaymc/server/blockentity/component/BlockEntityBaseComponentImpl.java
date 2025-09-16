@@ -2,6 +2,7 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -15,10 +16,13 @@ import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.ComponentManager;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
+
+import java.util.Objects;
 
 /**
  * @author daoge_cmd
@@ -38,6 +42,8 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
 
     @Manager
     protected ComponentManager manager;
+    @ComponentObject
+    protected BlockEntity thisBlockEntity;
 
     @Getter
     protected BlockEntityType<?> blockEntityType;
@@ -107,6 +113,39 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     public void applyClientChange(EntityPlayer player, NbtMap nbt) {
         loadNBT(nbt);
     }
+
+    /**
+     * Checks whether the block entity should be sent to the client.
+     */
+    public boolean sendToClient() {
+        return true;
+    }
+
+
+    /**
+     * @see #sendBlockEntityToViewers(boolean)
+     */
+    public void sendBlockEntityToViewers() {
+        sendBlockEntityToViewers(true);
+    }
+
+    /**
+     * Sends the block entity to its viewers.
+     *
+     * @param immediately whether the block entity should be sent immediately. When {@code false}, the block
+     *                    entity will be sent in the next tick of the chunk that the block entity is currently in.
+     */
+    public void sendBlockEntityToViewers(boolean immediately) {
+        var pos = getPosition();
+        var chunk = pos.dimension().getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
+        Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
+        if (immediately) {
+            chunk.forEachChunkLoaders(loader -> loader.viewBlockEntity(thisBlockEntity));
+        } else {
+            chunk.forEachChunkLoaderLater(loader -> loader.viewBlockEntity(thisBlockEntity));
+        }
+    }
+
 
     public void onBlockNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
         manager.callEvent(event);

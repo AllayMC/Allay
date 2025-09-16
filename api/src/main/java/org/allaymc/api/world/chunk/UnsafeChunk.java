@@ -57,6 +57,15 @@ public interface UnsafeChunk {
     }
 
     /**
+     * For-each the chunk loaders of the chunk in the next chunk tick.
+     *
+     * @param consumer the consumer to be applied to each chunk loader
+     */
+    default void forEachChunkLoaderLater(Consumer<ChunkLoader> consumer) {
+        addChunkTask(() -> forEachChunkLoaders(consumer));
+    }
+
+    /**
      * Add a chunk loader to this chunk.
      *
      * @param chunkLoader the chunk loader to add
@@ -80,10 +89,18 @@ public interface UnsafeChunk {
     }
 
     /**
+     * Adds a chunk task to the chunk. The task will be executed in the next chunk tick.
+     *
+     * @param task the task to execute
+     */
+    void addChunkTask(Runnable task);
+
+    /**
      * Add a chunk packet to the chunk. The packet will be sent to all chunk loaders the next tick.
      *
      * @param packet the packet to add
      */
+    // TODO: remove it
     void addChunkPacket(BedrockPacket packet);
 
     /**
@@ -92,6 +109,7 @@ public interface UnsafeChunk {
      * @param packet               the packet to add
      * @param chunkLoaderPredicate the predicate to match chunk loaders
      */
+    // TODO: remove it
     void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     /**
@@ -100,6 +118,7 @@ public interface UnsafeChunk {
      *
      * @param packet the packet to send
      */
+    // TODO: remove it
     void sendChunkPacket(BedrockPacket packet);
 
     /**
@@ -109,6 +128,7 @@ public interface UnsafeChunk {
      * @param packet               the packet to send
      * @param chunkLoaderPredicate the predicate to match chunk loaders
      */
+    // TODO: remove it
     void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     /**

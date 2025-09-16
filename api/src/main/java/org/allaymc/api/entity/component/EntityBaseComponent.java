@@ -6,10 +6,7 @@ import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
-import org.allaymc.api.entity.data.AnimateAction;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityEvent;
-import org.allaymc.api.entity.data.EntityFlag;
+import org.allaymc.api.entity.data.*;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
@@ -682,10 +679,17 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Apply an action to the entity.
      *
-     * @param action     the action of the action
+     * @param action     the action to apply
      * @param rowingTime the rowing time of the action
      */
     void applyAction(AnimateAction action, double rowingTime);
+
+    /**
+     * Apply an animation to the entity.
+     *
+     * @param animation the animation to apply
+     */
+    void applyAnimation(EntityAnimation animation);
 
     /**
      * Add a tag to the entity.

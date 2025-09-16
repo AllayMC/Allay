@@ -186,6 +186,8 @@ public class AllayChunk implements Chunk {
 
         void removeChunkLoader(ChunkLoader chunkLoader);
 
+        void addChunkTask(Runnable task);
+
         void addChunkPacket(BedrockPacket packet);
 
         void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);

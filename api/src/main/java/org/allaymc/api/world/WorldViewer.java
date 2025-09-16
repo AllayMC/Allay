@@ -1,11 +1,13 @@
 package org.allaymc.api.world;
 
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -90,6 +92,14 @@ public interface WorldViewer {
      * @param entity the entity to view
      */
     <T extends Entity & EntityContainerHolderComponent> void viewEntityArmors(T entity);
+
+    /**
+     * Views the animation performed by the entity passed.
+     *
+     * @param entity    the entity to view
+     * @param animation the animation to play
+     */
+    void viewEntityAnimation(Entity entity, EntityAnimation animation);
 
     /**
      * Views an event that is happening on the entity passed.
@@ -255,4 +265,11 @@ public interface WorldViewer {
      * @param debugShapes the debug shapes to remove.
      */
     void removeDebugShapes(Set<DebugShape> debugShapes);
+
+    /**
+     * Views the block entity passed.
+     *
+     * @param blockEntity the block entity to view
+     */
+    void viewBlockEntity(BlockEntity blockEntity);
 }

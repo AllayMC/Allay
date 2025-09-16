@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.debugshape.*;
 import org.allaymc.api.debugshape.DebugShape;
@@ -13,6 +14,7 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerChunkLoaderComponent;
 import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -36,6 +38,8 @@ import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
+import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -335,6 +339,17 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     }
 
     @Override
+    public void viewEntityAnimation(Entity entity, EntityAnimation animation) {
+        var packet = new AnimateEntityPacket();
+        packet.setAnimation(animation.name());
+        packet.setNextState(animation.nextState());
+        packet.setStopExpression(animation.stopCondition());
+        packet.setController(animation.controller());
+        packet.getRuntimeEntityIds().add(entity.getRuntimeId());
+        this.networkComponent.sendPacket(packet);
+    }
+
+    @Override
     public void viewPlayerSkin(EntityPlayer player) {
         var skin = player.getSkin();
         var packet = new PlayerSkinPacket();
@@ -402,11 +417,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     public Location3dc getLocation() {
         // NOTICE: Don't call thisPlayer.getLocation() here which will cause stack over flow error
         return this.baseComponent.getLocation();
-    }
-
-    @Override
-    public boolean isLoaderActive() {
-        return thisPlayer.isSpawned();
     }
 
     @Override
@@ -1126,5 +1136,17 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             );
             default -> throw new IllegalStateException("Unexpected value: " + shape);
         };
+    }
+
+    @Override
+    public void viewBlockEntity(BlockEntity blockEntity) {
+        if (!((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).sendToClient()) {
+            return;
+        }
+
+        var packet = new BlockEntityDataPacket();
+        packet.setBlockPosition(MathUtils.toCBVec(blockEntity.getPosition()));
+        packet.setData(blockEntity.saveNBT());
+        this.networkComponent.sendPacket(packet);
     }
 }

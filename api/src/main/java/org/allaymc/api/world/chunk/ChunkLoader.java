@@ -21,13 +21,6 @@ public interface ChunkLoader extends WorldViewer, PacketReceiver {
     Location3dc getLocation();
 
     /**
-     * Check if the loader is active.
-     *
-     * @return {@code true} if the loader is active, {@code false} otherwise.
-     */
-    boolean isLoaderActive();
-
-    /**
      * Get the chunk loading radius.
      *
      * @return the chunk loading radius

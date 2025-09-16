@@ -19,6 +19,7 @@ import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
+import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.allaymc.server.world.manager.AllayBlockUpdateManager;
 import org.allaymc.server.world.manager.AllayChunkManager;
@@ -64,16 +65,15 @@ public class AllayDimension implements Dimension {
     }
 
     public void tick(long currentTick) {
-        // There may be new chunk packets during sleeping, let's send them first
-        this.chunkManager.sendChunkPackets();
-
-        // Ticking
         this.entityManager.tick(currentTick);
         this.chunkManager.tick(currentTick);
         this.blockUpdateManager.tick();
-
-        // Send the new chunk packets again after most of the work is done
-        this.chunkManager.sendChunkPackets();
+        this.chunkManager.forEachLoadedChunks(c -> {
+            var chunk = (AllayUnsafeChunk) c.toUnsafeChunk();
+            chunk.sendChunkPackets(); // TODO: remove it
+            chunk.sendBlockUpdates();
+            chunk.performChunkTasks();
+        });
     }
 
     public void shutdown() {

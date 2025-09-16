@@ -96,10 +96,6 @@ public final class ChunkLoaderHolder {
     }
 
     public void tick() {
-        if (!chunkLoader.isLoaderActive()) {
-            return;
-        }
-
         long currentLoaderChunkPosHashed;
         var floor = MathUtils.floor(chunkLoader.getLocation());
         if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {

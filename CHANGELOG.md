@@ -32,6 +32,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced a bunch of functional interfaces in package `utils.funtion`.
 - (API) Introduced classes `AnimateAction`, `EntityEvent`, `EntityFlag` and `EntityData`, and they correspond to classes in the protocol library.
 - (API) Introduced enum `DiscType` for music disc.
+- (API) Introduced method `Chunk.addChunkTask()` that adds a task which will be performed later in the chunk tick.
+- (API) Introduced method `EntityBaaeComponent.applyAnimation()` and class `EntityAnimation`.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
 - Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
@@ -115,6 +117,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
 - (API) Removed methods `Dimension.addLevelSoundEvent()` and `Dimension.addLevelEvent()` due to the new sound/particle system.
 - (API) Removed methods `Dimension.sendBlockUpdateTo()`, please use `WorldViewer.viewBlockUpdate()` instead.
+- (API) Removed network related methods in class `BlockEntityBaseComponent`.
+- (API) Removed methods `BlockEntityHolderComponent.createBlockEntity()` and `BlockEntityHolderComponent.removeBlockEntity()` since these methods are not expected
+  to be touched by the user.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

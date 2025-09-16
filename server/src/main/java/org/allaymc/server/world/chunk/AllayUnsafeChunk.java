@@ -58,7 +58,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<WorldViewer.BlockUpdate> blockUpdates;
     protected final Queue<WorldViewer.BlockUpdate> extraBlockUpdates;
-    protected final Queue<ChunkPacketEntry> chunkPacketQueue;
+    protected final Queue<ChunkPacketEntry> chunkPacketQueue; // TODO: remove it?
+    protected final Queue<Runnable> chunkTaskQueue;
     protected final AllayChunk safeChunk;
     @Getter
     @Setter
@@ -100,6 +101,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.blockUpdates = PlatformDependent.newMpscQueue();
         this.extraBlockUpdates = PlatformDependent.newMpscQueue();
         this.chunkPacketQueue = PlatformDependent.newMpscQueue();
+        this.chunkTaskQueue = PlatformDependent.newMpscQueue();
         this.safeChunk = new AllayChunk(this);
     }
 
@@ -355,17 +357,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return newHeight;
     }
 
-    public void clearBlockChanges() {
-        blockUpdates.clear();
-        extraBlockUpdates.clear();
-    }
-
-    protected void sendBlockUpdates() {
-        var collectedBlockUpdates = collectUpdates(blockUpdates);
-        var collectedExtraBlockUpdates = collectUpdates(extraBlockUpdates);
-        this.chunkLoaders.forEach(chunkLoader -> chunkLoader.viewBlockUpdates(this.toSafeChunk(), collectedBlockUpdates, collectedExtraBlockUpdates));
-    }
-
     protected Collection<WorldViewer.BlockUpdate> collectUpdates(Queue<WorldViewer.BlockUpdate> queue) {
         var list = new ArrayList<WorldViewer.BlockUpdate>();
         WorldViewer.BlockUpdate update;
@@ -423,20 +414,50 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return safeChunk;
     }
 
+    // TODO: remove it
     public void sendChunkPackets() {
         if (chunkLoaders.isEmpty()) {
-            clearBlockChanges();
             chunkPacketQueue.clear();
             return;
         }
 
-        sendBlockUpdates();
         if (!chunkPacketQueue.isEmpty()) {
             ChunkPacketEntry entry;
             while ((entry = chunkPacketQueue.poll()) != null) {
                 sendChunkPacket(entry.packet(), entry.chunkLoaderPredicate());
             }
         }
+    }
+
+    public void sendBlockUpdates() {
+        if (chunkLoaders.isEmpty()) {
+            blockUpdates.clear();
+            extraBlockUpdates.clear();
+            return;
+        }
+
+        var collectedBlockUpdates = collectUpdates(blockUpdates);
+        var collectedExtraBlockUpdates = collectUpdates(extraBlockUpdates);
+        chunkLoaders.forEach(chunkLoader -> chunkLoader.viewBlockUpdates(toSafeChunk(), collectedBlockUpdates, collectedExtraBlockUpdates));
+    }
+
+    public void performChunkTasks() {
+        if (chunkLoaders.isEmpty()) {
+            chunkTaskQueue.clear();
+            return;
+        }
+
+        if (!chunkTaskQueue.isEmpty()) {
+            Runnable task;
+            while ((task = chunkTaskQueue.poll()) != null) {
+                task.run();
+            }
+        }
+    }
+
+    @Override
+    public void addChunkTask(Runnable task) {
+        chunkTaskQueue.add(task);
     }
 
     @Override

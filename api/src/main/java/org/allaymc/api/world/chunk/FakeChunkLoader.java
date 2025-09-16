@@ -2,11 +2,13 @@ package org.allaymc.api.world.chunk;
 
 import io.netty.util.AbstractReferenceCounted;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.AnimateAction;
+import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.data.EntityEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -27,8 +29,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 /**
- * Chunk loader that only loads chunks and do not handle data packets. Useful
- * for loading a range of chunks in some places like spawn point.
+ * Chunk loader that only loads chunks. Useful for loading a range of chunks in some places like spawn point.
  *
  * @author daoge_cmd
  */
@@ -37,11 +38,6 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     @Override
     public Location3dc getLocation() {
         return locationSupplier.get();
-    }
-
-    @Override
-    public boolean isLoaderActive() {
-        return true;
     }
 
     @Override
@@ -108,6 +104,10 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityArmors(T entity) {
+    }
+
+    @Override
+    public void viewEntityAnimation(Entity entity, EntityAnimation animation) {
     }
 
     @Override
@@ -184,5 +184,9 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
 
     @Override
     public void removeDebugShapes(Set<DebugShape> debugShapes) {
+    }
+
+    @Override
+    public void viewBlockEntity(BlockEntity blockEntity) {
     }
 }
