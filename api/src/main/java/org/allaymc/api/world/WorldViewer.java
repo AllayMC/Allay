@@ -1,5 +1,6 @@
 package org.allaymc.api.world;
 
+import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
@@ -195,6 +196,14 @@ public interface WorldViewer {
      */
     record BlockUpdate(int x, int y, int z, BlockState blockState) {
     }
+
+    /**
+     * Views an action performed by a block, including things such as a chest opening.
+     *
+     * @param pos    the pos of the block
+     * @param action the action performed
+     */
+    void viewBlockAction(Vector3ic pos, BlockAction action);
 
     /**
      * Views a sound with the specific volume and pitch at the pos passed.

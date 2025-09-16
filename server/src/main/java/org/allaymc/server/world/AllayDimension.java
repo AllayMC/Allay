@@ -70,7 +70,6 @@ public class AllayDimension implements Dimension {
         this.blockUpdateManager.tick();
         this.chunkManager.forEachLoadedChunks(c -> {
             var chunk = (AllayUnsafeChunk) c.toUnsafeChunk();
-            chunk.sendChunkPackets(); // TODO: remove it
             chunk.sendBlockUpdates();
             chunk.performChunkTasks();
         });

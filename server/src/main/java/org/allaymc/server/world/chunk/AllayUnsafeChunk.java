@@ -27,14 +27,12 @@ import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.allaymc.server.world.manager.AllayEntityManager;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jctools.maps.NonBlockingHashMap;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -58,7 +56,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<WorldViewer.BlockUpdate> blockUpdates;
     protected final Queue<WorldViewer.BlockUpdate> extraBlockUpdates;
-    protected final Queue<ChunkPacketEntry> chunkPacketQueue; // TODO: remove it?
     protected final Queue<Runnable> chunkTaskQueue;
     protected final AllayChunk safeChunk;
     @Getter
@@ -100,7 +97,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.chunkLoaders = Sets.newConcurrentHashSet();
         this.blockUpdates = PlatformDependent.newMpscQueue();
         this.extraBlockUpdates = PlatformDependent.newMpscQueue();
-        this.chunkPacketQueue = PlatformDependent.newMpscQueue();
         this.chunkTaskQueue = PlatformDependent.newMpscQueue();
         this.safeChunk = new AllayChunk(this);
     }
@@ -414,21 +410,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return safeChunk;
     }
 
-    // TODO: remove it
-    public void sendChunkPackets() {
-        if (chunkLoaders.isEmpty()) {
-            chunkPacketQueue.clear();
-            return;
-        }
-
-        if (!chunkPacketQueue.isEmpty()) {
-            ChunkPacketEntry entry;
-            while ((entry = chunkPacketQueue.poll()) != null) {
-                sendChunkPacket(entry.packet(), entry.chunkLoaderPredicate());
-            }
-        }
-    }
-
     public void sendBlockUpdates() {
         if (chunkLoaders.isEmpty()) {
             blockUpdates.clear();
@@ -461,16 +442,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public void addChunkPacket(BedrockPacket packet) {
-        chunkPacketQueue.add(new ChunkPacketEntry(packet, null));
-    }
-
-    @Override
-    public void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
-        chunkPacketQueue.add(new ChunkPacketEntry(packet, chunkLoaderPredicate));
-    }
-
-    @Override
     public Set<ChunkLoader> getChunkLoaders() {
         return Collections.unmodifiableSet(chunkLoaders);
     }
@@ -483,20 +454,5 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public void removeChunkLoader(ChunkLoader chunkLoader) {
         chunkLoaders.remove(chunkLoader);
-    }
-
-    @Override
-    public void sendChunkPacket(BedrockPacket packet) {
-        chunkLoaders.forEach(chunkLoader -> chunkLoader.sendPacket(packet));
-    }
-
-    @Override
-    public void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
-        chunkLoaders.stream()
-                .filter(chunkLoader -> chunkLoaderPredicate == null || chunkLoaderPredicate.test(chunkLoader))
-                .forEach(chunkLoader -> chunkLoader.sendPacket(packet));
-    }
-
-    protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
     }
 }

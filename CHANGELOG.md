@@ -125,6 +125,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
   to be touched by the user.
 - (API) Removed method `EntityBaseComponent.applyEntityEvent()` which is replaced by the new entity action system.
 - (API) Removed method `EntityBaseComponent.saveNBTWithoutPos()` which is never used.
+- (API) Removed method `Position3ic.toNetwork()`.
+- (API) Removed method `BlockEntityBaseComponent.sendPacketToViewers()`.
+- (API) Removed chunk packet related methods in `UnsafeChunk`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

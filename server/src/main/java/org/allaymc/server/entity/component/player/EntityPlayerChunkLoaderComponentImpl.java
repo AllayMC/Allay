@@ -2,6 +2,10 @@ package org.allaymc.server.entity.component.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.action.BlockAction;
+import org.allaymc.api.block.action.ContinueBreakAction;
+import org.allaymc.api.block.action.SimpleBlockAction;
+import org.allaymc.api.block.action.StartBreakAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.container.ContainerHolder;
@@ -83,6 +87,11 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     protected static final int BLOCK_UPDATE_NETWORK = 0b0010;
     protected static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
     protected static final int BLOCK_UPDATE_PRIORITY = 0b1000;
+
+    // Constants used in BlockEventPacket
+    protected static final int BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE = 1;
+    protected static final int BLOCK_EVENT_DATA_OPEN_CHEST = 1;
+    protected static final int BLOCK_EVENT_DATA_CLOSE_CHEST = 0;
 
     /**
      * A map which contains the network offset of some entities. The network offset is the additional offset in
@@ -364,6 +373,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case SimpleEntityAction.SWING_ARM -> {
                 if (entity instanceof EntityPlayer player) {
                     if (thisPlayer == player) {
+                        // Do not send to the player itself
                         return;
                     }
 
@@ -617,6 +627,55 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
             this.networkComponent.sendPacket(packet);
         }
+    }
+
+    @Override
+    public void viewBlockAction(Vector3ic p, BlockAction action) {
+        var pos = MathUtils.toCBVec(p);
+        var pos3f = Vector3f.from(p.x(), p.y(), p.z());
+        switch (action) {
+            case SimpleBlockAction.OPEN -> {
+                var packet = new BlockEventPacket();
+                packet.setBlockPosition(pos);
+                packet.setEventType(BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
+                packet.setEventData(BLOCK_EVENT_DATA_OPEN_CHEST);
+                this.networkComponent.sendPacket(packet);
+            }
+            case SimpleBlockAction.CLOSE -> {
+                var packet = new BlockEventPacket();
+                packet.setBlockPosition(pos);
+                packet.setEventType(BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
+                packet.setEventData(BLOCK_EVENT_DATA_CLOSE_CHEST);
+                this.networkComponent.sendPacket(packet);
+            }
+            case StartBreakAction(double breakTime) -> {
+                var packet = new LevelEventPacket();
+                packet.setType(LevelEvent.BLOCK_START_BREAK);
+                packet.setPosition(pos3f);
+                packet.setData(toNetworkBreakTime(breakTime));
+                this.networkComponent.sendPacket(packet);
+            }
+            case ContinueBreakAction(double breakTime) -> {
+                var packet = new LevelEventPacket();
+                packet.setType(LevelEvent.BLOCK_UPDATE_BREAK);
+                packet.setPosition(pos3f);
+                packet.setData(toNetworkBreakTime(breakTime));
+                this.networkComponent.sendPacket(packet);
+            }
+            case SimpleBlockAction.STOP_BREAK -> {
+                var packet = new LevelEventPacket();
+                packet.setType(LevelEvent.BLOCK_STOP_BREAK);
+                packet.setPosition(pos3f);
+                this.networkComponent.sendPacket(packet);
+            }
+            default ->
+                    throw new IllegalStateException("Unhandled block action type: " + action.getClass().getSimpleName());
+        }
+    }
+
+    protected int toNetworkBreakTime(double breakTime) {
+        if (breakTime == 0) return 65535;
+        return (int) (65535 / (breakTime * 20));
     }
 
     protected void encodeBlockUpdates(UpdateSubChunkBlocksPacket[] packets, Chunk chunk, Collection<BlockUpdate> blockUpdates, boolean isExtraLayer) {

@@ -1,6 +1,9 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.action.ContinueBreakAction;
+import org.allaymc.api.block.action.SimpleBlockAction;
+import org.allaymc.api.block.action.StartBreakAction;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
@@ -21,19 +24,15 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
-
 /**
  * @author Cool_Loong
  */
-// TODO: Replace raw level event packet with viewBlockAction()
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
@@ -53,7 +52,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected BlockState blockToBreak;
 
     // Seconds
-    protected double timeNeededToBreak;
+    protected double breakTime;
     // Ticks
     protected double stopBreakingTime;
 
@@ -156,25 +155,18 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.breakingPosZ = z;
         this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new Block(blockToBreak, new Position3i(x, y, z, player.getDimension())), faceToBreak, player.getItemInHand(), player);
         if (player.getGameMode() != GameMode.CREATIVE) {
-            this.timeNeededToBreak = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
+            this.breakTime = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
         } else {
             // Creative mode players can break blocks instantly
-            this.timeNeededToBreak = 0;
+            this.breakTime = 0;
         }
-        this.stopBreakingTime = startBreakingTime + this.timeNeededToBreak * 20.0d;
+        this.stopBreakingTime = startBreakingTime + this.breakTime * 20.0d;
 
-        var chunk = player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ);
-        var pk = new LevelEventPacket();
-        pk.setType(BLOCK_START_BREAK);
-        pk.setPosition(Vector3f.from(x, y, z));
-        pk.setData(toNetworkBreakTime(this.timeNeededToBreak));
-        chunk.addChunkPacket(pk);
-        sendBreakingPracticeAndTime(player, startBreakingTime);
-    }
-
-    protected int toNetworkBreakTime(double breakTime) {
-        if (breakTime == 0) return 65535;
-        return (int) (65535 / (this.timeNeededToBreak * 20));
+        player.getDimension().addBlockAction(x, y, z, new StartBreakAction(this.breakTime));
+        player.getDimension().addParticle(
+                this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
+                new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
+        );
     }
 
     protected void stopBreak(EntityPlayer player) {
@@ -183,18 +175,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
-        var chunk = player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ);
-        var pk = new LevelEventPacket();
-        pk.setType(BLOCK_STOP_BREAK);
-        pk.setPosition(Vector3f.from(this.breakingPosX, this.breakingPosY, this.breakingPosZ));
-        chunk.addChunkPacket(pk);
-
+        player.getDimension().addBlockAction(this.breakingPosX, this.breakingPosY, this.breakingPosZ, SimpleBlockAction.STOP_BREAK);
         this.breakingPosX = Integer.MAX_VALUE;
         this.breakingPosY = Integer.MAX_VALUE;
         this.breakingPosZ = Integer.MAX_VALUE;
         this.faceToBreak = null;
         this.blockToBreak = null;
-        this.timeNeededToBreak = 0;
+        this.breakTime = 0;
         this.stopBreakingTime = 0;
     }
 
@@ -222,38 +209,26 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         stopBreak(player);
     }
 
-    protected void sendBreakingPracticeAndTime(EntityPlayer player, long currentTime) {
-        updateBreakingTime(player, currentTime);
-
-        player.getDimension().addParticle(
-                this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
-                new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
-        );
-
-        var pk2 = new LevelEventPacket();
-        pk2.setType(BLOCK_UPDATE_BREAK);
-        pk2.setPosition(Vector3f.from(this.breakingPosX, this.breakingPosY, this.breakingPosZ));
-        pk2.setData(toNetworkBreakTime(this.timeNeededToBreak));
-        player.getDimension().getChunkManager().getChunkByDimensionPos(breakingPosX, breakingPosZ).sendChunkPacket(pk2);
-    }
-
-    protected void checkInteractDistance(EntityPlayer player) {
+    protected boolean checkInteractDistance(EntityPlayer player) {
         if (!player.canReach(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f)) {
             log.debug("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
+            return false;
         }
+
+        return true;
     }
 
     protected void updateBreakingTime(EntityPlayer player, long currentTime) {
         var newBreakingTime = this.blockToBreak.getBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
-        if (this.timeNeededToBreak == newBreakingTime) {
+        if (this.breakTime == newBreakingTime) {
             return;
         }
 
         // Breaking time has changed, make adjustments
         var timeLeft = this.stopBreakingTime - currentTime;
-        this.stopBreakingTime = currentTime + timeLeft * (this.timeNeededToBreak / newBreakingTime);
-        this.timeNeededToBreak = newBreakingTime;
+        this.stopBreakingTime = currentTime + timeLeft * (this.breakTime / newBreakingTime);
+        this.breakTime = newBreakingTime;
     }
 
     protected void handleInputData(EntityPlayer player, Set<PlayerAuthInputData> inputData) {
@@ -314,9 +289,16 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             handleMovement(player, packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0), packet.getRotation());
         }
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
-        if (isBreakingBlock()) {
-            sendBreakingPracticeAndTime(player, receiveTime);
-            checkInteractDistance(player);
+        if (isBreakingBlock() && checkInteractDistance(player)) {
+            player.getDimension().addParticle(
+                    this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
+                    new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
+            );
+            updateBreakingTime(player, receiveTime);
+            player.getDimension().addBlockAction(
+                    this.breakingPosX, this.breakingPosY, this.breakingPosZ,
+                    new ContinueBreakAction(this.breakTime)
+            );
         }
         return PacketSignal.UNHANDLED;
     }

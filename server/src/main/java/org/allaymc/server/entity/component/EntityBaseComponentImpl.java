@@ -457,7 +457,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void despawnFromAll() {
-        viewers.forEach(this::despawnFrom);
+        for (var iterator = viewers.iterator(); iterator.hasNext(); ) {
+            iterator.next().removeEntity(thisEntity);
+            iterator.remove();
+        }
     }
 
     public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {

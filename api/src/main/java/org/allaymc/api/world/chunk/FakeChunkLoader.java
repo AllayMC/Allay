@@ -1,6 +1,7 @@
 package org.allaymc.api.world.chunk;
 
 import io.netty.util.AbstractReferenceCounted;
+import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
@@ -151,6 +152,10 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
 
     @Override
     public void viewBlockUpdates(Chunk chunk, Collection<BlockUpdate> blockUpdates, Collection<BlockUpdate> extraBlockUpdates) {
+    }
+
+    @Override
+    public void viewBlockAction(Vector3ic pos, BlockAction action) {
     }
 
     @Override

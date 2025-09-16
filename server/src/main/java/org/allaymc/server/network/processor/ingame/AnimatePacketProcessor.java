@@ -1,5 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerAnimationEvent;
 import org.allaymc.server.network.processor.PacketProcessor;
@@ -19,9 +20,7 @@ public class AnimatePacketProcessor extends PacketProcessor<AnimatePacket> {
         }
 
         if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
-            if (player.isCurrentChunkLoaded()) {
-                player.getCurrentChunk().addChunkPacket(packet, chunkLoader -> chunkLoader != player);
-            }
+            player.applyAction(SimpleEntityAction.SWING_ARM);
             return PacketSignal.HANDLED;
         }
 

@@ -7,12 +7,7 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
-
-import java.util.Objects;
 
 /**
  * @author daoge_cmd
@@ -64,43 +59,6 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
      * @param nbt The NBT data to load
      */
     void loadNBT(NbtMap nbt);
-
-    /**
-     * Creates a BlockEntityDataPacket for the block entity.
-     *
-     * @return The BlockEntityDataPacket for the block entity
-     */
-    default BlockEntityDataPacket createBlockEntityDataPacket() {
-        var packet = new BlockEntityDataPacket();
-        var pos = getPosition();
-        packet.setBlockPosition(Vector3i.from(pos.x(), pos.y(), pos.z()));
-        packet.setData(saveNBT());
-        return packet;
-    }
-
-    // TODO: remove it
-    default void sendPacketToViewers(BedrockPacket packet) {
-        sendPacketToViewers(packet, true);
-    }
-
-    /**
-     * Sends a packet to the block entity's viewers.
-     *
-     * @param packet      the packet to send
-     * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
-     *                    will be sent in the next tick of the chunk that the block entity is currently in.
-     */
-    // TODO: remove it
-    default void sendPacketToViewers(BedrockPacket packet, boolean immediately) {
-        var pos = getPosition();
-        var chunk = pos.dimension().getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
-        Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
-        if (immediately) {
-            chunk.sendChunkPacket(packet);
-        } else {
-            chunk.addChunkPacket(packet);
-        }
-    }
 
     /**
      * Gets the block state of the block entity.

@@ -2,6 +2,7 @@ package org.allaymc.api.world;
 
 import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
 import it.unimi.dsi.fastutil.ints.IntObjectPair;
+import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
@@ -849,6 +850,25 @@ public interface Dimension {
      */
     default int getBlockEntityCount() {
         return getChunkManager().getLoadedChunks().stream().mapToInt(chunk -> chunk.getBlockEntities().size()).sum();
+    }
+
+    /**
+     * @see #addBlockAction(int, int, int, BlockAction)
+     */
+    default void addBlockAction(Vector3ic pos, BlockAction action) {
+        addBlockAction(pos.x(), pos.y(), pos.z(), action);
+    }
+
+    /**
+     * Adds a block action at the pos passed.
+     *
+     * @param x      the x coordinate of the pos
+     * @param y      the y coordinate of the pos
+     * @param z      the z coordinate of the pos
+     * @param action the action
+     */
+    default void addBlockAction(int x, int y, int z, BlockAction action) {
+        getChunkManager().getChunkByDimensionPos(x, z).forEachChunkLoaders(loader -> loader.viewBlockAction(new Vector3i(x, y, z), action));
     }
 
     /**

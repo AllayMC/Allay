@@ -1,15 +1,14 @@
 package org.allaymc.server.blockentity.component;
 
+import org.allaymc.api.block.action.SimpleBlockAction;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.sound.SimpleSound;
-import org.allaymc.api.world.sound.Sound;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
-import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**
  * @author daoge_cmd
@@ -33,14 +32,14 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
             var doubleChestContainer = containerHolder.getDoubleChestContainer();
             doubleChestContainer.addOpenListener(viewer -> {
                 if (doubleChestContainer.getViewers().size() == 1) {
-                    addSoundAndSendBlockEvent(getPosition(), SimpleSound.CHEST_OPEN, 2);
-                    addSoundAndSendBlockEvent(pairableComponent.getPair().getPosition(), SimpleSound.CHEST_OPEN, 2);
+                    changeChestState(getPosition(), true);
+                    changeChestState(pairableComponent.getPair().getPosition(), true);
                 }
             });
             doubleChestContainer.addCloseListener(viewer -> {
                 if (doubleChestContainer.getViewers().isEmpty()) {
-                    addSoundAndSendBlockEvent(getPosition(), SimpleSound.CHEST_CLOSE, 0);
-                    addSoundAndSendBlockEvent(pairableComponent.getPair().getPosition(), SimpleSound.CHEST_CLOSE, 0);
+                    changeChestState(getPosition(), false);
+                    changeChestState(pairableComponent.getPair().getPosition(), false);
                 }
             });
         }
@@ -48,23 +47,24 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
         var container = containerHolderComponent.getContainer();
         container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
-                addSoundAndSendBlockEvent(getPosition(), SimpleSound.CHEST_OPEN, 2);
+                changeChestState(getPosition(), true);
             }
         });
         container.addCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
-                addSoundAndSendBlockEvent(getPosition(), SimpleSound.CHEST_CLOSE, 0);
+                changeChestState(getPosition(), false);
             }
         });
     }
 
-    private void addSoundAndSendBlockEvent(Position3ic pos, Sound sound, int eventData) {
-        var packet = new BlockEventPacket();
-        packet.setBlockPosition(pos.toNetwork());
-        packet.setEventType(1);
-        packet.setEventData(eventData);
-
-        pos.dimension().addSound(MathUtils.center(pos), sound);
-        sendPacketToViewers(packet);
+    protected static void changeChestState(Position3ic pos, boolean open) {
+        var dimension = pos.dimension();
+        if (open) {
+            dimension.addSound(MathUtils.center(pos), SimpleSound.CHEST_OPEN);
+            dimension.addBlockAction(pos, SimpleBlockAction.OPEN);
+        } else {
+            dimension.addSound(MathUtils.center(pos), SimpleSound.CHEST_CLOSE);
+            dimension.addBlockAction(pos, SimpleBlockAction.CLOSE);
+        }
     }
 }

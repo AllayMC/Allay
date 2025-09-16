@@ -9,7 +9,6 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.data.DimensionInfo;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 /**
  * @author Cool_Loong | daoge_cmd
@@ -187,14 +185,6 @@ public class AllayChunk implements Chunk {
         void removeChunkLoader(ChunkLoader chunkLoader);
 
         void addChunkTask(Runnable task);
-
-        void addChunkPacket(BedrockPacket packet);
-
-        void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
-
-        void sendChunkPacket(BedrockPacket packet);
-
-        void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
         ChunkState getState();
 

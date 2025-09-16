@@ -6,7 +6,6 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.data.DimensionInfo;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 /**
  * Unsafe is similar to {@link Chunk} but is not thread-safe.
@@ -94,42 +92,6 @@ public interface UnsafeChunk {
      * @param task the task to execute
      */
     void addChunkTask(Runnable task);
-
-    /**
-     * Add a chunk packet to the chunk. The packet will be sent to all chunk loaders the next tick.
-     *
-     * @param packet the packet to add
-     */
-    // TODO: remove it
-    void addChunkPacket(BedrockPacket packet);
-
-    /**
-     * Add a chunk packet to the chunk. The packet will be sent to chunk loaders that match the predicate the next tick.
-     *
-     * @param packet               the packet to add
-     * @param chunkLoaderPredicate the predicate to match chunk loaders
-     */
-    // TODO: remove it
-    void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
-
-    /**
-     * Send packet to all chunk loaders. Compared to {@link #addChunkPacket(BedrockPacket)}, this
-     * method will send the packet immediately instead of sending it in the next tick.
-     *
-     * @param packet the packet to send
-     */
-    // TODO: remove it
-    void sendChunkPacket(BedrockPacket packet);
-
-    /**
-     * Send packet to chunk loaders that match the predicate. Compared to {@link #addChunkPacket(BedrockPacket, Predicate)}, this
-     * method will send the packet immediately instead of sending it in the next tick.
-     *
-     * @param packet               the packet to send
-     * @param chunkLoaderPredicate the predicate to match chunk loaders
-     */
-    // TODO: remove it
-    void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     /**
      * Get the state of the chunk.

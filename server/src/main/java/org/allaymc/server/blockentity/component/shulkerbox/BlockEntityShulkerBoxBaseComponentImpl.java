@@ -1,8 +1,10 @@
 package org.allaymc.server.blockentity.component.shulkerbox;
 
+import org.allaymc.api.block.action.SimpleBlockAction;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
@@ -10,7 +12,6 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.ShulkerBoxContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**
  * @author IWareQ | daoge_cmd
@@ -35,34 +36,14 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
         ShulkerBoxContainerImpl container = containerHolderComponent.getContainer();
         container.addOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
-                BlockEventPacket pk = new BlockEventPacket();
-                pk.setBlockPosition(position.toNetwork());
-                pk.setEventType(1);
-                pk.setEventData(2);
-
-                position.dimension().addSound(
-                        position.x() + 0.5f,
-                        position.y() + 0.5f,
-                        position.z() + 0.5f,
-                        SimpleSound.SHULKER_BOX_OPEN
-                );
-                sendPacketToViewers(pk);
+                position.dimension().addSound(MathUtils.center(position), SimpleSound.SHULKER_BOX_OPEN);
+                position.dimension().addBlockAction(position, SimpleBlockAction.OPEN);
             }
         });
         container.addCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
-                BlockEventPacket pk = new BlockEventPacket();
-                pk.setBlockPosition(position.toNetwork());
-                pk.setEventType(1);
-                pk.setEventData(0);
-
-                position.dimension().addSound(
-                        position.x() + 0.5f,
-                        position.y() + 0.5f,
-                        position.z() + 0.5f,
-                        SimpleSound.SHULKER_BOX_CLOSE
-                );
-                sendPacketToViewers(pk);
+                position.dimension().addSound(MathUtils.center(position), SimpleSound.SHULKER_BOX_CLOSE);
+                position.dimension().addBlockAction(position, SimpleBlockAction.CLOSE);
             }
         });
     }
