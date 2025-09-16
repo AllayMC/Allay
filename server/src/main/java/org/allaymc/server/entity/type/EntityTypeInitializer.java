@@ -82,6 +82,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityPlayerPhysicsComponentImpl::new, EntityPlayerPhysicsComponentImpl.class)
                 .addComponent(EntityPlayerScoreboardViewerComponentImpl::new, EntityPlayerScoreboardViewerComponentImpl.class)
                 .addComponent(EntityPlayerChunkLoaderComponentImpl::new, EntityPlayerChunkLoaderComponentImpl.class)
+                .addComponent(EntityPlayerBossBarViewerComponentImpl::new, EntityPlayerBossBarViewerComponentImpl.class)
                 .build();
     }
 

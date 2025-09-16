@@ -92,6 +92,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved methods `BlockStateData.fromJson()` to class `BlockStateDataLoader`.
 - (API) Moved several data classes for block and item to packages `block.data` and `item.data`.
 - (API) Renamed classes `PlayerArmorContainer`, `PlayerInventoryContainer` and `PlayerOffhandContainer` to `ArmorContainer`, `InventoryContainer` and `OffhandContainer`.
+- (API) Class `BossBar` now accepts `BossBarViewer` instead of `EntityPlayer` directly, but the usage won't change since `EntityPlayer` implemented `BossBarViewer`.
 
 ### Fixed
 

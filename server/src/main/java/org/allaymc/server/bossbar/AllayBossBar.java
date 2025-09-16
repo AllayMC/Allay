@@ -5,8 +5,7 @@ import lombok.Getter;
 import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.bossbar.BossBarColor;
 import org.allaymc.api.bossbar.BossBarStyle;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.cloudburstmc.protocol.bedrock.packet.BossEventPacket;
+import org.allaymc.api.bossbar.BossBarViewer;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -14,14 +13,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * @author daoge_cmd
  */
 public class AllayBossBar implements BossBar {
 
-    protected Set<EntityPlayer> viewers = new HashSet<>();
+    protected Set<BossBarViewer> viewers = new HashSet<>();
     @Getter
     protected String title = "";
     @Getter
@@ -34,89 +32,56 @@ public class AllayBossBar implements BossBar {
     protected boolean darkenSky = false;
 
     @Override
-    public void addViewer(EntityPlayer viewer) {
+    public void addViewer(BossBarViewer viewer) {
         if (viewers.add(viewer)) {
-            var pk = new BossEventPacket();
-            pk.setBossUniqueEntityId(viewer.getRuntimeId());
-            pk.setAction(BossEventPacket.Action.CREATE);
-            pk.setTitle(title);
-            pk.setHealthPercentage(progress);
-            pk.setDarkenSky(darkenSky ? 1 : 0);
-            pk.setColor(color.ordinal());
-            pk.setOverlay(style.ordinal());
-            viewer.sendPacket(pk);
+            viewer.viewBossBar(this);
         }
     }
 
     @Override
-    public void removeViewer(EntityPlayer viewer) {
+    public void removeViewer(BossBarViewer viewer) {
         if (viewers.remove(viewer)) {
-            var pk = new BossEventPacket();
-            pk.setBossUniqueEntityId(viewer.getRuntimeId());
-            pk.setAction(BossEventPacket.Action.REMOVE);
-            viewer.sendPacket(pk);
+            viewer.clearBossBar();
         }
     }
 
     @Override
-    public @UnmodifiableView Collection<EntityPlayer> getViewers() {
+    public @UnmodifiableView Collection<BossBarViewer> getViewers() {
         return Collections.unmodifiableSet(viewers);
     }
 
     @Override
     public void setColor(BossBarColor color) {
         this.color = color;
-        updateProperties();
+        update();
     }
 
     @Override
     public void setStyle(BossBarStyle style) {
         this.style = style;
-        updateProperties();
+        update();
     }
 
     @Override
     public void setDarkenSky(boolean darkenSky) {
         this.darkenSky = darkenSky;
-        sendPacketToViewers(pk -> {
-            pk.setAction(BossEventPacket.Action.UPDATE_PROPERTIES);
-            pk.setDarkenSky(darkenSky ? 1 : 0);
-        });
+        update();
     }
 
     @Override
     public void setProgress(@Range(from = 0, to = 1) float progress) {
         Preconditions.checkArgument(progress >= 0 && progress <= 1, "Progress must be between 0 and 1");
         this.progress = progress;
-        sendPacketToViewers(pk -> {
-            pk.setAction(BossEventPacket.Action.UPDATE_PERCENTAGE);
-            pk.setHealthPercentage(progress);
-        });
+        update();
     }
 
     @Override
     public void setTitle(String name) {
         this.title = name;
-        sendPacketToViewers(pk -> {
-            pk.setAction(BossEventPacket.Action.UPDATE_NAME);
-            pk.setTitle(name);
-        });
+        update();
     }
 
-    protected void updateProperties() {
-        sendPacketToViewers(pk -> {
-            pk.setAction(BossEventPacket.Action.UPDATE_STYLE);
-            pk.setColor(color.ordinal());
-            pk.setOverlay(style.ordinal());
-        });
-    }
-
-    protected void sendPacketToViewers(Consumer<BossEventPacket> processor) {
-        viewers.forEach(viewer -> {
-            var pk = new BossEventPacket();
-            pk.setBossUniqueEntityId(viewer.getRuntimeId());
-            processor.accept(pk);
-            viewer.sendPacket(pk);
-        });
+    protected void update() {
+        this.viewers.forEach(viewer -> viewer.viewBossBar(this));
     }
 }

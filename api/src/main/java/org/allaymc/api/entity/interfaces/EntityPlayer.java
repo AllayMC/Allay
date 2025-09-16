@@ -30,7 +30,8 @@ public interface EntityPlayer extends
         EntityDamageComponent,
         EntityPhysicsComponent,
         EntityPlayerScoreboardViewerComponent,
-        EntityPlayerChunkLoaderComponent {
+        EntityPlayerChunkLoaderComponent,
+        EntityPlayerBossBarViewerComponent {
 
     /**
      * Returns the reachable container for the given full container type. This

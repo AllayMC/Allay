@@ -1,7 +1,6 @@
 package org.allaymc.api.bossbar;
 
 import org.allaymc.api.AllayAPI;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -30,14 +29,14 @@ public interface BossBar {
      *
      * @param viewer the viewer to add
      */
-    void addViewer(EntityPlayer viewer);
+    void addViewer(BossBarViewer viewer);
 
     /**
      * Remove a viewer from the boss bar.
      *
      * @param viewer the viewer to remove
      */
-    void removeViewer(EntityPlayer viewer);
+    void removeViewer(BossBarViewer viewer);
 
     /**
      * Remove all viewers from the boss bar.
@@ -52,7 +51,7 @@ public interface BossBar {
      * @return the viewers of the boss bar
      */
     @UnmodifiableView
-    Collection<EntityPlayer> getViewers();
+    Collection<BossBarViewer> getViewers();
 
     /**
      * Get the color of the boss bar.
