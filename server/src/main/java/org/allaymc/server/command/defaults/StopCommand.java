@@ -15,7 +15,7 @@ public class StopCommand extends VanillaCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            context.getSender().sendTr(TrKeys.MC_COMMANDS_STOP_START);
+            context.getSender().sendTranslatable(TrKeys.MC_COMMANDS_STOP_START);
             Server.getInstance().shutdown();
             return context.success();
         });

@@ -38,7 +38,7 @@ public class DeOpCommand extends VanillaCommand {
             player.setOperator(false);
 
             context.addOutput(TrKeys.MC_COMMANDS_DEOP_SUCCESS, player.getOriginName());
-            player.sendTr(TrKeys.MC_COMMANDS_DEOP_MESSAGE);
+            player.sendTranslatable(TrKeys.MC_COMMANDS_DEOP_MESSAGE);
             return context.success();
         });
     }

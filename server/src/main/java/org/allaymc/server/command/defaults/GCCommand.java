@@ -27,7 +27,7 @@ public class GCCommand extends VanillaCommand {
             }
             System.gc();
             var freedMemory = memory - getCurrentMemoryUsage();
-            context.getSender().sendTr(TrKeys.ALLAY_COMMAND_GC_COMPLETED, freedMemory);
+            context.getSender().sendTranslatable(TrKeys.ALLAY_COMMAND_GC_COMPLETED, freedMemory);
             return context.success();
         });
     }

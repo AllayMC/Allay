@@ -56,7 +56,6 @@ public final class Abilities {
         set(Ability.FLYING, gameMode == GameMode.SPECTATOR);
         set(Ability.INSTABUILD, gameMode == GameMode.CREATIVE);
         set(Ability.TELEPORT, true);
-        this.dirty = true;
         sync();
     }
 
@@ -93,13 +92,11 @@ public final class Abilities {
     }
 
     public void sync() {
-        if (!this.dirty) {
-            return;
+        if (this.dirty) {
+            // Broadcast the packet to all players, so that players can see each other's permission level
+            ((AllayPlayerManager) Server.getInstance().getPlayerManager()).broadcastPacket(encodeUpdateAbilitiesPacket());
+            this.dirty = false;
         }
-
-        // Broadcast the packet to all players, so that players can see each other's permission level
-        Server.getInstance().getPlayerManager().broadcastPacket(encodeUpdateAbilitiesPacket());
-        this.dirty = false;
     }
 
     public UpdateAbilitiesPacket encodeUpdateAbilitiesPacket() {

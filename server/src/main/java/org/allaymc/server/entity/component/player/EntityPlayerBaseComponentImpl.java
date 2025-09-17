@@ -14,7 +14,6 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -35,11 +34,11 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
+import org.allaymc.api.player.Skin;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -50,7 +49,6 @@ import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
 import org.allaymc.server.player.Abilities;
-import org.allaymc.server.player.AllayPlayerManager;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -62,7 +60,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
-import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jctools.maps.NonBlockingHashMap;
 import org.jetbrains.annotations.Range;
@@ -70,7 +67,10 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -97,15 +97,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
-    protected EntityPlayerNetworkComponent networkComponent;
+    protected EntityPlayerNetworkComponentImpl networkComponent;
 
     @Getter
     protected GameMode gameMode;
     @Getter
-    protected SerializedSkin skin;
+    protected Skin skin;
     @Getter
     protected Abilities abilities;
-    protected CommandOriginData commandOriginData;
     protected Location3ic spawnPoint;
     protected boolean requireResendingCommands;
     @Getter
@@ -175,7 +174,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Do not register player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
         // Add parent permission group alone, so that adventure settings and abilities will also be updated
-        this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission().name()), thisPlayer);
+        this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission()), thisPlayer);
     }
 
     @Override
@@ -219,6 +218,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         thisPlayer.viewPlayerGameMode(thisPlayer);
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
+    }
+
+    @Override
+    public void setWalkSpeed(float walkSpeed) {
+        this.abilities.setWalkSpeed(walkSpeed);
     }
 
     @Override
@@ -503,11 +507,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setSkin(SerializedSkin skin) {
+    public void setSkin(Skin skin) {
         this.skin = skin;
         var server = Server.getInstance();
-        server.getPlayerManager().getPlayers().values().forEach(player -> player.viewPlayerSkin(thisPlayer));
-        ((AllayPlayerManager) server.getPlayerManager()).onSkinUpdate(thisPlayer);
+        server.getPlayerManager().forEachPlayer(player -> player.viewPlayerSkin(thisPlayer));
     }
 
     @Override
@@ -589,29 +592,23 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (sender == thisPlayer) {
             var packet = new CommandOutputPacket();
             packet.setType(CommandOutputType.ALL_OUTPUT);
-            packet.setCommandOriginData(sender.getCommandOriginData());
+            packet.setCommandOriginData(new CommandOriginData(CommandOriginType.PLAYER, thisPlayer.getLoginData().getUuid(), "", 0));
             for (var output : outputs) {
                 packet.getMessages().add(new CommandOutputMessage(
-                        status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
+                        // Indicates if the output message was one of a successful command execution
+                        status != CommandResult.FAIL_STATUS,
                         I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()),
-                        new String[0]));
+                        new String[0]
+                ));
             }
             packet.setSuccessCount(status);
-            networkComponent.sendPacket(packet);
+            this.networkComponent.sendPacket(packet);
         } else {
             for (var output : outputs) {
                 var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()) + "]";
                 sendText(str);
             }
         }
-    }
-
-    @Override
-    public CommandOriginData getCommandOriginData() {
-        if (commandOriginData == null) {
-            commandOriginData = new CommandOriginData(CommandOriginType.PLAYER, networkComponent.getLoginData().getUuid(), "", -1);
-        }
-        return commandOriginData;
     }
 
     @Override
@@ -745,19 +742,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
-        if (!forceTranslatedByClient) {
-            sendText(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), key, args));
-            return;
-        }
-
-        var packet = new TextPacket();
-        packet.setType(TextPacket.Type.TRANSLATION);
-        packet.setXuid("");
-        packet.setNeedsTranslation(true);
-        packet.setMessage(key);
-        packet.setParameters(List.of(Utils.objectArrayToStringArray(args)));
-        networkComponent.sendPacket(packet);
+    public void sendTranslatable(String translatable, Object... args) {
+        sendText(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), translatable, args));
     }
 
     @Override

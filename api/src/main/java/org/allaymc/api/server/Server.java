@@ -120,7 +120,7 @@ public interface Server extends TaskCreator, CommandSender {
      * @param text the text message to broadcast
      */
     default void broadcastText(String text) {
-        getPlayerManager().getPlayers().values().forEach(player -> player.sendText(text));
+        getPlayerManager().forEachPlayer(player -> player.sendText(text));
         sendText(text);
     }
 
@@ -150,7 +150,7 @@ public interface Server extends TaskCreator, CommandSender {
      */
     default void broadcastCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         sendCommandOutputs(sender, status, outputs);
-        getPlayerManager().getPlayers().values().forEach(player -> player.sendCommandOutputs(sender, status, outputs));
+        getPlayerManager().forEachPlayer(player -> player.sendCommandOutputs(sender, status, outputs));
     }
 
     /**

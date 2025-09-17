@@ -49,8 +49,6 @@ import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBd;
@@ -83,7 +81,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected static final int DEFAULT_DEAD_TIMER = 20;
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
-    protected static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
 
     @Getter
     protected final Location3d location;
@@ -626,11 +623,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public CommandOriginData getCommandOriginData() {
-        return ENTITY_COMMAND_ORIGIN_DATA;
-    }
-
-    @Override
     public Location3dc getCommandExecuteLocation() {
         return getLocation();
     }
@@ -651,7 +643,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
+    public void sendTranslatable(String translatable, Object... args) {
         // Do nothing
     }
 

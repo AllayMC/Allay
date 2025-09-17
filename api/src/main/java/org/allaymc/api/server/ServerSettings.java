@@ -10,8 +10,6 @@ import lombok.experimental.Accessors;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.data.Difficulty;
-import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
-import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 
 import java.util.UUID;
 
@@ -66,19 +64,18 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("default-permission")
         @Comment("Possible values: VISITOR, MEMBER, OPERATOR")
-        private PlayerPermission defaultPermission = PlayerPermission.MEMBER;
+        private String defaultPermission = "MEMBER";
 
         @Comment("The language used by console")
         private LangCode language = LangCode.en_US;
 
-        @Comment("Open debug mode")
         @Comment("If debug mode is enabled, the console will output more detailed information")
         private boolean debug = false;
 
+        @Comment("If whitelist is enabled, only players in the whitelist can join the server")
         @CustomKey("is-whitelisted")
         private boolean isWhitelisted = false;
 
-        @Comment("Whether to display the GUI")
         @CustomKey("enable-gui")
         private boolean enableGui = true;
 
@@ -121,7 +118,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("The compression algorithm used for network data streams. Possible values: ZLIB, SNAPPY")
         @Comment("ZLIB has better compression ratios and SNAPPY has better compression performance")
         @CustomKey("compression-algorithm")
-        private PacketCompressionAlgorithm compressionAlgorithm = PacketCompressionAlgorithm.ZLIB;
+        private CompressionAlgorithm compressionAlgorithm = CompressionAlgorithm.ZLIB;
 
         @CustomKey("network-thread-number")
         @Comment("The number of network threads. If put zero here, the server will automatically determine the number of network threads")
@@ -164,6 +161,11 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("to misjudgment (usually when changing skin), disable this feature will help you")
         @CustomKey("enable-encoding-protection")
         private boolean enableEncodingProtection = true;
+
+        public enum CompressionAlgorithm {
+            ZLIB,
+            SNAPPY
+        }
     }
 
     @Getter

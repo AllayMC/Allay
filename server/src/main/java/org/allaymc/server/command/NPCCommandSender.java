@@ -8,10 +8,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.permission.PermissionGroup;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-
-import java.util.UUID;
 
 /**
  * @author daoge_cmd
@@ -19,19 +15,12 @@ import java.util.UUID;
 @Getter
 public class NPCCommandSender implements CommandSender {
 
-    private static final CommandOriginData NPC_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
-
     protected EntityNpc npc;
     protected EntityPlayer initiator;
 
     @Override
     public String getCommandSenderName() {
         return npc.getDisplayName();
-    }
-
-    @Override
-    public CommandOriginData getCommandOriginData() {
-        return NPC_COMMAND_ORIGIN_DATA;
     }
 
     @Override
@@ -45,8 +34,8 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
-        // Do nothing
+    public void sendTranslatable(String translatable, Object... args) {
+
     }
 
     @Override

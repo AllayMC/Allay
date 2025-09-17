@@ -17,7 +17,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.player.ClientState;
-import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -35,6 +34,7 @@ import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.DeferredData;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
+import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayerManager;
 import org.allaymc.server.utils.Utils;
 import org.allaymc.server.world.AllayWorld;
@@ -82,7 +82,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Getter
     @Setter
-    protected LoginData loginData;
+    protected AllayLoginData loginData;
     @Getter
     @Setter
     protected boolean networkEncryptionEnabled;
@@ -197,15 +197,16 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
         thisPlayer.viewEntityMetadata(thisPlayer);
         // Send other players' abilities data to this player
-        Server.getInstance().getPlayerManager().getPlayers().values().forEach(other -> {
+        Server.getInstance().getPlayerManager().forEachPlayer(other -> {
             var abilities = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).getAbilities();
             sendPacket(abilities.encodeUpdateAbilitiesPacket());
         });
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
+        var playerManager = (AllayPlayerManager) server.getPlayerManager();
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
-        ((AllayPlayerManager) server.getPlayerManager()).addToPlayerList(thisPlayer);
+        playerManager.broadcastPlayerListChange(thisPlayer, true);
         if (server.getPlayerManager().getPlayerCount() > 1) {
-            ((AllayPlayerManager) server.getPlayerManager()).sendFullPlayerListInfoTo(thisPlayer);
+            playerManager.sendPlayerListTo(thisPlayer);
         }
         thisPlayer.sendAttributesToClient();
         sendInventories();
@@ -365,7 +366,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setTrustingPlayers(true);
         packet.setLevelName(Server.SETTINGS.genericSettings().motd());
         packet.setLevelId("");
-        packet.setDefaultPlayerPermission(Server.SETTINGS.genericSettings().defaultPermission());
+        packet.setDefaultPlayerPermission(PlayerPermission.valueOf(Server.SETTINGS.genericSettings().defaultPermission()));
         packet.setServerChunkTickRange(Server.SETTINGS.worldSettings().tickRadius());
         packet.setVanillaVersion("*");
         packet.setPremiumWorldTemplateId("");
@@ -400,7 +401,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void completeLogin() {
-        var playerManager = Server.getInstance().getPlayerManager();
+        var playerManager = (AllayPlayerManager) Server.getInstance().getPlayerManager();
         if (playerManager.getPlayerCount() >= playerManager.getMaxPlayerCount()) {
             disconnect(TrKeys.MC_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
             return;
@@ -418,7 +419,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
         sendPacket(playStatusPacket);
 
-        ((AllayPlayerManager) playerManager).onLoggedIn(thisPlayer);
+        playerManager.onLoggedIn(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         Server.getInstance().broadcastTr(event.getJoinMessage(), thisPlayer.getOriginName());
 

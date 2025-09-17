@@ -117,19 +117,19 @@ public class AllayCommandRegistry extends CommandRegistry {
 
         var spilt = splitCommandArgs(cmd);
         if (spilt.isEmpty()) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, "");
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, "");
             return CommandResult.fail();
         }
 
         var commandName = spilt.pop();
         var command = this.findCommand(commandName);
         if (command == null) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
 
         if (!sender.hasPermissions(command.getPermissions())) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
 
@@ -139,7 +139,7 @@ public class AllayCommandRegistry extends CommandRegistry {
             return result;
         } catch (Throwable t) {
             log.error("Error while execute command {}", commandName, t);
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_EXCEPTION);
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.fail();
         }
     }

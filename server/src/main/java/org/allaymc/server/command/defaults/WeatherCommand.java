@@ -26,7 +26,7 @@ public class WeatherCommand extends VanillaCommand {
             return context.success();
         }).root().key("query").exec(context -> {
             var weather = context.getSender().getCommandExecuteLocation().dimension().getWorld().getWeather();
-            context.getSender().sendTr(TrKeys.MC_COMMANDS_WEATHER_QUERY, weather.name().toLowerCase());
+            context.getSender().sendTranslatable(TrKeys.MC_COMMANDS_WEATHER_QUERY, weather.name().toLowerCase());
             return context.success();
         });
     }

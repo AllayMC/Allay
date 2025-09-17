@@ -27,12 +27,12 @@ public class HelpCommand extends VanillaCommand {
             var page = (int) context.getResult(0);
             page = Math.min(pages, Math.max(1, page));
 
-            sender.sendTr(TrKeys.MC_COMMANDS_HELP_HEADER, page, pages);
+            sender.sendTranslatable(TrKeys.MC_COMMANDS_HELP_HEADER, page, pages);
             for (var command : commands.values().stream().toList().subList((page - 1) * COMMANDS_PER_PAGE, page * COMMANDS_PER_PAGE)) {
                 printCommandHelp(sender, command);
                 sender.sendText("");
             }
-            sender.sendTr(TrKeys.MC_COMMANDS_HELP_FOOTER);
+            sender.sendTranslatable(TrKeys.MC_COMMANDS_HELP_FOOTER);
             return context.success();
         }, SenderType.SERVER).root().str("command").exec((context, sender) -> {
             if (Registries.COMMANDS instanceof AllayCommandRegistry commandRegistry) {
@@ -51,9 +51,9 @@ public class HelpCommand extends VanillaCommand {
     }
 
     private void printCommandHelp(Server sender, Command command) {
-        sender.sendTr(command.getAliases().isEmpty() ? command.getName() + ":" : TrKeys.MC_COMMANDS_HELP_COMMAND_ALIASES, command.getName(), String.join(" ", command.getAliases()));
-        sender.sendTr(command.getDescription());
-        sender.sendTr(TrKeys.MC_COMMANDS_GENERIC_USAGE_NOPARAM);
+        sender.sendTranslatable(command.getAliases().isEmpty() ? command.getName() + ":" : TrKeys.MC_COMMANDS_HELP_COMMAND_ALIASES, command.getName(), String.join(" ", command.getAliases()));
+        sender.sendTranslatable(command.getDescription());
+        sender.sendTranslatable(TrKeys.MC_COMMANDS_GENERIC_USAGE_NOPARAM);
         for (var usage : command.getCommandFormatTips()) {
             sender.sendText(usage);
         }

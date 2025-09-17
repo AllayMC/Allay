@@ -61,7 +61,7 @@ public class GiveCommand extends VanillaCommand {
                             }
                         }
 
-                        player.sendTr(TrKeys.MC_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
+                        player.sendTranslatable(TrKeys.MC_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
                     }
                     context.addOutput(
                             TrKeys.MC_COMMANDS_GIVE_SUCCESS, itemType.getIdentifier().toString(),

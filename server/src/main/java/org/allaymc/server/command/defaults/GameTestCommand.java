@@ -97,16 +97,6 @@ public class GameTestCommand extends VanillaCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("trc")
-                .str("key")
-                .remain("args")
-                .exec((context, player) -> {
-                    String key = context.getResult(1);
-                    List<String> args = context.getResult(2);
-                    player.sendTr(key, true, args.toArray());
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
                 .key("setblock")
                 .str("blockType")
                 .exec((context, player) -> {

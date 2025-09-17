@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * A utility class to convert between the API's Skin object and the protocol's SerializedSkin object.
+ * SkinConvertor is a utility class to convert between the API's Skin object and the protocol's SerializedSkin object.
  */
 @UtilityClass
-public final class SkinConverter {
+public final class SkinConvertor {
     /**
      * Converts an API Skin object into a protocol SerializedSkin object for network transmission.
      *
@@ -28,7 +28,7 @@ public final class SkinConverter {
 
         // Convert list of animations
         List<AnimationData> serializedAnimations = skin.animations().stream()
-                .map(SkinConverter::convertAnimationToSerialized)
+                .map(SkinConvertor::convertAnimationToSerialized)
                 .collect(Collectors.toList());
 
         // Convert list of persona pieces
@@ -97,7 +97,7 @@ public final class SkinConverter {
 
         // Convert list of animations
         List<Skin.AnimationData> animations = serializedSkin.getAnimations().stream()
-                .map(SkinConverter::convertAnimationFromSerialized)
+                .map(SkinConvertor::convertAnimationFromSerialized)
                 .collect(Collectors.toList());
 
         // Convert list of persona pieces

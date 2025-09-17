@@ -15,7 +15,6 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
-import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardManager;
 import org.allaymc.api.server.Server;
@@ -38,12 +37,9 @@ import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 
 import java.nio.file.Path;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -58,13 +54,11 @@ public final class AllayServer implements Server {
 
     private static final AllayServer INSTANCE = new AllayServer();
 
-    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
-
     private final AtomicReference<ServerState> state;
     @Getter
     private final AllayWorldPool worldPool;
     @Getter
-    private final PlayerManager playerManager;
+    private final AllayPlayerManager playerManager;
     @Getter
     private final ExecutorService computeThreadPool;
     @Getter
@@ -173,12 +167,12 @@ public final class AllayServer implements Server {
         this.scoreboardManager.read();
         this.pluginManager.enablePlugins();
 
-        sendTr(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
-        ((AllayPlayerManager) this.playerManager).startNetworkInterface();
+        sendTranslatable(TrKeys.ALLAY_NETWORK_INTERFACE_STARTING);
+        this.playerManager.startNetworkInterface();
 
         this.startTime = System.currentTimeMillis();
         if (SETTINGS.networkSettings().enablev6()) {
-            sendTr(
+            sendTranslatable(
                     TrKeys.ALLAY_NETWORK_INTERFACE_STARTED,
                     SETTINGS.networkSettings().ip(),
                     String.valueOf(SETTINGS.networkSettings().port()),
@@ -187,7 +181,7 @@ public final class AllayServer implements Server {
                     String.valueOf(startTime - initialTime)
             );
         } else {
-            sendTr(
+            sendTranslatable(
                     TrKeys.ALLAY_NETWORK_INTERFACE_STARTED_V4ONLY,
                     SETTINGS.networkSettings().ip(),
                     String.valueOf(SETTINGS.networkSettings().port()),
@@ -229,7 +223,7 @@ public final class AllayServer implements Server {
         // Disconnect all players
         playerManager.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
         // Shutdown network server to prevent new client connecting to the server
-        ((AllayPlayerManager) this.playerManager).shutdownNetworkInterface();
+        this.playerManager.shutdownNetworkInterface();
         this.scheduler.shutdown();
 
         new ServerStopEvent().call();
@@ -240,7 +234,7 @@ public final class AllayServer implements Server {
         // Save all configurations & data
         Server.SETTINGS.save();
         this.scoreboardManager.save();
-        ((AllayPlayerManager) this.playerManager).shutdown();
+        this.playerManager.shutdown();
 
         // Shutdown all worlds
         this.worldPool.shutdown();
@@ -259,8 +253,8 @@ public final class AllayServer implements Server {
 
     @Override
     public void broadcastTr(@MayContainTrKey String tr, Object... args) {
-        playerManager.getPlayers().values().forEach(player -> player.sendTr(tr, args));
-        sendTr(tr, args);
+        playerManager.forEachPlayer(player -> player.sendTranslatable(tr, args));
+        sendTranslatable(tr, args);
     }
 
     @Override
@@ -269,8 +263,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
-        // forceTranslatedByClient is unused
+    public void sendTranslatable(String key, Object... args) {
         log.info(I18n.get().tr(key, args));
     }
 
@@ -284,11 +277,6 @@ public final class AllayServer implements Server {
     @Override
     public String getCommandSenderName() {
         return "Server";
-    }
-
-    @Override
-    public CommandOriginData getCommandOriginData() {
-        return SERVER_COMMAND_ORIGIN_DATA;
     }
 
     @Override

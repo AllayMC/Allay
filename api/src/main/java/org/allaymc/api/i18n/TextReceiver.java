@@ -3,7 +3,7 @@ package org.allaymc.api.i18n;
 import org.allaymc.api.command.CommandSender;
 
 /**
- * Represents a text receiver.
+ * TextReceiver represents an object that can receive messages.
  *
  * @author daoge_cmd
  */
@@ -16,27 +16,19 @@ public interface TextReceiver {
     void sendText(String text);
 
     /**
-     * @see #sendTr(String, boolean, Object...)
+     * @see #sendTranslatable(String, Object...)
      */
-    default void sendTr(@MayContainTrKey String key) {
-        sendTr(key, new Object[0]);
-    }
-
-    /**
-     * @see #sendTr(String, boolean, Object...)
-     */
-    default void sendTr(@MayContainTrKey String key, Object... args) {
-        sendTr(key, false, args);
+    default void sendTranslatable(@MayContainTrKey String translatable) {
+        sendTranslatable(translatable, new Object[0]);
     }
 
     /**
      * Send a text which may contains translation key to the receiver.
      *
-     * @param key                     the text which may contains translation key
-     * @param forceTranslatedByClient whether the text should be translated by the client
-     * @param args                    the arguments used in the translation
+     * @param translatable the translatable text which may contains translation key
+     * @param args         the arguments used in the translation
      */
-    void sendTr(@MayContainTrKey String key, boolean forceTranslatedByClient, Object... args);
+    void sendTranslatable(@MayContainTrKey String translatable, Object... args);
 
     /**
      * Send the command outputs to the receiver.

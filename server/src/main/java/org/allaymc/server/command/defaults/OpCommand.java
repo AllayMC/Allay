@@ -38,7 +38,7 @@ public class OpCommand extends VanillaCommand {
             player.setOperator(true);
 
             context.addOutput(TrKeys.MC_COMMANDS_OP_SUCCESS, player.getOriginName());
-            player.sendTr(TrKeys.MC_COMMANDS_OP_MESSAGE);
+            player.sendTranslatable(TrKeys.MC_COMMANDS_OP_MESSAGE);
             return context.success();
         });
     }

@@ -54,6 +54,7 @@ import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
 import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.player.SkinConvertor;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkEncoder;
 import org.allaymc.server.world.gamerule.AllayGameRules;
@@ -356,7 +357,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public void viewPlayerSkin(EntityPlayer player) {
-        var skin = player.getSkin();
+        var skin = SkinConvertor.toSerializedSkin(player.getSkin());
         var packet = new PlayerSkinPacket();
         packet.setUuid(networkComponent.getLoginData().getUuid());
         packet.setSkin(skin);

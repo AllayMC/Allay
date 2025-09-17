@@ -1,8 +1,11 @@
 package org.allaymc.api.player;
 
 import lombok.Builder;
+import org.jose4j.json.internal.json_simple.JSONObject;
+import org.jose4j.json.internal.json_simple.JSONValue;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents the skin of a player, as sent over the network.
@@ -47,6 +50,22 @@ public record Skin(
     public static final String ARM_SIZE_WIDE = "wide";
     public static final String ARM_SIZE_SLIM = "slim";
 
+    public boolean isValid() {
+        var isValidSkin = skinId != null && !skinId.trim().isEmpty() && skinData != null && skinData.isValid();
+        var isValidResourcePatch = skinResourcePatch != null && validateSkinResourcePatch(skinResourcePatch);
+        return isValidSkin && isValidResourcePatch;
+    }
+
+    private static boolean validateSkinResourcePatch(String skinResourcePatch) {
+        try {
+            JSONObject object = (JSONObject) JSONValue.parse(skinResourcePatch);
+            JSONObject geometry = (JSONObject) object.get("geometry");
+            return geometry.containsKey("default") && geometry.get("default") instanceof String;
+        } catch (ClassCastException | NullPointerException e) {
+            return false;
+        }
+    }
+
     /**
      * Holds the dimensions and raw data of an image.
      *
@@ -56,6 +75,30 @@ public record Skin(
      */
     @Builder(toBuilder = true)
     public record ImageData(int width, int height, byte[] data) {
+        public static final ImageData EMPTY = new ImageData(0, 0, new byte[0]);
+
+        private static final int PIXEL_SIZE = 4;
+        private static final int SINGLE_SKIN_SIZE = 64 * 32 * PIXEL_SIZE;
+        private static final int DOUBLE_SKIN_SIZE = 64 * 64 * PIXEL_SIZE;
+        private static final int SKIN_128_64_SIZE = 128 * 64 * PIXEL_SIZE;
+        private static final int SKIN_128_128_SIZE = 128 * 128 * PIXEL_SIZE;
+        private static final int SKIN_PERSONA_SIZE = 256 * 256 * PIXEL_SIZE;
+
+        public static ImageData from(byte[] data) {
+            return switch (Objects.requireNonNull(data).length) {
+                case 0 -> EMPTY;
+                case SINGLE_SKIN_SIZE -> new ImageData(64, 32, data);
+                case DOUBLE_SKIN_SIZE -> new ImageData(64, 64, data);
+                case SKIN_128_64_SIZE -> new ImageData(128, 64, data);
+                case SKIN_128_128_SIZE -> new ImageData(128, 128, data);
+                case SKIN_PERSONA_SIZE -> new ImageData(256, 256, data);
+                default -> throw new IllegalArgumentException("Invalid skin length");
+            };
+        }
+
+        public boolean isValid() {
+            return width >= 64 && height >= 32 && data.length >= ImageData.SINGLE_SKIN_SIZE;
+        }
     }
 
     /**
@@ -135,11 +178,23 @@ public record Skin(
         /**
          * Body animation with 128x128 resolution.
          */
-        BODY_128X128
+        BODY_128X128;
+
+        private static final AnimationType[] VALUES = values();
+
+        public static AnimationType from(int id) {
+            return VALUES[id];
+        }
     }
 
     public enum ExpressionType {
         LINEAR,
-        BLINKING
+        BLINKING;
+
+        private static final ExpressionType[] VALUES = values();
+
+        public static ExpressionType from(int id) {
+            return VALUES[id];
+        }
     }
 }

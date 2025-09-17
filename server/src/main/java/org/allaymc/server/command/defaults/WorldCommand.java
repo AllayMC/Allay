@@ -175,9 +175,9 @@ public class WorldCommand extends VanillaCommand {
                                             .build());
                                 }
 
-                                player.sendTr(TrKeys.ALLAY_WORLD_LOADING, name);
+                                player.sendTranslatable(TrKeys.ALLAY_WORLD_LOADING, name);
                                 Server.getInstance().getWorldPool().loadWorld(name, worldSettingBuilder.build());
-                                player.sendTr(TrKeys.ALLAY_WORLD_LOADED, name);
+                                player.sendTranslatable(TrKeys.ALLAY_WORLD_LOADED, name);
                             })
                             .sendTo(player);
                     return context.success();

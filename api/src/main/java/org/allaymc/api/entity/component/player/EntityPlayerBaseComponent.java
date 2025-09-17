@@ -8,7 +8,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
-import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
+import org.allaymc.api.player.Skin;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -180,16 +180,16 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     /**
      * Get the skin of the player.
      *
-     * @return The skin of the player
+     * @return the skin of the player
      */
-    SerializedSkin getSkin();
+    Skin getSkin();
 
     /**
      * Sets the skin of the player.
      *
-     * @param skin The skin to set
+     * @param skin the skin to set
      */
-    void setSkin(SerializedSkin skin);
+    void setSkin(Skin skin);
 
     /**
      * Get the game mode of the player.
@@ -206,28 +206,35 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     void setGameMode(GameMode gameMode);
 
     /**
-     * Set the fly speed of the player.
+     * Sets the walk speed of the player.
      *
-     * @param flySpeed The fly speed to set
+     * @param walkSpeed the walk speed to set
+     */
+    void setWalkSpeed(float walkSpeed);
+
+    /**
+     * Sets the fly speed of the player.
+     *
+     * @param flySpeed the fly speed to set
      */
     void setFlySpeed(float flySpeed);
 
     /**
-     * Set the vertical fly speed of the player.
+     * Sets the vertical fly speed of the player.
      *
-     * @param verticalFlySpeed The vertical fly speed to set
+     * @param verticalFlySpeed the vertical fly speed to set
      */
     void setVerticalFlySpeed(float verticalFlySpeed);
 
     /**
-     * Set whether the player is flying.
+     * Sets whether the player is flying.
      *
      * @param flying Whether the player is flying
      */
     void setFlying(boolean flying);
 
     /**
-     * Send a tip to the player.
+     * Sends a tip to the player.
      *
      * @param message The message to send
      */

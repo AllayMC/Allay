@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced method `Chunk.addChunkTask()` that adds a task which will be performed later in the chunk tick.
 - (API) Introduced method `EntityBaaeComponent.applyAnimation()` and class `EntityAnimation`.
 - (API) Introduced classes `EntityAction` and `BlockAction`.
+- (API) Introduced class `Skin` as the replacement for the `SerializedSkin` class in protocol lib.
 - Implemented sharpness enchantment.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
@@ -94,6 +95,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved several data classes for block and item to packages `block.data` and `item.data`.
 - (API) Renamed classes `PlayerArmorContainer`, `PlayerInventoryContainer` and `PlayerOffhandContainer` to `ArmorContainer`, `InventoryContainer` and `OffhandContainer`.
 - (API) Class `BossBar` now accepts `BossBarViewer` instead of `EntityPlayer` directly, but the usage won't change since `EntityPlayer` implemented `BossBarViewer`.
+- (API) Renamed method `TextReceiver.sendTr()` to `TextReceiver.sendTranslatable()` for better readability.
+- (API) Renamed method `LoginData.isXboxAuthenticated()` to `LoginData.isAuthed()`.
+- (API) Made class `LoginData` as an interface, the implementation is moved to the server module.
 
 ### Fixed
 
@@ -129,6 +133,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `Position3ic.toNetwork()`.
 - (API) Removed method `BlockEntityBaseComponent.sendPacketToViewers()`.
 - (API) Removed chunk packet related methods in `UnsafeChunk`.
+- (API) Removed method `CommandSender.getCommandOriginData()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

@@ -5,6 +5,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
+import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.NetworkSettingsPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
@@ -40,7 +41,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         player.getClientSession().setCodec(codec);
 
         var settingsPacket = new NetworkSettingsPacket();
-        settingsPacket.setCompressionAlgorithm(Server.SETTINGS.networkSettings().compressionAlgorithm());
+        settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(Server.SETTINGS.networkSettings().compressionAlgorithm().name()));
         // NOTICE: We don't need to set the compression threshold after 1.20.60
         player.sendPacketImmediately(settingsPacket);
         // NOTICE: The NetworkSettingsPacket shouldn't be compressed, so we set the compression after sending the packet

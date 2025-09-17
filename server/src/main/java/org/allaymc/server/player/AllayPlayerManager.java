@@ -13,7 +13,6 @@ import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.player.ClientState;
-import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.BanInfo;
 import org.allaymc.api.server.Server;
@@ -22,7 +21,6 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.network.AllayNetworkInterface;
-import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -48,7 +46,6 @@ public class AllayPlayerManager implements PlayerManager {
     protected final AllayNetworkInterface networkInterface;
 
     protected final Map<UUID, EntityPlayer> players;
-    protected final Map<UUID, PlayerListPacket.Entry> playerListEntries;
     protected final BanInfo banInfo;
     protected final Whitelist whitelist;
 
@@ -56,7 +53,6 @@ public class AllayPlayerManager implements PlayerManager {
         this.playerStorage = playerStorage;
         this.networkInterface = networkInterface;
         this.players = new Object2ObjectOpenHashMap<>();
-        this.playerListEntries = new Object2ObjectOpenHashMap<>();
         this.banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
     }
@@ -90,11 +86,6 @@ public class AllayPlayerManager implements PlayerManager {
     @Override
     public void savePlayerData() {
         players.values().stream().filter(EntityPlayer::isInitialized).forEach(playerStorage::savePlayerData);
-    }
-
-    @Override
-    public void broadcastPacket(BedrockPacket packet) {
-        players.values().forEach(player -> player.sendPacket(packet));
     }
 
     @Override
@@ -161,6 +152,7 @@ public class AllayPlayerManager implements PlayerManager {
         players.values().stream()
                 .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
                 .forEach(player -> player.disconnect(TrKeys.ALLAY_DISCONNECT_BANIP));
+
         return true;
     }
 
@@ -226,6 +218,10 @@ public class AllayPlayerManager implements PlayerManager {
         return Collections.unmodifiableSet(whitelist.whitelist());
     }
 
+    public void broadcastPacket(BedrockPacket packet) {
+        players.values().forEach(player -> player.sendPacket(packet));
+    }
+
     public void startNetworkInterface() {
         this.networkInterface.start();
     }
@@ -240,7 +236,7 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     public synchronized void onDisconnect(EntityPlayer player) {
-        Server.getInstance().sendTr(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
+        Server.getInstance().sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
         // At this time the client have disconnected
         if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
@@ -260,70 +256,45 @@ public class AllayPlayerManager implements PlayerManager {
                 // player because there is a check in EntityPlayerBaseComponentImpl#setLocationBeforeSpawn()
                 player.getDimension().removePlayer(player);
                 playerStorage.savePlayerData(player);
-                removeFromPlayerList(player);
+                broadcastPlayerListChange(player, false);
             }
         }
 
         networkInterface.setPlayerCount(players.size());
     }
 
-    public synchronized void addToPlayerList(EntityPlayer player) {
-        addToPlayerList(
-                player.getLoginData().getUuid(),
-                player.getRuntimeId(),
-                player.getOriginName(),
-                player.getLoginData().getDeviceInfo(),
-                player.getLoginData().getXuid(),
-                player.getLoginData().getSkin()
-        );
-    }
-
-    private void addToPlayerList(UUID uuid, long entityId, String name, LoginData.DeviceInfo deviceInfo, String xuid, SerializedSkin skin) {
-        var playerListPacket = new PlayerListPacket();
-        playerListPacket.setAction(PlayerListPacket.Action.ADD);
-
-        var entry = new PlayerListPacket.Entry(uuid);
-        entry.setEntityId(entityId);
-        entry.setName(name);
-        entry.setXuid(xuid);
-        entry.setPlatformChatId(deviceInfo.deviceName());
-        entry.setBuildPlatform(deviceInfo.device().getId());
-        entry.setSkin(skin);
-        entry.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
-        entry.setColor(new Color(name.hashCode() & 0xFFFFFF));
-
-        playerListPacket.getEntries().add(entry);
-        playerListEntries.put(uuid, entry);
-
-        broadcastPacket(playerListPacket);
-    }
-
-    private void removeFromPlayerList(EntityPlayer player) {
-        removeFromPlayerList(player.getLoginData().getUuid());
-    }
-
-    private void removeFromPlayerList(UUID uuid) {
-        var playerListPacket = new PlayerListPacket();
-        playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
-        playerListPacket.getEntries().add(playerListEntries.remove(uuid));
-        broadcastPacket(playerListPacket);
-    }
-
-    public void sendFullPlayerListInfoTo(EntityPlayer player) {
-        var playerListPacket = new PlayerListPacket();
-        playerListPacket.setAction(PlayerListPacket.Action.ADD);
-        playerListEntries.forEach((uuid, entry) -> {
-            if (!uuid.equals(player.getLoginData().getUuid())) {
-                playerListPacket.getEntries().add(entry);
-            }
-        });
-        player.sendPacket(playerListPacket);
-    }
-
-    public void onSkinUpdate(EntityPlayer player) {
-        var entry = this.playerListEntries.get(player.getLoginData().getUuid());
-        if (entry != null) {
-            entry.setSkin(player.getSkin());
+    public void broadcastPlayerListChange(EntityPlayer player, boolean add) {
+        var packet = new PlayerListPacket();
+        if (add) {
+            packet.setAction(PlayerListPacket.Action.ADD);
+        } else {
+            packet.setAction(PlayerListPacket.Action.REMOVE);
         }
+        packet.getEntries().add(buildEntry(player));
+        broadcastPacket(packet);
+    }
+
+    public void sendPlayerListTo(EntityPlayer player) {
+        var packet = new PlayerListPacket();
+        packet.setAction(PlayerListPacket.Action.ADD);
+        for (var other : players.values()) {
+            if (other != player) {
+                packet.getEntries().add(buildEntry(other));
+            }
+        }
+        player.sendPacket(packet);
+    }
+
+    private static PlayerListPacket.Entry buildEntry(EntityPlayer player) {
+        var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
+        entry.setEntityId(player.getRuntimeId());
+        entry.setName(player.getOriginName());
+        entry.setXuid(player.getLoginData().getXuid());
+        entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
+        entry.setBuildPlatform(player.getLoginData().getDeviceInfo().device().getId());
+        entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
+        entry.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
+        entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
+        return entry;
     }
 }

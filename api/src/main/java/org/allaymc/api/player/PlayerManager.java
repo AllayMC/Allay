@@ -6,12 +6,12 @@ import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.server.Server;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * PlayerManager is used to manage player related things. It holds all online players,
@@ -28,6 +28,15 @@ public interface PlayerManager {
      */
     @UnmodifiableView
     Map<UUID, EntityPlayer> getPlayers();
+
+    /**
+     * For-each the online players.
+     *
+     * @param consumer the consumer which will be applied to each player
+     */
+    default void forEachPlayer(Consumer<EntityPlayer> consumer) {
+        getPlayers().values().forEach(consumer);
+    }
 
     /**
      * Get the online player count of the server.
@@ -65,7 +74,7 @@ public interface PlayerManager {
      * @param reason the reason of the disconnection
      */
     default void disconnectAllPlayers(@MayContainTrKey String reason) {
-        getPlayers().values().forEach(player -> player.disconnect(reason));
+        forEachPlayer(player -> player.disconnect(reason));
     }
 
     /**
@@ -92,13 +101,6 @@ public interface PlayerManager {
                 .findFirst()
                 .orElse(null);
     }
-
-    /**
-     * Broadcast a packet to all online players.
-     *
-     * @param packet the packet to broadcast
-     */
-    void broadcastPacket(BedrockPacket packet);
 
     /**
      * Check if the player is banned.
