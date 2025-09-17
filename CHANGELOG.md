@@ -134,6 +134,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `BlockEntityBaseComponent.sendPacketToViewers()`.
 - (API) Removed chunk packet related methods in `UnsafeChunk`.
 - (API) Removed method `CommandSender.getCommandOriginData()`.
+- (API) Removed method `CommandSender.handleResult()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

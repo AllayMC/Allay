@@ -8,9 +8,12 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
+import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.command.defaults.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
@@ -135,7 +138,20 @@ public class AllayCommandRegistry extends CommandRegistry {
 
         try {
             var result = command.execute(sender, spilt.toArray(new String[0]));
-            sender.handleResult(result);
+            var sendCommandFeedback = sender.getCommandExecuteLocation().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK);
+            if (result.context() == null || !sendCommandFeedback) {
+                return result;
+            }
+
+            var status = result.status();
+            var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
+            if (result.isSuccess()) {
+                Server.getInstance().broadcastCommandOutputs(result.context().getSender(), status, outputs);
+            } else {
+                // If there is an error, only send message to oneself
+                sender.sendCommandOutputs(result.context().getSender(), status, outputs);
+            }
+
             return result;
         } catch (Throwable t) {
             log.error("Error while execute command {}", commandName, t);
@@ -155,7 +171,10 @@ public class AllayCommandRegistry extends CommandRegistry {
 
     public Command findCommand(String nameOrAlias) {
         var result = this.get(nameOrAlias);
-        if (result != null) return result;
+        if (result != null) {
+            return result;
+        }
+        
         return this.getContent().values().stream()
                 .filter(command -> command.getAliases().contains(nameOrAlias))
                 .findFirst().orElse(null);
