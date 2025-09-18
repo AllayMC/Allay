@@ -13,7 +13,7 @@ public class ItemAirBaseComponentImpl extends ItemBaseComponentImpl {
     public static ItemStackInitInfo AIR_TYPE_INIT_INFO =
             ItemStackInitInfo
                     .builder()
-                    .autoAssignStackNetworkId(false)
+                    .assignUniqueId(false)
                     .build();
 
     static {

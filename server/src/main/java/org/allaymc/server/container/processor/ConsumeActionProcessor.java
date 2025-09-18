@@ -34,8 +34,8 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
         }
 
         var item = sourceContainer.getItemStack(slot);
-        if (failToValidateStackNetworkId(item.getStackNetworkId(), sourceStackNetworkId)) {
-            log.warn("Mismatch stack network id!");
+        if (failToValidateStackUniqueId(item.getUniqueId(), sourceStackNetworkId)) {
+            log.warn("Mismatch stack unique id!");
             return error();
         }
 
@@ -67,7 +67,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
                                                 ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, slot),
                                                 ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, slot),
                                                 item.getCount(),
-                                                item.getStackNetworkId(),
+                                                item.getUniqueId(),
                                                 item.getCustomName(),
                                                 item.getDamage(),
                                                 ""

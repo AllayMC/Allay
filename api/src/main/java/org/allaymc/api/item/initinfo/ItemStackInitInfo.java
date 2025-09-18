@@ -8,7 +8,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
-import static org.allaymc.api.item.component.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
+import static org.allaymc.api.item.component.ItemBaseComponent.EMPTY_UNIQUE_ID;
 
 /**
  * Represents the initialization information for an item stack.
@@ -18,19 +18,19 @@ import static org.allaymc.api.item.component.ItemBaseComponent.EMPTY_STACK_NETWO
 public class ItemStackInitInfo implements ComponentInitInfo {
     protected final int count;
     protected final int meta;
-    protected final int stackNetworkId;
-    protected final boolean autoAssignStackNetworkId;
+    protected final int uniqueId;
+    protected final boolean assignUniqueId;
     protected NbtMap extraTag;
     @Getter
     @Setter
     protected ItemType<?> itemType;
 
-    protected ItemStackInitInfo(int count, int meta, NbtMap extraTag, int stackNetworkId, boolean autoAssignStackNetworkId) {
+    protected ItemStackInitInfo(int count, int meta, NbtMap extraTag, int uniqueId, boolean assignUniqueId) {
         this.count = count;
         this.meta = meta;
         this.extraTag = extraTag;
-        this.stackNetworkId = stackNetworkId;
-        this.autoAssignStackNetworkId = autoAssignStackNetworkId;
+        this.uniqueId = uniqueId;
+        this.assignUniqueId = assignUniqueId;
     }
 
     public static Builder builder() {
@@ -65,29 +65,35 @@ public class ItemStackInitInfo implements ComponentInitInfo {
     }
 
     /**
-     * Get the stack network id of the item stack.
+     * Get the unique id of the item stack.
      *
-     * @return the stack network id of the item stack
+     * @return the unique id of the item stack
      */
-    public int stackNetworkId() {
-        return stackNetworkId;
+    public int uniqueId() {
+        return uniqueId;
     }
 
     /**
-     * Whether to auto assign the stack network id.
+     * Whether the unique id should be assigned.
      *
-     * @return whether to auto assign the stack network id
+     * @return {@code true} if the unique id should be assigned, otherwise {@code false}
      */
-    public boolean autoAssignStackNetworkId() {
-        return autoAssignStackNetworkId;
+    public boolean assignUniqueId() {
+        return assignUniqueId;
     }
 
     public static class Builder {
         protected int count;
         protected int meta;
-        protected NbtMapBuilder extraTagBuilder = NbtMap.builder();
-        protected int stackNetworkId = EMPTY_STACK_NETWORK_ID;
-        protected boolean autoAssignStackNetworkId = true;
+        protected NbtMapBuilder extraTagBuilder;
+        protected int uniqueId;
+        protected boolean assignUniqueId;
+
+        public Builder() {
+            this.extraTagBuilder = NbtMap.builder();
+            this.uniqueId = EMPTY_UNIQUE_ID;
+            this.assignUniqueId = true;
+        }
 
         public Builder count(int count) {
             this.count = count;
@@ -99,18 +105,18 @@ public class ItemStackInitInfo implements ComponentInitInfo {
             return this;
         }
 
-        public Builder stackNetworkId(int stackNetworkId) {
-            Preconditions.checkArgument(stackNetworkId >= 0);
-            this.stackNetworkId = stackNetworkId;
-            this.autoAssignStackNetworkId = false;
+        public Builder uniqueId(int uniqueId) {
+            Preconditions.checkArgument(uniqueId >= 0);
+            this.uniqueId = uniqueId;
+            this.assignUniqueId = false;
             return this;
         }
 
-        public Builder autoAssignStackNetworkId(boolean autoAssignStackNetworkId) {
-            if (autoAssignStackNetworkId) {
-                this.stackNetworkId = 0;
+        public Builder assignUniqueId(boolean assignUniqueId) {
+            if (assignUniqueId) {
+                this.uniqueId = 0;
             }
-            this.autoAssignStackNetworkId = autoAssignStackNetworkId;
+            this.assignUniqueId = assignUniqueId;
             return this;
         }
 
@@ -122,7 +128,8 @@ public class ItemStackInitInfo implements ComponentInitInfo {
         public ItemStackInitInfo build() {
             return new ItemStackInitInfo(
                     count, meta, extraTagBuilder.build(),
-                    stackNetworkId, autoAssignStackNetworkId);
+                    uniqueId, assignUniqueId
+            );
         }
     }
 }

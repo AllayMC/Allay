@@ -50,21 +50,21 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
     }
 
     /**
-     * Validates whether the client's stack network ID matches the expected server ID.
+     * Validates whether the client's stack unique ID matches the expected server ID.
      * <p>
      * This method is used to ensure data integrity between client and server. If the client's
-     * stack network ID is less than 0, it indicates the client is deferring to the server's
+     * stack unique ID is less than 0, it indicates the client is deferring to the server's
      * data, typically in multi-action requests where the first action validates the ID.
      *
-     * @param expectedSNID the expected stack network ID from the server
-     * @param clientSNID   the stack network ID provided by the client
+     * @param expectedId the expected stack unique ID from the server
+     * @param clientId   the stack unique ID provided by the client
      * @return {@code true} if validation fails, {@code false} if validation passes
      */
-    default boolean failToValidateStackNetworkId(int expectedSNID, int clientSNID) {
+    default boolean failToValidateStackUniqueId(int expectedId, int clientId) {
         // If the client's stackNetworkId is less than 0, it indicates that the client ensures data integrity and requests adherence to the server's data.
         // This usually happens when an ItemStackRequest contains multiple actions with the same source/destination container.
         // The first action checks the id, so subsequent actions do not need to repeat the check.
-        return clientSNID > 0 && expectedSNID != clientSNID;
+        return clientId > 0 && expectedId != clientId;
     }
 
     /**

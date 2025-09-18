@@ -14,6 +14,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.utils.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -83,7 +84,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                         ItemStackInitInfo
                                 .builder().count(1).meta(item.getShort("damage"))
                                 .extraTag(item.getCompound("tag", NbtMap.builder().build()))
-                                .autoAssignStackNetworkId(false).build()
+                                .assignUniqueId(false).build()
                 );
                 int groupIndex = (int) item.getLong("groupIndex");
                 var group = category.getGroup(groupIndex);
@@ -129,14 +130,14 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
         for (var group : groups) {
             encodedGroups.add(new org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup(
                     group.getCategory().getType(), I18n.get().tr(langCode, group.getName()),
-                    group.getIcon().toNetworkItemData()
+                    NetworkHelper.toNetwork(group.getIcon())
             ));
         }
 
         var encodedItems = new ArrayList<CreativeItemData>();
         for (var entry : entries) {
             // NOTICE: 0 is not indexed by the client for items
-            encodedItems.add(new CreativeItemData(entry.itemStack().toNetworkItemData(), entry.index() + 1, entry.group().getIndex()));
+            encodedItems.add(new CreativeItemData(NetworkHelper.toNetwork(entry.itemStack()), entry.index() + 1, entry.group().getIndex()));
         }
 
         var pk = new CreativeContentPacket();

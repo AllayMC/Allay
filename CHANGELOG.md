@@ -106,6 +106,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Changed methods in `ItemSignBaseComponent` to return `BlockType` instead of `BlockId`.
 - (API) Renamed class `DefaultDescriptor` to `ItemTypeDescriptor`.
 - (API) Moved events `PacketSendEvent` and  `PacketReceiveEvent` from api module to server module.
+- (API) Renamed item stack network id to unique id for better readability, changes are made to multiple related methods.
 
 ### Fixed
 
@@ -145,6 +146,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `CommandSender.handleResult()`.
 - (API) Removed network related methods in classes `ScoreboardLine` and `Scorer`.
 - (API) Removed method `BlockState.toNetworkDefinition()`.
+- (API) Removed method `Container.toNetworkItemData()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

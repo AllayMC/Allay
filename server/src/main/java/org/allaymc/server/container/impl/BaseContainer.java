@@ -17,7 +17,6 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -75,11 +74,6 @@ public class BaseContainer implements Container {
     @Override
     public ItemStack[] getItemStackArray() {
         return content;
-    }
-
-    @Override
-    public List<ItemData> toNetworkItemData() {
-        return Arrays.stream(content).map(ItemStack::toNetworkItemData).toList();
     }
 
     @Override

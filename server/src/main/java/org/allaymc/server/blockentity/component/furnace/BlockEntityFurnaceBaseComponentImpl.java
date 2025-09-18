@@ -57,7 +57,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     @Setter
     protected int storedXP;
 
-    protected int currentIngredientStackNetworkId = Integer.MAX_VALUE;
+    protected int currentIngredientStackUniqueId = Integer.MAX_VALUE;
     protected FurnaceRecipe currentFurnaceRecipe = null;
     protected FurnaceRecipeInput currentFurnaceRecipeInput = null;
 
@@ -159,7 +159,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var ingredient = container.getIngredient();
-        if (ingredient.getStackNetworkId() != currentIngredientStackNetworkId && !checkIngredient(ingredient)) {
+        if (ingredient.getUniqueId() != currentIngredientStackUniqueId && !checkIngredient(ingredient)) {
             return;
         }
 
@@ -227,7 +227,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return false;
         }
 
-        currentIngredientStackNetworkId = ingredient.getStackNetworkId();
+        currentIngredientStackUniqueId = ingredient.getUniqueId();
         currentFurnaceRecipe = furnaceRecipe;
         currentFurnaceRecipeInput = furnaceInput;
         return true;

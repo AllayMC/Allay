@@ -3,7 +3,6 @@ package org.allaymc.api.container;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -123,14 +122,6 @@ public interface Container {
      */
     @UnmodifiableView
     ItemStack[] getItemStackArray();
-
-    /**
-     * Get the network item data of the container.
-     *
-     * @return the network item data
-     */
-    // TODO: remove it
-    List<ItemData> toNetworkItemData();
 
     /**
      * @see #setItemStack(int, ItemStack, boolean)

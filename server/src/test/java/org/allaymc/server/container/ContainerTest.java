@@ -25,7 +25,7 @@ public class ContainerTest {
     @Test
     void testEmptySlotPlaceHolder() {
         assertEquals(0, AIR_STACK.getCount());
-        assertEquals(0, AIR_STACK.getStackNetworkId());
+        assertEquals(0, AIR_STACK.getUniqueId());
     }
 
     @Test

@@ -28,8 +28,8 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
         }
 
         var itemInHand = container.getItemInHand();
-        if (failToValidateStackNetworkId(itemInHand.getStackNetworkId(), action.getStackNetworkId())) {
-            log.warn("mismatch source stack network id!");
+        if (failToValidateStackUniqueId(itemInHand.getUniqueId(), action.getStackNetworkId())) {
+            log.warn("mismatch source stack unique id!");
             return error();
         }
 
@@ -46,7 +46,7 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
                                                 ContainerActionProcessor.toNetworkSlotIndex(container, handSlot),
                                                 ContainerActionProcessor.toNetworkSlotIndex(container, handSlot),
                                                 itemInHand.getCount(),
-                                                itemInHand.getStackNetworkId(),
+                                                itemInHand.getUniqueId(),
                                                 itemInHand.getCustomName(),
                                                 itemInHand.getDamage(),
                                                 ""

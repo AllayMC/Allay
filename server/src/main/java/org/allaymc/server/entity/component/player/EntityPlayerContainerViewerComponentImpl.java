@@ -17,6 +17,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.AbstractPlayerContainer;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
+import org.allaymc.server.utils.NetworkHelper;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
@@ -76,10 +77,10 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     protected void viewContentsWithSpecificContainerId(Container container, int containerId) {
         var packet = new InventoryContentPacket();
         packet.setContainerId(containerId);
-        // Client expects both zero if we do not use FullContainerName
-        // And the id of ContainerSlotType.ANVIL_INPUT is zero
+        // Client expects both zero if we do not use FullContainerName, and the id of
+        // ContainerSlotType.ANVIL_INPUT is zero
         packet.setContainerNameData(new FullContainerName(ContainerSlotType.ANVIL_INPUT, null));
-        packet.setContents(container.toNetworkItemData());
+        packet.setContents(NetworkHelper.toNetwork(container.getItemStacks()));
         networkComponent.sendPacket(packet);
     }
 
@@ -110,7 +111,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         packet.setContainerId(containerId);
         packet.setSlot(ContainerActionProcessor.toNetworkSlotIndex(container, slot));
         packet.setContainerNameData(new FullContainerName(ContainerActionProcessor.getSlotType(container, slot), null));
-        packet.setItem(container.getItemStack(slot).toNetworkItemData());
+        packet.setItem(NetworkHelper.toNetwork(container.getItemStack(slot)));
         networkComponent.sendPacket(packet);
     }
 
@@ -144,7 +145,6 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
         if (container instanceof BlockContainer blockContainer) {
-            // FIXME: got null pos here
             packet.setBlockPosition(MathUtils.toCBVec(blockContainer.getBlockPos()));
         } else {
             var location = baseComponent.getLocation();

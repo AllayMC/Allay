@@ -40,8 +40,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return error();
         }
 
-        if (failToValidateStackNetworkId(sourItem.getStackNetworkId(), sourceStackNetworkId)) {
-            log.warn("mismatch source stack network id!");
+        if (failToValidateStackUniqueId(sourItem.getUniqueId(), sourceStackNetworkId)) {
+            log.warn("mismatch source stack unique id!");
             return error();
         }
 
@@ -57,8 +57,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return error();
         }
 
-        if (failToValidateStackNetworkId(destItem.getStackNetworkId(), destinationStackNetworkId)) {
-            log.warn("mismatch destination stack network id!");
+        if (failToValidateStackUniqueId(destItem.getUniqueId(), destinationStackNetworkId)) {
+            log.warn("mismatch destination stack unique id!");
             return error();
         }
 
@@ -84,13 +84,13 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             source.setItemStack(sourceSlot, resultSourItem, false);
             if (destItem.getItemType() != AIR) {
                 resultDestItem = destItem;
-                // Destination item is not empty, just add count, and keep the same stack network id
+                // Destination item is not empty, just add count, and keep the same stack unique id
                 resultDestItem.setCount(destItem.getCount() + count);
                 destination.notifySlotChange(destinationSlot, false);
             } else {
-                // Destination item is empty, move the original stack to the new position, and use the source item's stack network id (like changing positions)
+                // Destination item is empty, move the original stack to the new position, and use the source item's stack unique id (like changing positions)
                 if (source.getContainerType() == ContainerType.CREATED_OUTPUT) {
-                    // HACK: If taken from CREATED_OUTPUT, the server needs to create a new stack network id
+                    // HACK: If taken from CREATED_OUTPUT, the server needs to create a new stack unique id
                     sourItem = sourItem.copy(true);
                 }
                 resultDestItem = sourItem;
@@ -107,7 +107,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 resultDestItem.setCount(destItem.getCount() + count);
                 destination.notifySlotChange(destinationSlot, false);
             } else {
-                // Destination item is empty, create a new stack network id for the separated sub-item stack
+                // Destination item is empty, create a new stack unique id for the separated sub-item stack
                 resultDestItem = sourItem.copy(true);
                 resultDestItem.setCount(count);
                 destination.setItemStack(destinationSlot, resultDestItem, false);
@@ -121,7 +121,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 ContainerActionProcessor.toNetworkSlotIndex(destination, destinationSlot),
                                 ContainerActionProcessor.toNetworkSlotIndex(destination, destinationSlot),
                                 resultDestItem.getCount(),
-                                resultDestItem.getStackNetworkId(),
+                                resultDestItem.getUniqueId(),
                                 resultDestItem.getCustomName(),
                                 resultDestItem.getDamage(),
                                 ""
@@ -144,7 +144,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                         ContainerActionProcessor.toNetworkSlotIndex(source, sourceSlot),
                                         ContainerActionProcessor.toNetworkSlotIndex(source, sourceSlot),
                                         resultSourItem.getCount(),
-                                        resultSourItem.getStackNetworkId(),
+                                        resultSourItem.getUniqueId(),
                                         resultSourItem.getCustomName(),
                                         resultSourItem.getDamage(),
                                         ""

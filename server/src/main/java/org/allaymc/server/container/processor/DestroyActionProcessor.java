@@ -27,8 +27,8 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
         var slot = ContainerActionProcessor.fromNetworkSlotIndex(container, action.getSource().getSlot());
 
         var item = container.getItemStack(slot);
-        if (failToValidateStackNetworkId(item.getStackNetworkId(), action.getSource().getStackNetworkId())) {
-            log.warn("mismatch stack network id!");
+        if (failToValidateStackUniqueId(item.getUniqueId(), action.getSource().getStackNetworkId())) {
+            log.warn("mismatch stack unique id!");
             return error();
         }
 
@@ -60,7 +60,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
                                                 ContainerActionProcessor.toNetworkSlotIndex(container, slot),
                                                 ContainerActionProcessor.toNetworkSlotIndex(container, slot),
                                                 item.getCount(),
-                                                item.getStackNetworkId(),
+                                                item.getUniqueId(),
                                                 item.getCustomName(),
                                                 item.getDamage(),
                                                 ""

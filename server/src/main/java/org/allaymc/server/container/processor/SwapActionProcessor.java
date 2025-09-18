@@ -27,14 +27,14 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
         var destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.getDestination().getSlot());
 
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
-        if (failToValidateStackNetworkId(sourceItem.getStackNetworkId(), action.getSource().getStackNetworkId())) {
-            log.warn("mismatch stack network id!");
+        if (failToValidateStackUniqueId(sourceItem.getUniqueId(), action.getSource().getStackNetworkId())) {
+            log.warn("mismatch stack unique id!");
             return error();
         }
 
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
-        if (failToValidateStackNetworkId(destinationItem.getStackNetworkId(), action.getDestination().getStackNetworkId())) {
-            log.warn("mismatch stack network id!");
+        if (failToValidateStackUniqueId(destinationItem.getUniqueId(), action.getDestination().getStackNetworkId())) {
+            log.warn("mismatch stack unique id!");
             return error();
         }
 
@@ -50,7 +50,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, sourceSlot),
                                                 ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, sourceSlot),
                                                 destinationItem.getCount(),
-                                                destinationItem.getStackNetworkId(),
+                                                destinationItem.getUniqueId(),
                                                 destinationItem.getCustomName(),
                                                 destinationItem.getDamage(),
                                                 ""
@@ -65,7 +65,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 ContainerActionProcessor.toNetworkSlotIndex(destinationContainer, destinationSlot),
                                                 ContainerActionProcessor.toNetworkSlotIndex(destinationContainer, destinationSlot),
                                                 sourceItem.getCount(),
-                                                sourceItem.getStackNetworkId(),
+                                                sourceItem.getUniqueId(),
                                                 sourceItem.getCustomName(),
                                                 sourceItem.getDamage(),
                                                 ""

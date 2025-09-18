@@ -38,7 +38,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     public void setItemStack(ItemStack itemStack) {
         // Stack network id shouldn't be kept
         if (itemStack != null) {
-            itemStack.clearStackNetworkId();
+            itemStack.clearUniqueId();
         }
         this.itemStack = itemStack;
     }

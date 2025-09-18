@@ -17,7 +17,6 @@ import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -28,7 +27,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class DoubleChestContainerImpl implements BlockContainer {
 
-    private static final int CHEST_SIZE = 27;
+    protected static final int CHEST_SIZE = ContainerType.CHEST.getSize();
 
     protected final BiMap<Byte, ContainerViewer> viewers;
     protected final Set<Consumer<ContainerViewer>> openListeners;
@@ -39,8 +38,8 @@ public class DoubleChestContainerImpl implements BlockContainer {
     @Getter
     @Setter
     protected Position3ic blockPos;
-    private Container left;
-    private Container right;
+    protected Container left;
+    protected Container right;
 
     public DoubleChestContainerImpl() {
         this.viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
@@ -225,14 +224,6 @@ public class DoubleChestContainerImpl implements BlockContainer {
     @Override
     public void loadNBT(List<NbtMap> nbtList) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<ItemData> toNetworkItemData() {
-        List<ItemData> networkItems = new ArrayList<>();
-        networkItems.addAll(left.toNetworkItemData());
-        networkItems.addAll(right.toNetworkItemData());
-        return networkItems;
     }
 
     private static boolean isLeft(int slot) {

@@ -55,6 +55,7 @@ import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.player.SkinConvertor;
+import org.allaymc.server.utils.NetworkHelper;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkEncoder;
 import org.allaymc.server.world.gamerule.AllayGameRules;
@@ -155,14 +156,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.setGameType(toGameType(player.getGameMode()));
                 p.getMetadata().putAll(getMetadata(entity));
                 p.setDeviceId(loginData.getDeviceInfo().deviceId());
-                p.setHand(player.getContainer(ContainerType.INVENTORY).getItemInHand().toNetworkItemData());
+                p.setHand(NetworkHelper.toNetwork(player.getContainer(ContainerType.INVENTORY).getItemInHand()));
                 yield p;
             }
             case EntityItem item -> {
                 var p = new AddItemEntityPacket();
                 p.setRuntimeEntityId(item.getRuntimeId());
                 p.setUniqueEntityId(item.getUniqueId());
-                p.setItemInHand(item.getItemStack().toNetworkItemData());
+                p.setItemInHand(NetworkHelper.toNetwork(item.getItemStack()));
                 p.setPosition(position);
                 p.setMotion(motion);
                 p.getMetadata().putAll(getMetadata(entity));
@@ -313,7 +314,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
-        packet.setItem(container.getItemInHand().toNetworkItemData());
+        packet.setItem(NetworkHelper.toNetwork(container.getItemInHand()));
         packet.setInventorySlot(handSlot);
         packet.setHotbarSlot(handSlot);
         this.networkComponent.sendPacket(packet);
@@ -327,7 +328,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setContainerId(UnopenedContainerId.OFFHAND);
         // Network slot index for offhand is 1, see FullContainerType.OFFHAND. Field `hotbarSlot` is unused
         packet.setInventorySlot(1);
-        packet.setItem(container.getOffhand().toNetworkItemData());
+        packet.setItem(NetworkHelper.toNetwork(container.getOffhand()));
         this.networkComponent.sendPacket(packet);
     }
 
@@ -336,11 +337,11 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var container = entity.getContainer(ContainerType.ARMOR);
         var packet = new MobArmorEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setBody(ItemAirStack.AIR_STACK.toNetworkItemData());
-        packet.setHelmet(container.getHelmet().toNetworkItemData());
-        packet.setChestplate(container.getChestplate().toNetworkItemData());
-        packet.setLeggings(container.getLeggings().toNetworkItemData());
-        packet.setBoots(container.getBoots().toNetworkItemData());
+        packet.setBody(NetworkHelper.toNetwork(ItemAirStack.AIR_STACK));
+        packet.setHelmet(NetworkHelper.toNetwork(container.getHelmet()));
+        packet.setChestplate(NetworkHelper.toNetwork(container.getChestplate()));
+        packet.setLeggings(NetworkHelper.toNetwork(container.getLeggings()));
+        packet.setBoots(NetworkHelper.toNetwork(container.getBoots()));
         this.networkComponent.sendPacket(packet);
     }
 
@@ -1171,7 +1172,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var packet2 = new LevelEventPacket();
         packet2.setPosition(Vector3f.ZERO);
         packet2.setType(LevelEvent.STOP_THUNDERSTORM);
-        if (weather != Weather.RAIN) {
+        if (weather == Weather.THUNDER) {
             packet2.setType(LevelEvent.START_THUNDERSTORM);
             packet2.setData(65535);
         }

@@ -38,6 +38,7 @@ import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.joml.Vector3ic;
 
 import java.util.*;
@@ -71,7 +72,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected static final String TAG_LOCK_MODE = "minecraft:item_lock";
     protected static final String TAG_PDC = "PDC";
 
-    private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
+    // The unique id counter should start at 1 because 0 is used to indicate that this item stack does not have a unique id
+    private static final AtomicInteger UNIQUE_ID = new AtomicInteger(1);
 
     @ComponentObject
     protected ItemStack thisItemStack;
@@ -108,23 +110,24 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected NbtMap blockEntityNBT;
     @Getter
     @Setter
-    protected int stackNetworkId;
+    protected int uniqueId;
 
     public ItemBaseComponentImpl(ItemStackInitInfo initInfo) {
         this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
         this.meta = initInfo.meta();
-        var specifiedNetworkId = initInfo.stackNetworkId();
-        if (specifiedNetworkId != EMPTY_STACK_NETWORK_ID) {
+        var specifiedNetworkId = initInfo.uniqueId();
+        if (specifiedNetworkId != EMPTY_UNIQUE_ID) {
             Preconditions.checkArgument(specifiedNetworkId > 0, "Specified ItemStack network id must be greater than 0");
-            this.stackNetworkId = specifiedNetworkId;
-        } else if (initInfo.autoAssignStackNetworkId()) {
-            this.stackNetworkId = STACK_NETWORK_ID_COUNTER.getAndIncrement();
+            this.uniqueId = specifiedNetworkId;
+        } else if (initInfo.assignUniqueId()) {
+            this.uniqueId = UNIQUE_ID.getAndIncrement();
         }
     }
 
-    public static int getCurrentStackNetworkIdCounter() {
-        return STACK_NETWORK_ID_COUNTER.get();
+    @VisibleForTesting
+    public static int getCurrentUniqueIdCounter() {
+        return UNIQUE_ID.get();
     }
 
     @OnInitFinish
@@ -307,8 +310,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                 .count(count)
                 .damage(meta)
                 .tag(saveExtraTag())
-                .usingNetId(hasStackNetworkId())
-                .netId(stackNetworkId)
+                .usingNetId(hasUniqueId())
+                .netId(uniqueId)
                 .build();
     }
 
@@ -321,8 +324,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                         .count(count)
                         .meta(meta)
                         .extraTag(extraTag != null ? extraTag : NbtMap.EMPTY)
-                        .stackNetworkId(newStackNetworkId ? EMPTY_STACK_NETWORK_ID : stackNetworkId)
-                        .autoAssignStackNetworkId(newStackNetworkId)
+                        .uniqueId(newStackNetworkId ? EMPTY_UNIQUE_ID : uniqueId)
+                        .assignUniqueId(newStackNetworkId)
                         .build()
         );
     }

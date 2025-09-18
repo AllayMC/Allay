@@ -15,18 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)
-public class ItemStackNetworkIdTest {
+public class ItemStackUniqueIdTest {
     @Test
-    void testItemAirStackNetworkId() {
-        assertEquals(ItemBaseComponent.EMPTY_STACK_NETWORK_ID, AIR.createItemStack(null).getStackNetworkId());
+    void testItemAirStackUniqueId() {
+        assertEquals(ItemBaseComponent.EMPTY_UNIQUE_ID, AIR.createItemStack(null).getUniqueId());
     }
 
     @Test
-    void testItemStackNetworkIdAssignment() {
-        var currentNID = ItemBaseComponentImpl.getCurrentStackNetworkIdCounter();
+    void testItemStackUniqueIdAssignment() {
+        var currentId = ItemBaseComponentImpl.getCurrentUniqueIdCounter();
         var itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().build());
-        assertEquals(currentNID, itemStack.getStackNetworkId());
-        itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().stackNetworkId(1).build());
-        assertEquals(1, itemStack.getStackNetworkId());
+        assertEquals(currentId, itemStack.getUniqueId());
+        itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().uniqueId(1).build());
+        assertEquals(1, itemStack.getUniqueId());
     }
 }

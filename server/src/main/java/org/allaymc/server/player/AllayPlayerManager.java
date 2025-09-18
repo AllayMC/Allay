@@ -233,17 +233,20 @@ public class AllayPlayerManager implements PlayerManager {
     public synchronized void onLoggedIn(EntityPlayer player) {
         players.put(player.getLoginData().getUuid(), player);
         networkInterface.setPlayerCount(players.size());
+        Server.getInstance().getMessageChannel().addReceiver(player);
     }
 
     public synchronized void onDisconnect(EntityPlayer player) {
-        Server.getInstance().sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
+        var server = Server.getInstance();
+        server.sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
         // At this time the client have disconnected
         if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
             Object[] args = new Object[]{player.getOriginName()};
-            Server.getInstance().getMessageChannel().broadcastTranslatable(event.getQuitMessage(), args);
+            server.getMessageChannel().broadcastTranslatable(event.getQuitMessage(), args);
+            server.getMessageChannel().removeReceiver(player);
             players.remove(player.getLoginData().getUuid());
 
             // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off

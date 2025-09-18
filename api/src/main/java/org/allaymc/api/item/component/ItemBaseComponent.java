@@ -33,7 +33,10 @@ import static org.allaymc.api.item.type.ItemTypes.SHEARS;
  */
 public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
-    int EMPTY_STACK_NETWORK_ID = 0;
+    /**
+     * The value returned by method {@link #getUniqueId()} when the item stack does not use the stack id.
+     */
+    int EMPTY_UNIQUE_ID = 0;
 
     /**
      * Gets the item type.
@@ -198,36 +201,41 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @return the {@link ItemData}
      */
+    // TODO: remove it
     ItemData toNetworkItemData();
 
     /**
-     * Checks if the item has a stack network ID.
+     * Gets the unique id of this item stack. Stack unique id is an increasing unique int value that associated
+     * with a stack, mainly used in the new item stack request system to reduce network traffic footprint. Different
+     * item stacks will have different unique ids.
+     * <p>
+     * Notes that item stack may don't have unique id, and in that case this method will return {@link #EMPTY_UNIQUE_ID}.
+     *
+     * @return the unique id
+     */
+    int getUniqueId();
+
+    /**
+     * Sets the unique id of this item stack.
+     *
+     * @param uniqueId the new unique id
+     */
+    void setUniqueId(int uniqueId);
+
+    /**
+     * Checks if the item stack has a unique id.
      *
      * @return {@code true} if present, {@code false} otherwise
      */
-    default boolean hasStackNetworkId() {
-        return getStackNetworkId() != EMPTY_STACK_NETWORK_ID;
+    default boolean hasUniqueId() {
+        return getUniqueId() != EMPTY_UNIQUE_ID;
     }
 
     /**
-     * Gets the stack network ID.
-     *
-     * @return the stack network ID
+     * Clears the unique id of this item stack.
      */
-    int getStackNetworkId();
-
-    /**
-     * Sets the stack network ID.
-     *
-     * @param newStackNetworkId the new ID
-     */
-    void setStackNetworkId(int newStackNetworkId);
-
-    /**
-     * Clears the stack network ID.
-     */
-    default void clearStackNetworkId() {
-        setStackNetworkId(EMPTY_STACK_NETWORK_ID);
+    default void clearUniqueId() {
+        setUniqueId(EMPTY_UNIQUE_ID);
     }
 
     /**
