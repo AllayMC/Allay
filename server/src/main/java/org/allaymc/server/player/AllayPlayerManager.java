@@ -150,7 +150,7 @@ public class AllayPlayerManager implements PlayerManager {
 
         banInfo.bannedIps().add(ip);
         players.values().stream()
-                .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
+                .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
                 .forEach(player -> player.disconnect(TrKeys.ALLAY_DISCONNECT_BANIP));
 
         return true;
@@ -238,7 +238,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     public synchronized void onDisconnect(EntityPlayer player) {
         var server = Server.getInstance();
-        server.sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
+        server.sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getSocketAddress().toString());
 
         // At this time the client have disconnected
         if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {

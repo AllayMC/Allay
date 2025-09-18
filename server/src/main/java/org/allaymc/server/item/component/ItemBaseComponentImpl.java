@@ -35,6 +35,7 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
+import org.allaymc.server.utils.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -305,7 +306,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         var blockState = toBlockState();
         return ItemData
                 .builder()
-                .definition(itemType.toNetworkDefinition())
+                .definition(NetworkHelper.toNetwork(itemType))
                 .blockDefinition(blockState != null ? blockState::blockStateHash : () -> 0)
                 .count(count)
                 .damage(meta)

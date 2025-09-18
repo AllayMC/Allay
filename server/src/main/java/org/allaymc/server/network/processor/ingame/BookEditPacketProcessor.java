@@ -39,7 +39,16 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
             return;
         }
 
-        var event = new PlayerBookEditEvent(player, book, packet.getAction());
+        var event = new PlayerBookEditEvent(
+                player, book,
+                switch (packet.getAction()) {
+                    case REPLACE_PAGE -> PlayerBookEditEvent.Action.REPLACE_PAGE;
+                    case ADD_PAGE -> PlayerBookEditEvent.Action.ADD_PAGE;
+                    case DELETE_PAGE -> PlayerBookEditEvent.Action.DELETE_PAGE;
+                    case SWAP_PAGES -> PlayerBookEditEvent.Action.SWAP_PAGES;
+                    case SIGN_BOOK -> PlayerBookEditEvent.Action.SIGN_BOOK;
+                }
+        );
         if (!event.call()) {
             return;
         }

@@ -3,7 +3,6 @@ package org.allaymc.server.network;
 import com.google.common.base.Suppliers;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
@@ -11,6 +10,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.server.registry.InternalRegistries;
+import org.allaymc.server.utils.NetworkHelper;
 import org.allaymc.server.world.biome.BiomeData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -60,7 +60,7 @@ public final class DeferredData {
 
     public static List<ItemDefinition> encodeItemDefinitions() {
         return Registries.ITEMS.getContent().values().stream()
-                .map(ItemType::toNetworkDefinition)
+                .map(NetworkHelper::toNetwork)
                 .toList();
     }
 
@@ -119,20 +119,16 @@ public final class DeferredData {
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
             if (type == Pack.Type.RESOURCES) {
-                packet.getResourcePackInfos().add(toEntryInfo(pack));
+                packet.getResourcePackInfos().add(new ResourcePacksInfoPacket.Entry(
+                        pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
+                        "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
+                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
+                        false, null
+                ));
             }
         }
 
         return packet;
-    }
-
-    public ResourcePacksInfoPacket.Entry toEntryInfo(Pack pack) {
-        return new ResourcePacksInfoPacket.Entry(
-                pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
-                "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
-                pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                false, null
-        );
     }
 
     public static ResourcePackStackPacket encodeResourcesPackStackPacket() {
@@ -148,7 +144,9 @@ public final class DeferredData {
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
             if (type == Pack.Type.RESOURCES) {
-                packet.getResourcePacks().add(pack.toEntryStack());
+                packet.getResourcePacks().add(new ResourcePackStackPacket.Entry(
+                        pack.getId().toString(), pack.getStringVersion(), ""
+                ));
             }
         }
 

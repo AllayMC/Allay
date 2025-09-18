@@ -22,7 +22,8 @@ import java.util.UUID;
  */
 public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProcessor<ResourcePackClientResponsePacket> {
     @Override
-    public void handle(EntityPlayer player, ResourcePackClientResponsePacket packet) {
+    public void handle(EntityPlayer p, ResourcePackClientResponsePacket packet) {
+        var player = (EntityPlayerImpl) p;
         switch (packet.getStatus()) {
             case SEND_PACKS -> {
                 for (var packId : packet.getPackIds()) {
@@ -41,7 +42,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                 player.sendPacket(packetToSend);
             }
             case COMPLETED ->
-                    ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).initializePlayer();
+                    ((EntityPlayerNetworkComponentImpl) player.getPlayerNetworkComponent()).initializePlayer();
             default -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         }
     }

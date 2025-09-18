@@ -48,6 +48,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final Supplier<BlockType<?>> blockType;
     // Item component data is used to be sent to the client to let the client know
     // the attributes of the item, so that the client know how to handle the item
+    @Getter
     private final ItemComponentData itemComponentData;
 
     private AllayItemType(

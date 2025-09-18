@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.item.ItemStack;
@@ -11,6 +12,7 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.*;
 import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
+import org.allaymc.server.utils.NetworkHelper;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 
 /**
@@ -50,10 +52,12 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         var pk = new PlayerEnchantOptionsPacket();
         if (item != ItemAirStack.AIR_STACK) {
             var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
-            var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions);
-            if (!event.call()) return;
+            var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
+            if (!event.call()) {
+                return;
+            }
 
-            pk.getOptions().addAll(event.getEnchantOptions());
+            pk.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
         }
 
         thisPlayer.sendPacket(pk);

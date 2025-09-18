@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.utils.SemVersion;
-import org.cloudburstmc.protocol.bedrock.packet.ResourcePackStackPacket;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
@@ -90,10 +89,6 @@ public abstract class Pack implements AutoCloseable {
     }
 
     public abstract Type getType();
-
-    public ResourcePackStackPacket.Entry toEntryStack() {
-        return new ResourcePackStackPacket.Entry(this.getId().toString(), this.getStringVersion(), "");
-    }
 
     @Override
     public void close() throws Exception {

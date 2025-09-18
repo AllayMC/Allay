@@ -24,7 +24,8 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
-    public void handle(EntityPlayer player, LoginPacket packet) {
+    public void handle(EntityPlayer p, LoginPacket packet) {
+        var player = (EntityPlayerImpl) p;
         AllayLoginData loginData;
         try {
             loginData = AllayLoginData.decode(packet);

@@ -2,7 +2,6 @@ package org.allaymc.api.item.enchantment;
 
 import lombok.AllArgsConstructor;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 
 import java.util.Objects;
 
@@ -38,7 +37,6 @@ public class EnchantmentInstance {
      * Set the level of the enchantment.
      *
      * @param level the level of the enchantment
-     *
      * @return the enchantment instance with the new level
      */
     public EnchantmentInstance setLevel(int level) {
@@ -55,10 +53,6 @@ public class EnchantmentInstance {
                 .putShort("id", (short) getType().getId())
                 .putShort("lvl", (short) getLevel())
                 .build();
-    }
-
-    public EnchantData toNetwork() {
-        return new EnchantData(getType().getId(), getLevel());
     }
 
     @Override

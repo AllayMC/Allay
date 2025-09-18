@@ -148,6 +148,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `BlockState.toNetworkDefinition()`.
 - (API) Removed method `Container.toNetworkItemData()`.
 - (API) Removed methods `toNetwork()`, `getChunkDataPacket()` and `toEntryInfo()` in class `Pack`.
+- (API) Removed method `EntityPlayerNetworkComponent.getClientSession()`.
+- (API) Removed method `EnchantmentInstance.toNetwork()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

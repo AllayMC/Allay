@@ -12,6 +12,7 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
 import java.util.List;
@@ -57,5 +58,9 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
 
     public void sendPacketImmediately(BedrockPacket packet) {
         ((EntityPlayerNetworkComponentImpl) (this.playerNetworkComponent)).sendPacketImmediately(packet);
+    }
+
+    public BedrockServerSession getClientSession() {
+        return ((EntityPlayerNetworkComponentImpl) (this.playerNetworkComponent)).getClientSession();
     }
 }

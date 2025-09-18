@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.eventbus.event.player.PlayerLoginEvent;
@@ -55,6 +54,7 @@ import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 
+import java.net.SocketAddress;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -73,7 +73,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Manager
     protected ComponentManager manager;
     @ComponentObject
-    protected EntityPlayer thisPlayer;
+    protected EntityPlayerImpl thisPlayer;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
 
@@ -258,8 +258,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         try {
             onDisconnect(disconnectReason);
             // Tell the client that it should disconnect
-            if (thisPlayer.getClientSession().isConnected()) {
-                thisPlayer.getClientSession().disconnect(disconnectReason);
+            if (this.clientSession.isConnected()) {
+                this.clientSession.disconnect(disconnectReason);
             }
         } catch (Throwable t) {
             log.error("Error while disconnecting the session", t);
@@ -276,8 +276,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         return packetProcessorHolder.getLastClientState();
     }
 
+    @Override
+    public SocketAddress getSocketAddress() {
+        return this.clientSession.getSocketAddress();
+    }
+
     protected void onDisconnect(String disconnectReason) {
-        new ClientDisconnectEvent(clientSession, disconnectReason).call();
+        new ClientDisconnectEvent(clientSession.getSocketAddress(), disconnectReason).call();
         thisPlayer.closeAllOpenedContainers();
         ((AllayPlayerManager) Server.getInstance().getPlayerManager()).onDisconnect(thisPlayer);
     }

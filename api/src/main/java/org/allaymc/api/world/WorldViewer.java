@@ -147,6 +147,8 @@ public interface WorldViewer {
      */
     void viewChunk(Chunk chunk);
 
+    // TODO: viewSubChunk()
+
     /**
      * Removes the chunk passed.
      *

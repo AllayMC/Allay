@@ -14,7 +14,6 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.Particle;
@@ -51,7 +50,7 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
 
     @Override
     public int getChunkMaxSendCountPerTick() {
-        return Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
+        return Integer.MAX_VALUE;
     }
 
     @Override

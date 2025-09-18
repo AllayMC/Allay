@@ -1,8 +1,17 @@
 package org.allaymc.server.utils;
 
+import it.unimi.dsi.fastutil.Pair;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.EnchantOption;
+import org.allaymc.api.item.enchantment.EnchantmentInstance;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.item.type.AllayItemType;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.*;
 
@@ -15,6 +24,29 @@ import java.util.List;
  */
 @UtilityClass
 public final class NetworkHelper {
+
+    public static EnchantData toNetwork(EnchantmentInstance instance) {
+        return new EnchantData(instance.getType().getId(), instance.getLevel());
+    }
+
+    public static EnchantOptionData toNetwork(Pair<Integer, EnchantOption> pair) {
+        var networkId = pair.left();
+        var option = pair.right();
+        return new EnchantOptionData(
+                option.requiredXpLevel(), 0,
+                option.enchantments().stream().map(NetworkHelper::toNetwork).toList(),
+                List.of(), List.of(), option.optionName(), networkId
+        );
+    }
+
+    public ItemDefinition toNetwork(ItemType<?> itemType) {
+        var itemComponentData = ((AllayItemType<?>) itemType).getItemComponentData();
+        return new SimpleItemDefinition(
+                itemType.getIdentifier().toString(), itemType.getRuntimeId(), itemComponentData.version(),
+                itemComponentData.componentBased(), itemComponentData.components()
+        );
+    }
+
     public static ItemData toNetwork(ItemStack itemStack) {
         var itemType = itemStack.getItemType();
         if (itemType == ItemTypes.AIR) {
@@ -24,7 +56,7 @@ public final class NetworkHelper {
         var blockState = itemStack.toBlockState();
         return ItemData
                 .builder()
-                .definition(itemType.toNetworkDefinition())
+                .definition(NetworkHelper.toNetwork(itemType))
                 .blockDefinition(blockState != null ? blockState::blockStateHash : () -> 0)
                 .count(itemStack.getCount())
                 .damage(itemStack.getMeta())

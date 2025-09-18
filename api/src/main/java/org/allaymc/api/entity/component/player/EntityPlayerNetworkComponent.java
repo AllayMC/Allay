@@ -6,7 +6,8 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.PacketReceiver;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.LoginData;
-import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+
+import java.net.SocketAddress;
 
 /**
  * EntityPlayerNetworkComponent is the component that manages network related things of a player.
@@ -100,11 +101,11 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     }
 
     /**
-     * Get the client session for the player.
+     * Get the socket address of the player.
      *
-     * @return the client session for the player
+     * @return the socket address of the player
      */
-    BedrockServerSession getClientSession();
+    SocketAddress getSocketAddress();
 
     /**
      * Get the ping of the player.

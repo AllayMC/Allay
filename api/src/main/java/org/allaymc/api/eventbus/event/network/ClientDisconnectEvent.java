@@ -2,7 +2,8 @@ package org.allaymc.api.eventbus.event.network;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+
+import java.net.SocketAddress;
 
 /**
  * ClientDisconnectEvent will be called when client disconnect.
@@ -15,7 +16,7 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 @AllArgsConstructor
 @Getter
 public class ClientDisconnectEvent extends NetworkEvent {
-    protected BedrockServerSession session;
+    protected SocketAddress socketAddress;
     /**
      * The reason why the client disconnected.
      */

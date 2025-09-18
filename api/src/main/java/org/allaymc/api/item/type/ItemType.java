@@ -77,6 +77,7 @@ public interface ItemType<T extends ItemStack> extends Identified {
      *
      * @return The network definition of the item
      */
+    // TODO: remove it
     ItemDefinition toNetworkDefinition();
 
     /**

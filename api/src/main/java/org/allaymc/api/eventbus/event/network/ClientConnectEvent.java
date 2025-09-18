@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.message.MayContainTrKey;
-import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+
+import java.net.SocketAddress;
 
 /**
  * @author daoge_cmd
@@ -13,7 +14,7 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 @AllArgsConstructor
 @Getter
 public class ClientConnectEvent extends NetworkEvent implements CancellableEvent {
-    protected BedrockServerSession session;
+    protected SocketAddress socketAddress;
     /**
      * The reason that will be shown to the player if the event is cancelled.
      * If the event is not cancelled, this field will be ignored.

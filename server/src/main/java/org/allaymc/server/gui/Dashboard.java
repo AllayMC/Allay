@@ -121,7 +121,7 @@ public final class Dashboard {
                     var pos = player.getLocation();
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
-                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ADDRESS) + ": " + player.getSocketAddress().toString() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_UUID) + ": " + player.getLoginData().getUuid().toString() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getDisplayName() + "\n" +
@@ -157,7 +157,7 @@ public final class Dashboard {
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
                     var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
-                    Server.getInstance().getPlayerManager().banIP(AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0]);
+                    Server.getInstance().getPlayerManager().banIP(AllayStringUtils.fastTwoPartSplit(player.getSocketAddress().toString().substring(1), ":", "")[0]);
                 });
                 popupMenu.add(banIpItem);
 
@@ -350,7 +350,7 @@ public final class Dashboard {
         for (var player : players) {
             data[row] = new String[]{
                     player.getOriginName(),
-                    player.getClientSession().getSocketAddress().toString(),
+                    player.getSocketAddress().toString(),
                     player.getLoginData().getUuid().toString()
             };
             row++;
