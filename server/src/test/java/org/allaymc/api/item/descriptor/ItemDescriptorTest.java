@@ -26,7 +26,7 @@ class ItemDescriptorTest {
 
     @Test
     void testDefaultDescriptor() {
-        var descriptor = new DefaultDescriptor(PLANKS, 32767);
+        var descriptor = new ItemTypeDescriptor(PLANKS, 32767);
         var plankItemStack = PLANKS.createItemStack(
                 ItemStackInitInfo.builder().meta(1).build()
         );
@@ -35,7 +35,7 @@ class ItemDescriptorTest {
 
     @Test
     void testItemDescriptorWithCount() {
-        var descriptor = new ItemDescriptorWithCount(new DefaultDescriptor(PLANKS), 32);
+        var descriptor = new ItemDescriptorWithCount(new ItemTypeDescriptor(PLANKS), 32);
         var plankItemStack = PLANKS.createItemStack(
                 ItemStackInitInfo.builder().count(32).build()
         );

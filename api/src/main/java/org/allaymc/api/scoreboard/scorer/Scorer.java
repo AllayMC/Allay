@@ -1,9 +1,5 @@
 package org.allaymc.api.scoreboard.scorer;
 
-import org.allaymc.api.scoreboard.Scoreboard;
-import org.allaymc.api.scoreboard.ScoreboardLine;
-import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
-
 /**
  * Describes a scorer.
  *
@@ -16,7 +12,7 @@ public sealed interface Scorer permits EntityScorer, PlayerScorer, FakeScorer {
      *
      * @return The type of this scorer
      */
-    ScoreInfo.ScorerType getScorerType();
+    ScorerType getScorerType();
 
     /**
      * Get the name of this scorer.
@@ -24,14 +20,4 @@ public sealed interface Scorer permits EntityScorer, PlayerScorer, FakeScorer {
      * @return The name of this scorer
      */
     String getName();
-
-    /**
-     * Convert this scorer to network information
-     *
-     * @param scoreboard The associated scoreboard
-     * @param line       The associated line
-     *
-     * @return The network information
-     */
-    ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line);
 }

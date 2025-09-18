@@ -3,9 +3,9 @@ package org.allaymc.server.registry.loader;
 import com.google.gson.JsonObject;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
+import org.allaymc.api.item.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.registry.Registries;
@@ -68,15 +68,15 @@ public final class RecipeJsonUtils {
         return new ItemTagDescriptor(itemTag);
     }
 
-    public static DefaultDescriptor parseDefaultItemDescriptor(JsonObject jsonObject) {
+    public static ItemTypeDescriptor parseDefaultItemDescriptor(JsonObject jsonObject) {
         Identifier itemId = new Identifier(jsonObject.get("item").getAsString());
         var itemType = Registries.ITEMS.get(itemId);
         // "data" field only exists in default item descriptor
         var meta = jsonObject.get("data");
         if (meta != null) {
-            return new DefaultDescriptor(itemType, meta.getAsInt());
+            return new ItemTypeDescriptor(itemType, meta.getAsInt());
         } else {
-            return new DefaultDescriptor(itemType);
+            return new ItemTypeDescriptor(itemType);
         }
     }
 

@@ -3,7 +3,7 @@ package org.allaymc.api.item.recipe.impl;
 import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.DefaultDescriptor;
+import org.allaymc.api.item.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.recipe.IdentifiedRecipe;
 import org.allaymc.api.item.recipe.TaggedRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
@@ -27,7 +27,7 @@ public class FurnaceRecipe implements BaseRecipe, TaggedRecipe, IdentifiedRecipe
     @Getter
     protected String tag;
     @Getter
-    protected DefaultDescriptor ingredient;
+    protected ItemTypeDescriptor ingredient;
     protected ItemStack output;
     // NOTICE: Furnace recipe does not have identifier in runtime
     // We give each furnace recipe an identifier server-side to make it possible
@@ -37,7 +37,7 @@ public class FurnaceRecipe implements BaseRecipe, TaggedRecipe, IdentifiedRecipe
     protected Identifier identifier;
 
     @Builder
-    public FurnaceRecipe(DefaultDescriptor ingredient, ItemStack output, String tag) {
+    public FurnaceRecipe(ItemTypeDescriptor ingredient, ItemStack output, String tag) {
         this.ingredient = ingredient;
         this.output = output;
         this.tag = tag;

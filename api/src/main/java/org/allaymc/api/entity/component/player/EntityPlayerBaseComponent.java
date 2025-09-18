@@ -206,13 +206,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     void setGameMode(GameMode gameMode);
 
     /**
-     * Sets the walk speed of the player.
-     *
-     * @param walkSpeed the walk speed to set
-     */
-    void setWalkSpeed(float walkSpeed);
-
-    /**
      * Sets the fly speed of the player.
      *
      * @param flySpeed the fly speed to set
@@ -464,7 +457,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      * command permissions change, but usually you don't need to call this method manually since the permission
      * listener does it.
      */
-    @ApiStatus.Experimental
+    @ApiStatus.Internal
     void requireResendingCommands();
 
     /**

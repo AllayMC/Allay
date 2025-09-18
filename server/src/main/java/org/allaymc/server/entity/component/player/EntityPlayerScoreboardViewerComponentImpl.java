@@ -7,10 +7,14 @@ import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.data.SortOrder;
+import org.allaymc.api.scoreboard.scorer.EntityScorer;
+import org.allaymc.api.scoreboard.scorer.FakeScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
+import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 import org.cloudburstmc.protocol.bedrock.packet.RemoveObjectivePacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetDisplayObjectivePacket;
 import org.cloudburstmc.protocol.bedrock.packet.SetScorePacket;
@@ -46,7 +50,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         setScorePacket.setInfos(
                 scoreboard.getLines().values()
                         .stream()
-                        .map(ScoreboardLine::toNetworkInfo)
+                        .map(this::toNetwork)
                         .filter(Objects::nonNull)
                         .toList()
         );
@@ -57,6 +61,39 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         var line = scoreboard.getLine(scorer);
         if (slot == DisplaySlot.BELOW_NAME && line != null) {
             thisPlayer.setData(EntityData.SCORE, line.getScore() + " " + scoreboard.getDisplayName());
+        }
+    }
+
+    protected ScoreInfo toNetwork(ScoreboardLine line) {
+        var scoreboard = line.getScoreboard();
+        switch (line.getScorer()) {
+            case EntityScorer scorer -> {
+                return new ScoreInfo(
+                        line.getLineId(), scoreboard.getObjectiveName(), line.getScore(),
+                        ScoreInfo.ScorerType.ENTITY, scorer.getUniqueId()
+                );
+            }
+            case PlayerScorer scorer -> {
+                if (scorer.getUuid() == null) {
+                    return null;
+                }
+
+                var player = Server.getInstance().getPlayerManager().getPlayers().get(scorer.getUuid());
+                if (player == null) {
+                    return null;
+                }
+
+                return new ScoreInfo(
+                        line.getLineId(), scoreboard.getObjectiveName(), line.getScore(),
+                        ScoreInfo.ScorerType.PLAYER, player.getRuntimeId()
+                );
+            }
+            case FakeScorer scorer -> {
+                return new ScoreInfo(
+                        line.getLineId(), scoreboard.getObjectiveName(),
+                        line.getScore(), scorer.getFakeName()
+                );
+            }
         }
     }
 
@@ -87,9 +124,10 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
     public void removeScoreboardLine(ScoreboardLine line) {
         var packet = new SetScorePacket();
         packet.setAction(SetScorePacket.Action.REMOVE);
-        var networkInfo = line.toNetworkInfo();
-        if (networkInfo != null)
+        var networkInfo = toNetwork(line);
+        if (networkInfo != null) {
             packet.getInfos().add(networkInfo);
+        }
         networkComponent.sendPacket(packet);
 
         var scorer = new PlayerScorer(thisPlayer);
@@ -102,9 +140,10 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
     public void updateScore(ScoreboardLine line) {
         var packet = new SetScorePacket();
         packet.setAction(SetScorePacket.Action.SET);
-        var networkInfo = line.toNetworkInfo();
-        if (networkInfo != null)
+        var networkInfo = toNetwork(line);
+        if (networkInfo != null) {
             packet.getInfos().add(networkInfo);
+        }
         networkComponent.sendPacket(packet);
 
         var scorer = new PlayerScorer(thisPlayer);

@@ -5,7 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 
 /**
  * @author JukeboxMC | daoge_cmd
@@ -34,7 +33,6 @@ public class Attribute implements Cloneable {
      * Create an Attribute object from a NbtMap.
      *
      * @param nbt the NbtMap
-     *
      * @return the Attribute object
      */
     public static Attribute fromNBT(NbtMap nbt) {
@@ -52,15 +50,6 @@ public class Attribute implements Cloneable {
      */
     public void reset() {
         this.currentValue = this.defaultValue;
-    }
-
-    /**
-     * Convert this attribute to an AttributeData object for network transmission.
-     *
-     * @return the AttributeData object
-     */
-    public AttributeData toNetwork() {
-        return new AttributeData(this.key, this.minValue, this.maxValue, this.currentValue, this.defaultValue);
     }
 
     /**

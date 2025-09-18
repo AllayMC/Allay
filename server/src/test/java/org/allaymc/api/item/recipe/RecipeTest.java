@@ -1,8 +1,8 @@
 package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
+import org.allaymc.api.item.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
-    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(GRASS_BLOCK));
+    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new ItemTypeDescriptor(GRASS_BLOCK));
 
     @Test
     void testShapedRecipe() {
@@ -195,9 +195,9 @@ class RecipeTest {
                 .identifier(new Identifier("minecraft:grass_magic_1"))
                 .ingredients(
                         new ItemDescriptor[]{
-                                new DefaultDescriptor(GRASS_BLOCK),
-                                new DefaultDescriptor(GRASS_BLOCK),
-                                new DefaultDescriptor(GRASS_BLOCK)
+                                new ItemTypeDescriptor(GRASS_BLOCK),
+                                new ItemTypeDescriptor(GRASS_BLOCK),
+                                new ItemTypeDescriptor(GRASS_BLOCK)
                         }
                 )
                 .outputs(new ItemStack[]{diamond()})
@@ -222,7 +222,7 @@ class RecipeTest {
     void testFurnaceRecipe() {
         var grassMagic1 = FurnaceRecipe
                 .builder()
-                .ingredient(new DefaultDescriptor(GRASS_BLOCK))
+                .ingredient(new ItemTypeDescriptor(GRASS_BLOCK))
                 .tag(FurnaceRecipe.FURNACE_TAG)
                 .output(diamond())
                 .build();
@@ -233,7 +233,7 @@ class RecipeTest {
 
         var grassMagic2 = FurnaceRecipe
                 .builder()
-                .ingredient(new DefaultDescriptor(GRASS_BLOCK))
+                .ingredient(new ItemTypeDescriptor(GRASS_BLOCK))
                 .tag(FurnaceRecipe.BLAST_FURNACE_TAG)
                 .output(diamond())
                 .build();

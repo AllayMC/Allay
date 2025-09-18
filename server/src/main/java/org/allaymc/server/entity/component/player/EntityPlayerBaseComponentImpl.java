@@ -116,15 +116,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
      * After teleporting, the server still receives the PlayerAuthInputPacket sent by the client before teleporting.
      * The following is a simple simulation (initial player position is (0, 1000, 0)):
      * <p>
-     * [C->S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                           <br>
-     * [S] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
-     * [S->C] Send new pos (0, 100, 0) `pk2`                                                  <br>
-     * [S] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
-     * [C] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
-     * [C->S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                           <br>
-     * [S] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
+     * [C -> S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                              <br>
+     * [Server] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
+     * [S -> C] Send new pos (0, 100, 0) `pk2`                                                     <br>
+     * [Server] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
+     * [Client] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
+     * [C -> S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                              <br>
+     * [Server] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
      *
-     * @see <a href="https://github.com/AllayMC/Allay/issues/517">teleport method should reset fall distance</a>
+     * @see <a href="https://github.com/AllayMC/Allay/issues/517">Teleport method should reset fall distance</a>
      */
     @Getter
     @Setter
@@ -218,11 +218,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         thisPlayer.viewPlayerGameMode(thisPlayer);
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
-    }
-
-    @Override
-    public void setWalkSpeed(float walkSpeed) {
-        this.abilities.setWalkSpeed(walkSpeed);
     }
 
     @Override

@@ -8,22 +8,20 @@ import org.allaymc.api.item.type.ItemType;
 import java.util.Objects;
 
 /**
- * Represents a default item descriptor.
- * <p>
- * This descriptor matches items based on their {@link ItemType} and meta.
+ * ItemTypeDescriptor matches items based on their {@link ItemType} and meta.
  *
  * @author daoge_cmd
  */
 @Getter
 @AllArgsConstructor
-public class DefaultDescriptor implements ItemDescriptor {
+public class ItemTypeDescriptor implements ItemDescriptor {
 
     public static final int WILDCARD_META = 32767;
 
     protected ItemType<?> itemType;
     protected int meta;
 
-    public DefaultDescriptor(ItemType<?> itemType) {
+    public ItemTypeDescriptor(ItemType<?> itemType) {
         this(itemType, WILDCARD_META);
     }
 
@@ -52,7 +50,7 @@ public class DefaultDescriptor implements ItemDescriptor {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof DefaultDescriptor that)) {
+        if (!(o instanceof ItemTypeDescriptor that)) {
             return false;
         }
         return meta == that.meta && Objects.equals(itemType, that.itemType);

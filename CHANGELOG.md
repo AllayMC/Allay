@@ -104,6 +104,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed class `TextReceiver` to `MessageReceiver` and method `TextReceiver.sendText()` to `MessageReceiver.sendMessage()`.
 - (API) Moved class `XXXId` from api to server, since the user is expected to use objects in `XXXTypes`.
 - (API) Changed methods in `ItemSignBaseComponent` to return `BlockType` instead of `BlockId`.
+- (API) Renamed class `DefaultDescriptor` to `ItemTypeDescriptor`.
 
 ### Fixed
 
@@ -141,6 +142,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed chunk packet related methods in `UnsafeChunk`.
 - (API) Removed method `CommandSender.getCommandOriginData()`.
 - (API) Removed method `CommandSender.handleResult()`.
+- (API) Removed network related methods in classes `ScoreboardLine` and `Scorer`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

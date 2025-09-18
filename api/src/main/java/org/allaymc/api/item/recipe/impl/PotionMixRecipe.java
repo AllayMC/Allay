@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.DefaultDescriptor;
+import org.allaymc.api.item.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.recipe.input.PotionMixRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
@@ -18,9 +18,9 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
 @ToString
 @Getter
 public class PotionMixRecipe implements Recipe<PotionMixData>, Identified {
-    protected DefaultDescriptor ingredient;
-    protected DefaultDescriptor output;
-    protected DefaultDescriptor reagent;
+    protected ItemTypeDescriptor ingredient;
+    protected ItemTypeDescriptor output;
+    protected ItemTypeDescriptor reagent;
 
     /**
      * NOTICE: Potion mix recipe does not have identifier in runtime
@@ -32,7 +32,7 @@ public class PotionMixRecipe implements Recipe<PotionMixData>, Identified {
     protected Identifier identifier;
 
     @Builder
-    public PotionMixRecipe(DefaultDescriptor ingredient, DefaultDescriptor output, DefaultDescriptor reagent) {
+    public PotionMixRecipe(ItemTypeDescriptor ingredient, ItemTypeDescriptor output, ItemTypeDescriptor reagent) {
         this.ingredient = ingredient;
         this.output = output;
         this.reagent = reagent;

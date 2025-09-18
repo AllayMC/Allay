@@ -16,6 +16,7 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.event.*;
+import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 import java.util.Arrays;
@@ -209,7 +210,10 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     public void sendAttributesToClient() {
         var packet = new UpdateAttributesPacket();
         packet.setRuntimeEntityId(thisEntity.getRuntimeId());
-        attributes.values().forEach(attribute -> packet.getAttributes().add(attribute.toNetwork()));
+        attributes.values().forEach(attr -> packet.getAttributes().add(new AttributeData(
+                attr.getKey(), attr.getMinValue(), attr.getMaxValue(),
+                attr.getCurrentValue(), attr.getDefaultValue()
+        )));
         packet.setTick(thisEntity.getWorld().getTick());
         networkComponent.sendPacket(packet);
     }
