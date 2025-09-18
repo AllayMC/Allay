@@ -11,7 +11,6 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.data.BlockId;
-import org.allaymc.server.container.impl.BlockContainerImpl;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
@@ -54,7 +53,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
         }
 
         var anvilContainer = player.getContainer(ContainerType.ANVIL);
-        ((BlockContainerImpl) anvilContainer).setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+        anvilContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         anvilContainer.addViewer(player);
         return true;
     }

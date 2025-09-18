@@ -22,7 +22,7 @@ public class ContainerType<T extends Container> {
     public static final ContainerType<CartographyTableContainer> CARTOGRAPHY_TABLE = new ContainerType<>(3);
     public static final ContainerType<BlockContainer> CHEST = new ContainerType<>(27);
     public static final ContainerType<RecipeContainer> CRAFTING_GRID = new ContainerType<>(4);
-    public static final ContainerType<RecipeContainer> CRAFTING_TABLE = new ContainerType<>(9);
+    public static final ContainerType<CraftingTableContainer> CRAFTING_TABLE = new ContainerType<>(9);
     public static final ContainerType<Container> CREATED_OUTPUT = new ContainerType<>(1);
     public static final ContainerType<Container> CURSOR = new ContainerType<>(1);
     public static final ContainerType<BlockContainer> DOUBLE_CHEST = new ContainerType<>(54);

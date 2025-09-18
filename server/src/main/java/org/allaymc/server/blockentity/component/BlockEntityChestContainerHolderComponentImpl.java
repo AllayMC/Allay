@@ -36,13 +36,13 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
         }
 
         var pos = new Position3i(interactInfo.clickedBlockPos(), event.getDimension());
-        if (!isSpaceAboveClear(pos)) {
+        if (!hasSpaceAbove(pos)) {
             return;
         }
 
         if (pairableComponent.isPaired()) {
             var pair = pairableComponent.getPair();
-            if (!isSpaceAboveClear((Position3i) pair.getPosition())) {
+            if (!hasSpaceAbove((Position3i) pair.getPosition())) {
                 return;
             }
 
@@ -65,7 +65,7 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
         event.setSuccess(true);
     }
 
-    protected boolean isSpaceAboveClear(Position3i pos) {
+    protected boolean hasSpaceAbove(Position3i pos) {
         return pos.dimension().getBlockState(BlockFace.UP.offsetPos(pos)).getBlockStateData().isTransparent();
     }
 }

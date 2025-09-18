@@ -2,7 +2,6 @@ package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
@@ -66,7 +65,7 @@ public final class DeferredData {
     public static List<BlockDefinition> encodeBlockDefinitions() {
         return Registries.BLOCKS.getContent().values().stream()
                 .flatMap(block -> block.getAllStates().stream())
-                .map(BlockState::toNetworkBlockDefinition)
+                .map(blockState -> (BlockDefinition) blockState::blockStateHash)
                 .toList();
     }
 

@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -15,7 +16,6 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.AbstractPlayerContainer;
-import org.allaymc.server.container.impl.BlockContainerImpl;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -143,7 +143,8 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         var packet = new ContainerOpenPacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
-        if (container instanceof BlockContainerImpl blockContainer) {
+        if (container instanceof BlockContainer blockContainer) {
+            // FIXME: got null pos here
             packet.setBlockPosition(MathUtils.toCBVec(blockContainer.getBlockPos()));
         } else {
             var location = baseComponent.getLocation();

@@ -1,13 +1,14 @@
 package org.allaymc.server.container.impl;
 
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.interfaces.CraftingTableContainer;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 
 /**
  * @author daoge_cmd
  */
-public class CraftingTableContainerImpl extends CraftingContainerImpl {
+public class CraftingTableContainerImpl extends CraftingContainerImpl implements CraftingTableContainer {
     public CraftingTableContainerImpl() {
         super(ContainerType.CRAFTING_TABLE);
     }

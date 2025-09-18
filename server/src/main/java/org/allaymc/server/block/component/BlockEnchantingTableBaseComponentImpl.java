@@ -7,7 +7,6 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.container.impl.BlockContainerImpl;
 
 /**
  * @author daoge_cmd
@@ -29,7 +28,7 @@ public class BlockEnchantingTableBaseComponentImpl extends BlockBaseComponentImp
         }
 
         var enchantTableContainer = player.getContainer(ContainerType.ENCHANT_TABLE);
-        ((BlockContainerImpl) enchantTableContainer).setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+        enchantTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         enchantTableContainer.addViewer(player);
         return true;
     }

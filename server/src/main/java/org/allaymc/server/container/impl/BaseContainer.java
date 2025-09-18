@@ -92,7 +92,9 @@ public class BaseContainer implements Container {
     @Override
     public void addViewer(ContainerViewer viewer) {
         var event = new ContainerOpenEvent(viewer, this);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         if (viewers.containsValue(viewer)) {
             log.warn("Viewer already exists! Container: {}, Viewer: {}", this.containerType, viewer);
@@ -100,6 +102,7 @@ public class BaseContainer implements Container {
             addViewer(viewer);
             return;
         }
+
         var assignedId = viewer.viewOpen(this);
         if (viewers.containsKey(assignedId)) {
             removeViewer(viewers.get(assignedId));

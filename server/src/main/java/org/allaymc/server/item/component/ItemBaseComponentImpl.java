@@ -303,7 +303,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         return ItemData
                 .builder()
                 .definition(itemType.toNetworkDefinition())
-                .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
+                .blockDefinition(blockState != null ? blockState::blockStateHash : () -> 0)
                 .count(count)
                 .damage(meta)
                 .tag(saveExtraTag())

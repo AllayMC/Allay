@@ -6,7 +6,6 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -117,15 +116,6 @@ public interface BlockState {
      * @return {@link ItemStack} representing this state
      */
     ItemStack toItemStack();
-
-    /**
-     * Converts this state to a network block definition.
-     *
-     * @return {@link BlockDefinition} for network use
-     */
-    default BlockDefinition toNetworkBlockDefinition() {
-        return this::blockStateHash;
-    }
 
     /**
      * Gets the behavior of this block state.

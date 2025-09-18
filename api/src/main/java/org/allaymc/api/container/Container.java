@@ -73,6 +73,7 @@ public interface Container {
      *
      * @return the viewers
      */
+    @UnmodifiableView
     Map<Byte, ContainerViewer> getViewers();
 
     /**
@@ -128,6 +129,7 @@ public interface Container {
      *
      * @return the network item data
      */
+    // TODO: remove it
     List<ItemData> toNetworkItemData();
 
     /**

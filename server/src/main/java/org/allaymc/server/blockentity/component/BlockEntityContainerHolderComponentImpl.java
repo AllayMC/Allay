@@ -5,6 +5,7 @@ import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -13,7 +14,6 @@ import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.container.impl.BlockContainerImpl;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;
 
@@ -37,6 +37,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         this.container = containerSupplier.get();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends Container> T getContainer() {
         return (T) container;
@@ -46,7 +47,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     protected void onLoadNBT(CBlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList("Items", NbtType.COMPOUND, items -> container.loadNBT(items));
-        if (container instanceof BlockContainerImpl blockContainer) {
+        if (container instanceof BlockContainer blockContainer) {
             blockContainer.setBlockPos(baseComponent.getPosition());
         }
     }
@@ -54,17 +55,15 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @EventHandler
     protected void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
-        builder.putList(
-                "Items",
-                NbtType.COMPOUND,
-                container.saveNBT()
-        );
+        builder.putList("Items", NbtType.COMPOUND, container.saveNBT());
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
-        if (player == null || player.isSneaking()) return;
+        if (player == null || player.isSneaking()) {
+            return;
+        }
 
         container.addViewer(player);
         event.setSuccess(true);
@@ -76,7 +75,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
 
     @EventHandler
     protected void onReplace(CBlockOnReplaceEvent event) {
-        if (!dropItemWhenBreak()) return;
+        if (!dropItemWhenBreak()) {
+            return;
+        }
 
         var current = event.getCurrentBlock();
         var pos = current.getPosition();

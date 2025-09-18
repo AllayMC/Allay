@@ -7,7 +7,6 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.container.impl.BlockContainerImpl;
 
 /**
  * @author IWareQ
@@ -29,7 +28,7 @@ public class BlockBrewingStandBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var brewingStandContainer = player.getContainer(ContainerType.BREWING_STAND);
-        ((BlockContainerImpl) brewingStandContainer).setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+        brewingStandContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         brewingStandContainer.addViewer(player);
         return true;
     }

@@ -23,12 +23,16 @@ public interface EnchantTableContainer extends BlockContainer {
      *
      * @return the ItemStack in the input slot
      */
-    ItemStack getInput();
+    default ItemStack getInput() {
+        return getItemStack(INPUT_SLOT);
+    }
 
     /**
      * Gets the item in the material slot of the enchantment table.
      *
      * @return the ItemStack in the material slot
      */
-    ItemStack getMaterial();
+    default ItemStack getMaterial() {
+        return getItemStack(MATERIAL_SLOT);
+    }
 }

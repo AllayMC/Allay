@@ -7,7 +7,6 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.container.impl.BlockContainerImpl;
 
 /**
  * @author daoge_cmd
@@ -29,7 +28,7 @@ public class BlockBeaconBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var beaconContainer = player.getContainer(ContainerType.BEACON);
-        ((BlockContainerImpl) beaconContainer).setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+        beaconContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         beaconContainer.addViewer(player);
         return true;
     }
