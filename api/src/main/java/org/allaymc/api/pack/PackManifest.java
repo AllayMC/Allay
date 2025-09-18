@@ -22,7 +22,8 @@ import java.util.UUID;
 @Slf4j
 public class PackManifest {
 
-    private static final String FILE_NAME = "manifest.json";
+    public static final String FILE_NAME = "manifest.json";
+
     private static final Gson GSON;
 
     static {

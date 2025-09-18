@@ -4,11 +4,12 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.joml.*;
 
 import java.util.List;
 
 /**
- * Helper class to convert types in allay to the types used in the protocol library.
+ * Helper class to convert types between allay and the protocol library.
  *
  * @author daoge_cmd
  */
@@ -36,5 +37,53 @@ public final class NetworkHelper {
 
     public static List<ItemData> toNetwork(List<ItemStack> items) {
         return items.stream().map(NetworkHelper::toNetwork).toList();
+    }
+
+    public static Vector3ic fromNetwork(org.cloudburstmc.math.vector.Vector3i vec) {
+        if (vec == null) {
+            return null;
+        }
+
+        return new Vector3i(vec.getX(), vec.getY(), vec.getZ());
+    }
+
+    public static Vector3dc fromNetwork(org.cloudburstmc.math.vector.Vector3d vec) {
+        if (vec == null) {
+            return null;
+        }
+
+        return new Vector3d(vec.getX(), vec.getY(), vec.getZ());
+    }
+
+    public static Vector3fc fromNetwork(org.cloudburstmc.math.vector.Vector3f vec) {
+        if (vec == null) {
+            return null;
+        }
+
+        return new Vector3f(vec.getX(), vec.getY(), vec.getZ());
+    }
+
+    public static org.cloudburstmc.math.vector.Vector3i toNetwork(Vector3ic vec) {
+        if (vec == null) {
+            return null;
+        }
+
+        return org.cloudburstmc.math.vector.Vector3i.from(vec.x(), vec.y(), vec.z());
+    }
+
+    public static org.cloudburstmc.math.vector.Vector3d toNetwork(Vector3dc vec) {
+        if (vec == null) {
+            return null;
+        }
+
+        return org.cloudburstmc.math.vector.Vector3d.from(vec.x(), vec.y(), vec.z());
+    }
+
+    public static org.cloudburstmc.math.vector.Vector3f toNetwork(Vector3fc vec) {
+        if (vec == null) {
+            return null;
+        }
+
+        return org.cloudburstmc.math.vector.Vector3f.from(vec.x(), vec.y(), vec.z());
     }
 }

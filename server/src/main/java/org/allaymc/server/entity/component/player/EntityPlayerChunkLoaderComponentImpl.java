@@ -609,7 +609,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewBlockUpdate(Vector3ic pos, int layer, BlockState blockState) {
         var packet = new UpdateBlockPacket();
-        packet.setBlockPosition(MathUtils.toCBVec(pos));
+        packet.setBlockPosition(NetworkHelper.toNetwork(pos));
         packet.setDataLayer(layer);
         packet.setDefinition(blockState::blockStateHash);
         packet.getFlags().add(UpdateBlockPacket.Flag.NETWORK);
@@ -633,7 +633,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public void viewBlockAction(Vector3ic p, BlockAction action) {
-        var pos = MathUtils.toCBVec(p);
+        var pos = NetworkHelper.toNetwork(p);
         var pos3f = Vector3f.from(p.x(), p.y(), p.z());
         switch (action) {
             case SimpleBlockAction.OPEN -> {
@@ -716,7 +716,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewSound(Sound sound, Vector3dc p, boolean relative) {
         LevelSoundEventPacket packet = new LevelSoundEventPacket();
-        var pos = MathUtils.toCBVec(MathUtils.toVec3f(p));
+        var pos = NetworkHelper.toNetwork(MathUtils.toVec3f(p));
         packet.setPosition(pos);
         packet.setIdentifier(":");
         packet.setExtraData(-1);
@@ -1072,7 +1072,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public void viewParticle(Particle particle, Vector3dc p) {
-        var pos = MathUtils.toCBVec(MathUtils.toVec3f(p));
+        var pos = NetworkHelper.toNetwork(MathUtils.toVec3f(p));
         var packet = new LevelEventPacket();
         packet.setPosition(pos);
         switch (particle) {
@@ -1223,37 +1223,37 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     protected static org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData(DebugShape shape) {
         return switch (shape) {
             case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    arrow.getId(), ARROW, MathUtils.toCBVec(arrow.getPosition()), arrow.getArrowHeadScale(),
+                    arrow.getId(), ARROW, NetworkHelper.toNetwork(arrow.getPosition()), arrow.getArrowHeadScale(),
                     null, null, arrow.getColor(),
-                    null, null, MathUtils.toCBVec(arrow.getEndPosition()),
+                    null, null, NetworkHelper.toNetwork(arrow.getEndPosition()),
                     arrow.getArrowHeadLength(), arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments()
             );
             case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    box.getId(), BOX, MathUtils.toCBVec(box.getPosition()), box.getScale(),
+                    box.getId(), BOX, NetworkHelper.toNetwork(box.getPosition()), box.getScale(),
                     null, null, box.getColor(),
-                    null, MathUtils.toCBVec(box.getBoxBounds()), null,
+                    null, NetworkHelper.toNetwork(box.getBoxBounds()), null,
                     null, null, null
             );
             case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    circle.getId(), CIRCLE, MathUtils.toCBVec(circle.getPosition()), circle.getScale(),
+                    circle.getId(), CIRCLE, NetworkHelper.toNetwork(circle.getPosition()), circle.getScale(),
                     null, null, circle.getColor(),
                     null, null, null,
                     null, null, circle.getSegments()
             );
             case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    line.getId(), LINE, MathUtils.toCBVec(line.getPosition()), null,
+                    line.getId(), LINE, NetworkHelper.toNetwork(line.getPosition()), null,
                     null, null, line.getColor(),
-                    null, null, MathUtils.toCBVec(line.getEndPosition()),
+                    null, null, NetworkHelper.toNetwork(line.getEndPosition()),
                     null, null, null
             );
             case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    sphere.getId(), SPHERE, MathUtils.toCBVec(sphere.getPosition()), sphere.getScale(),
+                    sphere.getId(), SPHERE, NetworkHelper.toNetwork(sphere.getPosition()), sphere.getScale(),
                     null, null, sphere.getColor(),
                     null, null, null,
                     null, null, sphere.getSegments()
             );
             case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    text.getId(), TEXT, MathUtils.toCBVec(text.getPosition()), null,
+                    text.getId(), TEXT, NetworkHelper.toNetwork(text.getPosition()), null,
                     null, null, text.getColor(),
                     text.getText(), null, null,
                     null, null, null
@@ -1269,7 +1269,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         }
 
         var packet = new BlockEntityDataPacket();
-        packet.setBlockPosition(MathUtils.toCBVec(blockEntity.getPosition()));
+        packet.setBlockPosition(NetworkHelper.toNetwork(blockEntity.getPosition()));
         packet.setData(blockEntity.saveNBT());
         this.networkComponent.sendPacket(packet);
     }

@@ -1,11 +1,14 @@
 package org.allaymc.api.item.tag;
 
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@MinecraftVersionSensitive
+/**
+ * @author daoge_cmd
+ */
+@ApiStatus.Experimental
 public interface ItemCustomTags {
     Map<String, ItemTag> NAME_TO_TAG = new HashMap<>();
 

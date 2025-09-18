@@ -2,14 +2,18 @@ package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.DeferredData;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
+import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackClientResponsePacket;
+import org.cloudburstmc.protocol.bedrock.packet.ResourcePackDataInfoPacket;
 
 import java.util.UUID;
 
@@ -28,7 +32,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                         return;
                     }
 
-                    player.sendPacket(pack.toNetwork());
+                    player.sendPacket(toNetwork(pack));
                 }
             }
             case HAVE_ALL_PACKS -> {
@@ -45,5 +49,27 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.RESOURCE_PACK_CLIENT_RESPONSE;
+    }
+
+    protected static ResourcePackDataInfoPacket toNetwork(Pack pack) {
+        var chunkSize = Server.SETTINGS.resourcePackSettings().maxChunkSize() * 1024;
+        var packet = new ResourcePackDataInfoPacket();
+        packet.setPackId(pack.getId());
+        packet.setPackVersion(pack.getStringVersion());
+        packet.setMaxChunkSize(chunkSize);
+        packet.setChunkCount((long) Math.ceil(pack.getSize() / (double) chunkSize));
+        packet.setCompressedPackSize(pack.getSize());
+        packet.setHash(pack.getHash());
+        packet.setType(toNetwork(pack.getType()));
+        return packet;
+    }
+
+    protected static ResourcePackType toNetwork(Pack.Type type) {
+        return switch (type) {
+            case RESOURCES -> ResourcePackType.RESOURCES;
+            case DATA -> ResourcePackType.DATA_ADD_ON;
+            case WORLD_TEMPLATE -> ResourcePackType.WORLD_TEMPLATE;
+            case SCRIPT -> ResourcePackType.ADDON;
+        };
     }
 }

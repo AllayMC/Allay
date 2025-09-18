@@ -1,11 +1,11 @@
 package org.allaymc.api.block.tag;
 
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@MinecraftVersionSensitive
+@ApiStatus.Experimental
 public interface BlockCustomTags {
     Map<String, BlockTag> NAME_TO_TAG = new HashMap<>();
 

@@ -20,6 +20,7 @@ import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.utils.NetworkHelper;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
@@ -82,7 +83,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.canReachBlock(MathUtils.toJOMLVec(pos))) {
+                    if (!player.canReachBlock(NetworkHelper.fromNetwork(pos))) {
                         log.debug("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -286,7 +287,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
         if (baseComponent.isAwaitingTeleportACK()) {
-            var clientPos = MathUtils.toJOMLVec(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
+            var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();
             if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
                 // The player has moved before it received the teleport packet. Ignore this movement entirely and

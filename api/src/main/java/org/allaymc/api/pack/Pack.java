@@ -6,26 +6,19 @@ import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.SemVersion;
-import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
-import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkDataPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ResourcePackDataInfoPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackStackPacket;
-import org.cloudburstmc.protocol.bedrock.packet.ResourcePacksInfoPacket;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.util.UUID;
 
 /**
- * @author IWareQ, Cloudburst Server
+ * @author IWareQ | Cloudburst Server | daoge_cmd
  */
 @Slf4j
 @Getter
 public abstract class Pack implements AutoCloseable {
-
-    public static final int MAX_CHUNK_SIZE = Server.SETTINGS.resourcePackSettings().maxChunkSize() * 1024;
 
     private final PackLoader loader;
     private final PackManifest manifest;
@@ -98,43 +91,6 @@ public abstract class Pack implements AutoCloseable {
 
     public abstract Type getType();
 
-    public ResourcePackDataInfoPacket toNetwork() {
-        var packet = new ResourcePackDataInfoPacket();
-        packet.setPackId(this.getId());
-        packet.setPackVersion(this.getStringVersion());
-        packet.setMaxChunkSize(MAX_CHUNK_SIZE);
-        packet.setChunkCount((long) Math.ceil(this.getSize() / (double) MAX_CHUNK_SIZE));
-        packet.setCompressedPackSize(this.getSize());
-        packet.setHash(this.getHash());
-        packet.setType(this.getType().getNetworkType());
-        return packet;
-    }
-
-    public ResourcePackChunkDataPacket getChunkDataPacket(int chunkIndex) {
-        var packet = new ResourcePackChunkDataPacket();
-        packet.setPackId(this.getId());
-        packet.setPackVersion(this.getStringVersion());
-        packet.setChunkIndex(chunkIndex);
-        packet.setData(this.getChunk(MAX_CHUNK_SIZE * chunkIndex, MAX_CHUNK_SIZE));
-        packet.setProgress((long) MAX_CHUNK_SIZE * chunkIndex);
-        return packet;
-    }
-
-    public ResourcePacksInfoPacket.Entry toEntryInfo() {
-        return new ResourcePacksInfoPacket.Entry(
-                this.getId(),
-                this.getStringVersion(),
-                this.getSize(),
-                this.getContentKey(),
-                "",
-                this.getId().toString(),
-                this.getType() == Pack.Type.SCRIPT,
-                this.manifest.getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                false,
-                null
-        );
-    }
-
     public ResourcePackStackPacket.Entry toEntryStack() {
         return new ResourcePackStackPacket.Entry(this.getId().toString(), this.getStringVersion(), "");
     }
@@ -157,17 +113,17 @@ public abstract class Pack implements AutoCloseable {
     }
 
     /**
+     * Type represents the type of pack.
+     *
      * @see <a href="https://learn.microsoft.com/en-us/minecraft/creator/reference/content/addonsreference/packmanifest?view=minecraft-bedrock-stable#modules">packmanifest</a>
      */
     @Getter
     @RequiredArgsConstructor
     public enum Type {
-        RESOURCES(ResourcePackType.RESOURCES),
-        DATA(ResourcePackType.DATA_ADD_ON),
-        WORLD_TEMPLATE(ResourcePackType.WORLD_TEMPLATE),
-        SCRIPT(ResourcePackType.ADDON);
-
-        private final ResourcePackType networkType;
+        RESOURCES,
+        DATA,
+        WORLD_TEMPLATE,
+        SCRIPT;
 
         public static class Serializer implements JsonSerializer<Type> {
             @Override

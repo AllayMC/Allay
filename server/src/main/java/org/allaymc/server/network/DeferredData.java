@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
+import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
@@ -32,6 +33,7 @@ import java.util.function.Supplier;
  *
  * @author daoge_cmd
  */
+// TODO: remove it since it is very useless :c
 @UtilityClass
 public final class DeferredData {
 
@@ -117,11 +119,20 @@ public final class DeferredData {
         for (var pack : Registries.PACKS.getContent().values()) {
             var type = pack.getType();
             if (type == Pack.Type.RESOURCES) {
-                packet.getResourcePackInfos().add(pack.toEntryInfo());
+                packet.getResourcePackInfos().add(toEntryInfo(pack));
             }
         }
 
         return packet;
+    }
+
+    public ResourcePacksInfoPacket.Entry toEntryInfo(Pack pack) {
+        return new ResourcePacksInfoPacket.Entry(
+                pack.getId(), pack.getStringVersion(), pack.getSize(), pack.getContentKey(),
+                "", pack.getId().toString(), pack.getType() == Pack.Type.SCRIPT,
+                pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED),
+                false, null
+        );
     }
 
     public static ResourcePackStackPacket encodeResourcesPackStackPacket() {

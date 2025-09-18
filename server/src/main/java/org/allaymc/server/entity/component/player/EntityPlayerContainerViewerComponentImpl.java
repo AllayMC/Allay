@@ -11,7 +11,6 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.container.ContainerNetworkInfo;
@@ -145,7 +144,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
         if (container instanceof BlockContainer blockContainer) {
-            packet.setBlockPosition(MathUtils.toCBVec(blockContainer.getBlockPos()));
+            packet.setBlockPosition(NetworkHelper.toNetwork(blockContainer.getBlockPos()));
         } else {
             var location = baseComponent.getLocation();
             packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));

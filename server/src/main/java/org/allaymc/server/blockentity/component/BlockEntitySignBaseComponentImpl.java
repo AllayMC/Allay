@@ -11,11 +11,11 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.server.utils.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 
@@ -68,7 +68,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     @Override
     public void openSignEditorFor(EntityPlayer player, boolean frontSide) {
         var pk = new OpenSignPacket();
-        pk.setPosition(MathUtils.toCBVec(getPosition()));
+        pk.setPosition(NetworkHelper.toNetwork(getPosition()));
         pk.setFrontSide(frontSide);
 
         player.sendPacket(pk);

@@ -2,9 +2,12 @@ package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
+import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkDataPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkRequestPacket;
 
 import static org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType.RESOURCE_PACK_CHUNK_REQUEST;
@@ -21,7 +24,18 @@ public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcess
             return;
         }
 
-        player.sendPacket(pack.getChunkDataPacket(packet.getChunkIndex()));
+        player.sendPacket(getChunkDataPacket(pack, packet.getChunkIndex()));
+    }
+
+    public ResourcePackChunkDataPacket getChunkDataPacket(Pack pack, int chunkIndex) {
+        var chunkSize = Server.SETTINGS.resourcePackSettings().maxChunkSize() * 1024;
+        var packet = new ResourcePackChunkDataPacket();
+        packet.setPackId(pack.getId());
+        packet.setPackVersion(pack.getStringVersion());
+        packet.setChunkIndex(chunkIndex);
+        packet.setData(pack.getChunk(chunkSize * chunkIndex, chunkSize));
+        packet.setProgress((long) chunkSize * chunkIndex);
+        return packet;
     }
 
     @Override

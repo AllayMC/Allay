@@ -10,8 +10,8 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerInteractBlockEvent;
 import org.allaymc.api.eventbus.event.player.PlayerInteractEntityEvent;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.utils.NetworkHelper;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
@@ -68,10 +68,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
-                        var clickBlockPos = MathUtils.toJOMLVec(packet.getBlockPosition());
-                        var clickPos = MathUtils.toJOMLVec(packet.getClickPosition());
+                        var clickBlockPos = NetworkHelper.fromNetwork(packet.getBlockPosition());
+                        var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
                         // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
-                        if (isSpamClick(clickPos, clickBlockPos, MathUtils.toJOMLVec(packet.getPlayerPosition()))) {
+                        if (isSpamClick(clickPos, clickBlockPos, NetworkHelper.fromNetwork(packet.getPlayerPosition()))) {
                             break;
                         }
 
@@ -158,7 +158,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
-                        var clickPos = MathUtils.toJOMLVec(packet.getClickPosition());
+                        var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
                         var event = new PlayerInteractEntityEvent(player, target, itemInHand, clickPos);
                         if (!event.call()) {
                             return;

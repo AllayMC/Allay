@@ -1,5 +1,6 @@
 package org.allaymc.api.math;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
@@ -14,6 +15,7 @@ import static java.lang.StrictMath.*;
  *
  * @author Cool_Loong | daoge_cmd
  */
+@UtilityClass
 public final class MathUtils {
 
     private static final double[] SIN_LOOK_UP_TABLE = new double[65536];
@@ -24,10 +26,6 @@ public final class MathUtils {
         }
     }
 
-    private MathUtils() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-    }
-
     /**
      * Converts the double vector passed to float vector
      *
@@ -36,91 +34,6 @@ public final class MathUtils {
      */
     public static Vector3fc toVec3f(Vector3dc vec) {
         return vec.get(new Vector3f());
-    }
-
-    /**
-     * Convert cloudburst vector to joml vector.
-     *
-     * @param cbVec cloudburst vector
-     * @return joml vector, or {@code null} if the input is {@code null}
-     */
-    // TODO: move them (don't forget .max() method!)
-    public static Vector3ic toJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
-        if (cbVec == null) {
-            return null;
-        }
-
-        return new Vector3i(cbVec.getX(), cbVec.getY(), cbVec.getZ());
-    }
-
-    /**
-     * Convert cloudburst vector to joml vector.
-     *
-     * @param cbVec cloudburst vector
-     * @return joml vector, or {@code null} if the input is {@code null}
-     */
-    public static Vector3dc toJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
-        if (cbVec == null) {
-            return null;
-        }
-
-        return new Vector3d(cbVec.getX(), cbVec.getY(), cbVec.getZ());
-    }
-
-    /**
-     * Convert cloudburst vector to joml vector.
-     *
-     * @param cbVec cloudburst vector
-     * @return joml vector, or {@code null} if the input is {@code null}
-     */
-    public static Vector3fc toJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
-        if (cbVec == null) {
-            return null;
-        }
-
-        return new Vector3f(cbVec.getX(), cbVec.getY(), cbVec.getZ());
-    }
-
-    /**
-     * Convert joml vector to cloudburst vector.
-     *
-     * @param JOMLVec joml vector
-     * @return cloudburst vector, or {@code null} if the input is {@code null}
-     */
-    public static org.cloudburstmc.math.vector.Vector3i toCBVec(Vector3ic JOMLVec) {
-        if (JOMLVec == null) {
-            return null;
-        }
-
-        return org.cloudburstmc.math.vector.Vector3i.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
-    }
-
-    /**
-     * Convert joml vector to cloudburst vector.
-     *
-     * @param JOMLVec joml vector
-     * @return cloudburst vector, or {@code null} if the input is {@code null}
-     */
-    public static org.cloudburstmc.math.vector.Vector3d toCBVec(Vector3dc JOMLVec) {
-        if (JOMLVec == null) {
-            return null;
-        }
-
-        return org.cloudburstmc.math.vector.Vector3d.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
-    }
-
-    /**
-     * Convert joml vector to cloudburst vector.
-     *
-     * @param JOMLVec joml vector
-     * @return cloudburst vector, or {@code null} if the input is {@code null}
-     */
-    public static org.cloudburstmc.math.vector.Vector3f toCBVec(Vector3fc JOMLVec) {
-        if (JOMLVec == null) {
-            return null;
-        }
-
-        return org.cloudburstmc.math.vector.Vector3f.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 
     /**
@@ -368,9 +281,8 @@ public final class MathUtils {
     }
 
     /**
-     * Normalize the vector if it is not zero.
-     * <p>
-     * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
+     * Normalize the vector if it is not zero. If the vector is zero, it can't be normalized, otherwise
+     * a vector with three NaN values will be produced.
      *
      * @param v the vector
      * @return the normalized vector
@@ -380,9 +292,8 @@ public final class MathUtils {
     }
 
     /**
-     * Normalize the vector if it is not zero.
-     * <p>
-     * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
+     * Normalize the vector if it is not zero. If the vector is zero, it can't be normalized, otherwise
+     * a vector with three NaN values will be produced.
      *
      * @param v the vector
      * @return the normalized vector
@@ -408,44 +319,5 @@ public final class MathUtils {
         aabb.maxY += growth.y();
         aabb.maxZ += growth.z();
         return aabb;
-    }
-
-    /**
-     * Calculate the Chebyshev distance between two points in a 2D space.
-     *
-     * @param x1 the x coordinate of the first point
-     * @param y1 the y coordinate of the first point
-     * @param x2 the x coordinate of the second point
-     * @param y2 the y coordinate of the second point
-     * @return the Chebyshev distance between the two points
-     */
-    public static int calculateChebyshevDistance(int x1, int y1, int x2, int y2) {
-        return Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2));
-    }
-
-    /**
-     * Calculate the Manhattan distance between two points in a 2D space.
-     *
-     * @param x1 the x coordinate of the first point
-     * @param y1 the y coordinate of the first point
-     * @param x2 the x coordinate of the second point
-     * @param y2 the y coordinate of the second point
-     * @return the Manhattan distance between the two points
-     */
-    public static int calculateManhattanDistance(int x1, int y1, int x2, int y2) {
-        return Math.abs(x1 - x2) + Math.abs(y1 - y2);
-    }
-
-    /**
-     * Calculate the Euclidean distance between two points in a 2D space.
-     *
-     * @param x1 the x coordinate of the first point
-     * @param y1 the y coordinate of the first point
-     * @param x2 the x coordinate of the second point
-     * @param y2 the y coordinate of the second point
-     * @return the Euclidean distance between the two points
-     */
-    public static double calculateEuclideanDistance(int x1, int y1, int x2, int y2) {
-        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 }
