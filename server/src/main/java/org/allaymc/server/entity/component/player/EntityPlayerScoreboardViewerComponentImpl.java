@@ -37,25 +37,25 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
     @Override
     public void displayScoreboard(Scoreboard scoreboard, DisplaySlot slot) {
-        var setDisplayObjectivePacket = new SetDisplayObjectivePacket();
-        setDisplayObjectivePacket.setDisplaySlot(slot.getSlotName());
-        setDisplayObjectivePacket.setObjectiveId(scoreboard.getObjectiveName());
-        setDisplayObjectivePacket.setDisplayName(scoreboard.getDisplayName());
-        setDisplayObjectivePacket.setCriteria(scoreboard.getCriteriaName());
-        setDisplayObjectivePacket.setSortOrder(scoreboard.getSortOrder().ordinal());
-        networkComponent.sendPacket(setDisplayObjectivePacket);
+        var packet1 = new SetDisplayObjectivePacket();
+        packet1.setDisplaySlot(slot.getSlotName());
+        packet1.setObjectiveId(scoreboard.getObjectiveName());
+        packet1.setDisplayName(scoreboard.getDisplayName());
+        packet1.setCriteria(scoreboard.getCriteriaName());
+        packet1.setSortOrder(scoreboard.getSortOrder().ordinal());
+        networkComponent.sendPacket(packet1);
 
         // Client won't storage the score of a scoreboard,so we should send the score to client
-        var setScorePacket = new SetScorePacket();
-        setScorePacket.setInfos(
+        var packet2 = new SetScorePacket();
+        packet2.setInfos(
                 scoreboard.getLines().values()
                         .stream()
                         .map(this::toNetwork)
                         .filter(Objects::nonNull)
                         .toList()
         );
-        setScorePacket.setAction(SetScorePacket.Action.SET);
-        networkComponent.sendPacket(setScorePacket);
+        packet2.setAction(SetScorePacket.Action.SET);
+        networkComponent.sendPacket(packet2);
 
         var scorer = new PlayerScorer(thisPlayer);
         var line = scoreboard.getLine(scorer);

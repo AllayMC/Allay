@@ -105,6 +105,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved class `XXXId` from api to server, since the user is expected to use objects in `XXXTypes`.
 - (API) Changed methods in `ItemSignBaseComponent` to return `BlockType` instead of `BlockId`.
 - (API) Renamed class `DefaultDescriptor` to `ItemTypeDescriptor`.
+- (API) Moved events `PacketSendEvent` and  `PacketReceiveEvent` from api module to server module.
 
 ### Fixed
 
