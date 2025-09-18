@@ -26,10 +26,10 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
 
     protected static final BlockStateDataComponentImpl DEFAULT = ofGlobalStatic(BlockStateData.DEFAULT);
 
-    protected Function<BlockState, BlockStateData> attributeAccessor;
+    protected Function<BlockState, BlockStateData> dataAccessor;
 
-    protected BlockStateDataComponentImpl(Function<BlockState, BlockStateData> attributeAccessor) {
-        this.attributeAccessor = attributeAccessor;
+    protected BlockStateDataComponentImpl(Function<BlockState, BlockStateData> dataAccessor) {
+        this.dataAccessor = dataAccessor;
     }
 
     /**
@@ -44,11 +44,11 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
     /**
      * Creates a static block state data component that always returns the same data.
      *
-     * @param attributes the static {@link BlockStateData} to return
+     * @param data the static {@link BlockStateData} to return
      * @return a new static data component instance
      */
-    public static BlockStateDataComponentImpl ofGlobalStatic(BlockStateData attributes) {
-        return new BlockStateDataComponentImpl(state -> attributes);
+    public static BlockStateDataComponentImpl ofGlobalStatic(BlockStateData data) {
+        return new BlockStateDataComponentImpl(state -> data);
     }
 
     /**
@@ -68,13 +68,13 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * @return a cached data component instance
      */
     public static BlockStateDataComponentImpl ofCachedDynamic(Function<BlockState, BlockStateData> accessor) {
-        return new BlockStateDataComponentImpl(new CachedAttributeAccessor(accessor));
+        return new BlockStateDataComponentImpl(new CachedDataAccessor(accessor));
     }
 
     /**
      * Creates a data component using a provided block state hash map supplier.
      *
-     * @param supplier supplies the attribute map
+     * @param supplier supplies the data map
      * @return a mapped data component instance
      */
     public static BlockStateDataComponentImpl ofMappedBlockStateHash(Supplier<Map<Integer, BlockStateData>> supplier) {
@@ -84,22 +84,22 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
     /**
      * Creates a data component using a provided block state hash map.
      *
-     * @param attributeMap a map from block state hash to attribute data
+     * @param dataMap a map from block state hash to data
      * @return a mapped data component instance
      */
-    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap) {
-        return ofMappedBlockStateHash(attributeMap, BlockStateData.DEFAULT);
+    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> dataMap) {
+        return ofMappedBlockStateHash(dataMap, BlockStateData.DEFAULT);
     }
 
     /**
      * Creates a data component using a provided block state hash map and a default value.
      *
-     * @param attributeMap a map from block state hash to attribute data
-     * @param defaultData  the default data if no match is found
+     * @param dataMap     a map from block state hash to data
+     * @param defaultData the default data if no match is found
      * @return a mapped data component instance
      */
-    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> attributeMap, BlockStateData defaultData) {
-        return new BlockStateDataComponentImpl(state -> attributeMap.getOrDefault(state.blockStateHash(), defaultData));
+    public static BlockStateDataComponentImpl ofMappedBlockStateHash(Map<Integer, BlockStateData> dataMap, BlockStateData defaultData) {
+        return new BlockStateDataComponentImpl(state -> dataMap.getOrDefault(state.blockStateHash(), defaultData));
     }
 
     /**
@@ -109,7 +109,7 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
      * @return a lazy-loaded data component instance
      */
     public static BlockStateDataComponentImpl ofMappedBlockStateHashLazyLoad(Function<BlockType<?>, Map<Integer, BlockStateData>> loader) {
-        return ofDirectDynamic(new LazyLoaderAttributeAccessor(loader));
+        return ofDirectDynamic(new LazyLoaderDataAccessor(loader));
     }
 
     /**
@@ -146,41 +146,41 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());
             Objects.requireNonNull(vanillaId);
-            var attributeMap = InternalRegistries.BLOCK_STATE_DATA.get(vanillaId);
-            Objects.requireNonNull(attributeMap);
+            var map = InternalRegistries.BLOCK_STATE_DATA.get(vanillaId);
+            Objects.requireNonNull(map);
 
-            Map<Integer, BlockStateData> newAttributeMap = new HashMap<>();
-            attributeMap.forEach((blockStateHash, attribute) ->
-                    newAttributeMap.put(blockStateHash, redefiner.apply(attribute.toBuilder(), blockType, blockStateHash))
+            Map<Integer, BlockStateData> newMap = new HashMap<>();
+            map.forEach((blockStateHash, data) ->
+                    newMap.put(blockStateHash, redefiner.apply(data.toBuilder(), blockType, blockStateHash))
             );
-            return newAttributeMap;
+            return newMap;
         });
     }
 
     @Override
     public BlockStateData getBlockStateData(BlockState blockState) {
-        return attributeAccessor.apply(blockState);
+        return dataAccessor.apply(blockState);
     }
 
-    private static class CachedAttributeAccessor implements Function<BlockState, BlockStateData> {
+    private static class CachedDataAccessor implements Function<BlockState, BlockStateData> {
         private final Map<Integer, BlockStateData> cache = new NonBlockingHashMap<>();
-        private final Function<BlockState, BlockStateData> directAttributeAccessor;
+        private final Function<BlockState, BlockStateData> directDataAccessor;
 
-        public CachedAttributeAccessor(Function<BlockState, BlockStateData> directAttributeAccessor) {
-            this.directAttributeAccessor = directAttributeAccessor;
+        public CachedDataAccessor(Function<BlockState, BlockStateData> directDataAccessor) {
+            this.directDataAccessor = directDataAccessor;
         }
 
         @Override
         public BlockStateData apply(BlockState blockState) {
-            return cache.computeIfAbsent(blockState.blockStateHash(), $ -> directAttributeAccessor.apply(blockState));
+            return cache.computeIfAbsent(blockState.blockStateHash(), $ -> directDataAccessor.apply(blockState));
         }
     }
 
-    private static class LazyLoaderAttributeAccessor implements Function<BlockState, BlockStateData> {
+    private static class LazyLoaderDataAccessor implements Function<BlockState, BlockStateData> {
         private final Function<BlockType<?>, Map<Integer, BlockStateData>> loader;
         private Map<Integer, BlockStateData> loadedMap;
 
-        public LazyLoaderAttributeAccessor(Function<BlockType<?>, Map<Integer, BlockStateData>> loader) {
+        public LazyLoaderDataAccessor(Function<BlockType<?>, Map<Integer, BlockStateData>> loader) {
             this.loader = loader;
         }
 

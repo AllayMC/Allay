@@ -22,6 +22,8 @@ import java.util.TreeMap;
 @Slf4j
 public final class HashUtils {
 
+    private static final Identifier UNKNOWN_ID = new Identifier("minecraft:unknown");
+
     //https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
     private static final int FNV1_32_INIT = 0x811c9dc5;
     private static final int FNV1_PRIME_32 = 0x01000193;
@@ -38,6 +40,10 @@ public final class HashUtils {
      * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
+        if (identifier.equals(UNKNOWN_ID)) {
+            return -2; // This is special case
+        }
+
         var states = new TreeMap<String, Object>();
         for (var value : propertyValues) {
             states.put(value.getPropertyType().getName(), value.getSerializedValue());
@@ -59,6 +65,10 @@ public final class HashUtils {
      * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
+        if (identifier.equals(UNKNOWN_ID)) {
+            return -2; // This is special case
+        }
+
         var states = new TreeMap<String, Object>();
         for (var value : propertyValues) {
             states.put(value.getPropertyType().getName(), value.getSerializedValue());
