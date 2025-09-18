@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.*;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.LangCode;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.Skin;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;

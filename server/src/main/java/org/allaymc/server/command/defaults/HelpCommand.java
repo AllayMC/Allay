@@ -3,7 +3,7 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.registry.AllayCommandRegistry;
@@ -30,7 +30,7 @@ public class HelpCommand extends VanillaCommand {
             sender.sendTranslatable(TrKeys.MC_COMMANDS_HELP_HEADER, page, pages);
             for (var command : commands.values().stream().toList().subList((page - 1) * COMMANDS_PER_PAGE, page * COMMANDS_PER_PAGE)) {
                 printCommandHelp(sender, command);
-                sender.sendText("");
+                sender.sendMessage("");
             }
             sender.sendTranslatable(TrKeys.MC_COMMANDS_HELP_FOOTER);
             return context.success();
@@ -55,7 +55,7 @@ public class HelpCommand extends VanillaCommand {
         sender.sendTranslatable(command.getDescription());
         sender.sendTranslatable(TrKeys.MC_COMMANDS_GENERIC_USAGE_NOPARAM);
         for (var usage : command.getCommandFormatTips()) {
-            sender.sendText(usage);
+            sender.sendMessage(usage);
         }
     }
 

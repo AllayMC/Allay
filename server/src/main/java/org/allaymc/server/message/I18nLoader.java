@@ -1,6 +1,6 @@
-package org.allaymc.server.i18n;
+package org.allaymc.server.message;
 
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.LangCode;
 
 import java.util.Map;
 

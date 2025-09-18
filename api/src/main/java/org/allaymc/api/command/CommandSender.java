@@ -2,14 +2,14 @@ package org.allaymc.api.command;
 
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.message.MessageReceiver;
 import org.allaymc.api.permission.Permissible;
 
 /**
  * @author daoge_cmd
  */
-public interface CommandSender extends TextReceiver, Permissible {
+public interface CommandSender extends MessageReceiver, Permissible {
 
     /**
      * Get the name of the command sender.

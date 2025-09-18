@@ -3,9 +3,9 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.LangCode;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.LangCode;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.GameMode;
 
 import java.util.ArrayList;

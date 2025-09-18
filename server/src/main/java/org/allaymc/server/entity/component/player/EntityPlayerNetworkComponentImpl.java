@@ -11,10 +11,10 @@ import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
 import org.allaymc.api.eventbus.event.player.PlayerLoginEvent;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.PlayerData;
@@ -421,7 +421,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         playerManager.onLoggedIn(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
-        Server.getInstance().broadcastTr(event.getJoinMessage(), thisPlayer.getOriginName());
+        Object[] args = new Object[]{thisPlayer.getOriginName()};
+        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), args);
 
         sendPacket(DeferredData.RESOURCE_PACKS_INFO_PACKET.get());
     }

@@ -5,8 +5,8 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityNpc;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.permission.PermissionGroup;
 
 /**
@@ -29,7 +29,7 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public void sendText(String text) {
+    public void sendMessage(String message) {
         // Do nothing
     }
 

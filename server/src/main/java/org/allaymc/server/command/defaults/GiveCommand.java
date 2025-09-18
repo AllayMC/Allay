@@ -3,8 +3,8 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.message.TrKeys;
 
 import java.util.Collection;
 import java.util.stream.Collectors;

@@ -25,12 +25,12 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
@@ -606,7 +606,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         } else {
             for (var output : outputs) {
                 var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()) + "]";
-                sendText(str);
+                sendMessage(str);
             }
         }
     }
@@ -729,8 +729,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendText(String text) {
-        sendSimpleMessage(text, TextPacket.Type.RAW);
+    public void sendMessage(String message) {
+        sendSimpleMessage(message, TextPacket.Type.RAW);
     }
 
     protected void sendSimpleMessage(String message, TextPacket.Type type) {
@@ -743,7 +743,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void sendTranslatable(String translatable, Object... args) {
-        sendText(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), translatable, args));
+        sendMessage(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), translatable, args));
     }
 
     @Override

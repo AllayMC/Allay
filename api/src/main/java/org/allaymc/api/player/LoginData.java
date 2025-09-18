@@ -2,7 +2,7 @@ package org.allaymc.api.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.LangCode;
 
 import java.util.UUID;
 

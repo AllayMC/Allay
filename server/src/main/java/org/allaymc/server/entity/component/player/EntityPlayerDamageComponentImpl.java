@@ -4,8 +4,8 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.message.I18n;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -121,7 +121,9 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
                 DamageContainer.DamageType.API.getDeathInfo(thisPlayer, null);
 
-        Server.getInstance().broadcastTr(deathInfo.left(), (Object[]) deathInfo.right());
+        String tr = deathInfo.left();
+        Object[] args = (Object[]) deathInfo.right();
+        Server.getInstance().getMessageChannel().broadcastTranslatable(tr, args);
 
         var packet = new DeathInfoPacket();
         // Translate it server-side

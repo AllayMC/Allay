@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.LangCode;
 
 import java.io.IOException;
 import java.nio.file.Files;

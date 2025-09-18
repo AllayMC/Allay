@@ -11,7 +11,7 @@ import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.eventbus.event.player.PlayerUnbanEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.BanInfo;
@@ -242,7 +242,8 @@ public class AllayPlayerManager implements PlayerManager {
         if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
-            Server.getInstance().broadcastTr(event.getQuitMessage(), player.getOriginName());
+            Object[] args = new Object[]{player.getOriginName()};
+            Server.getInstance().getMessageChannel().broadcastTranslatable(event.getQuitMessage(), args);
             players.remove(player.getLoginData().getUuid());
 
             // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off

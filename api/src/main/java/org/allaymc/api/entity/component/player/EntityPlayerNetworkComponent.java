@@ -1,8 +1,8 @@
 package org.allaymc.api.entity.component.player;
 
 import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.PacketReceiver;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.LoginData;

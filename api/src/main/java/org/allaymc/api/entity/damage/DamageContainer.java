@@ -9,8 +9,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
-import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.message.TrKeys;
 
 import java.util.*;
 import java.util.function.Function;

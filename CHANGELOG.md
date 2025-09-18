@@ -36,6 +36,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced method `EntityBaaeComponent.applyAnimation()` and class `EntityAnimation`.
 - (API) Introduced classes `EntityAction` and `BlockAction`.
 - (API) Introduced class `Skin` as the replacement for the `SerializedSkin` class in protocol lib.
+- (API) Introduced a new `MessageChannel` system to replace the old `broadcastXXX()` methods in `Server`. The default message channel of
+  the server can be got using method `Server.getMessageChannel()` and can be changed using method `Server.setMessageChannel()`.
 - Implemented sharpness enchantment.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
@@ -98,6 +100,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed method `TextReceiver.sendTr()` to `TextReceiver.sendTranslatable()` for better readability.
 - (API) Renamed method `LoginData.isXboxAuthenticated()` to `LoginData.isAuthed()`.
 - (API) Made class `LoginData` as an interface, the implementation is moved to the server module.
+- (API) Renamed package `i18n` to `message`.
+- (API) Renamed class `TextReceiver` to `MessageReceiver` and method `TextReceiver.sendText()` to `MessageReceiver.sendMessage()`.
+- (API) Moved class `XXXId` from api to server, since the user is expected to use objects in `XXXTypes`.
 
 ### Fixed
 

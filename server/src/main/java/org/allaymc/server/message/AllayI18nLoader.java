@@ -1,7 +1,7 @@
-package org.allaymc.server.i18n;
+package org.allaymc.server.message;
 
 import com.google.gson.reflect.TypeToken;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.LangCode;
 import org.allaymc.server.utils.JSONUtils;
 
 import java.io.IOException;

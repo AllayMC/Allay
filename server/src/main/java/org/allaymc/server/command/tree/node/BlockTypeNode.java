@@ -4,7 +4,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumData;

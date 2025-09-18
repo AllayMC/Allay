@@ -1,6 +1,6 @@
 package org.allaymc.api.item.creative;
 
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.LangCode;
 import org.cloudburstmc.protocol.bedrock.packet.CreativeContentPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 

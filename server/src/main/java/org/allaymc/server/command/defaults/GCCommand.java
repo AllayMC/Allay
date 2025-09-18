@@ -1,7 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 
 import static java.lang.Runtime.getRuntime;

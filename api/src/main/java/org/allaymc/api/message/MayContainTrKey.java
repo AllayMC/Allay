@@ -1,4 +1,4 @@
-package org.allaymc.api.i18n;
+package org.allaymc.api.message;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

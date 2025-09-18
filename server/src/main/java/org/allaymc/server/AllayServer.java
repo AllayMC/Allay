@@ -2,17 +2,18 @@ package org.allaymc.server;
 
 import com.google.common.base.Suppliers;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.server.ServerStopEvent;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.MessageChannel;
+import org.allaymc.api.message.TrContainer;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.scheduler.Scheduler;
@@ -76,6 +77,9 @@ public final class AllayServer implements Server {
     private final GameLoop gameLoop;
 
     @Getter
+    @Setter
+    private MessageChannel messageChannel;
+    @Getter
     private long startTime;
 
     private AllayServer() {
@@ -97,6 +101,8 @@ public final class AllayServer implements Server {
                 .onTick(this::serverThreadMain)
                 .onStop(this::onServerStop)
                 .build();
+        this.messageChannel = new MessageChannel();
+        this.messageChannel.addReceiver(this);
     }
 
     public static AllayServer getInstance() {
@@ -252,14 +258,8 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void broadcastTr(@MayContainTrKey String tr, Object... args) {
-        playerManager.forEachPlayer(player -> player.sendTranslatable(tr, args));
-        sendTranslatable(tr, args);
-    }
-
-    @Override
-    public void sendText(String text) {
-        log.info(text);
+    public void sendMessage(String message) {
+        log.info(message);
     }
 
     @Override

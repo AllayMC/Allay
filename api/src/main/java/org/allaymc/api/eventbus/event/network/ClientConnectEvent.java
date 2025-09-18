@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.message.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
 /**

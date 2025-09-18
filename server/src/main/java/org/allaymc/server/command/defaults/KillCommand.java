@@ -5,7 +5,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.GameMode;
 
 import java.util.HashMap;

@@ -20,11 +20,6 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
 
     @Getter
     @Delegate
-    protected EntityPlayerNetworkComponent playerNetworkComponent;
-    @Delegate
-    protected EntityPlayerAttributeComponent playerAttributeComponent;
-    @Getter
-    @Delegate
     protected EntityContainerHolderComponent containerHolderComponent;
     @Getter
     @Delegate
@@ -34,6 +29,11 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Getter
     @Delegate
     protected EntityPhysicsComponent physicsComponent;
+    @Getter
+    @Delegate
+    protected EntityPlayerNetworkComponent playerNetworkComponent;
+    @Delegate
+    protected EntityPlayerAttributeComponent playerAttributeComponent;
     @Delegate
     protected EntityPlayerScoreboardViewerComponent playerScoreboardViewerComponent;
     @Delegate
@@ -41,8 +41,7 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Delegate
     protected EntityPlayerBossBarViewerComponent playerBossBarViewerComponent;
 
-    public EntityPlayerImpl(EntityInitInfo initInfo,
-                            List<ComponentProvider<? extends Component>> componentProviders) {
+    public EntityPlayerImpl(EntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 
@@ -52,16 +51,10 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
         return (EntityPlayerBaseComponent) super.getBaseComponent();
     }
 
-    /**
-     * A tiny wrapper method facilitates the sending of packet.
-     */
     public void sendPacket(BedrockPacket packet) {
         ((EntityPlayerNetworkComponentImpl) (this.playerNetworkComponent)).sendPacket(packet);
     }
 
-    /**
-     * A tiny wrapper method facilitates the sending of packet.
-     */
     public void sendPacketImmediately(BedrockPacket packet) {
         ((EntityPlayerNetworkComponentImpl) (this.playerNetworkComponent)).sendPacketImmediately(packet);
     }

@@ -2,8 +2,8 @@ package org.allaymc.api.player;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.message.TrKeys;
 
 /**
  * GameMode represents a game mode that may be assigned to a player. Upon joining the world, players will be

@@ -1,7 +1,7 @@
 package org.allaymc.api.command;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.permission.Permission;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 

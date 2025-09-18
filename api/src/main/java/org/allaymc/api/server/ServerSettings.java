@@ -7,7 +7,7 @@ import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.LangCode;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.data.Difficulty;
 

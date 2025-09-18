@@ -22,11 +22,11 @@ import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.*;
-import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.permission.Permissible;
 import org.allaymc.api.permission.PermissionGroup;
@@ -638,7 +638,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendText(String text) {
+    public void sendMessage(String message) {
         // Do nothing
     }
 

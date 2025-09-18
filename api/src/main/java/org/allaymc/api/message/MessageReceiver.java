@@ -1,19 +1,19 @@
-package org.allaymc.api.i18n;
+package org.allaymc.api.message;
 
 import org.allaymc.api.command.CommandSender;
 
 /**
- * TextReceiver represents an object that can receive messages.
+ * MessageReceiver represents an object that can receive messages.
  *
  * @author daoge_cmd
  */
-public interface TextReceiver {
+public interface MessageReceiver {
     /**
      * Send a text to the receiver.
      *
-     * @param text the text
+     * @param message the text
      */
-    void sendText(String text);
+    void sendMessage(String message);
 
     /**
      * @see #sendTranslatable(String, Object...)

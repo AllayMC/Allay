@@ -1,4 +1,4 @@
-package org.allaymc.api.i18n;
+package org.allaymc.api.message;
 
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.AllayAPI;

@@ -1,20 +1,20 @@
-package org.allaymc.server.i18n;
+package org.allaymc.server.message;
 
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.LangCode;
 import org.allaymc.api.utils.Utils;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 import static java.lang.Math.min;
-import static org.allaymc.api.i18n.I18n.KeyInfo.EMPTY;
-import static org.allaymc.api.i18n.I18n.isValidKeyCharacter;
+import static org.allaymc.api.message.I18n.KeyInfo.EMPTY;
+import static org.allaymc.api.message.I18n.isValidKeyCharacter;
 
 /**
  * @author daoge_cmd

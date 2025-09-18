@@ -1,4 +1,4 @@
-package org.allaymc.api.i18n;
+package org.allaymc.api.message;
 
 /**
  * TrContainer is used to store the translation key and the arguments used in the translation.

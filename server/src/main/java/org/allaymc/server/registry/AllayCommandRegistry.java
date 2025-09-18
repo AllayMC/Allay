@@ -8,8 +8,8 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
-import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrContainer;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
@@ -146,7 +146,8 @@ public class AllayCommandRegistry extends CommandRegistry {
             var status = result.status();
             var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
             if (result.isSuccess()) {
-                Server.getInstance().broadcastCommandOutputs(result.context().getSender(), status, outputs);
+                CommandSender sender1 = result.context().getSender();
+                Server.getInstance().getMessageChannel().broadcastCommandOutputs(sender1, status, outputs);
             } else {
                 // If there is an error, only send message to oneself
                 sender.sendCommandOutputs(result.context().getSender(), status, outputs);
@@ -174,7 +175,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         if (result != null) {
             return result;
         }
-        
+
         return this.getContent().values().stream()
                 .filter(command -> command.getAliases().contains(nameOrAlias))
                 .findFirst().orElse(null);

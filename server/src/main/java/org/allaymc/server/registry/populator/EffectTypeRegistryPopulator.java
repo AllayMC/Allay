@@ -2,8 +2,8 @@ package org.allaymc.server.registry.populator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.effect.EffectTypes;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.server.entity.effect.*;
 
 /**

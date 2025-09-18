@@ -1,7 +1,7 @@
-package org.allaymc.server.i18n;
+package org.allaymc.server.message;
 
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.LangCode;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

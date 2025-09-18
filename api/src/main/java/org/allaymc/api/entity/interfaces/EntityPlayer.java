@@ -18,17 +18,17 @@ import org.joml.Vector3d;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * EntityPlayer represents a player.
+ * EntityPlayer represents a player in the server.
  */
 public interface EntityPlayer extends
         Entity,
-        EntityPlayerBaseComponent,
-        EntityPlayerNetworkComponent,
-        EntityPlayerAttributeComponent,
         EntityContainerHolderComponent,
         EntityContainerViewerComponent,
         EntityDamageComponent,
         EntityPhysicsComponent,
+        EntityPlayerBaseComponent,
+        EntityPlayerNetworkComponent,
+        EntityPlayerAttributeComponent,
         EntityPlayerScoreboardViewerComponent,
         EntityPlayerChunkLoaderComponent,
         EntityPlayerBossBarViewerComponent {
@@ -43,7 +43,10 @@ public interface EntityPlayer extends
      */
     default <T extends Container> T getReachableContainer(ContainerType<T> slotType) {
         var container = getOpenedContainer(slotType);
-        if (container == null) container = getContainer(slotType);
+        if (container == null) {
+            container = getContainer(slotType);
+        }
+
         return container;
     }
 

@@ -1,4 +1,4 @@
-package org.allaymc.server.i18n;
+package org.allaymc.server.message;
 
 import lombok.experimental.StandardException;
 
