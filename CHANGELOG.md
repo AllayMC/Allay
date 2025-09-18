@@ -103,6 +103,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed package `i18n` to `message`.
 - (API) Renamed class `TextReceiver` to `MessageReceiver` and method `TextReceiver.sendText()` to `MessageReceiver.sendMessage()`.
 - (API) Moved class `XXXId` from api to server, since the user is expected to use objects in `XXXTypes`.
+- (API) Changed methods in `ItemSignBaseComponent` to return `BlockType` instead of `BlockId`.
 
 ### Fixed
 

@@ -1,14 +1,12 @@
-package org.allaymc.api.block.data;
+package org.allaymc.server.block.data;
 
 import lombok.Getter;
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 
 import java.util.Locale;
 
-@MinecraftVersionSensitive
 public enum BlockId {
     ACACIA_BUTTON("minecraft:acacia_button"),
 

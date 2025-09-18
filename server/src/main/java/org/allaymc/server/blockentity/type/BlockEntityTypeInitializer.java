@@ -1,7 +1,6 @@
 package org.allaymc.server.blockentity.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.blockentity.data.BlockEntityId;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.server.blockentity.component.*;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityBlastFurnaceBaseComponentImpl;
@@ -9,6 +8,7 @@ import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseCo
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.data.BlockEntityId;
 import org.allaymc.server.blockentity.impl.*;
 import org.allaymc.server.container.impl.*;
 

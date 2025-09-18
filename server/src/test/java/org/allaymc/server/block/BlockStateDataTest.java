@@ -1,9 +1,9 @@
 package org.allaymc.server.block;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.registry.loader.BlockStateDataLoader;
 import org.allaymc.testutils.AllayTestExtension;

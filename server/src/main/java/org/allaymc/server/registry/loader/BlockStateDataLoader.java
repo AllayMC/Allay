@@ -4,7 +4,6 @@ import com.google.gson.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.LiquidReactionOnTouch;
 import org.allaymc.api.block.data.TintMethod;
@@ -12,6 +11,7 @@ import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.block.data.BlockId;
 import org.joml.primitives.AABBd;
 
 import java.awt.*;

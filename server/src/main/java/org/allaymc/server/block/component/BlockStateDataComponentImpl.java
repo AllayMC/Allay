@@ -1,13 +1,13 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.component.BlockStateDataComponent;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.utils.function.TriFunction;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.registry.InternalRegistries;
 import org.jctools.maps.NonBlockingHashMap;
 

@@ -2,11 +2,11 @@ package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
 import org.allaymc.server.entity.component.projectile.*;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 
 import static org.allaymc.server.entity.component.EntityAttributeComponentImpl.basicEntityAttributes;

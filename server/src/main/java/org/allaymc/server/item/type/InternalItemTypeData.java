@@ -3,12 +3,12 @@ package org.allaymc.server.item.type;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.tag.ItemCustomTags;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.item.data.ItemId;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;

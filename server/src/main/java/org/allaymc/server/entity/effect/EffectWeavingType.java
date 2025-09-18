@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.data.BlockId.WEB;
+import static org.allaymc.server.block.data.BlockId.WEB;
 
 /**
  * @author IWareQ

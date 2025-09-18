@@ -1,7 +1,7 @@
 package org.allaymc.server.entity.type;
 
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 
 public final class EntityTypeDefaultInitializer {

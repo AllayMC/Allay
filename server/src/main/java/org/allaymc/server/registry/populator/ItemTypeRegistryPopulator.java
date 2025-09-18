@@ -1,9 +1,9 @@
 package org.allaymc.server.registry.populator;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.type.InternalItemTypeData;
 import org.allaymc.server.item.type.ItemTypeDefaultInitializer;
 import org.allaymc.server.item.type.ItemTypeInitializer;

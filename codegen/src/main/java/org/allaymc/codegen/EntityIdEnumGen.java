@@ -18,7 +18,7 @@ import java.util.TreeMap;
 public class EntityIdEnumGen {
     static final Path ENTITY_ID_MAP_FILE_PATH = Path.of(CodeGenConstants.DATA_PATH + "unpacked/entity_id_map.json");
     static final Map<String, Integer> ENTITY_ID_MAP = new TreeMap<>();
-    private static final String PACKAGE_NAME = "org.allaymc.api.entity.data";
+    private static final String PACKAGE_NAME = "org.allaymc.server.entity.data";
 
     static {
         try {
@@ -37,12 +37,12 @@ public class EntityIdEnumGen {
     }
 
     public static void generate() {
-        generateApi(PACKAGE_NAME, Path.of("api/src/main/java/org/allaymc/api/entity/data/EntityId.java"), ClassNames.API_IDENTIFIER, ClassNames.API_ENTITY_TYPE);
+        generateServer(PACKAGE_NAME, Path.of("server/src/main/java/org/allaymc/server/entity/data/EntityId.java"), ClassNames.API_IDENTIFIER, ClassNames.ENTITY_TYPE);
         generateDep("org.allaymc.dependence", Path.of("codegen/src/main/java/org/allaymc/dependence/EntityId.java"), ClassNames.DEP_IDENTIFIER);
     }
 
     @SneakyThrows
-    protected static void generateApi(String packageName, Path outPutPath, ClassName identifierClassName, ClassName entityTypeClassName) {
+    protected static void generateServer(String packageName, Path outPutPath, ClassName identifierClassName, ClassName entityTypeClassName) {
         TypeSpec.Builder codeBuilder = TypeSpec.enumBuilder("EntityId")
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec

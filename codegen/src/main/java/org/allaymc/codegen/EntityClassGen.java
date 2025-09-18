@@ -35,7 +35,7 @@ public class EntityClassGen extends BaseClassGen {
                 .classBuilder(ClassNames.ENTITY_TYPES).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : EntityId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(ClassNames.API_ENTITY_TYPE, generateClassFullName(id)), id.name())
+                    FieldSpec.builder(ParameterizedTypeName.get(ClassNames.ENTITY_TYPE, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );

@@ -7,8 +7,8 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.allaymc.server.item.data.ItemId;
 
 import java.util.Objects;
 import java.util.Set;

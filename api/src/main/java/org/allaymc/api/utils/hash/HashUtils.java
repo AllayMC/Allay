@@ -2,7 +2,6 @@ package org.allaymc.api.utils.hash;
 
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.chunk.ChunkSection;
@@ -39,10 +38,6 @@ public final class HashUtils {
      * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
-            return -2; // This is special case
-        }
-
         var states = new TreeMap<String, Object>();
         for (var value : propertyValues) {
             states.put(value.getPropertyType().getName(), value.getSerializedValue());
@@ -64,10 +59,6 @@ public final class HashUtils {
      * @return the hash
      */
     public static int computeBlockStateHash(Identifier identifier, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
-            return -2; // This is special case
-        }
-
         var states = new TreeMap<String, Object>();
         for (var value : propertyValues) {
             states.put(value.getPropertyType().getName(), value.getSerializedValue());

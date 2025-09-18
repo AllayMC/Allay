@@ -1,19 +1,18 @@
 package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySplashPotion;
 import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.data.DiscType;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.block.data.BlockId;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.edible.*;
 import org.allaymc.server.item.component.projectile.ItemBottleProjectileComponentImpl;
@@ -26,6 +25,7 @@ import org.allaymc.server.item.component.tool.ItemEmptyMapBaseComponentImpl;
 import org.allaymc.server.item.component.tool.ItemHoeComponentImpl;
 import org.allaymc.server.item.component.tool.ItemSwordComponentImpl;
 import org.allaymc.server.item.component.tool.ItemToolComponentImpl;
+import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.impl.*;
 import org.joml.Vector3d;
 

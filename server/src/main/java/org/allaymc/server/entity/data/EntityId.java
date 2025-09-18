@@ -1,4 +1,4 @@
-package org.allaymc.api.entity.data;
+package org.allaymc.server.entity.data;
 
 import lombok.Getter;
 import org.allaymc.api.entity.type.EntityType;

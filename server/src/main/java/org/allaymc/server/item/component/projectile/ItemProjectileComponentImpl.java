@@ -2,7 +2,6 @@ package org.allaymc.server.item.component.projectile;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
@@ -18,6 +17,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.event.CItemClickInAirEvent;
 import org.allaymc.server.item.component.event.CItemInteractEntityEvent;
 import org.joml.Vector3d;

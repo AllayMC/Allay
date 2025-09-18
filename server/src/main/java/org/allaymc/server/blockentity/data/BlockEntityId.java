@@ -1,4 +1,4 @@
-package org.allaymc.api.blockentity.data;
+package org.allaymc.server.blockentity.data;
 
 public interface BlockEntityId {
     String BANNER = "Banner";

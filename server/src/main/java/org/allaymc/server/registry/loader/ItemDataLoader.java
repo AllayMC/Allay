@@ -4,10 +4,10 @@ import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.data.ItemData;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.item.data.ItemId;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;

@@ -6,7 +6,6 @@ import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.registry.Registries;
@@ -14,6 +13,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.data.EntityId;
 
 import java.util.ArrayList;
 import java.util.HashMap;

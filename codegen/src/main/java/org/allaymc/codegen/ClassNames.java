@@ -26,7 +26,7 @@ public interface ClassNames {
 
     ClassName BLOCK_BEHAVIOR = ClassName.get("org.allaymc.api.block", "BlockBehavior");
     ClassName BLOCK_BEHAVIOR_IMPL = ClassName.get("org.allaymc.server.block.impl", "BlockBehaviorImpl");
-    ClassName BLOCK_ID = ClassName.get("org.allaymc.api.block.data", "BlockId");
+    ClassName BLOCK_ID = ClassName.get("org.allaymc.server.block.data", "BlockId");
     ClassName BLOCK_PROPERTY_TYPE = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyType");
     ClassName BLOCK_PROPERTY_TYPES = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyTypes");
     ClassName BLOCK_TYPE = ClassName.get("org.allaymc.api.block.type", "BlockType");
@@ -47,8 +47,7 @@ public interface ClassNames {
     ClassName ENTITY_IMPL = ClassName.get("org.allaymc.server.entity.impl", "EntityImpl");
     ClassName ENTITY_INIT_INFO = ClassName.get("org.allaymc.api.entity.initinfo", "EntityInitInfo");
     ClassName ENTITY_ID = ClassName.get("org.allaymc.api.entity.data", "EntityId");
-    ClassName API_ENTITY_TYPE = ClassName.get("org.allaymc.api.entity.type", "EntityType");
-    ClassName DEP_ENTITY_TYPE = ClassName.get("org.allaymc.dependence", "EntityType");
+    ClassName ENTITY_TYPE = ClassName.get("org.allaymc.server.entity.type", "EntityType");
     ClassName ENTITY_TYPES = ClassName.get("org.allaymc.api.entity.type", "EntityTypes");
     ClassName ALLAY_ENTITY_TYPE = ClassName.get("org.allaymc.server.entity.type", "AllayEntityType");
     ClassName ENTITY_TYPE_DEFAULT_INITIALIZER = ClassName.get("org.allaymc.server.entity.type", "EntityTypeDefaultInitializer");

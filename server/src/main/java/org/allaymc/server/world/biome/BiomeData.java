@@ -22,6 +22,7 @@ import java.util.Map;
 /**
  * BiomeData represents the data of a biome.
  */
+// TODO: move to api
 @MinecraftVersionSensitive
 public record BiomeData(
         float ashDensity, float blueSporeDensity, float depth,

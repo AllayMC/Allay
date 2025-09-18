@@ -1,13 +1,13 @@
 package org.allaymc.server.registry;
 
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.data.ItemData;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.registry.SimpleRegistry;
+import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.property.BlockPropertyProcessor;
+import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.type.ItemComponentData;
 import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
 import org.cloudburstmc.protocol.bedrock.data.TrimPattern;

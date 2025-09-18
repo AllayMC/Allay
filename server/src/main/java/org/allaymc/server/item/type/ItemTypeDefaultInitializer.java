@@ -1,7 +1,7 @@
 package org.allaymc.server.item.type;
 
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.impl.*;
 
 public final class ItemTypeDefaultInitializer {

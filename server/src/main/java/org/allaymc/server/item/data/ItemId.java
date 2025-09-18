@@ -1,14 +1,12 @@
-package org.allaymc.api.item.data;
+package org.allaymc.server.item.data;
 
 import lombok.Getter;
-import org.allaymc.api.annotation.MinecraftVersionSensitive;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 
 import java.util.Locale;
 
-@MinecraftVersionSensitive
 public enum ItemId {
     ACACIA_BOAT("minecraft:acacia_boat", 405),
 

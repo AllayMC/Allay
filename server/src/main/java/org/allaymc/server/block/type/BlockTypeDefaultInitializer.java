@@ -1,8 +1,8 @@
 package org.allaymc.server.block.type;
 
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.impl.*;
 
 /**

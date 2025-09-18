@@ -2,7 +2,6 @@ package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -11,9 +10,10 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockGrowEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.data.BlockId;
+import org.allaymc.server.item.data.ItemId;
 import org.joml.Vector3ic;
 
 import java.util.Objects;

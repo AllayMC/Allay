@@ -1,8 +1,8 @@
 package org.allaymc.server.block.registry;
 
-import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.server.block.data.BlockId;
+import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;

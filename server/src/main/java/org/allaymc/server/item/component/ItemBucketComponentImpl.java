@@ -1,14 +1,12 @@
 package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.EventHandler;
@@ -19,7 +17,9 @@ import org.allaymc.api.item.interfaces.ItemBucketStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.component.annotation.ComponentObject;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 import org.joml.Vector3ic;
 
