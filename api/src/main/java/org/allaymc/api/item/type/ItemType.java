@@ -12,8 +12,9 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Set;
 
 /**
- * Represents a type of item.
+ * Represents a type of item, providing methods to create instances of the item as well as to retrieve its properties.
  *
+ * @param <T> the specific type of {@link ItemStack} this ItemType represents
  * @author daoge_cmd
  */
 public interface ItemType<T extends ItemStack> extends Identified {

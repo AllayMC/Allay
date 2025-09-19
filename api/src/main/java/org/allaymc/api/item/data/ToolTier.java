@@ -7,6 +7,9 @@ import org.allaymc.api.item.tag.ItemTag;
 import static org.allaymc.api.item.tag.ItemTags.*;
 
 /**
+ * Represents the various tiers of tools in terms of their quality and mining capability.
+ * Each tier is associated with an {@link ItemTag} and a specific mining level.
+ *
  * @author daoge_cmd
  */
 @Getter

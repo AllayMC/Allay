@@ -5,6 +5,9 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author daoge_cmd
+ */
 @ApiStatus.Experimental
 public interface BlockCustomTags {
     Map<String, BlockTag> NAME_TO_TAG = new HashMap<>();

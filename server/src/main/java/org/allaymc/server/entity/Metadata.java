@@ -6,7 +6,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.server.utils.NetworkHelper;
+import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.utils.ReflectionUtils;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;

@@ -7,8 +7,8 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
-import org.allaymc.server.network.DeferredData;
 import org.allaymc.server.network.MultiVersion;
+import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -37,7 +37,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                 }
             }
             case HAVE_ALL_PACKS -> {
-                var packetToSend = DeferredData.RESOURCES_PACK_STACK_PACKET.get();
+                var packetToSend = NetworkData.RESOURCES_PACK_STACK_PACKET.get();
                 MultiVersion.adaptExperimentData(player, packetToSend.getExperiments());
                 player.sendPacket(packetToSend);
             }

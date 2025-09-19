@@ -15,7 +15,7 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.server.utils.NetworkHelper;
+import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 

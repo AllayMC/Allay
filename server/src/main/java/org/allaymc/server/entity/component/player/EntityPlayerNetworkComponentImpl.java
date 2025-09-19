@@ -30,8 +30,8 @@ import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
-import org.allaymc.server.network.DeferredData;
 import org.allaymc.server.network.MultiVersion;
+import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayerManager;
@@ -336,19 +336,19 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacketImmediately(encodeStartGamePacket(dimension.getWorld(), playerData, dimension));
 
         var codecHelper = clientSession.getPeer().getCodecHelper();
-        codecHelper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(DeferredData.ITEM_DEFINITIONS.get()).build());
-        codecHelper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(DeferredData.BLOCK_DEFINITIONS.get()).build());
+        codecHelper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
+        codecHelper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
 
         var itemComponentPacket = new ItemComponentPacket();
-        itemComponentPacket.getItems().addAll(DeferredData.ITEM_DEFINITIONS.get());
+        itemComponentPacket.getItems().addAll(NetworkData.ITEM_DEFINITIONS.get());
         sendPacketImmediately(itemComponentPacket);
 
         sendPacket(Registries.CREATIVE_ITEMS.getCreativeContentPacketFor(thisPlayer.getLoginData().getLangCode()));
 
-        sendPacket(DeferredData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
-        sendPacket(DeferredData.BIOME_DEFINITION_LIST_PACKET.get());
-        sendPacket(DeferredData.CRAFTING_DATA_PACKET.get());
-        sendPacket(DeferredData.TRIM_DATA_PACKET.get());
+        sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
+        sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
+        sendPacket(NetworkData.CRAFTING_DATA_PACKET.get());
+        sendPacket(NetworkData.TRIM_DATA_PACKET.get());
     }
 
     protected StartGamePacket encodeStartGamePacket(World spawnWorld, PlayerData playerData, Dimension dimension) {
@@ -400,7 +400,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setWorldId("");
         packet.setScenarioId("");
         packet.setOwnerId("");
-        packet.getExperiments().addAll(DeferredData.EXPERIMENT_DATA_LIST.get());
+        packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
         MultiVersion.adaptExperimentData(thisPlayer, packet.getExperiments());
         return packet;
     }
@@ -429,6 +429,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         Object[] args = new Object[]{thisPlayer.getOriginName()};
         Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), args);
 
-        sendPacket(DeferredData.RESOURCE_PACKS_INFO_PACKET.get());
+        sendPacket(NetworkData.RESOURCE_PACKS_INFO_PACKET.get());
     }
 }

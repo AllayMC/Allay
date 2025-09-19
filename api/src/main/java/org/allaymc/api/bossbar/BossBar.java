@@ -7,7 +7,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Collection;
 
 /**
- * BossBar will be shown at the top of the screen.
+ * Represents a boss bar, a visual element often used in games to display progress, health, or status.
+ * It supports customization options such as color, style, title, progress, and visibility behavior.
  *
  * @author daoge_cmd
  */

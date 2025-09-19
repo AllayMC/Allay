@@ -1,4 +1,4 @@
-package org.allaymc.server.utils;
+package org.allaymc.server.network;
 
 import it.unimi.dsi.fastutil.Pair;
 import lombok.experimental.UtilityClass;

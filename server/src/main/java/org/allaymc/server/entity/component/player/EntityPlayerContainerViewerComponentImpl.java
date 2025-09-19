@@ -16,7 +16,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.AbstractPlayerContainer;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
-import org.allaymc.server.utils.NetworkHelper;
+import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;

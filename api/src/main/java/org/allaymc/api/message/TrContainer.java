@@ -5,5 +5,5 @@ package org.allaymc.api.message;
  *
  * @author daoge_cmd
  */
-public record TrContainer(String str, Object... args) {
+public record TrContainer(@MayContainTrKey String str, Object... args) {
 }
