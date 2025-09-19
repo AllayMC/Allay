@@ -22,8 +22,8 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.function.QuadConsumer;
 import org.allaymc.api.utils.function.TriFunction;
-import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.light.LightEngine;
@@ -1191,15 +1191,15 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     * @return the biome at the specified pos.{@code BiomeId.PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded
+     * @return the biome at the specified pos.{@link BiomeTypes#PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded
      */
     default BiomeType getBiome(int x, int y, int z) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
 
         var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
         }
 
         return chunk.getBiome(x & 15, y, z & 15);

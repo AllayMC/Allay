@@ -1,4 +1,4 @@
-package org.allaymc.api.world.biome;
+package org.allaymc.server.world.biome;
 
 import lombok.Getter;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -6,7 +6,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import java.util.HashMap;
 
 @Getter
-public enum BiomeId implements BiomeType {
+public enum BiomeId {
     OCEAN("minecraft:ocean", 0, "Ocean"),
 
     PLAINS("minecraft:plains", 1, "Plain"),
@@ -183,7 +183,7 @@ public enum BiomeId implements BiomeType {
 
     private static final BiomeId[] MAP1;
 
-    private static final HashMap<Identifier, BiomeType> MAP2;
+    private static final HashMap<Identifier, BiomeId> MAP2;
 
     static {
         MAP1 = new BiomeId[256];
@@ -206,11 +206,11 @@ public enum BiomeId implements BiomeType {
         this.type = type;
     }
 
-    public static BiomeType fromId(int id) {
+    public static BiomeId fromId(int id) {
         return MAP1[id];
     }
 
-    public static BiomeType fromIdentifier(Identifier identifier) {
+    public static BiomeId fromIdentifier(Identifier identifier) {
         return MAP2.get(identifier);
     }
 }

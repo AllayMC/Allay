@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class BiomeIdEnumGen {
     private static final Map<String, BiomeData> BIOME_DATA = new LinkedHashMap<>();
-    private static final String PACKAGE_NAME = "org.allaymc.api.world.biome";
-    private static final Path OUTPUT_PATH = Path.of("api/src/main/java/org/allaymc/api/world/biome/BiomeId.java");
+    private static final String PACKAGE_NAME = "org.allaymc.server.world.biome";
+    private static final Path OUTPUT_PATH = Path.of("server/src/main/java/org/allaymc/server/world/biome/BiomeId.java");
 
     static {
         try {
@@ -56,7 +56,7 @@ public class BiomeIdEnumGen {
                         .builder(ClassNames.BIOME_ID_ARRAY, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
-                        .builder(ParameterizedTypeName.get(ClassNames.HASH_MAP, ClassNames.API_IDENTIFIER, ClassNames.BIOME_TYPE), "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
+                        .builder(ParameterizedTypeName.get(ClassNames.HASH_MAP, ClassNames.API_IDENTIFIER, ClassNames.BIOME_ID), "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
                         .build())
                 .addField(FieldSpec
                         .builder(ClassNames.API_IDENTIFIER, "identifier", Modifier.PRIVATE, Modifier.FINAL)
@@ -82,21 +82,20 @@ public class BiomeIdEnumGen {
             var type = entry.getValue().type;
             codeBuilder.addEnumConstant(entry.getKey().toUpperCase(), TypeSpec.anonymousClassBuilder("$S, $L, $S", identifier, id, type).build());
         }
-        codeBuilder.addSuperinterface(ClassNames.BIOME_TYPE);
 
         codeBuilder.addMethod(MethodSpec
                 .methodBuilder("fromId")
                 .addParameter(int.class, "id")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP1[id];")
-                .returns(ClassNames.BIOME_TYPE)
+                .returns(ClassNames.BIOME_ID)
                 .build());
         codeBuilder.addMethod(MethodSpec
                 .methodBuilder("fromIdentifier")
                 .addParameter(ClassNames.API_IDENTIFIER, "identifier")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP2.get(identifier);")
-                .returns(ClassNames.BIOME_TYPE)
+                .returns(ClassNames.BIOME_ID)
                 .build());
         var builtCode = codeBuilder.build();
         var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode)

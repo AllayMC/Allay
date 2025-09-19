@@ -17,8 +17,8 @@ import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
-import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.OperationType;
@@ -450,10 +450,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static BiomeType getBiomeByIdNonNull(int id) {
         try {
-            return BiomeId.fromId(id);
+            return Registries.BIOMES.getByK1(id);
         } catch (ArrayIndexOutOfBoundsException e) {
             log.warn("Unknown biome id: {}", id);
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
         }
     }
 

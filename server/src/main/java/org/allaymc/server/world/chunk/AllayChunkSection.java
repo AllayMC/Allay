@@ -2,8 +2,8 @@ package org.allaymc.server.world.chunk;
 
 import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.ChunkSection;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.world.storage.leveldb.ChunkSectionVersion;
@@ -25,11 +25,11 @@ public record AllayChunkSection(
 
     @SuppressWarnings("unchecked")
     public AllayChunkSection(byte sectionY) {
-        this(sectionY, new Palette[]{new Palette<>(AIR.getDefaultState()), new Palette<>(AIR.getDefaultState())}, new Palette<>(BiomeId.PLAINS));
+        this(sectionY, new Palette[]{new Palette<>(AIR.getDefaultState()), new Palette<>(AIR.getDefaultState())}, new Palette<>(BiomeTypes.PLAINS));
     }
 
     public AllayChunkSection(byte sectionY, Palette<BlockState>[] blockLayer) {
-        this(sectionY, blockLayer, new Palette<>(BiomeId.PLAINS));
+        this(sectionY, blockLayer, new Palette<>(BiomeTypes.PLAINS));
     }
 
     @Override

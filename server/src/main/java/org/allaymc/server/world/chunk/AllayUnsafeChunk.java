@@ -17,8 +17,8 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
-import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -372,7 +372,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public BiomeType getBiome(int x, int y, int z) {
         if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
         }
 
         AllayUnsafeChunk.checkXZ(x, z);

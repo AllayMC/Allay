@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.data.DimensionInfo;
 
@@ -77,7 +77,7 @@ public class AllayChunk implements Chunk {
     @Override
     public BiomeType getBiome(int x, int y, int z) {
         if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
         }
 
         AllayUnsafeChunk.checkXZ(x, z);

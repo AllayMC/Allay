@@ -7,7 +7,9 @@ import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.item.type.AllayItemType;
+import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
@@ -24,6 +26,15 @@ import java.util.List;
  */
 @UtilityClass
 public final class NetworkHelper {
+
+    public static BiomeDefinitionData toNetwork(BiomeType biome) {
+        var data = biome.getBiomeData();
+        return new BiomeDefinitionData(
+                null, data.temperature(), data.downfall(), data.redSporeDensity(),
+                data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.depth(),
+                data.scale(), data.mapWaterColor(), data.rain(), data.tags(), null
+        );
+    }
 
     public static EnchantData toNetwork(EnchantmentInstance instance) {
         return new EnchantData(instance.getType().getId(), instance.getLevel());

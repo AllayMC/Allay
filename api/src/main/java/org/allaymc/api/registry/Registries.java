@@ -17,6 +17,7 @@ import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
 
@@ -45,7 +46,8 @@ public final class Registries {
     public static DoubleKeyMappedRegistry<Integer, Identifier, EffectType> EFFECTS;
     public static SimpleMappedRegistry<Identifier, EntityType<?>> ENTITIES;
 
-    // TODO: Biome
+    // Biome
+    public static DoubleKeyMappedRegistry<Integer, Identifier, BiomeType> BIOMES;
 
     // World
     public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;

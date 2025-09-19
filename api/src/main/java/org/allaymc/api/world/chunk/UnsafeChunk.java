@@ -263,7 +263,7 @@ public interface UnsafeChunk {
      * @param x the x coordinate of the position
      * @param y the y coordinate of the position
      * @param z the z coordinate of the position
-     * @return the biome type, or {@link org.allaymc.api.world.biome.BiomeId#PLAINS} if y is out of range
+     * @return the biome type, or {@link org.allaymc.api.world.biome.BiomeTypes#PLAINS} if y is out of range
      * @throws IllegalArgumentException if x or z is out of range
      */
     BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);

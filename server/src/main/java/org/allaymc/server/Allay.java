@@ -25,6 +25,7 @@ import org.allaymc.api.registry.*;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
@@ -215,6 +216,14 @@ public final class Allay {
                 RegistryLoaders.empty(() -> new HashMap<Identifier, EntityType<?>>()),
                 r -> Registries.ENTITIES = r,
                 new EntityTypeRegistryPopulator()
+        );
+
+        // Biome
+        InternalRegistries.BIOME_DATA = SimpleMappedRegistry.create(new BiomeDataLoader());
+        DoubleKeyMappedRegistry.create(
+                RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, BiomeType>())),
+                r -> Registries.BIOMES = r,
+                new BiomeTypeRegistryPopulator()
         );
 
         // World

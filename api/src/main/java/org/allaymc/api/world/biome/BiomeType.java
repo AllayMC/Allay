@@ -19,4 +19,11 @@ public interface BiomeType {
      * @return the id of the biome
      */
     int getId();
+    
+    /**
+     * Retrieves the biome data associated with this biome type.
+     *
+     * @return a {@link BiomeData} object that contains information and properties of the biome
+     */
+    BiomeData getBiomeData();
 }

@@ -14,8 +14,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.biome.BiomeId;
-import org.allaymc.server.world.biome.BiomeData;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ClientboundMapItemDataPacket;
@@ -100,7 +99,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             var finalGreen = color.getGreen();
             var finalBlue = color.getBlue();
             // TODO: mix neighbor biomes' water color
-            var waterColor = BiomeData.getBiomeData(dimension.getBiome(block.getPosition())).mapWaterColor();
+            var waterColor = dimension.getBiome(block.getPosition()).getBiomeData().mapWaterColor();
             if (block.getPosition().y() < SEA_LEVEL) {
                 // Under sea level, the farther away from sea level, the closer the color is to the ocean color
                 var depth = SEA_LEVEL - block.getPosition().y();
@@ -192,7 +191,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
         }
 
         var biomeType = block.getDimension().getBiome(block.getPosition());
-        if (biomeType == BiomeId.SWAMPLAND || biomeType == BiomeId.SWAMPLAND_MUTATED || biomeType == BiomeId.MANGROVE_SWAMP) {
+        if (biomeType == BiomeTypes.SWAMPLAND || biomeType == BiomeTypes.SWAMPLAND_MUTATED || biomeType == BiomeTypes.MANGROVE_SWAMP) {
             if (tintMethod == TintMethod.DRY_FOLIAGE) {
                 return DRY_FOLIAGE_SPECIAL_A;
             }
@@ -203,10 +202,10 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
                 return SWAMP_BIOME_GRASS_A;
             }
 
-            return biomeType == BiomeId.MANGROVE_SWAMP ? MANGROVE_SWAMP_BIOME_FOLIAGE : SWAMP_BIOME_FOLIAGE;
+            return biomeType == BiomeTypes.MANGROVE_SWAMP ? MANGROVE_SWAMP_BIOME_FOLIAGE : SWAMP_BIOME_FOLIAGE;
         }
 
-        if (biomeType == BiomeId.ROOFED_FOREST || biomeType == BiomeId.ROOFED_FOREST_MUTATED) {
+        if (biomeType == BiomeTypes.ROOFED_FOREST || biomeType == BiomeTypes.ROOFED_FOREST_MUTATED) {
             if (tintMethod == TintMethod.GRASS) {
                 return ROOFED_FOREST_BIOME_GRASS;
             }
@@ -216,12 +215,12 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             }
         }
 
-        if (biomeType == BiomeId.MESA ||
-            biomeType == BiomeId.MESA_BRYCE ||
-            biomeType == BiomeId.MESA_PLATEAU ||
-            biomeType == BiomeId.MESA_PLATEAU_MUTATED ||
-            biomeType == BiomeId.MESA_PLATEAU_STONE ||
-            biomeType == BiomeId.MESA_PLATEAU_STONE_MUTATED
+        if (biomeType == BiomeTypes.MESA ||
+            biomeType == BiomeTypes.MESA_BRYCE ||
+            biomeType == BiomeTypes.MESA_PLATEAU ||
+            biomeType == BiomeTypes.MESA_PLATEAU_MUTATED ||
+            biomeType == BiomeTypes.MESA_PLATEAU_STONE ||
+            biomeType == BiomeTypes.MESA_PLATEAU_STONE_MUTATED
         ) {
             if (tintMethod == TintMethod.GRASS) {
                 return MESA_BIOME_GRASS;
@@ -230,11 +229,11 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             return MESA_BIOME_FOLIAGE;
         }
 
-        if (biomeType == BiomeId.CHERRY_GROVE) {
+        if (biomeType == BiomeTypes.CHERRY_GROVE) {
             return CHERRY_GROVE_BIOME_PLANT;
         }
 
-        if (biomeType == BiomeId.PALE_GARDEN) {
+        if (biomeType == BiomeTypes.PALE_GARDEN) {
             if (tintMethod == TintMethod.DRY_FOLIAGE) {
                 return DRY_FOLIAGE_SPECIAL_B;
             }
@@ -242,8 +241,8 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             return PALE_GARDEN_BIOME_PLANT;
         }
 
-        var adjTemperature = Math.clamp(BiomeData.getBiomeData(biomeType).temperature(), 0, 1);
-        var adjDownfall = Math.clamp(BiomeData.getBiomeData(biomeType).downfall(), 0, 1) * adjTemperature;
+        var adjTemperature = Math.clamp(biomeType.getBiomeData().temperature(), 0, 1);
+        var adjDownfall = Math.clamp(biomeType.getBiomeData().downfall(), 0, 1) * adjTemperature;
         var colormap = switch (tintMethod) {
             case TintMethod.DRY_FOLIAGE -> DRY_FOLIAGE_COLORMAP;
             case TintMethod.GRASS -> GRASS_COLORMAP;

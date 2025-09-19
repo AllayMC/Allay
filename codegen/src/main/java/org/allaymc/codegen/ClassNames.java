@@ -40,8 +40,8 @@ public interface ClassNames {
     ClassName MATERIAL_TYPE = ClassName.get("org.allaymc.api.block.material", "MaterialType");
 
     ClassName BIOME_TYPE = ClassName.get("org.allaymc.api.world.biome", "BiomeType");
-    ClassName BIOME_ID = ClassName.get("org.allaymc.api.world.biome", "BiomeId");
-    ClassName BIOME_ID_ARRAY = ClassName.get("org.allaymc.api.world.biome", "BiomeId[]");
+    ClassName BIOME_ID = ClassName.get("org.allaymc.server.world.biome", "BiomeId");
+    ClassName BIOME_ID_ARRAY = ClassName.get("org.allaymc.server.world.biome", "BiomeId[]");
 
     ClassName ENTITY = ClassName.get("org.allaymc.api.entity", "Entity");
     ClassName ENTITY_IMPL = ClassName.get("org.allaymc.server.entity.impl", "EntityImpl");

@@ -38,6 +38,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced class `Skin` as the replacement for the `SerializedSkin` class in protocol lib.
 - (API) Introduced a new `MessageChannel` system to replace the old `broadcastXXX()` methods in `Server`. The default message channel of
   the server can be got using method `Server.getMessageChannel()` and can be changed using method `Server.setMessageChannel()`.
+- (API) Introduced new registry `Registries.BIOMES` which contains all available biomes in the game. This is the replacement for the old
+  `BiomeId` enum. Biome data is also accessible through method `BiomeType.getBiomeData` now.
 - Implemented sharpness enchantment.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This

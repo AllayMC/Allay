@@ -19,7 +19,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.world.biome.BiomeData;
 import org.joml.Vector3i;
 
 import java.util.Set;
@@ -242,7 +241,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
                         k += (ly - (y + 1)) * 100;
                     }
                     var maxChance = (flameOdds + 40 + dimension.getWorld().getWorldData().getDifficulty().ordinal() * 7) / (age + 30);
-                    if (BiomeData.getBiomeData(dimension.getBiome(lx, ly, lz)).isHumid()) {
+                    if (dimension.getBiome(lx, ly, lz).getBiomeData().isHumid()) {
                         maxChance /= 2;
                     }
 
