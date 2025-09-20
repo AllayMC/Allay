@@ -111,6 +111,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed item stack network id to unique id for better readability, changes are made to multiple related methods.
 - (API) Refactored the recipe system, network-related code is moved to the server module.
 - (API) Moved package `item.descriptor` to `item.recipe.descriptor` since the item descriptor is only used in recipe system.
+- (API) Replaced `ModalFormCancelReason` with `FormCancelReason` in the modal form APIs.
 
 ### Fixed
 

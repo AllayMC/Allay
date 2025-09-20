@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.form.FormCancelReason;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -36,7 +37,10 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
         if (formData != null) {
             form.handleResponse(formData.trim());
         } else {
-            form.handleClose(packet.getCancelReason().orElseThrow());
+            form.handleClose(switch (packet.getCancelReason().orElseThrow()) {
+                case USER_CLOSED -> FormCancelReason.PLAYER_CLOSED;
+                case USER_BUSY -> FormCancelReason.PLAYER_BUSY;
+            });
         }
         if (isServerSettingsForm) {
             ((CustomForm) form).syncDefaultValueToResponse();
