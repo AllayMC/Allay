@@ -43,7 +43,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         }
 
         // The network id for the recipe start from 1, so we need to subtract 1 to get the index in indexedRecipes
-        var recipe = NetworkData.indexedRecipes.get(recipeNetworkId - 1);
+        var recipe = NetworkData.INDEXED_RECIPES.get(recipeNetworkId - 1);
         var isShapeRecipe = recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe;
         if (!(isShapeRecipe || recipe instanceof SmithingRecipe)) {
             return error();

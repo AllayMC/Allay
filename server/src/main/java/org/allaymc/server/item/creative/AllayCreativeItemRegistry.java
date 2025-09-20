@@ -4,24 +4,20 @@ import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.creative.CreativeItemCategory;
+import org.allaymc.api.item.creative.CreativeItemCategory.Type;
 import org.allaymc.api.item.creative.CreativeItemEntry;
 import org.allaymc.api.item.creative.CreativeItemGroup;
 import org.allaymc.api.item.creative.CreativeItemRegistry;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.message.I18n;
-import org.allaymc.api.message.LangCode;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
-import org.cloudburstmc.protocol.bedrock.packet.CreativeContentPacket;
-import org.jetbrains.annotations.UnmodifiableView;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
@@ -33,20 +29,18 @@ import java.util.*;
 @Slf4j
 public class AllayCreativeItemRegistry implements CreativeItemRegistry {
 
-    protected final Map<CreativeItemCategory, AllayCreativeItemCategory> categories;
+    protected final Map<Type, AllayCreativeItemCategory> categories;
     protected final List<CreativeItemEntry> entries;
     protected final List<CreativeItemGroup> groups;
-    protected final Map<LangCode, CreativeContentPacket> cachedPackets;
 
     public AllayCreativeItemRegistry() {
-        this.categories = new EnumMap<>(CreativeItemCategory.class);
-        this.categories.put(CreativeItemCategory.CONSTRUCTION, new AllayCreativeItemCategory(this, CreativeItemCategory.CONSTRUCTION));
-        this.categories.put(CreativeItemCategory.NATURE, new AllayCreativeItemCategory(this, CreativeItemCategory.NATURE));
-        this.categories.put(CreativeItemCategory.EQUIPMENT, new AllayCreativeItemCategory(this, CreativeItemCategory.EQUIPMENT));
-        this.categories.put(CreativeItemCategory.ITEMS, new AllayCreativeItemCategory(this, CreativeItemCategory.ITEMS));
+        this.categories = new EnumMap<>(Type.class);
+        this.categories.put(Type.CONSTRUCTION, new AllayCreativeItemCategory(this, Type.CONSTRUCTION));
+        this.categories.put(Type.NATURE, new AllayCreativeItemCategory(this, Type.NATURE));
+        this.categories.put(Type.EQUIPMENT, new AllayCreativeItemCategory(this, Type.EQUIPMENT));
+        this.categories.put(Type.ITEMS, new AllayCreativeItemCategory(this, Type.ITEMS));
         this.entries = new ArrayList<>();
         this.groups = new ArrayList<>();
-        this.cachedPackets = new EnumMap<>(LangCode.class);
         this.load();
     }
 
@@ -58,7 +52,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("creative_groups.json")))) {
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
                 var group = entry.getAsJsonObject();
-                var category = getCategory(CreativeItemCategory.valueOf(group.get("category").getAsString().toUpperCase()));
+                var category = getCategory(Type.valueOf(group.get("category").getAsString().toUpperCase()));
                 var name = group.get("name").getAsString();
                 if (name.isEmpty()) {
                     category.registerUnnamedGroup();
@@ -79,7 +73,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                 var itemType = Registries.ITEMS.get(itemTypeName);
                 Objects.requireNonNull(itemType, "Unknown item type: " + itemTypeName);
 
-                var category = getCategory(CreativeItemCategory.valueOf(item.getString("category").toUpperCase()));
+                var category = getCategory(Type.valueOf(item.getString("category").toUpperCase()));
                 var itemStack = itemType.createItemStack(
                         ItemStackInitInfo
                                 .builder().count(1).meta(item.getShort("damage"))
@@ -101,7 +95,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
     }
 
     @Override
-    public org.allaymc.api.item.creative.CreativeItemCategory getCategory(CreativeItemCategory type) {
+    public CreativeItemCategory getCategory(Type type) {
         return categories.get(type);
     }
 
@@ -116,34 +110,13 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
     }
 
     @Override
-    public @UnmodifiableView List<CreativeItemEntry> getEntries() {
+    public List<CreativeItemEntry> getEntries() {
         return Collections.unmodifiableList(entries);
     }
 
     @Override
-    public CreativeContentPacket getCreativeContentPacketFor(LangCode langCode) {
-        return cachedPackets.computeIfAbsent(langCode, $ -> encodeCreativeContentPacketFor(langCode));
-    }
-
-    protected CreativeContentPacket encodeCreativeContentPacketFor(LangCode langCode) {
-        var encodedGroups = new ArrayList<org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup>();
-        for (var group : groups) {
-            encodedGroups.add(new org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup(
-                    group.getCategory().getType(), I18n.get().tr(langCode, group.getName()),
-                    NetworkHelper.toNetwork(group.getIcon())
-            ));
-        }
-
-        var encodedItems = new ArrayList<CreativeItemData>();
-        for (var entry : entries) {
-            // NOTICE: 0 is not indexed by the client for items
-            encodedItems.add(new CreativeItemData(NetworkHelper.toNetwork(entry.itemStack()), entry.index() + 1, entry.group().getIndex()));
-        }
-
-        var pk = new CreativeContentPacket();
-        pk.getGroups().addAll(encodedGroups);
-        pk.getContents().addAll(encodedItems);
-        return pk;
+    public List<CreativeItemGroup> getGroups() {
+        return Collections.unmodifiableList(groups);
     }
 
     CreativeItemEntry assignIndexForEntry(CreativeItemGroup group, ItemStack itemStack) {

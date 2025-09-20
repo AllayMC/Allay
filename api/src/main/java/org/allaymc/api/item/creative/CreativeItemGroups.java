@@ -1,5 +1,8 @@
 package org.allaymc.api.item.creative;
 
+import org.allaymc.api.annotation.MinecraftVersionSensitive;
+
+@MinecraftVersionSensitive
 public interface CreativeItemGroups {
     String RAIL = "itemGroup.name.rail";
 

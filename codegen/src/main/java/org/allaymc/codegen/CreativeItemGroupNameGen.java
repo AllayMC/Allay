@@ -28,7 +28,9 @@ public class CreativeItemGroupNameGen {
             });
         }
 
-        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(ClassNames.CREATIVE_ITEM_GROUPS)
+        TypeSpec.Builder codeBuilder = TypeSpec
+                .interfaceBuilder(ClassNames.CREATIVE_ITEM_GROUPS)
+                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE)
                 .addModifiers(Modifier.PUBLIC);
 
         for (var name : names) {

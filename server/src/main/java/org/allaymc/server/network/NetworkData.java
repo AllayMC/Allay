@@ -54,8 +54,7 @@ public final class NetworkData {
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
-
-    public static List<Recipe> indexedRecipes;
+    public static final List<Recipe> INDEXED_RECIPES = new ArrayList<>();
 
     public static List<ItemDefinition> encodeItemDefinitions() {
         return Registries.ITEMS.getContent().values().stream()
@@ -88,7 +87,6 @@ public final class NetworkData {
         var packet = new CraftingDataPacket();
         // NOTICE: network id is start at 1
         int idCounter = 1;
-        NetworkData.indexedRecipes = new ArrayList<>();
         for (var recipe : Registries.RECIPES.getContent().values()) {
             switch (recipe) {
                 // Indexed recipe (has network id)
@@ -101,7 +99,7 @@ public final class NetworkData {
                             UUID.randomUUID(), "crafting_table", shaped.getPriority(), id
                     );
                     packet.getCraftingData().add(data);
-                    NetworkData.indexedRecipes.add(recipe);
+                    NetworkData.INDEXED_RECIPES.add(recipe);
                 }
                 case ShapelessRecipe shapeless -> {
                     var id = idCounter++;
@@ -111,7 +109,7 @@ public final class NetworkData {
                             UUID.randomUUID(), "crafting_table", shapeless.getPriority(), id
                     );
                     packet.getCraftingData().add(data);
-                    NetworkData.indexedRecipes.add(recipe);
+                    NetworkData.INDEXED_RECIPES.add(recipe);
                 }
                 case SmithingTransformRecipe smithingTrans -> {
                     var id = idCounter++;
@@ -124,7 +122,7 @@ public final class NetworkData {
                             "smithing_table", id
                     );
                     packet.getCraftingData().add(data);
-                    NetworkData.indexedRecipes.add(recipe);
+                    NetworkData.INDEXED_RECIPES.add(recipe);
                 }
                 case SmithingTrimRecipe smithingTrim -> {
                     var id = idCounter++;
@@ -136,7 +134,7 @@ public final class NetworkData {
                             "smithing_table", id
                     );
                     packet.getCraftingData().add(data);
-                    NetworkData.indexedRecipes.add(recipe);
+                    NetworkData.INDEXED_RECIPES.add(recipe);
                 }
                 // Unindexed recipe (doesn't have network id)
                 case FurnaceRecipe furnace -> {

@@ -17,7 +17,6 @@ public interface CreativeItemCategory {
      * Get a specific group by index in this category.
      *
      * @param index the index of the group
-     *
      * @return the group with the specified index. {@code null} will be returned if the group does not exist
      */
     CreativeItemGroup getGroup(int index);
@@ -27,9 +26,7 @@ public interface CreativeItemCategory {
      *
      * @param name the name of the group, empty or blank string is not allowed here. Check
      *             {@link CreativeItemGroups} for all available group names in vanilla.
-     *
      * @return the group with the specified name. {@code null} will be returned if the group does not exist
-     *
      * @throws IllegalArgumentException if the name is empty or blank
      */
     CreativeItemGroup getNamedGroup(String name);
@@ -40,7 +37,6 @@ public interface CreativeItemCategory {
      *
      * @param name the name of the group, empty string is not allowed here. Translation key is supported
      * @param icon the icon of the group
-     *
      * @return the registered group
      */
     CreativeItemGroup registerGroup(String name, ItemStack icon);
@@ -66,5 +62,16 @@ public interface CreativeItemCategory {
      *
      * @return the type of this category
      */
-    org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory getType();
+    Type getType();
+
+    /**
+     * Represents the types of categories within the creative inventory. Each type corresponds
+     * to a specific grouping of items that can be seen in the creative inventory.
+     */
+    enum Type {
+        CONSTRUCTION,
+        NATURE,
+        EQUIPMENT,
+        ITEMS,
+    }
 }

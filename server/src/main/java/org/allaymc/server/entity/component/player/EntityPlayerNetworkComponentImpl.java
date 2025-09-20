@@ -32,6 +32,7 @@ import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayerManager;
@@ -48,6 +49,9 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
@@ -343,7 +347,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         itemComponentPacket.getItems().addAll(NetworkData.ITEM_DEFINITIONS.get());
         sendPacketImmediately(itemComponentPacket);
 
-        sendPacket(Registries.CREATIVE_ITEMS.getCreativeContentPacketFor(thisPlayer.getLoginData().getLangCode()));
+        sendPacket(encodeCreativeContentPacket());
 
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
@@ -402,6 +406,31 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setOwnerId("");
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
         MultiVersion.adaptExperimentData(thisPlayer, packet.getExperiments());
+        return packet;
+    }
+
+    protected CreativeContentPacket encodeCreativeContentPacket() {
+        var packet = new CreativeContentPacket();
+        for (var group : Registries.CREATIVE_ITEMS.getGroups()) {
+            packet.getGroups().add(new CreativeItemGroup(
+                    switch (group.getCategory().getType()) {
+                        case CONSTRUCTION -> CreativeItemCategory.CONSTRUCTION;
+                        case NATURE -> CreativeItemCategory.NATURE;
+                        case EQUIPMENT -> CreativeItemCategory.EQUIPMENT;
+                        case ITEMS -> CreativeItemCategory.ITEMS;
+                    },
+                    I18n.get().tr(getLoginData().getLangCode(), group.getName()),
+                    NetworkHelper.toNetwork(group.getIcon())
+            ));
+        }
+        for (var entry : Registries.CREATIVE_ITEMS.getEntries()) {
+            packet.getContents().add(new CreativeItemData(
+                    NetworkHelper.toNetwork(entry.itemStack()),
+                    // NOTICE: 0 is not indexed by the client for items
+                    entry.index() + 1,
+                    entry.group().getIndex()
+            ));
+        }
         return packet;
     }
 
