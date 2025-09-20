@@ -2,10 +2,10 @@ package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.entity.data.EntityId;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.entity.EntityInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.entity.data.EntityId;
 import org.joml.Vector3ic;
 
 /**

@@ -3,8 +3,6 @@ package org.allaymc.api.container;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public interface Container {
      *
      * @return the container type
      */
-    FullContainerType<?> getContainerType();
+    ContainerType<?> getContainerType();
 
     /**
      * Add a listener to be called when the container is opened.
@@ -70,20 +68,11 @@ public interface Container {
     void removeSlotChangeListener(int slot, Consumer<ItemStack> listener);
 
     /**
-     * Get the slot type of the slot.
-     *
-     * @param slot the slot
-     * @return the slot type
-     */
-    default ContainerSlotType getSlotType(int slot) {
-        return getContainerType().getSlotType(slot);
-    }
-
-    /**
      * Get the viewers of the container.
      *
      * @return the viewers
      */
+    @UnmodifiableView
     Map<Byte, ContainerViewer> getViewers();
 
     /**
@@ -133,13 +122,6 @@ public interface Container {
      */
     @UnmodifiableView
     ItemStack[] getItemStackArray();
-
-    /**
-     * Get the network item data of the container.
-     *
-     * @return the network item data
-     */
-    List<ItemData> toNetworkItemData();
 
     /**
      * @see #setItemStack(int, ItemStack, boolean)
@@ -249,26 +231,6 @@ public interface Container {
     void loadNBT(List<NbtMap> nbtList);
 
     /**
-     * Get the slot index from the network slot index.
-     *
-     * @param index the network slot index
-     * @return the slot index
-     */
-    default int toNetworkSlotIndex(int index) {
-        return getContainerType().networkSlotIndexMapper().inverse().get(index);
-    }
-
-    /**
-     * Get the network slot index from the slot index.
-     *
-     * @param index the slot index
-     * @return the network slot index
-     */
-    default int fromNetworkSlotIndex(int index) {
-        return getContainerType().networkSlotIndexMapper().get(index);
-    }
-
-    /**
      * Send the contents of the container to the viewer.
      *
      * @param viewer the viewer
@@ -354,7 +316,7 @@ public interface Container {
     }
 
     /**
-     * Send a container data to the viewers.
+     * Send container data to the viewers.
      *
      * @param property the property
      * @param value    the value

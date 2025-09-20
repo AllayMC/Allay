@@ -2,7 +2,7 @@ package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 

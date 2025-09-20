@@ -3,12 +3,12 @@ package org.allaymc.server.item.type;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.tag.ItemCustomTags;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.tag.ItemTags;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.item.data.ItemId;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
@@ -46,7 +46,7 @@ public final class InternalItemTypeData {
                     }
                     ITEM_TAGS.put(id, itemTags);
                 } else {
-                    ITEM_TAGS.put(id, Utils.EMPTY_ITEM_TAG_ARRAY);
+                    ITEM_TAGS.put(id, new ItemTag[0]);
                 }
             });
         }
@@ -73,7 +73,7 @@ public final class InternalItemTypeData {
                 ITEM_TAGS_CUSTOM.put(id, itemTags);
             });
             for (var id : ItemId.values()) {
-                ITEM_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_ITEM_TAG_ARRAY);
+                ITEM_TAGS_CUSTOM.putIfAbsent(id, new ItemTag[0]);
             }
         }
     }

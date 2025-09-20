@@ -8,7 +8,6 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.utils.Utils;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -59,7 +58,7 @@ public class BlockChorusPlantBaseComponentImpl extends BlockBaseComponentImpl {
             return Set.of(ItemTypes.CHORUS_FRUIT.createItemStack());
         }
 
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Set.of();
     }
 
     @Override

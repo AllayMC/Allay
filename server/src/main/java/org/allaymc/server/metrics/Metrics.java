@@ -5,9 +5,7 @@ import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.player.data.Device;
-import org.allaymc.api.player.data.DeviceInfo;
-import org.allaymc.api.player.data.LoginData;
+import org.allaymc.api.player.LoginData;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.server.utils.GitProperties;
@@ -594,8 +592,8 @@ public class Metrics {
             metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getPlayerManager().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)
                     .map(LoginData::getDeviceInfo)
-                    .map(DeviceInfo::device)
-                    .collect(groupingBy(Device::getName, countingInt()))));
+                    .map(LoginData.DeviceInfo::device)
+                    .collect(groupingBy(LoginData.Device::getName, countingInt()))));
 
             metrics.addCustomChart(new Metrics.AdvancedPie("player_game_version", () -> server.getPlayerManager().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)

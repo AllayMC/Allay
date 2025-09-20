@@ -1,8 +1,8 @@
 package org.allaymc.server.item.component;
 
 import com.google.common.base.Preconditions;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemWritableBookBaseComponent;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.Range;

@@ -7,7 +7,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.server.command.tree.node.RootNode;
 
 import java.util.ArrayList;

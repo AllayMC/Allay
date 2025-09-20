@@ -1,31 +1,30 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerHolder;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityBaseComponent;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.data.EntityFlag;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.ComponentClass;
+import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.*;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.joml.Vector3d;
 
 /**
@@ -38,8 +37,6 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Manager
     protected ComponentManager manager;
-    @Dependency
-    protected EntityBaseComponent baseComponent;
     @Dependency
     protected EntityAttributeComponent attributeComponent;
     @Dependency(optional = true)
@@ -73,9 +70,12 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyDamage(DamageContainer damage) {
         this.attributeComponent.setHealth(this.attributeComponent.getHealth() - damage.getFinalDamage());
-        this.baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
+        thisEntity.applyAction(SimpleEntityAction.HURT);
         if (damage.isCritical()) {
-            this.baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+            thisEntity.applyAction(SimpleEntityAction.CRITICAL_HIT);
+        }
+        if (damage.isEnchanted()) {
+            thisEntity.applyAction(SimpleEntityAction.ENCHANTED_HIT);
         }
         this.manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 
@@ -92,8 +92,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var kby = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var additionalMotion = new Vector3d();
-            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(FullContainerType.PLAYER_INVENTORY)) {
-                var kbEnchantmentLevel = component.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerType.INVENTORY)) {
+                var kbEnchantmentLevel = component.getContainer(ContainerType.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
                 if (kbEnchantmentLevel != 0) {
                     kb /= 2.0;
                     additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
@@ -106,7 +106,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {
-        var currentTime = baseComponent.getWorld().getTick();
+        var currentTime = thisEntity.getWorld().getTick();
         if (!forceToUpdate && lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
             return false;
         }
@@ -157,9 +157,20 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
                     return (float) (d * pow + ((pow - 1) / 0.4));
                 });
             }
-        }
 
-        // TODO: Sharpness enchantment
+            if (attacker instanceof ContainerHolder holder && holder.hasContainer(ContainerType.INVENTORY)) {
+                var item = holder.getContainer(ContainerType.INVENTORY).getItemInHand();
+                var sharpnessLevel = item.getEnchantmentLevel(EnchantmentTypes.SHARPNESS);
+                if (sharpnessLevel > 0) {
+                    damage.updateFinalDamage(d -> d + sharpnessLevel * 1.25f);
+                    damage.setEnchanted(true);
+                }
+            }
+
+            if (attacker instanceof EntityPhysicsComponent component) {
+                damage.setCritical(component.canCriticalAttack());
+            }
+        }
 
         if (damage.isCritical()) {
             damage.updateFinalDamage(d -> d * 1.5f);
@@ -187,15 +198,15 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean hasFallDamage() {
         return (physicsComponent != null && physicsComponent.hasGravity()) ||
-               (!baseComponent.hasEffect(EffectTypes.LEVITATION) && !baseComponent.hasEffect(EffectTypes.SLOW_FALLING)) ||
-               baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FALL_DAMAGE);
+               (!thisEntity.hasEffect(EffectTypes.LEVITATION) && !thisEntity.hasEffect(EffectTypes.SLOW_FALLING)) ||
+               thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FALL_DAMAGE);
     }
 
     @Override
     public boolean hasFireDamage() {
         return !thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
                !isFireproof() &&
-               baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FIRE_DAMAGE);
+               thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FIRE_DAMAGE);
     }
 
     @Override
@@ -210,9 +221,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         }
 
         if (this.onFireTicks > 0 && newOnFireTicks <= 0) {
-            baseComponent.setAndSendEntityFlag(EntityFlag.ON_FIRE, false);
+            thisEntity.setFlag(EntityFlag.ON_FIRE, false);
         } else if (this.onFireTicks <= 0 && newOnFireTicks > 0) {
-            baseComponent.setAndSendEntityFlag(EntityFlag.ON_FIRE, true);
+            thisEntity.setFlag(EntityFlag.ON_FIRE, true);
             // The first tick of fire damage is applied immediately
             attack(DamageContainer.fireTick(1));
         }
@@ -258,7 +269,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
         // physics component won't be null here, because CEntityFallEvent is called in physics component
         var blockStateStandingOn = physicsComponent.getBlockStateStandingOn();
-        double rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
+        double rawDamage = (event.getFallDistance() - 3) - thisEntity.getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
         if (damage > 0) {
             attack(DamageContainer.fall(damage));

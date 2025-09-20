@@ -20,7 +20,6 @@ public interface ChunkSection {
      * @param y     the local y coordinate of the block state
      * @param z     the local z coordinate of the block state
      * @param layer the layer of the block state
-     *
      * @return the block state at the given position
      */
     BlockState getBlockState(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, int layer);
@@ -42,7 +41,6 @@ public interface ChunkSection {
      * @param x the local x coordinate of the biome type
      * @param y the local y coordinate of the biome type
      * @param z the local z coordinate of the biome type
-     *
      * @return the biome type at the given position
      */
     BiomeType getBiomeType(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z);
@@ -56,4 +54,11 @@ public interface ChunkSection {
      * @param biomeType the biome type to set
      */
     void setBiomeType(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
+
+    /**
+     * Checks if this section is an air section, which means that all blocks in layer 0 is air.
+     *
+     * @return {@code true} if this section is an air section, {@code false} otherwise.
+     */
+    boolean isAirSection();
 }

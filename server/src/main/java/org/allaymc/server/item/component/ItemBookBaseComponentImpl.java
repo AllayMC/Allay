@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component;
 
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 
 /**
  * @author daoge_cmd

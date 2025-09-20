@@ -49,6 +49,6 @@ and moves right.
 
 If an illegal character (one that cannot be used in a translation key) is encountered, traversal stops,
 and the previous character is taken as the right boundary.
-For a list of valid characters, refer to the method `org.allaymc.api.i18n.I18n.isValidKeyCharacter`.
+For a list of valid characters, refer to the method `org.allaymc.api.message.I18n.isValidKeyCharacter`.
 
 If during traversal two colons (`:`) appear consecutively, this key will not be considered a valid translation key.

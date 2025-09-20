@@ -1,16 +1,16 @@
 package org.allaymc.server.blockentity.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.blockentity.data.BlockEntityId;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
-import org.allaymc.api.container.impl.*;
 import org.allaymc.server.blockentity.component.*;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityBlastFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.data.BlockEntityId;
 import org.allaymc.server.blockentity.impl.*;
+import org.allaymc.server.container.impl.*;
 
 /**
  * @author daoge_cmd
@@ -31,7 +31,7 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityBarrelImpl.class)
                 .name(BlockEntityId.BARREL)
                 .addComponent(BlockEntityBarrelBaseComponentImpl::new, BlockEntityBarrelBaseComponentImpl.class)
-                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BarrelContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BarrelContainerImpl::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
     }
 
@@ -59,19 +59,19 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityFurnaceImpl.class)
                 .name(BlockEntityId.FURNACE)
                 .addComponent(BlockEntityFurnaceBaseComponentImpl::new, BlockEntityFurnaceBaseComponentImpl.class)
-                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(FurnaceContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(FurnaceContainerImpl::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
         BlockEntityTypes.BLAST_FURNACE = AllayBlockEntityType
                 .builder(BlockEntityFurnaceImpl.class)
                 .name(BlockEntityId.BLAST_FURNACE)
                 .addComponent(BlockEntityBlastFurnaceBaseComponentImpl::new, BlockEntityBlastFurnaceBaseComponentImpl.class)
-                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BlastFurnaceContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BlastFurnaceContainerImpl::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
         BlockEntityTypes.SMOKER = AllayBlockEntityType
                 .builder(BlockEntityFurnaceImpl.class)
                 .name(BlockEntityId.SMOKER)
                 .addComponent(BlockEntitySmokerFurnaceBaseComponentImpl::new, BlockEntitySmokerFurnaceBaseComponentImpl.class)
-                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(SmokerContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(SmokerContainerImpl::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
     }
 
@@ -109,7 +109,7 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityBrewingStandImpl.class)
                 .name(BlockEntityId.BREWING_STAND)
                 .addComponent(BlockEntityBrewingStandBaseComponentImpl::new, BlockEntityBrewingStandBaseComponentImpl.class)
-                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BrewingStandContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BrewingStandContainerImpl::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
     }
 

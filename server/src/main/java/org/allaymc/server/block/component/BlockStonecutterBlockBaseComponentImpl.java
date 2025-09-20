@@ -3,10 +3,10 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.impl.StonecutterContainer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.container.impl.StonecutterContainerImpl;
 
 /**
  * @author IWareQ
@@ -27,7 +27,7 @@ public class BlockStonecutterBlockBaseComponentImpl extends BlockBaseComponentIm
             return false;
         }
 
-        var stonecutterContainer = new StonecutterContainer();
+        var stonecutterContainer = new StonecutterContainerImpl();
         stonecutterContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         stonecutterContainer.addViewer(player);
         return true;

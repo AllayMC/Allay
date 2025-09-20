@@ -3,7 +3,7 @@ package org.allaymc.server.pdc;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.pdc.PersistentDataType;
 import org.allaymc.api.pdc.PersistentDataTypeRegistry;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.HashMap;

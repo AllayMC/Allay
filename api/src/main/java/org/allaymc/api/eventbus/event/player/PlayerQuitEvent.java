@@ -3,7 +3,7 @@ package org.allaymc.api.eventbus.event.player;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.message.MayContainTrKey;
 
 /**
  * PlayerQuitEvent will be called when a player quit the server.

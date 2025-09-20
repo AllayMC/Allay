@@ -3,8 +3,8 @@ package org.allaymc.server.container.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBeacon;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.BeaconContainer;
+import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.interfaces.BeaconContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.tag.ItemCustomTags;
 import org.allaymc.api.registry.Registries;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class BeaconPaymentActionProcessor implements ContainerActionProcessor<BeaconPaymentAction> {
     @Override
     public ActionResponse handle(BeaconPaymentAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getContainer(FullContainerType.BEACON);
+        var container = player.getContainer(ContainerType.BEACON);
         var itemType = container.getBeaconPayment().getItemType();
         if (!itemType.hasItemTag(ItemCustomTags.BEACON_PAYMENT)) {
             log.warn("Invalid item type for beacon payment: {}", itemType.getIdentifier());
@@ -60,7 +60,7 @@ public class BeaconPaymentActionProcessor implements ContainerActionProcessor<Be
         var source = destroyAction.getSource();
         return destroyAction.getCount() == 1 &&
                source.getContainerName().getContainer() == ContainerSlotType.BEACON_PAYMENT &&
-               container.fromNetworkSlotIndex(source.getSlot()) == BeaconContainer.BEACON_PAYMENT_SLOT;
+               ContainerActionProcessor.fromNetworkSlotIndex(container, source.getSlot()) == BeaconContainer.BEACON_PAYMENT_SLOT;
     }
 
     @Override

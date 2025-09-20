@@ -39,7 +39,7 @@ public class AllayCreativeItemGroup implements CreativeItemGroup {
     public CreativeItemEntry registerItem(ItemStack itemStack) {
         var entry = registry.assignIndexForEntry(this, itemStack);
         // NOTICE: 0 is not indexed by the client for items
-        itemStack.setStackNetworkId(entry.index() + 1);
+        itemStack.setUniqueId(entry.index() + 1);
         this.items.put(entry.index(), entry);
         return entry;
     }

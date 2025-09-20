@@ -3,8 +3,8 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerKickEvent;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrKeys;
 
 import java.util.List;
 

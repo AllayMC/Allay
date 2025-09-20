@@ -6,13 +6,14 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.sound.ItemUseOnBlockSound;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3ic;
 
 /**
@@ -40,9 +41,8 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         var strippedBlockState = strippableComponent.getStrippedBlockState(clickedBlockState);
         tryFadeBlock(dimension, interactInfo, strippedBlockState, () -> {
             // Idk why mojang does not use UsingItemOnBlock for player
-            interactInfo.player().swingArm();
-
-            dimension.addLevelSoundEvent(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), SoundEvent.ITEM_USE_ON, clickedBlockState.blockStateHash());
+            interactInfo.player().applyAction(SimpleEntityAction.SWING_ARM);
+            dimension.addSound(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), new ItemUseOnBlockSound(clickedBlockState));
         });
     }
 
@@ -60,7 +60,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         if (oxidationComponent.isWaxed()) {
             var nextBlockType = oxidationComponent.getBlockWithWaxed(false);
             tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
-                dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_OFF);
+                dimension.addSound(clickedBlockPos, SimpleSound.WAX_REMOVED);
             });
 
             return true;
@@ -74,7 +74,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         oxidationLevel = OxidationLevel.values()[oxidationLevel.ordinal() - 1];
         var nextBlockType = oxidationComponent.getBlockWithOxidationLevel(oxidationLevel);
         tryFadeBlock(dimension, interactInfo, nextBlockType.copyPropertyValuesFrom(interactInfo.getClickedBlock().getBlockState()), () -> {
-            dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_SCRAPE);
+            dimension.addSound(clickedBlockPos, SimpleSound.COPPER_SCRAPED);
         });
 
         return true;
@@ -91,7 +91,7 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
         var event = new BlockFadeEvent(oldBlock, newBlockState);
         if (event.call()) {
             dimension.setBlockState(clickedBlockPos, event.getNewBlockState());
-            if (interactInfo.player().getGameType() != GameType.CREATIVE) {
+            if (interactInfo.player().getGameMode() != GameMode.CREATIVE) {
                 tryIncreaseDamage(1);
             }
             postBlockPlace.run();

@@ -7,18 +7,18 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -44,12 +44,11 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     @Override
     protected void initMetadata() {
         Objects.requireNonNull(blockState, "blockState");
-
         updateHitBoxAndCollisionBoxMetadata();
-        metadata.set(EntityFlag.HAS_GRAVITY, true);
-        metadata.set(EntityFlag.FIRE_IMMUNE, true);
-        metadata.set(EntityFlag.HAS_COLLISION, false);
-        metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
+        setFlag(EntityFlag.HAS_GRAVITY, true);
+        setFlag(EntityFlag.FIRE_IMMUNE, true);
+        setFlag(EntityFlag.HAS_COLLISION, false);
+        setData(EntityData.VARIANT, blockState.blockStateHash());
     }
 
     @Override
@@ -124,8 +123,4 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         return new AABBd(-0.49, 0, -0.49, 0.49, 0.98, 0.49);
     }
 
-    @Override
-    public float getNetworkOffset() {
-        return 0.49f;
-    }
 }

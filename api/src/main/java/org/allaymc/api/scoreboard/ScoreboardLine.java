@@ -3,7 +3,6 @@ package org.allaymc.api.scoreboard;
 import lombok.Getter;
 import org.allaymc.api.eventbus.event.scoreboard.ScoreboardLineValueChangeEvent;
 import org.allaymc.api.scoreboard.scorer.Scorer;
-import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -60,7 +59,6 @@ public final class ScoreboardLine {
      * Increase the score
      *
      * @param addition Amount to increase
-     *
      * @return Whether it was successful (false if the event was cancelled)
      */
     public boolean addScore(int addition) {
@@ -71,20 +69,10 @@ public final class ScoreboardLine {
      * Decrease the score
      *
      * @param reduction Amount to decrease
-     *
      * @return Whether it was successful (false if the event was cancelled)
      */
     public boolean removeScore(int reduction) {
         return setScore(getScore() - reduction);
-    }
-
-    /**
-     * Convert to network information
-     *
-     * @return Network information
-     */
-    public ScoreInfo toNetworkInfo() {
-        return getScorer().toNetworkInfo(getScoreboard(), this);
     }
 
     /**

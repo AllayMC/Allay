@@ -1,41 +1,19 @@
 package org.allaymc.api.entity.component.player;
 
-import com.google.common.collect.Lists;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
-
-import java.util.Arrays;
 
 /**
  * @author daoge_cmd
  */
 public interface EntityPlayerAttributeComponent extends EntityAttributeComponent {
-
-    /**
-     * Return an array of basic player attributes.
-     *
-     * @return array of basic player attributes
-     */
-    static AttributeType[] basicPlayerAttributes() {
-        var list = Lists.newArrayList(
-                AttributeType.PLAYER_HUNGER,
-                AttributeType.PLAYER_SATURATION,
-                AttributeType.PLAYER_EXHAUSTION,
-                AttributeType.PLAYER_EXPERIENCE_LEVEL,
-                AttributeType.PLAYER_EXPERIENCE_PROGRESS
-        );
-        list.addAll(Arrays.asList(EntityAttributeComponent.basicEntityAttributes()));
-        return list.toArray(AttributeType[]::new);
-    }
-
     /**
      * Calculates the required experience for a given level.
      *
      * @param level the level
-     *
      * @return the required experience
      */
-    static int calculateRequireExperience(int level) {
+    static int calculateRequiredExperience(int level) {
         if (level >= 30) {
             return 112 + (level - 30) * 9;
         } else if (level >= 15) {
@@ -80,13 +58,13 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
      */
     default void addExperience(int addition) {
         var currentLevel = getExperienceLevel();
-        var requiredExpCurrentLevel = calculateRequireExperience(currentLevel);
+        var requiredExpCurrentLevel = calculateRequiredExperience(currentLevel);
         var total = getExperienceProgress() * requiredExpCurrentLevel + addition;
 
         while (total >= requiredExpCurrentLevel) {
             total -= requiredExpCurrentLevel;
             currentLevel++;
-            requiredExpCurrentLevel = calculateRequireExperience(currentLevel);
+            requiredExpCurrentLevel = calculateRequiredExperience(currentLevel);
         }
 
         setExperienceProgress(total / requiredExpCurrentLevel);
@@ -98,8 +76,8 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
      *
      * @return the required experience
      */
-    default int getRequireExperienceForCurrentLevel() {
-        return calculateRequireExperience(getExperienceLevel());
+    default int getRequiredExperienceForCurrentLevel() {
+        return calculateRequiredExperience(getExperienceLevel());
     }
 
     /**
@@ -108,7 +86,7 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
      * @return the experience in the current level
      */
     default int getExperienceInCurrentLevel() {
-        return (int) (getExperienceProgress() * getRequireExperienceForCurrentLevel());
+        return (int) (getExperienceProgress() * getRequiredExperienceForCurrentLevel());
     }
 
     /**

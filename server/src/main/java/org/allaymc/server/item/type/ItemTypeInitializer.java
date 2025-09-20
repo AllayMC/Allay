@@ -1,18 +1,18 @@
 package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySplashPotion;
 import org.allaymc.api.item.data.ArmorType;
-import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.item.data.DiscType;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.block.data.BlockId;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.edible.*;
 import org.allaymc.server.item.component.projectile.ItemBottleProjectileComponentImpl;
@@ -25,8 +25,8 @@ import org.allaymc.server.item.component.tool.ItemEmptyMapBaseComponentImpl;
 import org.allaymc.server.item.component.tool.ItemHoeComponentImpl;
 import org.allaymc.server.item.component.tool.ItemSwordComponentImpl;
 import org.allaymc.server.item.component.tool.ItemToolComponentImpl;
+import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.impl.*;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 
 /**
@@ -44,34 +44,34 @@ public final class ItemTypeInitializer {
     }
 
     public static void initMusicDiscs() {
-        ItemTypes.MUSIC_DISC_13 = buildMusicDisc(ItemId.MUSIC_DISC_13, SoundEvent.RECORD_13);
-        ItemTypes.MUSIC_DISC_CAT = buildMusicDisc(ItemId.MUSIC_DISC_CAT, SoundEvent.RECORD_CAT);
-        ItemTypes.MUSIC_DISC_BLOCKS = buildMusicDisc(ItemId.MUSIC_DISC_BLOCKS, SoundEvent.RECORD_BLOCKS);
-        ItemTypes.MUSIC_DISC_CHIRP = buildMusicDisc(ItemId.MUSIC_DISC_CHIRP, SoundEvent.RECORD_CHIRP);
-        ItemTypes.MUSIC_DISC_FAR = buildMusicDisc(ItemId.MUSIC_DISC_FAR, SoundEvent.RECORD_FAR);
-        ItemTypes.MUSIC_DISC_LAVA_CHICKEN = buildMusicDisc(ItemId.MUSIC_DISC_LAVA_CHICKEN, SoundEvent.RECORD_LAVA_CHICKEN);
-        ItemTypes.MUSIC_DISC_MALL = buildMusicDisc(ItemId.MUSIC_DISC_MALL, SoundEvent.RECORD_MALL);
-        ItemTypes.MUSIC_DISC_MELLOHI = buildMusicDisc(ItemId.MUSIC_DISC_MELLOHI, SoundEvent.RECORD_MELLOHI);
-        ItemTypes.MUSIC_DISC_STAL = buildMusicDisc(ItemId.MUSIC_DISC_STAL, SoundEvent.RECORD_STAL);
-        ItemTypes.MUSIC_DISC_STRAD = buildMusicDisc(ItemId.MUSIC_DISC_STRAD, SoundEvent.RECORD_STRAD);
-        ItemTypes.MUSIC_DISC_TEARS = buildMusicDisc(ItemId.MUSIC_DISC_TEARS, SoundEvent.RECORD_TEARS);
-        ItemTypes.MUSIC_DISC_WARD = buildMusicDisc(ItemId.MUSIC_DISC_WARD, SoundEvent.RECORD_WARD);
-        ItemTypes.MUSIC_DISC_11 = buildMusicDisc(ItemId.MUSIC_DISC_11, SoundEvent.RECORD_11);
-        ItemTypes.MUSIC_DISC_WAIT = buildMusicDisc(ItemId.MUSIC_DISC_WAIT, SoundEvent.RECORD_WAIT);
-        ItemTypes.MUSIC_DISC_OTHERSIDE = buildMusicDisc(ItemId.MUSIC_DISC_OTHERSIDE, SoundEvent.RECORD_OTHERSIDE);
-        ItemTypes.MUSIC_DISC_5 = buildMusicDisc(ItemId.MUSIC_DISC_5, SoundEvent.RECORD_5);
-        ItemTypes.MUSIC_DISC_PIGSTEP = buildMusicDisc(ItemId.MUSIC_DISC_PIGSTEP, SoundEvent.RECORD_PIGSTEP);
-        ItemTypes.MUSIC_DISC_RELIC = buildMusicDisc(ItemId.MUSIC_DISC_RELIC, SoundEvent.RECORD_RELIC);
-        ItemTypes.MUSIC_DISC_CREATOR = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR, SoundEvent.RECORD_CREATOR);
-        ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR_MUSIC_BOX, SoundEvent.RECORD_CREATOR_MUSIC_BOX);
-        ItemTypes.MUSIC_DISC_PRECIPICE = buildMusicDisc(ItemId.MUSIC_DISC_PRECIPICE, SoundEvent.RECORD_PRECIPICE);
+        ItemTypes.MUSIC_DISC_13 = buildMusicDisc(ItemId.MUSIC_DISC_13, DiscType.DISC_13);
+        ItemTypes.MUSIC_DISC_CAT = buildMusicDisc(ItemId.MUSIC_DISC_CAT, DiscType.DISC_CAT);
+        ItemTypes.MUSIC_DISC_BLOCKS = buildMusicDisc(ItemId.MUSIC_DISC_BLOCKS, DiscType.DISC_BLOCKS);
+        ItemTypes.MUSIC_DISC_CHIRP = buildMusicDisc(ItemId.MUSIC_DISC_CHIRP, DiscType.DISC_CHIRP);
+        ItemTypes.MUSIC_DISC_FAR = buildMusicDisc(ItemId.MUSIC_DISC_FAR, DiscType.DISC_FAR);
+        ItemTypes.MUSIC_DISC_LAVA_CHICKEN = buildMusicDisc(ItemId.MUSIC_DISC_LAVA_CHICKEN, DiscType.DISC_LAVA_CHICKEN);
+        ItemTypes.MUSIC_DISC_MALL = buildMusicDisc(ItemId.MUSIC_DISC_MALL, DiscType.DISC_MALL);
+        ItemTypes.MUSIC_DISC_MELLOHI = buildMusicDisc(ItemId.MUSIC_DISC_MELLOHI, DiscType.DISC_MELLOHI);
+        ItemTypes.MUSIC_DISC_STAL = buildMusicDisc(ItemId.MUSIC_DISC_STAL, DiscType.DISC_STAL);
+        ItemTypes.MUSIC_DISC_STRAD = buildMusicDisc(ItemId.MUSIC_DISC_STRAD, DiscType.DISC_STRAD);
+        ItemTypes.MUSIC_DISC_TEARS = buildMusicDisc(ItemId.MUSIC_DISC_TEARS, DiscType.DISC_TEARS);
+        ItemTypes.MUSIC_DISC_WARD = buildMusicDisc(ItemId.MUSIC_DISC_WARD, DiscType.DISC_WARD);
+        ItemTypes.MUSIC_DISC_11 = buildMusicDisc(ItemId.MUSIC_DISC_11, DiscType.DISC_11);
+        ItemTypes.MUSIC_DISC_WAIT = buildMusicDisc(ItemId.MUSIC_DISC_WAIT, DiscType.DISC_WAIT);
+        ItemTypes.MUSIC_DISC_OTHERSIDE = buildMusicDisc(ItemId.MUSIC_DISC_OTHERSIDE, DiscType.DISC_OTHERSIDE);
+        ItemTypes.MUSIC_DISC_5 = buildMusicDisc(ItemId.MUSIC_DISC_5, DiscType.DISC_5);
+        ItemTypes.MUSIC_DISC_PIGSTEP = buildMusicDisc(ItemId.MUSIC_DISC_PIGSTEP, DiscType.DISC_PIGSTEP);
+        ItemTypes.MUSIC_DISC_RELIC = buildMusicDisc(ItemId.MUSIC_DISC_RELIC, DiscType.DISC_RELIC);
+        ItemTypes.MUSIC_DISC_CREATOR = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR, DiscType.DISC_CREATOR);
+        ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR_MUSIC_BOX, DiscType.DISC_CREATOR_MUSIC_BOX);
+        ItemTypes.MUSIC_DISC_PRECIPICE = buildMusicDisc(ItemId.MUSIC_DISC_PRECIPICE, DiscType.DISC_PRECIPICE);
     }
 
-    private static ItemType<ItemMusicDiscStack> buildMusicDisc(ItemId itemId, SoundEvent sound) {
+    private static ItemType<ItemMusicDiscStack> buildMusicDisc(ItemId itemId, DiscType discType) {
         return AllayItemType
                 .builder(ItemMusicDiscStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(initInfo -> new ItemMusicDiscBaseComponentImpl(initInfo, sound), ItemMusicDiscBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemMusicDiscBaseComponentImpl(initInfo, discType), ItemMusicDiscBaseComponentImpl.class)
                 .build();
     }
 
@@ -815,7 +815,9 @@ public final class ItemTypeInitializer {
                                 return false;
                             }
 
-                            player.setCooldown(ItemTypes.ENDER_PEARL, 20);
+                            // NOTICE: No need to send cooldown to the client since the client will display cooldown
+                            // automatically if the item/category has cool down after used it
+                            player.setCooldown(ItemTypes.ENDER_PEARL, 20, false);
                         }
 
                         return super.shoot(shooter);

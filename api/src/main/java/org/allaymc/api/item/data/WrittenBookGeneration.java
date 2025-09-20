@@ -2,8 +2,8 @@ package org.allaymc.api.item.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.message.TrKeys;
 
 /**
  * @author daoge_cmd

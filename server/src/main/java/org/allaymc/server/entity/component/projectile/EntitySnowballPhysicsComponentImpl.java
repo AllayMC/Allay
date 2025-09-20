@@ -6,7 +6,7 @@ import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -68,7 +68,7 @@ public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsC
     protected void addHitEffect() {
         var particleCount = nextParticleCount();
         for (var i = 0; i < particleCount; i++) {
-            thisEntity.getLocation().dimension().addParticle(thisEntity.getLocation(), ParticleType.SNOWBALL_POOF);
+            thisEntity.getLocation().dimension().addParticle(thisEntity.getLocation(), SimpleParticle.SNOWBALL_POOF);
         }
     }
 }

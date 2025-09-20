@@ -2,7 +2,6 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
@@ -19,7 +18,7 @@ public class BlockEntityPairableComponentImpl implements BlockEntityPairableComp
     protected static final String TAG_PAIR_Z = "pairz";
 
     @Dependency
-    protected BlockEntityBaseComponent baseComponent;
+    protected BlockEntityBaseComponentImpl baseComponent;
 
     @Getter
     protected boolean lead;

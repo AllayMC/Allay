@@ -1,6 +1,6 @@
 package org.allaymc.api.item.component;
 
-import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.type.BlockType;
 
 /**
  * Represents a sign base component.
@@ -9,16 +9,16 @@ import org.allaymc.api.block.data.BlockId;
  */
 public interface ItemSignBaseComponent extends ItemBaseComponent {
     /**
-     * Get the wall sign block id.
+     * Get the wall sign block type.
      *
-     * @return The wall sign block id
+     * @return The wall sign block type
      */
-    BlockId getWallSignId();
+    BlockType<?> getWallSignType();
 
     /**
-     * Get the standing sign block id.
+     * Get the standing sign block type.
      *
-     * @return The standing sign block id
+     * @return The standing sign block type
      */
-    BlockId getStandingSignId();
+    BlockType<?> getStandingSignType();
 }

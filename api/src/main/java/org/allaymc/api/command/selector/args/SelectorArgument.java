@@ -27,10 +27,8 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * @param selectorType the type of entity selector (e.g., {@code @a}, {@code @e})
      * @param sender       the command sender, which may affect the context of the selection
      * @param basePos      the base position used for relative coordinates, if needed. This parameter
-     *                     can be modified if the argument adjusts the reference coordinates.
-     *
+     *                     can be modified if the argument adjusts the reference coordinates
      * @return a {@code Predicate<Entity>} to filter entities, or {@code null} if none is applicable
-     *
      * @throws SelectorSyntaxException if an error occurs while parsing the arguments
      */
     default Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3d basePos, String... arguments) throws SelectorSyntaxException {
@@ -47,9 +45,7 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * @param selectorType the type of entity selector
      * @param sender       the command sender
      * @param basePos      the base position for relative coordinates, if needed
-     *
      * @return a function that filters a list of entities, or {@code null} if none is applicable
-     *
      * @throws SelectorSyntaxException if an error occurs while parsing the arguments
      */
     default Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
@@ -91,7 +87,6 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * @param values       the map of arguments
      * @param selectorType the type of entity selector
      * @param sender       the command executor or sender
-     *
      * @return the default value for this argument, or {@code null} if there is no default
      */
     default String getDefaultValue(Map<String, List<String>> values, SelectorType selectorType, CommandSender sender) {
@@ -104,7 +99,6 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * This method allows arguments to be sorted by priority when being processed.
      *
      * @param o the other {@code SelectorArgument} to compare to
-     *
      * @return a negative integer, zero, or a positive integer if this argument has a lower, equal,
      * or higher priority than the other argument, respectively.
      */

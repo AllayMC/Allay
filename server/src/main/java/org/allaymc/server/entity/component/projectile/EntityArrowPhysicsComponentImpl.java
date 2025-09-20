@@ -2,6 +2,7 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -9,9 +10,8 @@ import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -110,16 +110,13 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         addHitSound(hitPos);
-        this.arrowBaseComponent.applyEntityEvent(
-                EntityEventType.ARROW_SHAKE,
-                7 // How many times the arrow shakes
-        );
+        this.arrowBaseComponent.applyAction(new ArrowShakeAction(7));
         this.arrowBaseComponent.setCritical(false);
         this.hitBlock = true;
     }
 
     private void addHitSound(Vector3dc hitPos) {
-        this.arrowBaseComponent.getDimension().addLevelSoundEvent(hitPos, SoundEvent.BOW_HIT);
+        this.arrowBaseComponent.getDimension().addSound(hitPos, SimpleSound.ARROW_HIT);
     }
 
     private int getDifficultyBonus() {

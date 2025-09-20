@@ -7,15 +7,17 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.UnopenedContainerId;
-import org.allaymc.api.entity.Entity;
+import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.entity.EntityInitInfo;
+import org.allaymc.api.entity.action.EntityAction;
+import org.allaymc.api.entity.action.PickedUpAction;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityFlag;
+import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -23,35 +25,30 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.player.data.Abilities;
-import org.allaymc.api.player.data.AdventureSettings;
-import org.allaymc.api.player.storage.PlayerData;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.PlayerData;
+import org.allaymc.api.player.Skin;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.WorldState;
-import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.WorldViewer;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
-import org.allaymc.server.entity.component.event.CPlayerGameTypeChangeEvent;
+import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
-import org.allaymc.server.player.manager.AllayPlayerManager;
-import org.allaymc.server.world.AllayWorld;
-import org.allaymc.server.world.gamerule.AllayGameRules;
+import org.allaymc.server.player.Abilities;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -63,10 +60,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jctools.maps.NonBlockingHashMap;
 import org.jetbrains.annotations.Range;
@@ -74,9 +67,15 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.allaymc.server.utils.Utils.toGameMode;
+import static org.allaymc.server.utils.Utils.toGameType;
 
 /**
  * @author daoge_cmd
@@ -96,27 +95,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_ENDER_ITEMS = "EnderItems";
 
     @Dependency
-    protected EntityPlayerContainerHolderComponent containerHolderComponent;
+    protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
-    protected EntityPlayerNetworkComponent networkComponent;
+    protected EntityPlayerNetworkComponentImpl networkComponent;
 
     @Getter
-    protected GameType gameType;
+    protected GameMode gameMode;
     @Getter
-    protected SerializedSkin skin;
-    @Getter
-    protected AdventureSettings adventureSettings;
+    protected Skin skin;
     @Getter
     protected Abilities abilities;
-    @Getter
-    protected int chunkLoadingRadius;
-    @Getter
-    @Setter
-    protected int chunkMaxSendCountPerTick;
-    protected CommandOriginData commandOriginData;
     protected Location3ic spawnPoint;
-    protected boolean awaitingDimensionChangeACK;
-    protected boolean requireResendingAvailableCommands;
+    protected boolean requireResendingCommands;
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
@@ -126,15 +116,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
      * After teleporting, the server still receives the PlayerAuthInputPacket sent by the client before teleporting.
      * The following is a simple simulation (initial player position is (0, 1000, 0)):
      * <p>
-     * [C->S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                           <br>
-     * [S] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
-     * [S->C] Send new pos (0, 100, 0) `pk2`                                                  <br>
-     * [S] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
-     * [C] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
-     * [C->S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                           <br>
-     * [S] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
+     * [C -> S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                              <br>
+     * [Server] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
+     * [S -> C] Send new pos (0, 100, 0) `pk2`                                                     <br>
+     * [Server] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
+     * [Client] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
+     * [C -> S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                              <br>
+     * [Server] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
      *
-     * @see <a href="https://github.com/AllayMC/Allay/issues/517">teleport method should reset fall distance</a>
+     * @see <a href="https://github.com/AllayMC/Allay/issues/517">Teleport method should reset fall distance</a>
      */
     @Getter
     @Setter
@@ -159,9 +149,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
-        this.gameType = Server.SETTINGS.genericSettings().defaultGameType();
-        this.chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
-        this.chunkMaxSendCountPerTick = Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
+        this.gameMode = Server.SETTINGS.genericSettings().defaultGameMode();
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
         this.startUsingItemInAirTime = -1;
         this.formIdCounter = new AtomicInteger(0);
@@ -182,19 +170,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     protected void initPermissionGroup() {
-        this.adventureSettings = new AdventureSettings(thisPlayer);
         this.abilities = new Abilities(thisPlayer);
         // Do not register player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
         // Add parent permission group alone, so that adventure settings and abilities will also be updated
-        this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission().name()), thisPlayer);
+        this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission()), thisPlayer);
     }
 
     @Override
     protected void initMetadata() {
         super.initMetadata();
         // Player name is always shown
-        this.metadata.set(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
+        setData(EntityData.NAMETAG_ALWAYS_SHOW, (byte) 1);
     }
 
     @Override
@@ -208,28 +195,44 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setGameType(GameType gameType) {
-        var event = new PlayerGameTypeChangeEvent(thisPlayer, this.gameType, gameType);
-        if (!event.call()) {
-            return;
+    public void setGameMode(GameMode gameMode) {
+        setGameMode(gameMode, false);
+    }
+
+    protected void setGameMode(GameMode gameMode, boolean internal) {
+        if (!internal) {
+            var event = new PlayerGameModeChangeEvent(thisPlayer, this.gameMode, gameMode);
+            if (!event.call() || this.gameMode == event.getNewGameMode()) {
+                return;
+            }
+
+            gameMode = event.getNewGameMode();
         }
 
-        this.gameType = event.getNewGameType();
-        this.manager.callEvent(new CPlayerGameTypeChangeEvent(this.gameType));
-        this.adventureSettings.applyGameType(this.gameType);
-        this.abilities.applyGameType(this.gameType);
+        this.gameMode = gameMode;
+        this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
+        this.abilities.applyGameMode(this.gameMode);
 
-        setAndSendEntityFlag(EntityFlag.SILENT, this.gameType == GameType.SPECTATOR);
-        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, this.gameType != GameType.SPECTATOR);
+        setFlag(EntityFlag.SILENT, this.gameMode == GameMode.SPECTATOR);
+        setFlag(EntityFlag.HAS_COLLISION, this.gameMode != GameMode.SPECTATOR);
 
-        var packetToSelf = new SetPlayerGameTypePacket();
-        packetToSelf.setGamemode(this.gameType.ordinal());
-        networkComponent.sendPacket(packetToSelf);
+        thisPlayer.viewPlayerGameMode(thisPlayer);
+        forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
+    }
 
-        var packetToViewers = new UpdatePlayerGameTypePacket();
-        packetToViewers.setGameType(this.gameType);
-        packetToViewers.setEntityId(this.runtimeId);
-        sendPacketToViewers(packetToViewers);
+    @Override
+    public void setFlySpeed(float flySpeed) {
+        this.abilities.setFlySpeed(flySpeed);
+    }
+
+    @Override
+    public void setVerticalFlySpeed(float verticalFlySpeed) {
+        this.abilities.setVerticalFlySpeed(verticalFlySpeed);
+    }
+
+    @Override
+    public void setFlying(boolean flying) {
+        this.abilities.setFlying(flying);
     }
 
     @Override
@@ -243,8 +246,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void requireResendingAvailableCommands() {
-        this.requireResendingAvailableCommands = true;
+    public void requireResendingCommands() {
+        this.requireResendingCommands = true;
     }
 
     @Override
@@ -306,12 +309,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // These data are checked every tick, and are sent to client if changed
         // We don't send these data immediately after changed, because they may be changed multiple times in a tick
         // and sending these data will take up a lot of bandwidth
-        abilities.sync();
-        adventureSettings.sync();
+        this.abilities.sync();
 
-        if (requireResendingAvailableCommands) {
-            sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
-            requireResendingAvailableCommands = false;
+        if (requireResendingCommands) {
+            this.networkComponent.sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
+            this.requireResendingCommands = false;
         }
     }
 
@@ -344,7 +346,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 continue;
             }
 
-            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
+            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerType.INVENTORY));
             var slot = inventory.tryAddItem(item);
             if (slot == -1) {
                 // Player's inventory is full and cannot pick up the item
@@ -352,7 +354,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             }
 
             if (item.getCount() == 0) {
-                sendPickUpPacket(entityItem);
+                entityItem.applyAction(new PickedUpAction(thisPlayer));
                 // Set item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
                 entityItem.remove();
@@ -384,18 +386,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
             var arrow = ItemTypes.ARROW.createItemStack(1);
             arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(arrow) != -1) {
-                sendPickUpPacket(entityArrow);
+            if (thisPlayer.getContainer(ContainerType.INVENTORY).tryAddItem(arrow) != -1) {
+                entityArrow.applyAction(new PickedUpAction(thisPlayer));
                 entityArrow.remove();
             }
         }
-    }
-
-    protected void sendPickUpPacket(Entity entity) {
-        var packet = new TakeItemEntityPacket();
-        packet.setRuntimeEntityId(this.runtimeId);
-        packet.setItemRuntimeEntityId(entity.getRuntimeId());
-        getCurrentChunk().addChunkPacket(packet);
     }
 
     @Override
@@ -418,72 +413,58 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
             // Send new world's time
-            targetDim.getWorld().getWorldData().sendTimeOfDay(thisPlayer);
+            thisPlayer.viewTime(targetDim.getWorld().getWorldData().getTimeOfDay());
             // Send new world's game rules
-            networkComponent.sendPacket(((AllayGameRules) targetDim.getWorld().getWorldData().getGameRules()).buildPacket());
-            // Clear old world's weather
-            ((AllayWorld) currentDim.getWorld()).clearWeather(thisPlayer);
-            // Send new world's weather
-            ((AllayWorld) targetDim.getWorld()).sendWeather(thisPlayer);
+            thisPlayer.viewGameRules(targetDim.getWorld().getWorldData().getGameRules());
+            thisPlayer.viewWeather(targetDim.getWorld().getWeather());
         }
         location.dimension().removePlayer(thisPlayer, () -> {
             setLocationBeforeSpawn(target);
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
-                awaitingDimensionChangeACK = true;
-                var packet = new ChangeDimensionPacket();
-                packet.setDimension(targetDim.getDimensionInfo().dimensionId());
-                packet.setPosition(Vector3f.from(target.x(), target.y(), target.z()));
-                packet.setRespawn(!thisPlayer.isAlive());
-                networkComponent.sendPacket(packet);
+                // TODO: implement boolean changingDimension here
+                var packet1 = new ChangeDimensionPacket();
+                packet1.setDimension(targetDim.getDimensionInfo().dimensionId());
+                packet1.setPosition(Vector3f.from(target.x(), target.y() + 1.62f, target.z()));
+                networkComponent.sendPacket(packet1);
+
+                // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server. The client
+                // still sends the ack, but after the server has sent it. Thanks to Mojang for another groundbreaking change.
+                var packet2 = new PlayerActionPacket();
+                packet2.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
+                packet2.setRuntimeEntityId(this.runtimeId);
+                packet2.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
+                packet2.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
+                networkComponent.sendPacket(packet2);
             }
             targetDim.addPlayer(thisPlayer, this::sendLocationToSelf);
         });
     }
 
     @Override
-    public void spawnTo(EntityPlayer player) {
-        if (thisPlayer != player) {
-            super.spawnTo(player);
-            containerHolderComponent.getContainer(FullContainerType.ARMOR).sendArmorEquipmentPacketTo(player);
-            containerHolderComponent.getContainer(FullContainerType.OFFHAND).sendEquipmentPacketTo(player);
-            // Skin should be sent to the player
-            // Otherwise player's skin will become steve
-            // in other player's eyes after respawn
-            player.sendPacket(createSkinPacket(skin));
+    public void spawnTo(WorldViewer viewer) {
+        if (thisPlayer != viewer) {
+            super.spawnTo(viewer);
+            viewer.viewEntityArmors(thisPlayer);
+            viewer.viewEntityHand(thisPlayer);
+            viewer.viewEntityOffhand(thisPlayer);
+            // Skin should be sent to the player, otherwise player's skin will become Steve in other player's eyes after respawn
+            viewer.viewPlayerSkin(thisPlayer);
         }
     }
 
     @Override
-    public void despawnFrom(EntityPlayer player) {
-        if (thisPlayer != player) {
-            super.despawnFrom(player);
+    public void despawnFrom(WorldViewer viewer) {
+        if (thisPlayer != viewer) {
+            super.despawnFrom(viewer);
         }
     }
 
     @Override
-    public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
-        super.broadcastMoveToViewers(newLoc, teleporting);
+    public void broadcastMoveToViewers(Location3dc newLocation, boolean teleporting) {
+        super.broadcastMoveToViewers(newLocation, teleporting);
         if (!teleporting) {
             manager.callEvent(CPlayerMoveEvent.INSTANCE);
         }
-    }
-
-    @Override
-    public BedrockPacket createSpawnPacket0() {
-        var packet = new AddPlayerPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setUniqueEntityId(runtimeId);
-        packet.setUuid(networkComponent.getLoginData().getUuid());
-        packet.setUsername(networkComponent.getOriginName());
-        packet.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().deviceId());
-        packet.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
-        packet.setMotion(Vector3f.ZERO);
-        packet.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
-        packet.setGameType(gameType);
-        packet.getMetadata().putAll(metadata.getEntityDataMap());
-        packet.setDeviceId(networkComponent.getLoginData().getDeviceInfo().deviceId());
-        packet.setHand(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());
-        return packet;
     }
 
     public long getStartUsingItemInAirTime() {
@@ -500,49 +481,31 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public int getHandSlot() {
-        return containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot();
+        return containerHolderComponent.getContainer(ContainerType.INVENTORY).getHandSlot();
     }
 
     @Override
+    public void setHandSlot(int handSlot) {
+        setHandSlot(handSlot, true);
+    }
+
     public void setHandSlot(int handSlot, boolean sendToSelf) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
 
-        var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
-        inv.setHandSlot(handSlot);
-        var itemStack = inv.getItemStack(handSlot);
-
-        new PlayerItemHeldEvent(thisPlayer, itemStack, handSlot).call();
-
-        var packet = new MobEquipmentPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
-        packet.setItem(itemStack.toNetworkItemData());
-        packet.setInventorySlot(handSlot);
-        packet.setHotbarSlot(handSlot);
-
+        var container = containerHolderComponent.getContainer(ContainerType.INVENTORY);
+        container.setHandSlot(handSlot);
+        new PlayerItemHeldEvent(thisPlayer, container.getItemInHand(), handSlot).call();
         if (sendToSelf) {
-            sendPacket(packet);
+            thisPlayer.viewEntityHand(thisPlayer);
         }
-        sendPacketToViewers(packet);
+        forEachViewers(viewer -> viewer.viewEntityHand(thisPlayer));
     }
 
     @Override
-    public void setSkin(SerializedSkin skin) {
+    public void setSkin(Skin skin) {
         this.skin = skin;
         var server = Server.getInstance();
-        server.getPlayerManager().broadcastPacket(createSkinPacket(skin));
-        ((AllayPlayerManager) server.getPlayerManager()).onSkinUpdate(thisPlayer);
-    }
-
-    protected PlayerSkinPacket createSkinPacket(SerializedSkin skin) {
-        var packet = new PlayerSkinPacket();
-        packet.setUuid(networkComponent.getLoginData().getUuid());
-        packet.setSkin(skin);
-        packet.setNewSkinName(skin.getSkinId());
-        // It seems that old skin name is unused
-        packet.setOldSkinName("");
-        packet.setTrustedSkin(true);
-        return packet;
+        server.getPlayerManager().forEachPlayer(player -> player.viewPlayerSkin(thisPlayer));
     }
 
     @Override
@@ -552,21 +515,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putList(
                         TAG_OFFHAND,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.OFFHAND).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.OFFHAND).saveNBT())
                 .putList(
                         TAG_INVENTORY,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.INVENTORY).saveNBT())
                 .putList(
                         TAG_ARMOR,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.ARMOR).saveNBT())
                 .putList(
                         TAG_ENDER_ITEMS,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).saveNBT())
+                        containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).saveNBT())
                 .putInt(TAG_ENCHANTMENT_SEED, enchantmentSeed)
-                .putInt(TAG_GAME_TYPE, gameType.ordinal())
+                .putInt(TAG_GAME_TYPE, toGameType(gameMode).ordinal())
                 .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
                 .build();
     }
@@ -584,19 +547,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.loadNBT(nbt);
         nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionGroup.loadNBT(permNbt, thisPlayer));
         nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
-                containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(offhandNbt)
+                containerHolderComponent.getContainer(ContainerType.OFFHAND).loadNBT(offhandNbt)
         );
         nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt ->
-                containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).loadNBT(inventoryNbt)
+                containerHolderComponent.getContainer(ContainerType.INVENTORY).loadNBT(inventoryNbt)
         );
         nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
-                containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
+                containerHolderComponent.getContainer(ContainerType.ARMOR).loadNBT(armorNbt)
         );
         nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt ->
-                containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
+                containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameType(GameType.from(id)));
+        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(toGameMode(GameType.from(id)), true));
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
             loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
         } else {
@@ -624,29 +587,23 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (sender == thisPlayer) {
             var packet = new CommandOutputPacket();
             packet.setType(CommandOutputType.ALL_OUTPUT);
-            packet.setCommandOriginData(sender.getCommandOriginData());
+            packet.setCommandOriginData(new CommandOriginData(CommandOriginType.PLAYER, thisPlayer.getLoginData().getUuid(), "", 0));
             for (var output : outputs) {
                 packet.getMessages().add(new CommandOutputMessage(
-                        status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
+                        // Indicates if the output message was one of a successful command execution
+                        status != CommandResult.FAIL_STATUS,
                         I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()),
-                        Utils.EMPTY_STRING_ARRAY));
+                        new String[0]
+                ));
             }
             packet.setSuccessCount(status);
-            networkComponent.sendPacket(packet);
+            this.networkComponent.sendPacket(packet);
         } else {
             for (var output : outputs) {
                 var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()) + "]";
-                sendText(str);
+                sendMessage(str);
             }
         }
-    }
-
-    @Override
-    public CommandOriginData getCommandOriginData() {
-        if (commandOriginData == null) {
-            commandOriginData = new CommandOriginData(CommandOriginType.PLAYER, networkComponent.getLoginData().getUuid(), "", -1);
-        }
-        return commandOriginData;
     }
 
     @Override
@@ -664,7 +621,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         ToastRequestPacket pk = new ToastRequestPacket();
         pk.setTitle(title);
         pk.setContent(content);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -674,7 +631,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.TITLE);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -684,7 +641,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.SUBTITLE);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -694,7 +651,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.ACTIONBAR);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -704,21 +661,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setFadeInTime(fadeInTime);
         pk.setFadeOutTime(fadeOutTime);
         pk.setStayTime(duration);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
     public void resetTitleSettings() {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.RESET);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
     public void clearTitle() {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.CLEAR);
-        this.sendPacket(pk);
+        this.networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -748,27 +705,27 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     public void sendLocationToSelf() {
-        // NOTICE: do not use MovePlayerPacket. Sometimes this packet does not have any effect,
-        // especially when teleporting player to another world or a far away place.
-        networkComponent.sendPacket(createMovePacket(location, true));
+        // NOTICE: do not use MovePlayerPacket. Sometimes this packet does not have any
+        // effect especially when teleporting player to another world or a far away place.
+        thisPlayer.viewEntityLocation(thisPlayer, locationLastSent, location, true);
     }
 
     @Override
     public boolean isUsingItemInAir() {
-        return getMetadata().get(EntityFlag.USING_ITEM);
+        return getFlag(EntityFlag.USING_ITEM);
     }
 
     @Override
     public void setUsingItemInAir(boolean value, long time) {
-        setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
+        setFlag(EntityFlag.USING_ITEM, value);
         if (value) {
             startUsingItemInAirTime = time;
         }
     }
 
     @Override
-    public void sendText(String text) {
-        sendSimpleMessage(text, TextPacket.Type.RAW);
+    public void sendMessage(String message) {
+        sendSimpleMessage(message, TextPacket.Type.RAW);
     }
 
     protected void sendSimpleMessage(String message, TextPacket.Type type) {
@@ -780,101 +737,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public boolean isLoaderActive() {
-        return status.isSpawned();
+    public void sendTranslatable(String translatable, Object... args) {
+        sendMessage(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), translatable, args));
     }
 
     @Override
-    public void setChunkLoadingRadius(int radius) {
-        chunkLoadingRadius = Math.min(radius, Server.SETTINGS.worldSettings().viewDistance());
-        var chunkRadiusUpdatedPacket = new ChunkRadiusUpdatedPacket();
-        chunkRadiusUpdatedPacket.setRadius(chunkLoadingRadius);
-        networkComponent.sendPacket(chunkRadiusUpdatedPacket);
-    }
-
-    @Override
-    public void onChunkPosChanged() {
-        var packet = new NetworkChunkPublisherUpdatePacket();
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3i.from(location.x(), location.y(), location.z()));
-        packet.setRadius(getChunkLoadingRadius() << 4);
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void onChunkInRangeSend(Chunk chunk) {
-        if (awaitingDimensionChangeACK) {
-            sendDimensionChangeSuccess();
-        }
-        // This method will be called in non-ticking thread if async chunk sending is enabled. Let's
-        // send the entities in this chunk to the player next tick in the main thread: use forEachEntitiesInChunk()
-        // instead of forEachEntitiesInChunkImmediately()
-        getDimension().getEntityManager().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
-        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSend();
-    }
-
-    public void sendDimensionChangeSuccess() {
-        var packet = new PlayerActionPacket();
-        packet.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-        packet.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-        networkComponent.sendPacket(packet);
-        awaitingDimensionChangeACK = false;
-    }
-
-    @Override
-    public void onChunkOutOfRange(Set<Long> chunkHashes) {
-        for (var hash : chunkHashes) {
-            getDimension().getEntityManager().forEachEntitiesInChunk(HashUtils.getXFromHashXZ(hash), HashUtils.getZFromHashXZ(hash), entity -> entity.despawnFrom(thisPlayer));
-        }
-    }
-
-    @Override
-    public void sendPacket(BedrockPacket packet) {
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void sendPacketImmediately(BedrockPacket packet) {
-        networkComponent.sendPacketImmediately(packet);
-    }
-
-    @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
-        if (!forceTranslatedByClient) {
-            sendText(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), key, args));
-            return;
-        }
-
-        var packet = new TextPacket();
-        packet.setType(TextPacket.Type.TRANSLATION);
-        packet.setXuid("");
-        packet.setNeedsTranslation(true);
-        packet.setMessage(key);
-        packet.setParameters(List.of(Utils.objectArrayToStringArray(args)));
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void applyEntityEvent(EntityEventType event, int data) {
-        var packet = new EntityEventPacket();
-        packet.setRuntimeEntityId(getRuntimeId());
-        packet.setType(event);
-        packet.setData(data);
-        sendPacketToViewers(packet);
-        // Player should also send the packet to itself
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void applyAction(AnimatePacket.Action action, double rowingTime) {
-        var packet = new AnimatePacket();
-        packet.setRuntimeEntityId(getRuntimeId());
-        packet.setAction(action);
-        packet.setRowingTime((float) rowingTime);
-        sendPacketToViewers(packet);
-        // Player should also send the packet to itself
-        networkComponent.sendPacket(packet);
+    public void applyAction(EntityAction action) {
+        super.applyAction(action);
+        thisPlayer.viewEntityAction(thisPlayer, action);
     }
 
     @Override
@@ -892,12 +762,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         return Collections.unmodifiableMap(forms);
     }
 
-    @Override
-    public Form getForm(int id) {
-        return forms.get(id);
-    }
-
-    @Override
     public Form removeForm(int id) {
         return forms.remove(id);
     }
@@ -950,9 +814,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void sendMobEffectPacket(MobEffectPacket packet) {
-        super.sendMobEffectPacket(packet);
-        networkComponent.sendPacket(packet);
+    protected void sendMobEffect(EffectInstance newEffect, EffectInstance oldEffect) {
+        forEachViewers(viewer -> viewer.viewEntityEffectChange(thisEntity, newEffect, oldEffect));
+        thisPlayer.viewEntityEffectChange(thisPlayer, newEffect, oldEffect);
     }
 
     @Override
@@ -965,10 +829,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.setLocationBeforeSpawn(location);
     }
 
-    @Override
-    public void sendMetadata() {
+    protected void sendMetadata() {
         super.sendMetadata();
-        networkComponent.sendPacket(createSetEntityDataPacket());
+        // The current player should also view his metadata
+        thisPlayer.viewEntityMetadata(thisPlayer);
     }
 
     public void onJump() {
@@ -977,43 +841,68 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public boolean isSprinting() {
+        return getFlag(EntityFlag.SPRINTING);
+    }
+
+    @Override
     public void setSprinting(boolean sprinting) {
-        if (sprinting == isSprinting()) return;
+        if (sprinting != isSprinting()) {
+            new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
+            var speed = getMovementSpeed();
+            if (sprinting) {
+                speed *= 1.3f;
+            } else {
+                speed /= 1.3f;
+            }
 
-        new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
+            setMovementSpeed(speed);
+            setFlag(EntityFlag.SPRINTING, sprinting);
+        }
+    }
 
-        var speed = getMovementSpeed();
-        if (sprinting) speed *= 1.3f;
-        else speed /= 1.3f;
-        setMovementSpeed(speed);
-        setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
+    @Override
+    public boolean isSneaking() {
+        return getFlag(EntityFlag.SNEAKING);
     }
 
     @Override
     public void setSneaking(boolean sneaking) {
-        if (sneaking == isSneaking()) return;
+        if (sneaking != isSneaking()) {
+            new PlayerToggleSneakEvent(thisPlayer, sneaking).call();
+            setFlag(EntityFlag.SNEAKING, sneaking);
+        }
+    }
 
-        new PlayerToggleSneakEvent(thisPlayer, sneaking).call();
-
-        setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
+    @Override
+    public boolean isSwimming() {
+        return getFlag(EntityFlag.SWIMMING);
     }
 
     @Override
     public void setSwimming(boolean swimming) {
-        if (swimming == isSwimming()) return;
+        if (swimming != isSwimming()) {
+            new PlayerToggleSwimEvent(thisPlayer, swimming).call();
+            setFlag(EntityFlag.SWIMMING, swimming);
+        }
+    }
 
-        new PlayerToggleSwimEvent(thisPlayer, swimming).call();
-
-        setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
+    @Override
+    public boolean isGliding() {
+        return getFlag(EntityFlag.GLIDING);
     }
 
     @Override
     public void setGliding(boolean gliding) {
-        if (gliding == isGliding()) return;
+        if (gliding != isGliding()) {
+            new PlayerToggleGlideEvent(thisPlayer, gliding).call();
+            setFlag(EntityFlag.GLIDING, gliding);
+        }
+    }
 
-        new PlayerToggleGlideEvent(thisPlayer, gliding).call();
-
-        setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
+    @Override
+    public boolean isCrawling() {
+        return getFlag(EntityFlag.CRAWLING);
     }
 
     @Override
@@ -1022,7 +911,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
 
-        setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
+        setFlag(EntityFlag.CRAWLING, crawling);
     }
 
     public boolean isAwaitingTeleportACK() {

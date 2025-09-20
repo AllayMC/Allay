@@ -1,7 +1,8 @@
 package org.allaymc.api.bossbar;
 
 /**
- * Represents the style of a boss bar.
+ * Defines the available styles for a boss bar. Styles determine the visual segmentation of the
+ * boss bar's progress bar.
  *
  * @author daoge_cmd
  */

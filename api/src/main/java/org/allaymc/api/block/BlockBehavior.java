@@ -1,7 +1,7 @@
 package org.allaymc.api.block;
 
 import org.allaymc.api.block.component.BlockBaseComponent;
-import org.allaymc.api.block.component.data.BlockStateDataComponent;
+import org.allaymc.api.block.component.BlockStateDataComponent;
 
 /**
  * @author daoge_cmd

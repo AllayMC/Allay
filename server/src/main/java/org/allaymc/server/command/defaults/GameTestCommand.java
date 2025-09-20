@@ -3,28 +3,28 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.debugshape.DebugLine;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.form.Forms;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.LangCode;
-import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.LangCode;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Explosion;
+import org.allaymc.server.item.data.ItemId;
+import org.allaymc.server.utils.JSONUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.joml.Vector3d;
@@ -65,15 +65,15 @@ public class GameTestCommand extends VanillaCommand {
                         return context.fail();
                     }
 
-                    player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
+                    player.getContainer(ContainerType.INVENTORY).setItemInHand(blockState.toItemStack());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("rfinv")
                 .exec((context, player) -> {
-                    player.viewContents(player.getContainer(FullContainerType.PLAYER_INVENTORY));
-                    player.viewContents(player.getContainer(FullContainerType.ARMOR));
-                    player.viewContents(player.getContainer(FullContainerType.OFFHAND));
+                    player.viewContents(player.getContainer(ContainerType.INVENTORY));
+                    player.viewContents(player.getContainer(ContainerType.ARMOR));
+                    player.viewContents(player.getContainer(ContainerType.OFFHAND));
                     context.addOutput("Inventory is refreshed!");
                     return context.success();
                 }, SenderType.PLAYER)
@@ -88,22 +88,12 @@ public class GameTestCommand extends VanillaCommand {
                     List<String> args = context.getResult(3);
 
                     try {
-                        player.sendText(I18n.get().tr(langCode, key, args));
+                        player.sendMessage(I18n.get().tr(langCode, key, args));
                     } catch (Throwable t) {
                         context.addOutput(TextFormat.RED + "Unknown key!");
                         return context.fail();
                     }
 
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
-                .key("trc")
-                .str("key")
-                .remain("args")
-                .exec((context, player) -> {
-                    String key = context.getResult(1);
-                    List<String> args = context.getResult(2);
-                    player.sendTr(key, true, args.toArray());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -220,8 +210,8 @@ public class GameTestCommand extends VanillaCommand {
                 .root()
                 .key("printblockunder")
                 .exec((context, player) -> {
-                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3d()), 0).toString());
-                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3d()), 1).toString());
+                    player.sendMessage(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3d()), 0).toString());
+                    player.sendMessage(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3d()), 1).toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -263,14 +253,14 @@ public class GameTestCommand extends VanillaCommand {
                     var item = player.getItemInHand();
                     item.setLore(lore);
                     player.notifyItemInHandChange();
-                    player.sendText("Lore is set");
+                    player.sendMessage("Lore is set");
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("getheight")
                 .exec((context, player) -> {
                     var floorLoc = player.getLocation().floor(new Vector3d());
-                    player.sendText("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
+                    player.sendMessage("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -282,11 +272,11 @@ public class GameTestCommand extends VanillaCommand {
                     int y = (int) floorLoc.y;
                     int z = (int) floorLoc.z;
                     var lightEngine = player.getDimension().getLightEngine();
-                    player.sendText("InternalLight: " + lightEngine.getInternalLight(x, y, z));
-                    player.sendText("BlockLight: " + lightEngine.getBlockLight(x, y, z));
-                    player.sendText("SkyLight: " + lightEngine.getSkyLight(x, y, z));
-                    player.sendText("InternalSkyLight: " + lightEngine.getInternalSkyLight(x, y, z));
-                    player.sendText("QueuedUpdateCount: " + lightEngine.getQueuedUpdateCount());
+                    player.sendMessage("InternalLight: " + lightEngine.getInternalLight(x, y, z));
+                    player.sendMessage("BlockLight: " + lightEngine.getBlockLight(x, y, z));
+                    player.sendMessage("SkyLight: " + lightEngine.getSkyLight(x, y, z));
+                    player.sendMessage("InternalSkyLight: " + lightEngine.getInternalSkyLight(x, y, z));
+                    player.sendMessage("QueuedUpdateCount: " + lightEngine.getQueuedUpdateCount());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -323,7 +313,7 @@ public class GameTestCommand extends VanillaCommand {
                     var item = player.getItemInHand();
                     item.setLockMode(context.getResult(1));
                     player.notifyItemInHandChange();
-                    player.sendText("Item is locked in " + context.getResult(1) + " mode!");
+                    player.sendMessage("Item is locked in " + context.getResult(1) + " mode!");
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -333,12 +323,12 @@ public class GameTestCommand extends VanillaCommand {
                             .title("Test Simple Form")
                             .content("test content")
                             .button("test button 1")
-                            .onClick(button -> player.sendText("You clicked button 1"))
+                            .onClick(button -> player.sendMessage("You clicked button 1"))
                             .divider()
                             .label("test label")
                             .header("test header")
                             .button("test button 2")
-                            .onClick(button -> player.sendText("You clicked button 2"))
+                            .onClick(button -> player.sendMessage("You clicked button 2"))
                             .sendTo(player);
                     return context.success();
                 }, SenderType.PLAYER)
@@ -356,10 +346,10 @@ public class GameTestCommand extends VanillaCommand {
                     };
                     if (enable) {
                         Server.getInstance().getEventBus().registerListenerFor(BlockBreakEvent.class, lambda);
-                        player.sendText("Break block to see the blockstate");
+                        player.sendMessage("Break block to see the blockstate");
                     } else {
                         Server.getInstance().getEventBus().unregisterListenerFor(BlockBreakEvent.class, lambda);
-                        player.sendText("Disabled");
+                        player.sendMessage("Disabled");
                     }
                     return context.success();
                 }, SenderType.PLAYER)

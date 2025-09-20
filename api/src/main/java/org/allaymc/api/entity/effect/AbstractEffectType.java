@@ -2,13 +2,12 @@ package org.allaymc.api.entity.effect;
 
 import lombok.Getter;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.awt.*;
 
 /**
  * @author daoge_cmd
- * @see <a href="https://minecraft.wiki/w/Effect#Effect_list">Effect list</a>
  */
 @Getter
 public abstract class AbstractEffectType implements EffectType {

@@ -1,6 +1,5 @@
 package org.allaymc.server;
 
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.property.enums.MinecraftFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
@@ -22,7 +21,7 @@ public class BlockStateUpdateJMHTest {
     private BlockState observer;
 
     @Setup
-    public void init() throws MissingImplementationException {
+    public void init() {
         Allay.initI18n();
         Allay.initAllay();
         observer = BlockTypes.OBSERVER.getDefaultState();

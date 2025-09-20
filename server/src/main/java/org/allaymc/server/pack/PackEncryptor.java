@@ -6,7 +6,7 @@ import com.google.gson.Strictness;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.pack.PackManifest;
-import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.server.utils.JSONUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.crypto.Cipher;
@@ -39,7 +39,7 @@ public final class PackEncryptor {
     private static final int KEY_LENGTH = 32;
     private static final byte[] VERSION = new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};
     private static final byte[] MAGIC = new byte[]{(byte) 0xFC, (byte) 0xB9, (byte) 0xCF, (byte) 0x9B};
-    private static final List<String> EXCLUDED_FILES = List.of("manifest.json", "pack_icon.png", "bug_pack_icon.png");
+    private static final List<String> EXCLUDED_FILES = List.of(PackManifest.FILE_NAME, "pack_icon.png", "bug_pack_icon.png");
 
     public static String encrypt(Path inputPath, Path outputPath) {
         var key = RandomStringUtils.secure().nextAlphabetic(KEY_LENGTH);
@@ -210,7 +210,7 @@ public final class PackEncryptor {
 
     @SneakyThrows
     private static String findPackUUID(ZipFile zip) {
-        var manifestEntry = zip.getEntry("manifest.json");
+        var manifestEntry = zip.getEntry(PackManifest.FILE_NAME);
         if (manifestEntry == null) {
             throw new IllegalArgumentException("manifest file not exists");
         }

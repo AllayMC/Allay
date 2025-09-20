@@ -2,9 +2,9 @@ package org.allaymc.server.item.component;
 
 import lombok.AllArgsConstructor;
 import org.allaymc.api.item.component.ItemRepairableComponent;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.item.data.ItemId;
 
 /**
  * @author IWareQ

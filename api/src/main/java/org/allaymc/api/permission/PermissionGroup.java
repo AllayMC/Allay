@@ -452,7 +452,7 @@ public final class PermissionGroup {
                 var parent = PermissionGroup.get(name);
                 if (parent == null) {
                     log.warn("Find unknown parent permission group '{}' when loading permission group '{}'. Fallback to the default permission group", name, this.name);
-                    parent = PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission().name());
+                    parent = PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission());
                 }
 
                 addParent(parent, permissible);

@@ -15,8 +15,8 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -111,7 +111,7 @@ public abstract class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl
 
         if (onBoneMealUsed(dimension, interactInfo.clickedBlockPos(), interactInfo.getClickedBlock().getBlockState())) {
             interactInfo.player().tryConsumeItemInHand();
-            dimension.addLevelEvent(MathUtils.center(interactInfo.clickedBlockPos()), LevelEvent.PARTICLE_CROP_GROWTH);
+            dimension.addParticle(MathUtils.center(interactInfo.clickedBlockPos()), SimpleParticle.BONE_MEAL);
             return true;
         }
 

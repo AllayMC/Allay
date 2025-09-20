@@ -14,30 +14,30 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataContainer;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.BlockPlaceSound;
+import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
-import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.item.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.jetbrains.annotations.VisibleForTesting;
 import org.joml.Vector3ic;
 
 import java.util.*;
@@ -71,7 +71,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected static final String TAG_LOCK_MODE = "minecraft:item_lock";
     protected static final String TAG_PDC = "PDC";
 
-    private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
+    // The unique id counter should start at 1 because 0 is used to indicate that this item stack does not have a unique id
+    private static final AtomicInteger UNIQUE_ID = new AtomicInteger(1);
 
     @ComponentObject
     protected ItemStack thisItemStack;
@@ -108,23 +109,24 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected NbtMap blockEntityNBT;
     @Getter
     @Setter
-    protected int stackNetworkId;
+    protected int uniqueId;
 
     public ItemBaseComponentImpl(ItemStackInitInfo initInfo) {
         this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
         this.meta = initInfo.meta();
-        var specifiedNetworkId = initInfo.stackNetworkId();
-        if (specifiedNetworkId != EMPTY_STACK_NETWORK_ID) {
+        var specifiedNetworkId = initInfo.uniqueId();
+        if (specifiedNetworkId != EMPTY_UNIQUE_ID) {
             Preconditions.checkArgument(specifiedNetworkId > 0, "Specified ItemStack network id must be greater than 0");
-            this.stackNetworkId = specifiedNetworkId;
-        } else if (initInfo.autoAssignStackNetworkId()) {
-            this.stackNetworkId = STACK_NETWORK_ID_COUNTER.getAndIncrement();
+            this.uniqueId = specifiedNetworkId;
+        } else if (initInfo.assignUniqueId()) {
+            this.uniqueId = UNIQUE_ID.getAndIncrement();
         }
     }
 
-    public static int getCurrentStackNetworkIdCounter() {
-        return STACK_NETWORK_ID_COUNTER.get();
+    @VisibleForTesting
+    public static int getCurrentUniqueIdCounter() {
+        return UNIQUE_ID.get();
     }
 
     @OnInitFinish
@@ -294,25 +296,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public ItemData toNetworkItemData() {
-        if (itemType == ItemTypes.AIR) {
-            return ItemData.AIR;
-        }
-
-        var blockState = toBlockState();
-        return ItemData
-                .builder()
-                .definition(itemType.toNetworkDefinition())
-                .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
-                .count(count)
-                .damage(meta)
-                .tag(saveExtraTag())
-                .usingNetId(hasStackNetworkId())
-                .netId(stackNetworkId)
-                .build();
-    }
-
-    @Override
     public ItemStack copy(boolean newStackNetworkId) {
         var extraTag = saveExtraTag();
         return itemType.createItemStack(
@@ -321,8 +304,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                         .count(count)
                         .meta(meta)
                         .extraTag(extraTag != null ? extraTag : NbtMap.EMPTY)
-                        .stackNetworkId(newStackNetworkId ? EMPTY_STACK_NETWORK_ID : stackNetworkId)
-                        .autoAssignStackNetworkId(newStackNetworkId)
+                        .uniqueId(newStackNetworkId ? EMPTY_UNIQUE_ID : uniqueId)
+                        .assignUniqueId(newStackNetworkId)
                         .build()
         );
     }
@@ -385,7 +368,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var result = blockBehavior.place(dimension, blockState, placeBlockPos, placementInfo);
         if (result) {
-            dimension.addLevelSoundEvent(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, SoundEvent.PLACE, blockState.blockStateHash());
+            dimension.addSound(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, new BlockPlaceSound(blockState));
             tryApplyBlockEntityNBT(dimension, placeBlockPos);
             if (player != null) {
                 tryConsumeItem(player);
@@ -417,7 +400,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected void tryConsumeItem(EntityPlayer player) {
-        if (player == null || player.getGameType() != GameType.CREATIVE) {
+        if (player == null || player.getGameMode() != GameMode.CREATIVE) {
             thisItemStack.reduceCount(1);
         }
     }

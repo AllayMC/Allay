@@ -1,7 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 
 import static java.lang.Runtime.getRuntime;
@@ -27,7 +27,7 @@ public class GCCommand extends VanillaCommand {
             }
             System.gc();
             var freedMemory = memory - getCurrentMemoryUsage();
-            context.getSender().sendTr(TrKeys.ALLAY_COMMAND_GC_COMPLETED, freedMemory);
+            context.getSender().sendTranslatable(TrKeys.ALLAY_COMMAND_GC_COMPLETED, freedMemory);
             return context.success();
         });
     }

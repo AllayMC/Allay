@@ -3,8 +3,8 @@ package org.allaymc.server.world.chunk;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.ChunkState;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.jctools.maps.NonBlockingHashMap;
 
 /**

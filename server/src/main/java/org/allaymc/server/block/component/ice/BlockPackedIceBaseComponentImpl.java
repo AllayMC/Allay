@@ -5,7 +5,6 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.utils.Utils;
 
 import java.util.Set;
 
@@ -19,7 +18,7 @@ public class BlockPackedIceBaseComponentImpl extends BlockIceBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Set.of();
     }
 
     @Override

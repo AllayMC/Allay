@@ -20,8 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
@@ -114,7 +114,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                             return;
                         }
 
-                        var event = new ClientConnectEvent(session, "disconnect.disconnected");
+                        var event = new ClientConnectEvent(session.getSocketAddress(), "disconnect.disconnected");
                         if (!event.call()) {
                             session.disconnect(event.getDisconnectReason());
                             return;
@@ -183,7 +183,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .subMotd(genericSettings.subMotd())
                 .playerCount(0)
                 .maximumPlayerCount(genericSettings.maxPlayerCount())
-                .gameType(genericSettings.defaultGameType().name())
+                .gameType(genericSettings.defaultGameMode().name())
                 .nintendoLimited(false)
                 .version(ProtocolInfo.getLatestCodec().getMinecraftVersion())
                 .protocolVersion(ProtocolInfo.getLatestCodec().getProtocolVersion())

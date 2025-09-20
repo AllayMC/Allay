@@ -6,10 +6,10 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.Attachment;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.impl.GrindstoneContainer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.container.impl.GrindstoneContainerImpl;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.ATTACHMENT;
@@ -55,7 +55,7 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var grindstoneContainer = new GrindstoneContainer();
+        var grindstoneContainer = new GrindstoneContainerImpl();
         grindstoneContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         grindstoneContainer.addViewer(player);
         return true;

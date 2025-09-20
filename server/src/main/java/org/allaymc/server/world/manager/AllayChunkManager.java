@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -117,10 +117,6 @@ public final class AllayChunkManager implements ChunkManager {
             }
         }
         return shouldTick;
-    }
-
-    public void sendChunkPackets() {
-        forEachLoadedChunks(chunk -> ((AllayUnsafeChunk) chunk.toUnsafeChunk()).sendChunkPackets());
     }
 
     @Override

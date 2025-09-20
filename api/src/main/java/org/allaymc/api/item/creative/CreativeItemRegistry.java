@@ -1,7 +1,5 @@
 package org.allaymc.api.item.creative;
 
-import org.allaymc.api.i18n.LangCode;
-import org.cloudburstmc.protocol.bedrock.packet.CreativeContentPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.List;
@@ -18,7 +16,7 @@ public interface CreativeItemRegistry {
      * @return the construction category
      */
     default CreativeItemCategory getConstructionCategory() {
-        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.CONSTRUCTION);
+        return getCategory(CreativeItemCategory.Type.CONSTRUCTION);
     }
 
     /**
@@ -27,7 +25,7 @@ public interface CreativeItemRegistry {
      * @return the decoration category
      */
     default CreativeItemCategory getNatureCategory() {
-        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.NATURE);
+        return getCategory(CreativeItemCategory.Type.NATURE);
     }
 
     /**
@@ -36,7 +34,7 @@ public interface CreativeItemRegistry {
      * @return the equipment category
      */
     default CreativeItemCategory getEquipmentCategory() {
-        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.EQUIPMENT);
+        return getCategory(CreativeItemCategory.Type.EQUIPMENT);
     }
 
     /**
@@ -45,23 +43,21 @@ public interface CreativeItemRegistry {
      * @return the items category
      */
     default CreativeItemCategory getItemsCategory() {
-        return getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory.ITEMS);
+        return getCategory(CreativeItemCategory.Type.ITEMS);
     }
 
     /**
      * Get the specified category.
      *
      * @param type the type of the category
-     *
      * @return the specified category
      */
-    CreativeItemCategory getCategory(org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory type);
+    CreativeItemCategory getCategory(CreativeItemCategory.Type type);
 
     /**
      * Get the creative item by index.
      *
      * @param index the index of the creative item
-     *
      * @return the creative item, or {@code null} if not found
      */
     CreativeItemEntry getEntryByIndex(int index);
@@ -70,7 +66,6 @@ public interface CreativeItemRegistry {
      * Get the creative item group by index.
      *
      * @param index the index of the creative item group
-     *
      * @return the creative item group, or {@code null} if not found
      */
     CreativeItemGroup getGroupByIndex(int index);
@@ -84,11 +79,10 @@ public interface CreativeItemRegistry {
     List<CreativeItemEntry> getEntries();
 
     /**
-     * Encode the creative content packet in the specified language code.
+     * Get all registered creative item groups.
      *
-     * @param langCode the language code used to encode the creative content packet
-     *
-     * @return the encoded creative content packet
+     * @return the registered creative item groups
      */
-    CreativeContentPacket getCreativeContentPacketFor(LangCode langCode);
+    @UnmodifiableView
+    List<CreativeItemGroup> getGroups();
 }

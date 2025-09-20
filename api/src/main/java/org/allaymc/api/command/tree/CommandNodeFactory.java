@@ -1,6 +1,6 @@
 package org.allaymc.api.command.tree;
 
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
@@ -9,8 +9,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.world.Difficulty;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.data.Difficulty;
 import org.joml.Vector3fc;
 
 import java.util.List;
@@ -20,14 +20,14 @@ import java.util.List;
  * command nodes. Each command node can hold a specific type of data, such as strings, numbers,
  * game elements, and entities, and it defines how arguments are processed in the command execution tree.
  * <p>
- * This factory is held as an {@link ApiInstanceHolder} and can be accessed using {@link #getFactory()}.
+ * This factory is held as an {@link AllayAPI.APIInstanceHolder} and can be accessed using {@link #getFactory()}.
  * The factory allows users to create nodes with different types, and their default values, which are
  * used in command arguments parsing.
  *
  * @author daoge_cmd
  */
 public interface CommandNodeFactory {
-    ApiInstanceHolder<CommandNodeFactory> FACTORY = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<CommandNodeFactory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
     static CommandNodeFactory getFactory() {
         return FACTORY.get();
@@ -39,7 +39,6 @@ public interface CommandNodeFactory {
      * @param key          the key name
      * @param parent       the parent node
      * @param defaultValue the default value of the key
-     *
      * @return a new {@code CommandNode} for the key
      */
     CommandNode key(String key, CommandNode parent, String defaultValue);
@@ -50,7 +49,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default string value
-     *
      * @return a new {@code CommandNode} for the string argument
      */
     CommandNode str(String name, CommandNode parent, String defaultValue);
@@ -61,7 +59,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default short value
-     *
      * @return a new {@code CommandNode} for the short number argument
      */
     CommandNode shortNum(String name, CommandNode parent, short defaultValue);
@@ -72,7 +69,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default integer value
-     *
      * @return a new {@code CommandNode} for the integer argument
      */
     CommandNode intNum(String name, CommandNode parent, int defaultValue);
@@ -83,7 +79,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default long value
-     *
      * @return a new {@code CommandNode} for the long number argument
      */
     CommandNode longNum(String name, CommandNode parent, long defaultValue);
@@ -94,7 +89,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default float value
-     *
      * @return a new {@code CommandNode} for the float number argument
      */
     CommandNode floatNum(String name, CommandNode parent, float defaultValue);
@@ -105,7 +99,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default double value
-     *
      * @return a new {@code CommandNode} for the double number argument
      */
     CommandNode doubleNum(String name, CommandNode parent, double defaultValue);
@@ -116,7 +109,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default boolean value
-     *
      * @return a new {@code CommandNode} for the boolean argument
      */
     CommandNode bool(String name, CommandNode parent, boolean defaultValue);
@@ -128,7 +120,6 @@ public interface CommandNodeFactory {
      * @param parent       the parent node
      * @param defaultValue the default enum value as a string
      * @param enums        the available enum options
-     *
      * @return a new {@code CommandNode} for the enum argument
      */
     CommandNode enums(String name, CommandNode parent, String defaultValue, String[] enums);
@@ -141,7 +132,6 @@ public interface CommandNodeFactory {
      * @param enumName     the name of the enum
      * @param defaultValue the default enum value as a string
      * @param values       the available enum options
-     *
      * @return a new {@code CommandNode} for the enum argument
      */
     CommandNode enums(String name, CommandNode parent, String enumName, String defaultValue, String[] values);
@@ -153,7 +143,6 @@ public interface CommandNodeFactory {
      * @param parent       the parent node
      * @param defaultValue the default enum value as a string
      * @param enums        the available enum options
-     *
      * @return a new {@code CommandNode} for the case-insensitive enum argument
      */
     CommandNode enumsIgnoreCase(String name, CommandNode parent, String defaultValue, String[] enums);
@@ -166,7 +155,6 @@ public interface CommandNodeFactory {
      * @param enumName     the custom name of the enum
      * @param defaultValue the default enum value as a string
      * @param enums        the available enum options
-     *
      * @return a new {@code CommandNode} for the case-insensitive enum argument
      */
     CommandNode enumsIgnoreCase(String name, CommandNode parent, String enumName, String defaultValue, String[] enums);
@@ -180,7 +168,6 @@ public interface CommandNodeFactory {
      * @param name      the name of the parameter
      * @param parent    the parent node
      * @param enumClass the class of the enum type
-     *
      * @return a new {@code CommandNode} for the enum class argument
      */
     <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, Class<T> enumClass);
@@ -196,7 +183,6 @@ public interface CommandNodeFactory {
      * @param parent    the parent node
      * @param enumName  the custom name of the enum
      * @param enumClass the class of the enum type
-     *
      * @return a new {@code CommandNode} for the enum class argument
      */
     <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, String enumName, Class<T> enumClass);
@@ -207,7 +193,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default message value
-     *
      * @return a new {@code CommandNode} for the message argument
      */
     CommandNode msg(String name, CommandNode parent, String defaultValue);
@@ -218,7 +203,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default value for the remaining arguments
-     *
      * @return a new {@code CommandNode} for the remaining arguments
      */
     CommandNode remain(String name, CommandNode parent, List<String> defaultValue);
@@ -229,7 +213,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default target entities
-     *
      * @return a new {@code CommandNode} for the target argument
      */
     CommandNode target(String name, CommandNode parent, List<Entity> defaultValue);
@@ -240,7 +223,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default target player entities
-     *
      * @return a new {@code CommandNode} for the player target argument
      */
     CommandNode playerTarget(String name, CommandNode parent, List<EntityPlayer> defaultValue);
@@ -251,10 +233,9 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default game mode
-     *
      * @return a new {@code CommandNode} for the game mode argument
      */
-    CommandNode gameMode(String name, CommandNode parent, GameType defaultValue);
+    CommandNode gameMode(String name, CommandNode parent, GameMode defaultValue);
 
     /**
      * Creates a command node for a position argument.
@@ -262,7 +243,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default position (vector)
-     *
      * @return a new {@code CommandNode} for the position argument
      */
     CommandNode pos(String name, CommandNode parent, Vector3fc defaultValue);
@@ -273,7 +253,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default wildcard target
-     *
      * @return a new {@code CommandNode} for the wildcard target argument
      */
     CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue);
@@ -284,7 +263,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default enchantment type
-     *
      * @return a new {@code CommandNode} for the enchantment type argument
      */
     CommandNode enchantment(String name, CommandNode parent, EnchantmentType defaultValue);
@@ -295,7 +273,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default effect type
-     *
      * @return a new {@code CommandNode} for the effect type argument
      */
     CommandNode effect(String name, CommandNode parent, EffectType defaultValue);
@@ -306,7 +283,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default item type
-     *
      * @return a new {@code CommandNode} for the item type argument
      */
     CommandNode itemType(String name, CommandNode parent, ItemType<?> defaultValue);
@@ -317,7 +293,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default block type
-     *
      * @return a new {@code CommandNode} for the block type argument
      */
     CommandNode blockType(String name, CommandNode parent, BlockType<?> defaultValue);
@@ -328,7 +303,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default entity type
-     *
      * @return a new {@code CommandNode} for the entity type argument
      */
     CommandNode entityType(String name, CommandNode parent, EntityType<?> defaultValue);
@@ -339,7 +313,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default difficulty level
-     *
      * @return a new {@code CommandNode} for the difficulty argument
      */
     CommandNode difficulty(String name, CommandNode parent, Difficulty defaultValue);
@@ -350,7 +323,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default list of block property values
-     *
      * @return a new {@code CommandNode} for block property values
      */
     CommandNode blockPropertyValues(String name, CommandNode parent, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue);
@@ -361,7 +333,6 @@ public interface CommandNodeFactory {
      * @param name         the name of the argument
      * @param parent       the parent node
      * @param defaultValue the default command
-     *
      * @return a new {@code CommandNode} for the command argument
      */
     CommandNode cmd(String name, CommandNode parent, String defaultValue);

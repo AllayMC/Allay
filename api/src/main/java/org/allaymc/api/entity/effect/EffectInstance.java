@@ -9,6 +9,9 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.Range;
 
 /**
+ * EffectInstance represents an active effect, which contains the level of the effect, its
+ * duration, and whether the particle effect emitted can be seen by other players.
+ *
  * @author daoge_cmd
  */
 @Setter
@@ -54,7 +57,6 @@ public final class EffectInstance {
      * Creates a new effect instance from the given nbt.
      *
      * @param nbt the nbt that contains the effect information
-     *
      * @return a new effect instance based on the given nbt
      */
     public static EffectInstance fromNBT(NbtMap nbt) {

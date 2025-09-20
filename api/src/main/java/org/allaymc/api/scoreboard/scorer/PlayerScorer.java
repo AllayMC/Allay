@@ -3,10 +3,7 @@ package org.allaymc.api.scoreboard.scorer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.scoreboard.Scoreboard;
-import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.server.Server;
-import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 import java.util.UUID;
 
@@ -41,8 +38,8 @@ public final class PlayerScorer implements Scorer {
     }
 
     @Override
-    public ScoreInfo.ScorerType getScorerType() {
-        return ScoreInfo.ScorerType.PLAYER;
+    public ScorerType getScorerType() {
+        return ScorerType.PLAYER;
     }
 
     @Override
@@ -64,16 +61,4 @@ public final class PlayerScorer implements Scorer {
         return player == null ? String.valueOf(uuid.getMostSignificantBits()) : player.getOriginName();
     }
 
-    @Override
-    public ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line) {
-        if (uuid == null) return null;
-        var player = Server.getInstance().getPlayerManager().getPlayers().get(uuid);
-        return player != null ? new ScoreInfo(
-                line.getLineId(),
-                scoreboard.getObjectiveName(),
-                line.getScore(),
-                ScoreInfo.ScorerType.PLAYER,
-                player.getRuntimeId()
-        ) : null;
-    }
 }

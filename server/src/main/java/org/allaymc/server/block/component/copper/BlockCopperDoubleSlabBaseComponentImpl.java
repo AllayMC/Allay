@@ -2,9 +2,9 @@ package org.allaymc.server.block.component.copper;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockOxidationComponent;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockDoubleSlabBaseComponentImpl;
+import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.component.annotation.Dependency;
 
 /**

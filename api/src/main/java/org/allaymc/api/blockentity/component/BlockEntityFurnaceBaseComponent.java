@@ -1,6 +1,7 @@
 package org.allaymc.api.blockentity.component;
 
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.item.recipe.FurnaceRecipe;
 
 /**
  * @author daoge_cmd
@@ -63,11 +64,11 @@ public interface BlockEntityFurnaceBaseComponent extends BlockEntityBaseComponen
     void setLit(boolean lit);
 
     /**
-     * Gets the furnace recipe tag.
+     * Gets the furnace type
      *
      * @return the furnace recipe tag
      */
-    String getFurnaceRecipeTag();
+    FurnaceRecipe.Type getFurnaceRecipeType();
 
     /**
      * Gets the normal speed.

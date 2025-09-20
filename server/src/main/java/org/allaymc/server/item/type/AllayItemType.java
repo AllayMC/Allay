@@ -8,17 +8,17 @@ import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemComponent;
-import org.allaymc.api.item.data.ItemId;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.data.ItemData;
 import org.allaymc.api.item.tag.ItemTag;
-import org.allaymc.api.item.type.ItemData;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.Allay;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
+import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.utils.BlockAndItemIdMapper;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
+import static org.allaymc.server.component.ComponentProvider.toMap;
 
 /**
  * @author daoge_cmd
@@ -48,6 +48,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final Supplier<BlockType<?>> blockType;
     // Item component data is used to be sent to the client to let the client know
     // the attributes of the item, so that the client know how to handle the item
+    @Getter
     private final ItemComponentData itemComponentData;
 
     private AllayItemType(

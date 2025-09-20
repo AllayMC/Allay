@@ -5,7 +5,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -40,11 +40,6 @@ public record AllayBlockState(
                 .putCompound("states", NbtMap.fromMap(states))
                 .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NUM)
                 .build();
-    }
-
-    @Override
-    public long unsignedBlockStateHash() {
-        return Integer.toUnsignedLong(blockStateHash);
     }
 
     @Override

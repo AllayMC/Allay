@@ -2,7 +2,7 @@ package org.allaymc.api.form.type;
 
 import com.google.gson.Gson;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
+import org.allaymc.api.form.FormCancelReason;
 
 import java.util.function.Consumer;
 
@@ -15,7 +15,7 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
 
     protected static final Gson GSON = new Gson();
 
-    protected transient Consumer<ModalFormCancelReason> onClose = reason -> {
+    protected transient Consumer<FormCancelReason> onClose = reason -> {
     };
     protected transient Object response;
 
@@ -31,7 +31,7 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
     /**
      * Handle the response from the player.
      * <p>
-     * If the player just close the form due to some reason (e.g. the player is opening his inventory), {@link #handleClose(ModalFormCancelReason)}
+     * If the player just close the form due to some reason (e.g. the player is opening his inventory), {@link #handleClose(FormCancelReason)}
      * will be called instead of this method.
      *
      * @param data the response data from the player
@@ -43,7 +43,7 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
      *
      * @param reason the reason why the form is closed
      */
-    public abstract void handleClose(ModalFormCancelReason reason);
+    public abstract void handleClose(FormCancelReason reason);
 
     /**
      * @see #onClose(Consumer)
@@ -56,10 +56,9 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
      * Add a callback that will be called when player only close the form without other actions.
      *
      * @param onClose the callback
-     *
      * @return the form
      */
-    public Form onClose(Consumer<ModalFormCancelReason> onClose) {
+    public Form onClose(Consumer<FormCancelReason> onClose) {
         this.onClose = onClose;
         return this;
     }

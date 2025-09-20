@@ -1,16 +1,16 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
 
 /**
@@ -22,16 +22,18 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
-        var gameType = thisPlayer.getGameType();
-        if (gameType == GameType.SPECTATOR || gameType == GameType.CREATIVE)
+        var gameMode = thisPlayer.getGameMode();
+        if (gameMode == GameMode.SPECTATOR || gameMode == GameMode.CREATIVE) {
             return damage.getDamageType() == DamageContainer.DamageType.API;
+        }
+
         return true;
     }
 
     @Override
     public boolean hasFallDamage() {
-        var gameType = thisPlayer.getGameType();
-        return gameType == GameType.SURVIVAL || gameType == GameType.ADVENTURE;
+        var gameMode = thisPlayer.getGameMode();
+        return gameMode == GameMode.SURVIVAL || gameMode == GameMode.ADVENTURE;
     }
 
     // TODO: Implement breach enchantment
@@ -40,7 +42,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         if (!damage.canBeReducedByArmor()) return;
 
         int durabilityIncreased = Math.max(1, (int) (damage.getSourceDamage() / 4f));
-        var armorContainer = thisPlayer.getContainer(FullContainerType.ARMOR);
+        var armorContainer = thisPlayer.getContainer(ContainerType.ARMOR);
         var itemStackArray = armorContainer.getItemStackArray();
         for (int slot = 0; slot < itemStackArray.length; slot++) {
             var item = itemStackArray[slot];
@@ -95,7 +97,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     protected void applyArmorWhenFall(DamageContainer damage) {
         var enchantmentProtectionFactor = 0;
 
-        for (var item : thisPlayer.getContainer(FullContainerType.ARMOR).getItemStacks()) {
+        for (var item : thisPlayer.getContainer(ContainerType.ARMOR).getItemStacks()) {
             if (item == ItemAirStack.AIR_STACK) continue;
             enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
         }
@@ -109,8 +111,8 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
 
     @Override
     public boolean hasFireDamage() {
-        // Player in creative/spectator game type can't be damaged by fire
-        return super.hasFireDamage() && (thisPlayer.getGameType() == GameType.SURVIVAL || thisPlayer.getGameType() == GameType.ADVENTURE);
+        // Player in creative/spectator game mode can't be damaged by fire
+        return super.hasFireDamage() && (thisPlayer.getGameMode() == GameMode.SURVIVAL || thisPlayer.getGameMode() == GameMode.ADVENTURE);
     }
 
     @EventHandler
@@ -119,7 +121,9 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
                 DamageContainer.DamageType.API.getDeathInfo(thisPlayer, null);
 
-        Server.getInstance().broadcastTr(deathInfo.left(), (Object[]) deathInfo.right());
+        String tr = deathInfo.left();
+        Object[] args = (Object[]) deathInfo.right();
+        Server.getInstance().getMessageChannel().broadcastTranslatable(tr, args);
 
         var packet = new DeathInfoPacket();
         // Translate it server-side

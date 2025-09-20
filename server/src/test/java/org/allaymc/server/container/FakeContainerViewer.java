@@ -1,9 +1,8 @@
 package org.allaymc.server.container;
 
 import org.allaymc.api.container.Container;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerViewer;
-import org.allaymc.api.container.FullContainerType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
 import java.util.Set;
 
@@ -33,12 +32,7 @@ public class FakeContainerViewer implements ContainerViewer {
     }
 
     @Override
-    public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
-        return null;
-    }
-
-    @Override
-    public <T extends Container> T getOpenedContainer(ContainerSlotType slotType) {
+    public <T extends Container> T getOpenedContainer(ContainerType<T> type) {
         return null;
     }
 

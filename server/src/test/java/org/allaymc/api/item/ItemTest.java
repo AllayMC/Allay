@@ -1,6 +1,6 @@
 package org.allaymc.api.item;
 
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;

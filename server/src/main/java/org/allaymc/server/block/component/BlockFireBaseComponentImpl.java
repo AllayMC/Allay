@@ -17,10 +17,8 @@ import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.Utils;
-import org.allaymc.api.world.Weather;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.world.biome.BiomeData;
 import org.joml.Vector3i;
 
 import java.util.Set;
@@ -66,7 +64,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         var downBlockState = block.offsetPos(BlockFace.DOWN);
         var burnForever = canFireBurnForever(downBlockState.getBlockState());
 
-        return !burnForever && dimension.getWorld().getWeathers().contains(Weather.RAIN) &&
+        return !burnForever && dimension.getWorld().getWeather() != Weather.CLEAR &&
                (dimension.canPosSeeSky(pos) ||
                 dimension.canPosSeeSky(BlockFace.EAST.offsetPos(pos)) ||
                 dimension.canPosSeeSky(BlockFace.WEST.offsetPos(pos)) ||
@@ -243,7 +241,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
                         k += (ly - (y + 1)) * 100;
                     }
                     var maxChance = (flameOdds + 40 + dimension.getWorld().getWorldData().getDifficulty().ordinal() * 7) / (age + 30);
-                    if (BiomeData.getBiomeData(dimension.getBiome(lx, ly, lz)).isHumid()) {
+                    if (dimension.getBiome(lx, ly, lz).getBiomeData().isHumid()) {
                         maxChance /= 2;
                     }
 
@@ -302,7 +300,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Set.of();
     }
 
     @Override

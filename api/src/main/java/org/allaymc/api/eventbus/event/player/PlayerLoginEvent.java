@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.message.MayContainTrKey;
 
 /**
  * @author daoge_cmd

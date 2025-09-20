@@ -1,7 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 
 /**
@@ -15,7 +15,7 @@ public class StopCommand extends VanillaCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            context.getSender().sendTr(TrKeys.MC_COMMANDS_STOP_START);
+            context.getSender().sendTranslatable(TrKeys.MC_COMMANDS_STOP_START);
             Server.getInstance().shutdown();
             return context.success();
         });

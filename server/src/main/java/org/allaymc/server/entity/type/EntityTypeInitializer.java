@@ -2,15 +2,14 @@ package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
 import org.allaymc.server.entity.component.projectile.*;
+import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 
-import static org.allaymc.api.entity.component.attribute.EntityAttributeComponent.basicEntityAttributes;
+import static org.allaymc.server.entity.component.EntityAttributeComponentImpl.basicEntityAttributes;
 
 /**
  * @author daoge_cmd
@@ -75,14 +74,15 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
                 .addComponent(EntityPlayerNetworkComponentImpl::new, EntityPlayerNetworkComponentImpl.class)
-                .addComponent(() -> new EntityPlayerAttributeComponentImpl(EntityPlayerAttributeComponent.basicPlayerAttributes()), EntityPlayerAttributeComponentImpl.class)
+                .addComponent(() -> new EntityPlayerAttributeComponentImpl(EntityPlayerAttributeComponentImpl.basicPlayerAttributes()), EntityPlayerAttributeComponentImpl.class)
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
                 .addComponent(EntityPlayerDamageComponentImpl::new, EntityPlayerDamageComponentImpl.class)
                 .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
                 .addComponent(EntityPlayerPhysicsComponentImpl::new, EntityPlayerPhysicsComponentImpl.class)
                 .addComponent(EntityPlayerScoreboardViewerComponentImpl::new, EntityPlayerScoreboardViewerComponentImpl.class)
-                .addComponent(EntityPlayerDebugShapeViewerComponentImpl::new, EntityPlayerDebugShapeViewerComponentImpl.class)
+                .addComponent(EntityPlayerChunkLoaderComponentImpl::new, EntityPlayerChunkLoaderComponentImpl.class)
+                .addComponent(EntityPlayerBossBarViewerComponentImpl::new, EntityPlayerBossBarViewerComponentImpl.class)
                 .build();
     }
 

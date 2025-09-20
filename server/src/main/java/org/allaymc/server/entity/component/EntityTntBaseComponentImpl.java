@@ -2,15 +2,15 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityTntBaseComponent;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.data.EntityData;
+import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
 import org.allaymc.api.world.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -32,10 +32,9 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     @Override
     protected void initMetadata() {
         super.initMetadata();
-        metadata.set(EntityFlag.IGNITED, true);
-        metadata.set(EntityDataTypes.FUSE_TIME, fuse);
-
-        getDimension().addLevelEvent(location, LevelEvent.SOUND_FUSE);
+        setFlag(EntityFlag.IGNITED, true);
+        setData(EntityData.FUSE_TIME, fuse);
+        getDimension().addSound(location, SimpleSound.TNT);
     }
 
     @Override
@@ -61,9 +60,9 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
             }
         } else {
             fuse--;
-            if (fuse % 5 == 0) {
+            if (fuse % 5 == 0 || fuse < 20) {
                 // Reduce the number of packets sent to the client
-                setAndSendEntityData(EntityDataTypes.FUSE_TIME, fuse);
+                setData(EntityData.FUSE_TIME, fuse);
             }
         }
     }
@@ -80,11 +79,6 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
                 .toBuilder()
                 .putShort(TAG_FUSE, (short) fuse)
                 .build();
-    }
-
-    @Override
-    public float getNetworkOffset() {
-        return 0.49f;
     }
 
     @Override

@@ -25,6 +25,8 @@ application {
 
 dependencies {
     api(project(":api"))
+    implementation(libs.semver4j)
+    implementation(libs.commonslang3)
     implementation(libs.commonsio)
     implementation(libs.mcterminal)
     implementation(libs.bundles.logging)

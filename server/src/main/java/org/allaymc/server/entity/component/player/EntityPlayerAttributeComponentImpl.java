@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import com.google.common.collect.Lists;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
@@ -9,13 +10,16 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerExperienceLevelChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerExperienceProgressChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
-import org.allaymc.api.world.Difficulty;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.event.*;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
+
+import java.util.Arrays;
 
 /**
  * @author daoge_cmd
@@ -46,11 +50,23 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         super(attributeTypes);
     }
 
+    public static AttributeType[] basicPlayerAttributes() {
+        var list = Lists.newArrayList(
+                AttributeType.PLAYER_HUNGER,
+                AttributeType.PLAYER_SATURATION,
+                AttributeType.PLAYER_EXHAUSTION,
+                AttributeType.PLAYER_EXPERIENCE_LEVEL,
+                AttributeType.PLAYER_EXPERIENCE_PROGRESS
+        );
+        list.addAll(Arrays.asList(EntityAttributeComponentImpl.basicEntityAttributes()));
+        return list.toArray(AttributeType[]::new);
+    }
+
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
         if (thisPlayer.isDead() ||
-            thisPlayer.getGameType() == GameType.CREATIVE ||
-            thisPlayer.getGameType() == GameType.SPECTATOR) {
+            thisPlayer.getGameMode() == GameMode.CREATIVE ||
+            thisPlayer.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
 
@@ -105,7 +121,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public boolean canEat() {
         return getFoodLevel() < (int) AttributeType.PLAYER_HUNGER.getMaxValue() ||
-               thisPlayer.getGameType() == GameType.CREATIVE ||
+               thisPlayer.getGameMode() == GameMode.CREATIVE ||
                thisPlayer.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
     }
 
@@ -159,7 +175,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void exhaust(float level) {
-        if (thisPlayer.getGameType() == GameType.CREATIVE) {
+        if (thisPlayer.getGameMode() == GameMode.CREATIVE) {
             return;
         }
 
@@ -194,7 +210,10 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     public void sendAttributesToClient() {
         var packet = new UpdateAttributesPacket();
         packet.setRuntimeEntityId(thisEntity.getRuntimeId());
-        attributes.values().forEach(attribute -> packet.getAttributes().add(attribute.toNetwork()));
+        attributes.values().forEach(attr -> packet.getAttributes().add(new AttributeData(
+                attr.getKey(), attr.getMinValue(), attr.getMaxValue(),
+                attr.getCurrentValue(), attr.getDefaultValue()
+        )));
         packet.setTick(thisEntity.getWorld().getTick());
         networkComponent.sendPacket(packet);
     }

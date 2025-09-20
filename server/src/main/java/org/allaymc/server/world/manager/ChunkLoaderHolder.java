@@ -9,13 +9,10 @@ import lombok.Getter;
 import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
-import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.manager.ChunkManager;
-import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.joml.Vector3i;
 
 import java.util.Collection;
@@ -92,22 +89,18 @@ public final class ChunkLoaderHolder {
 
     public void onRemoved() {
         removeChunkLoaderInChunks(sentChunks);
-        chunkLoader.onChunkOutOfRange(sentChunks);
+        sentChunks.forEach(chunkLoader::removeChunk);
         if (asyncChunkSender != null) {
             asyncChunkSender.stop();
         }
     }
 
     public void tick() {
-        if (!chunkLoader.isLoaderActive()) {
-            return;
-        }
-
         long currentLoaderChunkPosHashed;
         var floor = MathUtils.floor(chunkLoader.getLocation());
         if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
             lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
-            chunkLoader.onChunkPosChanged();
+            chunkLoader.onLoaderChunkPosChange();
             updateInRadiusChunks(floor);
             removeOutOfRadiusChunks();
             updateChunkSendingQueue();
@@ -134,11 +127,12 @@ public final class ChunkLoaderHolder {
         }
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private void removeOutOfRadiusChunks() {
         var difference = Sets.difference(sentChunks, inRadiusChunks);
         removeChunkLoaderInChunks(difference);
         // Unload chunks out of range
-        chunkLoader.onChunkOutOfRange(difference);
+        difference.forEach(chunkLoader::removeChunk);
         // The intersection of sentChunks and inRadiusChunks
         sentChunks.removeAll(difference);
     }
@@ -190,25 +184,14 @@ public final class ChunkLoaderHolder {
                 asyncChunkSender.addChunkToSendingQueue(chunkReadyToSend.values());
             } else {
                 // Priority is given to sending chunks that are close to the chunk loader
-                var lcpStream = chunkReadyToSend.values().stream();
-                lcpStream.sorted(chunkDistanceComparator).forEachOrdered(chunk -> {
-                    chunkLoader.sendPacket(createLevelChunkPacket(chunk));
-                    chunkLoader.onChunkInRangeSend(chunk);
-                });
+                chunkReadyToSend.values()
+                        .stream()
+                        .sorted(chunkDistanceComparator)
+                        .forEachOrdered(chunkLoader::viewChunk);
             }
 
             sentChunks.addAll(chunkReadyToSend.keySet());
         }
-    }
-
-    private LevelChunkPacket createLevelChunkPacket(Chunk chunk) {
-        var lcp = new LevelChunkPacket[1];
-        chunk.applyOperation(unsafeChunk -> {
-            lcp[0] = Server.SETTINGS.worldSettings().useSubChunkSendingSystem() ?
-                    ((AllayUnsafeChunk) unsafeChunk).createSubChunkLevelChunkPacket() :
-                    ((AllayUnsafeChunk) unsafeChunk).createFullLevelChunkPacketChunk();
-        }, OperationType.READ, OperationType.READ);
-        return lcp[0];
     }
 
     private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {
@@ -226,9 +209,7 @@ public final class ChunkLoaderHolder {
             Thread.ofVirtual().start(() -> {
                 while (isRunning.get()) {
                     try {
-                        var chunk = chunkSendingQueue.take();
-                        chunkLoader.sendPacket(createLevelChunkPacket(chunk));
-                        chunkLoader.onChunkInRangeSend(chunk);
+                        chunkLoader.viewChunk(chunkSendingQueue.take());
                     } catch (InterruptedException e) {
                         return;
                     }

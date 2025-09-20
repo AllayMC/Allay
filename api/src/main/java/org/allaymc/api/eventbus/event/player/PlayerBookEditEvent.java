@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.interfaces.ItemWritableBookStack;
-import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
 
 /**
  * Event triggered when a player edits a book.
@@ -15,11 +14,19 @@ import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
 public class PlayerBookEditEvent extends PlayerEvent implements CancellableEvent {
 
     protected final ItemWritableBookStack book;
-    protected final BookEditPacket.Action action;
+    protected final Action action;
 
-    public PlayerBookEditEvent(EntityPlayer player, ItemWritableBookStack book, BookEditPacket.Action action) {
+    public PlayerBookEditEvent(EntityPlayer player, ItemWritableBookStack book, Action action) {
         super(player);
         this.book = book;
         this.action = action;
+    }
+
+    public enum Action {
+        REPLACE_PAGE,
+        ADD_PAGE,
+        DELETE_PAGE,
+        SWAP_PAGES,
+        SIGN_BOOK
     }
 }

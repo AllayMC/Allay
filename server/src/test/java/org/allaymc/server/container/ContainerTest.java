@@ -1,11 +1,10 @@
 package org.allaymc.server.container;
 
-import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.Container;
+import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerViewer;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.server.container.impl.BaseContainer;
 import org.allaymc.testutils.AllayTestExtension;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -19,19 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(AllayTestExtension.class)
 public class ContainerTest {
-    static FullContainerType<Container> testContainerType = FullContainerType
-            .builder()
-            .size(36)
-            // Here may throw an exception if we implemented lab table in the future
-            .mapAllSlotToType(ContainerSlotType.LAB_TABLE_INPUT)
-            .build();
+    static ContainerType<Container> testContainerType = new ContainerType<>(36);
     static BaseContainer container = new BaseContainer(testContainerType);
     static ContainerViewer viewer = new FakeContainerViewer();
 
     @Test
     void testEmptySlotPlaceHolder() {
         assertEquals(0, AIR_STACK.getCount());
-        assertEquals(0, AIR_STACK.getStackNetworkId());
+        assertEquals(0, AIR_STACK.getUniqueId());
     }
 
     @Test
@@ -85,5 +79,12 @@ public class ContainerTest {
         assertThrows(NullPointerException.class, () -> {
             container.setItemStack(0, null);
         });
+    }
+
+    @Test
+    void testCompareContainerType() {
+        var type1 = new ContainerType<>(0);
+        var type2 = new ContainerType<>(0);
+        assertNotEquals(type1, type2);
     }
 }

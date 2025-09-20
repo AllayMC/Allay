@@ -8,9 +8,9 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.item.data.ItemId;
 import org.joml.Vector3ic;
 
 import java.util.Set;
