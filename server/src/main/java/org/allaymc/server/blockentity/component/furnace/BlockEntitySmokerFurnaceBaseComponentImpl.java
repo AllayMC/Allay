@@ -3,7 +3,7 @@ package org.allaymc.server.blockentity.component.furnace;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
-import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
+import org.allaymc.api.item.recipe.FurnaceRecipe;
 
 /**
  * @author daoge_cmd
@@ -24,8 +24,8 @@ public class BlockEntitySmokerFurnaceBaseComponentImpl extends BlockEntityFurnac
     }
 
     @Override
-    public String getFurnaceRecipeTag() {
-        return FurnaceRecipe.SMOKER_TAG;
+    public FurnaceRecipe.Type getFurnaceRecipeType() {
+        return FurnaceRecipe.Type.SMOKER;
     }
 
     @Override

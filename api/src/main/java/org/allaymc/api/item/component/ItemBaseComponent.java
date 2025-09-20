@@ -16,7 +16,6 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3ic;
 
@@ -195,14 +194,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @return the {@link BlockState}
      */
     BlockState toBlockState();
-
-    /**
-     * Converts to network item data.
-     *
-     * @return the {@link ItemData}
-     */
-    // TODO: remove it
-    ItemData toNetworkItemData();
 
     /**
      * Gets the unique id of this item stack. Stack unique id is an increasing unique int value that associated

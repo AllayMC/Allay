@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.container.BrewingStandConsumeFuelEvent;
 import org.allaymc.api.eventbus.event.container.BrewingStandStartBrewEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.impl.PotionMixRecipe;
+import org.allaymc.api.item.recipe.PotionRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -175,8 +175,8 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         return true;
     }
 
-    protected PotionMixRecipe findRecipe(ItemStack ingredient, ItemStack reagent) {
-        return Registries.POTION_MIX_RECIPES.get(PotionMixRecipe.buildIdentifier(ingredient, reagent));
+    protected PotionRecipe findRecipe(ItemStack ingredient, ItemStack reagent) {
+        return (PotionRecipe) Registries.RECIPES.get(PotionRecipe.buildIdentifier(ingredient, reagent));
     }
 
     @Override

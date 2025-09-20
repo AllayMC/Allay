@@ -114,7 +114,7 @@ public class ItemStackInitInfo implements ComponentInitInfo {
 
         public Builder assignUniqueId(boolean assignUniqueId) {
             if (assignUniqueId) {
-                this.uniqueId = 0;
+                this.uniqueId = EMPTY_UNIQUE_ID;
             }
             this.assignUniqueId = assignUniqueId;
             return this;

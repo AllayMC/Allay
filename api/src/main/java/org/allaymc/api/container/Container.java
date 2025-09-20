@@ -316,7 +316,7 @@ public interface Container {
     }
 
     /**
-     * Send a container data to the viewers.
+     * Send container data to the viewers.
      *
      * @param property the property
      * @param value    the value

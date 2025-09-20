@@ -1,17 +1,12 @@
 package org.allaymc.api.item.recipe.input;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.recipe.FurnaceRecipe;
 
 /**
  * Represents a furnace input.
  *
  * @author daoge_cmd
  */
-@Getter
-@AllArgsConstructor
-public class FurnaceRecipeInput implements RecipeInput {
-    protected ItemStack ingredient;
-    protected String tag;
+public record FurnaceRecipeInput(ItemStack ingredient, FurnaceRecipe.Type type) implements RecipeInput {
 }

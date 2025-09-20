@@ -234,9 +234,7 @@ public final class Allay {
         Registries.CREATIVE_ITEMS = new AllayCreativeItemRegistry();
 
         // Recipe
-        Registries.RECIPES = IntMappedRegistry.create(new RecipeRegistryLoader());
-        Registries.FURNACE_RECIPES = SimpleMappedRegistry.create(new FurnaceRecipeRegistryLoader());
-        Registries.POTION_MIX_RECIPES = SimpleMappedRegistry.create(new PotionMixRecipeRegistryLoader());
+        Registries.RECIPES = SimpleMappedRegistry.create(new RecipeRegistryLoader());
 
         // Trim Data
         InternalRegistries.TRIM_PATTERNS = SimpleRegistry.create(new TrimPatternRegistryLoader());

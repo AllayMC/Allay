@@ -2,7 +2,8 @@ package org.allaymc.server.network;
 
 import com.google.common.base.Suppliers;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.item.recipe.Recipe;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
@@ -16,12 +17,15 @@ import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -50,6 +54,8 @@ public final class NetworkData {
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
+
+    public static List<Recipe> indexedRecipes;
 
     public static List<ItemDefinition> encodeItemDefinitions() {
         return Registries.ITEMS.getContent().values().stream()
@@ -80,13 +86,104 @@ public final class NetworkData {
 
     private static CraftingDataPacket encodeCraftingDataPacket() {
         var packet = new CraftingDataPacket();
-        packet.getCraftingData().addAll(Registries.RECIPES.getContent().values().stream().map(Recipe::toNetworkData).toList());
-        packet.getCraftingData().addAll(Registries.FURNACE_RECIPES.getContent().values().stream().map(Recipe::toNetworkData).toList());
-        packet.getPotionMixData().addAll(Registries.POTION_MIX_RECIPES.getContent().values().stream().map(Recipe::toNetworkData).toList());
-        // TODO: packet.getContainerMixData().addAll();
-        // TODO: packet.getMaterialReducers().addAll();
+        // NOTICE: network id is start at 1
+        int idCounter = 1;
+        NetworkData.indexedRecipes = new ArrayList<>();
+        for (var recipe : Registries.RECIPES.getContent().values()) {
+            switch (recipe) {
+                // Indexed recipe (has network id)
+                case ShapedRecipe shaped -> {
+                    var id = idCounter++;
+                    var data = ShapedRecipeData.of(
+                            CraftingDataType.SHAPED, shaped.getIdentifier().toString(),
+                            shaped.getPattern()[0].length, shaped.getPattern().length,
+                            buildNetworkIngredients(shaped), buildNetworkOutputs(shaped.getOutputs()),
+                            UUID.randomUUID(), "crafting_table", shaped.getPriority(), id
+                    );
+                    packet.getCraftingData().add(data);
+                    NetworkData.indexedRecipes.add(recipe);
+                }
+                case ShapelessRecipe shapeless -> {
+                    var id = idCounter++;
+                    var data = ShapelessRecipeData.of(
+                            CraftingDataType.SHAPELESS, shapeless.getIdentifier().toString(),
+                            buildNetworkIngredients(shapeless), buildNetworkOutputs(shapeless.getOutputs()),
+                            UUID.randomUUID(), "crafting_table", shapeless.getPriority(), id
+                    );
+                    packet.getCraftingData().add(data);
+                    NetworkData.indexedRecipes.add(recipe);
+                }
+                case SmithingTransformRecipe smithingTrans -> {
+                    var id = idCounter++;
+                    var data = SmithingTransformRecipeData.of(
+                            smithingTrans.getIdentifier().toString(),
+                            NetworkHelper.toNetworkWithCount(smithingTrans.getTemplate()),
+                            NetworkHelper.toNetworkWithCount(smithingTrans.getBase()),
+                            NetworkHelper.toNetworkWithCount(smithingTrans.getAddition()),
+                            NetworkHelper.toNetwork(smithingTrans.getOutput()),
+                            "smithing_table", id
+                    );
+                    packet.getCraftingData().add(data);
+                    NetworkData.indexedRecipes.add(recipe);
+                }
+                case SmithingTrimRecipe smithingTrim -> {
+                    var id = idCounter++;
+                    var data = SmithingTrimRecipeData.of(
+                            smithingTrim.getIdentifier().toString(),
+                            NetworkHelper.toNetworkWithCount(smithingTrim.getBase()),
+                            NetworkHelper.toNetworkWithCount(smithingTrim.getAddition()),
+                            NetworkHelper.toNetworkWithCount(smithingTrim.getTemplate()),
+                            "smithing_table", id
+                    );
+                    packet.getCraftingData().add(data);
+                    NetworkData.indexedRecipes.add(recipe);
+                }
+                // Unindexed recipe (doesn't have network id)
+                case FurnaceRecipe furnace -> {
+                    var data = FurnaceRecipeData.of(
+                            CraftingDataType.FURNACE, furnace.getIngredient().getItemType().getRuntimeId(),
+                            0, NetworkHelper.toNetwork(furnace.getOutput()),
+                            furnace.getType().name().toLowerCase(Locale.ROOT)
+                    );
+                    packet.getCraftingData().add(data);
+                }
+                case PotionRecipe potion -> {
+                    var data = new PotionMixData(
+                            potion.getIngredient().getItemType().getRuntimeId(), potion.getIngredient().getMeta(),
+                            potion.getReagent().getItemType().getRuntimeId(), potion.getReagent().getMeta(),
+                            potion.getOutput().getItemType().getRuntimeId(), potion.getOutput().getMeta()
+                    );
+                    packet.getPotionMixData().add(data);
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + recipe);
+            }
+        }
         packet.setCleanRecipes(true);
         return packet;
+    }
+
+    private static @NotNull List<ItemData> buildNetworkOutputs(ItemStack[] shaped) {
+        return Arrays.stream(shaped).map(NetworkHelper::toNetwork).toList();
+    }
+
+    private static List<ItemDescriptorWithCount> buildNetworkIngredients(ShapedRecipe recipe) {
+        List<ItemDescriptorWithCount> ingredients = new ArrayList<>();
+        for (var sub : recipe.getPattern()) {
+            for (var k : sub) {
+                if (k == ShapedRecipe.EMPTY_KEY_CHAR) {
+                    ingredients.add(ItemDescriptorWithCount.EMPTY);
+                    continue;
+                }
+
+                var descriptor = recipe.getKeys().get(k);
+                ingredients.add(NetworkHelper.toNetworkWithCount(descriptor));
+            }
+        }
+        return ingredients;
+    }
+
+    private static List<ItemDescriptorWithCount> buildNetworkIngredients(ShapelessRecipe recipe) {
+        return Arrays.stream(recipe.getIngredients()).map(NetworkHelper::toNetworkWithCount).toList();
     }
 
     public static AvailableEntityIdentifiersPacket encodeAvailableEntityIdentifiersPacket() {

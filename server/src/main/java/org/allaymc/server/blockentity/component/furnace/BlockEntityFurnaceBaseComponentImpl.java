@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.container.FurnaceConsumeFuelEvent;
 import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
+import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
@@ -57,12 +57,15 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     @Setter
     protected int storedXP;
 
-    protected int currentIngredientStackUniqueId = Integer.MAX_VALUE;
-    protected FurnaceRecipe currentFurnaceRecipe = null;
-    protected FurnaceRecipeInput currentFurnaceRecipeInput = null;
+    protected int currentIngredientStackUniqueId;
+    protected FurnaceRecipe currentRecipe;
+    protected FurnaceRecipeInput currentRecipeInput;
 
     public BlockEntityFurnaceBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
+        this.currentIngredientStackUniqueId = Integer.MAX_VALUE;
+        this.currentRecipe = null;
+        this.currentRecipeInput = null;
     }
 
     @OnInitFinish
@@ -87,8 +90,8 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     @Override
-    public String getFurnaceRecipeTag() {
-        return FurnaceRecipe.FURNACE_TAG;
+    public FurnaceRecipe.Type getFurnaceRecipeType() {
+        return FurnaceRecipe.Type.FURNACE;
     }
 
     @Override
@@ -103,7 +106,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public float getCurrentSpeed() {
-        return currentFurnaceRecipe.isFurnaceTypeMostSuitable(currentFurnaceRecipeInput) ? getIdealSpeed() : getNormalSpeed();
+        return currentRecipe.getType() == getFurnaceRecipeType() ? getIdealSpeed() : getNormalSpeed();
     }
 
     @Override
@@ -163,7 +166,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
-        var output = currentFurnaceRecipe.getOutput();
+        var output = currentRecipe.getOutput();
         var outputItemType = output.getItemType();
         if (
             // Output slot already have a different item, so we can't cook
@@ -221,15 +224,15 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         var furnaceRecipe = matchFurnaceRecipe(ingredient);
         if (furnaceRecipe == null) return false;
 
-        var furnaceInput = new FurnaceRecipeInput(ingredient, getFurnaceRecipeTag());
+        var furnaceInput = new FurnaceRecipeInput(ingredient, getFurnaceRecipeType());
         if (!furnaceRecipe.match(furnaceInput)) {
             log.warn("Furnace recipe does not match input! Recipe: {}, Input: {}", furnaceRecipe.getIdentifier(), ingredient.getItemType().getIdentifier());
             return false;
         }
 
         currentIngredientStackUniqueId = ingredient.getUniqueId();
-        currentFurnaceRecipe = furnaceRecipe;
-        currentFurnaceRecipeInput = furnaceInput;
+        currentRecipe = furnaceRecipe;
+        currentRecipeInput = furnaceInput;
         return true;
     }
 
@@ -303,10 +306,13 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     protected FurnaceRecipe matchFurnaceRecipe(ItemStack ingredient) {
-        var furnaceRecipe = Registries.FURNACE_RECIPES.get(FurnaceRecipe.buildFurnaceRecipeIdentifier(ingredient.getItemType(), getFurnaceRecipeTag()));
-        if (furnaceRecipe != null) return furnaceRecipe;
-        // BlastFurnace/Smoker can also use normal furnace recipe
-        return Registries.FURNACE_RECIPES.get(FurnaceRecipe.buildFurnaceRecipeIdentifier(ingredient.getItemType(), FurnaceRecipe.FURNACE_TAG));
+        var furnaceRecipe = (FurnaceRecipe) Registries.RECIPES.get(FurnaceRecipe.buildIdentifier(ingredient, getFurnaceRecipeType()));
+        if (furnaceRecipe != null) {
+            return furnaceRecipe;
+        }
+
+        // Blast furnace and smoker can also use a normal furnace recipe
+        return (FurnaceRecipe) Registries.RECIPES.get(FurnaceRecipe.buildIdentifier(ingredient, FurnaceRecipe.Type.FURNACE));
     }
 
     protected boolean isFuel(ItemStack itemStack) {

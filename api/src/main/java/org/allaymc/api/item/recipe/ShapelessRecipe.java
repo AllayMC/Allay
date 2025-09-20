@@ -1,36 +1,28 @@
-package org.allaymc.api.item.recipe.impl;
+package org.allaymc.api.item.recipe;
 
-import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapelessRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * @author daoge_cmd
  */
-public class ShapelessRecipe extends CraftingRecipe {
-    @Getter
+@Getter
+public class ShapelessRecipe extends Recipe {
     protected ItemDescriptor[] ingredients;
 
-    @Builder
-    protected ShapelessRecipe(Identifier identifier, ItemDescriptor[] ingredients, ItemStack[] outputs, String tag, UUID uuid, int priority) {
-        super(identifier, outputs, tag, uuid, priority);
+    public ShapelessRecipe(Identifier identifier, ItemStack[] outputs, int priority, ItemDescriptor[] ingredients) {
+        super(identifier, outputs, priority);
         this.ingredients = ingredients;
-        this.networkRecipeDataCache = buildNetworkRecipeData();
     }
 
     @Override
@@ -39,7 +31,7 @@ public class ShapelessRecipe extends CraftingRecipe {
             return false;
         }
 
-        var inputItems = collectNonAirItems(craftingRecipeInput.getFlattenItems());
+        var inputItems = collectNonAirItems(craftingRecipeInput.flattenedItems());
         if (inputItems.size() != ingredients.length) {
             return false;
         }
@@ -70,24 +62,5 @@ public class ShapelessRecipe extends CraftingRecipe {
             }
         }
         return -1;
-    }
-
-    @Override
-    public CraftingDataType getType() {
-        return CraftingDataType.SHAPELESS;
-    }
-
-    protected RecipeData buildNetworkRecipeData() {
-        return ShapelessRecipeData.of(
-                getType(), identifier.toString(),
-                buildNetworkIngredients(), buildNetworkOutputs(),
-                uuid, tag, priority, networkId
-        );
-    }
-
-    protected List<ItemDescriptorWithCount> buildNetworkIngredients() {
-        return Arrays.stream(ingredients)
-                .map(ingredient -> new ItemDescriptorWithCount(ingredient.toNetwork(), 1))
-                .toList();
     }
 }

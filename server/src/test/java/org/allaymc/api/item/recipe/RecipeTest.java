@@ -1,15 +1,12 @@
 package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
-import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
-import org.allaymc.api.item.recipe.impl.ShapedRecipe;
-import org.allaymc.api.item.recipe.impl.ShapelessRecipe;
+import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -20,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Map;
 
 import static org.allaymc.api.item.type.ItemTypes.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author daoge_cmd

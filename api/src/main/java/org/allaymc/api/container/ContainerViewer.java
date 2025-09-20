@@ -12,7 +12,7 @@ public interface ContainerViewer {
      * View the contents of an opened container.
      *
      * @param container the container to view
-     * @throws IllegalStateException if the container is not opened by this viewer
+     * @throws IllegalStateException if this viewer does not open the container
      */
     void viewContents(Container container);
 
@@ -21,7 +21,7 @@ public interface ContainerViewer {
      *
      * @param container the container to view
      * @param slot      the slot to view
-     * @throws IllegalStateException if the container is not opened by this viewer
+     * @throws IllegalStateException if this viewer does not open the container
      */
     void viewSlot(Container container, int slot);
 
@@ -30,7 +30,7 @@ public interface ContainerViewer {
      *
      * @param container the container that is opened
      * @return the assigned id for this container
-     * @throws IllegalStateException if the container have been opened by this viewer
+     * @throws IllegalStateException if this viewer has opened the container
      */
     byte viewOpen(Container container);
 
@@ -38,17 +38,17 @@ public interface ContainerViewer {
      * Close a container in the viewer's side.
      *
      * @param container the container that is closed
-     * @throws IllegalStateException if the container haven't been opened by this viewer
+     * @throws IllegalStateException if this viewer hasn't opened the container
      */
     void viewClose(Container container);
 
     /**
-     * View a container data.
+     * View container data.
      *
      * @param container the container to view
      * @param property  the property to view
      * @param value     the value to view
-     * @throws IllegalStateException if the container haven't been opened by this viewer
+     * @throws IllegalStateException if this viewer hasn't opened the container
      */
     void viewContainerData(Container container, int property, int value);
 
@@ -61,7 +61,7 @@ public interface ContainerViewer {
     <T extends Container> T getOpenedContainer(ContainerType<T> type);
 
     /**
-     * Get the container that is opened with the assigned id.
+     * Get the container opened with the assigned id.
      *
      * @param id the assigned id of the container
      * @return the container
@@ -76,7 +76,7 @@ public interface ContainerViewer {
     Set<Container> getOpenedContainers();
 
     /**
-     * Close all containers that is opened by this viewer.
+     * Close all containers that are opened by this viewer.
      */
     void closeAllOpenedContainers();
 }

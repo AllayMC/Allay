@@ -1,18 +1,15 @@
-package org.allaymc.api.item.recipe.impl;
+package org.allaymc.api.item.recipe;
 
-import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.ShapedRecipeData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
@@ -22,64 +19,34 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
  * @author daoge_cmd
  */
 @Getter
-public class ShapedRecipe extends CraftingRecipe {
+public class ShapedRecipe extends Recipe {
 
     /**
      * The character that represents an empty key in the pattern.
      */
     public static final char EMPTY_KEY_CHAR = ' ';
-
     protected static final ItemStack[][] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0][0];
 
-    protected char[][] pattern;
     protected Map<Character, ItemDescriptor> keys;
+    protected char[][] pattern;
 
-    @Builder
-    protected ShapedRecipe(Map<Character, ItemDescriptor> keys, char[][] pattern, Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
-        super(identifier, outputs, tag, uuid, priority);
-        this.keys = keys;
+    public ShapedRecipe(Identifier identifier, ItemStack[] outputs, int priority, char[][] pattern, Map<Character, ItemDescriptor> keys) {
+        super(identifier, outputs, priority);
         this.pattern = pattern;
-        this.networkRecipeDataCache = buildNetworkRecipeData();
-    }
-
-    @Override
-    public CraftingDataType getType() {
-        return CraftingDataType.SHAPED;
-    }
-
-    protected RecipeData buildNetworkRecipeData() {
-        return ShapedRecipeData.of(
-                getType(), identifier.toString(),
-                pattern[0].length, pattern.length,
-                buildNetworkIngredients(), buildNetworkOutputs(), uuid,
-                tag, priority, networkId
-        );
-    }
-
-    protected List<ItemDescriptorWithCount> buildNetworkIngredients() {
-        List<ItemDescriptorWithCount> ingredients = new ArrayList<>();
-        for (var sub : pattern) {
-            for (var k : sub) {
-                if (k == EMPTY_KEY_CHAR) {
-                    ingredients.add(ItemDescriptorWithCount.EMPTY);
-                    continue;
-                }
-                var descriptor = keys.get(k);
-                ingredients.add(new ItemDescriptorWithCount(descriptor.toNetwork(), 1));
-            }
-        }
-        return ingredients;
+        this.keys = keys;
     }
 
     @Override
     public boolean match(RecipeInput input) {
-        if (!(input instanceof CraftingRecipeInput craftingRecipeInput)) return false;
+        if (!(input instanceof CraftingRecipeInput(ItemStack[][] items))) return false;
 
-        var inputs = removeUselessRowAndColumn(craftingRecipeInput.getItems());
-        // Empty input not allowed
-        if (inputs.length == 0) return false;
-        if (inputs.length > pattern.length) return false;
-        if (inputs[0].length > pattern[0].length) return false;
+        var inputs = removeUselessRowAndColumn(items);
+        // Empty input isn't allowed
+        if (inputs.length == 0 ||
+            inputs.length > pattern.length ||
+            inputs[0].length > pattern[0].length) {
+            return false;
+        }
 
         for (int i = 0, patternLength = pattern.length; i < patternLength; i++) {
             var row = pattern[i];
@@ -87,10 +54,14 @@ public class ShapedRecipe extends CraftingRecipe {
                 var key = row[j];
                 var item = inputs[i][j];
                 if (key == EMPTY_KEY_CHAR) {
-                    if (!item.getItemType().equals(AIR)) return false;
+                    if (!item.getItemType().equals(AIR)) {
+                        return false;
+                    }
                 } else {
                     var descriptor = keys.get(key);
-                    if (!descriptor.match(item)) return false;
+                    if (!descriptor.match(item)) {
+                        return false;
+                    }
                 }
             }
         }

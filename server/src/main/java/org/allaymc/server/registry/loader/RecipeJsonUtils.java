@@ -3,10 +3,10 @@ package org.allaymc.server.registry.loader;
 import com.google.gson.JsonObject;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.descriptor.ItemTagDescriptor;
-import org.allaymc.api.item.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
@@ -56,7 +56,7 @@ public final class RecipeJsonUtils {
 
     public static ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
         return switch (parseItemDescriptorType(jsonObject)) {
-            case DEFAULT -> parseDefaultItemDescriptor(jsonObject);
+            case ITEM_TYPE -> parseItemTypeDescriptor(jsonObject);
             case ITEM_TAG -> parseItemTagDescriptor(jsonObject);
         };
     }
@@ -68,25 +68,38 @@ public final class RecipeJsonUtils {
         return new ItemTagDescriptor(itemTag);
     }
 
-    public static ItemTypeDescriptor parseDefaultItemDescriptor(JsonObject jsonObject) {
-        Identifier itemId = new Identifier(jsonObject.get("item").getAsString());
+    public static ItemTypeDescriptor parseItemTypeDescriptor(JsonObject jsonObject) {
+        var itemId = new Identifier(jsonObject.get("item").getAsString());
         var itemType = Registries.ITEMS.get(itemId);
-        // "data" field only exists in default item descriptor
+        Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
         var meta = jsonObject.get("data");
         if (meta != null) {
             return new ItemTypeDescriptor(itemType, meta.getAsInt());
         } else {
+            // When meta is null, it means that any meta values are allowed
             return new ItemTypeDescriptor(itemType);
+        }
+    }
+
+    public static ItemStack parseItemStack(JsonObject jsonObject) {
+        var itemId = new Identifier(jsonObject.get("item").getAsString());
+        var itemType = Registries.ITEMS.get(itemId);
+        Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
+        var meta = jsonObject.get("data");
+        if (meta != null) {
+            return itemType.createItemStack(1, meta.getAsInt());
+        } else {
+            return itemType.createItemStack(1);
         }
     }
 
     public static ItemDescriptorType parseItemDescriptorType(JsonObject jsonObject) {
         if (jsonObject.has("tag")) return ItemDescriptorType.ITEM_TAG;
-        else return ItemDescriptorType.DEFAULT;
+        else return ItemDescriptorType.ITEM_TYPE;
     }
 
     public enum ItemDescriptorType {
-        DEFAULT,
+        ITEM_TYPE,
         ITEM_TAG
     }
 }

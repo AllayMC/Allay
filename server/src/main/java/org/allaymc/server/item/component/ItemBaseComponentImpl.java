@@ -34,11 +34,9 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
-import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.joml.Vector3ic;
 
@@ -295,25 +293,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Override
     public BlockState toBlockState() {
         return itemType.getBlockType() != null ? itemType.getBlockType().getDefaultState() : null;
-    }
-
-    @Override
-    public ItemData toNetworkItemData() {
-        if (itemType == ItemTypes.AIR) {
-            return ItemData.AIR;
-        }
-
-        var blockState = toBlockState();
-        return ItemData
-                .builder()
-                .definition(NetworkHelper.toNetwork(itemType))
-                .blockDefinition(blockState != null ? blockState::blockStateHash : () -> 0)
-                .count(count)
-                .damage(meta)
-                .tag(saveExtraTag())
-                .usingNetId(hasUniqueId())
-                .netId(uniqueId)
-                .build();
     }
 
     @Override

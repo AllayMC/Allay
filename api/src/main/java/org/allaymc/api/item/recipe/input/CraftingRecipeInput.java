@@ -1,47 +1,75 @@
 package org.allaymc.api.item.recipe.input;
 
-import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * Represents a crafting input.
+ * Represents the input for a crafting recipe.
  *
+ * @param items the input items. The top-left item's index is defined as [0][0], with the coordinate system as [row][column]
  * @author daoge_cmd
  */
-@Getter
-public class CraftingRecipeInput implements RecipeInput {
-    // We define the top-left item index as [0][0], with the coordinate system as [row][column]
-    protected ItemStack[][] items;
+public record CraftingRecipeInput(ItemStack[][] items) implements RecipeInput {
 
-    // 3x3
+    /**
+     * Constructs a new 3x3 crafting recipe input with the specified items.
+     *
+     * @param item00 the item for the top-left position (row 0, column 0)
+     * @param item01 the item for the top-center position (row 0, column 1)
+     * @param item02 the item for the top-right position (row 0, column 2)
+     * @param item10 the item for the middle-left position (row 1, column 0)
+     * @param item11 the item for the middle-center position (row 1, column 1)
+     * @param item12 the item for the middle-right position (row 1, column 2)
+     * @param item20 the item for the bottom-left position (row 2, column 0)
+     * @param item21 the item for the bottom-center position (row 2, column 1)
+     * @param item22 the item for the bottom-right position (row 2, column 2)
+     * @throws IllegalArgumentException if any item is null or if the count of non-air items is not 1
+     *                                  or air items have a non-zero count
+     */
     public CraftingRecipeInput(
             ItemStack item00, ItemStack item01, ItemStack item02,
             ItemStack item10, ItemStack item11, ItemStack item12,
             ItemStack item20, ItemStack item21, ItemStack item22
     ) {
-        this.items = new ItemStack[][]{
+        this(new ItemStack[][]{
                 {item00, item01, item02},
                 {item10, item11, item12},
                 {item20, item21, item22}
-        };
+        });
         checkValid();
     }
 
-    // 2x2
+    /**
+     * Constructs a new 2x2 crafting recipe input with the specified items.
+     *
+     * @param item00 the item for the top-left position (row 0, column 0)
+     * @param item01 the item for the top-right position (row 0, column 1)
+     * @param item10 the item for the bottom-left position (row 1, column 0)
+     * @param item11 the item for the bottom-right position (row 1, column 1)
+     * @throws IllegalArgumentException if any item is null or if the count of non-air items is not 1
+     *                                  or air items have a non-zero count
+     */
     public CraftingRecipeInput(
             ItemStack item00, ItemStack item01,
             ItemStack item10, ItemStack item11
     ) {
-        this.items = new ItemStack[][]{
+        this(new ItemStack[][]{
                 {item00, item01},
                 {item10, item11}
-        };
+        });
         checkValid();
     }
 
-    public ItemStack[] getFlattenItems() {
+    /**
+     * Flattens the two-dimensional array of ItemStack objects into a single-dimensional array.
+     * The size of the resulting array depends on the type of the recipe input:
+     * - 9 for a "BIG" type
+     * - 4 for a "SMALL" type
+     *
+     * @return a one-dimensional ItemStack array containing all the elements of the two-dimensional array.
+     */
+    public ItemStack[] flattenedItems() {
         ItemStack[] result = new ItemStack[getType() == Type.BIG ? 9 : 4];
         int index = 0;
         for (ItemStack[] itemStacks : items) {
@@ -52,7 +80,7 @@ public class CraftingRecipeInput implements RecipeInput {
         return result;
     }
 
-    protected void checkValid() {
+    private void checkValid() {
         for (ItemStack[] itemStacks : items) {
             for (ItemStack itemStack : itemStacks) {
                 if (itemStack == null) {

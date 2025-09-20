@@ -5,6 +5,9 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
+import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.biome.BiomeType;
@@ -15,6 +18,7 @@ import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
 import org.joml.*;
 
 import java.util.List;
@@ -26,6 +30,18 @@ import java.util.List;
  */
 @UtilityClass
 public final class NetworkHelper {
+
+    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(ItemDescriptor descriptor) {
+        return switch (descriptor) {
+            case ItemTypeDescriptor type -> new DefaultDescriptor(toNetwork(type.getItemType()), type.getMeta());
+            case ItemTagDescriptor tag -> new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemTagDescriptor(tag.getItemTag().name());
+            default -> throw new IllegalArgumentException("Unexpected value: " + descriptor);
+        };
+    }
+
+    public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount toNetworkWithCount(ItemDescriptor descriptor) {
+        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount(toNetwork(descriptor), 1);
+    }
 
     public static BiomeDefinitionData toNetwork(BiomeType biome) {
         var data = biome.getBiomeData();

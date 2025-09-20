@@ -19,7 +19,7 @@ import static org.allaymc.server.container.processor.CraftRecipeActionProcessor.
 public class CreateActionProcessor implements ContainerActionProcessor<CreateAction> {
     @Override
     public ActionResponse handle(CreateAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var recipe = (Recipe<?>) dataPool.get(RECIPE_DATA_KEY);
+        var recipe = (Recipe) dataPool.get(RECIPE_DATA_KEY);
         if (recipe == null) {
             log.warn("Recipe not found in data pool!");
             return error();

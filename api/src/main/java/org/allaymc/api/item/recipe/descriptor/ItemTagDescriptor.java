@@ -1,4 +1,4 @@
-package org.allaymc.api.item.descriptor;
+package org.allaymc.api.item.recipe.descriptor;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,13 +22,6 @@ public class ItemTagDescriptor implements ItemDescriptor {
     @Override
     public boolean match(ItemStack itemStack) {
         return itemStack.getItemType().hasItemTag(itemTag);
-    }
-
-    @Override
-    public org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork() {
-        return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemTagDescriptor(
-                itemTag.name()
-        );
     }
 
     @Override

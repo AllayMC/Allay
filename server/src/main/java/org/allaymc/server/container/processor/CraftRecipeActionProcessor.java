@@ -9,12 +9,14 @@ import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.impl.CraftingRecipe;
-import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
+import org.allaymc.api.item.recipe.ShapedRecipe;
+import org.allaymc.api.item.recipe.ShapelessRecipe;
+import org.allaymc.api.item.recipe.SmithingRecipe;
+import org.allaymc.api.item.recipe.SmithingTrimRecipe;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
+import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
@@ -38,54 +40,54 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         var recipeNetworkId = action.getRecipeNetworkId();
         if (recipeNetworkId >= EnchantmentOptionGenerator.NETWORK_ID_COUNTER_INITIAL_VALUE) {
             return handleEnchantTableRecipe(player, recipeNetworkId);
-        } else {
-            var recipe = Registries.RECIPES.get(recipeNetworkId);
-            var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
+        }
 
-            if (recipe instanceof CraftingRecipe craftingRecipe) {
-                var openedContainer = player.getOpenedContainers().toArray(Container[]::new)[0];
-                if (openedContainer instanceof RecipeContainer recipeContainer) {
-                    var recipeInput = recipeContainer.createRecipeInput();
-                    if (!recipe.match(recipeInput)) {
-                        log.warn("Mismatched recipe! Network id: {}", recipe.getNetworkId());
-                        return error();
-                    }
-                }
-
-                // Special cases
-                ActionResponse error = null;
-                var tag = craftingRecipe.getTag();
-                if (tag.equalsIgnoreCase("crafting_table")) {
-                    error = handleCraftingTable(player, numberOfRequestedCrafts, currentActionIndex, actions);
-                } else if (craftingRecipe instanceof SmithingTrimRecipe) {
-                    error = handleSmithingTableTrim(player);
-                }
-
-                if (error != null) {
-                    return error;
-                }
-
-                if (craftingRecipe.getOutputs() != null && craftingRecipe.getOutputs().length == 1) {
-                    // If the recipe outputs a single item, the client will not send a CreateAction,
-                    // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
-                    var output = craftingRecipe.getOutputs()[0].copy(false);
-                    output.setCount(output.getCount() * numberOfRequestedCrafts);
-                    player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, output, false);
-                } else {
-                    if (numberOfRequestedCrafts != 1) {
-                        log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
-                        return error();
-                    }
-                    // If the recipe outputs multiple items, the client will send a CreateAction, so we will set the output in CREATED_OUTPUT in CreateActionProcessor
-                    // Put recipe to data pool so that CreateActionProcessor can get it
-                    dataPool.put(RECIPE_DATA_KEY, craftingRecipe);
-                }
-
-                return null;
-            }
-
+        // The network id for the recipe start from 1, so we need to subtract 1 to get the index in indexedRecipes
+        var recipe = NetworkData.indexedRecipes.get(recipeNetworkId - 1);
+        var isShapeRecipe = recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe;
+        if (!(isShapeRecipe || recipe instanceof SmithingRecipe)) {
             return error();
         }
+
+        var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
+        var openedContainer = player.getOpenedContainers().toArray(Container[]::new)[0];
+        if (openedContainer instanceof RecipeContainer recipeContainer) {
+            var recipeInput = recipeContainer.createRecipeInput();
+            if (!recipe.match(recipeInput)) {
+                log.warn("Mismatched recipe! Recipe identifier: {}", recipe.getIdentifier());
+                return error();
+            }
+        }
+
+        ActionResponse error = null;
+        if (isShapeRecipe) {
+            error = handleCraftingTable(player, numberOfRequestedCrafts, currentActionIndex, actions);
+        } else if (recipe instanceof SmithingTrimRecipe) {
+            error = handleSmithingTableTrim(player);
+        }
+
+        if (error != null) {
+            return error;
+        }
+
+        if (recipe.getOutputs() != null && recipe.getOutputs().length == 1) {
+            // If the recipe outputs a single item, the client will not send a CreateAction,
+            // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
+            var output = recipe.getOutput().copy(false);
+            output.setCount(output.getCount() * numberOfRequestedCrafts);
+            player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, output, false);
+        } else {
+            if (numberOfRequestedCrafts != 1) {
+                log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
+                return error();
+            }
+
+            // If the recipe outputs multiple items, the client will send a CreateAction, so we will set the output in CREATED_OUTPUT in CreateActionProcessor
+            // Put the recipe to data pool so that CreateActionProcessor can get it
+            dataPool.put(RECIPE_DATA_KEY, recipe);
+        }
+
+        return null;
     }
 
     protected ActionResponse handleEnchantTableRecipe(EntityPlayer player, int recipeNetworkId) {
