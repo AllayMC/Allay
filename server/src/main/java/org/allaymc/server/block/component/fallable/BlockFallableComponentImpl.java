@@ -9,7 +9,7 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.EventHandler;

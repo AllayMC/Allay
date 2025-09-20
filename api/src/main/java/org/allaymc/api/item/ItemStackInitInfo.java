@@ -1,4 +1,4 @@
-package org.allaymc.api.item.initinfo;
+package org.allaymc.api.item;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;

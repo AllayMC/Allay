@@ -2,8 +2,8 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;

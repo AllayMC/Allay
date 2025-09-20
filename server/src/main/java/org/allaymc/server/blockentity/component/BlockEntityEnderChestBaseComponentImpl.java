@@ -2,8 +2,8 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import org.allaymc.api.block.action.SimpleBlockAction;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityEnderChestBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 

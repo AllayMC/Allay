@@ -1,7 +1,7 @@
 package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassBlockStack;

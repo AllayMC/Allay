@@ -6,7 +6,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;

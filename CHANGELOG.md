@@ -113,6 +113,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved package `item.descriptor` to `item.recipe.descriptor` since the item descriptor is only used in recipe system.
 - (API) Replaced protocol library class `ModalFormCancelReason` with `FormCancelReason` in the modal form APIs.
 - (API) Replaced protocol library class `CreativeItemCategory` with `CreativeItemCategory.Type` in the creative item APIs.
+- (API) Moved `XXXInitInfo` classes to their parent packages.
 
 ### Fixed
 

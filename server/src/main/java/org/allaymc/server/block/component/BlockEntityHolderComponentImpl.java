@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;

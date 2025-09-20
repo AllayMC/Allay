@@ -1,9 +1,9 @@
 package org.allaymc.server.item.component;
 
 import lombok.Getter;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
 import org.allaymc.api.item.data.DiscType;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 
 /**
  * @author IWareQ | daoge_cmd

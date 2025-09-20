@@ -2,10 +2,10 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityTntBaseComponent;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
 import org.allaymc.api.world.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;

@@ -3,7 +3,7 @@ package org.allaymc.server.item.component;
 import org.allaymc.api.block.component.BlockOxidationComponent;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;

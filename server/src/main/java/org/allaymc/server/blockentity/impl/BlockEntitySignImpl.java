@@ -1,8 +1,8 @@
 package org.allaymc.server.blockentity.impl;
 
 import lombok.experimental.Delegate;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityHangingSign;
 import org.allaymc.api.blockentity.interfaces.BlockEntitySign;
 import org.allaymc.api.component.Component;

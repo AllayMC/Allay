@@ -2,7 +2,7 @@ package org.allaymc.server.item.component.projectile;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.type.EntityType;

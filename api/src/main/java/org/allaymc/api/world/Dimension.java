@@ -13,7 +13,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;

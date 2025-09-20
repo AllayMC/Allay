@@ -2,8 +2,8 @@ package org.allaymc.server.blockentity.component;
 
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityItemFrameBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.ItemFrameUseEvent;
 import org.allaymc.api.item.ItemHelper;

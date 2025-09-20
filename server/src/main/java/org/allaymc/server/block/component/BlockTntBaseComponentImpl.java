@@ -6,7 +6,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;

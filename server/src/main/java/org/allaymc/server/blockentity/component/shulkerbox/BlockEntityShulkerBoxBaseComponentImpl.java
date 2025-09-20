@@ -2,8 +2,8 @@ package org.allaymc.server.blockentity.component.shulkerbox;
 
 import org.allaymc.api.block.action.SimpleBlockAction;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;

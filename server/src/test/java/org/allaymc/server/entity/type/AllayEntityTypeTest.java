@@ -1,6 +1,6 @@
 package org.allaymc.server.entity.type;
 
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntitySheep;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.math.location.Location3d;

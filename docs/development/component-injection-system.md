@@ -88,7 +88,7 @@ public class ItemSayHiComponentImpl implements ItemComponent {
 
 ```java
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 

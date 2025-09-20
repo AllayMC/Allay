@@ -2,7 +2,7 @@ package org.allaymc.server.blockentity.component.furnace;
 
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 
 /**

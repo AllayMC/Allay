@@ -1,6 +1,6 @@
 package org.allaymc.api.item.descriptor;
 
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.tag.ItemTags;

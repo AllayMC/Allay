@@ -1,8 +1,8 @@
 package org.allaymc.server.blockentity.impl;
 
 import lombok.experimental.Delegate;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
 import org.allaymc.api.component.Component;
 import org.allaymc.server.component.ComponentProvider;

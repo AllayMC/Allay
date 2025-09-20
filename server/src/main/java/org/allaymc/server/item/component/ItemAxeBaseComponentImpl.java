@@ -8,7 +8,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;

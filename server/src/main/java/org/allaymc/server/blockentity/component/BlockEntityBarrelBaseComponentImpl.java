@@ -1,8 +1,8 @@
 package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.container.impl.BarrelContainerImpl;

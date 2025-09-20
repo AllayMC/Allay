@@ -3,7 +3,7 @@ package org.allaymc.server.registry.loader;
 import com.google.gson.JsonObject;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;

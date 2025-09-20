@@ -5,8 +5,8 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.CompassRoseDirection;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.eventbus.event.block.SignWaxEvent;
@@ -182,14 +182,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             case SOUTH -> interactedFace == BlockFace.SOUTH;
             case WEST -> interactedFace == BlockFace.WEST;
             case NORTH -> interactedFace == BlockFace.NORTH;
-            case NORTH_EAST, NORTH_NORTH_EAST, EAST_NORTH_EAST ->
-                    interactedFace == BlockFace.EAST || interactedFace == BlockFace.NORTH;
-            case NORTH_WEST, NORTH_NORTH_WEST, WEST_NORTH_WEST ->
-                    interactedFace == BlockFace.WEST || interactedFace == BlockFace.NORTH;
-            case SOUTH_EAST, SOUTH_SOUTH_EAST, EAST_SOUTH_EAST ->
-                    interactedFace == BlockFace.EAST || interactedFace == BlockFace.SOUTH;
-            case SOUTH_WEST, SOUTH_SOUTH_WEST, WEST_SOUTH_WEST ->
-                    interactedFace == BlockFace.WEST || interactedFace == BlockFace.SOUTH;
+            case NORTH_EAST, NORTH_NORTH_EAST, EAST_NORTH_EAST -> interactedFace == BlockFace.EAST || interactedFace == BlockFace.NORTH;
+            case NORTH_WEST, NORTH_NORTH_WEST, WEST_NORTH_WEST -> interactedFace == BlockFace.WEST || interactedFace == BlockFace.NORTH;
+            case SOUTH_EAST, SOUTH_SOUTH_EAST, EAST_SOUTH_EAST -> interactedFace == BlockFace.EAST || interactedFace == BlockFace.SOUTH;
+            case SOUTH_WEST, SOUTH_SOUTH_WEST, WEST_SOUTH_WEST -> interactedFace == BlockFace.WEST || interactedFace == BlockFace.SOUTH;
         };
     }
 

@@ -1,9 +1,9 @@
 package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.block.action.SimpleBlockAction;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.sound.SimpleSound;

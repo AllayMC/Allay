@@ -2,7 +2,7 @@ package org.allaymc.server.item.component.tool;
 
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 

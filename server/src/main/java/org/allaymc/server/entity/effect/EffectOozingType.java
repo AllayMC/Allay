@@ -1,9 +1,9 @@
 package org.allaymc.server.entity.effect;
 
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.utils.identifier.Identifier;
 

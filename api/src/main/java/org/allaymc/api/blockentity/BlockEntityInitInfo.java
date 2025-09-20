@@ -1,4 +1,4 @@
-package org.allaymc.api.blockentity.initinfo;
+package org.allaymc.api.blockentity;
 
 import lombok.AccessLevel;
 import lombok.Getter;

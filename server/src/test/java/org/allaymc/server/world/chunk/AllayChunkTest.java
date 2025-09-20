@@ -1,7 +1,7 @@
 package org.allaymc.server.world.chunk;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.Chunk;

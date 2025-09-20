@@ -2,10 +2,10 @@ package org.allaymc.server.entity.component.projectile;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.item.data.PotionType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;

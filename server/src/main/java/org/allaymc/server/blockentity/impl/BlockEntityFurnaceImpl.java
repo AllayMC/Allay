@@ -1,9 +1,9 @@
 package org.allaymc.server.blockentity.impl;
 
 import lombok.experimental.Delegate;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityFurnaceBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBlastFurnace;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
 import org.allaymc.api.blockentity.interfaces.BlockEntitySmoker;

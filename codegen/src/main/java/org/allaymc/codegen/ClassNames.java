@@ -45,7 +45,7 @@ public interface ClassNames {
 
     ClassName ENTITY = ClassName.get("org.allaymc.api.entity", "Entity");
     ClassName ENTITY_IMPL = ClassName.get("org.allaymc.server.entity.impl", "EntityImpl");
-    ClassName ENTITY_INIT_INFO = ClassName.get("org.allaymc.api.entity.initinfo", "EntityInitInfo");
+    ClassName ENTITY_INIT_INFO = ClassName.get("org.allaymc.api.entity", "EntityInitInfo");
     ClassName ENTITY_ID = ClassName.get("org.allaymc.api.entity.data", "EntityId");
     ClassName ENTITY_TYPE = ClassName.get("org.allaymc.server.entity.type", "EntityType");
     ClassName ENTITY_TYPES = ClassName.get("org.allaymc.api.entity.type", "EntityTypes");
@@ -55,7 +55,7 @@ public interface ClassNames {
     ClassName ITEM_ID = ClassName.get("org.allaymc.api.item.data", "ItemId");
     ClassName ITEM_STACK = ClassName.get("org.allaymc.api.item", "ItemStack");
     ClassName ITEM_STACK_IMPL = ClassName.get("org.allaymc.server.item.impl", "ItemStackImpl");
-    ClassName ITEM_STACK_INIT_INFO = ClassName.get("org.allaymc.api.item.initinfo", "ItemStackInitInfo");
+    ClassName ITEM_STACK_INIT_INFO = ClassName.get("org.allaymc.api.item", "ItemStackInitInfo");
     ClassName ITEM_TYPE = ClassName.get("org.allaymc.api.item.type", "ItemType");
     ClassName ITEM_TYPES = ClassName.get("org.allaymc.api.item.type", "ItemTypes");
     ClassName ALLAY_ITEM_TYPE = ClassName.get("org.allaymc.server.item.type", "AllayItemType");

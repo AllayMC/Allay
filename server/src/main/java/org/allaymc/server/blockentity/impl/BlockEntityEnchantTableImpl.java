@@ -1,6 +1,6 @@
 package org.allaymc.server.blockentity.impl;
 
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityEnchantTable;
 import org.allaymc.api.component.Component;
 import org.allaymc.server.component.ComponentProvider;
