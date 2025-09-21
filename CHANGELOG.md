@@ -16,11 +16,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
+- (API) Implemented basic bed feature.
+- (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
 - (API) Introduced PlayerInteractBlockEvent.
 - (API) Introduced PlayerBookEditEvent.
-- (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
 - (API) Introduced methods `Entity.getOffsetAABBForCollisionCheck()` and `Entity.checkBlockCollision()`.
-- (API) Implemented basic bed feature.
 - (API) Introduced event `BlockExplodeEvent`.
 - (API) Introduced option `ServerSettings.NetworkSettings.enablev6` to close ipv6 if needed.
 - (API) Introduced field `PlayerRespawnEvent.respawnLocation` which can be changed to modify the respawn location of a player after death.
@@ -54,7 +54,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed method `Entity.despawn()` to `Entity.remove()` as a clarification with other methods like `Entity.despawnFrom()` and `Entity.despawnFromAll()`.
 - (API) Renamed entries in class `TrKeys`. The old `M_XXX` is renamed to `MC_XXX` and `A_XXX` is renamed to `ALLAY_XXX`.
 - (API) Renamed field `Block.pos` to `Block.position`.
-- (API) Moved class `ComponentManager` from api to server module since it is useless in api module.
 - (API) Renamed class `BlockUpdateService` to `BlockUpdateManager`.
 - (API) Renamed class `ChunkService` to `ChunkManager`.
 - (API) Renamed class `EntityService` to `EntityManager`.
@@ -63,60 +62,60 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed class `PlayerService` to `PlayerManager`.
 - (API) Renamed class `ScoreboardService` to `ScoreboardManager`.
 - (API) Renamed package `org.allaymc.api(server).client` to `org.allaymc.api(server).player`.
-- (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details. 
-- (API) Moved classes `BlockPropertyProcessor`, `BlockPlaceHelper` and `FortuneDropHelper` from api to server.
-- (API) Removed methods `BlockPropertyType.getProcessor()` and `BlockPropertyType.setProcessor()`.
+- (API) Renamed classes `BlockStateSafeGetter` and `ItemTypeSafeGetter` to `BlockStateGetter` and `ItemTypeGetter`.
+- (API) Renamed class `ApiInstanceHolder` to `APIInstanceHolder`.
+- (API) Renamed class `EntityStatus` to `EntityState`.
+- (API) Renamed `FullContainerType` to `ContainerType`. All the network related code inside are moved to server module.
+- (API) Renamed classes `PlayerArmorContainer`, `PlayerInventoryContainer` and `PlayerOffhandContainer` to `ArmorContainer`, `InventoryContainer` and `OffhandContainer`.
+- (API) Renamed method `TextReceiver.sendTr()` to `TextReceiver.sendTranslatable()` for better readability.
+- (API) Renamed method `LoginData.isXboxAuthenticated()` to `LoginData.isAuthed()`.
+- (API) Renamed package `i18n` to `message`.
+- (API) Renamed class `TextReceiver` to `MessageReceiver` and method `TextReceiver.sendText()` to `MessageReceiver.sendMessage()`.
+- (API) Renamed class `DefaultDescriptor` to `ItemTypeDescriptor`.
+- (API) Renamed item stack network id to unique id for better readability, changes are made to multiple related methods.
+- (API) Renamed method `Command.getCommandOverloads()` to `Command.getOverloads()`.
+- (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details.
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
+- (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
+- (API) Flattened all classes under `player` package.
+- (API) Introduced new `GameMode` enum, and the old `GameType` used in protocol lib is unused since it has many game types which only exist in vanilla.
+- (API) Moved classes `Abilities` and `AdventureSettings` from api module to server module. Since most of the abilities/settings have corresponded permission,
+  consider using permission instead.
+- (API) Moved class `ComponentManager` from api to server module since it is useless in api module.
+- (API) Moved classes `BlockPropertyProcessor`, `BlockPlaceHelper` and `FortuneDropHelper` from api to server.
 - (API) Moved classes `Structure` and `StructureException` from `utils` to `world` package.
 - (API) Moved class `BlockAndItemIdMapper` from api to server module.
 - (API) Moved all effect implementations from api to server module.
-- (API) Renamed classes `BlockStateSafeGetter` and `ItemTypeSafeGetter` to `BlockStateGetter` and `ItemTypeGetter`.
-- (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
 - (API) Moved classes under package `component.interfaces` to `component` package.
 - (API) Moved class `ScoreboardStorage` form package `scoreboard.storage` to `scoreboard` package.
-- (API) Made classes `UIProfile`, `DeviceInfo` and `Device` as the inner classes of `LoginData`.
-- (API) Flattened all classes under `player` package.
-- (API) Moved classes `Abilities` and `AdventureSettings` from api module to server module. Since most of the abilities/settings have corresponded permission,
-  consider using permission instead.
-- (API) Introduced new `GameMode` enum, and the old `GameType` used in protocol lib is unused since it has many game types which only exist in vanilla.
 - (API) Moved classes `HashUtils` and `HashException` from package `utils` to `utils.hash`.
 - (API) Moved classes `Identified`, `Identifier`, `IdentifierUtils` and `InvalidIdentifierException` from package `utils` to `utils.identifier`.
 - (API) Moved class `GameLoop` from api module to server module.
 - (API) Moved class `JSONUtils` and the classes only used by this util from api module to server module.
 - (API) Moved class `Difficulty`, `DimensionInfo`, `Sound` and `Weather` from package `world` to package `world.data`.
-- (API) Renamed class `ApiInstanceHolder` to `APIInstanceHolder`.
-- (API) Made classes `APINotImplementedException`, `MissingImplementationException`, `MissingRequirementException` and `APIInstanceHolder` as the private subclasses of `AllayAPI`.
 - (API) Moved class `NPCCommandSender` from api module to server module.
 - (API) Moved class `ClientStatus` from package `network` to package `player` and renamed it to `ClientState`.
-- (API) Renamed class `EntityStatus` to `EntityState`.
-- (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
-- (API) Refactored the weather system. Removed network related code in `Weather`, and world will hold only one `Weather` instance now.
 - (API) Moved the implementations of `EnchantmentType` from api module to server module.
 - (API) Moved class `CommandParseException` from api module to server module.
-- (API) Refactored the container system. All container implementations are moved to server module now.
-- (API) Renamed `FullContainerType` to `ContainerType`. All the network related code inside are moved to server module.
-- (API) Refactored the sound and particle system, now each sound and particle instance is a pure data object or an enum of `SimpleSound`/`SimpleParticle` if it doesn't require
-  additional parameters.
 - (API) Moved methods `BlockStateData.fromJson()` to class `BlockStateDataLoader`.
 - (API) Moved several data classes for block and item to packages `block.data` and `item.data`.
-- (API) Renamed classes `PlayerArmorContainer`, `PlayerInventoryContainer` and `PlayerOffhandContainer` to `ArmorContainer`, `InventoryContainer` and `OffhandContainer`.
-- (API) Class `BossBar` now accepts `BossBarViewer` instead of `EntityPlayer` directly, but the usage won't change since `EntityPlayer` implemented `BossBarViewer`.
-- (API) Renamed method `TextReceiver.sendTr()` to `TextReceiver.sendTranslatable()` for better readability.
-- (API) Renamed method `LoginData.isXboxAuthenticated()` to `LoginData.isAuthed()`.
-- (API) Made class `LoginData` as an interface, the implementation is moved to the server module.
-- (API) Renamed package `i18n` to `message`.
-- (API) Renamed class `TextReceiver` to `MessageReceiver` and method `TextReceiver.sendText()` to `MessageReceiver.sendMessage()`.
 - (API) Moved class `XXXId` from api to server, since the user is expected to use objects in `XXXTypes`.
-- (API) Changed methods in `ItemSignBaseComponent` to return `BlockType` instead of `BlockId`.
-- (API) Renamed class `DefaultDescriptor` to `ItemTypeDescriptor`.
 - (API) Moved events `PacketSendEvent` and  `PacketReceiveEvent` from api module to server module.
-- (API) Renamed item stack network id to unique id for better readability, changes are made to multiple related methods.
-- (API) Refactored the recipe system, network-related code is moved to the server module.
 - (API) Moved package `item.descriptor` to `item.recipe.descriptor` since the item descriptor is only used in recipe system.
+- (API) Moved `XXXInitInfo` classes to their parent packages.
+- (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
+- (API) Refactored the weather system. World will hold only one `Weather` instance now.
+- (API) Refactored the container system. All container implementations are moved to server module now.
+- (API) Refactored the sound and particle system, now each sound and particle instance is a pure data object or an enum of `SimpleSound`/`SimpleParticle` if it doesn't require
+  additional parameters.
+- (API) Refactored the recipe system, network-related code is moved to the server module.
+- (API) Made classes `UIProfile`, `DeviceInfo` and `Device` as the inner classes of `LoginData`.
+- (API) Made classes `APINotImplementedException`, `MissingImplementationException`, `MissingRequirementException` and `APIInstanceHolder` as the private subclasses of `AllayAPI`.
+- (API) Made class `LoginData` as an interface, the implementation is moved to the server module.
 - (API) Replaced protocol library class `ModalFormCancelReason` with `FormCancelReason` in the modal form APIs.
 - (API) Replaced protocol library class `CreativeItemCategory` with `CreativeItemCategory.Type` in the creative item APIs.
-- (API) Moved `XXXInitInfo` classes to their parent packages.
-- (API) Renamed method `Command.getCommandOverloads()` to `Command.getOverloads()`.
+- (API) Class `BossBar` now accepts `BossBarViewer` instead of `EntityPlayer` directly, but the usage won't change since `EntityPlayer` implemented `BossBarViewer`.
+- (API) Changed methods in `ItemSignBaseComponent` to return `BlockType` instead of `BlockId`.
 
 ### Fixed
 
@@ -164,6 +163,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed classes `BaseCommand` and `SimpleCommand`, and plugin commands now should extend `Command` directly.
 - (API) Removed method `Command.getCommandFormatTips()`.
 - (API) Removed class `PacketReceiver`.
+- (API) Removed methods `BlockPropertyType.getProcessor()` and `BlockPropertyType.setProcessor()`.
+- (API) Removed network-related code in `Weather`
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 
