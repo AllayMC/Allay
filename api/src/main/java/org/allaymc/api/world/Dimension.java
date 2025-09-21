@@ -1,7 +1,5 @@
 package org.allaymc.api.world;
 
-import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
-import it.unimi.dsi.fastutil.ints.IntObjectPair;
 import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
@@ -22,6 +20,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.function.QuadConsumer;
 import org.allaymc.api.utils.function.TriFunction;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.OperationType;
@@ -62,7 +61,7 @@ public interface Dimension {
     /**
      * The return value of {@link #getLiquid(int, int, int)} if no liquid is found.
      */
-    IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
+    Pair<Integer, BlockState> PAIR_LIQUID_NOT_FOUND = new Pair<>(-1, null);
 
     /**
      * Get the chunk manager of this dimension.
@@ -1232,7 +1231,7 @@ public interface Dimension {
     /**
      * @see #getLiquid(Vector3ic)
      */
-    default IntObjectPair<BlockState> getLiquid(int x, int y, int z) {
+    default Pair<Integer, BlockState> getLiquid(int x, int y, int z) {
         return getLiquid(new Vector3i(x, y, z));
     }
 
@@ -1244,10 +1243,10 @@ public interface Dimension {
      * @param pos the position to check for a liquid block
      * @return the liquid block at the position and the layer it is in, or {@link #PAIR_LIQUID_NOT_FOUND} if no liquid is found
      */
-    default IntObjectPair<BlockState> getLiquid(Vector3ic pos) {
+    default Pair<Integer, BlockState> getLiquid(Vector3ic pos) {
         var layer0 = getBlockState(pos);
         if (layer0.getBehavior() instanceof BlockLiquidBaseComponent) {
-            return new IntObjectImmutablePair<>(0, layer0);
+            return new Pair<>(0, layer0);
         }
 
         if (!layer0.getBlockStateData().canContainLiquid()) {
@@ -1256,7 +1255,7 @@ public interface Dimension {
 
         var layer1 = getBlockState(pos, 1);
         if (layer1.getBehavior() instanceof BlockLiquidBaseComponent) {
-            return new IntObjectImmutablePair<>(1, layer1);
+            return new Pair<>(1, layer1);
         }
 
         return PAIR_LIQUID_NOT_FOUND;

@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +37,7 @@ import org.allaymc.api.player.Skin;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -767,7 +767,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public Pair<Integer, CustomForm> getServerSettingForm() {
-        return Pair.of(serverSettingFormId, serverSettingForm);
+        return new Pair<>(serverSettingFormId, serverSettingForm);
     }
 
     @Override

@@ -41,6 +41,8 @@ dependencies {
     implementation(libs.bundles.rng)
     implementation(libs.sentry)
     implementation(libs.jctools)
+    implementation(libs.caffeine)
+    implementation(libs.bundles.fastutil)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)

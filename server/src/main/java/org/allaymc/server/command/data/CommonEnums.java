@@ -1,4 +1,4 @@
-package org.allaymc.api.command.data;
+package org.allaymc.server.command.data;
 
 import org.allaymc.api.world.gamerule.GameRule;
 

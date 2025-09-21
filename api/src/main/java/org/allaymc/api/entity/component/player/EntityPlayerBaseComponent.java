@@ -1,6 +1,5 @@
 package org.allaymc.api.entity.component.player;
 
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
@@ -9,6 +8,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
+import org.allaymc.api.utils.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;

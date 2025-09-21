@@ -1,6 +1,6 @@
 package org.allaymc.server.command.selector.args;
 
-import org.allaymc.api.command.selector.args.SelectorArgument;
+import org.allaymc.api.command.selector.SelectorArgument;
 
 /**
  * CoordinateArgument is the base class for args like {@link X}, {@link Y} and {@link Z}.

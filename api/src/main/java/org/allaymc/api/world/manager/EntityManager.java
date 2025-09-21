@@ -1,11 +1,11 @@
 package org.allaymc.api.world.manager;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -104,7 +104,7 @@ public interface EntityManager {
      * @return all entities in the chunk
      */
     default Map<Long, Entity> getEntitiesInChunk(int chunkX, int chunkZ) {
-        var map = new Long2ObjectOpenHashMap<Entity>();
+        var map = new HashMap<Long, Entity>();
         forEachEntitiesInChunkImmediately(chunkX, chunkZ, entity -> map.put(entity.getRuntimeId(), entity));
         return map;
     }
@@ -118,7 +118,7 @@ public interface EntityManager {
      * @return all players in the chunk
      */
     default Map<Long, EntityPlayer> getPlayersInChunk(int chunkX, int chunkZ) {
-        var map = new Long2ObjectOpenHashMap<EntityPlayer>();
+        var map = new HashMap<Long, EntityPlayer>();
         forEachEntitiesInChunkImmediately(chunkX, chunkZ, entity -> {
             if (entity instanceof EntityPlayer player) {
                 map.put(player.getRuntimeId(), player);

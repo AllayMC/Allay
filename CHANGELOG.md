@@ -103,6 +103,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved events `PacketSendEvent` and  `PacketReceiveEvent` from api module to server module.
 - (API) Moved package `item.descriptor` to `item.recipe.descriptor` since the item descriptor is only used in recipe system.
 - (API) Moved `XXXInitInfo` classes to their parent packages.
+- (API) Moved class `CommonEnums` from api to server.
+- (API) Moved classes `CachedSimpleSelectorArgument` and `CachedFilterSelectorArgument` from api to server.
 - (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
 - (API) Refactored the weather system. World will hold only one `Weather` instance now.
 - (API) Refactored the container system. All container implementations are moved to server module now.
@@ -165,6 +167,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed class `PacketReceiver`.
 - (API) Removed methods `BlockPropertyType.getProcessor()` and `BlockPropertyType.setProcessor()`.
 - (API) Removed network-related code in `Weather`
+- (API) Removed class `IntMappedRegistry`.
+- (API) Removed method `BlockType.register()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

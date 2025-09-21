@@ -8,8 +8,8 @@ import org.allaymc.api.world.gamerule.GameRule;
 
 import java.util.function.Function;
 
-import static org.allaymc.api.command.data.CommonEnums.BOOL_GAMERULE_ENUM;
-import static org.allaymc.api.command.data.CommonEnums.INT_GAMERULE_ENUM;
+import static org.allaymc.server.command.data.CommonEnums.BOOL_GAMERULE_ENUM;
+import static org.allaymc.server.command.data.CommonEnums.INT_GAMERULE_ENUM;
 
 /**
  * @author daoge_cmd

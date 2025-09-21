@@ -22,7 +22,6 @@ import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
-import org.allaymc.api.registry.IntMappedRegistry;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.scheduler.Scheduler;
@@ -201,7 +200,7 @@ public final class Allay {
 
         // Block
         InternalRegistries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
-        Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
+        Registries.BLOCK_STATE_PALETTE = SimpleMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),
                 r -> Registries.BLOCKS = r,

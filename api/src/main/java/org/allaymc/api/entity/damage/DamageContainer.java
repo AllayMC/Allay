@@ -1,7 +1,6 @@
 package org.allaymc.api.entity.damage;
 
 import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.Pair;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockTypes;
@@ -11,6 +10,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.utils.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Function;
@@ -434,7 +434,7 @@ public class DamageContainer {
             List<String> params = new ArrayList<>();
             params.add(victim.getDisplayName());
             params.addAll(Arrays.asList(deathInfoExtraParamsProvider.apply(attacker)));
-            return Pair.of(deathInfoProvider.apply(attacker), params.toArray(String[]::new));
+            return new Pair<>(deathInfoProvider.apply(attacker), params.toArray(String[]::new));
         }
     }
 }

@@ -4,8 +4,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.registry.IntMappedRegistry;
-import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.identifier.Identified;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.jetbrains.annotations.Unmodifiable;
@@ -42,7 +40,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Check if the block type has the specified property.
      *
      * @param name the property name
-     *
      * @return {@code true} if the block type has the property, {@code false} otherwise.
      */
     default boolean hasProperty(String name) {
@@ -53,7 +50,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Check if the block type has the specified property.
      *
      * @param propertyType the property type
-     *
      * @return {@code true} if the block type has the property, {@code false} otherwise.
      */
     default boolean hasProperty(BlockPropertyType<?> propertyType) {
@@ -120,7 +116,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Creates a block state from the given list of property values.
      *
      * @param propertyValues the list of property values
-     *
      * @return the block state, or null if the given property values is invalid
      */
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
@@ -130,7 +125,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * The given block state's type must have same property types as this block type.
      *
      * @param other the block state to copy property values from
-     *
      * @return the block state, or null if the given block state is invalid
      */
     default BlockState copyPropertyValuesFrom(BlockState other) {
@@ -141,7 +135,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Creates a block state from the given block state hash.
      *
      * @param blockStateHash the block state hash
-     *
      * @return the block state, or null if the given block state hash is invalid
      */
     default BlockState ofState(int blockStateHash) {
@@ -152,31 +145,10 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Creates a block state from the given array of property values.
      *
      * @param propertyValues the array of property values
-     *
      * @return the block state, or null if the given property values is invalid
      */
     default BlockState ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
         return ofState(List.of(propertyValues));
-    }
-
-    /**
-     * Registers this block type to the given registry.
-     *
-     * @param registry the block type registry
-     */
-    default void register(SimpleMappedRegistry<Identifier, BlockType<?>> registry) {
-        registry.register(getIdentifier(), this);
-    }
-
-    /**
-     * Registers all block states of this block type to the given palette.
-     *
-     * @param registry the block state hash palette
-     */
-    default void register(IntMappedRegistry<BlockState> registry) {
-        for (var s : getBlockStateHashMap().values()) {
-            registry.register(s.blockStateHash(), s);
-        }
     }
 
     /**
@@ -191,7 +163,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Check if this block type has the specified tag.
      *
      * @param blockTag the block tag
-     *
      * @return {@code true} if the block type has the tag, {@code false} otherwise.
      */
     default boolean hasBlockTag(BlockTag blockTag) {

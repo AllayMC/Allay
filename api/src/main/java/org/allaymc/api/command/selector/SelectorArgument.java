@@ -1,8 +1,6 @@
-package org.allaymc.api.command.selector.args;
+package org.allaymc.api.command.selector;
 
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.selector.SelectorSyntaxException;
-import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;

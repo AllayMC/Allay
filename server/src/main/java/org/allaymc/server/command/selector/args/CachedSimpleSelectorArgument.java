@@ -1,9 +1,10 @@
-package org.allaymc.api.command.selector.args;
+package org.allaymc.server.command.selector.args;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Sets;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.selector.SelectorArgument;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.entity.Entity;
@@ -45,9 +46,7 @@ public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
      * @param sender       the command sender who issued the selector
      * @param basePos      the base position used for relative coordinate parsing
      * @param arguments    the arguments used for the selector
-     *
      * @return a {@code Predicate<Entity>} that filters entities
-     *
      * @throws SelectorSyntaxException if the arguments cannot be parsed
      */
     protected abstract Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException;

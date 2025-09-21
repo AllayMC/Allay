@@ -1,8 +1,8 @@
 package org.allaymc.api.message;
 
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.utils.tuple.Pair;
 
 /**
  * I18n is used to translate the text which contains translation key in the game.
@@ -113,7 +113,7 @@ public interface I18n {
      * @see #toClientFriendlyStyle0(LangCode, String, Object...)
      */
     default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr, Object... args) {
-        return toClientFriendlyStyle0(langCode, tr, args).first();
+        return toClientFriendlyStyle0(langCode, tr, args).left();
     }
 
     /**
@@ -139,10 +139,10 @@ public interface I18n {
         if (VANILLA_LANG_NAMESPACE.equals(namespace)) {
             // Preserve '%'
             var prefix = keyInfo.hasStarter() ? tr.substring(0, keyInfo.startIndex() + 1) : "";
-            return Pair.of(prefix + tr.substring(keyInfo.colonIndex() + 1), true);
+            return new Pair<>(prefix + tr.substring(keyInfo.colonIndex() + 1), true);
         }
 
-        return Pair.of(tr(langCode, tr, args), false);
+        return new Pair<>(tr(langCode, tr, args), false);
     }
 
     /**

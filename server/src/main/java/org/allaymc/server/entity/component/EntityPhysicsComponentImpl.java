@@ -1,7 +1,5 @@
 package org.allaymc.server.entity.component;
 
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
 import lombok.Getter;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
@@ -20,6 +18,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -51,7 +50,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected static final String TAG_ON_GROUND = "OnGround";
 
     // Constants used in physics calculation
-    protected static final DoubleBooleanImmutablePair EMPTY_DOUBLE_BOOLEAN_PAIR = new DoubleBooleanImmutablePair(0, false);
+    protected static final Pair<Double, Boolean> EMPTY_DOUBLE_BOOLEAN_PAIR = new Pair<>(0.0, false);
     protected static final double STEPPING_OFFSET = 0.05;
 
     @ComponentObject
@@ -300,7 +299,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             axis.setComponent(recorder, axis.getComponent(recorder) + deltaInAxis);
         }
 
-        return new DoubleBooleanImmutablePair(motion, collision);
+        return new Pair<>(motion, collision);
     }
 
     private boolean notValidEntityArea(AABBd extendAABB) {

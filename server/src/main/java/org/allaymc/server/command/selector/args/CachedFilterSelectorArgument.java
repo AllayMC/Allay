@@ -1,9 +1,10 @@
-package org.allaymc.api.command.selector.args;
+package org.allaymc.server.command.selector.args;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.collect.Sets;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.selector.SelectorArgument;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.entity.Entity;
@@ -51,9 +52,7 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
      * @param sender       the command sender invoking the selector
      * @param basePos      the base position for relative coordinates (if required)
      * @param arguments    the arguments used to compute the filter
-     *
      * @return a function that filters a list of entities
-     *
      * @throws SelectorSyntaxException if there is an error parsing the arguments
      */
     protected abstract Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException;

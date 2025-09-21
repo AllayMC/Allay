@@ -1,6 +1,5 @@
 package org.allaymc.server.item.enchantment;
 
-import it.unimi.dsi.fastutil.Pair;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStack;
@@ -9,6 +8,7 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.server.utils.AllayRandom;
 import org.jctools.maps.NonBlockingHashMapLong;
 
@@ -111,7 +111,7 @@ public final class EnchantmentOptionGenerator {
         var networkId = NETWORK_ID_COUNTER.getAndIncrement();
         var option = new EnchantOption(generateRandomOptionName(random), requiredLapisLazuliCount, requiredXpLevel, resultEnchantments);
         ENCHANT_OPTIONS.put(networkId, option);
-        return Pair.of(networkId, option);
+        return new Pair<>(networkId, option);
     }
 
     private static int countBookshelves(Position3ic enchantTablePos) {

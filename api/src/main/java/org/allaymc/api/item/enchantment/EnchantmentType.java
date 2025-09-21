@@ -1,6 +1,5 @@
 package org.allaymc.api.item.enchantment;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -9,6 +8,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -40,7 +40,7 @@ public abstract class EnchantmentType {
         this.maxLevel = maxLevel;
         this.rarity = rarity;
         this.applicableType = applicableType;
-        this.instances = new Int2ObjectOpenHashMap<>();
+        this.instances = new HashMap<>();
         Registries.ENCHANTMENTS.register(this.id, identifier, this);
     }
 

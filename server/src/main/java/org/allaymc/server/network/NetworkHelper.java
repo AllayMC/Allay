@@ -1,6 +1,5 @@
 package org.allaymc.server.network;
 
-import it.unimi.dsi.fastutil.Pair;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
@@ -11,6 +10,7 @@ import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;

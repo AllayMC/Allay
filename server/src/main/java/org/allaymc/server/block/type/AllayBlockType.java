@@ -317,8 +317,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             } catch (Throwable t) {
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }
-            type.register(Registries.BLOCKS);
-            type.register(Registries.BLOCK_STATE_PALETTE);
+
+            Registries.BLOCKS.register(type.getIdentifier(), type);
+            for (var blockState : type.blockStateHashMap.values()) {
+                Registries.BLOCK_STATE_PALETTE.register(blockState.blockStateHash(), blockState);
+            }
+
             return type;
         }
 

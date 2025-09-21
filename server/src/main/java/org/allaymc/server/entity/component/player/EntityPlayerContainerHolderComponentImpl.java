@@ -1,11 +1,11 @@
 package org.allaymc.server.entity.component.player;
 
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.*;

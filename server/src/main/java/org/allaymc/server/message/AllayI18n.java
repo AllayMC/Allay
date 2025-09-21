@@ -1,6 +1,5 @@
 package org.allaymc.server.message;
 
-import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.tuple.Pair;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -112,7 +112,7 @@ public class AllayI18n implements I18n {
             text = text.replaceAll("%" + order + "\\$s", "%" + order);
             text = text.replaceAll("%" + order + "\\$d", "%" + order);
         }
-        return Pair.of(text, argIndex);
+        return new Pair<>(text, argIndex);
     }
 
     private String replaceOrderedParams(String text, int startArgIndex, String[] args) {

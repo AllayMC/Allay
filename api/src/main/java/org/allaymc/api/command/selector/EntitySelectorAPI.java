@@ -2,7 +2,6 @@ package org.allaymc.api.command.selector;
 
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.allaymc.api.entity.Entity;
 
 import java.util.List;

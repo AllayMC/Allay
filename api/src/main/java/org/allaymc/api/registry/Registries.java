@@ -37,7 +37,7 @@ public final class Registries {
     public static SimpleMappedRegistry<String, BlockEntityType<?>> BLOCK_ENTITIES;
 
     // Block
-    public static IntMappedRegistry<BlockState> BLOCK_STATE_PALETTE;
+    public static SimpleMappedRegistry<Integer, BlockState> BLOCK_STATE_PALETTE;
     public static SimpleMappedRegistry<Identifier, BlockType<?>> BLOCKS;
 
     // Entity

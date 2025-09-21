@@ -15,7 +15,7 @@ Let's start with a simple command `/hello` that greets the command sender.
 import org.allaymc.api.command.Command;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
     }
@@ -51,7 +51,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
         getPermissions().forEach(PermissionGroups.MEMBER::addPermission); /*(1)!*/
@@ -82,7 +82,7 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
     }
@@ -115,7 +115,7 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
     }
