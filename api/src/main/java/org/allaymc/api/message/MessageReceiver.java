@@ -23,9 +23,9 @@ public interface MessageReceiver {
     }
 
     /**
-     * Send a text which may contains translation key to the receiver.
+     * Send a text which may contain a translation key to the receiver.
      *
-     * @param translatable the translatable text which may contains translation key
+     * @param translatable the translatable text which may contain a translation key
      * @param args         the arguments used in the translation
      */
     void sendTranslatable(@MayContainTrKey String translatable, Object... args);

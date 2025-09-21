@@ -165,7 +165,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
         getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && player.hasPermissions(command.getPermissions()))
+                .filter(command -> player.hasPermissions(command.getPermissions()))
                 .forEach(command -> pk.getCommands().add(command.buildNetworkDataFor(player)));
         return pk;
     }

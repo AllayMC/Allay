@@ -406,7 +406,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
-        var blockAABB = blockState.getBehavior().getBlockStateData(blockState).computeOffsetCollisionShape(
+        var blockAABB = blockState.getBlockStateData().computeOffsetCollisionShape(
                 placePos.x(),
                 placePos.y(),
                 placePos.z()

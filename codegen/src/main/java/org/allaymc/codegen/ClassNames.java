@@ -37,7 +37,6 @@ public interface ClassNames {
     ClassName ENUM_PROPERTY = ClassName.get("org.allaymc.api.block.property.type", "EnumPropertyType");
     ClassName BOOLEAN_PROPERTY = ClassName.get("org.allaymc.api.block.property.type", "BooleanPropertyType");
     ClassName INT_PROPERTY = ClassName.get("org.allaymc.api.block.property.type", "IntPropertyType");
-    ClassName MATERIAL_TYPE = ClassName.get("org.allaymc.api.block.material", "MaterialType");
 
     ClassName BIOME_TYPE = ClassName.get("org.allaymc.api.world.biome", "BiomeType");
     ClassName BIOME_ID = ClassName.get("org.allaymc.server.world.biome", "BiomeId");

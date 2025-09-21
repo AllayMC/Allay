@@ -19,7 +19,6 @@ public interface Command {
      *
      * @param sender The sender of the command
      * @param args   The arguments provided to the command
-     *
      * @return The result of the command execution
      */
     CommandResult execute(CommandSender sender, String[] args);
@@ -28,23 +27,9 @@ public interface Command {
      * Builds a network data representation of this command for the given player.
      *
      * @param player The player to build the data for
-     *
      * @return The network data representation of this command
      */
     CommandData buildNetworkDataFor(EntityPlayer player);
-
-    /**
-     * Whether this command is only available on the server side. If a command is server
-     * side only, this command won't be encoded and sent to the client.
-     * <p>
-     * Some commands like `/help` are server-side only because in client-side these commands
-     * are handled by the client itself and will not request the server to handle them.
-     *
-     * @return Whether this command is only available on the server side
-     */
-    default boolean isServerSideOnly() {
-        return false;
-    }
 
     /**
      * Get the name of this command.
