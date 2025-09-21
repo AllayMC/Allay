@@ -10,8 +10,10 @@ import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.item.type.AllayItemType;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
@@ -144,5 +146,24 @@ public final class NetworkHelper {
         }
 
         return org.cloudburstmc.math.vector.Vector3f.from(vec.x(), vec.y(), vec.z());
+    }
+
+    public static GameType toNetwork(GameMode gameMode) {
+        return switch (gameMode) {
+            case SURVIVAL -> GameType.SURVIVAL;
+            case CREATIVE -> GameType.CREATIVE;
+            case ADVENTURE -> GameType.ADVENTURE;
+            case SPECTATOR -> GameType.SPECTATOR;
+        };
+    }
+
+    public static GameMode fromNetwork(GameType gameType) {
+        return switch (gameType) {
+            case SURVIVAL -> GameMode.SURVIVAL;
+            case CREATIVE -> GameMode.CREATIVE;
+            case ADVENTURE -> GameMode.ADVENTURE;
+            case SPECTATOR -> GameMode.SPECTATOR;
+            default -> null;
+        };
     }
 }

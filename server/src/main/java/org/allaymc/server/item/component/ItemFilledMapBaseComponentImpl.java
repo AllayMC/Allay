@@ -15,6 +15,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypes;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ClientboundMapItemDataPacket;
@@ -350,7 +351,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
             }
         }
         pk.setColors(colors);
-        player.sendPacket(pk);
+        ((EntityPlayerImpl) player).sendPacket(pk);
     }
 
     @Override

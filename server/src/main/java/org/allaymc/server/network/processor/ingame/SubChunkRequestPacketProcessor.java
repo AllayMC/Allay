@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.world.chunk.AllayChunkSection;
 import org.allaymc.server.world.chunk.ChunkEncoder;
@@ -39,7 +40,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             var subChunkPacket = new SubChunkPacket();
             subChunkPacket.setDimension(packet.getDimension());
             subChunkPacket.setCenterPosition(packet.getSubChunkPosition());
-            player.sendPacket(subChunkPacket);
+            ((EntityPlayerImpl) player).sendPacket(subChunkPacket);
             return PacketSignal.HANDLED;
         }
 
@@ -53,7 +54,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         subChunkPacket.setDimension(packet.getDimension());
         subChunkPacket.setCenterPosition(centerPosition);
         subChunkPacket.setSubChunks(responseData);
-        player.sendPacket(subChunkPacket);
+        ((EntityPlayerImpl) player).sendPacket(subChunkPacket);
         return PacketSignal.HANDLED;
     }
 

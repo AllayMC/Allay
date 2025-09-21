@@ -7,6 +7,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
@@ -80,7 +81,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
 
         var itemStackResponsePacket = new ItemStackResponsePacket();
         itemStackResponsePacket.getEntries().addAll(encodedResponses);
-        player.sendPacket(itemStackResponsePacket);
+        ((EntityPlayerImpl) player).sendPacket(itemStackResponsePacket);
     }
 
     private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {

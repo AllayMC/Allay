@@ -73,8 +73,8 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.allaymc.server.utils.Utils.toGameMode;
-import static org.allaymc.server.utils.Utils.toGameType;
+import static org.allaymc.server.network.NetworkHelper.fromNetwork;
+import static org.allaymc.server.network.NetworkHelper.toNetwork;
 
 /**
  * @author daoge_cmd
@@ -528,7 +528,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).saveNBT())
                 .putInt(TAG_ENCHANTMENT_SEED, enchantmentSeed)
-                .putInt(TAG_GAME_TYPE, toGameType(gameMode).ordinal())
+                .putInt(TAG_GAME_TYPE, toNetwork(gameMode).ordinal())
                 .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
                 .build();
     }
@@ -558,7 +558,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(toGameMode(GameType.from(id)), true));
+        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(fromNetwork(GameType.from(id)), true));
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
             loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
         } else {

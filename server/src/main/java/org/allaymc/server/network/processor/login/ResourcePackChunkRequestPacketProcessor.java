@@ -5,6 +5,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkDataPacket;
@@ -24,7 +25,7 @@ public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcess
             return;
         }
 
-        player.sendPacket(getChunkDataPacket(pack, packet.getChunkIndex()));
+        ((EntityPlayerImpl) player).sendPacket(getChunkDataPacket(pack, packet.getChunkIndex()));
     }
 
     public ResourcePackChunkDataPacket getChunkDataPacket(Pack pack, int chunkIndex) {

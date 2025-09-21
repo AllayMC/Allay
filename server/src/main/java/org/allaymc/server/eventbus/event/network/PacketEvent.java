@@ -11,7 +11,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 /**
  * @author daoge_cmd
  */
-// TODO: move to server
 @Getter
 @AllArgsConstructor
 public class PacketEvent extends NetworkEvent implements CancellableEvent {

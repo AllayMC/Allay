@@ -15,6 +15,7 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
@@ -71,7 +72,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         pk.setPosition(NetworkHelper.toNetwork(getPosition()));
         pk.setFrontSide(frontSide);
 
-        player.sendPacket(pk);
+        ((EntityPlayerImpl) player).sendPacket(pk);
     }
 
     @Override

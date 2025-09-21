@@ -3,7 +3,6 @@ package org.allaymc.server.entity.component.player;
 import com.google.common.collect.Lists;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -36,7 +35,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     private static final int MIN_FOOD_EXHAUSTION = 4;
 
     @Dependency(optional = true)
-    protected EntityPlayerNetworkComponent networkComponent;
+    protected EntityPlayerNetworkComponentImpl networkComponent;
 
     protected float swimDistance = 0;
     protected float sprintDistance = 0;

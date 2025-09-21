@@ -33,7 +33,7 @@ public final class Registries {
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEMS;
 
-    // BlockEntity
+    // Block Entity
     public static SimpleMappedRegistry<String, BlockEntityType<?>> BLOCK_ENTITIES;
 
     // Block

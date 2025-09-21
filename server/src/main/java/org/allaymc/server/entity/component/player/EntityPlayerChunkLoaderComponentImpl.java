@@ -72,7 +72,7 @@ import org.joml.Vector3ic;
 
 import java.util.*;
 
-import static org.allaymc.server.utils.Utils.toGameType;
+import static org.allaymc.server.network.NetworkHelper.toNetwork;
 import static org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.*;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
@@ -153,7 +153,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.setPosition(Vector3f.from(l.x(), l.y(), l.z()));
                 p.setMotion(motion);
                 p.setRotation(Vector3f.from(l.pitch(), l.yaw(), l.headYaw()));
-                p.setGameType(toGameType(player.getGameMode()));
+                p.setGameType(toNetwork(player.getGameMode()));
                 p.getMetadata().putAll(getMetadata(entity));
                 p.setDeviceId(loginData.getDeviceInfo().deviceId());
                 p.setHand(NetworkHelper.toNetwork(player.getContainer(ContainerType.INVENTORY).getItemInHand()));
@@ -196,7 +196,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var gameMode = player.getGameMode();
         if (thisPlayer == player) {
             var packet1 = new SetPlayerGameTypePacket();
-            packet1.setGamemode(toGameType(player.getGameMode()).ordinal());
+            packet1.setGamemode(toNetwork(player.getGameMode()).ordinal());
             this.networkComponent.sendPacket(packet1);
 
             var packet2 = new UpdateAdventureSettingsPacket();
@@ -208,7 +208,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             this.networkComponent.sendPacket(packet2);
         } else {
             var packet = new UpdatePlayerGameTypePacket();
-            packet.setGameType(toGameType(player.getGameMode()));
+            packet.setGameType(toNetwork(player.getGameMode()));
             packet.setEntityId(player.getRuntimeId());
             this.networkComponent.sendPacket(packet);
         }
@@ -450,8 +450,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 packet.setData(times);
                 this.networkComponent.sendPacket(packet);
             }
-            default ->
-                    throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
+            default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
         }
     }
 
@@ -509,18 +508,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setPosition(Vector3i.from(location.x(), location.y(), location.z()));
         packet.setRadius(getChunkLoadingRadius() << 4);
         networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void sendPacket(BedrockPacket packet) {
-        // TODO: remove
-        this.networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void sendPacketImmediately(BedrockPacket packet) {
-        // TODO: remove
-        this.networkComponent.sendPacketImmediately(packet);
     }
 
     @Override
@@ -670,8 +657,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 packet.setPosition(pos3f);
                 this.networkComponent.sendPacket(packet);
             }
-            default ->
-                    throw new IllegalStateException("Unhandled block action type: " + action.getClass().getSimpleName());
+            default -> throw new IllegalStateException("Unhandled block action type: " + action.getClass().getSimpleName());
         }
     }
 
@@ -997,12 +983,9 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             }
             case CrossbowLoadSound so -> {
                 switch (so.stage()) {
-                    case START ->
-                            packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_START : SoundEvent.CROSSBOW_LOADING_START);
-                    case MIDDLE ->
-                            packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_MIDDLE : SoundEvent.CROSSBOW_LOADING_MIDDLE);
-                    case END ->
-                            packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_END : SoundEvent.CROSSBOW_LOADING_END);
+                    case START -> packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_START : SoundEvent.CROSSBOW_LOADING_START);
+                    case MIDDLE -> packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_MIDDLE : SoundEvent.CROSSBOW_LOADING_MIDDLE);
+                    case END -> packet.setSound(so.quickCharge() ? SoundEvent.CROSSBOW_QUICK_CHARGE_END : SoundEvent.CROSSBOW_LOADING_END);
                 }
             }
             case MusicDiscPlaySound so -> {
@@ -1152,8 +1135,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 packet.setType(ParticleType.FALLING_DUST);
                 packet.setData(pa.color().getRGB());
             }
-            default ->
-                    throw new IllegalArgumentException("Unhandled particle type: " + particle.getClass().getSimpleName());
+            default -> throw new IllegalArgumentException("Unhandled particle type: " + particle.getClass().getSimpleName());
         }
         this.networkComponent.sendPacket(packet);
     }

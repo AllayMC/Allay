@@ -30,7 +30,6 @@ public final class ItemHelper {
      * This method will also update the item state to the latest version.
      *
      * @param nbt The NBT tag
-     *
      * @return The {@link ItemStack} object
      */
     public static ItemStack fromNBT(NbtMap nbt) {
@@ -58,7 +57,6 @@ public final class ItemHelper {
      * Get the tool tier of an item.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return The {@link ToolTier} object, or {@code null} if the item does not have a tool tier
      */
     public static ToolTier getToolTier(ItemType<?> itemType) {
@@ -72,7 +70,6 @@ public final class ItemHelper {
      * Get the armor tier of an item.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return The {@link ArmorTier} object, or {@code null} if the item does not have an armor tier
      */
     public static ArmorTier getArmorTier(ItemType<?> itemType) {
@@ -86,7 +83,6 @@ public final class ItemHelper {
      * Check if an item is a tool.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a tool, {@code false} otherwise.
      */
     public static boolean isTool(ItemType<?> itemType) {
@@ -97,7 +93,6 @@ public final class ItemHelper {
      * Check if an item is a sword.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a sword, {@code false} otherwise.
      */
     public static boolean isSword(ItemType<?> itemType) {
@@ -108,7 +103,6 @@ public final class ItemHelper {
      * Check if an item is a pickaxe.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a pickaxe, {@code false} otherwise.
      */
     public static boolean isPickaxe(ItemType<?> itemType) {
@@ -119,7 +113,6 @@ public final class ItemHelper {
      * Check if an item is a hoe.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a hoe, {@code false} otherwise.
      */
     public static boolean isHoe(ItemType<?> itemType) {
@@ -130,7 +123,6 @@ public final class ItemHelper {
      * Check if an item is an axe.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is an axe, {@code false} otherwise.
      */
     public static boolean isAxe(ItemType<?> itemType) {
@@ -141,7 +133,6 @@ public final class ItemHelper {
      * Check if an item is a shovel.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a shovel, {@code false} otherwise.
      */
     public static boolean isShovel(ItemType<?> itemType) {
@@ -152,7 +143,6 @@ public final class ItemHelper {
      * Check if an item is a weapon.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a weapon, {@code false} otherwise.
      */
     public static boolean isArmor(ItemType<?> itemType) {
@@ -163,7 +153,6 @@ public final class ItemHelper {
      * Check if an item is a head.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a head, {@code false} otherwise.
      */
     public static boolean isHead(ItemType<?> itemType) {
@@ -174,7 +163,6 @@ public final class ItemHelper {
      * Check if an item is a trimmable armor.
      *
      * @param itemType The {@link ItemType} of the item
-     *
      * @return {@code true} if the item is a trimmable armor, {@code false} otherwise.
      */
     public static boolean isTrimmableArmor(ItemType<?> itemType) {

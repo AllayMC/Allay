@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -18,10 +19,10 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
         var respawnPacket = new RespawnPacket();
         // NOTICE: No need to set runtime entity id
-        var sp = player.validateAndGetSpawnPoint();
-        respawnPacket.setPosition(Vector3f.from(sp.x(), sp.y(), sp.z()));
+        var spawnPoint = player.validateAndGetSpawnPoint();
+        respawnPacket.setPosition(Vector3f.from(spawnPoint.x(), spawnPoint.y(), spawnPoint.z()));
         respawnPacket.setState(RespawnPacket.State.SERVER_READY);
-        player.sendPacket(respawnPacket);
+        ((EntityPlayerImpl) player).sendPacket(respawnPacket);
 
         return PacketSignal.HANDLED;
     }

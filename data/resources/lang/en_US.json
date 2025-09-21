@@ -31,7 +31,7 @@
   "allay:extension.construct.instance.error": "Error while constructing extension instance for extension %1. Error: %2",
   "allay:extension.entrance.missing": "Can't find the entrance of extension %1",
   "allay:extension.loading": "loading extension %1",
-  "allay:extension.mainclass.typeinvalid": "The entrance class of extension %1 is not a subclass of PluginExtension",
+  "allay:extension.mainclass.typeinvalid": "The entrance class of extension %1 is not a subclass of Extension",
   "allay:gui.chunk": "Chunk",
   "allay:gui.chunk.label": "Loaded Chunk Count: %1",
   "allay:gui.console": "Console",

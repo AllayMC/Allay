@@ -1,10 +1,8 @@
 package org.allaymc.server.utils;
 
+import com.google.common.base.Preconditions;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.player.GameMode;
 import org.allaymc.api.plugin.PluginDescriptor;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.semver4j.Semver;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,25 +19,6 @@ public class Utils {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new IllegalArgumentException(e);
         }
-    }
-
-    public static GameType toGameType(GameMode gameMode) {
-        return switch (gameMode) {
-            case SURVIVAL -> GameType.SURVIVAL;
-            case CREATIVE -> GameType.CREATIVE;
-            case ADVENTURE -> GameType.ADVENTURE;
-            case SPECTATOR -> GameType.SPECTATOR;
-        };
-    }
-
-    public static GameMode toGameMode(GameType gameType) {
-        return switch (gameType) {
-            case SURVIVAL -> GameMode.SURVIVAL;
-            case CREATIVE -> GameMode.CREATIVE;
-            case ADVENTURE -> GameMode.ADVENTURE;
-            case SPECTATOR -> GameMode.SPECTATOR;
-            default -> null;
-        };
     }
 
     @SuppressWarnings("DataFlowIssue")

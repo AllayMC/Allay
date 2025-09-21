@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
 import it.unimi.dsi.fastutil.Pair;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -11,6 +10,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.*;
 import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
@@ -21,7 +21,7 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHolderComponentImpl {
 
     @ComponentObject
-    private EntityPlayer thisPlayer;
+    private EntityPlayerImpl thisPlayer;
 
     public EntityPlayerContainerHolderComponentImpl() {
         super(
@@ -49,7 +49,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     }
 
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
-        var pk = new PlayerEnchantOptionsPacket();
+        var packet = new PlayerEnchantOptionsPacket();
         if (item != ItemAirStack.AIR_STACK) {
             var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
             var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
@@ -57,10 +57,10 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 return;
             }
 
-            pk.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
+            packet.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
         }
 
-        thisPlayer.sendPacket(pk);
+        thisPlayer.sendPacket(packet);
     }
 
     @Override
