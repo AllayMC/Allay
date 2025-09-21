@@ -4,9 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.world.sound.MusicDiscPlaySound;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
@@ -72,6 +72,6 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound(TAG_RECORD_ITEM, value -> this.musicDiscItem = ItemHelper.fromNBT(value));
+        nbt.listenForCompound(TAG_RECORD_ITEM, value -> this.musicDiscItem = NBTIO.getAPI().fromItemStackNBT(value));
     }
 }

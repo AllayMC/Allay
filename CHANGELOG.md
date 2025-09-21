@@ -42,6 +42,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   `BiomeId` enum. Biome data is also accessible through method `BiomeType.getBiomeData` now.
 - (API) Introduced method `Command.isDebugCommand()` which can be overridden to determine whether the command is a debug command. Debug
   command name will be shown blue client-side.
+- (API) Introduced class `NBTIO` which replaced the old `fromNBT()` methods in `XXXHelper` classes.
 - Implemented sharpness enchantment.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This

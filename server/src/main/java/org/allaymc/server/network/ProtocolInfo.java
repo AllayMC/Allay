@@ -1,4 +1,4 @@
-package org.allaymc.api.network;
+package org.allaymc.server.network;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.utils.SemVersion;
@@ -19,7 +19,6 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-// TODO: move it from api to server
 @UtilityClass
 public final class ProtocolInfo {
 
@@ -37,7 +36,7 @@ public final class ProtocolInfo {
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
      * <p>
-     * This is not the same as current game version. It should match the nearest version
+     * This is different from the current game version. It should match the nearest version
      * that has block state changes.
      */
     public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 60, 33, 0);

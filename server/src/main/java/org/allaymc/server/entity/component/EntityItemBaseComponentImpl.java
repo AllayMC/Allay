@@ -10,12 +10,11 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
-
-import static org.allaymc.api.item.ItemHelper.fromNBT;
 
 /**
  * @author daoge_cmd
@@ -77,7 +76,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
 
-        nbt.listenForCompound("Item", itemNbt -> this.itemStack = fromNBT(itemNbt));
+        nbt.listenForCompound("Item", itemNbt -> this.itemStack = NBTIO.getAPI().fromItemStackNBT(itemNbt));
     }
 
     @Override

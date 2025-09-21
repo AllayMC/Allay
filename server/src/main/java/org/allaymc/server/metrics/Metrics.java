@@ -4,10 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.utils.GitProperties;
 
 import javax.net.ssl.HttpsURLConnection;

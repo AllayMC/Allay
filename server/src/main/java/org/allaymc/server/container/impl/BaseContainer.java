@@ -14,6 +14,7 @@ import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
 import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.utils.NBTIO;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -21,8 +22,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
 import java.util.function.Consumer;
-
-import static org.allaymc.api.item.ItemHelper.fromNBT;
 
 /**
  * @author daoge_cmd
@@ -199,7 +198,7 @@ public class BaseContainer implements Container {
                 continue;
             }
             int slot = nbt.getByte(TAG_SLOT);
-            ItemStack itemStack = fromNBT(nbt);
+            ItemStack itemStack = NBTIO.getAPI().fromItemStackNBT(nbt);
             content[slot] = itemStack;
         }
     }

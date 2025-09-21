@@ -4,18 +4,11 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.data.ArmorTier;
 import org.allaymc.api.item.data.ToolTier;
-import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.tag.ItemCustomTags;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.updater.item.ItemStateUpdaters;
-import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * @author daoge_cmd
@@ -23,36 +16,6 @@ import java.util.Objects;
 @UtilityClass
 @Slf4j
 public final class ItemHelper {
-
-    /**
-     * Create an {@link ItemStack} from an NBT tag.
-     * <p>
-     * This method will also update the item state to the latest version.
-     *
-     * @param nbt The NBT tag
-     * @return The {@link ItemStack} object
-     */
-    public static ItemStack fromNBT(NbtMap nbt) {
-        try {
-            nbt = ItemStateUpdaters.updateItemState(nbt, ProtocolInfo.ITEM_STATE_UPDATER.getVersion());
-            int count = nbt.getByte("Count", (byte) 1);
-            int meta = nbt.getShort("Damage");
-            var name = nbt.getString("Name");
-            var itemType = Objects.requireNonNull(Registries.ITEMS.get(new Identifier(name)), "Unknown item type " + name + "while loading container items!");
-            return itemType.createItemStack(
-                    ItemStackInitInfo
-                            .builder()
-                            .count(count)
-                            .meta(meta)
-                            .extraTag(nbt.getCompound("tag"))
-                            .build()
-            );
-        } catch (Throwable t) {
-            log.error("Failed to load item from NBT", t);
-            return ItemAirStack.AIR_STACK;
-        }
-    }
-
     /**
      * Get the tool tier of an item.
      *

@@ -3,7 +3,6 @@ package org.allaymc.api.server;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
-import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -137,7 +136,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Represents the level of resource leak detection.")
         @Comment("Possible values: DISABLED, SIMPLE, ADVANCED, PARANOID")
         @CustomKey("resource-leak-detector-level")
-        private ResourceLeakDetector.Level resourceLeakDetectorLevel = ResourceLeakDetector.Level.DISABLED;
+        private ResourceLeakDetectorLevel resourceLeakDetectorLevel = ResourceLeakDetectorLevel.DISABLED;
 
         @Comment("The maximum number of datagram packets each address can send within one RakNet tick (10ms)")
         @Comment("Default value is 120 packets, and will be Integer.MAX_VALUE if the server is running in dev mode")
@@ -165,6 +164,13 @@ public class ServerSettings extends OkaeriConfig {
         public enum CompressionAlgorithm {
             ZLIB,
             SNAPPY
+        }
+
+        public enum ResourceLeakDetectorLevel {
+            DISABLED,
+            SIMPLE,
+            ADVANCED,
+            PARANOID;
         }
     }
 

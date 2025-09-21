@@ -5,14 +5,6 @@ version = rootProject.property("api.version").toString() +
         if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
 
 dependencies {
-    // TODO: move to server
-    api(libs.network) {
-        exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
-        exclude(group = "org.cloudburstmc.fastutil.commons")
-        exclude(group = "org.cloudburstmc.fastutil.maps")
-    }
-    // TODO: move to server
-    api(libs.stateupdater)
     api(libs.nbt)
     api(libs.slf4j.api)
     api(libs.guava)

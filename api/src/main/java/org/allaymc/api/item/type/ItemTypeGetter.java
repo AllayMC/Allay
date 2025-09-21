@@ -1,10 +1,7 @@
 package org.allaymc.api.item.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.updater.item.ItemStateUpdaters;
+import org.allaymc.api.utils.NBTIO;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
@@ -69,12 +66,7 @@ public class ItemTypeGetter {
          * @return The item type
          */
         public ItemType<?> itemType() {
-            var updatedNbt = ItemStateUpdaters.updateItemState(nbtMapBuilder.build(), ProtocolInfo.ITEM_STATE_UPDATER.getVersion());
-            var itemType = Registries.ITEMS.get(new Identifier(updatedNbt.getString("Name")));
-            if (itemType == null) {
-                throw new IllegalArgumentException("Unknown item type " + updatedNbt.getString("Name"));
-            }
-            return itemType;
+            return NBTIO.getAPI().fromItemStackNBT(nbtMapBuilder.build()).getItemType();
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.allaymc.server.network.processor.login;
 
+import io.netty.buffer.Unpooled;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
@@ -34,7 +35,7 @@ public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcess
         packet.setPackId(pack.getId());
         packet.setPackVersion(pack.getStringVersion());
         packet.setChunkIndex(chunkIndex);
-        packet.setData(pack.getChunk(chunkSize * chunkIndex, chunkSize));
+        packet.setData(Unpooled.wrappedBuffer(pack.getChunk(chunkSize * chunkIndex, chunkSize)));
         packet.setProgress((long) chunkSize * chunkIndex);
         return packet;
     }

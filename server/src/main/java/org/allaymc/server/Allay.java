@@ -18,7 +18,6 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
@@ -26,6 +25,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.bossbar.AllayBossBar;
@@ -38,12 +38,14 @@ import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.item.creative.AllayCreativeItemRegistry;
 import org.allaymc.server.message.AllayI18n;
 import org.allaymc.server.message.AllayI18nLoader;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.pdc.AllayPersistentDataTypeRegistry;
 import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.registry.loader.*;
 import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
+import org.allaymc.server.utils.AllayNBTIO;
 import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
@@ -71,7 +73,12 @@ public final class Allay {
             // Enable sentry only in non-dev build
             Sentry.close();
         }
-        ResourceLeakDetector.setLevel(Server.SETTINGS.networkSettings().resourceLeakDetectorLevel());
+        ResourceLeakDetector.setLevel(switch (Server.SETTINGS.networkSettings().resourceLeakDetectorLevel()) {
+            case DISABLED -> ResourceLeakDetector.Level.DISABLED;
+            case SIMPLE -> ResourceLeakDetector.Level.SIMPLE;
+            case ADVANCED -> ResourceLeakDetector.Level.ADVANCED;
+            case PARANOID -> ResourceLeakDetector.Level.PARANOID;
+        });
         // Disable scientific notation in joml
         System.setProperty("joml.format", "false");
         // Enable async logging
@@ -161,6 +168,7 @@ public final class Allay {
 
         // Misc
         api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
+        api.bind(NBTIO.class, AllayNBTIO::new);
 
         api.implement("allay", GitProperties.isDevBuild());
 

@@ -1,8 +1,7 @@
 package org.allaymc.api.player;
 
+import com.google.gson.JsonParser;
 import lombok.Builder;
-import org.jose4j.json.internal.json_simple.JSONObject;
-import org.jose4j.json.internal.json_simple.JSONValue;
 
 import java.util.List;
 import java.util.Objects;
@@ -58,10 +57,10 @@ public record Skin(
 
     private static boolean validateSkinResourcePatch(String skinResourcePatch) {
         try {
-            JSONObject object = (JSONObject) JSONValue.parse(skinResourcePatch);
-            JSONObject geometry = (JSONObject) object.get("geometry");
-            return geometry.containsKey("default") && geometry.get("default") instanceof String;
-        } catch (ClassCastException | NullPointerException e) {
+            var object = JsonParser.parseString(skinResourcePatch).getAsJsonObject();
+            var geometry = object.get("geometry").getAsJsonObject();
+            return geometry.has("default") && geometry.get("default").getAsJsonPrimitive().isString();
+        } catch (ClassCastException | NullPointerException | IllegalStateException e) {
             return false;
         }
     }

@@ -4,10 +4,10 @@ import lombok.Getter;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockStateGetter;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityFlowerPotBaseComponent;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -71,6 +71,6 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound(TAG_PLANT_BLOCK, value -> this.plantBlock = BlockStateGetter.fromNBT(value));
+        nbt.listenForCompound(TAG_PLANT_BLOCK, value -> this.plantBlock = NBTIO.getAPI().fromBlockStateNBT(value));
     }
 }

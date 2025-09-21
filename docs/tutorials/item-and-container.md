@@ -2,7 +2,7 @@
 comments: true
 ---
 
-# Work with Items and Containers
+# Work with Items and Containers (TODO: needs to be updated)
 
 This tutorial introduces the core concepts of Allay's Items and Containers API and shows practical ways to work with item types, item stacks, and containers.
 

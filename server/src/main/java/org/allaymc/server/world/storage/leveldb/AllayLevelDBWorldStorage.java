@@ -7,13 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityHelper;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
@@ -30,6 +28,7 @@ import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
 import org.allaymc.server.network.NetworkHelper;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.*;
@@ -597,7 +596,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 continue;
             }
 
-            var entity = EntityHelper.fromNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNbtUtils.bytesToNbtLE(nbt));
+            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNbtUtils.bytesToNbtLE(nbt));
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
@@ -617,7 +616,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
         var map = new Long2ObjectOpenHashMap<Entity>();
         for (var nbt : AllayNbtUtils.bytesToNbtListLE(entityBytes)) {
-            var entity = EntityHelper.fromNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
+            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
@@ -827,7 +826,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         for (var nbt : AllayNbtUtils.bytesToNbtListLE(tileBytes)) {
             BlockEntity blockEntity;
             try {
-                blockEntity = BlockEntityHelper.fromNBT(world.getDimension(builder.getDimensionInfo().dimensionId()), nbt);
+                blockEntity = NBTIO.getAPI().fromBlockEntityNBT(world.getDimension(builder.getDimensionInfo().dimensionId()), nbt);
             } catch (Throwable t) {
                 log.error("Error while loading block entity from NBT", t);
                 continue;

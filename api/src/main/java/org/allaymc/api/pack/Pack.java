@@ -1,8 +1,6 @@
 package org.allaymc.api.pack;
 
 import com.google.gson.*;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +69,7 @@ public abstract class Pack implements AutoCloseable {
         return this.hash;
     }
 
-    public ByteBuf getChunk(int offset, int length) {
+    public byte[] getChunk(int offset, int length) {
         byte[] chunk;
         if ((this.getSize() - offset) > length) {
             chunk = new byte[length];
@@ -85,7 +83,7 @@ public abstract class Pack implements AutoCloseable {
             log.error("An error occurred while processing the resource pack {} at offset {} and length {}", getName(), offset, length, exception);
         }
 
-        return Unpooled.wrappedBuffer(chunk);
+        return chunk;
     }
 
     public abstract Type getType();

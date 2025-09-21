@@ -13,6 +13,7 @@ import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.NBTIO;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
@@ -171,6 +172,7 @@ public final class AllayAPI {
 
         // Misc
         requireImpl(BossBar.Factory.class, BossBar.FACTORY::set);
+        requireImpl(NBTIO.class, NBTIO.API::set);
     }
 
     /**

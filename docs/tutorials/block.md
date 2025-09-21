@@ -2,7 +2,7 @@
 comments: true
 ---
 
-# Work with Blocks
+# Work with Blocks (TODO: needs to be updated)
 
 This tutorial introduces the core concepts of Allay’s Blocks API and shows practical ways to look up block types and states, and to read/write blocks in the world.
 

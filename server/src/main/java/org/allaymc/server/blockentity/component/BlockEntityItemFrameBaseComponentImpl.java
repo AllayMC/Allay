@@ -6,12 +6,12 @@ import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityItemFrameBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.ItemFrameUseEvent;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPunchEvent;
@@ -115,7 +115,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
         // Should use setItemStack() here, since this method will set ITEM_FRAME_MAP_BIT to true if the item stack is a map
-        nbt.listenForCompound(TAG_ITEM, itemNbt -> this.itemStack = ItemHelper.fromNBT(itemNbt));
+        nbt.listenForCompound(TAG_ITEM, itemNbt -> this.itemStack = NBTIO.getAPI().fromItemStackNBT(itemNbt));
         nbt.listenForByte(TAG_ITEM_ROTATION, itemRotation -> this.itemRotation = itemRotation);
     }
 

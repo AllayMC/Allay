@@ -23,7 +23,6 @@ import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.AllayStringUtils;

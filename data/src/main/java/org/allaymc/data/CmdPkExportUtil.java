@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import lombok.SneakyThrows;
-import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.utils.JSONUtils;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodecHelper;

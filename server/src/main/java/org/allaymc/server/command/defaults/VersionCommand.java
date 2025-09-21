@@ -4,8 +4,8 @@ import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.utils.GitProperties;
 
 /**

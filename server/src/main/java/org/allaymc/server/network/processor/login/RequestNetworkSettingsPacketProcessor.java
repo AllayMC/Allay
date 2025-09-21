@@ -2,9 +2,9 @@ package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;

@@ -117,7 +117,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
 
         if (downBlockType.hasBlockTag(BlockTags.SAND) || downBlockType.hasBlockTag(BlockTags.DIRT)) {
             for (var face : BlockFace.getHorizontalBlockFaces()) {
-                var liquid = dimension.getLiquid(BlockFace.DOWN.offsetPos(face.offsetPos(pos))).second();
+                var liquid = dimension.getLiquid(BlockFace.DOWN.offsetPos(face.offsetPos(pos))).right();
                 if (liquid != null && liquid.getBlockType().hasBlockTag(BlockTags.WATER)) {
                     return true;
                 }

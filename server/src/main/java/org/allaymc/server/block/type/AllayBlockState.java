@@ -4,8 +4,8 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.hash.HashUtils;
+import org.allaymc.server.network.ProtocolInfo;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
