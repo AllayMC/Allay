@@ -26,7 +26,6 @@ import org.allaymc.api.world.Explosion;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.utils.JSONUtils;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3f;
@@ -49,7 +48,11 @@ public class GameTestCommand extends VanillaCommand {
     public GameTestCommand() {
         super("gametest", TrKeys.MC_GAMETEST_DESCRIPTION);
         aliases.add("gt");
-        flags.add(CommandData.Flag.TEST_USAGE);
+    }
+
+    @Override
+    public boolean isDebugCommand() {
+        return true;
     }
 
     @Override
@@ -109,20 +112,6 @@ public class GameTestCommand extends VanillaCommand {
                     var loc = player.getLocation();
                     var floorLoc = loc.floor(new Vector3d());
                     loc.dimension().setBlockState((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), blockType.getDefaultState());
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
-                .key("dumpcmd")
-                .exec((context, player) -> {
-                    var cmdPk = Registries.COMMANDS.encodeAvailableCommandsPacketFor(player);
-                    try {
-                        Files.deleteIfExists(Path.of("cmd_pk_allay.json"));
-                    } catch (IOException e) {
-                        context.addOutput(TextFormat.RED + "" + e);
-                        return context.fail();
-                    }
-
-                    JSONUtils.toFile("cmd_pk_allay.json", cmdPk, writer -> writer.setIndent("  "));
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

@@ -3,6 +3,7 @@ package org.allaymc.server.entity.component.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
@@ -21,6 +22,7 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -32,7 +34,6 @@ import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.NetworkData;
-import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayerManager;
@@ -47,11 +48,9 @@ import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
@@ -59,7 +58,7 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 
 import java.net.SocketAddress;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
@@ -205,9 +204,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             var abilities = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).getAbilities();
             sendPacket(abilities.encodeUpdateAbilitiesPacket());
         });
-        sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
-        // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
+        // PlayerListPacket can only be sent at this stage, otherwise the client won't show its skin
         playerManager.broadcastPlayerListChange(thisPlayer, true);
         if (server.getPlayerManager().getPlayerCount() > 1) {
             playerManager.sendPlayerListTo(thisPlayer);
@@ -221,6 +219,58 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         thisPlayer.viewWeather(world.getWeather());
         // Save player data the first time it joins
         server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
+    }
+
+    public void sendCommands() {
+        sendPacket(encodeAvailableCommandsPacket());
+    }
+
+    public AvailableCommandsPacket encodeAvailableCommandsPacket() {
+        var pk = new AvailableCommandsPacket();
+        Registries.COMMANDS.getContent().values().stream()
+                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
+                .forEach(command -> pk.getCommands().add(encodeCommand(command)));
+        return pk;
+    }
+
+    protected CommandData encodeCommand(Command command) {
+        // Aliases
+        CommandEnumData aliases = null;
+        if (!command.getAliases().isEmpty()) {
+            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
+            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
+            values.put(command.getName(), Collections.emptySet());
+            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
+        }
+
+        // Overloads
+        var overloads = new ArrayList<CommandOverloadData>();
+        for (var leaf : command.getCommandTree().getLeaves()) {
+            var params = new CommandParamData[leaf.depth()];
+            var node = leaf;
+            var index = leaf.depth() - 1;
+            while (!node.isRoot()) {
+                params[index] = ((BaseNode) node).toNetworkData();
+                node = node.parent();
+                index--;
+            }
+            overloads.add(new CommandOverloadData(false, params));
+        }
+        if (overloads.isEmpty()) {
+            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
+        }
+
+        // Flags
+        var flags = new HashSet<CommandData.Flag>();
+        flags.add(CommandData.Flag.NOT_CHEAT);
+        if (command.isDebugCommand()) {
+            flags.add(CommandData.Flag.TEST_USAGE);
+        }
+
+        return new CommandData(
+                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
+                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
+        );
     }
 
     @Override
@@ -339,16 +389,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         sendPacketImmediately(encodeStartGamePacket(dimension.getWorld(), playerData, dimension));
 
-        var codecHelper = clientSession.getPeer().getCodecHelper();
-        codecHelper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
-        codecHelper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
+        var helper = clientSession.getPeer().getCodecHelper();
+        helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
+        helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
 
-        var itemComponentPacket = new ItemComponentPacket();
-        itemComponentPacket.getItems().addAll(NetworkData.ITEM_DEFINITIONS.get());
-        sendPacketImmediately(itemComponentPacket);
-
-        sendPacket(encodeCreativeContentPacket());
-
+        sendPacketImmediately(NetworkData.ITEM_COMPONENT_PACKET.get());
+        sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
         sendPacket(NetworkData.CRAFTING_DATA_PACKET.get());
@@ -406,31 +452,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setOwnerId("");
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
         MultiVersion.adaptExperimentData(thisPlayer, packet.getExperiments());
-        return packet;
-    }
-
-    protected CreativeContentPacket encodeCreativeContentPacket() {
-        var packet = new CreativeContentPacket();
-        for (var group : Registries.CREATIVE_ITEMS.getGroups()) {
-            packet.getGroups().add(new CreativeItemGroup(
-                    switch (group.getCategory().getType()) {
-                        case CONSTRUCTION -> CreativeItemCategory.CONSTRUCTION;
-                        case NATURE -> CreativeItemCategory.NATURE;
-                        case EQUIPMENT -> CreativeItemCategory.EQUIPMENT;
-                        case ITEMS -> CreativeItemCategory.ITEMS;
-                    },
-                    I18n.get().tr(getLoginData().getLangCode(), group.getName()),
-                    NetworkHelper.toNetwork(group.getIcon())
-            ));
-        }
-        for (var entry : Registries.CREATIVE_ITEMS.getEntries()) {
-            packet.getContents().add(new CreativeItemData(
-                    NetworkHelper.toNetwork(entry.itemStack()),
-                    // NOTICE: 0 is not indexed by the client for items
-                    entry.index() + 1,
-                    entry.group().getIndex()
-            ));
-        }
         return packet;
     }
 

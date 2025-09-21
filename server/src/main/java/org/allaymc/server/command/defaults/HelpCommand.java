@@ -6,10 +6,15 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.registry.AllayCommandRegistry;
+import org.allaymc.server.command.tree.node.BaseNode;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
- * @author harryxi
+ * @author harryxi | daoge_cmd
  */
 public class HelpCommand extends VanillaCommand {
     private static final int COMMANDS_PER_PAGE = 7;
@@ -40,18 +45,14 @@ public class HelpCommand extends VanillaCommand {
                 .root()
                 .str("command")
                 .exec((context, sender) -> {
-                    if (Registries.COMMANDS instanceof AllayCommandRegistry commandRegistry) {
-                        var command = commandRegistry.findCommand(context.getResult(0));
-                        if (command == null) {
-                            context.addSyntaxError(0);
-                            return context.fail();
-                        }
-
-                        printCommandHelp(sender, command);
-                        return context.success();
+                    var command = Registries.COMMANDS.findCommand(context.getResult(0));
+                    if (command == null) {
+                        context.addSyntaxError(0);
+                        return context.fail();
                     }
 
-                    return context.fail();
+                    printCommandHelp(sender, command);
+                    return context.success();
                 }, SenderType.SERVER);
     }
 
@@ -59,8 +60,56 @@ public class HelpCommand extends VanillaCommand {
         sender.sendTranslatable(command.getAliases().isEmpty() ? command.getName() + ":" : TrKeys.MC_COMMANDS_HELP_COMMAND_ALIASES, command.getName(), String.join(" ", command.getAliases()));
         sender.sendTranslatable(command.getDescription());
         sender.sendTranslatable(TrKeys.MC_COMMANDS_GENERIC_USAGE_NOPARAM);
-        for (var usage : command.getCommandFormatTips()) {
+        for (var usage : buildCommandTips(command)) {
             sender.sendMessage(usage);
         }
+    }
+
+    @Override
+    public boolean isServerSideOnly() {
+        return true;
+    }
+
+    private static List<String> buildCommandTips(Command command) {
+        var tips = new ArrayList<String>();
+        for (var leaf : command.getCommandTree().getLeaves()) {
+            var params = new CommandParamData[leaf.depth()];
+            var node = leaf;
+            var index = leaf.depth() - 1;
+            while (!node.isRoot()) {
+                params[index] = ((BaseNode) node).toNetworkData();
+                node = node.parent();
+                index--;
+            }
+
+            var tip = new StringBuilder("- /").append(command.getName());
+            for (var param : params) {
+                if (param.getEnumData() == null) {
+                    tip.append(param.isOptional() ? " [" : " <")
+                            .append(param.getName())
+                            .append(": ")
+                            .append(param.getType().getParamType().name().toLowerCase(Locale.ENGLISH))
+                            .append(param.isOptional() ? "]" : ">");
+                } else {
+                    var enums = new ArrayList<>(param.getEnumData().getValues().keySet());
+                    if (enums.size() == 1 && !param.isOptional()) {
+                        tip.append(" ").append(enums.getFirst());
+                    } else {
+                        tip.append(param.isOptional() ? " [" : " <")
+                                .append(
+                                        enums.isEmpty()
+                                                ? param.getName() + ": " + param.getEnumData().getName()
+                                                : String.join("|", enums.subList(0, Math.min(enums.size(), 10)))
+                                )
+                                .append(enums.size() > 10 ? "|..." : "")
+                                .append(param.isOptional() ? "]" : ">");
+                    }
+                }
+            }
+
+            tips.add(tip.toString());
+        }
+
+        return tips;
     }
 }

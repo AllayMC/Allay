@@ -40,6 +40,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   the server can be got using method `Server.getMessageChannel()` and can be changed using method `Server.setMessageChannel()`.
 - (API) Introduced new registry `Registries.BIOMES` which contains all available biomes in the game. This is the replacement for the old
   `BiomeId` enum. Biome data is also accessible through method `BiomeType.getBiomeData` now.
+- (API) Introduced method `Command.isDebugCommand()` which can be overridden to determine whether the command is a debug command. Debug
+  command name will be shown blue client-side.
 - Implemented sharpness enchantment.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
@@ -114,6 +116,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Replaced protocol library class `ModalFormCancelReason` with `FormCancelReason` in the modal form APIs.
 - (API) Replaced protocol library class `CreativeItemCategory` with `CreativeItemCategory.Type` in the creative item APIs.
 - (API) Moved `XXXInitInfo` classes to their parent packages.
+- (API) Renamed method `Command.getCommandOverloads()` to `Command.getOverloads()`.
 
 ### Fixed
 
@@ -141,7 +144,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
 - (API) Removed methods `Dimension.addLevelSoundEvent()` and `Dimension.addLevelEvent()` due to the new sound/particle system.
 - (API) Removed methods `Dimension.sendBlockUpdateTo()`, please use `WorldViewer.viewBlockUpdate()` instead.
-- (API) Removed network related methods in class `BlockEntityBaseComponent`, use the newly introduced world viewer interface instead.
+- (API) Removed network-related methods in class `BlockEntityBaseComponent`, use the newly introduced world viewer interface instead.
 - (API) Removed methods `BlockEntityHolderComponent.createBlockEntity()` and `BlockEntityHolderComponent.removeBlockEntity()` since these methods are not expected
   to be touched by the user.
 - (API) Removed method `EntityBaseComponent.applyEntityEvent()` which is replaced by the new entity action system.
@@ -157,7 +160,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed methods `toNetwork()`, `getChunkDataPacket()` and `toEntryInfo()` in class `Pack`.
 - (API) Removed method `EntityPlayerNetworkComponent.getClientSession()`.
 - (API) Removed method `EnchantmentInstance.toNetwork()`.
-- (API) Removed method `Command.isServerSideOnly()`.
+- (API) Removed network-related methods in the command system.
+- (API) Removed classes `BaseCommand` and `SimpleCommand`, and plugin commands now should extend `Command` directly.
+- (API) Removed method `Command.getCommandFormatTips()`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

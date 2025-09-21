@@ -2,7 +2,6 @@ package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.message.TrKeys;

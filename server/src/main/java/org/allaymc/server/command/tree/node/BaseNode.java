@@ -1,4 +1,4 @@
-package org.allaymc.api.command.tree;
+package org.allaymc.server.command.tree.node;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
@@ -6,11 +6,14 @@ import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
+import org.allaymc.api.command.tree.CommandContext;
+import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.permission.Permission;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -39,7 +42,6 @@ public abstract class BaseNode implements CommandNode {
     @Getter
     @Setter
     protected int maxArgCostBranch;
-    protected Set<CommandParamOption> paramOptions;
     protected List<Permission> permissions;
 
     public BaseNode(String name, CommandNode parent) {
@@ -50,7 +52,6 @@ public abstract class BaseNode implements CommandNode {
         this.name = name;
         this.parent = parent;
         this.defaultValue = defaultValue;
-        this.paramOptions = EnumSet.noneOf(CommandParamOption.class);
         this.permissions = new ArrayList<>();
     }
 
@@ -236,12 +237,6 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public CommandNode addParamOption(CommandParamOption option) {
-        paramOptions.add(option);
-        return this;
-    }
-
-    @Override
     public CommandNode permission(Permission permission) {
         if (this.optional) {
             throw new IllegalArgumentException("Adding permissions to optional node is not allowed!");
@@ -256,12 +251,10 @@ public abstract class BaseNode implements CommandNode {
         return Collections.unmodifiableList(this.permissions);
     }
 
-    @Override
     public CommandParamData toNetworkData() {
         var data = new CommandParamData();
         data.setName(name);
         data.setOptional(optional);
-        data.getOptions().addAll(paramOptions);
         return data;
     }
 }

@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  * @author daoge_cmd
  */
 @Getter
-public final class ModalForm extends Form {
+public class ModalForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "modal";
 

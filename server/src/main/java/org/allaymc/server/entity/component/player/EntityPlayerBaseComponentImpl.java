@@ -35,7 +35,6 @@ import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.TextFormat;
@@ -312,7 +311,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.abilities.sync();
 
         if (requireResendingCommands) {
-            this.networkComponent.sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
+            this.networkComponent.sendCommands();
             this.requireResendingCommands = false;
         }
     }

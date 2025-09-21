@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  */
 @Getter
 @Slf4j
-public final class SimpleForm extends Form {
+public class SimpleForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "form";
 

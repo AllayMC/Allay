@@ -1,7 +1,6 @@
 package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.message.TrKeys;
@@ -40,7 +39,7 @@ public class BlockTypeNode extends BaseNode {
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
         // NOTICE: The name must be "blockName", so that the client will show item list
-        // There is need to send the full block list to the client
+        // There is no need to send the full block list to the client
         data.setName("blockName");
         // Also, there must be "Block"
         data.setEnumData(new CommandEnumData("Block", new LinkedHashMap<>(), false));

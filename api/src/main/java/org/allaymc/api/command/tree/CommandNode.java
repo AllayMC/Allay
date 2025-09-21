@@ -15,8 +15,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.data.Difficulty;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3fc;
 
@@ -30,6 +29,7 @@ import static org.allaymc.api.command.tree.CommandNodeFactory.getFactory;
 /**
  * @author daoge_cmd
  */
+@ApiStatus.NonExtendable
 public interface CommandNode {
 
     /**
@@ -300,48 +300,6 @@ public interface CommandNode {
     Consumer<CommandContext> getOnRedirect();
 
     /**
-     * Add a parameter option to this command node.
-     *
-     * @param option the parameter option to add
-     * @return the current {@code CommandNode}
-     */
-    CommandNode addParamOption(CommandParamOption option);
-
-    /**
-     * Suppresses automatic enum completion for this node.
-     *
-     * @return the current {@code CommandNode}
-     */
-    default CommandNode suppressEnumAutoCompletion() {
-        return addParamOption(CommandParamOption.SUPPRESS_ENUM_AUTOCOMPLETION);
-    }
-
-    /**
-     * Marks this node as having a semantic constraint.
-     *
-     * @return the current {@code CommandNode}
-     */
-    default CommandNode hasSemanticConstraint() {
-        return addParamOption(CommandParamOption.HAS_SEMANTIC_CONSTRAINT);
-    }
-
-    /**
-     * Marks this node as an enum that behaves as a chained command.
-     *
-     * @return the current {@code CommandNode}
-     */
-    default CommandNode enumAsChainedCommand() {
-        return addParamOption(CommandParamOption.ENUM_AS_CHAINED_COMMAND);
-    }
-
-    /**
-     * Converts this command node to network data for communication.
-     *
-     * @return the network data representation of this node
-     */
-    CommandParamData toNetworkData();
-
-    /**
      * Add a key parameter to this command node with a default value.
      *
      * @param key          the key of the parameter
@@ -545,12 +503,25 @@ public interface CommandNode {
         return enums(name, "", values);
     }
 
+    /**
+     * Add an enum parameter to this command node based on the specified enum class, and
+     * the default value is set to {@code null}.
+     * <p>
+     * Unlike {@link #enums}, the string result will then be mapped back to the type of
+     * the provided enum class, which means that you don't need to map string back to
+     * enum manually.
+     *
+     * @param name      the name of the command node
+     * @param enumClass the class of the enumeration to be used for this command node
+     * @return a CommandNode instance configured to accept values from the specified enumeration class
+     */
     default <T extends Enum<?>> CommandNode enumClass(String name, Class<T> enumClass) {
         return enumClass(name, null, enumClass);
     }
 
     /**
      * Add an enum parameter to this command node based on the specified enum class.
+     * <p>
      * Unlike {@link #enums}, the string result will then be mapped back to the type of
      * the provided enum class, which means that you don't need to map string back to
      * enum manually.
@@ -566,6 +537,7 @@ public interface CommandNode {
 
     /**
      * Add an enum parameter to this command node based on the specified enum class.
+     * <p>
      * Unlike {@link #enums}, the string result will then be mapped back to the type of
      * the provided enum class, which means that you don't need to map string back to
      * enum manually.

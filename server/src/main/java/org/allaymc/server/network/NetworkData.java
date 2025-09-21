@@ -17,6 +17,9 @@ import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemGroup;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
@@ -48,18 +51,20 @@ public final class NetworkData {
     public static final Supplier<List<ItemDefinition>> ITEM_DEFINITIONS = Suppliers.memoize(NetworkData::encodeItemDefinitions);
     public static final Supplier<List<BlockDefinition>> BLOCK_DEFINITIONS = Suppliers.memoize(NetworkData::encodeBlockDefinitions);
     public static final Supplier<List<ExperimentData>> EXPERIMENT_DATA_LIST = Suppliers.memoize(NetworkData::encodeExperimentDataList);
+
+    public static final Supplier<ItemComponentPacket> ITEM_COMPONENT_PACKET = Suppliers.memoize(NetworkData::encodeItemComponentPacket);
+    public static final Supplier<CreativeContentPacket> CREATIVE_CONTENT_PACKET = Suppliers.memoize(NetworkData::encodeCreativeContentPacket);
     public static final Supplier<CraftingDataPacket> CRAFTING_DATA_PACKET = Suppliers.memoize(NetworkData::encodeCraftingDataPacket);
     public static final Supplier<AvailableEntityIdentifiersPacket> AVAILABLE_ENTITY_IDENTIFIERS_PACKET = Suppliers.memoize(NetworkData::encodeAvailableEntityIdentifiersPacket);
     public static final Supplier<BiomeDefinitionListPacket> BIOME_DEFINITION_LIST_PACKET = Suppliers.memoize(NetworkData::encodeBiomeDefinitionListPacket);
     public static final Supplier<ResourcePacksInfoPacket> RESOURCE_PACKS_INFO_PACKET = Suppliers.memoize(NetworkData::encodeResourcePacksInfoPacket);
     public static final Supplier<ResourcePackStackPacket> RESOURCES_PACK_STACK_PACKET = Suppliers.memoize(NetworkData::encodeResourcesPackStackPacket);
     public static final Supplier<TrimDataPacket> TRIM_DATA_PACKET = Suppliers.memoize(NetworkData::encodeTrimDataPacket);
+
     public static final List<Recipe> INDEXED_RECIPES = new ArrayList<>();
 
     public static List<ItemDefinition> encodeItemDefinitions() {
-        return Registries.ITEMS.getContent().values().stream()
-                .map(NetworkHelper::toNetwork)
-                .toList();
+        return Registries.ITEMS.getContent().values().stream().map(NetworkHelper::toNetwork).toList();
     }
 
     public static List<BlockDefinition> encodeBlockDefinitions() {
@@ -81,6 +86,37 @@ public final class NetworkData {
                 // Copper chests and golem
                 new ExperimentData("y_2025_drop_3", true)
         );
+    }
+
+    private static ItemComponentPacket encodeItemComponentPacket() {
+        var packet = new ItemComponentPacket();
+        packet.getItems().addAll(NetworkData.ITEM_DEFINITIONS.get());
+        return packet;
+    }
+
+    private static CreativeContentPacket encodeCreativeContentPacket() {
+        var packet = new CreativeContentPacket();
+        for (var group : Registries.CREATIVE_ITEMS.getGroups()) {
+            packet.getGroups().add(new CreativeItemGroup(
+                    switch (group.getCategory().getType()) {
+                        case CONSTRUCTION -> CreativeItemCategory.CONSTRUCTION;
+                        case NATURE -> CreativeItemCategory.NATURE;
+                        case EQUIPMENT -> CreativeItemCategory.EQUIPMENT;
+                        case ITEMS -> CreativeItemCategory.ITEMS;
+                    },
+                    group.getName(),
+                    NetworkHelper.toNetwork(group.getIcon())
+            ));
+        }
+        for (var entry : Registries.CREATIVE_ITEMS.getEntries()) {
+            packet.getContents().add(new CreativeItemData(
+                    NetworkHelper.toNetwork(entry.itemStack()),
+                    // NOTICE: 0 is not indexed by the client for items
+                    entry.index() + 1,
+                    entry.group().getIndex()
+            ));
+        }
+        return packet;
     }
 
     private static CraftingDataPacket encodeCraftingDataPacket() {

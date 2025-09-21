@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  */
 @Getter
 @Slf4j
-public final class CustomForm extends Form {
+public class CustomForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "custom_form";
 

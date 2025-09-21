@@ -6,7 +6,6 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.message.TrKeys;
@@ -15,7 +14,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.command.defaults.*;
-import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -149,7 +147,7 @@ public class AllayCommandRegistry extends CommandRegistry {
                 CommandSender sender1 = result.context().getSender();
                 Server.getInstance().getMessageChannel().broadcastCommandOutputs(sender1, status, outputs);
             } else {
-                // If there is an error, only send message to oneself
+                // If there is an error, only send the message to itself
                 sender.sendCommandOutputs(result.context().getSender(), status, outputs);
             }
 
@@ -159,25 +157,5 @@ public class AllayCommandRegistry extends CommandRegistry {
             sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.fail();
         }
-    }
-
-    @Override
-    public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
-        var pk = new AvailableCommandsPacket();
-        getContent().values().stream()
-                .filter(command -> player.hasPermissions(command.getPermissions()))
-                .forEach(command -> pk.getCommands().add(command.buildNetworkDataFor(player)));
-        return pk;
-    }
-
-    public Command findCommand(String nameOrAlias) {
-        var result = this.get(nameOrAlias);
-        if (result != null) {
-            return result;
-        }
-
-        return this.getContent().values().stream()
-                .filter(command -> command.getAliases().contains(nameOrAlias))
-                .findFirst().orElse(null);
     }
 }

@@ -1,6 +1,5 @@
 package org.allaymc.server.command.tree.node;
 
-import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.item.type.ItemType;
@@ -41,7 +40,7 @@ public class ItemTypeNode extends BaseNode {
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
         // NOTICE: The name must be "itemName", so that the client will show item list
-        // There is need to send the full item list to the client
+        // There is no need to send the full item list to the client
         data.setName("itemName");
         // Also, there must be "Item"
         data.setEnumData(new CommandEnumData("Item", new LinkedHashMap<>(), false));

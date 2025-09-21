@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  *
  * @author daoge_cmd
  */
-public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
+public abstract class Form {
 
     protected static final Gson GSON = new Gson();
 
