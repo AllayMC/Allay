@@ -48,7 +48,7 @@ public class FurnaceRecipe extends Recipe {
     public static Identifier buildIdentifier(ItemStack ingredient, Type type) {
         return new Identifier("furnace." + index(ingredient) + "_" + type.name().toLowerCase(Locale.ROOT));
     }
-    
+
     private static String index(ItemStack item) {
         return item.getItemType().getIdentifier().toString().replace(Identifier.NAMESPACE_SEPARATOR, "_");
     }
@@ -91,12 +91,4 @@ public class FurnaceRecipe extends Recipe {
          */
         SOUL_CAMPFIRE;
     }
-
-//    @Override
-//    public RecipeData toNetworkData() {
-//        return FurnaceRecipeData.of(
-//                getType(), ingredient.getItemType().getRuntimeId(),
-//                0, output.toNetworkItemData(), tag
-//        );
-//    }
 }

@@ -185,7 +185,8 @@ class RecipeTest {
                         new ItemTypeDescriptor(GRASS_BLOCK),
                         new ItemTypeDescriptor(GRASS_BLOCK),
                         new ItemTypeDescriptor(GRASS_BLOCK)
-                }
+                },
+                ShapelessRecipe.Type.CRAFTING
         );
 
         var input1 = new CraftingRecipeInput(grass(), grass(), grass(), air());

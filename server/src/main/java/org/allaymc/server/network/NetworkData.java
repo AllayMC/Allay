@@ -106,7 +106,13 @@ public final class NetworkData {
                     var data = ShapelessRecipeData.of(
                             CraftingDataType.SHAPELESS, shapeless.getIdentifier().toString(),
                             buildNetworkIngredients(shapeless), buildNetworkOutputs(shapeless.getOutputs()),
-                            UUID.randomUUID(), "crafting_table", shapeless.getPriority(), id
+                            UUID.randomUUID(),
+                            switch (shapeless.getType()) {
+                                case CRAFTING -> "crafting_table";
+                                case STONECUTTER -> "stonecutter";
+                                case CARTOGRAPHY_TABLE -> "cartography_table";
+                            },
+                            shapeless.getPriority(), id
                     );
                     packet.getCraftingData().add(data);
                     NetworkData.INDEXED_RECIPES.add(recipe);

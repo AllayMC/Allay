@@ -126,7 +126,13 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
                 new Identifier(obj.get("id").getAsString()),
                 RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new),
                 obj.has("priority") ? obj.get("priority").getAsInt() : 0,
-                ingredients.toArray(ItemDescriptor[]::new)
+                ingredients.toArray(ItemDescriptor[]::new),
+                switch (obj.get("tag").getAsString()) {
+                    case "crafting_table" -> ShapelessRecipe.Type.CRAFTING;
+                    case "stonecutter" -> ShapelessRecipe.Type.STONECUTTER;
+                    case "cartography_table" -> ShapelessRecipe.Type.CARTOGRAPHY_TABLE;
+                    default -> throw new IllegalStateException("Unhandled tag for shapeless recipe: " + obj.get("tag").getAsString());
+                }
         );
     }
 

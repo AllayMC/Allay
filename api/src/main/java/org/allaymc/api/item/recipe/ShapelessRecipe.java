@@ -14,15 +14,29 @@ import java.util.List;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
+ * Represents a shapeless recipe that can be matched and crafted without
+ * requiring a specific arrangement of ingredients in a crafting grid.
+ * This recipe checks for the presence of the required ingredients in any
+ * order, as long as all ingredients match.
+ *
  * @author daoge_cmd
  */
 @Getter
 public class ShapelessRecipe extends Recipe {
+    /**
+     * Represents the ingredient required for this shapeless recipe.
+     */
     protected ItemDescriptor[] ingredients;
+    /**
+     * Specifies the type of the recipe. The type determines the block/container required to use
+     * this recipe, such as whether it should be used in a crafting grid/table or a stonecutter.
+     */
+    protected Type type;
 
-    public ShapelessRecipe(Identifier identifier, ItemStack[] outputs, int priority, ItemDescriptor[] ingredients) {
+    public ShapelessRecipe(Identifier identifier, ItemStack[] outputs, int priority, ItemDescriptor[] ingredients, Type type) {
         super(identifier, outputs, priority);
         this.ingredients = ingredients;
+        this.type = type;
     }
 
     @Override
@@ -62,5 +76,24 @@ public class ShapelessRecipe extends Recipe {
             }
         }
         return -1;
+    }
+
+    /**
+     * Represents the type of shapeless recipe, specifying the block or container required to use
+     * the recipe.
+     */
+    public enum Type {
+        /**
+         * This recipe can only be used in 2x2 crafting grid or 3x3 crafting table.
+         */
+        CRAFTING,
+        /**
+         * This recipe can only be used in a stonecutter.
+         */
+        STONECUTTER,
+        /**
+         * This recipe can only be used in a cartography table.
+         */
+        CARTOGRAPHY_TABLE
     }
 }
