@@ -10,8 +10,6 @@ import org.allaymc.api.item.creative.CreativeItemCategory.Type;
 import org.allaymc.api.item.creative.CreativeItemEntry;
 import org.allaymc.api.item.creative.CreativeItemGroup;
 import org.allaymc.api.item.creative.CreativeItemRegistry;
-import org.allaymc.api.message.I18n;
-import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -46,8 +44,6 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
 
     @SneakyThrows
     protected void load() {
-        log.info(I18n.get().tr(TrKeys.ALLAY_CREATIVEITEM_LOADING));
-
         // Load groups
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("creative_groups.json")))) {
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
@@ -90,8 +86,6 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                 group.registerItem(itemStack);
             }
         }
-
-        log.info(I18n.get().tr(TrKeys.ALLAY_CREATIVEITEM_LOADED));
     }
 
     @Override

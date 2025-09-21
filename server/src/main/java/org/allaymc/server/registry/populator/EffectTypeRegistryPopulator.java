@@ -2,8 +2,6 @@ package org.allaymc.server.registry.populator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.effect.EffectTypes;
-import org.allaymc.api.message.I18n;
-import org.allaymc.api.message.TrKeys;
 import org.allaymc.server.entity.effect.*;
 
 /**
@@ -13,7 +11,6 @@ import org.allaymc.server.entity.effect.*;
 public class EffectTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.ALLAY_EFFECTTYPE_LOADING));
         EffectTypes.ABSORPTION = new EffectAbsorptionType();
         EffectTypes.BAD_OMEN = new EffectBadOmenType();
         EffectTypes.BLINDNESS = new EffectBlindnessType();
@@ -50,6 +47,5 @@ public class EffectTypeRegistryPopulator implements Runnable {
         EffectTypes.WEAVING_OMEN = new EffectWeavingType();
         EffectTypes.WIND_CHARGED = new EffectWindChargedType();
         EffectTypes.WITHER = new EffectWitherType();
-        log.info(I18n.get().tr(TrKeys.ALLAY_EFFECTTYPE_LOADED, EffectTypes.class.getFields().length));
     }
 }

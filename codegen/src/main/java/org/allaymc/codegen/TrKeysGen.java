@@ -16,7 +16,7 @@ import java.nio.file.Path;
  */
 public class TrKeysGen {
     static final Path TR_EN_FILE_PATH = Path.of(CodeGenConstants.DATA_PATH + "lang/en_US.json");
-    static final Path OUTPUT_PATH = Path.of("api/src/main/java/org/allaymc/api/i18n/TrKeys.java");
+    static final Path OUTPUT_PATH = Path.of("api/src/main/java/org/allaymc/api/message/TrKeys.java");
 
     @SneakyThrows
     public static void main(String[] args) {

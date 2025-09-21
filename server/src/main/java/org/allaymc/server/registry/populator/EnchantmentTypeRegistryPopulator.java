@@ -2,8 +2,6 @@ package org.allaymc.server.registry.populator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
-import org.allaymc.api.message.I18n;
-import org.allaymc.api.message.TrKeys;
 import org.allaymc.server.item.enchantment.*;
 
 /**
@@ -13,7 +11,6 @@ import org.allaymc.server.item.enchantment.*;
 public class EnchantmentTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        log.info(I18n.get().tr(TrKeys.ALLAY_ENCHTYPE_LOADING));
         EnchantmentTypes.AQUA_AFFINITY = new EnchantmentAquaAffinityType();
         EnchantmentTypes.BANE_OF_ARTHROPODS = new EnchantmentBaneOfArthropodsType();
         EnchantmentTypes.BINDING = new EnchantmentBindingType();
@@ -55,6 +52,5 @@ public class EnchantmentTypeRegistryPopulator implements Runnable {
         EnchantmentTypes.UNBREAKING = new EnchantmentUnbreakingType();
         EnchantmentTypes.VANISHING = new EnchantmentVanishingType();
         EnchantmentTypes.WIND_BURST = new EnchantmentWindBurstType();
-        log.info(I18n.get().tr(TrKeys.ALLAY_ENCHTYPE_LOADED, EnchantmentTypes.class.getFields().length));
     }
 }

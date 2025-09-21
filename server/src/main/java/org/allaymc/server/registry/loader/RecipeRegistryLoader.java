@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
-import org.allaymc.api.message.I18n;
-import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -24,7 +22,6 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
     @SneakyThrows
     @Override
     public Map<Identifier, Recipe> load(Void $) {
-        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_LOADING));
         var recipes = new HashMap<Identifier, Recipe>();
         JsonObject obj;
         try (var reader = new InputStreamReader(Objects.requireNonNull(Utils.getResource("recipes.json")))) {
@@ -85,7 +82,6 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
             recipes.put(recipe.getIdentifier(), recipe);
         }
 
-        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_LOADED, recipes.size()));
         return recipes;
     }
 

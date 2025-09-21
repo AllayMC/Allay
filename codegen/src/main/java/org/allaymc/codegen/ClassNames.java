@@ -61,7 +61,7 @@ public interface ClassNames {
     ClassName ITEM_TYPE_DEFAULT_INITIALIZER = ClassName.get("org.allaymc.server.item.type", "ItemTypeDefaultInitializer");
     ClassName ITEM_TAG = ClassName.get("org.allaymc.api.item.tag", "ItemTag");
 
-    ClassName TR_KEYS = ClassName.get("org.allaymc.api.i18n", "TrKeys");
+    ClassName TR_KEYS = ClassName.get("org.allaymc.api.message", "TrKeys");
     ClassName MINECRAFT_VERSION_SENSITIVE = ClassName.get("org.allaymc.api.annotation", "MinecraftVersionSensitive");
     ClassName SOUND_NAMES = ClassName.get("org.allaymc.api.world.sound", "SoundNames");
     ClassName CREATIVE_ITEM_GROUPS = ClassName.get("org.allaymc.api.item.creative", "CreativeItemGroups");
