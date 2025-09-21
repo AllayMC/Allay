@@ -3,19 +3,17 @@ package org.allaymc.server.registry;
 import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.data.ItemData;
+import org.allaymc.api.item.data.TrimMaterial;
+import org.allaymc.api.item.data.TrimPattern;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.registry.SimpleRegistry;
 import org.allaymc.api.world.biome.BiomeData;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.property.BlockPropertyProcessor;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.type.ItemComponentData;
 import org.allaymc.server.world.biome.BiomeId;
-import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
-import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author daoge_cmd
@@ -30,6 +28,6 @@ public final class InternalRegistries {
 
     public static SimpleMappedRegistry<BiomeId, BiomeData> BIOME_DATA;
 
-    public static SimpleRegistry<Set<TrimPattern>> TRIM_PATTERNS;
-    public static SimpleRegistry<Set<TrimMaterial>> TRIM_MATERIALS;
+    public static SimpleMappedRegistry<String, TrimPattern> TRIM_PATTERNS;
+    public static SimpleMappedRegistry<String, TrimMaterial> TRIM_MATERIALS;
 }

@@ -273,7 +273,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         );
     }
 
-    @Override
     public void sendPacket(BedrockPacket packet) {
         if (!getClientState().canHandlePackets()) {
             return;
@@ -287,7 +286,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         this.clientSession.sendPacket(event.getPacket());
     }
 
-    @Override
     public void sendPacketImmediately(BedrockPacket packet) {
         if (!getClientState().canHandlePackets()) {
             return;

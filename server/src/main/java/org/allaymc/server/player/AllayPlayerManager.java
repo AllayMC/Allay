@@ -20,6 +20,7 @@ import org.allaymc.api.server.Whitelist;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.AllayNetworkInterface;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
@@ -219,7 +220,7 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     public void broadcastPacket(BedrockPacket packet) {
-        players.values().forEach(player -> player.sendPacket(packet));
+        players.values().forEach(player -> ((EntityPlayerImpl) player).sendPacket(packet));
     }
 
     public void startNetworkInterface() {
@@ -278,7 +279,7 @@ public class AllayPlayerManager implements PlayerManager {
         broadcastPacket(packet);
     }
 
-    public void sendPlayerListTo(EntityPlayer player) {
+    public void sendPlayerListTo(EntityPlayerImpl player) {
         var packet = new PlayerListPacket();
         packet.setAction(PlayerListPacket.Action.ADD);
         for (var other : players.values()) {

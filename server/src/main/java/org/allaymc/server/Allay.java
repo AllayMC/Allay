@@ -21,7 +21,10 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.registry.*;
+import org.allaymc.api.registry.DoubleKeyMappedRegistry;
+import org.allaymc.api.registry.IntMappedRegistry;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -237,8 +240,8 @@ public final class Allay {
         Registries.RECIPES = SimpleMappedRegistry.create(new RecipeRegistryLoader());
 
         // Trim Data
-        InternalRegistries.TRIM_PATTERNS = SimpleRegistry.create(new TrimPatternRegistryLoader());
-        InternalRegistries.TRIM_MATERIALS = SimpleRegistry.create(new TrimMaterialRegistryLoader());
+        InternalRegistries.TRIM_PATTERNS = SimpleMappedRegistry.create(new TrimPatternRegistryLoader());
+        InternalRegistries.TRIM_MATERIALS = SimpleMappedRegistry.create(new TrimMaterialRegistryLoader());
 
         // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());

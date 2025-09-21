@@ -193,12 +193,20 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var trimPattern = InternalRegistries.TRIM_PATTERNS.getContent().stream().filter(pattern ->
-                pattern.getItemName().equals(templateItem.getItemType().getIdentifier().toString())
-        ).findFirst().orElse(null);
-        var trimMaterial = InternalRegistries.TRIM_MATERIALS.getContent().stream().filter(material ->
-                material.getItemName().equals(materialItem.getItemType().getIdentifier().toString())
-        ).findFirst().orElse(null);
+        var trimPattern = InternalRegistries.TRIM_PATTERNS
+                .getContent()
+                .values()
+                .stream()
+                .filter(pattern -> pattern.itemType() == templateItem.getItemType())
+                .findFirst()
+                .orElse(null);
+        var trimMaterial = InternalRegistries.TRIM_MATERIALS
+                .getContent()
+                .values()
+                .stream()
+                .filter(material -> material.itemType() == materialItem.getItemType())
+                .findFirst()
+                .orElse(null);
 
         if (trimPattern == null || trimMaterial == null) {
             log.warn("Trim pattern or material not found");

@@ -1,6 +1,5 @@
 package org.allaymc.api.world.chunk;
 
-import io.netty.util.AbstractReferenceCounted;
 import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -18,7 +17,6 @@ import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.sound.Sound;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -51,22 +49,6 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     @Override
     public int getChunkMaxSendCountPerTick() {
         return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public void sendPacket(BedrockPacket packet) {
-        // TODO: remove it
-        if (packet instanceof AbstractReferenceCounted lcp) {
-            lcp.release();
-        }
-    }
-
-    @Override
-    public void sendPacketImmediately(BedrockPacket packet) {
-        // TODO: remove it
-        if (packet instanceof AbstractReferenceCounted lcp) {
-            lcp.release();
-        }
     }
 
     @Override

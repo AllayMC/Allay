@@ -1,7 +1,6 @@
 package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.network.PacketReceiver;
 import org.allaymc.api.world.WorldViewer;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
  *
  * @author daoge_cmd
  */
-public interface ChunkLoader extends WorldViewer, PacketReceiver {
+public interface ChunkLoader extends WorldViewer {
 
     /**
      * Get the location of the chunk loader.

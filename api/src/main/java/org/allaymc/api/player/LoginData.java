@@ -94,6 +94,9 @@ public interface LoginData {
         }
     }
 
+    /**
+     * An enumeration that represents various types of devices. Each device has an associated id and name.
+     */
     @Getter
     @AllArgsConstructor
     enum Device {
@@ -132,6 +135,9 @@ public interface LoginData {
         }
     }
 
+    /**
+     * Represents information about a player's device.
+     */
     record DeviceInfo(
             String deviceName,
             String deviceId,

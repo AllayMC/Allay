@@ -13,6 +13,8 @@ import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
+import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
+import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitions;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
@@ -30,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * A utility class that provides memoized suppliers for various encoded data packets and definitions.
@@ -295,8 +298,19 @@ public final class NetworkData {
 
     public static TrimDataPacket encodeTrimDataPacket() {
         var packet = new TrimDataPacket();
-        packet.getPatterns().addAll(InternalRegistries.TRIM_PATTERNS.getContent());
-        packet.getMaterials().addAll(InternalRegistries.TRIM_MATERIALS.getContent());
+        packet.getPatterns().addAll(InternalRegistries.TRIM_PATTERNS.getContent().values().stream().map(pattern ->
+                new TrimPattern(
+                        pattern.itemType().getIdentifier().toString(),
+                        pattern.patternId()
+                )
+        ).collect(Collectors.toSet()));
+        packet.getMaterials().addAll(InternalRegistries.TRIM_MATERIALS.getContent().values().stream().map(material ->
+                new TrimMaterial(
+                        material.materialId(),
+                        material.color(),
+                        material.itemType().getIdentifier().toString()
+                )
+        ).collect(Collectors.toSet()));
         return packet;
     }
 }

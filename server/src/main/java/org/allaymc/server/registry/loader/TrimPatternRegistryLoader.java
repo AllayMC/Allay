@@ -2,31 +2,35 @@ package org.allaymc.server.registry.loader;
 
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.item.data.TrimPattern;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.utils.JSONUtils;
-import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author IWareQ
  */
 @Slf4j
-public class TrimPatternRegistryLoader implements RegistryLoader<Void, Set<TrimPattern>> {
+public class TrimPatternRegistryLoader implements RegistryLoader<Void, Map<String, TrimPattern>> {
     @Override
-    public Set<TrimPattern> load(Void unused) {
+    public Map<String, TrimPattern> load(Void unused) {
         try (var stream = Utils.getResource("trim_data.json")) {
-            Set<TrimPattern> result = new HashSet<>();
+            var map = new HashMap<String, TrimPattern>();
 
             var root = JSONUtils.from(stream, JsonObject.class);
             for (var element : root.getAsJsonArray("patterns").asList()) {
-                var pattern = element.getAsJsonObject();
-                result.add(new TrimPattern(pattern.get("itemName").getAsString(), pattern.get("patternId").getAsString()));
+                var obj = element.getAsJsonObject();
+                var itemType = Registries.ITEMS.get(new Identifier(obj.get("itemName").getAsString()));
+                var patternId = obj.get("patternId").getAsString();
+                map.put(patternId, new TrimPattern(itemType, patternId));
             }
 
-            return result;
+            return map;
         } catch (Exception e) {
             throw new AssertionError("Failed to load trim_data.json", e);
         }

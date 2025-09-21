@@ -21,8 +21,6 @@ import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.utils.BlockAndItemIdMapper;
-import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 
 import java.util.*;
 import java.util.function.Function;
@@ -80,14 +78,6 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     @Override
     public BlockType<?> getBlockType() {
         return blockType.get();
-    }
-
-    @Override
-    public ItemDefinition toNetworkDefinition() {
-        return new SimpleItemDefinition(
-                getIdentifier().toString(), getRuntimeId(), itemComponentData.version(),
-                itemComponentData.componentBased(), itemComponentData.components()
-        );
     }
 
     @ToString

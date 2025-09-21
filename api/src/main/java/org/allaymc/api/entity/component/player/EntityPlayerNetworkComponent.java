@@ -3,18 +3,17 @@ package org.allaymc.api.entity.component.player;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.network.PacketReceiver;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.LoginData;
 
 import java.net.SocketAddress;
 
 /**
- * EntityPlayerNetworkComponent is the component that manages network related things of a player.
+ * EntityPlayerNetworkComponent is the component that manages network-related things of a player.
  *
  * @author daoge_cmd
  */
-public interface EntityPlayerNetworkComponent extends EntityComponent, PacketReceiver {
+public interface EntityPlayerNetworkComponent extends EntityComponent {
     /**
      * Get the login data of the player.
      *

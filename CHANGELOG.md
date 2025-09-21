@@ -163,6 +163,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed network-related methods in the command system.
 - (API) Removed classes `BaseCommand` and `SimpleCommand`, and plugin commands now should extend `Command` directly.
 - (API) Removed method `Command.getCommandFormatTips()`.
+- (API) Removed class `PacketReceiver`.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 
