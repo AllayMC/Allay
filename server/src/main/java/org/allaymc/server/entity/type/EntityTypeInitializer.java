@@ -43,7 +43,7 @@ public final class EntityTypeInitializer {
                 .builder(EntityItemImpl.class)
                 .vanillaEntity(EntityId.ITEM)
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
-                .addComponent(() -> new EntityDamageComponentImpl() {
+                .addComponent(() -> new EntityLivingComponentImpl() {
                     @Override
                     public boolean hasFallDamage() {
                         return false;
@@ -53,7 +53,7 @@ public final class EntityTypeInitializer {
                     public boolean hasDrowningDamage() {
                         return false;
                     }
-                }, EntityDamageComponentImpl.class)
+                }, EntityLivingComponentImpl.class)
                 .addComponent(
                         () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
                         EntityAttributeComponentImpl.class
@@ -77,8 +77,7 @@ public final class EntityTypeInitializer {
                 .addComponent(() -> new EntityPlayerAttributeComponentImpl(EntityPlayerAttributeComponentImpl.basicPlayerAttributes()), EntityPlayerAttributeComponentImpl.class)
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
-                .addComponent(EntityPlayerDamageComponentImpl::new, EntityPlayerDamageComponentImpl.class)
-                .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
+                .addComponent(EntityPlayerLivingComponentImpl::new, EntityPlayerLivingComponentImpl.class)
                 .addComponent(EntityPlayerPhysicsComponentImpl::new, EntityPlayerPhysicsComponentImpl.class)
                 .addComponent(EntityPlayerScoreboardViewerComponentImpl::new, EntityPlayerScoreboardViewerComponentImpl.class)
                 .addComponent(EntityPlayerChunkLoaderComponentImpl::new, EntityPlayerChunkLoaderComponentImpl.class)
@@ -91,8 +90,7 @@ public final class EntityTypeInitializer {
                 .builder(EntityVillagerV2Impl.class)
                 .vanillaEntity(EntityId.VILLAGER_V2)
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
-                .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
-                .addComponent(EntityBreatheComponentImpl::new, EntityBreatheComponentImpl.class)
+                .addComponent(EntityLivingComponentImpl::new, EntityLivingComponentImpl.class)
                 .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
                 .build();
     }
@@ -102,7 +100,7 @@ public final class EntityTypeInitializer {
                 .builder(EntityXpOrbImpl.class)
                 .vanillaEntity(EntityId.XP_ORB)
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
-                .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
+                .addComponent(EntityLivingComponentImpl::new, EntityLivingComponentImpl.class)
                 .addComponent(
                         () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
                         EntityAttributeComponentImpl.class
@@ -166,7 +164,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityArrowPhysicsComponentImpl::new, EntityArrowPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
-                .addComponent(EntityArrowDamageComponentImpl::new, EntityArrowDamageComponentImpl.class)
+                .addComponent(EntityArrowLivingComponentImpl::new, EntityArrowLivingComponentImpl.class)
                 .addComponent(
                         () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
                         EntityAttributeComponentImpl.class

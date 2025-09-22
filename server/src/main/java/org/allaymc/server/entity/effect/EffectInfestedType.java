@@ -1,10 +1,10 @@
 package org.allaymc.server.entity.effect;
 
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -22,7 +22,7 @@ public class EffectInfestedType extends AbstractEffectType {
     }
 
     @Override
-    public void onEntityDamage(Entity entity, EffectInstance effectInstance, DamageContainer damage) {
+    public void onEntityDamage(EntityLiving entity, EffectInstance effectInstance, DamageContainer damage) {
         if (ThreadLocalRandom.current().nextFloat() >= 0.1) return;
         var silverFishNumberToSpawn = ThreadLocalRandom.current().nextFloat() < 0.5 ? 1 : 2;
         var dimension = entity.getDimension();

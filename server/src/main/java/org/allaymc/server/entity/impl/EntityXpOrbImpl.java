@@ -4,7 +4,7 @@ import lombok.experimental.Delegate;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityAgeComponent;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
@@ -16,7 +16,7 @@ import java.util.List;
 public class EntityXpOrbImpl extends EntityImpl implements EntityXpOrb {
 
     @Delegate
-    protected EntityDamageComponent damageComponent;
+    protected EntityLivingComponent livingComponent;
     @Delegate
     protected EntityAttributeComponent attributeComponent;
     @Delegate

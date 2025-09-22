@@ -6,16 +6,22 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
+import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
+import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
+import org.allaymc.api.eventbus.event.entity.EntityEffectAddEvent;
+import org.allaymc.api.eventbus.event.entity.EntityEffectRemoveEvent;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -26,15 +32,23 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author daoge_cmd
  */
-public class EntityDamageComponentImpl implements EntityDamageComponent {
+public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_damage_component");
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_living_component");
+
+    protected static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
 
     @Manager
     protected ComponentManager manager;
@@ -43,14 +57,19 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Dependency(optional = true)
     protected EntityPhysicsComponent physicsComponent;
     @ComponentObject
-    protected Entity thisEntity;
+    protected EntityLiving thisEntity;
 
     @Getter
     protected DamageContainer lastDamage;
     @Getter
-    protected long lastDamageTime = 0;
+    protected long lastDamageTime;
     @Getter
     protected int onFireTicks;
+    protected Map<EffectType, EffectInstance> effects;
+
+    public EntityLivingComponentImpl() {
+        this.effects = new HashMap<>();
+    }
 
     @Override
     public boolean attack(DamageContainer damage, boolean ignoreCoolDown) {
@@ -132,7 +151,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             }
         }
 
-        thisEntity.getAllEffects().values().forEach(effect ->
+        this.effects.values().forEach(effect ->
                 effect.getType().onEntityDamage(thisEntity, effect, lastDamage)
         );
     }
@@ -143,20 +162,22 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyAttacker(DamageContainer damage) {
         if (damage.getAttacker() instanceof Entity attacker) {
-            var strengthLevel = attacker.getEffectLevel(EffectTypes.STRENGTH);
-            if (strengthLevel > 0) {
-                damage.updateFinalDamage(d -> {
-                    var pow = Math.pow(1.3, strengthLevel);
-                    return (float) (d * pow + ((pow - 1) / 0.3));
-                });
-            }
+            if (attacker instanceof EntityLivingComponent living) {
+                var strengthLevel = living.getEffectLevel(EffectTypes.STRENGTH);
+                if (strengthLevel > 0) {
+                    damage.updateFinalDamage(d -> {
+                        var pow = Math.pow(1.3, strengthLevel);
+                        return (float) (d * pow + ((pow - 1) / 0.3));
+                    });
+                }
 
-            var weaknessLevel = attacker.getEffectLevel(EffectTypes.WEAKNESS);
-            if (weaknessLevel > 0) {
-                damage.updateFinalDamage(d -> {
-                    var pow = Math.pow(0.8, weaknessLevel);
-                    return (float) (d * pow + ((pow - 1) / 0.4));
-                });
+                var weaknessLevel = living.getEffectLevel(EffectTypes.WEAKNESS);
+                if (weaknessLevel > 0) {
+                    damage.updateFinalDamage(d -> {
+                        var pow = Math.pow(0.8, weaknessLevel);
+                        return (float) (d * pow + ((pow - 1) / 0.4));
+                    });
+                }
             }
 
             if (attacker instanceof ContainerHolder holder && holder.hasContainer(ContainerType.INVENTORY)) {
@@ -199,20 +220,20 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean hasFallDamage() {
         return (physicsComponent != null && physicsComponent.hasGravity()) ||
-               (!thisEntity.hasEffect(EffectTypes.LEVITATION) && !thisEntity.hasEffect(EffectTypes.SLOW_FALLING)) ||
+               (!hasEffect(EffectTypes.LEVITATION) && !hasEffect(EffectTypes.SLOW_FALLING)) ||
                thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FALL_DAMAGE);
     }
 
     @Override
     public boolean hasFireDamage() {
-        return !thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
+        return !hasEffect(EffectTypes.FIRE_RESISTANCE) &&
                !isFireproof() &&
                thisEntity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FIRE_DAMAGE);
     }
 
     @Override
     public boolean hasDrowningDamage() {
-        return !thisEntity.hasEffect(EffectTypes.WATER_BREATHING);
+        return !hasEffect(EffectTypes.WATER_BREATHING);
     }
 
     @Override
@@ -233,9 +254,96 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         return true;
     }
 
+    @Override
+    public Map<EffectType, EffectInstance> getAllEffects() {
+        return Collections.unmodifiableMap(effects);
+    }
+
+    @Override
+    public boolean hasEffect(EffectType effectType) {
+        return effects.containsKey(effectType);
+    }
+
+    @Override
+    public int getEffectLevel(EffectType effectType) {
+        var effect = effects.get(effectType);
+        return effect == null ? 0 : effect.getLevel();
+    }
+
+    @Override
+    public boolean addEffect(EffectInstance effectInstance) {
+        if (!canApplyEffect(effectInstance.getType())) {
+            return false;
+        }
+
+        var event = new EntityEffectAddEvent(thisEntity, effectInstance);
+        if (!event.call()) {
+            return false;
+        }
+
+        effectInstance = event.getEffect();
+        var old = effects.put(effectInstance.getType(), effectInstance);
+        if (old != null && old.getType() != effectInstance.getType()) {
+            old.getType().onRemove(thisEntity, old);
+            effectInstance.getType().onAdd(thisEntity, effectInstance);
+        }
+
+        sendEffects(effectInstance, old);
+        if (old == null) {
+            syncVisibleEffects();
+        }
+
+        return true;
+    }
+
+    @Override
+    public void removeEffect(EffectType effectType) {
+        var removed = effects.get(effectType);
+        if (removed == null) {
+            return;
+        }
+
+        var event = new EntityEffectRemoveEvent(thisEntity, removed);
+        if (!event.call()) {
+            return;
+        }
+
+        effects.remove(effectType);
+        effectType.onRemove(thisEntity, removed);
+        sendEffects(null, removed);
+        syncVisibleEffects();
+    }
+
+    protected void sendEffects(EffectInstance newEffect, EffectInstance oldEffect) {
+        thisEntity.forEachViewers(viewer -> viewer.viewEntityEffectChange(thisEntity, newEffect, oldEffect));
+    }
+
+    protected void syncVisibleEffects() {
+        long visibleEffects = 0;
+        for (var effect : this.effects.values()) {
+            if (!effect.isVisible()) {
+                continue;
+            }
+
+            visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
+        }
+
+        thisEntity.setData(EntityData.VISIBLE_MOB_EFFECTS, visibleEffects);
+    }
+
+    @Override
+    public void removeAllEffects() {
+        // Prevent ConcurrentModificationException
+        for (EffectType effectType : this.effects.keySet().toArray(EffectType[]::new)) {
+            removeEffect(effectType);
+        }
+    }
+
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
         tickFire();
+        tickBreathe();
+        tickEffects();
     }
 
     protected void tickFire() {
@@ -252,14 +360,69 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         }
     }
 
+    protected void tickBreathe() {
+        if (!thisEntity.hasData(EntityData.AIR_SUPPLY)) {
+            return;
+        }
+
+        short airSupply = thisEntity.getData(EntityData.AIR_SUPPLY);
+        short airSupplyMax = thisEntity.getData(EntityData.AIR_SUPPLY_MAX);
+        short newAirSupply = airSupply;
+        if (!canBreathe()) {
+            thisEntity.setFlag(EntityFlag.BREATHING, false);
+            newAirSupply = (short) (airSupply - 1);
+            if (newAirSupply <= -20) {
+                if (hasDrowningDamage()) {
+                    attack(DamageContainer.drown(2));
+                }
+                newAirSupply = 0;
+            }
+        } else if (airSupply < airSupplyMax) {
+            thisEntity.setFlag(EntityFlag.BREATHING, true);
+            newAirSupply = (short) (airSupply + 4);
+        }
+        if (airSupply != newAirSupply) {
+            thisEntity.setData(EntityData.AIR_SUPPLY, newAirSupply);
+        }
+    }
+
+    protected boolean canBreathe() {
+        return hasEffect(EffectTypes.WATER_BREATHING) || hasEffect(EffectTypes.CONDUIT_POWER) || !thisEntity.isEyesInWater();
+    }
+
+    protected void tickEffects() {
+        if (this.effects.isEmpty()) {
+            return;
+        }
+
+        for (var effect : this.effects.values().toArray(EffectInstance[]::new)) {
+            effect.setDuration(effect.getDuration() - 1);
+            effect.getType().onTick(thisEntity, effect);
+            if (effect.getDuration() <= 0) {
+                removeEffect(effect.getType());
+            }
+        }
+    }
+
     @EventHandler
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
-        event.getNbt().putShort("Fire", (short) onFireTicks);
+        var nbt = event.getNbt();
+        nbt.putShort("Fire", (short) onFireTicks);
+        if (!effects.isEmpty()) {
+            nbt.putList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
+        }
     }
 
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
-        this.onFireTicks = event.getNbt().getShort("Fire");
+        var nbt = event.getNbt();
+        nbt.listenForShort("Fire", s -> this.onFireTicks = s);
+        nbt.listenForList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, activeEffects -> {
+            for (NbtMap activeEffect : activeEffects) {
+                var effectInstance = EffectInstance.fromNBT(activeEffect);
+                addEffect(effectInstance);
+            }
+        });
     }
 
     @EventHandler
@@ -270,7 +433,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
         // physics component won't be null here, because CEntityFallEvent is called in physics component
         var blockStateStandingOn = physicsComponent.getBlockStateStandingOn();
-        double rawDamage = (event.getFallDistance() - 3) - thisEntity.getEffectLevel(EffectTypes.JUMP_BOOST);
+        double rawDamage = (event.getFallDistance() - 3) - getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
         if (damage > 0) {
             attack(DamageContainer.fall(damage));
@@ -278,16 +441,16 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     @EventHandler
-    protected void onDrown(CEntityDrownEvent event) {
-        if (!hasDrowningDamage()) {
-            return;
-        }
-
-        attack(DamageContainer.drown(2));
+    protected void onDie(CEntityDieEvent event) {
+        setOnFireTicks(0);
+        this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
+        removeAllEffects();
     }
 
     @EventHandler
-    protected void onDie(CEntityDieEvent event) {
-        setOnFireTicks(0);
+    protected void onInitMetadata(CEntityInitMetadataEvent $) {
+        thisEntity.setFlag(EntityFlag.BREATHING, true);
+        thisEntity.setData(EntityData.AIR_SUPPLY, (short) 300);
+        thisEntity.setData(EntityData.AIR_SUPPLY_MAX, (short) 300);
     }
 }

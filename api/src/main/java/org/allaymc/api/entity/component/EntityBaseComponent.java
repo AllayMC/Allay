@@ -10,9 +10,6 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
-import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.entity.effect.EffectType;
-import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.type.EntityType;
@@ -41,7 +38,6 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -511,49 +507,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     default void onSplash() {
     }
 
-    /**
-     * Get all the effects of the entity.
-     *
-     * @return all the effects of the entity
-     */
-    @UnmodifiableView
-    Map<EffectType, EffectInstance> getAllEffects();
-
-    /**
-     * Check if the entity has the specified effect.
-     *
-     * @param effectType the effect type to check
-     * @return {@code true} if the entity has the specified effect, otherwise {@code false}.
-     */
-    boolean hasEffect(EffectType effectType);
-
-    /**
-     * Get the effect level of the specified effect.
-     *
-     * @param effectType the effect type to get
-     * @return the effect level of the specified effect
-     */
-    int getEffectLevel(EffectType effectType);
-
-    /**
-     * Add the specified effect to the entity.
-     *
-     * @param effectInstance the effect instance to add
-     * @return {@code true} if the effect is added successfully, otherwise {@code false}.
-     */
-    boolean addEffect(EffectInstance effectInstance);
-
-    /**
-     * Remove the specified effect from the entity.
-     *
-     * @param effectType the effect type to remove
-     */
-    void removeEffect(EffectType effectType);
-
-    /**
-     * Remove all effects from the entity.
-     */
-    void removeAllEffects();
 
     /**
      * Check if the entity has head yaw.
@@ -715,25 +668,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
         return blockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
                blockState.getBlockStateData().computeOffsetShape(MathUtils.floor(loc)).intersectsPoint(loc);
-    }
-
-    /**
-     * Check if the entity can breathe.
-     *
-     * @return {@code true} if the entity can breathe, otherwise {@code false}.
-     */
-    default boolean canBreathe() {
-        return hasEffect(EffectTypes.WATER_BREATHING) || hasEffect(EffectTypes.CONDUIT_POWER) || !isEyesInWater();
-    }
-
-    /**
-     * Check if the specific effect can apply on the entity.
-     *
-     * @param effectType the specific effect
-     * @return {@code true} if the specific effect can apply on the entity, otherwise {@code false}.
-     */
-    default boolean canApplyEffect(EffectType effectType) {
-        return true;
     }
 
     /**

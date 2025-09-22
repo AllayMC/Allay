@@ -6,11 +6,11 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.particle.Particle;
@@ -334,7 +334,7 @@ public class Explosion {
                         physicsComponent.addMotion(direction.normalize().mul(impact * (1.0 - kbResistance)));
                     }
                 }
-                if (affectedEntity instanceof EntityDamageComponent damageComponent) {
+                if (affectedEntity instanceof EntityLiving living) {
                     var m = switch (dimension.getWorld().getWorldData().getDifficulty()) {
                         case PEACEFUL -> 0.0;
                         case EASY -> 3.5f;
@@ -343,9 +343,9 @@ public class Explosion {
                     };
                     var damage = (impact * impact + impact) * m * size / 2.0 + 1.0;
                     if (entity == null) {
-                        damageComponent.attack(DamageContainer.blockExplosion((float) damage));
+                        living.attack(DamageContainer.blockExplosion((float) damage));
                     } else {
-                        damageComponent.attack(DamageContainer.entityExplosion(entity, (float) damage));
+                        living.attack(DamageContainer.entityExplosion(entity, (float) damage));
                     }
                 }
             }

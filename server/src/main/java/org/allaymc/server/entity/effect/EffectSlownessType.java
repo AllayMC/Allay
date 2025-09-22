@@ -1,8 +1,8 @@
 package org.allaymc.server.entity.effect;
 
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.identifier.Identifier;
 
@@ -17,7 +17,7 @@ public class EffectSlownessType extends AbstractEffectType {
     }
 
     @Override
-    public void onAdd(Entity entity, EffectInstance effectInstance) {
+    public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
         var level = effectInstance.getLevel();
         var slowness = 1 - level * 0.15f;
@@ -26,7 +26,7 @@ public class EffectSlownessType extends AbstractEffectType {
     }
 
     @Override
-    public void onRemove(Entity entity, EffectInstance effectInstance) {
+    public void onRemove(EntityLiving entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
         var level = effectInstance.getLevel();
         var slowness = 1 - level * 0.15f;

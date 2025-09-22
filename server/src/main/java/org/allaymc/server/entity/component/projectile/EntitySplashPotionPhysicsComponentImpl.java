@@ -6,6 +6,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntitySplashPotionProjectileComponent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
@@ -65,17 +66,21 @@ public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhys
         if (!effects.isEmpty()) {
             var entities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
             for (var entity : entities) {
-                var pos = entity.getLocation();
+                if (!(entity instanceof EntityLiving living)) {
+                    continue;
+                }
+
+                var pos = living.getLocation();
                 var distance = pos.distance(thisEntity.getLocation());
                 if (distance > 4) {
                     continue;
                 }
 
-                var factor = entity != entityBeingHit ? 1.0 - distance / 4.0 : 1.0;
+                var factor = living != entityBeingHit ? 1.0 - distance / 4.0 : 1.0;
                 for (var effect : effects) {
                     // Zero duration is still meaningful for instantaneous effects
                     effect.setDuration((int) (effect.getDuration() * durationMultiplier * factor));
-                    entity.addEffect(effect);
+                    living.addEffect(effect);
                 }
             }
         } else if (potionType == PotionType.WATER) {

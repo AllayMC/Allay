@@ -1,8 +1,8 @@
 package org.allaymc.server.entity.effect;
 
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.utils.identifier.Identifier;
 
 import java.awt.*;
@@ -16,7 +16,7 @@ public class EffectWindChargedType extends AbstractEffectType {
     }
 
     @Override
-    public void onEntityDies(Entity entity, EffectInstance effectInstance) {
+    public void onEntityDies(EntityLiving entity, EffectInstance effectInstance) {
         //TODO: Create a wind charge explosion at the entity's position
     }
 }

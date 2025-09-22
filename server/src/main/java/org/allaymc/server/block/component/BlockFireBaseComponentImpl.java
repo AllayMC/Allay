@@ -10,7 +10,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.BlockBurnEvent;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
@@ -305,13 +305,13 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onEntityInside(Block block, Entity entity) {
-        if (!(entity instanceof EntityDamageComponent damageComponent)) {
+        if (!(entity instanceof EntityLiving living)) {
             return;
         }
 
         var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, block, 20 * 8);
         if (event.call()) {
-            damageComponent.setOnFireTicks(event.getOnFireTicks());
+            living.setOnFireTicks(event.getOnFireTicks());
         }
     }
 }

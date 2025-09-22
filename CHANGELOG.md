@@ -76,6 +76,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed item stack network id to unique id for better readability, changes are made to multiple related methods.
 - (API) Renamed method `Command.getCommandOverloads()` to `Command.getOverloads()`.
 - (API) Renamed method `BlockState.getBlockStateTag()` to `BlockState.getBlockStateNBT()`.
+- (API) Renamed class `EntityDamageComponent` to `EntityLivingComponent`.
 - (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details.
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
 - (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
@@ -83,6 +84,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced new `GameMode` enum, and the old `GameType` used in protocol lib is unused since it has many game types which only exist in vanilla.
 - (API) Moved classes `Abilities` and `AdventureSettings` from api module to server module. Since most of the abilities/settings have corresponded permission,
   consider using permission instead.
+- (API) Moved effect-related methods from `EntityBaseComponent` to `EntityLivingComponent`.
 - (API) Moved class `ComponentManager` from api to server module since it is useless in api module.
 - (API) Moved classes `BlockPropertyProcessor`, `BlockPlaceHelper` and `FortuneDropHelper` from api to server.
 - (API) Moved classes `Structure` and `StructureException` from `utils` to `world` package.

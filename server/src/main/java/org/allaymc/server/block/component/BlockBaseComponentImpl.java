@@ -13,6 +13,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
@@ -102,17 +103,19 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         speed *= efficiency;
 
         if (entity != null) {
-            if (entity.hasEffect(EffectTypes.HASTE) || entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
-                var level = Math.max(entity.getEffectLevel(EffectTypes.HASTE), entity.getEffectLevel(EffectTypes.CONDUIT_POWER));
-                speed *= (0.2d * level + 1) * Math.pow(1.2d, level);
-            }
+            if (entity instanceof EntityLiving living) {
+                if (living.hasEffect(EffectTypes.HASTE) || living.hasEffect(EffectTypes.CONDUIT_POWER)) {
+                    var level = Math.max(living.getEffectLevel(EffectTypes.HASTE), living.getEffectLevel(EffectTypes.CONDUIT_POWER));
+                    speed *= (0.2d * level + 1) * Math.pow(1.2d, level);
+                }
 
-            // Entity mining fatigue effect negative bonus
-            if (entity.hasEffect(EffectTypes.MINING_FATIGUE)) {
-                // speedMultiplier *= 0.3 ^ miningFatigueLevel
-                // damage *= 0.7 ^ miningFatigueLevel
-                // 0.3 + 0.7 = 0.21 ^ miningFatigueLevel
-                speed *= Math.pow(0.21d, entity.getEffectLevel(EffectTypes.MINING_FATIGUE));
+                // Entity mining fatigue effect negative bonus
+                if (living.hasEffect(EffectTypes.MINING_FATIGUE)) {
+                    // speedMultiplier *= 0.3 ^ miningFatigueLevel
+                    // damage *= 0.7 ^ miningFatigueLevel
+                    // 0.3 + 0.7 = 0.21 ^ miningFatigueLevel
+                    speed *= Math.pow(0.21d, living.getEffectLevel(EffectTypes.MINING_FATIGUE));
+                }
             }
 
             var hasAquaAffinity = false;

@@ -3,13 +3,14 @@ package org.allaymc.server.entity.component.player;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
+import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.entity.component.EntityDamageComponentImpl;
+import org.allaymc.server.entity.component.EntityLivingComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
@@ -17,7 +18,7 @@ import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
 /**
  * @author daoge_cmd
  */
-public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
+public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     @ComponentObject
     protected EntityPlayerImpl thisPlayer;
 
@@ -114,6 +115,12 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     public boolean hasFireDamage() {
         // Player in creative/spectator game mode can't be damaged by fire
         return super.hasFireDamage() && (thisPlayer.getGameMode() == GameMode.SURVIVAL || thisPlayer.getGameMode() == GameMode.ADVENTURE);
+    }
+
+    @Override
+    protected void sendEffects(EffectInstance newEffect, EffectInstance oldEffect) {
+        super.sendEffects(newEffect, oldEffect);
+        thisPlayer.viewEntityEffectChange(thisPlayer, newEffect, oldEffect);
     }
 
     @EventHandler

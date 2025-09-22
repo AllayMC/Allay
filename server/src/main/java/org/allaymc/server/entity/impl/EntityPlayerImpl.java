@@ -6,7 +6,7 @@ import org.allaymc.api.component.Component;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.*;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -26,7 +26,7 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Delegate
     protected EntityContainerViewerComponent containerViewerComponent;
     @Delegate
-    protected EntityDamageComponent damageComponent;
+    protected EntityLivingComponent livingComponent;
     @Getter
     @Delegate
     protected EntityPhysicsComponent physicsComponent;

@@ -1,8 +1,8 @@
 package org.allaymc.api.item.data;
 
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 
 import java.awt.*;
 import java.util.List;
@@ -138,7 +138,7 @@ public enum PotionType {
      *
      * @param entity the entity that this potion type will be applied to
      */
-    public void applyTo(Entity entity) {
+    public void applyTo(EntityLiving entity) {
         getEffects().forEach(entity::addEffect);
     }
 

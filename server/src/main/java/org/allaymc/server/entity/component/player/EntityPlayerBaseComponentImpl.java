@@ -16,7 +16,6 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
-import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -810,12 +809,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     protected int assignFormId() {
         return formIdCounter.getAndIncrement();
-    }
-
-    @Override
-    protected void sendMobEffect(EffectInstance newEffect, EffectInstance oldEffect) {
-        forEachViewers(viewer -> viewer.viewEntityEffectChange(thisEntity, newEffect, oldEffect));
-        thisPlayer.viewEntityEffectChange(thisPlayer, newEffect, oldEffect);
     }
 
     @Override

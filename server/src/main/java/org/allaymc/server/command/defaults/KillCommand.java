@@ -43,8 +43,8 @@ public class KillCommand extends VanillaCommand {
                     continue;
                 }
 
-                if (target instanceof EntityAttributeComponent damageComponent) {
-                    damageComponent.kill();
+                if (target instanceof EntityAttributeComponent attributeComponent) {
+                    attributeComponent.kill();
                 } else {
                     target.remove();
                 }

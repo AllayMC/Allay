@@ -9,8 +9,8 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
@@ -43,21 +43,21 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void onEntityInside(Block block, Entity entity) {
-        if (!(entity instanceof EntityDamageComponent damageComponent)) {
+        if (!(entity instanceof EntityLiving living)) {
             return;
         }
 
         // Set on fire ticks
         var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, block, 20 * 15);
         if (event1.call()) {
-            damageComponent.setOnFireTicks(event1.getOnFireTicks());
+            living.setOnFireTicks(event1.getOnFireTicks());
         }
 
         // Lava damage
-        if (damageComponent.hasFireDamage() && entity.getWorld().getTick() % 10 == 0) {
+        if (living.hasFireDamage() && entity.getWorld().getTick() % 10 == 0) {
             var event2 = new EntityDamageEvent(entity, DamageContainer.lava(4));
             if (event2.call()) {
-                damageComponent.attack(event2.getDamageContainer(), true);
+                living.attack(event2.getDamageContainer(), true);
             }
         }
     }

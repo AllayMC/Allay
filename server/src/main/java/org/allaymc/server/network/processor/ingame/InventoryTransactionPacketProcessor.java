@@ -5,7 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerInteractBlockEvent;
@@ -170,7 +170,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         // Doesn't have damage component, can't attack
-                        if (!(target instanceof EntityDamageComponent damageable)) {
+                        if (!(target instanceof EntityLivingComponent damageable)) {
                             return;
                         }
 

@@ -2,10 +2,8 @@ package org.allaymc.api.entity.interfaces;
 
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.*;
 import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
@@ -21,10 +19,9 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
  * EntityPlayer represents a player in the server.
  */
 public interface EntityPlayer extends
-        Entity,
+        EntityLiving,
         EntityContainerHolderComponent,
         EntityContainerViewerComponent,
-        EntityDamageComponent,
         EntityPhysicsComponent,
         EntityPlayerBaseComponent,
         EntityPlayerNetworkComponent,

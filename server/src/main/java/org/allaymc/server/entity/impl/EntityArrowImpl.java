@@ -19,7 +19,7 @@ public class EntityArrowImpl extends EntityImpl implements EntityArrow {
     @Delegate
     protected EntityPhysicsComponent physicsComponent;
     @Delegate
-    protected EntityDamageComponent damageComponent;
+    protected EntityLivingComponent livingComponent;
     @Delegate
     protected EntityAttributeComponent attributeComponent;
 

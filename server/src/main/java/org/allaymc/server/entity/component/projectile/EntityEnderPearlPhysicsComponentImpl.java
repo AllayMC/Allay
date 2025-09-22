@@ -2,9 +2,9 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -25,8 +25,8 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
             return;
         }
 
-        if (other instanceof EntityDamageComponent damageComponent) {
-            damageComponent.attack(DamageContainer.projectile(thisEntity, 0));
+        if (other instanceof EntityLiving living) {
+            living.attack(DamageContainer.projectile(thisEntity, 0));
         }
 
         this.teleport();
@@ -58,8 +58,8 @@ public class EntityEnderPearlPhysicsComponentImpl extends EntityProjectilePhysic
 
         dimension.addSound(location, SimpleSound.TELEPORT);
         dimension.addParticle(location, SimpleParticle.ENDERMAN_TELEPORT);
-        if (shooter instanceof EntityDamageComponent damageComponent) {
-            damageComponent.attack(DamageContainer.fall(5));
+        if (shooter instanceof EntityLiving living) {
+            living.attack(DamageContainer.fall(5));
         }
         // TODO: spawn ender mite
     }

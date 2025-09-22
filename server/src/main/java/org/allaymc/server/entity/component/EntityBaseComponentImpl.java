@@ -18,10 +18,10 @@ import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.data.EntityFlag;
-import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.eventbus.event.entity.*;
+import org.allaymc.api.eventbus.event.entity.EntityDieEvent;
+import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
@@ -74,7 +74,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected static final String TAG_IDENTIFIER = "identifier";
     protected static final String TAG_ROTATION = "Rotation";
     protected static final String TAG_TAGS = "Tags";
-    protected static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
     protected static final String TAG_UNIQUE_ID = "UniqueID";
     protected static final String TAG_PDC = "PDC";
 
@@ -105,7 +104,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected EntityType<? extends Entity> entityType;
     protected Set<WorldViewer> viewers;
-    protected Map<EffectType, EffectInstance> effects;
     @Getter
     protected EntityState state;
     protected int deadTimer;
@@ -125,7 +123,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.metadata = new Metadata();
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
-        this.effects = new HashMap<>();
         this.state = EntityState.DESPAWNED;
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
@@ -184,9 +181,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     public void tick(long currentTick) {
         checkDead();
-        tickEffects();
         computeAndNotifyCollidedBlocks();
-
         manager.callEvent(new CEntityTickEvent(currentTick));
     }
 
@@ -220,20 +215,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.setLocation(newLocation);
         this.broadcastMoveToViewers(newLocation, false);
         return true;
-    }
-
-    protected void tickEffects() {
-        if (effects.isEmpty()) {
-            return;
-        }
-
-        for (var effect : effects.values().toArray(EffectInstance[]::new)) {
-            effect.setDuration(effect.getDuration() - 1);
-            effect.getType().onTick(thisEntity, effect);
-            if (effect.getDuration() <= 0) {
-                removeEffect(effect.getType());
-            }
-        }
     }
 
     protected void checkDead() {
@@ -273,8 +254,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         applyAction(SimpleEntityAction.DEATH);
-        effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
-        removeAllEffects();
     }
 
     protected void spawnDeadParticle() {
@@ -476,9 +455,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (!tags.isEmpty()) {
             builder.putList(TAG_TAGS, NbtType.STRING, new ArrayList<>(tags));
         }
-        if (!effects.isEmpty()) {
-            builder.putList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
-        }
         if (!persistentDataContainer.isEmpty()) {
             builder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
@@ -507,12 +483,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         nbt.listenForList(TAG_TAGS, NbtType.STRING, tags -> this.tags.addAll(tags));
-        nbt.listenForList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, activeEffects -> {
-            for (NbtMap activeEffect : activeEffects) {
-                var effectInstance = EffectInstance.fromNBT(activeEffect);
-                addEffect(effectInstance);
-            }
-        });
+
         nbt.listenForCompound(TAG_PDC, customNbt -> {
             this.persistentDataContainer.clear();
             this.persistentDataContainer.putAll(customNbt);
@@ -530,91 +501,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         this.uniqueId = UUID.randomUUID().getMostSignificantBits();
-    }
-
-    @Override
-    public Map<EffectType, EffectInstance> getAllEffects() {
-        return Collections.unmodifiableMap(effects);
-    }
-
-    @Override
-    public boolean hasEffect(EffectType effectType) {
-        return effects.containsKey(effectType);
-    }
-
-    @Override
-    public int getEffectLevel(EffectType effectType) {
-        var effect = effects.get(effectType);
-        return effect == null ? 0 : effect.getLevel();
-    }
-
-    @Override
-    public boolean addEffect(EffectInstance effectInstance) {
-        if (!canApplyEffect(effectInstance.getType())) {
-            return false;
-        }
-
-        var event = new EntityEffectAddEvent(thisEntity, effectInstance);
-        if (!event.call()) {
-            return false;
-        }
-
-        effectInstance = event.getEffect();
-        var old = effects.put(effectInstance.getType(), effectInstance);
-        if (old != null && old.getType() != effectInstance.getType()) {
-            old.getType().onRemove(thisEntity, old);
-            effectInstance.getType().onAdd(thisEntity, effectInstance);
-        }
-
-        sendMobEffect(effectInstance, old);
-        if (old == null) {
-            syncVisibleEffects();
-        }
-
-        return true;
-    }
-
-    @Override
-    public void removeEffect(EffectType effectType) {
-        var removed = effects.get(effectType);
-        if (removed == null) {
-            return;
-        }
-
-        var event = new EntityEffectRemoveEvent(thisEntity, removed);
-        if (!event.call()) {
-            return;
-        }
-
-        effects.remove(effectType);
-        effectType.onRemove(thisEntity, removed);
-        sendMobEffect(null, removed);
-        syncVisibleEffects();
-    }
-
-    protected void sendMobEffect(EffectInstance newEffect, EffectInstance oldEffect) {
-        forEachViewers(viewer -> viewer.viewEntityEffectChange(thisEntity, newEffect, oldEffect));
-    }
-
-    @Override
-    public void removeAllEffects() {
-        // Prevent ConcurrentModificationException
-        for (EffectType effectType : this.effects.keySet().toArray(EffectType[]::new)) {
-            removeEffect(effectType);
-        }
-    }
-
-    protected void syncVisibleEffects() {
-        long visibleEffects = 0;
-        for (var effect : this.effects.values()) {
-            if (!effect.isVisible()) {
-                continue;
-            }
-
-            visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
-        }
-
-        setData(EntityData.VISIBLE_MOB_EFFECTS, visibleEffects);
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
@@ -57,6 +58,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected Entity thisEntity;
     @Dependency(optional = true)
     protected EntityAttributeComponent attributeComponent;
+    @Dependency(optional = true)
+    protected EntityLivingComponent livingComponent;
     @Manager
     protected ComponentManager manager;
 
@@ -479,9 +482,14 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     @Override
     public boolean canCriticalAttack() {
-        return !isOnGround() && getMotion().y() < 0 &&
-               !thisEntity.hasEffect(EffectTypes.BLINDNESS) &&
-               !thisEntity.hasEffect(EffectTypes.SLOW_FALLING);
+        if (livingComponent != null &&
+            (livingComponent.hasEffect(EffectTypes.BLINDNESS) ||
+             livingComponent.hasEffect(EffectTypes.SLOW_FALLING))
+        ) {
+            return false;
+        }
+
+        return !isOnGround() && getMotion().y() < 0;
     }
 
     @Override

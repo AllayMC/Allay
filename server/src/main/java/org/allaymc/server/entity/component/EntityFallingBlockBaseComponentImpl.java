@@ -8,8 +8,8 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityInitInfo;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.data.EntityData;
@@ -87,8 +87,8 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             if (damage > 0) {
                 dimension.getEntityManager().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
                         .stream()
-                        .filter(entity -> entity instanceof EntityDamageComponent)
-                        .map(EntityDamageComponent.class::cast)
+                        .filter(entity -> entity instanceof EntityLivingComponent)
+                        .map(EntityLivingComponent.class::cast)
                         .forEach(entity -> entity.attack(DamageContainer.fallingBlock(damage)));
             }
 

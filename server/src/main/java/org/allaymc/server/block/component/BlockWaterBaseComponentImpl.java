@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.particle.SimpleParticle;
@@ -100,10 +100,10 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void onCollideWithEntity(Block block, Entity entity) {
-        if (entity instanceof EntityDamageComponent damageComponent && damageComponent.getOnFireTicks() > 0) {
-            damageComponent.setOnFireTicks(0);
-            entity.getDimension().addParticle(entity.getLocation(), SimpleParticle.WHITE_SMOKE);
-            entity.getDimension().addSound(entity.getLocation(), SimpleSound.FIRE_EXTINGUISH);
+        if (entity instanceof EntityLiving living && living.getOnFireTicks() > 0) {
+            living.setOnFireTicks(0);
+            living.getDimension().addParticle(living.getLocation(), SimpleParticle.WHITE_SMOKE);
+            living.getDimension().addSound(living.getLocation(), SimpleSound.FIRE_EXTINGUISH);
         }
     }
 

@@ -1,8 +1,6 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityAgeComponent;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
@@ -11,9 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface EntityXpOrb extends
-        Entity,
+        EntityLiving,
         EntityXpOrbBaseComponent,
-        EntityDamageComponent,
         EntityAttributeComponent,
         EntityPhysicsComponent,
         EntityAgeComponent {

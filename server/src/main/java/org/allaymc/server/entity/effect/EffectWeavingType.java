@@ -2,9 +2,9 @@ package org.allaymc.server.entity.effect;
 
 import com.google.common.collect.AbstractIterator;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -25,7 +25,7 @@ public class EffectWeavingType extends AbstractEffectType {
     }
 
     @Override
-    public void onEntityDies(Entity entity, EffectInstance effectInstance) {
+    public void onEntityDies(EntityLiving entity, EffectInstance effectInstance) {
         if (
                 entity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.MOB_GRIEFING) ||
                 entity.isPlayer()
