@@ -195,7 +195,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                         for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
                             var palette = section.blockLayers()[i];
                             palette.compact();
-                            palette.writeToStorage(buffer, BlockState::getBlockStateTag);
+                            palette.writeToStorage(buffer, BlockState::getBlockStateNBT);
                             palette.setDirty(false);
                         }
                     })

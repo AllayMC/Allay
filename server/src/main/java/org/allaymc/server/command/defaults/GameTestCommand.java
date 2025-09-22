@@ -327,7 +327,7 @@ public class GameTestCommand extends VanillaCommand {
                 .exec((context, player) -> {
                     boolean enable = context.getResult(1);
                     Consumer<BlockBreakEvent> lambda = (event) -> {
-                        System.out.println(event.getBlock().getBlockStateTag());
+                        System.out.println(event.getBlock().getBlockStateNBT());
                         var data = event.getBlock().getBlockStateData();
                         System.out.println(data.collisionShape());
                         System.out.println(data.shape());

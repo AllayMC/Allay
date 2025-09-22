@@ -2,6 +2,7 @@ package org.allaymc.api.utils;
 
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
@@ -34,7 +35,7 @@ public interface NBTIO {
      * Get the block state from the block state NBT.
      *
      * @param nbt the block state NBT
-     * @return the block state, or the default state of {@code BlockTypes.UNKNOWN}
+     * @return the block state, or the default state of {@link BlockTypes#UNKNOWN}
      * if the block state is not found, or the block state version is too new.
      */
     BlockState fromBlockStateNBT(NbtMap nbt);

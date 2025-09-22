@@ -5,11 +5,13 @@ import lombok.Setter;
 import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3dc;
+import org.joml.Vector3ic;
 
 /**
  * Represents the initialization information for an entity.
@@ -59,11 +61,22 @@ public class EntityInitInfo implements ComponentInitInfo {
             return this;
         }
 
+        public Builder loc(Location3ic loc) {
+            pos(loc.x(), loc.y(), loc.z());
+            rot((float) loc.yaw(), (float) loc.pitch());
+            this.dimension = loc.dimension();
+            return this;
+        }
+
         public Builder loc(Location3dc loc) {
             pos(loc.x(), loc.y(), loc.z());
             rot((float) loc.yaw(), (float) loc.pitch());
             this.dimension = loc.dimension();
             return this;
+        }
+
+        public Builder pos(Vector3ic pos) {
+            return pos(pos.x(), pos.y(), pos.z());
         }
 
         public Builder pos(Vector3dc pos) {

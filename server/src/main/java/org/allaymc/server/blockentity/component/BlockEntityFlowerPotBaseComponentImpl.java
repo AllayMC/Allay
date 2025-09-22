@@ -64,7 +64,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
 
         return savedNbt
                 .toBuilder()
-                .putCompound(TAG_PLANT_BLOCK, this.plantBlock.getBlockStateTag())
+                .putCompound(TAG_PLANT_BLOCK, this.plantBlock.getBlockStateNBT())
                 .build();
     }
 

@@ -38,7 +38,7 @@ public final class ScheduledUpdateInfo {
                 .putInt("z", pos.z())
                 .putLong("time", time)
                 // Written in vanilla, but is not used in Allay. We just write an air here
-                .putCompound("blockState", BlockTypes.AIR.getDefaultState().getBlockStateTag())
+                .putCompound("blockState", BlockTypes.AIR.getDefaultState().getBlockStateNBT())
                 .build();
     }
 }

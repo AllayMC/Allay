@@ -43,7 +43,7 @@ public record AllayBlockState(
     }
 
     @Override
-    public NbtMap getBlockStateTag() {
+    public NbtMap getBlockStateNBT() {
         return blockStateTag;
     }
 

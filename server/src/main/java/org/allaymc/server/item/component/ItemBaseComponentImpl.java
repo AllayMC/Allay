@@ -222,7 +222,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var blockState = toBlockState();
         if (blockState != null) {
-            builder.put(TAG_BLOCK, blockState.getBlockStateTag());
+            builder.put(TAG_BLOCK, blockState.getBlockStateNBT());
         }
 
         // TODO: CanDestroy

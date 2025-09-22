@@ -280,7 +280,7 @@ public record Structure(
                                                         NbtType.COMPOUND,
                                                         palette.getPalette()
                                                                 .stream()
-                                                                .map(BlockState::getBlockStateTag)
+                                                                .map(BlockState::getBlockStateNBT)
                                                                 .toList())
                                                 .putCompound("block_position_data", blockEntityNBT.build())
                                                 .build()

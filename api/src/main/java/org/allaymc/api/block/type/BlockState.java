@@ -108,7 +108,7 @@ public interface BlockState {
      *
      * @return {@link NbtMap} of this block state
      */
-    NbtMap getBlockStateTag();
+    NbtMap getBlockStateNBT();
 
     /**
      * Converts this state to its item form.

@@ -75,6 +75,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed class `DefaultDescriptor` to `ItemTypeDescriptor`.
 - (API) Renamed item stack network id to unique id for better readability, changes are made to multiple related methods.
 - (API) Renamed method `Command.getCommandOverloads()` to `Command.getOverloads()`.
+- (API) Renamed method `BlockState.getBlockStateTag()` to `BlockState.getBlockStateNBT()`.
 - (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details.
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
 - (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
