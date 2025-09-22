@@ -3,17 +3,17 @@ log4j = "2.25.1"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.1.0"
-netty = "4.2.4.Final"
+netty = "4.2.6.Final"
 
 [libraries]
 # NBT
 nbt = { group = "org.allaymc", name = "NBT", version = "3.0.10" }
 # Network protocol
-network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta7-SNAPSHOT" }
+network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta8-SNAPSHOT" }
 # State Updater
 stateupdater = { group = "org.allaymc", name = "stateupdater", version = "master-SNAPSHOT" }
 # Collections
-guava = { group = "com.google.guava", name = "guava", version = "33.4.8-jre" }
+guava = { group = "com.google.guava", name = "guava", version = "33.5.0-jre" }
 # Fastutil
 fastutil-object-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-int-maps", version.ref = "fastutil" }
 fastutil-object-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-reference-maps", version.ref = "fastutil" }
@@ -35,11 +35,11 @@ fastutil-short-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = 
 fastutil-byte-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "byte-object-maps", version.ref = "fastutil" }
 fastutil-io = { group = "org.cloudburstmc.fastutil", name = "io", version.ref = "fastutil" }
 # Serialization
-gson = { group = "com.google.code.gson", name = "gson", version = "2.13.1" }
-snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.4" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.13.2" }
+snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.5" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.18.0" }
-annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
+annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2-1" }
 semver4j = { group = "org.semver4j", name = "semver4j", version = "6.0.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
@@ -67,24 +67,24 @@ joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version.ref = "netty" }
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version.ref = "netty" }
 # Configulation lib
-okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.9" }
+okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.13" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.8.3" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.0" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.1" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.23892.538" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.26199.169" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.13.4" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "1.13.4" }
-mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.19.0" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.20.0" }
 # Lombok
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.38" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 # Random generator
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.19.1" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.21.1" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
@@ -103,5 +103,5 @@ rng = ["rng-simple", "rng-sampling"]
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version = "9.0.1" }
-gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.2" }
+gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.3" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
