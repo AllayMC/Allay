@@ -107,6 +107,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved `XXXInitInfo` classes to their parent packages.
 - (API) Moved class `CommonEnums` from api to server.
 - (API) Moved classes `CachedSimpleSelectorArgument` and `CachedFilterSelectorArgument` from api to server.
+- (API) Moved class `DamageType` out from class `DamageContainer`.
 - (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
 - (API) Refactored the weather system. World will hold only one `Weather` instance now.
 - (API) Refactored the container system. All container implementations are moved to server module now.

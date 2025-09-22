@@ -7,8 +7,8 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**
- * BlockStateGetter is used to get a block state safely, which means that
- * the plugin developers can get an item type without worrying about being broken
+ * BlockStateGetter is used to get a block state safely using {@link NBTIO}, which means
+ * that the plugin developers can get an item type without worrying about being broken
  * in the next minecraft version compared to using {@link BlockTypes} directly.
  *
  * @author daoge_cmd | harry-xi
@@ -72,7 +72,7 @@ public final class BlockStateGetter {
         /**
          * Try to get the block state.
          *
-         * @return The block state
+         * @return the block state, or the default state of {@link BlockTypes#UNKNOWN} if failed to get the block state
          */
         public BlockState blockState() {
             if (stateBuilder != null) {

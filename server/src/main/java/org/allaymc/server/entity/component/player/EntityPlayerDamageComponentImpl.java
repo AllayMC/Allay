@@ -2,6 +2,7 @@ package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.message.I18n;
@@ -24,7 +25,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     public boolean canBeAttacked(DamageContainer damage) {
         var gameMode = thisPlayer.getGameMode();
         if (gameMode == GameMode.SPECTATOR || gameMode == GameMode.CREATIVE) {
-            return damage.getDamageType() == DamageContainer.DamageType.API;
+            return damage.getDamageType() == DamageType.API;
         }
 
         return true;
@@ -53,7 +54,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
             armorContainer.notifySlotChange(slot);
         }
 
-        if (damage.getDamageType() == DamageContainer.DamageType.FALL) {
+        if (damage.getDamageType() == DamageType.FALL) {
             // Fall damage can't be reduced by armor value,
             // but it can be reduced by feather falling enchantment
             applyArmorWhenFall(damage);
@@ -119,7 +120,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     protected void onDie(CEntityDieEvent event) {
         var deathInfo = lastDamage != null ?
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
-                DamageContainer.DamageType.API.getDeathInfo(thisPlayer, null);
+                DamageType.API.getDeathInfo(thisPlayer, null);
 
         String tr = deathInfo.left();
         Object[] args = (Object[]) deathInfo.right();

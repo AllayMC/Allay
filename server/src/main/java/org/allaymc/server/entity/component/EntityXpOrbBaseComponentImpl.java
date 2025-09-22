@@ -5,7 +5,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
-import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -106,7 +106,7 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @EventHandler
     protected void onDamage(CEntityTryDamageEvent event) {
         var damageType = event.getDamage().getDamageType();
-        event.setCanAttack(damageType != DamageContainer.DamageType.FALL);
+        event.setCanAttack(damageType != DamageType.FALL);
     }
 
     @Override

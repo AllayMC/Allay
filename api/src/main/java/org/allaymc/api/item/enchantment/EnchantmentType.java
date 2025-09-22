@@ -2,7 +2,7 @@ package org.allaymc.api.item.enchantment;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
@@ -160,7 +160,7 @@ public abstract class EnchantmentType {
      * @return the protection factor of this enchantment type
      * @see <a href="https://minecraft.wiki/w/Armor#Enchantments">Enchantments</a>
      */
-    public int getProtectionFactor(DamageContainer.DamageType damageType, int level) {
+    public int getProtectionFactor(DamageType damageType, int level) {
         return 0;
     }
 

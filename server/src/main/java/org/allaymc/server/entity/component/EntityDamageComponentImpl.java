@@ -11,6 +11,7 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
@@ -185,9 +186,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
         // Fire resistance effect
         if (hasFireDamage() &&
-            (damage.getDamageType() == DamageContainer.DamageType.FIRE ||
-             damage.getDamageType() == DamageContainer.DamageType.LAVA ||
-             damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK)
+            (damage.getDamageType() == DamageType.FIRE ||
+             damage.getDamageType() == DamageType.LAVA ||
+             damage.getDamageType() == DamageType.FIRE_TICK)
         ) return false;
 
         var event = new CEntityTryDamageEvent(damage, true);

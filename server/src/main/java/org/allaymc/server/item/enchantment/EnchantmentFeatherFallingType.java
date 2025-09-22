@@ -1,6 +1,6 @@
 package org.allaymc.server.item.enchantment;
 
-import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
@@ -15,8 +15,8 @@ public class EnchantmentFeatherFallingType extends EnchantmentType {
     }
 
     @Override
-    public int getProtectionFactor(DamageContainer.DamageType damageType, int level) {
-        if (damageType != DamageContainer.DamageType.FALL) {
+    public int getProtectionFactor(DamageType damageType, int level) {
+        if (damageType != DamageType.FALL) {
             return 0;
         }
         return level * 3;

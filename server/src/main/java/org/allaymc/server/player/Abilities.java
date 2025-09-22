@@ -30,7 +30,6 @@ public final class Abilities {
 
     private final EntityPlayer player;
 
-    private float walkSpeed = DEFAULT_WALK_SPEED;
     private float flySpeed = DEFAULT_FLY_SPEED;
     private float verticalFlySpeed = DEFAULT_VERTICAL_FLY_SPEED;
 
@@ -72,11 +71,6 @@ public final class Abilities {
         return abilities.contains(ability);
     }
 
-    public void setWalkSpeed(float walkSpeed) {
-        this.walkSpeed = walkSpeed;
-        this.dirty = true;
-    }
-
     public void setFlySpeed(float flySpeed) {
         this.flySpeed = flySpeed;
         this.dirty = true;
@@ -100,27 +94,28 @@ public final class Abilities {
     }
 
     public UpdateAbilitiesPacket encodeUpdateAbilitiesPacket() {
-        UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
+        UpdateAbilitiesPacket packet = new UpdateAbilitiesPacket();
 
-        updateAbilitiesPacket.setUniqueEntityId(player.getRuntimeId());
+        packet.setUniqueEntityId(player.getRuntimeId());
         // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
         // If this player does not have specific command permissions, the command description won't even be sent to the client
-        updateAbilitiesPacket.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
+        packet.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
         // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
-        updateAbilitiesPacket.setPlayerPermission(calculatePlayerPermission(player));
+        packet.setPlayerPermission(calculatePlayerPermission(player));
 
-        AbilityLayer abilityLayer = new AbilityLayer();
-        abilityLayer.setLayerType(AbilityLayer.Type.BASE);
-        abilityLayer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
-        abilityLayer.getAbilityValues().addAll(abilities);
-        abilityLayer.getAbilityValues().add(Ability.WALK_SPEED);
-        abilityLayer.getAbilityValues().add(Ability.FLY_SPEED);
-        abilityLayer.setWalkSpeed(this.walkSpeed);
-        abilityLayer.setFlySpeed(this.flySpeed);
-        abilityLayer.setVerticalFlySpeed(this.verticalFlySpeed);
-        updateAbilitiesPacket.getAbilityLayers().add(abilityLayer);
+        var layer = new AbilityLayer();
+        layer.setLayerType(AbilityLayer.Type.BASE);
+        layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
+        layer.getAbilityValues().addAll(abilities);
+        layer.getAbilityValues().add(Ability.WALK_SPEED);
+        layer.getAbilityValues().add(Ability.FLY_SPEED);
+        // NOTICE: this shouldn't be changed
+        layer.setWalkSpeed(DEFAULT_WALK_SPEED);
+        layer.setFlySpeed(this.flySpeed);
+        layer.setVerticalFlySpeed(this.verticalFlySpeed);
+        packet.getAbilityLayers().add(layer);
 
-        return updateAbilitiesPacket;
+        return packet;
     }
 
     private PlayerPermission calculatePlayerPermission(EntityPlayer player) {

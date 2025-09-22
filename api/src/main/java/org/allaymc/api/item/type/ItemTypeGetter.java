@@ -6,8 +6,8 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**
- * ItemTypeGetter is used to get an item type safely, which means that
- * the plugin developers can get an item type without worrying about being broken
+ * ItemTypeGetter is used to get an item type safely using {@link NBTIO}, which means
+ * that the plugin developers can get an item type without worrying about being broken
  * in the next minecraft version compared to using {@link ItemTypes} directly.
  *
  * @author daoge_cmd
@@ -63,7 +63,7 @@ public class ItemTypeGetter {
         /**
          * Try to get the item type.
          *
-         * @return The item type
+         * @return the item type, or {@link ItemTypes#UNKNOWN} if failed to get the item type
          */
         public ItemType<?> itemType() {
             return NBTIO.getAPI().fromItemStackNBT(nbtMapBuilder.build()).getItemType();

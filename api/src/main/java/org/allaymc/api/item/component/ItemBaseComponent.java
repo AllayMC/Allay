@@ -5,7 +5,7 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ItemLockMode;
@@ -391,10 +391,10 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     /**
      * Gets the protection factor for a damage type.
      *
-     * @param damageType the {@link DamageContainer.DamageType}
+     * @param damageType the {@link DamageType}
      * @return the total protection factor
      */
-    default int getEnchantmentProtectionFactor(DamageContainer.DamageType damageType) {
+    default int getEnchantmentProtectionFactor(DamageType damageType) {
         return getEnchantments().stream()
                 .mapToInt(enchantmentInstance -> enchantmentInstance.getType().getProtectionFactor(damageType, enchantmentInstance.getLevel()))
                 .sum();

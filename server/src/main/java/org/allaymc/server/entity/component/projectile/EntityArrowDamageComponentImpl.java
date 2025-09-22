@@ -1,6 +1,7 @@
 package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 
 /**
@@ -9,6 +10,6 @@ import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 public class EntityArrowDamageComponentImpl extends EntityDamageComponentImpl {
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
-        return damage.getDamageType() == DamageContainer.DamageType.API;
+        return damage.getDamageType() == DamageType.API;
     }
 }

@@ -1,6 +1,6 @@
 package org.allaymc.server.item.enchantment;
 
-import org.allaymc.api.entity.damage.DamageContainer.DamageType;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
