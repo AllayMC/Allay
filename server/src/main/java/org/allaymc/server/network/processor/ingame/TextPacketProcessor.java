@@ -1,8 +1,8 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerChatEvent;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
  */
 public class TextPacketProcessor extends PacketProcessor<TextPacket> {
     @Override
-    public void handleSync(EntityPlayer player, TextPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayerImpl player, TextPacket packet, long receiveTime) {
         if (packet.getType() != TextPacket.Type.CHAT) return;
 
         var event = new PlayerChatEvent(player, "<" + player.getDisplayName() + "> ", packet.getMessage());

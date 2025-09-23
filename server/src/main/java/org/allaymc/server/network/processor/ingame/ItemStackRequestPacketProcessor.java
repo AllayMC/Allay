@@ -3,7 +3,6 @@ package org.allaymc.server.network.processor.ingame;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
@@ -33,7 +32,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
     protected final ContainerActionProcessorHolder processorHolder = new ContainerActionProcessorHolder();
 
     @Override
-    public void handleSync(EntityPlayer player, ItemStackRequestPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayerImpl player, ItemStackRequestPacket packet, long receiveTime) {
         List<ItemStackResponse> encodedResponses = new LinkedList<>();
         label:
         for (var request : packet.getRequests()) {

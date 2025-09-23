@@ -116,7 +116,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Dependency
     protected EntityBaseComponent baseComponent;
     @Dependency
-    protected EntityPlayerNetworkComponentImpl networkComponent;
+    protected EntityPlayerClientComponentImpl clientComponent;
 
     @Getter
     protected int chunkLoadingRadius;
@@ -181,14 +181,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 yield p;
             }
         };
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
     public void removeEntity(Entity entity) {
         var packet = new RemoveEntityPacket();
         packet.setUniqueEntityId(entity.getUniqueId());
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -197,7 +197,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         if (thisPlayer == player) {
             var packet1 = new SetPlayerGameTypePacket();
             packet1.setGamemode(toNetwork(player.getGameMode()).ordinal());
-            this.networkComponent.sendPacket(packet1);
+            this.clientComponent.sendPacket(packet1);
 
             var packet2 = new UpdateAdventureSettingsPacket();
             packet2.setNoPvM(gameMode == GameMode.SPECTATOR);
@@ -205,12 +205,12 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             packet2.setShowNameTags(gameMode != GameMode.SPECTATOR);
             packet2.setImmutableWorld(gameMode == GameMode.SPECTATOR);
             packet2.setAutoJump(true);
-            this.networkComponent.sendPacket(packet2);
+            this.clientComponent.sendPacket(packet2);
         } else {
             var packet = new UpdatePlayerGameTypePacket();
             packet.setGameType(toNetwork(player.getGameMode()));
             packet.setEntityId(player.getRuntimeId());
-            this.networkComponent.sendPacket(packet);
+            this.clientComponent.sendPacket(packet);
         }
     }
 
@@ -222,7 +222,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         } else {
             packet = createAbsoluteMovePacket(entity, newLocation, teleporting);
         }
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3dc newLocation, boolean teleporting) {
@@ -296,7 +296,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var packet = new SetEntityMotionPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -304,7 +304,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var packet = new SetEntityDataPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setMetadata(getMetadata(entity));
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -317,7 +317,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setItem(NetworkHelper.toNetwork(container.getItemInHand()));
         packet.setInventorySlot(handSlot);
         packet.setHotbarSlot(handSlot);
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -329,7 +329,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         // Network slot index for offhand is 1, see FullContainerType.OFFHAND. Field `hotbarSlot` is unused
         packet.setInventorySlot(1);
         packet.setItem(NetworkHelper.toNetwork(container.getOffhand()));
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -342,7 +342,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setChestplate(NetworkHelper.toNetwork(container.getChestplate()));
         packet.setLeggings(NetworkHelper.toNetwork(container.getLeggings()));
         packet.setBoots(NetworkHelper.toNetwork(container.getBoots()));
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -353,20 +353,20 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setStopExpression(animation.stopCondition());
         packet.setController(animation.controller());
         packet.getRuntimeEntityIds().add(entity.getRuntimeId());
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
     public void viewPlayerSkin(EntityPlayer player) {
         var skin = SkinConvertor.toSerializedSkin(player.getSkin());
         var packet = new PlayerSkinPacket();
-        packet.setUuid(networkComponent.getLoginData().getUuid());
+        packet.setUuid(clientComponent.getLoginData().getUuid());
         packet.setSkin(skin);
         packet.setNewSkinName(skin.getSkinId());
         // It seems that old skin name is unused
         packet.setOldSkinName("");
         packet.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -382,38 +382,38 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                     var packet = new AnimatePacket();
                     packet.setAction(AnimatePacket.Action.SWING_ARM);
                     packet.setRuntimeEntityId(entity.getRuntimeId());
-                    this.networkComponent.sendPacket(packet);
+                    this.clientComponent.sendPacket(packet);
 
                 } else {
                     var packet = new EntityEventPacket();
                     packet.setType(EntityEventType.ATTACK_START);
                     packet.setRuntimeEntityId(entity.getRuntimeId());
-                    this.networkComponent.sendPacket(packet);
+                    this.clientComponent.sendPacket(packet);
                 }
             }
             case SimpleEntityAction.HURT -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.HURT);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case SimpleEntityAction.CRITICAL_HIT -> {
                 var packet = new AnimatePacket();
                 packet.setAction(AnimatePacket.Action.CRITICAL_HIT);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case SimpleEntityAction.ENCHANTED_HIT -> {
                 var packet = new AnimatePacket();
                 packet.setAction(AnimatePacket.Action.MAGIC_CRITICAL_HIT);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case SimpleEntityAction.DEATH -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.DEATH);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case SimpleEntityAction.EAT -> {
                 if (entity instanceof ContainerHolder holder && holder.hasContainer(ContainerType.INVENTORY)) {
@@ -422,33 +422,33 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                     packet.setType(EntityEventType.EATING_ITEM);
                     packet.setRuntimeEntityId(entity.getRuntimeId());
                     packet.setData((item.getItemType().getRuntimeId() << 16) | item.getMeta());
-                    this.networkComponent.sendPacket(packet);
+                    this.clientComponent.sendPacket(packet);
                 }
             }
             case SimpleEntityAction.FIREWORK_EXPLOSION -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.FIREWORK_EXPLODE);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case SimpleEntityAction.TOTEM_USE -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.CONSUME_TOTEM);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case PickedUpAction(Entity picker) -> {
                 var packet = new TakeItemEntityPacket();
                 packet.setRuntimeEntityId(picker.getRuntimeId());
                 packet.setItemRuntimeEntityId(entity.getRuntimeId());
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case ArrowShakeAction(int times) -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.ARROW_SHAKE);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
                 packet.setData(times);
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
         }
@@ -460,7 +460,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setRuntimeEntityId(player.getRuntimeId());
         packet.setEmoteId(emoteId.toString());
         packet.getFlags().add(EmoteFlag.SERVER_SIDE);
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -480,7 +480,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             packet.setDuration(newEffect.getDuration());
             packet.setEvent(oldEffect == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
         }
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     protected EntityDataMap getMetadata(Entity entity) {
@@ -498,7 +498,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         this.chunkLoadingRadius = Math.min(radius, Server.SETTINGS.worldSettings().viewDistance());
         var packet = new ChunkRadiusUpdatedPacket();
         packet.setRadius(chunkLoadingRadius);
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -507,12 +507,12 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var packet = new NetworkChunkPublisherUpdatePacket();
         packet.setPosition(Vector3i.from(location.x(), location.y(), location.z()));
         packet.setRadius(getChunkLoadingRadius() << 4);
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
     public void viewChunk(Chunk chunk) {
-        this.networkComponent.sendPacket(createLevelChunkPacket(chunk));
+        this.clientComponent.sendPacket(createLevelChunkPacket(chunk));
         // This method will be called in non-ticking thread if async chunk sending is enabled. Let's
         // send the entities in this chunk to the player next tick in the main thread: use forEachEntitiesInChunk()
         // instead of forEachEntitiesInChunkImmediately()
@@ -583,14 +583,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     public void viewTime(int timeOfDay) {
         var packet = new SetTimePacket();
         packet.setTime(timeOfDay);
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
     public void viewGameRules(GameRules gameRules) {
         var packet = new GameRulesChangedPacket();
         packet.getGameRules().addAll(((AllayGameRules) gameRules).toNetworkGameRuleData());
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -600,7 +600,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setDataLayer(layer);
         packet.setDefinition(blockState::blockStateHash);
         packet.getFlags().add(UpdateBlockPacket.Flag.NETWORK);
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -614,7 +614,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 continue;
             }
 
-            this.networkComponent.sendPacket(packet);
+            this.clientComponent.sendPacket(packet);
         }
     }
 
@@ -628,34 +628,34 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 packet.setBlockPosition(pos);
                 packet.setEventType(BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
                 packet.setEventData(BLOCK_EVENT_DATA_OPEN_CHEST);
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case SimpleBlockAction.CLOSE -> {
                 var packet = new BlockEventPacket();
                 packet.setBlockPosition(pos);
                 packet.setEventType(BLOCK_EVENT_TYPE_CHANGE_CHEST_STATE);
                 packet.setEventData(BLOCK_EVENT_DATA_CLOSE_CHEST);
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case StartBreakAction(double breakTime) -> {
                 var packet = new LevelEventPacket();
                 packet.setType(LevelEvent.BLOCK_START_BREAK);
                 packet.setPosition(pos3f);
                 packet.setData(toNetworkBreakTime(breakTime));
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case ContinueBreakAction(double breakTime) -> {
                 var packet = new LevelEventPacket();
                 packet.setType(LevelEvent.BLOCK_UPDATE_BREAK);
                 packet.setPosition(pos3f);
                 packet.setData(toNetworkBreakTime(breakTime));
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             case SimpleBlockAction.STOP_BREAK -> {
                 var packet = new LevelEventPacket();
                 packet.setType(LevelEvent.BLOCK_STOP_BREAK);
                 packet.setPosition(pos3f);
-                this.networkComponent.sendPacket(packet);
+                this.clientComponent.sendPacket(packet);
             }
             default -> throw new IllegalStateException("Unhandled block action type: " + action.getClass().getSimpleName());
         }
@@ -757,14 +757,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_INK_SACE_USED);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.DOOR_CRASH -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ZOMBIE_DOOR_CRASH);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.EXPLOSION -> {
@@ -778,112 +778,112 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_CLICK);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.SIGN_WAXED -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.PARTICLE_WAX_ON);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.WAX_REMOVED -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.PARTICLE_WAX_OFF);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.COPPER_SCRAPED -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.PARTICLE_SCRAPE);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.POP -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_INFINITY_ARROW_PICKUP);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.ITEM_ADD -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_ITEM_ADD);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.ITEM_FRAME_REMOVE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_ITEM_REMOVE);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.ITEM_FRAME_ROTATE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_ITEM_ROTATE);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.GHAST_WARNING -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_GHAST_WARNING);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.GHAST_SHOOT -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_GHAST_FIREBALL);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.TNT -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_FUSE);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.ANVIL_LAND -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ANVIL_LAND);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.ANVIL_USE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ANVIL_USED);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.ANVIL_BREAK -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ANVIL_BROKEN);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.FIRE_CHARGE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_BLAZE_FIREBALL);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.TOTEM -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_TOTEM_USED);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case SimpleSound.ITEM_THROW -> {
@@ -898,7 +898,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_EXPERIENCE_ORB_PICKUP);
                 levelEvent.setPosition(pos.toFloat());
-                this.networkComponent.sendPacket(levelEvent);
+                this.clientComponent.sendPacket(levelEvent);
                 return;
             }
             case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
@@ -1020,7 +1020,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 playSound.setPosition(pos);
                 playSound.setVolume(1.0f);
                 playSound.setPitch(0.7f + 0.5f * (float) so.progress());
-                this.networkComponent.sendPacket(playSound);
+                this.clientComponent.sendPacket(playSound);
                 return;
             }
             case CustomSound so -> {
@@ -1029,13 +1029,13 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 playSound.setPosition(pos);
                 playSound.setVolume(so.volume());
                 playSound.setPitch(so.pitch());
-                this.networkComponent.sendPacket(playSound);
+                this.clientComponent.sendPacket(playSound);
                 return;
             }
             default -> throw new IllegalArgumentException("Unhandled sound type: " + sound.getClass().getSimpleName());
         }
 
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     protected SoundEvent getEquipSound(ItemType<?> itemType) {
@@ -1078,7 +1078,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 pk.setIdentifier(pa.particleName());
                 pk.setMolangVariablesJson(Optional.ofNullable(pa.moLangVariables()));
                 pk.setPosition(pos);
-                this.networkComponent.sendPacket(pk);
+                this.clientComponent.sendPacket(pk);
                 return;
             }
             case DragonEggTeleportParticle pa -> {
@@ -1097,7 +1097,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 pk.setBlockPosition(Vector3i.from((int) p.x(), (int) p.y(), (int) p.z()));
                 pk.setEventType(pa.instrument().ordinal());
                 pk.setEventData(pa.pitch());
-                this.networkComponent.sendPacket(pk);
+                this.clientComponent.sendPacket(pk);
                 return;
             }
             case BlockBreakParticle pa -> {
@@ -1137,7 +1137,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             }
             default -> throw new IllegalArgumentException("Unhandled particle type: " + particle.getClass().getSimpleName());
         }
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -1149,7 +1149,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             packet1.setType(LevelEvent.START_RAINING);
             packet1.setData(65535);
         }
-        this.networkComponent.sendPacket(packet1);
+        this.clientComponent.sendPacket(packet1);
 
         var packet2 = new LevelEventPacket();
         packet2.setPosition(Vector3f.ZERO);
@@ -1158,14 +1158,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             packet2.setType(LevelEvent.START_THUNDERSTORM);
             packet2.setData(65535);
         }
-        this.networkComponent.sendPacket(packet2);
+        this.clientComponent.sendPacket(packet2);
     }
 
     @Override
     public void viewDebugShape(DebugShape debugShape) {
         var packet = new ServerScriptDebugDrawerPacket();
         packet.getShapes().add(toNetworkData(debugShape));
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -1174,14 +1174,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         for (var debugShape : debugShapes) {
             packet.getShapes().add(toNetworkData(debugShape));
         }
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
     public void removeDebugShape(DebugShape debugShape) {
         var packet = new ServerScriptDebugDrawerPacket();
         packet.getShapes().add(createRemovalNotice(debugShape));
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -1190,7 +1190,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         for (var debugShape : debugShapes) {
             packet.getShapes().add(createRemovalNotice(debugShape));
         }
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     protected static org.cloudburstmc.protocol.bedrock.data.DebugShape createRemovalNotice(DebugShape shape) {
@@ -1253,6 +1253,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var packet = new BlockEntityDataPacket();
         packet.setBlockPosition(NetworkHelper.toNetwork(blockEntity.getPosition()));
         packet.setData(blockEntity.saveNBT());
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 }

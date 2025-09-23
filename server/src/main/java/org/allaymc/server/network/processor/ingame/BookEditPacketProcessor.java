@@ -1,11 +1,11 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBookEditEvent;
 import org.allaymc.api.item.data.WrittenBookGeneration;
 import org.allaymc.api.item.interfaces.ItemWritableBookStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
@@ -16,7 +16,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
 @Slf4j
 public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
     @Override
-    public void handleSync(EntityPlayer player, BookEditPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayerImpl player, BookEditPacket packet, long receiveTime) {
         if (player.getHandSlot() != packet.getInventorySlot()) {
             log.warn("Invalid inventory slot: {}, should be {}", packet.getInventorySlot(), player.getHandSlot());
             return;

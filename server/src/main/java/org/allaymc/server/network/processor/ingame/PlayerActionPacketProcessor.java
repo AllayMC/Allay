@@ -6,6 +6,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
@@ -17,7 +18,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 @Slf4j
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayerImpl player, PlayerActionPacket packet, long receiveTime) {
         return switch (packet.getAction()) {
             case RESPAWN -> {
                 if (!player.canBeSpawned()) {

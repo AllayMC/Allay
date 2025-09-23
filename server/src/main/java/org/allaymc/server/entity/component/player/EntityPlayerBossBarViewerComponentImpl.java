@@ -21,7 +21,7 @@ public class EntityPlayerBossBarViewerComponentImpl implements EntityPlayerBossB
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Dependency
-    protected EntityPlayerNetworkComponentImpl networkComponent;
+    protected EntityPlayerClientComponentImpl clientComponent;
 
     @Override
     public void viewBossBar(BossBar bossBar) {
@@ -37,7 +37,7 @@ public class EntityPlayerBossBarViewerComponentImpl implements EntityPlayerBossB
         packet.setDarkenSky(bossBar.isDarkenSky() ? 1 : 0);
         packet.setColor(bossBar.getColor().ordinal());
         packet.setOverlay(bossBar.getStyle().ordinal());
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -45,6 +45,6 @@ public class EntityPlayerBossBarViewerComponentImpl implements EntityPlayerBossB
         var packet = new BossEventPacket();
         packet.setBossUniqueEntityId(thisPlayer.getRuntimeId());
         packet.setAction(BossEventPacket.Action.REMOVE);
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 }

@@ -25,7 +25,7 @@ import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
-import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
@@ -173,7 +173,7 @@ public class AllayWorld implements World {
                 }
 
                 var playerImpl = (EntityPlayerImpl) entry.player;
-                var networkComponent = (EntityPlayerNetworkComponentImpl) playerImpl.getPlayerNetworkComponent();
+                var networkComponent = (EntityPlayerClientComponentImpl) playerImpl.getPlayerClientComponent();
                 networkComponent.handlePacketSync(entry.packet(), entry.time());
                 count++;
             } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);

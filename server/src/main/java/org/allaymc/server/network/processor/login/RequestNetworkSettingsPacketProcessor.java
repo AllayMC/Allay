@@ -1,6 +1,5 @@
 package org.allaymc.server.network.processor.login;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -17,8 +16,7 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestNetworkSettingsPacket;
  */
 public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor<RequestNetworkSettingsPacket> {
     @Override
-    public void handle(EntityPlayer p, RequestNetworkSettingsPacket packet) {
-        var player = (EntityPlayerImpl) p;
+    public void handle(EntityPlayerImpl player, RequestNetworkSettingsPacket packet) {
         var protocolVersion = packet.getProtocolVersion();
         var codec = ProtocolInfo.findCodec(protocolVersion);
         if (codec == null) {

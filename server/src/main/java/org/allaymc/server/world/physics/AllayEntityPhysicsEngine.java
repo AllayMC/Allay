@@ -25,8 +25,7 @@ import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
-import org.allaymc.server.network.processor.ingame.PlayerAuthInputPacketProcessor;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
+import org.allaymc.server.network.processor.PacketProcessor;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBdc;
@@ -385,7 +384,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
+     * See {@link PacketProcessor#handleAsync(EntityPlayerImpl, org.cloudburstmc.protocol.bedrock.packet.BedrockPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3dc newLoc) {
         if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {

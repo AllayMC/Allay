@@ -17,7 +17,7 @@ import org.joml.Vector3dc;
 public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponentImpl {
 
     @Dependency
-    protected EntityPlayerNetworkComponentImpl networkComponent;
+    protected EntityPlayerClientComponentImpl clientComponent;
 
     @EventHandler
     protected void onGameModeChange(CPlayerGameModeChangeEvent event) {
@@ -38,7 +38,7 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
     @Override
     public void setMotion(Vector3dc motion) {
         if (MathUtils.hasNaN(motion)) {
-            throw new IllegalArgumentException("Trying to set the motion of player " + networkComponent.getOriginName() + " to a new motion which contains NaN: " + motion);
+            throw new IllegalArgumentException("Trying to set the motion of player " + clientComponent.getOriginName() + " to a new motion which contains NaN: " + motion);
         }
 
         // For player, motion effect is calculated by the client rather than the server. We only
@@ -46,6 +46,6 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
         var packet = new SetEntityMotionPacket();
         packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         packet.setRuntimeEntityId(thisEntity.getRuntimeId());
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 }

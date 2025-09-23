@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.eventbus.event.player.PlayerLoginEvent;
@@ -68,10 +68,10 @@ import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
  * @author daoge_cmd
  */
 @Slf4j
-public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComponent {
+public class EntityPlayerClientComponentImpl implements EntityPlayerClientComponent {
 
     @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:player_client_component");
 
     @Manager
     protected ComponentManager manager;
@@ -95,7 +95,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Getter
     protected BedrockServerSession clientSession;
 
-    public EntityPlayerNetworkComponentImpl() {
+    public EntityPlayerClientComponentImpl() {
         this.packetProcessorHolder = new PacketProcessorHolder();
         this.fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
     }
@@ -181,7 +181,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     // this shouldn't be an error
                     return;
                 }
-                EntityPlayerNetworkComponentImpl.this.onDisconnect(reason);
+                EntityPlayerClientComponentImpl.this.onDisconnect(reason);
             }
         });
     }
@@ -212,9 +212,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
         thisPlayer.sendAttributesToClient();
         sendInventories();
-        var playStatusPacket = new PlayStatusPacket();
-        playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
-        sendPacket(playStatusPacket);
+        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         thisPlayer.viewTime(world.getWorldData().getTimeOfDay());
         thisPlayer.viewWeather(world.getWeather());
         // Save player data the first time it joins
@@ -222,15 +220,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void sendCommands() {
-        sendPacket(encodeAvailableCommandsPacket());
-    }
-
-    public AvailableCommandsPacket encodeAvailableCommandsPacket() {
-        var pk = new AvailableCommandsPacket();
+        var packet = new AvailableCommandsPacket();
         Registries.COMMANDS.getContent().values().stream()
                 .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
-                .forEach(command -> pk.getCommands().add(encodeCommand(command)));
-        return pk;
+                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
+        sendPacket(packet);
     }
 
     protected CommandData encodeCommand(Command command) {
@@ -385,7 +379,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 
-        sendPacketImmediately(encodeStartGamePacket(dimension.getWorld(), playerData, dimension));
+        startGame(dimension.getWorld(), playerData, dimension);
 
         var helper = clientSession.getPeer().getCodecHelper();
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
@@ -399,7 +393,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(NetworkData.TRIM_DATA_PACKET.get());
     }
 
-    protected StartGamePacket encodeStartGamePacket(World spawnWorld, PlayerData playerData, Dimension dimension) {
+    protected void startGame(World spawnWorld, PlayerData playerData, Dimension dimension) {
         var packet = new StartGamePacket();
         packet.getGamerules().addAll(((AllayGameRules) spawnWorld.getWorldData().getGameRules()).toNetworkGameRuleData());
         packet.setUniqueEntityId(thisPlayer.getRuntimeId());
@@ -450,7 +444,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         packet.setOwnerId("");
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
         MultiVersion.adaptExperimentData(thisPlayer, packet.getExperiments());
-        return packet;
+        sendPacketImmediately(packet);
     }
 
     public void completeLogin() {
@@ -467,10 +461,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
 
         this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
-
-        var playStatusPacket = new PlayStatusPacket();
-        playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-        sendPacket(playStatusPacket);
+        sendPlayStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
 
         playerManager.onLoggedIn(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
@@ -478,5 +469,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), args);
 
         sendPacket(NetworkData.RESOURCE_PACKS_INFO_PACKET.get());
+    }
+
+    protected void sendPlayStatus(PlayStatusPacket.Status status) {
+        var packet = new PlayStatusPacket();
+        packet.setStatus(status);
+        sendPacket(packet);
     }
 }

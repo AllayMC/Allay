@@ -30,7 +30,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_player_scoreboard_viewer_component");
 
     @Dependency
-    protected EntityPlayerNetworkComponentImpl networkComponent;
+    protected EntityPlayerClientComponentImpl clientComponent;
 
     @ComponentObject
     protected EntityPlayer thisPlayer;
@@ -43,7 +43,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         packet1.setDisplayName(scoreboard.getDisplayName());
         packet1.setCriteria(scoreboard.getCriteriaName());
         packet1.setSortOrder(scoreboard.getSortOrder().ordinal());
-        networkComponent.sendPacket(packet1);
+        clientComponent.sendPacket(packet1);
 
         // Client won't storage the score of a scoreboard,so we should send the score to client
         var packet2 = new SetScorePacket();
@@ -55,7 +55,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
                         .toList()
         );
         packet2.setAction(SetScorePacket.Action.SET);
-        networkComponent.sendPacket(packet2);
+        clientComponent.sendPacket(packet2);
 
         var scorer = new PlayerScorer(thisPlayer);
         var line = scoreboard.getLine(scorer);
@@ -105,7 +105,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         packet.setDisplayName("");
         packet.setCriteria("");
         packet.setSortOrder(SortOrder.ASCENDING.ordinal());
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
 
         if (slot == DisplaySlot.BELOW_NAME) {
             thisPlayer.setData(EntityData.SCORE, "");
@@ -117,7 +117,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         var packet = new RemoveObjectivePacket();
         packet.setObjectiveId(scoreboard.getObjectiveName());
 
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         if (networkInfo != null) {
             packet.getInfos().add(networkInfo);
         }
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisPlayer)) {
@@ -144,7 +144,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         if (networkInfo != null) {
             packet.getInfos().add(networkInfo);
         }
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
@@ -154,6 +154,6 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
     @Override
     public boolean isScoreboardViewerValid() {
-        return !networkComponent.isDisconnected();
+        return !clientComponent.isDisconnected();
     }
 }

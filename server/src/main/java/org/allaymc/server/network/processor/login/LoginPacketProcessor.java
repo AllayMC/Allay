@@ -1,10 +1,9 @@
 package org.allaymc.server.network.processor.login;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayLoginData;
@@ -24,8 +23,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
-    public void handle(EntityPlayer p, LoginPacket packet) {
-        var player = (EntityPlayerImpl) p;
+    public void handle(EntityPlayerImpl player, LoginPacket packet) {
         AllayLoginData loginData;
         try {
             loginData = AllayLoginData.decode(packet);
@@ -35,8 +33,8 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var networkComponent = (EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent();
-        networkComponent.setLoginData(loginData);
+        var clientComponent = (EntityPlayerClientComponentImpl) player.getPlayerClientComponent();
+        clientComponent.setLoginData(loginData);
 
         var server = Server.getInstance();
         if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
@@ -72,12 +70,12 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         }
 
         if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
-            networkComponent.completeLogin();
+            clientComponent.completeLogin();
             return;
         }
 
         try {
-            networkComponent.setNetworkEncryptionEnabled(true);
+            clientComponent.setNetworkEncryptionEnabled(true);
 
             var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
             var serverKeyPair = EncryptionUtils.createKeyPair();

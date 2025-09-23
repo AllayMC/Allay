@@ -35,7 +35,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Dependency
     protected EntityPlayerBaseComponent baseComponent;
     @Dependency
-    protected EntityPlayerNetworkComponentImpl networkComponent;
+    protected EntityPlayerClientComponentImpl clientComponent;
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
 
@@ -79,7 +79,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         // ContainerSlotType.ANVIL_INPUT is zero
         packet.setContainerNameData(new FullContainerName(ContainerSlotType.ANVIL_INPUT, null));
         packet.setContents(NetworkHelper.toNetwork(container.getItemStacks()));
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         packet.setSlot(ContainerActionProcessor.toNetworkSlotIndex(container, slot));
         packet.setContainerNameData(new FullContainerName(ContainerActionProcessor.getSlotType(container, slot), null));
         packet.setItem(NetworkHelper.toNetwork(container.getItemStack(slot)));
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
             var location = baseComponent.getLocation();
             packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
         }
-        this.networkComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -171,7 +171,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         var packet = new ContainerClosePacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         packet.setProperty(property);
         packet.setValue(value);
 
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @SuppressWarnings("unchecked")

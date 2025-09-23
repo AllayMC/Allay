@@ -73,7 +73,7 @@ public final class EntityTypeInitializer {
                 .builder(EntityPlayerImpl.class)
                 .vanillaEntity(EntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
-                .addComponent(EntityPlayerNetworkComponentImpl::new, EntityPlayerNetworkComponentImpl.class)
+                .addComponent(EntityPlayerClientComponentImpl::new, EntityPlayerClientComponentImpl.class)
                 .addComponent(() -> new EntityPlayerAttributeComponentImpl(EntityPlayerAttributeComponentImpl.basicPlayerAttributes()), EntityPlayerAttributeComponentImpl.class)
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)

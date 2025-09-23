@@ -17,7 +17,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
@@ -267,20 +267,19 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case STOP_GLIDING -> player.setGliding(false);
                 case START_CRAWLING -> player.setCrawling(true);
                 case STOP_CRAWLING -> player.setCrawling(false);
-                case START_JUMPING ->
-                        ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).onJump();
+                case START_JUMPING -> ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).onJump();
             }
         }
     }
 
     @Override
-    public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayerImpl player, PlayerAuthInputPacket packet, long receiveTime) {
         handleInputData(player, packet.getInputData());
         handleSingleItemStackRequest(player, packet.getItemStackRequest(), receiveTime);
     }
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayerImpl player, PlayerAuthInputPacket packet, long receiveTime) {
         if (notReadyForInput(player)) {
             return PacketSignal.HANDLED;
         }
@@ -352,7 +351,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
-        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).handlePacketSync(pk, receiveTime);
+        ((EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent()).handlePacketSync(pk, receiveTime);
     }
 
     protected boolean notReadyForInput(EntityPlayer player) {

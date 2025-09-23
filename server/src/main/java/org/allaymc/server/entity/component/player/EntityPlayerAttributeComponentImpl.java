@@ -35,7 +35,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     private static final int MIN_FOOD_EXHAUSTION = 4;
 
     @Dependency(optional = true)
-    protected EntityPlayerNetworkComponentImpl networkComponent;
+    protected EntityPlayerClientComponentImpl clientComponent;
 
     protected float swimDistance = 0;
     protected float sprintDistance = 0;
@@ -214,7 +214,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
                 attr.getCurrentValue(), attr.getDefaultValue()
         )));
         packet.setTick(thisEntity.getWorld().getTick());
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @EventHandler

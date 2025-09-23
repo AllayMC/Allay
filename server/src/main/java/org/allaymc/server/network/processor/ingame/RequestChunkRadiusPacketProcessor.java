@@ -1,6 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RequestChunkRadiusPacket;
@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestChunkRadiusPacket;
  */
 public class RequestChunkRadiusPacketProcessor extends PacketProcessor<RequestChunkRadiusPacket> {
     @Override
-    public void handleSync(EntityPlayer player, RequestChunkRadiusPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayerImpl player, RequestChunkRadiusPacket packet, long receiveTime) {
         player.setChunkLoadingRadius(Math.min(packet.getRadius(), packet.getMaxRadius()));
     }
 

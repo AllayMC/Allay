@@ -3,6 +3,7 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.interfaces.ArmorContainer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
@@ -23,6 +24,7 @@ import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.eventbus.event.entity.EntityEffectAddEvent;
 import org.allaymc.api.eventbus.event.entity.EntityEffectRemoveEvent;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -56,6 +58,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     protected EntityAttributeComponent attributeComponent;
     @Dependency(optional = true)
     protected EntityPhysicsComponent physicsComponent;
+    @Dependency(optional = true)
+    protected EntityContainerHolderComponent containerHolderComponent;
     @ComponentObject
     protected EntityLiving thisEntity;
 
@@ -141,6 +145,89 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         applyEffects(damage);
     }
 
+    // TODO: Implement breach enchantment
+    protected void applyArmor(DamageContainer damage) {
+        if (!damage.canBeReducedByArmor() || containerHolderComponent == null) {
+            return;
+        }
+
+        var armorContainer = containerHolderComponent.getContainer(ContainerType.ARMOR);
+        if (armorContainer == null) {
+            return;
+        }
+
+        int durabilityIncreased = Math.max(1, (int) (damage.getSourceDamage() / 4f));
+        var itemStackArray = armorContainer.getItemStackArray();
+        for (int slot = 0; slot < itemStackArray.length; slot++) {
+            var item = itemStackArray[slot];
+            if (!item.getItemType().getItemData().isDamageable()) {
+                continue;
+            }
+            item.tryIncreaseDamage(durabilityIncreased);
+            armorContainer.notifySlotChange(slot);
+        }
+
+        if (damage.getDamageType() == DamageType.FALL) {
+            // Fall damage can't be reduced by armor value,
+            // but it can be reduced by feather falling enchantment
+            applyArmorWhenFall(damage, armorContainer);
+            return;
+        }
+
+        var totalArmorValue = 0f;
+        var totalToughnessValue = 0f;
+        var enchantmentProtectionFactor = 0;
+
+        for (var item : armorContainer.getItemStacks()) {
+            if (item == ItemAirStack.AIR_STACK) {
+                continue;
+            }
+
+            totalArmorValue += item.getItemType().getItemData().armorValue();
+            totalToughnessValue += item.getItemType().getItemData().toughnessValue();
+            enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
+        }
+        enchantmentProtectionFactor = Math.min(20, enchantmentProtectionFactor);
+
+        // See https://minecraft.wiki/w/Armor#Damage_reduction
+        final var v = totalArmorValue;
+        final var t = totalToughnessValue;
+        damage.updateFinalDamage(d -> {
+            if (0 <= d && d <= 1.6f * v + 0.2f * v * t) {
+                return (1f / (6.25f + 50f)) * d * d +
+                       (1f - v / 25f) * d;
+            } else {
+                return (1f - v / 125f) * d;
+            }
+        });
+
+        // See https://minecraft.wiki/w/Armor#Enchantments
+        final var epf = enchantmentProtectionFactor;
+        if (epf != 0) {
+            damage.updateFinalDamage(d -> d * (1f - epf / 25f));
+        }
+    }
+
+    protected void applyArmorWhenFall(DamageContainer damage, ArmorContainer armorContainer) {
+        var enchantmentProtectionFactor = 0;
+
+        for (var item : armorContainer.getItemStacks()) {
+            if (item == ItemAirStack.AIR_STACK) {
+                continue;
+            }
+
+            enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
+        }
+        enchantmentProtectionFactor = Math.min(20, enchantmentProtectionFactor);
+
+        if (enchantmentProtectionFactor == 0) {
+            return;
+        }
+
+        final var epf = enchantmentProtectionFactor;
+        damage.updateFinalDamage(d -> d * (1f - epf / 25f));
+    }
+
     protected void applyEffects(DamageContainer damage) {
         // Damage absorption
         if (attributeComponent.supportAttribute(AttributeType.ABSORPTION)) {
@@ -154,10 +241,6 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         this.effects.values().forEach(effect ->
                 effect.getType().onEntityDamage(thisEntity, effect, lastDamage)
         );
-    }
-
-    protected void applyArmor(DamageContainer damage) {
-        // Nothing here (But love by daoge)
     }
 
     protected void applyAttacker(DamageContainer damage) {

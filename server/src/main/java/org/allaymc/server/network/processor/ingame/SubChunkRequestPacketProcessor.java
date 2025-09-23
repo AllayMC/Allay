@@ -33,14 +33,14 @@ import java.util.Objects;
 public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequestPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, SubChunkRequestPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayerImpl player, SubChunkRequestPacket packet, long receiveTime) {
         var dimensionInfo = Objects.requireNonNull(DimensionInfo.of(packet.getDimension()));
         if (dimensionInfo != player.getDimension().getDimensionInfo()) {
             // Outdated sub chunk request from a previous dimension
             var subChunkPacket = new SubChunkPacket();
             subChunkPacket.setDimension(packet.getDimension());
             subChunkPacket.setCenterPosition(packet.getSubChunkPosition());
-            ((EntityPlayerImpl) player).sendPacket(subChunkPacket);
+            player.sendPacket(subChunkPacket);
             return PacketSignal.HANDLED;
         }
 
@@ -54,7 +54,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         subChunkPacket.setDimension(packet.getDimension());
         subChunkPacket.setCenterPosition(centerPosition);
         subChunkPacket.setSubChunks(responseData);
-        ((EntityPlayerImpl) player).sendPacket(subChunkPacket);
+        player.sendPacket(subChunkPacket);
         return PacketSignal.HANDLED;
     }
 

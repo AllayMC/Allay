@@ -77,6 +77,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed method `Command.getCommandOverloads()` to `Command.getOverloads()`.
 - (API) Renamed method `BlockState.getBlockStateTag()` to `BlockState.getBlockStateNBT()`.
 - (API) Renamed class `EntityDamageComponent` to `EntityLivingComponent`.
+- (API) Renamed class `EntityPlayerNetworkComponent` to `EntityPlayerClientComponent`.
 - (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details.
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
 - (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
@@ -136,7 +137,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
-- (API) Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerNetworkComponent` because
+- (API) Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerClientComponent` because
   these methods are not very useful as APIs.
 - (API) Removed class `CustomBlockComponent` since it is never used.
 - (API) Removed class `Metadata` which is used in entity. Using the getter/setter methods for entity data and flag in `EntityBaseComponent` directly.
@@ -164,7 +165,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `BlockState.toNetworkDefinition()`.
 - (API) Removed method `Container.toNetworkItemData()`.
 - (API) Removed methods `toNetwork()`, `getChunkDataPacket()` and `toEntryInfo()` in class `Pack`.
-- (API) Removed method `EntityPlayerNetworkComponent.getClientSession()`.
+- (API) Removed method `EntityPlayerClientComponent.getClientSession()`.
 - (API) Removed method `EnchantmentInstance.toNetwork()`.
 - (API) Removed network-related methods in the command system.
 - (API) Removed classes `BaseCommand` and `SimpleCommand`, and plugin commands now should extend `Command` directly.

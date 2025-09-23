@@ -11,7 +11,7 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.*;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.component.ComponentProvider;
-import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
@@ -32,7 +32,7 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     protected EntityPhysicsComponent physicsComponent;
     @Getter
     @Delegate
-    protected EntityPlayerNetworkComponent playerNetworkComponent;
+    protected EntityPlayerClientComponent playerClientComponent;
     @Delegate
     protected EntityPlayerAttributeComponent playerAttributeComponent;
     @Delegate
@@ -53,14 +53,14 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     }
 
     public void sendPacket(BedrockPacket packet) {
-        ((EntityPlayerNetworkComponentImpl) (this.playerNetworkComponent)).sendPacket(packet);
+        ((EntityPlayerClientComponentImpl) (this.playerClientComponent)).sendPacket(packet);
     }
 
     public void sendPacketImmediately(BedrockPacket packet) {
-        ((EntityPlayerNetworkComponentImpl) (this.playerNetworkComponent)).sendPacketImmediately(packet);
+        ((EntityPlayerClientComponentImpl) (this.playerClientComponent)).sendPacketImmediately(packet);
     }
 
     public BedrockServerSession getClientSession() {
-        return ((EntityPlayerNetworkComponentImpl) (this.playerNetworkComponent)).getClientSession();
+        return ((EntityPlayerClientComponentImpl) (this.playerClientComponent)).getClientSession();
     }
 }

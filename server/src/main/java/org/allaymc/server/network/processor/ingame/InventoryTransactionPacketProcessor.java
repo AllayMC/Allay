@@ -7,9 +7,9 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerInteractBlockEvent;
 import org.allaymc.api.eventbus.event.player.PlayerInteractEntityEvent;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -59,7 +59,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     }
 
     @Override
-    public void handleSync(EntityPlayer player, InventoryTransactionPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayerImpl player, InventoryTransactionPacket packet, long receiveTime) {
         var itemInHand = player.getItemInHand();
         var transactionType = packet.getTransactionType();
         switch (transactionType) {

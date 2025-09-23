@@ -95,7 +95,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
-    protected EntityPlayerNetworkComponentImpl networkComponent;
+    protected EntityPlayerClientComponentImpl clientComponent;
 
     @Getter
     protected GameMode gameMode;
@@ -160,7 +160,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @EventHandler
     protected void onPlayerLoggedIn(CPlayerLoggedInEvent event) {
-        var loginData = networkComponent.getLoginData();
+        var loginData = clientComponent.getLoginData();
         this.skin = loginData.getSkin();
         this.uniqueId = loginData.getUuid().getMostSignificantBits();
         setDisplayName(loginData.getXname());
@@ -255,7 +255,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             var packet = new PlayerStartItemCooldownPacket();
             packet.setItemCategory(category);
             packet.setCooldownDuration(duration);
-            this.networkComponent.sendPacket(packet);
+            this.clientComponent.sendPacket(packet);
         }
     }
 
@@ -285,7 +285,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var respawnPacket = new RespawnPacket();
         respawnPacket.setPosition(Vector3f.ZERO);
         respawnPacket.setState(RespawnPacket.State.SERVER_SEARCHING);
-        networkComponent.sendPacket(respawnPacket);
+        clientComponent.sendPacket(respawnPacket);
     }
 
     protected void tickPlayerDataAutoSave() {
@@ -310,7 +310,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.abilities.sync();
 
         if (requireResendingCommands) {
-            this.networkComponent.sendCommands();
+            this.clientComponent.sendCommands();
             this.requireResendingCommands = false;
         }
     }
@@ -423,7 +423,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 var packet1 = new ChangeDimensionPacket();
                 packet1.setDimension(targetDim.getDimensionInfo().dimensionId());
                 packet1.setPosition(Vector3f.from(target.x(), target.y() + 1.62f, target.z()));
-                networkComponent.sendPacket(packet1);
+                clientComponent.sendPacket(packet1);
 
                 // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server. The client
                 // still sends the ack, but after the server has sent it. Thanks to Mojang for another groundbreaking change.
@@ -432,7 +432,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 packet2.setRuntimeEntityId(this.runtimeId);
                 packet2.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
                 packet2.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-                networkComponent.sendPacket(packet2);
+                clientComponent.sendPacket(packet2);
             }
             targetDim.addPlayer(thisPlayer, this::sendLocationToSelf);
         });
@@ -595,7 +595,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 ));
             }
             packet.setSuccessCount(status);
-            this.networkComponent.sendPacket(packet);
+            this.clientComponent.sendPacket(packet);
         } else {
             for (var output : outputs) {
                 var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()) + "]";
@@ -619,7 +619,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         ToastRequestPacket pk = new ToastRequestPacket();
         pk.setTitle(title);
         pk.setContent(content);
-        this.networkComponent.sendPacket(pk);
+        this.clientComponent.sendPacket(pk);
     }
 
     @Override
@@ -629,7 +629,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.TITLE);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.networkComponent.sendPacket(pk);
+        this.clientComponent.sendPacket(pk);
     }
 
     @Override
@@ -639,7 +639,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.SUBTITLE);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.networkComponent.sendPacket(pk);
+        this.clientComponent.sendPacket(pk);
     }
 
     @Override
@@ -649,7 +649,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setType(SetTitlePacket.Type.ACTIONBAR);
         pk.setXuid("");
         pk.setPlatformOnlineId("");
-        this.networkComponent.sendPacket(pk);
+        this.clientComponent.sendPacket(pk);
     }
 
     @Override
@@ -659,21 +659,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setFadeInTime(fadeInTime);
         pk.setFadeOutTime(fadeOutTime);
         pk.setStayTime(duration);
-        this.networkComponent.sendPacket(pk);
+        this.clientComponent.sendPacket(pk);
     }
 
     @Override
     public void resetTitleSettings() {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.RESET);
-        this.networkComponent.sendPacket(pk);
+        this.clientComponent.sendPacket(pk);
     }
 
     @Override
     public void clearTitle() {
         var pk = new SetTitlePacket();
         pk.setType(SetTitlePacket.Type.CLEAR);
-        this.networkComponent.sendPacket(pk);
+        this.clientComponent.sendPacket(pk);
     }
 
     @Override
@@ -729,9 +729,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void sendSimpleMessage(String message, TextPacket.Type type) {
         var packet = new TextPacket();
         packet.setType(type);
-        packet.setXuid(networkComponent.getLoginData().getXuid());
+        packet.setXuid(clientComponent.getLoginData().getXuid());
         packet.setMessage(message);
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -784,19 +784,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void showForm(Form form) {
         if (forms.size() > 100) {
-            networkComponent.disconnect("Possible DoS vulnerability: More Than 100 FormWindow sent to client already.");
+            clientComponent.disconnect("Possible DoS vulnerability: More Than 100 FormWindow sent to client already.");
         }
         var packet = new ModalFormRequestPacket();
         var id = assignFormId();
         packet.setFormId(id);
         packet.setFormData(form.toJson());
         forms.putIfAbsent(id, form);
-        networkComponent.sendPacket(packet);
+        clientComponent.sendPacket(packet);
     }
 
     @Override
     public void closeAllForms() {
-        networkComponent.sendPacket(new ClientboundCloseFormPacket());
+        clientComponent.sendPacket(new ClientboundCloseFormPacket());
         forms.clear();
     }
 

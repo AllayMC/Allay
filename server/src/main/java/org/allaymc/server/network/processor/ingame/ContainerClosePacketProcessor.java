@@ -1,6 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
  */
 public class ContainerClosePacketProcessor extends PacketProcessor<ContainerClosePacket> {
     @Override
-    public void handleSync(EntityPlayer player, ContainerClosePacket packet, long receiveTime) {
+    public void handleSync(EntityPlayerImpl player, ContainerClosePacket packet, long receiveTime) {
         var opened = player.getOpenedContainer(packet.getId());
         if (opened == null) {
             throw new IllegalStateException("Player is not viewing an inventory");
