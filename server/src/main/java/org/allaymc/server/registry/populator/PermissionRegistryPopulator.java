@@ -38,7 +38,7 @@ public class PermissionRegistryPopulator implements Runnable {
     private static PermissionListener syncAbility(Ability ability, boolean inverted) {
         return (permissible, value) -> {
             if (permissible instanceof EntityPlayer player) {
-                getBaseComponent(player).getAbilities().setWithoutSend(ability, inverted != value);
+                getBaseComponent(player).getAbilities().set(ability, inverted != value);
             }
         };
     }
