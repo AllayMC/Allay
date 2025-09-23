@@ -210,14 +210,21 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      *
      * @param flySpeed the fly speed to set
      */
-    void setFlySpeed(float flySpeed);
+    void setFlySpeed(float flySpeed); // TODO: getter
 
     /**
      * Sets the vertical fly speed of the player.
      *
      * @param verticalFlySpeed the vertical fly speed to set
      */
-    void setVerticalFlySpeed(float verticalFlySpeed);
+    void setVerticalFlySpeed(float verticalFlySpeed); // TODO: getter
+
+    /**
+     * Determines whether the player is currently flying.
+     *
+     * @return {@code true} if the player is flying, {@code false} otherwise
+     */
+    boolean isFlying();
 
     /**
      * Sets whether the player is flying.

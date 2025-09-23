@@ -14,48 +14,13 @@ import org.cloudburstmc.protocol.bedrock.data.Ability;
 public class PermissionRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        Permissions.ABILITY_BUILD = Permission.create(
-                "ability.build",
-                "The permission to build blocks",
-                syncAbility(Ability.BUILD)
-        );
-        Permissions.ABILITY_MINE = Permission.create(
-                "ability.mine",
-                "The permission to mine blocks",
-                syncAbility(Ability.MINE)
-        );
-        Permissions.ABILITY_DOORS_AND_SWITCHES = Permission.create(
-                "ability.door_and_switches",
-                "The permission to use doors and switches",
-                syncAbility(Ability.DOORS_AND_SWITCHES)
-        );
-        Permissions.ABILITY_OPEN_CONTAINERS = Permission.create(
-                "ability.open_containers",
-                "The permission to open containers",
-                syncAbility(Ability.OPEN_CONTAINERS)
-        );
-        Permissions.ABILITY_ATTACK_PLAYERS = Permission.create(
-                "ability.attack_players",
-                "The permission to attack players",
-                syncAbility(Ability.ATTACK_PLAYERS)
-        );
-        Permissions.ABILITY_ATTACK_MOBS = Permission.create(
-                "ability.attack_mobs",
-                "The permission to attack mobs",
-                syncAbility(Ability.ATTACK_MOBS)
-        );
-        Permissions.ABILITY_MAY_FLY = Permission.create(
-                "ability.mayfly",
+        Permissions.ABILITY_FLY = Permission.create(
+                "ability.fly",
                 "The permission to fly in the sky",
                 syncAbility(Ability.MAY_FLY)
         );
-        Permissions.ABILITY_SUMMON_LIGHTNING = Permission.create(
-                "ability.summon_lightning",
-                "The permission to summon lightning",
-                syncAbility(Ability.LIGHTNING)
-        );
         Permissions.ABILITY_CHAT = Permission.create(
-                "ability.muted",
+                "ability.chat",
                 "The permission to chat",
                 syncAbility(Ability.MUTED, true)
         );
@@ -73,7 +38,7 @@ public class PermissionRegistryPopulator implements Runnable {
     private static PermissionListener syncAbility(Ability ability, boolean inverted) {
         return (permissible, value) -> {
             if (permissible instanceof EntityPlayer player) {
-                getBaseComponent(player).getAbilities().set(ability, inverted != value);
+                getBaseComponent(player).getAbilities().setWithoutSend(ability, inverted != value);
             }
         };
     }

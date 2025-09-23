@@ -175,6 +175,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed network-related code in `Weather`
 - (API) Removed class `IntMappedRegistry`.
 - (API) Removed method `BlockType.register()`.
+- (API) Removed field `BlockPlaceEvent.entity` since the entity can be obtained from the interact info.
+- (API) Removed a number of useless build-in permissions which are listed in class `Permissions`, the developer should listen to the corresponded events.
 
 ## 0.7.1 (API 0.11.0) - 2025/8/20
 

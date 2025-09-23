@@ -229,6 +229,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public boolean isFlying() {
+        return this.abilities.has(Ability.FLYING);
+    }
+
+    @Override
     public void setFlying(boolean flying) {
         this.abilities.setFlying(flying);
     }
@@ -304,11 +309,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     protected void syncData() {
-        // These data are checked every tick, and are sent to client if changed
-        // We don't send these data immediately after changed, because they may be changed multiple times in a tick
-        // and sending these data will take up a lot of bandwidth
-        this.abilities.sync();
-
         if (requireResendingCommands) {
             this.clientComponent.sendCommands();
             this.requireResendingCommands = false;

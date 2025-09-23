@@ -201,8 +201,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         thisPlayer.viewEntityMetadata(thisPlayer);
         // Send other players' abilities data to this player
         Server.getInstance().getPlayerManager().forEachPlayer(other -> {
-            var abilities = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).getAbilities();
-            sendPacket(abilities.encodeUpdateAbilitiesPacket());
+            sendPacket(((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).getAbilities().encodePacket());
         });
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
         // PlayerListPacket can only be sent at this stage, otherwise the client won't show its skin

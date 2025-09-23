@@ -18,12 +18,7 @@ public interface PermissionGroups {
      */
     PermissionGroup MEMBER = PermissionGroup.create(
             "MEMBER",
-            Set.of(
-                    Permissions.ABILITY_BUILD, Permissions.ABILITY_MINE,
-                    Permissions.ABILITY_DOORS_AND_SWITCHES, Permissions.ABILITY_OPEN_CONTAINERS,
-                    Permissions.ABILITY_ATTACK_MOBS, Permissions.ABILITY_ATTACK_PLAYERS,
-                    Permissions.ABILITY_SUMMON_LIGHTNING, Permissions.ABILITY_CHAT
-            ),
+            Set.of(Permissions.ABILITY_CHAT),
             Set.of(VISITOR)
     );
 

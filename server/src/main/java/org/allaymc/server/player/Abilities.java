@@ -26,35 +26,28 @@ public final class Abilities {
     public static final float DEFAULT_FLY_SPEED = 0.05f;
     public static final float DEFAULT_VERTICAL_FLY_SPEED = 1.0f;
 
-    private final Set<Ability> abilities = EnumSet.noneOf(Ability.class);
-
-    private final EntityPlayer player;
-
     private float flySpeed = DEFAULT_FLY_SPEED;
     private float verticalFlySpeed = DEFAULT_VERTICAL_FLY_SPEED;
-
-    private boolean dirty = false;
+    private final EntityPlayer player;
+    private final Set<Ability> abilities;
 
     public Abilities(EntityPlayer player) {
         this.player = player;
+        this.abilities = EnumSet.noneOf(Ability.class);
     }
 
     public void applyGameMode(GameMode gameMode) {
-        // Set only necessary permissions
-        this.player.setPermission(Permissions.ABILITY_BUILD, gameMode != GameMode.SPECTATOR);
-        this.player.setPermission(Permissions.ABILITY_MINE, gameMode != GameMode.SPECTATOR);
-        this.player.setPermission(Permissions.ABILITY_DOORS_AND_SWITCHES, gameMode != GameMode.SPECTATOR);
-        this.player.setPermission(Permissions.ABILITY_OPEN_CONTAINERS, gameMode != GameMode.SPECTATOR);
-        this.player.setPermission(Permissions.ABILITY_ATTACK_PLAYERS, gameMode != GameMode.SPECTATOR);
-        this.player.setPermission(Permissions.ABILITY_ATTACK_MOBS, gameMode != GameMode.SPECTATOR);
-        this.player.setPermission(Permissions.ABILITY_MAY_FLY, gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE);
-        // Do not need to manage SUMMON_LIGHTNING and CHAT;
-        // allow plugins to control without resetting after mode switch
-        // The following abilities do not need to be integrated into the permission tree
-        set(Ability.NO_CLIP, gameMode == GameMode.SPECTATOR);
-        set(Ability.FLYING, gameMode == GameMode.SPECTATOR);
-        set(Ability.INSTABUILD, gameMode == GameMode.CREATIVE);
-        set(Ability.TELEPORT, true);
+        this.player.setPermission(Permissions.ABILITY_FLY, gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE);
+        setWithoutSend(Ability.BUILD, gameMode != GameMode.SPECTATOR);
+        setWithoutSend(Ability.MINE, gameMode != GameMode.SPECTATOR);
+        setWithoutSend(Ability.DOORS_AND_SWITCHES, gameMode != GameMode.SPECTATOR);
+        setWithoutSend(Ability.OPEN_CONTAINERS, gameMode != GameMode.SPECTATOR);
+        setWithoutSend(Ability.ATTACK_PLAYERS, gameMode != GameMode.SPECTATOR);
+        setWithoutSend(Ability.ATTACK_MOBS, gameMode != GameMode.SPECTATOR);
+        setWithoutSend(Ability.NO_CLIP, gameMode == GameMode.SPECTATOR);
+        setWithoutSend(Ability.FLYING, gameMode == GameMode.SPECTATOR);
+        setWithoutSend(Ability.INSTABUILD, gameMode == GameMode.CREATIVE);
+        setWithoutSend(Ability.TELEPORT, true);
         sync();
     }
 
@@ -64,7 +57,15 @@ public final class Abilities {
         } else {
             abilities.remove(ability);
         }
-        this.dirty = true;
+        sync();
+    }
+
+    private void setWithoutSend(Ability ability, boolean value) {
+        if (value) {
+            abilities.add(ability);
+        } else {
+            abilities.remove(ability);
+        }
     }
 
     public boolean has(Ability ability) {
@@ -73,12 +74,12 @@ public final class Abilities {
 
     public void setFlySpeed(float flySpeed) {
         this.flySpeed = flySpeed;
-        this.dirty = true;
+        sync();
     }
 
     public void setVerticalFlySpeed(float verticalFlySpeed) {
         this.verticalFlySpeed = verticalFlySpeed;
-        this.dirty = true;
+        sync();
     }
 
     public void setFlying(boolean flying) {
@@ -86,14 +87,11 @@ public final class Abilities {
     }
 
     public void sync() {
-        if (this.dirty) {
-            // Broadcast the packet to all players, so that players can see each other's permission level
-            ((AllayPlayerManager) Server.getInstance().getPlayerManager()).broadcastPacket(encodeUpdateAbilitiesPacket());
-            this.dirty = false;
-        }
+        // Broadcast the packet to all players, so that players can see each other's permission level
+        ((AllayPlayerManager) Server.getInstance().getPlayerManager()).broadcastPacket(encodePacket());
     }
 
-    public UpdateAbilitiesPacket encodeUpdateAbilitiesPacket() {
+    public UpdateAbilitiesPacket encodePacket() {
         UpdateAbilitiesPacket packet = new UpdateAbilitiesPacket();
 
         packet.setUniqueEntityId(player.getRuntimeId());

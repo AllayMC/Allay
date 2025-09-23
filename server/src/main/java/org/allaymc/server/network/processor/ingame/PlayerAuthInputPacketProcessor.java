@@ -13,6 +13,7 @@ import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -268,6 +269,16 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case START_CRAWLING -> player.setCrawling(true);
                 case STOP_CRAWLING -> player.setCrawling(false);
                 case START_JUMPING -> ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).onJump();
+                case START_FLYING -> {
+                    if (!player.hasPermission(Permissions.ABILITY_FLY)) {
+                        player.setFlying(false);
+                        log.warn("Player {} tried to start flying without permission", player.getOriginName());
+                        return;
+                    }
+
+                    player.setFlying(true);
+                }
+                case STOP_FLYING -> player.setFlying(false);
             }
         }
     }

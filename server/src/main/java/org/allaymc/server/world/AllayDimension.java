@@ -183,10 +183,7 @@ public class AllayDimension implements Dimension {
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
-        var event = new BlockPlaceEvent(
-                new Block(blockState, new Position3i(x, y, z, this), layer),
-                oldBlockState, placementInfo != null ? placementInfo.player() : null, placementInfo
-        );
+        var event = new BlockPlaceEvent(new Block(blockState, new Position3i(x, y, z, this), layer), oldBlockState, placementInfo);
         if (!event.call()) {
             return false;
         }
