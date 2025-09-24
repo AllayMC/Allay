@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityPickableBaseComponent;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -22,12 +21,6 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
 
     public EntityPickableBaseComponentImpl(EntityInitInfo info) {
         super(info);
-    }
-
-    @Override
-    protected void initMetadata() {
-        super.initMetadata();
-        setFlag(EntityFlag.HAS_COLLISION, false);
     }
 
     @Override
@@ -54,5 +47,10 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
         var builder = super.saveNBT().toBuilder();
         builder.putInt(TAG_PICKUP_DELAY, pickupDelay);
         return builder.build();
+    }
+
+    @Override
+    public boolean hasEntityCollision() {
+        return false;
     }
 }

@@ -22,7 +22,7 @@ public class EffectSlownessType extends AbstractEffectType {
         var level = effectInstance.getLevel();
         var slowness = 1 - level * 0.15f;
         if (slowness <= 0) slowness = 0.00001f;
-        player.setMovementSpeed(player.getMovementSpeed() * slowness);
+        player.setSpeed(player.getSpeed() * slowness);
     }
 
     @Override
@@ -31,6 +31,6 @@ public class EffectSlownessType extends AbstractEffectType {
         var level = effectInstance.getLevel();
         var slowness = 1 - level * 0.15f;
         if (slowness <= 0) slowness = 0.00001f;
-        player.setMovementSpeed(player.getMovementSpeed() / slowness);
+        player.setSpeed(player.getSpeed() / slowness);
     }
 }

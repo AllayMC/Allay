@@ -13,8 +13,6 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
@@ -55,6 +53,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Manager
     protected ComponentManager manager;
     @Dependency
+    protected EntityBaseComponentImpl baseComponent;
+    @Dependency
     protected EntityAttributeComponent attributeComponent;
     @Dependency(optional = true)
     protected EntityPhysicsComponent physicsComponent;
@@ -69,10 +69,16 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     protected long lastDamageTime;
     @Getter
     protected int onFireTicks;
+    @Getter
+    protected int airSupplyTicks;
+    @Getter
+    protected int airSupplyMaxTicks;
     protected Map<EffectType, EffectInstance> effects;
 
     public EntityLivingComponentImpl() {
         this.effects = new HashMap<>();
+        this.airSupplyTicks = 300;
+        this.airSupplyMaxTicks = 300;
     }
 
     @Override
@@ -325,20 +331,37 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
             return false;
         }
 
+        var updateState = false;
         if (this.onFireTicks > 0 && newOnFireTicks <= 0) {
-            thisEntity.setFlag(EntityFlag.ON_FIRE, false);
+            updateState = true;
         } else if (this.onFireTicks <= 0 && newOnFireTicks > 0) {
-            thisEntity.setFlag(EntityFlag.ON_FIRE, true);
+            updateState = true;
             // The first tick of fire damage is applied immediately
             attack(DamageContainer.fireTick(1));
         }
+
         this.onFireTicks = newOnFireTicks;
+        if (updateState) {
+            this.baseComponent.broadcastState();
+        }
 
         return true;
     }
 
     @Override
-    public Map<EffectType, EffectInstance> getAllEffects() {
+    public void setAirSupplyTicks(int ticks) {
+        this.airSupplyTicks = ticks;
+        this.baseComponent.broadcastState();
+    }
+
+    @Override
+    public void setAirSupplyMaxTicks(int ticks) {
+        this.airSupplyMaxTicks = ticks;
+        this.baseComponent.broadcastState();
+    }
+
+    @Override
+    public Map<EffectType, EffectInstance> getEffects() {
         return Collections.unmodifiableMap(effects);
     }
 
@@ -373,7 +396,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
         sendEffects(effectInstance, old);
         if (old == null) {
-            syncVisibleEffects();
+            this.baseComponent.broadcastState();
         }
 
         return true;
@@ -394,24 +417,11 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         effects.remove(effectType);
         effectType.onRemove(thisEntity, removed);
         sendEffects(null, removed);
-        syncVisibleEffects();
+        this.baseComponent.broadcastState();
     }
 
     protected void sendEffects(EffectInstance newEffect, EffectInstance oldEffect) {
         thisEntity.forEachViewers(viewer -> viewer.viewEntityEffectChange(thisEntity, newEffect, oldEffect));
-    }
-
-    protected void syncVisibleEffects() {
-        long visibleEffects = 0;
-        for (var effect : this.effects.values()) {
-            if (!effect.isVisible()) {
-                continue;
-            }
-
-            visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
-        }
-
-        thisEntity.setData(EntityData.VISIBLE_MOB_EFFECTS, visibleEffects);
     }
 
     @Override
@@ -444,32 +454,26 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     }
 
     protected void tickBreathe() {
-        if (!thisEntity.hasData(EntityData.AIR_SUPPLY)) {
-            return;
-        }
-
-        short airSupply = thisEntity.getData(EntityData.AIR_SUPPLY);
-        short airSupplyMax = thisEntity.getData(EntityData.AIR_SUPPLY_MAX);
-        short newAirSupply = airSupply;
+        var newAirSupplyTicks = this.airSupplyTicks;
         if (!canBreathe()) {
-            thisEntity.setFlag(EntityFlag.BREATHING, false);
-            newAirSupply = (short) (airSupply - 1);
-            if (newAirSupply <= -20) {
+            newAirSupplyTicks = this.airSupplyTicks - 1;
+            if (newAirSupplyTicks <= -20) {
                 if (hasDrowningDamage()) {
                     attack(DamageContainer.drown(2));
                 }
-                newAirSupply = 0;
+                newAirSupplyTicks = 0;
             }
-        } else if (airSupply < airSupplyMax) {
-            thisEntity.setFlag(EntityFlag.BREATHING, true);
-            newAirSupply = (short) (airSupply + 4);
+        } else if (this.airSupplyTicks < this.airSupplyMaxTicks) {
+            newAirSupplyTicks = this.airSupplyTicks + 4;
         }
-        if (airSupply != newAirSupply) {
-            thisEntity.setData(EntityData.AIR_SUPPLY, newAirSupply);
+        if (this.airSupplyTicks != newAirSupplyTicks) {
+            this.airSupplyTicks = newAirSupplyTicks;
+            this.baseComponent.broadcastState();
         }
     }
 
-    protected boolean canBreathe() {
+    @Override
+    public boolean canBreathe() {
         return hasEffect(EffectTypes.WATER_BREATHING) || hasEffect(EffectTypes.CONDUIT_POWER) || !thisEntity.isEyesInWater();
     }
 
@@ -528,12 +532,5 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         setOnFireTicks(0);
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         removeAllEffects();
-    }
-
-    @EventHandler
-    protected void onInitMetadata(CEntityInitMetadataEvent $) {
-        thisEntity.setFlag(EntityFlag.BREATHING, true);
-        thisEntity.setData(EntityData.AIR_SUPPLY, (short) 300);
-        thisEntity.setData(EntityData.AIR_SUPPLY_MAX, (short) 300);
     }
 }

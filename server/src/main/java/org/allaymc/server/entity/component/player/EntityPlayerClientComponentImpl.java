@@ -198,10 +198,10 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT, player game mode is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
-        thisPlayer.viewEntityMetadata(thisPlayer);
+        thisPlayer.viewEntityState(thisPlayer);
         // Send other players' abilities data to this player
         Server.getInstance().getPlayerManager().forEachPlayer(other -> {
-            sendPacket(((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).getAbilities().encodePacket());
+            sendPacket(((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).encodeAbilities());
         });
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
         // PlayerListPacket can only be sent at this stage, otherwise the client won't show its skin

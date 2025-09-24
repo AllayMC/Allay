@@ -1,15 +1,13 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityTntBaseComponent;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
 import org.allaymc.api.world.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -22,18 +20,16 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     public static final String TAG_FUSE = "Fuse";
 
     @Getter
-    @Setter
-    protected int fuse = 80;
+    protected int fuseTime = 80;
 
     public EntityTntBaseComponentImpl(EntityInitInfo info) {
         super(info);
     }
 
+    @OnInitFinish
     @Override
-    protected void initMetadata() {
-        super.initMetadata();
-        setFlag(EntityFlag.IGNITED, true);
-        setData(EntityData.FUSE_TIME, fuse);
+    public void onInitFinish(EntityInitInfo initInfo) {
+        super.onInitFinish(initInfo);
         getDimension().addSound(location, SimpleSound.TNT);
     }
 
@@ -44,7 +40,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     }
 
     protected void tickTnt() {
-        if (fuse <= 0) {
+        if (fuseTime <= 0) {
             if (!getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.TNT_EXPLODES)) {
                 this.remove();
                 return;
@@ -59,10 +55,10 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
                 explosion.explode(getDimension(), location.x, location.y + 0.06125f, location.z);
             }
         } else {
-            fuse--;
-            if (fuse % 5 == 0 || fuse < 20) {
+            fuseTime--;
+            if (fuseTime % 5 == 0 || fuseTime < 20) {
                 // Reduce the number of packets sent to the client
-                setData(EntityData.FUSE_TIME, fuse);
+                broadcastState();
             }
         }
     }
@@ -70,19 +66,25 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForShort(TAG_FUSE, this::setFuse);
+        nbt.listenForShort(TAG_FUSE, this::setFuseTime);
     }
 
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT()
                 .toBuilder()
-                .putShort(TAG_FUSE, (short) fuse)
+                .putShort(TAG_FUSE, (short) fuseTime)
                 .build();
     }
 
     @Override
     public AABBdc getAABB() {
         return new AABBd(-0.49, 0.0, -0.49, 0.49, 0.98, 0.49);
+    }
+
+    @Override
+    public void setFuseTime(int fuseTime) {
+        this.fuseTime = fuseTime;
+        broadcastState();
     }
 }

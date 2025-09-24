@@ -6,7 +6,6 @@ import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.damage.DamageType;
-import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.component.annotation.Dependency;
@@ -112,6 +111,6 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @Override
     public void setExperienceValue(int experienceValue) {
         this.experienceValue = experienceValue;
-        setData(EntityData.VALUE, experienceValue);
+        broadcastState();
     }
 }

@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.entity.component.player.EntityPlayerScoreboardViewerComponent;
-import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
@@ -60,7 +59,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         var scorer = new PlayerScorer(thisPlayer);
         var line = scoreboard.getLine(scorer);
         if (slot == DisplaySlot.BELOW_NAME && line != null) {
-            thisPlayer.setData(EntityData.SCORE, line.getScore() + " " + scoreboard.getDisplayName());
+            thisPlayer.setScoreTag(line.getScore() + " " + scoreboard.getDisplayName());
         }
     }
 
@@ -108,7 +107,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
         clientComponent.sendPacket(packet);
 
         if (slot == DisplaySlot.BELOW_NAME) {
-            thisPlayer.setData(EntityData.SCORE, "");
+            thisPlayer.setScoreTag(null);
         }
     }
 
@@ -132,7 +131,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisPlayer)) {
-            thisPlayer.setData(EntityData.SCORE, "");
+            thisPlayer.setScoreTag(null);
         }
     }
 
@@ -148,7 +147,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
 
         var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
-            thisPlayer.setData(EntityData.SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
+            thisPlayer.setScoreTag(line.getScore() + " " + line.getScoreboard().getDisplayName());
         }
     }
 

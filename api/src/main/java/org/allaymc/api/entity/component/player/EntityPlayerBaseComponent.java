@@ -22,9 +22,17 @@ import java.util.concurrent.ThreadLocalRandom;
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
     /**
-     * The default movement speed of a player.
+     * The default speed of a player.
      */
-    float DEFAULT_MOVEMENT_SPEED = 0.1f;
+    float DEFAULT_SPEED = 0.1f;
+    /**
+     * The default fly speed of a player.
+     */
+    float DEFAULT_FLY_SPEED = 0.05f;
+    /**
+     * The default vertical fly speed of a player.
+     */
+    float DEFAULT_VERTICAL_FLY_SPEED = 1.0f;
 
     /**
      * Check if the player is sprinting.
@@ -151,6 +159,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      */
     long getItemUsingInAirTime(long currentTime);
 
+    /**
+     * Retrieves the in-air time of an item based on the current world tick.
+     *
+     * @return the in-air time of the item as a long value
+     */
     default long getItemUsingInAirTime() {
         return getItemUsingInAirTime(getWorld().getTick());
     }
@@ -206,18 +219,46 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     void setGameMode(GameMode gameMode);
 
     /**
+     * Get the speed of the player.
+     *
+     * @return The speed of the player
+     */
+    float getSpeed();
+
+    /**
+     * Set the speed of the player.
+     *
+     * @param speed The speed to set
+     */
+    void setSpeed(float speed);
+
+    /**
+     * Get the fly speed of the player.
+     *
+     * @return The fly speed of the player
+     */
+    float getFlySpeed();
+
+    /**
      * Sets the fly speed of the player.
      *
      * @param flySpeed the fly speed to set
      */
-    void setFlySpeed(float flySpeed); // TODO: getter
+    void setFlySpeed(float flySpeed);
+
+    /**
+     * Get the vertical fly speed of the player.
+     *
+     * @return The vertical fly speed of the player
+     */
+    float getVerticalFlySpeed();
 
     /**
      * Sets the vertical fly speed of the player.
      *
      * @param verticalFlySpeed the vertical fly speed to set
      */
-    void setVerticalFlySpeed(float verticalFlySpeed); // TODO: getter
+    void setVerticalFlySpeed(float verticalFlySpeed);
 
     /**
      * Determines whether the player is currently flying.
@@ -232,6 +273,29 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      * @param flying Whether the player is flying
      */
     void setFlying(boolean flying);
+
+    /**
+     * Gets the score tag of the player.
+     *
+     * @return the score tag of the player
+     */
+    String getScoreTag();
+
+    /**
+     * Sets the score tag of the player.
+     *
+     * @param scoreTag the score tag to set, or {@code null} to remove the score tag
+     */
+    void setScoreTag(String scoreTag);
+
+    /**
+     * Checks if the score tag is present.
+     *
+     * @return {@code true} if the score tag exists and is not null, {@code false} otherwise
+     */
+    default boolean hasScoreTag() {
+        return getScoreTag() != null;
+    }
 
     /**
      * Sends a tip to the player.
@@ -423,20 +487,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     default double getMaxInteractDistance() {
         return getGameMode() == GameMode.CREATIVE ? 13d : 7d;
     }
-
-    /**
-     * Get the movement speed of the player.
-     *
-     * @return The movement speed of the player
-     */
-    float getMovementSpeed();
-
-    /**
-     * Set the movement speed of the player.
-     *
-     * @param speed The movement speed to set
-     */
-    void setMovementSpeed(float speed);
 
     /**
      * Get the enchantment seed of the player.

@@ -12,8 +12,6 @@ import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.component.annotation.Dependency;
@@ -22,8 +20,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
-
-import java.util.Objects;
 
 /**
  * @author IWareQ
@@ -39,16 +35,6 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
     public EntityFallingBlockBaseComponentImpl(EntityInitInfo info) {
         super(info);
-    }
-
-    @Override
-    protected void initMetadata() {
-        Objects.requireNonNull(blockState, "blockState");
-        updateHitBoxAndCollisionBoxMetadata();
-        setFlag(EntityFlag.HAS_GRAVITY, true);
-        setFlag(EntityFlag.FIRE_IMMUNE, true);
-        setFlag(EntityFlag.HAS_COLLISION, false);
-        setData(EntityData.VARIANT, blockState.blockStateHash());
     }
 
     @Override
@@ -123,4 +109,8 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         return new AABBd(-0.49, 0, -0.49, 0.49, 0.98, 0.49);
     }
 
+    @Override
+    public boolean hasEntityCollision() {
+        return false;
+    }
 }

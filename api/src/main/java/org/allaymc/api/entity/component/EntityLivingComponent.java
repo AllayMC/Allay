@@ -129,12 +129,54 @@ public interface EntityLivingComponent extends EntityComponent {
     }
 
     /**
-     * Get all the effects of the entity.
+     * Gets the current number of air supply ticks remaining for this entity.
+     * This value determines how long the entity can stay underwater before taking drowning damage.
      *
-     * @return all the effects of the entity
+     * @return The current air supply ticks
+     */
+    int getAirSupplyTicks();
+
+    /**
+     * Sets the current number of air supply ticks for this entity.
+     * Setting this to 0 will cause the entity to start taking drowning damage if underwater.
+     *
+     * @param ticks The number of air supply ticks to set
+     */
+    void setAirSupplyTicks(int ticks);
+
+    /**
+     * Gets the maximum number of air supply ticks this entity can have.
+     * This represents the total time the entity can stay underwater before running out of air.
+     *
+     * @return The maximum air supply ticks
+     */
+    int getAirSupplyMaxTicks();
+
+    /**
+     * Sets the maximum number of air supply ticks this entity can have.
+     * This affects how long the entity can stay underwater before needing to surface for air.
+     *
+     * @param ticks The maximum number of air supply ticks to set
+     */
+    void setAirSupplyMaxTicks(int ticks);
+
+    /**
+     * Checks if the entity can breathe.
+     *
+     * @return {@code true} if the entity can breathe, {@code false} otherwise.
+     */
+    boolean canBreathe();
+
+    /**
+     * Gets an unmodifiable view of the current effects applied to the entity.
+     * <p>
+     * Each entry in the returned map represents an active effect and its corresponding instance.
+     *
+     * @return an unmodifiable map containing the effects applied to the entity, where the keys are the effect types
+     * and the values are the corresponding effect instances
      */
     @UnmodifiableView
-    Map<EffectType, EffectInstance> getAllEffects();
+    Map<EffectType, EffectInstance> getEffects();
 
     /**
      * Check if the entity has the specified effect.

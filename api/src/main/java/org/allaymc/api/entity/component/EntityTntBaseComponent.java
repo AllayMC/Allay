@@ -9,12 +9,12 @@ public interface EntityTntBaseComponent extends EntityBaseComponent {
      *
      * @return the fuse of the tnt entity
      */
-    int getFuse();
+    int getFuseTime();
 
     /**
      * Set the fuse of the tnt entity.
      *
-     * @param fuse the fuse of the tnt entity
+     * @param fuseTime the fuse of the tnt entity
      */
-    void setFuse(int fuse);
+    void setFuseTime(int fuseTime);
 }

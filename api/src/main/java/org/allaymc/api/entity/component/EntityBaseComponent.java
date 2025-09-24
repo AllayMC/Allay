@@ -8,8 +8,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.data.EntityAnimation;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.type.EntityType;
@@ -77,45 +75,54 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the name tag of this entity
      */
-    default String getNameTag() {
-        return getData(EntityData.NAME);
-    }
+    String getNameTag();
 
     /**
      * Sets the name tag of this entity.
      *
-     * @param nameTag the name tag to set
+     * @param nameTag the name tag to set, or {@code null} to clear the name tag
      */
-    default void setNameTag(String nameTag) {
-        setData(EntityData.NAME, nameTag);
+    void setNameTag(String nameTag);
+
+    /**
+     * Determines whether the entity has a name tag assigned.
+     *
+     * @return {@code true} if the entity has a name tag; {@code false} otherwise
+     */
+    default boolean hasNameTag() {
+        return getNameTag() != null;
     }
 
     /**
-     * Clears the name tag of this entity.
+     * Determines whether the name tag is always displayed for an entity or object.
+     *
+     * @return {@code true} if the name tag is set to always show, {@code false} otherwise.
      */
-    default void clearNameTag() {
-        setData(EntityData.NAME, "");
-    }
+    boolean isNameTagAlwaysShow();
+
+    /**
+     * Sets whether the name tag of an entity should always be visible above it.
+     *
+     * @param nameTagAlwaysShow a boolean value where {@code true} makes the name tag always visible,
+     *                          and {@code false} causes it to only display under certain conditions.
+     */
+    void setNameTagAlwaysShow(boolean nameTagAlwaysShow);
 
     /**
      * Checks whether this entity is visible to its viewers.
      *
      * @return whether this entity is visible to its viewers
      */
-    default boolean isInvisible() {
-        return getFlag(EntityFlag.INVISIBLE);
-    }
+    boolean isInvisible();
 
     /**
      * Sets whether this entity is invisible to its viewers. When set to {@code true}, this
-     * entity will not be visible to its viewers, however the item in its hand/offhand, the
+     * entity will not be visible to its viewers. However, the item in its hand/offhand, the
      * armor it wears and the effect particle around this entity will still remain visible.
      *
-     * @param visible whether the body of this entity is visible to its viewers
+     * @param invisible whether the body of this entity is invisible to its viewers
      */
-    default void setInvisible(boolean visible) {
-        setFlag(EntityFlag.INVISIBLE, visible);
-    }
+    void setInvisible(boolean invisible);
 
     /**
      * Gets the last location of this entity.
@@ -290,49 +297,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     long getUniqueId();
 
     /**
-     * Get the value of the entity data type passed.
-     *
-     * @param dataType the entity data type to get
-     * @return the value of the entity data type passed, or {@code null} if this entity data type is never set
-     */
-    <T> T getData(EntityData<T> dataType);
-
-    /**
-     * Check if the entity data type passed is set.
-     *
-     * @param dataType the entity data type to set
-     * @return {@code true} if the entity data type passed is set, otherwise {@code false}
-     */
-    default boolean hasData(EntityData<?> dataType) {
-        return getData(dataType) == null;
-    }
-
-    /**
-     * Set the value of the entity data type passed.
-     *
-     * @param dataType the entity data type to set
-     * @param value    the value of the entity data type passed
-     * @throws IllegalArgumentException if value type is not the same to the type defined in {@link EntityData}
-     */
-    <T> void setData(EntityData<T> dataType, T value);
-
-    /**
-     * Get the value of the entity flag passed.
-     *
-     * @param flag the entity flag to get
-     * @return the value of the entity flag passed
-     */
-    boolean getFlag(EntityFlag flag);
-
-    /**
-     * Set the value of the entity flag passed.
-     *
-     * @param flag  the entity flag to set
-     * @param value the value of the entity flag passed
-     */
-    void setFlag(EntityFlag flag, boolean value);
-
-    /**
      * Get the aabb of this entity.
      *
      * @return the aabb of this entity
@@ -362,16 +326,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity has entity collision.
      */
     default boolean hasEntityCollision() {
-        return getFlag(EntityFlag.HAS_COLLISION);
-    }
-
-    /**
-     * Set if the entity has collision.
-     *
-     * @param hasEntityCollision {@code true} if the entity has collision, {@code false} otherwise
-     */
-    default void setHasEntityCollision(boolean hasEntityCollision) {
-        setFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
+        return true;
     }
 
     /**

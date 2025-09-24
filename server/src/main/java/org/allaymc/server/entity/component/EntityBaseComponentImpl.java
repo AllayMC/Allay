@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component;
 
-import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +15,6 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityDieEvent;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
@@ -43,14 +40,12 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
-import org.allaymc.server.entity.Metadata;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3f;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -81,6 +76,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
 
+    @Manager
+    protected ComponentManager manager;
+    @Dependency(optional = true)
+    protected EntityAttributeComponent attributeComponent;
+    @ComponentObject
+    protected Entity thisEntity;
+
     @Getter
     protected final Location3d location;
     @Getter
@@ -89,18 +91,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected final long runtimeId;
     @Getter
-    protected final Metadata metadata;
-    @Getter
     protected PermissionGroup permissionGroup;
     // Will be reset in method loadUniqueId()
     @Getter
     protected long uniqueId = Long.MAX_VALUE;
-    @Manager
-    protected ComponentManager manager;
-    @ComponentObject
-    protected Entity thisEntity;
-    @Dependency(optional = true)
-    protected EntityAttributeComponent attributeComponent;
     @Getter
     protected EntityType<? extends Entity> entityType;
     protected Set<WorldViewer> viewers;
@@ -110,6 +104,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     @Setter
     protected String displayName;
+    @Getter
+    protected String nameTag;
+    @Getter
+    protected boolean nameTagAlwaysShow;
+    @Getter
+    protected boolean invisible;
     protected Set<String> tags;
     @Getter
     @Setter
@@ -120,7 +120,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.lastLocation = new Location3d(this.location);
         this.locationLastSent = new Location3d(this.location);
         this.runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
-        this.metadata = new Metadata();
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
         this.state = EntityState.DESPAWNED;
@@ -132,17 +131,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @OnInitFinish
     public void onInitFinish(EntityInitInfo initInfo) {
         loadNBT(initInfo.nbt());
-        initMetadata();
         initPermissionGroup();
     }
 
-    protected void initMetadata() {
-        this.manager.callEvent(CEntityInitMetadataEvent.INSTANCE);
-        setData(EntityData.PLAYER_INDEX, 0);
-        setFlag(EntityFlag.HAS_GRAVITY, true);
-        setFlag(EntityFlag.HAS_COLLISION, true);
-        setFlag(EntityFlag.CAN_CLIMB, true);
-        updateHitBoxAndCollisionBoxMetadata();
+    public void broadcastState() {
+        forEachViewers(viewer -> viewer.viewEntityState(thisEntity));
     }
 
     protected void initPermissionGroup() {
@@ -152,31 +145,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public Permissible getPermissible() {
         return thisEntity;
-    }
-
-    protected NbtMap buildAABBTag() {
-        var aabb = getAABB();
-        return NbtMap.builder()
-                .putFloat("MinX", 0)
-                .putFloat("MinY", 0)
-                .putFloat("MinZ", 0)
-                .putFloat("MaxX", (float) (aabb.maxX() - aabb.minX()))
-                .putFloat("MaxY", (float) (aabb.maxY() - aabb.minY()))
-                .putFloat("MaxZ", (float) (aabb.maxZ() - aabb.minZ()))
-                .putFloat("PivotX", 0)
-                .putFloat("PivotY", 0)
-                .putFloat("PivotZ", 0)
-                .build();
-    }
-
-    protected void updateHitBoxAndCollisionBoxMetadata() {
-        var aabb = getAABB();
-        setData(EntityData.HITBOX, buildAABBTag());
-        setData(EntityData.COLLISION_BOX, new Vector3f(
-                (float) (aabb.maxX() - aabb.minX()),
-                (float) (aabb.maxY() - aabb.minY()),
-                (float) (aabb.maxZ() - aabb.minZ())
-        ));
     }
 
     public void tick(long currentTick) {
@@ -265,6 +233,24 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 }
             }
         }
+    }
+
+    @Override
+    public void setNameTag(String nameTag) {
+        this.nameTag = nameTag;
+        broadcastState();
+    }
+
+    @Override
+    public void setNameTagAlwaysShow(boolean nameTagAlwaysShow) {
+        this.nameTagAlwaysShow = nameTagAlwaysShow;
+        broadcastState();
+    }
+
+    @Override
+    public void setInvisible(boolean invisible) {
+        this.invisible = invisible;
+        broadcastState();
     }
 
     @Override
@@ -423,6 +409,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void spawnTo(WorldViewer viewer) {
         viewers.add(viewer);
         viewer.viewEntity(thisEntity);
+        viewer.viewEntityState(thisEntity);
     }
 
     @Override
@@ -568,37 +555,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
         var aabb = getOffsetAABBForCollisionCheck();
         return getDimension().getCollidingBlockStates(aabb) != null;
-    }
-
-    @Override
-    public <T> T getData(EntityData<T> dataType) {
-        return this.metadata.get(dataType);
-    }
-
-    @Override
-    public <T> void setData(EntityData<T> dataType, T value) {
-        Preconditions.checkArgument(dataType.getType().isInstance(value));
-        if (this.metadata.get(dataType) != value) {
-            this.metadata.set(dataType, value);
-            sendMetadata();
-        }
-    }
-
-    @Override
-    public boolean getFlag(EntityFlag flag) {
-        return this.metadata.get(flag);
-    }
-
-    @Override
-    public void setFlag(EntityFlag flag, boolean value) {
-        if (this.metadata.get(flag) != value) {
-            this.metadata.set(flag, value);
-            sendMetadata();
-        }
-    }
-
-    protected void sendMetadata() {
-        forEachViewers(viewer -> viewer.viewEntityMetadata(thisEntity));
     }
 
     @Override

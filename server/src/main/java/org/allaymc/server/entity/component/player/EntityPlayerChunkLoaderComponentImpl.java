@@ -19,12 +19,12 @@ import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerChunkLoaderComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.entity.interfaces.EntityItem;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemHelper;
@@ -51,10 +51,7 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.container.impl.UnopenedContainerId;
-import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
-import org.allaymc.server.entity.impl.EntityImpl;
-import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.player.SkinConvertor;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkEncoder;
@@ -62,9 +59,12 @@ import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3dc;
@@ -154,19 +154,19 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.setMotion(motion);
                 p.setRotation(Vector3f.from(l.pitch(), l.yaw(), l.headYaw()));
                 p.setGameType(toNetwork(player.getGameMode()));
-                p.getMetadata().putAll(getMetadata(entity));
+                p.getMetadata().putAll(parseMetadata(entity));
                 p.setDeviceId(loginData.getDeviceInfo().deviceId());
-                p.setHand(NetworkHelper.toNetwork(player.getContainer(ContainerType.INVENTORY).getItemInHand()));
+                p.setHand(toNetwork(player.getContainer(ContainerType.INVENTORY).getItemInHand()));
                 yield p;
             }
             case EntityItem item -> {
                 var p = new AddItemEntityPacket();
                 p.setRuntimeEntityId(item.getRuntimeId());
                 p.setUniqueEntityId(item.getUniqueId());
-                p.setItemInHand(NetworkHelper.toNetwork(item.getItemStack()));
+                p.setItemInHand(toNetwork(item.getItemStack()));
                 p.setPosition(position);
                 p.setMotion(motion);
-                p.getMetadata().putAll(getMetadata(entity));
+                p.getMetadata().putAll(parseMetadata(entity));
                 yield p;
             }
             default -> {
@@ -177,7 +177,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.setPosition(position);
                 p.setMotion(motion);
                 p.setRotation(Vector2f.from(l.pitch(), l.yaw()));
-                p.getMetadata().putAll(getMetadata(entity));
+                p.getMetadata().putAll(parseMetadata(entity));
                 yield p;
             }
         };
@@ -300,11 +300,116 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     }
 
     @Override
-    public void viewEntityMetadata(Entity entity) {
+    public void viewEntityState(Entity entity) {
         var packet = new SetEntityDataPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setMetadata(getMetadata(entity));
+        packet.setMetadata(parseMetadata(entity));
         this.clientComponent.sendPacket(packet);
+    }
+
+    protected EntityDataMap parseMetadata(Entity entity) {
+        var map = new EntityDataMap();
+        addGenericMetadata(entity, map);
+        addComponentSpecificMetadata(entity, map);
+        addTypeSpecificMetadata(entity, map);
+        return map;
+    }
+
+    protected void addGenericMetadata(Entity entity, EntityDataMap map) {
+        map.setFlag(EntityFlag.HAS_COLLISION, entity.hasEntityCollision());
+        map.setFlag(EntityFlag.CAN_CLIMB, true);
+        map.setFlag(EntityFlag.INVISIBLE, entity.isInvisible());
+        var aabb = entity.getAABB();
+        var nbt = NbtMap.builder()
+                .putFloat("MinX", 0)
+                .putFloat("MinY", 0)
+                .putFloat("MinZ", 0)
+                .putFloat("MaxX", (float) (aabb.maxX() - aabb.minX()))
+                .putFloat("MaxY", (float) (aabb.maxY() - aabb.minY()))
+                .putFloat("MaxZ", (float) (aabb.maxZ() - aabb.minZ()))
+                .putFloat("PivotX", 0)
+                .putFloat("PivotY", 0)
+                .putFloat("PivotZ", 0)
+                .build();
+        map.put(EntityDataTypes.HITBOX, nbt);
+        map.put(EntityDataTypes.COLLISION_BOX, Vector3f.from(
+                (float) (aabb.maxX() - aabb.minX()),
+                (float) (aabb.maxY() - aabb.minY()),
+                (float) (aabb.maxZ() - aabb.minZ())
+        ));
+        if (entity.hasNameTag()) {
+            map.setFlag(EntityFlag.CAN_SHOW_NAME, true);
+            map.put(EntityDataTypes.NAME, entity.getNameTag());
+            if (entity.isNameTagAlwaysShow()) {
+                map.setFlag(EntityFlag.ALWAYS_SHOW_NAME, true);
+                map.put(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
+            }
+        }
+    }
+
+    protected void addComponentSpecificMetadata(Entity entity, EntityDataMap map) {
+        switch (entity) {
+            case EntityPhysicsComponent physicsComponent -> {
+                map.setFlag(EntityFlag.HAS_GRAVITY, physicsComponent.hasGravity());
+            }
+            case EntityLivingComponent livingComponent -> {
+                map.setFlag(EntityFlag.ON_FIRE, livingComponent.isOnFire());
+                map.setFlag(EntityFlag.BREATHING, livingComponent.canBreathe());
+                map.put(EntityDataTypes.AIR_SUPPLY, livingComponent.getAirSupplyTicks());
+                map.put(EntityDataTypes.AIR_SUPPLY_MAX, livingComponent.getAirSupplyMaxTicks());
+                map.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
+            }
+            default -> {
+            }
+        }
+    }
+
+    protected void addTypeSpecificMetadata(Entity entity, EntityDataMap map) {
+        switch (entity) {
+            case EntityTnt tnt -> {
+                map.setFlag(EntityFlag.IGNITED, true);
+                map.put(EntityDataTypes.FUSE_TIME, tnt.getFuseTime());
+            }
+            case EntityPlayer player -> {
+                map.setFlag(EntityFlag.SPRINTING, player.isSprinting());
+                map.setFlag(EntityFlag.SNEAKING, player.isSneaking());
+                map.setFlag(EntityFlag.SWIMMING, player.isSwimming());
+                map.setFlag(EntityFlag.GLIDING, player.isGliding());
+                map.setFlag(EntityFlag.CRAWLING, player.isCrawling());
+                map.setFlag(EntityFlag.USING_ITEM, player.isUsingItemInAir());
+                if (player.hasScoreTag()) {
+                    map.put(EntityDataTypes.SCORE, player.getScoreTag());
+                }
+            }
+            case EntityFallingBlock fallingBlock -> {
+                map.setFlag(EntityFlag.FIRE_IMMUNE, true);
+                map.put(EntityDataTypes.VARIANT, fallingBlock.getBlockState().blockStateHash());
+            }
+            case EntityXpOrb xpOrb -> {
+                map.put(EntityDataTypes.VALUE, xpOrb.getExperienceValue());
+            }
+            case EntityArrow arrow -> {
+                map.setFlag(EntityFlag.CRITICAL, arrow.isCritical());
+                var potionType = arrow.getPotionType();
+                if (potionType != null) {
+                    map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) (potionType.ordinal() + 1));
+                }
+            }
+            default -> {
+            }
+        }
+    }
+
+    protected long encodeVisibleEffects(Collection<EffectInstance> effects) {
+        long visibleEffects = 0;
+        for (var effect : effects) {
+            if (!effect.isVisible()) {
+                continue;
+            }
+
+            visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
+        }
+        return visibleEffects;
     }
 
     @Override
@@ -314,7 +419,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
-        packet.setItem(NetworkHelper.toNetwork(container.getItemInHand()));
+        packet.setItem(toNetwork(container.getItemInHand()));
         packet.setInventorySlot(handSlot);
         packet.setHotbarSlot(handSlot);
         this.clientComponent.sendPacket(packet);
@@ -328,7 +433,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setContainerId(UnopenedContainerId.OFFHAND);
         // Network slot index for offhand is 1, see FullContainerType.OFFHAND. Field `hotbarSlot` is unused
         packet.setInventorySlot(1);
-        packet.setItem(NetworkHelper.toNetwork(container.getOffhand()));
+        packet.setItem(toNetwork(container.getOffhand()));
         this.clientComponent.sendPacket(packet);
     }
 
@@ -337,11 +442,11 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         var container = entity.getContainer(ContainerType.ARMOR);
         var packet = new MobArmorEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setBody(NetworkHelper.toNetwork(ItemAirStack.AIR_STACK));
-        packet.setHelmet(NetworkHelper.toNetwork(container.getHelmet()));
-        packet.setChestplate(NetworkHelper.toNetwork(container.getChestplate()));
-        packet.setLeggings(NetworkHelper.toNetwork(container.getLeggings()));
-        packet.setBoots(NetworkHelper.toNetwork(container.getBoots()));
+        packet.setBody(toNetwork(ItemAirStack.AIR_STACK));
+        packet.setHelmet(toNetwork(container.getHelmet()));
+        packet.setChestplate(toNetwork(container.getChestplate()));
+        packet.setLeggings(toNetwork(container.getLeggings()));
+        packet.setBoots(toNetwork(container.getBoots()));
         this.clientComponent.sendPacket(packet);
     }
 
@@ -483,10 +588,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         this.clientComponent.sendPacket(packet);
     }
 
-    protected EntityDataMap getMetadata(Entity entity) {
-        return ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).getMetadata().getNetworkMetadata();
-    }
-
     @Override
     public Location3dc getLocation() {
         // NOTICE: Don't call thisPlayer.getLocation() here which will cause stack over flow error
@@ -596,7 +697,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewBlockUpdate(Vector3ic pos, int layer, BlockState blockState) {
         var packet = new UpdateBlockPacket();
-        packet.setBlockPosition(NetworkHelper.toNetwork(pos));
+        packet.setBlockPosition(toNetwork(pos));
         packet.setDataLayer(layer);
         packet.setDefinition(blockState::blockStateHash);
         packet.getFlags().add(UpdateBlockPacket.Flag.NETWORK);
@@ -620,7 +721,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public void viewBlockAction(Vector3ic p, BlockAction action) {
-        var pos = NetworkHelper.toNetwork(p);
+        var pos = toNetwork(p);
         var pos3f = Vector3f.from(p.x(), p.y(), p.z());
         switch (action) {
             case SimpleBlockAction.OPEN -> {
@@ -702,7 +803,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewSound(Sound sound, Vector3dc p, boolean relative) {
         LevelSoundEventPacket packet = new LevelSoundEventPacket();
-        var pos = NetworkHelper.toNetwork(MathUtils.toVec3f(p));
+        var pos = toNetwork(MathUtils.toVec3f(p));
         packet.setPosition(pos);
         packet.setIdentifier(":");
         packet.setExtraData(-1);
@@ -1055,7 +1156,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public void viewParticle(Particle particle, Vector3dc p) {
-        var pos = NetworkHelper.toNetwork(MathUtils.toVec3f(p));
+        var pos = toNetwork(MathUtils.toVec3f(p));
         var packet = new LevelEventPacket();
         packet.setPosition(pos);
         switch (particle) {
@@ -1205,37 +1306,37 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     protected static org.cloudburstmc.protocol.bedrock.data.DebugShape toNetworkData(DebugShape shape) {
         return switch (shape) {
             case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    arrow.getId(), ARROW, NetworkHelper.toNetwork(arrow.getPosition()), arrow.getArrowHeadScale(),
+                    arrow.getId(), ARROW, toNetwork(arrow.getPosition()), arrow.getArrowHeadScale(),
                     null, null, arrow.getColor(),
-                    null, null, NetworkHelper.toNetwork(arrow.getEndPosition()),
+                    null, null, toNetwork(arrow.getEndPosition()),
                     arrow.getArrowHeadLength(), arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments()
             );
             case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    box.getId(), BOX, NetworkHelper.toNetwork(box.getPosition()), box.getScale(),
+                    box.getId(), BOX, toNetwork(box.getPosition()), box.getScale(),
                     null, null, box.getColor(),
-                    null, NetworkHelper.toNetwork(box.getBoxBounds()), null,
+                    null, toNetwork(box.getBoxBounds()), null,
                     null, null, null
             );
             case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    circle.getId(), CIRCLE, NetworkHelper.toNetwork(circle.getPosition()), circle.getScale(),
+                    circle.getId(), CIRCLE, toNetwork(circle.getPosition()), circle.getScale(),
                     null, null, circle.getColor(),
                     null, null, null,
                     null, null, circle.getSegments()
             );
             case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    line.getId(), LINE, NetworkHelper.toNetwork(line.getPosition()), null,
+                    line.getId(), LINE, toNetwork(line.getPosition()), null,
                     null, null, line.getColor(),
-                    null, null, NetworkHelper.toNetwork(line.getEndPosition()),
+                    null, null, toNetwork(line.getEndPosition()),
                     null, null, null
             );
             case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    sphere.getId(), SPHERE, NetworkHelper.toNetwork(sphere.getPosition()), sphere.getScale(),
+                    sphere.getId(), SPHERE, toNetwork(sphere.getPosition()), sphere.getScale(),
                     null, null, sphere.getColor(),
                     null, null, null,
                     null, null, sphere.getSegments()
             );
             case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.DebugShape(
-                    text.getId(), TEXT, NetworkHelper.toNetwork(text.getPosition()), null,
+                    text.getId(), TEXT, toNetwork(text.getPosition()), null,
                     null, null, text.getColor(),
                     text.getText(), null, null,
                     null, null, null
@@ -1251,7 +1352,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         }
 
         var packet = new BlockEntityDataPacket();
-        packet.setBlockPosition(NetworkHelper.toNetwork(blockEntity.getPosition()));
+        packet.setBlockPosition(toNetwork(blockEntity.getPosition()));
         packet.setData(blockEntity.saveNBT());
         this.clientComponent.sendPacket(packet);
     }

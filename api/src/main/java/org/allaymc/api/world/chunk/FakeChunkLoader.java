@@ -72,7 +72,8 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
-    public void viewEntityMetadata(Entity entity) {
+    public void viewEntityState(Entity entity) {
+
     }
 
     @Override

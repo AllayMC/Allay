@@ -1,7 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.data.EntityData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
 import org.allaymc.api.math.location.Location3d;
@@ -80,7 +79,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
         player.removeAllEffects();
         player.resetHealth();
         player.resetFoodData();
-        player.setData(EntityData.AIR_SUPPLY, player.getData(EntityData.AIR_SUPPLY_MAX));
+        player.setAirSupplyTicks(player.getAirSupplyMaxTicks());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
@@ -9,7 +10,6 @@ import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
@@ -56,6 +56,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     @ComponentObject
     protected Entity thisEntity;
+    @Dependency
+    protected EntityBaseComponentImpl baseComponent;
     @Dependency(optional = true)
     protected EntityAttributeComponent attributeComponent;
     @Dependency(optional = true)
@@ -69,6 +71,9 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected Vector3d lastMotion;
     @Getter
     protected boolean onGround;
+    @Getter
+    @Accessors(fluent = true)
+    protected boolean hasGravity;
     @Getter
     protected double fallDistance;
 
@@ -493,13 +498,9 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     @Override
-    public boolean hasGravity() {
-        return thisEntity.getFlag(EntityFlag.HAS_GRAVITY);
-    }
-
-    @Override
     public void setHasGravity(boolean hasGravity) {
-        thisEntity.setFlag(EntityFlag.HAS_GRAVITY, hasGravity);
+        this.hasGravity = hasGravity;
+        this.baseComponent.broadcastState();
     }
 
     @Override

@@ -14,8 +14,6 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -30,6 +28,8 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.permission.PermissionGroup;
+import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
@@ -46,29 +46,22 @@ import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
-import org.allaymc.server.player.Abilities;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.Ability;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
+import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jctools.maps.NonBlockingHashMap;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -96,18 +89,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
     protected EntityPlayerClientComponentImpl clientComponent;
+    @ComponentObject
+    protected EntityPlayer thisPlayer;
 
     @Getter
     protected GameMode gameMode;
     @Getter
     protected Skin skin;
-    @Getter
-    protected Abilities abilities;
     protected Location3ic spawnPoint;
     protected boolean requireResendingCommands;
-    @Getter
-    @Setter
-    protected boolean usingItemOnBlock;
     /**
      * expectedTeleportPos is used to solve the desynchronization of data at both ends.
      * Because PlayerAuthInputPacket will be sent from the client to the server at a rate of 20 per second.
@@ -133,6 +123,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected int enchantmentSeed;
+    @Getter
+    @Setter
+    protected boolean usingItemOnBlock;
+    @Getter
+    protected boolean usingItemInAir;
     protected long startUsingItemInAirTime;
     protected AtomicInteger formIdCounter;
     protected Map<Integer, Form> forms;
@@ -140,9 +135,25 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected CustomForm serverSettingForm;
     protected int serverSettingFormId;
     @Getter
-    protected float movementSpeed;
-    @ComponentObject
-    protected EntityPlayer thisPlayer;
+    protected float speed;
+    @Getter
+    protected float flySpeed;
+    @Getter
+    protected float verticalFlySpeed;
+    @Getter
+    protected String scoreTag;
+    @Getter
+    protected boolean sprinting;
+    @Getter
+    protected boolean sneaking;
+    @Getter
+    protected boolean swimming;
+    @Getter
+    protected boolean gliding;
+    @Getter
+    protected boolean crawling;
+    @Getter
+    protected boolean flying;
     protected long nextSavePlayerDataTime;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
@@ -154,7 +165,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.forms = new NonBlockingHashMap<>();
         this.cooldowns = new NonBlockingHashMap<>();
         this.serverSettingFormId = -1;
-        this.movementSpeed = DEFAULT_MOVEMENT_SPEED;
+        this.speed = DEFAULT_SPEED;
+        this.flySpeed = DEFAULT_FLY_SPEED;
+        this.verticalFlySpeed = DEFAULT_VERTICAL_FLY_SPEED;
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
     }
 
@@ -168,18 +181,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     protected void initPermissionGroup() {
-        this.abilities = new Abilities(thisPlayer);
-        // Do not register player's permission group
+        // Do not register the player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
-        // Add parent permission group alone, so that adventure settings and abilities will also be updated
+        // Add the parent permission group alone, so that adventure settings and abilities will also be updated
         this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission()), thisPlayer);
-    }
-
-    @Override
-    protected void initMetadata() {
-        super.initMetadata();
-        // Player name is always shown
-        setData(EntityData.NAMETAG_ALWAYS_SHOW, (byte) 1);
     }
 
     @Override
@@ -209,33 +214,114 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         this.gameMode = gameMode;
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
-        this.abilities.applyGameMode(this.gameMode);
-
-        setFlag(EntityFlag.SILENT, this.gameMode == GameMode.SPECTATOR);
-        setFlag(EntityFlag.HAS_COLLISION, this.gameMode != GameMode.SPECTATOR);
+        setPermission(Permissions.ABILITY_FLY, gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE);
+        sendAbilities(thisPlayer);
 
         thisPlayer.viewPlayerGameMode(thisPlayer);
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
 
+    public void setSpeed(float speed) {
+        if (this.speed != speed) {
+            this.speed = speed;
+            attributeComponent.setAttributeValue(AttributeType.MOVEMENT_SPEED, this.speed);
+            // NOTICE: abilities.setWalkSpeed(speed) shouldn't be called otherwise player can't sprint
+        }
+    }
+
     @Override
     public void setFlySpeed(float flySpeed) {
-        this.abilities.setFlySpeed(flySpeed);
+        if (this.flySpeed != flySpeed) {
+            this.flySpeed = flySpeed;
+            sendAbilities(thisPlayer);
+        }
     }
 
     @Override
     public void setVerticalFlySpeed(float verticalFlySpeed) {
-        this.abilities.setVerticalFlySpeed(verticalFlySpeed);
-    }
-
-    @Override
-    public boolean isFlying() {
-        return this.abilities.has(Ability.FLYING);
+        if (this.verticalFlySpeed != verticalFlySpeed) {
+            this.verticalFlySpeed = verticalFlySpeed;
+            sendAbilities(thisPlayer);
+        }
     }
 
     @Override
     public void setFlying(boolean flying) {
-        this.abilities.setFlying(flying);
+        if (this.flying != flying) {
+            this.flying = flying;
+            sendAbilities(thisPlayer);
+        }
+    }
+
+    public void sendAbilities(EntityPlayer player) {
+        ((EntityPlayerImpl) player).sendPacket(encodeAbilities());
+    }
+
+    protected UpdateAbilitiesPacket encodeAbilities() {
+        UpdateAbilitiesPacket packet = new UpdateAbilitiesPacket();
+
+        packet.setUniqueEntityId(this.runtimeId);
+        // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
+        // If this player does not have specific command permissions, the command description won't even be sent to the client
+        packet.setCommandPermission(hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
+        // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
+        packet.setPlayerPermission(calculatePlayerPermission());
+
+        var layer = new AbilityLayer();
+        layer.setLayerType(AbilityLayer.Type.BASE);
+        layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
+        layer.getAbilityValues().addAll(calculateAbilities());
+        // NOTICE: this shouldn't be changed
+        layer.setWalkSpeed(EntityPlayerBaseComponent.DEFAULT_SPEED);
+        layer.setFlySpeed(this.flySpeed);
+        layer.setVerticalFlySpeed(this.verticalFlySpeed);
+        packet.getAbilityLayers().add(layer);
+
+        return packet;
+    }
+
+    private @NotNull EnumSet<Ability> calculateAbilities() {
+        var abilities = EnumSet.noneOf(Ability.class);
+        abilities.add(Ability.TELEPORT);
+        abilities.add(Ability.WALK_SPEED);
+        abilities.add(Ability.FLY_SPEED);
+        abilities.add(Ability.VERTICAL_FLY_SPEED);
+        if (this.gameMode != GameMode.SPECTATOR) {
+            abilities.add(Ability.BUILD);
+            abilities.add(Ability.MINE);
+            abilities.add(Ability.DOORS_AND_SWITCHES);
+            abilities.add(Ability.OPEN_CONTAINERS);
+            abilities.add(Ability.ATTACK_PLAYERS);
+            abilities.add(Ability.ATTACK_MOBS);
+        } else {
+            abilities.add(Ability.NO_CLIP);
+            abilities.add(Ability.FLYING);
+        }
+        if (this.gameMode == GameMode.CREATIVE) {
+            abilities.add(Ability.INSTABUILD);
+        }
+        if (hasPermission(Permissions.ABILITY_FLY)) {
+            abilities.add(Ability.MAY_FLY);
+        }
+        if (this.flying) {
+            abilities.add(Ability.FLYING);
+        }
+        return abilities;
+    }
+
+    protected PlayerPermission calculatePlayerPermission() {
+        if (hasPermissions(PermissionGroups.OPERATOR, true)) {
+            return PlayerPermission.OPERATOR;
+        } else if (hasPermissions(PermissionGroups.MEMBER, true)) {
+            return PlayerPermission.MEMBER;
+        }
+        return PlayerPermission.VISITOR;
+    }
+
+    @Override
+    public void setScoreTag(String scoreTag) {
+        this.scoreTag = scoreTag;
+        broadcastState();
     }
 
     @Override
@@ -276,7 +362,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     protected void computeAndNotifyCollidedBlocks() {
-        if (abilities.has(Ability.NO_CLIP)) {
+        if (this.gameMode == GameMode.SPECTATOR) {
             return;
         }
 
@@ -709,16 +795,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public boolean isUsingItemInAir() {
-        return getFlag(EntityFlag.USING_ITEM);
-    }
-
-    @Override
     public void setUsingItemInAir(boolean value, long time) {
-        setFlag(EntityFlag.USING_ITEM, value);
+        this.usingItemInAir = value;
         if (value) {
             startUsingItemInAirTime = time;
         }
+        broadcastState();
     }
 
     @Override
@@ -800,13 +882,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         forms.clear();
     }
 
-    @Override
-    public void setMovementSpeed(float speed) {
-        movementSpeed = speed;
-        attributeComponent.setAttributeValue(AttributeType.MOVEMENT_SPEED, movementSpeed);
-        // NOTICE: abilities.setWalkSpeed(speed) shouldn't be called otherwise player can't sprint
-    }
-
     protected int assignFormId() {
         return formIdCounter.getAndIncrement();
     }
@@ -821,10 +896,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.setLocationBeforeSpawn(location);
     }
 
-    protected void sendMetadata() {
-        super.sendMetadata();
-        // The current player should also view his metadata
-        thisPlayer.viewEntityMetadata(thisPlayer);
+    @Override
+    public void broadcastState() {
+        super.broadcastState();
+        thisPlayer.viewEntityState(thisPlayer);
     }
 
     public void onJump() {
@@ -833,77 +908,61 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public boolean isSprinting() {
-        return getFlag(EntityFlag.SPRINTING);
-    }
-
-    @Override
     public void setSprinting(boolean sprinting) {
-        if (sprinting != isSprinting()) {
-            new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
-            var speed = getMovementSpeed();
+        if (this.sprinting != sprinting) {
+            this.sprinting = sprinting;
+            var speed = this.getSpeed();
             if (sprinting) {
                 speed *= 1.3f;
             } else {
                 speed /= 1.3f;
             }
 
-            setMovementSpeed(speed);
-            setFlag(EntityFlag.SPRINTING, sprinting);
+            setSpeed(speed);
+            broadcastState();
+            new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
         }
-    }
-
-    @Override
-    public boolean isSneaking() {
-        return getFlag(EntityFlag.SNEAKING);
     }
 
     @Override
     public void setSneaking(boolean sneaking) {
-        if (sneaking != isSneaking()) {
+        if (this.sneaking != sneaking) {
+            this.sneaking = sneaking;
+            broadcastState();
             new PlayerToggleSneakEvent(thisPlayer, sneaking).call();
-            setFlag(EntityFlag.SNEAKING, sneaking);
         }
-    }
-
-    @Override
-    public boolean isSwimming() {
-        return getFlag(EntityFlag.SWIMMING);
     }
 
     @Override
     public void setSwimming(boolean swimming) {
-        if (swimming != isSwimming()) {
+        if (this.swimming != swimming) {
+            this.swimming = swimming;
+            broadcastState();
             new PlayerToggleSwimEvent(thisPlayer, swimming).call();
-            setFlag(EntityFlag.SWIMMING, swimming);
         }
-    }
-
-    @Override
-    public boolean isGliding() {
-        return getFlag(EntityFlag.GLIDING);
     }
 
     @Override
     public void setGliding(boolean gliding) {
-        if (gliding != isGliding()) {
+        if (this.gliding != gliding) {
+            this.gliding = gliding;
+            broadcastState();
             new PlayerToggleGlideEvent(thisPlayer, gliding).call();
-            setFlag(EntityFlag.GLIDING, gliding);
         }
     }
 
     @Override
-    public boolean isCrawling() {
-        return getFlag(EntityFlag.CRAWLING);
+    public void setCrawling(boolean crawling) {
+        if (this.crawling != crawling) {
+            this.crawling = crawling;
+            broadcastState();
+            new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
+        }
     }
 
     @Override
-    public void setCrawling(boolean crawling) {
-        if (crawling == isCrawling()) return;
-
-        new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
-
-        setFlag(EntityFlag.CRAWLING, crawling);
+    public boolean hasEntityCollision() {
+        return this.gameMode != GameMode.SPECTATOR;
     }
 
     public boolean isAwaitingTeleportACK() {

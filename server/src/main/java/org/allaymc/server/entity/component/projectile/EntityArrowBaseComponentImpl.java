@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
-import org.allaymc.api.entity.data.EntityData;
-import org.allaymc.api.entity.data.EntityFlag;
 import org.allaymc.api.item.data.PotionType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
@@ -39,6 +37,10 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     @Getter
     @Setter
     protected boolean pickUpDisabled;
+    @Getter
+    protected boolean critical;
+    @Getter
+    protected PotionType potionType;
 
     public EntityArrowBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -46,28 +48,15 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     }
 
     @Override
-    public boolean isCritical() {
-        return getFlag(EntityFlag.CRITICAL);
-    }
-
-    @Override
     public void setCritical(boolean critical) {
-        setFlag(EntityFlag.CRITICAL, critical);
-    }
-
-    @Override
-    public PotionType getPotionType() {
-        var idPlusOne = getData(EntityData.CUSTOM_DISPLAY);
-        if (idPlusOne != null) {
-            return PotionType.fromId(idPlusOne - 1);
-        }
-
-        return null;
+        this.critical = critical;
+        broadcastState();
     }
 
     @Override
     public void setPotionType(PotionType potionType) {
-        setData(EntityData.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
+        this.potionType = potionType;
+        broadcastState();
     }
 
     @Override

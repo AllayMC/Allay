@@ -21,7 +21,7 @@ public class EffectSpeedType extends AbstractEffectType {
         if (!(entity instanceof EntityPlayer player)) return;
         var level = effectInstance.getLevel();
         var speed = 1 + level * 0.2f;
-        player.setMovementSpeed(player.getMovementSpeed() * speed);
+        player.setSpeed(player.getSpeed() * speed);
     }
 
     @Override
@@ -29,6 +29,6 @@ public class EffectSpeedType extends AbstractEffectType {
         if (!(entity instanceof EntityPlayer player)) return;
         var level = effectInstance.getLevel();
         var speed = 1 + level * 0.2f;
-        player.setMovementSpeed(player.getMovementSpeed() / speed);
+        player.setSpeed(player.getSpeed() / speed);
     }
 }

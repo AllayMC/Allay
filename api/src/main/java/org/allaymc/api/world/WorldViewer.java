@@ -66,14 +66,14 @@ public interface WorldViewer {
     <T extends Entity & EntityPhysicsComponent> void viewEntityMotion(T entity, Vector3dc motion);
 
     /**
-     * Views the metadata of the entity passed.
+     * Views the state of the entity passed.
      *
      * @param entity the entity to view
      */
-    void viewEntityMetadata(Entity entity);
+    void viewEntityState(Entity entity);
 
     /**
-     * Views the item in main hand of the entity passed.
+     * Views the item in the main hand of the entity passed.
      *
      * @param entity the entity to view
      */
