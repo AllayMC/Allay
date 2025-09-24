@@ -81,6 +81,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         this.motion = new Vector3d();
         this.lastMotion = new Vector3d();
         this.onGround = true;
+        this.hasGravity = true;
     }
 
     @EventHandler
