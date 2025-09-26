@@ -7,7 +7,6 @@ import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.server.component.ComponentProvider;
 
@@ -17,8 +16,6 @@ public class EntityItemImpl extends EntityImpl implements EntityItem {
 
     @Delegate
     protected EntityLivingComponent livingComponent;
-    @Delegate
-    protected EntityAttributeComponent attributeComponent;
     @Delegate
     protected EntityPhysicsComponent physicsComponent;
     @Delegate

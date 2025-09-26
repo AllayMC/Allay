@@ -1,7 +1,5 @@
 package org.allaymc.server.entity.effect;
 
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityLiving;
@@ -19,15 +17,11 @@ public class EffectAbsorptionType extends AbstractEffectType {
 
     @Override
     public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
-        if (entity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAttribute(AttributeType.ABSORPTION)) {
-            attributeComponent.setAbsorption(effectInstance.getLevel() * 4);
-        }
+        entity.setAbsorption(effectInstance.getLevel() * 4);
     }
 
     @Override
     public void onRemove(EntityLiving entity, EffectInstance effectInstance) {
-        if (entity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAttribute(AttributeType.ABSORPTION)) {
-            attributeComponent.setAbsorption(0);
-        }
+        entity.setAbsorption(0);
     }
 }

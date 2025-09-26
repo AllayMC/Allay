@@ -23,7 +23,10 @@ public class EffectInfestedType extends AbstractEffectType {
 
     @Override
     public void onEntityDamage(EntityLiving entity, EffectInstance effectInstance, DamageContainer damage) {
-        if (ThreadLocalRandom.current().nextFloat() >= 0.1) return;
+        if (ThreadLocalRandom.current().nextFloat() >= 0.1) {
+            return;
+        }
+
         var silverFishNumberToSpawn = ThreadLocalRandom.current().nextFloat() < 0.5 ? 1 : 2;
         var dimension = entity.getDimension();
         var location = entity.getLocation();

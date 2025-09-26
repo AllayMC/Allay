@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * ComponentClass is the base class of class which is composed of multiple components.
+ * ComponentClass is the base class of the class that is composed of multiple components.
  *
  * @author daoge_cmd
  * @see ItemStackImpl

@@ -9,14 +9,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.EntityAction;
-import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.eventbus.event.entity.EntityDieEvent;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.math.MathUtils;
@@ -34,10 +30,8 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
-import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
@@ -72,14 +66,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected static final String TAG_UNIQUE_ID = "UniqueID";
     protected static final String TAG_PDC = "PDC";
 
-    protected static final int DEFAULT_DEAD_TIMER = 20;
     // NOTICE: the runtime id is counted from 1 not 0
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
 
     @Manager
     protected ComponentManager manager;
-    @Dependency(optional = true)
-    protected EntityAttributeComponent attributeComponent;
     @ComponentObject
     protected Entity thisEntity;
 
@@ -100,7 +91,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected Set<WorldViewer> viewers;
     @Getter
     protected EntityState state;
-    protected int deadTimer;
     @Getter
     @Setter
     protected String displayName;
@@ -125,7 +115,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.state = EntityState.DESPAWNED;
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
-        setDisplayName(entityType.getIdentifier().toString());
+        this.displayName = entityType.getIdentifier().toString();
     }
 
     @OnInitFinish
@@ -148,7 +138,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     public void tick(long currentTick) {
-        checkDead();
         computeAndNotifyCollidedBlocks();
         manager.callEvent(new CEntityTickEvent(currentTick));
     }
@@ -180,59 +169,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         newLocation = event.getTo();
-        this.setLocation(newLocation);
-        this.broadcastMoveToViewers(newLocation, false);
+        setLocation(newLocation);
+        broadcastMoveToViewers(newLocation, false);
         return true;
-    }
-
-    protected void checkDead() {
-        // TODO: move these code to EntityAttributeComponentImpl
-        if (attributeComponent == null || !attributeComponent.supportAttribute(AttributeType.HEALTH)) {
-            return;
-        }
-
-        if (attributeComponent.getHealth() == 0 && !isDead()) {
-            onDie();
-        }
-        if (isDead()) {
-            if (hasDeadTimer()) {
-                if (deadTimer > 0) deadTimer--;
-                if (deadTimer == 0) {
-                    // Spawn dead particle
-                    spawnDeadParticle();
-                    getDimension().getEntityManager().removeEntity(thisEntity);
-                }
-            } else {
-                getDimension().getEntityManager().removeEntity(thisEntity);
-            }
-        }
     }
 
     protected boolean hasDeadTimer() {
         return true;
-    }
-
-    protected void onDie() {
-        new EntityDieEvent(thisEntity).call();
-
-        manager.callEvent(CEntityDieEvent.INSTANCE);
-        setState(EntityState.DEAD);
-        if (hasDeadTimer()) {
-            deadTimer = DEFAULT_DEAD_TIMER;
-        }
-
-        applyAction(SimpleEntityAction.DEATH);
-    }
-
-    protected void spawnDeadParticle() {
-        var offsetAABB = getOffsetAABB();
-        for (double x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5) {
-            for (double z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5) {
-                for (double y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5) {
-                    this.getDimension().addParticle(x, y, z, SimpleParticle.EXPLODE);
-                }
-            }
-        }
     }
 
     @Override

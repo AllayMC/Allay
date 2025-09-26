@@ -6,6 +6,7 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityFlowerPotBaseComponent;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
@@ -44,6 +45,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
         return block.getBlockType().hasBlockTag(BlockCustomTags.POTTABLE_PLANT);
     }
 
+    @EventHandler
     @Override
     public void onBlockReplace(CBlockOnReplaceEvent event) {
         if (plantBlock == null) {

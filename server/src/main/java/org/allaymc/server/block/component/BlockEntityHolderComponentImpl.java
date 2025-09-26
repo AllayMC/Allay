@@ -8,12 +8,14 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
+import org.allaymc.server.component.ComponentClass;
 
 import java.util.Objects;
 
@@ -72,12 +74,11 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
         var pos = event.getCurrentBlock().getPosition();
         createBlockEntity(pos);
         var blockEntity = getBlockEntity(pos);
-        var baseComponent = getBaseComponentImpl(blockEntity);
-        baseComponent.onBlockPlace(event);
-        // Send block entity to client after called onPlace() because onPlace() method may make some changes
+        forwardEvent(blockEntity, event);
+        // Send block entity to the client after called onPlace() because onPlace() method may make some changes
         // on this block entity. Also, we should send the block entity in the next chunk tick because we need
         // to wait for the block being sent first
-        baseComponent.sendBlockEntityToViewers(false);
+        getBaseComponentImpl(blockEntity).sendBlockEntityToViewers(false);
     }
 
     @EventHandler
@@ -88,7 +89,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
             log.warn("Block entity not found at pos: {}", pos);
             return;
         }
-        getBaseComponentImpl(blockEntity).onBlockReplace(event);
+        forwardEvent(blockEntity, event);
         removeBlockEntity(pos);
     }
 
@@ -96,20 +97,24 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().getPosition());
         var blockEntity = getBlockEntity(pos);
-        getBaseComponentImpl(blockEntity).onBlockNeighborUpdate(event);
+        forwardEvent(blockEntity, event);
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickedBlockPos();
         var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
-        getBaseComponentImpl(blockEntity).onBlockInteract(event);
+        forwardEvent(blockEntity, event);
     }
 
     @EventHandler
     protected void onPunch(CBlockOnPunchEvent event) {
         var blockEntity = getBlockEntity(event.getCurrentBlock().getPosition());
-        getBaseComponentImpl(blockEntity).onBlockPunch(event);
+        forwardEvent(blockEntity, event);
+    }
+
+    protected void forwardEvent(BlockEntity blockEntity, Event event) {
+        ((ComponentClass) blockEntity).getManager().callEvent(event);
     }
 
     protected BlockEntityBaseComponentImpl getBaseComponentImpl(BlockEntity blockEntity) {

@@ -25,7 +25,6 @@ public interface EntityPlayer extends
         EntityPhysicsComponent,
         EntityPlayerBaseComponent,
         EntityPlayerClientComponent,
-        EntityPlayerAttributeComponent,
         EntityPlayerScoreboardViewerComponent,
         EntityPlayerChunkLoaderComponent,
         EntityPlayerBossBarViewerComponent {

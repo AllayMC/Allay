@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
 import org.allaymc.api.utils.NBTIO;
@@ -41,6 +42,7 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
         this.getDimension().addSound(this.getPosition(), SimpleSound.MUSIC_DISC_END);
     }
 
+    @EventHandler
     @Override
     public void onBlockReplace(CBlockOnReplaceEvent event) {
         if (this.musicDiscItem != null) {

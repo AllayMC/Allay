@@ -7,7 +7,6 @@ import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.server.component.ComponentProvider;
 
@@ -17,8 +16,6 @@ public class EntityXpOrbImpl extends EntityImpl implements EntityXpOrb {
 
     @Delegate
     protected EntityLivingComponent livingComponent;
-    @Delegate
-    protected EntityAttributeComponent attributeComponent;
     @Delegate
     protected EntityPhysicsComponent physicsComponent;
     @Delegate

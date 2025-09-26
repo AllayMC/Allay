@@ -34,8 +34,6 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     @Delegate
     protected EntityPlayerClientComponent playerClientComponent;
     @Delegate
-    protected EntityPlayerAttributeComponent playerAttributeComponent;
-    @Delegate
     protected EntityPlayerScoreboardViewerComponent playerScoreboardViewerComponent;
     @Delegate
     protected EntityPlayerChunkLoaderComponent playerChunkLoaderComponent;

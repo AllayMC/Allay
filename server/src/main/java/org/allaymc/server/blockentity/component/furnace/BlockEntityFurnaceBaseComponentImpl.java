@@ -10,6 +10,7 @@ import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent
 import org.allaymc.api.blockentity.component.BlockEntityFurnaceBaseComponent;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
 import org.allaymc.api.container.interfaces.FurnaceContainer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.container.FurnaceConsumeFuelEvent;
 import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
@@ -248,6 +249,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         storedXP = 0;
     }
 
+    @EventHandler
     @Override
     public void onBlockReplace(CBlockOnReplaceEvent event) {
         super.onBlockReplace(event);

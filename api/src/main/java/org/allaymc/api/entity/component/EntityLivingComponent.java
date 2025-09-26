@@ -12,6 +12,10 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface EntityLivingComponent extends EntityComponent {
+
+    int DEFAULT_MAX_AIR_SUPPLY = 300;
+    int DEFAULT_MAX_HEALTH = 20;
+
     /**
      * Attack this entity with the given damage container.
      *
@@ -223,4 +227,62 @@ public interface EntityLivingComponent extends EntityComponent {
     default boolean canApplyEffect(EffectType effectType) {
         return true;
     }
+
+    /**
+     * Gets the damage absorption value of this entity. This value represents how much
+     * damage the entity can absorb before taking actual damage.
+     *
+     * @return the damage absorption value as a floating-point number
+     */
+    float getAbsorption();
+
+    /**
+     * Sets the damage absorption value for this entity.
+     *
+     * @param absorption the damage absorption value to set
+     */
+    void setAbsorption(float absorption);
+
+    /**
+     * Retrieves the current health of the entity.
+     *
+     * @return the current health of the entity as a floating-point number
+     */
+    float getHealth();
+
+    /**
+     * Sets the health of the entity.
+     *
+     * @param health the health value to set for the entity
+     */
+    void setHealth(float health);
+
+    /**
+     * Resets the health of the entity to its maximum value.
+     * This method sets the current health of the entity to the value returned by {@link #getMaxHealth()}.
+     */
+    default void resetHealth() {
+        setHealth(getMaxHealth());
+    }
+
+    /**
+     * Kills the entity by setting its health to zero.
+     */
+    default void kill() {
+        setHealth(0);
+    }
+
+    /**
+     * Returns the maximum health value of the entity.
+     *
+     * @return the maximum health as a floating-point number
+     */
+    float getMaxHealth();
+
+    /**
+     * Sets the maximum health value for the entity.
+     *
+     * @param maxHealth the maximum health value to set, must be a positive floating-point number
+     */
+    void setMaxHealth(float maxHealth);
 }

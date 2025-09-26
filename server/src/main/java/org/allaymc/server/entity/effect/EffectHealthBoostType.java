@@ -1,7 +1,5 @@
 package org.allaymc.server.entity.effect;
 
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityLiving;
@@ -19,20 +17,14 @@ public class EffectHealthBoostType extends AbstractEffectType {
 
     @Override
     public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityAttributeComponent component) || !component.supportAttribute(AttributeType.HEALTH))
-            return;
-        var level = effectInstance.getLevel();
-        component.setMaxHealth(component.getMaxHealth() + (level * 4));
+        entity.setMaxHealth(entity.getMaxHealth() + (effectInstance.getLevel() * 4));
     }
 
     @Override
     public void onRemove(EntityLiving entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityAttributeComponent component) || !component.supportAttribute(AttributeType.HEALTH))
-            return;
-        var level = effectInstance.getLevel();
-        component.setMaxHealth(component.getMaxHealth() - (level * 4));
-        if (component.getHealth() > component.getMaxHealth()) {
-            component.setHealth(component.getMaxHealth());
+        entity.setMaxHealth(entity.getMaxHealth() - (effectInstance.getLevel() * 4));
+        if (entity.getHealth() > entity.getMaxHealth()) {
+            entity.setHealth(entity.getMaxHealth());
         }
     }
 }

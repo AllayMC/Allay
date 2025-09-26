@@ -21,18 +21,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
-    /**
-     * The default speed of a player.
-     */
     float DEFAULT_SPEED = 0.1f;
-    /**
-     * The default fly speed of a player.
-     */
     float DEFAULT_FLY_SPEED = 0.05f;
-    /**
-     * The default vertical fly speed of a player.
-     */
     float DEFAULT_VERTICAL_FLY_SPEED = 1.0f;
+
+    int MAX_FOOD_LEVEL = 20;
+    float MAX_FOOD_SATURATION_LEVEL = 20;
+    float MAX_FOOD_EXHAUSTION_LEVEL = 4;
 
     /**
      * Check if the player is sprinting.
@@ -576,4 +571,159 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     default boolean isCooldownEnd(ItemType<?> itemType) {
         return isCooldownEnd(itemType.getIdentifier().toString());
     }
+
+    /**
+     * Calculates the required experience for a given level.
+     *
+     * @param level the level
+     * @return the required experience
+     */
+    static int calculateRequiredExperience(int level) {
+        if (level >= 30) {
+            return 112 + (level - 30) * 9;
+        } else if (level >= 15) {
+            return 37 + (level - 15) * 5;
+        } else {
+            return 7 + (level << 1);
+        }
+    }
+
+    /**
+     * Get the current experience level.
+     *
+     * @return the experience level
+     */
+    int getExperienceLevel();
+
+    /**
+     * Set the experience level.
+     *
+     * @param value the new experience level
+     */
+    void setExperienceLevel(int value);
+
+    /**
+     * Get the current experience progress.
+     *
+     * @return the experience progress
+     */
+    float getExperienceProgress();
+
+    /**
+     * Set the experience progress.
+     *
+     * @param value the new experience progress
+     */
+    void setExperienceProgress(float value);
+
+    /**
+     * Adds experience to the player.
+     *
+     * @param addition the amount of experience to add
+     */
+    default void addExperience(int addition) {
+        var currentLevel = getExperienceLevel();
+        var requiredExpCurrentLevel = calculateRequiredExperience(currentLevel);
+        var total = getExperienceProgress() * requiredExpCurrentLevel + addition;
+
+        while (total >= requiredExpCurrentLevel) {
+            total -= requiredExpCurrentLevel;
+            currentLevel++;
+            requiredExpCurrentLevel = calculateRequiredExperience(currentLevel);
+        }
+
+        setExperienceProgress(total / requiredExpCurrentLevel);
+        setExperienceLevel(currentLevel);
+    }
+
+    /**
+     * Get the required experience for the current level.
+     *
+     * @return the required experience
+     */
+    default int getRequiredExperienceForCurrentLevel() {
+        return calculateRequiredExperience(getExperienceLevel());
+    }
+
+    /**
+     * Get the experience in the current level.
+     *
+     * @return the experience in the current level
+     */
+    default int getExperienceInCurrentLevel() {
+        return (int) (getExperienceProgress() * getRequiredExperienceForCurrentLevel());
+    }
+
+    /**
+     * Resets the food data.
+     */
+    default void resetFoodData() {
+        setFoodLevel(MAX_FOOD_LEVEL);
+        setFoodSaturationLevel(MAX_FOOD_SATURATION_LEVEL);
+        setFoodExhaustionLevel(0);
+    }
+
+    /**
+     * Get the current food level.
+     *
+     * @return the food level
+     */
+    int getFoodLevel();
+
+    /**
+     * Set the food level.
+     *
+     * @param value the new food level
+     */
+    void setFoodLevel(int value);
+
+    /**
+     * Get the current food saturation level.
+     *
+     * @return the food saturation level
+     */
+    float getFoodSaturationLevel();
+
+    /**
+     * Set the food saturation level.
+     *
+     * @param value the new food saturation level
+     */
+    void setFoodSaturationLevel(float value);
+
+    /**
+     * Get the current food exhaustion level.
+     *
+     * @return the food exhaustion level
+     */
+    float getFoodExhaustionLevel();
+
+    /**
+     * Set the food exhaustion level.
+     *
+     * @param value the new food exhaustion level
+     */
+    void setFoodExhaustionLevel(float value);
+
+    /**
+     * Reduces the player's exhaustion level.
+     *
+     * @param level the amount of exhaustion to reduce by
+     */
+    void exhaust(float level);
+
+    /**
+     * Increases the player's saturation level.
+     *
+     * @param food       the amount of food to add
+     * @param saturation the amount of saturation to add
+     */
+    void saturate(int food, float saturation);
+
+    /**
+     * Check if the player can eat.
+     *
+     * @return {@code true} if the player can eat, {@code false} otherwise.
+     */
+    boolean canEat();
 }

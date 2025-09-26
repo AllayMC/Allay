@@ -3,7 +3,7 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.GameMode;
@@ -43,8 +43,8 @@ public class KillCommand extends VanillaCommand {
                     continue;
                 }
 
-                if (target instanceof EntityAttributeComponent attributeComponent) {
-                    attributeComponent.kill();
+                if (target instanceof EntityLiving living) {
+                    living.kill();
                 } else {
                     target.remove();
                 }

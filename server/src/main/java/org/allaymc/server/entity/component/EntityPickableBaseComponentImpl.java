@@ -44,9 +44,10 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
 
     @Override
     public NbtMap saveNBT() {
-        var builder = super.saveNBT().toBuilder();
-        builder.putInt(TAG_PICKUP_DELAY, pickupDelay);
-        return builder.build();
+        return super.saveNBT()
+                .toBuilder()
+                .putInt(TAG_PICKUP_DELAY, pickupDelay)
+                .build();
     }
 
     @Override

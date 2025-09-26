@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.effect;
 
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityLiving;
@@ -18,7 +17,6 @@ public class EffectRegenerationType extends AbstractEffectType {
 
     @Override
     public void onTick(EntityLiving entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityAttributeComponent attributeComponent)) return;
         var level = effectInstance.getLevel() - 1;
 
         var ticksPerHealth = 50 >> level;
@@ -27,6 +25,6 @@ public class EffectRegenerationType extends AbstractEffectType {
         if (effectInstance.getDuration() % ticksPerHealth != 0) return;
 
         var healthPerSecond = 20f / ticksPerHealth;
-        attributeComponent.setHealth(attributeComponent.getHealth() + healthPerSecond);
+        entity.setHealth(entity.getHealth() + healthPerSecond);
     }
 }

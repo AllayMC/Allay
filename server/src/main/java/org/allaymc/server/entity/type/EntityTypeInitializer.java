@@ -1,15 +1,12 @@
 package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
 import org.allaymc.server.entity.component.projectile.*;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
-
-import static org.allaymc.server.entity.component.EntityAttributeComponentImpl.basicEntityAttributes;
 
 /**
  * @author daoge_cmd
@@ -43,21 +40,21 @@ public final class EntityTypeInitializer {
                 .builder(EntityItemImpl.class)
                 .vanillaEntity(EntityId.ITEM)
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
-                .addComponent(() -> new EntityLivingComponentImpl() {
-                    @Override
-                    public boolean hasFallDamage() {
-                        return false;
-                    }
+                .addComponent(() -> {
+                    var component = new EntityLivingComponentImpl() {
+                        @Override
+                        public boolean hasFallDamage() {
+                            return false;
+                        }
 
-                    @Override
-                    public boolean hasDrowningDamage() {
-                        return false;
-                    }
+                        @Override
+                        public boolean hasDrowningDamage() {
+                            return false;
+                        }
+                    };
+                    component.setMaxHealth(5);
+                    return component;
                 }, EntityLivingComponentImpl.class)
-                .addComponent(
-                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
-                        EntityAttributeComponentImpl.class
-                )
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
                     @Override
                     public double getGravity() {
@@ -74,7 +71,6 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
                 .addComponent(EntityPlayerClientComponentImpl::new, EntityPlayerClientComponentImpl.class)
-                .addComponent(() -> new EntityPlayerAttributeComponentImpl(EntityPlayerAttributeComponentImpl.basicPlayerAttributes()), EntityPlayerAttributeComponentImpl.class)
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
                 .addComponent(EntityPlayerLivingComponentImpl::new, EntityPlayerLivingComponentImpl.class)
@@ -89,7 +85,6 @@ public final class EntityTypeInitializer {
         EntityTypes.VILLAGER_V2 = AllayEntityType
                 .builder(EntityVillagerV2Impl.class)
                 .vanillaEntity(EntityId.VILLAGER_V2)
-                .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
                 .addComponent(EntityLivingComponentImpl::new, EntityLivingComponentImpl.class)
                 .addComponent(EntityHumanPhysicsComponentImpl::new, EntityHumanPhysicsComponentImpl.class)
                 .build();
@@ -100,11 +95,11 @@ public final class EntityTypeInitializer {
                 .builder(EntityXpOrbImpl.class)
                 .vanillaEntity(EntityId.XP_ORB)
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
-                .addComponent(EntityLivingComponentImpl::new, EntityLivingComponentImpl.class)
-                .addComponent(
-                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
-                        EntityAttributeComponentImpl.class
-                )
+                .addComponent(() -> {
+                    var component = new EntityLivingComponentImpl();
+                    component.setMaxHealth(5);
+                    return component;
+                }, EntityLivingComponentImpl.class)
                 .addComponent(() -> new EntityPhysicsComponentImpl() {
                     @Override
                     public double getGravity() {
@@ -164,11 +159,16 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityArrowPhysicsComponentImpl::new, EntityArrowPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
-                .addComponent(EntityArrowLivingComponentImpl::new, EntityArrowLivingComponentImpl.class)
-                .addComponent(
-                        () -> new EntityAttributeComponentImpl(AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)),
-                        EntityAttributeComponentImpl.class
-                )
+                .addComponent(() -> {
+                    var component = new EntityArrowLivingComponentImpl() {
+                        @Override
+                        protected boolean hasDeadTimer() {
+                            return false;
+                        }
+                    };
+                    component.setMaxHealth(5);
+                    return component;
+                }, EntityArrowLivingComponentImpl.class)
                 .build();
     }
 }

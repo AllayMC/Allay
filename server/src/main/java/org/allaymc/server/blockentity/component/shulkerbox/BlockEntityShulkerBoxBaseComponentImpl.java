@@ -4,6 +4,7 @@ import org.allaymc.api.block.action.SimpleBlockAction;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
@@ -61,6 +62,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
                 .build();
     }
 
+    @EventHandler
     @Override
     public void onBlockPlace(CBlockOnPlaceEvent event) {
         super.onBlockPlace(event);

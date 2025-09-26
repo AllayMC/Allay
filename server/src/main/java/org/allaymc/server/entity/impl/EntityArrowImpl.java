@@ -4,7 +4,6 @@ import lombok.experimental.Delegate;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.*;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.server.component.ComponentProvider;
 
@@ -20,8 +19,6 @@ public class EntityArrowImpl extends EntityImpl implements EntityArrow {
     protected EntityPhysicsComponent physicsComponent;
     @Delegate
     protected EntityLivingComponent livingComponent;
-    @Delegate
-    protected EntityAttributeComponent attributeComponent;
 
     public EntityArrowImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {

@@ -5,7 +5,10 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.entity.component.EntityLivingComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.eventbus.event.player.PlayerLoginEvent;
@@ -13,7 +16,10 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.ClientState;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -199,23 +205,149 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         // Load EntityPlayer's NBT, player game mode is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
         thisPlayer.viewEntityState(thisPlayer);
-        // Send other players' abilities data to this player
-        Server.getInstance().getPlayerManager().forEachPlayer(other -> {
-            sendPacket(((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).encodeAbilities());
-        });
+        // TODO
+//        // Send other players' abilities data to this player
+//        Server.getInstance().getPlayerManager().forEachPlayer(other -> {
+//            sendPacket(((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).encodeAbilities());
+//        });
+        sendSpeed(thisPlayer.getSpeed());
+        sendAbilities(thisPlayer);
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
         // PlayerListPacket can only be sent at this stage, otherwise the client won't show its skin
         playerManager.broadcastPlayerListChange(thisPlayer, true);
         if (server.getPlayerManager().getPlayerCount() > 1) {
             playerManager.sendPlayerListTo(thisPlayer);
         }
-        thisPlayer.sendAttributesToClient();
         sendInventories();
         sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         thisPlayer.viewTime(world.getWorldData().getTimeOfDay());
         thisPlayer.viewWeather(world.getWeather());
         // Save player data the first time it joins
         server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
+    }
+
+    public void sendAbilities(EntityPlayer player) {
+        var packet = new UpdateAbilitiesPacket();
+
+        packet.setUniqueEntityId(player.getRuntimeId());
+        // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
+        // If this player does not have specific command permissions, the command description won't even be sent to the client
+        packet.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
+        // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
+        packet.setPlayerPermission(calculatePlayerPermission(player));
+
+        var layer = new AbilityLayer();
+        layer.setLayerType(AbilityLayer.Type.BASE);
+        layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
+        layer.getAbilityValues().addAll(calculateAbilities(player));
+        // NOTICE: this shouldn't be changed
+        layer.setWalkSpeed(EntityPlayerBaseComponent.DEFAULT_SPEED);
+        layer.setFlySpeed(player.getFlySpeed());
+        layer.setVerticalFlySpeed(player.getVerticalFlySpeed());
+        packet.getAbilityLayers().add(layer);
+
+        sendPacket(packet);
+    }
+
+    private EnumSet<Ability> calculateAbilities(EntityPlayer player) {
+        var abilities = EnumSet.noneOf(Ability.class);
+        abilities.add(Ability.TELEPORT);
+        abilities.add(Ability.WALK_SPEED);
+        abilities.add(Ability.FLY_SPEED);
+        abilities.add(Ability.VERTICAL_FLY_SPEED);
+        if (player.getGameMode() != GameMode.SPECTATOR) {
+            abilities.add(Ability.BUILD);
+            abilities.add(Ability.MINE);
+            abilities.add(Ability.DOORS_AND_SWITCHES);
+            abilities.add(Ability.OPEN_CONTAINERS);
+            abilities.add(Ability.ATTACK_PLAYERS);
+            abilities.add(Ability.ATTACK_MOBS);
+        } else {
+            abilities.add(Ability.NO_CLIP);
+            abilities.add(Ability.FLYING);
+        }
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            abilities.add(Ability.INSTABUILD);
+        }
+        if (player.hasPermission(Permissions.ABILITY_FLY)) {
+            abilities.add(Ability.MAY_FLY);
+        }
+        if (player.isFlying()) {
+            abilities.add(Ability.FLYING);
+        }
+        return abilities;
+    }
+
+    protected PlayerPermission calculatePlayerPermission(EntityPlayer player) {
+        if (player.hasPermissions(PermissionGroups.OPERATOR, true)) {
+            return PlayerPermission.OPERATOR;
+        } else if (player.hasPermissions(PermissionGroups.MEMBER, true)) {
+            return PlayerPermission.MEMBER;
+        }
+        return PlayerPermission.VISITOR;
+    }
+
+    public void sendSpeed(float value) {
+        sendAttribute(new AttributeData(
+                "minecraft:movement", 0, Float.MAX_VALUE,
+                value, 0, Float.MAX_VALUE, EntityPlayerBaseComponent.DEFAULT_SPEED,
+                Collections.emptyList()
+        ));
+    }
+
+    public void sendAbsorption(float absorption) {
+        sendAttribute(new AttributeData("minecraft:absorption", 0, Float.MAX_VALUE, absorption));
+    }
+
+    public void sendHealth(float health, float maxHealth) {
+        var defaultMax = EntityLivingComponent.DEFAULT_MAX_HEALTH;
+        sendAttribute(new AttributeData(
+                "minecraft:health", 0, maxHealth,
+                health, 0, defaultMax, defaultMax,
+                Collections.emptyList()
+        ));
+    }
+
+    public void sendExperienceLevel(int value) {
+        sendAttribute(new AttributeData("minecraft:player.level", 0, Float.MAX_VALUE, value));
+    }
+
+    public void sendExperienceProgress(float value) {
+        sendAttribute(new AttributeData("minecraft:player.experience", 0, 1, value));
+    }
+
+    public void sendFoodLevel(int value) {
+        var max = EntityPlayerBaseComponent.MAX_FOOD_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.hunger", 0, max,
+                value, 0, max, max,
+                Collections.emptyList()
+        ));
+    }
+
+    public void sendFoodSaturationLevel(float value) {
+        var max = EntityPlayerBaseComponent.MAX_FOOD_SATURATION_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.saturation", 0, max,
+                value, 0, max, max,
+                Collections.emptyList()
+        ));
+    }
+
+    public void sendFoodExhaustionLevel(float value) {
+        var max = EntityPlayerBaseComponent.MAX_FOOD_EXHAUSTION_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.exhaustion", 0, max,
+                value, 0, max, 0,
+                Collections.emptyList()
+        ));
+    }
+
+    protected void sendAttribute(AttributeData attributeData) {
+        var packet = new UpdateAttributesPacket();
+        packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
+        packet.getAttributes().add(attributeData);
+        thisPlayer.sendPacket(packet);
     }
 
     public void sendCommands() {

@@ -7,8 +7,6 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.math.MathUtils;
@@ -324,11 +322,8 @@ public class Explosion {
                     continue;
                 }
 
-                var kbResistance = 0.0;
-                if (affectedEntity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
-                    kbResistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
-                }
                 if (affectedEntity instanceof EntityPhysicsComponent physicsComponent) {
+                    var kbResistance = physicsComponent.getKnockbackResistance();
                     var direction = affectedEntity.getLocation().sub(explosionPos, new Vector3d());
                     if (direction.lengthSquared() > 0) {
                         physicsComponent.addMotion(direction.normalize().mul(impact * (1.0 - kbResistance)));

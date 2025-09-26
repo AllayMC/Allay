@@ -8,6 +8,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
@@ -114,6 +115,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         sendBlockEntityToViewers();
     }
 
+    @EventHandler
     @Override
     public void onBlockInteract(CBlockOnInteractEvent event) {
         super.onBlockInteract(event);
@@ -164,6 +166,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         event.setSuccess(true);
     }
 
+    @EventHandler
     @Override
     public void onBlockPlace(CBlockOnPlaceEvent event) {
         super.onBlockPlace(event);

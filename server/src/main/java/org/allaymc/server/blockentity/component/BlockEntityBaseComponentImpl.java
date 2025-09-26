@@ -7,6 +7,7 @@ import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataContainer;
@@ -54,11 +55,12 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     protected String customName;
     @Getter
     @Setter
-    protected PersistentDataContainer persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
+    protected PersistentDataContainer persistentDataContainer;
 
     public BlockEntityBaseComponentImpl(BlockEntityInitInfo initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
         this.position = new Position3i(0, 0, 0, initInfo.dimension());
+        this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
     }
 
     @OnInitFinish
@@ -83,8 +85,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         if (!persistentDataContainer.isEmpty()) {
             builder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
-        var event = new CBlockEntitySaveNBTEvent(builder);
-        manager.callEvent(event);
+        manager.callEvent(new CBlockEntitySaveNBTEvent(builder));
         return builder.build();
     }
 
@@ -103,8 +104,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
             this.persistentDataContainer.putAll(customNbt);
         });
 
-        var event = new CBlockEntityLoadNBTEvent(nbt);
-        manager.callEvent(event);
+        manager.callEvent(new CBlockEntityLoadNBTEvent(nbt));
     }
 
     /**
@@ -146,23 +146,27 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         }
     }
 
-
+    @EventHandler
     public void onBlockNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
         manager.callEvent(event);
     }
 
+    @EventHandler
     public void onBlockPlace(CBlockOnPlaceEvent event) {
         manager.callEvent(event);
     }
 
+    @EventHandler
     public void onBlockReplace(CBlockOnReplaceEvent event) {
         manager.callEvent(event);
     }
 
+    @EventHandler
     public void onBlockInteract(CBlockOnInteractEvent event) {
         manager.callEvent(event);
     }
 
+    @EventHandler
     public void onBlockPunch(CBlockOnPunchEvent event) {
         manager.callEvent(event);
     }

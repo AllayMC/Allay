@@ -4,6 +4,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -33,7 +34,6 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * engine may use parallel stream to handle all the entities.
      *
      * @param hasLiquidMotion whether this entity's motion is affected by liquid
-     *
      * @return the updated motion
      */
     @ApiStatus.OverrideOnly
@@ -254,6 +254,24 @@ public interface EntityPhysicsComponent extends EntityComponent {
     void knockback(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance);
 
     /**
+     * Retrieve the knockback resistance of the entity.
+     *
+     * @return the knockback resistance value of this entity, represented as a float
+     */
+    float getKnockbackResistance();
+
+    /**
+     * Sets the knockback resistance of the entity. Knockback resistance determines
+     * how resistant the entity is to being pushed or knocked back due to external forces,
+     * such as attacks or collisions. Higher values provide increased resistance while
+     * lower values allow for easier displacement.
+     *
+     * @param knockbackResistance the knockback resistance value to set. Must be a float
+     *                            value between 0.0 (no resistance) and 1.0 (full resistance).
+     */
+    void setKnockbackResistance(@Range(from = 0, to = 1) float knockbackResistance);
+
+    /**
      * Get the block which the entity is standing on.
      *
      * @return the block which the entity is standing on, or air if the entity is not standing on any block (and the pos will be {@code null})
@@ -273,7 +291,6 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * @param x the x coordinate
      * @param y the y coordinate
      * @param z the z coordinate
-     *
      * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
      */
     boolean canStandSafely(int x, int y, int z, Dimension dimension);

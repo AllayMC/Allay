@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.effect;
 
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -19,10 +18,6 @@ public class EffectPoisonType extends AbstractEffectType {
 
     @Override
     public void onTick(EntityLiving entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityAttributeComponent attributeComponent)) {
-            return;
-        }
-
         var level = effectInstance.getLevel();
 
         var ticksPerDamage = 50 >> level;
@@ -33,7 +28,7 @@ public class EffectPoisonType extends AbstractEffectType {
         }
 
         var damagePerSecond = 20f / ticksPerDamage;
-        if (attributeComponent.getHealth() - damagePerSecond <= 0) {
+        if (entity.getHealth() - damagePerSecond <= 0) {
             return;
         }
 

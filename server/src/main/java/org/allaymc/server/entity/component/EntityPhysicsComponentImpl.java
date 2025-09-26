@@ -8,8 +8,6 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
@@ -26,6 +24,7 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
+import org.jetbrains.annotations.Range;
 import org.joml.RoundingMode;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -49,6 +48,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     protected static final String TAG_MOTION = "Motion";
     protected static final String TAG_ON_GROUND = "OnGround";
+    protected static final String TAG_KNOCKBACK_RESISTANCE = "KnockbackResistance";
 
     // Constants used in physics calculation
     protected static final Pair<Double, Boolean> EMPTY_DOUBLE_BOOLEAN_PAIR = new Pair<>(0.0, false);
@@ -58,8 +58,6 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected Entity thisEntity;
     @Dependency
     protected EntityBaseComponentImpl baseComponent;
-    @Dependency(optional = true)
-    protected EntityAttributeComponent attributeComponent;
     @Dependency(optional = true)
     protected EntityLivingComponent livingComponent;
     @Manager
@@ -76,6 +74,8 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected boolean hasGravity;
     @Getter
     protected double fallDistance;
+    @Getter
+    protected float knockbackResistance;
 
     public EntityPhysicsComponentImpl() {
         this.motion = new Vector3d();
@@ -94,6 +94,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         }
 
         nbt.listenForBoolean(TAG_ON_GROUND, onGround -> this.onGround = onGround);
+        nbt.listenForFloat(TAG_KNOCKBACK_RESISTANCE, knockbackResistance -> this.knockbackResistance = knockbackResistance);
     }
 
     @EventHandler
@@ -101,6 +102,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         var builder = event.getNbt();
         builder.putBoolean(TAG_ON_GROUND, onGround);
         AllayNbtUtils.writeVector3f(builder, TAG_MOTION, (float) motion.x, (float) motion.y, (float) motion.z);
+        builder.putFloat(TAG_KNOCKBACK_RESISTANCE, knockbackResistance);
     }
 
     @EventHandler
@@ -409,14 +411,15 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         setMotion(calculateKnockbackMotion(source, kb, kby, additionalMotion, ignoreKnockbackResistance));
     }
 
+    @Override
+    public void setKnockbackResistance(@Range(from = 0, to = 1) float knockbackResistance) {
+        this.knockbackResistance = Math.clamp(knockbackResistance, 0, 1);
+    }
+
     protected Vector3d calculateKnockbackMotion(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
         if (!ignoreKnockbackResistance) {
-            var resistance = 0.0;
-            if (attributeComponent != null && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
-                resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
-            }
-            if (resistance > 0) {
-                var factor = 1 - resistance;
+            if (this.knockbackResistance > 0) {
+                var factor = 1 - this.knockbackResistance;
                 kb *= factor;
                 kby *= factor;
                 additionalMotion = additionalMotion.mul(factor, new Vector3d());

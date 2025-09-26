@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.effect;
 
 import org.allaymc.api.entity.component.EntityUndeadComponent;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -23,8 +22,7 @@ public class EffectInstantDamageType extends AbstractEffectType {
         var level = effectInstance.getLevel();
 
         if (entity instanceof EntityUndeadComponent) {
-            if (!(entity instanceof EntityAttributeComponent attributeComponent)) return;
-            attributeComponent.setHealth(attributeComponent.getHealth() + (float) (2 * Math.pow(2, level)));
+            entity.setHealth(entity.getHealth() + (float) (2 * Math.pow(2, level)));
             return;
         }
 

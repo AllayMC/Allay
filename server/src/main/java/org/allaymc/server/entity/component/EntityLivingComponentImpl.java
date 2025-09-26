@@ -1,16 +1,16 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.interfaces.ArmorContainer;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -18,14 +18,13 @@ import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
-import org.allaymc.api.eventbus.event.entity.EntityEffectAddEvent;
-import org.allaymc.api.eventbus.event.entity.EntityEffectRemoveEvent;
+import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.component.ComponentClass;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -40,6 +39,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 /**
  * @author daoge_cmd
  */
@@ -49,13 +51,15 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_living_component");
 
     protected static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
+    protected static final String TAG_FIRE = "Fire";
+    protected static final String TAG_ABSORPTION = "Absorption";
+    protected static final String TAG_HEALTH = "Health";
+    protected static final String TAG_MAX_HEALTH = "MaxHealth";
 
     @Manager
     protected ComponentManager manager;
     @Dependency
     protected EntityBaseComponentImpl baseComponent;
-    @Dependency
-    protected EntityAttributeComponent attributeComponent;
     @Dependency(optional = true)
     protected EntityPhysicsComponent physicsComponent;
     @Dependency(optional = true)
@@ -73,12 +77,20 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     protected int airSupplyTicks;
     @Getter
     protected int airSupplyMaxTicks;
+    @Getter
+    @Setter
+    protected float absorption;
+    @Getter
+    protected float health;
+    @Getter
+    protected float maxHealth;
     protected Map<EffectType, EffectInstance> effects;
+    protected int deadTimer;
 
     public EntityLivingComponentImpl() {
         this.effects = new HashMap<>();
-        this.airSupplyTicks = 300;
-        this.airSupplyMaxTicks = 300;
+        this.airSupplyTicks = this.airSupplyMaxTicks = DEFAULT_MAX_AIR_SUPPLY;
+        this.health = this.maxHealth = DEFAULT_MAX_HEALTH;
     }
 
     @Override
@@ -99,7 +111,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     }
 
     protected void applyDamage(DamageContainer damage) {
-        this.attributeComponent.setHealth(this.attributeComponent.getHealth() - damage.getFinalDamage());
+        setHealth(this.health - damage.getFinalDamage());
         thisEntity.applyAction(SimpleEntityAction.HURT);
         if (damage.isCritical()) {
             thisEntity.applyAction(SimpleEntityAction.CRITICAL_HIT);
@@ -236,12 +248,9 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     protected void applyEffects(DamageContainer damage) {
         // Damage absorption
-        if (attributeComponent.supportAttribute(AttributeType.ABSORPTION)) {
-            var absorption = attributeComponent.getAbsorption();
-            if (absorption > 0) {
-                attributeComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
-                damage.updateFinalDamage(d -> Math.max(0, d - absorption));
-            }
+        if (this.absorption > 0) {
+            setAbsorption(Math.max(0, this.absorption - damage.getFinalDamage()));
+            damage.updateFinalDamage(d -> Math.max(0, d - this.absorption));
         }
 
         this.effects.values().forEach(effect ->
@@ -432,11 +441,86 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         }
     }
 
+    @Override
+    public void setHealth(float value) {
+        if (value > 0 && value < 1) {
+            // Client will think he is dead if the health is less than 1 But server doesn't think so, which
+            // would cause bug So we need to set the health to 0 if it's less than 1 and bigger than 0
+            value = 0;
+        } else {
+            value = max(0, min(value, this.maxHealth));
+        }
+
+        var event = new EntityHealthChangeEvent(thisEntity, this.health, value);
+        if (!event.call()) {
+            return;
+        }
+
+        this.health = event.getNewHealth();
+    }
+
+    @Override
+    public void setMaxHealth(float maxHealth) {
+        this.maxHealth = maxHealth;
+        this.health = Math.min(this.health, this.maxHealth);
+    }
+
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
+        tickDead();
         tickFire();
         tickBreathe();
         tickEffects();
+    }
+
+    protected void tickDead() {
+        if (this.health == 0 && !this.baseComponent.isDead()) {
+            onDie();
+        }
+
+        if (this.baseComponent.isDead()) {
+            var manager = this.baseComponent.getDimension().getEntityManager();
+            if (hasDeadTimer()) {
+                if (deadTimer > 0) deadTimer--;
+                if (deadTimer == 0) {
+                    // Spawn dead particle
+                    spawnDeadParticle();
+                    manager.removeEntity(thisEntity);
+                }
+            } else {
+                manager.removeEntity(thisEntity);
+            }
+        }
+    }
+
+    protected boolean hasDeadTimer() {
+        return true;
+    }
+
+    protected void onDie() {
+        new EntityDieEvent(thisEntity).call();
+        manager.callEvent(CEntityDieEvent.INSTANCE);
+
+        setOnFireTicks(0);
+        this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
+        removeAllEffects();
+        this.baseComponent.setState(EntityState.DEAD);
+        if (hasDeadTimer()) {
+            this.deadTimer = 20;
+        }
+
+        this.baseComponent.applyAction(SimpleEntityAction.DEATH);
+    }
+
+    protected void spawnDeadParticle() {
+        var offsetAABB = this.baseComponent.getOffsetAABB();
+        for (double x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5) {
+            for (double z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5) {
+                for (double y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5) {
+                    this.baseComponent.getDimension().addParticle(x, y, z, SimpleParticle.EXPLODE);
+                }
+            }
+        }
     }
 
     protected void tickFire() {
@@ -494,22 +578,28 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @EventHandler
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
         var nbt = event.getNbt();
-        nbt.putShort("Fire", (short) onFireTicks);
+        nbt.putShort(TAG_FIRE, (short) onFireTicks);
         if (!effects.isEmpty()) {
             nbt.putList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
         }
+        nbt.putFloat(TAG_ABSORPTION, this.absorption);
+        nbt.putFloat(TAG_HEALTH, this.health);
+        nbt.putFloat(TAG_MAX_HEALTH, this.maxHealth);
     }
 
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
-        nbt.listenForShort("Fire", s -> this.onFireTicks = s);
+        nbt.listenForShort(TAG_FIRE, this::setOnFireTicks);
         nbt.listenForList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, activeEffects -> {
             for (NbtMap activeEffect : activeEffects) {
                 var effectInstance = EffectInstance.fromNBT(activeEffect);
                 addEffect(effectInstance);
             }
         });
+        nbt.listenForFloat(TAG_ABSORPTION, this::setAbsorption);
+        nbt.listenForFloat(TAG_HEALTH, this::setHealth);
+        nbt.listenForFloat(TAG_MAX_HEALTH, this::setMaxHealth);
     }
 
     @EventHandler
@@ -525,12 +615,5 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         if (damage > 0) {
             attack(DamageContainer.fall(damage));
         }
-    }
-
-    @EventHandler
-    protected void onDie(CEntityDieEvent event) {
-        setOnFireTicks(0);
-        this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
-        removeAllEffects();
     }
 }

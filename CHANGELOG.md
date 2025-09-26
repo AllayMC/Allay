@@ -14,6 +14,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.7.1](https://github.com/AllayMC/Allay/compare/0.7.1...HEAD)</small>
 
+# TODO: rewrite the changelog for 0.7.2 after finish the refactor
+
 ### Added
 
 - (API) Implemented basic bed feature.

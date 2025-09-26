@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBedBaseComponent;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.DyeColor;
 import org.allaymc.server.block.component.BlockBedBaseComponentImpl;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
@@ -26,6 +27,7 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
         super(initInfo);
     }
 
+    @EventHandler
     @Override
     public void onBlockPlace(CBlockOnPlaceEvent event) {
         super.onBlockPlace(event);

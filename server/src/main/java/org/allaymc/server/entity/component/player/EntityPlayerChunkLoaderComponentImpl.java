@@ -97,7 +97,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     /**
      * A map which contains the network offset of some entities. The network offset is the additional offset in
-     * y coordinate when sent over network.This is mostly the case for older entities such as player and TNT.
+     * y coordinate when sent over network. This is mostly the case for older entities such as player and TNT.
      */
     protected static final Map<EntityType<?>, Float> NETWORK_OFFSETS;
 
@@ -377,6 +377,9 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 map.setFlag(EntityFlag.GLIDING, player.isGliding());
                 map.setFlag(EntityFlag.CRAWLING, player.isCrawling());
                 map.setFlag(EntityFlag.USING_ITEM, player.isUsingItemInAir());
+                map.setFlag(EntityFlag.BREATHING, player.canBreathe());
+                map.put(EntityDataTypes.AIR_SUPPLY, (short) player.getAirSupplyTicks());
+                map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) player.getAirSupplyMaxTicks());
                 if (player.hasScoreTag()) {
                     map.put(EntityDataTypes.SCORE, player.getScoreTag());
                 }

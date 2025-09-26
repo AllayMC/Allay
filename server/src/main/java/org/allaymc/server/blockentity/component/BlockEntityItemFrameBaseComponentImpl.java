@@ -1,10 +1,12 @@
 package org.allaymc.server.blockentity.component;
 
 import com.google.common.base.Preconditions;
+import lombok.Getter;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityItemFrameBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.ItemFrameUseEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -17,7 +19,6 @@ import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPunchEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.jetbrains.annotations.Range;
 
 /**
  * @author daoge_cmd
@@ -28,14 +29,17 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     protected static final String TAG_ITEM_ROTATION = "ItemRotation";
     protected static final String TAG_ITEM_DROP_CHANCE = "ItemDropChance";
 
+    @Getter
     protected ItemStack itemStack;
-    protected @Range(from = 0, to = 7) int itemRotation;
+    @Getter
+    protected int itemRotation;
 
     public BlockEntityItemFrameBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
         this.itemStack = ItemAirStack.AIR_STACK;
     }
 
+    @EventHandler
     @Override
     public void onBlockInteract(CBlockOnInteractEvent event) {
         super.onBlockInteract(event);
@@ -68,6 +72,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         event.setSuccess(true);
     }
 
+    @EventHandler
     @Override
     public void onBlockPunch(CBlockOnPunchEvent event) {
         super.onBlockPunch(event);
@@ -90,6 +95,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         dimension.addSound(MathUtils.center(event.getCurrentBlock().getPosition()), SimpleSound.ITEM_FRAME_REMOVE);
     }
 
+    @EventHandler
     @Override
     public void onBlockReplace(CBlockOnReplaceEvent event) {
         super.onBlockReplace(event);
@@ -120,11 +126,6 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @Override
-    public ItemStack getItemStack() {
-        return this.itemStack;
-    }
-
-    @Override
     public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
         if (this.itemStack instanceof ItemFilledMapStack) {
@@ -136,12 +137,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @Override
-    public @Range(from = 0, to = 7) int getItemRotation() {
-        return this.itemRotation;
-    }
-
-    @Override
-    public void setItemRotation(@Range(from = 0, to = 7) int itemRotation) {
+    public void setItemRotation(int itemRotation) {
         Preconditions.checkArgument(itemRotation >= 0 && itemRotation <= 7, "Item rotation must be between 0 and 7");
         this.itemRotation = itemRotation;
         sendBlockEntityToViewers();
