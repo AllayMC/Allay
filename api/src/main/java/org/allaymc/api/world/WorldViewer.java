@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * WorldViewer represents an object that can view objects and changes made in a world.
+ * WorldViewer represents an object that can view objects and changes made in the world.
  *
  * @author daoge_cmd
  */

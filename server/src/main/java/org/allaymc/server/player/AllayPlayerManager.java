@@ -231,13 +231,13 @@ public class AllayPlayerManager implements PlayerManager {
         this.networkInterface.shutdown();
     }
 
-    public synchronized void onLoggedIn(EntityPlayer player) {
+    public synchronized void addPlayer(EntityPlayer player) {
         players.put(player.getLoginData().getUuid(), player);
         networkInterface.setPlayerCount(players.size());
         Server.getInstance().getMessageChannel().addReceiver(player);
     }
 
-    public synchronized void onDisconnect(EntityPlayer player) {
+    public synchronized void removePlayer(EntityPlayer player) {
         var server = Server.getInstance();
         server.sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getSocketAddress().toString());
 

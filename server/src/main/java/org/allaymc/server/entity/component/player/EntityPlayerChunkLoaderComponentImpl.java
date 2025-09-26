@@ -82,7 +82,7 @@ import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Fla
 public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLoaderComponent {
 
     @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_player_world_viewer_component");
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_player_chunk_loader_component");
 
     // Constants used in UpdateSubChunkBlocksPacket
     protected static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
@@ -1008,7 +1008,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case NoteSound so -> {
                 packet.setSound(SoundEvent.NOTE);
-                // 假设Instrument.getIntValue()返回整数值
                 packet.setExtraData((so.instrument().ordinal() << 8) | so.pitch());
             }
             case FallSound so -> {

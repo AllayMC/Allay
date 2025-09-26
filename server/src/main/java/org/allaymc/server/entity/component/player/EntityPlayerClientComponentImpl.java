@@ -456,7 +456,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     protected void onDisconnect(String disconnectReason) {
         new ClientDisconnectEvent(clientSession.getSocketAddress(), disconnectReason).call();
         thisPlayer.closeAllOpenedContainers();
-        ((AllayPlayerManager) Server.getInstance().getPlayerManager()).onDisconnect(thisPlayer);
+        ((AllayPlayerManager) Server.getInstance().getPlayerManager()).removePlayer(thisPlayer);
     }
 
     @Override
@@ -589,7 +589,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
         sendPlayStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
 
-        playerManager.onLoggedIn(thisPlayer);
+        playerManager.addPlayer(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         Object[] args = new Object[]{thisPlayer.getOriginName()};
         Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), args);
