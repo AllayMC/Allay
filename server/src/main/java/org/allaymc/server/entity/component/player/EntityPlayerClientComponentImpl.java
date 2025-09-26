@@ -205,11 +205,6 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         // Load EntityPlayer's NBT, player game mode is also updated in loadNBT()
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
         thisPlayer.viewEntityState(thisPlayer);
-        // TODO
-//        // Send other players' abilities data to this player
-//        Server.getInstance().getPlayerManager().forEachPlayer(other -> {
-//            sendPacket(((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) other).getBaseComponent()).encodeAbilities());
-//        });
         sendSpeed(thisPlayer.getSpeed());
         sendAbilities(thisPlayer);
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
@@ -219,9 +214,9 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
             playerManager.sendPlayerListTo(thisPlayer);
         }
         sendInventories();
-        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         thisPlayer.viewTime(world.getWorldData().getTimeOfDay());
         thisPlayer.viewWeather(world.getWeather());
+        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         // Save player data the first time it joins
         server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
     }

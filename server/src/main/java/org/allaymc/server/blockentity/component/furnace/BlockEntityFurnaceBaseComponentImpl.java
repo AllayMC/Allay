@@ -37,11 +37,12 @@ import java.util.concurrent.ThreadLocalRandom;
 @Slf4j
 public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityFurnaceBaseComponent {
 
-    public static final int MAX_COOK_TIME = 200;
     public static final String TAG_BURN_TIME = "BurnTime";
     public static final String TAG_COOK_TIME = "CookTime";
     public static final String TAG_BURN_DURATION = "BurnDuration";
     public static final String TAG_STORED_XP_INT = "StoredXPInt";
+
+    public static final int MAX_COOK_TIME = 200;
 
     @Dependency
     protected BlockEntityContainerHolderComponent containerHolderComponent;

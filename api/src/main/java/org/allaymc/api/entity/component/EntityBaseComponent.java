@@ -218,6 +218,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Checks if the entity has been despawned.
+     *
+     * @return {@code true} if the entity's state is despawned, {@code false} otherwise.
+     */
+    default boolean isDespawned() {
+        return getState() == EntityState.DESPAWNED;
+    }
+
+    /**
      * Check if the entity can be spawned.
      *
      * @return {@code true} if the entity can be spawned.

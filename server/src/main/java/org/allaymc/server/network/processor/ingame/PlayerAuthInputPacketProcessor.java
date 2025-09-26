@@ -295,7 +295,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
-        var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
+        var baseComponent = ((EntityPlayerBaseComponentImpl) player.getBaseComponent());
         if (baseComponent.isAwaitingTeleportACK()) {
             var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();

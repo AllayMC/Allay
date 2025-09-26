@@ -124,6 +124,13 @@ public interface EntityLivingComponent extends EntityComponent {
     boolean setOnFireTicks(int onFireTicks);
 
     /**
+     * Extinguishes the entity by resetting its "on fire" ticks to {@code 0}.
+     */
+    default void extinguish() {
+        setOnFireTicks(0);
+    }
+
+    /**
      * Check if the entity is on fire.
      *
      * @return {@code true} if the entity is on fire, {@code false} otherwise.

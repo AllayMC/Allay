@@ -20,8 +20,8 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
     public PacketSignal handleAsync(EntityPlayerImpl player, PlayerActionPacket packet, long receiveTime) {
         return switch (packet.getAction()) {
             case RESPAWN -> {
-                if (!player.canBeSpawned()) {
-                    log.warn("Player {} tried to respawn but he can't be spawned!", player.getOriginName());
+                if (!player.isDespawned()) {
+                    log.warn("Player {} tried to respawn but he is already spawned!", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 
@@ -68,18 +68,16 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
 
     private void prepareForRespawn(EntityPlayer player, Location3ic spawnPoint) {
         player.setLocationBeforeSpawn(new Location3d(spawnPoint));
-    }
-
-    private void afterRespawn(EntityPlayer player, Location3ic spawnPoint) {
-        var spawnDimension = spawnPoint.dimension();
-        // Teleport to prevent the player from falling into strange places
-        player.teleport(new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), spawnDimension));
-        player.setSprinting(false);
-        player.setSneaking(false);
         player.removeAllEffects();
         player.resetHealth();
         player.resetFoodData();
+        player.extinguish();
         player.setAirSupplyTicks(player.getAirSupplyMaxTicks());
+    }
+
+    private void afterRespawn(EntityPlayer player, Location3ic spawnPoint) {
+        // Teleport to prevent the player from falling into strange places
+        player.teleport(spawnPoint);
     }
 
     @Override

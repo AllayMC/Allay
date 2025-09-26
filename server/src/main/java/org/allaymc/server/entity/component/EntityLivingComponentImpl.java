@@ -501,9 +501,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         new EntityDieEvent(thisEntity).call();
         manager.callEvent(CEntityDieEvent.INSTANCE);
 
-        setOnFireTicks(0);
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
-        removeAllEffects();
         this.baseComponent.setState(EntityState.DEAD);
         if (hasDeadTimer()) {
             this.deadTimer = 20;

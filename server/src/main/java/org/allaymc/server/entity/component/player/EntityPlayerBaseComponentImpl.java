@@ -200,7 +200,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void initPermissionGroup() {
         // Do not register the player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
-        // Add the parent permission group alone, so that adventure settings and abilities will also be updated
+        // Add the parent permission group alone, so that the permission listeners will be triggered
         this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission()), thisPlayer);
     }
 
