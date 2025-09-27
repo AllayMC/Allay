@@ -15,10 +15,8 @@ import static org.allaymc.codegen.ClassNames.*;
  */
 public class TagGen {
     public static void main(String[] args) throws IOException {
-        generate("api/src/main/java/org/allaymc/api/item/tag/ItemTags.java", ITEM_TAG, "unpacked/item_tags.json");
-        generate("api/src/main/java/org/allaymc/api/item/tag/ItemCustomTags.java", ITEM_TAG, "item_tags_custom.json");
-        generate("api/src/main/java/org/allaymc/api/block/tag/BlockTags.java", BLOCK_TAG, "unpacked/block_tags.json");
-        generate("api/src/main/java/org/allaymc/api/block/tag/BlockCustomTags.java", BLOCK_TAG, "block_tags_custom.json");
+        generate("api/src/main/java/org/allaymc/api/item/data/ItemTags.java", ITEM_TAG, "unpacked/item_tags.json", "item_tags_custom.json");
+        generate("api/src/main/java/org/allaymc/api/block/data/BlockTags.java", BLOCK_TAG, "unpacked/block_tags.json", "block_tags_custom.json");
     }
 
     public static void generate(String writeTo, ClassName tagClass, String... tagFiles) throws IOException {

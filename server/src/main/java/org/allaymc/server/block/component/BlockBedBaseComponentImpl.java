@@ -4,10 +4,10 @@ import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
@@ -56,7 +56,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
         var playerFace = placementInfo.player().getHorizontalFace();
         var nextPos = playerFace.offsetPos(placeBlockPos);
         var nextBlockState = dimension.getBlockState(nextPos);
-        if (!nextBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (!nextBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return false;
         }
 

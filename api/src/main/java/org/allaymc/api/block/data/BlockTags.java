@@ -1,4 +1,4 @@
-package org.allaymc.api.block.tag;
+package org.allaymc.api.block.data;
 
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
@@ -14,6 +14,8 @@ public interface BlockTags {
     BlockTag FERTILIZE_AREA = create("minecraft:fertilize_area");
 
     BlockTag MOB_SPAWNER = create("minecraft:mob_spawner");
+
+    BlockTag INFINITE_FIRE_SUPPORTER = create("minecraft:infinite_fire_supporter");
 
     BlockTag DIAMOND_TIER_DESTRUCTIBLE = create("minecraft:diamond_tier_destructible");
 
@@ -41,6 +43,8 @@ public interface BlockTags {
 
     BlockTag DARK_OAK = create("minecraft:dark_oak");
 
+    BlockTag BEACON_BASE = create("minecraft:beacon_base");
+
     BlockTag LOG = create("minecraft:log");
 
     BlockTag IS_SWORD_ITEM_DESTRUCTIBLE = create("minecraft:is_sword_item_destructible");
@@ -53,6 +57,8 @@ public interface BlockTags {
 
     BlockTag PLANT = create("minecraft:plant");
 
+    BlockTag LEAVES_SUPPORTER = create("minecraft:leaves_supporter");
+
     BlockTag IRON_PICK_DIGGABLE = create("minecraft:iron_pick_diggable");
 
     BlockTag PUMPKIN = create("minecraft:pumpkin");
@@ -60,6 +66,12 @@ public interface BlockTags {
     BlockTag SPRUCE = create("minecraft:spruce");
 
     BlockTag OAK = create("minecraft:oak");
+
+    BlockTag WOOL = create("minecraft:wool");
+
+    BlockTag POTTABLE_PLANT = create("minecraft:pottable_plant");
+
+    BlockTag SOUL_FIRE_CONVERTER = create("minecraft:soul_fire_converter");
 
     BlockTag IS_SHOVEL_ITEM_DESTRUCTIBLE = create("minecraft:is_shovel_item_destructible");
 
@@ -69,9 +81,13 @@ public interface BlockTags {
 
     BlockTag STONE_TIER_DESTRUCTIBLE = create("minecraft:stone_tier_destructible");
 
+    BlockTag LAVA = create("minecraft:lava");
+
     BlockTag SNOW = create("minecraft:snow");
 
     BlockTag METAL = create("minecraft:metal");
+
+    BlockTag REPLACEABLE = create("minecraft:replaceable");
 
     BlockTag IS_PICKAXE_ITEM_DESTRUCTIBLE = create("minecraft:is_pickaxe_item_destructible");
 
@@ -82,6 +98,8 @@ public interface BlockTags {
     BlockTag STONE_PICK_DIGGABLE = create("minecraft:stone_pick_diggable");
 
     BlockTag IS_HOE_ITEM_DESTRUCTIBLE = create("minecraft:is_hoe_item_destructible");
+
+    BlockTag LEAVES = create("minecraft:leaves");
 
     BlockTag RAIL = create("minecraft:rail");
 

@@ -3,9 +3,8 @@ package org.allaymc.api.item;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.data.ArmorTier;
+import org.allaymc.api.item.data.ItemTags;
 import org.allaymc.api.item.data.ToolTier;
-import org.allaymc.api.item.tag.ItemCustomTags;
-import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.item.type.ItemType;
 
 import java.util.Arrays;
@@ -119,7 +118,7 @@ public final class ItemHelper {
      * @return {@code true} if the item is a head, {@code false} otherwise.
      */
     public static boolean isHead(ItemType<?> itemType) {
-        return itemType.hasItemTag(ItemCustomTags.HEAD);
+        return itemType.hasItemTag(ItemTags.HEAD);
     }
 
     /**

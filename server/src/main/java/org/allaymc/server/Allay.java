@@ -186,7 +186,8 @@ public final class Allay {
                 r -> Registries.ENCHANTMENTS = r,
                 new EnchantmentTypeRegistryPopulator()
         );
-        InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataLoader());
+        InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataRegistryLoader());
+        InternalRegistries.ITEM_TAGS = SimpleMappedRegistry.create(new ItemTagRegistryLoader());
         InternalRegistries.ITEM_COMPONENT_DATA = SimpleMappedRegistry.create(new ItemComponentRegistryLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
@@ -202,14 +203,16 @@ public final class Allay {
         );
 
         // Block
-        InternalRegistries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
+        InternalRegistries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataRegistryLoader());
+        InternalRegistries.BLOCK_TAGS = SimpleMappedRegistry.create(new BlockTagRegistryLoader());
+        InternalRegistries.BLOCK_DEFAULT_STATE_HASHES = SimpleMappedRegistry.create(new BlockDefaultStateHashRegistryLoader());
+        InternalRegistries.BLOCK_PROPERTY_PROCESSORS = SimpleMappedRegistry.create(new BlockPropertyProcessorRegistryLoader());
         Registries.BLOCK_STATE_PALETTE = SimpleMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),
                 r -> Registries.BLOCKS = r,
                 new BlockTypeRegistryPopulator()
         );
-        InternalRegistries.BLOCK_PROPERTY_PROCESSORS = SimpleMappedRegistry.create(new BlockPropertyProcessorRegistryLoader());
 
         // Entity
         DoubleKeyMappedRegistry.create(
@@ -224,7 +227,7 @@ public final class Allay {
         );
 
         // Biome
-        InternalRegistries.BIOME_DATA = SimpleMappedRegistry.create(new BiomeDataLoader());
+        InternalRegistries.BIOME_DATA = SimpleMappedRegistry.create(new BiomeDataRegistryLoader());
         DoubleKeyMappedRegistry.create(
                 RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, BiomeType>())),
                 r -> Registries.BIOMES = r,

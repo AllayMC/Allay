@@ -32,7 +32,7 @@ public interface ClassNames {
     ClassName BLOCK_TYPE = ClassName.get("org.allaymc.api.block.type", "BlockType");
     ClassName BLOCK_TYPES = ClassName.get("org.allaymc.api.block.type", "BlockTypes");
     ClassName BLOCK_TYPE_DEFAULT_INITIALIZER = ClassName.get("org.allaymc.server.block.type", "BlockTypeDefaultInitializer");
-    ClassName BLOCK_TAG = ClassName.get("org.allaymc.api.block.tag", "BlockTag");
+    ClassName BLOCK_TAG = ClassName.get("org.allaymc.api.block.data", "BlockTag");
     ClassName ALLAY_BLOCK_TYPE = ClassName.get("org.allaymc.server.block.type", "AllayBlockType");
     ClassName ENUM_PROPERTY = ClassName.get("org.allaymc.api.block.property.type", "EnumPropertyType");
     ClassName BOOLEAN_PROPERTY = ClassName.get("org.allaymc.api.block.property.type", "BooleanPropertyType");
@@ -59,7 +59,7 @@ public interface ClassNames {
     ClassName ITEM_TYPES = ClassName.get("org.allaymc.api.item.type", "ItemTypes");
     ClassName ALLAY_ITEM_TYPE = ClassName.get("org.allaymc.server.item.type", "AllayItemType");
     ClassName ITEM_TYPE_DEFAULT_INITIALIZER = ClassName.get("org.allaymc.server.item.type", "ItemTypeDefaultInitializer");
-    ClassName ITEM_TAG = ClassName.get("org.allaymc.api.item.tag", "ItemTag");
+    ClassName ITEM_TAG = ClassName.get("org.allaymc.api.item.data", "ItemTag");
 
     ClassName TR_KEYS = ClassName.get("org.allaymc.api.message", "TrKeys");
     ClassName MINECRAFT_VERSION_SENSITIVE = ClassName.get("org.allaymc.api.annotation", "MinecraftVersionSensitive");

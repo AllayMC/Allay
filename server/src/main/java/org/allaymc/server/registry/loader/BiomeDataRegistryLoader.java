@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * @author daoge_cmd
  */
-public class BiomeDataLoader implements RegistryLoader<Void, Map<BiomeId, BiomeData>> {
+public class BiomeDataRegistryLoader implements RegistryLoader<Void, Map<BiomeId, BiomeData>> {
     protected static final Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var obj = json.getAsJsonObject();

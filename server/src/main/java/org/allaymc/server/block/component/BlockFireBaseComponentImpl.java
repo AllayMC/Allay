@@ -2,10 +2,10 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -74,7 +74,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
     protected static boolean canFireBurnForever(BlockState blockState) {
         var blockType = blockState.getBlockType();
-        var burnForever = blockType.hasBlockTag(BlockCustomTags.INFINITE_FIRE_SUPPORTER);
+        var burnForever = blockType.hasBlockTag(BlockTags.INFINITE_FIRE_SUPPORTER);
         // INFINIBURN_BIT is used by bedrock
         if (blockType.hasProperty(BlockPropertyTypes.INFINIBURN_BIT)) {
             burnForever = blockState.getPropertyValue(BlockPropertyTypes.INFINIBURN_BIT);
@@ -206,7 +206,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         // Block that has SOUL_FIRE_CONVERTER tag can transform
         // normal fire to soul fire, and the soul fire will
         // transform back to normal block when block below change
-        if (downBlockType.hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER)) {
+        if (downBlockType.hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER)) {
             block.getDimension().setBlockState(block.getPosition(), BlockTypes.SOUL_FIRE.copyPropertyValuesFrom(block.getBlockState()));
             return true;
         }

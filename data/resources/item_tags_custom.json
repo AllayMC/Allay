@@ -1,12 +1,12 @@
 {
-  "allay:beacon_payment": [
+  "minecraft:beacon_payment": [
     "minecraft:iron_ingot",
     "minecraft:gold_ingot",
     "minecraft:diamond",
     "minecraft:emerald",
     "minecraft:netherite_ingot"
   ],
-  "allay:head": [
+  "minecraft:head": [
     "minecraft:creeper_head",
     "minecraft:dragon_head",
     "minecraft:piglin_head",

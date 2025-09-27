@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.tag.BlockCustomTags;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityInitInfo;
@@ -55,7 +55,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             return;
         }
 
-        if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (currentBlock.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             dimension.setBlockState(location.floor(new Vector3d()), BlockTypes.AIR.getDefaultState());
         }
     }

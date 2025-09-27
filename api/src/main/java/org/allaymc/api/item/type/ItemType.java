@@ -4,7 +4,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.data.ItemData;
-import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.item.data.ItemTag;
 import org.allaymc.api.utils.identifier.Identified;
 import org.jetbrains.annotations.Unmodifiable;
 

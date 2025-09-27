@@ -1,9 +1,9 @@
 package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerType;
@@ -94,7 +94,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             liquidPlacedPos = interactInfo.clickedBlockPos();
         } else {
             var blockOnPlacePos = dimension.getBlockState(event.getPlaceBlockPos());
-            if (blockOnPlacePos.getBlockType() == BlockTypes.AIR || blockOnPlacePos.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+            if (blockOnPlacePos.getBlockType() == BlockTypes.AIR || blockOnPlacePos.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
                 dimension.setBlockState(event.getPlaceBlockPos(), getLiquidType().getDefaultState(), 0);
             } else if (blockOnPlacePos.getBlockStateData().canContainLiquidSource()) {
                 dimension.setBlockState(event.getPlaceBlockPos(), getLiquidType().getDefaultState(), 1);

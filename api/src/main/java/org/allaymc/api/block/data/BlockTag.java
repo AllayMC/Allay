@@ -1,4 +1,4 @@
-package org.allaymc.api.block.tag;
+package org.allaymc.api.block.data;
 
 /**
  * Represents a block tag.

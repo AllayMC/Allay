@@ -5,7 +5,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.registry.InternalRegistries;
-import org.allaymc.server.registry.loader.BlockStateDataLoader;
+import org.allaymc.server.registry.loader.BlockStateDataRegistryLoader;
 import org.allaymc.testutils.AllayTestExtension;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ class BlockStateDataTest {
 
     @Test
     void testDeserialization() {
-        var blockStateData = BlockStateDataLoader.fromJson(json);
+        var blockStateData = BlockStateDataRegistryLoader.fromJson(json);
         assertEquals(0, blockStateData.burnOdds());
         assertFalse(blockStateData.canContainLiquidSource());
         var unionAABB = blockStateData.collisionShape().unionAABB();

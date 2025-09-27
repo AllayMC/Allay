@@ -1,8 +1,8 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.data.BlockTag;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.identifier.Identified;
 import org.allaymc.api.utils.identifier.Identifier;

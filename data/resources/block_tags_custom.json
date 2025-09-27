@@ -1,5 +1,5 @@
 {
-  "allay:replaceable": [
+  "minecraft:replaceable": [
     "minecraft:snow_layer",
     "minecraft:seagrass",
     "minecraft:soul_fire",
@@ -38,7 +38,7 @@
     "minecraft:light_block_14",
     "minecraft:light_block_15"
   ],
-  "allay:wool": [
+  "minecraft:wool": [
     "minecraft:green_wool",
     "minecraft:orange_wool",
     "minecraft:light_gray_wool",
@@ -56,7 +56,7 @@
     "minecraft:red_wool",
     "minecraft:black_wool"
   ],
-  "allay:leaves": [
+  "minecraft:leaves": [
     "minecraft:pale_oak_leaves",
     "minecraft:oak_leaves",
     "minecraft:acacia_leaves",
@@ -69,7 +69,7 @@
     "minecraft:mangrove_leaves",
     "minecraft:azalea_leaves"
   ],
-  "allay:leaves_supporter": [
+  "minecraft:leaves_supporter": [
     "minecraft:stripped_oak_log",
     "minecraft:mangrove_wood",
     "minecraft:spruce_wood",
@@ -115,33 +115,29 @@
     "minecraft:cherry_log",
     "minecraft:stripped_mangrove_log"
   ],
-  "allay:infinite_fire_supporter": [
+  "minecraft:infinite_fire_supporter": [
     "minecraft:netherrack",
     "minecraft:magma",
     "minecraft:bedrock",
     "minecraft:soul_sand",
     "minecraft:soul_soil"
   ],
-  "allay:soul_fire_converter": [
+  "minecraft:soul_fire_converter": [
     "minecraft:soul_sand",
     "minecraft:soul_soil"
   ],
-  "allay:water": [
-    "minecraft:water",
-    "minecraft:flowing_water"
-  ],
-  "allay:lava": [
+  "minecraft:lava": [
     "minecraft:lava",
     "minecraft:flowing_lava"
   ],
-  "allay:beacon_base": [
+  "minecraft:beacon_base": [
     "minecraft:iron_block",
     "minecraft:gold_block",
     "minecraft:diamond_block",
     "minecraft:emerald_block",
     "minecraft:netherite_block"
   ],
-  "allay:pottable_plant": [
+  "minecraft:pottable_plant": [
     "minecraft:dandelion",
     "minecraft:poppy",
     "minecraft:blue_orchid",

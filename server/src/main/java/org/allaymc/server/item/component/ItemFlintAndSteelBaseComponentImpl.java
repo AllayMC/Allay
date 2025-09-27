@@ -1,9 +1,9 @@
 package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.item.ItemStackInitInfo;
@@ -56,7 +56,7 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
                 if (event.call()) {
                     // Check if the block that the player clicked on is a soul fire converter
                     // In that case, we should place a soul fire instead of a normal fire
-                    var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
+                    var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
                     dimension.setBlockState(placeBlockPos, fireBlockState);
                     dimension.addSound(MathUtils.center(placeBlockPos), SimpleSound.IGNITE);
                 }

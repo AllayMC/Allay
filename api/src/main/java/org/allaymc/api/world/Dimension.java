@@ -3,10 +3,10 @@ package org.allaymc.api.world;
 import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
@@ -1290,7 +1290,7 @@ public interface Dimension {
         }
 
         var existingBlockState = getBlockState(pos);
-        if (!existingBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (!existingBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             var blockStateData = existingBlockState.getBlockStateData();
             if (!(isSource(liquid) ? blockStateData.canContainLiquidSource() : blockStateData.canContainLiquid())) {
                 return;

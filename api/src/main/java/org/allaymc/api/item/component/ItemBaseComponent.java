@@ -1,7 +1,7 @@
 package org.allaymc.api.item.component;
 
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.item.tag.ItemTags.*;
+import static org.allaymc.api.item.data.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
 /**
@@ -486,9 +486,9 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
-            if (blockType.hasBlockTag(BlockCustomTags.WOOL)) {
+            if (blockType.hasBlockTag(BlockTags.WOOL)) {
                 return 5d;
-            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockCustomTags.LEAVES)) {
+            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockTags.LEAVES)) {
                 return 15d;
             }
 

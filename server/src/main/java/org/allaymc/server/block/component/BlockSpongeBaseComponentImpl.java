@@ -2,9 +2,9 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -62,7 +62,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
                 var neighbor = entry.block().offsetPos(face);
                 var neighborType = neighbor.getBlockType();
 
-                if (neighborType.hasBlockTag(BlockCustomTags.WATER)) {
+                if (neighborType.hasBlockTag(BlockTags.WATER)) {
                     center.getDimension().setBlockState(neighbor.getPosition(), BlockTypes.AIR.getDefaultState());
                     removedWaterCount++;
                     if (currentDistance < MAX_ABSORB_DISTANCE) {
@@ -81,7 +81,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
 
     private boolean hasAdjacentWater(Block center) {
         for (var face : BlockFace.values()) {
-            if (center.offsetPos(face).getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
+            if (center.offsetPos(face).getBlockType().hasBlockTag(BlockTags.WATER)) {
                 return true;
             }
         }

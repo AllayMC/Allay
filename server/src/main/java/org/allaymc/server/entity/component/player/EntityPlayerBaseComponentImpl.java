@@ -54,7 +54,6 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.command.*;
@@ -223,18 +222,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void setGameMode(GameMode gameMode) {
-        setGameMode(gameMode, false);
-    }
-
-    protected void setGameMode(GameMode gameMode, boolean internal) {
-        if (!internal) {
-            var event = new PlayerGameModeChangeEvent(thisPlayer, this.gameMode, gameMode);
-            if (!event.call() || this.gameMode == event.getNewGameMode()) {
-                return;
-            }
-
-            gameMode = event.getNewGameMode();
+        var event = new PlayerGameModeChangeEvent(thisPlayer, this.gameMode, gameMode);
+        if (!event.call() || this.gameMode == event.getNewGameMode()) {
+            return;
         }
+
+        gameMode = event.getNewGameMode();
 
         this.gameMode = gameMode;
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
@@ -248,11 +241,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setSpeed(float speed) {
         if (this.speed != speed) {
             this.speed = speed;
-            sendAttribute(new AttributeData(
-                    "minecraft:movement", 0, Float.MAX_VALUE,
-                    this.speed, 0, Float.MAX_VALUE, EntityPlayerBaseComponent.DEFAULT_SPEED,
-                    Collections.emptyList()
-            ));
+            this.clientComponent.sendSpeed(this.speed);
         }
     }
 
@@ -432,7 +421,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.experienceLevel = event.getNewExperienceLevel();
-        sendAttribute(new AttributeData("minecraft:player.level", 0, Float.MAX_VALUE, this.experienceLevel));
+        this.clientComponent.sendExperienceLevel(this.experienceLevel);
     }
 
     @Override
@@ -443,7 +432,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.experienceProgress = value;
-        sendAttribute(new AttributeData("minecraft:player.experience", 0, 1, this.experienceProgress));
+        this.clientComponent.sendExperienceProgress(this.experienceProgress);
     }
 
     @Override
@@ -455,41 +444,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.foodLevel = event.getNewFoodLevel();
-        var max = EntityPlayerBaseComponent.MAX_FOOD_LEVEL;
-        sendAttribute(new AttributeData(
-                "minecraft:player.hunger", 0, max,
-                this.foodLevel, 0, max, max,
-                Collections.emptyList()
-        ));
+        this.clientComponent.sendFoodLevel(this.foodLevel);
     }
 
     @Override
     public void setFoodSaturationLevel(float value) {
         this.foodSaturationLevel = Math.max(0, Math.min(value, MAX_FOOD_SATURATION_LEVEL));
-        var max = EntityPlayerBaseComponent.MAX_FOOD_SATURATION_LEVEL;
-        sendAttribute(new AttributeData(
-                "minecraft:player.saturation", 0, max,
-                this.foodSaturationLevel, 0, max, max,
-                Collections.emptyList()
-        ));
+        this.clientComponent.sendFoodSaturationLevel(this.foodSaturationLevel);
     }
 
     @Override
     public void setFoodExhaustionLevel(float value) {
         this.foodExhaustionLevel = Math.max(0, Math.min(value, MAX_FOOD_EXHAUSTION_LEVEL));
-        var max = EntityPlayerBaseComponent.MAX_FOOD_EXHAUSTION_LEVEL;
-        sendAttribute(new AttributeData(
-                "minecraft:player.exhaustion", 0, max,
-                this.foodExhaustionLevel, 0, max, 0,
-                Collections.emptyList()
-        ));
-    }
-
-    protected void sendAttribute(AttributeData attributeData) {
-        var packet = new UpdateAttributesPacket();
-        packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        packet.getAttributes().add(attributeData);
-        this.clientComponent.sendPacket(packet);
+        this.clientComponent.sendFoodExhaustionLevel(this.foodExhaustionLevel);
     }
 
     @Override
@@ -816,7 +783,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // General
         nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionGroup.loadNBT(permNbt, thisPlayer));
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> setGameMode(fromNetwork(GameType.from(id)), true));
+        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> this.gameMode = fromNetwork(GameType.from(id)));
 
         // SpawnPoint
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
@@ -840,19 +807,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         );
 
         // Experience
-        nbt.listenForInt(TAG_PLAYER_LEVEL, this::setExperienceLevel);
-        nbt.listenForFloat(TAG_PLAYER_LEVEL_PROGRESS, this::setExperienceProgress);
+        nbt.listenForInt(TAG_PLAYER_LEVEL, value -> this.experienceLevel = value);
+        nbt.listenForFloat(TAG_PLAYER_LEVEL_PROGRESS, value -> this.experienceProgress = value);
 
         // Food
-        nbt.listenForInt(TAG_FOOD_LEVEL, this::setFoodLevel);
-        nbt.listenForFloat(TAG_FOOD_SATURATION_LEVEL, this::setFoodSaturationLevel);
-        nbt.listenForFloat(TAG_FOOD_EXHAUSTION_LEVEL, this::setFoodExhaustionLevel);
+        nbt.listenForInt(TAG_FOOD_LEVEL, value -> this.foodLevel = value);
+        nbt.listenForFloat(TAG_FOOD_SATURATION_LEVEL, value -> this.foodSaturationLevel = value);
+        nbt.listenForFloat(TAG_FOOD_EXHAUSTION_LEVEL, value -> this.foodExhaustionLevel = value);
         nbt.listenForInt(TAG_FOOD_TICK_TIMER, value -> this.foodTickTimer = value);
 
         // Speed
-        nbt.listenForFloat(TAG_SPEED, this::setSpeed);
-        nbt.listenForFloat(TAG_FLY_SPEED, this::setFlySpeed);
-        nbt.listenForFloat(TAG_VERTICAL_FLY_SPEED, this::setVerticalFlySpeed);
+        nbt.listenForFloat(TAG_SPEED, value -> this.speed = value);
+        nbt.listenForFloat(TAG_FLY_SPEED, value -> this.flySpeed = value);
+        nbt.listenForFloat(TAG_VERTICAL_FLY_SPEED, value -> this.verticalFlySpeed = value);
     }
 
     protected void loadSpawnPoint(NbtMap nbt) {

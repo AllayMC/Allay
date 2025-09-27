@@ -61,6 +61,7 @@ import org.joml.Vector3fc;
 
 import java.net.SocketAddress;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -203,10 +204,20 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
         thisPlayer.viewEntityState(thisPlayer);
-        sendAbilities(thisPlayer);
-        sendInventories();
+        thisPlayer.viewPlayerGameMode(thisPlayer);
+        thisPlayer.forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
         thisPlayer.viewTime(world.getWorldData().getTimeOfDay());
         thisPlayer.viewWeather(world.getWeather());
+        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.INVENTORY));
+        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.OFFHAND));
+        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.ARMOR));
+        sendSpeed(thisPlayer.getSpeed());
+        sendExperienceLevel(thisPlayer.getExperienceLevel());
+        sendExperienceProgress(thisPlayer.getExperienceProgress());
+        sendFoodLevel(thisPlayer.getFoodLevel());
+        sendFoodSaturationLevel(thisPlayer.getFoodSaturationLevel());
+        sendFoodExhaustionLevel(thisPlayer.getFoodExhaustionLevel());
+        sendAbilities(thisPlayer);
 
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
         playerManager.broadcastPlayerListChange(thisPlayer, true);
@@ -279,6 +290,52 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
             return PlayerPermission.MEMBER;
         }
         return PlayerPermission.VISITOR;
+    }
+
+    public void sendSpeed(float value) {
+        sendAttribute(new AttributeData(
+                "minecraft:movement", 0, Float.MAX_VALUE, value, 0,
+                Float.MAX_VALUE, EntityPlayerBaseComponent.DEFAULT_SPEED, Collections.emptyList()
+        ));
+    }
+
+    public void sendExperienceLevel(int value) {
+        sendAttribute(new AttributeData("minecraft:player.level", 0, Float.MAX_VALUE, value));
+    }
+
+    public void sendExperienceProgress(float value) {
+        sendAttribute(new AttributeData("minecraft:player.experience", 0, 1, value));
+    }
+
+    public void sendFoodLevel(int value) {
+        var max = EntityPlayerBaseComponent.MAX_FOOD_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.hunger", 0, max,
+                value, 0, max, max, Collections.emptyList()
+        ));
+    }
+
+    public void sendFoodSaturationLevel(float value) {
+        var max = EntityPlayerBaseComponent.MAX_FOOD_SATURATION_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.saturation", 0, max,
+                value, 0, max, max, Collections.emptyList()
+        ));
+    }
+
+    public void sendFoodExhaustionLevel(float value) {
+        var max = EntityPlayerBaseComponent.MAX_FOOD_EXHAUSTION_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.exhaustion", 0, max,
+                value, 0, max, 0, Collections.emptyList()
+        ));
+    }
+
+    protected void sendAttribute(AttributeData attributeData) {
+        var packet = new UpdateAttributesPacket();
+        packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
+        packet.getAttributes().add(attributeData);
+        sendPacket(packet);
     }
 
     @Override
@@ -363,13 +420,6 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         var childChannel = rakServerChannel.getChildChannel(clientSession.getSocketAddress());
         var rakSessionCodec = childChannel.rakPipeline().get(RakSessionCodec.class);
         return (int) rakSessionCodec.getPing();
-    }
-
-    protected void sendInventories() {
-        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.INVENTORY));
-        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.OFFHAND));
-        thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.ARMOR));
-        // No need to send the cursor's content to the client because there is nothing in the cursor
     }
 
     public void initializePlayer() {

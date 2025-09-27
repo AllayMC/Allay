@@ -24,7 +24,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-public class BlockStateDataLoader implements RegistryLoader<Void, Map<BlockId, Map<Integer, BlockStateData>>> {
+public class BlockStateDataRegistryLoader implements RegistryLoader<Void, Map<BlockId, Map<Integer, BlockStateData>>> {
     protected static final Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var array = json.getAsJsonArray();

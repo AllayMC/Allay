@@ -2,9 +2,8 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.tag.BlockCustomTags;
-import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -62,7 +61,6 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
      * Check for water within 4 blocks in each direction from the farmland.
      *
      * @param block The farmland block
-     *
      * @return {@code true} if the farmland is hydrated, {@code false} otherwise.
      */
     protected boolean hydrated(Block block) {
@@ -72,7 +70,7 @@ public class BlockFarmLandBaseComponentImpl extends BlockBaseComponentImpl {
             for (var x = -4; x <= 4; x++) {
                 for (var z = -4; z <= 4; z++) {
                     var liquid = dimension.getLiquid(pos.x() + x, pos.y() + y, pos.z() + z).right();
-                    if (liquid != null && liquid.getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
+                    if (liquid != null && liquid.getBlockType().hasBlockTag(BlockTags.WATER)) {
                         return true;
                     }
                 }

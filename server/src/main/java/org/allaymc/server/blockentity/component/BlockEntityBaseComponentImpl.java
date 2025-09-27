@@ -107,7 +107,7 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     }
 
     /**
-     * Called when client send back BlockEntityDataPacket.
+     * Called when the client sends back BlockEntityDataPacket.
      */
     public void applyClientChange(EntityPlayer player, NbtMap nbt) {
         loadNBT(nbt);

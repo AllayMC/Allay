@@ -5,9 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockHelper;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
-import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -354,7 +353,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var blockBehavior = blockState.getBlockType().getBlockBehavior();
         var oldBlockState = dimension.getBlockState(placeBlockPos);
-        if (!oldBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (!oldBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return blockBehavior.combine(dimension, blockState, placeBlockPos, placementInfo);
         }
 
@@ -517,8 +516,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                 return true;
             }
 
-            return blockType.hasBlockTag(BlockCustomTags.WOOL) ||
-                   blockType.hasBlockTag(BlockCustomTags.LEAVES) ||
+            return blockType.hasBlockTag(BlockTags.WOOL) ||
+                   blockType.hasBlockTag(BlockTags.LEAVES) ||
                    blockType.hasBlockTag(BlockTags.PLANT) ||
                    blockType.hasBlockTag(BlockTags.IS_SHEARS_ITEM_DESTRUCTIBLE);
         }

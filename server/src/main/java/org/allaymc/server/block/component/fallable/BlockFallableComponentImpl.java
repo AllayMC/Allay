@@ -3,9 +3,9 @@ package org.allaymc.server.block.component.fallable;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -77,7 +77,7 @@ public class BlockFallableComponentImpl implements BlockFallableComponent {
                down0 == BlockTypes.FIRE ||
                down0.getBlockBehavior() instanceof BlockLiquidBehavior ||
                (down0 == BlockTypes.BUBBLE_COLUMN && down1.getBlockBehavior() instanceof BlockLiquidBehavior) ||
-               down0.hasBlockTag(BlockCustomTags.REPLACEABLE);
+               down0.hasBlockTag(BlockTags.REPLACEABLE);
     }
 
     protected EntityFallingBlock createFallingBlock(Dimension dimension, Vector3ic pos, BlockState blockState) {

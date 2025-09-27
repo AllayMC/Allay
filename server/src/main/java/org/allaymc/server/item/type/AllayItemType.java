@@ -11,7 +11,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.data.ItemData;
-import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.item.data.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -124,9 +124,9 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             }
 
             // Tags for vanilla item
-            var tags = InternalItemTypeData.getItemTags(itemId);
-            if (tags.length != 0) {
-                itemTags(tags);
+            var tags = InternalRegistries.ITEM_TAGS.get(itemId);
+            if (tags != null) {
+                setItemTags(tags);
             }
 
             return this;
@@ -180,8 +180,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             return addComponent($ -> supplier.get(), componentClass);
         }
 
-        public Builder itemTags(ItemTag... itemTags) {
-            this.itemTags = Set.of(itemTags);
+        public Builder setItemTags(Collection<ItemTag> itemTags) {
+            this.itemTags = new HashSet<>(itemTags);
             return this;
         }
 

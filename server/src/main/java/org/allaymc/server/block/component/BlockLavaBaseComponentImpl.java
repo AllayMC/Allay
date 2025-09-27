@@ -2,9 +2,9 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -38,7 +38,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public boolean isSameLiquidType(BlockType<?> blockType) {
-        return blockType.hasBlockTag(BlockCustomTags.LAVA);
+        return blockType.hasBlockTag(BlockTags.LAVA);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     protected BlockState getFireBlockState(Dimension dimension, Vector3ic pos) {
         // Check if the block that the player clicked on is a soul fire converter
         // In that case, we should place a soul fire instead of a normal fire
-        return dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType().hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
+        return dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
     }
 
     protected boolean canNeighborBurn(Dimension dimension, Vector3ic pos) {

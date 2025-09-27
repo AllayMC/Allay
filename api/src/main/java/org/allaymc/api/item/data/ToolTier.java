@@ -2,9 +2,8 @@ package org.allaymc.api.item.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.item.tag.ItemTag;
 
-import static org.allaymc.api.item.tag.ItemTags.*;
+import static org.allaymc.api.item.data.ItemTags.*;
 
 /**
  * Represents the various tiers of tools in terms of their quality and mining capability.

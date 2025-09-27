@@ -4,9 +4,9 @@ import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -67,7 +67,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         // Slowly propagates the need to update instead of peaking down the TPS for huge trees
         for (var face : BlockFace.values()) {
             var sideBlockState = current.offsetPos(face);
-            if (sideBlockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
+            if (sideBlockState.getBlockType().hasBlockTag(BlockTags.LEAVES)) {
                 if (!sideBlockState.getPropertyValue(UPDATE_BIT)) {
                     pos.dimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(sideBlockState.getPosition(), 2);
                 }
@@ -99,10 +99,10 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             visited.defaultReturnValue(-1);
         }
 
-        if (current.getBlockType().hasBlockTag(BlockCustomTags.LEAVES_SUPPORTER)) {
+        if (current.getBlockType().hasBlockTag(BlockTags.LEAVES_SUPPORTER)) {
             return true;
         }
-        if (distance == 0 || !current.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
+        if (distance == 0 || !current.getBlockType().hasBlockTag(BlockTags.LEAVES)) {
             return false;
         }
 

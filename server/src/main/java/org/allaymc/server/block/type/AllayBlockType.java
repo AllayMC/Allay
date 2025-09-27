@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
+import org.allaymc.api.block.data.BlockTag;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -224,10 +224,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 throw new BlockTypeBuildException("Cannot find vanilla block data component for " + blockId + " from vanilla block data registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
 
-            var tags = InternalBlockTypeData.getBlockTags(blockId);
-            if (tags.length != 0) setBlockTags(tags);
+            var tags = InternalRegistries.BLOCK_TAGS.get(blockId);
+            if (tags != null) {
+                setBlockTags(tags);
+            }
 
-            defaultStateSupplier = blockStates -> blockStates.get(InternalBlockTypeData.getDefaultBlockStateHash(blockId));
+            defaultStateSupplier = blockStates -> blockStates.get(InternalRegistries.BLOCK_DEFAULT_STATE_HASHES.get(blockId));
             return this;
         }
 
@@ -291,9 +293,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
-        public Builder setBlockTags(BlockTag... blockTags) {
-            // Unmodifiable set
-            this.blockTags = Set.of(blockTags);
+        public Builder setBlockTags(Collection<BlockTag> blockTags) {
+            this.blockTags = new HashSet<>(blockTags);
             return this;
         }
 

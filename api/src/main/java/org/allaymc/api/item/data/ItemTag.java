@@ -1,4 +1,4 @@
-package org.allaymc.api.item.tag;
+package org.allaymc.api.item.data;
 
 /**
  * Represents an item tag.

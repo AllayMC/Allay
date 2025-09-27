@@ -3,7 +3,7 @@ package org.allaymc.api.item.recipe.descriptor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.item.data.ItemTag;
 
 import java.util.Objects;
 

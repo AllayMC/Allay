@@ -1,4 +1,4 @@
-package org.allaymc.api.item.tag;
+package org.allaymc.api.item.data;
 
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
@@ -61,6 +61,8 @@ public interface ItemTags {
 
     ItemTag TRIM_TEMPLATES = create("minecraft:trim_templates");
 
+    ItemTag BEACON_PAYMENT = create("minecraft:beacon_payment");
+
     ItemTag IS_FOOD = create("minecraft:is_food");
 
     ItemTag GOLDEN_TIER = create("minecraft:golden_tier");
@@ -120,6 +122,8 @@ public interface ItemTags {
     ItemTag STONE_TIER = create("minecraft:stone_tier");
 
     ItemTag WARPED_STEMS = create("minecraft:warped_stems");
+
+    ItemTag HEAD = create("minecraft:head");
 
     ItemTag DIGGER = create("minecraft:digger");
 

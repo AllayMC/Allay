@@ -1,6 +1,6 @@
 package org.allaymc.api.block;
 
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.data.ToolTier;
 
@@ -12,7 +12,6 @@ public final class BlockHelper {
      * Gets the tool tier required to break a block type.
      *
      * @param blockType the {@link BlockType} to check
-     *
      * @return the required {@link ToolTier}, or {@code null} if none is needed
      */
     public static ToolTier getRequiredToolTier(BlockType<?> blockType) {

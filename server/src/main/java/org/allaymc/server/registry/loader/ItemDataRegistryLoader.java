@@ -18,7 +18,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-public class ItemDataLoader implements RegistryLoader<Void, Map<ItemId, ItemData>> {
+public class ItemDataRegistryLoader implements RegistryLoader<Void, Map<ItemId, ItemData>> {
     @Override
     @SneakyThrows
     public Map<ItemId, ItemData> load(Void $) {

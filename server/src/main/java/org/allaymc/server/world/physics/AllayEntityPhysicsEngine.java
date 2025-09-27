@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.tag.BlockCustomTags;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -271,10 +271,10 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 flowVector.mul(d);
             }
 
-            if (liquidBehavior.getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
+            if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.WATER)) {
                 hasWaterMotion.set(true);
                 waterMotion.add(flowVector);
-            } else if (liquidBehavior.getBlockType().hasBlockTag(BlockCustomTags.LAVA)) {
+            } else if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.LAVA)) {
                 hasLavaMotion.set(true);
                 lavaMotion.add(flowVector);
             }
