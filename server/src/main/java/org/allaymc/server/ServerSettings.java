@@ -1,4 +1,4 @@
-package org.allaymc.api.server;
+package org.allaymc.server;
 
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;

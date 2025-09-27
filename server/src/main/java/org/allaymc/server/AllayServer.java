@@ -20,7 +20,6 @@ import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardManager;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
@@ -56,11 +55,12 @@ import java.util.function.Supplier;
 @Slf4j
 public final class AllayServer implements Server {
 
-    private static final AllayServer INSTANCE = new AllayServer();
+    // NOTICE: Settings needs to be initialized first, as it is used in the constructor
     private static final ServerSettings SETTINGS = ConfigManager.create(
             ServerSettings.class,
             Utils.createConfigInitializer(Path.of("server-settings.yml"))
     );
+    private static final AllayServer INSTANCE = new AllayServer();
 
     private final AtomicReference<ServerState> state;
     @Getter

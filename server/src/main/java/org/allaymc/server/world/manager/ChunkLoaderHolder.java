@@ -23,7 +23,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.ASYNC;
+import static org.allaymc.server.ServerSettings.WorldSettings.ChunkSendingStrategy.ASYNC;
 
 /**
  * ChunkLoaderHolder is a class that holds a chunk loader and manages the sending of chunks. It
