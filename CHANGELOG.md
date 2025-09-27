@@ -47,9 +47,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced class `NBTIO` which replaced the old `fromNBT()` methods in `XXXHelper` classes.
 - Implemented sharpness enchantment.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
-- Introduced dirty flag for block layers in chunk section. Now blocks will only be rewritten to the database if they are changed. This
+- Introduced a dirty flag for block layers in chunk sections. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
-- Added support for basic multi-version. The server now support 1.21.80 - 1.21.100 client to join.
+- Added support for basic multi-version. The server now supports 1.21.80 - 1.21.100 client to join.
 - The motion of the player will be added to the arrow shot by the player now.
 
 ### Changed
@@ -85,8 +85,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.
 - (API) Flattened all classes under `player` package.
 - (API) Introduced new `GameMode` enum, and the old `GameType` used in protocol lib is unused since it has many game types which only exist in vanilla.
-- (API) Moved classes `Abilities` and `AdventureSettings` from api module to server module. Since most of the abilities/settings have corresponded permission,
-  consider using permission instead.
 - (API) Moved effect-related methods from `EntityBaseComponent` to `EntityLivingComponent`.
 - (API) Moved class `ComponentManager` from api to server module since it is useless in api module.
 - (API) Moved classes `BlockPropertyProcessor`, `BlockPlaceHelper` and `FortuneDropHelper` from api to server.
@@ -112,7 +110,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved `XXXInitInfo` classes to their parent packages.
 - (API) Moved class `CommonEnums` from api to server.
 - (API) Moved classes `CachedSimpleSelectorArgument` and `CachedFilterSelectorArgument` from api to server.
+- (API) Moved classes `XXXTag` and `XXXTags` from `tag` package to `data` package. 
 - (API) Moved class `DamageType` out from class `DamageContainer`.
+- (API) Moved class `ServerSettings` from api to server.
 - (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
 - (API) Refactored the weather system. World will hold only one `Weather` instance now.
 - (API) Refactored the container system. All container implementations are moved to server module now.
@@ -141,13 +141,16 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Removed methods `isClientCacheEnabled()`, `isNetworkEncryptionEnabled()` and `getEncryptionSecretKey()` in `EntityPlayerClientComponent` because
   these methods are not very useful as APIs.
+- (API) Removed classes `Abilities` and `AdventureSettings`.
 - (API) Removed class `CustomBlockComponent` since it is never used.
 - (API) Removed class `Metadata` which is used in entity. Using the getter/setter methods for entity data and flag in `EntityBaseComponent` directly.
+- (API) Removed class `EntityAttributeComponent`, health related methods are moved to `EntityLivingComponent` and experience/food related methods are
+  moved to `EntityPlayerBaseComponent`.
+- (API) Removed class `XXXCustomTags`, all the custom tags are merged to `XXXTags` and the namespace is renamed to `minecraft` instead of `allay`.
 - (API) Removed adventure settings related permissions in `Permissions` since adventure settings should only change when the game mode change.
 - (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
 - (API) Removed field `networkId` in `EntityId` since it is never used.
 - (API) Removed method `Difficulty.from(String)`.
-- (API) Removed methods `EntityAttributeComponent.basicEntityAttributes()` and `EntityPlayerAttributeComponent.basicPlayerAttributes()`.
 - (API) Removed methods `ChunkLoader.onChunkInRangeSend()` and `ChunkLoader.onChunkOutOfRange()`, they are replaced by `WorldViewer.viewChunk()` and `WorldViewer.removeChunk()`.
 - (API) Removed method `WorldData.sendTimeOfDay()`.
 - (API) Removed method `UnsafeChunk.getPlayerChunkLoaders()`.
