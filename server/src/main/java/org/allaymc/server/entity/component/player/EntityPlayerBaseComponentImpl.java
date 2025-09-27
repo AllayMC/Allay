@@ -806,7 +806,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
                 .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId());
-        AllayNbtUtils.writeVector3i(builder, EntityBaseComponentImpl.TAG_POS, spawnPoint);
+        AllayNbtUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
     }
 
@@ -822,21 +822,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
             loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
         } else {
-            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
         }
 
         // Container
         nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
-                containerHolderComponent.getContainer(ContainerType.OFFHAND).loadNBT(offhandNbt)
+                this.containerHolderComponent.getContainer(ContainerType.OFFHAND).loadNBT(offhandNbt)
         );
         nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt ->
-                containerHolderComponent.getContainer(ContainerType.INVENTORY).loadNBT(inventoryNbt)
+                this.containerHolderComponent.getContainer(ContainerType.INVENTORY).loadNBT(inventoryNbt)
         );
         nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
-                containerHolderComponent.getContainer(ContainerType.ARMOR).loadNBT(armorNbt)
+                this.containerHolderComponent.getContainer(ContainerType.ARMOR).loadNBT(armorNbt)
         );
         nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt ->
-                containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
+                this.containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
 
         // Experience
@@ -858,16 +858,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void loadSpawnPoint(NbtMap nbt) {
         var world = Server.getInstance().getWorldPool().getWorld(nbt.getString(TAG_WORLD));
         if (world == null) {
-            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
             return;
         }
+
         var dimension = world.getDimension(nbt.getInt(TAG_DIMENSION));
         if (dimension == null) {
-            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
             return;
         }
-        var pos = AllayNbtUtils.readVector3i(nbt, EntityBaseComponentImpl.TAG_POS);
-        spawnPoint = new Location3i(pos, 0, 0, 0, dimension);
+
+        this.spawnPoint = new Location3i(
+                AllayNbtUtils.readVector3i(nbt, TAG_POS),
+                0, 0, 0, dimension
+        );
     }
 
     @Override

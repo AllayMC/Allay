@@ -377,11 +377,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
-        manager.callEvent(new CEntitySaveNBTEvent(builder));
+        this.manager.callEvent(new CEntitySaveNBTEvent(builder));
 
-        builder.putString(TAG_IDENTIFIER, entityType.getIdentifier().toString());
-        AllayNbtUtils.writeVector3f(builder, TAG_POS, (float) location.x, (float) location.y, (float) location.z);
-        AllayNbtUtils.writeVector2f(builder, TAG_ROTATION, (float) location.yaw(), (float) location.pitch());
+        builder.putString(TAG_IDENTIFIER, this.entityType.getIdentifier().toString());
+        AllayNbtUtils.writeVector3f(builder, TAG_POS, (float) this.location.x, (float) this.location.y, (float) this.location.z);
+        AllayNbtUtils.writeVector2f(builder, TAG_ROTATION, (float) this.location.yaw(), (float) this.location.pitch());
 
         if (!tags.isEmpty()) {
             builder.putList(TAG_TAGS, NbtType.STRING, new ArrayList<>(tags));
@@ -401,18 +401,18 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        manager.callEvent(new CEntityLoadNBTEvent(nbt));
+        this.manager.callEvent(new CEntityLoadNBTEvent(nbt));
 
         if (nbt.containsKey(TAG_POS)) {
             var pos = readVector3f(nbt, TAG_POS);
-            location.set(pos.x, pos.y, pos.z);
-            lastLocation.set(location);
+            this.location.set(pos.x, pos.y, pos.z);
+            this.lastLocation.set(location);
         }
 
         if (nbt.containsKey(TAG_ROTATION)) {
             var rot = readVector2f(nbt, TAG_ROTATION);
-            location.setYaw(rot.x);
-            location.setPitch(rot.y);
+            this.location.setYaw(rot.x);
+            this.location.setPitch(rot.y);
         }
 
         nbt.listenForList(TAG_TAGS, NbtType.STRING, tags -> this.tags.addAll(tags));

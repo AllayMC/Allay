@@ -82,7 +82,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Dependency
-    protected EntityPlayerBaseComponentImpl baseComponent;
+    protected EntityPlayerBaseComponent baseComponent;
 
     protected final PacketProcessorHolder packetProcessorHolder;
     protected final AtomicInteger fullyJoinChunkThreshold;
@@ -369,38 +369,39 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.INVENTORY));
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.OFFHAND));
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerType.ARMOR));
-        // No need to send cursor's content to client because there is nothing in cursor
+        // No need to send the cursor's content to the client because there is nothing in the cursor
     }
 
     public void initializePlayer() {
         var server = Server.getInstance();
         // initializePlayer() method will read all the data in PlayerData except nbt
-        // To be more exactly, we will validate and set player's current pos in this method
-        // And nbt will be used in EntityPlayer::loadNBT() in doFirstSpawn() method
+        // To be more exact, we will validate and set player's current pos in this method,
+        // and nbt will be used in EntityPlayer::loadNBT() in doFirstSpawn() method
         var playerData = server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer);
+
         // Validate and set player pos
         Dimension dimension;
         Vector3fc currentPos;
 
         var logOffWorld = server.getWorldPool().getWorld(playerData.getWorld());
         if (logOffWorld == null || logOffWorld.getDimension(playerData.getDimension()) == null) {
-            // The world or dimension where player logged off doesn't exist
-            // Fallback to global spawn point
+            // The world or dimension where the player logged off doesn't exist, fallback to the global spawn point
             dimension = server.getWorldPool().getGlobalSpawnPoint().dimension();
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
-            // The old pos stored in playerNBT is invalid, we should replace it with the new one!
+
+            // The old pos stored in player's nbt is invalid, and we should replace it with the new one!
             var builder = playerData.getNbt().toBuilder();
             writeVector3f(builder, "Pos", currentPos);
             playerData.setNbt(builder.build());
+
             // Save new player data back to storage
             server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer.getLoginData().getUuid(), playerData);
         } else {
             dimension = logOffWorld.getDimension(playerData.getDimension());
-            // Read current pos from playerNBT
             currentPos = readVector3f(playerData.getNbt(), "Pos");
         }
 
-        baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
+        this.baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 
         startGame(dimension.getWorld(), playerData, dimension);
