@@ -2,7 +2,7 @@ package org.allaymc.api.form.type;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
-import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
+import org.allaymc.api.form.FormCancelReason;
 
 import java.util.function.Consumer;
 
@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  * @author daoge_cmd
  */
 @Getter
-public final class ModalForm extends Form {
+public class ModalForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "modal";
 
@@ -34,7 +34,6 @@ public final class ModalForm extends Form {
      * Set the title of the form.
      *
      * @param title the title
-     *
      * @return the form
      */
     public ModalForm title(String title) {
@@ -46,7 +45,6 @@ public final class ModalForm extends Form {
      * Set the content of the form.
      *
      * @param content the content
-     *
      * @return the form
      */
     public ModalForm content(String content) {
@@ -58,7 +56,6 @@ public final class ModalForm extends Form {
      * Set the text of the true button.
      *
      * @param trueButton the text of the true button
-     *
      * @return the form
      */
     public ModalForm trueButton(String trueButton) {
@@ -71,7 +68,6 @@ public final class ModalForm extends Form {
      *
      * @param trueButton the text of the true button
      * @param onTrue     the action to be performed when the player clicks the button
-     *
      * @return the form
      */
     public ModalForm trueButton(String trueButton, Runnable onTrue) {
@@ -84,7 +80,6 @@ public final class ModalForm extends Form {
      * Set the action to be performed when the player clicks the true button.
      *
      * @param onTrue the action to be performed when the player clicks the true button
-     *
      * @return the form
      */
     public ModalForm onTrue(Runnable onTrue) {
@@ -96,7 +91,6 @@ public final class ModalForm extends Form {
      * Set the text of the false button.
      *
      * @param falseButton the text of the false button
-     *
      * @return the form
      */
     public ModalForm falseButton(String falseButton) {
@@ -109,7 +103,6 @@ public final class ModalForm extends Form {
      *
      * @param falseButton the text of the false button
      * @param onFalse     the action to be performed when the player clicks the button
-     *
      * @return the form
      */
     public ModalForm falseButton(String falseButton, Runnable onFalse) {
@@ -122,7 +115,6 @@ public final class ModalForm extends Form {
      * Set the action to be performed when the player clicks the false button.
      *
      * @param onFalse the action to be performed when the player clicks the false button
-     *
      * @return the form
      */
     public ModalForm onFalse(Runnable onFalse) {
@@ -134,7 +126,6 @@ public final class ModalForm extends Form {
      * Set the action to be performed when the player clicks the true or false button.
      *
      * @param onResponse the action to be performed when the player clicks the true or false button
-     *
      * @return the form
      */
     public ModalForm onResponse(Consumer<String> onResponse) {
@@ -154,7 +145,7 @@ public final class ModalForm extends Form {
     }
 
     @Override
-    public void handleClose(ModalFormCancelReason reason) {
+    public void handleClose(FormCancelReason reason) {
         onClose.accept(reason);
     }
 

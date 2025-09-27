@@ -1,8 +1,8 @@
 package org.allaymc.server.command.selector.args;
 
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.command.selector.SelectorArgument;
 import org.allaymc.api.command.selector.SelectorType;
-import org.allaymc.api.command.selector.args.SelectorArgument;
 
 import java.util.List;
 import java.util.Map;

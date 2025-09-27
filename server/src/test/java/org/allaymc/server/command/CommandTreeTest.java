@@ -6,7 +6,6 @@ import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.permission.Permissions;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.joml.Vector3d;
@@ -76,7 +75,7 @@ public class CommandTreeTest {
                 .str("test_optional")
                 .optional()
                 .exec(context -> "".equals(context.getResult(0)) ? context.success() : context.fail());
-        var res = tree.parse(mockSender, Utils.EMPTY_STRING_ARRAY);
+        var res = tree.parse(mockSender, new String[0]);
         assertTrue(res.isSuccess());
     }
 
@@ -92,8 +91,8 @@ public class CommandTreeTest {
     @Test
     void testAddPermissionToOptionalParam() {
         var tree = AllayCommandTree.create(mockCmd);
-        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").optional().permission(Permissions.ABILITY_BUILD));
-        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").permission(Permissions.ABILITY_BUILD).optional());
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").optional().permission(Permissions.ABILITY_FLY));
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").permission(Permissions.ABILITY_FLY).optional());
     }
 
     @Test

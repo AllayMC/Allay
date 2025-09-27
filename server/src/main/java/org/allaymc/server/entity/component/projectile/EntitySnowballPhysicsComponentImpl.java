@@ -2,11 +2,11 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -41,10 +41,10 @@ public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsC
             return;
         }
 
-        if (other instanceof EntityDamageComponent damageComponent) {
+        if (other instanceof EntityLiving living) {
             var damage = DamageContainer.projectile(thisEntity, other.getEntityType() == EntityTypes.BLAZE ? 3 : 0);
             damage.setHasKnockback(false);
-            if (damageComponent.attack(damage) && other instanceof EntityPhysicsComponent physicsComponent) {
+            if (living.attack(damage) && other instanceof EntityPhysicsComponent physicsComponent) {
                 // Use the last location as the knockback source
                 physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()));
             }
@@ -68,7 +68,7 @@ public class EntitySnowballPhysicsComponentImpl extends EntityProjectilePhysicsC
     protected void addHitEffect() {
         var particleCount = nextParticleCount();
         for (var i = 0; i < particleCount; i++) {
-            thisEntity.getLocation().dimension().addParticle(thisEntity.getLocation(), ParticleType.SNOWBALL_POOF);
+            thisEntity.getLocation().dimension().addParticle(thisEntity.getLocation(), SimpleParticle.SNOWBALL_POOF);
         }
     }
 }

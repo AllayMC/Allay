@@ -1,11 +1,11 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.message.TrKeys;
 
 import java.util.Collection;
 
@@ -44,7 +44,7 @@ public class EnchantCommand extends VanillaCommand {
                     }
 
                     for (var player : players) {
-                        var item = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
+                        var item = player.getContainer(ContainerTypes.INVENTORY).getItemInHand();
                         if (item == ItemAirStack.AIR_STACK) {
                             ctx.addOutput(TrKeys.MC_COMMANDS_ENCHANT_NOITEM, player.getDisplayName());
                             return ctx.fail();

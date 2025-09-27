@@ -2,17 +2,17 @@ package org.allaymc.server.block.component.door;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.sound.DoorCloseSound;
+import org.allaymc.api.world.sound.DoorOpenSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -41,7 +41,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var upBlockState = dimension.getBlockState(BlockFace.UP.offsetPos(placeBlockPos));
-        if (!upBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (!upBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return false;
         }
 
@@ -101,7 +101,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
 
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
-        dimension.addSound(MathUtils.center(pos), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
+        dimension.addSound(MathUtils.center(pos), isOpen ? new DoorOpenSound(blockState) : new DoorCloseSound(blockState));
         return true;
     }
 
@@ -115,6 +115,6 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return block.getPropertyValue(UPPER_BLOCK_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(block, usedItem, entity);
+        return block.getPropertyValue(UPPER_BLOCK_BIT) ? Set.of() : super.getDrops(block, usedItem, entity);
     }
 }

@@ -2,25 +2,23 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.BlockBurnEvent;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.Utils;
-import org.allaymc.api.world.Weather;
+import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.world.biome.BiomeData;
 import org.joml.Vector3i;
 
 import java.util.Set;
@@ -66,7 +64,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         var downBlockState = block.offsetPos(BlockFace.DOWN);
         var burnForever = canFireBurnForever(downBlockState.getBlockState());
 
-        return !burnForever && dimension.getWorld().getWeathers().contains(Weather.RAIN) &&
+        return !burnForever && dimension.getWorld().getWeather() != Weather.CLEAR &&
                (dimension.canPosSeeSky(pos) ||
                 dimension.canPosSeeSky(BlockFace.EAST.offsetPos(pos)) ||
                 dimension.canPosSeeSky(BlockFace.WEST.offsetPos(pos)) ||
@@ -76,7 +74,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
     protected static boolean canFireBurnForever(BlockState blockState) {
         var blockType = blockState.getBlockType();
-        var burnForever = blockType.hasBlockTag(BlockCustomTags.INFINITE_FIRE_SUPPORTER);
+        var burnForever = blockType.hasBlockTag(BlockTags.INFINITE_FIRE_SUPPORTER);
         // INFINIBURN_BIT is used by bedrock
         if (blockType.hasProperty(BlockPropertyTypes.INFINIBURN_BIT)) {
             burnForever = blockState.getPropertyValue(BlockPropertyTypes.INFINIBURN_BIT);
@@ -208,7 +206,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         // Block that has SOUL_FIRE_CONVERTER tag can transform
         // normal fire to soul fire, and the soul fire will
         // transform back to normal block when block below change
-        if (downBlockType.hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER)) {
+        if (downBlockType.hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER)) {
             block.getDimension().setBlockState(block.getPosition(), BlockTypes.SOUL_FIRE.copyPropertyValuesFrom(block.getBlockState()));
             return true;
         }
@@ -243,7 +241,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
                         k += (ly - (y + 1)) * 100;
                     }
                     var maxChance = (flameOdds + 40 + dimension.getWorld().getWorldData().getDifficulty().ordinal() * 7) / (age + 30);
-                    if (BiomeData.getBiomeData(dimension.getBiome(lx, ly, lz)).isHumid()) {
+                    if (dimension.getBiome(lx, ly, lz).getBiomeData().isHumid()) {
                         maxChance /= 2;
                     }
 
@@ -302,18 +300,18 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Utils.EMPTY_ITEM_STACK_SET;
+        return Set.of();
     }
 
     @Override
     public void onEntityInside(Block block, Entity entity) {
-        if (!(entity instanceof EntityDamageComponent damageComponent)) {
+        if (!(entity instanceof EntityLiving living)) {
             return;
         }
 
         var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, block, 20 * 8);
         if (event.call()) {
-            damageComponent.setOnFireTicks(event.getOnFireTicks());
+            living.setOnFireTicks(event.getOnFireTicks());
         }
     }
 }

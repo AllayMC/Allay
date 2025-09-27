@@ -1,8 +1,8 @@
 package org.allaymc.server.component;
 
 import lombok.Getter;
-import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.Component;
+import org.allaymc.api.component.ComponentInitInfo;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.server.block.impl.BlockBehaviorImpl;
@@ -11,8 +11,6 @@ import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
-import org.allaymc.server.component.interfaces.ComponentManager;
-import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.item.impl.ItemStackImpl;
@@ -25,7 +23,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * ComponentClass is the base class of class which is composed of multiple components.
+ * ComponentClass is the base class of the class that is composed of multiple components.
  *
  * @author daoge_cmd
  * @see ItemStackImpl

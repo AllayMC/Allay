@@ -3,66 +3,22 @@ package org.allaymc.api.utils;
 import eu.okaeri.configs.OkaeriConfigInitializer;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.tag.BlockTag;
-import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.data.ItemId;
-import org.allaymc.api.item.tag.ItemTag;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author daoge_cmd
  */
 @UtilityClass
 public class Utils {
-
-    // Some empty constants
-
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
-    public static final BlockTag[] EMPTY_BLOCK_TAG_ARRAY = new BlockTag[0];
-    public static final ItemTag[] EMPTY_ITEM_TAG_ARRAY = new ItemTag[0];
-    public static final ItemId[] EMPTY_ITEM_ID_ARRAY = new ItemId[0];
-    public static final BlockId[] EMPTY_BLOCK_ID_ARRAY = new BlockId[0];
-    public static final ItemStack[] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0];
-    public static final Set<ItemStack> EMPTY_ITEM_STACK_SET = Set.of();
-
-    /**
-     * Merge multiple byte arrays into one byte array.
-     *
-     * @param bytes1 the first byte array
-     * @param bytes2 the other byte arrays
-     *
-     * @return the merged byte array
-     */
-    public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
-        int length = bytes1.length;
-        for (byte[] bytes : bytes2) {
-            length += bytes.length;
-        }
-
-        byte[] appendedBytes = new byte[length];
-        System.arraycopy(bytes1, 0, appendedBytes, 0, bytes1.length);
-        int index = bytes1.length;
-
-        for (byte[] b : bytes2) {
-            System.arraycopy(b, 0, appendedBytes, index, b.length);
-            index += b.length;
-        }
-        return appendedBytes;
-    }
-
     /**
      * Calculates the number of bit that the specified value convert to binary.
      *
      * @param value the value
-     *
      * @return the bits
      */
     public byte computeRequiredBits(int value) {
@@ -73,7 +29,6 @@ public class Utils {
      * Convert a {@code Object[]} array to a {@code String[]} array.
      *
      * @param objectArray the object array
-     *
      * @return the string array
      */
     public String[] objectArrayToStringArray(Object[] objectArray) {
@@ -84,9 +39,7 @@ public class Utils {
      * Read a string from the input stream.
      *
      * @param inputStream the input stream
-     *
      * @return the string
-     *
      * @throws IOException if an I/O error occurs
      */
     public static String readString(InputStream inputStream) throws IOException {
@@ -97,9 +50,7 @@ public class Utils {
      * Read a string from the reader.
      *
      * @param reader the reader
-     *
      * @return the string
-     *
      * @throws IOException if an I/O error occurs
      */
     public static String readString(Reader reader) throws IOException {
@@ -122,7 +73,6 @@ public class Utils {
      * Get a specified resource in the jar file.
      *
      * @param resourceName the resource name
-     *
      * @return the input stream
      */
     public static InputStream getResource(String resourceName) {
@@ -133,7 +83,6 @@ public class Utils {
      * Create a default config initializer.
      *
      * @param file the file path
-     *
      * @return the config initializer
      */
     public static OkaeriConfigInitializer createConfigInitializer(Path file) {
@@ -149,33 +98,5 @@ public class Utils {
             // Load and save to update comments/new fields
             it.load(true);
         };
-    }
-
-    /**
-     * Mirror the result of a CompletableFuture to another CompletableFuture.
-     *
-     * @param source the source CompletableFuture
-     * @param target the target CompletableFuture
-     * @param <T>    the type of the result
-     */
-    public static <T> void mirror(CompletableFuture<T> source, CompletableFuture<T> target) {
-        source.whenComplete((result, ex) -> {
-            if (ex == null) {
-                target.complete(result);
-            } else {
-                target.completeExceptionally(ex);
-            }
-        });
-    }
-
-    /**
-     * Check if a CompletableFuture is done normally (not exceptionally or cancelled).
-     *
-     * @param future the CompletableFuture to check
-     *
-     * @return true if the future is done normally, false otherwise
-     */
-    public static boolean isDoneNormally(CompletableFuture<?> future) {
-        return future.isDone() && !future.isCompletedExceptionally() && !future.isCancelled();
     }
 }

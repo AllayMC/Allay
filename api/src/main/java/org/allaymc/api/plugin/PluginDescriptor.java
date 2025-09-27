@@ -1,8 +1,5 @@
 package org.allaymc.api.plugin;
 
-import org.cloudburstmc.protocol.common.util.Preconditions;
-import org.semver4j.Semver;
-
 import java.util.List;
 
 /**
@@ -11,29 +8,6 @@ import java.util.List;
  * @author daoge_cmd
  */
 public interface PluginDescriptor {
-
-    /**
-     * Checks if a descriptor is valid.
-     *
-     * @param descriptor the descriptor to check
-     */
-    @SuppressWarnings("DataFlowIssue")
-    static void checkDescriptorValid(PluginDescriptor descriptor) {
-        Preconditions.checkNotNull(descriptor.getName(), "Plugin name cannot be null");
-        Preconditions.checkNotNull(descriptor.getEntrance(), "Plugin entrance cannot be null");
-        Preconditions.checkNotNull(descriptor.getVersion(), "Plugin version cannot be null");
-        Preconditions.checkNotNull(descriptor.getAuthors(), "Plugin authors cannot be null");
-        Preconditions.checkNotNull(descriptor.getDescription(), "Plugin description cannot be null");
-        Preconditions.checkNotNull(descriptor.getAPIVersion(), "Plugin api version cannot be null");
-        Preconditions.checkNotNull(descriptor.getDependencies(), "Plugin dependencies cannot be null");
-        for (var dependency : descriptor.getDependencies()) {
-            Preconditions.checkNotNull(dependency.name(), "Dependency name cannot be null");
-            Preconditions.checkArgument(!dependency.name().isBlank(), "Dependency name cannot be blank");
-        }
-        Preconditions.checkNotNull(descriptor.getWebsite(), "Plugin website cannot be null");
-        Preconditions.checkNotNull(Semver.coerce(descriptor.getVersion()), "Plugin version cannot be coerced (Use https://semver.org/)");
-    }
-
     /**
      * Gets the name of the plugin.
      *

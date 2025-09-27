@@ -12,10 +12,10 @@ a basic understanding of how to define and register commands with allay.
 Let's start with a simple command `/hello` that greets the command sender.
 
 ```java linenums="1"
-import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
     }
@@ -46,12 +46,12 @@ permission for everyone to use.
 Let's make the following changes to our code:
 
 ```java linenums="1" hl_lines="9"
-import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
         getPermissions().forEach(PermissionGroups.MEMBER::addPermission); /*(1)!*/
@@ -78,11 +78,11 @@ Now, the next step is to handle the commands we just created. Let's say we want 
 message to whoever execute this command. It's just a few more lines away from that.
 
 ```java linenums="1" hl_lines="10-17"
-import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
     }
@@ -111,11 +111,11 @@ We can add a parameter to the command that accepts a message.
 Let's change our code to add an **optional** parameter `message` with `msg` type:
 
 ```java linenums="1" hl_lines="13-14 16-21"
-import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.server.Server;
 
-public class HelloCommand extends SimpleCommand {
+public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
     }

@@ -1,18 +1,16 @@
 package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.network.PacketReceiver;
+import org.allaymc.api.world.WorldViewer;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Set;
-
 /**
- * ChunkLoader represents a loader that will load chunks in the dimension. A ChunkLoader is also a {@link PacketReceiver}
- * since it needs to receive data packets that are bounded to the chunk which is loaded by itself.
+ * ChunkLoader represents a loader that will load chunks in the dimension. A chunk loader
+ * is also a {@link WorldViewer} since it will view stuff like entities when loading chunks.
  *
  * @author daoge_cmd
  */
-public interface ChunkLoader extends PacketReceiver {
+public interface ChunkLoader extends WorldViewer {
 
     /**
      * Get the location of the chunk loader.
@@ -20,13 +18,6 @@ public interface ChunkLoader extends PacketReceiver {
      * @return the location of the chunk loader
      */
     Location3dc getLocation();
-
-    /**
-     * Check if the loader is active.
-     *
-     * @return {@code true} if the loader is active, {@code false} otherwise.
-     */
-    boolean isLoaderActive();
 
     /**
      * Get the chunk loading radius.
@@ -39,7 +30,6 @@ public interface ChunkLoader extends PacketReceiver {
      * Set the chunk loading radius.
      *
      * @param radius the chunk loading radius
-     *
      * @throws UnsupportedOperationException if the loading radius cannot be changed for this chunk loader
      */
     void setChunkLoadingRadius(int radius);
@@ -55,19 +45,5 @@ public interface ChunkLoader extends PacketReceiver {
      * A method which will be called when the chunk pos of the loader is changed.
      */
     @ApiStatus.OverrideOnly
-    void onChunkPosChanged();
-
-    /**
-     * A method which will be called after a chunk is sent.
-     */
-    @ApiStatus.OverrideOnly
-    void onChunkInRangeSend(Chunk chunk);
-
-    /**
-     * A method which will be called when a chunk is out of range.
-     *
-     * @param chunkHashes the chunk hashes that are out of range
-     */
-    @ApiStatus.OverrideOnly
-    void onChunkOutOfRange(Set<Long> chunkHashes);
+    void onLoaderChunkPosChange();
 }

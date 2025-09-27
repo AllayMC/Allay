@@ -2,18 +2,18 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
-import org.allaymc.api.world.DimensionInfo;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.particle.SimpleParticle;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
@@ -29,7 +29,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public boolean isSameLiquidType(BlockType<?> blockType) {
-        return blockType.hasBlockTag(BlockCustomTags.WATER);
+        return blockType.hasBlockTag(BlockTags.WATER);
     }
 
     @Override
@@ -100,10 +100,10 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void onCollideWithEntity(Block block, Entity entity) {
-        if (entity instanceof EntityDamageComponent damageComponent && damageComponent.getOnFireTicks() > 0) {
-            damageComponent.setOnFireTicks(0);
-            entity.getDimension().addParticle(entity.getLocation(), ParticleType.WHITE_SMOKE);
-            entity.getDimension().addLevelSoundEvent(entity.getLocation(), SoundEvent.EXTINGUISH_FIRE);
+        if (entity instanceof EntityLiving living && living.getOnFireTicks() > 0) {
+            living.extinguish();
+            living.getDimension().addParticle(living.getLocation(), SimpleParticle.WHITE_SMOKE);
+            living.getDimension().addSound(living.getLocation(), SimpleSound.FIRE_EXTINGUISH);
         }
     }
 
@@ -134,7 +134,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
 
         dimension.setBlockState(hardenedBlockPosition, event.getHardenedBlockState());
-        flownIntoBy.addLevelSoundEvent(SoundEvent.FIZZ);
+        flownIntoBy.addSound(SimpleSound.FIZZ);
         return true;
     }
 

@@ -1,20 +1,20 @@
 package org.allaymc.api.bossbar;
 
-import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.AllayAPI;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 
 /**
- * BossBar will be shown at the top of the screen.
+ * Represents a boss bar, a visual element often used in games to display progress, health, or status.
+ * It supports customization options such as color, style, title, progress, and visibility behavior.
  *
  * @author daoge_cmd
  */
 public interface BossBar {
 
-    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<Factory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
     /**
      * Create a new boss bar.
@@ -30,14 +30,14 @@ public interface BossBar {
      *
      * @param viewer the viewer to add
      */
-    void addViewer(EntityPlayer viewer);
+    void addViewer(BossBarViewer viewer);
 
     /**
      * Remove a viewer from the boss bar.
      *
      * @param viewer the viewer to remove
      */
-    void removeViewer(EntityPlayer viewer);
+    void removeViewer(BossBarViewer viewer);
 
     /**
      * Remove all viewers from the boss bar.
@@ -52,7 +52,7 @@ public interface BossBar {
      * @return the viewers of the boss bar
      */
     @UnmodifiableView
-    Collection<EntityPlayer> getViewers();
+    Collection<BossBarViewer> getViewers();
 
     /**
      * Get the color of the boss bar.

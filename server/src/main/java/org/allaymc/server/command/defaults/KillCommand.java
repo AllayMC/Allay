@@ -3,10 +3,10 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrKeys;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.player.GameMode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,19 +32,19 @@ public class KillCommand extends VanillaCommand {
                 targets = List.of(sender);
             }
 
-            if (targets.stream().allMatch(target -> target instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE)) {
+            if (targets.stream().allMatch(target -> target instanceof EntityPlayer player && player.getGameMode() == GameMode.CREATIVE)) {
                 context.addError("%" + TrKeys.MC_COMMANDS_KILL_ATTEMPTKILLPLAYERCREATIVE);
                 return context.fail();
             }
 
             Map<String, Integer> killedEntities = new HashMap<>();
             for (var target : targets) {
-                if (target instanceof EntityPlayer player && (player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR)) {
+                if (target instanceof EntityPlayer player && (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR)) {
                     continue;
                 }
 
-                if (target instanceof EntityAttributeComponent damageComponent) {
-                    damageComponent.kill();
+                if (target instanceof EntityLiving living) {
+                    living.kill();
                 } else {
                     target.remove();
                 }

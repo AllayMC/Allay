@@ -6,15 +6,15 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.particle.Particle;
+import org.allaymc.api.world.particle.SimpleParticle;
+import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.api.world.sound.Sound;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3i;
@@ -77,11 +77,11 @@ public class Explosion {
     /**
      * The sound to play when the explosion is created.
      */
-    protected SoundEvent sound;
+    protected Sound sound;
     /**
      * The particle to spawn when the explosion is created.
      */
-    protected ParticleType particle;
+    protected Particle particle;
     /**
      * The entity that caused the explosion. If keep this field to {@code null},
      * the explosion will be considered as a block explosion.
@@ -99,38 +99,38 @@ public class Explosion {
     protected boolean affectEntities;
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, Particle)
      */
     public Explosion() {
         this(4);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, Particle)
      */
     public Explosion(float size) {
         this(size, false);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, Particle)
      */
     public Explosion(float size, boolean spawnFire) {
         this(size, spawnFire, 1.0f / size);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, Particle)
      */
     public Explosion(float size, boolean spawnFire, float itemDropChance) {
-        this(size, spawnFire, itemDropChance, SoundEvent.EXPLODE);
+        this(size, spawnFire, itemDropChance, SimpleSound.EXPLOSION);
     }
 
     /**
-     * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
+     * @see #Explosion(float, boolean, float, Sound, Particle)
      */
-    public Explosion(float size, boolean spawnFire, float itemDropChance, SoundEvent sound) {
-        this(size, spawnFire, itemDropChance, sound, ParticleType.HUGE_EXPLOSION);
+    public Explosion(float size, boolean spawnFire, float itemDropChance, Sound sound) {
+        this(size, spawnFire, itemDropChance, sound, SimpleParticle.HUGE_EXPLOSION);
     }
 
     /**
@@ -142,7 +142,7 @@ public class Explosion {
      * @param sound          the sound of the explosion
      * @param particle       the particle of the explosion
      */
-    public Explosion(float size, boolean spawnFire, float itemDropChance, SoundEvent sound, ParticleType particle) {
+    public Explosion(float size, boolean spawnFire, float itemDropChance, Sound sound, Particle particle) {
         this.size = size;
         this.spawnFire = spawnFire;
         this.itemDropChance = itemDropChance;
@@ -322,17 +322,14 @@ public class Explosion {
                     continue;
                 }
 
-                var kbResistance = 0.0;
-                if (affectedEntity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
-                    kbResistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
-                }
                 if (affectedEntity instanceof EntityPhysicsComponent physicsComponent) {
+                    var kbResistance = physicsComponent.getKnockbackResistance();
                     var direction = affectedEntity.getLocation().sub(explosionPos, new Vector3d());
                     if (direction.lengthSquared() > 0) {
                         physicsComponent.addMotion(direction.normalize().mul(impact * (1.0 - kbResistance)));
                     }
                 }
-                if (affectedEntity instanceof EntityDamageComponent damageComponent) {
+                if (affectedEntity instanceof EntityLiving living) {
                     var m = switch (dimension.getWorld().getWorldData().getDifficulty()) {
                         case PEACEFUL -> 0.0;
                         case EASY -> 3.5f;
@@ -341,9 +338,9 @@ public class Explosion {
                     };
                     var damage = (impact * impact + impact) * m * size / 2.0 + 1.0;
                     if (entity == null) {
-                        damageComponent.attack(DamageContainer.blockExplosion((float) damage));
+                        living.attack(DamageContainer.blockExplosion((float) damage));
                     } else {
-                        damageComponent.attack(DamageContainer.entityExplosion(entity, (float) damage));
+                        living.attack(DamageContainer.entityExplosion(entity, (float) damage));
                     }
                 }
             }
@@ -433,7 +430,7 @@ public class Explosion {
         }
 
         dimension.addParticle(x, y, z, particle);
-        dimension.addLevelSoundEvent(x, y, z, sound);
+        dimension.addSound(x, y, z, sound);
     }
 
     /**

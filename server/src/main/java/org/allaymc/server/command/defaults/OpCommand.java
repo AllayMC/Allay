@@ -2,7 +2,7 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 
 import java.util.Collection;
 
@@ -38,7 +38,7 @@ public class OpCommand extends VanillaCommand {
             player.setOperator(true);
 
             context.addOutput(TrKeys.MC_COMMANDS_OP_SUCCESS, player.getOriginName());
-            player.sendTr(TrKeys.MC_COMMANDS_OP_MESSAGE);
+            player.sendTranslatable(TrKeys.MC_COMMANDS_OP_MESSAGE);
             return context.success();
         });
     }

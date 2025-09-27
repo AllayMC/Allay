@@ -4,26 +4,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.component.BlockFallableComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.tag.BlockCustomTags;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
-
-import java.util.Objects;
 
 /**
  * @author IWareQ
@@ -39,17 +35,6 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
     public EntityFallingBlockBaseComponentImpl(EntityInitInfo info) {
         super(info);
-    }
-
-    @Override
-    protected void initMetadata() {
-        Objects.requireNonNull(blockState, "blockState");
-
-        updateHitBoxAndCollisionBoxMetadata();
-        metadata.set(EntityFlag.HAS_GRAVITY, true);
-        metadata.set(EntityFlag.FIRE_IMMUNE, true);
-        metadata.set(EntityFlag.HAS_COLLISION, false);
-        metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
     }
 
     @Override
@@ -70,7 +55,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             return;
         }
 
-        if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (currentBlock.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             dimension.setBlockState(location.floor(new Vector3d()), BlockTypes.AIR.getDefaultState());
         }
     }
@@ -88,8 +73,8 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             if (damage > 0) {
                 dimension.getEntityManager().getPhysicsService().computeCollidingEntities(getOffsetAABB(), true)
                         .stream()
-                        .filter(entity -> entity instanceof EntityDamageComponent)
-                        .map(EntityDamageComponent.class::cast)
+                        .filter(entity -> entity instanceof EntityLivingComponent)
+                        .map(EntityLivingComponent.class::cast)
                         .forEach(entity -> entity.attack(DamageContainer.fallingBlock(damage)));
             }
 
@@ -125,7 +110,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     @Override
-    public float getNetworkOffset() {
-        return 0.49f;
+    public boolean hasEntityCollision() {
+        return false;
     }
 }

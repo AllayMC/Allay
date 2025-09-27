@@ -4,7 +4,7 @@ import com.sun.jna.platform.win32.COM.WbemcliUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Dimension;
@@ -72,7 +72,7 @@ public class StatusCommand extends VanillaCommand {
     }
 
     protected static void printOperationSystemMemoryInfo(CommandSender sender) {
-        sender.sendText("--- Memory Info ---");
+        sender.sendMessage("--- Memory Info ---");
         var globalMemory = SYSTEM_INFO.getHardware().getMemory();
         var virtualMemory = globalMemory.getVirtualMemory();
 
@@ -88,39 +88,39 @@ public class StatusCommand extends VanillaCommand {
         if (totalVirt > 0) {
             sendMemoryUsage(sender, "Virtual memory", usedVirt, totalVirt);
         } else {
-            sender.sendText("Virtual memory: " + TextFormat.GREEN + "N/A");
+            sender.sendMessage("Virtual memory: " + TextFormat.GREEN + "N/A");
         }
 
         // Hardware
         var physicalMemories = globalMemory.getPhysicalMemory();
         if (!physicalMemories.isEmpty()) {
-            sender.sendText("Hardware list:");
+            sender.sendMessage("Hardware list:");
             for (var each : physicalMemories) {
-                sender.sendText("- " + TextFormat.GREEN + each.getBankLabel() + " " + formatFreq(each.getClockSpeed())
-                                + TextFormat.WHITE + " " + toMB(each.getCapacity()));
-                sender.sendText("  " + TextFormat.GREEN + each.getMemoryType() + ", " + each.getManufacturer());
+                sender.sendMessage("- " + TextFormat.GREEN + each.getBankLabel() + " " + formatFreq(each.getClockSpeed())
+                                   + TextFormat.WHITE + " " + toMB(each.getCapacity()));
+                sender.sendMessage("  " + TextFormat.GREEN + each.getMemoryType() + ", " + each.getManufacturer());
             }
         }
-        sender.sendText("\n");
+        sender.sendMessage("\n");
     }
 
     protected static void printCPUInfo(CommandSender sender) {
         var cpu = SYSTEM_INFO.getHardware().getProcessor();
         var processorIdentifier = cpu.getProcessorIdentifier();
 
-        sender.sendText("--- CPU Info ---");
-        sender.sendText(
+        sender.sendMessage("--- CPU Info ---");
+        sender.sendMessage(
                 "CPU: " + TextFormat.GREEN + processorIdentifier.getName().trim() + TextFormat.YELLOW +
                 " (" + formatFreq(cpu.getMaxFreq()) + " baseline; " +
                 cpu.getPhysicalProcessorCount() + " cores, " + cpu.getLogicalProcessorCount() + " logical cores)"
         );
-        sender.sendText("Thread count: " + TextFormat.GREEN + Thread.getAllStackTraces().size());
-        sender.sendText(
+        sender.sendMessage("Thread count: " + TextFormat.GREEN + Thread.getAllStackTraces().size());
+        sender.sendMessage(
                 "CPU Features: " + TextFormat.GREEN +
                 (processorIdentifier.isCpu64bit() ? "64bit, " : "32bit, ") +
                 processorIdentifier.getModel() + ", micro-arch: " + processorIdentifier.getMicroarchitecture()
         );
-        sender.sendText("\n");
+        sender.sendMessage("\n");
     }
 
     protected static void printNetworkInfo(CommandSender sender) {
@@ -130,8 +130,8 @@ public class StatusCommand extends VanillaCommand {
                 return;
             }
 
-            sender.sendText("--- Network Info ---");
-            sender.sendText("Network hardware list:");
+            sender.sendMessage("--- Network Info ---");
+            sender.sendMessage("Network hardware list:");
             for (var nic : networkIFs) {
                 var addresses = Stream.concat(
                         Arrays.stream(nic.getIPv4addr()),
@@ -139,14 +139,14 @@ public class StatusCommand extends VanillaCommand {
                 ).toList();
 
                 String speedStr = nic.getSpeed() > 0 ? toKB(nic.getSpeed()) + "/s " : "";
-                sender.sendText(
+                sender.sendMessage(
                         "- " + TextFormat.GREEN + nic.getDisplayName() + " " + speedStr
                         + TextFormat.YELLOW + String.join(", ", addresses)
                 );
             }
-            sender.sendText("\n");
+            sender.sendMessage("\n");
         } catch (Exception e) {
-            sender.sendText(TextFormat.RED + "Failed to get network info.");
+            sender.sendMessage(TextFormat.RED + "Failed to get network info.");
             log.debug("Network info retrieval failed", e);
         }
     }
@@ -155,48 +155,48 @@ public class StatusCommand extends VanillaCommand {
         var os = SYSTEM_INFO.getOperatingSystem();
         var mxBean = ManagementFactory.getRuntimeMXBean();
 
-        sender.sendText("--- OS & JVM Info ---");
+        sender.sendMessage("--- OS & JVM Info ---");
         var versionInfo = os.getVersionInfo();
-        sender.sendText(
+        sender.sendMessage(
                 "OS: " + TextFormat.GREEN +
                 os.getFamily() + " " + os.getManufacturer() + " " +
                 versionInfo.getVersion() + " " + versionInfo.getCodeName() + " " +
                 os.getBitness() + "bit, build " + versionInfo.getBuildNumber()
         );
-        sender.sendText("JVM: " + TextFormat.GREEN + mxBean.getVmName() + " " + mxBean.getVmVendor() + " " + mxBean.getVmVersion());
+        sender.sendMessage("JVM: " + TextFormat.GREEN + mxBean.getVmName() + " " + mxBean.getVmVendor() + " " + mxBean.getVmVersion());
         try {
             String vm = detectVM();
-            sender.sendText("Virtual environment: " + TextFormat.GREEN + (vm == null ? "N/A" : vm));
+            sender.sendMessage("Virtual environment: " + TextFormat.GREEN + (vm == null ? "N/A" : vm));
         } catch (Exception e) {
-            sender.sendText("Virtual environment: " + TextFormat.GREEN + "N/A");
+            sender.sendMessage("Virtual environment: " + TextFormat.GREEN + "N/A");
             log.debug("VM detection error", e);
         }
-        sender.sendText("\n");
+        sender.sendMessage("\n");
     }
 
     protected static void printWorldInfo(CommandSender sender) {
-        sender.sendText("--- Worlds Status ---");
+        sender.sendMessage("--- Worlds Status ---");
         for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
-            sender.sendText("- " + world.getWorldData().getDisplayName());
-            sender.sendText("  TPS: " + TextFormat.GREEN + world.getTPS());
-            sender.sendText("  MSPT: " + TextFormat.GREEN + world.getMSPT());
-            sender.sendText("  TickUsage: " + TextFormat.GREEN + (world.getTickUsage() * 100f) + "%");
+            sender.sendMessage("- " + world.getWorldData().getDisplayName());
+            sender.sendMessage("  TPS: " + TextFormat.GREEN + world.getTPS());
+            sender.sendMessage("  MSPT: " + TextFormat.GREEN + world.getMSPT());
+            sender.sendMessage("  TickUsage: " + TextFormat.GREEN + (world.getTickUsage() * 100f) + "%");
 
             var dims = world.getDimensions().values();
             var chunks = dims.stream().mapToInt(d -> d.getChunkManager().getLoadedChunks().size()).sum();
             var entities = dims.stream().mapToInt(Dimension::getEntityCount).sum();
             var blockEntities = dims.stream().mapToInt(Dimension::getBlockEntityCount).sum();
 
-            sender.sendText("  Chunks: " + TextFormat.GREEN + chunks);
-            sender.sendText("  Entities: " + TextFormat.GREEN + entities);
-            sender.sendText("  BlockEntities: " + TextFormat.GREEN + blockEntities);
-            sender.sendText("\n");
+            sender.sendMessage("  Chunks: " + TextFormat.GREEN + chunks);
+            sender.sendMessage("  Entities: " + TextFormat.GREEN + entities);
+            sender.sendMessage("  BlockEntities: " + TextFormat.GREEN + blockEntities);
+            sender.sendMessage("\n");
         }
     }
 
     protected static void printUpTimeInfo(CommandSender sender) {
         var time = System.currentTimeMillis() - Server.getInstance().getStartTime();
-        sender.sendText("Uptime: " + TextFormat.GREEN + formatUptime(time));
+        sender.sendMessage("Uptime: " + TextFormat.GREEN + formatUptime(time));
     }
 
     protected static void printMemoryUsageInfo(CommandSender sender) {
@@ -206,9 +206,9 @@ public class StatusCommand extends VanillaCommand {
         var maxMB = bytesToMB(runtime.maxMemory());
         var usagePct = maxMB > 0 ? (usedMB / maxMB) * 100d : 0d;
 
-        sender.sendText("Used VM memory: " + colorizeUsage(usagePct) + round(usedMB, 2) + " MB (" + round(usagePct, 2) + "%)");
-        sender.sendText("Total VM memory: " + TextFormat.GREEN + round(totalMB, 2) + " MB");
-        sender.sendText("Maximum JVM memory: " + TextFormat.GREEN + round(maxMB, 2) + " MB");
+        sender.sendMessage("Used VM memory: " + colorizeUsage(usagePct) + round(usedMB, 2) + " MB (" + round(usagePct, 2) + "%)");
+        sender.sendMessage("Total VM memory: " + TextFormat.GREEN + round(totalMB, 2) + " MB");
+        sender.sendMessage("Maximum JVM memory: " + TextFormat.GREEN + round(maxMB, 2) + " MB");
     }
 
     protected static void printOnlinePlayerInfo(CommandSender sender) {
@@ -226,7 +226,7 @@ public class StatusCommand extends VanillaCommand {
             color = TextFormat.RED;
         }
 
-        sender.sendText("Players: " + color + online + "/" + maxPlayerCount);
+        sender.sendMessage("Players: " + color + online + "/" + maxPlayerCount);
     }
 
     protected static String detectVM() {
@@ -302,12 +302,12 @@ public class StatusCommand extends VanillaCommand {
 
     private static void sendMemoryUsage(CommandSender sender, String label, long usedBytes, long totalBytes) {
         if (totalBytes <= 0) {
-            sender.sendText(label + ": " + TextFormat.GREEN + "N/A");
+            sender.sendMessage(label + ": " + TextFormat.GREEN + "N/A");
             return;
         }
 
         var usagePct = usedBytes * 100d / totalBytes;
-        sender.sendText(
+        sender.sendMessage(
                 label + ": " + colorizeUsage(usagePct) +
                 toMB(usedBytes) + " / " + toMB(totalBytes) +
                 " (" + round(usagePct, 2) + "%)"
@@ -366,11 +366,11 @@ public class StatusCommand extends VanillaCommand {
             boolean full = context.getResult(0);
             var sender = context.getSender();
 
-            sender.sendText("--- Server Status ---");
+            sender.sendMessage("--- Server Status ---");
             printUpTimeInfo(sender);
             printMemoryUsageInfo(sender);
             printOnlinePlayerInfo(sender);
-            sender.sendText("\n");
+            sender.sendMessage("\n");
 
             printWorldInfo(sender);
             if (full) {

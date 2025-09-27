@@ -2,15 +2,15 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.impl.AnvilContainer;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
@@ -32,7 +32,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
             return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
         }
 
-        dimension.addSound(placeBlockPos, Sound.RANDOM_ANVIL_LAND);
+        dimension.addSound(placeBlockPos, SimpleSound.ANVIL_LAND);
 
         blockState = blockState.setPropertyValue(
                 MINECRAFT_CARDINAL_DIRECTION,
@@ -52,7 +52,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
             return false;
         }
 
-        var anvilContainer = new AnvilContainer();
+        var anvilContainer = player.getContainer(ContainerTypes.ANVIL);
         anvilContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         anvilContainer.addViewer(player);
         return true;

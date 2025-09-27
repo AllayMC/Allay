@@ -3,12 +3,13 @@ package org.allaymc.server.item.enchantment;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.server.utils.AllayRandom;
-import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
 import org.jctools.maps.NonBlockingHashMapLong;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public final class EnchantmentOptionGenerator {
     public static final int NETWORK_ID_COUNTER_INITIAL_VALUE = 100000;
 
     // TODO: possible OOM attack here
-    private static final NonBlockingHashMapLong<AllayEnchantOptionData> ENCHANT_OPTIONS = new NonBlockingHashMapLong<>();
+    private static final NonBlockingHashMapLong<EnchantOption> ENCHANT_OPTIONS = new NonBlockingHashMapLong<>();
     private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(NETWORK_ID_COUNTER_INITIAL_VALUE);
     private static final int MAX_BOOKSHELF_COUNT = 15;
 
@@ -49,7 +50,7 @@ public final class EnchantmentOptionGenerator {
             "mdx", "iwareq", "liulihaocai" // QAQ
     );
 
-    public static List<EnchantOptionData> generateEnchantOptions(Position3ic enchantTablePos, ItemStack input, int seed) {
+    public static List<Pair<Integer, EnchantOption>> generateEnchantOptions(Position3ic enchantTablePos, ItemStack input, int seed) {
         if (input == null || input.hasEnchantments() || input.getItemType().getItemData().enchantValue() == 0) {
             return Collections.emptyList();
         }
@@ -66,11 +67,11 @@ public final class EnchantmentOptionGenerator {
         );
     }
 
-    public AllayEnchantOptionData removeEnchantOption(int networkId) {
+    public EnchantOption removeEnchantOption(int networkId) {
         return ENCHANT_OPTIONS.remove(networkId);
     }
 
-    private static EnchantOptionData createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredLapisLazuliCount, int requiredXpLevel) {
+    private static Pair<Integer, EnchantOption> createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredLapisLazuliCount, int requiredXpLevel) {
         int modifiedLevel = requiredXpLevel;
 
         int enchantValue = inputItem.getItemType().getItemData().enchantValue();
@@ -106,22 +107,11 @@ public final class EnchantmentOptionGenerator {
                 modifiedLevel /= 2;
             }
         }
-        return createEnchantOptionData(requiredLapisLazuliCount, requiredXpLevel, generateRandomOptionName(random), resultEnchantments);
-    }
 
-    private static EnchantOptionData createEnchantOptionData(int requiredLapisLazuliCount, int requiredXpLevel, String optionName, List<EnchantmentInstance> enchantments) {
         var networkId = NETWORK_ID_COUNTER.getAndIncrement();
-        var option = new EnchantOptionData(
-                requiredXpLevel,
-                0,
-                enchantments.stream().map(EnchantmentInstance::toNetwork).toList(),
-                List.of(),
-                List.of(),
-                optionName,
-                networkId
-        );
-        ENCHANT_OPTIONS.put(networkId, new AllayEnchantOptionData(requiredLapisLazuliCount, requiredXpLevel, enchantments));
-        return option;
+        var option = new EnchantOption(generateRandomOptionName(random), requiredLapisLazuliCount, requiredXpLevel, resultEnchantments);
+        ENCHANT_OPTIONS.put(networkId, option);
+        return new Pair<>(networkId, option);
     }
 
     private static int countBookshelves(Position3ic enchantTablePos) {
@@ -218,10 +208,4 @@ public final class EnchantmentOptionGenerator {
                 .toList();
     }
 
-    public record AllayEnchantOptionData(
-            int requiredLapisLazuliCount,
-            int requiredXpLevel,
-            List<EnchantmentInstance> enchantments
-    ) {
-    }
 }

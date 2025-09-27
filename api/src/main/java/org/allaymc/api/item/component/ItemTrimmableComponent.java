@@ -1,10 +1,10 @@
 package org.allaymc.api.item.component;
 
-import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
-import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
+import org.allaymc.api.item.data.TrimMaterial;
+import org.allaymc.api.item.data.TrimPattern;
 
 /**
- * @author IWareQ
+ * @author IWareQ | daoge_cmd
  */
 public interface ItemTrimmableComponent extends ItemComponent {
     /**

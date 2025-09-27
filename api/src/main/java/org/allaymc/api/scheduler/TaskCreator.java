@@ -2,13 +2,11 @@ package org.allaymc.api.scheduler;
 
 /**
  * Describes a creator for scheduled tasks.
- *
  * <p>
  * The task creator is responsible for determining whether a task is valid before it is executed.
  * Each time a task is scheduled, the validity of the task is checked.
- * If the creator returns {@code false}, indicating that the task is no longer valid,
- * the task will be canceled before execution.
- * </p>
+ * If the creator returns {@code false}, indicating that the task is no longer valid, the task
+ * will be canceled before execution.
  *
  * @author daoge_cmd
  */

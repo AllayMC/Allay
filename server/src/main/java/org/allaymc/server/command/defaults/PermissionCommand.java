@@ -25,13 +25,13 @@ public class PermissionCommand extends VanillaCommand {
         tree.getRoot()
                 .key("list")
                 .exec(context -> {
-                    context.getSender().sendText("List of registered permissions:");
+                    context.getSender().sendMessage("List of registered permissions:");
                     Registries.PERMISSIONS
                             .getContent()
                             .values()
                             .stream()
                             .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
-                            .forEach(permission -> context.getSender().sendText(" - " + permission.getName() + ": " + TextFormat.GREEN + permission.getDescription()));
+                            .forEach(permission -> context.getSender().sendMessage(" - " + permission.getName() + ": " + TextFormat.GREEN + permission.getDescription()));
 
                     return context.success();
                 })
@@ -51,13 +51,13 @@ public class PermissionCommand extends VanillaCommand {
                     }
 
                     var target = targets.getFirst();
-                    context.getSender().sendText("The player " + target.getOriginName() + " has the following permissions:");
+                    context.getSender().sendMessage("The player " + target.getOriginName() + " has the following permissions:");
                     target.getPermissionGroup()
                             .getPermissions(true)
                             .stream()
                             .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
-                            .forEach(permission -> context.getSender().sendText(" - " + permission.getName() + ": " + TextFormat.GREEN + permission.getDescription()));
-                    context.getSender().sendText("Parents: " + TextFormat.GREEN + target.getPermissionGroup().getParents().stream().map(PermissionGroup::getName).collect(Collectors.joining(", ")));
+                            .forEach(permission -> context.getSender().sendMessage(" - " + permission.getName() + ": " + TextFormat.GREEN + permission.getDescription()));
+                    context.getSender().sendMessage("Parents: " + TextFormat.GREEN + target.getPermissionGroup().getParents().stream().map(PermissionGroup::getName).collect(Collectors.joining(", ")));
 
                     return context.success();
                 })
@@ -80,14 +80,14 @@ public class PermissionCommand extends VanillaCommand {
 
                     var permission = Permission.get(context.getResult(2));
                     if (permission == null) {
-                        context.getSender().sendText(TextFormat.RED + "Permission not found: " + context.getResult(2));
+                        context.getSender().sendMessage(TextFormat.RED + "Permission not found: " + context.getResult(2));
                         return context.fail();
                     }
 
                     boolean value = context.getResult(3);
                     var target = targets.getFirst();
                     target.setPermission(permission, value);
-                    context.getSender().sendText("Set permission " + permission.getName() + " for player " + target.getOriginName() + " to " + (value ? TextFormat.GREEN + "true" : TextFormat.RED + "false"));
+                    context.getSender().sendMessage("Set permission " + permission.getName() + " for player " + target.getOriginName() + " to " + (value ? TextFormat.GREEN + "true" : TextFormat.RED + "false"));
 
                     return context.success();
                 });

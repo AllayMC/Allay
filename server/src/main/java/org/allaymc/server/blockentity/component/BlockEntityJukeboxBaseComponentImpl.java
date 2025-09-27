@@ -2,14 +2,16 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
-import org.allaymc.api.item.ItemHelper;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
+import org.allaymc.api.utils.NBTIO;
+import org.allaymc.api.world.sound.MusicDiscPlaySound;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,17 +33,18 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void play() {
         if (this.musicDiscItem instanceof ItemMusicDiscBaseComponent component) {
-            this.getDimension().addLevelSoundEvent(this.getPosition(), component.getSound());
+            this.getDimension().addSound(this.getPosition(), new MusicDiscPlaySound(component.getDiscType()));
         }
     }
 
     @Override
     public void stop() {
-        this.getDimension().addLevelSoundEvent(this.getPosition(), SoundEvent.STOP_RECORD);
+        this.getDimension().addSound(this.getPosition(), SimpleSound.MUSIC_DISC_END);
     }
 
+    @EventHandler
     @Override
-    public void onReplace(CBlockOnReplaceEvent event) {
+    public void onBlockReplace(CBlockOnReplaceEvent event) {
         if (this.musicDiscItem != null) {
             var current = event.getCurrentBlock();
             var pos = current.getPosition();
@@ -71,6 +74,6 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound(TAG_RECORD_ITEM, value -> this.musicDiscItem = ItemHelper.fromNBT(value));
+        nbt.listenForCompound(TAG_RECORD_ITEM, value -> this.musicDiscItem = NBTIO.getAPI().fromItemStackNBT(value));
     }
 }

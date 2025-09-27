@@ -9,8 +9,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemStuffStorableComponent;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 import java.util.Set;
 
@@ -54,6 +54,6 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
         var blockEntity = blockEntityHolderComponent.getBlockEntity(block.getPosition());
         var container = blockEntity.getContainer();
         if (!container.isEmpty()) return true;
-        return !(entity instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE;
+        return !(entity instanceof EntityPlayer player) || player.getGameMode() != GameMode.CREATIVE;
     }
 }

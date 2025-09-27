@@ -4,18 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.cloudburstmc.protocol.bedrock.data.skin.SerializedSkin;
+import org.allaymc.api.player.Skin;
 
 /**
  * @author daoge_cmd | Dhaiven
  */
 @Getter
 public class PlayerChangeSkinEvent extends PlayerEvent implements CancellableEvent {
-    protected SerializedSkin oldSkin;
+    protected Skin oldSkin;
     @Setter
-    protected SerializedSkin newSkin;
+    protected Skin newSkin;
 
-    public PlayerChangeSkinEvent(EntityPlayer player, SerializedSkin oldSkin, SerializedSkin newSkin) {
+    public PlayerChangeSkinEvent(EntityPlayer player, Skin oldSkin, Skin newSkin) {
         super(player);
         this.oldSkin = oldSkin;
         this.newSkin = newSkin;

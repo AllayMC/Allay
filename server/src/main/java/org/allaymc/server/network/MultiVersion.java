@@ -1,6 +1,8 @@
 package org.allaymc.server.network;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v800.Bedrock_v800;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
@@ -26,10 +28,14 @@ public final class MultiVersion {
     }
 
     private static boolean is1_21_100(EntityPlayer player) {
-        return player.getClientSession().getCodec() == Bedrock_v827.CODEC;
+        return getCodec(player) == Bedrock_v827.CODEC;
     }
 
     private static boolean is1_21_80(EntityPlayer player) {
-        return player.getClientSession().getCodec() == Bedrock_v800.CODEC;
+        return getCodec(player) == Bedrock_v800.CODEC;
+    }
+
+    private static BedrockCodec getCodec(EntityPlayer player) {
+        return ((EntityPlayerImpl) player).getClientSession().getCodec();
     }
 }

@@ -20,21 +20,21 @@ import java.util.Map;
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
     public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var sourceContainer = player.getReachableContainer(action.getSource().getContainerName().getContainer());
-        var destinationContainer = player.getReachableContainer(action.getDestination().getContainerName().getContainer());
+        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
+        var destinationContainer = ContainerActionProcessor.getContainerFrom(player, action.getDestination().getContainerName());
 
-        var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
-        var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());
+        var sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.getSource().getSlot());
+        var destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.getDestination().getSlot());
 
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
-        if (failToValidateStackNetworkId(sourceItem.getStackNetworkId(), action.getSource().getStackNetworkId())) {
-            log.warn("mismatch stack network id!");
+        if (failToValidateStackUniqueId(sourceItem.getUniqueId(), action.getSource().getStackNetworkId())) {
+            log.warn("mismatch stack unique id!");
             return error();
         }
 
         var destinationItem = destinationContainer.getItemStack(destinationSlot);
-        if (failToValidateStackNetworkId(destinationItem.getStackNetworkId(), action.getDestination().getStackNetworkId())) {
-            log.warn("mismatch stack network id!");
+        if (failToValidateStackUniqueId(destinationItem.getUniqueId(), action.getDestination().getStackNetworkId())) {
+            log.warn("mismatch stack unique id!");
             return error();
         }
 
@@ -44,34 +44,34 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                 true,
                 List.of(
                         new ItemStackResponseContainer(
-                                sourceContainer.getSlotType(sourceSlot),
+                                ContainerActionProcessor.getSlotType(sourceContainer, sourceSlot),
                                 Collections.singletonList(
                                         new ItemStackResponseSlot(
-                                                sourceContainer.toNetworkSlotIndex(sourceSlot),
-                                                sourceContainer.toNetworkSlotIndex(sourceSlot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, sourceSlot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, sourceSlot),
                                                 destinationItem.getCount(),
-                                                destinationItem.getStackNetworkId(),
+                                                destinationItem.getUniqueId(),
                                                 destinationItem.getCustomName(),
                                                 destinationItem.getDamage(),
                                                 ""
                                         )
                                 ),
-                                new FullContainerName(sourceContainer.getSlotType(sourceSlot), null)
+                                new FullContainerName(ContainerActionProcessor.getSlotType(sourceContainer, sourceSlot), null)
                         ),
                         new ItemStackResponseContainer(
-                                destinationContainer.getSlotType(destinationSlot),
+                                ContainerActionProcessor.getSlotType(destinationContainer, destinationSlot),
                                 Collections.singletonList(
                                         new ItemStackResponseSlot(
-                                                destinationContainer.toNetworkSlotIndex(destinationSlot),
-                                                destinationContainer.toNetworkSlotIndex(destinationSlot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(destinationContainer, destinationSlot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(destinationContainer, destinationSlot),
                                                 sourceItem.getCount(),
-                                                sourceItem.getStackNetworkId(),
+                                                sourceItem.getUniqueId(),
                                                 sourceItem.getCustomName(),
                                                 sourceItem.getDamage(),
                                                 ""
                                         )
                                 ),
-                                new FullContainerName(destinationContainer.getSlotType(destinationSlot), null)
+                                new FullContainerName(ContainerActionProcessor.getSlotType(destinationContainer, destinationSlot), null)
                         )
                 )
         );

@@ -2,15 +2,15 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
@@ -18,9 +18,9 @@ import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -38,26 +38,26 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public boolean isSameLiquidType(BlockType<?> blockType) {
-        return blockType.hasBlockTag(BlockCustomTags.LAVA);
+        return blockType.hasBlockTag(BlockTags.LAVA);
     }
 
     @Override
     public void onEntityInside(Block block, Entity entity) {
-        if (!(entity instanceof EntityDamageComponent damageComponent)) {
+        if (!(entity instanceof EntityLiving living)) {
             return;
         }
 
         // Set on fire ticks
         var event1 = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, block, 20 * 15);
         if (event1.call()) {
-            damageComponent.setOnFireTicks(event1.getOnFireTicks());
+            living.setOnFireTicks(event1.getOnFireTicks());
         }
 
         // Lava damage
-        if (damageComponent.hasFireDamage() && entity.getWorld().getTick() % 10 == 0) {
+        if (living.hasFireDamage() && entity.getWorld().getTick() % 10 == 0) {
             var event2 = new EntityDamageEvent(entity, DamageContainer.lava(4));
             if (event2.call()) {
-                damageComponent.attack(event2.getDamageContainer(), true);
+                living.attack(event2.getDamageContainer(), true);
             }
         }
     }
@@ -121,7 +121,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                 }
 
                 dimension.setBlockState(pos, event.getHardenedBlockState());
-                block.addLevelSoundEvent(SoundEvent.FIZZ);
+                block.addSound(SimpleSound.FIZZ);
                 return true;
             }
 
@@ -145,7 +145,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
 
         dimension.setBlockState(pos, event.getHardenedBlockState());
-        dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
+        dimension.addSound(MathUtils.center(pos), SimpleSound.FIZZ);
         return true;
     }
 
@@ -200,7 +200,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     protected BlockState getFireBlockState(Dimension dimension, Vector3ic pos) {
         // Check if the block that the player clicked on is a soul fire converter
         // In that case, we should place a soul fire instead of a normal fire
-        return dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType().hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
+        return dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
     }
 
     protected boolean canNeighborBurn(Dimension dimension, Vector3ic pos) {

@@ -4,14 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.AnvilDamageEvent;
 import org.allaymc.api.eventbus.event.container.AnvilTakeResultEvent;
 import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.world.Sound;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -34,7 +34,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
 
     @Override
     public ActionResponse handle(CraftRecipeOptionalAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getOpenedContainer(FullContainerType.ANVIL);
+        var container = player.getOpenedContainer(ContainerTypes.ANVIL);
         if (container == null) {
             log.warn("Received a CraftRecipeOptionalAction without an opened container");
             return error();
@@ -184,7 +184,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             totalCost = ANVIL_COST_LIMIT;
         }
 
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             if (totalCost > ANVIL_COST_LIMIT) {
                 log.warn("Repair cost exceeds anvil limit of {}", ANVIL_COST_LIMIT);
                 return error();
@@ -203,7 +203,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                     var event = new AnvilDamageEvent(new Block(anvilState, anvilPos), newAnvilState);
                     if (event.call()) {
                         if (newAnvilState.getBlockType() == BlockTypes.AIR) {
-                            player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_BREAK);
+                            player.getDimension().addSound(anvilPos, SimpleSound.ANVIL_BREAK);
                         }
 
                         player.getDimension().setBlockState(anvilPos, event.getNewState());
@@ -211,8 +211,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
                 }
             }
 
-            player.getDimension().addSound(anvilPos, Sound.RANDOM_ANVIL_USE);
-
+            player.getDimension().addSound(anvilPos, SimpleSound.ANVIL_USE);
             player.setExperienceLevel(player.getExperienceLevel() - totalCost);
         }
 
@@ -228,7 +227,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             return error();
         }
 
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(event.getResultItem());
+        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
         return null;
     }
 

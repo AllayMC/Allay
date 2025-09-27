@@ -3,8 +3,8 @@ package org.allaymc.api.form.type;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.form.FormCancelReason;
 import org.allaymc.api.form.element.*;
-import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  */
 @Getter
 @Slf4j
-public final class CustomForm extends Form {
+public class CustomForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "custom_form";
 
@@ -34,7 +34,6 @@ public final class CustomForm extends Form {
      * Set the title of the form.
      *
      * @param title the title
-     *
      * @return the form
      */
     public CustomForm title(String title) {
@@ -46,7 +45,6 @@ public final class CustomForm extends Form {
      * Set the icon of the form.
      *
      * @param icon the icon
-     *
      * @return the form
      */
     public CustomForm icon(ImageData icon) {
@@ -59,7 +57,6 @@ public final class CustomForm extends Form {
      *
      * @param imageType the type of the image
      * @param data      the data of the image
-     *
      * @return the form
      */
     public CustomForm icon(ImageData.ImageType imageType, String data) {
@@ -70,7 +67,6 @@ public final class CustomForm extends Form {
      * Set the icon of the form.
      *
      * @param path the path of the image
-     *
      * @return the form
      */
     public CustomForm pathIcon(String path) {
@@ -81,7 +77,6 @@ public final class CustomForm extends Form {
      * Set the icon of the form.
      *
      * @param url the URL of the image
-     *
      * @return the form
      */
     public CustomForm urlIcon(String url) {
@@ -92,7 +87,6 @@ public final class CustomForm extends Form {
      * Add an element to the form.
      *
      * @param element the element
-     *
      * @return the form
      */
     public CustomForm element(CustomFormElement element) {
@@ -104,7 +98,6 @@ public final class CustomForm extends Form {
      * Add a dropdown element to the form.
      *
      * @param text the text of the element
-     *
      * @return the form
      */
     public CustomForm dropdown(String text) {
@@ -116,7 +109,6 @@ public final class CustomForm extends Form {
      *
      * @param text    the text of the element
      * @param options the options of the element
-     *
      * @return the form
      */
     public CustomForm dropdown(String text, List<String> options) {
@@ -128,7 +120,6 @@ public final class CustomForm extends Form {
      *
      * @param text    the text of the element
      * @param options the options of the element
-     *
      * @return the form
      */
     public CustomForm dropdown(String text, String... options) {
@@ -141,7 +132,6 @@ public final class CustomForm extends Form {
      * @param text               the text of the element
      * @param options            the options of the element
      * @param defaultOptionIndex the index of the default option
-     *
      * @return the form
      */
     public CustomForm dropdown(String text, List<String> options, int defaultOptionIndex) {
@@ -152,7 +142,6 @@ public final class CustomForm extends Form {
      * Add an input element to the form.
      *
      * @param text the text of the element
-     *
      * @return the form
      */
     public CustomForm input(String text) {
@@ -164,7 +153,6 @@ public final class CustomForm extends Form {
      *
      * @param text        the text of the element
      * @param placeholder the placeholder of the element
-     *
      * @return the form
      */
     public CustomForm input(String text, String placeholder) {
@@ -177,7 +165,6 @@ public final class CustomForm extends Form {
      * @param text        the text of the element
      * @param placeholder the placeholder of the element
      * @param defaultText the default text of the element
-     *
      * @return the form
      */
     public CustomForm input(String text, String placeholder, String defaultText) {
@@ -188,7 +175,6 @@ public final class CustomForm extends Form {
      * Add a label element to the form.
      *
      * @param text the text of the element
-     *
      * @return the form
      */
     public CustomForm label(String text) {
@@ -199,7 +185,6 @@ public final class CustomForm extends Form {
      * Add a slider element to the form.
      *
      * @param text the text of the element
-     *
      * @return the form
      */
     public CustomForm slider(String text, float min, float max) {
@@ -213,7 +198,6 @@ public final class CustomForm extends Form {
      * @param min  the minimum value of the element
      * @param max  the maximum value of the element
      * @param step the step of the element
-     *
      * @return the form
      */
     public CustomForm slider(String text, float min, float max, int step) {
@@ -228,7 +212,6 @@ public final class CustomForm extends Form {
      * @param max          the maximum value of the element
      * @param step         the step of the element
      * @param defaultValue the default value of the element
-     *
      * @return the form
      */
     public CustomForm slider(String text, float min, float max, int step, float defaultValue) {
@@ -239,7 +222,6 @@ public final class CustomForm extends Form {
      * Add a step slider element to the form.
      *
      * @param text the text of the element
-     *
      * @return the form
      */
     public CustomForm stepSlider(String text) {
@@ -251,7 +233,6 @@ public final class CustomForm extends Form {
      *
      * @param text  the text of the element
      * @param steps the steps of the element
-     *
      * @return the form
      */
     public CustomForm stepSlider(String text, String... steps) {
@@ -263,7 +244,6 @@ public final class CustomForm extends Form {
      *
      * @param text  the text of the element
      * @param steps the steps of the element
-     *
      * @return the form
      */
     public CustomForm stepSlider(String text, List<String> steps) {
@@ -276,7 +256,6 @@ public final class CustomForm extends Form {
      * @param text        the text of the element
      * @param steps       the steps of the element
      * @param defaultStep the default step of the element
-     *
      * @return the form
      */
     public CustomForm stepSlider(String text, List<String> steps, int defaultStep) {
@@ -287,7 +266,6 @@ public final class CustomForm extends Form {
      * Add a toggle element to the form.
      *
      * @param text the text of the element
-     *
      * @return the form
      */
     public CustomForm toggle(String text) {
@@ -299,7 +277,6 @@ public final class CustomForm extends Form {
      *
      * @param text         the text of the element
      * @param defaultValue the default value of the element
-     *
      * @return the form
      */
     public CustomForm toggle(String text, boolean defaultValue) {
@@ -310,7 +287,6 @@ public final class CustomForm extends Form {
      * Add a header element to the form.
      *
      * @param text the text of the element
-     *
      * @return the form
      */
     public CustomForm header(String text) {
@@ -330,7 +306,6 @@ public final class CustomForm extends Form {
      * Set the action to be performed when the form is submitted.
      *
      * @param onResponse the action to be performed when the form is submitted
-     *
      * @return the form
      */
     public CustomForm onResponse(Consumer<List<String>> onResponse) {
@@ -361,7 +336,7 @@ public final class CustomForm extends Form {
      * {@inheritDoc}
      */
     @Override
-    public void handleClose(ModalFormCancelReason reason) {
+    public void handleClose(FormCancelReason reason) {
         onClose.accept(reason);
     }
 

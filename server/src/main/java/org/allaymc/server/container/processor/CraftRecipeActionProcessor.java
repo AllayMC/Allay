@@ -2,21 +2,22 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.RecipeContainer;
-import org.allaymc.api.container.impl.CraftingContainer;
+import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.container.interfaces.RecipeContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.impl.CraftingRecipe;
-import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
+import org.allaymc.api.item.recipe.ShapedRecipe;
+import org.allaymc.api.item.recipe.ShapelessRecipe;
+import org.allaymc.api.item.recipe.SmithingRecipe;
+import org.allaymc.api.item.recipe.SmithingTrimRecipe;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.registry.Registries;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
+import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.registry.InternalRegistries;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -25,6 +26,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * @author daoge_cmd
@@ -38,54 +40,54 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         var recipeNetworkId = action.getRecipeNetworkId();
         if (recipeNetworkId >= EnchantmentOptionGenerator.NETWORK_ID_COUNTER_INITIAL_VALUE) {
             return handleEnchantTableRecipe(player, recipeNetworkId);
-        } else {
-            var recipe = Registries.RECIPES.get(recipeNetworkId);
-            var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
+        }
 
-            if (recipe instanceof CraftingRecipe craftingRecipe) {
-                var openedContainer = player.getOpenedContainers().toArray(Container[]::new)[0];
-                if (openedContainer instanceof RecipeContainer recipeContainer) {
-                    var recipeInput = recipeContainer.createRecipeInput();
-                    if (!recipe.match(recipeInput)) {
-                        log.warn("Mismatched recipe! Network id: {}", recipe.getNetworkId());
-                        return error();
-                    }
-                }
-
-                // Special cases
-                ActionResponse error = null;
-                var tag = craftingRecipe.getTag();
-                if (tag.equalsIgnoreCase("crafting_table")) {
-                    error = handleCraftingTable(player, numberOfRequestedCrafts, currentActionIndex, actions);
-                } else if (craftingRecipe instanceof SmithingTrimRecipe) {
-                    error = handleSmithingTableTrim(player);
-                }
-
-                if (error != null) {
-                    return error;
-                }
-
-                if (craftingRecipe.getOutputs() != null && craftingRecipe.getOutputs().length == 1) {
-                    // If the recipe outputs a single item, the client will not send a CreateAction,
-                    // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
-                    var output = craftingRecipe.getOutputs()[0].copy(false);
-                    output.setCount(output.getCount() * numberOfRequestedCrafts);
-                    player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(output);
-                } else {
-                    if (numberOfRequestedCrafts != 1) {
-                        log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
-                        return error();
-                    }
-                    // If the recipe outputs multiple items, the client will send a CreateAction, so we will set the output in CREATED_OUTPUT in CreateActionProcessor
-                    // Put recipe to data pool so that CreateActionProcessor can get it
-                    dataPool.put(RECIPE_DATA_KEY, craftingRecipe);
-                }
-
-                return null;
-            }
-
+        // The network id for the recipe start from 1, so we need to subtract 1 to get the index in indexedRecipes
+        var recipe = NetworkData.INDEXED_RECIPES.get(recipeNetworkId - 1);
+        var isShapeRecipe = recipe instanceof ShapedRecipe || recipe instanceof ShapelessRecipe;
+        if (!(isShapeRecipe || recipe instanceof SmithingRecipe)) {
             return error();
         }
+
+        var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
+        var openedContainer = player.getOpenedContainers().toArray(Container[]::new)[0];
+        if (openedContainer instanceof RecipeContainer recipeContainer) {
+            var recipeInput = recipeContainer.createRecipeInput();
+            if (!recipe.match(recipeInput)) {
+                log.warn("Mismatched recipe! Recipe identifier: {}", recipe.getIdentifier());
+                return error();
+            }
+        }
+
+        ActionResponse error = null;
+        if (isShapeRecipe) {
+            error = handleCraftingTable(player, numberOfRequestedCrafts, currentActionIndex, actions);
+        } else if (recipe instanceof SmithingTrimRecipe) {
+            error = handleSmithingTableTrim(player);
+        }
+
+        if (error != null) {
+            return error;
+        }
+
+        if (recipe.getOutputs() != null && recipe.getOutputs().length == 1) {
+            // If the recipe outputs a single item, the client will not send a CreateAction,
+            // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
+            var output = recipe.getOutput().copy(false);
+            output.setCount(output.getCount() * numberOfRequestedCrafts);
+            player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, output, false);
+        } else {
+            if (numberOfRequestedCrafts != 1) {
+                log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
+                return error();
+            }
+
+            // If the recipe outputs multiple items, the client will send a CreateAction, so we will set the output in CREATED_OUTPUT in CreateActionProcessor
+            // Put the recipe to data pool so that CreateActionProcessor can get it
+            dataPool.put(RECIPE_DATA_KEY, recipe);
+        }
+
+        return null;
     }
 
     protected ActionResponse handleEnchantTableRecipe(EntityPlayer player, int recipeNetworkId) {
@@ -95,7 +97,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var enchantTableContainer = player.getOpenedContainer(FullContainerType.ENCHANT_TABLE);
+        var enchantTableContainer = player.getOpenedContainer(ContainerTypes.ENCHANT_TABLE);
         var inputItem = enchantTableContainer.getInput();
         if (inputItem.getItemType() == ItemTypes.AIR) {
             log.warn("Input item is air!");
@@ -113,7 +115,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         enchantments = event.getEnchantments();
         requiredLapisLazuliCount = event.getRequiredLapisLazuliCount();
 
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             var material = enchantTableContainer.getMaterial();
             if (material.getItemType() != ItemTypes.LAPIS_LAZULI || material.getCount() < requiredLapisLazuliCount) {
                 log.warn("Not enough lapis lazuli! Need: {}, Current: {}", requiredLapisLazuliCount, enchantTableContainer.getMaterial().getCount());
@@ -132,17 +134,17 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         enchantedItem.addEnchantments(enchantments);
         // Copy the enchanted item to CREATED_OUTPUT, and client will send a PlaceAction
         // to move the enchanted item back to the input slot of the enchant table container
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(enchantedItem);
+        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, enchantedItem, false);
         player.regenerateEnchantmentSeed();
 
         return null;
     }
 
     protected ActionResponse handleCraftingTable(EntityPlayer player, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
-        CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
+        RecipeContainer craftingContainer = player.getOpenedContainer(ContainerTypes.CRAFTING_TABLE);
         if (craftingContainer == null) {
             // The player is not opening a crafting table, using crafting grid instead
-            craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
+            craftingContainer = player.getContainer(ContainerTypes.CRAFTING_GRID);
         }
 
         // Validate if the player has provided enough ingredients
@@ -163,7 +165,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         // Validate the consume action count which client sent
         // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
         var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
-        var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemSlotCount();
+        var consumeActionCountNeeded = calculateNonEmptySlotCount(craftingContainer);
         if (consumeActions.size() != consumeActionCountNeeded) {
             log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
             return error();
@@ -172,8 +174,12 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         return null;
     }
 
+    protected int calculateNonEmptySlotCount(Container container) {
+        return (int) IntStream.range(0, container.getContainerType().getSize()).filter(i -> !container.isEmpty(i)).count();
+    }
+
     protected ActionResponse handleSmithingTableTrim(EntityPlayer player) {
-        var container = player.getOpenedContainer(FullContainerType.SMITHING_TABLE);
+        var container = player.getOpenedContainer(ContainerTypes.SMITHING_TABLE);
         if (container == null) {
             log.warn("Received a CraftRecipeActionProcessor without an opened container!");
             return error();
@@ -187,12 +193,20 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var trimPattern = InternalRegistries.TRIM_PATTERNS.getContent().stream().filter(pattern ->
-                pattern.getItemName().equals(templateItem.getItemType().getIdentifier().toString())
-        ).findFirst().orElse(null);
-        var trimMaterial = InternalRegistries.TRIM_MATERIALS.getContent().stream().filter(material ->
-                material.getItemName().equals(materialItem.getItemType().getIdentifier().toString())
-        ).findFirst().orElse(null);
+        var trimPattern = InternalRegistries.TRIM_PATTERNS
+                .getContent()
+                .values()
+                .stream()
+                .filter(pattern -> pattern.itemType() == templateItem.getItemType())
+                .findFirst()
+                .orElse(null);
+        var trimMaterial = InternalRegistries.TRIM_MATERIALS
+                .getContent()
+                .values()
+                .stream()
+                .filter(material -> material.itemType() == materialItem.getItemType())
+                .findFirst()
+                .orElse(null);
 
         if (trimPattern == null || trimMaterial == null) {
             log.warn("Trim pattern or material not found");
@@ -206,7 +220,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         }
 
         trimComponent.trim(trimPattern, trimMaterial);
-        player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(result);
+        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, result, false);
         return null;
     }
 

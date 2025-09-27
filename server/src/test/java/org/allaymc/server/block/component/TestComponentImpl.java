@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * @author daoge_cmd

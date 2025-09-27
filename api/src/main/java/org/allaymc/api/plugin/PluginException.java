@@ -1,12 +1,10 @@
 package org.allaymc.api.plugin;
 
-import org.allaymc.api.utils.FormativeException;
+import lombok.experimental.StandardException;
 
 /**
  * @author daoge_cmd
  */
-public class PluginException extends FormativeException {
-    public PluginException(String format, Object... arguments) {
-        super(format, arguments);
-    }
+@StandardException
+public class PluginException extends RuntimeException {
 }

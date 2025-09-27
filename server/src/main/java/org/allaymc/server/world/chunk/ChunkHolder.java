@@ -13,6 +13,7 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.world.generator.ChunkPyramid;
 import org.allaymc.server.world.generator.ChunkStep;
 import org.allaymc.server.world.manager.AllayChunkManager;
@@ -99,7 +100,7 @@ public final class ChunkHolder {
         this.z = z;
         this.loadFuture = new CompletableFuture<>();
         this.unloadFuture = new CompletableFuture<>();
-        this.removeCountDown = Server.SETTINGS.worldSettings().removeUnusedProtoChunkCycle();
+        this.removeCountDown = AllayServer.getSettings().worldSettings().removeUnusedProtoChunkCycle();
         // Wait chunk read future to complete
         this.lock();
         chunkReadFuture.whenComplete((c, t) -> {
@@ -225,8 +226,8 @@ public final class ChunkHolder {
         if (isUsed()) {
             // Reset the countdown if the chunk is used
             this.removeCountDown = isFullChunk() ?
-                    Server.SETTINGS.worldSettings().removeUnusedFullChunkCycle() :
-                    Server.SETTINGS.worldSettings().removeUnusedProtoChunkCycle();
+                    AllayServer.getSettings().worldSettings().removeUnusedFullChunkCycle() :
+                    AllayServer.getSettings().worldSettings().removeUnusedProtoChunkCycle();
             return false;
         } else {
             this.removeCountDown--;

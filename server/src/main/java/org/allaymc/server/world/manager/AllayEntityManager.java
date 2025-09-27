@@ -4,16 +4,16 @@ import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityStatus;
+import org.allaymc.api.entity.EntityState;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.manager.EntityManager;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
@@ -116,7 +116,7 @@ public class AllayEntityManager implements EntityManager {
 
     protected void checkAutoSave() {
         autoSaveTimer++;
-        if (autoSaveTimer >= Server.SETTINGS.storageSettings().entityAutoSaveCycle()) {
+        if (autoSaveTimer >= AllayServer.getSettings().storageSettings().entityAutoSaveCycle()) {
             autoSaveTimer = 0;
             removeAndSaveEntitiesIf(entity -> {
                 var loc = entity.getLocation();
@@ -170,7 +170,7 @@ public class AllayEntityManager implements EntityManager {
             return;
         }
 
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.SPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.SPAWNED_NEXT_TICK)) {
             queue.add(() -> {
                 addEntityImmediately(entity);
                 callback.run();
@@ -189,14 +189,14 @@ public class AllayEntityManager implements EntityManager {
         physicsService.addEntity(entity);
         var chunk = entity.getCurrentChunk();
         if (chunk != null) {
-            entity.spawnTo(chunk.getPlayerChunkLoaders());
+            entity.spawnTo(chunk.getChunkLoaders());
         }
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.ALIVE);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.ALIVE);
     }
 
     @Override
     public void removeEntity(Entity entity, Runnable callback) {
-        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.DESPAWNED_NEXT_TICK)) {
+        if (((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED_NEXT_TICK)) {
             queue.add(() -> {
                 removeEntityImmediately(entity);
                 callback.run();
@@ -211,7 +211,7 @@ public class AllayEntityManager implements EntityManager {
         physicsService.removeEntity(entity);
         entity.despawnFromAll();
 
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setStatus(EntityStatus.DESPAWNED);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.DESPAWNED);
     }
 
     @Override
@@ -247,6 +247,6 @@ public class AllayEntityManager implements EntityManager {
 
     @Override
     public void checkAutoSaveImmediately() {
-        this.autoSaveTimer = Server.SETTINGS.storageSettings().entityAutoSaveCycle();
+        this.autoSaveTimer = AllayServer.getSettings().storageSettings().entityAutoSaveCycle();
     }
 }

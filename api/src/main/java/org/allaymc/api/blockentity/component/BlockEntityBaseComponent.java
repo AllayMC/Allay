@@ -3,18 +3,11 @@ package org.allaymc.api.blockentity.component;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
-import org.jetbrains.annotations.ApiStatus;
-
-import java.util.Objects;
 
 /**
  * @author daoge_cmd
@@ -66,81 +59,6 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
      * @param nbt The NBT data to load
      */
     void loadNBT(NbtMap nbt);
-
-    /**
-     * Applies a client change to the block entity.
-     *
-     * @param player The player who made the change
-     * @param nbt    The NBT data of the change
-     */
-    @ApiStatus.OverrideOnly
-    default void applyClientChange(EntityPlayer player, NbtMap nbt) {
-        loadNBT(nbt);
-    }
-
-    /**
-     * Creates a BlockEntityDataPacket for the block entity.
-     *
-     * @return The BlockEntityDataPacket for the block entity
-     */
-    default BlockEntityDataPacket createBlockEntityDataPacket() {
-        var packet = new BlockEntityDataPacket();
-        var pos = getPosition();
-        packet.setBlockPosition(Vector3i.from(pos.x(), pos.y(), pos.z()));
-        packet.setData(saveNBT());
-        return packet;
-    }
-
-    /**
-     * @see #sendBlockEntityToViewers(boolean)
-     */
-    default void sendPacketToViewers(BedrockPacket packet) {
-        sendPacketToViewers(packet, true);
-    }
-
-    /**
-     * Sends a packet to the block entity's viewers.
-     *
-     * @param packet      the packet to send
-     * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
-     *                    will be sent in the next tick of the chunk that the block entity is currently in.
-     */
-    default void sendPacketToViewers(BedrockPacket packet, boolean immediately) {
-        var pos = getPosition();
-        var chunk = pos.dimension().getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
-        Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
-        if (immediately) {
-            chunk.sendChunkPacket(packet);
-        } else {
-            chunk.addChunkPacket(packet);
-        }
-    }
-
-    /**
-     * @see #sendBlockEntityToViewers(boolean)
-     */
-    default void sendBlockEntityToViewers() {
-        sendBlockEntityToViewers(true);
-    }
-
-    /**
-     * Sends the block entity to its viewers.
-     *
-     * @param immediately whether the packet should be sent immediately. When {@code false}, the packet
-     *                    will be sent in the next tick of the chunk that the block entity is currently in.
-     */
-    default void sendBlockEntityToViewers(boolean immediately) {
-        sendPacketToViewers(createBlockEntityDataPacket(), immediately);
-    }
-
-    /**
-     * Whether the block entity should be sent to the client.
-     *
-     * @return Whether the block entity should be sent to the client
-     */
-    default boolean sendToClient() {
-        return true;
-    }
 
     /**
      * Gets the block state of the block entity.

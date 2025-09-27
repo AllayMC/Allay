@@ -25,6 +25,8 @@ application {
 
 dependencies {
     api(project(":api"))
+    implementation(libs.semver4j)
+    implementation(libs.commonslang3)
     implementation(libs.commonsio)
     implementation(libs.mcterminal)
     implementation(libs.bundles.logging)
@@ -39,6 +41,14 @@ dependencies {
     implementation(libs.bundles.rng)
     implementation(libs.sentry)
     implementation(libs.jctools)
+    implementation(libs.caffeine)
+    implementation(libs.bundles.fastutil)
+    implementation(libs.network) {
+        exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
+        exclude(group = "org.cloudburstmc.fastutil.commons")
+        exclude(group = "org.cloudburstmc.fastutil.maps")
+    }
+    implementation(libs.stateupdater)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)

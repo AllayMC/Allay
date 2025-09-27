@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class MineBlockActionProcessor implements ContainerActionProcessor<MineBlockAction> {
     @Override
     public ActionResponse handle(MineBlockAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+        var container = player.getContainer(ContainerTypes.INVENTORY);
         int handSlot = player.getHandSlot();
         if (handSlot != action.getHotbarSlot()) {
             log.warn("The held Item Index on the server side does not match the client side!");
@@ -28,8 +28,8 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
         }
 
         var itemInHand = container.getItemInHand();
-        if (failToValidateStackNetworkId(itemInHand.getStackNetworkId(), action.getStackNetworkId())) {
-            log.warn("mismatch source stack network id!");
+        if (failToValidateStackUniqueId(itemInHand.getUniqueId(), action.getStackNetworkId())) {
+            log.warn("mismatch source stack unique id!");
             return error();
         }
 
@@ -40,19 +40,19 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
                 true,
                 Collections.singletonList(
                         new ItemStackResponseContainer(
-                                container.getSlotType(handSlot),
+                                ContainerActionProcessor.getSlotType(container, handSlot),
                                 Collections.singletonList(
                                         new ItemStackResponseSlot(
-                                                container.toNetworkSlotIndex(handSlot),
-                                                container.toNetworkSlotIndex(handSlot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(container, handSlot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(container, handSlot),
                                                 itemInHand.getCount(),
-                                                itemInHand.getStackNetworkId(),
+                                                itemInHand.getUniqueId(),
                                                 itemInHand.getCustomName(),
                                                 itemInHand.getDamage(),
                                                 ""
                                         )
                                 ),
-                                new FullContainerName(container.getSlotType(handSlot), null)
+                                new FullContainerName(ContainerActionProcessor.getSlotType(container, handSlot), null)
                         )
                 )
         );

@@ -1,16 +1,14 @@
 package org.allaymc.server.entity.component;
 
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.AttributeType;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
 import org.allaymc.api.math.MathUtils;
@@ -18,16 +16,15 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.interfaces.ComponentManager;
 import org.allaymc.server.entity.component.event.*;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.Range;
 import org.joml.RoundingMode;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -51,15 +48,18 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     protected static final String TAG_MOTION = "Motion";
     protected static final String TAG_ON_GROUND = "OnGround";
+    protected static final String TAG_KNOCKBACK_RESISTANCE = "KnockbackResistance";
 
     // Constants used in physics calculation
-    protected static final DoubleBooleanImmutablePair EMPTY_DOUBLE_BOOLEAN_PAIR = new DoubleBooleanImmutablePair(0, false);
+    protected static final Pair<Double, Boolean> EMPTY_DOUBLE_BOOLEAN_PAIR = new Pair<>(0.0, false);
     protected static final double STEPPING_OFFSET = 0.05;
 
     @ComponentObject
     protected Entity thisEntity;
+    @Dependency
+    protected EntityBaseComponentImpl baseComponent;
     @Dependency(optional = true)
-    protected EntityAttributeComponent attributeComponent;
+    protected EntityLivingComponent livingComponent;
     @Manager
     protected ComponentManager manager;
 
@@ -70,12 +70,18 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     @Getter
     protected boolean onGround;
     @Getter
+    @Accessors(fluent = true)
+    protected boolean hasGravity;
+    @Getter
     protected double fallDistance;
+    @Getter
+    protected float knockbackResistance;
 
     public EntityPhysicsComponentImpl() {
         this.motion = new Vector3d();
         this.lastMotion = new Vector3d();
         this.onGround = true;
+        this.hasGravity = true;
     }
 
     @EventHandler
@@ -88,6 +94,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         }
 
         nbt.listenForBoolean(TAG_ON_GROUND, onGround -> this.onGround = onGround);
+        nbt.listenForFloat(TAG_KNOCKBACK_RESISTANCE, knockbackResistance -> this.knockbackResistance = knockbackResistance);
     }
 
     @EventHandler
@@ -95,6 +102,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         var builder = event.getNbt();
         builder.putBoolean(TAG_ON_GROUND, onGround);
         AllayNbtUtils.writeVector3f(builder, TAG_MOTION, (float) motion.x, (float) motion.y, (float) motion.z);
+        builder.putFloat(TAG_KNOCKBACK_RESISTANCE, knockbackResistance);
     }
 
     @EventHandler
@@ -117,39 +125,6 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             this.fallDistance -= newLocation.y() - location.y();
             tryResetFallDistance(newLocation);
         }
-    }
-
-    @EventHandler
-    protected void onCreateMovePacket(CEntityCreateMovePacketEvent event) {
-        event.getPackets().add(createMotionPacket());
-        if (onGround) {
-            for (var packet : event.getPackets()) {
-                switch (packet) {
-                    case MoveEntityDeltaPacket deltaPacket ->
-                            deltaPacket.getFlags().add(MoveEntityDeltaPacket.Flag.ON_GROUND);
-                    case MoveEntityAbsolutePacket absolutePacket -> absolutePacket.setOnGround(true);
-                    case null, default -> {/* no-op */}
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    protected void onCreateSpawnPacket(CEntityCreateSpawnPacketEvent event) {
-        var vec = Vector3f.from(motion.x(), motion.y(), motion.z());
-        switch (event.getPacket()) {
-            case AddEntityPacket addEntityPacket -> addEntityPacket.setMotion(vec);
-            case AddPlayerPacket addPlayerPacket -> addPlayerPacket.setMotion(vec);
-            case AddItemEntityPacket addItemEntityPacket -> addItemEntityPacket.setMotion(vec);
-            case null, default -> {/* no-op */}
-        }
-    }
-
-    protected BedrockPacket createMotionPacket() {
-        var pk = new SetEntityMotionPacket();
-        pk.setRuntimeEntityId(thisEntity.getRuntimeId());
-        pk.setMotion(Vector3f.from(motion.x, motion.y, motion.z));
-        return pk;
     }
 
     protected void tryResetFallDistance(Location3dc location) {
@@ -335,7 +310,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             axis.setComponent(recorder, axis.getComponent(recorder) + deltaInAxis);
         }
 
-        return new DoubleBooleanImmutablePair(motion, collision);
+        return new Pair<>(motion, collision);
     }
 
     private boolean notValidEntityArea(AABBd extendAABB) {
@@ -436,14 +411,15 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         setMotion(calculateKnockbackMotion(source, kb, kby, additionalMotion, ignoreKnockbackResistance));
     }
 
+    @Override
+    public void setKnockbackResistance(@Range(from = 0, to = 1) float knockbackResistance) {
+        this.knockbackResistance = Math.clamp(knockbackResistance, 0, 1);
+    }
+
     protected Vector3d calculateKnockbackMotion(Vector3dc source, double kb, double kby, Vector3dc additionalMotion, boolean ignoreKnockbackResistance) {
         if (!ignoreKnockbackResistance) {
-            var resistance = 0.0;
-            if (attributeComponent != null && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
-                resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
-            }
-            if (resistance > 0) {
-                var factor = 1 - resistance;
+            if (this.knockbackResistance > 0) {
+                var factor = 1 - this.knockbackResistance;
                 kb *= factor;
                 kby *= factor;
                 additionalMotion = additionalMotion.mul(factor, new Vector3d());
@@ -473,10 +449,9 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             return;
         }
 
+        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
         var blockUnder = getBlockStateStandingOn();
         blockUnder.getBehavior().onEntityFallOn(thisEntity, blockUnder);
-
-        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
         this.fallDistance = 0;
     }
 
@@ -515,19 +490,20 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
 
     @Override
     public boolean canCriticalAttack() {
-        return !isOnGround() && getMotion().y() < 0 &&
-               !thisEntity.hasEffect(EffectTypes.BLINDNESS) &&
-               !thisEntity.hasEffect(EffectTypes.SLOW_FALLING);
-    }
+        if (livingComponent != null &&
+            (livingComponent.hasEffect(EffectTypes.BLINDNESS) ||
+             livingComponent.hasEffect(EffectTypes.SLOW_FALLING))
+        ) {
+            return false;
+        }
 
-    @Override
-    public boolean hasGravity() {
-        return thisEntity.getMetadata().get(EntityFlag.HAS_GRAVITY);
+        return !isOnGround() && getMotion().y() < 0;
     }
 
     @Override
     public void setHasGravity(boolean hasGravity) {
-        thisEntity.setAndSendEntityFlag(EntityFlag.HAS_GRAVITY, hasGravity);
+        this.hasGravity = hasGravity;
+        this.baseComponent.broadcastState();
     }
 
     @Override

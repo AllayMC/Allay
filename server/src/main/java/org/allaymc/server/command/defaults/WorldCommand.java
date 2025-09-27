@@ -3,14 +3,14 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.form.Forms;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldSettings;
+import org.allaymc.api.world.data.DimensionInfo;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -175,9 +175,9 @@ public class WorldCommand extends VanillaCommand {
                                             .build());
                                 }
 
-                                player.sendTr(TrKeys.ALLAY_WORLD_LOADING, name);
+                                player.sendTranslatable(TrKeys.ALLAY_WORLD_LOADING, name);
                                 Server.getInstance().getWorldPool().loadWorld(name, worldSettingBuilder.build());
-                                player.sendTr(TrKeys.ALLAY_WORLD_LOADED, name);
+                                player.sendTranslatable(TrKeys.ALLAY_WORLD_LOADED, name);
                             })
                             .sendTo(player);
                     return context.success();

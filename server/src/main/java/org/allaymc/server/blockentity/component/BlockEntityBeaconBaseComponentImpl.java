@@ -2,12 +2,12 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.block.tag.BlockCustomTags;
+import org.allaymc.api.block.data.BlockTags;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBeaconBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -149,7 +149,7 @@ public class BlockEntityBeaconBaseComponentImpl extends BlockEntityBaseComponent
         for (var y = position.y() - 1; y >= position.y() - 4; y--) {
             for (var x = position.x() - iter; x <= position.x() + iter; x++) {
                 for (var z = position.z() - iter; z <= position.z() + iter; z++) {
-                    if (!position.dimension().getBlockState(x, y, z).getBlockType().hasBlockTag(BlockCustomTags.BEACON_BASE)) {
+                    if (!position.dimension().getBlockState(x, y, z).getBlockType().hasBlockTag(BlockTags.BEACON_BASE)) {
                         return lvl;
                     }
                 }

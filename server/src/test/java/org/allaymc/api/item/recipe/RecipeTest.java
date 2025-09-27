@@ -1,18 +1,15 @@
 package org.allaymc.api.item.recipe;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.DefaultDescriptor;
-import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
-import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
-import org.allaymc.api.item.recipe.impl.ShapedRecipe;
-import org.allaymc.api.item.recipe.impl.ShapelessRecipe;
+import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,27 +24,23 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
-    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(GRASS_BLOCK));
+    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new ItemTypeDescriptor(GRASS_BLOCK));
 
     @Test
     void testShapedRecipe() {
-        var grassMagic1 = ShapedRecipe
-                .builder()
-                .identifier(new Identifier("minecraft:grass_magic_1"))
-                .tag("test_tag")
-                .pattern(
-                        ShapedRecipe.PatternHelper.build(
-                                "xx",
-                                "xx"
-                        )
-                )
-                .keys(GRASS_KEY)
-                .outputs(new ItemStack[]{diamond()})
-                .build();
+        var grassMagic1 = new ShapedRecipe(
+                new Identifier("minecraft:grass_magic_1"),
+                new ItemStack[]{diamond()},
+                0,
+                ShapedRecipe.PatternHelper.build(
+                        "xx",
+                        "xx"
+                ),
+                GRASS_KEY
+        );
 
         assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
         assertEquals(DIAMOND, grassMagic1.getOutputs()[0].getItemType());
-        assertEquals("test_tag", grassMagic1.getTag());
 
         var input1 = new CraftingRecipeInput(
                 grass(), grass(), air(),
@@ -94,18 +87,16 @@ class RecipeTest {
         assertFalse(grassMagic1.match(input6));
         assertFalse(grassMagic1.match(input7));
 
-        var grassMagic2 = ShapedRecipe
-                .builder()
-                .identifier(new Identifier("minecraft:grass_magic_2"))
-                .pattern(
-                        ShapedRecipe.PatternHelper.build(
-                                "x",
-                                "x"
-                        )
-                )
-                .keys(GRASS_KEY)
-                .outputs(new ItemStack[]{diamond()})
-                .build();
+        var grassMagic2 = new ShapedRecipe(
+                new Identifier("minecraft:grass_magic_2"),
+                new ItemStack[]{diamond()},
+                0,
+                ShapedRecipe.PatternHelper.build(
+                        "x",
+                        "x"
+                ),
+                GRASS_KEY
+        );
 
         var input8 = new CraftingRecipeInput(
                 grass(), air(), air(),
@@ -153,17 +144,13 @@ class RecipeTest {
         assertFalse(grassMagic2.match(input6));
         assertFalse(grassMagic2.match(input7));
 
-        var grassMagic3 = ShapedRecipe
-                .builder()
-                .identifier(new Identifier("minecraft:grass_magic_3"))
-                .pattern(
-                        ShapedRecipe.PatternHelper.build(
-                                'x'
-                        )
-                )
-                .keys(GRASS_KEY)
-                .outputs(new ItemStack[]{diamond()})
-                .build();
+        var grassMagic3 = new ShapedRecipe(
+                new Identifier("minecraft:grass_magic_3"),
+                new ItemStack[]{diamond()},
+                0,
+                ShapedRecipe.PatternHelper.build('x'),
+                GRASS_KEY
+        );
 
         var input14 = new CraftingRecipeInput(
                 grass(), air(),
@@ -190,18 +177,17 @@ class RecipeTest {
 
     @Test
     void testShapelessRecipe() {
-        var grassMagic1 = ShapelessRecipe
-                .builder()
-                .identifier(new Identifier("minecraft:grass_magic_1"))
-                .ingredients(
-                        new ItemDescriptor[]{
-                                new DefaultDescriptor(GRASS_BLOCK),
-                                new DefaultDescriptor(GRASS_BLOCK),
-                                new DefaultDescriptor(GRASS_BLOCK)
-                        }
-                )
-                .outputs(new ItemStack[]{diamond()})
-                .build();
+        var grassMagic1 = new ShapelessRecipe(
+                new Identifier("minecraft:grass_magic_1"),
+                new ItemStack[]{diamond()},
+                0,
+                new ItemDescriptor[]{
+                        new ItemTypeDescriptor(GRASS_BLOCK),
+                        new ItemTypeDescriptor(GRASS_BLOCK),
+                        new ItemTypeDescriptor(GRASS_BLOCK)
+                },
+                ShapelessRecipe.Type.CRAFTING
+        );
 
         var input1 = new CraftingRecipeInput(grass(), grass(), grass(), air());
 
@@ -220,30 +206,26 @@ class RecipeTest {
 
     @Test
     void testFurnaceRecipe() {
-        var grassMagic1 = FurnaceRecipe
-                .builder()
-                .ingredient(new DefaultDescriptor(GRASS_BLOCK))
-                .tag(FurnaceRecipe.FURNACE_TAG)
-                .output(diamond())
-                .build();
+        var grassMagic1 = new FurnaceRecipe(
+                new ItemTypeDescriptor(GRASS_BLOCK).createItemStack(),
+                diamond(),
+                FurnaceRecipe.Type.FURNACE
+        );
 
-        var input1 = new FurnaceRecipeInput(grass(), FurnaceRecipe.FURNACE_TAG);
+        var input1 = new FurnaceRecipeInput(grass(), FurnaceRecipe.Type.FURNACE);
 
         assertTrue(grassMagic1.match(input1));
 
-        var grassMagic2 = FurnaceRecipe
-                .builder()
-                .ingredient(new DefaultDescriptor(GRASS_BLOCK))
-                .tag(FurnaceRecipe.BLAST_FURNACE_TAG)
-                .output(diamond())
-                .build();
+        var grassMagic2 = new FurnaceRecipe(
+                new ItemTypeDescriptor(GRASS_BLOCK).createItemStack(),
+                diamond(),
+                FurnaceRecipe.Type.BLAST_FURNACE);
 
-        var input2 = new FurnaceRecipeInput(grass(), FurnaceRecipe.FURNACE_TAG);
+        var input2 = new FurnaceRecipeInput(grass(), FurnaceRecipe.Type.FURNACE);
 
         assertFalse(grassMagic2.match(input2));
-        assertEquals(grassMagic2.getIdentifier(), new Identifier(GRASS_BLOCK.getIdentifier() + "_" + FurnaceRecipe.BLAST_FURNACE_TAG));
 
-        var input3 = new FurnaceRecipeInput(grass(), FurnaceRecipe.BLAST_FURNACE_TAG);
+        var input3 = new FurnaceRecipeInput(grass(), FurnaceRecipe.Type.BLAST_FURNACE);
 
         assertTrue(grassMagic1.match(input3));
     }

@@ -2,12 +2,10 @@ package org.allaymc.server.entity.component.projectile;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.item.data.PotionType;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -39,6 +37,10 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     @Getter
     @Setter
     protected boolean pickUpDisabled;
+    @Getter
+    protected boolean critical;
+    @Getter
+    protected PotionType potionType;
 
     public EntityArrowBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -46,28 +48,15 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     }
 
     @Override
-    public boolean isCritical() {
-        return this.metadata.get(EntityFlag.CRITICAL);
-    }
-
-    @Override
     public void setCritical(boolean critical) {
-        setAndSendEntityFlag(EntityFlag.CRITICAL, critical);
-    }
-
-    @Override
-    public PotionType getPotionType() {
-        var idPlusOne = this.metadata.get(EntityDataTypes.CUSTOM_DISPLAY);
-        if (idPlusOne != null) {
-            return PotionType.fromId(idPlusOne - 1);
-        }
-
-        return null;
+        this.critical = critical;
+        broadcastState();
     }
 
     @Override
     public void setPotionType(PotionType potionType) {
-        setAndSendEntityData(EntityDataTypes.CUSTOM_DISPLAY, potionType != null ? (byte) (potionType.ordinal() + 1) : null);
+        this.potionType = potionType;
+        broadcastState();
     }
 
     @Override

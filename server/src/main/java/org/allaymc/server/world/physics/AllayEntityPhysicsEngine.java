@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.tag.BlockCustomTags;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -14,19 +14,18 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;
 import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
-import org.allaymc.server.network.processor.impl.ingame.PlayerAuthInputPacketProcessor;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
+import org.allaymc.server.network.processor.PacketProcessor;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBdc;
@@ -64,7 +63,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     private static final double LAVA_FLOW_MOTION_IN_NETHER = 0.007;
 
     static {
-        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
+        var settings = AllayServer.getSettings().entitySettings().physicsEngineSettings();
         MOTION_THRESHOLD = settings.motionThreshold();
         BLOCK_COLLISION_MOTION = settings.blockCollisionMotion();
     }
@@ -272,10 +271,10 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 flowVector.mul(d);
             }
 
-            if (liquidBehavior.getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
+            if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.WATER)) {
                 hasWaterMotion.set(true);
                 waterMotion.add(flowVector);
-            } else if (liquidBehavior.getBlockType().hasBlockTag(BlockCustomTags.LAVA)) {
+            } else if (liquidBehavior.getBlockType().hasBlockTag(BlockTags.LAVA)) {
                 hasLavaMotion.set(true);
                 lavaMotion.add(flowVector);
             }
@@ -385,7 +384,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
+     * See {@link PacketProcessor#handleAsync(EntityPlayer, org.cloudburstmc.protocol.bedrock.packet.BedrockPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3dc newLoc) {
         if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {

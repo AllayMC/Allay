@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
 /**
  * @author daoge_cmd

@@ -1,10 +1,10 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.message.TrKeys;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -54,14 +54,14 @@ public class GiveCommand extends VanillaCommand {
                             remaining -= giveCount;
 
                             var itemStack = itemType.createItemStack(giveCount, data);
-                            player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
+                            player.getContainer(ContainerTypes.INVENTORY).tryAddItem(itemStack);
 
                             if (itemStack.getCount() > 0) {
                                 player.dropItemInPlayerPos(itemStack);
                             }
                         }
 
-                        player.sendTr(TrKeys.MC_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
+                        player.sendTranslatable(TrKeys.MC_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
                     }
                     context.addOutput(
                             TrKeys.MC_COMMANDS_GIVE_SUCCESS, itemType.getIdentifier().toString(),

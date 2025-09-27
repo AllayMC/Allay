@@ -1,37 +1,36 @@
 package org.allaymc.api.world;
 
-import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
-import it.unimi.dsi.fastutil.ints.IntObjectPair;
+import org.allaymc.api.block.action.BlockAction;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.world.biome.BiomeId;
+import org.allaymc.api.utils.function.QuadConsumer;
+import org.allaymc.api.utils.function.TriFunction;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.OperationType;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.api.world.manager.BlockUpdateManager;
 import org.allaymc.api.world.manager.ChunkManager;
 import org.allaymc.api.world.manager.EntityManager;
-import org.apache.commons.lang3.function.TriFunction;
-import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
-import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.allaymc.api.world.particle.Particle;
+import org.allaymc.api.world.sound.Sound;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -62,26 +61,7 @@ public interface Dimension {
     /**
      * The return value of {@link #getLiquid(int, int, int)} if no liquid is found.
      */
-    IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
-
-    /**
-     * Create a block update packet.
-     *
-     * @param newBlockState the new block state
-     * @param x             the x coordinate of the block
-     * @param y             the y coordinate of the block
-     * @param z             the z coordinate of the block
-     * @param layer         the layer which contains the block
-     * @return the created block update packet
-     */
-    private static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
-        var updateBlockPacket = new UpdateBlockPacket();
-        updateBlockPacket.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.from(x, y, z));
-        updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinition());
-        updateBlockPacket.setDataLayer(layer);
-        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
-        return updateBlockPacket;
-    }
+    Pair<Integer, BlockState> PAIR_LIQUID_NOT_FOUND = new Pair<>(-1, null);
 
     /**
      * Get the chunk manager of this dimension.
@@ -348,28 +328,6 @@ public interface Dimension {
     boolean setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
 
     /**
-     * @see #sendBlockUpdateTo(BlockState, int, int, int, int, EntityPlayer)
-     */
-    default void sendBlockUpdateTo(BlockState blockState, Vector3ic pos, int layer, EntityPlayer player) {
-        sendBlockUpdateTo(blockState, pos.x(), pos.y(), pos.z(), layer, player);
-    }
-
-    /**
-     * Send block update in a specified pos to a specified player with the given block state.
-     * This is useful for plugin to create fake block client side.
-     *
-     * @param blockState the block state to send
-     * @param x          the x coordinate of the block
-     * @param y          the y coordinate of the block
-     * @param z          the z coordinate of the block
-     * @param layer      the layer which contains the block
-     * @param player     the player to send the block update
-     */
-    default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
-        player.sendPacket(createUpdateBlockPacket(blockState, x, y, z, layer));
-    }
-
-    /**
      * @see #getBlockState(int, int, int, int)
      */
     default BlockState getBlockState(Vector3dc pos) {
@@ -442,9 +400,9 @@ public interface Dimension {
     }
 
     /**
-     * @see #forEachBlockStates(int, int, int, int, int, int, int, PosAndBlockStateConsumer)
+     * @see #forEachBlockStates(int, int, int, int, int, int, int, QuadConsumer)
      */
-    default void forEachBlockStates(AABBdc aabb, int layer, PosAndBlockStateConsumer blockStateConsumer) {
+    default void forEachBlockStates(AABBdc aabb, int layer, QuadConsumer<Integer, Integer, Integer, BlockState> blockStateConsumer) {
         var maxX = (int) Math.ceil(aabb.maxX());
         var maxY = (int) Math.ceil(aabb.maxY());
         var maxZ = (int) Math.ceil(aabb.maxZ());
@@ -471,7 +429,7 @@ public interface Dimension {
             @Range(from = 1, to = Integer.MAX_VALUE) int sizeX,
             @Range(from = 1, to = Integer.MAX_VALUE) int sizeY,
             @Range(from = 1, to = Integer.MAX_VALUE) int sizeZ,
-            int layer, PosAndBlockStateConsumer blockStateConsumer) {
+            int layer, QuadConsumer<Integer, Integer, Integer, BlockState> blockStateConsumer) {
         var blockStates = getBlockStates(x, y, z, sizeX, sizeY, sizeZ, layer);
         if (blockStates == null) {
             return;
@@ -487,7 +445,7 @@ public interface Dimension {
                         continue;
                     }
 
-                    blockStateConsumer.apply(x + offsetX, y + offsetY, z + offsetZ, blockState);
+                    blockStateConsumer.accept(x + offsetX, y + offsetY, z + offsetZ, blockState);
                 }
             }
         }
@@ -726,128 +684,8 @@ public interface Dimension {
     }
 
     /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
+     * @see #updateAroundIgnoreFace(Vector3ic, BlockFace...)
      */
-    default void addLevelEvent(Vector3ic pos, LevelEventType eventType) {
-        addLevelEvent(pos, eventType, 0);
-    }
-
-    /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(Vector3ic pos, LevelEventType eventType, int data) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
-    }
-
-    /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(Vector3dc pos, LevelEventType eventType) {
-        addLevelEvent(pos, eventType, 0);
-    }
-
-    /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(Vector3dc pos, LevelEventType eventType, int data) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
-    }
-
-    /**
-     * @see #addLevelEvent(double, double, double, LevelEventType, int)
-     */
-    default void addLevelEvent(double x, double y, double z, LevelEventType eventType) {
-        addLevelEvent(x, y, z, eventType, 0);
-    }
-
-    /**
-     * Add a level event at the specified position.
-     *
-     * @param x         the x coordinate of the position
-     * @param y         the y coordinate of the position
-     * @param z         the z coordinate of the position
-     * @param eventType the level event type
-     * @param data      the data of the level event
-     */
-    default void addLevelEvent(double x, double y, double z, LevelEventType eventType, int data) {
-        var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
-        if (chunk == null) return;
-
-        var packet = new LevelEventPacket();
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
-        packet.setType(eventType);
-        packet.setData(data);
-        chunk.sendChunkPacket(packet);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent, int extraData) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(Vector3dc pos, SoundEvent soundEvent) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(Vector3dc pos, SoundEvent soundEvent, int extraData) {
-        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent) {
-        addLevelSoundEvent(x, y, z, soundEvent, -1);
-    }
-
-    /**
-     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
-     */
-    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData) {
-        addLevelSoundEvent(x, y, z, soundEvent, extraData, "", false, false);
-    }
-
-    /**
-     * Add a level sound event at the specified position.
-     *
-     * @param x                      the x coordinate of the position
-     * @param y                      the y coordinate of the position
-     * @param z                      the z coordinate of the position
-     * @param soundEvent             the sound event
-     * @param extraData              the extra data of the sound event
-     * @param identifier             the identifier of the sound event
-     * @param babySound              whether the sound is a baby sound
-     * @param relativeVolumeDisabled whether the relative volume is disabled
-     */
-    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
-        var chunk = getChunkManager().getChunk((int) x >> 4, (int) z >> 4);
-        if (chunk == null) return;
-
-        var packet = new LevelSoundEventPacket();
-        packet.setSound(soundEvent);
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
-        packet.setExtraData(extraData);
-        packet.setIdentifier(identifier);
-        packet.setBabySound(babySound);
-        packet.setRelativeVolumeDisabled(relativeVolumeDisabled);
-        chunk.sendChunkPacket(packet);
-    }
-
     default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {
         updateAroundIgnoreFace(new Vector3i(x, y, z), ignoreFaces);
     }
@@ -870,11 +708,7 @@ public interface Dimension {
     }
 
     /**
-     * Update the blocks around a block.
-     *
-     * @param x the x coordinate of the block
-     * @param y the y coordinate of the block
-     * @param z the z coordinate of the block
+     * @see #updateAround(Vector3ic)
      */
     default void updateAround(int x, int y, int z) {
         for (var face : BlockFace.values()) updateAtFace(x, y, z, face);
@@ -883,7 +717,7 @@ public interface Dimension {
     /**
      * Update the blocks around a block.
      *
-     * @param pos the pos
+     * @param pos the pos where the block is in
      */
     default void updateAround(Vector3ic pos) {
         for (var face : BlockFace.values()) updateAtFace(pos, face);
@@ -1018,145 +852,100 @@ public interface Dimension {
     }
 
     /**
-     * @see #addParticle(double, double, double, ParticleType, int)
+     * @see #addBlockAction(int, int, int, BlockAction)
      */
-    default void addParticle(Vector3ic pos, ParticleType particleType) {
-        addParticle(pos, particleType, 0);
+    default void addBlockAction(Vector3ic pos, BlockAction action) {
+        addBlockAction(pos.x(), pos.y(), pos.z(), action);
     }
 
     /**
-     * @see #addParticle(double, double, double, ParticleType, int)
+     * Adds a block action at the pos passed.
+     *
+     * @param x      the x coordinate of the pos
+     * @param y      the y coordinate of the pos
+     * @param z      the z coordinate of the pos
+     * @param action the action
      */
-    default void addParticle(Vector3ic pos, ParticleType particleType, int data) {
-        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
+    default void addBlockAction(int x, int y, int z, BlockAction action) {
+        getChunkManager().getChunkByDimensionPos(x, z).forEachChunkLoaders(loader -> loader.viewBlockAction(new Vector3i(x, y, z), action));
     }
 
     /**
-     * @see #addParticle(double, double, double, ParticleType, int)
+     * @see #addParticle(double, double, double, Particle)
      */
-    default void addParticle(Vector3dc pos, ParticleType particleType) {
-        addParticle(pos, particleType, 0);
+    default void addParticle(Vector3ic pos, Particle particle) {
+        addParticle(pos.x(), pos.y(), pos.z(), particle);
     }
 
     /**
-     * @see #addParticle(double, double, double, ParticleType, int)
+     * @see #addParticle(double, double, double, Particle)
      */
-    default void addParticle(Vector3dc pos, ParticleType particleType, int data) {
-        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
-    }
-
-    /**
-     * @see #addParticle(double, double, double, ParticleType, int)
-     */
-    default void addParticle(double x, double y, double z, ParticleType particleType) {
-        this.addParticle(x, y, z, particleType, 0);
+    default void addParticle(Vector3dc pos, Particle particle) {
+        addParticle(pos.x(), pos.y(), pos.z(), particle);
     }
 
     /**
      * Adds a particle at the specified position.
      *
-     * @param x            the x-coordinate of the position where the particle should be added
-     * @param y            the y-coordinate of the position where the particle should be added
-     * @param z            the z-coordinate of the position where the particle should be added
-     * @param particleType the type of the particle to be added
-     * @param data         the data associated with the particle
+     * @param x        the x-coordinate of the particle
+     * @param y        the y-coordinate of the particle
+     * @param z        the z-coordinate of the particle
+     * @param particle the particle to be added
      */
-    default void addParticle(double x, double y, double z, ParticleType particleType, int data) {
-        addLevelEvent(x, y, z, particleType, data);
+    default void addParticle(double x, double y, double z, Particle particle) {
+        getChunkManager().getChunkByDimensionPos((int) x, (int) z)
+                .forEachChunkLoaders(loader -> loader.viewParticle(particle, new Vector3d(x, y, z)));
     }
 
     /**
-     * Broadcast a packet to all players in this dimension.
-     *
-     * @param packet the packet to broadcast
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void broadcastPacket(BedrockPacket packet) {
-        getPlayers().forEach(player -> player.sendPacket(packet));
+    default void addSound(Vector3dc pos, Sound sound) {
+        addSound(pos, sound, true);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3dc pos, String sound) {
-        addSound(pos, sound, 1);
+    default void addSound(Vector3dc pos, Sound sound, boolean relative) {
+        addSound(pos.x(), pos.y(), pos.z(), sound, relative);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3dc pos, String sound, double volume) {
-        addSound(pos, sound, volume, 1);
+    default void addSound(Vector3ic pos, Sound sound) {
+        addSound(pos, sound, true);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3dc pos, String sound, double volume, double pitch) {
-        addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
+    default void addSound(Vector3ic pos, Sound sound, boolean relative) {
+        addSound(pos.x(), pos.y(), pos.z(), sound, relative);
     }
 
     /**
-     * @see #addSound(double, double, double, String, double)
+     * @see #addSound(double, double, double, Sound, boolean)
      */
-    default void addSound(Vector3ic pos, String sound) {
-        addSound(pos, sound, 1);
-    }
-
-    /**
-     * @see #addSound(double, double, double, String, double)
-     */
-    default void addSound(Vector3ic pos, String sound, double volume) {
-        addSound(pos, sound, volume, 1);
-    }
-
-    /**
-     * @see #addSound(double, double, double, String, double)
-     */
-    default void addSound(Vector3ic pos, String sound, double volume, double pitch) {
-        addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
-    }
-
-    /**
-     * @see #addSound(double, double, double, String, double)
-     */
-    default void addSound(double x, double y, double z, String sound) {
-        addSound(x, y, z, sound, 1);
+    default void addSound(double x, double y, double z, Sound sound) {
+        addSound(x, y, z, sound, true);
     }
 
     /**
      * Add a sound at the specified pos.
      *
-     * @param x      the x coordinate of the pos
-     * @param y      the y coordinate of the pos
-     * @param z      the z coordinate of the pos
-     * @param sound  the sound
-     * @param volume the volume of the sound
+     * @param x        the x coordinate of the pos
+     * @param y        the y coordinate of the pos
+     * @param z        the z coordinate of the pos
+     * @param sound    the sound
+     * @param relative whether the sound is relative. If set to {@code true}, the sound will have full volume,
+     *                 regardless of where the Position is, whereas if set to {@code false}, the sound's volume
+     *                 will be based on the distance to the pos passed
      */
-    default void addSound(double x, double y, double z, String sound, double volume) {
-        addSound(x, y, z, sound, volume, 1);
-    }
-
-    /**
-     * Add a sound at the specified pos.
-     *
-     * @param x      the x coordinate of the pos
-     * @param y      the y coordinate of the pos
-     * @param z      the z coordinate of the pos
-     * @param sound  the sound
-     * @param volume the volume of the sound
-     * @param pitch  the pitch of the sound
-     */
-    default void addSound(double x, double y, double z, String sound, double volume, double pitch) {
-        Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
-        Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0");
-
-        var packet = new PlaySoundPacket();
-        packet.setSound(sound);
-        packet.setVolume((float) volume);
-        packet.setPitch((float) pitch);
-        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
-
-        getChunkManager().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
+    default void addSound(double x, double y, double z, Sound sound, boolean relative) {
+        getChunkManager().getChunkByDimensionPos((int) x, (int) z)
+                .forEachChunkLoaders(loader -> loader.viewSound(sound, new Vector3d(x, y, z), relative));
     }
 
     /**
@@ -1401,15 +1190,15 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     * @return the biome at the specified pos.{@code BiomeId.PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded
+     * @return the biome at the specified pos.{@link BiomeTypes#PLAINS} will be returned if the y coordinate is out of the valid range of this dimension or the chunk is not loaded
      */
     default BiomeType getBiome(int x, int y, int z) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
 
         var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
         }
 
         return chunk.getBiome(x & 15, y, z & 15);
@@ -1442,7 +1231,7 @@ public interface Dimension {
     /**
      * @see #getLiquid(Vector3ic)
      */
-    default IntObjectPair<BlockState> getLiquid(int x, int y, int z) {
+    default Pair<Integer, BlockState> getLiquid(int x, int y, int z) {
         return getLiquid(new Vector3i(x, y, z));
     }
 
@@ -1454,10 +1243,10 @@ public interface Dimension {
      * @param pos the position to check for a liquid block
      * @return the liquid block at the position and the layer it is in, or {@link #PAIR_LIQUID_NOT_FOUND} if no liquid is found
      */
-    default IntObjectPair<BlockState> getLiquid(Vector3ic pos) {
+    default Pair<Integer, BlockState> getLiquid(Vector3ic pos) {
         var layer0 = getBlockState(pos);
         if (layer0.getBehavior() instanceof BlockLiquidBaseComponent) {
-            return new IntObjectImmutablePair<>(0, layer0);
+            return new Pair<>(0, layer0);
         }
 
         if (!layer0.getBlockStateData().canContainLiquid()) {
@@ -1466,7 +1255,7 @@ public interface Dimension {
 
         var layer1 = getBlockState(pos, 1);
         if (layer1.getBehavior() instanceof BlockLiquidBaseComponent) {
-            return new IntObjectImmutablePair<>(1, layer1);
+            return new Pair<>(1, layer1);
         }
 
         return PAIR_LIQUID_NOT_FOUND;
@@ -1501,7 +1290,7 @@ public interface Dimension {
         }
 
         var existingBlockState = getBlockState(pos);
-        if (!existingBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (!existingBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             var blockStateData = existingBlockState.getBlockStateData();
             if (!(isSource(liquid) ? blockStateData.canContainLiquidSource() : blockStateData.canContainLiquid())) {
                 return;

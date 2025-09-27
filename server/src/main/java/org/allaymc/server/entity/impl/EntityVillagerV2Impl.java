@@ -1,22 +1,19 @@
 package org.allaymc.server.entity.impl;
 
 import lombok.experimental.Delegate;
-import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.component.Component;
+import org.allaymc.api.entity.EntityInitInfo;
+import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityVillagerV2;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.component.ComponentProvider;
 
 import java.util.List;
 
 public class EntityVillagerV2Impl extends EntityImpl implements EntityVillagerV2 {
 
     @Delegate
-    protected EntityAttributeComponent attributeComponent;
-    @Delegate
-    protected EntityDamageComponent damageComponent;
+    protected EntityLivingComponent livingComponent;
     @Delegate
     protected EntityPhysicsComponent physicsComponent;
 

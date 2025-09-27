@@ -1,18 +1,18 @@
 package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.BlockFireBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 
 /**
@@ -29,11 +29,11 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
 
         var player = interactInfo.player();
 
-        if (player.getGameType() == GameType.ADVENTURE) {
+        if (player.getGameMode() == GameMode.ADVENTURE) {
             return false;
         }
 
-        if (player.getGameType() != GameType.CREATIVE) {
+        if (player.getGameMode() != GameMode.CREATIVE) {
             // The durability will always be reduced
             // no matter if the fire is spawned successfully
             tryIncreaseDamage(1);
@@ -56,9 +56,9 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
                 if (event.call()) {
                     // Check if the block that the player clicked on is a soul fire converter
                     // In that case, we should place a soul fire instead of a normal fire
-                    var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockCustomTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
+                    var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
                     dimension.setBlockState(placeBlockPos, fireBlockState);
-                    dimension.addLevelSoundEvent(MathUtils.center(placeBlockPos), SoundEvent.IGNITE);
+                    dimension.addSound(MathUtils.center(placeBlockPos), SimpleSound.IGNITE);
                 }
             }
         } else {

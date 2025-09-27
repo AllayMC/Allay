@@ -23,9 +23,9 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
     @Override
     public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
-        var sourceContainer = player.getReachableContainer(action.getSource().getContainerName().getContainer());
+        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
         var sourceStackNetworkId = action.getSource().getStackNetworkId();
-        var slot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
+        var slot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.getSource().getSlot());
 
         var count = action.getCount();
         if (count == 0) {
@@ -34,8 +34,8 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
         }
 
         var item = sourceContainer.getItemStack(slot);
-        if (failToValidateStackNetworkId(item.getStackNetworkId(), sourceStackNetworkId)) {
-            log.warn("Mismatch stack network id!");
+        if (failToValidateStackUniqueId(item.getUniqueId(), sourceStackNetworkId)) {
+            log.warn("Mismatch stack unique id!");
             return error();
         }
 
@@ -61,19 +61,19 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
                 true,
                 List.of(
                         new ItemStackResponseContainer(
-                                sourceContainer.getSlotType(slot),
+                                ContainerActionProcessor.getSlotType(sourceContainer, slot),
                                 List.of(
                                         new ItemStackResponseSlot(
-                                                sourceContainer.toNetworkSlotIndex(slot),
-                                                sourceContainer.toNetworkSlotIndex(slot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, slot),
+                                                ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, slot),
                                                 item.getCount(),
-                                                item.getStackNetworkId(),
+                                                item.getUniqueId(),
                                                 item.getCustomName(),
                                                 item.getDamage(),
                                                 ""
                                         )
                                 ),
-                                new FullContainerName(sourceContainer.getSlotType(slot), null)
+                                new FullContainerName(ContainerActionProcessor.getSlotType(sourceContainer, slot), null)
                         )
                 )
         );

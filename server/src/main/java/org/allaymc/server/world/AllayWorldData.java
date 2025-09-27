@@ -8,15 +8,15 @@ import org.allaymc.api.eventbus.event.world.GameRuleChangeEvent;
 import org.allaymc.api.eventbus.event.world.SpawnPointChangeEvent;
 import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
 import org.allaymc.api.pdc.PersistentDataContainer;
+import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
+import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.gamerule.AllayGameRules;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -27,9 +27,9 @@ public final class AllayWorldData implements WorldData {
     private World world;
 
     @Builder.Default
-    private Difficulty difficulty = Server.SETTINGS.genericSettings().defaultDifficulty();
+    private Difficulty difficulty = AllayServer.getSettings().genericSettings().defaultDifficulty();
     @Builder.Default
-    private GameType gameType = Server.SETTINGS.genericSettings().defaultGameType();
+    private GameMode gameMode = AllayServer.getSettings().genericSettings().defaultGameMode();
     @Setter
     @Builder.Default
     private String displayName = DEFAULT_WORLD_DISPLAY_NAME;
@@ -55,9 +55,8 @@ public final class AllayWorldData implements WorldData {
         this.gameRules.setWorld(world);
     }
 
-    @Override
-    public void setGameType(GameType gameType) {
-        this.gameType = gameType;
+    public void setGameMode(GameMode gameMode) {
+        this.gameMode = gameMode;
     }
 
     @Override
@@ -78,7 +77,7 @@ public final class AllayWorldData implements WorldData {
         }
 
         this.timeOfDay = event.getNewTime();
-        sendTimeOfDay(this.world.getPlayers());
+        this.world.getPlayers().forEach(player -> player.viewTime(this.world.getWorldData().getTimeOfDay()));
     }
 
     private int rollbackTimeOfDay(int time) {

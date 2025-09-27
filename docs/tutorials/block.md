@@ -2,7 +2,7 @@
 comments: true
 ---
 
-# Work with Blocks
+# Work with Blocks (TODO: needs to be updated)
 
 This tutorial introduces the core concepts of Allay’s Blocks API and shows practical ways to look up block types and states, and to read/write blocks in the world.
 
@@ -42,7 +42,7 @@ There are two common ways to obtain a BlockType.
 
 ```java linenums="1"
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.block.type.BlockType;
 
 BlockType<?> stone = Registries.BLOCKS.get(new Identifier("minecraft:stone"));
@@ -100,17 +100,17 @@ BlockState oakLogX = BlockTypes.OAK_LOG.ofState(
 );
 ```
 
-### 2. Using BlockStateSafeGetter (version-safe)
+### 2. Using BlockStateGetter (version-safe)
 
-BlockStateSafeGetter helps you build or parse states in a way that remains compatible across protocol versions.
+BlockStateGetter helps you build or parse states in a way that remains compatible across protocol versions.
 
 - Build by name + properties:
 
 ```java linenums="1"
-import org.allaymc.api.block.type.BlockStateSafeGetter;
+import org.allaymc.api.block.type.BlockStateGetter;
 import org.allaymc.api.block.type.BlockState;
 
-BlockState oakLogZ = BlockStateSafeGetter
+BlockState oakLogZ = BlockStateGetter
         .name("minecraft:oak_log")
         .property("pillar_axis", "z") // property names/values follow the block state NBT representation
         .blockState();
@@ -119,7 +119,7 @@ BlockState oakLogZ = BlockStateSafeGetter
 - Parse from NBT:
 
 ```java linenums="1"
-import org.allaymc.api.block.type.BlockStateSafeGetter;
+import org.allaymc.api.block.type.BlockStateGetter;
 import org.allaymc.api.network.ProtocolInfo;
 import org.cloudburstmc.nbt.NbtMap;
 import org.allaymc.api.block.type.BlockState;
@@ -131,7 +131,7 @@ NbtMap stateNbt = NbtMap.builder()
                 .putString("pillar_axis", "y")
                 .build())
         .build();
-BlockState oakLogY = BlockStateSafeGetter.fromNBT(stateNbt);
+BlockState oakLogY = BlockStateGetter.fromNBT(stateNbt);
 ```
 
 ### 3. From the BlockState palette (by hash)
@@ -194,4 +194,4 @@ This reads the current state at the position, applies the property change, and w
 
     - BlockState is a singleton; you can compare states with `==` reliably.
     - `setPropertyValue` returns another BlockState instance; the original state remains unchanged.
-    - When using BlockStateSafeGetter, prefer name + properties to avoid breakage across protocol updates.
+    - When using BlockStateGetter, prefer name + properties to avoid breakage across protocol updates.

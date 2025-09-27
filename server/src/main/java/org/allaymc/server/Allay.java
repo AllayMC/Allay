@@ -5,7 +5,6 @@ import io.sentry.Sentry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.bossbar.BossBar;
@@ -15,17 +14,20 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.EventBus;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.registry.*;
+import org.allaymc.api.registry.DoubleKeyMappedRegistry;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.NBTIO;
+import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
@@ -33,15 +35,17 @@ import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.extension.ExtensionManager;
 import org.allaymc.server.gui.Dashboard;
-import org.allaymc.server.i18n.AllayI18n;
-import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.creative.AllayCreativeItemRegistry;
+import org.allaymc.server.message.AllayI18n;
+import org.allaymc.server.message.AllayI18nLoader;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.pdc.AllayPersistentDataTypeRegistry;
 import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.registry.loader.*;
 import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
+import org.allaymc.server.utils.AllayNBTIO;
 import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
@@ -65,11 +69,11 @@ public final class Allay {
 
     public static void main(String[] args) throws InterruptedException {
         long initialTime = System.currentTimeMillis();
-        if (GitProperties.isDevBuild() && !Server.SETTINGS.genericSettings().forceEnableSentry()) {
+        if (GitProperties.isDevBuild() && !AllayServer.getSettings().genericSettings().forceEnableSentry()) {
             // Enable sentry only in non-dev build
             Sentry.close();
         }
-        ResourceLeakDetector.setLevel(Server.SETTINGS.networkSettings().resourceLeakDetectorLevel());
+        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
         // Disable scientific notation in joml
         System.setProperty("joml.format", "false");
         // Enable async logging
@@ -80,14 +84,14 @@ public final class Allay {
 
         // Check if the environment is headless
         if (isHeadless()) {
-            Server.SETTINGS.genericSettings().enableGui(false);
+            AllayServer.getSettings().genericSettings().enableGui(false);
         }
-        if (Server.SETTINGS.genericSettings().enableGui()) {
+        if (AllayServer.getSettings().genericSettings().enableGui()) {
             try {
                 DASHBOARD = Dashboard.getInstance();
             } catch (Throwable t) {
                 log.error("Cannot init Dashboard!", t);
-                Server.SETTINGS.genericSettings().enableGui(false);
+                AllayServer.getSettings().genericSettings().enableGui(false);
             }
         }
 
@@ -138,12 +142,12 @@ public final class Allay {
      * which means that you should call initI18n() before call initAllay()!
      */
     @VisibleForTesting
-    public static void initAllay() throws MissingImplementationException {
+    public static void initAllay() {
         initAllayAPI();
         initRegistries();
     }
 
-    private static void initAllayAPI() throws MissingImplementationException {
+    private static void initAllayAPI() {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
 
@@ -159,6 +163,7 @@ public final class Allay {
 
         // Misc
         api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
+        api.bind(NBTIO.class, AllayNBTIO::new);
 
         api.implement("allay", GitProperties.isDevBuild());
 
@@ -181,7 +186,8 @@ public final class Allay {
                 r -> Registries.ENCHANTMENTS = r,
                 new EnchantmentTypeRegistryPopulator()
         );
-        InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataLoader());
+        InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataRegistryLoader());
+        InternalRegistries.ITEM_TAGS = SimpleMappedRegistry.create(new ItemTagRegistryLoader());
         InternalRegistries.ITEM_COMPONENT_DATA = SimpleMappedRegistry.create(new ItemComponentRegistryLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
@@ -197,14 +203,16 @@ public final class Allay {
         );
 
         // Block
-        InternalRegistries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
-        Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
+        InternalRegistries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataRegistryLoader());
+        InternalRegistries.BLOCK_TAGS = SimpleMappedRegistry.create(new BlockTagRegistryLoader());
+        InternalRegistries.BLOCK_DEFAULT_STATE_HASHES = SimpleMappedRegistry.create(new BlockDefaultStateHashRegistryLoader());
+        InternalRegistries.BLOCK_PROPERTY_PROCESSORS = SimpleMappedRegistry.create(new BlockPropertyProcessorRegistryLoader());
+        Registries.BLOCK_STATE_PALETTE = SimpleMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),
                 r -> Registries.BLOCKS = r,
                 new BlockTypeRegistryPopulator()
         );
-        InternalRegistries.BLOCK_PROPERTY_PROCESSORS = SimpleMappedRegistry.create(new BlockPropertyProcessorRegistryLoader());
 
         // Entity
         DoubleKeyMappedRegistry.create(
@@ -218,6 +226,14 @@ public final class Allay {
                 new EntityTypeRegistryPopulator()
         );
 
+        // Biome
+        InternalRegistries.BIOME_DATA = SimpleMappedRegistry.create(new BiomeDataRegistryLoader());
+        DoubleKeyMappedRegistry.create(
+                RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, BiomeType>())),
+                r -> Registries.BIOMES = r,
+                new BiomeTypeRegistryPopulator()
+        );
+
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
         Registries.WORLD_GENERATOR_FACTORIES = SimpleMappedRegistry.create(new WorldGeneratorFactoryRegistryLoader());
@@ -226,13 +242,11 @@ public final class Allay {
         Registries.CREATIVE_ITEMS = new AllayCreativeItemRegistry();
 
         // Recipe
-        Registries.RECIPES = IntMappedRegistry.create(new RecipeRegistryLoader());
-        Registries.FURNACE_RECIPES = SimpleMappedRegistry.create(new FurnaceRecipeRegistryLoader());
-        Registries.POTION_MIX_RECIPES = SimpleMappedRegistry.create(new PotionMixRecipeRegistryLoader());
+        Registries.RECIPES = SimpleMappedRegistry.create(new RecipeRegistryLoader());
 
         // Trim Data
-        InternalRegistries.TRIM_PATTERNS = SimpleRegistry.create(new TrimPatternRegistryLoader());
-        InternalRegistries.TRIM_MATERIALS = SimpleRegistry.create(new TrimMaterialRegistryLoader());
+        InternalRegistries.TRIM_PATTERNS = SimpleMappedRegistry.create(new TrimPatternRegistryLoader());
+        InternalRegistries.TRIM_MATERIALS = SimpleMappedRegistry.create(new TrimMaterialRegistryLoader());
 
         // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());
@@ -262,6 +276,6 @@ public final class Allay {
             return;
         }
 
-        AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
+        AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), AllayServer.getSettings().genericSettings().language()));
     }
 }

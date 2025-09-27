@@ -1,8 +1,8 @@
 package org.allaymc.api.entity.effect;
 
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.awt.*;
@@ -39,7 +39,6 @@ public interface EffectType {
      * @param duration  The duration of the effect in ticks
      * @param ambient   Whether the effect is ambient
      * @param visible   Whether the effect is visible
-     *
      * @return A new instance of this effect
      */
     EffectInstance createInstance(int amplifier, int duration, boolean ambient, boolean visible);
@@ -51,7 +50,7 @@ public interface EffectType {
      * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
-    default void onTick(Entity entity, EffectInstance effectInstance) {
+    default void onTick(EntityLiving entity, EffectInstance effectInstance) {
     }
 
     /**
@@ -61,7 +60,7 @@ public interface EffectType {
      * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
-    default void onAdd(Entity entity, EffectInstance effectInstance) {
+    default void onAdd(EntityLiving entity, EffectInstance effectInstance) {
     }
 
     /**
@@ -71,7 +70,7 @@ public interface EffectType {
      * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
-    default void onRemove(Entity entity, EffectInstance effectInstance) {
+    default void onRemove(EntityLiving entity, EffectInstance effectInstance) {
     }
 
     /**
@@ -82,7 +81,7 @@ public interface EffectType {
      * @param lastDamage     The last damage taken by the entity
      */
     @ApiStatus.OverrideOnly
-    default void onEntityDamage(Entity entity, EffectInstance effectInstance, DamageContainer lastDamage) {
+    default void onEntityDamage(EntityLiving entity, EffectInstance effectInstance, DamageContainer lastDamage) {
     }
 
     /**
@@ -92,7 +91,7 @@ public interface EffectType {
      * @param effectInstance The instance of the effect
      */
     @ApiStatus.OverrideOnly
-    default void onEntityDies(Entity entity, EffectInstance effectInstance) {
+    default void onEntityDies(EntityLiving entity, EffectInstance effectInstance) {
     }
 
     /**

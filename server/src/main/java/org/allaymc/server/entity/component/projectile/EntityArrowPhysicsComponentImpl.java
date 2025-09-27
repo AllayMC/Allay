@@ -2,16 +2,16 @@ package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
@@ -26,8 +26,6 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     protected EntityArrowBaseComponent arrowBaseComponent;
     @Dependency
     protected EntityProjectileComponent projectileComponent;
-    @Dependency
-    protected EntityDamageComponent damageComponent;
 
     // Indicates whether the arrow has already hit a block
     protected boolean hitBlock;
@@ -58,12 +56,12 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         addHitSound(hitPos);
-        var potionType = arrowBaseComponent.getPotionType();
-        if (potionType != null) {
-            potionType.applyTo(other);
-        }
+        if (other instanceof EntityLiving living) {
+            var potionType = arrowBaseComponent.getPotionType();
+            if (potionType != null) {
+                potionType.applyTo(living);
+            }
 
-        if (other instanceof EntityDamageComponent otherDamageComponent) {
             double damage = arrowBaseComponent.getBaseDamage();
             if (projectileComponent.getShooter() instanceof EntityPlayer) {
                 damage = damage
@@ -82,7 +80,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
             var damageContainer = DamageContainer.projectile(thisEntity, (float) damage);
             damageContainer.setHasKnockback(false);
-            if (otherDamageComponent.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
+            if (living.attack(damageContainer) && other instanceof EntityPhysicsComponent physicsComponent) {
                 var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
                 var additionalMotion = new Vector3d();
                 var punchLevel = arrowBaseComponent.getPunchLevel();
@@ -95,8 +93,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
                 physicsComponent.knockback(hitPos.sub(this.motion, new Vector3d()), kb, EntityPhysicsComponent.DEFAULT_KNOCKBACK, additionalMotion);
             }
 
-            if (this.damageComponent.isOnFire()) {
-                otherDamageComponent.setOnFireTicks(20 * 5);
+            if (this.livingComponent.isOnFire()) {
+                living.setOnFireTicks(20 * 5);
             }
         }
 
@@ -110,16 +108,13 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
         }
 
         addHitSound(hitPos);
-        this.arrowBaseComponent.applyEntityEvent(
-                EntityEventType.ARROW_SHAKE,
-                7 // How many times the arrow shakes
-        );
+        this.arrowBaseComponent.applyAction(new ArrowShakeAction(7));
         this.arrowBaseComponent.setCritical(false);
         this.hitBlock = true;
     }
 
     private void addHitSound(Vector3dc hitPos) {
-        this.arrowBaseComponent.getDimension().addLevelSoundEvent(hitPos, SoundEvent.BOW_HIT);
+        this.arrowBaseComponent.getDimension().addSound(hitPos, SimpleSound.ARROW_HIT);
     }
 
     private int getDifficultyBonus() {

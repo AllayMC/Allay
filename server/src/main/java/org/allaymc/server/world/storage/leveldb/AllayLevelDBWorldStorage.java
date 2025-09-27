@@ -7,28 +7,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.EntityHelper;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.HashUtils;
-import org.allaymc.api.world.Difficulty;
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.utils.NBTIO;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
-import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.OperationType;
+import org.allaymc.api.world.data.Difficulty;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
+import org.allaymc.server.network.NetworkHelper;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.*;
@@ -60,6 +61,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+
+import static org.allaymc.server.network.NetworkHelper.toNetwork;
 
 /**
  * An implementation of {@link WorldStorage} which add support for the LevelDB world
@@ -164,8 +167,8 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         nbt.listenForCompound(TAG_PDC, pdc::putAll);
 
         return AllayWorldData.builder()
-                .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, Server.SETTINGS.genericSettings().defaultDifficulty().ordinal())))
-                .gameType(GameType.from(nbt.getInt(TAG_GAME_TYPE, Server.SETTINGS.genericSettings().defaultGameType().ordinal())))
+                .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, AllayServer.getSettings().genericSettings().defaultDifficulty().ordinal())))
+                .gameMode(NetworkHelper.fromNetwork(GameType.from(nbt.getInt(TAG_GAME_TYPE, toNetwork(AllayServer.getSettings().genericSettings().defaultGameMode()).ordinal()))))
                 .displayName(nbt.getString(TAG_DISPLAY_NAME, WorldData.DEFAULT_WORLD_DISPLAY_NAME))
                 .spawnPoint(new Vector3i(nbt.getInt(TAG_SPAWN_X, 0), nbt.getInt(TAG_SPAWN_Y, 64), nbt.getInt(TAG_SPAWN_Z, 0)))
                 .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))
@@ -193,7 +196,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                         for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
                             var palette = section.blockLayers()[i];
                             palette.compact();
-                            palette.writeToStorage(buffer, BlockState::getBlockStateTag);
+                            palette.writeToStorage(buffer, BlockState::getBlockStateNBT);
                             palette.setDirty(false);
                         }
                     })
@@ -447,10 +450,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static BiomeType getBiomeByIdNonNull(int id) {
         try {
-            return BiomeId.fromId(id);
+            return Registries.BIOMES.getByK1(id);
         } catch (ArrayIndexOutOfBoundsException e) {
             log.warn("Unknown biome id: {}", id);
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
         }
     }
 
@@ -594,7 +597,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 continue;
             }
 
-            var entity = EntityHelper.fromNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNbtUtils.bytesToNbtLE(nbt));
+            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNbtUtils.bytesToNbtLE(nbt));
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
@@ -614,7 +617,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
         var map = new Long2ObjectOpenHashMap<Entity>();
         for (var nbt : AllayNbtUtils.bytesToNbtListLE(entityBytes)) {
-            var entity = EntityHelper.fromNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
+            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
@@ -764,7 +767,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         var builder = NbtMap.builder();
 
         builder.putInt(TAG_DIFFICULTY, worldData.getDifficulty().ordinal());
-        builder.putInt(TAG_GAME_TYPE, worldData.getGameType().ordinal());
+        builder.putInt(TAG_GAME_TYPE, toNetwork(worldData.getGameMode()).ordinal());
         builder.putString(TAG_DISPLAY_NAME, worldData.getDisplayName());
         builder.putInt(TAG_SPAWN_X, worldData.getSpawnPoint().x());
         builder.putInt(TAG_SPAWN_Y, worldData.getSpawnPoint().y());
@@ -824,7 +827,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         for (var nbt : AllayNbtUtils.bytesToNbtListLE(tileBytes)) {
             BlockEntity blockEntity;
             try {
-                blockEntity = BlockEntityHelper.fromNBT(world.getDimension(builder.getDimensionInfo().dimensionId()), nbt);
+                blockEntity = NBTIO.getAPI().fromBlockEntityNBT(world.getDimension(builder.getDimensionInfo().dimensionId()), nbt);
             } catch (Throwable t) {
                 log.error("Error while loading block entity from NBT", t);
                 continue;

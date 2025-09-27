@@ -1,6 +1,6 @@
 package org.allaymc.server.blockentity.component;
 
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**

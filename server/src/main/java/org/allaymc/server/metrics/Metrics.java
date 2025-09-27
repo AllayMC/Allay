@@ -4,12 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.player.data.Device;
-import org.allaymc.api.player.data.DeviceInfo;
-import org.allaymc.api.player.data.LoginData;
+import org.allaymc.api.player.LoginData;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
+import org.allaymc.server.AllayServer;
+import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.utils.GitProperties;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -576,7 +575,7 @@ public class Metrics {
     public static class AllayMetrics {
         public static void startMetrics() {
             var server = Server.getInstance();
-            var settings = Server.SETTINGS.bStatsSettings();
+            var settings = AllayServer.getSettings().bStatsSettings();
             // Only start Metrics if it's enabled in the config
             if (!settings.enable()) {
                 return;
@@ -589,13 +588,13 @@ public class Metrics {
             metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", GitProperties::getBuildApiVersion));
             metrics.addCustomChart(new Metrics.SimplePie("allay_server_version", GitProperties::getBuildVersion));
             metrics.addCustomChart(new Metrics.SimplePie("max_memory", () -> String.format("%.2f", Runtime.getRuntime().maxMemory() / (1024d * 1024d * 1024d)) + "G"));
-            metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> Server.SETTINGS.networkSettings().xboxAuth() ? "Required" : "Not required"));
+            metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> AllayServer.getSettings().networkSettings().xboxAuth() ? "Required" : "Not required"));
 
             metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getPlayerManager().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)
                     .map(LoginData::getDeviceInfo)
-                    .map(DeviceInfo::device)
-                    .collect(groupingBy(Device::getName, countingInt()))));
+                    .map(LoginData.DeviceInfo::device)
+                    .collect(groupingBy(LoginData.Device::getName, countingInt()))));
 
             metrics.addCustomChart(new Metrics.AdvancedPie("player_game_version", () -> server.getPlayerManager().getPlayers().values().stream()
                     .map(EntityPlayer::getLoginData)

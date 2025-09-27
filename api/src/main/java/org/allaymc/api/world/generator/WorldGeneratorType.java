@@ -15,38 +15,32 @@ public enum WorldGeneratorType {
     /**
      * World generator for limited world
      */
-    LIMIT(0),
+    LIMIT,
     /**
      * World generator for infinite world
      */
-    INFINITE(1),
+    INFINITE,
     /**
      * World generator for flat world
      */
-    FLAT(2),
+    FLAT,
     /**
      * World generator for nether
      */
-    NETHER(3),
+    NETHER,
     /**
      * World generator for end
      */
-    THE_END(4),
+    THE_END,
     /**
      * World generator for void
      */
-    VOID(5);
-
-    /**
-     * The generator id
-     */
-    private final int id;
+    VOID;
 
     /**
      * Get the WorldGeneratorType by id
      *
      * @param id the generator id
-     *
      * @return the WorldGeneratorType
      */
     public static WorldGeneratorType byId(int id) {

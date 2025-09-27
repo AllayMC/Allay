@@ -3,7 +3,6 @@ package org.allaymc.server.command.tree.node;
 import com.google.common.collect.Lists;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
-import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.entity.Entity;

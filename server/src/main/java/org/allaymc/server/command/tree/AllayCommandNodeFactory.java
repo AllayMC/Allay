@@ -10,9 +10,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.world.Difficulty;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.server.command.tree.node.*;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3fc;
 
 import java.util.List;
@@ -112,7 +112,7 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     }
 
     @Override
-    public CommandNode gameMode(String name, CommandNode parent, GameType defaultValue) {
+    public CommandNode gameMode(String name, CommandNode parent, GameMode defaultValue) {
         return new GameModeNode(name, parent, defaultValue);
     }
 

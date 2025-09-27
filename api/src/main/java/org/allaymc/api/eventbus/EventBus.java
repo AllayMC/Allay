@@ -1,6 +1,6 @@
 package org.allaymc.api.eventbus;
 
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.eventbus.event.Event;
 
 import java.util.function.Consumer;
@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * @author daoge_cmd
  */
 public interface EventBus {
-    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<Factory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
     /**
      * Create a new event bus.
@@ -71,7 +71,6 @@ public interface EventBus {
      *
      * @param event the event to call
      * @param <E>   the type of the event
-     *
      * @return the event
      */
     <E extends Event> E callEvent(E event);

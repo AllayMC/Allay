@@ -1,8 +1,8 @@
 package org.allaymc.api.entity.type;
 
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
-import org.allaymc.api.utils.Identified;
+import org.allaymc.api.entity.EntityInitInfo;
+import org.allaymc.api.utils.identifier.Identified;
 
 /**
  * @author daoge_cmd

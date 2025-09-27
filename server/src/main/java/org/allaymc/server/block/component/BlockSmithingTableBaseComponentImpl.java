@@ -3,10 +3,10 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.impl.SmithingTableContainer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.container.impl.SmithingTableContainerImpl;
 
 /**
  * @author IWareQ
@@ -27,7 +27,7 @@ public class BlockSmithingTableBaseComponentImpl extends BlockBaseComponentImpl 
             return false;
         }
 
-        var container = new SmithingTableContainer();
+        var container = new SmithingTableContainerImpl();
         container.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         container.addViewer(player);
         return true;

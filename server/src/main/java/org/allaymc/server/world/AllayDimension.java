@@ -6,25 +6,24 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.debugshape.DebugShape;
-import org.allaymc.api.debugshape.DebugShapeViewer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.network.ClientStatus;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.WorldViewer;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.network.processor.impl.login.SetLocalPlayerAsInitializedPacketProcessor;
+import org.allaymc.api.world.particle.BlockBreakParticle;
+import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
+import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.allaymc.server.world.manager.AllayBlockUpdateManager;
 import org.allaymc.server.world.manager.AllayChunkManager;
 import org.allaymc.server.world.manager.AllayEntityManager;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -66,16 +65,14 @@ public class AllayDimension implements Dimension {
     }
 
     public void tick(long currentTick) {
-        // There may be new chunk packets during sleeping, let's send them first
-        this.chunkManager.sendChunkPackets();
-
-        // Ticking
         this.entityManager.tick(currentTick);
         this.chunkManager.tick(currentTick);
         this.blockUpdateManager.tick();
-
-        // Send the new chunk packets again after most of the work is done
-        this.chunkManager.sendChunkPackets();
+        this.chunkManager.forEachLoadedChunks(c -> {
+            var chunk = (AllayUnsafeChunk) c.toUnsafeChunk();
+            chunk.sendBlockUpdates();
+            chunk.performChunkTasks();
+        });
     }
 
     public void shutdown() {
@@ -93,7 +90,7 @@ public class AllayDimension implements Dimension {
         this.players.add(player);
         this.chunkManager.addChunkLoader(player);
         this.entityManager.addEntity(player, runnable);
-        if (player.getClientStatus() == ClientStatus.IN_GAME) {
+        if (player.getClientState() == ClientState.IN_GAME) {
             // Only send debug shapes to the players when they are in-game. This
             // solves the issue that debug shapes won't be displayed if the player
             // haven't fully joined. When the player join, the debug shapes will be
@@ -106,7 +103,7 @@ public class AllayDimension implements Dimension {
     /**
      * Set this method to public because it is used in {@link SetLocalPlayerAsInitializedPacketProcessor}
      */
-    public void addDebugShapesTo(DebugShapeViewer viewer) {
+    public void addDebugShapesTo(WorldViewer viewer) {
         for (var debugShape : debugShapes) {
             // Let's send all the debug shapes in one packet to improve performance
             debugShape.addViewer(viewer, false);
@@ -131,7 +128,7 @@ public class AllayDimension implements Dimension {
         removeDebugShapesFrom(player);
     }
 
-    protected void removeDebugShapesFrom(DebugShapeViewer viewer) {
+    protected void removeDebugShapesFrom(WorldViewer viewer) {
         for (var debugShape : debugShapes) {
             // Let's send all the remove notices in one packet to improve performance
             debugShape.removeViewer(viewer, false);
@@ -186,10 +183,7 @@ public class AllayDimension implements Dimension {
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
-        var event = new BlockPlaceEvent(
-                new Block(blockState, new Position3i(x, y, z, this), layer),
-                oldBlockState, placementInfo != null ? placementInfo.player() : null, placementInfo
-        );
+        var event = new BlockPlaceEvent(new Block(blockState, new Position3i(x, y, z, this), layer), oldBlockState, placementInfo);
         if (!event.call()) {
             return false;
         }
@@ -231,11 +225,7 @@ public class AllayDimension implements Dimension {
         }
 
         if (sendParticle) {
-            var pk = new LevelEventPacket();
-            pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
-            pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
-            pk.setData(block.blockStateHash());
-            getChunkManager().getChunkByDimensionPos(x, z).addChunkPacket(pk);
+            addParticle(x + 0.5f, y + 0.5f, z + 0.5f, new BlockBreakParticle(block));
         }
 
         block.getBehavior().onBreak(

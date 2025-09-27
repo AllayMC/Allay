@@ -1,0 +1,96 @@
+package org.allaymc.api.world.biome;
+
+/**
+ * BiomeTypes contains all the available biomes in the game.
+ *
+ * @author daoge_cmd
+ */
+public final class BiomeTypes {
+    public static BiomeType OCEAN;
+    public static BiomeType PLAINS;
+    public static BiomeType DESERT;
+    public static BiomeType EXTREME_HILLS;
+    public static BiomeType FOREST;
+    public static BiomeType TAIGA;
+    public static BiomeType SWAMPLAND;
+    public static BiomeType RIVER;
+    public static BiomeType HELL;
+    public static BiomeType THE_END;
+    public static BiomeType LEGACY_FROZEN_OCEAN;
+    public static BiomeType FROZEN_RIVER;
+    public static BiomeType ICE_PLAINS;
+    public static BiomeType ICE_MOUNTAINS;
+    public static BiomeType MUSHROOM_ISLAND;
+    public static BiomeType MUSHROOM_ISLAND_SHORE;
+    public static BiomeType BEACH;
+    public static BiomeType DESERT_HILLS;
+    public static BiomeType FOREST_HILLS;
+    public static BiomeType TAIGA_HILLS;
+    public static BiomeType EXTREME_HILLS_EDGE;
+    public static BiomeType JUNGLE;
+    public static BiomeType JUNGLE_HILLS;
+    public static BiomeType JUNGLE_EDGE;
+    public static BiomeType DEEP_OCEAN;
+    public static BiomeType STONE_BEACH;
+    public static BiomeType COLD_BEACH;
+    public static BiomeType BIRCH_FOREST;
+    public static BiomeType BIRCH_FOREST_HILLS;
+    public static BiomeType ROOFED_FOREST;
+    public static BiomeType COLD_TAIGA;
+    public static BiomeType COLD_TAIGA_HILLS;
+    public static BiomeType MEGA_TAIGA;
+    public static BiomeType MEGA_TAIGA_HILLS;
+    public static BiomeType EXTREME_HILLS_PLUS_TREES;
+    public static BiomeType SAVANNA;
+    public static BiomeType SAVANNA_PLATEAU;
+    public static BiomeType MESA;
+    public static BiomeType MESA_PLATEAU_STONE;
+    public static BiomeType MESA_PLATEAU;
+    public static BiomeType WARM_OCEAN;
+    public static BiomeType DEEP_WARM_OCEAN;
+    public static BiomeType LUKEWARM_OCEAN;
+    public static BiomeType DEEP_LUKEWARM_OCEAN;
+    public static BiomeType COLD_OCEAN;
+    public static BiomeType DEEP_COLD_OCEAN;
+    public static BiomeType FROZEN_OCEAN;
+    public static BiomeType DEEP_FROZEN_OCEAN;
+    public static BiomeType BAMBOO_JUNGLE;
+    public static BiomeType BAMBOO_JUNGLE_HILLS;
+    public static BiomeType SUNFLOWER_PLAINS;
+    public static BiomeType DESERT_MUTATED;
+    public static BiomeType EXTREME_HILLS_MUTATED;
+    public static BiomeType FLOWER_FOREST;
+    public static BiomeType TAIGA_MUTATED;
+    public static BiomeType SWAMPLAND_MUTATED;
+    public static BiomeType ICE_PLAINS_SPIKES;
+    public static BiomeType JUNGLE_MUTATED;
+    public static BiomeType JUNGLE_EDGE_MUTATED;
+    public static BiomeType BIRCH_FOREST_MUTATED;
+    public static BiomeType BIRCH_FOREST_HILLS_MUTATED;
+    public static BiomeType ROOFED_FOREST_MUTATED;
+    public static BiomeType COLD_TAIGA_MUTATED;
+    public static BiomeType REDWOOD_TAIGA_MUTATED;
+    public static BiomeType REDWOOD_TAIGA_HILLS_MUTATED;
+    public static BiomeType EXTREME_HILLS_PLUS_TREES_MUTATED;
+    public static BiomeType SAVANNA_MUTATED;
+    public static BiomeType SAVANNA_PLATEAU_MUTATED;
+    public static BiomeType MESA_BRYCE;
+    public static BiomeType MESA_PLATEAU_STONE_MUTATED;
+    public static BiomeType MESA_PLATEAU_MUTATED;
+    public static BiomeType SOULSAND_VALLEY;
+    public static BiomeType CRIMSON_FOREST;
+    public static BiomeType WARPED_FOREST;
+    public static BiomeType BASALT_DELTAS;
+    public static BiomeType JAGGED_PEAKS;
+    public static BiomeType FROZEN_PEAKS;
+    public static BiomeType SNOWY_SLOPES;
+    public static BiomeType GROVE;
+    public static BiomeType MEADOW;
+    public static BiomeType LUSH_CAVES;
+    public static BiomeType DRIPSTONE_CAVES;
+    public static BiomeType STONY_PEAKS;
+    public static BiomeType DEEP_DARK;
+    public static BiomeType MANGROVE_SWAMP;
+    public static BiomeType CHERRY_GROVE;
+    public static BiomeType PALE_GARDEN;
+}

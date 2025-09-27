@@ -5,18 +5,20 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.CompassRoseDirection;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 
 /**
@@ -68,10 +70,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     @Override
     public void openSignEditorFor(EntityPlayer player, boolean frontSide) {
         var pk = new OpenSignPacket();
-        pk.setPosition(MathUtils.JOMLVecToCBVec(getPosition()));
+        pk.setPosition(NetworkHelper.toNetwork(getPosition()));
         pk.setFrontSide(frontSide);
 
-        player.sendPacket(pk);
+        ((EntityPlayerImpl) player).sendPacket(pk);
     }
 
     @Override
@@ -89,7 +91,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         }
 
         var event = new SignTextChangeEvent(new Block(getBlockState(), position, 0), newText, player);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
+
         newText = event.getText();
 
         if (isFrontSide) {
@@ -110,9 +115,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         sendBlockEntityToViewers();
     }
 
+    @EventHandler
     @Override
-    public void onInteract(CBlockOnInteractEvent event) {
-        super.onInteract(event);
+    public void onBlockInteract(CBlockOnInteractEvent event) {
+        super.onBlockInteract(event);
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
         // If a sign is waxed, it cannot be modified.
@@ -127,7 +133,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
             setWaxed(true);
             player.tryConsumeItemInHand();
-            player.getDimension().addLevelEvent(position.x(), position.y(), position.z(), LevelEvent.PARTICLE_WAX_ON);
+            player.getDimension().addSound(position.x(), position.y(), position.z(), SimpleSound.SIGN_WAXED);
             event.setSuccess(true);
             return;
         }
@@ -139,7 +145,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
                 backText.setGlowing(true);
             }
             player.tryConsumeItemInHand();
-            player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
+            player.getDimension().addSound(player.getLocation(), SimpleSound.GLOW_INK_SAC_USED);
             event.setSuccess(true);
             return;
         }
@@ -151,7 +157,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
                 backText.setGlowing(false);
             }
             player.tryConsumeItemInHand();
-            player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
+            player.getDimension().addSound(player.getLocation(), SimpleSound.GLOW_INK_SAC_USED);
             event.setSuccess(true);
             return;
         }
@@ -160,9 +166,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         event.setSuccess(true);
     }
 
+    @EventHandler
     @Override
-    public void onPlace(CBlockOnPlaceEvent event) {
-        super.onPlace(event);
+    public void onBlockPlace(CBlockOnPlaceEvent event) {
+        super.onBlockPlace(event);
         if (event.getPlacementInfo() == null) return;
         openSignEditorFor(event.getPlacementInfo().player(), true);
     }
@@ -179,14 +186,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             case SOUTH -> interactedFace == BlockFace.SOUTH;
             case WEST -> interactedFace == BlockFace.WEST;
             case NORTH -> interactedFace == BlockFace.NORTH;
-            case NORTH_EAST, NORTH_NORTH_EAST, EAST_NORTH_EAST ->
-                    interactedFace == BlockFace.EAST || interactedFace == BlockFace.NORTH;
-            case NORTH_WEST, NORTH_NORTH_WEST, WEST_NORTH_WEST ->
-                    interactedFace == BlockFace.WEST || interactedFace == BlockFace.NORTH;
-            case SOUTH_EAST, SOUTH_SOUTH_EAST, EAST_SOUTH_EAST ->
-                    interactedFace == BlockFace.EAST || interactedFace == BlockFace.SOUTH;
-            case SOUTH_WEST, SOUTH_SOUTH_WEST, WEST_SOUTH_WEST ->
-                    interactedFace == BlockFace.WEST || interactedFace == BlockFace.SOUTH;
+            case NORTH_EAST, NORTH_NORTH_EAST, EAST_NORTH_EAST -> interactedFace == BlockFace.EAST || interactedFace == BlockFace.NORTH;
+            case NORTH_WEST, NORTH_NORTH_WEST, WEST_NORTH_WEST -> interactedFace == BlockFace.WEST || interactedFace == BlockFace.NORTH;
+            case SOUTH_EAST, SOUTH_SOUTH_EAST, EAST_SOUTH_EAST -> interactedFace == BlockFace.EAST || interactedFace == BlockFace.SOUTH;
+            case SOUTH_WEST, SOUTH_SOUTH_WEST, WEST_SOUTH_WEST -> interactedFace == BlockFace.WEST || interactedFace == BlockFace.SOUTH;
         };
     }
 

@@ -2,8 +2,8 @@ package org.allaymc.api.form.type;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.form.FormCancelReason;
 import org.allaymc.api.form.element.*;
-import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  */
 @Getter
 @Slf4j
-public final class SimpleForm extends Form {
+public class SimpleForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "form";
 
@@ -31,7 +31,6 @@ public final class SimpleForm extends Form {
      * Set the title of the form.
      *
      * @param title the title
-     *
      * @return the form
      */
     public SimpleForm title(String title) {
@@ -43,7 +42,6 @@ public final class SimpleForm extends Form {
      * Set the content of the form.
      *
      * @param content the content
-     *
      * @return the form
      */
     public SimpleForm content(String content) {
@@ -55,7 +53,6 @@ public final class SimpleForm extends Form {
      * Add a button to the form.
      *
      * @param button the button
-     *
      * @return the button
      */
     public Button button(Button button) {
@@ -68,7 +65,6 @@ public final class SimpleForm extends Form {
      * Add a button to the form.
      *
      * @param text the text of the button
-     *
      * @return the button
      */
     public Button button(String text) {
@@ -83,7 +79,6 @@ public final class SimpleForm extends Form {
      * @param data      the data of the image
      *                  If the type is {@code ImageData.ImageType.PATH}, it should be the path of the image
      *                  If the type is {@code ImageData.ImageType.URL}, it should be the URL of the image
-     *
      * @return the button
      */
     public Button button(String text, ImageData.ImageType imageType, String data) {
@@ -95,7 +90,6 @@ public final class SimpleForm extends Form {
      *
      * @param text the text of the button
      * @param path the path of the image
-     *
      * @return the button
      */
     public Button buttonWithPathImage(String text, String path) {
@@ -107,7 +101,6 @@ public final class SimpleForm extends Form {
      *
      * @param text the text of the button
      * @param url  the URL of the image
-     *
      * @return the button
      */
     public Button buttonWithUrlImage(String text, String url) {
@@ -118,7 +111,6 @@ public final class SimpleForm extends Form {
      * Add a label to the form.
      *
      * @param text the text of the label
-     *
      * @return the form
      */
     public SimpleForm label(String text) {
@@ -130,7 +122,6 @@ public final class SimpleForm extends Form {
      * Add a header to the form.
      *
      * @param text the text of the header
-     *
      * @return the form
      */
     public SimpleForm header(String text) {
@@ -152,7 +143,6 @@ public final class SimpleForm extends Form {
      * Add a callback that will be called when a button is clicked.
      *
      * @param onResponse the callback
-     *
      * @return the form
      */
     public SimpleForm onResponse(Consumer<Button> onResponse) {
@@ -194,7 +184,7 @@ public final class SimpleForm extends Form {
      * {@inheritDoc}
      */
     @Override
-    public void handleClose(ModalFormCancelReason reason) {
+    public void handleClose(FormCancelReason reason) {
         onClose.accept(reason);
     }
 

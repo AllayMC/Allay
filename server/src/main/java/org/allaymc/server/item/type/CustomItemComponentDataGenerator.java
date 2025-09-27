@@ -2,12 +2,12 @@ package org.allaymc.server.item.type;
 
 import com.google.common.base.Preconditions;
 import lombok.Builder;
-import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
 import org.allaymc.api.item.component.ItemEdibleComponent;
 import org.allaymc.api.item.component.ItemToolComponent;
-import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.item.data.ItemTag;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.message.MayContainTrKey;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -156,7 +156,6 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
          * Creates a RenderOffsets instance with texture size applied to the offsets.
          *
          * @param textureSize the size of the texture, must be greater than 0 and a multiple of 16
-         *
          * @return a RenderOffsets instance with scaled offsets based on the texture size
          */
         public static RenderOffsets textureSize(int textureSize) {
@@ -167,7 +166,6 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
          * Creates a RenderOffsets instance with scale applied to the offsets.
          *
          * @param scale the scale factor to apply to the offsets, must be greater than 0
-         *
          * @return a RenderOffsets instance with scaled offsets
          */
         public static RenderOffsets scale(float scale) {

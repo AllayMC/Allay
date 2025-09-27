@@ -10,21 +10,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.data.BlockTag;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.component.Component;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.HashUtils;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.hash.HashUtils;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.block.data.BlockId;
+import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.item.impl.ItemBlockImpl;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.registry.InternalRegistries;
@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.allaymc.server.component.interfaces.ComponentProvider.findComponentIdentifierInClass;
+import static org.allaymc.server.component.ComponentProvider.findComponentIdentifierInClass;
 
 /**
  * @author daoge_cmd | Cool_Loong
@@ -224,10 +224,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 throw new BlockTypeBuildException("Cannot find vanilla block data component for " + blockId + " from vanilla block data registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
 
-            var tags = InternalBlockTypeData.getBlockTags(blockId);
-            if (tags.length != 0) setBlockTags(tags);
+            var tags = InternalRegistries.BLOCK_TAGS.get(blockId);
+            if (tags != null) {
+                setBlockTags(tags);
+            }
 
-            defaultStateSupplier = blockStates -> blockStates.get(InternalBlockTypeData.getDefaultBlockStateHash(blockId));
+            defaultStateSupplier = blockStates -> blockStates.get(InternalRegistries.BLOCK_DEFAULT_STATE_HASHES.get(blockId));
             return this;
         }
 
@@ -291,9 +293,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
-        public Builder setBlockTags(BlockTag... blockTags) {
-            // Unmodifiable set
-            this.blockTags = Set.of(blockTags);
+        public Builder setBlockTags(Collection<BlockTag> blockTags) {
+            this.blockTags = new HashSet<>(blockTags);
             return this;
         }
 
@@ -317,8 +318,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             } catch (Throwable t) {
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }
-            type.register(Registries.BLOCKS);
-            type.register(Registries.BLOCK_STATE_PALETTE);
+
+            Registries.BLOCKS.register(type.getIdentifier(), type);
+            for (var blockState : type.blockStateHashMap.values()) {
+                Registries.BLOCK_STATE_PALETTE.register(blockState.blockStateHash(), blockState);
+            }
+
             return type;
         }
 

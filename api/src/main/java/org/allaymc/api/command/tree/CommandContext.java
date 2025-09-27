@@ -5,9 +5,9 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.message.TrContainer;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
 
@@ -97,7 +97,6 @@ public interface CommandContext {
      * Return the argument at the specified index.
      *
      * @param index the index of the argument to retrieve
-     *
      * @return the argument at the specified index
      */
     String queryArg(int index);
@@ -207,7 +206,6 @@ public interface CommandContext {
      * Checks if the specified argument index is valid.
      *
      * @param index the index to check
-     *
      * @return {@code true} if the index is valid, {@code false} otherwise.
      */
     default boolean isValidArgIndex(int index) {
@@ -223,7 +221,7 @@ public interface CommandContext {
      */
     default void sendWhisperTo(EntityPlayer player, @MayContainTrKey String message, Object... args) {
         if (player.getDimension().getWorld().getWorldData().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {
-            player.sendTr(message, args);
+            player.sendTranslatable(message, args);
         }
     }
 
@@ -254,7 +252,6 @@ public interface CommandContext {
      * Return a successful command result with a specified status code.
      *
      * @param status the status code
-     *
      * @return a {@link CommandResult} representing success with the given status
      */
     default CommandResult success(int status) {
@@ -275,7 +272,6 @@ public interface CommandContext {
      *
      * @param index the index of the result
      * @param <T>   the type of the result
-     *
      * @return the result at the specified index
      */
     <T> T getResult(int index);
@@ -286,7 +282,6 @@ public interface CommandContext {
      * @param index        the index of the result
      * @param defaultValue the default value to return if the result is {@code null}
      * @param <T>          the type of the result
-     *
      * @return the result at the specified index, or the default value if the result is {@code null}
      */
     default <T> T getResultOr(int index, T defaultValue) {

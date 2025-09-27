@@ -3,7 +3,6 @@ package org.allaymc.server.command.selector.args;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
-import org.allaymc.api.command.selector.args.CachedSimpleSelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3dc;
@@ -26,7 +25,7 @@ public class M extends CachedSimpleSelectorArgument {
         }
 
         var gm = ParseUtils.parseGameMode(rawGm);
-        return entity -> entity instanceof EntityPlayer player && (reversed != (player.getGameType().ordinal() == gm));
+        return entity -> entity instanceof EntityPlayer player && (reversed != (player.getGameMode().ordinal() == gm));
     }
 
     @Override

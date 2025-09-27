@@ -254,7 +254,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
             var neighborPos = face.offsetPos(pos);
             var neighbor = dimension.getLiquid(neighborPos);
-            var neighborLiquidLayer = neighbor.leftInt();
+            var neighborLiquidLayer = neighbor.left();
             var neighborLiquid = neighbor.right();
             if (neighborLiquid == null || !isSameLiquidType(neighborLiquid.getBlockType())) {
                 continue;

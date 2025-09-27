@@ -1,6 +1,6 @@
 package org.allaymc.api.scheduler;
 
-import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.AllayAPI;
 
 import java.util.concurrent.ExecutorService;
 
@@ -10,13 +10,12 @@ import java.util.concurrent.ExecutorService;
  * @author daoge_cmd
  */
 public interface Scheduler {
-    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
+    AllayAPI.APIInstanceHolder<Factory> FACTORY = AllayAPI.APIInstanceHolder.create();
 
     /**
      * Create a scheduler.
      *
      * @param asyncTaskExecutor the async task executor
-     *
      * @return the scheduler
      */
     static Scheduler createScheduler(ExecutorService asyncTaskExecutor) {

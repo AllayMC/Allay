@@ -3,8 +3,7 @@ package org.allaymc.server.world.manager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -13,6 +12,7 @@ import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.manager.ChunkManager;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkHolder;
 import org.jctools.maps.NonBlockingHashMapLong;
@@ -111,16 +111,12 @@ public final class AllayChunkManager implements ChunkManager {
         for (var chunkLoader : chunk.getChunkLoaders()) {
             var lcx = ((int) Math.floor(chunkLoader.getLocation().x())) >> 4;
             var lcz = ((int) Math.floor(chunkLoader.getLocation().z())) >> 4;
-            if (Math.pow(lcx - cx, 2) + Math.pow(lcz - cz, 2) <= Math.pow(Server.SETTINGS.worldSettings().tickRadius(), 2)) {
+            if (Math.pow(lcx - cx, 2) + Math.pow(lcz - cz, 2) <= Math.pow(AllayServer.getSettings().worldSettings().tickRadius(), 2)) {
                 shouldTick = true;
                 break;
             }
         }
         return shouldTick;
-    }
-
-    public void sendChunkPackets() {
-        forEachLoadedChunks(chunk -> ((AllayUnsafeChunk) chunk.toUnsafeChunk()).sendChunkPackets());
     }
 
     @Override

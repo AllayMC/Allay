@@ -6,14 +6,14 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrContainer;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.command.defaults.*;
-import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,47 +118,44 @@ public class AllayCommandRegistry extends CommandRegistry {
 
         var spilt = splitCommandArgs(cmd);
         if (spilt.isEmpty()) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, "");
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, "");
             return CommandResult.fail();
         }
 
         var commandName = spilt.pop();
         var command = this.findCommand(commandName);
         if (command == null) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
 
         if (!sender.hasPermissions(command.getPermissions())) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
 
         try {
-            var result = command.execute(sender, spilt.toArray(Utils.EMPTY_STRING_ARRAY));
-            sender.handleResult(result);
+            var result = command.execute(sender, spilt.toArray(new String[0]));
+            var sendCommandFeedback = sender.getCommandExecuteLocation().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK);
+            if (result.context() == null || !sendCommandFeedback) {
+                return result;
+            }
+
+            var status = result.status();
+            var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
+            if (result.isSuccess()) {
+                CommandSender sender1 = result.context().getSender();
+                Server.getInstance().getMessageChannel().broadcastCommandOutputs(sender1, status, outputs);
+            } else {
+                // If there is an error, only send the message to itself
+                sender.sendCommandOutputs(result.context().getSender(), status, outputs);
+            }
+
             return result;
         } catch (Throwable t) {
             log.error("Error while execute command {}", commandName, t);
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_EXCEPTION);
+            sender.sendTranslatable(TextFormat.RED + "%" + TrKeys.MC_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.fail();
         }
-    }
-
-    @Override
-    public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
-        var pk = new AvailableCommandsPacket();
-        getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && player.hasPermissions(command.getPermissions()))
-                .forEach(command -> pk.getCommands().add(command.buildNetworkDataFor(player)));
-        return pk;
-    }
-
-    public Command findCommand(String nameOrAlias) {
-        var result = this.get(nameOrAlias);
-        if (result != null) return result;
-        return this.getContent().values().stream()
-                .filter(command -> command.getAliases().contains(nameOrAlias))
-                .findFirst().orElse(null);
     }
 }

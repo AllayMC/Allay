@@ -1,13 +1,14 @@
 package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockStateSafeGetter;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityFlowerPotBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -41,11 +42,12 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     private boolean isValidPlant(BlockState block) {
-        return block.getBlockType().hasBlockTag(BlockCustomTags.POTTABLE_PLANT);
+        return block.getBlockType().hasBlockTag(BlockTags.POTTABLE_PLANT);
     }
 
+    @EventHandler
     @Override
-    public void onReplace(CBlockOnReplaceEvent event) {
+    public void onBlockReplace(CBlockOnReplaceEvent event) {
         if (plantBlock == null) {
             return;
         }
@@ -64,13 +66,13 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
 
         return savedNbt
                 .toBuilder()
-                .putCompound(TAG_PLANT_BLOCK, this.plantBlock.getBlockStateTag())
+                .putCompound(TAG_PLANT_BLOCK, this.plantBlock.getBlockStateNBT())
                 .build();
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound(TAG_PLANT_BLOCK, value -> this.plantBlock = BlockStateSafeGetter.fromNBT(value));
+        nbt.listenForCompound(TAG_PLANT_BLOCK, value -> this.plantBlock = NBTIO.getAPI().fromBlockStateNBT(value));
     }
 }

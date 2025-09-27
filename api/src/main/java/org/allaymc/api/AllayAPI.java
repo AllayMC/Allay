@@ -1,16 +1,19 @@
 package org.allaymc.api;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.eventbus.EventBus;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.NBTIO;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
@@ -31,10 +34,10 @@ public final class AllayAPI {
 
     private static final AllayAPI INSTANCE = new AllayAPI();
 
-    private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
-    private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
-    private boolean i18nSet = false;
-    private boolean implemented = false;
+    private final Map<Class<?>, ApiBindingAction<?>> bindings;
+    private final Map<Class<?>, Consumer<?>> consumers;
+    private boolean i18nSet;
+    private boolean implemented;
     /**
      * The name of the core which implements the AllayAPI.
      */
@@ -45,6 +48,8 @@ public final class AllayAPI {
     private boolean isDevBuild;
 
     private AllayAPI() {
+        this.bindings = new LinkedHashMap<>();
+        this.consumers = new HashMap<>();
         registerDefaultAPIRequirements();
     }
 
@@ -66,7 +71,7 @@ public final class AllayAPI {
      */
     @SuppressWarnings("unchecked")
     @ApiStatus.Internal
-    public void implement(String coreName, boolean isDevBuild) throws MissingImplementationException {
+    public void implement(String coreName, boolean isDevBuild) {
         if (!i18nSet) {
             throw new MissingImplementationException("Missing i18n implementation!");
         }
@@ -143,9 +148,7 @@ public final class AllayAPI {
      * Each api class has only one implementation instance, so calling this method with the same parameters will return an identical object
      *
      * @param api the interface
-     *
      * @return the implementation instance of the specific interface
-     *
      * @throws APINotImplementedException if the interface has not been implemented
      */
     @ApiStatus.Internal
@@ -169,8 +172,65 @@ public final class AllayAPI {
 
         // Misc
         requireImpl(BossBar.Factory.class, BossBar.FACTORY::set);
+        requireImpl(NBTIO.class, NBTIO.API::set);
+    }
+
+    /**
+     * APIInstanceHolder is used to hold the API instance that
+     * needs to be implemented and provided by api implementation (server).
+     *
+     * @author daoge_cmd
+     */
+    @NoArgsConstructor
+    @ApiStatus.Internal
+    public static final class APIInstanceHolder<T> {
+
+        private T instance;
+
+        /**
+         * Create a new empty api instance holder with the specific type.
+         *
+         * @param <T> the type of the api instance that the holder will hold
+         * @return the new api instance holder
+         */
+        public static <T> APIInstanceHolder<T> create() {
+            return new APIInstanceHolder<>();
+        }
+
+        /**
+         * Set the instance of the api implementation.
+         * <p>
+         * This method only works when the instance is null, which means that you can only set the instance once.'
+         * Calls this method multiple times will not change the instance.
+         *
+         * @param instance the instance of the api implementation
+         */
+        public void set(T instance) {
+            if (this.instance == null) this.instance = instance;
+        }
+
+        /**
+         * Get the instance of the api implementation.
+         *
+         * @return the instance of the api implementation
+         */
+        public T get() {
+            return this.instance;
+        }
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {
+    }
+
+    @StandardException
+    private static class APINotImplementedException extends RuntimeException {
+    }
+
+    @StandardException
+    private static class MissingImplementationException extends RuntimeException {
+    }
+
+    @StandardException
+    private static class MissingRequirementException extends RuntimeException {
     }
 }

@@ -2,16 +2,15 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
-import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -106,12 +105,12 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @EventHandler
     protected void onDamage(CEntityTryDamageEvent event) {
         var damageType = event.getDamage().getDamageType();
-        event.setCanAttack(damageType != DamageContainer.DamageType.FALL);
+        event.setCanAttack(damageType != DamageType.FALL);
     }
 
     @Override
     public void setExperienceValue(int experienceValue) {
         this.experienceValue = experienceValue;
-        setAndSendEntityData(EntityDataTypes.VALUE, experienceValue);
+        broadcastState();
     }
 }

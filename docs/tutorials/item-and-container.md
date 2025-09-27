@@ -2,7 +2,7 @@
 comments: true
 ---
 
-# Work with Items and Containers
+# Work with Items and Containers (TODO: needs to be updated)
 
 This tutorial introduces the core concepts of Allay's Items and Containers API and shows practical ways to work with item types, item stacks, and containers.
 
@@ -45,7 +45,7 @@ There are two common ways to obtain an ItemType.
 
 ```java linenums="1"
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.item.type.ItemType;
 
 ItemType<?> diamond = Registries.ITEMS.get(new Identifier("minecraft:diamond"));
@@ -171,8 +171,8 @@ container.getItemStack(0) == ItemAirStack.AIR_STACK
 
 ```java linenums="1"
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerContainer;
+import org.allaymc.server.container.impl.ContainerTypeInfo;
+import org.allaymc.server.container.impl.AbstractPlayerContainer;
 
 ContainerHolder holder = /* obtain a container holder (e.g., player) */;
 // Get a specific container type
@@ -185,8 +185,8 @@ boolean hasContainer = holder.hasContainer(FullContainerType.PLAYER);
 
 ```java linenums="1"
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerContainer;
+import org.allaymc.server.container.impl.ContainerTypeInfo;
+import org.allaymc.server.container.impl.AbstractPlayerContainer;
 
 Container container = /* obtain a container */;
 ContainerViewer viewer = /* obtain a container viewer */;

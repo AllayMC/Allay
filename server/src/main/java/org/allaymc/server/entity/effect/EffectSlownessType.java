@@ -1,0 +1,36 @@
+package org.allaymc.server.entity.effect;
+
+import org.allaymc.api.entity.effect.AbstractEffectType;
+import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.interfaces.EntityLiving;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.utils.identifier.Identifier;
+
+import java.awt.*;
+
+/**
+ * @author daoge_cmd
+ */
+public class EffectSlownessType extends AbstractEffectType {
+    public EffectSlownessType() {
+        super(2, new Identifier("minecraft:slowness"), new Color(0x8bafe0), true);
+    }
+
+    @Override
+    public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
+        if (!(entity instanceof EntityPlayer player)) return;
+        var level = effectInstance.getLevel();
+        var slowness = 1 - level * 0.15f;
+        if (slowness <= 0) slowness = 0.00001f;
+        player.setSpeed(player.getSpeed() * slowness);
+    }
+
+    @Override
+    public void onRemove(EntityLiving entity, EffectInstance effectInstance) {
+        if (!(entity instanceof EntityPlayer player)) return;
+        var level = effectInstance.getLevel();
+        var slowness = 1 - level * 0.15f;
+        if (slowness <= 0) slowness = 0.00001f;
+        player.setSpeed(player.getSpeed() / slowness);
+    }
+}

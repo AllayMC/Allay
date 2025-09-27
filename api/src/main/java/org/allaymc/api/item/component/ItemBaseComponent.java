@@ -1,23 +1,21 @@
 package org.allaymc.api.item.component;
 
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.enchantment.type.AbstractEnchantmentProtectionType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3ic;
 
@@ -26,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.item.tag.ItemTags.*;
+import static org.allaymc.api.item.data.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
 /**
@@ -34,7 +32,10 @@ import static org.allaymc.api.item.type.ItemTypes.SHEARS;
  */
 public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
-    int EMPTY_STACK_NETWORK_ID = 0;
+    /**
+     * The value returned by method {@link #getUniqueId()} when the item stack does not use the stack id.
+     */
+    int EMPTY_UNIQUE_ID = 0;
 
     /**
      * Gets the item type.
@@ -127,7 +128,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * May be ignored based on unbreaking enchantment.
      *
      * @param increase the amount to increase
-     *
      * @return {@code true} if increased, {@code false} if ignored
      */
     boolean tryIncreaseDamage(int increase);
@@ -196,40 +196,37 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     BlockState toBlockState();
 
     /**
-     * Converts to network item data.
+     * Gets the unique id of this item stack. Stack unique id is an increasing unique int value that associated
+     * with a stack, mainly used in the new item stack request system to reduce network traffic footprint. Different
+     * item stacks will have different unique ids.
+     * <p>
+     * Notes that item stack may don't have unique id, and in that case this method will return {@link #EMPTY_UNIQUE_ID}.
      *
-     * @return the {@link ItemData}
+     * @return the unique id
      */
-    ItemData toNetworkItemData();
+    int getUniqueId();
 
     /**
-     * Checks if the item has a stack network ID.
+     * Sets the unique id of this item stack.
+     *
+     * @param uniqueId the new unique id
+     */
+    void setUniqueId(int uniqueId);
+
+    /**
+     * Checks if the item stack has a unique id.
      *
      * @return {@code true} if present, {@code false} otherwise
      */
-    default boolean hasStackNetworkId() {
-        return getStackNetworkId() != EMPTY_STACK_NETWORK_ID;
+    default boolean hasUniqueId() {
+        return getUniqueId() != EMPTY_UNIQUE_ID;
     }
 
     /**
-     * Gets the stack network ID.
-     *
-     * @return the stack network ID
+     * Clears the unique id of this item stack.
      */
-    int getStackNetworkId();
-
-    /**
-     * Sets the stack network ID.
-     *
-     * @param newStackNetworkId the new ID
-     */
-    void setStackNetworkId(int newStackNetworkId);
-
-    /**
-     * Clears the stack network ID.
-     */
-    default void clearStackNetworkId() {
-        setStackNetworkId(EMPTY_STACK_NETWORK_ID);
+    default void clearUniqueId() {
+        setUniqueId(EMPTY_UNIQUE_ID);
     }
 
     /**
@@ -245,7 +242,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Copies the item stack with optional new network ID.
      *
      * @param newStackNetworkId whether to generate a new ID
-     *
      * @return the copied {@link ItemStack}
      */
     ItemStack copy(boolean newStackNetworkId);
@@ -282,7 +278,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @param dimension     the {@link Dimension}
      * @param placeBlockPos the block position ({@link Vector3ic})
      * @param interactInfo  the {@link PlayerInteractInfo}
-     *
      * @return {@code true} if used, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
@@ -294,7 +289,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @param dimension     the {@link Dimension}
      * @param placeBlockPos the placement position ({@link Vector3ic})
      * @param placementInfo the {@link PlayerInteractInfo}, may be {@code null}
-     *
      * @return {@code true} if placed, {@code false} otherwise
      */
     default boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
@@ -315,7 +309,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * mouse button or screen).
      *
      * @param player the {@link EntityPlayer} that try to use this item in air
-     *
      * @return {@code true} if usable, {@code false} otherwise
      */
     boolean canUseItemInAir(EntityPlayer player);
@@ -327,7 +320,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @param player   the {@link EntityPlayer}
      * @param usedTime the usage duration
-     *
      * @return {@code true} if used, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
@@ -350,7 +342,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks if this item can merge with another.
      *
      * @param itemStack the {@link ItemStack} to check
-     *
      * @return {@code true} if mergeable, {@code false} otherwise
      */
     default boolean canMerge(ItemStack itemStack) {
@@ -362,7 +353,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @param itemStack   the {@link ItemStack} to check
      * @param ignoreCount whether to ignore count in comparison
-     *
      * @return {@code true} if mergeable, {@code false} otherwise
      */
     boolean canMerge(ItemStack itemStack, boolean ignoreCount);
@@ -385,7 +375,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks for a specific enchantment.
      *
      * @param enchantmentType the {@link EnchantmentType}
-     *
      * @return {@code true} if present, {@code false} otherwise
      */
     boolean hasEnchantment(EnchantmentType enchantmentType);
@@ -400,25 +389,14 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Checks for protection enchantments.
-     *
-     * @return {@code true} if present, {@code false} otherwise
-     */
-    default boolean hasProtectionEnchantment() {
-        return getEnchantments().stream().anyMatch(enchantmentInstance -> enchantmentInstance.getType() instanceof AbstractEnchantmentProtectionType);
-    }
-
-    /**
      * Gets the protection factor for a damage type.
      *
-     * @param damageType the {@link DamageContainer.DamageType}
-     *
+     * @param damageType the {@link DamageType}
      * @return the total protection factor
      */
-    default int getEnchantmentProtectionFactor(DamageContainer.DamageType damageType) {
+    default int getEnchantmentProtectionFactor(DamageType damageType) {
         return getEnchantments().stream()
-                .filter(enchantmentInstance -> enchantmentInstance.getType() instanceof AbstractEnchantmentProtectionType)
-                .mapToInt(enchantmentInstance -> ((AbstractEnchantmentProtectionType) enchantmentInstance.getType()).getProtectionFactor(damageType, enchantmentInstance.getLevel()))
+                .mapToInt(enchantmentInstance -> enchantmentInstance.getType().getProtectionFactor(damageType, enchantmentInstance.getLevel()))
                 .sum();
     }
 
@@ -426,7 +404,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Gets the level of an enchantment.
      *
      * @param enchantmentType the {@link EnchantmentType}
-     *
      * @return the level, or 0 if absent
      */
     int getEnchantmentLevel(EnchantmentType enchantmentType);
@@ -457,7 +434,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Removes an enchantment from the item.
      *
      * @param enchantmentType the {@link EnchantmentType}
-     *
      * @return the removed {@link EnchantmentInstance}, or {@code null} if absent
      */
     EnchantmentInstance removeEnchantment(EnchantmentType enchantmentType);
@@ -490,7 +466,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      *
      * @param performer the {@link Entity} performing the interaction
      * @param victim    the {@link Entity} being interacted with
-     *
      * @return {@code true} if successful, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
@@ -500,7 +475,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Gets the break time bonus for a block.
      *
      * @param blockState the {@link BlockState} to break
-     *
      * @return the bonus multiplier
      */
     default double getBreakTimeBonus(BlockState blockState) {
@@ -512,9 +486,9 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
-            if (blockType.hasBlockTag(BlockCustomTags.WOOL)) {
+            if (blockType.hasBlockTag(BlockTags.WOOL)) {
                 return 5d;
-            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockCustomTags.LEAVES)) {
+            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockTags.LEAVES)) {
                 return 15d;
             }
 
@@ -534,7 +508,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks if this is the correct tool for a block.
      *
      * @param blockState the {@link BlockState} to break
-     *
      * @return {@code true} if correct, {@code false} otherwise
      */
     boolean isCorrectToolFor(BlockState blockState);
@@ -543,7 +516,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks if this item can instantly break a block.
      *
      * @param blockState the {@link BlockState} to break
-     *
      * @return {@code true} if instant, {@code false} otherwise
      */
     default boolean canInstantBreak(BlockState blockState) {
@@ -574,7 +546,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Checks compatibility with an enchantment type.
      *
      * @param type the {@link EnchantmentType} to check
-     *
      * @return {@code true} if compatible, {@code false} otherwise
      */
     default boolean checkEnchantmentCompatibility(EnchantmentType type) {
@@ -585,7 +556,6 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * Gets incompatible enchantment types.
      *
      * @param type the {@link EnchantmentType} to check
-     *
      * @return the {@link Set} of incompatible {@link EnchantmentType}
      */
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {

@@ -3,13 +3,13 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.world.gamerule.GameRule;
 
 import java.util.function.Function;
 
-import static org.allaymc.api.command.data.CommonEnums.BOOL_GAMERULE_ENUM;
-import static org.allaymc.api.command.data.CommonEnums.INT_GAMERULE_ENUM;
+import static org.allaymc.server.command.data.CommonEnums.BOOL_GAMERULE_ENUM;
+import static org.allaymc.server.command.data.CommonEnums.INT_GAMERULE_ENUM;
 
 /**
  * @author daoge_cmd

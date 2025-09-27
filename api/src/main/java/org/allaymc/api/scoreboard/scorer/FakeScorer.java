@@ -2,9 +2,6 @@ package org.allaymc.api.scoreboard.scorer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.scoreboard.Scoreboard;
-import org.allaymc.api.scoreboard.ScoreboardLine;
-import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 /**
  * FakeScorer is a scorer that only has a name and is not associated with any entity.
@@ -20,8 +17,8 @@ public final class FakeScorer implements Scorer {
     private final String fakeName;
 
     @Override
-    public ScoreInfo.ScorerType getScorerType() {
-        return ScoreInfo.ScorerType.FAKE;
+    public ScorerType getScorerType() {
+        return ScorerType.FAKE;
     }
 
     @Override
@@ -42,8 +39,4 @@ public final class FakeScorer implements Scorer {
         return fakeName;
     }
 
-    @Override
-    public ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line) {
-        return new ScoreInfo(line.getLineId(), scoreboard.getObjectiveName(), line.getScore(), fakeName);
-    }
 }

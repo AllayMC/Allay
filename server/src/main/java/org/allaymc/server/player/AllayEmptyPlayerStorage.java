@@ -1,0 +1,36 @@
+package org.allaymc.server.player;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import org.allaymc.api.player.PlayerData;
+
+import java.util.UUID;
+
+/**
+ * @author daoge_cmd
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class AllayEmptyPlayerStorage extends AllayPlayerStorage {
+
+    public static final AllayEmptyPlayerStorage INSTANCE = new AllayEmptyPlayerStorage();
+
+    @Override
+    public PlayerData readPlayerData(UUID uuid) {
+        return PlayerData.createEmpty();
+    }
+
+    @Override
+    public void savePlayerData(UUID uuid, PlayerData playerData) {
+        // Do nothing
+    }
+
+    @Override
+    public boolean removePlayerData(UUID uuid) {
+        return false;
+    }
+
+    @Override
+    public boolean hasPlayerData(UUID uuid) {
+        return false;
+    }
+}

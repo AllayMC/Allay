@@ -1,5 +1,7 @@
 package org.allaymc.server.utils;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import com.google.common.reflect.ClassPath;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -62,6 +64,47 @@ public class ReflectionUtils {
             if (method.getReturnType() != void.class) return false;
             return method.getParameterCount() == 0;
         }).toList();
+    }
+
+    public static <T, U> BiMap<T, U> mapStaticFields(Class<?> classA, Class<?> classB) {
+        Map<String, T> staticInstancesA = new java.util.HashMap<>();
+
+        for (var field : classA.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers()) &&
+                Modifier.isPublic(field.getModifiers())) {
+                field.setAccessible(true);
+                try {
+                    @SuppressWarnings("unchecked")
+                    T instance = (T) field.get(null);
+                    if (instance != null) {
+                        staticInstancesA.put(field.getName(), instance);
+                    }
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+        }
+
+        BiMap<T, U> result = HashBiMap.create();
+
+        for (var field : classB.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers()) &&
+                Modifier.isPublic(field.getModifiers())) {
+                field.setAccessible(true);
+                try {
+                    @SuppressWarnings("unchecked")
+                    U instance = (U) field.get(null);
+                    if (instance != null) {
+                        T match = staticInstancesA.get(field.getName());
+                        if (match != null) {
+                            result.put(match, instance);
+                        }
+                    }
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+        }
+
+        return result;
     }
 }
 

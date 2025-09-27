@@ -2,19 +2,19 @@ package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.PlayerOffhandContainer;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.entity.EntityShootBowEvent;
+import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.data.PotionType;
-import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemArrowStack;
 import org.allaymc.api.math.MathUtils;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.container.impl.OffhandContainerImpl;
 import org.joml.Vector3d;
 
 /**
@@ -38,7 +38,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             return;
         }
 
-        var creative = player.getGameType() == GameType.CREATIVE;
+        var creative = player.getGameMode() == GameMode.CREATIVE;
         var force = Math.min(usedTime * (usedTime + 40.0) / 1200.0, 1.0);
         var speed = force * 5;
 
@@ -93,18 +93,18 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         if (!creative) {
             tryIncreaseDamage(1);
         }
-        player.getDimension().addLevelSoundEvent(shootPos, SoundEvent.BOW);
+        player.getDimension().addSound(shootPos, SimpleSound.BOW_SHOOT);
     }
 
     protected boolean hasArrow(EntityPlayer player) {
         // Find offhand arrow first
-        Container container = player.getContainer(FullContainerType.OFFHAND);
-        if (container.getItemStack(PlayerOffhandContainer.OFFHAND_SLOT) instanceof ItemArrowStack) {
+        Container container = player.getContainer(ContainerTypes.OFFHAND);
+        if (container.getItemStack(OffhandContainerImpl.OFFHAND_SLOT) instanceof ItemArrowStack) {
             return true;
         }
 
         // Arrow is not in offhand, search in inventory again
-        container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+        container = player.getContainer(ContainerTypes.INVENTORY);
         for (var itemStack : container.getItemStacks()) {
             if (itemStack instanceof ItemArrowStack) {
                 return true;
@@ -120,15 +120,15 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         ItemArrowStack arrow = null;
 
         // Find offhand arrow first
-        container = player.getContainer(FullContainerType.OFFHAND);
-        slot = PlayerOffhandContainer.OFFHAND_SLOT;
+        container = player.getContainer(ContainerTypes.OFFHAND);
+        slot = OffhandContainerImpl.OFFHAND_SLOT;
         if (container.getItemStack(slot) instanceof ItemArrowStack a) {
             arrow = a;
         }
 
         if (arrow == null) {
             // Arrow is not in offhand, search in inventory again
-            container = player.getContainer(FullContainerType.PLAYER_INVENTORY);
+            container = player.getContainer(ContainerTypes.INVENTORY);
             var itemStacks = container.getItemStacks();
             for (slot = 0; slot < itemStacks.size(); slot++) {
                 var item = itemStacks.get(slot);

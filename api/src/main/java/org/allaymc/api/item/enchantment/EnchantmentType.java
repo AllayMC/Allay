@@ -1,13 +1,14 @@
 package org.allaymc.api.item.enchantment;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ public abstract class EnchantmentType {
         this.maxLevel = maxLevel;
         this.rarity = rarity;
         this.applicableType = applicableType;
-        this.instances = new Int2ObjectOpenHashMap<>();
+        this.instances = new HashMap<>();
         Registries.ENCHANTMENTS.register(this.id, identifier, this);
     }
 
@@ -47,7 +48,6 @@ public abstract class EnchantmentType {
      * Create an instance of the enchantment.
      *
      * @param level The level of the instance
-     *
      * @return The instance of the enchantment
      */
     public EnchantmentInstance createInstance(int level) {
@@ -85,9 +85,7 @@ public abstract class EnchantmentType {
      * Get the minimum modified level of the enchantment.
      *
      * @param level The level of the enchantment
-     *
      * @return The minimum modified level of the enchantment
-     *
      * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
      */
     public int getMinModifiedLevel(int level) {
@@ -98,9 +96,7 @@ public abstract class EnchantmentType {
      * Get the maximum modified level of the enchantment.
      *
      * @param level The level of the enchantment
-     *
      * @return The maximum modified level of the enchantment
-     *
      * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
      */
     public int getMaxModifiedLevel(int level) {
@@ -129,7 +125,6 @@ public abstract class EnchantmentType {
      * Check if the enchantment can be applied to an item type.
      *
      * @param itemType The item type
-     *
      * @return {@code true} if the enchantment can be applied to the item type, {@code false} otherwise.
      */
     public boolean canBeAppliedTo(ItemType<?> itemType) {
@@ -160,10 +155,19 @@ public abstract class EnchantmentType {
     }
 
     /**
+     * Get the protection factor of this enchantment type.
+     *
+     * @return the protection factor of this enchantment type
+     * @see <a href="https://minecraft.wiki/w/Armor#Enchantments">Enchantments</a>
+     */
+    public int getProtectionFactor(DamageType damageType, int level) {
+        return 0;
+    }
+
+    /**
      * Check if the enchantment is incompatible with another enchantment.
      *
      * @param other The other enchantment
-     *
      * @return {@code true} if the enchantments are incompatible, {@code false} otherwise.
      */
     public boolean isIncompatibleWith(EnchantmentType other) {

@@ -1,7 +1,9 @@
 package org.allaymc.api.item.descriptor;
 
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.tag.ItemTags;
+import org.allaymc.api.item.ItemStackInitInfo;
+import org.allaymc.api.item.data.ItemTags;
+import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
+import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,18 +28,9 @@ class ItemDescriptorTest {
 
     @Test
     void testDefaultDescriptor() {
-        var descriptor = new DefaultDescriptor(PLANKS, 32767);
+        var descriptor = new ItemTypeDescriptor(PLANKS, 32767);
         var plankItemStack = PLANKS.createItemStack(
                 ItemStackInitInfo.builder().meta(1).build()
-        );
-        assertTrue(descriptor.match(plankItemStack));
-    }
-
-    @Test
-    void testItemDescriptorWithCount() {
-        var descriptor = new ItemDescriptorWithCount(new DefaultDescriptor(PLANKS), 32);
-        var plankItemStack = PLANKS.createItemStack(
-                ItemStackInitInfo.builder().count(32).build()
         );
         assertTrue(descriptor.match(plankItemStack));
     }

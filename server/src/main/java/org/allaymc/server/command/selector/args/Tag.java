@@ -2,7 +2,6 @@ package org.allaymc.server.command.selector.args;
 
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.SelectorType;
-import org.allaymc.api.command.selector.args.CachedSimpleSelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.server.command.selector.ParseUtils;

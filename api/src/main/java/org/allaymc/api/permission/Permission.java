@@ -12,7 +12,7 @@ import org.allaymc.api.registry.Registries;
 public final class Permission {
     private static final PermissionListener COMMAND_PERMISSION_LISTENER = (permissible, value) -> {
         if (permissible instanceof EntityPlayer player) {
-            player.requireResendingAvailableCommands();
+            player.requireResendingCommands();
         }
     };
 
@@ -33,9 +33,7 @@ public final class Permission {
      *
      * @param commandName the command name without the leading slash
      * @param permission  the name of the permission
-     *
      * @return a new permission instance
-     *
      * @throws PermissionException if a permission with the same name already exists
      */
     public static Permission createForCommand(String commandName, String permission) {
@@ -63,9 +61,7 @@ public final class Permission {
      * @param name        the name of the permission
      * @param description the description of the permission
      * @param listener    the listener of the permission, or {@code null} if no listener is set
-     *
      * @return a new permission instance
-     *
      * @throws PermissionException if a permission with the given name already exists
      */
     public static Permission create(String name, String description, PermissionListener listener) {
@@ -82,9 +78,7 @@ public final class Permission {
      * Gets an existing permission by its name.
      *
      * @param name the name of the permission
-     *
      * @return the permission with the given name, or {@code null} if it does not exist
-     *
      * @throws IllegalArgumentException if the given permission name is invalid
      */
     public static Permission get(String name) {

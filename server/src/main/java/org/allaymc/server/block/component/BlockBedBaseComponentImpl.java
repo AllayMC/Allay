@@ -4,10 +4,10 @@ import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBed;
@@ -15,10 +15,9 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockExplodeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3ic;
@@ -57,7 +56,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
         var playerFace = placementInfo.player().getHorizontalFace();
         var nextPos = playerFace.offsetPos(placeBlockPos);
         var nextBlockState = dimension.getBlockState(nextPos);
-        if (!nextBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+        if (!nextBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return false;
         }
 
@@ -114,7 +113,7 @@ public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? Utils.EMPTY_ITEM_STACK_SET : createBedDrop(block);
+        return block.getPropertyValue(BlockPropertyTypes.HEAD_PIECE_BIT) ? Set.of() : createBedDrop(block);
     }
 
     private Set<ItemStack> createBedDrop(Block blockState) {

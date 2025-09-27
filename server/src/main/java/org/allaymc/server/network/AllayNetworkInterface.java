@@ -20,14 +20,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.I18n;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.AllayServer;
+import org.allaymc.server.ServerSettings;
+import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
@@ -60,7 +60,7 @@ public class AllayNetworkInterface implements NetworkInterface {
 
     @SneakyThrows
     public void start() {
-        var settings = Server.SETTINGS;
+        var settings = AllayServer.getSettings();
         var networkSettings = settings.networkSettings();
 
         var networkThreadNumber = networkSettings.networkThreadNumber();
@@ -114,7 +114,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                             return;
                         }
 
-                        var event = new ClientConnectEvent(session, "disconnect.disconnected");
+                        var event = new ClientConnectEvent(session.getSocketAddress(), "disconnect.disconnected");
                         if (!event.call()) {
                             session.disconnect(event.getDisconnectReason());
                             return;
@@ -122,7 +122,7 @@ public class AllayNetworkInterface implements NetworkInterface {
 
                         var player = EntityTypes.PLAYER.createEntity();
                         log.info(I18n.get().tr(TrKeys.ALLAY_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
-                        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientSession(session);
+                        ((EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent()).setClientSession(session);
                     }
                 });
 
@@ -183,7 +183,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .subMotd(genericSettings.subMotd())
                 .playerCount(0)
                 .maximumPlayerCount(genericSettings.maxPlayerCount())
-                .gameType(genericSettings.defaultGameType().name())
+                .gameType(genericSettings.defaultGameMode().name())
                 .nintendoLimited(false)
                 .version(ProtocolInfo.getLatestCodec().getMinecraftVersion())
                 .protocolVersion(ProtocolInfo.getLatestCodec().getProtocolVersion())

@@ -1,11 +1,11 @@
 package org.allaymc.server.world.chunk;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
-import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.biome.BiomeId;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ class AllayChunkTest {
         assertThrows(IllegalArgumentException.class, () -> chunk.getBlockState(-1, 0, -1));
         assertThrows(IllegalArgumentException.class, () -> chunk.getBlockState(16, 0, 16));
 
-        assertEquals(BiomeId.PLAINS, chunk.getBiome(0, -10000, 0));
+        assertEquals(BiomeTypes.PLAINS, chunk.getBiome(0, -10000, 0));
         assertThrows(IllegalArgumentException.class, () -> chunk.getBiome(-1, 0, -1));
         assertThrows(IllegalArgumentException.class, () -> chunk.getBiome(16, 0, 16));
 
@@ -57,9 +57,9 @@ class AllayChunkTest {
         assertThrows(IllegalArgumentException.class, () -> chunk.getHeight(-1, -1));
         assertThrows(IllegalArgumentException.class, () -> chunk.getHeight(16, 16));
 
-        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(0, -10000, 0, BiomeId.PLAINS));
-        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(-1, 0, -1, BiomeId.PLAINS));
-        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(16, 0, 16, BiomeId.PLAINS));
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(0, -10000, 0, BiomeTypes.PLAINS));
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(-1, 0, -1, BiomeTypes.PLAINS));
+        assertThrows(IllegalArgumentException.class, () -> chunk.setBiome(16, 0, 16, BiomeTypes.PLAINS));
 
         assertThrows(IllegalArgumentException.class, () -> chunk.getSection(114514));
     }
@@ -74,8 +74,8 @@ class AllayChunkTest {
 
     @Test
     void testUpdateBiome() {
-        chunk.setBiome(0, 10, 0, BiomeId.CHERRY_GROVE);
-        assertEquals(BiomeId.CHERRY_GROVE, chunk.getBiome(0, 10, 0));
+        chunk.setBiome(0, 10, 0, BiomeTypes.CHERRY_GROVE);
+        assertEquals(BiomeTypes.CHERRY_GROVE, chunk.getBiome(0, 10, 0));
     }
 
     @Test

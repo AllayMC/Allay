@@ -18,12 +18,12 @@ import java.util.Map;
 public class AllayCreativeItemCategory implements CreativeItemCategory {
     protected final AllayCreativeItemRegistry registry;
     @Getter
-    protected final org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory type;
+    protected final Type type;
 
     protected Map<Integer, CreativeItemGroup> groups;
     protected Map<String, CreativeItemGroup> namedGroups;
 
-    public AllayCreativeItemCategory(AllayCreativeItemRegistry registry, org.cloudburstmc.protocol.bedrock.data.inventory.CreativeItemCategory type) {
+    public AllayCreativeItemCategory(AllayCreativeItemRegistry registry, Type type) {
         this.registry = registry;
         this.type = type;
         this.groups = new Int2ObjectOpenHashMap<>();

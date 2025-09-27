@@ -1,6 +1,6 @@
 package org.allaymc.api.world.chunk;
 
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 
 /**
  * ChunkSource represents an object that you can get chunks from. It provides methods to retrieve
@@ -17,7 +17,6 @@ public interface ChunkSource {
      *
      * @param x the x coordinate of the chunk
      * @param z the z coordinate of the chunk
-     *
      * @return the chunk at the specified chunk coordinates, or {@code null} if not
      * found or is not accessible by this chunk source.
      */
@@ -28,7 +27,6 @@ public interface ChunkSource {
      *
      * @param x the x coordinate of the dimension pos
      * @param z the z coordinate of the dimension pos
-     *
      * @return the chunk which the specified dimension pos is in, or {@code null} if not
      * found or is not accessible by this chunk source.
      */
@@ -40,7 +38,6 @@ public interface ChunkSource {
      * Get the chunk by chunk hash.
      *
      * @param chunkHash the hash of the chunk
-     *
      * @return the chunk which has the specified hash, or {@code null} if not found
      * or is not accessible by this chunk source.
      */

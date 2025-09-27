@@ -5,7 +5,7 @@ import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;

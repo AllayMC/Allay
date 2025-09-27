@@ -5,11 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.*;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.allaymc.api.world.data.DimensionInfo;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 /**
  * @author Cool_Loong | daoge_cmd
@@ -79,7 +77,7 @@ public class AllayChunk implements Chunk {
     @Override
     public BiomeType getBiome(int x, int y, int z) {
         if (y < getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight()) {
-            return BiomeId.PLAINS;
+            return BiomeTypes.PLAINS;
         }
 
         AllayUnsafeChunk.checkXZ(x, z);
@@ -186,13 +184,7 @@ public class AllayChunk implements Chunk {
 
         void removeChunkLoader(ChunkLoader chunkLoader);
 
-        void addChunkPacket(BedrockPacket packet);
-
-        void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
-
-        void sendChunkPacket(BedrockPacket packet);
-
-        void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
+        void addChunkTask(Runnable task);
 
         ChunkState getState();
 

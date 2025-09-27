@@ -1,6 +1,5 @@
 package org.allaymc.server.block.component;
 
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
@@ -8,8 +7,9 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.Sound;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.joml.Vector3ic;
 
 import java.util.ArrayList;
@@ -168,7 +168,7 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        return Pair.of(stemHeight, hasBranch);
+        return new Pair<>(stemHeight, hasBranch);
     }
 
     protected void growInDirection(Block current, BlockFace face, int addingAge) {
@@ -179,6 +179,6 @@ public class BlockChorusFlowerBaseComponentImpl extends BlockBaseComponentImpl {
         var currentAge = newBlockState.getPropertyValue(AGE_6);
         newBlockState = newBlockState.setPropertyValue(AGE_6, Math.min(AGE_6.getMax(), currentAge + addingAge));
         current.getDimension().setBlockState(newPos, newBlockState);
-        current.getDimension().addSound(newPos, Sound.BLOCK_CHORUSFLOWER_GROW);
+        current.getDimension().addSound(newPos, SimpleSound.CHORUS_FLOWER_GROW);
     }
 }

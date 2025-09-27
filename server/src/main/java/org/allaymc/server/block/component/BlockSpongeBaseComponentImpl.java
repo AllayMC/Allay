@@ -2,14 +2,14 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.allaymc.api.world.particle.BlockBreakParticle;
+import org.allaymc.api.world.sound.SimpleSound;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -40,8 +40,8 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
     protected void tryAbsorbWater(Block center) {
         if (performAbsorbWater(center)) {
             center.getDimension().setBlockState(center.getPosition(), BlockTypes.WET_SPONGE.getDefaultState());
-            center.addLevelEvent(LevelEvent.PARTICLE_DESTROY_BLOCK, BlockTypes.WATER.getDefaultState().blockStateHash());
-            center.addLevelSoundEvent(SoundEvent.SPONGE_ABSORB);
+            center.addParticle(new BlockBreakParticle(BlockTypes.WATER.getDefaultState()));
+            center.addSound(SimpleSound.SPONGE_ABSORB);
         }
     }
 
@@ -62,7 +62,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
                 var neighbor = entry.block().offsetPos(face);
                 var neighborType = neighbor.getBlockType();
 
-                if (neighborType.hasBlockTag(BlockCustomTags.WATER)) {
+                if (neighborType.hasBlockTag(BlockTags.WATER)) {
                     center.getDimension().setBlockState(neighbor.getPosition(), BlockTypes.AIR.getDefaultState());
                     removedWaterCount++;
                     if (currentDistance < MAX_ABSORB_DISTANCE) {
@@ -81,7 +81,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
 
     private boolean hasAdjacentWater(Block center) {
         for (var face : BlockFace.values()) {
-            if (center.offsetPos(face).getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
+            if (center.offsetPos(face).getBlockType().hasBlockTag(BlockTags.WATER)) {
                 return true;
             }
         }

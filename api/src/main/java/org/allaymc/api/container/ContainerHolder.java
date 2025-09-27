@@ -1,6 +1,5 @@
 package org.allaymc.api.container;
 
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -17,7 +16,7 @@ public interface ContainerHolder {
      * @return a map of containers
      */
     @UnmodifiableView
-    Map<FullContainerType<?>, Container> getContainers();
+    Map<ContainerType<?>, Container> getContainers();
 
     /**
      * Checks if the holder has a container of the specified type.
@@ -25,7 +24,7 @@ public interface ContainerHolder {
      * @param type the type of the container
      * @return {@code true} if the holder has a container of the specified type, {@code false} otherwise.
      */
-    boolean hasContainer(FullContainerType<?> type);
+    boolean hasContainer(ContainerType<?> type);
 
     /**
      * Returns a container of the specified type.
@@ -34,16 +33,7 @@ public interface ContainerHolder {
      * @param <T>  the type of the container
      * @return the container
      */
-    <T extends Container> T getContainer(FullContainerType<T> type);
-
-    /**
-     * Returns a container of the specified slot type.
-     *
-     * @param slotType the type of the slot
-     * @param <T>      the type of the container
-     * @return the container
-     */
-    <T extends Container> T getContainer(ContainerSlotType slotType);
+    <T extends Container> T getContainer(ContainerType<T> type);
 
     /**
      * Adds a container to the holder.

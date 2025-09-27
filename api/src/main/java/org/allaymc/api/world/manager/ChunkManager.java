@@ -1,7 +1,6 @@
 package org.allaymc.api.world.manager;
 
-import org.allaymc.api.server.ServerSettings;
-import org.allaymc.api.utils.HashUtils;
+import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.chunk.ChunkSource;
@@ -208,13 +207,10 @@ public interface ChunkManager extends ChunkSource {
      * Remove all proto chunks, and full chunks that are unused in the next tick.
      * <p>
      * An unused full chunk is a chunk that is fully loaded but is not holding any chunk
-     * loader. Usually these chunks will still keep loaded for a period of time (the time
-     * is specified by {@link ServerSettings.WorldSettings#removeUnusedFullChunkCycle()}).
+     * loader. Usually these chunks will still keep loaded for a period of time.
      * <p>
      * Proto chunks are chunks that are not fully loaded, they are used during world
-     * generation and will be removed after a period of time which is specified by
-     * {@link ServerSettings.WorldSettings#removeUnusedProtoChunkCycle()} since they
-     * are added.
+     * generation and will be removed after a period of time since they are added.
      * <p>
      * Calling this method will set the countdown of all unused chunks to zero, which
      * will make these chunks be unloaded during the next tick.

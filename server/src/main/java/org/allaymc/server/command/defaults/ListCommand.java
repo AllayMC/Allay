@@ -1,7 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 
 import java.util.StringJoiner;
@@ -23,8 +23,8 @@ public class ListCommand extends VanillaCommand {
             var joiner = new StringJoiner(", ");
             players.forEach(player -> joiner.add(player.getDisplayName()));
 
-            context.getSender().sendTr(TrKeys.MC_COMMANDS_PLAYERS_LIST, players.size(), playerManager.getMaxPlayerCount());
-            context.getSender().sendText(joiner.toString());
+            context.getSender().sendTranslatable(TrKeys.MC_COMMANDS_PLAYERS_LIST, players.size(), playerManager.getMaxPlayerCount());
+            context.getSender().sendMessage(joiner.toString());
             return context.success();
         });
     }

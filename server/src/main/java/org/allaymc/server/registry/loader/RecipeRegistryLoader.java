@@ -2,21 +2,14 @@ package org.allaymc.server.registry.loader;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.recipe.NetworkRecipe;
-import org.allaymc.api.item.recipe.impl.ShapedRecipe;
-import org.allaymc.api.item.recipe.impl.ShapelessRecipe;
-import org.allaymc.api.item.recipe.impl.SmithingTransformRecipe;
-import org.allaymc.api.item.recipe.impl.SmithingTrimRecipe;
+import org.allaymc.api.item.recipe.*;
+import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.utils.identifier.Identifier;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -25,89 +18,121 @@ import java.util.*;
  * @author daoge_cmd
  */
 @Slf4j
-public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<NetworkRecipe>> {
+public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier, Recipe>> {
+    @SneakyThrows
     @Override
-    public Int2ObjectMap<NetworkRecipe> load(Void $) {
-        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_LOADING));
-        var recipes = new Int2ObjectOpenHashMap<NetworkRecipe>();
-        var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
+    public Map<Identifier, Recipe> load(Void $) {
+        var recipes = new HashMap<Identifier, Recipe>();
+        JsonObject obj;
+        try (var reader = new InputStreamReader(Objects.requireNonNull(Utils.getResource("recipes.json")))) {
+            obj = JsonParser.parseReader(reader).getAsJsonObject();
+        }
 
-        var obj = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
-
+        // Shaped
         var shapedRecipes = obj.getAsJsonArray("shaped");
         for (var shapedRecipe : shapedRecipes) {
+            if (isDeprecated(shapedRecipe.getAsJsonObject())) {
+                continue;
+            }
+
             var recipe = parseShaped(shapedRecipe.getAsJsonObject());
-            recipes.put(recipe.getNetworkId(), recipe);
+            recipes.put(recipe.getIdentifier(), recipe);
         }
 
+        // Shapeless
         var shapelessRecipes = obj.getAsJsonArray("shapeless");
         for (var shapelessRecipe : shapelessRecipes) {
+            if (isDeprecated(shapelessRecipe.getAsJsonObject())) {
+                continue;
+            }
+
             var recipe = parseShapeless(shapelessRecipe.getAsJsonObject());
-            recipes.put(recipe.getNetworkId(), recipe);
+            recipes.put(recipe.getIdentifier(), recipe);
         }
 
+        // Smithing Transform
         var smithingTransformRecipes = obj.getAsJsonArray("smithingTransform");
         for (var smithingTransformRecipe : smithingTransformRecipes) {
             var recipe = parseSmithingTransform(smithingTransformRecipe.getAsJsonObject());
-            recipes.put(recipe.getNetworkId(), recipe);
+            recipes.put(recipe.getIdentifier(), recipe);
         }
 
+        // Smithing Trim
         var smithingTrimRecipes = obj.getAsJsonArray("smithingTrim");
         for (var smithingTrimRecipe : smithingTrimRecipes) {
             var recipe = parseSmithingTrim(smithingTrimRecipe.getAsJsonObject());
-            recipes.put(recipe.getNetworkId(), recipe);
+            recipes.put(recipe.getIdentifier(), recipe);
         }
 
-        log.info(I18n.get().tr(TrKeys.ALLAY_RECIPE_LOADED, recipes.size()));
+        // Furnace
+        var furnaceRecipes = obj.getAsJsonArray("furnaceAux");
+        for (var furnaceRecipe : furnaceRecipes) {
+            if (isDeprecated(furnaceRecipe.getAsJsonObject())) {
+                continue;
+            }
+
+            var recipe = parseFurnace(furnaceRecipe.getAsJsonObject());
+            recipes.put(recipe.getIdentifier(), recipe);
+        }
+
+        // Potion
+        var potionRecipes = obj.getAsJsonArray("potionMixes");
+        for (var potionRecipe : potionRecipes) {
+            var recipe = parsePotion(potionRecipe.getAsJsonObject());
+            recipes.put(recipe.getIdentifier(), recipe);
+        }
+
         return recipes;
     }
 
-    protected SmithingTrimRecipe parseSmithingTrim(JsonObject obj) {
-        return SmithingTrimRecipe
-                .builder()
-                .identifier(new Identifier(obj.get("id").getAsString()))
-                .template(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("template")))
-                .base(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("base")))
-                .addition(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("addition")))
-                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
-                .tag(obj.get("tag").getAsString())
-                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
-                .build();
+    protected static boolean isDeprecated(JsonObject obj) {
+        return obj.has("tag") && obj.get("tag").getAsString().equals("deprecated");
     }
 
-    protected SmithingTransformRecipe parseSmithingTransform(JsonObject obj) {
-        return SmithingTransformRecipe
-                .builder()
-                .identifier(new Identifier(obj.get("id").getAsString()))
-                .template(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("template")))
-                .base(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("base")))
-                .addition(RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("addition")))
-                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
-                .outputs(RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new))
-                .tag(obj.get("tag").getAsString())
-                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
-                .build();
+    protected static SmithingTrimRecipe parseSmithingTrim(JsonObject obj) {
+        return new SmithingTrimRecipe(
+                new Identifier(obj.get("id").getAsString()),
+                null,
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("template")),
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("base")),
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("addition"))
+        );
     }
 
-    protected ShapelessRecipe parseShapeless(JsonObject obj) {
+    protected static SmithingTransformRecipe parseSmithingTransform(JsonObject obj) {
+        return new SmithingTransformRecipe(
+                new Identifier(obj.get("id").getAsString()),
+                RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new),
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("template")),
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("base")),
+                RecipeJsonUtils.parseItemDescriptor(obj.getAsJsonObject("addition"))
+        );
+    }
+
+    protected static ShapelessRecipe parseShapeless(JsonObject obj) {
         // Ingredients
         List<ItemDescriptor> ingredients = new ArrayList<>();
         obj.getAsJsonArray("input").forEach(item -> {
             ingredients.add(RecipeJsonUtils.parseItemDescriptor(item.getAsJsonObject()));
         });
 
-        return ShapelessRecipe
-                .builder()
-                .identifier(new Identifier(obj.get("id").getAsString()))
-                .ingredients(ingredients.toArray(ItemDescriptor[]::new))
-                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
-                .outputs(RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new))
-                .tag(obj.get("tag").getAsString())
-                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
-                .build();
+        return new ShapelessRecipe(
+                new Identifier(obj.get("id").getAsString()),
+                RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new),
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
+                ingredients.toArray(ItemDescriptor[]::new),
+                switch (obj.get("tag").getAsString()) {
+                    case "crafting_table" -> ShapelessRecipe.Type.CRAFTING;
+                    case "stonecutter" -> ShapelessRecipe.Type.STONECUTTER;
+                    case "cartography_table" -> ShapelessRecipe.Type.CARTOGRAPHY_TABLE;
+                    default -> throw new IllegalStateException("Unhandled tag for shapeless recipe: " + obj.get("tag").getAsString());
+                }
+        );
     }
 
-    protected ShapedRecipe parseShaped(JsonObject obj) {
+    protected static ShapedRecipe parseShaped(JsonObject obj) {
         // Pattern
         List<String> patternList = new ArrayList<>();
         obj.getAsJsonArray("pattern").forEach(line -> {
@@ -123,15 +148,28 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
             keys.put(key, itemDescriptor);
         });
 
-        return ShapedRecipe
-                .builder()
-                .identifier(new Identifier(obj.get("id").getAsString()))
-                .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
-                .pattern(ShapedRecipe.PatternHelper.build(patternList))
-                .keys(keys)
-                .outputs(RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new))
-                .tag(obj.get("tag").getAsString())
-                .uuid(UUID.fromString(obj.get("uuid").getAsString()))
-                .build();
+        return new ShapedRecipe(
+                new Identifier(obj.get("id").getAsString()),
+                RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new),
+                obj.has("priority") ? obj.get("priority").getAsInt() : 0,
+                ShapedRecipe.PatternHelper.build(patternList),
+                keys
+        );
+    }
+
+    protected static FurnaceRecipe parseFurnace(JsonObject obj) {
+        return new FurnaceRecipe(
+                RecipeJsonUtils.parseItemStack(obj.getAsJsonObject("input")),
+                RecipeJsonUtils.parseOutput(obj.getAsJsonObject("output")),
+                FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase())
+        );
+    }
+
+    protected static PotionRecipe parsePotion(JsonObject obj) {
+        return new PotionRecipe(
+                RecipeJsonUtils.parseItemStack(obj.getAsJsonObject("input")),
+                RecipeJsonUtils.parseItemStack(obj.getAsJsonObject("output")),
+                RecipeJsonUtils.parseItemStack(obj.getAsJsonObject("reagent"))
+        );
     }
 }

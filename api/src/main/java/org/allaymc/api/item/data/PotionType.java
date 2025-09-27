@@ -1,14 +1,23 @@
 package org.allaymc.api.item.data;
 
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectInstance;
-import org.allaymc.api.entity.effect.type.EffectTypes;
+import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 
 import java.awt.*;
 import java.util.List;
 
 /**
- * PotionType holds the effects given by a specific potion.
+ * Represents the various potion types available in the game, including standard potions like
+ * Water and Awkward, as well as enhanced potions with effects such as Night Vision, Strength,
+ * and Turtle Master.
+ * <p>
+ * Each potion type can have associated effects, durations, and strengths, which are automatically
+ * calculated or defined. Potions with effects also have a color representation that is derived
+ * from the colors of their respective effects.
+ * <p>
+ * Enum constants with no associated effects (e.g., WATER, AWKWARD) represent base or transitional
+ * potion states, which are commonly used as ingredients to create other potions.
  *
  * @author daoge_cmd
  */
@@ -97,7 +106,6 @@ public enum PotionType {
      * Gets the potion type from id.
      *
      * @param id the id of potion
-     *
      * @return the potion type
      */
     public static PotionType fromId(int id) {
@@ -130,7 +138,7 @@ public enum PotionType {
      *
      * @param entity the entity that this potion type will be applied to
      */
-    public void applyTo(Entity entity) {
+    public void applyTo(EntityLiving entity) {
         getEffects().forEach(entity::addEffect);
     }
 

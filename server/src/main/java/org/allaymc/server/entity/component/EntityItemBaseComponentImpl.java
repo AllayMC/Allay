@@ -3,22 +3,18 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.utils.NBTIO;
 import org.allaymc.server.component.annotation.Dependency;
-import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
-
-import static org.allaymc.api.item.ItemHelper.fromNBT;
 
 /**
  * @author daoge_cmd
@@ -41,7 +37,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     public void setItemStack(ItemStack itemStack) {
         // Stack network id shouldn't be kept
         if (itemStack != null) {
-            itemStack.clearStackNetworkId();
+            itemStack.clearUniqueId();
         }
         this.itemStack = itemStack;
     }
@@ -80,7 +76,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
 
-        nbt.listenForCompound("Item", itemNbt -> this.itemStack = fromNBT(itemNbt));
+        nbt.listenForCompound("Item", itemNbt -> this.itemStack = NBTIO.getAPI().fromItemStackNBT(itemNbt));
     }
 
     @Override
@@ -88,20 +84,4 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
         return new AABBd(-0.125, 0.0, -0.125, 0.125, 0.25, 0.125);
     }
 
-    @Override
-    public float getNetworkOffset() {
-        return 0.125f;
-    }
-
-    @Override
-    public BedrockPacket createSpawnPacket0() {
-        var packet = new AddItemEntityPacket();
-        packet.setRuntimeEntityId(runtimeId);
-        packet.setUniqueEntityId(runtimeId);
-        packet.setItemInHand(itemStack.toNetworkItemData());
-        packet.setPosition(Vector3f.from(location.x, location.y, location.z));
-        packet.setMotion(Vector3f.ZERO);
-        packet.getMetadata().putAll(metadata.getEntityDataMap());
-        return packet;
-    }
 }

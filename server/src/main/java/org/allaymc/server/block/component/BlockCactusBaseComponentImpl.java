@@ -2,15 +2,15 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
@@ -35,8 +35,8 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onCollideWithEntity(Block block, Entity entity) {
-        if (entity instanceof EntityDamageComponent damageComponent) {
-            damageComponent.attack(DamageContainer.contact(0.5f));
+        if (entity instanceof EntityLiving living) {
+            living.attack(DamageContainer.contact(0.5f));
         }
     }
 
@@ -78,7 +78,6 @@ public class BlockCactusBaseComponentImpl extends BlockBaseComponentImpl {
      * @param dimension the dimension that the cactus is in
      * @param pos       the pos of the cactus
      * @param recursive whether to check the block below recursively
-     *
      * @return {@code true} if cactus can live/grow here, {@code false} otherwise
      */
     protected boolean canGrowHere(Dimension dimension, Vector3ic pos, boolean recursive) {

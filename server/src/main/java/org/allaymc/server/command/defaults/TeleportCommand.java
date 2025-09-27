@@ -3,8 +3,8 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.message.TrKeys;
 import org.joml.Vector3d;
 
 import java.util.List;

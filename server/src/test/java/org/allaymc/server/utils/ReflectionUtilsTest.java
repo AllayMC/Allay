@@ -3,8 +3,7 @@ package org.allaymc.server.utils;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author daoge_cmd
@@ -30,6 +29,18 @@ class ReflectionUtilsTest {
         }
     }
 
+    @Test
+    void testMapStaticFields() {
+        var map = ReflectionUtils.mapStaticFields(EnumA.class, EnumB.class);
+        assertEquals(EnumB.A, map.get(EnumA.A));
+        assertEquals(EnumB.B, map.get(EnumA.B));
+        assertNull(map.get(EnumA.C));
+
+        var inverse = map.inverse();
+        assertEquals(EnumA.A, inverse.get(EnumB.A));
+        assertEquals(EnumA.B, inverse.get(EnumB.B));
+    }
+
     static class A {
         int a;
 
@@ -49,5 +60,13 @@ class ReflectionUtilsTest {
         String methodB() {
             return "methodB";
         }
+    }
+
+    enum EnumA {
+        A, B, C
+    }
+
+    enum EnumB {
+        A, B
     }
 }

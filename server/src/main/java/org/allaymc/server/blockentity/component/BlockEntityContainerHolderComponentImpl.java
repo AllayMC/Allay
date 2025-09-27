@@ -4,18 +4,17 @@ import lombok.Setter;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.container.impl.BlockContainer;
+import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -38,6 +37,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         this.container = containerSupplier.get();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends Container> T getContainer() {
         return (T) container;
@@ -55,17 +55,15 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @EventHandler
     protected void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
-        builder.putList(
-                "Items",
-                NbtType.COMPOUND,
-                container.saveNBT()
-        );
+        builder.putList("Items", NbtType.COMPOUND, container.saveNBT());
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
-        if (player == null || player.isSneaking()) return;
+        if (player == null || player.isSneaking()) {
+            return;
+        }
 
         container.addViewer(player);
         event.setSuccess(true);
@@ -77,7 +75,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
 
     @EventHandler
     protected void onReplace(CBlockOnReplaceEvent event) {
-        if (!dropItemWhenBreak()) return;
+        if (!dropItemWhenBreak()) {
+            return;
+        }
 
         var current = event.getCurrentBlock();
         var pos = current.getPosition();
@@ -97,18 +97,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @Override
-    public boolean hasContainer(FullContainerType<?> type) {
+    public boolean hasContainer(ContainerType<?> type) {
         return container.getContainerType() == type;
-    }
-
-    @Override
-    public <T extends Container> T getContainer(ContainerSlotType slotType) {
-        // BlockEntityContainerHolder can only hold one container in its lifetime
-        // So we only need to check the slotType which caller provided
-        if (!container.getContainerType().heldSlotTypes().contains(slotType)) {
-            throw new IllegalArgumentException("The container " + container.getContainerType() + " does not have the slot type " + slotType);
-        }
-
-        return (T) container;
     }
 }

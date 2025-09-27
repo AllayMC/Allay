@@ -5,15 +5,15 @@ import lombok.Getter;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.api.entity.data.EntityId;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.Allay;
-import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.component.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.data.EntityId;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
+import static org.allaymc.server.component.ComponentProvider.toMap;
 
 /**
  * @author daoge_cmd

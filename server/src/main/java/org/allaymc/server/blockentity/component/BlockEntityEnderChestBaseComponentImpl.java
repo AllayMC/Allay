@@ -1,11 +1,11 @@
 package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
+import org.allaymc.api.block.action.SimpleBlockAction;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityEnderChestBaseComponent;
-import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.world.Sound;
-import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
+import org.allaymc.api.world.sound.SimpleSound;
 
 /**
  * @author IWareQ
@@ -23,21 +23,11 @@ public class BlockEntityEnderChestBaseComponentImpl extends BlockEntityBaseCompo
         this.viewersCount = count;
 
         if (viewersCount == 1) {
-            BlockEventPacket packet = new BlockEventPacket();
-            packet.setBlockPosition(position.toNetwork());
-            packet.setEventType(1);
-            packet.setEventData(2);
-            sendPacketToViewers(packet);
-
-            position.dimension().addSound(MathUtils.center(position), Sound.RANDOM_ENDERCHESTOPEN);
+            position.dimension().addSound(MathUtils.center(position), SimpleSound.ENDER_CHEST_OPEN);
+            position.dimension().addBlockAction(position, SimpleBlockAction.OPEN);
         } else if (viewersCount == 0) {
-            BlockEventPacket packet = new BlockEventPacket();
-            packet.setBlockPosition(position.toNetwork());
-            packet.setEventType(1);
-            packet.setEventData(0);
-            sendPacketToViewers(packet);
-
-            position.dimension().addSound(MathUtils.center(position), Sound.RANDOM_ENDERCHESTCLOSED);
+            position.dimension().addSound(MathUtils.center(position), SimpleSound.ENDER_CHEST_CLOSE);
+            position.dimension().addBlockAction(position, SimpleBlockAction.CLOSE);
         }
     }
 }

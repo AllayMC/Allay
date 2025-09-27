@@ -1,20 +1,15 @@
 package org.allaymc.api.entity.interfaces;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityAgeComponent;
-import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
-import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface EntityXpOrb extends
-        Entity,
+        EntityLiving,
         EntityXpOrbBaseComponent,
-        EntityDamageComponent,
-        EntityAttributeComponent,
         EntityPhysicsComponent,
         EntityAgeComponent {
 
@@ -25,7 +20,7 @@ public interface EntityXpOrb extends
      * Splits the specified amount of XP into an array of acceptable XP orb sizes.
      */
     static List<Integer> splitIntoOrbSizes(int amount) {
-        List<Integer> result = new IntArrayList();
+        List<Integer> result = new ArrayList<>();
 
         while (amount > 0) {
             int size = getMaxOrbSize(amount);

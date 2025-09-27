@@ -1,14 +1,14 @@
 package org.allaymc.server.blockentity.component.shulkerbox;
 
-import org.allaymc.api.container.impl.ShulkerBoxContainer;
 import org.allaymc.server.blockentity.component.BlockEntityContainerHolderComponentImpl;
+import org.allaymc.server.container.impl.ShulkerBoxContainerImpl;
 
 /**
  * @author daoge_cmd
  */
 public class BlockEntityShulkerBoxContainerHolderComponentImpl extends BlockEntityContainerHolderComponentImpl {
     public BlockEntityShulkerBoxContainerHolderComponentImpl() {
-        super(ShulkerBoxContainer::new);
+        super(ShulkerBoxContainerImpl::new);
     }
 
     @Override

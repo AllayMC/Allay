@@ -1,6 +1,6 @@
 package org.allaymc.api.pdc;
 
-import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Set;

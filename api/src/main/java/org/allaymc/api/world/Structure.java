@@ -1,13 +1,13 @@
 package org.allaymc.api.world;
 
 import lombok.Getter;
+import lombok.experimental.StandardException;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockStateSafeGetter;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.NBTIO;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -130,7 +130,7 @@ public record Structure(
         var layer1 = (List<Integer>) blockIndices.get(1);
         var palette = structureNBT.getCompound("palette").getCompound("default");
         var blockEntityNBT = palette.getCompound("block_position_data");
-        var blockPalette = palette.getList("block_palette", NbtType.COMPOUND).stream().map(BlockStateSafeGetter::fromNBT).toList();
+        var blockPalette = palette.getList("block_palette", NbtType.COMPOUND).stream().map(NBTIO.getAPI()::fromBlockStateNBT).toList();
 
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
         for (int lx = 0; lx < sizeX; lx++) {
@@ -231,7 +231,7 @@ public record Structure(
                     oldPos.y - this.y + y,
                     oldPos.z - this.z + z
             );
-            dimension.getEntityManager().addEntity(EntityHelper.fromNBT(dimension, builder.build()));
+            dimension.getEntityManager().addEntity(NBTIO.getAPI().fromEntityNBT(dimension, builder.build()));
         }
     }
 
@@ -280,7 +280,7 @@ public record Structure(
                                                         NbtType.COMPOUND,
                                                         palette.getPalette()
                                                                 .stream()
-                                                                .map(BlockState::getBlockStateTag)
+                                                                .map(BlockState::getBlockStateNBT)
                                                                 .toList())
                                                 .putCompound("block_position_data", blockEntityNBT.build())
                                                 .build()
@@ -307,5 +307,9 @@ public record Structure(
                 return index;
             }
         }
+    }
+
+    @StandardException
+    private static class StructureException extends RuntimeException {
     }
 }

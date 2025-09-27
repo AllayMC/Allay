@@ -3,9 +3,6 @@ package org.allaymc.api.scoreboard.scorer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.scoreboard.Scoreboard;
-import org.allaymc.api.scoreboard.ScoreboardLine;
-import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 /**
  * EntityScorer is a scorer that represents an entity.
@@ -23,8 +20,8 @@ public final class EntityScorer implements Scorer {
     }
 
     @Override
-    public ScoreInfo.ScorerType getScorerType() {
-        return ScoreInfo.ScorerType.ENTITY;
+    public ScorerType getScorerType() {
+        return ScorerType.ENTITY;
     }
 
     @Override
@@ -45,14 +42,4 @@ public final class EntityScorer implements Scorer {
         return String.valueOf(uniqueId);
     }
 
-    @Override
-    public ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line) {
-        return new ScoreInfo(
-                line.getLineId(),
-                scoreboard.getObjectiveName(),
-                line.getScore(),
-                ScoreInfo.ScorerType.ENTITY,
-                uniqueId
-        );
-    }
 }
