@@ -78,14 +78,14 @@ import static org.allaymc.server.network.NetworkHelper.toNetwork;
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl implements EntityPlayerBaseComponent {
 
     protected static final String TAG_PERMISSION = "Permission";
+    protected static final String TAG_ENCHANTMENT_SEED = "EnchantmentSeed";
+    protected static final String TAG_PLAYER_GAME_MODE = "PlayerGameMode";
 
     protected static final String TAG_OFFHAND = "Offhand";
     protected static final String TAG_INVENTORY = "Inventory";
     protected static final String TAG_ARMOR = "Armor";
-    protected static final String TAG_ENDER_ITEMS = "EnderItems";
+    protected static final String TAG_ENDER_ITEMS = "EnderChestInventory";
 
-    protected static final String TAG_ENCHANTMENT_SEED = "EnchantmentSeed";
-    protected static final String TAG_GAME_TYPE = "GameType";
     protected static final String TAG_SPAWN_POINT = "SpawnPoint";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
@@ -122,10 +122,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Location3ic spawnPoint;
     protected boolean requireResendingCommands;
     /**
-     * expectedTeleportPos is used to solve the desynchronization of data at both ends.
-     * Because PlayerAuthInputPacket will be sent from the client to the server at a rate of 20 per second.
-     * After teleporting, the server still receives the PlayerAuthInputPacket sent by the client before teleporting.
-     * The following is a simple simulation (initial player position is (0, 1000, 0)):
+     * expectedTeleportPos is used to solve the desynchronization of data at both ends. Because PlayerAuthInputPacket
+     * will be sent from the client to the server at a rate of 20 per second. After teleporting, the server still
+     * receives the PlayerAuthInputPacket sent by the client before teleporting. The following is a simple simulation
+     * (initial player position is (0, 1000, 0)):
      * <p>
      * [C -> S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                              <br>
      * [Server] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
@@ -140,8 +140,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected Vector3dc expectedTeleportPos;
-    // Set enchantment seed to a random value, and if the player has enchantment
-    // seed previously, this random value will be covered
     @Getter
     @Setter
     protected int enchantmentSeed;
@@ -182,6 +180,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
         this.gameMode = AllayServer.getSettings().genericSettings().defaultGameMode();
+        // Set enchantment seed to a random value, and if the player has enchantment
+        // seed previously, this random value will be covered
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
         this.startUsingItemInAirTime = -1;
         this.formIdCounter = new AtomicInteger(0);
@@ -767,7 +767,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 // General
                 .putCompound(TAG_PERMISSION, this.permissionGroup.saveNBT())
                 .putInt(TAG_ENCHANTMENT_SEED, this.enchantmentSeed)
-                .putInt(TAG_GAME_TYPE, toNetwork(this.gameMode).ordinal())
+                .putInt(TAG_PLAYER_GAME_MODE, toNetwork(this.gameMode).ordinal())
+                // SpawnPoint
                 .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
                 // Container
                 .putList(
@@ -815,7 +816,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // General
         nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionGroup.loadNBT(permNbt, thisPlayer));
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(fromNetwork(GameType.from(id)), true));
+        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> setGameMode(fromNetwork(GameType.from(id)), true));
+
+        // SpawnPoint
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
             loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
         } else {
