@@ -2,8 +2,6 @@
 comments: true
 ---
 
-# TODO: this document needs update
-
 # Updating to the Next Protocol Version
 
 This guide outlines the general process for updating the **Allay** core to a new Minecraft Bedrock Edition protocol
