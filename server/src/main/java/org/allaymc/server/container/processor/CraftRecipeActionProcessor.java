@@ -2,7 +2,7 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.RecipeContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
@@ -75,7 +75,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
             var output = recipe.getOutput().copy(false);
             output.setCount(output.getCount() * numberOfRequestedCrafts);
-            player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, output, false);
+            player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, output, false);
         } else {
             if (numberOfRequestedCrafts != 1) {
                 log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
@@ -97,7 +97,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        var enchantTableContainer = player.getOpenedContainer(ContainerType.ENCHANT_TABLE);
+        var enchantTableContainer = player.getOpenedContainer(ContainerTypes.ENCHANT_TABLE);
         var inputItem = enchantTableContainer.getInput();
         if (inputItem.getItemType() == ItemTypes.AIR) {
             log.warn("Input item is air!");
@@ -134,17 +134,17 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         enchantedItem.addEnchantments(enchantments);
         // Copy the enchanted item to CREATED_OUTPUT, and client will send a PlaceAction
         // to move the enchanted item back to the input slot of the enchant table container
-        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, enchantedItem, false);
+        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, enchantedItem, false);
         player.regenerateEnchantmentSeed();
 
         return null;
     }
 
     protected ActionResponse handleCraftingTable(EntityPlayer player, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
-        RecipeContainer craftingContainer = player.getOpenedContainer(ContainerType.CRAFTING_TABLE);
+        RecipeContainer craftingContainer = player.getOpenedContainer(ContainerTypes.CRAFTING_TABLE);
         if (craftingContainer == null) {
             // The player is not opening a crafting table, using crafting grid instead
-            craftingContainer = player.getContainer(ContainerType.CRAFTING_GRID);
+            craftingContainer = player.getContainer(ContainerTypes.CRAFTING_GRID);
         }
 
         // Validate if the player has provided enough ingredients
@@ -179,7 +179,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
     }
 
     protected ActionResponse handleSmithingTableTrim(EntityPlayer player) {
-        var container = player.getOpenedContainer(ContainerType.SMITHING_TABLE);
+        var container = player.getOpenedContainer(ContainerTypes.SMITHING_TABLE);
         if (container == null) {
             log.warn("Received a CraftRecipeActionProcessor without an opened container!");
             return error();
@@ -220,7 +220,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         }
 
         trimComponent.trim(trimPattern, trimMaterial);
-        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, result, false);
+        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, result, false);
         return null;
     }
 

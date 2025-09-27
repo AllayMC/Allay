@@ -1,7 +1,7 @@
 package org.allaymc.api.block;
 
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
@@ -97,8 +97,8 @@ public class BlockBreakTest {
         var helmet = ItemTypes.DIAMOND_HELMET.createItemStack();
         helmet.addEnchantment(EnchantmentTypes.AQUA_AFFINITY, 1);
 
-        when(player.hasContainer(ContainerType.ARMOR)).thenReturn(true);
-        when(player.getContainer(ContainerType.ARMOR)).thenReturn(armorContainer);
+        when(player.hasContainer(ContainerTypes.ARMOR)).thenReturn(true);
+        when(player.getContainer(ContainerTypes.ARMOR)).thenReturn(armorContainer);
 
         when(armorContainer.getHelmet()).thenReturn(helmet);
 
@@ -110,7 +110,7 @@ public class BlockBreakTest {
         testCalculatingBreakTime(10, cobblestone, usedItem, true, false);
         testCalculatingBreakTime(50, cobblestone, usedItem, false, false);
 
-        when(player.hasContainer(ContainerType.ARMOR)).thenReturn(false);
+        when(player.hasContainer(ContainerTypes.ARMOR)).thenReturn(false);
     }
 
     @Test

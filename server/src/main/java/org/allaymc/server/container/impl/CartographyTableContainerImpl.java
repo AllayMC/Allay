@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.CartographyTableContainer;
 
 /**
@@ -8,6 +8,6 @@ import org.allaymc.api.container.interfaces.CartographyTableContainer;
  */
 public class CartographyTableContainerImpl extends BlockContainerImpl implements CartographyTableContainer {
     public CartographyTableContainerImpl() {
-        super(ContainerType.CARTOGRAPHY_TABLE);
+        super(ContainerTypes.CARTOGRAPHY_TABLE);
     }
 }

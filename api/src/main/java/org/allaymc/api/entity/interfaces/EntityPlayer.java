@@ -2,6 +2,7 @@ package org.allaymc.api.entity.interfaces;
 
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -54,7 +55,7 @@ public interface EntityPlayer extends
      * @return {@code true} if all items were added successfully, {@code false} if some were dropped.
      */
     default boolean tryAddItem(ItemStack itemStack) {
-        getContainer(ContainerType.INVENTORY).tryAddItem(itemStack);
+        getContainer(ContainerTypes.INVENTORY).tryAddItem(itemStack);
         if (itemStack.getCount() != 0) {
             dropItemInPlayerPos(itemStack);
             return false;
@@ -70,7 +71,7 @@ public interface EntityPlayer extends
      * @return {@code true} if the item was successfully dropped, {@code false} otherwise.
      */
     default boolean tryDropItemInHand(int count) {
-        return tryDropItem(ContainerType.INVENTORY, getContainer(ContainerType.INVENTORY).getHandSlot(), count);
+        return tryDropItem(ContainerTypes.INVENTORY, getContainer(ContainerTypes.INVENTORY).getHandSlot(), count);
     }
 
     /**
@@ -154,7 +155,7 @@ public interface EntityPlayer extends
      * @return the item in hand
      */
     default ItemStack getItemInHand() {
-        return getContainer(ContainerType.INVENTORY).getItemInHand();
+        return getContainer(ContainerTypes.INVENTORY).getItemInHand();
     }
 
     /**
@@ -163,14 +164,14 @@ public interface EntityPlayer extends
      * @param itemStack the item to set in hand
      */
     default void setItemInHand(ItemStack itemStack) {
-        getContainer(ContainerType.INVENTORY).setItemInHand(itemStack);
+        getContainer(ContainerTypes.INVENTORY).setItemInHand(itemStack);
     }
 
     /**
      * Clears the item in the player's hand.
      */
     default void clearItemInHand() {
-        getContainer(ContainerType.INVENTORY).clearItemInHand();
+        getContainer(ContainerTypes.INVENTORY).clearItemInHand();
     }
 
     /**
@@ -195,7 +196,7 @@ public interface EntityPlayer extends
      * Will update the inventory slot or clear it if the item count is zero.
      */
     default void notifyItemInHandChange() {
-        var inv = getContainer(ContainerType.INVENTORY);
+        var inv = getContainer(ContainerTypes.INVENTORY);
         var itemStack = inv.getItemInHand();
         if (itemStack.getCount() != 0) {
             inv.notifySlotChange(inv.getHandSlot());

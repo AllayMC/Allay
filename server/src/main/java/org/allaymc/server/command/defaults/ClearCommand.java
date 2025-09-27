@@ -3,7 +3,7 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
@@ -50,9 +50,9 @@ public class ClearCommand extends VanillaCommand {
                     int status = 0;
                     for (var target : targets) {
                         var containers = Stream.of(
-                                ContainerType.INVENTORY,
-                                ContainerType.OFFHAND,
-                                ContainerType.ARMOR
+                                ContainerTypes.INVENTORY,
+                                ContainerTypes.OFFHAND,
+                                ContainerTypes.ARMOR
                         ).map(target::getContainer).toList();
                         if (maxCount == 0) {
                             int count = containers.stream()

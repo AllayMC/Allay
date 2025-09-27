@@ -8,7 +8,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -120,9 +120,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
             var hasAquaAffinity = false;
             if (entity instanceof EntityContainerHolderComponent containerHolder) {
-                if (containerHolder.hasContainer(ContainerType.ARMOR)) {
+                if (containerHolder.hasContainer(ContainerTypes.ARMOR)) {
                     hasAquaAffinity = containerHolder
-                            .getContainer(ContainerType.ARMOR)
+                            .getContainer(ContainerTypes.ARMOR)
                             .getHelmet()
                             .hasEnchantment(EnchantmentTypes.AQUA_AFFINITY);
                 }

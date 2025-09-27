@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BrewingStandContainer;
 
 /**
@@ -8,6 +8,6 @@ import org.allaymc.api.container.interfaces.BrewingStandContainer;
  */
 public class BrewingStandContainerImpl extends BlockContainerImpl implements BrewingStandContainer {
     public BrewingStandContainerImpl() {
-        super(ContainerType.BREWING_STAND);
+        super(ContainerTypes.BREWING_STAND);
     }
 }

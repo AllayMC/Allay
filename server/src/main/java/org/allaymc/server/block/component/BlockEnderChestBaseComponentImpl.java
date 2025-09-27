@@ -5,7 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
@@ -38,7 +38,7 @@ public class BlockEnderChestBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var enderChestContainer = player.getContainer(ContainerType.ENDER_CHEST);
+        var enderChestContainer = player.getContainer(ContainerTypes.ENDER_CHEST);
         enderChestContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         enderChestContainer.addViewer(player);
         enderChestContainer.sendContents(player);

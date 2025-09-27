@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BeaconContainer;
 
 /**
@@ -8,6 +8,6 @@ import org.allaymc.api.container.interfaces.BeaconContainer;
  */
 public class BeaconContainerImpl extends BlockContainerImpl implements BeaconContainer {
     public BeaconContainerImpl() {
-        super(ContainerType.BEACON);
+        super(ContainerTypes.BEACON);
     }
 }

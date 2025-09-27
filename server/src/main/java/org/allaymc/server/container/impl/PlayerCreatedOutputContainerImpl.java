@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import static org.allaymc.api.container.ContainerType.CREATED_OUTPUT;
+import static org.allaymc.api.container.ContainerTypes.CREATED_OUTPUT;
 
 /**
  * @author daoge_cmd

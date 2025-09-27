@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBlockPickEvent;
 import org.allaymc.api.player.GameMode;
@@ -50,7 +50,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
             }
         }
 
-        var inventory = player.getContainer(ContainerType.INVENTORY);
+        var inventory = player.getContainer(ContainerTypes.INVENTORY);
         // Step 1: Search for an existing item in the hotbar
         for (int slot = 0; slot < 9; slot++) {
             var hotBarItem = inventory.getItemStack(slot);
@@ -61,7 +61,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         }
 
         // Step 2: Search in the main inventory and swap
-        for (int slot = 9; slot < ContainerType.INVENTORY.getSize(); slot++) {
+        for (int slot = 9; slot < ContainerTypes.INVENTORY.getSize(); slot++) {
             var hotBarItem = inventory.getItemStack(slot);
             if (hotBarItem.getItemType() == item.getItemType()) {
                 var emptySlot = findFirstEmptyHotbarSlot(inventory);

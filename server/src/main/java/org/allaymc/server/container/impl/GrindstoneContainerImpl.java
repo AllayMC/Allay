@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.GrindstoneContainer;
 
 /**
@@ -8,6 +8,6 @@ import org.allaymc.api.container.interfaces.GrindstoneContainer;
  */
 public class GrindstoneContainerImpl extends BlockContainerImpl implements GrindstoneContainer {
     public GrindstoneContainerImpl() {
-        super(ContainerType.GRINDSTONE);
+        super(ContainerTypes.GRINDSTONE);
     }
 }

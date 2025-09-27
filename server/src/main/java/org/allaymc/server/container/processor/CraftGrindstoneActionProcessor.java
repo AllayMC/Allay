@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.container.GrindstoneTakeResultEvent;
 import org.allaymc.api.item.ItemStack;
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<CraftGrindstoneAction> {
     @Override
     public ActionResponse handle(CraftGrindstoneAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getOpenedContainer(ContainerType.GRINDSTONE);
+        var container = player.getOpenedContainer(ContainerTypes.GRINDSTONE);
         if (container == null) {
             log.warn("Received a CraftGrindstoneAction without an opened container!");
             return error();
@@ -90,7 +90,7 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
             ), xp);
         }
 
-        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
+        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
         return null;
     }
 

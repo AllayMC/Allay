@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
@@ -27,7 +28,7 @@ import java.util.function.Consumer;
 @Slf4j
 public class DoubleChestContainerImpl implements BlockContainer {
 
-    protected static final int CHEST_SIZE = ContainerType.CHEST.getSize();
+    protected static final int CHEST_SIZE = ContainerTypes.CHEST.getSize();
 
     protected final BiMap<Byte, ContainerViewer> viewers;
     protected final Set<Consumer<ContainerViewer>> openListeners;
@@ -51,7 +52,7 @@ public class DoubleChestContainerImpl implements BlockContainer {
 
     @Override
     public ContainerType<?> getContainerType() {
-        return ContainerType.DOUBLE_CHEST;
+        return ContainerTypes.DOUBLE_CHEST;
     }
 
     public void setLeft(Container left) {

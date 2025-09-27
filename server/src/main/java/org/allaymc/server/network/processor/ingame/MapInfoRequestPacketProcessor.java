@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.interfaces.BlockEntityItemFrame;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMapInfoRequestEvent;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
@@ -23,9 +23,9 @@ public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoReques
         var mapId = packet.getUniqueMapId();
 
         // Try to find the map item in the player's offhand and inventory
-        ItemFilledMapStack mapItem = findMapItemIn(mapId, player.getContainer(ContainerType.OFFHAND));
+        ItemFilledMapStack mapItem = findMapItemIn(mapId, player.getContainer(ContainerTypes.OFFHAND));
         if (mapItem == null) {
-            mapItem = findMapItemIn(mapId, player.getContainer(ContainerType.INVENTORY));
+            mapItem = findMapItemIn(mapId, player.getContainer(ContainerTypes.INVENTORY));
         }
 
         // Try to find the map item in item frames

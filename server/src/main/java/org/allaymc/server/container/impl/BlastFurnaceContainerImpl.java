@@ -1,12 +1,12 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 
 /**
  * @author daoge_cmd
  */
 public class BlastFurnaceContainerImpl extends FurnaceContainerImpl {
     public BlastFurnaceContainerImpl() {
-        super(ContainerType.BLAST_FURNACE);
+        super(ContainerTypes.BLAST_FURNACE);
     }
 }

@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.LoomContainer;
 
 /**
@@ -9,7 +9,7 @@ import org.allaymc.api.container.interfaces.LoomContainer;
 public class LoomContainerImpl extends BlockContainerImpl implements LoomContainer {
 
     public LoomContainerImpl() {
-        super(ContainerType.LOOM);
+        super(ContainerTypes.LOOM);
     }
 
 }

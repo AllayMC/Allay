@@ -1,7 +1,7 @@
 package org.allaymc.server.container.impl;
 
 import org.allaymc.api.blockentity.component.BlockEntityEnderChestBaseComponent;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.ContainerViewer;
 
 /**
@@ -9,7 +9,7 @@ import org.allaymc.api.container.ContainerViewer;
  */
 public class EnderChestContainerImpl extends BlockContainerImpl {
     public EnderChestContainerImpl() {
-        super(ContainerType.ENDER_CHEST);
+        super(ContainerTypes.ENDER_CHEST);
     }
 
     @Override

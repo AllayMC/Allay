@@ -1,7 +1,7 @@
 package org.allaymc.server.container.impl;
 
 import lombok.Getter;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.math.position.Position3ic;
@@ -12,7 +12,7 @@ import org.allaymc.api.math.position.Position3ic;
 @Getter
 public class CraftingGridContainerImpl extends CraftingContainerImpl {
     public CraftingGridContainerImpl() {
-        super(ContainerType.CRAFTING_GRID);
+        super(ContainerTypes.CRAFTING_GRID);
     }
 
     @Override

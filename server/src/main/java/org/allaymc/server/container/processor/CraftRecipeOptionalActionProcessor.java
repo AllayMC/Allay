@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.AnvilDamageEvent;
 import org.allaymc.api.eventbus.event.container.AnvilTakeResultEvent;
@@ -34,7 +34,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
 
     @Override
     public ActionResponse handle(CraftRecipeOptionalAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getOpenedContainer(ContainerType.ANVIL);
+        var container = player.getOpenedContainer(ContainerTypes.ANVIL);
         if (container == null) {
             log.warn("Received a CraftRecipeOptionalAction without an opened container");
             return error();
@@ -227,7 +227,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             return error();
         }
 
-        player.getContainer(ContainerType.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
+        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
         return null;
     }
 

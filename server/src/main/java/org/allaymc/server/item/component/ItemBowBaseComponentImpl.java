@@ -2,7 +2,7 @@ package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -98,13 +98,13 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
     protected boolean hasArrow(EntityPlayer player) {
         // Find offhand arrow first
-        Container container = player.getContainer(ContainerType.OFFHAND);
+        Container container = player.getContainer(ContainerTypes.OFFHAND);
         if (container.getItemStack(OffhandContainerImpl.OFFHAND_SLOT) instanceof ItemArrowStack) {
             return true;
         }
 
         // Arrow is not in offhand, search in inventory again
-        container = player.getContainer(ContainerType.INVENTORY);
+        container = player.getContainer(ContainerTypes.INVENTORY);
         for (var itemStack : container.getItemStacks()) {
             if (itemStack instanceof ItemArrowStack) {
                 return true;
@@ -120,7 +120,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         ItemArrowStack arrow = null;
 
         // Find offhand arrow first
-        container = player.getContainer(ContainerType.OFFHAND);
+        container = player.getContainer(ContainerTypes.OFFHAND);
         slot = OffhandContainerImpl.OFFHAND_SLOT;
         if (container.getItemStack(slot) instanceof ItemArrowStack a) {
             arrow = a;
@@ -128,7 +128,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
         if (arrow == null) {
             // Arrow is not in offhand, search in inventory again
-            container = player.getContainer(ContainerType.INVENTORY);
+            container = player.getContainer(ContainerTypes.INVENTORY);
             var itemStacks = container.getItemStacks();
             for (slot = 0; slot < itemStacks.size(); slot++) {
                 var item = itemStacks.get(slot);

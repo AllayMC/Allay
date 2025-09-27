@@ -1,7 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.message.TrKeys;
@@ -54,7 +54,7 @@ public class GiveCommand extends VanillaCommand {
                             remaining -= giveCount;
 
                             var itemStack = itemType.createItemStack(giveCount, data);
-                            player.getContainer(ContainerType.INVENTORY).tryAddItem(itemStack);
+                            player.getContainer(ContainerTypes.INVENTORY).tryAddItem(itemStack);
 
                             if (itemStack.getCount() > 0) {
                                 player.dropItemInPlayerPos(itemStack);

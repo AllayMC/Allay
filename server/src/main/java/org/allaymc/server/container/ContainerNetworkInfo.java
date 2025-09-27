@@ -3,6 +3,7 @@ package org.allaymc.server.container;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 
@@ -25,70 +26,70 @@ public record ContainerNetworkInfo(
     private static final Map<ContainerType<?>, ContainerNetworkInfo> TYPE_TO_INFO = new HashMap<>();
 
     public static final ContainerNetworkInfo CURSOR = builder()
-            .type(ContainerType.CURSOR)
+            .type(ContainerTypes.CURSOR)
             .mapAllSlotToType(ContainerSlotType.CURSOR)
             .build();
 
     public static final ContainerNetworkInfo ARMOR = builder()
-            .type(ContainerType.ARMOR)
+            .type(ContainerTypes.ARMOR)
             .mapAllSlotToType(ContainerSlotType.ARMOR)
             .build();
 
     public static final ContainerNetworkInfo OFFHAND = builder()
-            .type(ContainerType.OFFHAND)
+            .type(ContainerTypes.OFFHAND)
             .mapAllSlotToType(ContainerSlotType.OFFHAND)
             .mapNetworkSlotIndex(1, 0)
             .build();
 
     public static final ContainerNetworkInfo PLAYER_INVENTORY = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.INVENTORY)
-            .type(ContainerType.INVENTORY)
+            .type(ContainerTypes.INVENTORY)
             .mapRangedSlotToType(0, 8, ContainerSlotType.HOTBAR)
             .mapRangedSlotToType(9, 35, ContainerSlotType.INVENTORY)
             .holdSlotType(ContainerSlotType.HOTBAR_AND_INVENTORY)
             .build();
 
     public static final ContainerNetworkInfo CREATED_OUTPUT = builder()
-            .type(ContainerType.CREATED_OUTPUT)
+            .type(ContainerTypes.CREATED_OUTPUT)
             .mapAllSlotToType(ContainerSlotType.CREATED_OUTPUT)
             .mapNetworkSlotIndex(50, 0)
             .build();
 
     public static final ContainerNetworkInfo BARREL = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CONTAINER)
-            .type(ContainerType.BARREL)
+            .type(ContainerTypes.BARREL)
             .mapAllSlotToType(ContainerSlotType.BARREL)
             .build();
 
     public static final ContainerNetworkInfo CHEST = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CONTAINER)
-            .type(ContainerType.CHEST)
+            .type(ContainerTypes.CHEST)
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
             .build();
 
     public static final ContainerNetworkInfo CRAFTING_GRID = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.INVENTORY)
-            .type(ContainerType.CRAFTING_GRID)
+            .type(ContainerTypes.CRAFTING_GRID)
             .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
             .mapRangedNetworkSlotIndex(28, 31, 0)
             .build();
 
     public static final ContainerNetworkInfo CRAFTING_TABLE = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.WORKBENCH)
-            .type(ContainerType.CRAFTING_TABLE)
+            .type(ContainerTypes.CRAFTING_TABLE)
             .mapAllSlotToType(ContainerSlotType.CRAFTING_INPUT)
             .mapRangedNetworkSlotIndex(32, 40, 0)
             .build();
 
     public static final ContainerNetworkInfo SHULKER_BOX = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CONTAINER)
-            .type(ContainerType.SHULKER_BOX)
+            .type(ContainerTypes.SHULKER_BOX)
             .mapAllSlotToType(ContainerSlotType.SHULKER_BOX)
             .build();
 
     public static final ContainerNetworkInfo FURNACE = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.FURNACE)
-            .type(ContainerType.FURNACE)
+            .type(ContainerTypes.FURNACE)
             .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.FURNACE_INGREDIENT)
             .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
             .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
@@ -96,7 +97,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo BLAST_FURNACE = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.BLAST_FURNACE)
-            .type(ContainerType.BLAST_FURNACE)
+            .type(ContainerTypes.BLAST_FURNACE)
             .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.BLAST_FURNACE_INGREDIENT)
             .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
             .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
@@ -104,7 +105,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo SMOKER = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.SMOKER)
-            .type(ContainerType.SMOKER)
+            .type(ContainerTypes.SMOKER)
             .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.SMOKER_INGREDIENT)
             .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
             .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
@@ -112,7 +113,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo ENCHANT_TABLE = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.ENCHANTMENT)
-            .type(ContainerType.ENCHANT_TABLE)
+            .type(ContainerTypes.ENCHANT_TABLE)
             .mapSlotToType(EnchantTableContainer.INPUT_SLOT, ContainerSlotType.ENCHANTING_INPUT)
             .mapSlotToType(EnchantTableContainer.MATERIAL_SLOT, ContainerSlotType.ENCHANTING_MATERIAL)
             .mapRangedNetworkSlotIndex(14, 15, 0)
@@ -120,14 +121,14 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo BEACON = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.BEACON)
-            .type(ContainerType.BEACON)
+            .type(ContainerTypes.BEACON)
             .mapAllSlotToType(ContainerSlotType.BEACON_PAYMENT)
             .mapNetworkSlotIndex(27, BeaconContainer.BEACON_PAYMENT_SLOT)
             .build();
 
     public static final ContainerNetworkInfo BREWING_STAND = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.BREWING_STAND)
-            .type(ContainerType.BREWING_STAND)
+            .type(ContainerTypes.BREWING_STAND)
             .mapSlotToType(BrewingStandContainer.REAGENT_SLOT, ContainerSlotType.BREWING_INPUT)
             .mapRangedSlotToType(1, 3, ContainerSlotType.BREWING_RESULT)
             .mapSlotToType(BrewingStandContainer.FUEL_SLOT, ContainerSlotType.BREWING_FUEL)
@@ -135,13 +136,13 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo ENDER_CHEST = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CONTAINER)
-            .type(ContainerType.ENDER_CHEST)
+            .type(ContainerTypes.ENDER_CHEST)
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
             .build();
 
     public static final ContainerNetworkInfo ANVIL = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.ANVIL)
-            .type(ContainerType.ANVIL)
+            .type(ContainerTypes.ANVIL)
             .mapSlotToType(AnvilContainer.INPUT_SLOT, ContainerSlotType.ANVIL_INPUT)
             .mapSlotToType(AnvilContainer.MATERIAL_SLOT, ContainerSlotType.ANVIL_MATERIAL)
             .mapSlotToType(AnvilContainer.RESULT_SLOT, ContainerSlotType.ANVIL_RESULT)
@@ -150,7 +151,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo STONECUTTER = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.STONECUTTER)
-            .type(ContainerType.STONECUTTER)
+            .type(ContainerTypes.STONECUTTER)
             .mapSlotToType(StonecutterContainer.INPUT_SLOT, ContainerSlotType.STONECUTTER_INPUT)
             .mapSlotToType(StonecutterContainer.RESULT_SLOT, ContainerSlotType.STONECUTTER_RESULT)
             .mapRangedNetworkSlotIndex(3, 4, 0)
@@ -158,7 +159,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo GRINDSTONE = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.GRINDSTONE)
-            .type(ContainerType.GRINDSTONE)
+            .type(ContainerTypes.GRINDSTONE)
             .mapSlotToType(GrindstoneContainer.INPUT_SLOT, ContainerSlotType.GRINDSTONE_INPUT)
             .mapSlotToType(GrindstoneContainer.ADDITIONAL_SLOT, ContainerSlotType.GRINDSTONE_ADDITIONAL)
             .mapSlotToType(GrindstoneContainer.RESULT_SLOT, ContainerSlotType.GRINDSTONE_RESULT)
@@ -167,7 +168,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo CARTOGRAPHY_TABLE = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CARTOGRAPHY)
-            .type(ContainerType.CARTOGRAPHY_TABLE)
+            .type(ContainerTypes.CARTOGRAPHY_TABLE)
             .mapSlotToType(CartographyTableContainer.INPUT_SLOT, ContainerSlotType.CARTOGRAPHY_INPUT)
             .mapSlotToType(CartographyTableContainer.ADDITIONAL_SLOT, ContainerSlotType.CARTOGRAPHY_ADDITIONAL)
             .mapSlotToType(CartographyTableContainer.RESULT_SLOT, ContainerSlotType.CARTOGRAPHY_RESULT)
@@ -176,7 +177,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo LOOM = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.LOOM)
-            .type(ContainerType.LOOM)
+            .type(ContainerTypes.LOOM)
             .mapSlotToType(LoomContainer.INPUT_SLOT, ContainerSlotType.LOOM_INPUT)
             .mapSlotToType(LoomContainer.DYE_SLOT, ContainerSlotType.LOOM_DYE)
             .mapSlotToType(LoomContainer.MATERIAL_SLOT, ContainerSlotType.LOOM_MATERIAL)
@@ -186,7 +187,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo SMITHING_TABLE = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.SMITHING_TABLE)
-            .type(ContainerType.SMITHING_TABLE)
+            .type(ContainerTypes.SMITHING_TABLE)
             .mapSlotToType(SmithingTableContainer.INPUT_SLOT, ContainerSlotType.SMITHING_TABLE_INPUT)
             .mapSlotToType(SmithingTableContainer.MATERIAL_SLOT, ContainerSlotType.SMITHING_TABLE_MATERIAL)
             .mapSlotToType(SmithingTableContainer.TEMPLATE_SLOT, ContainerSlotType.SMITHING_TABLE_TEMPLATE)
@@ -196,7 +197,7 @@ public record ContainerNetworkInfo(
 
     public static final ContainerNetworkInfo DOUBLE_CHEST = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CONTAINER)
-            .type(ContainerType.DOUBLE_CHEST)
+            .type(ContainerTypes.DOUBLE_CHEST)
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
             .build();
 

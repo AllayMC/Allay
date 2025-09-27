@@ -5,7 +5,7 @@ import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -52,7 +52,7 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
             return false;
         }
 
-        var anvilContainer = player.getContainer(ContainerType.ANVIL);
+        var anvilContainer = player.getContainer(ContainerTypes.ANVIL);
         anvilContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         anvilContainer.addViewer(player);
         return true;

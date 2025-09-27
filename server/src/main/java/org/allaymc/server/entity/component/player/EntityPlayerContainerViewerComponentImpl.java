@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
@@ -86,7 +87,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Override
     public void viewSlot(Container container, int slot) {
         if (container instanceof AbstractPlayerContainer playerContainer) {
-            if (playerContainer.getContainerType() == ContainerType.OFFHAND) {
+            if (playerContainer.getContainerType() == ContainerTypes.OFFHAND) {
                 // HACK: for unknown reason, we should send InventoryContentPacket instead of InventorySlotPacket
                 // for offhand container, otherwise the client will not update the offhand item
                 // TODO: replace this hack when we find the reason and have better solution
@@ -197,7 +198,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         // containers, even if not registered
         Container container = null;
         if (isPlayerInventoryOpened()) {
-            if (type == ContainerType.ARMOR || type == ContainerType.OFFHAND || type == ContainerType.CRAFTING_GRID) {
+            if (type == ContainerTypes.ARMOR || type == ContainerTypes.OFFHAND || type == ContainerTypes.CRAFTING_GRID) {
                 container = containerHolderComponent.getContainer(type);
             }
         }
@@ -215,9 +216,9 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         ContainerType<?> type = null;
         if (isPlayerInventoryOpened()) {
             type = switch (slotType) {
-                case ARMOR -> ContainerType.ARMOR;
-                case OFFHAND -> ContainerType.OFFHAND;
-                case CRAFTING_INPUT -> ContainerType.CRAFTING_GRID;
+                case ARMOR -> ContainerTypes.ARMOR;
+                case OFFHAND -> ContainerTypes.OFFHAND;
+                case CRAFTING_INPUT -> ContainerTypes.CRAFTING_GRID;
                 default -> null;
             };
         }
@@ -229,7 +230,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     protected boolean isPlayerInventoryOpened() {
-        return typeToContainer.get(ContainerType.INVENTORY) != null;
+        return typeToContainer.get(ContainerTypes.INVENTORY) != null;
     }
 
     @Override
@@ -243,9 +244,9 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
         // Similarly, special case handling needed
         if (isPlayerInventoryOpened()) {
-            containers.add(getOpenedContainer(ContainerType.ARMOR));
-            containers.add(getOpenedContainer(ContainerType.OFFHAND));
-            containers.add(getOpenedContainer(ContainerType.CRAFTING_GRID));
+            containers.add(getOpenedContainer(ContainerTypes.ARMOR));
+            containers.add(getOpenedContainer(ContainerTypes.OFFHAND));
+            containers.add(getOpenedContainer(ContainerTypes.CRAFTING_GRID));
         }
 
         return containers;

@@ -9,7 +9,7 @@ import org.allaymc.api.block.action.StartBreakAction;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.debugshape.*;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
@@ -157,7 +157,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.setGameType(toNetwork(player.getGameMode()));
                 p.getMetadata().putAll(parseMetadata(entity));
                 p.setDeviceId(loginData.getDeviceInfo().deviceId());
-                p.setHand(toNetwork(player.getContainer(ContainerType.INVENTORY).getItemInHand()));
+                p.setHand(toNetwork(player.getContainer(ContainerTypes.INVENTORY).getItemInHand()));
                 yield p;
             }
             case EntityItem item -> {
@@ -422,7 +422,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityHand(T entity) {
-        var container = entity.getContainer(ContainerType.INVENTORY);
+        var container = entity.getContainer(ContainerTypes.INVENTORY);
         var handSlot = container.getHandSlot();
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
@@ -435,7 +435,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityOffhand(T entity) {
-        var container = entity.getContainer(ContainerType.OFFHAND);
+        var container = entity.getContainer(ContainerTypes.OFFHAND);
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setContainerId(UnopenedContainerId.OFFHAND);
@@ -447,7 +447,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public <T extends Entity & EntityContainerHolderComponent> void viewEntityArmors(T entity) {
-        var container = entity.getContainer(ContainerType.ARMOR);
+        var container = entity.getContainer(ContainerTypes.ARMOR);
         var packet = new MobArmorEquipmentPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setBody(toNetwork(ItemAirStack.AIR_STACK));
@@ -529,8 +529,8 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 this.clientComponent.sendPacket(packet);
             }
             case SimpleEntityAction.EAT -> {
-                if (entity instanceof ContainerHolder holder && holder.hasContainer(ContainerType.INVENTORY)) {
-                    var item = holder.getContainer(ContainerType.INVENTORY).getItemInHand();
+                if (entity instanceof ContainerHolder holder && holder.hasContainer(ContainerTypes.INVENTORY)) {
+                    var item = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand();
                     var packet = new EntityEventPacket();
                     packet.setType(EntityEventType.EATING_ITEM);
                     packet.setRuntimeEntityId(entity.getRuntimeId());

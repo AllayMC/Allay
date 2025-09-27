@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.SmithingTableContainer;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.item.recipe.input.SmithingRecipeInput;
@@ -11,7 +11,7 @@ import org.allaymc.api.item.recipe.input.SmithingRecipeInput;
 public class SmithingTableContainerImpl extends BlockContainerImpl implements SmithingTableContainer {
 
     public SmithingTableContainerImpl() {
-        super(ContainerType.SMITHING_TABLE);
+        super(ContainerTypes.SMITHING_TABLE);
     }
 
     @Override

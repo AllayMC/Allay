@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.action.PickedUpAction;
@@ -550,7 +550,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 continue;
             }
 
-            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerType.INVENTORY));
+            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerTypes.INVENTORY));
             var slot = inventory.tryAddItem(item);
             if (slot == -1) {
                 // Player's inventory is full and cannot pick up the item
@@ -590,7 +590,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
             var arrow = ItemTypes.ARROW.createItemStack(1);
             arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(ContainerType.INVENTORY).tryAddItem(arrow) != -1) {
+            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrow) != -1) {
                 entityArrow.applyAction(new PickedUpAction(thisPlayer));
                 entityArrow.remove();
             }
@@ -701,7 +701,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public int getHandSlot() {
-        return containerHolderComponent.getContainer(ContainerType.INVENTORY).getHandSlot();
+        return containerHolderComponent.getContainer(ContainerTypes.INVENTORY).getHandSlot();
     }
 
     @Override
@@ -712,7 +712,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setHandSlot(int handSlot, boolean sendToSelf) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
 
-        var container = containerHolderComponent.getContainer(ContainerType.INVENTORY);
+        var container = containerHolderComponent.getContainer(ContainerTypes.INVENTORY);
         container.setHandSlot(handSlot);
         new PlayerItemHeldEvent(thisPlayer, container.getItemInHand(), handSlot).call();
         if (sendToSelf) {
@@ -741,19 +741,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putList(
                         TAG_OFFHAND,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerType.OFFHAND).saveNBT())
+                        containerHolderComponent.getContainer(ContainerTypes.OFFHAND).saveNBT())
                 .putList(
                         TAG_INVENTORY,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerType.INVENTORY).saveNBT())
+                        containerHolderComponent.getContainer(ContainerTypes.INVENTORY).saveNBT())
                 .putList(
                         TAG_ARMOR,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerType.ARMOR).saveNBT())
+                        containerHolderComponent.getContainer(ContainerTypes.ARMOR).saveNBT())
                 .putList(
                         TAG_ENDER_ITEMS,
                         NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).saveNBT())
+                        containerHolderComponent.getContainer(ContainerTypes.ENDER_CHEST).saveNBT())
                 // Experience
                 .putInt(TAG_PLAYER_LEVEL, this.experienceLevel)
                 .putFloat(TAG_PLAYER_LEVEL_PROGRESS, this.experienceProgress)
@@ -794,16 +794,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         // Container
         nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
-                this.containerHolderComponent.getContainer(ContainerType.OFFHAND).loadNBT(offhandNbt)
+                this.containerHolderComponent.getContainer(ContainerTypes.OFFHAND).loadNBT(offhandNbt)
         );
         nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt ->
-                this.containerHolderComponent.getContainer(ContainerType.INVENTORY).loadNBT(inventoryNbt)
+                this.containerHolderComponent.getContainer(ContainerTypes.INVENTORY).loadNBT(inventoryNbt)
         );
         nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
-                this.containerHolderComponent.getContainer(ContainerType.ARMOR).loadNBT(armorNbt)
+                this.containerHolderComponent.getContainer(ContainerTypes.ARMOR).loadNBT(armorNbt)
         );
         nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt ->
-                this.containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
+                this.containerHolderComponent.getContainer(ContainerTypes.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
 
         // Experience

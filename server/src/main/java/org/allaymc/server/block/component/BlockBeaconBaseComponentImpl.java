@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -27,7 +27,7 @@ public class BlockBeaconBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var beaconContainer = player.getContainer(ContainerType.BEACON);
+        var beaconContainer = player.getContainer(ContainerTypes.BEACON);
         beaconContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
         beaconContainer.addViewer(player);
         return true;

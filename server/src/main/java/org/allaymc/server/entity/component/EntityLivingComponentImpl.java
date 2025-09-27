@@ -3,7 +3,7 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.ArmorContainer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
@@ -138,8 +138,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
             var kb = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var kby = EntityPhysicsComponent.DEFAULT_KNOCKBACK;
             var additionalMotion = new Vector3d();
-            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerType.INVENTORY)) {
-                var kbEnchantmentLevel = component.getContainer(ContainerType.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
+            if (entity instanceof EntityContainerHolderComponent component && component.hasContainer(ContainerTypes.INVENTORY)) {
+                var kbEnchantmentLevel = component.getContainer(ContainerTypes.INVENTORY).getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
                 if (kbEnchantmentLevel != 0) {
                     kb /= 2.0;
                     additionalMotion = MathUtils.normalizeIfNotZero(MathUtils.getDirectionVector(entity.getLocation()).setComponent(1, 0));
@@ -173,7 +173,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
             return;
         }
 
-        var armorContainer = containerHolderComponent.getContainer(ContainerType.ARMOR);
+        var armorContainer = containerHolderComponent.getContainer(ContainerTypes.ARMOR);
         if (armorContainer == null) {
             return;
         }
@@ -282,8 +282,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
                 }
             }
 
-            if (attacker instanceof ContainerHolder holder && holder.hasContainer(ContainerType.INVENTORY)) {
-                var item = holder.getContainer(ContainerType.INVENTORY).getItemInHand();
+            if (attacker instanceof ContainerHolder holder && holder.hasContainer(ContainerTypes.INVENTORY)) {
+                var item = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand();
                 var sharpnessLevel = item.getEnchantmentLevel(EnchantmentTypes.SHARPNESS);
                 if (sharpnessLevel > 0) {
                     damage.updateFinalDamage(d -> d + sharpnessLevel * 1.25f);

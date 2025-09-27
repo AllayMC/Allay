@@ -2,7 +2,7 @@ package org.allaymc.server.container.impl;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.InventoryContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
@@ -19,7 +19,7 @@ public class InventoryContainerImpl extends AbstractPlayerContainer implements I
     protected int handSlot = 0;
 
     public InventoryContainerImpl(Supplier<EntityPlayer> playerSupplier) {
-        super(ContainerType.INVENTORY, playerSupplier);
+        super(ContainerTypes.INVENTORY, playerSupplier);
     }
 
     @Override

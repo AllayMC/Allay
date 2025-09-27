@@ -3,7 +3,7 @@ package org.allaymc.server.container.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBeacon;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BeaconContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.data.ItemTags;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class BeaconPaymentActionProcessor implements ContainerActionProcessor<BeaconPaymentAction> {
     @Override
     public ActionResponse handle(BeaconPaymentAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getContainer(ContainerType.BEACON);
+        var container = player.getContainer(ContainerTypes.BEACON);
         var itemType = container.getBeaconPayment().getItemType();
         if (!itemType.hasItemTag(ItemTags.BEACON_PAYMENT)) {
             log.warn("Invalid item type for beacon payment: {}", itemType.getIdentifier());

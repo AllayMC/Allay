@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.CraftingTableContainer;
 import org.allaymc.api.item.recipe.input.CraftingRecipeInput;
 import org.allaymc.api.item.recipe.input.RecipeInput;
@@ -10,7 +10,7 @@ import org.allaymc.api.item.recipe.input.RecipeInput;
  */
 public class CraftingTableContainerImpl extends CraftingContainerImpl implements CraftingTableContainer {
     public CraftingTableContainerImpl() {
-        super(ContainerType.CRAFTING_TABLE);
+        super(ContainerTypes.CRAFTING_TABLE);
     }
 
     @Override

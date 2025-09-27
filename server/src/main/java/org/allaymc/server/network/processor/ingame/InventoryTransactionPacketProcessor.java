@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -211,7 +211,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 var dropSlot = containerAction.getSlot();
                 var dropCount = containerAction.getFromItem().getCount() - containerAction.getToItem().getCount();
-                if (!player.tryDropItem(ContainerType.INVENTORY, dropSlot, dropCount)) {
+                if (!player.tryDropItem(ContainerTypes.INVENTORY, dropSlot, dropCount)) {
                     log.warn("Failed to drop item from slot {} with count {}", dropSlot, dropCount);
                 }
             }

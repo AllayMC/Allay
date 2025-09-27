@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.ArmorContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
@@ -18,7 +18,7 @@ public class ArmorContainerImpl extends AbstractPlayerContainer implements Armor
     protected static final float KNOCKBACK_RESISTANCE_PER_NETHERITE_ARMOR = 0.1f;
 
     public ArmorContainerImpl(Supplier<EntityPlayer> playerSupplier) {
-        super(ContainerType.ARMOR, playerSupplier);
+        super(ContainerTypes.ARMOR, playerSupplier);
         addSlotChangeListener(0, this::onArmorChange);
         addSlotChangeListener(1, this::onArmorChange);
         addSlotChangeListener(2, this::onArmorChange);

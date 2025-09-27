@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 import java.util.function.Supplier;
@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  */
 public class PlayerCursorContainerImpl extends AbstractPlayerContainer {
     public PlayerCursorContainerImpl(Supplier<EntityPlayer> playerSupplier) {
-        super(ContainerType.CURSOR, playerSupplier);
+        super(ContainerTypes.CURSOR, playerSupplier);
     }
 
     @Override

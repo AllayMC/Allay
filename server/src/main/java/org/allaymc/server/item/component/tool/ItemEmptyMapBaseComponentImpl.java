@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component.tool;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemTypes;
@@ -18,7 +18,7 @@ public class ItemEmptyMapBaseComponentImpl extends ItemBaseComponentImpl {
     public void clickItemInAir(EntityPlayer player) {
         player.tryConsumeItemInHand();
         var itemStack = ItemTypes.FILLED_MAP.createItemStack();
-        player.getContainer(ContainerType.INVENTORY).tryAddItem(itemStack);
+        player.getContainer(ContainerTypes.INVENTORY).tryAddItem(itemStack);
         if (itemStack.getCount() != 0) {
             player.dropItemInPlayerPos(itemStack);
         }

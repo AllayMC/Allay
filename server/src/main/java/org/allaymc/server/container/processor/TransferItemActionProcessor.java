@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.container.ContainerItemMoveEvent;
 import org.allaymc.api.item.ItemStack;
@@ -89,7 +89,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 destination.notifySlotChange(destinationSlot, false);
             } else {
                 // Destination item is empty, move the original stack to the new position, and use the source item's stack unique id (like changing positions)
-                if (source.getContainerType() == ContainerType.CREATED_OUTPUT) {
+                if (source.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
                     // HACK: If taken from CREATED_OUTPUT, the server needs to create a new stack unique id
                     sourItem = sourItem.copy(true);
                 }
@@ -131,7 +131,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         );
 
         // Special case: no need to respond to CREATED_OUTPUT
-        if (source.getContainerType() == ContainerType.CREATED_OUTPUT) {
+        if (source.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
             return new ActionResponse(true, List.of(destItemStackResponseSlot));
         }
 

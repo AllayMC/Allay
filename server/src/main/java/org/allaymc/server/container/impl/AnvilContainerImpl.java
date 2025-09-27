@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.AnvilContainer;
 
 /**
@@ -8,6 +8,6 @@ import org.allaymc.api.container.interfaces.AnvilContainer;
  */
 public class AnvilContainerImpl extends BlockContainerImpl implements AnvilContainer {
     public AnvilContainerImpl() {
-        super(ContainerType.ANVIL);
+        super(ContainerTypes.ANVIL);
     }
 }

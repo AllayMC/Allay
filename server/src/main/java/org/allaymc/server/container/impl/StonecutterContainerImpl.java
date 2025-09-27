@@ -1,6 +1,6 @@
 package org.allaymc.server.container.impl;
 
-import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.StonecutterContainer;
 
 /**
@@ -8,6 +8,6 @@ import org.allaymc.api.container.interfaces.StonecutterContainer;
  */
 public class StonecutterContainerImpl extends BlockContainerImpl implements StonecutterContainer {
     public StonecutterContainerImpl() {
-        super(ContainerType.STONECUTTER);
+        super(ContainerTypes.STONECUTTER);
     }
 }
