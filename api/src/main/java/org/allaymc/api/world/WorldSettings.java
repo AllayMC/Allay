@@ -41,8 +41,8 @@ public class WorldSettings extends OkaeriConfig {
     public static class WorldSetting extends OkaeriConfig {
         /**
          * A field indicates whether the world is runtime only, which means that the world will not be saved
-         * to `world-settings.yml` when the server shutdown. Therefore, it won't be loaded after the server
-         * restarted because the setting for this world does not exist in `world-settings.yml`.
+         * to the configuration file when the server shutdown. Therefore, it won't be loaded after the server
+         * restarted because the setting for this world does not exist in the configuration file
          * <p>
          * This is useful for the world created for game room which will be deleted when shutdown.
          */
@@ -55,7 +55,6 @@ public class WorldSettings extends OkaeriConfig {
         @CustomKey("enable")
         @Builder.Default
         private boolean enable = true;
-
 
         @CustomKey("storage-type")
         private String storageType;
