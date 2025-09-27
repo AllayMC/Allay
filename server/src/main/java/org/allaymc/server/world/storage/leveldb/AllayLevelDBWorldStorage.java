@@ -24,6 +24,7 @@ import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
@@ -166,8 +167,8 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         nbt.listenForCompound(TAG_PDC, pdc::putAll);
 
         return AllayWorldData.builder()
-                .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, Server.SETTINGS.genericSettings().defaultDifficulty().ordinal())))
-                .gameMode(NetworkHelper.fromNetwork(GameType.from(nbt.getInt(TAG_GAME_TYPE, toNetwork(Server.SETTINGS.genericSettings().defaultGameMode()).ordinal()))))
+                .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, AllayServer.getSettings().genericSettings().defaultDifficulty().ordinal())))
+                .gameMode(NetworkHelper.fromNetwork(GameType.from(nbt.getInt(TAG_GAME_TYPE, toNetwork(AllayServer.getSettings().genericSettings().defaultGameMode()).ordinal()))))
                 .displayName(nbt.getString(TAG_DISPLAY_NAME, WorldData.DEFAULT_WORLD_DISPLAY_NAME))
                 .spawnPoint(new Vector3i(nbt.getInt(TAG_SPAWN_X, 0), nbt.getInt(TAG_SPAWN_Y, 64), nbt.getInt(TAG_SPAWN_Z, 0)))
                 .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))

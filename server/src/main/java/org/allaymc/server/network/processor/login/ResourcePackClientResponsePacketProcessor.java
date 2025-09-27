@@ -4,7 +4,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.MultiVersion;
@@ -51,7 +51,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
     }
 
     protected static ResourcePackDataInfoPacket toNetwork(Pack pack) {
-        var chunkSize = Server.SETTINGS.resourcePackSettings().maxChunkSize() * 1024;
+        var chunkSize = AllayServer.getSettings().resourcePackSettings().maxChunkSize() * 1024;
         var packet = new ResourcePackDataInfoPacket();
         packet.setPackId(pack.getId());
         packet.setPackVersion(pack.getStringVersion());

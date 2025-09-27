@@ -1,15 +1,23 @@
 package org.allaymc.api.permission;
 
+import org.allaymc.api.AllayAPI;
+
 import java.util.Set;
 
 /**
- * PermissionGroups contains all available permission groups that are in pure allay.
+ * PermissionGroups contains all available permission groups that in pure allay.
  *
  * @author daoge_cmd
  */
 public interface PermissionGroups {
+
     /**
-     * Permission group that contains no permission. Suitable for player that only view the server.
+     * The default permission group of this server which used for the newly joined players.
+     */
+    AllayAPI.APIInstanceHolder<PermissionGroup> DEFAULT = AllayAPI.APIInstanceHolder.create();
+
+    /**
+     * Permission group that contains no permission. Suitable for player that only views the server.
      */
     PermissionGroup VISITOR = PermissionGroup.create("VISITOR");
 

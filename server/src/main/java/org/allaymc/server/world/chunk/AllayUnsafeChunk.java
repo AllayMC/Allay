@@ -13,7 +13,6 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
@@ -23,6 +22,7 @@ import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.world.light.AllayLightEngine;
@@ -132,7 +132,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public void checkAutoSave(WorldStorage worldStorage) {
         autoSaveTimer++;
-        if (autoSaveTimer >= Server.SETTINGS.storageSettings().chunkAutoSaveCycle()) {
+        if (autoSaveTimer >= AllayServer.getSettings().storageSettings().chunkAutoSaveCycle()) {
             worldStorage.writeChunk(safeChunk);
             autoSaveTimer = 0;
         }

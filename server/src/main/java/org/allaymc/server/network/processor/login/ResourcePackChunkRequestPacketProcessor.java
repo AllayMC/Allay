@@ -5,7 +5,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkDataPacket;
@@ -29,7 +29,7 @@ public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcess
     }
 
     public ResourcePackChunkDataPacket getChunkDataPacket(Pack pack, int chunkIndex) {
-        var chunkSize = Server.SETTINGS.resourcePackSettings().maxChunkSize() * 1024;
+        var chunkSize = AllayServer.getSettings().resourcePackSettings().maxChunkSize() * 1024;
         var packet = new ResourcePackChunkDataPacket();
         packet.setPackId(pack.getId());
         packet.setPackVersion(pack.getStringVersion());

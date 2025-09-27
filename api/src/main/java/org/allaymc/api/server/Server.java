@@ -1,6 +1,5 @@
 package org.allaymc.api.server;
 
-import eu.okaeri.configs.ConfigManager;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.EventBus;
@@ -10,11 +9,9 @@ import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.scoreboard.ScoreboardManager;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 
-import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -22,9 +19,10 @@ import java.util.concurrent.ExecutorService;
  */
 public interface Server extends TaskCreator, CommandSender {
 
+    /**
+     * A static instance holder for the {@link Server} interface.
+     */
     AllayAPI.APIInstanceHolder<Server> INSTANCE = AllayAPI.APIInstanceHolder.create();
-
-    ServerSettings SETTINGS = ConfigManager.create(ServerSettings.class, Utils.createConfigInitializer(Path.of("server-settings.yml")));
 
     /**
      * Retrieves the server instance.

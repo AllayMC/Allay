@@ -41,6 +41,7 @@ import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -89,8 +90,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
 
-    protected static final String TAG_EXPERIENCE_LEVEL = "ExperienceLevel";
-    protected static final String TAG_EXPERIENCE_PROGRESS = "ExperienceProgress";
+    protected static final String TAG_PLAYER_LEVEL = "PlayerLevel";
+    protected static final String TAG_PLAYER_LEVEL_PROGRESS = "PlayerLevelProgress";
 
     protected static final String TAG_FOOD_LEVEL = "FoodLevel";
     protected static final String TAG_FOOD_SATURATION_LEVEL = "FoodSaturationLevel";
@@ -180,7 +181,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
-        this.gameMode = Server.SETTINGS.genericSettings().defaultGameMode();
+        this.gameMode = AllayServer.getSettings().genericSettings().defaultGameMode();
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
         this.startUsingItemInAirTime = -1;
         this.formIdCounter = new AtomicInteger(0);
@@ -207,7 +208,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Do not register the player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
         // Add the parent permission group alone, so that the permission listeners will be triggered
-        this.permissionGroup.addParent(PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission()), thisPlayer);
+        this.permissionGroup.addParent(PermissionGroup.get(AllayServer.getSettings().genericSettings().defaultPermission()), thisPlayer);
     }
 
     @Override
@@ -544,12 +545,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // and the tick in different worlds may not be same
         var currentServerTick = Server.getInstance().getTick();
         if (nextSavePlayerDataTime == Integer.MAX_VALUE) {
-            nextSavePlayerDataTime = currentServerTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
+            nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
             return;
         }
         if (currentServerTick >= nextSavePlayerDataTime) {
             Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
-            nextSavePlayerDataTime = currentServerTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
+            nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
         }
     }
 
@@ -786,8 +787,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).saveNBT())
                 // Experience
-                .putInt(TAG_EXPERIENCE_LEVEL, this.experienceLevel)
-                .putFloat(TAG_EXPERIENCE_PROGRESS, this.experienceProgress)
+                .putInt(TAG_PLAYER_LEVEL, this.experienceLevel)
+                .putFloat(TAG_PLAYER_LEVEL_PROGRESS, this.experienceProgress)
                 // Food
                 .putInt(TAG_FOOD_LEVEL, foodLevel)
                 .putFloat(TAG_FOOD_SATURATION_LEVEL, this.foodSaturationLevel)
@@ -836,8 +837,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         );
 
         // Experience
-        nbt.listenForInt(TAG_EXPERIENCE_LEVEL, this::setExperienceLevel);
-        nbt.listenForFloat(TAG_EXPERIENCE_PROGRESS, this::setExperienceProgress);
+        nbt.listenForInt(TAG_PLAYER_LEVEL, this::setExperienceLevel);
+        nbt.listenForFloat(TAG_PLAYER_LEVEL_PROGRESS, this::setExperienceProgress);
 
         // Food
         nbt.listenForInt(TAG_FOOD_LEVEL, this::setFoodLevel);
@@ -991,7 +992,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void sendLocationToSelf() {
         // NOTICE: do not use MovePlayerPacket. Sometimes this packet does not have any
         // effect especially when teleporting player to another world or a far away place.
-        thisPlayer.viewEntityLocation(thisPlayer, locationLastSent, location, true);
+        thisPlayer.viewEntityLocation(thisPlayer, lastSentLocation, location, true);
     }
 
     @Override

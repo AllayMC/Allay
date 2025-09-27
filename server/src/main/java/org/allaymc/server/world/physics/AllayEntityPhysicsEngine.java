@@ -14,11 +14,11 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
 import org.allaymc.api.world.physics.EntityPhysicsEngine;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;
 import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.datastruct.aabb.AABBTree;
@@ -63,7 +63,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     private static final double LAVA_FLOW_MOTION_IN_NETHER = 0.007;
 
     static {
-        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
+        var settings = AllayServer.getSettings().entitySettings().physicsEngineSettings();
         MOTION_THRESHOLD = settings.motionThreshold();
         BLOCK_COLLISION_MOTION = settings.blockCollisionMotion();
     }

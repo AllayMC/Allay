@@ -13,7 +13,6 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
@@ -51,8 +50,7 @@ public interface WorldViewer {
      *
      * @param entity           the entity to view
      * @param locationLastSent the location that is sent in the last method call. Changes will be applied to this parameter when the difference in a
-     *                         specific field (e.g. x-axis) exceeds the threshold defined in {@link ServerSettings.EntitySettings.PhysicsEngineSettings}.
-     *                         This field is used only when {@link ServerSettings.EntitySettings.PhysicsEngineSettings#useDeltaMovePacket()} is enabled.
+     *                         specific field (e.g. x-axis) exceeds the threshold.
      * @param newLocation      the new location of the entity
      * @param teleporting      whether the entity is being teleported to the new location
      */

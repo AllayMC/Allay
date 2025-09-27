@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
@@ -38,7 +39,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         clientComponent.setLoginData(loginData);
 
         var server = Server.getInstance();
-        if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
+        if (AllayServer.getSettings().genericSettings().enableWhitelist() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED);
             return;
         }
@@ -49,7 +50,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        if (!loginData.isAuthed() && Server.SETTINGS.networkSettings().xboxAuth()) {
+        if (!loginData.isAuthed() && AllayServer.getSettings().networkSettings().xboxAuth()) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
             return;
         }
@@ -70,7 +71,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             otherDevice.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }
 
-        if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
+        if (!AllayServer.getSettings().networkSettings().enableNetworkEncryption()) {
             clientComponent.completeLogin();
             return;
         }

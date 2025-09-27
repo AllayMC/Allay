@@ -8,11 +8,11 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import lombok.Getter;
 import org.allaymc.api.annotation.NotThreadSafe;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.manager.ChunkManager;
+import org.allaymc.server.AllayServer;
 import org.joml.Vector3i;
 
 import java.util.Collection;
@@ -81,7 +81,7 @@ public final class ChunkLoaderHolder {
         this.sentChunks = new LongOpenHashSet();
         this.inRadiusChunks = new LongOpenHashSet();
         this.chunkSendingQueue = new LongArrayFIFOQueue((chunkLoader.getChunkLoadingRadius() * 2 + 1) * (chunkLoader.getChunkLoadingRadius() * 2 + 1));
-        if (Server.SETTINGS.worldSettings().chunkSendingStrategy() == ASYNC) {
+        if (AllayServer.getSettings().worldSettings().chunkSendingStrategy() == ASYNC) {
             this.asyncChunkSender = new AsyncChunkSender();
         }
         this.lastLoaderChunkPosHashed = Long.MAX_VALUE;
@@ -179,7 +179,7 @@ public final class ChunkLoaderHolder {
         } while (!chunkSendingQueue.isEmpty() && sentChunkCount < chunkLoader.getChunkMaxSendCountPerTick());
 
         if (!chunkReadyToSend.isEmpty()) {
-            var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
+            var chunkSendingStrategy = AllayServer.getSettings().worldSettings().chunkSendingStrategy();
             if (chunkSendingStrategy == ASYNC) {
                 asyncChunkSender.addChunkToSendingQueue(chunkReadyToSend.values());
             } else {

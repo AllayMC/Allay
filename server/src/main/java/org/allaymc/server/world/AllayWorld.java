@@ -24,6 +24,7 @@ import org.allaymc.api.world.chunk.FakeChunkLoader;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -47,9 +48,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class AllayWorld implements World {
 
     protected static final int TIME_SENDING_INTERVAL = 12 * 20;
-    protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
-    protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = Server.SETTINGS.networkSettings().enableIndependentNetworkThread();
-    protected static final boolean TICK_DIMENSION_IN_PARALLEL = Server.SETTINGS.worldSettings().tickDimensionInParallel();
+    protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = AllayServer.getSettings().networkSettings().maxSyncedPacketsHandleCountAtOnce();
+    protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = AllayServer.getSettings().networkSettings().enableIndependentNetworkThread();
+    protected static final boolean TICK_DIMENSION_IN_PARALLEL = AllayServer.getSettings().worldSettings().tickDimensionInParallel();
 
     @Getter
     protected final String name;
@@ -210,12 +211,12 @@ public class AllayWorld implements World {
         isFirstTick = false;
 
         var overworld = getOverWorld();
-        if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
+        if (AllayServer.getSettings().worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
             overworld.getChunkManager().addChunkLoader(new FakeChunkLoader(() -> {
                 var spawnPoint = worldData.getSpawnPoint();
                 return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
-            }, Server.SETTINGS.worldSettings().spawnPointChunkRadius()));
+            }, AllayServer.getSettings().worldSettings().spawnPointChunkRadius()));
         }
 
         // Find the spawn point only the first time the world is loaded

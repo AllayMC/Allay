@@ -26,6 +26,7 @@ import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
@@ -59,7 +60,7 @@ public class AllayNetworkInterface implements NetworkInterface {
 
     @SneakyThrows
     public void start() {
-        var settings = Server.SETTINGS;
+        var settings = AllayServer.getSettings();
         var networkSettings = settings.networkSettings();
 
         var networkThreadNumber = networkSettings.networkThreadNumber();

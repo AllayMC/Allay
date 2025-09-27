@@ -36,7 +36,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.chunk.Chunk;
@@ -45,6 +44,7 @@ import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.*;
 import org.allaymc.api.world.sound.*;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.component.ComponentManager;
@@ -126,8 +126,8 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     protected int chunkMaxSendCountPerTick;
 
     public EntityPlayerChunkLoaderComponentImpl() {
-        this.chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
-        this.chunkMaxSendCountPerTick = Server.SETTINGS.worldSettings().chunkMaxSendCountPerTick();
+        this.chunkLoadingRadius = AllayServer.getSettings().worldSettings().viewDistance();
+        this.chunkMaxSendCountPerTick = AllayServer.getSettings().worldSettings().chunkMaxSendCountPerTick();
     }
 
     @Override
@@ -218,10 +218,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewEntityLocation(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
         BedrockPacket packet;
-        if (Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket()) {
+        if (AllayServer.getSettings().entitySettings().physicsEngineSettings().useDeltaMovePacket()) {
             packet = createDeltaMovePacket(entity, locationLastSent, newLocation, teleporting);
         } else {
             packet = createAbsoluteMovePacket(entity, newLocation, teleporting);
+            locationLastSent.set(newLocation);
+            locationLastSent.setPitch(newLocation.pitch());
+            locationLastSent.setYaw(newLocation.yaw());
+            locationLastSent.setHeadYaw(newLocation.headYaw());
         }
         this.clientComponent.sendPacket(packet);
     }
@@ -278,7 +282,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Entity entity, Location3d locationLastSent, Location3dc newLocation) {
         var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
-        var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
+        var settings = AllayServer.getSettings().entitySettings().physicsEngineSettings();
         var diffPositionThreshold = settings.diffPositionThreshold();
         var diffRotationThreshold = settings.diffRotationThreshold();
         if (Math.abs(locationLastSent.x() - newLocation.x()) > diffPositionThreshold) flags.add(HAS_X);
@@ -474,7 +478,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         packet.setNewSkinName(skin.getSkinId());
         // It seems that old skin name is unused
         packet.setOldSkinName("");
-        packet.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
+        packet.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
         this.clientComponent.sendPacket(packet);
     }
 
@@ -600,7 +604,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
 
     @Override
     public void setChunkLoadingRadius(int radius) {
-        this.chunkLoadingRadius = Math.min(radius, Server.SETTINGS.worldSettings().viewDistance());
+        this.chunkLoadingRadius = Math.min(radius, AllayServer.getSettings().worldSettings().viewDistance());
         var packet = new ChunkRadiusUpdatedPacket();
         packet.setRadius(chunkLoadingRadius);
         clientComponent.sendPacket(packet);
@@ -628,7 +632,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     protected LevelChunkPacket createLevelChunkPacket(Chunk chunk) {
         var lcp = new LevelChunkPacket[1];
         chunk.applyOperation(unsafeChunk -> {
-            if (Server.SETTINGS.worldSettings().useSubChunkSendingSystem()) {
+            if (AllayServer.getSettings().worldSettings().useSubChunkSendingSystem()) {
                 lcp[0] = createSubChunkLevelChunkPacket((AllayUnsafeChunk) unsafeChunk);
             } else {
                 lcp[0] = createFullLevelChunkPacketChunk((AllayUnsafeChunk) unsafeChunk);

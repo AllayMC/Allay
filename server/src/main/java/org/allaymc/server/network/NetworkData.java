@@ -7,8 +7,8 @@ import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -251,7 +251,7 @@ public final class NetworkData {
     }
 
     public static ResourcePacksInfoPacket encodeResourcePacksInfoPacket() {
-        var settings = Server.SETTINGS.resourcePackSettings();
+        var settings = AllayServer.getSettings().resourcePackSettings();
 
         var packet = new ResourcePacksInfoPacket();
         packet.setForcedToAccept(settings.forceResourcePacks());
@@ -275,7 +275,7 @@ public final class NetworkData {
     }
 
     public static ResourcePackStackPacket encodeResourcesPackStackPacket() {
-        var settings = Server.SETTINGS.resourcePackSettings();
+        var settings = AllayServer.getSettings().resourcePackSettings();
 
         var packet = new ResourcePackStackPacket();
         packet.setForcedToAccept(settings.forceResourcePacks() && !settings.allowClientResourcePacks());

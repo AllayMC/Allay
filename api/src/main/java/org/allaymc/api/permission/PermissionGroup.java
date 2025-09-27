@@ -3,7 +3,6 @@ package org.allaymc.api.permission;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -452,7 +451,7 @@ public final class PermissionGroup {
                 var parent = PermissionGroup.get(name);
                 if (parent == null) {
                     log.warn("Find unknown parent permission group '{}' when loading permission group '{}'. Fallback to the default permission group", name, this.name);
-                    parent = PermissionGroup.get(Server.SETTINGS.genericSettings().defaultPermission());
+                    parent = PermissionGroups.DEFAULT.get();
                 }
 
                 addParent(parent, permissible);

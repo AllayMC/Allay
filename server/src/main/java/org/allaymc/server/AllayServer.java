@@ -1,6 +1,7 @@
 package org.allaymc.server;
 
 import com.google.common.base.Suppliers;
+import eu.okaeri.configs.ConfigManager;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -19,8 +20,10 @@ import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardManager;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.metrics.Metrics;
 import org.allaymc.server.network.AllayNetworkInterface;
@@ -54,6 +57,10 @@ import java.util.function.Supplier;
 public final class AllayServer implements Server {
 
     private static final AllayServer INSTANCE = new AllayServer();
+    private static final ServerSettings SETTINGS = ConfigManager.create(
+            ServerSettings.class,
+            Utils.createConfigInitializer(Path.of("server-settings.yml"))
+    );
 
     private final AtomicReference<ServerState> state;
     @Getter
@@ -61,9 +68,7 @@ public final class AllayServer implements Server {
     @Getter
     private final AllayPlayerManager playerManager;
     @Getter
-    private final ExecutorService computeThreadPool;
-    @Getter
-    private final ExecutorService virtualThreadPool;
+    private final ExecutorService computeThreadPool, virtualThreadPool;
     @Getter
     private final EventBus eventBus;
     @Getter
@@ -84,7 +89,7 @@ public final class AllayServer implements Server {
 
     private AllayServer() {
         this.state = new AtomicReference<>(ServerState.STARTING);
-        this.playerManager = new AllayPlayerManager(Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE, new AllayNetworkInterface(this));
+        this.playerManager = new AllayPlayerManager(SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE, new AllayNetworkInterface(this));
         this.worldPool = new AllayWorldPool();
         this.computeThreadPool = createComputeThreadPool();
         this.virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
@@ -107,6 +112,10 @@ public final class AllayServer implements Server {
 
     public static AllayServer getInstance() {
         return INSTANCE;
+    }
+
+    public static ServerSettings getSettings() {
+        return SETTINGS;
     }
 
     private void serverThreadMain(GameLoop gameLoop) {
@@ -140,9 +149,9 @@ public final class AllayServer implements Server {
 
     private ExecutorService createComputeThreadPool() {
         return new ForkJoinPool(
-                Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ?
+                SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ?
                         Runtime.getRuntime().availableProcessors() :
-                        Server.SETTINGS.genericSettings().maxComputeThreadCount(),
+                        SETTINGS.genericSettings().maxComputeThreadCount(),
                 new AllayForkJoinWorkerThreadFactory(), null, true
         );
     }
@@ -152,7 +161,7 @@ public final class AllayServer implements Server {
         var ctx = (LoggerContext) LogManager.getContext(false);
         var log4jConfig = ctx.getConfiguration();
         var loggerConfig = log4jConfig.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
-        if (Server.SETTINGS.genericSettings().debug() && Level.TRACE.isLessSpecificThan(loggerConfig.getLevel())) {
+        if (SETTINGS.genericSettings().debug() && Level.TRACE.isLessSpecificThan(loggerConfig.getLevel())) {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();
         }
@@ -238,7 +247,7 @@ public final class AllayServer implements Server {
         this.pluginManager.disablePlugins();
 
         // Save all configurations & data
-        Server.SETTINGS.save();
+        SETTINGS.save();
         this.scoreboardManager.save();
         this.playerManager.shutdown();
 

@@ -1,11 +1,9 @@
 package org.allaymc.api.player;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
-import org.allaymc.api.server.Server;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -167,23 +165,18 @@ public interface PlayerManager {
     Set<String> getBannedIPs();
 
     /**
+     * Retrieves the current status of the whitelist.
+     *
+     * @return {@code true} if the whitelist is enabled, otherwise {@code false}.
+     */
+    boolean getWhitelistStatus();
+
+    /**
      * Set the whitelist status.
      *
      * @param enable {@code true} to enable the whitelist, otherwise {@code false}
      */
-    default void setWhitelistStatus(boolean enable) {
-        var event = new WhitelistChangeEvent(enable);
-        if (!event.call()) {
-            return;
-        }
-
-        Server.SETTINGS.genericSettings().isWhitelisted(enable);
-        if (enable) {
-            getPlayers().values().stream()
-                    .filter(player -> !isWhitelisted(player))
-                    .forEach(player -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED));
-        }
-    }
+    void setWhitelistStatus(boolean enable);
 
     /**
      * Check if the player is in the whitelist.

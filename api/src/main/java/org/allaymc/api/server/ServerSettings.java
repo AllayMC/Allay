@@ -72,8 +72,8 @@ public class ServerSettings extends OkaeriConfig {
         private boolean debug = false;
 
         @Comment("If whitelist is enabled, only players in the whitelist can join the server")
-        @CustomKey("is-whitelisted")
-        private boolean isWhitelisted = false;
+        @CustomKey("enable-whitelist")
+        private boolean enableWhitelist = false;
 
         @CustomKey("enable-gui")
         private boolean enableGui = true;

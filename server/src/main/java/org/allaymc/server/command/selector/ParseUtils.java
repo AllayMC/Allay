@@ -2,7 +2,7 @@ package org.allaymc.server.command.selector;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
-import org.allaymc.api.server.Server;
+import org.allaymc.server.AllayServer;
 
 /**
  * ParseUtils provides some commonly used static functions about target selector parsing.
@@ -128,7 +128,7 @@ public class ParseUtils {
             case "c", "creative", "1" -> 1;
             case "a", "adventure", "2" -> 2;
             case "spectator", "6" -> 6;
-            case "d", "default" -> Server.SETTINGS.genericSettings().defaultGameMode().ordinal();
+            case "d", "default" -> AllayServer.getSettings().genericSettings().defaultGameMode().ordinal();
             default -> throw new SelectorSyntaxException("Unknown GameMode token: " + token);
         };
     }

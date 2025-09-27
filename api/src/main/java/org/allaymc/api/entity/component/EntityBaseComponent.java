@@ -54,10 +54,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Get the display name of the entity.
      * <p>
-     * Display name is used in chat, damage message etc. Normally, it is equal to the origin name,
-     * however you can change the display name compared to the origin name. This is very useful for
-     * plugin especially if plugin wants to change the appearance of entity name in chat because
-     * origin name cannot be changed.
+     * Display name is used in chat, damage message, etc. Normally, it is equal to the origin name.
+     * However, you can change the display name compared to the origin name. This is very useful for
+     * plugins, especially if the plugin wants to change the appearance of entity's name in chat because
+     * its origin name cannot be changed.
      *
      * @return The display name of the player
      */

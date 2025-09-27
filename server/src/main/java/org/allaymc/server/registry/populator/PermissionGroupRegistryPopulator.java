@@ -1,6 +1,8 @@
 package org.allaymc.server.registry.populator;
 
+import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.server.AllayServer;
 
 /**
  * @author daoge_cmd
@@ -8,7 +10,6 @@ import org.allaymc.api.permission.PermissionGroups;
 public class PermissionGroupRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        // Load PermissionGroups.class
-        var $ = PermissionGroups.VISITOR;
+        PermissionGroups.DEFAULT.set(PermissionGroup.get(AllayServer.getSettings().genericSettings().defaultPermission()));
     }
 }

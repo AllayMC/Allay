@@ -2,7 +2,7 @@ package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.server.Server;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
@@ -43,7 +43,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
         session.setCodec(codec);
 
         var settingsPacket = new NetworkSettingsPacket();
-        settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(Server.SETTINGS.networkSettings().compressionAlgorithm().name()));
+        settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(AllayServer.getSettings().networkSettings().compressionAlgorithm().name()));
         // NOTICE: We don't need to set the compression threshold after 1.20.60
         player.sendPacketImmediately(settingsPacket);
         // NOTICE: The NetworkSettingsPacket shouldn't be compressed, so we set the compression after sending the packet

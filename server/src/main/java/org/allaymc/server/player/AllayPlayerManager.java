@@ -10,6 +10,7 @@ import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.eventbus.event.player.PlayerUnbanEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
+import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
@@ -20,6 +21,7 @@ import org.allaymc.api.server.Whitelist;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.AllayNetworkInterface;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -178,6 +180,26 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     @Override
+    public boolean getWhitelistStatus() {
+        return AllayServer.getSettings().genericSettings().enableWhitelist();
+    }
+
+    @Override
+    public void setWhitelistStatus(boolean enable) {
+        var event = new WhitelistChangeEvent(enable);
+        if (!event.call()) {
+            return;
+        }
+
+        AllayServer.getSettings().genericSettings().enableWhitelist(enable);
+        if (enable) {
+            getPlayers().values().stream()
+                    .filter(player -> !isWhitelisted(player))
+                    .forEach(player -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED));
+        }
+    }
+
+    @Override
     public boolean isWhitelisted(String uuidOrName) {
         return whitelist.whitelist().contains(uuidOrName);
     }
@@ -298,7 +320,7 @@ public class AllayPlayerManager implements PlayerManager {
         entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
         entry.setBuildPlatform(player.getLoginData().getDeviceInfo().device().getId());
         entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
-        entry.setTrustedSkin(Server.SETTINGS.resourcePackSettings().trustAllSkins());
+        entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
         entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
         return entry;
     }

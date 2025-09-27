@@ -69,7 +69,7 @@ public final class Allay {
 
     public static void main(String[] args) throws InterruptedException {
         long initialTime = System.currentTimeMillis();
-        if (GitProperties.isDevBuild() && !Server.SETTINGS.genericSettings().forceEnableSentry()) {
+        if (GitProperties.isDevBuild() && !AllayServer.getSettings().genericSettings().forceEnableSentry()) {
             // Enable sentry only in non-dev build
             Sentry.close();
         }
@@ -84,14 +84,14 @@ public final class Allay {
 
         // Check if the environment is headless
         if (isHeadless()) {
-            Server.SETTINGS.genericSettings().enableGui(false);
+            AllayServer.getSettings().genericSettings().enableGui(false);
         }
-        if (Server.SETTINGS.genericSettings().enableGui()) {
+        if (AllayServer.getSettings().genericSettings().enableGui()) {
             try {
                 DASHBOARD = Dashboard.getInstance();
             } catch (Throwable t) {
                 log.error("Cannot init Dashboard!", t);
-                Server.SETTINGS.genericSettings().enableGui(false);
+                AllayServer.getSettings().genericSettings().enableGui(false);
             }
         }
 
@@ -273,6 +273,6 @@ public final class Allay {
             return;
         }
 
-        AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
+        AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), AllayServer.getSettings().genericSettings().language()));
     }
 }

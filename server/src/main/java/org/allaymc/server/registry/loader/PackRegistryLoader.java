@@ -9,7 +9,7 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackLoader;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.server.Server;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.pack.PackEncryptor;
 import org.allaymc.server.pack.PackUtils;
 import org.allaymc.server.pack.defaults.ResourcePack;
@@ -114,7 +114,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
                 Files.createDirectories(path);
             }
         }
-        if (Server.SETTINGS.resourcePackSettings().autoEncryptPacks()) {
+        if (AllayServer.getSettings().resourcePackSettings().autoEncryptPacks()) {
             encryptPacks();
         }
         this.registerLoaderFactory(ZipPackLoader.FACTORY);

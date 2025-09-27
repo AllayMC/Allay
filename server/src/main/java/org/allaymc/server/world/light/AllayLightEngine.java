@@ -5,7 +5,6 @@ import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -14,6 +13,7 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.light.LightEngine;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayChunkSection;
@@ -85,7 +85,7 @@ public class AllayLightEngine implements LightEngine {
     protected LightPropagator skyLightPropagator;
 
     public AllayLightEngine(Dimension dimension) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeather, Server.SETTINGS.worldSettings().maxLightUpdateCountPerDimension());
+        this(dimension.getDimensionInfo(), dimension.getWorld().getName(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeather, AllayServer.getSettings().worldSettings().maxLightUpdateCountPerDimension());
     }
 
     @VisibleForTesting

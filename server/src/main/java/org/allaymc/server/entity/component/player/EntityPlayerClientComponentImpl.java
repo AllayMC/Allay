@@ -24,6 +24,7 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -100,7 +101,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
     public EntityPlayerClientComponentImpl() {
         this.packetProcessorHolder = new PacketProcessorHolder();
-        this.fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
+        this.fullyJoinChunkThreshold = new AtomicInteger(AllayServer.getSettings().worldSettings().fullyJoinChunkThreshold());
     }
 
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
@@ -120,7 +121,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         this.clientSession = session;
         this.packetProcessorHolder.setClientState(ClientState.CONNECTED);
 
-        var maxLoginTime = Server.SETTINGS.networkSettings().maxLoginTime();
+        var maxLoginTime = AllayServer.getSettings().networkSettings().maxLoginTime();
         if (maxLoginTime > 0) {
             Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
                 var status = getClientState();
@@ -434,10 +435,10 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setLevelGameType(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()));
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         packet.setTrustingPlayers(true);
-        packet.setLevelName(Server.SETTINGS.genericSettings().motd());
+        packet.setLevelName(AllayServer.getSettings().genericSettings().motd());
         packet.setLevelId("");
-        packet.setDefaultPlayerPermission(PlayerPermission.valueOf(Server.SETTINGS.genericSettings().defaultPermission()));
-        packet.setServerChunkTickRange(Server.SETTINGS.worldSettings().tickRadius());
+        packet.setDefaultPlayerPermission(PlayerPermission.valueOf(AllayServer.getSettings().genericSettings().defaultPermission()));
+        packet.setServerChunkTickRange(AllayServer.getSettings().worldSettings().tickRadius());
         packet.setVanillaVersion("*");
         packet.setPremiumWorldTemplateId("");
         packet.setInventoriesServerAuthoritative(true);

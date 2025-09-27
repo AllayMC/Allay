@@ -10,11 +10,11 @@ import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.joml.Vector3i;
@@ -27,9 +27,9 @@ public final class AllayWorldData implements WorldData {
     private World world;
 
     @Builder.Default
-    private Difficulty difficulty = Server.SETTINGS.genericSettings().defaultDifficulty();
+    private Difficulty difficulty = AllayServer.getSettings().genericSettings().defaultDifficulty();
     @Builder.Default
-    private GameMode gameMode = Server.SETTINGS.genericSettings().defaultGameMode();
+    private GameMode gameMode = AllayServer.getSettings().genericSettings().defaultGameMode();
     @Setter
     @Builder.Default
     private String displayName = DEFAULT_WORLD_DISPLAY_NAME;

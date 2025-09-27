@@ -3,6 +3,7 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.AllayServer;
 
 /**
  * @author daoge_cmd
@@ -18,7 +19,7 @@ public class SetMaxPlayersCommand extends VanillaCommand {
         tree.getRoot().intNum("maxPlayers").exec(context -> {
             var maxPlayers = Math.max(Server.getInstance().getPlayerManager().getPlayerCount(), context.getResult(0));
 
-            Server.SETTINGS.genericSettings().maxPlayerCount(maxPlayers);
+            AllayServer.getSettings().genericSettings().maxPlayerCount(maxPlayers);
             Server.getInstance().getPlayerManager().setMaxPlayerCount(maxPlayers);
             context.addOutput(TrKeys.MC_COMMANDS_SETMAXPLAYERS_SUCCESS, maxPlayers);
             return context.success();

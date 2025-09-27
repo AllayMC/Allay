@@ -60,7 +60,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected static final String TAG_BLOCK = "Block";
 
     // The following tags are in extra tag.
-
     protected static final String TAG_DAMAGE = "Damage";
     protected static final String TAG_REPAIR_COST = "RepairCost";
     protected static final String TAG_DISPLAY = "display";
