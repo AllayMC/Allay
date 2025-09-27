@@ -284,18 +284,18 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     @Override
-    public void handleSync(EntityPlayerImpl player, PlayerAuthInputPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
         handleInputData(player, packet.getInputData());
         handleSingleItemStackRequest(player, packet.getItemStackRequest(), receiveTime);
     }
 
     @Override
-    public PacketSignal handleAsync(EntityPlayerImpl player, PlayerAuthInputPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
         if (notReadyForInput(player)) {
             return PacketSignal.HANDLED;
         }
 
-        var baseComponent = ((EntityPlayerBaseComponentImpl) player.getBaseComponent());
+        var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
         if (baseComponent.isAwaitingTeleportACK()) {
             var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();

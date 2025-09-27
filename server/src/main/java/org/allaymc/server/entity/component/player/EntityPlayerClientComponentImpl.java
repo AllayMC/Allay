@@ -3,9 +3,7 @@ package org.allaymc.server.entity.component.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.command.Command;
 import org.allaymc.api.container.ContainerType;
-import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -21,20 +19,17 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
-import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
 import org.allaymc.server.network.MultiVersion;
@@ -54,7 +49,7 @@ import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
-import org.cloudburstmc.protocol.bedrock.data.command.*;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -64,7 +59,9 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 
 import java.net.SocketAddress;
-import java.util.*;
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
@@ -82,7 +79,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     @Manager
     protected ComponentManager manager;
     @ComponentObject
-    protected EntityPlayerImpl thisPlayer;
+    protected EntityPlayer thisPlayer;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
 
@@ -202,23 +199,24 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     protected void onFullyJoin() {
         var server = Server.getInstance();
         var world = thisPlayer.getWorld();
-        // Load EntityPlayer's NBT, player game mode is also updated in loadNBT()
+
         thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
         thisPlayer.viewEntityState(thisPlayer);
-        sendSpeed(thisPlayer.getSpeed());
         sendAbilities(thisPlayer);
+        sendInventories();
+        thisPlayer.viewTime(world.getWorldData().getTimeOfDay());
+        thisPlayer.viewWeather(world.getWeather());
+
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
-        // PlayerListPacket can only be sent at this stage, otherwise the client won't show its skin
         playerManager.broadcastPlayerListChange(thisPlayer, true);
         if (server.getPlayerManager().getPlayerCount() > 1) {
             playerManager.sendPlayerListTo(thisPlayer);
         }
-        sendInventories();
-        thisPlayer.viewTime(world.getWorldData().getTimeOfDay());
-        thisPlayer.viewWeather(world.getWeather());
-        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
+
         // Save player data the first time it joins
         server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
+
+        sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
     }
 
     public void sendAbilities(EntityPlayer player) {
@@ -282,118 +280,12 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         return PlayerPermission.VISITOR;
     }
 
-    public void sendSpeed(float value) {
-        sendAttribute(new AttributeData(
-                "minecraft:movement", 0, Float.MAX_VALUE,
-                value, 0, Float.MAX_VALUE, EntityPlayerBaseComponent.DEFAULT_SPEED,
-                Collections.emptyList()
-        ));
-    }
-
-    public void sendAbsorption(float absorption) {
-        sendAttribute(new AttributeData("minecraft:absorption", 0, Float.MAX_VALUE, absorption));
-    }
-
-    public void sendHealth(float health, float maxHealth) {
-        var defaultMax = EntityLivingComponent.DEFAULT_MAX_HEALTH;
-        sendAttribute(new AttributeData(
-                "minecraft:health", 0, maxHealth,
-                health, 0, defaultMax, defaultMax,
-                Collections.emptyList()
-        ));
-    }
-
-    public void sendExperienceLevel(int value) {
-        sendAttribute(new AttributeData("minecraft:player.level", 0, Float.MAX_VALUE, value));
-    }
-
-    public void sendExperienceProgress(float value) {
-        sendAttribute(new AttributeData("minecraft:player.experience", 0, 1, value));
-    }
-
-    public void sendFoodLevel(int value) {
-        var max = EntityPlayerBaseComponent.MAX_FOOD_LEVEL;
-        sendAttribute(new AttributeData(
-                "minecraft:player.hunger", 0, max,
-                value, 0, max, max,
-                Collections.emptyList()
-        ));
-    }
-
-    public void sendFoodSaturationLevel(float value) {
-        var max = EntityPlayerBaseComponent.MAX_FOOD_SATURATION_LEVEL;
-        sendAttribute(new AttributeData(
-                "minecraft:player.saturation", 0, max,
-                value, 0, max, max,
-                Collections.emptyList()
-        ));
-    }
-
-    public void sendFoodExhaustionLevel(float value) {
-        var max = EntityPlayerBaseComponent.MAX_FOOD_EXHAUSTION_LEVEL;
-        sendAttribute(new AttributeData(
-                "minecraft:player.exhaustion", 0, max,
-                value, 0, max, 0,
-                Collections.emptyList()
-        ));
-    }
-
-    protected void sendAttribute(AttributeData attributeData) {
-        var packet = new UpdateAttributesPacket();
-        packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        packet.getAttributes().add(attributeData);
-        thisPlayer.sendPacket(packet);
-    }
-
-    public void sendCommands() {
-        var packet = new AvailableCommandsPacket();
-        Registries.COMMANDS.getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
-                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
-        sendPacket(packet);
-    }
-
-    protected CommandData encodeCommand(Command command) {
-        // Aliases
-        CommandEnumData aliases = null;
-        if (!command.getAliases().isEmpty()) {
-            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
-            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
-            values.put(command.getName(), Collections.emptySet());
-            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
+    @Override
+    public void sendPacket(Object p) {
+        if (!(p instanceof BedrockPacket packet)) {
+            return;
         }
 
-        // Overloads
-        var overloads = new ArrayList<CommandOverloadData>();
-        for (var leaf : command.getCommandTree().getLeaves()) {
-            var params = new CommandParamData[leaf.depth()];
-            var node = leaf;
-            var index = leaf.depth() - 1;
-            while (!node.isRoot()) {
-                params[index] = ((BaseNode) node).toNetworkData();
-                node = node.parent();
-                index--;
-            }
-            overloads.add(new CommandOverloadData(false, params));
-        }
-        if (overloads.isEmpty()) {
-            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
-        }
-
-        // Flags
-        var flags = new HashSet<CommandData.Flag>();
-        flags.add(CommandData.Flag.NOT_CHEAT);
-        if (command.isDebugCommand()) {
-            flags.add(CommandData.Flag.TEST_USAGE);
-        }
-
-        return new CommandData(
-                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
-                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
-        );
-    }
-
-    public void sendPacket(BedrockPacket packet) {
         if (!getClientState().canHandlePackets()) {
             return;
         }
@@ -406,7 +298,12 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         this.clientSession.sendPacket(event.getPacket());
     }
 
-    public void sendPacketImmediately(BedrockPacket packet) {
+    @Override
+    public void sendPacketImmediately(Object p) {
+        if (!(p instanceof BedrockPacket packet)) {
+            return;
+        }
+
         if (!getClientState().canHandlePackets()) {
             return;
         }
@@ -528,7 +425,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         var loc = thisPlayer.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
-        packet.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
+        packet.setPlayerPosition(Vector3f.from(loc.x(), loc.y() + 1.62, loc.z()));
         packet.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
         // We don't send world seed to client for security reason
         packet.setSeed(0L);

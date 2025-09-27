@@ -73,8 +73,9 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
 
     @Override
     public NbtMap saveNBT() {
-        var builder = NbtMap.builder()
-                .putString(TAG_ID, blockEntityType.getName())
+        var builder = NbtMap.builder();
+        manager.callEvent(new CBlockEntitySaveNBTEvent(builder));
+        builder.putString(TAG_ID, blockEntityType.getName())
                 .putInt(TAG_X, position.x())
                 .putInt(TAG_Y, position.y())
                 .putInt(TAG_Z, position.z())
@@ -85,26 +86,24 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         if (!persistentDataContainer.isEmpty()) {
             builder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
-        manager.callEvent(new CBlockEntitySaveNBTEvent(builder));
         return builder.build();
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
+        manager.callEvent(new CBlockEntityLoadNBTEvent(nbt));
         nbt.listenForString(TAG_CUSTOM_NAME, customName -> this.customName = customName);
 
-        var pos = new Position3i(position);
-        pos.x = nbt.getInt(TAG_X, position.x());
-        pos.y = nbt.getInt(TAG_Y, position.y());
-        pos.z = nbt.getInt(TAG_Z, position.z());
-        position = pos;
+        var pos = new Position3i(this.position);
+        pos.x = nbt.getInt(TAG_X, this.position.x());
+        pos.y = nbt.getInt(TAG_Y, this.position.y());
+        pos.z = nbt.getInt(TAG_Z, this.position.z());
+        this.position = pos;
 
         nbt.listenForCompound(TAG_PDC, customNbt -> {
             this.persistentDataContainer.clear();
             this.persistentDataContainer.putAll(customNbt);
         });
-
-        manager.callEvent(new CBlockEntityLoadNBTEvent(nbt));
     }
 
     /**

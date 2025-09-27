@@ -1,5 +1,6 @@
 package org.allaymc.server.network.processor.login;
 
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
@@ -21,8 +22,7 @@ import java.util.UUID;
  */
 public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProcessor<ResourcePackClientResponsePacket> {
     @Override
-    public void handle(EntityPlayerImpl p, ResourcePackClientResponsePacket packet) {
-        var player = (EntityPlayerImpl) p;
+    public void handle(EntityPlayer player, ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
             case SEND_PACKS -> {
                 for (var packId : packet.getPackIds()) {
@@ -40,7 +40,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                 MultiVersion.adaptExperimentData(player, packetToSend.getExperiments());
                 player.sendPacket(packetToSend);
             }
-            case COMPLETED -> ((EntityPlayerClientComponentImpl) player.getPlayerClientComponent()).initializePlayer();
+            case COMPLETED -> ((EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent()).initializePlayer();
             default -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         }
     }

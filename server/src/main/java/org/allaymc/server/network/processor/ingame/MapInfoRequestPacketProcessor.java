@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.interfaces.BlockEntityItemFrame;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMapInfoRequestEvent;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.MapInfoRequestPacket;
@@ -19,7 +19,7 @@ import org.joml.Vector3d;
 public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoRequestPacket> {
 
     @Override
-    public void handleSync(EntityPlayerImpl player, MapInfoRequestPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayer player, MapInfoRequestPacket packet, long receiveTime) {
         var mapId = packet.getUniqueMapId();
 
         // Try to find the map item in the player's offhand and inventory

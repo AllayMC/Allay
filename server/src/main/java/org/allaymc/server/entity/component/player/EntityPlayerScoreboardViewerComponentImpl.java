@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerScoreboardViewerComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
@@ -29,7 +30,7 @@ public class EntityPlayerScoreboardViewerComponentImpl implements EntityPlayerSc
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_player_scoreboard_viewer_component");
 
     @Dependency
-    protected EntityPlayerClientComponentImpl clientComponent;
+    protected EntityPlayerClientComponent clientComponent;
 
     @ComponentObject
     protected EntityPlayer thisPlayer;

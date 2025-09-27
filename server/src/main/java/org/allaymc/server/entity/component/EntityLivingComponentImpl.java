@@ -119,13 +119,17 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         if (damage.isEnchanted()) {
             thisEntity.applyAction(SimpleEntityAction.ENCHANTED_HIT);
         }
+
+        // Call the event in advance, as it may return early due to a short circuit later
         this.manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 
-        if (!(damage.getAttacker() instanceof Entity entity)) {
+        if (damage.getAttacker() instanceof Entity entity) {
+            ((ComponentClass) entity).getManager().callEvent(CEntityAttackEvent.INSTANCE);
+        } else {
             return;
         }
 
-        ((ComponentClass) entity).getManager().callEvent(CEntityAttackEvent.INSTANCE);
+
         if (!damage.isHasKnockback()) {
             return;
         }
@@ -498,8 +502,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     }
 
     protected void onDie() {
-        new EntityDieEvent(thisEntity).call();
         manager.callEvent(CEntityDieEvent.INSTANCE);
+        new EntityDieEvent(thisEntity).call();
 
         this.effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         this.baseComponent.setState(EntityState.DEAD);

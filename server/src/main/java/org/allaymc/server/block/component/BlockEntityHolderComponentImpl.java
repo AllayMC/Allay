@@ -96,21 +96,18 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     @EventHandler
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().getPosition());
-        var blockEntity = getBlockEntity(pos);
-        forwardEvent(blockEntity, event);
+        forwardEvent(getBlockEntity(pos), event);
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickedBlockPos();
-        var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
-        forwardEvent(blockEntity, event);
+        forwardEvent(getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension()), event);
     }
 
     @EventHandler
     protected void onPunch(CBlockOnPunchEvent event) {
-        var blockEntity = getBlockEntity(event.getCurrentBlock().getPosition());
-        forwardEvent(blockEntity, event);
+        forwardEvent(getBlockEntity(event.getCurrentBlock().getPosition()), event);
     }
 
     protected void forwardEvent(BlockEntity blockEntity, Event event) {

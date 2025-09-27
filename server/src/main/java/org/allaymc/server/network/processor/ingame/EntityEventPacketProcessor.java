@@ -2,7 +2,7 @@ package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.action.SimpleEntityAction;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
@@ -15,7 +15,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class EntityEventPacketProcessor extends PacketProcessor<EntityEventPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayerImpl player, EntityEventPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayer player, EntityEventPacket packet, long receiveTime) {
         return switch (packet.getType()) {
             case EATING_ITEM -> {
                 if (packet.getData() == 0 || packet.getRuntimeEntityId() != player.getRuntimeId()) {

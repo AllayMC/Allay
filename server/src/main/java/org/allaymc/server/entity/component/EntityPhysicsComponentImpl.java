@@ -449,10 +449,9 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             return;
         }
 
+        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
         var blockUnder = getBlockStateStandingOn();
         blockUnder.getBehavior().onEntityFallOn(thisEntity, blockUnder);
-
-        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
         this.fallDistance = 0;
     }
 

@@ -73,12 +73,7 @@ public final class Allay {
             // Enable sentry only in non-dev build
             Sentry.close();
         }
-        ResourceLeakDetector.setLevel(switch (Server.SETTINGS.networkSettings().resourceLeakDetectorLevel()) {
-            case DISABLED -> ResourceLeakDetector.Level.DISABLED;
-            case SIMPLE -> ResourceLeakDetector.Level.SIMPLE;
-            case ADVANCED -> ResourceLeakDetector.Level.ADVANCED;
-            case PARANOID -> ResourceLeakDetector.Level.PARANOID;
-        });
+        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
         // Disable scientific notation in joml
         System.setProperty("joml.format", "false");
         // Enable async logging

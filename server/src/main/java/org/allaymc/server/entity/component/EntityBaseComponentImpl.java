@@ -138,11 +138,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     public void tick(long currentTick) {
-        computeAndNotifyCollidedBlocks();
         manager.callEvent(new CEntityTickEvent(currentTick));
+        tickBlockCollision();
     }
 
-    protected void computeAndNotifyCollidedBlocks() {
+    protected void tickBlockCollision() {
         var aabb = getOffsetAABBForCollisionCheck();
         var dimension = getDimension();
         dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
@@ -379,18 +379,21 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
+        manager.callEvent(new CEntitySaveNBTEvent(builder));
+
         builder.putString(TAG_IDENTIFIER, entityType.getIdentifier().toString());
         AllayNbtUtils.writeVector3f(builder, TAG_POS, (float) location.x, (float) location.y, (float) location.z);
         AllayNbtUtils.writeVector2f(builder, TAG_ROTATION, (float) location.yaw(), (float) location.pitch());
+
         if (!tags.isEmpty()) {
             builder.putList(TAG_TAGS, NbtType.STRING, new ArrayList<>(tags));
         }
+
         if (!persistentDataContainer.isEmpty()) {
             builder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
+
         saveUniqueId(builder);
-        var event = new CEntitySaveNBTEvent(builder);
-        manager.callEvent(event);
         return builder.build();
     }
 
@@ -400,6 +403,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void loadNBT(NbtMap nbt) {
+        manager.callEvent(new CEntityLoadNBTEvent(nbt));
+
         if (nbt.containsKey(TAG_POS)) {
             var pos = readVector3f(nbt, TAG_POS);
             location.set(pos.x, pos.y, pos.z);
@@ -420,8 +425,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         });
 
         loadUniqueId(nbt);
-        var event = new CEntityLoadNBTEvent(nbt);
-        manager.callEvent(event);
     }
 
     protected void loadUniqueId(NbtMap nbt) {

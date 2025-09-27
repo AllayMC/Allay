@@ -1,5 +1,6 @@
 package org.allaymc.server.registry.populator;
 
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionListener;
 import org.allaymc.api.permission.Permissions;
@@ -35,15 +36,15 @@ public class PermissionRegistryPopulator implements Runnable {
         );
     }
 
-    private static PermissionListener ifIsPlayer(BiConsumer<EntityPlayerImpl, Boolean> consumer) {
+    private static PermissionListener ifIsPlayer(BiConsumer<EntityPlayer, Boolean> consumer) {
         return (permissible, value) -> {
-            if (permissible instanceof EntityPlayerImpl player) {
+            if (permissible instanceof EntityPlayer player) {
                 consumer.accept(player, value);
             }
         };
     }
 
-    private static EntityPlayerClientComponentImpl getClientComponent(EntityPlayerImpl player) {
-        return (EntityPlayerClientComponentImpl) player.getPlayerClientComponent();
+    private static EntityPlayerClientComponentImpl getClientComponent(EntityPlayer player) {
+        return (EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent();
     }
 }

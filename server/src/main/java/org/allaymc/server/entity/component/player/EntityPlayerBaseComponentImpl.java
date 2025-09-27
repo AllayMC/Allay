@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerType;
@@ -32,6 +33,7 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.TextFormat;
@@ -39,6 +41,7 @@ import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
+import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -50,22 +53,17 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
+import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -79,21 +77,29 @@ import static org.allaymc.server.network.NetworkHelper.toNetwork;
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl implements EntityPlayerBaseComponent {
 
     protected static final String TAG_PERMISSION = "Permission";
+
     protected static final String TAG_OFFHAND = "Offhand";
     protected static final String TAG_INVENTORY = "Inventory";
     protected static final String TAG_ARMOR = "Armor";
+    protected static final String TAG_ENDER_ITEMS = "EnderItems";
+
     protected static final String TAG_ENCHANTMENT_SEED = "EnchantmentSeed";
     protected static final String TAG_GAME_TYPE = "GameType";
     protected static final String TAG_SPAWN_POINT = "SpawnPoint";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
-    protected static final String TAG_ENDER_ITEMS = "EnderItems";
+
     protected static final String TAG_EXPERIENCE_LEVEL = "ExperienceLevel";
     protected static final String TAG_EXPERIENCE_PROGRESS = "ExperienceProgress";
+
     protected static final String TAG_FOOD_LEVEL = "FoodLevel";
     protected static final String TAG_FOOD_SATURATION_LEVEL = "FoodSaturationLevel";
     protected static final String TAG_FOOD_EXHAUSTION_LEVEL = "FoodExhaustionLevel";
     protected static final String TAG_FOOD_TICK_TIMER = "FoodTickTimer";
+
+    protected static final String TAG_SPEED = "Speed";
+    protected static final String TAG_FLY_SPEED = "FlySpeed";
+    protected static final String TAG_VERTICAL_FLY_SPEED = "VerticalFlySpeed";
 
     protected static final int FOOD_TICK_THRESHOLD = 80;
     /**
@@ -241,7 +247,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setSpeed(float speed) {
         if (this.speed != speed) {
             this.speed = speed;
-            this.clientComponent.sendSpeed(this.speed);
+            sendAttribute(new AttributeData(
+                    "minecraft:movement", 0, Float.MAX_VALUE,
+                    this.speed, 0, Float.MAX_VALUE, EntityPlayerBaseComponent.DEFAULT_SPEED,
+                    Collections.emptyList()
+            ));
         }
     }
 
@@ -284,9 +294,57 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         tickPlayerDataAutoSave();
 
         if (this.requireResendingCommands) {
-            this.clientComponent.sendCommands();
+            sendCommands();
             this.requireResendingCommands = false;
         }
+    }
+
+    protected void sendCommands() {
+        var packet = new AvailableCommandsPacket();
+        Registries.COMMANDS.getContent().values().stream()
+                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
+                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
+        this.clientComponent.sendPacket(packet);
+    }
+
+    protected CommandData encodeCommand(Command command) {
+        // Aliases
+        CommandEnumData aliases = null;
+        if (!command.getAliases().isEmpty()) {
+            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
+            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
+            values.put(command.getName(), Collections.emptySet());
+            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
+        }
+
+        // Overloads
+        var overloads = new ArrayList<CommandOverloadData>();
+        for (var leaf : command.getCommandTree().getLeaves()) {
+            var params = new CommandParamData[leaf.depth()];
+            var node = leaf;
+            var index = leaf.depth() - 1;
+            while (!node.isRoot()) {
+                params[index] = ((BaseNode) node).toNetworkData();
+                node = node.parent();
+                index--;
+            }
+            overloads.add(new CommandOverloadData(false, params));
+        }
+        if (overloads.isEmpty()) {
+            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
+        }
+
+        // Flags
+        var flags = new HashSet<CommandData.Flag>();
+        flags.add(CommandData.Flag.NOT_CHEAT);
+        if (command.isDebugCommand()) {
+            flags.add(CommandData.Flag.TEST_USAGE);
+        }
+
+        return new CommandData(
+                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
+                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
+        );
     }
 
     protected void tickFood() {
@@ -373,7 +431,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.experienceLevel = event.getNewExperienceLevel();
-        this.clientComponent.sendExperienceLevel(this.experienceLevel);
+        sendAttribute(new AttributeData("minecraft:player.level", 0, Float.MAX_VALUE, this.experienceLevel));
     }
 
     @Override
@@ -384,7 +442,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.experienceProgress = value;
-        this.clientComponent.sendExperienceProgress(this.experienceProgress);
+        sendAttribute(new AttributeData("minecraft:player.experience", 0, 1, this.experienceProgress));
     }
 
     @Override
@@ -396,19 +454,41 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.foodLevel = event.getNewFoodLevel();
-        this.clientComponent.sendFoodLevel(this.foodLevel);
+        var max = EntityPlayerBaseComponent.MAX_FOOD_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.hunger", 0, max,
+                this.foodLevel, 0, max, max,
+                Collections.emptyList()
+        ));
     }
 
     @Override
     public void setFoodSaturationLevel(float value) {
         this.foodSaturationLevel = Math.max(0, Math.min(value, MAX_FOOD_SATURATION_LEVEL));
-        this.clientComponent.sendFoodSaturationLevel(this.foodSaturationLevel);
+        var max = EntityPlayerBaseComponent.MAX_FOOD_SATURATION_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.saturation", 0, max,
+                this.foodSaturationLevel, 0, max, max,
+                Collections.emptyList()
+        ));
     }
 
     @Override
     public void setFoodExhaustionLevel(float value) {
         this.foodExhaustionLevel = Math.max(0, Math.min(value, MAX_FOOD_EXHAUSTION_LEVEL));
-        this.clientComponent.sendFoodExhaustionLevel(this.foodExhaustionLevel);
+        var max = EntityPlayerBaseComponent.MAX_FOOD_EXHAUSTION_LEVEL;
+        sendAttribute(new AttributeData(
+                "minecraft:player.exhaustion", 0, max,
+                this.foodExhaustionLevel, 0, max, 0,
+                Collections.emptyList()
+        ));
+    }
+
+    protected void sendAttribute(AttributeData attributeData) {
+        var packet = new UpdateAttributesPacket();
+        packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
+        packet.getAttributes().add(attributeData);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
@@ -450,12 +530,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void computeAndNotifyCollidedBlocks() {
+    protected void tickBlockCollision() {
         if (this.gameMode == GameMode.SPECTATOR) {
             return;
         }
 
-        super.computeAndNotifyCollidedBlocks();
+        super.tickBlockCollision();
     }
 
     protected void tickPlayerDataAutoSave() {
@@ -683,7 +763,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
-                .putCompound(TAG_PERMISSION, permissionGroup.saveNBT())
+                // General
+                .putCompound(TAG_PERMISSION, this.permissionGroup.saveNBT())
+                .putInt(TAG_ENCHANTMENT_SEED, this.enchantmentSeed)
+                .putInt(TAG_GAME_TYPE, toNetwork(this.gameMode).ordinal())
+                .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
+                // Container
                 .putList(
                         TAG_OFFHAND,
                         NbtType.COMPOUND,
@@ -700,15 +785,18 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         TAG_ENDER_ITEMS,
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).saveNBT())
-                .putInt(TAG_ENCHANTMENT_SEED, enchantmentSeed)
-                .putInt(TAG_GAME_TYPE, toNetwork(gameMode).ordinal())
-                .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
-                .putInt(TAG_EXPERIENCE_LEVEL, experienceLevel)
-                .putFloat(TAG_EXPERIENCE_PROGRESS, experienceProgress)
+                // Experience
+                .putInt(TAG_EXPERIENCE_LEVEL, this.experienceLevel)
+                .putFloat(TAG_EXPERIENCE_PROGRESS, this.experienceProgress)
+                // Food
                 .putInt(TAG_FOOD_LEVEL, foodLevel)
-                .putFloat(TAG_FOOD_SATURATION_LEVEL, foodSaturationLevel)
-                .putFloat(TAG_FOOD_EXHAUSTION_LEVEL, foodExhaustionLevel)
-                .putInt(TAG_FOOD_TICK_TIMER, foodTickTimer)
+                .putFloat(TAG_FOOD_SATURATION_LEVEL, this.foodSaturationLevel)
+                .putFloat(TAG_FOOD_EXHAUSTION_LEVEL, this.foodExhaustionLevel)
+                .putInt(TAG_FOOD_TICK_TIMER, this.foodTickTimer)
+                // Speed
+                .putFloat(TAG_SPEED, this.speed)
+                .putFloat(TAG_FLY_SPEED, this.flySpeed)
+                .putFloat(TAG_VERTICAL_FLY_SPEED, this.verticalFlySpeed)
                 .build();
     }
 
@@ -723,7 +811,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
+        // General
         nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionGroup.loadNBT(permNbt, thisPlayer));
+        nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
+        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(fromNetwork(GameType.from(id)), true));
+        if (nbt.containsKey(TAG_SPAWN_POINT)) {
+            loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
+        } else {
+            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+        }
+
+        // Container
         nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
                 containerHolderComponent.getContainer(ContainerType.OFFHAND).loadNBT(offhandNbt)
         );
@@ -736,19 +834,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt ->
                 containerHolderComponent.getContainer(ContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
-        nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameMode(fromNetwork(GameType.from(id)), true));
-        if (nbt.containsKey(TAG_SPAWN_POINT)) {
-            loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
-        } else {
-            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
-        }
+
+        // Experience
         nbt.listenForInt(TAG_EXPERIENCE_LEVEL, this::setExperienceLevel);
         nbt.listenForFloat(TAG_EXPERIENCE_PROGRESS, this::setExperienceProgress);
+
+        // Food
         nbt.listenForInt(TAG_FOOD_LEVEL, this::setFoodLevel);
         nbt.listenForFloat(TAG_FOOD_SATURATION_LEVEL, this::setFoodSaturationLevel);
         nbt.listenForFloat(TAG_FOOD_EXHAUSTION_LEVEL, this::setFoodExhaustionLevel);
         nbt.listenForInt(TAG_FOOD_TICK_TIMER, value -> this.foodTickTimer = value);
+
+        // Speed
+        nbt.listenForFloat(TAG_SPEED, this::setSpeed);
+        nbt.listenForFloat(TAG_FLY_SPEED, this::setFlySpeed);
+        nbt.listenForFloat(TAG_VERTICAL_FLY_SPEED, this::setVerticalFlySpeed);
     }
 
     protected void loadSpawnPoint(NbtMap nbt) {

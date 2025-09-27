@@ -6,7 +6,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 /**
  * ChunkLoader represents a loader that will load chunks in the dimension. A chunk loader
- * is also a {@link WorldViewer}.
+ * is also a {@link WorldViewer} since it will view stuff like entities when loading chunks.
  *
  * @author daoge_cmd
  */

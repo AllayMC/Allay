@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
@@ -17,7 +18,7 @@ import org.joml.Vector3dc;
 public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponentImpl {
 
     @Dependency
-    protected EntityPlayerClientComponentImpl clientComponent;
+    protected EntityPlayerClientComponent clientComponent;
 
     @EventHandler
     protected void onGameModeChange(CPlayerGameModeChangeEvent event) {

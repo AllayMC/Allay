@@ -1,10 +1,10 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerChatEvent;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
@@ -15,7 +15,7 @@ import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 @Slf4j
 public class TextPacketProcessor extends PacketProcessor<TextPacket> {
     @Override
-    public void handleSync(EntityPlayerImpl player, TextPacket packet, long receiveTime) {
+    public void handleSync(EntityPlayer player, TextPacket packet, long receiveTime) {
         if (packet.getType() != TextPacket.Type.CHAT) {
             log.warn("Player {} attempted to send a non-chat text packet", player.getOriginName());
             return;

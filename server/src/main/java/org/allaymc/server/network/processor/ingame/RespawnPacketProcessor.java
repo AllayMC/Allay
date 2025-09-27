@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -15,7 +15,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayerImpl player, RespawnPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayer player, RespawnPacket packet, long receiveTime) {
         if (packet.getState() != RespawnPacket.State.CLIENT_READY) {
             log.warn("Respawn state must be CLIENT_READY, but got {}", packet.getState());
             return PacketSignal.HANDLED;

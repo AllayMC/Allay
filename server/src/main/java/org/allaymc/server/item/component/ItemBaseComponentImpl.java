@@ -136,38 +136,36 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void loadExtraTag(NbtMap extraTag) {
+        manager.callEvent(new CItemLoadExtraTagEvent(extraTag));
+
         this.damage = extraTag.getInt(TAG_DAMAGE, 0);
         this.repairCost = extraTag.getInt(TAG_REPAIR_COST, 0);
+
         extraTag.listenForCompound(TAG_DISPLAY, displayNbt -> {
             this.customName = displayNbt.getString(TAG_CUSTOM_NAME);
             this.lore = displayNbt.getList(TAG_LORE, NbtType.STRING);
         });
-
         extraTag.listenForList(TAG_ENCHANTMENT, NbtType.COMPOUND, enchsNbt -> enchsNbt.forEach(enchNbt -> {
             var enchantment = EnchantmentHelper.fromNBT(enchNbt);
             this.enchantments.put(enchantment.getType(), enchantment);
         }));
-
         extraTag.listenForCompound(TAG_BLOCK_ENTITY, nbt -> this.blockEntityNBT = nbt);
-
         extraTag.listenForByte(TAG_LOCK_MODE, lockMode -> this.lockMode = ItemLockMode.values()[lockMode]);
-
         extraTag.listenForCompound(TAG_PDC, customNbt -> {
             this.persistentDataContainer.clear();
             this.persistentDataContainer.putAll(customNbt);
         });
 
-        var event = new CItemLoadExtraTagEvent(extraTag);
-        manager.callEvent(event);
     }
 
     @Override
     public NbtMap saveExtraTag() {
         var nbtBuilder = NbtMap.builder();
+        manager.callEvent(new CItemSaveExtraTagEvent(nbtBuilder));
+
         if (damage != 0) {
             nbtBuilder.putInt(TAG_DAMAGE, damage);
         }
-
         if (repairCost > 0) {
             nbtBuilder.putInt(TAG_REPAIR_COST, repairCost);
         }
@@ -202,9 +200,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             nbtBuilder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
 
-        var event = new CItemSaveExtraTagEvent(nbtBuilder);
-        manager.callEvent(event);
-
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }
 
@@ -233,8 +228,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        var event = new CItemRightClickOnBlockEvent(dimension, placeBlockPos, interactInfo);
-        manager.callEvent(event);
+        manager.callEvent(new CItemRightClickOnBlockEvent(dimension, placeBlockPos, interactInfo));
     }
 
     @Override
@@ -322,8 +316,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void clickItemInAir(EntityPlayer player) {
-        var event = new CItemClickInAirEvent(player);
-        manager.callEvent(event);
+        manager.callEvent(new CItemClickInAirEvent(player));
     }
 
     @Override
@@ -511,7 +504,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         var blockType = blockState.getBlockType();
 
         var requiredToolTier = BlockHelper.getRequiredToolTier(blockType);
-        // requiredToolTier != null means that this block has tool tier requirement
+        // requiredToolTier != null means that this block has a tool tier requirement
         if (requiredToolTier != null) {
             var toolTier = ItemHelper.getToolTier(itemType);
             if (toolTier == null || !toolTier.isBetterThan(requiredToolTier)) {

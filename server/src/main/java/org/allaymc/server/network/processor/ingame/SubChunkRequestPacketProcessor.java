@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.DimensionInfo;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.allaymc.server.world.chunk.AllayChunkSection;
 import org.allaymc.server.world.chunk.ChunkEncoder;
@@ -33,7 +32,7 @@ import java.util.Objects;
 public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequestPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayerImpl player, SubChunkRequestPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayer player, SubChunkRequestPacket packet, long receiveTime) {
         var dimensionInfo = Objects.requireNonNull(DimensionInfo.of(packet.getDimension()));
         if (dimensionInfo != player.getDimension().getDimensionInfo()) {
             // Outdated sub chunk request from a previous dimension

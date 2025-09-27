@@ -5,6 +5,7 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.LoginData;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.net.SocketAddress;
 
@@ -113,4 +114,20 @@ public interface EntityPlayerClientComponent extends EntityComponent {
      * @return the ping of the client
      */
     int getPing();
+
+    /**
+     * Sends a packet to the client.
+     *
+     * @param packet the packet object to be sent to the client. The type of the packet depends on the implementation.
+     */
+    @ApiStatus.Internal
+    void sendPacket(Object packet);
+
+    /**
+     * Immediately sends a packet to the client without any delay or buffering.
+     *
+     * @param packet the packet to be sent to the client. The type of the packet depends on the implementation.
+     */
+    @ApiStatus.Internal
+    void sendPacketImmediately(Object packet);
 }

@@ -22,6 +22,7 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerChunkLoaderComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
@@ -116,7 +117,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Dependency
     protected EntityBaseComponent baseComponent;
     @Dependency
-    protected EntityPlayerClientComponentImpl clientComponent;
+    protected EntityPlayerClientComponent clientComponent;
 
     @Getter
     protected int chunkLoadingRadius;

@@ -133,11 +133,6 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("However, independent network threads will increase CPU usage to a certain extent")
         private boolean enableIndependentNetworkThread = true;
 
-        @Comment("Represents the level of resource leak detection.")
-        @Comment("Possible values: DISABLED, SIMPLE, ADVANCED, PARANOID")
-        @CustomKey("resource-leak-detector-level")
-        private ResourceLeakDetectorLevel resourceLeakDetectorLevel = ResourceLeakDetectorLevel.DISABLED;
-
         @Comment("The maximum number of datagram packets each address can send within one RakNet tick (10ms)")
         @Comment("Default value is 120 packets, and will be Integer.MAX_VALUE if the server is running in dev mode")
         @CustomKey("raknet-packet-limit")
@@ -164,13 +159,6 @@ public class ServerSettings extends OkaeriConfig {
         public enum CompressionAlgorithm {
             ZLIB,
             SNAPPY
-        }
-
-        public enum ResourceLeakDetectorLevel {
-            DISABLED,
-            SIMPLE,
-            ADVANCED,
-            PARANOID;
         }
     }
 

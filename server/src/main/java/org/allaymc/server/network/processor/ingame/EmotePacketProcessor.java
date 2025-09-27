@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.EmotePacket;
@@ -20,7 +20,7 @@ public class EmotePacketProcessor extends PacketProcessor<EmotePacket> {
     protected long lastEmoteTime;
 
     @Override
-    public PacketSignal handleAsync(EntityPlayerImpl player, EmotePacket packet, long receiveTime) {
+    public PacketSignal handleAsync(EntityPlayer player, EmotePacket packet, long receiveTime) {
         if (receiveTime - this.lastEmoteTime < EMOTE_TIME_LIMIT) {
             // Emote too fast
             return PacketSignal.HANDLED;

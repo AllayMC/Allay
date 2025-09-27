@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -10,7 +11,6 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.*;
 import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
@@ -21,7 +21,7 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHolderComponentImpl {
 
     @ComponentObject
-    private EntityPlayerImpl thisPlayer;
+    private EntityPlayer thisPlayer;
 
     public EntityPlayerContainerHolderComponentImpl() {
         super(

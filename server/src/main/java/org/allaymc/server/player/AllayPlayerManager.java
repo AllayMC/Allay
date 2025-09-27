@@ -279,7 +279,7 @@ public class AllayPlayerManager implements PlayerManager {
         broadcastPacket(packet);
     }
 
-    public void sendPlayerListTo(EntityPlayerImpl player) {
+    public void sendPlayerListTo(EntityPlayer player) {
         var packet = new PlayerListPacket();
         packet.setAction(PlayerListPacket.Action.ADD);
         for (var other : players.values()) {

@@ -1,5 +1,6 @@
 package org.allaymc.server.network.processor.login;
 
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -16,7 +17,7 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestNetworkSettingsPacket;
  */
 public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor<RequestNetworkSettingsPacket> {
     @Override
-    public void handle(EntityPlayerImpl player, RequestNetworkSettingsPacket packet) {
+    public void handle(EntityPlayer player, RequestNetworkSettingsPacket packet) {
         var protocolVersion = packet.getProtocolVersion();
         var codec = ProtocolInfo.findCodec(protocolVersion);
         if (codec == null) {
@@ -38,14 +39,15 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             return;
         }
 
-        player.getClientSession().setCodec(codec);
+        var session = ((EntityPlayerImpl) player).getClientSession();
+        session.setCodec(codec);
 
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(PacketCompressionAlgorithm.valueOf(Server.SETTINGS.networkSettings().compressionAlgorithm().name()));
         // NOTICE: We don't need to set the compression threshold after 1.20.60
         player.sendPacketImmediately(settingsPacket);
         // NOTICE: The NetworkSettingsPacket shouldn't be compressed, so we set the compression after sending the packet
-        player.getClientSession().setCompression(settingsPacket.getCompressionAlgorithm());
+        session.setCompression(settingsPacket.getCompressionAlgorithm());
     }
 
     @Override

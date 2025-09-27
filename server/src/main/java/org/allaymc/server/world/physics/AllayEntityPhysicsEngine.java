@@ -384,7 +384,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link PacketProcessor#handleAsync(EntityPlayerImpl, org.cloudburstmc.protocol.bedrock.packet.BedrockPacket, long)}
+     * See {@link PacketProcessor#handleAsync(EntityPlayer, org.cloudburstmc.protocol.bedrock.packet.BedrockPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3dc newLoc) {
         if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {

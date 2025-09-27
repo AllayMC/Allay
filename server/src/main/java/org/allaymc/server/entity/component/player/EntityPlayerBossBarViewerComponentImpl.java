@@ -3,6 +3,7 @@ package org.allaymc.server.entity.component.player;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.entity.component.player.EntityPlayerBossBarViewerComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -21,7 +22,7 @@ public class EntityPlayerBossBarViewerComponentImpl implements EntityPlayerBossB
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Dependency
-    protected EntityPlayerClientComponentImpl clientComponent;
+    protected EntityPlayerClientComponent clientComponent;
 
     @Override
     public void viewBossBar(BossBar bossBar) {
