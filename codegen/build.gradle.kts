@@ -7,7 +7,3 @@ dependencies {
     implementation(libs.bundles.fastutil)
     implementation(libs.annotations)
 }
-
-tasks.publish {
-    enabled = false
-}
