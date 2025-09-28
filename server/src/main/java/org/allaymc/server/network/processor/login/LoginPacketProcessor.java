@@ -30,7 +30,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         try {
             loginData = AllayLoginData.decode(packet);
         } catch (Throwable t) {
-            log.warn("Failed to decode login data of player {}", player.getOriginName(), t);
+            log.warn("Failed to decode login data of {}", player.getSocketAddress(), t);
             player.disconnect();
             return;
         }
