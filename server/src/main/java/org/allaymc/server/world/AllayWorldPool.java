@@ -12,7 +12,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.api.world.WorldSettings;
+import org.allaymc.api.world.WorldSetting;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -45,9 +45,9 @@ public final class AllayWorldPool implements WorldPool {
         int changeNumber = 0;
         for (var file : Objects.requireNonNull(WORLDS_FOLDER.toFile().listFiles(File::isDirectory))) {
             if (!this.worldConfig.worlds().containsKey(file.getName())) {
-                var worldEntry = WorldSettings.WorldSetting.builder()
+                var worldEntry = WorldSetting.builder()
                         .enable(true)
-                        .overworld(new WorldSettings.WorldSetting.DimensionSettings("VOID", ""))
+                        .overworld(new WorldSetting.DimensionSettings("VOID", ""))
                         .nether(null)
                         .theEnd(null)
                         .storageType("LEVELDB")
@@ -82,7 +82,7 @@ public final class AllayWorldPool implements WorldPool {
     }
 
     @Override
-    public void loadWorld(String name, WorldSettings.WorldSetting setting) {
+    public void loadWorld(String name, WorldSetting setting) {
         if (!setting.enable()) {
             return;
         }
@@ -176,7 +176,7 @@ public final class AllayWorldPool implements WorldPool {
         return true;
     }
 
-    private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldSetting.DimensionSettings settings) {
+    private WorldGenerator tryCreateWorldGenerator(WorldSetting.DimensionSettings settings) {
         var factory = Registries.WORLD_GENERATOR_FACTORIES.get(settings.generatorType());
         if (factory == null) {
             log.error("Cannot find world generator {}", settings.generatorType());

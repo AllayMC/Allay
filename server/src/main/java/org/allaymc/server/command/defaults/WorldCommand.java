@@ -9,8 +9,9 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.world.WorldSettings;
+import org.allaymc.api.world.WorldSetting;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.server.world.AllayWorldPool;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -106,11 +107,13 @@ public class WorldCommand extends VanillaCommand {
                 .str("world")
                 .exec(context -> {
                     String worldName = context.getResult(1);
-                    var worldSetting = Server.getInstance().getWorldPool().getWorldConfig().worlds().get(worldName);
+
+                    var worldSetting = ((AllayWorldPool) Server.getInstance().getWorldPool()).getWorldConfig().worlds().get(worldName);
                     if (worldSetting == null) {
                         context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
+
                     if (Server.getInstance().getWorldPool().getWorld(worldName) != null) {
                         context.addError("%" + TrKeys.ALLAY_WORLD_LOADED, worldName);
                         return context.fail();
@@ -155,21 +158,21 @@ public class WorldCommand extends VanillaCommand {
                                 var theEndGenerator = generatorTypes.get(Integer.parseInt(response.get(11)));
                                 var theEndPreset = response.get(12);
 
-                                var worldSettingBuilder = WorldSettings.WorldSetting.builder()
+                                var worldSettingBuilder = WorldSetting.builder()
                                         .enable(true)
                                         .storageType(storageType)
-                                        .overworld(WorldSettings.WorldSetting.DimensionSettings.builder()
+                                        .overworld(WorldSetting.DimensionSettings.builder()
                                                 .generatorType(overworldGenerator)
                                                 .generatorPreset(overworldPreset)
                                                 .build());
                                 if (enableNether) {
-                                    worldSettingBuilder.nether(WorldSettings.WorldSetting.DimensionSettings.builder()
+                                    worldSettingBuilder.nether(WorldSetting.DimensionSettings.builder()
                                             .generatorType(netherGenerator)
                                             .generatorPreset(netherPreset)
                                             .build());
                                 }
                                 if (enableTheEnd) {
-                                    worldSettingBuilder.theEnd(WorldSettings.WorldSetting.DimensionSettings.builder()
+                                    worldSettingBuilder.theEnd(WorldSetting.DimensionSettings.builder()
                                             .generatorType(theEndGenerator)
                                             .generatorPreset(theEndPreset)
                                             .build());
