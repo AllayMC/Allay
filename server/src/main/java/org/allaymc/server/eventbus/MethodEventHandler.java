@@ -2,8 +2,7 @@ package org.allaymc.server.eventbus;
 
 import me.sunlan.fastreflection.FastMemberLoader;
 import me.sunlan.fastreflection.FastMethod;
-import org.allaymc.api.eventbus.EventException;
-
+import lombok.extern.slf4j.Slf4j;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * @author daoge_cmd
  */
+@Slf4j
 public class MethodEventHandler extends AbstractEventHandler {
 
     protected static final Map<ClassLoader, FastMemberLoader> FAST_MEMBER_LOADERS = new ConcurrentHashMap<>();
@@ -37,7 +37,7 @@ public class MethodEventHandler extends AbstractEventHandler {
         try {
             method.invoke(instance, event);
         } catch (Throwable e) {
-            throw new EventException(e);
+            log.error("Unhandled exception occurred during event handling ", e);
         }
     }
 }
