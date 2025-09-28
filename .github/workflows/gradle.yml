@@ -74,11 +74,14 @@ jobs:
           name: allay-server
           path: ${{ steps.vars.outputs.shaded_jar_path }}
 
-      - name: Publish to JitPack
+      - name: Publish to Maven Central
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        run: |
-          chmod +x publish_to_jitpack
-          ./publish_to_jitpack
+        run: ./gradlew publishToMavenCentral
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ SONATYPE_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ SONATYPE_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ SONATYPE_SECRET_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ SONATYPE_SECRET_KEY_PASSWORD }}
 
       - name: Set Tag
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')

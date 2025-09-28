@@ -1,15 +1,12 @@
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
+
 plugins {
     id("java-library")
-    id("maven-publish")
-}
-
-tasks.jar {
-    enabled = false
+    alias(libs.plugins.publish) apply false
 }
 
 subprojects {
     apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
 
     group = "org.allaymc.allay"
 
@@ -38,6 +35,7 @@ subprojects {
         maven("https://repo.opencollab.dev/maven-releases/")
         maven("https://repo.opencollab.dev/maven-snapshots/")
         maven("https://storehouse.okaeri.eu/repository/maven-public/")
+        // TODO: remove it
         maven("https://www.jitpack.io/")
     }
 
@@ -49,51 +47,51 @@ subprojects {
         testAnnotationProcessor(rootProject.libs.lombok)
     }
 
-    publishing {
-        repositories {
-            // Jitpack requires us to publish artifacts to local maven repo
-            mavenLocal()
-        }
+    if (project.name in listOf("api", "server")) {
+        apply(plugin = "com.vanniktech.maven.publish")
 
         java {
             withSourcesJar()
         }
 
-        if (project.name in listOf("api", "server")) {
-            publications {
-                create<MavenPublication>(project.name) {
-                    from(components["java"])
+        // We already have sources jar, so no need to build javadoc which would cause a lot of warnings
+        tasks.withType<Javadoc> {
+            enabled = false
+        }
 
-                    groupId = project.group.toString()
-                    artifactId = project.name
-                    version = project.version.toString()
+        configure<MavenPublishBaseExtension> {
+            publishToMavenCentral()
+            signAllPublications()
 
-                    pom {
-                        inceptionYear.set("2023")
-                        packaging = "jar"
-                        url.set("https://github.com/AllayMC/Allay")
+            coordinates(
+                project.group.toString(),
+                project.name,
+                rootProject.property(project.name + ".version").toString() +
+                        if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-SNAPSHOT" else ""
+            )
 
-                        scm {
-                            connection.set("scm:git:git://github.com/AllayMC/Allay.git")
-                            developerConnection.set("scm:git:ssh://github.com/AllayMC/Allay.git")
-                            url.set("https://github.com/AllayMC/Allay")
-                        }
+            pom {
+                name.set(project.name)
+                description.set("The next-generation Minecraft: Bedrock Edition server software aims to be reliable, fast and feature-rich.")
+                inceptionYear.set("2023")
+                url.set("https://github.com/AllayMC/Allay")
 
-                        licenses {
-                            license {
-                                name.set("LGPL 3.0")
-                                url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
-                            }
-                        }
+                scm {
+                    connection.set("scm:git:git://github.com/AllayMC/Allay.git")
+                    developerConnection.set("scm:git:ssh://github.com/AllayMC/Allay.git")
+                    url.set("https://github.com/AllayMC/Allay")
+                }
 
-                        developers {
-                            developer {
-                                name.set("AllayMC Team")
-                                organization.set("AllayMC")
-                                organizationUrl.set("https://github.com/AllayMC")
-                            }
-                        }
+                licenses {
+                    license {
+                        name.set("LGPL 3.0")
+                        url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
                     }
+                }
+
+                organization {
+                    name.set("AllayMC")
+                    url.set("https://github.com/AllayMC")
                 }
             }
         }
