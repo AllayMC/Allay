@@ -97,7 +97,7 @@ The PDC supports a wide range of data types, such as:
 - `Boolean`
 - `PersistentDataContainer` - a way to nest PDCs within each other.
   To create a new `PersistentDataContainer`, you can use:
-  ```java
+  ```java linenums="1"
   // Get the existing container
   PersistentDataContainer container = ...;
   // Create a new container
@@ -105,7 +105,7 @@ The PDC supports a wide range of data types, such as:
   ```
 - `List` - a way to represent lists of data that can be stored via another persistent data type.
   You may create them via:
-  ```java
+  ```java linenums="1"
   // Storing a list of strings in a container by verbosely creating
   // a list data type wrapping the string data type.
   container.set(
@@ -139,7 +139,7 @@ above) and then vice versa.
 
 Here is an example of how to do that for a UUID:
 
-```java
+```java linenums="1"
 import org.allaymc.api.pdc.PersistentDataAdapterContext;
 import org.allaymc.api.pdc.PersistentDataType;
 
