@@ -50,8 +50,9 @@ public interface EntityPhysicsComponent extends EntityComponent {
      * Set the motion of this entity.
      *
      * @param motion the motion to set
+     * @return {@code true} if motion is applied (not cancelled), {@code false} otherwise.
      */
-    void setMotion(Vector3dc motion);
+    boolean setMotion(Vector3dc motion);
 
     /**
      * Get the last motion of this entity.
