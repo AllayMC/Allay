@@ -105,6 +105,7 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new RespawnPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SetDefaultGameTypePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SetPlayerGameTypePacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new SetDifficultyPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SubChunkRequestPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new TextPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new SettingsCommandPacketProcessor());

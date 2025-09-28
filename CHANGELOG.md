@@ -14,8 +14,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.7.1](https://github.com/AllayMC/Allay/compare/0.7.1...HEAD)</small>
 
-# TODO: rewrite the changelog for 0.7.2 after finish the refactor
-
 ### Added
 
 - (API) Implemented basic bed feature.
@@ -46,6 +44,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   command name will be shown blue client-side.
 - (API) Introduced class `NBTIO` which replaced the old `fromNBT()` methods in `XXXHelper` classes.
 - Implemented sharpness enchantment.
+- Implemented `SetDifficultyPacketProcessor` to support changing level difficulty through setting menu.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced a dirty flag for block layers in chunk sections. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
@@ -137,6 +136,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug where plugins lacking soft dependencies could not be loaded.
 - Fixed the bug where plugins which have dependencies will only be loaded but not enabled.
 - Fixed the sub chunk sending system.
+- Fixed the bug that food leve is not frozen when world difficulty is set to peaceful.
 
 ### Removed
 
