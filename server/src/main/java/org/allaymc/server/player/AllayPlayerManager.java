@@ -1,8 +1,13 @@
 package org.allaymc.server.player;
 
+import com.google.common.collect.Sets;
 import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.OkaeriConfig;
+import eu.okaeri.configs.annotation.Comment;
+import eu.okaeri.configs.annotation.CustomKey;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
@@ -20,8 +25,6 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.BanInfo;
-import org.allaymc.server.Whitelist;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.AllayNetworkInterface;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -323,5 +326,34 @@ public class AllayPlayerManager implements PlayerManager {
         entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
         entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
         return entry;
+    }
+
+    /**
+     * Whitelist is used to store the whitelisted player list.
+     *
+     * @author daoge_cmd
+     */
+    @Getter
+    @Accessors(fluent = true)
+    public static class Whitelist extends OkaeriConfig {
+        @Comment("Whitelisted player list. The value can be player's name or uuid")
+        private Set<String> whitelist = Sets.newConcurrentHashSet();
+    }
+
+    /**
+     * BanInfo is used to store the banned player and ip list.
+     *
+     * @author daoge_cmd
+     */
+    @Getter
+    @Accessors(fluent = true)
+    public static class BanInfo extends OkaeriConfig {
+        @CustomKey("banned-players")
+        @Comment("Banned player list. The value can be player's name or uuid")
+        private Set<String> bannedPlayers = Sets.newConcurrentHashSet();
+
+        @CustomKey("banned-ips")
+        @Comment("Banned ip list")
+        private Set<String> bannedIps = Sets.newConcurrentHashSet();
     }
 }
