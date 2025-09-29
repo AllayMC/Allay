@@ -11,7 +11,8 @@ nbt = { group = "org.allaymc", name = "NBT", version = "3.0.10" }
 # Network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta7-SNAPSHOT" }
 # State Updater
-stateupdater = { group = "org.allaymc", name = "stateupdater", version = "master-SNAPSHOT" }
+item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.100" }
+block-updater = { group = "org.allaymc.stateupdater", name = "block-updater", version = "1.21.60" }
 # Collections
 guava = { group = "com.google.guava", name = "guava", version = "33.4.8-jre" }
 # Fastutil
@@ -100,6 +101,7 @@ fastutil = [
 ]
 leveldb = ["leveldb", "leveldb-api"]
 rng = ["rng-simple", "rng-sampling"]
+stateupdater = ["item-updater", "block-updater"]
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version = "9.0.1" }

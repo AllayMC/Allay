@@ -39,7 +39,7 @@ dependencies {
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")
     }
-    implementation(libs.stateupdater)
+    implementation(libs.bundles.stateupdater)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)
