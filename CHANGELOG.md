@@ -113,6 +113,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Moved class `DamageType` out from class `DamageContainer`.
 - (API) Moved class `ServerSettings` from api to server.
 - (API) Moved class `WorldSettings` from api to server.
+- (API) Moved classes `BanInfo` and `Whitelist` from api to server. Plugin should use the APIs in `PlayerManager` instead of reading/writing
+  the config directly.
 - (API) Updated several methods in `EntityBaseComponent` to use `WorldViewer` as the viewer of entity instead of `EntityPlayer`.
 - (API) Refactored the weather system. World will hold only one `Weather` instance now.
 - (API) Refactored the container system. All container implementations are moved to server module now.

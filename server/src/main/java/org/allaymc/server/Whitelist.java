@@ -1,4 +1,4 @@
-package org.allaymc.api.server;
+package org.allaymc.server;
 
 import com.google.common.collect.Sets;
 import eu.okaeri.configs.OkaeriConfig;
