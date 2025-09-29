@@ -50,11 +50,14 @@ subprojects {
     if (project.name in listOf("api", "server")) {
         apply(plugin = "com.vanniktech.maven.publish")
 
+        project.version = rootProject.property(project.name + ".version").toString() +
+                if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
+
         java {
             withSourcesJar()
         }
 
-        // We already have sources jar, so no need to build javadoc which would cause a lot of warnings
+        // We already have sources jar, so no need to build Javadoc, which would cause a lot of warnings
         tasks.withType<Javadoc> {
             enabled = false
         }
@@ -66,8 +69,7 @@ subprojects {
             coordinates(
                 project.group.toString(),
                 project.name,
-                rootProject.property(project.name + ".version").toString() +
-                        if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-SNAPSHOT" else ""
+                project.version.toString().replace("-dev", "-SNAPSHOT")
             )
 
             pom {

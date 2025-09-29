@@ -2,15 +2,6 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCach
 import org.gradle.kotlin.dsl.support.serviceOf
 import java.io.ByteArrayOutputStream
 
-/**
- * The current version of allay-server
- *
- * This is not the same as the version of allay-api.
- * Please note that they are two things.
- */
-version = rootProject.property("server.version").toString() +
-        if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
-
 plugins {
     id("jacoco")
     id("application")

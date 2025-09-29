@@ -1,9 +1,3 @@
-/**
- * The current version of allay-api
- */
-version = rootProject.property("api.version").toString() +
-        if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
-
 dependencies {
     api(libs.nbt)
     api(libs.slf4j.api)
