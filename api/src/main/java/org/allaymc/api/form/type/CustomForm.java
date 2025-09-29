@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 
 /**
  * CustomForm is a type of form that can have a variety of elements and a submit button.
- * It is suitable when you want the player to fill and submit some information.
+ * It is suitable when you want the viewer to fill and submit some information.
  *
  * @author daoge_cmd
  */

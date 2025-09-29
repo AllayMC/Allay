@@ -38,6 +38,8 @@ public class EntityPlayerImpl extends EntityImpl implements EntityPlayer {
     protected EntityPlayerChunkLoaderComponent playerChunkLoaderComponent;
     @Delegate
     protected EntityPlayerBossBarViewerComponent playerBossBarViewerComponent;
+    @Delegate
+    protected EntityPlayerFormViewerComponent playerFormViewerComponent;
 
     public EntityPlayerImpl(EntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

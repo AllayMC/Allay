@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 /**
  * ModalForm is a type of form that can have a title, content, and two buttons.
- * It is suitable for letting the player choose between two options.
+ * It is suitable for letting the viewer choose between two options.
  *
  * @author daoge_cmd
  */
@@ -64,10 +64,10 @@ public class ModalForm extends Form {
     }
 
     /**
-     * Set the text of the true button and the action to be performed when the player clicks the button.
+     * Set the text of the true button and the action to be performed when the viewer clicks the button.
      *
      * @param trueButton the text of the true button
-     * @param onTrue     the action to be performed when the player clicks the button
+     * @param onTrue     the action to be performed when the viewer clicks the button
      * @return the form
      */
     public ModalForm trueButton(String trueButton, Runnable onTrue) {
@@ -77,9 +77,9 @@ public class ModalForm extends Form {
     }
 
     /**
-     * Set the action to be performed when the player clicks the true button.
+     * Set the action to be performed when the viewer clicks the true button.
      *
-     * @param onTrue the action to be performed when the player clicks the true button
+     * @param onTrue the action to be performed when the viewer clicks the true button
      * @return the form
      */
     public ModalForm onTrue(Runnable onTrue) {
@@ -99,10 +99,10 @@ public class ModalForm extends Form {
     }
 
     /**
-     * Set the text of the false button and the action to be performed when the player clicks the button.
+     * Set the text of the false button and the action to be performed when the viewer clicks the button.
      *
      * @param falseButton the text of the false button
-     * @param onFalse     the action to be performed when the player clicks the button
+     * @param onFalse     the action to be performed when the viewer clicks the button
      * @return the form
      */
     public ModalForm falseButton(String falseButton, Runnable onFalse) {
@@ -112,9 +112,9 @@ public class ModalForm extends Form {
     }
 
     /**
-     * Set the action to be performed when the player clicks the false button.
+     * Set the action to be performed when the viewer clicks the false button.
      *
-     * @param onFalse the action to be performed when the player clicks the false button
+     * @param onFalse the action to be performed when the viewer clicks the false button
      * @return the form
      */
     public ModalForm onFalse(Runnable onFalse) {
@@ -123,9 +123,9 @@ public class ModalForm extends Form {
     }
 
     /**
-     * Set the action to be performed when the player clicks the true or false button.
+     * Set the action to be performed when the viewer clicks the true or false button.
      *
-     * @param onResponse the action to be performed when the player clicks the true or false button
+     * @param onResponse the action to be performed when the viewer clicks the true or false button
      * @return the form
      */
     public ModalForm onResponse(Consumer<String> onResponse) {

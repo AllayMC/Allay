@@ -2,7 +2,6 @@ package org.allaymc.server.network.processor.ingame;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.server.Server;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ServerSettingsRequestPacket;
@@ -26,7 +25,7 @@ public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettin
             var pk = new ServerSettingsResponsePacket();
             pk.setFormId(serverSettingForm.left());
             pk.setFormData(serverSettingForm.right().toJson());
-            ((EntityPlayerImpl) player).sendPacket(pk);
+            player.sendPacket(pk);
             return true;
         }, 20);
         return PacketSignal.HANDLED;

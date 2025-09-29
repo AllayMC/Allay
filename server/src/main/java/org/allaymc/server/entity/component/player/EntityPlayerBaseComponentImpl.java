@@ -20,8 +20,6 @@ import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.*;
-import org.allaymc.api.form.type.CustomForm;
-import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
@@ -38,7 +36,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
@@ -66,7 +63,6 @@ import org.joml.primitives.AABBd;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.server.network.NetworkHelper.fromNetwork;
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
@@ -149,11 +145,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected boolean usingItemOnBlock, usingItemInAir;
     protected long startUsingItemInAirTime;
 
-    protected AtomicInteger formIdCounter;
-    protected Map<Integer, Form> forms;
-    protected CustomForm serverSettingForm;
-    protected int serverSettingFormId;
-
     protected Map<String, Long> cooldowns;
 
     @Getter
@@ -184,9 +175,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // seed previously, this random value will be covered
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
         this.startUsingItemInAirTime = -1;
-        this.formIdCounter = new AtomicInteger(0);
-        this.forms = new NonBlockingHashMap<>();
-        this.serverSettingFormId = -1;
         this.cooldowns = new NonBlockingHashMap<>();
         this.speed = DEFAULT_SPEED;
         this.flySpeed = DEFAULT_FLY_SPEED;
@@ -994,56 +982,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public EntityPlayer asPlayer() {
         return thisPlayer;
-    }
-
-    @Override
-    public Map<Integer, Form> getForms() {
-        return Collections.unmodifiableMap(forms);
-    }
-
-    public Form removeForm(int id) {
-        return forms.remove(id);
-    }
-
-    @Override
-    public Pair<Integer, CustomForm> getServerSettingForm() {
-        return new Pair<>(serverSettingFormId, serverSettingForm);
-    }
-
-    @Override
-    public void setServerSettingForm(CustomForm form) {
-        serverSettingFormId = assignFormId();
-        serverSettingForm = form;
-    }
-
-    @Override
-    public void removeServerSettingForm() {
-        serverSettingForm = null;
-        serverSettingFormId = -1;
-    }
-
-    @Override
-    public void showForm(Form form) {
-        if (forms.size() > 100) {
-            this.clientComponent.disconnect("Possible DoS vulnerability: More Than 100 FormWindow sent to client already.");
-        }
-        var id = assignFormId();
-        this.forms.putIfAbsent(id, form);
-
-        var packet = new ModalFormRequestPacket();
-        packet.setFormId(id);
-        packet.setFormData(form.toJson());
-        this.clientComponent.sendPacket(packet);
-    }
-
-    protected int assignFormId() {
-        return formIdCounter.getAndIncrement();
-    }
-
-    @Override
-    public void closeAllForms() {
-        this.clientComponent.sendPacket(new ClientboundCloseFormPacket());
-        this.forms.clear();
     }
 
     @Override

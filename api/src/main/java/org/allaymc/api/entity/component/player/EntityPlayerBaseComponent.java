@@ -1,22 +1,17 @@
 package org.allaymc.api.entity.component.player;
 
 import org.allaymc.api.entity.component.EntityBaseComponent;
-import org.allaymc.api.form.type.CustomForm;
-import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
-import org.allaymc.api.utils.tuple.Pair;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
-import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
@@ -384,45 +379,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      * @param spawnPoint The spawn point to set
      */
     void setSpawnPoint(Location3ic spawnPoint);
-
-    /**
-     * Get the forms send to the player that are waiting for response.
-     *
-     * @return the forms send to the player that are waiting for response
-     */
-    @UnmodifiableView
-    Map<Integer, Form> getForms();
-
-    /**
-     * Get the server setting form and its id.
-     *
-     * @return the server setting form and its id
-     */
-    Pair<Integer, CustomForm> getServerSettingForm();
-
-    /**
-     * Set a server setting form to the player.
-     *
-     * @param form the form to add
-     */
-    void setServerSettingForm(CustomForm form);
-
-    /**
-     * Remove the server setting form.
-     */
-    void removeServerSettingForm();
-
-    /**
-     * Show a form to the player.
-     *
-     * @param form the form to show
-     */
-    void showForm(Form form);
-
-    /**
-     * Close all opened forms of the player.
-     */
-    void closeAllForms();
 
     /**
      * Check if the player can reach a block at the specified position.

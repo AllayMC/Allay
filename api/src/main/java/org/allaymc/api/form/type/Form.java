@@ -1,8 +1,8 @@
 package org.allaymc.api.form.type;
 
 import com.google.gson.Gson;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormCancelReason;
+import org.allaymc.api.form.FormViewer;
 
 import java.util.function.Consumer;
 
@@ -20,26 +20,26 @@ public abstract class Form {
     protected transient Object response;
 
     /**
-     * Send this form to a specific player.
+     * Send this form to a specific viewer.
      *
-     * @param player the player that the form will be sent to
+     * @param viewer the viewer that the form will be sent to
      */
-    public void sendTo(EntityPlayer player) {
-        player.showForm(this);
+    public void sendTo(FormViewer viewer) {
+        viewer.viewForm(this);
     }
 
     /**
-     * Handle the response from the player.
+     * Handle the response from the viewer.
      * <p>
-     * If the player just close the form due to some reason (e.g. the player is opening his inventory), {@link #handleClose(FormCancelReason)}
+     * If the viewer just closes the form due to some reason (e.g. the viewer is opening his inventory), {@link #handleClose(FormCancelReason)}
      * will be called instead of this method.
      *
-     * @param data the response data from the player
+     * @param data the response data from the viewer
      */
     public abstract void handleResponse(String data);
 
     /**
-     * Handle the close of the form. This method will be called when the player close the form.
+     * Handle the close of the form. This method will be called when the viewer close the form.
      *
      * @param reason the reason why the form is closed
      */
@@ -53,7 +53,7 @@ public abstract class Form {
     }
 
     /**
-     * Add a callback that will be called when player only close the form without other actions.
+     * Add a callback that will be called when viewer only close the form without other actions.
      *
      * @param onClose the callback
      * @return the form
@@ -76,7 +76,7 @@ public abstract class Form {
     }
 
     /**
-     * Get the response from the player.
+     * Get the response from the viewer.
      *
      * @return the response
      */

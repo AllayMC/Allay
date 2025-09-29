@@ -43,6 +43,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced method `Command.isDebugCommand()` which can be overridden to determine whether the command is a debug command. Debug
   command name will be shown blue client-side.
 - (API) Introduced class `NBTIO` which replaced the old `fromNBT()` methods in `XXXHelper` classes.
+- (API) Introduced interfaces `FormViewer` and `EntityPlayerFormViewerComponent`.
 - Implemented sharpness enchantment.
 - Implemented `SetDifficultyPacketProcessor` to support changing level difficulty through setting menu.
 - Players can now extinguish the fire on the surface of the block by left-clicking.

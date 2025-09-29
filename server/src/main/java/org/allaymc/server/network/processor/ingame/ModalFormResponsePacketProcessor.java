@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormCancelReason;
 import org.allaymc.api.form.type.CustomForm;
-import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ModalFormResponsePacket;
@@ -19,8 +17,7 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
     @Override
     public void handleSync(EntityPlayer player, ModalFormResponsePacket packet, long receiveTime) {
         var id = packet.getFormId();
-        var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
-        var form = baseComponent.removeForm(id);
+        var form = player.removeForm(id);
         var isServerSettingsForm = false;
         if (form == null) {
             var serverSettingForm = player.getServerSettingForm();
@@ -38,8 +35,8 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
             form.handleResponse(formData.trim());
         } else {
             form.handleClose(switch (packet.getCancelReason().orElseThrow()) {
-                case USER_CLOSED -> FormCancelReason.PLAYER_CLOSED;
-                case USER_BUSY -> FormCancelReason.PLAYER_BUSY;
+                case USER_CLOSED -> FormCancelReason.CLOSED;
+                case USER_BUSY -> FormCancelReason.BUSY;
             });
         }
         if (isServerSettingsForm) {

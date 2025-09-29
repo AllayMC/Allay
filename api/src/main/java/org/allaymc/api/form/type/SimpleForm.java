@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * Simple form is a type of form that can have a title, content, and a list of buttons.
- * It is suitable for letting the player choose something.
+ * It is suitable for letting the viewer choose something.
  *
  * @author daoge_cmd
  */
@@ -176,7 +176,7 @@ public class SimpleForm extends Form {
             button.getOnClick().accept(button);
             response = button;
         } else {
-            log.warn("Player clicked an invalid simple form element: {}", data);
+            log.warn("Viewer clicked an invalid simple form element: {}", data);
         }
     }
 

@@ -28,7 +28,8 @@ public interface EntityPlayer extends
         EntityPlayerClientComponent,
         EntityPlayerScoreboardViewerComponent,
         EntityPlayerChunkLoaderComponent,
-        EntityPlayerBossBarViewerComponent {
+        EntityPlayerBossBarViewerComponent,
+        EntityPlayerFormViewerComponent {
 
     /**
      * Returns the reachable container for the given full container type. This
