@@ -7,12 +7,12 @@ netty = "4.2.4.Final"
 
 [libraries]
 # NBT
-nbt = { group = "org.allaymc", name = "NBT", version = "3.0.10" }
+nbt = { group = "org.allaymc", name = "nbt", version = "3.0.10" }
 # Network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta7-SNAPSHOT" }
 # State Updater
-item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.100" }
-block-updater = { group = "org.allaymc.stateupdater", name = "block-updater", version = "1.21.60" }
+item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.100-R2" }
+block-updater = { group = "org.allaymc.stateupdater", name = "block-updater", version = "1.21.60-R2" }
 # Collections
 guava = { group = "com.google.guava", name = "guava", version = "33.4.8-jre" }
 # Fastutil
@@ -60,7 +60,7 @@ mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", versio
 # Code generating
 javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.7.0" }
 # Reflections
-fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version = "8733a599fa" }
+fastreflect = { group = "me.sunlan", name = "fast-reflection", version = "1.0.3" }
 # Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.8" }
 joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "f4a0483f44" }

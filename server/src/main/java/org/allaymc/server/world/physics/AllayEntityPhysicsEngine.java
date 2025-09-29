@@ -324,7 +324,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 }
 
                 var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
-                if (baseComponent.isAwaitingTeleportACK()) {
+                if (baseComponent.getExpectedTeleportPos() != null) {
                     // It is possible that client move already get into the move queue
                     // before we set awatingTeleportACK to true, so here we should ignore all
                     // client move until awatingTeleportACK become false.

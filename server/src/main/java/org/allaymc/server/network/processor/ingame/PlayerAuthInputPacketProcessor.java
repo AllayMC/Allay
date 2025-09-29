@@ -10,6 +10,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
+import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
@@ -268,7 +269,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case STOP_GLIDING -> player.setGliding(false);
                 case START_CRAWLING -> player.setCrawling(true);
                 case STOP_CRAWLING -> player.setCrawling(false);
-                case START_JUMPING -> ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).onJump();
+                case START_JUMPING -> {
+                    new PlayerJumpEvent(player).call();
+                    player.exhaust(player.isSprinting() ? 0.2f : 0.05f);
+                }
                 case START_FLYING -> {
                     if (!player.hasPermission(Permissions.ABILITY_FLY)) {
                         player.setFlying(false);
@@ -296,7 +300,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
-        if (baseComponent.isAwaitingTeleportACK()) {
+        if (baseComponent.getExpectedTeleportPos() != null) {
             var clientPos = NetworkHelper.fromNetwork(packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0));
             var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();
             if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
@@ -305,7 +309,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 // enough to the teleport position, we'll allow the player to move around again.
                 return PacketSignal.HANDLED;
             }
-            baseComponent.ackTeleported();
+            baseComponent.setExpectedTeleportPos(null);
         }
 
         if (!validateClientLocation(player, packet.getPosition(), packet.getRotation())) {

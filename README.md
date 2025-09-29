@@ -11,7 +11,8 @@ The next-generation Minecraft: Bedrock Edition server software aims to be reliab
 
 <a href="https://github.com/AllayMC/Allay/actions"><img src="https://github.com/AllayMC/Allay/actions/workflows/gradle.yml/badge.svg" alt="Build"/></a>
 <a href="https://docs.allaymc.org"><img src="https://readthedocs.org/projects/allaymc/badge/?version=latest" alt="Documentation Status"></a>
-[![](https://jitpack.io/v/AllayMC/Allay.svg)](https://jitpack.io/#AllayMC/Allay)
+[![api](https://img.shields.io/maven-central/v/org.allaymc.allay/api?label=api)](https://central.sonatype.com/artifact/org.allaymc.allay/api)
+[![server](https://img.shields.io/maven-central/v/org.allaymc.allay/server?label=server)](https://central.sonatype.com/artifact/org.allaymc.allay/server)
 [![codecov](https://codecov.io/gh/AllayMC/Allay/graph/badge.svg?token=EI8EDEKI51)](https://codecov.io/gh/AllayMC/Allay)
 <a href="https://app.codacy.com/gh/AllayMC/Allay/dashboard"><img src="https://app.codacy.com/project/badge/Grade/30e264923da2425a8b777a84b4028334"></a>
 <a href="https://discord.gg/ngkkE4hPTU"><img src="https://img.shields.io/discord/1147136608290750526?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
@@ -87,26 +88,36 @@ You can check out the following plugin templates:
 
 ### Use Allay in Existing Project
 
-If you have an existing project and want to use Allay in it, you can add the following
-dependencies to your project:
+Allay API is published to the Maven Central. If you have an existing project and want to use Allay in it, simply
+add the following dependencies to your project:
 
 ```kts
 repositories {
     mavenCentral()
-    maven("https://www.jitpack.io/")
     maven("https://repo.opencollab.dev/maven-releases/")
     maven("https://repo.opencollab.dev/maven-snapshots/")
     maven("https://storehouse.okaeri.eu/repository/maven-public/")
 }
 
 dependencies {
-    compileOnly(group = "org.allaymc.allay", name = "api", version = "master-SNAPSHOT")
+    compileOnly(group = "org.allaymc.allay", name = "api", version = "<version>")
 }
 ```
 
-Currently, we use jitpack to publish our artifacts. If you want to use a specified version,
-you can check the version list in [jitpack](https://jitpack.io/#AllayMC/Allay) and replace
-`master-SNAPSHOT` with the version you want.
+You can also use the snapshot version that is under development. To fetch the snapshot version, the central snapshot
+repository needs to be added:
+
+```kts
+repositories {
+    // Add the central snapshot repository
+    maven("https://central.sonatype.com/repository/maven-snapshots/")
+}
+
+dependencies {
+    // Add `-SNAPSHOT` suffix to the version to use the snapshot version, an example is `0.12.0-SNAPSHOT`
+    compileOnly(group = "org.allaymc.allay", name = "api", version = "<version>-SNAPSHOT")
+}
+```
 
 ## 🙌 Contributing
 

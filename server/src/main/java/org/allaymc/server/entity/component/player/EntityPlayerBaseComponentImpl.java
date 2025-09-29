@@ -29,6 +29,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.permission.PermissionGroup;
+import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
@@ -194,20 +195,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
     }
 
-    @EventHandler
-    protected void onPlayerLoggedIn(CPlayerLoggedInEvent event) {
-        var loginData = this.clientComponent.getLoginData();
-        this.skin = loginData.getSkin();
-        this.uniqueId = loginData.getUuid().getMostSignificantBits();
-        setDisplayName(loginData.getXname());
-    }
-
     @Override
     protected void initPermissionGroup() {
         // Do not register the player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
         // Add the parent permission group alone, so that the permission listeners will be triggered
-        this.permissionGroup.addParent(PermissionGroup.get(AllayServer.getSettings().genericSettings().defaultPermission()), thisPlayer);
+        // Commands will be sent to the client during this method call
+        this.permissionGroup.addParent(PermissionGroups.DEFAULT.get(), thisPlayer);
     }
 
     @Override
@@ -371,6 +365,97 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
     }
 
+    protected void tryPickUpEntities() {
+        if (isDead() || !isSpawned() || willBeDespawnedNextTick() || !isCurrentChunkLoaded()) {
+            return;
+        }
+
+        var dimension = location.dimension();
+        var pickUpArea = new AABBd(
+                location.x - 1.425,
+                location.y - 1.425,
+                location.z - 1.425,
+                location.x + 1.425,
+                location.y + 1.425,
+                location.z + 1.425
+        );
+
+        // Pick up items
+        var entityItems = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
+                .stream()
+                .filter(EntityItem.class::isInstance)
+                .map(EntityItem.class::cast)
+                .filter(EntityItemBaseComponent::canBePicked)
+                .toList();
+        for (var entityItem : entityItems) {
+            var item = entityItem.getItemStack();
+            if (item == null) {
+                // Have been picked by others
+                continue;
+            }
+
+            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerTypes.INVENTORY));
+            var slot = inventory.tryAddItem(item);
+            if (slot == -1) {
+                // Player's inventory is full and cannot pick up the item
+                continue;
+            }
+
+            if (item.getCount() == 0) {
+                entityItem.applyAction(new PickedUpAction(thisPlayer));
+                // Set item to null to prevent others from picking this item twice
+                entityItem.setItemStack(null);
+                entityItem.remove();
+            }
+        }
+
+        // Pick up arrows
+        var entityArrows = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
+                .stream()
+                .filter(EntityArrow.class::isInstance)
+                .map(EntityArrow.class::cast)
+                .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
+                .toList();
+        for (var entityArrow : entityArrows) {
+            if (entityArrow.willBeDespawnedNextTick()) {
+                // Have been picked by others
+                continue;
+            }
+
+            if (entityArrow.isPickUpDisabled()) {
+                continue;
+            }
+
+            if (entityArrow.isInfinite()) {
+                // Arrow shot by bow with infinity enchantment or shot by creative player can't be picked up
+                entityArrow.remove();
+                continue;
+            }
+
+            var arrow = ItemTypes.ARROW.createItemStack(1);
+            arrow.setPotionType(entityArrow.getPotionType());
+            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrow) != -1) {
+                entityArrow.applyAction(new PickedUpAction(thisPlayer));
+                entityArrow.remove();
+            }
+        }
+    }
+
+    protected void tickPlayerDataAutoSave() {
+        // We use server's tick instead of world's tick
+        // because player may teleport between worlds
+        // and the tick in different worlds may not be same
+        var currentServerTick = Server.getInstance().getTick();
+        if (nextSavePlayerDataTime == Integer.MAX_VALUE) {
+            nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
+            return;
+        }
+        if (currentServerTick >= nextSavePlayerDataTime) {
+            Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
+            nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
+        }
+    }
+
     protected void regenerate(boolean exhaust) {
         if (thisPlayer.getHealth() == thisPlayer.getMaxHealth()) {
             return;
@@ -380,16 +465,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (exhaust) {
             exhaust(6);
         }
-    }
-
-    @EventHandler
-    protected void onDamage(CEntityAfterDamageEvent event) {
-        exhaust(0.1f);
-    }
-
-    @EventHandler
-    protected void onAttack(CEntityAttackEvent event) {
-        exhaust(0.1f);
     }
 
     @Override
@@ -504,97 +579,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         super.tickBlockCollision();
-    }
-
-    protected void tickPlayerDataAutoSave() {
-        // We use server's tick instead of world's tick
-        // because player may teleport between worlds
-        // and the tick in different worlds may not be same
-        var currentServerTick = Server.getInstance().getTick();
-        if (nextSavePlayerDataTime == Integer.MAX_VALUE) {
-            nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
-            return;
-        }
-        if (currentServerTick >= nextSavePlayerDataTime) {
-            Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
-            nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
-        }
-    }
-
-    protected void tryPickUpEntities() {
-        if (isDead() || !isSpawned() || willBeDespawnedNextTick() || !isCurrentChunkLoaded()) {
-            return;
-        }
-
-        var dimension = location.dimension();
-        var pickUpArea = new AABBd(
-                location.x - 1.425,
-                location.y - 1.425,
-                location.z - 1.425,
-                location.x + 1.425,
-                location.y + 1.425,
-                location.z + 1.425
-        );
-
-        // Pick up items
-        var entityItems = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
-                .stream()
-                .filter(EntityItem.class::isInstance)
-                .map(EntityItem.class::cast)
-                .filter(EntityItemBaseComponent::canBePicked)
-                .toList();
-        for (var entityItem : entityItems) {
-            var item = entityItem.getItemStack();
-            if (item == null) {
-                // Have been picked by others
-                continue;
-            }
-
-            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerTypes.INVENTORY));
-            var slot = inventory.tryAddItem(item);
-            if (slot == -1) {
-                // Player's inventory is full and cannot pick up the item
-                continue;
-            }
-
-            if (item.getCount() == 0) {
-                entityItem.applyAction(new PickedUpAction(thisPlayer));
-                // Set item to null to prevent others from picking this item twice
-                entityItem.setItemStack(null);
-                entityItem.remove();
-            }
-        }
-
-        // Pick up arrows
-        var entityArrows = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
-                .stream()
-                .filter(EntityArrow.class::isInstance)
-                .map(EntityArrow.class::cast)
-                .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
-                .toList();
-        for (var entityArrow : entityArrows) {
-            if (entityArrow.willBeDespawnedNextTick()) {
-                // Have been picked by others
-                continue;
-            }
-
-            if (entityArrow.isPickUpDisabled()) {
-                continue;
-            }
-
-            if (entityArrow.isInfinite()) {
-                // Arrow shot by bow with infinity enchantment or shot by creative player can't be picked up
-                entityArrow.remove();
-                continue;
-            }
-
-            var arrow = ItemTypes.ARROW.createItemStack(1);
-            arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrow) != -1) {
-                entityArrow.applyAction(new PickedUpAction(thisPlayer));
-                entityArrow.remove();
-            }
-        }
     }
 
     @Override
@@ -1052,6 +1036,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.clientComponent.sendPacket(packet);
     }
 
+    protected int assignFormId() {
+        return formIdCounter.getAndIncrement();
+    }
+
     @Override
     public void closeAllForms() {
         this.clientComponent.sendPacket(new ClientboundCloseFormPacket());
@@ -1061,10 +1049,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void requireResendingCommands() {
         this.requireResendingCommands = true;
-    }
-
-    protected int assignFormId() {
-        return formIdCounter.getAndIncrement();
     }
 
     @Override
@@ -1081,11 +1065,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void broadcastState() {
         super.broadcastState();
         thisPlayer.viewEntityState(thisPlayer);
-    }
-
-    public void onJump() {
-        new PlayerJumpEvent(thisPlayer).call();
-        exhaust(thisPlayer.isSprinting() ? 0.2f : 0.05f);
     }
 
     @Override
@@ -1146,11 +1125,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         return this.gameMode != GameMode.SPECTATOR;
     }
 
-    public boolean isAwaitingTeleportACK() {
-        return expectedTeleportPos != null;
+    @EventHandler
+    protected void onPlayerLoggedIn(CPlayerLoggedInEvent event) {
+        var loginData = this.clientComponent.getLoginData();
+        this.skin = loginData.getSkin();
+        this.uniqueId = loginData.getUuid().getMostSignificantBits();
+        setDisplayName(loginData.getXname());
     }
 
-    public void ackTeleported() {
-        this.expectedTeleportPos = null;
+    @EventHandler
+    protected void onDamage(CEntityAfterDamageEvent event) {
+        exhaust(0.1f);
+    }
+
+    @EventHandler
+    protected void onAttack(CEntityAttackEvent event) {
+        exhaust(0.1f);
     }
 }

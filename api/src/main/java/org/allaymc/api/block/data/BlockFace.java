@@ -47,7 +47,6 @@ public enum BlockFace {
      * Retrieves the block face by its index.
      *
      * @param index the index of the block face
-     *
      * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range
      */
     public static BlockFace fromIndex(int index) {
@@ -62,7 +61,6 @@ public enum BlockFace {
      * Retrieves the block face by its horizontal index.
      *
      * @param index the horizontal index of the block face (0-3)
-     *
      * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range
      */
     public static BlockFace fromHorizontalIndex(int index) {
@@ -77,7 +75,6 @@ public enum BlockFace {
      * Converts a {@link MinecraftCardinalDirection} to a corresponding {@link BlockFace}.
      *
      * @param direction the Minecraft cardinal direction to convert
-     *
      * @return the corresponding {@link BlockFace}
      */
     @ApiStatus.Experimental
@@ -114,7 +111,6 @@ public enum BlockFace {
      * @param x the x coordinate
      * @param y the y coordinate
      * @param z the z coordinate
-     *
      * @return a new Vector3ic representing the resulting position
      */
     public Vector3ic offsetPos(int x, int y, int z) {
@@ -125,7 +121,6 @@ public enum BlockFace {
      * Adds the current block face offset to the specified position.
      *
      * @param pos the position to offset
-     *
      * @return a new Vector3ic representing the resulting position
      */
     public Vector3ic offsetPos(Vector3ic pos) {
@@ -136,7 +131,6 @@ public enum BlockFace {
      * Rotates the given AABB based on this block face.
      *
      * @param aabb the axis-aligned bounding box to rotate
-     *
      * @return a new AABBd representing the rotated bounding box
      */
     public AABBd rotateAABB(AABBdc aabb) {
@@ -158,7 +152,6 @@ public enum BlockFace {
      * Rotates the given vector based on this block face.
      *
      * @param vec the vector to rotate
-     *
      * @return a new Vector3d representing the rotated vector
      */
     @SuppressWarnings("SuspiciousNameCombination")
@@ -217,7 +210,6 @@ public enum BlockFace {
      * Rotates this block face clockwise around the Y axis (NORTH => EAST => SOUTH => WEST => NORTH).
      *
      * @return the rotated {@link BlockFace}
-     *
      * @throws IllegalStateException if this face is {@link #UP} or {@link #DOWN}
      */
     public BlockFace rotateY() {
@@ -234,7 +226,6 @@ public enum BlockFace {
      * Rotates this block face counter-clockwise around the Y axis (NORTH => WEST => SOUTH => EAST => NORTH).
      *
      * @return the rotated {@link BlockFace}
-     *
      * @throws IllegalStateException if this face is {@link #UP} or {@link #DOWN}
      */
     public BlockFace rotateYCCW() {
