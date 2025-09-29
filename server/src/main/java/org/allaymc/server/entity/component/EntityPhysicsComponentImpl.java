@@ -11,6 +11,7 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
+import org.allaymc.api.eventbus.event.entity.EntitySetMotionEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
@@ -398,12 +399,19 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     @Override
-    public void setMotion(Vector3dc motion) {
+    public boolean setMotion(Vector3dc motion) {
         if (MathUtils.hasNaN(motion)) {
             throw new IllegalArgumentException("Trying to set the motion of entity " + thisEntity.getRuntimeId() + " to a new motion which contains NaN: " + motion);
         }
-        this.lastMotion = this.motion;
-        this.motion = new Vector3d(motion);
+
+        var event = new EntitySetMotionEvent(thisEntity, motion);
+        if (event.call()) {
+            this.lastMotion = this.motion;
+            this.motion = new Vector3d(event.getMotion());
+            return true;
+        }
+
+        return false;
     }
 
     @Override
