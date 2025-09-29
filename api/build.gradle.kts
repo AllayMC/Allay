@@ -11,10 +11,10 @@ dependencies {
         // TODO: remove this workaround when joml release 1.10.9
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk7")
+        // Use the latest version of joml, as joml primitives
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib-jdk8")
     }
     api(libs.joml.primitives) {
-        // Use the latest version of joml, as joml primitives
         // lib uses an old version of joml for no reason
         exclude(group = "org.joml", module = "joml")
     }

@@ -32,12 +32,9 @@ subprojects {
     repositories {
         mavenCentral()
         maven("https://www.jetbrains.com/intellij-repository/releases/")
-        // TODO: check if we can remove this repo
         maven("https://repo.opencollab.dev/maven-releases/")
         maven("https://repo.opencollab.dev/maven-snapshots/")
         maven("https://storehouse.okaeri.eu/repository/maven-public/")
-        // TODO: remove it
-        maven("https://www.jitpack.io/")
     }
 
     dependencies {
