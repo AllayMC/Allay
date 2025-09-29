@@ -50,7 +50,7 @@ public final class NetworkHelper {
         return new BiomeDefinitionData(
                 null, data.temperature(), data.downfall(), data.redSporeDensity(),
                 data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.depth(),
-                data.scale(), data.mapWaterColor(), data.rain(), data.tags(), null
+                data.scale(), data.mapWaterColor(), data.rain(), null, null
         );
     }
 

@@ -178,7 +178,8 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
             }
 
             @Override
-            public void onDisconnect(String reason) {
+            public void onDisconnect(CharSequence seq) {
+                var reason = seq.toString();
                 if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED, false)) {
                     // Failed to set disconnected field from false to true
                     // Which means the client may be disconnected by server
@@ -506,7 +507,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setBlockRegistryChecksum(0L);
         packet.setPlayerPropertyData(NbtMap.EMPTY);
         packet.setWorldTemplateId(new UUID(0, 0));
-        packet.setWorldEditor(false);
+        packet.setEditorWorldType(WorldType.NON_EDITOR);
         packet.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
         packet.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
         packet.setCustomBiomeName("plains");
