@@ -6,6 +6,4 @@ package org.allaymc.api.world.generator.function;
 public interface GenerateFunction {
     default void init(String preset) {
     }
-
-    String getName();
 }

@@ -23,11 +23,6 @@ public class FlatNoiser implements Noiser {
         parsePreset(preset);
     }
 
-    @Override
-    public String getName() {
-        return "FLAT_NOISER";
-    }
-
     protected void parsePreset(String preset) {
         var list = new ArrayList<BlockState>();
         if (preset.isBlank()) {
