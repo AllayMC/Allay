@@ -105,7 +105,7 @@ rng = ["rng-simple", "rng-sampling"]
 stateupdater = ["updater-common", "item-updater", "block-updater"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "9.0.1" }
+shadow = { id = "com.gradleup.shadow", version = "9.2.2" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.3" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
 publish = { id = "com.vanniktech.maven.publish", version = "0.34.0" }
