@@ -3,6 +3,7 @@ package org.allaymc.api.world.generator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.generator.function.GenerateFunction;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.api.world.generator.function.PostProcessor;
@@ -12,6 +13,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
+ * WorldGenerator is responsible for generating chunks in the dimension. It is composed of multiple {@link GenerateFunction}
+ * which will be called in different generation stages based on their types.
+ *
  * @author daoge_cmd
  */
 @Getter
