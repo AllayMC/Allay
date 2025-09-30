@@ -25,6 +25,7 @@ import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypes;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.DimensionInfo;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.light.LightEngine;
 import org.allaymc.api.world.manager.BlockUpdateManager;
 import org.allaymc.api.world.manager.ChunkManager;
@@ -131,6 +132,13 @@ public interface Dimension {
      * @return the world which contains this dimension
      */
     World getWorld();
+
+    /**
+     * Gets the world generator associated with this dimension.
+     *
+     * @return the {@code WorldGenerator} used to generate the dimension
+     */
+    WorldGenerator getWorldGenerator();
 
     /**
      * Get all the entities in this dimension.

@@ -7,6 +7,7 @@ import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.data.Weather;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -34,6 +35,15 @@ public interface World extends TaskCreator {
      * @return the thread which the world is running on
      */
     Thread getWorldThread();
+
+    /**
+     * Gets the {@code WorldStorage} instance associated with the world. The {@code WorldStorage} is
+     * responsible for managing the persistent storage operations such as reading and writing chunks
+     * and world data for this specific world instance.
+     *
+     * @return the {@code WorldStorage} instance for the world
+     */
+    WorldStorage getWorldStorage();
 
     /**
      * Get the tick of the world.
@@ -170,6 +180,23 @@ public interface World extends TaskCreator {
         var vec = getWorldData().getSpawnPoint();
         return new Location3d(vec.x(), vec.y(), vec.z(), getOverWorld());
     }
+
+    /**
+     * Check whether the world is runtime-only. Runtime-only world will not be loaded after the
+     * server restarted. This is useful for the world created for game room which will be deleted
+     * when shutdown.
+     *
+     * @return {@code true} if the world is runtime-only, otherwise {@code false}
+     */
+    boolean isRuntimeOnly();
+
+    /**
+     * Sets whether the world is runtime-only.
+     *
+     * @param runtimeOnly {@code true} to mark the world as runtime-only, or {@code false} to keep it persistent.
+     * @see #isRuntimeOnly()
+     */
+    void setRuntimeOnly(boolean runtimeOnly);
 
     @Override
     default boolean isValid() {

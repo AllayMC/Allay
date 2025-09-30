@@ -1,5 +1,6 @@
 package org.allaymc.api.world.generator;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.generator.function.Noiser;
@@ -13,31 +14,34 @@ import java.util.function.Consumer;
 /**
  * @author daoge_cmd
  */
+@Getter
 public class WorldGenerator {
 
-    @Getter
+    /**
+     * The name of the generator.
+     */
     private final String name;
-    @Getter
-    private final WorldGeneratorType type;
-    @Getter
+    /**
+     * A preset string that will be passed to the generator instance. The format of the preset string depends
+     * on the generator implementation, for example, the generator implementation can require text preset to a
+     * JSON format.
+     */
     private final String preset;
-    @Getter
+
     private final List<Noiser> noisers;
-    @Getter
     private final List<Populator> populators;
-    @Getter
     private final List<PostProcessor> postProcessors;
+
+    @Getter(AccessLevel.NONE)
     private final Consumer<Dimension> dimensionConsumer;
 
     /**
      * Dimension that this generator is associated with. Will be set later.
      */
-    @Getter
     private Dimension dimension;
 
     private WorldGenerator(
             String name,
-            WorldGeneratorType type,
             String preset,
             List<Noiser> noisers,
             List<Populator> populators,
@@ -45,7 +49,6 @@ public class WorldGenerator {
             Consumer<Dimension> dimensionConsumer
     ) {
         this.name = name;
-        this.type = type;
         this.preset = preset;
         this.noisers = Collections.unmodifiableList(noisers);
         this.populators = Collections.unmodifiableList(populators);
@@ -72,7 +75,6 @@ public class WorldGenerator {
      * this method from outside the implementation will result in throwing {@link IllegalStateException}.
      *
      * @param dimension the dimension
-     *
      * @throws IllegalStateException if the method is called twice
      */
     public void setDimension(Dimension dimension) {
@@ -87,7 +89,6 @@ public class WorldGenerator {
     public static final class WorldGeneratorBuilder {
 
         private String name;
-        private WorldGeneratorType type = WorldGeneratorType.INFINITE;
         private String preset = "";
         private List<Noiser> noisers = List.of();
         private List<Populator> populators = List.of();
@@ -102,7 +103,6 @@ public class WorldGenerator {
          * Set the name of the generator.
          *
          * @param name the name
-         *
          * @return the builder
          */
         public WorldGeneratorBuilder name(String name) {
@@ -111,22 +111,9 @@ public class WorldGenerator {
         }
 
         /**
-         * Set the type of the generator.
-         *
-         * @param type the type
-         *
-         * @return the builder
-         */
-        public WorldGeneratorBuilder type(WorldGeneratorType type) {
-            this.type = type;
-            return this;
-        }
-
-        /**
          * Set the preset of the generator.
          *
          * @param preset the preset
-         *
          * @return the builder
          */
         public WorldGeneratorBuilder preset(String preset) {
@@ -138,7 +125,6 @@ public class WorldGenerator {
          * Set the noisers of the generator.
          *
          * @param noisers the noisers
-         *
          * @return the builder
          */
         public WorldGeneratorBuilder noisers(Noiser... noisers) {
@@ -150,7 +136,6 @@ public class WorldGenerator {
          * Set the populators of the generator.
          *
          * @param populators the populators
-         *
          * @return the builder
          */
         public WorldGeneratorBuilder populators(Populator... populators) {
@@ -162,7 +147,6 @@ public class WorldGenerator {
          * Set the post processors of the generator.
          *
          * @param postProcessors the post processors
-         *
          * @return the builder
          */
         public WorldGeneratorBuilder postProcessors(PostProcessor... postProcessors) {
@@ -175,7 +159,6 @@ public class WorldGenerator {
          * This is used to set the dimension of the generator.
          *
          * @param dimensionConsumer the consumer to call with the dimension
-         *
          * @return the builder
          */
         public WorldGeneratorBuilder onDimensionSet(Consumer<Dimension> dimensionConsumer) {
@@ -192,7 +175,7 @@ public class WorldGenerator {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name cannot be null or blank");
             }
-            return new WorldGenerator(name, type, preset, noisers, populators, postProcessors, dimensionConsumer);
+            return new WorldGenerator(name, preset, noisers, populators, postProcessors, dimensionConsumer);
         }
     }
 }

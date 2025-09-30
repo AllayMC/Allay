@@ -129,6 +129,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Replaced protocol library class `CreativeItemCategory` with `CreativeItemCategory.Type` in the creative item APIs.
 - (API) Class `BossBar` now accepts `BossBarViewer` instead of `EntityPlayer` directly, but the usage won't change since `EntityPlayer` implemented `BossBarViewer`.
 - (API) Changed methods in `ItemSignBaseComponent` to return `BlockType` instead of `BlockId`.
+- (API) Changed the parameters of method `WorldPool.loadWorld()`.
 
 ### Fixed
 
@@ -151,6 +152,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed class `EntityAttributeComponent`, health related methods are moved to `EntityLivingComponent` and experience/food related methods are
   moved to `EntityPlayerBaseComponent`.
 - (API) Removed class `XXXCustomTags`, all the custom tags are merged to `XXXTags` and the namespace is renamed to `minecraft` instead of `allay`.
+- (API) Removed classes `BaseCommand` and `SimpleCommand`, and plugin commands now should extend `Command` directly.
+- (API) Removed class `PacketReceiver`.
+- (API) Removed class `IntMappedRegistry`.
+- (API) Removed class `WorldGeneratorType` which is not very useful.
 - (API) Removed adventure settings related permissions in `Permissions` since adventure settings should only change when the game mode change.
 - (API) Removed field `CommonEnums.GAMEMODE_ENUM`.
 - (API) Removed field `networkId` in `EntityId` since it is never used.
@@ -177,12 +182,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed method `EntityPlayerClientComponent.getClientSession()`.
 - (API) Removed method `EnchantmentInstance.toNetwork()`.
 - (API) Removed network-related methods in the command system.
-- (API) Removed classes `BaseCommand` and `SimpleCommand`, and plugin commands now should extend `Command` directly.
 - (API) Removed method `Command.getCommandFormatTips()`.
-- (API) Removed class `PacketReceiver`.
 - (API) Removed methods `BlockPropertyType.getProcessor()` and `BlockPropertyType.setProcessor()`.
 - (API) Removed network-related code in `Weather`
-- (API) Removed class `IntMappedRegistry`.
 - (API) Removed method `BlockType.register()`.
 - (API) Removed field `BlockPlaceEvent.entity` since the entity can be obtained from the interact info.
 - (API) Removed a number of useless build-in permissions which are listed in class `Permissions`, the developer should listen to the corresponded events.

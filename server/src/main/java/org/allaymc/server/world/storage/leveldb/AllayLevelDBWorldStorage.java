@@ -746,6 +746,11 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
+    @Override
+    public String getName() {
+        return "LEVELDB";
+    }
+
     private WorldData createWorldData(String worldName) {
         var levelDat = path.resolve(FILE_LEVEL_DAT).toFile();
         try {

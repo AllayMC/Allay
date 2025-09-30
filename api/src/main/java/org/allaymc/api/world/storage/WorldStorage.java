@@ -1,6 +1,7 @@
 package org.allaymc.api.world.storage;
 
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
@@ -129,4 +130,12 @@ public interface WorldStorage {
      * @return the world data
      */
     WorldData readWorldData();
+
+    /**
+     * Retrieves the name associated with the world storage. Which should be the same
+     * registered in {@link Registries#WORLD_STORAGE_FACTORIES}.
+     *
+     * @return the name of the world storage
+     */
+    String getName();
 }

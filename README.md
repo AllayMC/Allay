@@ -83,8 +83,8 @@ The quickest way to create a new plugin is to use our plugin template!
 You can check out the following plugin templates:
 
 - [JavaPluginTemplate](https://github.com/AllayMC/JavaPluginTemplate)
-- [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
 - [KotlinPluginTemplate](https://github.com/MineBuilders/allaymc-kotlin-plugin-template)
+- [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
 
 ### Use Allay in Existing Project
 
@@ -94,7 +94,6 @@ add the following dependencies to your project:
 ```kts
 repositories {
     mavenCentral()
-    maven("https://storehouse.okaeri.eu/repository/maven-public/")
 }
 
 dependencies {
@@ -107,6 +106,7 @@ repository needs to be added:
 
 ```kts
 repositories {
+    mavenCentral()
     // Add the central snapshot repository
     maven("https://central.sonatype.com/repository/maven-snapshots/")
 }

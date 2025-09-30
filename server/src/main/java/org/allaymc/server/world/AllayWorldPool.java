@@ -2,22 +2,27 @@ package org.allaymc.server.world;
 
 import com.google.common.base.Preconditions;
 import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.OkaeriConfig;
+import eu.okaeri.configs.annotation.Comment;
+import eu.okaeri.configs.annotation.CustomKey;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
 import org.allaymc.api.eventbus.event.world.WorldUnloadEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
-import org.allaymc.api.world.WorldSetting;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.utils.Utils;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -29,79 +34,61 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public final class AllayWorldPool implements WorldPool {
-    private static final Path WORLDS_FOLDER = Path.of("worlds");
 
     private final Map<String, AllayWorld> worlds;
     @Getter
+    private final Path worldFolder;
     private final WorldSettings worldConfig;
 
     public AllayWorldPool() {
         this.worlds = new ConcurrentHashMap<>();
+        this.worldFolder = Path.of("worlds");
         this.worldConfig = Objects.requireNonNull(ConfigManager.create(
                 WorldSettings.class,
-                Utils.createConfigInitializer(WORLDS_FOLDER.resolve("world-settings.yml"))
+                Utils.createConfigInitializer(this.worldFolder.resolve("world-settings.yml"))
         ));
-
-        int changeNumber = 0;
-        for (var file : Objects.requireNonNull(WORLDS_FOLDER.toFile().listFiles(File::isDirectory))) {
-            if (!this.worldConfig.worlds().containsKey(file.getName())) {
-                var worldEntry = WorldSetting.builder()
-                        .enable(true)
-                        .overworld(new WorldSetting.DimensionSettings("VOID", ""))
-                        .nether(null)
-                        .theEnd(null)
-                        .storageType("LEVELDB")
-                        .build();
-                this.worldConfig.worlds().put(file.getName(), worldEntry);
-                changeNumber++;
-            }
-        }
-
-        if (changeNumber != 0) {
-            this.worldConfig.save();
-        }
-    }
-
-    public void shutdown() {
-        this.worlds.values().forEach(AllayWorld::shutdown);
-        // Waiting for all worlds to fully shutdown
-        while (worlds.values().stream().anyMatch(world -> world.getState() != WorldState.STOPPED)) {
-            Thread.onSpinWait();
-        }
-        this.worldConfig.save();
     }
 
     public void loadWorlds() {
         this.worldConfig.worlds().forEach((name, setting) -> {
             try {
-                this.loadWorld(name, setting);
+                loadWorld(name, setting);
             } catch (Exception e) {
                 log.error("Error when loading world {}, skipped.", name, e);
             }
         });
     }
 
-    @Override
-    public void loadWorld(String name, WorldSetting setting) {
-        if (!setting.enable()) {
-            return;
+    public void shutdown() {
+        this.worlds.values().forEach(AllayWorld::shutdown);
+
+        // Waiting for all worlds to fully shutdown
+        while (this.worlds.values().stream().anyMatch(world -> world.getState() != WorldState.STOPPED)) {
+            Thread.onSpinWait();
         }
 
+        // Save world settings
+        this.worldConfig.worlds().clear();
+        this.worlds.forEach((name, world) -> {
+            if (!world.isRuntimeOnly()) {
+                this.worldConfig.worlds().put(name, toWorldSetting(world));
+            }
+        });
+        this.worldConfig.save();
+    }
+
+    @Override
+    public void loadWorld(
+            String name, WorldStorage storage,
+            WorldGenerator overworldGenerator,
+            WorldGenerator netherGenerator,
+            WorldGenerator theEndGenerator
+    ) {
         log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADING, name));
         if (worlds.containsKey(name)) {
             throw new IllegalArgumentException("World " + name + " is already loaded");
         }
 
-        var overworldSettings = setting.overworld();
-        Preconditions.checkNotNull(overworldSettings, "World must has overworld dimension");
-
-        var netherSettings = setting.nether();
-        var theEndSettings = setting.theEnd();
-        var storage = Registries.WORLD_STORAGE_FACTORIES.get(setting.storageType()).apply(WORLDS_FOLDER.resolve(name));
-        if (storage == null) {
-            log.error("Cannot find world storage type {}", setting.storageType());
-            storage = Registries.WORLD_STORAGE_FACTORIES.get("LEVELDB").apply(WORLDS_FOLDER.resolve(name));
-        }
         AllayWorld world;
         try {
             world = new AllayWorld(name, storage);
@@ -109,26 +96,26 @@ public final class AllayWorldPool implements WorldPool {
             log.error("Error while initializing world {}", name, t);
             return;
         }
+
         // Load overworld dimension
-        world.addDimension(new AllayDimension(world, tryCreateWorldGenerator(overworldSettings), DimensionInfo.OVERWORLD));
+        world.addDimension(new AllayDimension(world, overworldGenerator, DimensionInfo.OVERWORLD));
 
         // Load nether and the end dimension if they are not null
-        if (netherSettings != null) {
-            world.addDimension(new AllayDimension(world, tryCreateWorldGenerator(netherSettings), DimensionInfo.NETHER));
+        if (netherGenerator != null) {
+            world.addDimension(new AllayDimension(world, netherGenerator, DimensionInfo.NETHER));
         }
-        if (theEndSettings != null) {
-            world.addDimension(new AllayDimension(world, tryCreateWorldGenerator(theEndSettings), DimensionInfo.THE_END));
+        if (theEndGenerator != null) {
+            world.addDimension(new AllayDimension(world, theEndGenerator, DimensionInfo.THE_END));
         }
 
-        if (addWorld(world)) {
-            log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADED, name));
-            if (setting.runtimeOnly() || this.worldConfig.worlds().containsKey(name)) {
-                // Runtime-only world won't be saved to world-settings.yml
-                return;
-            }
-            this.worldConfig.worlds().put(name, setting);
-            this.worldConfig.save();
+        var event = new WorldLoadEvent(world);
+        if (!event.call()) {
+            return;
         }
+
+        this.worlds.put(world.getName(), world);
+        world.startTick();
+        log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_LOADED, name));
     }
 
     @Override
@@ -165,28 +152,100 @@ public final class AllayWorldPool implements WorldPool {
         return getWorld(worldConfig.defaultWorld());
     }
 
-    private boolean addWorld(AllayWorld world) {
-        var event = new WorldLoadEvent(world);
-        if (!event.call()) {
-            return false;
+    private void loadWorld(String name, WorldSettings.WorldSetting setting) {
+        var storage = Registries.WORLD_STORAGE_FACTORIES.get(setting.storageType()).apply(this.worldFolder.resolve(name));
+        if (storage == null) {
+            log.error("Cannot find world storage type {}", setting.storageType());
+            storage = Registries.WORLD_STORAGE_FACTORIES.get("LEVELDB").apply(this.worldFolder.resolve(name));
         }
 
-        this.worlds.put(world.getName(), world);
-        world.startTick();
-        return true;
+        var overworldGenerator = tryCreateWorldGenerator(Preconditions.checkNotNull(setting.overworld(), "World must has overworld dimension"));
+        var netherGenerator = setting.nether() == null ? null : tryCreateWorldGenerator(setting.nether());
+        var theEndGenerator = setting.theEnd() == null ? null : tryCreateWorldGenerator(setting.theEnd());
+
+        loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
     }
 
-    private WorldGenerator tryCreateWorldGenerator(WorldSetting.DimensionSettings settings) {
+    private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldSetting.DimensionSetting settings) {
         var factory = Registries.WORLD_GENERATOR_FACTORIES.get(settings.generatorType());
         if (factory == null) {
-            log.error("Cannot find world generator {}", settings.generatorType());
+            log.error("Cannot find world generator {}, fallback to the VOID generator", settings.generatorType());
             factory = Registries.WORLD_GENERATOR_FACTORIES.get("VOID");
         }
+
         try {
             return factory.apply(settings.generatorPreset());
         } catch (Throwable t) {
-            log.error("Error while creating {} type world generator with the preset {}", settings.generatorType(), settings.generatorPreset(), t);
+            log.error("Error while creating {} type world generator with the preset {}, fallback to the VOID generator", settings.generatorType(), settings.generatorPreset(), t);
             return Registries.WORLD_GENERATOR_FACTORIES.get("VOID").apply(null);
+        }
+    }
+
+    private WorldSettings.WorldSetting toWorldSetting(World world) {
+        var owGenerator = world.getOverWorld().getWorldGenerator();
+
+        WorldGenerator netherGenerator = null;
+        if (world.getNether() != null) {
+            netherGenerator = world.getNether().getWorldGenerator();
+        }
+
+        WorldGenerator theEndGenerator = null;
+        if (world.getTheEnd() != null) {
+            theEndGenerator = world.getTheEnd().getWorldGenerator();
+        }
+
+        return new WorldSettings.WorldSetting(
+                world.getWorldStorage().getName(),
+                new WorldSettings.WorldSetting.DimensionSetting(owGenerator.getName(), owGenerator.getPreset()),
+                netherGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(netherGenerator.getName(), netherGenerator.getPreset()) : null,
+                theEndGenerator != null ? new WorldSettings.WorldSetting.DimensionSetting(theEndGenerator.getName(), theEndGenerator.getPreset()) : null
+        );
+    }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class WorldSettings extends OkaeriConfig {
+
+        @Setter
+        @CustomKey("worlds")
+        private Map<String, WorldSetting> worlds = Map.of("world", new WorldSetting(
+                "LEVELDB",
+                new WorldSetting.DimensionSetting(
+                        "FLAT",
+                        ""
+                ), null, null
+        ));
+
+        @Comment("The default world is the world that newly joined players will be in")
+        @CustomKey("default-world")
+        private String defaultWorld = "world";
+
+        @Getter
+        @Accessors(fluent = true)
+        @AllArgsConstructor
+        public static class WorldSetting extends OkaeriConfig {
+            @CustomKey("storage-type")
+            private String storageType;
+
+            private DimensionSetting overworld;
+
+            // Can be null
+            private DimensionSetting nether;
+
+            // Can be null
+            @CustomKey("the-end")
+            private DimensionSetting theEnd;
+
+            @Getter
+            @Accessors(fluent = true)
+            @AllArgsConstructor
+            public static class DimensionSetting extends OkaeriConfig {
+                @CustomKey("generator-type")
+                private String generatorType;
+
+                @CustomKey("generator-preset")
+                private String generatorPreset;
+            }
         }
     }
 }

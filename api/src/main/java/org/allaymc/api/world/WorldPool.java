@@ -2,8 +2,11 @@ package org.allaymc.api.world;
 
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 /**
@@ -12,6 +15,13 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface WorldPool {
+    /**
+     * Retrieves the path to the folder where worlds are stored.
+     *
+     * @return the path to the world folder
+     */
+    Path getWorldFolder();
+
     /**
      * Get the world by the name.
      *
@@ -36,15 +46,23 @@ public interface WorldPool {
     World getDefaultWorld();
 
     /**
-     * Load the world with the specific name and settings.
-     * <p>
-     * If the world is not exists in {@code WorldSettings}, the world will be added into the {@code WorldSettings}.
+     * Create a world with the provided name, storage and generators for different dimensions.
      *
-     * @param name         the name of the world
-     * @param worldSetting the settings of the world
+     * @param name               the name of the world to be loaded
+     * @param storage            the storage used for reading and writing chunks and world data
+     * @param overworldGenerator the generator used to initialize or generate the overworld dimension
+     * @param netherGenerator    the generator used to initialize or generate the nether dimension, or
+     *                           {@code null} to disable nether dimension
+     * @param theEndGenerator    the generator used to initialize or generate the end dimension, or
+     *                           {@code null} to disable the end dimension
      * @throws IllegalArgumentException if the world with the specific name already exists
      */
-    void loadWorld(String name, WorldSetting worldSetting);
+    void loadWorld(
+            String name, WorldStorage storage,
+            WorldGenerator overworldGenerator,
+            WorldGenerator netherGenerator,
+            WorldGenerator theEndGenerator
+    );
 
     /**
      * Unload the world with the specific name.

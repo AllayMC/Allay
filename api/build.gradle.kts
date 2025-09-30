@@ -18,8 +18,5 @@ dependencies {
         // lib uses an old version of joml for no reason
         exclude(group = "org.joml", module = "joml")
     }
-    api(libs.okaeri.configs.yaml.snakeyaml) {
-        exclude(group = "org.yaml", module = "snakeyaml") // Use the latest version
-    }
     api(libs.snakeyaml)
 }

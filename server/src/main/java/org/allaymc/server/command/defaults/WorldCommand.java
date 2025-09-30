@@ -9,9 +9,8 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.world.WorldSetting;
 import org.allaymc.api.world.data.DimensionInfo;
-import org.allaymc.server.world.AllayWorldPool;
+import org.allaymc.api.world.generator.WorldGenerator;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -103,29 +102,6 @@ public class WorldCommand extends VanillaCommand {
                     return context.success();
                 })
                 .root()
-                .key("load")
-                .str("world")
-                .exec(context -> {
-                    String worldName = context.getResult(1);
-
-                    var worldSetting = ((AllayWorldPool) Server.getInstance().getWorldPool()).getWorldConfig().worlds().get(worldName);
-                    if (worldSetting == null) {
-                        context.addError("%" + TrKeys.ALLAY_COMMAND_WORLD_UNKNOWN, worldName);
-                        return context.fail();
-                    }
-
-                    if (Server.getInstance().getWorldPool().getWorld(worldName) != null) {
-                        context.addError("%" + TrKeys.ALLAY_WORLD_LOADED, worldName);
-                        return context.fail();
-                    }
-
-                    worldSetting.enable(true);
-                    context.addOutput(TrKeys.ALLAY_WORLD_LOADING, worldName);
-                    Server.getInstance().getWorldPool().loadWorld(worldName, worldSetting);
-                    context.addOutput(TrKeys.ALLAY_WORLD_LOADED, worldName);
-                    return context.success();
-                })
-                .root()
                 .key("create")
                 .exec((context, player) -> {
                     var langCode = player.getLoginData().getLangCode();
@@ -148,39 +124,28 @@ public class WorldCommand extends VanillaCommand {
                             .input(I18n.get().tr(langCode, TrKeys.ALLAY_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_THEEND))
                             .onResponse(response -> {
                                 var name = response.get(0);
-                                var storageType = storageTypes.get(Integer.parseInt(response.get(1)));
-                                var overworldGenerator = generatorTypes.get(Integer.parseInt(response.get(3)));
-                                var overworldPreset = response.get(4);
-                                var enableNether = Boolean.parseBoolean(response.get(6));
-                                var netherGenerator = generatorTypes.get(Integer.parseInt(response.get(7)));
-                                var netherPreset = response.get(8);
-                                var enableTheEnd = Boolean.parseBoolean(response.get(10));
-                                var theEndGenerator = generatorTypes.get(Integer.parseInt(response.get(11)));
-                                var theEndPreset = response.get(12);
+                                var storage = Registries.WORLD_STORAGE_FACTORIES
+                                        .get(storageTypes.get(Integer.parseInt(response.get(1))))
+                                        .apply(Server.getInstance().getWorldPool().getWorldFolder().resolve(name));
+                                var overworldGenerator = Registries.WORLD_GENERATOR_FACTORIES
+                                        .get(generatorTypes.get(Integer.parseInt(response.get(3))))
+                                        .apply(response.get(4));
 
-                                var worldSettingBuilder = WorldSetting.builder()
-                                        .enable(true)
-                                        .storageType(storageType)
-                                        .overworld(WorldSetting.DimensionSettings.builder()
-                                                .generatorType(overworldGenerator)
-                                                .generatorPreset(overworldPreset)
-                                                .build());
-                                if (enableNether) {
-                                    worldSettingBuilder.nether(WorldSetting.DimensionSettings.builder()
-                                            .generatorType(netherGenerator)
-                                            .generatorPreset(netherPreset)
-                                            .build());
-                                }
-                                if (enableTheEnd) {
-                                    worldSettingBuilder.theEnd(WorldSetting.DimensionSettings.builder()
-                                            .generatorType(theEndGenerator)
-                                            .generatorPreset(theEndPreset)
-                                            .build());
+                                WorldGenerator netherGenerator = null;
+                                if (Boolean.parseBoolean(response.get(6))) {
+                                    netherGenerator = Registries.WORLD_GENERATOR_FACTORIES
+                                            .get(generatorTypes.get(Integer.parseInt(response.get(7))))
+                                            .apply(response.get(8));
                                 }
 
-                                player.sendTranslatable(TrKeys.ALLAY_WORLD_LOADING, name);
-                                Server.getInstance().getWorldPool().loadWorld(name, worldSettingBuilder.build());
-                                player.sendTranslatable(TrKeys.ALLAY_WORLD_LOADED, name);
+                                WorldGenerator theEndGenerator = null;
+                                if (Boolean.parseBoolean(response.get(10))) {
+                                    theEndGenerator = Registries.WORLD_GENERATOR_FACTORIES
+                                            .get(generatorTypes.get(Integer.parseInt(response.get(11))))
+                                            .apply(response.get(12));
+                                }
+
+                                Server.getInstance().getWorldPool().loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
                             })
                             .sendTo(player);
                     return context.success();

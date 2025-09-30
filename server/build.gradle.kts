@@ -16,30 +16,33 @@ application {
 
 dependencies {
     api(project(":api"))
+    implementation(libs.bundles.logging)
+    implementation(libs.bundles.leveldb)
+    implementation(libs.bundles.rng)
+    implementation(libs.bundles.fastutil)
+    implementation(libs.bundles.stateupdater)
     implementation(libs.semver4j)
     implementation(libs.commonslang3)
     implementation(libs.commonsio)
     implementation(libs.mcterminal)
-    implementation(libs.bundles.logging)
     implementation(libs.disruptor)
-    implementation(libs.bundles.leveldb)
     implementation(libs.netty.epoll)
     implementation(libs.netty.kqueue)
     implementation(libs.fastreflect)
     implementation(libs.oshi)
     implementation(libs.flatlaf)
     implementation(libs.formsrt)
-    implementation(libs.bundles.rng)
     implementation(libs.sentry)
     implementation(libs.jctools)
     implementation(libs.caffeine)
-    implementation(libs.bundles.fastutil)
     implementation(libs.network) {
         exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")
     }
-    implementation(libs.bundles.stateupdater)
+    implementation(libs.okaeri.configs.yaml.snakeyaml) {
+        exclude(group = "org.yaml", module = "snakeyaml") // Use the latest version
+    }
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)

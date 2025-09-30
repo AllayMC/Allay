@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockTypes;
@@ -58,8 +59,10 @@ public class AllayWorld implements World {
     protected final WorldStorage worldStorage;
     @Getter
     protected final AllayWorldData worldData;
+
     protected final BlockingQueueWrapper<PacketQueueEntry> packetQueue;
     protected final Semaphore networkSemaphore;
+
     protected final AtomicReference<WorldState> state;
     @Getter
     protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
@@ -67,19 +70,19 @@ public class AllayWorld implements World {
     protected final Scheduler scheduler;
     protected final GameLoop gameLoop;
     @Getter
-    protected final Thread worldThread;
-    protected final Thread networkThread;
+    protected final Thread worldThread, networkThread;
 
     protected long nextTimeSendTick;
 
     @Getter
     protected Weather weather;
-    protected int rainTimer;
-    protected int thunderTimer;
-    protected boolean isRaining;
-    protected boolean isThundering;
+    protected int rainTimer, thunderTimer;
+    protected boolean raining, thundering;
 
-    protected boolean isFirstTick;
+    protected boolean firstTick;
+    @Getter
+    @Setter
+    protected boolean runtimeOnly;
 
     public AllayWorld(String name, WorldStorage worldStorage) {
         this.name = name;
@@ -108,7 +111,7 @@ public class AllayWorld implements World {
         this.weather = Weather.CLEAR;
         this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
         this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
-        this.isFirstTick = true;
+        this.firstTick = true;
     }
 
     protected void onWorldStart() {
@@ -205,22 +208,22 @@ public class AllayWorld implements World {
     }
 
     protected void checkFirstTick() {
-        if (!isFirstTick) {
+        if (!this.firstTick) {
             return;
         }
-        isFirstTick = false;
+        this.firstTick = false;
 
         var overworld = getOverWorld();
         if (AllayServer.getSettings().worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
             overworld.getChunkManager().addChunkLoader(new FakeChunkLoader(() -> {
-                var spawnPoint = worldData.getSpawnPoint();
+                var spawnPoint = this.worldData.getSpawnPoint();
                 return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
             }, AllayServer.getSettings().worldSettings().spawnPointChunkRadius()));
         }
 
         // Find the spawn point only the first time the world is loaded
-        if (worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
+        if (this.worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
             Thread.ofVirtual().name("Spawn Point Finding Thread #" + name).start(() -> {
                 var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
                 if (newSpawnPoint == null) {
@@ -231,7 +234,7 @@ public class AllayWorld implements World {
                 var finalNewSpawnPoint = newSpawnPoint;
                 overworld.getWorld().getScheduler().runLater(this, () -> {
                     // Set new spawn point in world thread as world data object is not thread-safe
-                    worldData.setSpawnPoint(finalNewSpawnPoint);
+                    this.worldData.setSpawnPoint(finalNewSpawnPoint);
                     log.info("Spawn point for world {} is set to {}, {}, {}", name, finalNewSpawnPoint.x(), finalNewSpawnPoint.y(), finalNewSpawnPoint.z());
                 });
             });
@@ -248,23 +251,23 @@ public class AllayWorld implements World {
     }
 
     public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
-        packetQueue.offer(new PacketQueueEntry(player, packet, time));
+        this.packetQueue.offer(new PacketQueueEntry(player, packet, time));
     }
 
     protected void tickTime(long currentTick) {
-        if (currentTick < nextTimeSendTick) {
+        if (currentTick < this.nextTimeSendTick) {
             return;
         }
 
-        if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
+        if (!this.worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
             // Client will always keep time flowing, so we still need to send the
             // same time uninterruptedly if the daylight cycle is disabled
             getPlayers().forEach(player -> player.viewTime(this.worldData.getTimeOfDay()));
         } else {
-            worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
+            this.worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
         }
 
-        nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
+        this.nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
     }
 
     protected void tickWeather() {
@@ -274,25 +277,25 @@ public class AllayWorld implements World {
 
         var newWeather = this.weather;
         if (--this.rainTimer == 0) {
-            if (this.isRaining) {
+            if (this.raining) {
                 newWeather = Weather.CLEAR;
                 this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
             } else {
-                newWeather = isThundering ? Weather.THUNDER : Weather.RAIN;
+                newWeather = thundering ? Weather.THUNDER : Weather.RAIN;
                 this.rainTimer = Weather.RAIN.generateRandomTimeLength();
             }
-            this.isRaining = !this.isRaining;
+            this.raining = !this.raining;
         }
 
         if (--this.thunderTimer == 0) {
-            if (this.isThundering) {
-                newWeather = isRaining ? Weather.RAIN : Weather.CLEAR;
+            if (this.thundering) {
+                newWeather = raining ? Weather.RAIN : Weather.CLEAR;
                 this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
             } else {
-                newWeather = isRaining ? Weather.THUNDER : Weather.CLEAR;
+                newWeather = raining ? Weather.THUNDER : Weather.CLEAR;
                 this.thunderTimer = Weather.THUNDER.generateRandomTimeLength();
             }
-            this.isThundering = !this.isThundering;
+            this.thundering = !this.thundering;
         }
 
         setWeather(newWeather);
@@ -300,51 +303,51 @@ public class AllayWorld implements World {
 
     @Override
     public long getTick() {
-        return gameLoop.getTick();
+        return this.gameLoop.getTick();
     }
 
     @Override
     public float getTPS() {
-        return gameLoop.getTPS();
+        return this.gameLoop.getTPS();
     }
 
     @Override
     public float getMSPT() {
-        return gameLoop.getMSPT();
+        return this.gameLoop.getMSPT();
     }
 
     @Override
     public float getTickUsage() {
-        return gameLoop.getTickUsage();
+        return this.gameLoop.getTickUsage();
     }
 
     public void startTick() {
-        if (worldThread.getState() != Thread.State.NEW) {
-            throw new IllegalStateException("World " + name + " is already ticking!");
+        if (this.worldThread.getState() != Thread.State.NEW) {
+            throw new IllegalStateException("World " + this.name + " is already ticking!");
         }
 
-        worldThread.start();
-        dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).startTick());
+        this.worldThread.start();
+        this.dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).startTick());
         if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-            networkThread.start();
+            this.networkThread.start();
         }
     }
 
     @Override
     public Dimension getDimension(int dimensionId) {
-        return dimensionMap.get(dimensionId);
+        return this.dimensionMap.get(dimensionId);
     }
 
     @Override
     @UnmodifiableView
     public Map<Integer, Dimension> getDimensions() {
-        return Collections.unmodifiableMap(dimensionMap);
+        return Collections.unmodifiableMap(this.dimensionMap);
     }
 
     @Override
     @UnmodifiableView
     public Collection<EntityPlayer> getPlayers() {
-        return dimensionMap.values().stream()
+        return this.dimensionMap.values().stream()
                 .flatMap(dimension -> dimension.getPlayers().stream())
                 .toList();
     }
@@ -368,12 +371,12 @@ public class AllayWorld implements World {
     protected void shutdownReally() {
         log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_UNLOADING, name));
         getPlayers().forEach(EntityPlayer::disconnect);
-        scheduler.shutdown();
-        dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
+        this.scheduler.shutdown();
+        this.dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
-        worldStorage.shutdown();
+        this.worldStorage.shutdown();
+        this.state.set(WorldState.STOPPED);
         log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_UNLOADED, name));
-        state.set(WorldState.STOPPED);
     }
 
     @Override

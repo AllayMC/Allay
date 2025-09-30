@@ -483,7 +483,10 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         // We don't send world seed to client for security reason
         packet.setSeed(0L);
         packet.setDimensionId(dimension.getDimensionInfo().dimensionId());
-        packet.setGeneratorId(dimension.getChunkManager().getWorldGenerator().getType().ordinal());
+        // 0 - limit 1 - infinite
+        // 2 - flat  3 - nether
+        // 4 - end   5 - void
+        packet.setGeneratorId(1);
         packet.setLevelGameType(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()));
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         packet.setTrustingPlayers(true);

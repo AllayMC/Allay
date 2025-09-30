@@ -23,10 +23,10 @@ import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.AllayNetworkInterface;
+import org.allaymc.server.utils.Utils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -59,7 +59,7 @@ public class AllayPlayerManager implements PlayerManager {
         this.playerStorage = playerStorage;
         this.networkInterface = networkInterface;
         this.players = new Object2ObjectOpenHashMap<>();
-        this.banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
+        this.banInfo = ConfigManager.create(BanInfo.class, org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
     }
 

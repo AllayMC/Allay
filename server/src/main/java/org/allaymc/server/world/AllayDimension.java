@@ -41,6 +41,7 @@ public class AllayDimension implements Dimension {
 
     protected final AllayWorld world;
     protected final DimensionInfo dimensionInfo;
+    protected final WorldGenerator worldGenerator;
     protected final AllayChunkManager chunkManager;
     protected final AllayEntityManager entityManager;
     protected final AllayBlockUpdateManager blockUpdateManager;
@@ -51,6 +52,7 @@ public class AllayDimension implements Dimension {
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
+        this.worldGenerator = worldGenerator;
         this.chunkManager = new AllayChunkManager(this, worldGenerator, world.getWorldStorage());
         this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
         this.blockUpdateManager = new AllayBlockUpdateManager(this);

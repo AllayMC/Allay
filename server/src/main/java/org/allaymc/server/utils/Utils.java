@@ -1,12 +1,15 @@
 package org.allaymc.server.utils;
 
 import com.google.common.base.Preconditions;
+import eu.okaeri.configs.OkaeriConfigInitializer;
+import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.plugin.PluginDescriptor;
 import org.semver4j.Semver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Path;
 
 /**
  * @author daoge_cmd
@@ -21,7 +24,6 @@ public class Utils {
         }
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public static void checkDescriptorValid(PluginDescriptor descriptor) {
         Preconditions.checkNotNull(descriptor.getName(), "Plugin name cannot be null");
         Preconditions.checkNotNull(descriptor.getEntrance(), "Plugin entrance cannot be null");
@@ -60,5 +62,26 @@ public class Utils {
             index += b.length;
         }
         return appendedBytes;
+    }
+
+    /**
+     * Create a default config initializer.
+     *
+     * @param file the file path
+     * @return the config initializer
+     */
+    public static OkaeriConfigInitializer createConfigInitializer(Path file) {
+        return it -> {
+            // Specify configurer implementation, optionally additional serdes packages
+            it.withConfigurer(new YamlSnakeYamlConfigurer());
+            // Specify Path, File or pathname
+            it.withBindFile(file);
+            // Automatic removal of undeclared keys
+            it.withRemoveOrphans(true);
+            // Save file if it does not exist
+            it.saveDefaults();
+            // Load and save to update comments/new fields
+            it.load(true);
+        };
     }
 }
