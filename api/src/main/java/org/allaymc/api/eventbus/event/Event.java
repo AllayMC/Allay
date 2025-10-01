@@ -27,7 +27,6 @@ public abstract class Event {
      * Call the event with the specified event bus.
      *
      * @param eventBus the event bus to call the event
-     *
      * @return {@code true} if the event was not cancelled, {@code false} otherwise.
      */
     public boolean call(EventBus eventBus) {
@@ -38,8 +37,7 @@ public abstract class Event {
     /**
      * Cancel the event.
      *
-     * @param value {@code true} if the event is cancelled, otherwise {@code false}
-     *
+     * @param value {@code true} if the event should be cancelled, otherwise {@code false}
      * @throws EventException if the event is not cancellable
      */
     public void setCancelled(boolean value) {
