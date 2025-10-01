@@ -188,6 +188,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed network-related code in `Weather`
 - (API) Removed method `BlockType.register()`.
 - (API) Removed method `GenerateFunction.getName()`.
+- (API) Removed method `Entity.teleportAsync()` since the normal teleport method is not blocking now.
 - (API) Removed field `BlockPlaceEvent.entity` since the entity can be obtained from the interact info.
 - (API) Removed a number of useless build-in permissions which are listed in class `Permissions`, the developer should listen to the corresponded events.
 

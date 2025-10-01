@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import com.google.common.base.Suppliers;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.action.BlockAction;
@@ -72,6 +73,7 @@ import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
 import static org.cloudburstmc.protocol.bedrock.data.DebugShape.Type.*;
@@ -100,14 +102,16 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
      * A map which contains the network offset of some entities. The network offset is the additional offset in
      * y coordinate when sent over network. This is mostly the case for older entities such as player and TNT.
      */
-    protected static final Map<EntityType<?>, Float> NETWORK_OFFSETS;
+    protected static final Supplier<Map<EntityType<?>, Float>> NETWORK_OFFSETS = Suppliers.memoize(() -> {
+        var map = new HashMap<EntityType<?>, Float>();
+        map.put(EntityTypes.PLAYER, 1.62f);
+        map.put(EntityTypes.FALLING_BLOCK, 0.49f);
+        map.put(EntityTypes.ITEM, 0.125f);
+        map.put(EntityTypes.TNT, 0.49f);
+        return map;
+    });
 
-    static {
-        NETWORK_OFFSETS = new HashMap<>();
-        NETWORK_OFFSETS.put(EntityTypes.PLAYER, 1.62f);
-        NETWORK_OFFSETS.put(EntityTypes.FALLING_BLOCK, 0.49f);
-        NETWORK_OFFSETS.put(EntityTypes.ITEM, 0.125f);
-        NETWORK_OFFSETS.put(EntityTypes.TNT, 0.49f);
+    protected static void initNetworkOffsetMap() {
     }
 
     @ComponentObject
@@ -133,7 +137,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewEntity(Entity entity) {
         var l = entity.getLocation();
-        var position = Vector3f.from(l.x(), l.y() + NETWORK_OFFSETS.getOrDefault(entity.getEntityType(), 0.0f), l.z());
+        var position = Vector3f.from(l.x(), l.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), l.z());
         var motion = switch (entity) {
             case EntityPhysicsComponent physicsComponent -> {
                 var m = physicsComponent.getMotion();
@@ -221,25 +225,9 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         if (AllayServer.getSettings().entitySettings().physicsEngineSettings().useDeltaMovePacket()) {
             packet = createDeltaMovePacket(entity, locationLastSent, newLocation, teleporting);
         } else {
-            packet = createAbsoluteMovePacket(entity, newLocation, teleporting);
-            locationLastSent.set(newLocation);
-            locationLastSent.setPitch(newLocation.pitch());
-            locationLastSent.setYaw(newLocation.yaw());
-            locationLastSent.setHeadYaw(newLocation.headYaw());
+            packet = createAbsoluteMovePacket(entity, locationLastSent, newLocation, teleporting);
         }
         this.clientComponent.sendPacket(packet);
-    }
-
-    protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3dc newLocation, boolean teleporting) {
-        var packet = new MoveEntityAbsolutePacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
-        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
-        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), newLocation.headYaw()));
-        packet.setTeleported(teleporting);
-        if (entity instanceof EntityPhysicsComponent physicsComponent) {
-            packet.setOnGround(physicsComponent.isOnGround());
-        }
-        return packet;
     }
 
     protected BedrockPacket createDeltaMovePacket(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
@@ -252,8 +240,8 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             locationLastSent.x = newLocation.x();
         }
         if (moveFlags.contains(HAS_Y)) {
-            packet.setY((float) newLocation.y());
-            locationLastSent.y = newLocation.y() + NETWORK_OFFSETS.getOrDefault(entity.getEntityType(), 0.0f);
+            packet.setY((float) newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f));
+            locationLastSent.y = newLocation.y();
         }
         if (moveFlags.contains(HAS_Z)) {
             packet.setZ((float) newLocation.z());
@@ -294,6 +282,24 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             flags.add(HAS_HEAD_YAW);
         }
         return flags;
+    }
+
+    protected BedrockPacket createAbsoluteMovePacket(Entity entity, Location3d locationLastSent, Location3dc newLocation, boolean teleporting) {
+        locationLastSent.set(newLocation);
+        locationLastSent.setPitch(newLocation.pitch());
+        locationLastSent.setYaw(newLocation.yaw());
+        locationLastSent.setHeadYaw(newLocation.headYaw());
+
+        var packet = new MoveEntityAbsolutePacket();
+        packet.setRuntimeEntityId(entity.getRuntimeId());
+        packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
+        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), newLocation.headYaw()));
+        packet.setTeleported(teleporting);
+        if (entity instanceof EntityPhysicsComponent physicsComponent) {
+            packet.setOnGround(physicsComponent.isOnGround());
+        }
+
+        return packet;
     }
 
     @Override
