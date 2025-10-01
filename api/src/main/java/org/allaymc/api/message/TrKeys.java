@@ -305,6 +305,11 @@ public interface TrKeys {
     String ALLAY_GUI_PLUGIN = "allay:gui.plugin";
 
     /**
+     * API Version
+     */
+    String ALLAY_GUI_PLUGIN_API_VERSION = "allay:gui.plugin.api_version";
+
+    /**
      * Authors
      */
     String ALLAY_GUI_PLUGIN_AUTHORS = "allay:gui.plugin.authors";

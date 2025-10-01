@@ -59,6 +59,7 @@
   "allay:gui.player.uuid": "UUID",
   "allay:gui.player.world": "所在世界",
   "allay:gui.plugin": "插件",
+  "allay:gui.plugin.api_version": "API版本",
   "allay:gui.plugin.authors": "作者",
   "allay:gui.plugin.dependencies": "依赖",
   "allay:gui.plugin.description": "介绍",

@@ -66,6 +66,7 @@
   "gui.plugin.info": "Plugin Information",
   "gui.plugin.name": "Name",
   "gui.plugin.version": "Version",
+  "gui.plugin.api_version": "API Version",
   "gui.plugin.website": "Website",
   "gui.ram.label": "Used: %1mb (%2% free)",
   "lang.set": "Server language was set to %1",

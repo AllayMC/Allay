@@ -66,6 +66,7 @@
   "gui.plugin.info": "插件信息",
   "gui.plugin.name": "名称",
   "gui.plugin.version": "版本",
+  "gui.plugin.api_version": "API版本",
   "gui.plugin.website": "网站",
   "gui.ram.label": "已使用: %1mb (%2% 空闲)",
   "lang.set": "服务器语言已设置为 %1",

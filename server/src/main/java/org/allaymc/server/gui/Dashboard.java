@@ -96,6 +96,7 @@ public final class Dashboard {
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_DESCRIPTION) + ": " + pluginDescriptor.getDescription() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_VERSION) + ": " + pluginDescriptor.getVersion() + "\n" +
+                            I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_API_VERSION) + ": " + pluginDescriptor.getAPIVersion() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_AUTHORS) + ": " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_DEPENDENCIES) + ": " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLUGIN_WEBSITE) + ": " + pluginDescriptor.getWebsite(),
