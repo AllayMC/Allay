@@ -80,6 +80,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed method `BlockState.getBlockStateTag()` to `BlockState.getBlockStateNBT()`.
 - (API) Renamed class `EntityDamageComponent` to `EntityLivingComponent`.
 - (API) Renamed class `EntityPlayerNetworkComponent` to `EntityPlayerClientComponent`.
+- (API) Renamed class `BlockEntityHolderComponent` to `BlockBlockEntityHolderComponent` to match the naming convention.
 - (API) Refactored the container system, multiple methods were renamed/deleted. See the commit history for details.
 - (API) Refactored the permission system to add support for multiple parents in a permission group. See the commit history for details.
 - (API) Due to the new `XXXViewer` system, a number of network related methods are removed (e.g. `Entity.createSpawnPacket()`). See the commit history for details.

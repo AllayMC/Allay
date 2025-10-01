@@ -3,7 +3,7 @@ package org.allaymc.server.block.component;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.BlockEntityHolderComponent;
+import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements BlockEntityHolderComponent<T> {
+public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implements BlockBlockEntityHolderComponent<T> {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_holder_component");
 

@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.BlockEntityHolderComponent;
+import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
@@ -18,7 +18,7 @@ import org.allaymc.server.component.annotation.Dependency;
  */
 public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
     @Dependency
-    BlockEntityHolderComponent<BlockEntityJukebox> blockEntityHolderComponent;
+    BlockBlockEntityHolderComponent<BlockEntityJukebox> blockEntityHolderComponent;
 
     public BlockJukeboxBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

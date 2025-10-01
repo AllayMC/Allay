@@ -91,7 +91,6 @@ public class BlockClassGen extends BaseClassGen {
         deleteOldFiles(interfaceDir, generatedFiles);
         deleteOldFiles(implDir, generatedFiles);
 
-
         generateDefaultBlockTypeInitializer();
 
         var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPES.packageName(), typesClass.build())

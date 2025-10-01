@@ -21,7 +21,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
-import org.allaymc.server.block.component.BlockEntityHolderComponentImpl;
+import org.allaymc.server.block.component.BlockBlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.component.ComponentProvider;
@@ -234,7 +234,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         public Builder bindBlockEntity(BlockEntityType<?> blockEntityType) {
-            return addComponent(new BlockEntityHolderComponentImpl<>(blockEntityType));
+            return addComponent(new BlockBlockEntityHolderComponentImpl<>(blockEntityType));
         }
 
         public Builder setDefaultStateSupplier(Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier) {

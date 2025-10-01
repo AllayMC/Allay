@@ -2,7 +2,7 @@ package org.allaymc.server.block.component;
 
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.BlockEntityHolderComponent;
+import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
@@ -30,7 +30,7 @@ import java.util.Set;
 public class BlockBedBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Dependency
-    BlockEntityHolderComponent<BlockEntityBed> blockEntityHolderComponent;
+    BlockBlockEntityHolderComponent<BlockEntityBed> blockEntityHolderComponent;
 
     public BlockBedBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

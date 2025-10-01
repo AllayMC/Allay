@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.BlockEntityHolderComponent;
+import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -16,7 +16,7 @@ import org.allaymc.server.component.annotation.Dependency;
  */
 public class BlockChestBaseComponentImpl extends BlockBaseComponentImpl {
     @Dependency
-    private BlockEntityHolderComponent<BlockEntityChest> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityChest> blockEntityHolderComponent;
 
     public BlockChestBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

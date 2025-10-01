@@ -1,7 +1,7 @@
 package org.allaymc.server.block.impl;
 
 import lombok.experimental.Delegate;
-import org.allaymc.api.block.component.BlockEntityHolderComponent;
+import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.interfaces.BlockChestBehavior;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.component.Component;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlockChestBehaviorImpl extends BlockBehaviorImpl implements BlockChestBehavior {
     @Delegate
-    protected BlockEntityHolderComponent<BlockEntityChest> blockEntityHolderComponent;
+    protected BlockBlockEntityHolderComponent<BlockEntityChest> blockEntityHolderComponent;
 
     public BlockChestBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

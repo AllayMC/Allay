@@ -8,7 +8,7 @@ import org.allaymc.api.world.Dimension;
 /**
  * @author daoge_cmd
  */
-public interface BlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {
+public interface BlockBlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {
     /**
      * Get the block entity type.
      *

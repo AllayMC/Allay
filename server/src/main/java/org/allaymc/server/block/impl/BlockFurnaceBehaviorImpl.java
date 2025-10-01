@@ -1,7 +1,7 @@
 package org.allaymc.server.block.impl;
 
 import lombok.experimental.Delegate;
-import org.allaymc.api.block.component.BlockEntityHolderComponent;
+import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.interfaces.BlockFurnaceBehavior;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
 import org.allaymc.api.component.Component;
@@ -12,7 +12,7 @@ import java.util.List;
 public class BlockFurnaceBehaviorImpl extends BlockBehaviorImpl implements BlockFurnaceBehavior {
 
     @Delegate
-    protected BlockEntityHolderComponent<BlockEntityFurnace> blockEntityHolderComponent;
+    protected BlockBlockEntityHolderComponent<BlockEntityFurnace> blockEntityHolderComponent;
 
     public BlockFurnaceBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {
