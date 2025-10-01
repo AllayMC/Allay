@@ -12,6 +12,7 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
@@ -31,32 +32,45 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     @Getter
     protected final BlockEntityType<T> blockEntityType;
 
-    /**
-     * Create block entity at a specific location.
-     *
-     * @param pos block entity's pos
-     */
-    protected void createBlockEntity(Position3ic pos) {
-        var dimension = pos.dimension();
-        Objects.requireNonNull(dimension);
-        var chunk = dimension.getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
-        if (chunk == null) {
-            throw new IllegalStateException("Trying to create a block entity in an unload chunk! Dimension: " + dimension + " at pos " + pos);
+    @Override
+    public T getBlockEntity(int x, int y, int z, Dimension dimension) {
+        var blockEntity = dimension.getBlockEntity(x, y, z);
+        if (blockEntity == null) {
+            return createBlockEntity(x, y, z, dimension);
         }
-        var presentBlockEntity = chunk.getBlockEntity(pos.x() & 15, pos.y(), pos.z() & 15);
-        if (presentBlockEntity != null) {
-            throw new IllegalStateException("Trying to create a block entity when block entity already exists! Dimension: " + dimension + " at pos " + pos);
+
+        if (blockEntity.getBlockEntityType() != this.blockEntityType) {
+            throw new IllegalStateException(
+                    "Mismatched block entity type at pos %d, %d, %d, %s! Expected: %s, actual: %s"
+                            .formatted(
+                                    x, y, z, dimension.toString(),
+                                    this.blockEntityType.getName(),
+                                    blockEntity.getBlockEntityType().getName()
+                            )
+            );
         }
-        var blockEntity = getBlockEntityType().createBlockEntity(BlockEntityInitInfo.builder().pos(pos.x(), pos.y(), pos.z()).dimension(dimension).build());
-        chunk.addBlockEntity(blockEntity);
+
+        return (T) blockEntity;
     }
 
-    /**
-     * Remove a block entity in a specific location.
-     *
-     * @param pos block entity's pos
-     * @throws IllegalStateException if chunk isn't loaded or the block entity not exists
-     */
+    protected T createBlockEntity(int x, int y, int z, Dimension dimension) {
+        Objects.requireNonNull(dimension);
+        var chunk = dimension.getChunkManager().getChunkByDimensionPos(x, z);
+        if (chunk == null) {
+            throw new IllegalStateException("Trying to create a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
+        }
+
+        var presentBlockEntity = chunk.getBlockEntity(x & 15, y, z & 15);
+        if (presentBlockEntity != null) {
+            throw new IllegalStateException("Trying to create a block entity when block entity already exists! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
+        }
+
+        var blockEntity = this.blockEntityType.createBlockEntity(BlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
+        chunk.addBlockEntity(blockEntity);
+
+        return blockEntity;
+    }
+
     protected void removeBlockEntity(Position3ic pos) {
         var dimension = pos.dimension();
         Objects.requireNonNull(dimension);
@@ -72,7 +86,6 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     @EventHandler
     protected void onBlockPlace(CBlockOnPlaceEvent event) {
         var pos = event.getCurrentBlock().getPosition();
-        createBlockEntity(pos);
         var blockEntity = getBlockEntity(pos);
         forwardEvent(blockEntity, event);
         // Send block entity to the client after called onPlace() because onPlace() method may make some changes
@@ -93,6 +106,14 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
         removeBlockEntity(pos);
     }
 
+    protected void forwardEvent(BlockEntity blockEntity, Event event) {
+        ((ComponentClass) blockEntity).getManager().callEvent(event);
+    }
+
+    protected BlockEntityBaseComponentImpl getBaseComponentImpl(BlockEntity blockEntity) {
+        return (BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent();
+    }
+
     @EventHandler
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().getPosition());
@@ -108,13 +129,5 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     @EventHandler
     protected void onPunch(CBlockOnPunchEvent event) {
         forwardEvent(getBlockEntity(event.getCurrentBlock().getPosition()), event);
-    }
-
-    protected void forwardEvent(BlockEntity blockEntity, Event event) {
-        ((ComponentClass) blockEntity).getManager().callEvent(event);
-    }
-
-    protected BlockEntityBaseComponentImpl getBaseComponentImpl(BlockEntity blockEntity) {
-        return (BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent();
     }
 }

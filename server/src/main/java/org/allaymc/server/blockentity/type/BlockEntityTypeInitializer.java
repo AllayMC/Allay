@@ -149,4 +149,13 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityBedBaseComponentImpl::new, BlockEntityBedBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initNoteblock() {
+        BlockEntityTypes.NOTEBLOCK = AllayBlockEntityType
+                .builder(BlockEntityNoteblockImpl.class)
+                // Yes, that's not an error xd
+                .name(BlockEntityId.MUSIC)
+                .addComponent(BlockEntityNoteblockBaseComponentImpl::new, BlockEntityNoteblockBaseComponentImpl.class)
+                .build();
+    }
 }

@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityBedBaseComponent {
 
-    private static final String TAG_COLOR = "color";
+    protected static final String TAG_COLOR = "color";
 
     @Getter
     protected DyeColor color;

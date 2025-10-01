@@ -469,10 +469,8 @@ public final class BlockTypeInitializer {
         BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperStairs = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER_STAIRS : BlockTypes.CUT_COPPER_STAIRS;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS : BlockTypes.EXPOSED_CUT_COPPER_STAIRS;
-            case WEATHERED ->
-                    waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS : BlockTypes.WEATHERED_CUT_COPPER_STAIRS;
-            case OXIDIZED ->
-                    waxed ? BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS : BlockTypes.OXIDIZED_CUT_COPPER_STAIRS;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS : BlockTypes.WEATHERED_CUT_COPPER_STAIRS;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS : BlockTypes.OXIDIZED_CUT_COPPER_STAIRS;
         };
         BlockTypes.CUT_COPPER_STAIRS = buildCopperStairs(BlockId.CUT_COPPER_STAIRS, OxidationLevel.UNAFFECTED, cutCopperStairs);
         BlockTypes.EXPOSED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.EXPOSED_CUT_COPPER_STAIRS, OxidationLevel.EXPOSED, cutCopperStairs);
@@ -632,12 +630,9 @@ public final class BlockTypeInitializer {
 
         BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperSlab = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.DOUBLE_CUT_COPPER_SLAB;
-            case EXPOSED ->
-                    waxed ? BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB;
-            case WEATHERED ->
-                    waxed ? BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB;
-            case OXIDIZED ->
-                    waxed ? BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
         };
         BlockTypes.DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.DOUBLE_CUT_COPPER_SLAB, BlockId.CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
         BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB, BlockId.EXPOSED_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
@@ -1773,6 +1768,14 @@ public final class BlockTypeInitializer {
                 .bindBlockEntity(BlockEntityTypes.BED)
                 .setProperties(BlockPropertyTypes.HEAD_PIECE_BIT, BlockPropertyTypes.OCCUPIED_BIT, BlockPropertyTypes.DIRECTION_4)
                 .setBaseComponentSupplier(BlockBedBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initNoteblock() {
+        BlockTypes.NOTEBLOCK = AllayBlockType
+                .builder(BlockNoteblockBehaviorImpl.class)
+                .vanillaBlock(BlockId.NOTEBLOCK)
+                .bindBlockEntity(BlockEntityTypes.NOTEBLOCK)
                 .build();
     }
 }

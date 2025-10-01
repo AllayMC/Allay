@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Implemented basic bed feature.
 - (API) Implemented arrow and bow. A new event `EntityShootBowEvent` is added.
+- (API) Implemented noteblock.
 - (API) Introduced PlayerInteractBlockEvent.
 - (API) Introduced PlayerBookEditEvent.
 - (API) Introduced methods `Entity.getOffsetAABBForCollisionCheck()` and `Entity.checkBlockCollision()`.

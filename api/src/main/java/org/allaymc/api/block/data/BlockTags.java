@@ -9,9 +9,49 @@ import java.util.Map;
 public interface BlockTags {
     Map<String, BlockTag> NAME_TO_TAG = new HashMap<>();
 
-    BlockTag CROP = create("minecraft:crop");
-
     BlockTag FERTILIZE_AREA = create("minecraft:fertilize_area");
+
+    BlockTag WATER = create("minecraft:water");
+
+    BlockTag GRASS = create("minecraft:grass");
+
+    BlockTag DARK_OAK = create("minecraft:dark_oak");
+
+    BlockTag BEACON_BASE = create("minecraft:beacon_base");
+
+    BlockTag LOG = create("minecraft:log");
+
+    BlockTag IS_SWORD_ITEM_DESTRUCTIBLE = create("minecraft:is_sword_item_destructible");
+
+    BlockTag CONCRETE_POWDER = create("minecraft:concrete_powder");
+
+    BlockTag LEAVES_SUPPORTER = create("minecraft:leaves_supporter");
+
+    BlockTag PUMPKIN = create("minecraft:pumpkin");
+
+    BlockTag SPRUCE = create("minecraft:spruce");
+
+    BlockTag SOUL_FIRE_CONVERTER = create("minecraft:soul_fire_converter");
+
+    BlockTag IS_SHOVEL_ITEM_DESTRUCTIBLE = create("minecraft:is_shovel_item_destructible");
+
+    BlockTag STONE = create("minecraft:stone");
+
+    BlockTag SAND = create("minecraft:sand");
+
+    BlockTag STONE_TIER_DESTRUCTIBLE = create("minecraft:stone_tier_destructible");
+
+    BlockTag SNOW = create("minecraft:snow");
+
+    BlockTag IS_PICKAXE_ITEM_DESTRUCTIBLE = create("minecraft:is_pickaxe_item_destructible");
+
+    BlockTag NOT_FEATURE_REPLACEABLE = create("minecraft:not_feature_replaceable");
+
+    BlockTag IS_HOE_ITEM_DESTRUCTIBLE = create("minecraft:is_hoe_item_destructible");
+
+    BlockTag RAIL = create("minecraft:rail");
+
+    BlockTag CROP = create("minecraft:crop");
 
     BlockTag MOB_SPAWNER = create("minecraft:mob_spawner");
 
@@ -31,23 +71,11 @@ public interface BlockTags {
 
     BlockTag ONE_WAY_COLLIDABLE = create("minecraft:one_way_collidable");
 
-    BlockTag WATER = create("minecraft:water");
-
-    BlockTag GRASS = create("minecraft:grass");
-
     BlockTag BIRCH = create("minecraft:birch");
 
     BlockTag JUNGLE = create("minecraft:jungle");
 
     BlockTag ACACIA = create("minecraft:acacia");
-
-    BlockTag DARK_OAK = create("minecraft:dark_oak");
-
-    BlockTag BEACON_BASE = create("minecraft:beacon_base");
-
-    BlockTag LOG = create("minecraft:log");
-
-    BlockTag IS_SWORD_ITEM_DESTRUCTIBLE = create("minecraft:is_sword_item_destructible");
 
     BlockTag WOOD = create("minecraft:wood");
 
@@ -57,13 +85,7 @@ public interface BlockTags {
 
     BlockTag PLANT = create("minecraft:plant");
 
-    BlockTag LEAVES_SUPPORTER = create("minecraft:leaves_supporter");
-
     BlockTag IRON_PICK_DIGGABLE = create("minecraft:iron_pick_diggable");
-
-    BlockTag PUMPKIN = create("minecraft:pumpkin");
-
-    BlockTag SPRUCE = create("minecraft:spruce");
 
     BlockTag OAK = create("minecraft:oak");
 
@@ -71,37 +93,19 @@ public interface BlockTags {
 
     BlockTag POTTABLE_PLANT = create("minecraft:pottable_plant");
 
-    BlockTag SOUL_FIRE_CONVERTER = create("minecraft:soul_fire_converter");
-
-    BlockTag IS_SHOVEL_ITEM_DESTRUCTIBLE = create("minecraft:is_shovel_item_destructible");
-
-    BlockTag STONE = create("minecraft:stone");
-
-    BlockTag SAND = create("minecraft:sand");
-
-    BlockTag STONE_TIER_DESTRUCTIBLE = create("minecraft:stone_tier_destructible");
+    BlockTag INFESTED = create("minecraft:infested");
 
     BlockTag LAVA = create("minecraft:lava");
-
-    BlockTag SNOW = create("minecraft:snow");
 
     BlockTag METAL = create("minecraft:metal");
 
     BlockTag REPLACEABLE = create("minecraft:replaceable");
 
-    BlockTag IS_PICKAXE_ITEM_DESTRUCTIBLE = create("minecraft:is_pickaxe_item_destructible");
-
-    BlockTag NOT_FEATURE_REPLACEABLE = create("minecraft:not_feature_replaceable");
-
     BlockTag TRAPDOORS = create("minecraft:trapdoors");
 
     BlockTag STONE_PICK_DIGGABLE = create("minecraft:stone_pick_diggable");
 
-    BlockTag IS_HOE_ITEM_DESTRUCTIBLE = create("minecraft:is_hoe_item_destructible");
-
     BlockTag LEAVES = create("minecraft:leaves");
-
-    BlockTag RAIL = create("minecraft:rail");
 
     static BlockTag create(String name) {
         var tag = new BlockTag(name);
