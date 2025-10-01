@@ -63,10 +63,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     }
 
     @EventHandler
-    @Override
-    public void onBlockPlace(CBlockOnPlaceEvent event) {
-        super.onBlockPlace(event);
-
+    protected void onBlockPlace(CBlockOnPlaceEvent event) {
         var placementInfo = event.getPlacementInfo();
         if (placementInfo == null) return;
 

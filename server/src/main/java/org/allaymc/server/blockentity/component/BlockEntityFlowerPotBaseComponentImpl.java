@@ -46,8 +46,7 @@ public class BlockEntityFlowerPotBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @EventHandler
-    @Override
-    public void onBlockReplace(CBlockOnReplaceEvent event) {
+    protected void onBlockReplace(CBlockOnReplaceEvent event) {
         if (plantBlock == null) {
             return;
         }

@@ -43,8 +43,7 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     @EventHandler
-    @Override
-    public void onBlockReplace(CBlockOnReplaceEvent event) {
+    protected void onBlockReplace(CBlockOnReplaceEvent event) {
         if (this.musicDiscItem != null) {
             var current = event.getCurrentBlock();
             var pos = current.getPosition();

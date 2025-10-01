@@ -116,9 +116,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     }
 
     @EventHandler
-    @Override
-    public void onBlockInteract(CBlockOnInteractEvent event) {
-        super.onBlockInteract(event);
+    protected void onBlockInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
         // If a sign is waxed, it cannot be modified.
@@ -164,14 +162,6 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
         openSignEditorFor(player, isFrontSideInteracted);
         event.setSuccess(true);
-    }
-
-    @EventHandler
-    @Override
-    public void onBlockPlace(CBlockOnPlaceEvent event) {
-        super.onBlockPlace(event);
-        if (event.getPlacementInfo() == null) return;
-        openSignEditorFor(event.getPlacementInfo().player(), true);
     }
 
     protected boolean isFrontSideInteracted(BlockFace interactedFace) {
@@ -262,5 +252,11 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
                     .putString(TAG_TEXT_OWNER, "")
                     .build();
         }
+    }
+
+    @EventHandler
+    protected void onBlockPlace(CBlockOnPlaceEvent event) {
+        if (event.getPlacementInfo() == null) return;
+        openSignEditorFor(event.getPlacementInfo().player(), true);
     }
 }
