@@ -7,13 +7,11 @@ import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.ComponentManager;
@@ -143,30 +141,5 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         } else {
             chunk.forEachChunkLoaderLater(loader -> loader.viewBlockEntity(thisBlockEntity));
         }
-    }
-
-    @EventHandler
-    public void onBlockNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
-        manager.callEvent(event);
-    }
-
-    @EventHandler
-    public void onBlockPlace(CBlockOnPlaceEvent event) {
-        manager.callEvent(event);
-    }
-
-    @EventHandler
-    public void onBlockReplace(CBlockOnReplaceEvent event) {
-        manager.callEvent(event);
-    }
-
-    @EventHandler
-    public void onBlockInteract(CBlockOnInteractEvent event) {
-        manager.callEvent(event);
-    }
-
-    @EventHandler
-    public void onBlockPunch(CBlockOnPunchEvent event) {
-        manager.callEvent(event);
     }
 }

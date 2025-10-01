@@ -27,18 +27,6 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
         super(initInfo);
     }
 
-    @EventHandler
-    @Override
-    public void onBlockPlace(CBlockOnPlaceEvent event) {
-        super.onBlockPlace(event);
-        var placementInfo = event.getPlacementInfo();
-        if (placementInfo == null) {
-            this.color = DyeColor.RED;
-        } else {
-            this.color = Preconditions.checkNotNull(DyeColor.from(placementInfo.player().getItemInHand().getMeta()));
-        }
-    }
-
     public void setColor(DyeColor color) {
         this.color = color;
         var pair = BlockBedBaseComponentImpl.getPairBlock(new Block(this.getDimension(), this.getPosition())).getBlockEntity();
@@ -62,5 +50,15 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
                 .toBuilder()
                 .putByte(TAG_COLOR, (byte) this.color.ordinal())
                 .build();
+    }
+
+    @EventHandler
+    protected void onBlockPlace(CBlockOnPlaceEvent event) {
+        var placementInfo = event.getPlacementInfo();
+        if (placementInfo == null) {
+            this.color = DyeColor.RED;
+        } else {
+            this.color = Preconditions.checkNotNull(DyeColor.from(placementInfo.player().getItemInHand().getMeta()));
+        }
     }
 }

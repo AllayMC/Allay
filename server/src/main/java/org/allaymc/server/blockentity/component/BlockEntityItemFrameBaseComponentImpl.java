@@ -40,10 +40,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @EventHandler
-    @Override
-    public void onBlockInteract(CBlockOnInteractEvent event) {
-        super.onBlockInteract(event);
-
+    protected void onBlockInteract(CBlockOnInteractEvent event) {
         if (itemStack != ItemAirStack.AIR_STACK) {
             var e = new ItemFrameUseEvent(event.getInteractInfo().getClickedBlock(), event.getInteractInfo().player(), ItemFrameUseEvent.Action.ROTATE);
             if (!e.call()) {
@@ -73,10 +70,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @EventHandler
-    @Override
-    public void onBlockPunch(CBlockOnPunchEvent event) {
-        super.onBlockPunch(event);
-
+    protected void onBlockPunch(CBlockOnPunchEvent event) {
         if (itemStack == ItemAirStack.AIR_STACK) {
             return;
         }
@@ -96,10 +90,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @EventHandler
-    @Override
-    public void onBlockReplace(CBlockOnReplaceEvent event) {
-        super.onBlockReplace(event);
-
+    protected void onBlockReplace(CBlockOnReplaceEvent event) {
         if (this.itemStack != ItemAirStack.AIR_STACK) {
             // Drop the item in the frame when the frame is replaced
             event.getCurrentBlock().getDimension().dropItem(itemStack, MathUtils.center(event.getCurrentBlock().getPosition()));

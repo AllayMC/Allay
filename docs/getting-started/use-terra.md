@@ -35,7 +35,6 @@ if we want to modify the generator of default world, just open `worlds/orld-sett
 ```yml linenums="1" hl_lines="6-7"
 worlds:
   world:
-    enable: true
     storage-type: LEVELDB
     overworld:
       generator-type: TERRA
