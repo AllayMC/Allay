@@ -55,11 +55,18 @@ public class BlockClassGen extends BaseClassGen {
                 .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE);
 
         for (var id : BlockId.values()) {
-            typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(ClassNames.BLOCK_TYPE, generateClassFullName(id)), id.name())
-                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                            .build()
-            );
+            var fieldBuilder = FieldSpec
+                    .builder(ParameterizedTypeName.get(ClassNames.BLOCK_TYPE, generateClassFullName(id)), id.name())
+                    .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+
+            var states = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString()).getCompound("states");
+            if (!states.isEmpty()) {
+                states.forEach((name, value) -> {
+                    fieldBuilder.addJavadoc("{@link $T#$N}\n", ClassNames.BLOCK_PROPERTY_TYPES, getSizedBlockPropertyTypeName(id, name));
+                });
+            }
+
+            typesClass.addField(fieldBuilder.build());
 
             var interfaceSimpleName = generateClassSimpleName(id);
             var interfaceFullName = generateClassFullName(id);
@@ -149,15 +156,12 @@ public class BlockClassGen extends BaseClassGen {
                 .add("$T.$N = $T\n", ClassNames.BLOCK_TYPES, id.name(), ClassNames.ALLAY_BLOCK_TYPE)
                 .add("        .builder($T.class)\n", blockClassName)
                 .add("        .vanillaBlock($T.$N)\n", ClassNames.BLOCK_ID, id.name());
-        var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString());
-        var states = blockPaletteData.getCompound("states");
+        var states = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString()).getCompound("states");
         if (!states.isEmpty()) {
             initializer.add("        .setProperties(");
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
-                var propertyName = BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(id.getIdentifier().toString()) ?
-                        BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(id.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase() : name.replaceAll(":", "_").toUpperCase();
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), ClassNames.BLOCK_PROPERTY_TYPES, propertyName);
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), ClassNames.BLOCK_PROPERTY_TYPES, getSizedBlockPropertyTypeName(id, name));
             });
             initializer.add(")\n");
         }
@@ -166,6 +170,16 @@ public class BlockClassGen extends BaseClassGen {
                 .beginControlFlow("if ($T.$N == null)", ClassNames.BLOCK_TYPES, id.name())
                 .addStatement(initializer.build())
                 .endControlFlow();
+    }
+
+    private static String getSizedBlockPropertyTypeName(BlockId id, String name) {
+        if (BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) &&
+            BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(id.getIdentifier().toString())
+        ) {
+            return BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(id.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase();
+        }
+
+        return name.replaceAll(":", "_").toUpperCase();
     }
 
     @SneakyThrows
