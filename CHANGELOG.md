@@ -49,7 +49,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced a dirty flag for block layers in chunk sections. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.
-- Added support for basic multi-version. The server now supports 1.21.80 - 1.21.100 client to join.
+- Added support for basic multi-version. The server now supports 1.21.80 - 1.21.110 client to join.
 - The motion of the player will be added to the arrow shot by the player now.
 
 ### Changed
