@@ -5,7 +5,7 @@ comments: true
 # Create Your First Plugin
 
 Welcome to **Allay**! Allay provides a powerful plugin system that allows you to write plugins in various languages —
-Java, JavaScript, Scala, and Kotlin. In this section, we'll walk you through creating a simple plugin in Java.
+Java, Kotlin, Scala and any JVM-based language. In this section, we'll walk you through creating a simple plugin in Java.
 
 ## Prerequisites
 
@@ -20,8 +20,8 @@ Before you begin, make sure you have the following installed:
 To quickly get started, you can use one of the available plugin templates:
 
 - [JavaPluginTemplate](https://github.com/AllayMC/JavaPluginTemplate)
-- [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
 - [KotlinPluginTemplate](https://github.com/MineBuilders/allaymc-kotlin-plugin-template)
+- [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
 
 In this guide, we will use **JavaPluginTemplate**.
 
