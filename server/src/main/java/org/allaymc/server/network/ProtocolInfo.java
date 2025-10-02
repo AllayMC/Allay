@@ -41,7 +41,7 @@ public final class ProtocolInfo {
      * This is different from the current game version. It should match the nearest version
      * that has block state changes.
      */
-    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 60, 33, 0);
+    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 110, 26, 0);
 
     /**
      * The currently used block state updater instance.
