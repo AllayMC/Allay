@@ -27,7 +27,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implements BlockBlockEntityHolderComponent<T> {
     @Identifier.Component
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_holder_component");
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_block_entity_holder_component");
 
     @Getter
     protected final BlockEntityType<T> blockEntityType;

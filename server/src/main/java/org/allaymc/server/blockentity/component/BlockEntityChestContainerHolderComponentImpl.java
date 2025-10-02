@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
+import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
@@ -12,7 +13,7 @@ import org.allaymc.server.container.impl.ChestContainerImpl;
 import org.allaymc.server.container.impl.DoubleChestContainerImpl;
 
 /**
- * @author IWareQ
+ * @author IWareQ | daoge_cmd
  */
 public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityContainerHolderComponentImpl {
     @Getter
@@ -54,12 +55,15 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
                 right = temp;
             }
 
-            doubleChestContainer.setLeft(left);
-            doubleChestContainer.setRight(right);
-            doubleChestContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), event.getDimension()));
-            doubleChestContainer.addViewer(player);
+            this.doubleChestContainer.setLeft(left);
+            this.doubleChestContainer.setRight(right);
+            this.doubleChestContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), event.getDimension()));
+            this.doubleChestContainer.addViewer(player);
         } else {
-            container.addViewer(player);
+            if (this.container instanceof BlockContainer blockContainer) {
+                blockContainer.setBlockPos(this.baseComponent.getPosition());
+            }
+            this.container.addViewer(player);
         }
 
         event.setSuccess(true);

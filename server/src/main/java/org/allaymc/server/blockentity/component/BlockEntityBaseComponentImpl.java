@@ -93,9 +93,9 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         nbt.listenForString(TAG_CUSTOM_NAME, customName -> this.customName = customName);
 
         var pos = new Position3i(this.position);
-        pos.x = nbt.getInt(TAG_X, this.position.x());
-        pos.y = nbt.getInt(TAG_Y, this.position.y());
-        pos.z = nbt.getInt(TAG_Z, this.position.z());
+        nbt.listenForInt(TAG_X, value -> pos.x = value);
+        nbt.listenForInt(TAG_Y, value -> pos.y = value);
+        nbt.listenForInt(TAG_Z, value -> pos.z = value);
         this.position = pos;
 
         nbt.listenForCompound(TAG_PDC, customNbt -> {

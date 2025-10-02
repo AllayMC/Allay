@@ -47,9 +47,6 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     protected void onLoadNBT(CBlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList("Items", NbtType.COMPOUND, items -> container.loadNBT(items));
-        if (container instanceof BlockContainer blockContainer) {
-            blockContainer.setBlockPos(baseComponent.getPosition());
-        }
     }
 
     @EventHandler
@@ -65,6 +62,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
             return;
         }
 
+        if (container instanceof BlockContainer blockContainer) {
+            blockContainer.setBlockPos(baseComponent.getPosition());
+        }
         container.addViewer(player);
         event.setSuccess(true);
     }

@@ -2,7 +2,6 @@ package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.block.action.SimpleBlockAction;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
-import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3ic;
@@ -15,7 +14,7 @@ import org.allaymc.server.component.annotation.OnInitFinish;
  */
 public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentImpl {
     @Dependency
-    private BlockEntityContainerHolderComponent containerHolderComponent;
+    private BlockEntityChestContainerHolderComponentImpl containerHolderComponent;
     @Dependency
     private BlockEntityPairableComponent pairableComponent;
 
@@ -28,21 +27,19 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
 
-        if (containerHolderComponent instanceof BlockEntityChestContainerHolderComponentImpl containerHolder) {
-            var doubleChestContainer = containerHolder.getDoubleChestContainer();
-            doubleChestContainer.addOpenListener(viewer -> {
-                if (doubleChestContainer.getViewers().size() == 1) {
-                    changeChestState(getPosition(), true);
-                    changeChestState(pairableComponent.getPair().getPosition(), true);
-                }
-            });
-            doubleChestContainer.addCloseListener(viewer -> {
-                if (doubleChestContainer.getViewers().isEmpty()) {
-                    changeChestState(getPosition(), false);
-                    changeChestState(pairableComponent.getPair().getPosition(), false);
-                }
-            });
-        }
+        var doubleChestContainer = containerHolderComponent.getDoubleChestContainer();
+        doubleChestContainer.addOpenListener(viewer -> {
+            if (doubleChestContainer.getViewers().size() == 1) {
+                changeChestState(getPosition(), true);
+                changeChestState(pairableComponent.getPair().getPosition(), true);
+            }
+        });
+        doubleChestContainer.addCloseListener(viewer -> {
+            if (doubleChestContainer.getViewers().isEmpty()) {
+                changeChestState(getPosition(), false);
+                changeChestState(pairableComponent.getPair().getPosition(), false);
+            }
+        });
 
         var container = containerHolderComponent.getContainer();
         container.addOpenListener(viewer -> {
