@@ -31,6 +31,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemSaplingStack> ACACIA_SAPLING;
 
+    public static ItemType<ItemShelfStack> ACACIA_SHELF;
+
     public static ItemType<ItemSignStack> ACACIA_SIGN;
 
     public static ItemType<ItemSlabStack> ACACIA_SLAB;
@@ -143,6 +145,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemSaplingStack> BAMBOO_SAPLING;
 
+    public static ItemType<ItemShelfStack> BAMBOO_SHELF;
+
     public static ItemType<ItemSignStack> BAMBOO_SIGN;
 
     public static ItemType<ItemSlabStack> BAMBOO_SLAB;
@@ -216,6 +220,8 @@ public final class ItemTypes {
     public static ItemType<ItemBirchPressurePlateStack> BIRCH_PRESSURE_PLATE;
 
     public static ItemType<ItemSaplingStack> BIRCH_SAPLING;
+
+    public static ItemType<ItemShelfStack> BIRCH_SHELF;
 
     public static ItemType<ItemSignStack> BIRCH_SIGN;
 
@@ -471,8 +477,6 @@ public final class ItemTypes {
 
     public static ItemType<ItemCaveVinesHeadWithBerriesStack> CAVE_VINES_HEAD_WITH_BERRIES;
 
-    public static ItemType<ItemChainStack> CHAIN;
-
     public static ItemType<ItemChainCommandBlockStack> CHAIN_COMMAND_BLOCK;
 
     public static ItemType<ItemBootsStack> CHAINMAIL_BOOTS;
@@ -516,6 +520,8 @@ public final class ItemTypes {
     public static ItemType<ItemCherryPressurePlateStack> CHERRY_PRESSURE_PLATE;
 
     public static ItemType<ItemSaplingStack> CHERRY_SAPLING;
+
+    public static ItemType<ItemShelfStack> CHERRY_SHELF;
 
     public static ItemType<ItemSignStack> CHERRY_SIGN;
 
@@ -671,11 +677,15 @@ public final class ItemTypes {
 
     public static ItemType<ItemAxeStack> COPPER_AXE;
 
+    public static ItemType<ItemCopperBarsStack> COPPER_BARS;
+
     public static ItemType<ItemCopperBlockStack> COPPER_BLOCK;
 
     public static ItemType<ItemBootsStack> COPPER_BOOTS;
 
     public static ItemType<ItemCopperBulbStack> COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> COPPER_CHAIN;
 
     public static ItemType<ItemCopperChestStack> COPPER_CHEST;
 
@@ -685,13 +695,19 @@ public final class ItemTypes {
 
     public static ItemType<ItemSpawnEggStack> COPPER_GOLEM_SPAWN_EGG;
 
+    public static ItemType<ItemCopperGolemStatueStack> COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemCopperGrateStack> COPPER_GRATE;
 
     public static ItemType<ItemHelmetStack> COPPER_HELMET;
 
     public static ItemType<ItemHoeStack> COPPER_HOE;
 
+    public static ItemType<ItemHorseArmorStack> COPPER_HORSE_ARMOR;
+
     public static ItemType<ItemCopperIngotStack> COPPER_INGOT;
+
+    public static ItemType<ItemCopperLanternStack> COPPER_LANTERN;
 
     public static ItemType<ItemLeggingsStack> COPPER_LEGGINGS;
 
@@ -704,6 +720,8 @@ public final class ItemTypes {
     public static ItemType<ItemShovelStack> COPPER_SHOVEL;
 
     public static ItemType<ItemSwordStack> COPPER_SWORD;
+
+    public static ItemType<ItemTorchStack> COPPER_TORCH;
 
     public static ItemType<ItemTrapdoorStack> COPPER_TRAPDOOR;
 
@@ -766,6 +784,8 @@ public final class ItemTypes {
     public static ItemType<ItemCrimsonPressurePlateStack> CRIMSON_PRESSURE_PLATE;
 
     public static ItemType<ItemCrimsonRootsStack> CRIMSON_ROOTS;
+
+    public static ItemType<ItemShelfStack> CRIMSON_SHELF;
 
     public static ItemType<ItemSignStack> CRIMSON_SIGN;
 
@@ -862,6 +882,8 @@ public final class ItemTypes {
     public static ItemType<ItemDarkOakPressurePlateStack> DARK_OAK_PRESSURE_PLATE;
 
     public static ItemType<ItemSaplingStack> DARK_OAK_SAPLING;
+
+    public static ItemType<ItemShelfStack> DARK_OAK_SHELF;
 
     public static ItemType<ItemSignStack> DARK_OAK_SIGN;
 
@@ -995,7 +1017,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemHoeStack> DIAMOND_HOE;
 
-    public static ItemType<ItemDiamondHorseArmorStack> DIAMOND_HORSE_ARMOR;
+    public static ItemType<ItemHorseArmorStack> DIAMOND_HORSE_ARMOR;
 
     public static ItemType<ItemLeggingsStack> DIAMOND_LEGGINGS;
 
@@ -1369,13 +1391,21 @@ public final class ItemTypes {
 
     public static ItemType<ItemCopperStack> EXPOSED_COPPER;
 
+    public static ItemType<ItemCopperBarsStack> EXPOSED_COPPER_BARS;
+
     public static ItemType<ItemExposedCopperBulbStack> EXPOSED_COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> EXPOSED_COPPER_CHAIN;
 
     public static ItemType<ItemExposedCopperChestStack> EXPOSED_COPPER_CHEST;
 
     public static ItemType<ItemDoorStack> EXPOSED_COPPER_DOOR;
 
+    public static ItemType<ItemCopperGolemStatueStack> EXPOSED_COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemExposedCopperGrateStack> EXPOSED_COPPER_GRATE;
+
+    public static ItemType<ItemCopperLanternStack> EXPOSED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> EXPOSED_COPPER_TRAPDOOR;
 
@@ -1386,6 +1416,8 @@ public final class ItemTypes {
     public static ItemType<ItemStairsStack> EXPOSED_CUT_COPPER_STAIRS;
 
     public static ItemType<ItemSlabStack> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+
+    public static ItemType<ItemLightningRodStack> EXPOSED_LIGHTNING_ROD;
 
     public static ItemType<ItemEyeArmorTrimSmithingTemplateStack> EYE_ARMOR_TRIM_SMITHING_TEMPLATE;
 
@@ -1521,7 +1553,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemHoeStack> GOLDEN_HOE;
 
-    public static ItemType<ItemGoldenHorseArmorStack> GOLDEN_HORSE_ARMOR;
+    public static ItemType<ItemHorseArmorStack> GOLDEN_HORSE_ARMOR;
 
     public static ItemType<ItemLeggingsStack> GOLDEN_LEGGINGS;
 
@@ -1769,6 +1801,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemBootsStack> IRON_BOOTS;
 
+    public static ItemType<ItemIronChainStack> IRON_CHAIN;
+
     public static ItemType<ItemChestplateStack> IRON_CHESTPLATE;
 
     public static ItemType<ItemDoorStack> IRON_DOOR;
@@ -1779,7 +1813,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemHoeStack> IRON_HOE;
 
-    public static ItemType<ItemIronHorseArmorStack> IRON_HORSE_ARMOR;
+    public static ItemType<ItemHorseArmorStack> IRON_HORSE_ARMOR;
 
     public static ItemType<ItemIronIngotStack> IRON_INGOT;
 
@@ -1814,8 +1848,6 @@ public final class ItemTypes {
     public static ItemType<ItemItemCampfireStack> ITEM_CAMPFIRE;
 
     public static ItemType<ItemItemCauldronStack> ITEM_CAULDRON;
-
-    public static ItemType<ItemItemChainStack> ITEM_CHAIN;
 
     public static ItemType<ItemDoorStack> ITEM_CRIMSON_DOOR;
 
@@ -1883,6 +1915,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemSaplingStack> JUNGLE_SAPLING;
 
+    public static ItemType<ItemShelfStack> JUNGLE_SHELF;
+
     public static ItemType<ItemSignStack> JUNGLE_SIGN;
 
     public static ItemType<ItemSlabStack> JUNGLE_SLAB;
@@ -1931,7 +1965,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemHelmetStack> LEATHER_HELMET;
 
-    public static ItemType<ItemLeatherHorseArmorStack> LEATHER_HORSE_ARMOR;
+    public static ItemType<ItemHorseArmorStack> LEATHER_HORSE_ARMOR;
 
     public static ItemType<ItemLeggingsStack> LEATHER_LEGGINGS;
 
@@ -2159,6 +2193,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemMangroveRootsStack> MANGROVE_ROOTS;
 
+    public static ItemType<ItemShelfStack> MANGROVE_SHELF;
+
     public static ItemType<ItemSignStack> MANGROVE_SIGN;
 
     public static ItemType<ItemSlabStack> MANGROVE_SLAB;
@@ -2381,6 +2417,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemSaplingStack> OAK_SAPLING;
 
+    public static ItemType<ItemShelfStack> OAK_SHELF;
+
     public static ItemType<ItemSignStack> OAK_SIGN;
 
     public static ItemType<ItemSlabStack> OAK_SLAB;
@@ -2439,13 +2477,21 @@ public final class ItemTypes {
 
     public static ItemType<ItemCopperStack> OXIDIZED_COPPER;
 
+    public static ItemType<ItemCopperBarsStack> OXIDIZED_COPPER_BARS;
+
     public static ItemType<ItemOxidizedCopperBulbStack> OXIDIZED_COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> OXIDIZED_COPPER_CHAIN;
 
     public static ItemType<ItemOxidizedCopperChestStack> OXIDIZED_COPPER_CHEST;
 
     public static ItemType<ItemDoorStack> OXIDIZED_COPPER_DOOR;
 
+    public static ItemType<ItemCopperGolemStatueStack> OXIDIZED_COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemOxidizedCopperGrateStack> OXIDIZED_COPPER_GRATE;
+
+    public static ItemType<ItemCopperLanternStack> OXIDIZED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> OXIDIZED_COPPER_TRAPDOOR;
 
@@ -2456,6 +2502,8 @@ public final class ItemTypes {
     public static ItemType<ItemStairsStack> OXIDIZED_CUT_COPPER_STAIRS;
 
     public static ItemType<ItemSlabStack> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+
+    public static ItemType<ItemLightningRodStack> OXIDIZED_LIGHTNING_ROD;
 
     public static ItemType<ItemPackedIceStack> PACKED_ICE;
 
@@ -2494,6 +2542,8 @@ public final class ItemTypes {
     public static ItemType<ItemPaleOakPressurePlateStack> PALE_OAK_PRESSURE_PLATE;
 
     public static ItemType<ItemSaplingStack> PALE_OAK_SAPLING;
+
+    public static ItemType<ItemShelfStack> PALE_OAK_SHELF;
 
     public static ItemType<ItemSignStack> PALE_OAK_SIGN;
 
@@ -3115,6 +3165,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemSaplingStack> SPRUCE_SAPLING;
 
+    public static ItemType<ItemShelfStack> SPRUCE_SHELF;
+
     public static ItemType<ItemSignStack> SPRUCE_SIGN;
 
     public static ItemType<ItemSlabStack> SPRUCE_SLAB;
@@ -3417,6 +3469,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemWarpedRootsStack> WARPED_ROOTS;
 
+    public static ItemType<ItemShelfStack> WARPED_SHELF;
+
     public static ItemType<ItemSignStack> WARPED_SIGN;
 
     public static ItemType<ItemSlabStack> WARPED_SLAB;
@@ -3443,13 +3497,21 @@ public final class ItemTypes {
 
     public static ItemType<ItemCopperStack> WAXED_COPPER;
 
+    public static ItemType<ItemCopperBarsStack> WAXED_COPPER_BARS;
+
     public static ItemType<ItemWaxedCopperBulbStack> WAXED_COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> WAXED_COPPER_CHAIN;
 
     public static ItemType<ItemWaxedCopperChestStack> WAXED_COPPER_CHEST;
 
     public static ItemType<ItemDoorStack> WAXED_COPPER_DOOR;
 
+    public static ItemType<ItemCopperGolemStatueStack> WAXED_COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemWaxedCopperGrateStack> WAXED_COPPER_GRATE;
+
+    public static ItemType<ItemCopperLanternStack> WAXED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_COPPER_TRAPDOOR;
 
@@ -3465,13 +3527,21 @@ public final class ItemTypes {
 
     public static ItemType<ItemCopperStack> WAXED_EXPOSED_COPPER;
 
+    public static ItemType<ItemCopperBarsStack> WAXED_EXPOSED_COPPER_BARS;
+
     public static ItemType<ItemWaxedExposedCopperBulbStack> WAXED_EXPOSED_COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> WAXED_EXPOSED_COPPER_CHAIN;
 
     public static ItemType<ItemWaxedExposedCopperChestStack> WAXED_EXPOSED_COPPER_CHEST;
 
     public static ItemType<ItemDoorStack> WAXED_EXPOSED_COPPER_DOOR;
 
+    public static ItemType<ItemCopperGolemStatueStack> WAXED_EXPOSED_COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemWaxedExposedCopperGrateStack> WAXED_EXPOSED_COPPER_GRATE;
+
+    public static ItemType<ItemCopperLanternStack> WAXED_EXPOSED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_EXPOSED_COPPER_TRAPDOOR;
 
@@ -3483,17 +3553,29 @@ public final class ItemTypes {
 
     public static ItemType<ItemSlabStack> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
+    public static ItemType<ItemLightningRodStack> WAXED_EXPOSED_LIGHTNING_ROD;
+
+    public static ItemType<ItemLightningRodStack> WAXED_LIGHTNING_ROD;
+
     public static ItemType<ItemCopperStack> WAXED_OXIDIZED_CHISELED_COPPER;
 
     public static ItemType<ItemCopperStack> WAXED_OXIDIZED_COPPER;
 
+    public static ItemType<ItemCopperBarsStack> WAXED_OXIDIZED_COPPER_BARS;
+
     public static ItemType<ItemWaxedOxidizedCopperBulbStack> WAXED_OXIDIZED_COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> WAXED_OXIDIZED_COPPER_CHAIN;
 
     public static ItemType<ItemWaxedOxidizedCopperChestStack> WAXED_OXIDIZED_COPPER_CHEST;
 
     public static ItemType<ItemDoorStack> WAXED_OXIDIZED_COPPER_DOOR;
 
+    public static ItemType<ItemCopperGolemStatueStack> WAXED_OXIDIZED_COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemWaxedOxidizedCopperGrateStack> WAXED_OXIDIZED_COPPER_GRATE;
+
+    public static ItemType<ItemCopperLanternStack> WAXED_OXIDIZED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_OXIDIZED_COPPER_TRAPDOOR;
 
@@ -3505,17 +3587,27 @@ public final class ItemTypes {
 
     public static ItemType<ItemSlabStack> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
+    public static ItemType<ItemLightningRodStack> WAXED_OXIDIZED_LIGHTNING_ROD;
+
     public static ItemType<ItemCopperStack> WAXED_WEATHERED_CHISELED_COPPER;
 
     public static ItemType<ItemCopperStack> WAXED_WEATHERED_COPPER;
 
+    public static ItemType<ItemCopperBarsStack> WAXED_WEATHERED_COPPER_BARS;
+
     public static ItemType<ItemWaxedWeatheredCopperBulbStack> WAXED_WEATHERED_COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> WAXED_WEATHERED_COPPER_CHAIN;
 
     public static ItemType<ItemWaxedWeatheredCopperChestStack> WAXED_WEATHERED_COPPER_CHEST;
 
     public static ItemType<ItemDoorStack> WAXED_WEATHERED_COPPER_DOOR;
 
+    public static ItemType<ItemCopperGolemStatueStack> WAXED_WEATHERED_COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemWaxedWeatheredCopperGrateStack> WAXED_WEATHERED_COPPER_GRATE;
+
+    public static ItemType<ItemCopperLanternStack> WAXED_WEATHERED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_WEATHERED_COPPER_TRAPDOOR;
 
@@ -3527,19 +3619,29 @@ public final class ItemTypes {
 
     public static ItemType<ItemSlabStack> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
+    public static ItemType<ItemLightningRodStack> WAXED_WEATHERED_LIGHTNING_ROD;
+
     public static ItemType<ItemWayfinderArmorTrimSmithingTemplateStack> WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE;
 
     public static ItemType<ItemCopperStack> WEATHERED_CHISELED_COPPER;
 
     public static ItemType<ItemCopperStack> WEATHERED_COPPER;
 
+    public static ItemType<ItemCopperBarsStack> WEATHERED_COPPER_BARS;
+
     public static ItemType<ItemWeatheredCopperBulbStack> WEATHERED_COPPER_BULB;
+
+    public static ItemType<ItemCopperChainStack> WEATHERED_COPPER_CHAIN;
 
     public static ItemType<ItemWeatheredCopperChestStack> WEATHERED_COPPER_CHEST;
 
     public static ItemType<ItemDoorStack> WEATHERED_COPPER_DOOR;
 
+    public static ItemType<ItemCopperGolemStatueStack> WEATHERED_COPPER_GOLEM_STATUE;
+
     public static ItemType<ItemWeatheredCopperGrateStack> WEATHERED_COPPER_GRATE;
+
+    public static ItemType<ItemCopperLanternStack> WEATHERED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WEATHERED_COPPER_TRAPDOOR;
 
@@ -3550,6 +3652,8 @@ public final class ItemTypes {
     public static ItemType<ItemStairsStack> WEATHERED_CUT_COPPER_STAIRS;
 
     public static ItemType<ItemSlabStack> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+
+    public static ItemType<ItemLightningRodStack> WEATHERED_LIGHTNING_ROD;
 
     public static ItemType<ItemWebStack> WEB;
 

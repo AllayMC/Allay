@@ -96,10 +96,9 @@ Update to the latest versions of:
 Modify `ProtocolInfo.java` fields:
 
 - `PACKET_CODEC`
-- `MINECRAFT_VERSION`
+- `BLOCK_STATE_VERSION`
 
-If you're unsure about the new `MINECRAFT_VERSION`, refer
-to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
+If you're unsure about the new `BLOCK_STATE_VERSION`, refer to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
 Ensure dependencies are updated before editing this file.
 
 ## 7. Test and Finalize
@@ -108,4 +107,4 @@ Ensure dependencies are updated before editing this file.
 2. Update the client and test connectivity with the server.
 3. Once verified, the update is considered complete.
 
-Don't forget to record all changes in `CHANGELOG.md`.
+Remember to record all changes in `CHANGELOG.md`.
