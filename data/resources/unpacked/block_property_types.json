@@ -1008,6 +1008,16 @@
         true
       ]
     },
+    "powered_shelf_type": {
+      "serializationName": "powered_shelf_type",
+      "valueType": "INTEGER",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
     "propagule_stage": {
       "serializationName": "propagule_stage",
       "valueType": "INTEGER",

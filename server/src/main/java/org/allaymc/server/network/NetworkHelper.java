@@ -48,9 +48,9 @@ public final class NetworkHelper {
     public static BiomeDefinitionData toNetwork(BiomeType biome) {
         var data = biome.getBiomeData();
         return new BiomeDefinitionData(
-                null, data.temperature(), data.downfall(), data.redSporeDensity(),
-                data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.depth(),
-                data.scale(), data.mapWaterColor(), data.rain(), null, null
+                biome.getIdentifier().toString(), data.temperature(), data.downfall(), data.redSporeDensity(),
+                data.blueSporeDensity(), data.ashDensity(), data.whiteAshDensity(), data.foliageSnow(),
+                data.depth(), data.scale(), data.mapWaterColor(), data.rain(), data.tags(), null
         );
     }
 

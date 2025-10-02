@@ -31,11 +31,11 @@ Then, use it to export the following files:
 
 | File                                                    | Source                                                                                                                    |
 |---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
-| `biome_definitions.json`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData)                                                                   |
-| `entity_identifiers.nbt`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData)                                                                   |
+| `biome_definitions.json`                                | [CloudburstMC/Data](https://github.com/CloudburstMC/Data/blob/master/stripped_biome_definitions.json)                     |
+| `entity_identifiers.nbt`                                | [pmmp/BedrockData](https://github.com/pmmp/BedrockData/blob/master/entity_identifiers.nbt)                                |
 | `music_definitions.json`                                | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json) |
-| `colormap/*`                                            | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/textures/colormap)             |
 | `sound_definitions.json`                                | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/sound_definitions.json) |
+| `colormap/*`                                            | [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/textures/colormap)             |
 | Others (`block_types.json`, `creative_items.nbt`, etc.) | Exported from Endstone                                                                                                    |
 
 ### Manually maintained files
@@ -71,20 +71,20 @@ Generate using `BlockStateDataProcessor`, based on `block_states_raw.json`.
 1. Copy original `.lang` files from `endstone/bedrock_server/resource_packs/vanilla/texts` to
    `unpacked/lang_raw/vanilla`.
 2. Run `LangBuilder` in `data`.
-3. Then run `TrKeysGen` in `codegen`.
+3. Then run `TrKeyGen` in `codegen`.
 
 ## 5. Code Generation (`codegen`)
 
-| Generator                                          | When to Run                                                                                                                                                                                   |
-|----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `SoundNameGen`                                     | If `music_definitions.json` or `sound_definitions.json` changed                                                                                                                               |
-| `CreativeItemGroupNameGen`                         | If `creative_groups.json` changed                                                                                                                                                             |
-| `BiomeIdEnumGen`                                   | If `biome_id_and_type.json` changed                                                                                                                                                           |
-| `EntityIdEnumGen` -> `EntityClassGen`              | If `entity_id_map.json` changed                                                                                                                                                               |
-| `TagGen`                                           | If `item_tags.json` or `block_tags.json` changed                                                                                                                                              |
-| `BlockIdEnumGen` -> `BlockPropertyTypeDataFileGen` | Always after block updates                                                                                                                                                                    |
-| `BlockClassGen`                                    | Requires manual edits:<br>– Delete old blocks<br>– Update properties and logic<br>– Check `BlockTypeInitializer.java` for errors<br>– Add merged blocks in `registerMergedBlocks()` if needed |
-| `ItemIdEnumGen` -> `ItemClassGen`                  | Similar to blocks:<br>– Remove old items<br>– Migrate logic if only names changed<br>– Add merged items in `registerMergedItems()` if needed                                                  |
+| Generator                                  | When to Run                                                                                                                                                                                   |
+|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `SoundNameGen`                             | If `music_definitions.json` or `sound_definitions.json` changed                                                                                                                               |
+| `CreativeItemGroupNameGen`                 | If `creative_groups.json` changed                                                                                                                                                             |
+| `BiomeIdEnumGen`                           | If `biome_id_and_type.json` changed                                                                                                                                                           |
+| `EntityIdEnumGen` -> `EntityClassGen`      | If `entity_id_map.json` changed                                                                                                                                                               |
+| `TagGen`                                   | If `item_tags.json` or `block_tags.json` changed                                                                                                                                              |
+| `BlockIdEnumGen` -> `BlockPropertyTypeGen` | Always after block updates                                                                                                                                                                    |
+| `BlockClassGen`                            | Requires manual edits:<br>– Delete old blocks<br>– Update properties and logic<br>– Check `BlockTypeInitializer.java` for errors<br>– Add merged blocks in `registerMergedBlocks()` if needed |
+| `ItemIdEnumGen` -> `ItemClassGen`          | Similar to blocks:<br>– Remove old items<br>– Migrate logic if only names changed<br>– Add merged items in `registerMergedItems()` if needed                                                  |
 
 ## 6. Update Dependencies and `ProtocolInfo.java`
 

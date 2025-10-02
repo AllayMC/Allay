@@ -289,5 +289,11 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*IceBehavior"), "BlockIceBehavior");
         registerMergedBlock(Pattern.compile(".*PressurePlateBehavior"), "BlockPressurePlateBehavior");
         registerMergedBlock(Pattern.compile(".*Torch.*"), "BlockTorchBehavior");
+        registerMergedBlock(Pattern.compile(".*ShelfBehavior"), "BlockShelfBehavior");
+        registerMergedBlock(Pattern.compile(".*LightningRodBehavior"), "BlockLightningRodBehavior");
+        registerMergedBlock(Pattern.compile(".*CopperBarsBehavior"), "BlockCopperBarsBehavior");
+        registerMergedBlock(Pattern.compile(".*CopperLanternBehavior"), "BlockCopperLanternBehavior");
+        registerMergedBlock(Pattern.compile(".*CopperGolemStatueBehavior"), "BlockCopperGolemStatueBehavior");
+        registerMergedBlock(Pattern.compile(".*CopperChainBehavior"), "BlockCopperChainBehavior");
     }
 }

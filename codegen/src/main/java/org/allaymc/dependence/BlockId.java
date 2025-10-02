@@ -25,6 +25,8 @@ public enum BlockId {
 
     ACACIA_SAPLING("minecraft:acacia_sapling"),
 
+    ACACIA_SHELF("minecraft:acacia_shelf"),
+
     ACACIA_SLAB("minecraft:acacia_slab"),
 
     ACACIA_STAIRS("minecraft:acacia_stairs"),
@@ -101,6 +103,8 @@ public enum BlockId {
 
     BAMBOO_SAPLING("minecraft:bamboo_sapling"),
 
+    BAMBOO_SHELF("minecraft:bamboo_shelf"),
+
     BAMBOO_SLAB("minecraft:bamboo_slab"),
 
     BAMBOO_STAIRS("minecraft:bamboo_stairs"),
@@ -154,6 +158,8 @@ public enum BlockId {
     BIRCH_PRESSURE_PLATE("minecraft:birch_pressure_plate"),
 
     BIRCH_SAPLING("minecraft:birch_sapling"),
+
+    BIRCH_SHELF("minecraft:birch_shelf"),
 
     BIRCH_SLAB("minecraft:birch_slab"),
 
@@ -325,8 +331,6 @@ public enum BlockId {
 
     CAVE_VINES_HEAD_WITH_BERRIES("minecraft:cave_vines_head_with_berries"),
 
-    CHAIN("minecraft:chain"),
-
     CHAIN_COMMAND_BLOCK("minecraft:chain_command_block"),
 
     CHALKBOARD("minecraft:chalkboard"),
@@ -354,6 +358,8 @@ public enum BlockId {
     CHERRY_PRESSURE_PLATE("minecraft:cherry_pressure_plate"),
 
     CHERRY_SAPLING("minecraft:cherry_sapling"),
+
+    CHERRY_SHELF("minecraft:cherry_shelf"),
 
     CHERRY_SLAB("minecraft:cherry_slab"),
 
@@ -447,17 +453,27 @@ public enum BlockId {
 
     CONDUIT("minecraft:conduit"),
 
+    COPPER_BARS("minecraft:copper_bars"),
+
     COPPER_BLOCK("minecraft:copper_block"),
 
     COPPER_BULB("minecraft:copper_bulb"),
+
+    COPPER_CHAIN("minecraft:copper_chain"),
 
     COPPER_CHEST("minecraft:copper_chest"),
 
     COPPER_DOOR("minecraft:copper_door"),
 
+    COPPER_GOLEM_STATUE("minecraft:copper_golem_statue"),
+
     COPPER_GRATE("minecraft:copper_grate"),
 
+    COPPER_LANTERN("minecraft:copper_lantern"),
+
     COPPER_ORE("minecraft:copper_ore"),
+
+    COPPER_TORCH("minecraft:copper_torch"),
 
     COPPER_TRAPDOOR("minecraft:copper_trapdoor"),
 
@@ -504,6 +520,8 @@ public enum BlockId {
     CRIMSON_PRESSURE_PLATE("minecraft:crimson_pressure_plate"),
 
     CRIMSON_ROOTS("minecraft:crimson_roots"),
+
+    CRIMSON_SHELF("minecraft:crimson_shelf"),
 
     CRIMSON_SLAB("minecraft:crimson_slab"),
 
@@ -584,6 +602,8 @@ public enum BlockId {
     DARK_OAK_PRESSURE_PLATE("minecraft:dark_oak_pressure_plate"),
 
     DARK_OAK_SAPLING("minecraft:dark_oak_sapling"),
+
+    DARK_OAK_SHELF("minecraft:dark_oak_shelf"),
 
     DARK_OAK_SLAB("minecraft:dark_oak_slab"),
 
@@ -1007,13 +1027,21 @@ public enum BlockId {
 
     EXPOSED_COPPER("minecraft:exposed_copper"),
 
+    EXPOSED_COPPER_BARS("minecraft:exposed_copper_bars"),
+
     EXPOSED_COPPER_BULB("minecraft:exposed_copper_bulb"),
+
+    EXPOSED_COPPER_CHAIN("minecraft:exposed_copper_chain"),
 
     EXPOSED_COPPER_CHEST("minecraft:exposed_copper_chest"),
 
     EXPOSED_COPPER_DOOR("minecraft:exposed_copper_door"),
 
+    EXPOSED_COPPER_GOLEM_STATUE("minecraft:exposed_copper_golem_statue"),
+
     EXPOSED_COPPER_GRATE("minecraft:exposed_copper_grate"),
+
+    EXPOSED_COPPER_LANTERN("minecraft:exposed_copper_lantern"),
 
     EXPOSED_COPPER_TRAPDOOR("minecraft:exposed_copper_trapdoor"),
 
@@ -1024,6 +1052,8 @@ public enum BlockId {
     EXPOSED_CUT_COPPER_STAIRS("minecraft:exposed_cut_copper_stairs"),
 
     EXPOSED_DOUBLE_CUT_COPPER_SLAB("minecraft:exposed_double_cut_copper_slab"),
+
+    EXPOSED_LIGHTNING_ROD("minecraft:exposed_lightning_rod"),
 
     FARMLAND("minecraft:farmland"),
 
@@ -1261,6 +1291,8 @@ public enum BlockId {
 
     IRON_BLOCK("minecraft:iron_block"),
 
+    IRON_CHAIN("minecraft:iron_chain"),
+
     IRON_DOOR("minecraft:iron_door"),
 
     IRON_ORE("minecraft:iron_ore"),
@@ -1292,6 +1324,8 @@ public enum BlockId {
     JUNGLE_PRESSURE_PLATE("minecraft:jungle_pressure_plate"),
 
     JUNGLE_SAPLING("minecraft:jungle_sapling"),
+
+    JUNGLE_SHELF("minecraft:jungle_shelf"),
 
     JUNGLE_SLAB("minecraft:jungle_slab"),
 
@@ -1499,6 +1533,8 @@ public enum BlockId {
 
     MANGROVE_ROOTS("minecraft:mangrove_roots"),
 
+    MANGROVE_SHELF("minecraft:mangrove_shelf"),
+
     MANGROVE_SLAB("minecraft:mangrove_slab"),
 
     MANGROVE_STAIRS("minecraft:mangrove_stairs"),
@@ -1613,6 +1649,8 @@ public enum BlockId {
 
     OAK_SAPLING("minecraft:oak_sapling"),
 
+    OAK_SHELF("minecraft:oak_shelf"),
+
     OAK_SLAB("minecraft:oak_slab"),
 
     OAK_STAIRS("minecraft:oak_stairs"),
@@ -1657,13 +1695,21 @@ public enum BlockId {
 
     OXIDIZED_COPPER("minecraft:oxidized_copper"),
 
+    OXIDIZED_COPPER_BARS("minecraft:oxidized_copper_bars"),
+
     OXIDIZED_COPPER_BULB("minecraft:oxidized_copper_bulb"),
+
+    OXIDIZED_COPPER_CHAIN("minecraft:oxidized_copper_chain"),
 
     OXIDIZED_COPPER_CHEST("minecraft:oxidized_copper_chest"),
 
     OXIDIZED_COPPER_DOOR("minecraft:oxidized_copper_door"),
 
+    OXIDIZED_COPPER_GOLEM_STATUE("minecraft:oxidized_copper_golem_statue"),
+
     OXIDIZED_COPPER_GRATE("minecraft:oxidized_copper_grate"),
+
+    OXIDIZED_COPPER_LANTERN("minecraft:oxidized_copper_lantern"),
 
     OXIDIZED_COPPER_TRAPDOOR("minecraft:oxidized_copper_trapdoor"),
 
@@ -1674,6 +1720,8 @@ public enum BlockId {
     OXIDIZED_CUT_COPPER_STAIRS("minecraft:oxidized_cut_copper_stairs"),
 
     OXIDIZED_DOUBLE_CUT_COPPER_SLAB("minecraft:oxidized_double_cut_copper_slab"),
+
+    OXIDIZED_LIGHTNING_ROD("minecraft:oxidized_lightning_rod"),
 
     PACKED_ICE("minecraft:packed_ice"),
 
@@ -1706,6 +1754,8 @@ public enum BlockId {
     PALE_OAK_PRESSURE_PLATE("minecraft:pale_oak_pressure_plate"),
 
     PALE_OAK_SAPLING("minecraft:pale_oak_sapling"),
+
+    PALE_OAK_SHELF("minecraft:pale_oak_shelf"),
 
     PALE_OAK_SLAB("minecraft:pale_oak_slab"),
 
@@ -2139,6 +2189,8 @@ public enum BlockId {
 
     SPRUCE_SAPLING("minecraft:spruce_sapling"),
 
+    SPRUCE_SHELF("minecraft:spruce_shelf"),
+
     SPRUCE_SLAB("minecraft:spruce_slab"),
 
     SPRUCE_STAIRS("minecraft:spruce_stairs"),
@@ -2345,6 +2397,8 @@ public enum BlockId {
 
     WARPED_ROOTS("minecraft:warped_roots"),
 
+    WARPED_SHELF("minecraft:warped_shelf"),
+
     WARPED_SLAB("minecraft:warped_slab"),
 
     WARPED_STAIRS("minecraft:warped_stairs"),
@@ -2367,13 +2421,21 @@ public enum BlockId {
 
     WAXED_COPPER("minecraft:waxed_copper"),
 
+    WAXED_COPPER_BARS("minecraft:waxed_copper_bars"),
+
     WAXED_COPPER_BULB("minecraft:waxed_copper_bulb"),
+
+    WAXED_COPPER_CHAIN("minecraft:waxed_copper_chain"),
 
     WAXED_COPPER_CHEST("minecraft:waxed_copper_chest"),
 
     WAXED_COPPER_DOOR("minecraft:waxed_copper_door"),
 
+    WAXED_COPPER_GOLEM_STATUE("minecraft:waxed_copper_golem_statue"),
+
     WAXED_COPPER_GRATE("minecraft:waxed_copper_grate"),
+
+    WAXED_COPPER_LANTERN("minecraft:waxed_copper_lantern"),
 
     WAXED_COPPER_TRAPDOOR("minecraft:waxed_copper_trapdoor"),
 
@@ -2389,13 +2451,21 @@ public enum BlockId {
 
     WAXED_EXPOSED_COPPER("minecraft:waxed_exposed_copper"),
 
+    WAXED_EXPOSED_COPPER_BARS("minecraft:waxed_exposed_copper_bars"),
+
     WAXED_EXPOSED_COPPER_BULB("minecraft:waxed_exposed_copper_bulb"),
+
+    WAXED_EXPOSED_COPPER_CHAIN("minecraft:waxed_exposed_copper_chain"),
 
     WAXED_EXPOSED_COPPER_CHEST("minecraft:waxed_exposed_copper_chest"),
 
     WAXED_EXPOSED_COPPER_DOOR("minecraft:waxed_exposed_copper_door"),
 
+    WAXED_EXPOSED_COPPER_GOLEM_STATUE("minecraft:waxed_exposed_copper_golem_statue"),
+
     WAXED_EXPOSED_COPPER_GRATE("minecraft:waxed_exposed_copper_grate"),
+
+    WAXED_EXPOSED_COPPER_LANTERN("minecraft:waxed_exposed_copper_lantern"),
 
     WAXED_EXPOSED_COPPER_TRAPDOOR("minecraft:waxed_exposed_copper_trapdoor"),
 
@@ -2407,17 +2477,29 @@ public enum BlockId {
 
     WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_exposed_double_cut_copper_slab"),
 
+    WAXED_EXPOSED_LIGHTNING_ROD("minecraft:waxed_exposed_lightning_rod"),
+
+    WAXED_LIGHTNING_ROD("minecraft:waxed_lightning_rod"),
+
     WAXED_OXIDIZED_CHISELED_COPPER("minecraft:waxed_oxidized_chiseled_copper"),
 
     WAXED_OXIDIZED_COPPER("minecraft:waxed_oxidized_copper"),
 
+    WAXED_OXIDIZED_COPPER_BARS("minecraft:waxed_oxidized_copper_bars"),
+
     WAXED_OXIDIZED_COPPER_BULB("minecraft:waxed_oxidized_copper_bulb"),
+
+    WAXED_OXIDIZED_COPPER_CHAIN("minecraft:waxed_oxidized_copper_chain"),
 
     WAXED_OXIDIZED_COPPER_CHEST("minecraft:waxed_oxidized_copper_chest"),
 
     WAXED_OXIDIZED_COPPER_DOOR("minecraft:waxed_oxidized_copper_door"),
 
+    WAXED_OXIDIZED_COPPER_GOLEM_STATUE("minecraft:waxed_oxidized_copper_golem_statue"),
+
     WAXED_OXIDIZED_COPPER_GRATE("minecraft:waxed_oxidized_copper_grate"),
+
+    WAXED_OXIDIZED_COPPER_LANTERN("minecraft:waxed_oxidized_copper_lantern"),
 
     WAXED_OXIDIZED_COPPER_TRAPDOOR("minecraft:waxed_oxidized_copper_trapdoor"),
 
@@ -2429,17 +2511,27 @@ public enum BlockId {
 
     WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_oxidized_double_cut_copper_slab"),
 
+    WAXED_OXIDIZED_LIGHTNING_ROD("minecraft:waxed_oxidized_lightning_rod"),
+
     WAXED_WEATHERED_CHISELED_COPPER("minecraft:waxed_weathered_chiseled_copper"),
 
     WAXED_WEATHERED_COPPER("minecraft:waxed_weathered_copper"),
 
+    WAXED_WEATHERED_COPPER_BARS("minecraft:waxed_weathered_copper_bars"),
+
     WAXED_WEATHERED_COPPER_BULB("minecraft:waxed_weathered_copper_bulb"),
+
+    WAXED_WEATHERED_COPPER_CHAIN("minecraft:waxed_weathered_copper_chain"),
 
     WAXED_WEATHERED_COPPER_CHEST("minecraft:waxed_weathered_copper_chest"),
 
     WAXED_WEATHERED_COPPER_DOOR("minecraft:waxed_weathered_copper_door"),
 
+    WAXED_WEATHERED_COPPER_GOLEM_STATUE("minecraft:waxed_weathered_copper_golem_statue"),
+
     WAXED_WEATHERED_COPPER_GRATE("minecraft:waxed_weathered_copper_grate"),
+
+    WAXED_WEATHERED_COPPER_LANTERN("minecraft:waxed_weathered_copper_lantern"),
 
     WAXED_WEATHERED_COPPER_TRAPDOOR("minecraft:waxed_weathered_copper_trapdoor"),
 
@@ -2451,17 +2543,27 @@ public enum BlockId {
 
     WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_weathered_double_cut_copper_slab"),
 
+    WAXED_WEATHERED_LIGHTNING_ROD("minecraft:waxed_weathered_lightning_rod"),
+
     WEATHERED_CHISELED_COPPER("minecraft:weathered_chiseled_copper"),
 
     WEATHERED_COPPER("minecraft:weathered_copper"),
 
+    WEATHERED_COPPER_BARS("minecraft:weathered_copper_bars"),
+
     WEATHERED_COPPER_BULB("minecraft:weathered_copper_bulb"),
+
+    WEATHERED_COPPER_CHAIN("minecraft:weathered_copper_chain"),
 
     WEATHERED_COPPER_CHEST("minecraft:weathered_copper_chest"),
 
     WEATHERED_COPPER_DOOR("minecraft:weathered_copper_door"),
 
+    WEATHERED_COPPER_GOLEM_STATUE("minecraft:weathered_copper_golem_statue"),
+
     WEATHERED_COPPER_GRATE("minecraft:weathered_copper_grate"),
+
+    WEATHERED_COPPER_LANTERN("minecraft:weathered_copper_lantern"),
 
     WEATHERED_COPPER_TRAPDOOR("minecraft:weathered_copper_trapdoor"),
 
@@ -2472,6 +2574,8 @@ public enum BlockId {
     WEATHERED_CUT_COPPER_STAIRS("minecraft:weathered_cut_copper_stairs"),
 
     WEATHERED_DOUBLE_CUT_COPPER_SLAB("minecraft:weathered_double_cut_copper_slab"),
+
+    WEATHERED_LIGHTNING_ROD("minecraft:weathered_lightning_rod"),
 
     WEB("minecraft:web"),
 

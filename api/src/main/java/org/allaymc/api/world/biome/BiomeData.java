@@ -1,20 +1,19 @@
 package org.allaymc.api.world.biome;
 
-import com.google.gson.annotations.SerializedName;
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
 
 import java.awt.*;
 import java.util.List;
 
 /**
- * BiomeData represents the data of a biome.
+ * BiomeData contains the data of a {@link BiomeType}.
  */
 @MinecraftVersionSensitive
 public record BiomeData(
-        float ashDensity, float blueSporeDensity, float depth,
-        float downfall, @SerializedName("mapWaterColour") Color mapWaterColor,
-        boolean rain, float redSporeDensity, float scale, List<String> tags,
-        float temperature, float whiteAshDensity
+        float temperature, float downfall,
+        float redSporeDensity, float blueSporeDensity, float ashDensity, float whiteAshDensity,
+        float foliageSnow, float depth, float scale,
+        Color mapWaterColor, boolean rain, List<String> tags
 ) {
 
     /**

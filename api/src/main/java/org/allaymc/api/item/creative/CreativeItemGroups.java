@@ -64,11 +64,15 @@ public interface CreativeItemGroups {
 
     String WOOL_CARPET = "itemGroup.name.woolCarpet";
 
+    String LANTERNS = "itemGroup.name.lanterns";
+
     String WOOD = "itemGroup.name.wood";
 
     String STAIRS = "itemGroup.name.stairs";
 
     String SAPLING = "itemGroup.name.sapling";
+
+    String SHELF = "itemGroup.name.shelf";
 
     String RECORD = "itemGroup.name.record";
 
@@ -88,6 +92,8 @@ public interface CreativeItemGroups {
 
     String SPLASH_POTION = "itemGroup.name.splashPotion";
 
+    String BARS = "itemGroup.name.bars";
+
     String BOAT = "itemGroup.name.boat";
 
     String DYE = "itemGroup.name.dye";
@@ -100,6 +106,8 @@ public interface CreativeItemGroups {
 
     String ARROW = "itemGroup.name.arrow";
 
+    String CHAINS = "itemGroup.name.chains";
+
     String GLASS = "itemGroup.name.glass";
 
     String ENCHANTED_BOOK = "itemGroup.name.enchantedBook";
@@ -111,6 +119,8 @@ public interface CreativeItemGroups {
     String CONCRETE_POWDER = "itemGroup.name.concretePowder";
 
     String HORSE_ARMOR = "itemGroup.name.horseArmor";
+
+    String LIGHTNING_ROD = "itemGroup.name.lightning_rod";
 
     String CONCRETE = "itemGroup.name.concrete";
 
@@ -161,4 +171,6 @@ public interface CreativeItemGroups {
     String STONE = "itemGroup.name.stone";
 
     String BUTTONS = "itemGroup.name.buttons";
+
+    String COPPER_GOLEM_STATUE = "itemGroup.name.copper_golem_statue";
 }

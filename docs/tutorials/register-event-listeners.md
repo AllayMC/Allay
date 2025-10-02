@@ -22,7 +22,7 @@ import org.allaymc.api.utils.TextFormat;
 public class MyEventListener {
     @EventHandler
     private void onPlayerJoin(PlayerJoinEvent event) { /*(1)!*/
-        Server.getInstance().broadcastText(TextFormat.YELLOW + "Welcome " + event.getPlayer().getDisplayName() + " to the server!");
+        Server.getInstance().getMessageChannel().broadcastText(TextFormat.YELLOW + "Welcome " + event.getPlayer().getDisplayName() + " to the server!");
     }
 }
 ```

@@ -1077,13 +1077,6 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.GROWING_PLANT_AGE)
                     .build();
         }
-        if (BlockTypes.CHAIN == null) {
-            BlockTypes.CHAIN = AllayBlockType
-                    .builder(BlockChainBehaviorImpl.class)
-                    .vanillaBlock(BlockId.CHAIN)
-                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                    .build();
-        }
         if (BlockTypes.CHAIN_COMMAND_BLOCK == null) {
             BlockTypes.CHAIN_COMMAND_BLOCK = AllayBlockType
                     .builder(BlockChainCommandBlockBehaviorImpl.class)

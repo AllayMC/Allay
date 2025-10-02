@@ -525,6 +525,16 @@ public interface TrKeys {
     String ALLAY_WORLD_UNLOADING = "allay:world.unloading";
 
     /**
+     * Account data has been copied to your clipboard.
+     */
+    String MC_ACCOUNT_TOAST_COPIED_BODY = "minecraft:account.toast.copied.body";
+
+    /**
+     * Copied data to clipboard
+     */
+    String MC_ACCOUNT_TOAST_COPIED_TITLE = "minecraft:account.toast.copied.title";
+
+    /**
      * Acquire Hardware
      */
     String MC_ACHIEVEMENT_ACQUIREIRON = "minecraft:achievement.acquireIron";
@@ -1155,6 +1165,11 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_CUT = "minecraft:action.interact.cut";
 
     /**
+     * Drop Item
+     */
+    String MC_ACTION_INTERACT_DROP_ITEM = "minecraft:action.interact.drop_item";
+
+    /**
      * Dye
      */
     String MC_ACTION_INTERACT_DYE = "minecraft:action.interact.dye";
@@ -1310,6 +1325,11 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_SADDLE = "minecraft:action.interact.saddle";
 
     /**
+     * Scrape
+     */
+    String MC_ACTION_INTERACT_SCRAPE = "minecraft:action.interact.scrape";
+
+    /**
      * Shear
      */
     String MC_ACTION_INTERACT_SHEAR = "minecraft:action.interact.shear";
@@ -1358,6 +1378,16 @@ public interface TrKeys {
      * Wake Villager
      */
     String MC_ACTION_INTERACT_WAKEVILLAGER = "minecraft:action.interact.wakevillager";
+
+    /**
+     * Wax Off
+     */
+    String MC_ACTION_INTERACT_WAX_OFF = "minecraft:action.interact.wax_off";
+
+    /**
+     * Wax On
+     */
+    String MC_ACTION_INTERACT_WAX_ON = "minecraft:action.interact.wax_on";
 
     /**
      * Write
@@ -1458,6 +1488,16 @@ public interface TrKeys {
      * -%d%% %s
      */
     String MC_ATTRIBUTE_MODIFIER_TAKE_2 = "minecraft:attribute.modifier.take.2";
+
+    /**
+     * Armor
+     */
+    String MC_ATTRIBUTE_NAME_GENERIC_ARMOR = "minecraft:attribute.name.generic.armor";
+
+    /**
+     * Armor Toughness
+     */
+    String MC_ATTRIBUTE_NAME_GENERIC_ARMORTOUGHNESS = "minecraft:attribute.name.generic.armorToughness";
 
     /**
      * Attack Damage
@@ -1668,6 +1708,16 @@ public interface TrKeys {
      * Minimum height for building is %s blocks
      */
     String MC_BUILD_TOOLOW = "minecraft:build.tooLow";
+
+    /**
+     * Build information has been copied to your clipboard.
+     */
+    String MC_BUILD_INFO_TOAST_COPIED_BODY = "minecraft:build_info.toast.copied.body";
+
+    /**
+     * Copied data to clipboard
+     */
+    String MC_BUILD_INFO_TOAST_COPIED_TITLE = "minecraft:build_info.toast.copied.title";
 
     /**
      * Cauldron
@@ -6845,9 +6895,19 @@ public interface TrKeys {
     String MC_CONTAINER_CHEST = "minecraft:container.chest";
 
     /**
+     * Copper Chest
+     */
+    String MC_CONTAINER_CHESTCOPPER = "minecraft:container.chestCopper";
+
+    /**
      * Large Chest
      */
     String MC_CONTAINER_CHESTDOUBLE = "minecraft:container.chestDouble";
+
+    /**
+     * Large Copper Chest
+     */
+    String MC_CONTAINER_CHESTDOUBLECOPPER = "minecraft:container.chestDoubleCopper";
 
     /**
      * Crafter
@@ -8730,24 +8790,199 @@ public interface TrKeys {
     String MC_DR_ACCENT_CHANNEL = "minecraft:dr.accent_channel";
 
     /**
-     * Emotes Tab 3 of 4
+     * Narrow Arms
      */
-    String MC_DR_ACCESSIBILITY_HEADER_ANIMATION = "minecraft:dr.accessibility.header.animation";
+    String MC_DR_ACCESSIBILITY_ARM_SIZE_NARROW = "minecraft:dr.accessibility.arm_size.narrow";
 
     /**
-     * Capes Tab 4 of 4
+     * Wide Arms
      */
-    String MC_DR_ACCESSIBILITY_HEADER_CAPES = "minecraft:dr.accessibility.header.capes";
+    String MC_DR_ACCESSIBILITY_ARM_SIZE_WIDE = "minecraft:dr.accessibility.arm_size.wide";
 
     /**
-     * Classic Skins Tab 2 of 4
+     * Select previous character
      */
-    String MC_DR_ACCESSIBILITY_HEADER_CLASSIC_SKINS = "minecraft:dr.accessibility.header.classic_skins";
+    String MC_DR_ACCESSIBILITY_CHARACTER_LEFT = "minecraft:dr.accessibility.character_left";
 
     /**
-     * Character Creator Tab 1 of 4
+     * Select next character
      */
-    String MC_DR_ACCESSIBILITY_HEADER_CUSTOMIZATION = "minecraft:dr.accessibility.header.customization";
+    String MC_DR_ACCESSIBILITY_CHARACTER_RIGHT = "minecraft:dr.accessibility.character_right";
+
+    /**
+     * Medium Character
+     */
+    String MC_DR_ACCESSIBILITY_CHARACTER_SIZE_MEDIUM = "minecraft:dr.accessibility.character_size.medium";
+
+    /**
+     * Small Character
+     */
+    String MC_DR_ACCESSIBILITY_CHARACTER_SIZE_SMALL = "minecraft:dr.accessibility.character_size.small";
+
+    /**
+     * Smaller character
+     */
+    String MC_DR_ACCESSIBILITY_CHARACTER_SIZE_SMALLER = "minecraft:dr.accessibility.character_size.smaller";
+
+    /**
+     * Tall Character
+     */
+    String MC_DR_ACCESSIBILITY_CHARACTER_SIZE_TALL = "minecraft:dr.accessibility.character_size.tall";
+
+    /**
+     * Toggle. Open Color Picker
+     */
+    String MC_DR_ACCESSIBILITY_COLOR_PICKER = "minecraft:dr.accessibility.color_picker";
+
+    /**
+     * Custom Classic Skin
+     */
+    String MC_DR_ACCESSIBILITY_CUSTOM_SKIN = "minecraft:dr.accessibility.custom_skin";
+
+    /**
+     * Toggle. View Character in full screen
+     */
+    String MC_DR_ACCESSIBILITY_EXPAND_APPEARANCE = "minecraft:dr.accessibility.expand_appearance";
+
+    /**
+     * Switch to both limbs
+     */
+    String MC_DR_ACCESSIBILITY_LIMB_BOTH = "minecraft:dr.accessibility.limb_both";
+
+    /**
+     * Switch to left side
+     */
+    String MC_DR_ACCESSIBILITY_LIMB_LEFT = "minecraft:dr.accessibility.limb_left";
+
+    /**
+     * Switch to right side
+     */
+    String MC_DR_ACCESSIBILITY_LIMB_RIGHT = "minecraft:dr.accessibility.limb_right";
+
+    /**
+     * Locked
+     */
+    String MC_DR_ACCESSIBILITY_LOCKED = "minecraft:dr.accessibility.locked";
+
+    /**
+     * Owned
+     */
+    String MC_DR_ACCESSIBILITY_OWNED = "minecraft:dr.accessibility.owned";
+
+    /**
+     * Character Arms
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_ARMS = "minecraft:dr.accessibility.persona_arms";
+
+    /**
+     * Character Back Item
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_BACK = "minecraft:dr.accessibility.persona_back";
+
+    /**
+     * Character Body
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_BODY = "minecraft:dr.accessibility.persona_body";
+
+    /**
+     * Character Bottom
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_BOTTOM = "minecraft:dr.accessibility.persona_bottom";
+
+    /**
+     * Character Cape
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_CAPES = "minecraft:dr.accessibility.persona_capes";
+
+    /**
+     * Character Skin
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_CLASSIC_SKIN = "minecraft:dr.accessibility.persona_classic_skin";
+
+    /**
+     * Character Emote
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_EMOTE = "minecraft:dr.accessibility.persona_emote";
+
+    /**
+     * Character Eyes
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_EYES = "minecraft:dr.accessibility.persona_eyes";
+
+    /**
+     * Character Face Accessory
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_FACE_ACCESSORY = "minecraft:dr.accessibility.persona_face_accessory";
+
+    /**
+     * Character Facial Hair
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_FACIAL_HAIR = "minecraft:dr.accessibility.persona_facial_hair";
+
+    /**
+     * Character Footwear
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_FEET = "minecraft:dr.accessibility.persona_feet";
+
+    /**
+     * Character Hair
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_HAIR = "minecraft:dr.accessibility.persona_hair";
+
+    /**
+     * Character Gloves
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_HAND = "minecraft:dr.accessibility.persona_hand";
+
+    /**
+     * Character Headwear
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_HEAD = "minecraft:dr.accessibility.persona_head";
+
+    /**
+     * Character Face Item
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_HOOD = "minecraft:dr.accessibility.persona_hood";
+
+    /**
+     * Character Legs
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_LEGS = "minecraft:dr.accessibility.persona_legs";
+
+    /**
+     * Character Mouth
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_MOUTH = "minecraft:dr.accessibility.persona_mouth";
+
+    /**
+     * Character Outerwear
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_OUTERWEAR = "minecraft:dr.accessibility.persona_outerwear";
+
+    /**
+     * Character Base
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_SKIN = "minecraft:dr.accessibility.persona_skin";
+
+    /**
+     * Character Top
+     */
+    String MC_DR_ACCESSIBILITY_PERSONA_TOP = "minecraft:dr.accessibility.persona_top";
+
+    /**
+     * Purchaseable
+     */
+    String MC_DR_ACCESSIBILITY_PURCHASEABLE = "minecraft:dr.accessibility.purchaseable";
+
+    /**
+     * Redeemable
+     */
+    String MC_DR_ACCESSIBILITY_REDEEMABLE = "minecraft:dr.accessibility.redeemable";
+
+    /**
+     * Switch to %s
+     */
+    String MC_DR_ACCESSIBILITY_SWITCH_COLOR_CHANNEL = "minecraft:dr.accessibility.switch_color_channel";
 
     /**
      * This item is unlocked through completing an achievement.
@@ -10463,6 +10698,11 @@ public interface TrKeys {
      * Minecart with Command Block
      */
     String MC_ENTITY_COMMAND_BLOCK_MINECART_NAME = "minecraft:entity.command_block_minecart.name";
+
+    /**
+     * Copper Golem
+     */
+    String MC_ENTITY_COPPER_GOLEM_NAME = "minecraft:entity.copper_golem.name";
 
     /**
      * Cow
@@ -15955,14 +16195,69 @@ public interface TrKeys {
     String MC_ITEM_COOKIE_NAME = "minecraft:item.cookie.name";
 
     /**
+     * Copper Axe
+     */
+    String MC_ITEM_COPPER_AXE_NAME = "minecraft:item.copper_axe.name";
+
+    /**
+     * Copper Boots
+     */
+    String MC_ITEM_COPPER_BOOTS_NAME = "minecraft:item.copper_boots.name";
+
+    /**
+     * Copper Chestplate
+     */
+    String MC_ITEM_COPPER_CHESTPLATE_NAME = "minecraft:item.copper_chestplate.name";
+
+    /**
      * Copper Door
      */
     String MC_ITEM_COPPER_DOOR_NAME = "minecraft:item.copper_door.name";
 
     /**
+     * Copper Helmet
+     */
+    String MC_ITEM_COPPER_HELMET_NAME = "minecraft:item.copper_helmet.name";
+
+    /**
+     * Copper Hoe
+     */
+    String MC_ITEM_COPPER_HOE_NAME = "minecraft:item.copper_hoe.name";
+
+    /**
+     * Copper Horse Armor
+     */
+    String MC_ITEM_COPPER_HORSE_ARMOR_NAME = "minecraft:item.copper_horse_armor.name";
+
+    /**
      * Copper Ingot
      */
     String MC_ITEM_COPPER_INGOT_NAME = "minecraft:item.copper_ingot.name";
+
+    /**
+     * Copper Leggings
+     */
+    String MC_ITEM_COPPER_LEGGINGS_NAME = "minecraft:item.copper_leggings.name";
+
+    /**
+     * Copper Nugget
+     */
+    String MC_ITEM_COPPER_NUGGET_NAME = "minecraft:item.copper_nugget.name";
+
+    /**
+     * Copper Pickaxe
+     */
+    String MC_ITEM_COPPER_PICKAXE_NAME = "minecraft:item.copper_pickaxe.name";
+
+    /**
+     * Copper Shovel
+     */
+    String MC_ITEM_COPPER_SHOVEL_NAME = "minecraft:item.copper_shovel.name";
+
+    /**
+     * Copper Sword
+     */
+    String MC_ITEM_COPPER_SWORD_NAME = "minecraft:item.copper_sword.name";
 
     /**
      * Creeper Charge Banner Pattern
@@ -17845,6 +18140,11 @@ public interface TrKeys {
     String MC_ITEM_SPAWN_EGG_ENTITY_COD_NAME = "minecraft:item.spawn_egg.entity.cod.name";
 
     /**
+     * Copper Golem Spawn Egg
+     */
+    String MC_ITEM_SPAWN_EGG_ENTITY_COPPER_GOLEM_NAME = "minecraft:item.spawn_egg.entity.copper_golem.name";
+
+    /**
      * Cow Spawn Egg
      */
     String MC_ITEM_SPAWN_EGG_ENTITY_COW_NAME = "minecraft:item.spawn_egg.entity.cow.name";
@@ -18835,6 +19135,11 @@ public interface TrKeys {
     String MC_ITEMGROUP_NAME_BANNER_PATTERN = "minecraft:itemGroup.name.banner_pattern";
 
     /**
+     * Bars
+     */
+    String MC_ITEMGROUP_NAME_BARS = "minecraft:itemGroup.name.bars";
+
+    /**
      * Beds
      */
     String MC_ITEMGROUP_NAME_BED = "minecraft:itemGroup.name.bed";
@@ -18863,6 +19168,11 @@ public interface TrKeys {
      * Candles
      */
     String MC_ITEMGROUP_NAME_CANDLES = "minecraft:itemGroup.name.candles";
+
+    /**
+     * Chains
+     */
+    String MC_ITEMGROUP_NAME_CHAINS = "minecraft:itemGroup.name.chains";
 
     /**
      * Chalkboards
@@ -18908,6 +19218,11 @@ public interface TrKeys {
      * Copper
      */
     String MC_ITEMGROUP_NAME_COPPER = "minecraft:itemGroup.name.copper";
+
+    /**
+     * Copper Golem Statues
+     */
+    String MC_ITEMGROUP_NAME_COPPER_GOLEM_STATUE = "minecraft:itemGroup.name.copper_golem_statue";
 
     /**
      * Coral Blocks
@@ -19015,6 +19330,11 @@ public interface TrKeys {
     String MC_ITEMGROUP_NAME_HORSEARMOR = "minecraft:itemGroup.name.horseArmor";
 
     /**
+     * Lanterns
+     */
+    String MC_ITEMGROUP_NAME_LANTERNS = "minecraft:itemGroup.name.lanterns";
+
+    /**
      * Leaves
      */
     String MC_ITEMGROUP_NAME_LEAVES = "minecraft:itemGroup.name.leaves";
@@ -19023,6 +19343,11 @@ public interface TrKeys {
      * Leggings
      */
     String MC_ITEMGROUP_NAME_LEGGINGS = "minecraft:itemGroup.name.leggings";
+
+    /**
+     * Lightning Rods
+     */
+    String MC_ITEMGROUP_NAME_LIGHTNING_ROD = "minecraft:itemGroup.name.lightning_rod";
 
     /**
      * Lingering Potions
@@ -19143,6 +19468,11 @@ public interface TrKeys {
      * Seeds
      */
     String MC_ITEMGROUP_NAME_SEED = "minecraft:itemGroup.name.seed";
+
+    /**
+     * Shelves
+     */
+    String MC_ITEMGROUP_NAME_SHELF = "minecraft:itemGroup.name.shelf";
 
     /**
      * Shovels
@@ -19738,11 +20068,6 @@ public interface TrKeys {
      * Control Tips
      */
     String MC_KEY_TOGGLECONTROLTIPS = "minecraft:key.toggleControlTips";
-
-    /**
-     * Toggle Immersion
-     */
-    String MC_KEY_TOGGLELIVINGROOM = "minecraft:key.toggleLivingroom";
 
     /**
      * Toggle Perspective
@@ -21932,6 +22257,26 @@ public interface TrKeys {
     String MC_SIGN_EDIT = "minecraft:sign.edit";
 
     /**
+     * When on Chest:
+     */
+    String MC_SLOT_ARMOR_CHEST_WHEN_EQUIPPED = "minecraft:slot.armor.chest.when_equipped";
+
+    /**
+     * When on Feet:
+     */
+    String MC_SLOT_ARMOR_FEET_WHEN_EQUIPPED = "minecraft:slot.armor.feet.when_equipped";
+
+    /**
+     * When on Head:
+     */
+    String MC_SLOT_ARMOR_HEAD_WHEN_EQUIPPED = "minecraft:slot.armor.head.when_equipped";
+
+    /**
+     * When on Legs:
+     */
+    String MC_SLOT_ARMOR_LEGS_WHEN_EQUIPPED = "minecraft:slot.armor.legs.when_equipped";
+
+    /**
      * Go Back
      */
     String MC_TERMS_AND_CONDITIONS_GOBACK = "minecraft:terms_and_conditions.goBack";
@@ -21970,6 +22315,11 @@ public interface TrKeys {
      * Acacia Pressure Plate
      */
     String MC_TILE_ACACIA_PRESSURE_PLATE_NAME = "minecraft:tile.acacia_pressure_plate.name";
+
+    /**
+     * Acacia Shelf
+     */
+    String MC_TILE_ACACIA_SHELF_NAME = "minecraft:tile.acacia_shelf.name";
 
     /**
      * Acacia Stairs
@@ -22105,6 +22455,11 @@ public interface TrKeys {
      * Bamboo Pressure Plate
      */
     String MC_TILE_BAMBOO_PRESSURE_PLATE_NAME = "minecraft:tile.bamboo_pressure_plate.name";
+
+    /**
+     * Bamboo Shelf
+     */
+    String MC_TILE_BAMBOO_SHELF_NAME = "minecraft:tile.bamboo_shelf.name";
 
     /**
      * Bamboo Slab
@@ -22250,6 +22605,11 @@ public interface TrKeys {
      * Birch Pressure Plate
      */
     String MC_TILE_BIRCH_PRESSURE_PLATE_NAME = "minecraft:tile.birch_pressure_plate.name";
+
+    /**
+     * Birch Shelf
+     */
+    String MC_TILE_BIRCH_SHELF_NAME = "minecraft:tile.birch_shelf.name";
 
     /**
      * Birch Stairs
@@ -22615,6 +22975,11 @@ public interface TrKeys {
      * Cherry Sapling
      */
     String MC_TILE_CHERRY_SAPLING_NAME = "minecraft:tile.cherry_sapling.name";
+
+    /**
+     * Cherry Shelf
+     */
+    String MC_TILE_CHERRY_SHELF_NAME = "minecraft:tile.cherry_shelf.name";
 
     /**
      * Cherry Slab
@@ -22992,6 +23357,11 @@ public interface TrKeys {
     String MC_TILE_CONDUIT_NAME = "minecraft:tile.conduit.name";
 
     /**
+     * Copper Bars
+     */
+    String MC_TILE_COPPER_BARS_NAME = "minecraft:tile.copper_bars.name";
+
+    /**
      * Block of Copper
      */
     String MC_TILE_COPPER_BLOCK_NAME = "minecraft:tile.copper_block.name";
@@ -23002,9 +23372,24 @@ public interface TrKeys {
     String MC_TILE_COPPER_BULB_NAME = "minecraft:tile.copper_bulb.name";
 
     /**
+     * Copper Chain
+     */
+    String MC_TILE_COPPER_CHAIN_NAME = "minecraft:tile.copper_chain.name";
+
+    /**
+     * Copper Chest
+     */
+    String MC_TILE_COPPER_CHEST_NAME = "minecraft:tile.copper_chest.name";
+
+    /**
      * Copper Door
      */
     String MC_TILE_COPPER_DOOR_NAME = "minecraft:tile.copper_door.name";
+
+    /**
+     * Copper Golem Statue
+     */
+    String MC_TILE_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.copper_golem_statue.name";
 
     /**
      * Copper Grate
@@ -23012,9 +23397,19 @@ public interface TrKeys {
     String MC_TILE_COPPER_GRATE_NAME = "minecraft:tile.copper_grate.name";
 
     /**
+     * Copper Lantern
+     */
+    String MC_TILE_COPPER_LANTERN_NAME = "minecraft:tile.copper_lantern.name";
+
+    /**
      * Copper Ore
      */
     String MC_TILE_COPPER_ORE_NAME = "minecraft:tile.copper_ore.name";
+
+    /**
+     * Copper Torch
+     */
+    String MC_TILE_COPPER_TORCH_NAME = "minecraft:tile.copper_torch.name";
 
     /**
      * Copper Trapdoor
@@ -23262,6 +23657,11 @@ public interface TrKeys {
     String MC_TILE_CRIMSON_ROOTS_CRIMSONROOTS_NAME = "minecraft:tile.crimson_roots.crimsonRoots.name";
 
     /**
+     * Crimson Shelf
+     */
+    String MC_TILE_CRIMSON_SHELF_NAME = "minecraft:tile.crimson_shelf.name";
+
+    /**
      * Crimson Slab
      */
     String MC_TILE_CRIMSON_SLAB_NAME = "minecraft:tile.crimson_slab.name";
@@ -23340,6 +23740,11 @@ public interface TrKeys {
      * Dark Oak Pressure Plate
      */
     String MC_TILE_DARK_OAK_PRESSURE_PLATE_NAME = "minecraft:tile.dark_oak_pressure_plate.name";
+
+    /**
+     * Dark Oak Shelf
+     */
+    String MC_TILE_DARK_OAK_SHELF_NAME = "minecraft:tile.dark_oak_shelf.name";
 
     /**
      * Dark Oak Stairs
@@ -23697,9 +24102,24 @@ public interface TrKeys {
     String MC_TILE_EXPOSED_COPPER_NAME = "minecraft:tile.exposed_copper.name";
 
     /**
+     * Exposed Copper Bars
+     */
+    String MC_TILE_EXPOSED_COPPER_BARS_NAME = "minecraft:tile.exposed_copper_bars.name";
+
+    /**
      * Exposed Copper Bulb
      */
     String MC_TILE_EXPOSED_COPPER_BULB_NAME = "minecraft:tile.exposed_copper_bulb.name";
+
+    /**
+     * Exposed Copper Chain
+     */
+    String MC_TILE_EXPOSED_COPPER_CHAIN_NAME = "minecraft:tile.exposed_copper_chain.name";
+
+    /**
+     * Exposed Copper Chest
+     */
+    String MC_TILE_EXPOSED_COPPER_CHEST_NAME = "minecraft:tile.exposed_copper_chest.name";
 
     /**
      * Exposed Copper Door
@@ -23707,9 +24127,19 @@ public interface TrKeys {
     String MC_TILE_EXPOSED_COPPER_DOOR_NAME = "minecraft:tile.exposed_copper_door.name";
 
     /**
+     * Exposed Copper Golem Statue
+     */
+    String MC_TILE_EXPOSED_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.exposed_copper_golem_statue.name";
+
+    /**
      * Exposed Copper Grate
      */
     String MC_TILE_EXPOSED_COPPER_GRATE_NAME = "minecraft:tile.exposed_copper_grate.name";
+
+    /**
+     * Exposed Copper Lantern
+     */
+    String MC_TILE_EXPOSED_COPPER_LANTERN_NAME = "minecraft:tile.exposed_copper_lantern.name";
 
     /**
      * Exposed Copper Trapdoor
@@ -23730,6 +24160,11 @@ public interface TrKeys {
      * Exposed Cut Copper Stairs
      */
     String MC_TILE_EXPOSED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.exposed_cut_copper_stairs.name";
+
+    /**
+     * Exposed Lightning Rod
+     */
+    String MC_TILE_EXPOSED_LIGHTNING_ROD_NAME = "minecraft:tile.exposed_lightning_rod.name";
 
     /**
      * Farmland
@@ -24102,6 +24537,11 @@ public interface TrKeys {
     String MC_TILE_IRON_BLOCK_NAME = "minecraft:tile.iron_block.name";
 
     /**
+     * Iron Chain
+     */
+    String MC_TILE_IRON_CHAIN_NAME = "minecraft:tile.iron_chain.name";
+
+    /**
      * Iron Door
      */
     String MC_TILE_IRON_DOOR_NAME = "minecraft:tile.iron_door.name";
@@ -24145,6 +24585,11 @@ public interface TrKeys {
      * Jungle Pressure Plate
      */
     String MC_TILE_JUNGLE_PRESSURE_PLATE_NAME = "minecraft:tile.jungle_pressure_plate.name";
+
+    /**
+     * Jungle Shelf
+     */
+    String MC_TILE_JUNGLE_SHELF_NAME = "minecraft:tile.jungle_shelf.name";
 
     /**
      * Jungle Stairs
@@ -24412,6 +24857,11 @@ public interface TrKeys {
     String MC_TILE_MANGROVE_ROOTS_NAME = "minecraft:tile.mangrove_roots.name";
 
     /**
+     * Mangrove Shelf
+     */
+    String MC_TILE_MANGROVE_SHELF_NAME = "minecraft:tile.mangrove_shelf.name";
+
+    /**
      * Mangrove Slab
      */
     String MC_TILE_MANGROVE_SLAB_NAME = "minecraft:tile.mangrove_slab.name";
@@ -24637,6 +25087,11 @@ public interface TrKeys {
     String MC_TILE_NOTEBLOCK_NAME = "minecraft:tile.noteblock.name";
 
     /**
+     * Oak Shelf
+     */
+    String MC_TILE_OAK_SHELF_NAME = "minecraft:tile.oak_shelf.name";
+
+    /**
      * Oak Stairs
      */
     String MC_TILE_OAK_STAIRS_NAME = "minecraft:tile.oak_stairs.name";
@@ -24687,9 +25142,24 @@ public interface TrKeys {
     String MC_TILE_OXIDIZED_COPPER_NAME = "minecraft:tile.oxidized_copper.name";
 
     /**
+     * Oxidized Copper Bars
+     */
+    String MC_TILE_OXIDIZED_COPPER_BARS_NAME = "minecraft:tile.oxidized_copper_bars.name";
+
+    /**
      * Oxidized Copper Bulb
      */
     String MC_TILE_OXIDIZED_COPPER_BULB_NAME = "minecraft:tile.oxidized_copper_bulb.name";
+
+    /**
+     * Oxidized Copper Chain
+     */
+    String MC_TILE_OXIDIZED_COPPER_CHAIN_NAME = "minecraft:tile.oxidized_copper_chain.name";
+
+    /**
+     * Oxidized Copper Chest
+     */
+    String MC_TILE_OXIDIZED_COPPER_CHEST_NAME = "minecraft:tile.oxidized_copper_chest.name";
 
     /**
      * Oxidized Copper Door
@@ -24697,9 +25167,19 @@ public interface TrKeys {
     String MC_TILE_OXIDIZED_COPPER_DOOR_NAME = "minecraft:tile.oxidized_copper_door.name";
 
     /**
+     * Oxidized Copper Golem Statue
+     */
+    String MC_TILE_OXIDIZED_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.oxidized_copper_golem_statue.name";
+
+    /**
      * Oxidized Copper Grate
      */
     String MC_TILE_OXIDIZED_COPPER_GRATE_NAME = "minecraft:tile.oxidized_copper_grate.name";
+
+    /**
+     * Oxidized Copper Lantern
+     */
+    String MC_TILE_OXIDIZED_COPPER_LANTERN_NAME = "minecraft:tile.oxidized_copper_lantern.name";
 
     /**
      * Oxidized Copper Trapdoor
@@ -24720,6 +25200,11 @@ public interface TrKeys {
      * Oxidized Cut Copper Stairs
      */
     String MC_TILE_OXIDIZED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.oxidized_cut_copper_stairs.name";
+
+    /**
+     * Oxidized Lightning Rod
+     */
+    String MC_TILE_OXIDIZED_LIGHTNING_ROD_NAME = "minecraft:tile.oxidized_lightning_rod.name";
 
     /**
      * Packed Ice
@@ -24790,6 +25275,11 @@ public interface TrKeys {
      * Pale Oak Sapling
      */
     String MC_TILE_PALE_OAK_SAPLING_NAME = "minecraft:tile.pale_oak_sapling.name";
+
+    /**
+     * Pale Oak Shelf
+     */
+    String MC_TILE_PALE_OAK_SHELF_NAME = "minecraft:tile.pale_oak_shelf.name";
 
     /**
      * Pale Oak Slab
@@ -25695,6 +26185,11 @@ public interface TrKeys {
      * Spruce Pressure Plate
      */
     String MC_TILE_SPRUCE_PRESSURE_PLATE_NAME = "minecraft:tile.spruce_pressure_plate.name";
+
+    /**
+     * Spruce Shelf
+     */
+    String MC_TILE_SPRUCE_SHELF_NAME = "minecraft:tile.spruce_shelf.name";
 
     /**
      * Spruce Stairs
@@ -26612,6 +27107,11 @@ public interface TrKeys {
     String MC_TILE_WARPED_ROOTS_WARPEDROOTS_NAME = "minecraft:tile.warped_roots.warpedRoots.name";
 
     /**
+     * Warped Shelf
+     */
+    String MC_TILE_WARPED_SHELF_NAME = "minecraft:tile.warped_shelf.name";
+
+    /**
      * Warped Slab
      */
     String MC_TILE_WARPED_SLAB_NAME = "minecraft:tile.warped_slab.name";
@@ -26667,9 +27167,24 @@ public interface TrKeys {
     String MC_TILE_WAXED_COPPER_NAME = "minecraft:tile.waxed_copper.name";
 
     /**
+     * Waxed Copper Bars
+     */
+    String MC_TILE_WAXED_COPPER_BARS_NAME = "minecraft:tile.waxed_copper_bars.name";
+
+    /**
      * Waxed Copper Bulb
      */
     String MC_TILE_WAXED_COPPER_BULB_NAME = "minecraft:tile.waxed_copper_bulb.name";
+
+    /**
+     * Waxed Copper Chain
+     */
+    String MC_TILE_WAXED_COPPER_CHAIN_NAME = "minecraft:tile.waxed_copper_chain.name";
+
+    /**
+     * Waxed Copper Chest
+     */
+    String MC_TILE_WAXED_COPPER_CHEST_NAME = "minecraft:tile.waxed_copper_chest.name";
 
     /**
      * Waxed Copper Door
@@ -26677,9 +27192,19 @@ public interface TrKeys {
     String MC_TILE_WAXED_COPPER_DOOR_NAME = "minecraft:tile.waxed_copper_door.name";
 
     /**
+     * Waxed Copper Golem Statue
+     */
+    String MC_TILE_WAXED_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.waxed_copper_golem_statue.name";
+
+    /**
      * Waxed Copper Grate
      */
     String MC_TILE_WAXED_COPPER_GRATE_NAME = "minecraft:tile.waxed_copper_grate.name";
+
+    /**
+     * Waxed Copper Lantern
+     */
+    String MC_TILE_WAXED_COPPER_LANTERN_NAME = "minecraft:tile.waxed_copper_lantern.name";
 
     /**
      * Waxed Copper Trapdoor
@@ -26712,9 +27237,24 @@ public interface TrKeys {
     String MC_TILE_WAXED_EXPOSED_COPPER_NAME = "minecraft:tile.waxed_exposed_copper.name";
 
     /**
+     * Waxed Exposed Copper Bars
+     */
+    String MC_TILE_WAXED_EXPOSED_COPPER_BARS_NAME = "minecraft:tile.waxed_exposed_copper_bars.name";
+
+    /**
      * Waxed Exposed Copper Bulb
      */
     String MC_TILE_WAXED_EXPOSED_COPPER_BULB_NAME = "minecraft:tile.waxed_exposed_copper_bulb.name";
+
+    /**
+     * Waxed Exposed Copper Chain
+     */
+    String MC_TILE_WAXED_EXPOSED_COPPER_CHAIN_NAME = "minecraft:tile.waxed_exposed_copper_chain.name";
+
+    /**
+     * Waxed Exposed Copper Chest
+     */
+    String MC_TILE_WAXED_EXPOSED_COPPER_CHEST_NAME = "minecraft:tile.waxed_exposed_copper_chest.name";
 
     /**
      * Waxed Exposed Copper Door
@@ -26722,9 +27262,19 @@ public interface TrKeys {
     String MC_TILE_WAXED_EXPOSED_COPPER_DOOR_NAME = "minecraft:tile.waxed_exposed_copper_door.name";
 
     /**
+     * Waxed Exposed Copper Golem Statue
+     */
+    String MC_TILE_WAXED_EXPOSED_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.waxed_exposed_copper_golem_statue.name";
+
+    /**
      * Waxed Exposed Copper Grate
      */
     String MC_TILE_WAXED_EXPOSED_COPPER_GRATE_NAME = "minecraft:tile.waxed_exposed_copper_grate.name";
+
+    /**
+     * Waxed Exposed Copper Lantern
+     */
+    String MC_TILE_WAXED_EXPOSED_COPPER_LANTERN_NAME = "minecraft:tile.waxed_exposed_copper_lantern.name";
 
     /**
      * Waxed Exposed Copper Trapdoor
@@ -26747,6 +27297,16 @@ public interface TrKeys {
     String MC_TILE_WAXED_EXPOSED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_exposed_cut_copper_stairs.name";
 
     /**
+     * Waxed Exposed Lightning Rod
+     */
+    String MC_TILE_WAXED_EXPOSED_LIGHTNING_ROD_NAME = "minecraft:tile.waxed_exposed_lightning_rod.name";
+
+    /**
+     * Waxed Lightning Rod
+     */
+    String MC_TILE_WAXED_LIGHTNING_ROD_NAME = "minecraft:tile.waxed_lightning_rod.name";
+
+    /**
      * Waxed Oxidized Chiseled Copper
      */
     String MC_TILE_WAXED_OXIDIZED_CHISELED_COPPER_NAME = "minecraft:tile.waxed_oxidized_chiseled_copper.name";
@@ -26757,9 +27317,24 @@ public interface TrKeys {
     String MC_TILE_WAXED_OXIDIZED_COPPER_NAME = "minecraft:tile.waxed_oxidized_copper.name";
 
     /**
+     * Waxed Oxidized Copper Bars
+     */
+    String MC_TILE_WAXED_OXIDIZED_COPPER_BARS_NAME = "minecraft:tile.waxed_oxidized_copper_bars.name";
+
+    /**
      * Waxed Oxidized Copper Bulb
      */
     String MC_TILE_WAXED_OXIDIZED_COPPER_BULB_NAME = "minecraft:tile.waxed_oxidized_copper_bulb.name";
+
+    /**
+     * Waxed Oxidized Copper Chain
+     */
+    String MC_TILE_WAXED_OXIDIZED_COPPER_CHAIN_NAME = "minecraft:tile.waxed_oxidized_copper_chain.name";
+
+    /**
+     * Waxed Oxidized Copper Chest
+     */
+    String MC_TILE_WAXED_OXIDIZED_COPPER_CHEST_NAME = "minecraft:tile.waxed_oxidized_copper_chest.name";
 
     /**
      * Waxed Oxidized Copper Door
@@ -26767,9 +27342,19 @@ public interface TrKeys {
     String MC_TILE_WAXED_OXIDIZED_COPPER_DOOR_NAME = "minecraft:tile.waxed_oxidized_copper_door.name";
 
     /**
+     * Waxed Oxidized Copper Golem Statue
+     */
+    String MC_TILE_WAXED_OXIDIZED_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.waxed_oxidized_copper_golem_statue.name";
+
+    /**
      * Waxed Oxidized Copper Grate
      */
     String MC_TILE_WAXED_OXIDIZED_COPPER_GRATE_NAME = "minecraft:tile.waxed_oxidized_copper_grate.name";
+
+    /**
+     * Waxed Oxidized Copper Lantern
+     */
+    String MC_TILE_WAXED_OXIDIZED_COPPER_LANTERN_NAME = "minecraft:tile.waxed_oxidized_copper_lantern.name";
 
     /**
      * Waxed Oxidized Copper Trapdoor
@@ -26792,6 +27377,11 @@ public interface TrKeys {
     String MC_TILE_WAXED_OXIDIZED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_oxidized_cut_copper_stairs.name";
 
     /**
+     * Waxed Oxidized Lightning Rod
+     */
+    String MC_TILE_WAXED_OXIDIZED_LIGHTNING_ROD_NAME = "minecraft:tile.waxed_oxidized_lightning_rod.name";
+
+    /**
      * Waxed Weathered Chiseled Copper
      */
     String MC_TILE_WAXED_WEATHERED_CHISELED_COPPER_NAME = "minecraft:tile.waxed_weathered_chiseled_copper.name";
@@ -26802,9 +27392,24 @@ public interface TrKeys {
     String MC_TILE_WAXED_WEATHERED_COPPER_NAME = "minecraft:tile.waxed_weathered_copper.name";
 
     /**
+     * Waxed Weathered Copper Bars
+     */
+    String MC_TILE_WAXED_WEATHERED_COPPER_BARS_NAME = "minecraft:tile.waxed_weathered_copper_bars.name";
+
+    /**
      * Waxed Weathered Copper Bulb
      */
     String MC_TILE_WAXED_WEATHERED_COPPER_BULB_NAME = "minecraft:tile.waxed_weathered_copper_bulb.name";
+
+    /**
+     * Waxed Weathered Copper Chain
+     */
+    String MC_TILE_WAXED_WEATHERED_COPPER_CHAIN_NAME = "minecraft:tile.waxed_weathered_copper_chain.name";
+
+    /**
+     * Waxed Weathered Copper Chest
+     */
+    String MC_TILE_WAXED_WEATHERED_COPPER_CHEST_NAME = "minecraft:tile.waxed_weathered_copper_chest.name";
 
     /**
      * Waxed Weathered Copper Door
@@ -26812,9 +27417,19 @@ public interface TrKeys {
     String MC_TILE_WAXED_WEATHERED_COPPER_DOOR_NAME = "minecraft:tile.waxed_weathered_copper_door.name";
 
     /**
+     * Waxed Weathered Copper Golem Statue
+     */
+    String MC_TILE_WAXED_WEATHERED_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.waxed_weathered_copper_golem_statue.name";
+
+    /**
      * Waxed Weathered Copper Grate
      */
     String MC_TILE_WAXED_WEATHERED_COPPER_GRATE_NAME = "minecraft:tile.waxed_weathered_copper_grate.name";
+
+    /**
+     * Waxed Weathered Copper Lantern
+     */
+    String MC_TILE_WAXED_WEATHERED_COPPER_LANTERN_NAME = "minecraft:tile.waxed_weathered_copper_lantern.name";
 
     /**
      * Waxed Weathered Copper Trapdoor
@@ -26837,6 +27452,11 @@ public interface TrKeys {
     String MC_TILE_WAXED_WEATHERED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.waxed_weathered_cut_copper_stairs.name";
 
     /**
+     * Waxed Weathered Lightning Rod
+     */
+    String MC_TILE_WAXED_WEATHERED_LIGHTNING_ROD_NAME = "minecraft:tile.waxed_weathered_lightning_rod.name";
+
+    /**
      * Weathered Chiseled Copper
      */
     String MC_TILE_WEATHERED_CHISELED_COPPER_NAME = "minecraft:tile.weathered_chiseled_copper.name";
@@ -26847,9 +27467,24 @@ public interface TrKeys {
     String MC_TILE_WEATHERED_COPPER_NAME = "minecraft:tile.weathered_copper.name";
 
     /**
+     * Weathered Copper Bars
+     */
+    String MC_TILE_WEATHERED_COPPER_BARS_NAME = "minecraft:tile.weathered_copper_bars.name";
+
+    /**
      * Weathered Copper Bulb
      */
     String MC_TILE_WEATHERED_COPPER_BULB_NAME = "minecraft:tile.weathered_copper_bulb.name";
+
+    /**
+     * Weathered Copper Chain
+     */
+    String MC_TILE_WEATHERED_COPPER_CHAIN_NAME = "minecraft:tile.weathered_copper_chain.name";
+
+    /**
+     * Weathered Copper Chest
+     */
+    String MC_TILE_WEATHERED_COPPER_CHEST_NAME = "minecraft:tile.weathered_copper_chest.name";
 
     /**
      * Weathered Copper Door
@@ -26857,9 +27492,19 @@ public interface TrKeys {
     String MC_TILE_WEATHERED_COPPER_DOOR_NAME = "minecraft:tile.weathered_copper_door.name";
 
     /**
+     * Weathered Copper Golem Statue
+     */
+    String MC_TILE_WEATHERED_COPPER_GOLEM_STATUE_NAME = "minecraft:tile.weathered_copper_golem_statue.name";
+
+    /**
      * Weathered Copper Grate
      */
     String MC_TILE_WEATHERED_COPPER_GRATE_NAME = "minecraft:tile.weathered_copper_grate.name";
+
+    /**
+     * Weathered Copper Lantern
+     */
+    String MC_TILE_WEATHERED_COPPER_LANTERN_NAME = "minecraft:tile.weathered_copper_lantern.name";
 
     /**
      * Weathered Copper Trapdoor
@@ -26880,6 +27525,11 @@ public interface TrKeys {
      * Weathered Cut Copper Stairs
      */
     String MC_TILE_WEATHERED_CUT_COPPER_STAIRS_NAME = "minecraft:tile.weathered_cut_copper_stairs.name";
+
+    /**
+     * Weathered Lightning Rod
+     */
+    String MC_TILE_WEATHERED_LIGHTNING_ROD_NAME = "minecraft:tile.weathered_lightning_rod.name";
 
     /**
      * Cobweb
@@ -27380,6 +28030,11 @@ public interface TrKeys {
      * world
      */
     String MC_TRANSLATION_TEST_WORLD = "minecraft:translation.test.world";
+
+    /**
+     * Travel to new World
+     */
+    String MC_TRAVEL_TOAST = "minecraft:travel.toast";
 
     /**
      * Amethyst Material

@@ -51,7 +51,7 @@ public interface ClassNames {
     ClassName ALLAY_ENTITY_TYPE = ClassName.get("org.allaymc.server.entity.type", "AllayEntityType");
     ClassName ENTITY_TYPE_DEFAULT_INITIALIZER = ClassName.get("org.allaymc.server.entity.type", "EntityTypeDefaultInitializer");
 
-    ClassName ITEM_ID = ClassName.get("org.allaymc.api.item.data", "ItemId");
+    ClassName ITEM_ID = ClassName.get("org.allaymc.server.item.data", "ItemId");
     ClassName ITEM_STACK = ClassName.get("org.allaymc.api.item", "ItemStack");
     ClassName ITEM_STACK_IMPL = ClassName.get("org.allaymc.server.item.impl", "ItemStackImpl");
     ClassName ITEM_STACK_INIT_INFO = ClassName.get("org.allaymc.api.item", "ItemStackInitInfo");
