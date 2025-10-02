@@ -12,8 +12,8 @@ nbt = { group = "org.allaymc", name = "nbt", version = "3.0.10" }
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta9-SNAPSHOT" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
-item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.100-R3" }
-block-updater = { group = "org.allaymc.stateupdater", name = "block-updater", version = "1.21.60-R3" }
+item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.110-R1" }
+block-updater = { group = "org.allaymc.stateupdater", name = "block-updater", version = "1.21.110-R1" }
 # Collections
 guava = { group = "com.google.guava", name = "guava", version = "33.5.0-jre" }
 # Fastutil
