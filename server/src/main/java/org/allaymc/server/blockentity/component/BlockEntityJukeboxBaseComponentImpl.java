@@ -2,11 +2,11 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityJukeboxBaseComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.ItemMusicDiscBaseComponent;
+import org.allaymc.api.item.interfaces.ItemMusicDiscStack;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.world.sound.MusicDiscPlaySound;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -17,14 +17,15 @@ import org.joml.Vector3d;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author IWareQ
+ * @author IWareQ | daoge_cmd
  */
+@Slf4j
 public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityJukeboxBaseComponent {
     protected static final String TAG_RECORD_ITEM = "RecordItem";
 
     @Getter
     @Setter
-    private ItemStack musicDiscItem;
+    private ItemMusicDiscStack musicDiscItem;
 
     public BlockEntityJukeboxBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -32,9 +33,7 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public void play() {
-        if (this.musicDiscItem instanceof ItemMusicDiscBaseComponent component) {
-            this.getDimension().addSound(this.getPosition(), new MusicDiscPlaySound(component.getDiscType()));
-        }
+        this.getDimension().addSound(this.getPosition(), new MusicDiscPlaySound(this.musicDiscItem.getDiscType()));
     }
 
     @Override
@@ -73,6 +72,13 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound(TAG_RECORD_ITEM, value -> this.musicDiscItem = NBTIO.getAPI().fromItemStackNBT(value));
+        nbt.listenForCompound(TAG_RECORD_ITEM, value -> {
+            var item = NBTIO.getAPI().fromItemStackNBT(value);
+            if (item instanceof ItemMusicDiscStack musicDiscStack) {
+                this.musicDiscItem = musicDiscStack;
+            } else {
+                log.warn("Invalid music disc item {} in jukebox at {}", item.getItemType().getIdentifier(), this.getPosition());
+            }
+        });
     }
 }

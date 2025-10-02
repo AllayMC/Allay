@@ -1,6 +1,6 @@
 package org.allaymc.api.blockentity.component;
 
-import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemMusicDiscStack;
 
 /**
  * @author IWareQ
@@ -22,12 +22,12 @@ public interface BlockEntityJukeboxBaseComponent extends BlockEntityBaseComponen
      *
      * @return the music disc item
      */
-    ItemStack getMusicDiscItem();
+    ItemMusicDiscStack getMusicDiscItem();
 
     /**
      * Set the music disc inside the jukebox.
      *
      * @param item the music disc item
      */
-    void setMusicDiscItem(ItemStack item);
+    void setMusicDiscItem(ItemMusicDiscStack item);
 }

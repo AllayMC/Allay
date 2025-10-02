@@ -143,6 +143,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug where plugins which have dependencies will only be loaded but not enabled.
 - Fixed the sub chunk sending system.
 - Fixed the bug that food leve is not frozen when world difficulty is set to peaceful.
+- Fixed the placement of wall sign.
+- Fixed the bug that jukebox accepts any type of item, it now only allows music disc item to be placed.
 
 ### Removed
 

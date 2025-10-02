@@ -8,6 +8,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityJukebox;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemMusicDiscStack;
 import org.allaymc.api.math.position.Position3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -30,21 +31,23 @@ public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        var player = interactInfo.player();
+        if (!(itemStack instanceof ItemMusicDiscStack musicDiscItem)) {
+            return false;
+        }
+
         var blockEntity = blockEntityHolderComponent.getBlockEntity(new Position3i(interactInfo.clickedBlockPos(), dimension));
-        if (blockEntity instanceof BlockEntityJukebox jukebox) {
-            var musicDisc = jukebox.getMusicDiscItem();
-            if (musicDisc != null) {
-                jukebox.setMusicDiscItem(null);
-                jukebox.stop();
+        var oldMusicDiscItem = blockEntity.getMusicDiscItem();
+        if (oldMusicDiscItem != null) {
+            blockEntity.setMusicDiscItem(null);
+            blockEntity.stop();
 
-                dimension.dropItem(musicDisc, new Position3d(blockEntity.getPosition()).add(0, 1, 0));
-            } else {
-                jukebox.setMusicDiscItem(player.getItemInHand());
-                player.clearItemInHand();
+            dimension.dropItem(oldMusicDiscItem, new Position3d(blockEntity.getPosition()).add(0, 1, 0));
+        } else {
+            var player = interactInfo.player();
+            blockEntity.setMusicDiscItem(musicDiscItem);
+            player.clearItemInHand();
 
-                jukebox.play();
-            }
+            blockEntity.play();
         }
 
         return true;
