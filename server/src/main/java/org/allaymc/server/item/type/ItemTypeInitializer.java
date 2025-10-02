@@ -468,6 +468,7 @@ public final class ItemTypeInitializer {
         ItemTypes.NETHERITE_SWORD = buildSword(ItemId.NETHERITE_SWORD, ItemId.NETHERITE_INGOT);
         ItemTypes.STONE_SWORD = buildSword(ItemId.STONE_SWORD, ItemId.COBBLESTONE);
         ItemTypes.WOODEN_SWORD = buildSword(ItemId.WOODEN_SWORD, ItemId.PLANKS);
+        ItemTypes.COPPER_SWORD = buildSword(ItemId.COPPER_SWORD, ItemId.COPPER_INGOT);
     }
 
     private static ItemType<ItemSwordStack> buildSword(ItemId itemId, ItemId repairItemId) {
@@ -486,6 +487,7 @@ public final class ItemTypeInitializer {
         ItemTypes.NETHERITE_PICKAXE = buildPickaxe(ItemId.NETHERITE_PICKAXE, ItemId.NETHERITE_INGOT);
         ItemTypes.STONE_PICKAXE = buildPickaxe(ItemId.STONE_PICKAXE, ItemId.COBBLESTONE);
         ItemTypes.WOODEN_PICKAXE = buildPickaxe(ItemId.WOODEN_PICKAXE, ItemId.PLANKS);
+        ItemTypes.COPPER_PICKAXE = buildPickaxe(ItemId.COPPER_PICKAXE, ItemId.COPPER_INGOT);
     }
 
     private static ItemType<ItemPickaxeStack> buildPickaxe(ItemId itemId, ItemId repairItemId) {
@@ -504,6 +506,7 @@ public final class ItemTypeInitializer {
         ItemTypes.NETHERITE_AXE = buildAxe(ItemId.NETHERITE_AXE, ItemId.NETHERITE_INGOT);
         ItemTypes.STONE_AXE = buildAxe(ItemId.STONE_AXE, ItemId.COBBLESTONE);
         ItemTypes.WOODEN_AXE = buildAxe(ItemId.WOODEN_AXE, ItemId.PLANKS);
+        ItemTypes.COPPER_AXE = buildAxe(ItemId.COPPER_AXE, ItemId.COPPER_INGOT);
     }
 
     private static ItemType<ItemAxeStack> buildAxe(ItemId itemId, ItemId repairItemId) {
@@ -523,6 +526,7 @@ public final class ItemTypeInitializer {
         ItemTypes.NETHERITE_SHOVEL = buildShovel(ItemId.NETHERITE_SHOVEL, ItemId.NETHERITE_INGOT);
         ItemTypes.STONE_SHOVEL = buildShovel(ItemId.STONE_SHOVEL, ItemId.COBBLESTONE);
         ItemTypes.WOODEN_SHOVEL = buildShovel(ItemId.WOODEN_SHOVEL, ItemId.PLANKS);
+        ItemTypes.COPPER_SHOVEL = buildShovel(ItemId.COPPER_SHOVEL, ItemId.COPPER_INGOT);
     }
 
     private static ItemType<ItemShovelStack> buildShovel(ItemId itemId, ItemId repairItemId) {
@@ -541,6 +545,7 @@ public final class ItemTypeInitializer {
         ItemTypes.NETHERITE_HOE = buildHoe(ItemId.NETHERITE_HOE, ItemId.NETHERITE_INGOT);
         ItemTypes.STONE_HOE = buildHoe(ItemId.STONE_HOE, ItemId.COBBLESTONE);
         ItemTypes.WOODEN_HOE = buildHoe(ItemId.WOODEN_HOE, ItemId.PLANKS);
+        ItemTypes.COPPER_HOE = buildHoe(ItemId.COPPER_HOE, ItemId.COPPER_INGOT);
     }
 
     private static ItemType<ItemHoeStack> buildHoe(ItemId itemId, ItemId repairItemId) {
