@@ -82,6 +82,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.AGE_BIT)
                     .build();
         }
+        if (BlockTypes.ACACIA_SHELF == null) {
+            BlockTypes.ACACIA_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.ACACIA_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
+                    .build();
+        }
         if (BlockTypes.ACACIA_SLAB == null) {
             BlockTypes.ACACIA_SLAB = AllayBlockType
                     .builder(BlockSlabBehaviorImpl.class)
@@ -337,6 +344,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.AGE_BIT)
                     .build();
         }
+        if (BlockTypes.BAMBOO_SHELF == null) {
+            BlockTypes.BAMBOO_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.BAMBOO_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
+                    .build();
+        }
         if (BlockTypes.BAMBOO_SLAB == null) {
             BlockTypes.BAMBOO_SLAB = AllayBlockType
                     .builder(BlockSlabBehaviorImpl.class)
@@ -520,6 +534,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockSaplingBehaviorImpl.class)
                     .vanillaBlock(BlockId.BIRCH_SAPLING)
                     .setProperties(BlockPropertyTypes.AGE_BIT)
+                    .build();
+        }
+        if (BlockTypes.BIRCH_SHELF == null) {
+            BlockTypes.BIRCH_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.BIRCH_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
                     .build();
         }
         if (BlockTypes.BIRCH_SLAB == null) {
@@ -1172,6 +1193,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.AGE_BIT)
                     .build();
         }
+        if (BlockTypes.CHERRY_SHELF == null) {
+            BlockTypes.CHERRY_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.CHERRY_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
+                    .build();
+        }
         if (BlockTypes.CHERRY_SLAB == null) {
             BlockTypes.CHERRY_SLAB = AllayBlockType
                     .builder(BlockSlabBehaviorImpl.class)
@@ -1474,6 +1502,12 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.CONDUIT)
                     .build();
         }
+        if (BlockTypes.COPPER_BARS == null) {
+            BlockTypes.COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.COPPER_BLOCK == null) {
             BlockTypes.COPPER_BLOCK = AllayBlockType
                     .builder(BlockCopperBehaviorImpl.class)
@@ -1485,6 +1519,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.COPPER_CHAIN == null) {
+            BlockTypes.COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.COPPER_CHEST == null) {
@@ -1501,16 +1542,37 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.COPPER_GOLEM_STATUE == null) {
+            BlockTypes.COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.COPPER_GRATE == null) {
             BlockTypes.COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_GRATE)
                     .build();
         }
+        if (BlockTypes.COPPER_LANTERN == null) {
+            BlockTypes.COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
+                    .build();
+        }
         if (BlockTypes.COPPER_ORE == null) {
             BlockTypes.COPPER_ORE = AllayBlockType
                     .builder(BlockOreBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_ORE)
+                    .build();
+        }
+        if (BlockTypes.COPPER_TORCH == null) {
+            BlockTypes.COPPER_TORCH = AllayBlockType
+                    .builder(BlockTorchBehaviorImpl.class)
+                    .vanillaBlock(BlockId.COPPER_TORCH)
+                    .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                     .build();
         }
         if (BlockTypes.COPPER_TRAPDOOR == null) {
@@ -1660,6 +1722,13 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.CRIMSON_ROOTS = AllayBlockType
                     .builder(BlockCrimsonRootsBehaviorImpl.class)
                     .vanillaBlock(BlockId.CRIMSON_ROOTS)
+                    .build();
+        }
+        if (BlockTypes.CRIMSON_SHELF == null) {
+            BlockTypes.CRIMSON_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.CRIMSON_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
                     .build();
         }
         if (BlockTypes.CRIMSON_SLAB == null) {
@@ -1925,6 +1994,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockSaplingBehaviorImpl.class)
                     .vanillaBlock(BlockId.DARK_OAK_SAPLING)
                     .setProperties(BlockPropertyTypes.AGE_BIT)
+                    .build();
+        }
+        if (BlockTypes.DARK_OAK_SHELF == null) {
+            BlockTypes.DARK_OAK_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.DARK_OAK_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
                     .build();
         }
         if (BlockTypes.DARK_OAK_SLAB == null) {
@@ -3245,11 +3321,24 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.EXPOSED_COPPER)
                     .build();
         }
+        if (BlockTypes.EXPOSED_COPPER_BARS == null) {
+            BlockTypes.EXPOSED_COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.EXPOSED_COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.EXPOSED_COPPER_BULB == null) {
             BlockTypes.EXPOSED_COPPER_BULB = AllayBlockType
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.EXPOSED_COPPER_CHAIN == null) {
+            BlockTypes.EXPOSED_COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.EXPOSED_COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.EXPOSED_COPPER_CHEST == null) {
@@ -3266,10 +3355,24 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.EXPOSED_COPPER_GOLEM_STATUE == null) {
+            BlockTypes.EXPOSED_COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.EXPOSED_COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.EXPOSED_COPPER_GRATE == null) {
             BlockTypes.EXPOSED_COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_GRATE)
+                    .build();
+        }
+        if (BlockTypes.EXPOSED_COPPER_LANTERN == null) {
+            BlockTypes.EXPOSED_COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.EXPOSED_COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
                     .build();
         }
         if (BlockTypes.EXPOSED_COPPER_TRAPDOOR == null) {
@@ -3304,6 +3407,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+                    .build();
+        }
+        if (BlockTypes.EXPOSED_LIGHTNING_ROD == null) {
+            BlockTypes.EXPOSED_LIGHTNING_ROD = AllayBlockType
+                    .builder(BlockLightningRodBehaviorImpl.class)
+                    .vanillaBlock(BlockId.EXPOSED_LIGHTNING_ROD)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
         if (BlockTypes.FARMLAND == null) {
@@ -4045,6 +4155,13 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.IRON_BLOCK)
                     .build();
         }
+        if (BlockTypes.IRON_CHAIN == null) {
+            BlockTypes.IRON_CHAIN = AllayBlockType
+                    .builder(BlockIronChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.IRON_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                    .build();
+        }
         if (BlockTypes.IRON_DOOR == null) {
             BlockTypes.IRON_DOOR = AllayBlockType
                     .builder(BlockIronDoorBehaviorImpl.class)
@@ -4151,6 +4268,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockSaplingBehaviorImpl.class)
                     .vanillaBlock(BlockId.JUNGLE_SAPLING)
                     .setProperties(BlockPropertyTypes.AGE_BIT)
+                    .build();
+        }
+        if (BlockTypes.JUNGLE_SHELF == null) {
+            BlockTypes.JUNGLE_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.JUNGLE_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
                     .build();
         }
         if (BlockTypes.JUNGLE_SLAB == null) {
@@ -4515,7 +4639,7 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.LIGHTNING_ROD = AllayBlockType
                     .builder(BlockLightningRodBehaviorImpl.class)
                     .vanillaBlock(BlockId.LIGHTNING_ROD)
-                    .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
         if (BlockTypes.LILAC == null) {
@@ -4813,6 +4937,13 @@ public final class BlockTypeDefaultInitializer {
             BlockTypes.MANGROVE_ROOTS = AllayBlockType
                     .builder(BlockMangroveRootsBehaviorImpl.class)
                     .vanillaBlock(BlockId.MANGROVE_ROOTS)
+                    .build();
+        }
+        if (BlockTypes.MANGROVE_SHELF == null) {
+            BlockTypes.MANGROVE_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.MANGROVE_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
                     .build();
         }
         if (BlockTypes.MANGROVE_SLAB == null) {
@@ -5193,6 +5324,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.AGE_BIT)
                     .build();
         }
+        if (BlockTypes.OAK_SHELF == null) {
+            BlockTypes.OAK_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.OAK_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
+                    .build();
+        }
         if (BlockTypes.OAK_SLAB == null) {
             BlockTypes.OAK_SLAB = AllayBlockType
                     .builder(BlockSlabBehaviorImpl.class)
@@ -5333,11 +5471,24 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.OXIDIZED_COPPER)
                     .build();
         }
+        if (BlockTypes.OXIDIZED_COPPER_BARS == null) {
+            BlockTypes.OXIDIZED_COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.OXIDIZED_COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.OXIDIZED_COPPER_BULB == null) {
             BlockTypes.OXIDIZED_COPPER_BULB = AllayBlockType
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.OXIDIZED_COPPER_CHAIN == null) {
+            BlockTypes.OXIDIZED_COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.OXIDIZED_COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.OXIDIZED_COPPER_CHEST == null) {
@@ -5354,10 +5505,24 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.OXIDIZED_COPPER_GOLEM_STATUE == null) {
+            BlockTypes.OXIDIZED_COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.OXIDIZED_COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.OXIDIZED_COPPER_GRATE == null) {
             BlockTypes.OXIDIZED_COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_GRATE)
+                    .build();
+        }
+        if (BlockTypes.OXIDIZED_COPPER_LANTERN == null) {
+            BlockTypes.OXIDIZED_COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.OXIDIZED_COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
                     .build();
         }
         if (BlockTypes.OXIDIZED_COPPER_TRAPDOOR == null) {
@@ -5392,6 +5557,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+                    .build();
+        }
+        if (BlockTypes.OXIDIZED_LIGHTNING_ROD == null) {
+            BlockTypes.OXIDIZED_LIGHTNING_ROD = AllayBlockType
+                    .builder(BlockLightningRodBehaviorImpl.class)
+                    .vanillaBlock(BlockId.OXIDIZED_LIGHTNING_ROD)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
         if (BlockTypes.PACKED_ICE == null) {
@@ -5499,6 +5671,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockSaplingBehaviorImpl.class)
                     .vanillaBlock(BlockId.PALE_OAK_SAPLING)
                     .setProperties(BlockPropertyTypes.AGE_BIT)
+                    .build();
+        }
+        if (BlockTypes.PALE_OAK_SHELF == null) {
+            BlockTypes.PALE_OAK_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.PALE_OAK_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
                     .build();
         }
         if (BlockTypes.PALE_OAK_SLAB == null) {
@@ -6939,6 +7118,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.AGE_BIT)
                     .build();
         }
+        if (BlockTypes.SPRUCE_SHELF == null) {
+            BlockTypes.SPRUCE_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.SPRUCE_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
+                    .build();
+        }
         if (BlockTypes.SPRUCE_SLAB == null) {
             BlockTypes.SPRUCE_SLAB = AllayBlockType
                     .builder(BlockSlabBehaviorImpl.class)
@@ -7641,6 +7827,13 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.WARPED_ROOTS)
                     .build();
         }
+        if (BlockTypes.WARPED_SHELF == null) {
+            BlockTypes.WARPED_SHELF = AllayBlockType
+                    .builder(BlockShelfBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WARPED_SHELF)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.POWERED_BIT, BlockPropertyTypes.POWERED_SHELF_TYPE)
+                    .build();
+        }
         if (BlockTypes.WARPED_SLAB == null) {
             BlockTypes.WARPED_SLAB = AllayBlockType
                     .builder(BlockSlabBehaviorImpl.class)
@@ -7714,11 +7907,24 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.WAXED_COPPER)
                     .build();
         }
+        if (BlockTypes.WAXED_COPPER_BARS == null) {
+            BlockTypes.WAXED_COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.WAXED_COPPER_BULB == null) {
             BlockTypes.WAXED_COPPER_BULB = AllayBlockType
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WAXED_COPPER_CHAIN == null) {
+            BlockTypes.WAXED_COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.WAXED_COPPER_CHEST == null) {
@@ -7735,10 +7941,24 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.WAXED_COPPER_GOLEM_STATUE == null) {
+            BlockTypes.WAXED_COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WAXED_COPPER_GRATE == null) {
             BlockTypes.WAXED_COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_COPPER_GRATE)
+                    .build();
+        }
+        if (BlockTypes.WAXED_COPPER_LANTERN == null) {
+            BlockTypes.WAXED_COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
                     .build();
         }
         if (BlockTypes.WAXED_COPPER_TRAPDOOR == null) {
@@ -7787,11 +8007,24 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER)
                     .build();
         }
+        if (BlockTypes.WAXED_EXPOSED_COPPER_BARS == null) {
+            BlockTypes.WAXED_EXPOSED_COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.WAXED_EXPOSED_COPPER_BULB == null) {
             BlockTypes.WAXED_EXPOSED_COPPER_BULB = AllayBlockType
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WAXED_EXPOSED_COPPER_CHAIN == null) {
+            BlockTypes.WAXED_EXPOSED_COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_CHEST == null) {
@@ -7808,10 +8041,24 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.WAXED_EXPOSED_COPPER_GOLEM_STATUE == null) {
+            BlockTypes.WAXED_EXPOSED_COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WAXED_EXPOSED_COPPER_GRATE == null) {
             BlockTypes.WAXED_EXPOSED_COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_GRATE)
+                    .build();
+        }
+        if (BlockTypes.WAXED_EXPOSED_COPPER_LANTERN == null) {
+            BlockTypes.WAXED_EXPOSED_COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
                     .build();
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR == null) {
@@ -7848,6 +8095,20 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
         }
+        if (BlockTypes.WAXED_EXPOSED_LIGHTNING_ROD == null) {
+            BlockTypes.WAXED_EXPOSED_LIGHTNING_ROD = AllayBlockType
+                    .builder(BlockLightningRodBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_EXPOSED_LIGHTNING_ROD)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WAXED_LIGHTNING_ROD == null) {
+            BlockTypes.WAXED_LIGHTNING_ROD = AllayBlockType
+                    .builder(BlockLightningRodBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_LIGHTNING_ROD)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
         if (BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER == null) {
             BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER = AllayBlockType
                     .builder(BlockCopperBehaviorImpl.class)
@@ -7860,11 +8121,24 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER)
                     .build();
         }
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_BARS == null) {
+            BlockTypes.WAXED_OXIDIZED_COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_BULB == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_BULB = AllayBlockType
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_CHAIN == null) {
+            BlockTypes.WAXED_OXIDIZED_COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_CHEST == null) {
@@ -7881,10 +8155,24 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_GOLEM_STATUE == null) {
+            BlockTypes.WAXED_OXIDIZED_COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_GRATE == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_GRATE)
+                    .build();
+        }
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_LANTERN == null) {
+            BlockTypes.WAXED_OXIDIZED_COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
                     .build();
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR == null) {
@@ -7921,6 +8209,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
         }
+        if (BlockTypes.WAXED_OXIDIZED_LIGHTNING_ROD == null) {
+            BlockTypes.WAXED_OXIDIZED_LIGHTNING_ROD = AllayBlockType
+                    .builder(BlockLightningRodBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_OXIDIZED_LIGHTNING_ROD)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
         if (BlockTypes.WAXED_WEATHERED_CHISELED_COPPER == null) {
             BlockTypes.WAXED_WEATHERED_CHISELED_COPPER = AllayBlockType
                     .builder(BlockCopperBehaviorImpl.class)
@@ -7933,11 +8228,24 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER)
                     .build();
         }
+        if (BlockTypes.WAXED_WEATHERED_COPPER_BARS == null) {
+            BlockTypes.WAXED_WEATHERED_COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.WAXED_WEATHERED_COPPER_BULB == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_BULB = AllayBlockType
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WAXED_WEATHERED_COPPER_CHAIN == null) {
+            BlockTypes.WAXED_WEATHERED_COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_CHEST == null) {
@@ -7954,10 +8262,24 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.WAXED_WEATHERED_COPPER_GOLEM_STATUE == null) {
+            BlockTypes.WAXED_WEATHERED_COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WAXED_WEATHERED_COPPER_GRATE == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_GRATE)
+                    .build();
+        }
+        if (BlockTypes.WAXED_WEATHERED_COPPER_LANTERN == null) {
+            BlockTypes.WAXED_WEATHERED_COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
                     .build();
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR == null) {
@@ -7994,6 +8316,13 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
         }
+        if (BlockTypes.WAXED_WEATHERED_LIGHTNING_ROD == null) {
+            BlockTypes.WAXED_WEATHERED_LIGHTNING_ROD = AllayBlockType
+                    .builder(BlockLightningRodBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WAXED_WEATHERED_LIGHTNING_ROD)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
         if (BlockTypes.WEATHERED_CHISELED_COPPER == null) {
             BlockTypes.WEATHERED_CHISELED_COPPER = AllayBlockType
                     .builder(BlockCopperBehaviorImpl.class)
@@ -8006,11 +8335,24 @@ public final class BlockTypeDefaultInitializer {
                     .vanillaBlock(BlockId.WEATHERED_COPPER)
                     .build();
         }
+        if (BlockTypes.WEATHERED_COPPER_BARS == null) {
+            BlockTypes.WEATHERED_COPPER_BARS = AllayBlockType
+                    .builder(BlockCopperBarsBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WEATHERED_COPPER_BARS)
+                    .build();
+        }
         if (BlockTypes.WEATHERED_COPPER_BULB == null) {
             BlockTypes.WEATHERED_COPPER_BULB = AllayBlockType
                     .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
+                    .build();
+        }
+        if (BlockTypes.WEATHERED_COPPER_CHAIN == null) {
+            BlockTypes.WEATHERED_COPPER_CHAIN = AllayBlockType
+                    .builder(BlockCopperChainBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WEATHERED_COPPER_CHAIN)
+                    .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                     .build();
         }
         if (BlockTypes.WEATHERED_COPPER_CHEST == null) {
@@ -8027,10 +8369,24 @@ public final class BlockTypeDefaultInitializer {
                     .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
+        if (BlockTypes.WEATHERED_COPPER_GOLEM_STATUE == null) {
+            BlockTypes.WEATHERED_COPPER_GOLEM_STATUE = AllayBlockType
+                    .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WEATHERED_COPPER_GOLEM_STATUE)
+                    .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                    .build();
+        }
         if (BlockTypes.WEATHERED_COPPER_GRATE == null) {
             BlockTypes.WEATHERED_COPPER_GRATE = AllayBlockType
                     .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_GRATE)
+                    .build();
+        }
+        if (BlockTypes.WEATHERED_COPPER_LANTERN == null) {
+            BlockTypes.WEATHERED_COPPER_LANTERN = AllayBlockType
+                    .builder(BlockCopperLanternBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WEATHERED_COPPER_LANTERN)
+                    .setProperties(BlockPropertyTypes.HANGING)
                     .build();
         }
         if (BlockTypes.WEATHERED_COPPER_TRAPDOOR == null) {
@@ -8065,6 +8421,13 @@ public final class BlockTypeDefaultInitializer {
                     .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+                    .build();
+        }
+        if (BlockTypes.WEATHERED_LIGHTNING_ROD == null) {
+            BlockTypes.WEATHERED_LIGHTNING_ROD = AllayBlockType
+                    .builder(BlockLightningRodBehaviorImpl.class)
+                    .vanillaBlock(BlockId.WEATHERED_LIGHTNING_ROD)
+                    .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
                     .build();
         }
         if (BlockTypes.WEB == null) {

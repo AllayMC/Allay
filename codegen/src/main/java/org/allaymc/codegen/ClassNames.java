@@ -21,8 +21,8 @@ public interface ClassNames {
     ClassName API_IDENTIFIER = ClassName.get("org.allaymc.api.utils.identifier", "Identifier");
     ClassName DEP_IDENTIFIER = ClassName.get("org.allaymc.dependence", "Identifier");
 
-    ClassName COMPONENT = ClassName.get("org.allaymc.api.component.interfaces", "Component");
-    ClassName COMPONENT_PROVIDER = ClassName.get("org.allaymc.server.component.interfaces", "ComponentProvider");
+    ClassName COMPONENT = ClassName.get("org.allaymc.api.component", "Component");
+    ClassName COMPONENT_PROVIDER = ClassName.get("org.allaymc.server.component", "ComponentProvider");
 
     ClassName BLOCK_BEHAVIOR = ClassName.get("org.allaymc.api.block", "BlockBehavior");
     ClassName BLOCK_BEHAVIOR_IMPL = ClassName.get("org.allaymc.server.block.impl", "BlockBehaviorImpl");

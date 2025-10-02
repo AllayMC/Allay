@@ -66,6 +66,13 @@ public final class BlockTypes {
     public static BlockType<BlockSaplingBehavior> ACACIA_SAPLING;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> ACACIA_SHELF;
+
+    /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockSlabBehavior> ACACIA_SLAB;
@@ -246,6 +253,13 @@ public final class BlockTypes {
     public static BlockType<BlockSaplingBehavior> BAMBOO_SAPLING;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> BAMBOO_SHELF;
+
+    /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockSlabBehavior> BAMBOO_SLAB;
@@ -389,6 +403,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#AGE_BIT}
      */
     public static BlockType<BlockSaplingBehavior> BIRCH_SAPLING;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> BIRCH_SHELF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -723,11 +744,6 @@ public final class BlockTypes {
     public static BlockType<BlockCaveVinesHeadWithBerriesBehavior> CAVE_VINES_HEAD_WITH_BERRIES;
 
     /**
-     * {@link BlockPropertyTypes#PILLAR_AXIS}
-     */
-    public static BlockType<BlockChainBehavior> CHAIN;
-
-    /**
      * {@link BlockPropertyTypes#CONDITIONAL_BIT}
      * {@link BlockPropertyTypes#FACING_DIRECTION}
      */
@@ -798,6 +814,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#AGE_BIT}
      */
     public static BlockType<BlockSaplingBehavior> CHERRY_SAPLING;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> CHERRY_SHELF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -984,6 +1007,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockConduitBehavior> CONDUIT;
 
+    public static BlockType<BlockCopperBarsBehavior> COPPER_BARS;
+
     public static BlockType<BlockCopperBehavior> COPPER_BLOCK;
 
     /**
@@ -991,6 +1016,11 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -1005,9 +1035,24 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> COPPER_GRATE;
 
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> COPPER_LANTERN;
+
     public static BlockType<BlockOreBehavior> COPPER_ORE;
+
+    /**
+     * {@link BlockPropertyTypes#TORCH_FACING_DIRECTION}
+     */
+    public static BlockType<BlockTorchBehavior> COPPER_TORCH;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -1102,6 +1147,13 @@ public final class BlockTypes {
     public static BlockType<BlockPressurePlateBehavior> CRIMSON_PRESSURE_PLATE;
 
     public static BlockType<BlockCrimsonRootsBehavior> CRIMSON_ROOTS;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> CRIMSON_SHELF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1272,6 +1324,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#AGE_BIT}
      */
     public static BlockType<BlockSaplingBehavior> DARK_OAK_SAPLING;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> DARK_OAK_SHELF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -1880,11 +1939,18 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> EXPOSED_COPPER;
 
+    public static BlockType<BlockCopperBarsBehavior> EXPOSED_COPPER_BARS;
+
     /**
      * {@link BlockPropertyTypes#LIT}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> EXPOSED_COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> EXPOSED_COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -1899,7 +1965,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> EXPOSED_COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> EXPOSED_COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> EXPOSED_COPPER_GRATE;
+
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> EXPOSED_COPPER_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -1925,6 +2001,12 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockDoubleCopperSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     */
+    public static BlockType<BlockLightningRodBehavior> EXPOSED_LIGHTNING_ROD;
 
     /**
      * {@link BlockPropertyTypes#MOISTURIZED_AMOUNT}
@@ -2273,6 +2355,11 @@ public final class BlockTypes {
     public static BlockType<BlockIronBlockBehavior> IRON_BLOCK;
 
     /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockIronChainBehavior> IRON_CHAIN;
+
+    /**
      * {@link BlockPropertyTypes#DOOR_HINGE_BIT}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      * {@link BlockPropertyTypes#OPEN_BIT}
@@ -2355,6 +2442,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#AGE_BIT}
      */
     public static BlockType<BlockSaplingBehavior> JUNGLE_SAPLING;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> JUNGLE_SHELF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2544,6 +2638,7 @@ public final class BlockTypes {
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockLightningRodBehavior> LIGHTNING_ROD;
 
@@ -2714,6 +2809,13 @@ public final class BlockTypes {
     public static BlockType<BlockMangrovePropaguleBehavior> MANGROVE_PROPAGULE;
 
     public static BlockType<BlockMangroveRootsBehavior> MANGROVE_ROOTS;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> MANGROVE_SHELF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -2967,6 +3069,13 @@ public final class BlockTypes {
     public static BlockType<BlockSaplingBehavior> OAK_SAPLING;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> OAK_SHELF;
+
+    /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockSlabBehavior> OAK_SLAB;
@@ -3037,11 +3146,18 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> OXIDIZED_COPPER;
 
+    public static BlockType<BlockCopperBarsBehavior> OXIDIZED_COPPER_BARS;
+
     /**
      * {@link BlockPropertyTypes#LIT}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> OXIDIZED_COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> OXIDIZED_COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -3056,7 +3172,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> OXIDIZED_COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> OXIDIZED_COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> OXIDIZED_COPPER_GRATE;
+
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> OXIDIZED_COPPER_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -3082,6 +3208,12 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockDoubleCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     */
+    public static BlockType<BlockLightningRodBehavior> OXIDIZED_LIGHTNING_ROD;
 
     public static BlockType<BlockIceBehavior> PACKED_ICE;
 
@@ -3161,6 +3293,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#AGE_BIT}
      */
     public static BlockType<BlockSaplingBehavior> PALE_OAK_SAPLING;
+
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> PALE_OAK_SHELF;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -4106,6 +4245,13 @@ public final class BlockTypes {
     public static BlockType<BlockSaplingBehavior> SPRUCE_SAPLING;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> SPRUCE_SHELF;
+
+    /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockSlabBehavior> SPRUCE_SLAB;
@@ -4609,6 +4755,13 @@ public final class BlockTypes {
     public static BlockType<BlockWarpedRootsBehavior> WARPED_ROOTS;
 
     /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     * {@link BlockPropertyTypes#POWERED_SHELF_TYPE}
+     */
+    public static BlockType<BlockShelfBehavior> WARPED_SHELF;
+
+    /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockSlabBehavior> WARPED_SLAB;
@@ -4654,11 +4807,18 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_COPPER;
 
+    public static BlockType<BlockCopperBarsBehavior> WAXED_COPPER_BARS;
+
     /**
      * {@link BlockPropertyTypes#LIT}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> WAXED_COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> WAXED_COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4673,7 +4833,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> WAXED_COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> WAXED_COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> WAXED_COPPER_GRATE;
+
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> WAXED_COPPER_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -4704,11 +4874,18 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_COPPER;
 
+    public static BlockType<BlockCopperBarsBehavior> WAXED_EXPOSED_COPPER_BARS;
+
     /**
      * {@link BlockPropertyTypes#LIT}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> WAXED_EXPOSED_COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> WAXED_EXPOSED_COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4723,7 +4900,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> WAXED_EXPOSED_COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> WAXED_EXPOSED_COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> WAXED_EXPOSED_COPPER_GRATE;
+
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> WAXED_EXPOSED_COPPER_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -4750,15 +4937,34 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     */
+    public static BlockType<BlockLightningRodBehavior> WAXED_EXPOSED_LIGHTNING_ROD;
+
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     */
+    public static BlockType<BlockLightningRodBehavior> WAXED_LIGHTNING_ROD;
+
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_CHISELED_COPPER;
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_COPPER;
+
+    public static BlockType<BlockCopperBarsBehavior> WAXED_OXIDIZED_COPPER_BARS;
 
     /**
      * {@link BlockPropertyTypes#LIT}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> WAXED_OXIDIZED_COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> WAXED_OXIDIZED_COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4773,7 +4979,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> WAXED_OXIDIZED_COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> WAXED_OXIDIZED_COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> WAXED_OXIDIZED_COPPER_GRATE;
+
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> WAXED_OXIDIZED_COPPER_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -4800,15 +5016,28 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     */
+    public static BlockType<BlockLightningRodBehavior> WAXED_OXIDIZED_LIGHTNING_ROD;
+
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_CHISELED_COPPER;
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_COPPER;
+
+    public static BlockType<BlockCopperBarsBehavior> WAXED_WEATHERED_COPPER_BARS;
 
     /**
      * {@link BlockPropertyTypes#LIT}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> WAXED_WEATHERED_COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> WAXED_WEATHERED_COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4823,7 +5052,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> WAXED_WEATHERED_COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> WAXED_WEATHERED_COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> WAXED_WEATHERED_COPPER_GRATE;
+
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> WAXED_WEATHERED_COPPER_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -4850,15 +5089,28 @@ public final class BlockTypes {
      */
     public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     */
+    public static BlockType<BlockLightningRodBehavior> WAXED_WEATHERED_LIGHTNING_ROD;
+
     public static BlockType<BlockCopperBehavior> WEATHERED_CHISELED_COPPER;
 
     public static BlockType<BlockCopperBehavior> WEATHERED_COPPER;
+
+    public static BlockType<BlockCopperBarsBehavior> WEATHERED_COPPER_BARS;
 
     /**
      * {@link BlockPropertyTypes#LIT}
      * {@link BlockPropertyTypes#POWERED_BIT}
      */
     public static BlockType<BlockCopperBulbBehavior> WEATHERED_COPPER_BULB;
+
+    /**
+     * {@link BlockPropertyTypes#PILLAR_AXIS}
+     */
+    public static BlockType<BlockCopperChainBehavior> WEATHERED_COPPER_CHAIN;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -4873,7 +5125,17 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperDoorBehavior> WEATHERED_COPPER_DOOR;
 
+    /**
+     * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
+     */
+    public static BlockType<BlockCopperGolemStatueBehavior> WEATHERED_COPPER_GOLEM_STATUE;
+
     public static BlockType<BlockCopperGrateBehavior> WEATHERED_COPPER_GRATE;
+
+    /**
+     * {@link BlockPropertyTypes#HANGING}
+     */
+    public static BlockType<BlockCopperLanternBehavior> WEATHERED_COPPER_LANTERN;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -4899,6 +5161,12 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
      */
     public static BlockType<BlockDoubleCopperSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+
+    /**
+     * {@link BlockPropertyTypes#FACING_DIRECTION}
+     * {@link BlockPropertyTypes#POWERED_BIT}
+     */
+    public static BlockType<BlockLightningRodBehavior> WEATHERED_LIGHTNING_ROD;
 
     public static BlockType<BlockWebBehavior> WEB;
 

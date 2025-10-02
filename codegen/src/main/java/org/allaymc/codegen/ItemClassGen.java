@@ -213,5 +213,11 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*BundleStack"), "ItemBundleStack");
         registerMergedItem(Pattern.compile(".*(Furnace|Smoker)Stack"), "ItemFurnaceStack");
         registerMergedItem(Pattern.compile(".*HarnessStack"), "ItemHarnessStack");
+        registerMergedItem(Pattern.compile(".*ShelfStack"), "ItemShelfStack");
+        registerMergedItem(Pattern.compile(".*LightningRodStack"), "ItemLightningRodStack");
+        registerMergedItem(Pattern.compile(".*CopperBarsStack"), "ItemCopperBarsStack");
+        registerMergedItem(Pattern.compile(".*CopperLanternStack"), "ItemCopperLanternStack");
+        registerMergedItem(Pattern.compile(".*CopperGolemStatueStack"), "ItemCopperGolemStatueStack");
+        registerMergedItem(Pattern.compile(".*CopperChainStack"), "ItemCopperChainStack");
     }
 }
