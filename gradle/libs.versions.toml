@@ -8,8 +8,8 @@ netty = "4.2.6.Final"
 [libraries]
 # NBT
 nbt = { group = "org.allaymc", name = "nbt", version = "3.0.10" }
-# Network protocol
-network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta9-SNAPSHOT" }
+# Protocol
+protocol = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta10-20251002.132136-1" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
 item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.110-R1" }

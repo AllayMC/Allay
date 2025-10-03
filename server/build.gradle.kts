@@ -35,7 +35,7 @@ dependencies {
     implementation(libs.sentry)
     implementation(libs.jctools)
     implementation(libs.caffeine)
-    implementation(libs.network) {
+    implementation(libs.protocol) {
         exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")
