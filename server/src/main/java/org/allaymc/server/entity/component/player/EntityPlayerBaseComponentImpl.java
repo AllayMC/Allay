@@ -190,6 +190,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Add the parent permission group alone, so that the permission listeners will be triggered
         // Commands will be sent to the client during this method call
         this.permissionGroup.addParent(PermissionGroups.DEFAULT.get(), thisPlayer);
+        // The default game mode may be creative/spectator, and in that case we should give player fly ability
+        setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
     }
 
     @Override
@@ -210,12 +212,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         gameMode = event.getNewGameMode();
-
         this.gameMode = gameMode;
-        this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
         setPermission(Permissions.ABILITY_FLY, gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE);
-        this.clientComponent.sendAbilities(thisPlayer);
+        this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
+        this.clientComponent.sendAbilities(thisPlayer);
         thisPlayer.viewPlayerGameMode(thisPlayer);
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
@@ -753,9 +754,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
         // General
-        nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionGroup.loadNBT(permNbt, thisPlayer));
+        nbt.listenForCompound(TAG_PERMISSION, permNbt -> this.permissionGroup.loadNBT(permNbt, thisPlayer));
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> this.gameMode = fromNetwork(GameType.from(id)));
+        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> {
+            this.gameMode = fromNetwork(GameType.from(id));
+            setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
+        });
 
         // SpawnPoint
         if (nbt.containsKey(TAG_SPAWN_POINT)) {

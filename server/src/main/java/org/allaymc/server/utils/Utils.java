@@ -65,20 +65,20 @@ public class Utils {
     }
 
     /**
-     * Create a default config initializer.
+     * Create a YAML config initializer.
      *
-     * @param file the file path
-     * @return the config initializer
+     * @param path the path of the config file
+     * @return the YAML config initializer
      */
-    public static OkaeriConfigInitializer createConfigInitializer(Path file) {
+    public static OkaeriConfigInitializer createConfigInitializer(Path path) {
         return it -> {
             // Specify configurer implementation, optionally additional serdes packages
             it.withConfigurer(new YamlSnakeYamlConfigurer());
             // Specify Path, File or pathname
-            it.withBindFile(file);
+            it.withBindFile(path);
             // Automatic removal of undeclared keys
             it.withRemoveOrphans(true);
-            // Save file if it does not exist
+            // Save the file if it does not exist
             it.saveDefaults();
             // Load and save to update comments/new fields
             it.load(true);
