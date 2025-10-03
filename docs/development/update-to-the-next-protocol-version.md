@@ -93,15 +93,18 @@ Update to the latest versions of:
 - [CloudburstMC/Protocol](https://github.com/CloudburstMC/Protocol)
 - [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater)
 
-Modify `ProtocolInfo.java` fields:
+## 7. Update `ProtocolInfo.java`, `NetworkData.java` and `MultiVersion.java`
 
-- `PACKET_CODEC`
-- `BLOCK_STATE_VERSION`
+Update `ProtocolInfo.java`:
+- `ProtocolInfo.PACKET_CODEC`
+- `ProtocolInfo.BLOCK_STATE_VERSION`
 
-If you're unsure about the new `BLOCK_STATE_VERSION`, refer to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
-Ensure dependencies are updated before editing this file.
+Update `NetworkData.java`:
+- `NetworkData.encodeExperimentDataList()`
 
-## 7. Test and Finalize
+Update `MultiVersion.java`
+
+## 8. Test and Finalize
 
 1. Run `gradle test` to ensure all tests pass.
 2. Update the client and test connectivity with the server.
