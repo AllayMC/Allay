@@ -85,9 +85,7 @@ public final class NetworkData {
                 // Needed for block properties for states
                 new ExperimentData("upcoming_creator_features", true),
                 // Needed for certain molang queries used in blocks and items
-                new ExperimentData("experimental_molang_features", true),
-                // Copper chests and golem
-                new ExperimentData("y_2025_drop_3", true)
+                new ExperimentData("experimental_molang_features", true)
         );
     }
 

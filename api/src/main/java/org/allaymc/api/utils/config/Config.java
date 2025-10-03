@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
  */
 // TODO: refactor
 // TODO: add javadoc
+// TODO: add tests
 @Slf4j
 public class Config {
 

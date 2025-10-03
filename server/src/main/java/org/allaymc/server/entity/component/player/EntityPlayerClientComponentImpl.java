@@ -480,7 +480,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         packet.setPlayerPosition(Vector3f.from(loc.x(), loc.y() + 1.62, loc.z()));
         packet.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
-        // We don't send world seed to client for security reason
+        // We don't send world seed to the client for security reason
         packet.setSeed(0L);
         packet.setDimensionId(dimension.getDimensionInfo().dimensionId());
         // 0 - limit 1 - infinite
@@ -494,7 +494,10 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setLevelId("");
         packet.setDefaultPlayerPermission(PlayerPermission.valueOf(AllayServer.getSettings().genericSettings().defaultPermission()));
         packet.setServerChunkTickRange(AllayServer.getSettings().worldSettings().tickRadius());
-        packet.setVanillaVersion("*");
+        // VanillaVersion is the version of the game from which Vanilla features will be used
+        packet.setVanillaVersion(ProtocolInfo.getLatestCodec().getMinecraftVersion());
+        // ServerEngine(aka.GameVersion) is the version of the game the server is running
+        packet.setServerEngine(ProtocolInfo.getLatestCodec().getMinecraftVersion());
         packet.setPremiumWorldTemplateId("");
         packet.setInventoriesServerAuthoritative(true);
         packet.setServerAuthoritativeBlockBreaking(true);
@@ -506,7 +509,6 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setMultiplayerCorrelationId(UUID.randomUUID().toString());
         packet.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         packet.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
-        packet.setServerEngine(ProtocolInfo.getLatestCodec().getMinecraftVersion());
         packet.setBlockRegistryChecksum(0L);
         packet.setPlayerPropertyData(NbtMap.EMPTY);
         packet.setWorldTemplateId(new UUID(0, 0));
