@@ -98,7 +98,7 @@
   "allay:plugin.loading": "正在加载插件 %1",
   "allay:server.is_dev_version": "§e你正在运行开发版本。开发版本可能存在非预期的问题，请勿在生产环境使用！",
   "allay:server.starting": "正在启动allay...",
-  "allay:server.starting.mcbe": "正在启动我的世界：基岩版服务器，版本 §a%1§r（协议版本§a%2§r）",
+  "allay:server.starting.mcbe": "正在启动我的世界：基岩版服务器",
   "allay:server.stopped": "服务器已关闭",
   "allay:world.loaded": "世界 %1 已加载",
   "allay:world.loading": "正在加载世界 %1",

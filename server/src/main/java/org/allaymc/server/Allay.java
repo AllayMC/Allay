@@ -95,9 +95,7 @@ public final class Allay {
             }
         }
 
-        var versionStr = ProtocolInfo.getLowestCodec().getMinecraftVersion() + " - " + ProtocolInfo.getLatestCodec().getMinecraftVersion();
-        var protocolStr = ProtocolInfo.getLowestCodec().getProtocolVersion() + " - " + ProtocolInfo.getLatestCodec().getProtocolVersion();
-        log.info(I18n.get().tr(TrKeys.ALLAY_SERVER_STARTING, versionStr, protocolStr));
+        log.info(I18n.get().tr(TrKeys.ALLAY_SERVER_STARTING));
 
         try {
             initAllay();

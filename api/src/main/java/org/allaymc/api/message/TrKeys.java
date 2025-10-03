@@ -495,7 +495,7 @@ public interface TrKeys {
     String ALLAY_SERVER_IS_DEV_VERSION = "allay:server.is_dev_version";
 
     /**
-     * Starting up Minecraft: Bedrock Edition server, version §a%1§r (protocol version §a%2§r)
+     * Starting up Minecraft: Bedrock Edition server
      */
     String ALLAY_SERVER_STARTING = "allay:server.starting";
 

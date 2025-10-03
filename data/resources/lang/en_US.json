@@ -97,7 +97,7 @@
   "allay:plugin.load.error": "Error while loading plugin %1. Error: %2",
   "allay:plugin.loading": "Loading plugin %1",
   "allay:server.is_dev_version": "§eYou are running a development version. The development version may have unexpected bugs, please do not use it in a production environment!",
-  "allay:server.starting": "Starting up Minecraft: Bedrock Edition server, version §a%1§r (protocol version §a%2§r)",
+  "allay:server.starting": "Starting up Minecraft: Bedrock Edition server",
   "allay:server.stopped": "Server stopped",
   "allay:world.loaded": "World %1 is loaded",
   "allay:world.loading": "Loading world %1",
