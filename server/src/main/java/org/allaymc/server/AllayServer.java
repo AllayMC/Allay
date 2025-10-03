@@ -23,7 +23,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.eventbus.AllayEventBus;
-import org.allaymc.server.metrics.Metrics;
 import org.allaymc.server.network.AllayNetworkInterface;
 import org.allaymc.server.player.AllayEmptyPlayerStorage;
 import org.allaymc.server.player.AllayNBTFilePlayerStorage;

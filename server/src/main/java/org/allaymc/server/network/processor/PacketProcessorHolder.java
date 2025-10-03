@@ -122,6 +122,7 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new AnvilDamagePacketProcessor());
         registerProcessor(ClientState.IN_GAME, new BookEditPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new MapInfoRequestPacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new ServerboundDiagnosticsPacketProcessor());
     }
 
     @SuppressWarnings("unchecked")

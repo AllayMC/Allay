@@ -83,7 +83,7 @@ public class AllayNBTIO implements NBTIO {
             int count = nbt.getByte("Count", (byte) 1);
             int meta = nbt.getShort("Damage");
             var name = nbt.getString("Name");
-            var itemType = Objects.requireNonNull(Registries.ITEMS.get(new Identifier(name)), "Unknown item type " + name + "while loading container items!");
+            var itemType = Objects.requireNonNull(Registries.ITEMS.get(new Identifier(name)), "Unknown item type " + name + " while loading container items!");
             return itemType.createItemStack(
                     ItemStackInitInfo
                             .builder()
