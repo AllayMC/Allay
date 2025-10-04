@@ -1,6 +1,8 @@
 package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
@@ -166,7 +168,27 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .addComponent(() -> {
-                    var component = new EntityArrowLivingComponentImpl() {
+                    var component = new EntityLivingComponentImpl() {
+                        @Override
+                        public boolean canBeAttacked(DamageContainer damage) {
+                            return damage.getDamageType() == DamageType.API;
+                        }
+
+                        @Override
+                        public boolean hasFallDamage() {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean hasFireDamage() {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean hasDrowningDamage() {
+                            return false;
+                        }
+
                         @Override
                         protected boolean hasDeadTimer() {
                             return false;
@@ -174,7 +196,7 @@ public final class EntityTypeInitializer {
                     };
                     component.setMaxHealth(5);
                     return component;
-                }, EntityArrowLivingComponentImpl.class)
+                }, EntityLivingComponentImpl.class)
                 .build();
     }
 }
