@@ -145,7 +145,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      * Get how long the player has been using the item, in game ticks.
      *
      * @param currentTime The current time
-     * @return How long the player has been using the item, in game ticks
+     * @return How long the player has been using the item in game ticks
      */
     long getItemUsingInAirTime(long currentTime);
 

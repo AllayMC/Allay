@@ -662,14 +662,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     public long getStartUsingItemInAirTime() {
         if (!isUsingItemInAir()) {
-            log.warn("Trying to get a player's start action time who doesn't have action!");
+            log.warn("Player {} is not using item in air", thisPlayer.getOriginName());
         }
-        return startUsingItemInAirTime;
+        return this.startUsingItemInAirTime;
     }
 
     @Override
     public long getItemUsingInAirTime(long currentTime) {
-        return currentTime - startUsingItemInAirTime;
+        return currentTime - this.startUsingItemInAirTime;
     }
 
     @Override
@@ -949,7 +949,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setUsingItemInAir(boolean value, long time) {
         this.usingItemInAir = value;
         if (value) {
-            startUsingItemInAirTime = time;
+            this.startUsingItemInAirTime = time;
         }
         broadcastState();
     }

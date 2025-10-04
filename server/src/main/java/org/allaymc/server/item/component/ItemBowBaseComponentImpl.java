@@ -29,7 +29,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
     @Override
     public boolean canUseItemInAir(EntityPlayer player) {
-        return hasArrow(player);
+        return player.getGameMode() == GameMode.CREATIVE || hasArrow(player);
     }
 
     @Override
