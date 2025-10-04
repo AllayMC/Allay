@@ -314,9 +314,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
              damage.getDamageType() == DamageType.FIRE_TICK)
         ) return false;
 
-        var event = new CEntityTryDamageEvent(damage, true);
-        manager.callEvent(event);
-        return event.isCanAttack();
+        return false;
     }
 
     @Override

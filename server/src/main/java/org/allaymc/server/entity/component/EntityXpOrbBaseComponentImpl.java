@@ -5,11 +5,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
-import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -100,12 +97,6 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     @Override
     public AABBdc getAABB() {
         return new AABBd(-0.05, 0, -0.05, 0.05, 0.1, 0.05);
-    }
-
-    @EventHandler
-    protected void onDamage(CEntityTryDamageEvent event) {
-        var damageType = event.getDamage().getDamageType();
-        event.setCanAttack(damageType != DamageType.FALL);
     }
 
     @Override

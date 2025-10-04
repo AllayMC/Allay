@@ -97,7 +97,12 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.XP_ORB)
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
                 .addComponent(() -> {
-                    var component = new EntityLivingComponentImpl();
+                    var component = new EntityLivingComponentImpl() {
+                        @Override
+                        public boolean hasFallDamage() {
+                            return false;
+                        }
+                    };
                     component.setMaxHealth(5);
                     return component;
                 }, EntityLivingComponentImpl.class)
