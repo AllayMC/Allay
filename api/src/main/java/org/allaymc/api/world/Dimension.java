@@ -820,7 +820,8 @@ public interface Dimension {
      * @param x the x coordinate of the pos
      * @param y the y coordinate of the pos
      * @param z the z coordinate of the pos
-     * @return the block entity at the specified pos. {@code null} will be returned if block entity is not found or the chunk is not loaded
+     * @return the block entity at the specified pos. {@code null} will be returned if the block entity is not found or
+     * the chunk is not loaded
      */
     default BlockEntity getBlockEntity(int x, int y, int z) {
         var chunk = getChunkManager().getChunkByDimensionPos(x, z);
@@ -875,7 +876,10 @@ public interface Dimension {
      * @param action the action
      */
     default void addBlockAction(int x, int y, int z, BlockAction action) {
-        getChunkManager().getChunkByDimensionPos(x, z).forEachChunkLoaders(loader -> loader.viewBlockAction(new Vector3i(x, y, z), action));
+        var chunk = getChunkManager().getChunkByDimensionPos(x, z);
+        if (chunk != null) {
+            chunk.forEachChunkLoaders(loader -> loader.viewBlockAction(new Vector3i(x, y, z), action));
+        }
     }
 
     /**
@@ -901,8 +905,10 @@ public interface Dimension {
      * @param particle the particle to be added
      */
     default void addParticle(double x, double y, double z, Particle particle) {
-        getChunkManager().getChunkByDimensionPos((int) x, (int) z)
-                .forEachChunkLoaders(loader -> loader.viewParticle(particle, new Vector3d(x, y, z)));
+        var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
+        if (chunk != null) {
+            chunk.forEachChunkLoaders(loader -> loader.viewParticle(particle, new Vector3d(x, y, z)));
+        }
     }
 
     /**
@@ -952,8 +958,10 @@ public interface Dimension {
      *                 will be based on the distance to the pos passed
      */
     default void addSound(double x, double y, double z, Sound sound, boolean relative) {
-        getChunkManager().getChunkByDimensionPos((int) x, (int) z)
-                .forEachChunkLoaders(loader -> loader.viewSound(sound, new Vector3d(x, y, z), relative));
+        var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
+        if (chunk != null) {
+            chunk.forEachChunkLoaders(loader -> loader.viewSound(sound, new Vector3d(x, y, z), relative));
+        }
     }
 
     /**
