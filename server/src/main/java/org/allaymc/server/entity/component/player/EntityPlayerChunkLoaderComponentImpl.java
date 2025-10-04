@@ -111,9 +111,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         return map;
     });
 
-    protected static void initNetworkOffsetMap() {
-    }
-
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Manager
