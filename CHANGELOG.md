@@ -47,6 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced interfaces `FormViewer` and `EntityPlayerFormViewerComponent`.
 - Implemented sharpness enchantment.
 - Implemented `SetDifficultyPacketProcessor` to support changing level difficulty through setting menu.
+- Block entity's custom name will be set to the custom name of the item now, which allows the player to change the inventory name of containers.
 - Players can now extinguish the fire on the surface of the block by left-clicking.
 - Introduced a dirty flag for block layers in chunk sections. Now blocks will only be rewritten to the database if they are changed. This
   would speed up the time used during server shutdown significantly if there are many only loaded chunks.

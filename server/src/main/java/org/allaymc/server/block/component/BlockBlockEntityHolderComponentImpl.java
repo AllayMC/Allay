@@ -72,8 +72,7 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     }
 
     protected void removeBlockEntity(Position3ic pos) {
-        var dimension = pos.dimension();
-        Objects.requireNonNull(dimension);
+        var dimension = Objects.requireNonNull(pos.dimension());
         var chunk = dimension.getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
         if (chunk == null) {
             throw new IllegalStateException("Trying to remove a block entity in an unload chunk! Dimension: " + dimension + " at pos " + pos);
@@ -87,10 +86,17 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     protected void onBlockPlace(CBlockOnPlaceEvent event) {
         var pos = event.getCurrentBlock().getPosition();
         var blockEntity = getBlockEntity(pos);
+
+        var placementInfo = event.getPlacementInfo();
+        if (placementInfo != null) {
+            // Set the block entity's custom name to the item's custom name
+            blockEntity.setCustomName(placementInfo.player().getItemInHand().getCustomName());
+        }
+
         forwardEvent(blockEntity, event);
-        // Send block entity to the client after called onPlace() because onPlace() method may make some changes
-        // on this block entity. Also, we should send the block entity in the next chunk tick because we need
-        // to wait for the block being sent first
+        // Send the block entity to the client after called onPlace() because onPlace() method may make some
+        // changes on this block entity. Also, we should send the block entity in the next chunk tick because
+        // we need to wait for the block being sent first
         getBaseComponentImpl(blockEntity).sendBlockEntityToViewers(false);
     }
 
