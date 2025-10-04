@@ -52,6 +52,12 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     }
 
     @Override
+    public boolean hasVoidDamage() {
+        return thisPlayer.getGameMode() != GameMode.CREATIVE &&
+               thisPlayer.getGameMode() != GameMode.SPECTATOR;
+    }
+
+    @Override
     protected void sendEffects(EffectInstance newEffect, EffectInstance oldEffect) {
         super.sendEffects(newEffect, oldEffect);
         thisPlayer.viewEntityEffectChange(thisPlayer, newEffect, oldEffect);

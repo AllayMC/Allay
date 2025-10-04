@@ -53,6 +53,11 @@ public final class EntityTypeInitializer {
                         public boolean hasDrowningDamage() {
                             return false;
                         }
+
+                        @Override
+                        protected boolean hasDeadTimer() {
+                            return false;
+                        }
                     };
                     component.setMaxHealth(5);
                     return component;

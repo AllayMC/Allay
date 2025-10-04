@@ -16,9 +16,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
+- (API) Implemented void damage. New methods `EntityLivingComponent.hasVoidDamage()` and `DamageContainer.voidDamage()` were added.
+
 ### Changed
 
 ### Fixed
+
+- Disabled dead timer for item entity.
 
 ### Removed
 

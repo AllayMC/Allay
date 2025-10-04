@@ -94,7 +94,9 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     @Override
     public boolean attack(DamageContainer damage, boolean ignoreCoolDown) {
-        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage, ignoreCoolDown)) {
+        if (!thisEntity.isAlive() ||
+            !canBeAttacked(damage) ||
+            !checkAndUpdateCoolDown(damage, ignoreCoolDown)) {
             return false;
         }
 
@@ -302,18 +304,27 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
-        if (!thisEntity.isAlive()) {
+        if (!hasFallDamage() && damage.getDamageType() == DamageType.FALL) {
             return false;
         }
 
-        // Fire resistance effect
-        if (hasFireDamage() &&
+        if (!hasFireDamage() &&
             (damage.getDamageType() == DamageType.FIRE ||
              damage.getDamageType() == DamageType.LAVA ||
              damage.getDamageType() == DamageType.FIRE_TICK)
-        ) return false;
+        ) {
+            return false;
+        }
 
-        return false;
+        if (!hasDrowningDamage() && damage.getDamageType() == DamageType.DROWN) {
+            return false;
+        }
+
+        if (!hasVoidDamage() && damage.getDamageType() == DamageType.VOID) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -333,6 +344,16 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @Override
     public boolean hasDrowningDamage() {
         return !hasEffect(EffectTypes.WATER_BREATHING);
+    }
+
+    @Override
+    public boolean hasVoidDamage() {
+        return true;
+    }
+
+    @Override
+    public boolean isFireproof() {
+        return false;
     }
 
     @Override
@@ -468,12 +489,85 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
-        tickDead();
+        tickVoid(event.getCurrentTick());
         tickFire();
         tickBreathe();
         tickEffects();
+        tickDead();
     }
 
+    /// Check the void damage every 20 ticks. If the entity's y coordinate is lower than {@code minHeight - 18},
+    /// 10 points damage will be given to the entity.
+    protected void tickVoid(long currentTick) {
+        if (currentTick % 20 != 0) {
+            // Check void damage every 20 ticks
+            return;
+        }
+
+        int minY = thisEntity.getDimension().getDimensionInfo().minHeight() - 18;
+        if (thisEntity.getLocation().y() <= minY) {
+            attack(DamageContainer.voidDamage(10));
+        }
+    }
+
+    /// Update the {@link #onFireTicks} of the entity, fire tick damage will be applied to the entity if the entity
+    /// is on fire every second.
+    protected void tickFire() {
+        if (this.onFireTicks <= 0) {
+            return;
+        }
+
+        // Do not do onFireTicks-- directly, because we also
+        // need to update the ON_FIRE flag of the entity, and
+        // this method will update the flag.
+        this.setOnFireTicks(onFireTicks - 1);
+        if (this.onFireTicks % 20 == 0) {
+            attack(DamageContainer.fireTick(1));
+        }
+    }
+
+    /// Update the {@link #airSupplyTicks} of the entity. Drown damage will be applied to the entity every second
+    /// if the entity's air supply runs out. If the entity is able to breathe, the air supply will be regenerated
+    /// by four points every tick.
+    protected void tickBreathe() {
+        var newAirSupplyTicks = this.airSupplyTicks;
+        if (!canBreathe()) {
+            newAirSupplyTicks = this.airSupplyTicks - 1;
+            if (newAirSupplyTicks <= -20) {
+                attack(DamageContainer.drown(2));
+                newAirSupplyTicks = 0;
+            }
+        } else if (this.airSupplyTicks < this.airSupplyMaxTicks) {
+            newAirSupplyTicks = this.airSupplyTicks + 4;
+        }
+        if (this.airSupplyTicks != newAirSupplyTicks) {
+            this.airSupplyTicks = newAirSupplyTicks;
+            this.baseComponent.broadcastState();
+        }
+    }
+
+    @Override
+    public boolean canBreathe() {
+        return hasEffect(EffectTypes.WATER_BREATHING) || hasEffect(EffectTypes.CONDUIT_POWER) || !thisEntity.isEyesInWater();
+    }
+
+    /// Tick and update the duration of all the active effects this entity is holding currently.
+    protected void tickEffects() {
+        if (this.effects.isEmpty()) {
+            return;
+        }
+
+        for (var effect : this.effects.values().toArray(EffectInstance[]::new)) {
+            effect.setDuration(effect.getDuration() - 1);
+            effect.getType().onTick(thisEntity, effect);
+            if (effect.getDuration() <= 0) {
+                removeEffect(effect.getType());
+            }
+        }
+    }
+
+    /// Check if the entity should dead and update the dead timer after the death if dead timer is
+    /// enabled for this entity.
     protected void tickDead() {
         if (this.health == 0 && !this.baseComponent.isDead()) {
             onDie();
@@ -494,10 +588,15 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         }
     }
 
+    /// Whether the entity's body should keep existing in the dimension in a period of time after
+    /// death. This method also determines whether to create a cloud of white smoke when the entity's
+    /// body disappears. If the dead timer is disabled, the entity will be removed from the dimension
+    /// immediately when dead.
     protected boolean hasDeadTimer() {
         return true;
     }
 
+    /// Called when the entity dead (health == 0)
     protected void onDie() {
         manager.callEvent(CEntityDieEvent.INSTANCE);
         new EntityDieEvent(thisEntity).call();
@@ -511,6 +610,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         this.baseComponent.applyAction(SimpleEntityAction.DEATH);
     }
 
+    /// Spawn white smoke inside the entity's aabb box.
     protected void spawnDeadParticle() {
         var offsetAABB = this.baseComponent.getOffsetAABB();
         for (double x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5) {
@@ -518,58 +618,6 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
                 for (double y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5) {
                     this.baseComponent.getDimension().addParticle(x, y, z, SimpleParticle.EXPLODE);
                 }
-            }
-        }
-    }
-
-    protected void tickFire() {
-        if (this.onFireTicks <= 0) {
-            return;
-        }
-
-        // Do not do onFireTicks-- directly, because we also
-        // need to update the ON_FIRE flag of the entity, and
-        // this method will update the flag.
-        this.setOnFireTicks(onFireTicks - 1);
-        if (this.onFireTicks % 20 == 0) {
-            attack(DamageContainer.fireTick(1));
-        }
-    }
-
-    protected void tickBreathe() {
-        var newAirSupplyTicks = this.airSupplyTicks;
-        if (!canBreathe()) {
-            newAirSupplyTicks = this.airSupplyTicks - 1;
-            if (newAirSupplyTicks <= -20) {
-                if (hasDrowningDamage()) {
-                    attack(DamageContainer.drown(2));
-                }
-                newAirSupplyTicks = 0;
-            }
-        } else if (this.airSupplyTicks < this.airSupplyMaxTicks) {
-            newAirSupplyTicks = this.airSupplyTicks + 4;
-        }
-        if (this.airSupplyTicks != newAirSupplyTicks) {
-            this.airSupplyTicks = newAirSupplyTicks;
-            this.baseComponent.broadcastState();
-        }
-    }
-
-    @Override
-    public boolean canBreathe() {
-        return hasEffect(EffectTypes.WATER_BREATHING) || hasEffect(EffectTypes.CONDUIT_POWER) || !thisEntity.isEyesInWater();
-    }
-
-    protected void tickEffects() {
-        if (this.effects.isEmpty()) {
-            return;
-        }
-
-        for (var effect : this.effects.values().toArray(EffectInstance[]::new)) {
-            effect.setDuration(effect.getDuration() - 1);
-            effect.getType().onTick(thisEntity, effect);
-            if (effect.getDuration() <= 0) {
-                removeEffect(effect.getType());
             }
         }
     }
@@ -604,10 +652,11 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     @EventHandler
     protected void onFall(CEntityFallEvent event) {
         if (!hasFallDamage()) {
+            // Short circuit here to avoid unnecessary block querying
             return;
         }
 
-        // physics component won't be null here, because CEntityFallEvent is called in physics component
+        // Physics component won't be null here, because CEntityFallEvent is called in physics component
         var blockStateStandingOn = physicsComponent.getBlockStateStandingOn();
         double rawDamage = (event.getFallDistance() - 3) - getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));

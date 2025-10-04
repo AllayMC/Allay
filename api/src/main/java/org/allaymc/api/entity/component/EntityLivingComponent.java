@@ -54,7 +54,8 @@ public interface EntityLivingComponent extends EntityComponent {
     }
 
     /**
-     * Check if this entity can be attacked with the given damage container.
+     * Check if this entity can be attacked with the given damage container. Notes that this method
+     * will not check if the entity is alive or if is in damage cool down.
      *
      * @param damage the damage container
      * @return {@code true} if the entity can be attacked, {@code false} otherwise.
@@ -97,29 +98,36 @@ public interface EntityLivingComponent extends EntityComponent {
     boolean hasDrowningDamage();
 
     /**
-     * Check if this entity can against fire damage even if it does not have fire resistance
-     * effect. For example, netherite items. When return {@code true}, the entity will not be
-     * able to be set on fire and method {@link #setOnFireTicks(int)} will always return {@code false}.
+     * Check if the entity has void damage. Void damage will be applied to the entity every second
+     * when its y coordinate is less than {@code minHeight - 18}.
+     *
+     * @return {@code true} if the entity has void damage, {@code false} otherwise.
+     */
+    boolean hasVoidDamage();
+
+    /**
+     * Check if this entity can against fire damage even if it does not have a fire resistance effect.
+     * For example, netherite items. When return {@code true}, the entity will not be able to be set on
+     * fire and method {@link #setOnFireTicks(int)} will always return {@code false}.
      *
      * @return {@code true} if the entity is fireproof, {@code false} otherwise.
      */
-    default boolean isFireproof() {
-        // TODO: netherite item
-        return false;
-    }
+    boolean isFireproof();
 
     /**
      * Get the on fire ticks of the entity.
      *
-     * @return the on fire ticks, or zero if the entity is not on fire
+     * @return the on fire ticks, or zero if the entity is not on fire or is fireproof.
+     * @see #isFireproof()
      */
     int getOnFireTicks();
 
     /**
-     * Set the on fire ticks of the entity.
+     * Set the on fire ticks of the entity. This method will return {@code false} if the entity is fireproof.
      *
      * @param onFireTicks the on fire ticks
-     * @return {@code true} if the on fire ticks was set, {@code false} if the entity is fireproof.
+     * @return {@code true} if the on fire ticks were set, {@code false} if the entity is fireproof.
+     * @see #isFireproof()
      */
     boolean setOnFireTicks(int onFireTicks);
 

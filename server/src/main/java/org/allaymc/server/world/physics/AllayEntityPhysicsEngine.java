@@ -92,7 +92,8 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
             if (!physicsComponent.computeMovementServerSide() ||
                 !entity.isCurrentChunkLoaded() ||
-                entity.getLocation().y() < dimension.getDimensionInfo().minHeight()) {
+                // Invisible bedrock is present at minHeight - 40
+                entity.getLocation().y() < dimension.getDimensionInfo().minHeight() - 40) {
                 return;
             }
 

@@ -220,6 +220,16 @@ public class DamageContainer {
     }
 
     /**
+     * Creates a void damage container.
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer voidDamage(float sourceDamage) {
+        return new DamageContainer(null, VOID, sourceDamage);
+    }
+
+    /**
      * Get the attacker.
      *
      * @param <T> the type of the attacker
