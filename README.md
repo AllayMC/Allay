@@ -148,15 +148,10 @@ the LGPL-3.0 license. The contents of the following folders are open-sourced und
 ## ❤️ Special Thanks
 
 - [Endstone](https://github.com/EndstoneMC/Endstone): Endstone's build-in DevTools is essential for Allay to dump key data from BDS
-- [Protocol](https://github.com/CloudburstMC/Protocol): The protocol library and implementation used by Allay
+- [Protocol](https://github.com/CloudburstMC/Protocol): The protocol library and implementation of RakNet used by Allay
 - [df-mc](https://github.com/df-mc): References for some key API designs
 - [gophertunnel](https://github.com/Sandertv/gophertunnel): The protocol library for reference which is well-documented
 - [pmmp](https://github.com/pmmp/PocketMine-MP): Provides a lot of useful information in many ways
-
-![IntelliJ IDEA logo](https://resources.jetbrains.com/storage/products/company/brand/logos/IntelliJ_IDEA_icon.svg)
-
-We sincerely thank JetBrains for providing a free Open Source license to support this project. Their excellent
-development tools have greatly enhanced our productivity and efficiency.
 
 [![YourKit-Logo](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/)
 
