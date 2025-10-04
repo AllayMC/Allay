@@ -89,9 +89,12 @@ subprojects {
                     }
                 }
 
-                organization {
-                    name.set("AllayMC")
-                    url.set("https://github.com/AllayMC")
+                developers {
+                    developer {
+                        name.set("AllayMC Team")
+                        organization.set("AllayMC")
+                        organizationUrl.set("https://github.com/AllayMC")
+                    }
                 }
             }
         }
