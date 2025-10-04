@@ -489,8 +489,9 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
-        tickVoid(event.getCurrentTick());
-        tickFire();
+        var currentTick = event.getCurrentTick();
+        tickVoid(currentTick);
+        tickFire(currentTick);
         tickBreathe();
         tickEffects();
         tickDead();
@@ -512,8 +513,8 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
     /// Update the {@link #onFireTicks} of the entity, fire tick damage will be applied to the entity if the entity
     /// is on fire every second.
-    protected void tickFire() {
-        if (this.onFireTicks <= 0) {
+    protected void tickFire(long currentTick) {
+        if (!isOnFire()) {
             return;
         }
 
@@ -521,7 +522,7 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         // need to update the ON_FIRE flag of the entity, and
         // this method will update the flag.
         this.setOnFireTicks(onFireTicks - 1);
-        if (this.onFireTicks % 20 == 0) {
+        if (currentTick % 20 == 0) {
             attack(DamageContainer.fireTick(1));
         }
     }

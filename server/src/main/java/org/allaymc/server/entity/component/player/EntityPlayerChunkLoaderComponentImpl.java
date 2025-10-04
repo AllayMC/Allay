@@ -359,19 +359,15 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     }
 
     protected void addComponentSpecificMetadata(Entity entity, EntityDataMap map) {
-        switch (entity) {
-            case EntityPhysicsComponent physicsComponent -> {
-                map.setFlag(EntityFlag.HAS_GRAVITY, physicsComponent.hasGravity());
-            }
-            case EntityLivingComponent livingComponent -> {
-                map.setFlag(EntityFlag.ON_FIRE, livingComponent.isOnFire());
-                map.setFlag(EntityFlag.BREATHING, livingComponent.canBreathe());
-                map.put(EntityDataTypes.AIR_SUPPLY, livingComponent.getAirSupplyTicks());
-                map.put(EntityDataTypes.AIR_SUPPLY_MAX, livingComponent.getAirSupplyMaxTicks());
-                map.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
-            }
-            default -> {
-            }
+        if (entity instanceof EntityPhysicsComponent physicsComponent) {
+            map.setFlag(EntityFlag.HAS_GRAVITY, physicsComponent.hasGravity());
+        }
+        if (entity instanceof EntityLivingComponent livingComponent) {
+            map.setFlag(EntityFlag.ON_FIRE, livingComponent.isOnFire());
+            map.setFlag(EntityFlag.BREATHING, livingComponent.canBreathe());
+            map.put(EntityDataTypes.AIR_SUPPLY, (short) livingComponent.getAirSupplyTicks());
+            map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) livingComponent.getAirSupplyMaxTicks());
+            map.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
         }
     }
 

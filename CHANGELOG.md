@@ -23,6 +23,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Disabled dead timer for item entity.
+- Fixed fire damage wasn't given when the on fire tick is continuously updated.
+- Fixed the bug that air supply, effect particle and on fire state are invisible.
 
 ### Removed
 
