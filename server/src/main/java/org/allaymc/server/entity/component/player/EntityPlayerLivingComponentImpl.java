@@ -36,7 +36,7 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
             return damage.getDamageType() == DamageType.API;
         }
 
-        return true;
+        return super.canBeAttacked(damage);
     }
 
     @Override

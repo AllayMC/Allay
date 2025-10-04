@@ -71,19 +71,18 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     protected DamageContainer lastDamage;
     @Getter
     protected long lastDamageTime;
+
     @Getter
     protected int onFireTicks;
     @Getter
-    protected int airSupplyTicks;
+    protected int airSupplyTicks, airSupplyMaxTicks;
+
     @Getter
-    protected int airSupplyMaxTicks;
+    protected float health, maxHealth;
     @Getter
     @Setter
     protected float absorption;
-    @Getter
-    protected float health;
-    @Getter
-    protected float maxHealth;
+
     protected Map<EffectType, EffectInstance> effects;
     protected int deadTimer;
 
