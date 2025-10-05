@@ -10,7 +10,6 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.*;
@@ -32,28 +31,29 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     @Getter
     protected final BlockEntityType<T> blockEntityType;
 
+    @SuppressWarnings("unchecked")
     @Override
     public T getBlockEntity(int x, int y, int z, Dimension dimension) {
         var blockEntity = dimension.getBlockEntity(x, y, z);
+
         if (blockEntity == null) {
-            return createBlockEntity(x, y, z, dimension);
-        }
-
-        if (blockEntity.getBlockEntityType() != this.blockEntityType) {
-            throw new IllegalStateException(
-                    "Mismatched block entity type at pos %d, %d, %d, %s! Expected: %s, actual: %s"
-                            .formatted(
-                                    x, y, z, dimension.toString(),
-                                    this.blockEntityType.getName(),
-                                    blockEntity.getBlockEntityType().getName()
-                            )
+            return createBlockEntity(dimension, x, y, z);
+        } else if (blockEntity.getBlockEntityType() != this.blockEntityType) {
+            log.warn(
+                    "Mismatched block entity type at pos {}, {}, {}, {}! Expected: {}, actual: {}",
+                    x, y, z, dimension.getWorld().getName() + "#" + dimension.getDimensionInfo().dimensionId(),
+                    this.blockEntityType.getName(), blockEntity.getBlockEntityType().getName()
             );
+            // Remove the incorrect block entity and create a new one
+            removeBlockEntity(dimension, x, y, z);
+            return createBlockEntity(dimension, x, y, z);
         }
 
+        // We have checked the type above so we can safely cast
         return (T) blockEntity;
     }
 
-    protected T createBlockEntity(int x, int y, int z, Dimension dimension) {
+    protected T createBlockEntity(Dimension dimension, int x, int y, int z) {
         Objects.requireNonNull(dimension);
         var chunk = dimension.getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
@@ -62,6 +62,7 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
 
         var presentBlockEntity = chunk.getBlockEntity(x & 15, y, z & 15);
         if (presentBlockEntity != null) {
+            // Should never happen since we have checked in getBlockEntity() method
             throw new IllegalStateException("Trying to create a block entity when block entity already exists! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
 
@@ -71,14 +72,14 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
         return blockEntity;
     }
 
-    protected void removeBlockEntity(Position3ic pos) {
-        var dimension = Objects.requireNonNull(pos.dimension());
-        var chunk = dimension.getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
+    protected void removeBlockEntity(Dimension dimension, int x, int y, int z) {
+        Objects.requireNonNull(dimension);
+        var chunk = dimension.getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk == null) {
-            throw new IllegalStateException("Trying to remove a block entity in an unload chunk! Dimension: " + dimension + " at pos " + pos);
+            throw new IllegalStateException("Trying to remove a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
-        if (chunk.removeBlockEntity(pos.x() & 15, pos.y(), pos.z() & 15) == null) {
-            throw new IllegalStateException("Trying to remove a block entity which is not exists in Dimension " + dimension + " at pos " + pos);
+        if (chunk.removeBlockEntity(x & 15, y, z & 15) == null) {
+            throw new IllegalStateException("Trying to remove a block entity which is not exists in Dimension " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
     }
 
@@ -109,7 +110,7 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
             return;
         }
         forwardEvent(blockEntity, event);
-        removeBlockEntity(pos);
+        removeBlockEntity(pos.dimension(), pos.x(), pos.y(), pos.z());
     }
 
     protected void forwardEvent(BlockEntity blockEntity, Event event) {
