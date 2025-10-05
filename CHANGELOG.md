@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Implemented void damage. New methods `EntityLivingComponent.hasVoidDamage()` and `DamageContainer.voidDamage()` were added.
 - (API) Implemented lightning rods.
+- (API) Implemented (copper) lanterns.
 
 ### Changed
 

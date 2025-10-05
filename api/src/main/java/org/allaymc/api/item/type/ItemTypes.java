@@ -707,7 +707,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemCopperIngotStack> COPPER_INGOT;
 
-    public static ItemType<ItemCopperLanternStack> COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> COPPER_LANTERN;
 
     public static ItemType<ItemLeggingsStack> COPPER_LEGGINGS;
 
@@ -1405,7 +1405,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemExposedCopperGrateStack> EXPOSED_COPPER_GRATE;
 
-    public static ItemType<ItemCopperLanternStack> EXPOSED_COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> EXPOSED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> EXPOSED_COPPER_TRAPDOOR;
 
@@ -2491,7 +2491,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemOxidizedCopperGrateStack> OXIDIZED_COPPER_GRATE;
 
-    public static ItemType<ItemCopperLanternStack> OXIDIZED_COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> OXIDIZED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> OXIDIZED_COPPER_TRAPDOOR;
 
@@ -3115,7 +3115,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemSoulFireStack> SOUL_FIRE;
 
-    public static ItemType<ItemSoulLanternStack> SOUL_LANTERN;
+    public static ItemType<ItemLanternStack> SOUL_LANTERN;
 
     public static ItemType<ItemSandStack> SOUL_SAND;
 
@@ -3511,7 +3511,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemWaxedCopperGrateStack> WAXED_COPPER_GRATE;
 
-    public static ItemType<ItemCopperLanternStack> WAXED_COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> WAXED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_COPPER_TRAPDOOR;
 
@@ -3541,7 +3541,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemWaxedExposedCopperGrateStack> WAXED_EXPOSED_COPPER_GRATE;
 
-    public static ItemType<ItemCopperLanternStack> WAXED_EXPOSED_COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> WAXED_EXPOSED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_EXPOSED_COPPER_TRAPDOOR;
 
@@ -3575,7 +3575,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemWaxedOxidizedCopperGrateStack> WAXED_OXIDIZED_COPPER_GRATE;
 
-    public static ItemType<ItemCopperLanternStack> WAXED_OXIDIZED_COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> WAXED_OXIDIZED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_OXIDIZED_COPPER_TRAPDOOR;
 
@@ -3607,7 +3607,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemWaxedWeatheredCopperGrateStack> WAXED_WEATHERED_COPPER_GRATE;
 
-    public static ItemType<ItemCopperLanternStack> WAXED_WEATHERED_COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> WAXED_WEATHERED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WAXED_WEATHERED_COPPER_TRAPDOOR;
 
@@ -3641,7 +3641,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemWeatheredCopperGrateStack> WEATHERED_COPPER_GRATE;
 
-    public static ItemType<ItemCopperLanternStack> WEATHERED_COPPER_LANTERN;
+    public static ItemType<ItemLanternStack> WEATHERED_COPPER_LANTERN;
 
     public static ItemType<ItemTrapdoorStack> WEATHERED_COPPER_TRAPDOOR;
 

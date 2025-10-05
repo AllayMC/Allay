@@ -2114,7 +2114,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.COPPER_LANTERN == null) {
             ItemTypes.COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.COPPER_LANTERN)
                     .build();
         }
@@ -4208,7 +4208,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.EXPOSED_COPPER_LANTERN == null) {
             ItemTypes.EXPOSED_COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.EXPOSED_COPPER_LANTERN)
                     .build();
         }
@@ -7466,7 +7466,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.OXIDIZED_COPPER_LANTERN == null) {
             ItemTypes.OXIDIZED_COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.OXIDIZED_COPPER_LANTERN)
                     .build();
         }
@@ -9338,7 +9338,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SOUL_LANTERN == null) {
             ItemTypes.SOUL_LANTERN = AllayItemType
-                    .builder(ItemSoulLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.SOUL_LANTERN)
                     .build();
         }
@@ -10526,7 +10526,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_COPPER_LANTERN == null) {
             ItemTypes.WAXED_COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.WAXED_COPPER_LANTERN)
                     .build();
         }
@@ -10616,7 +10616,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_EXPOSED_COPPER_LANTERN == null) {
             ItemTypes.WAXED_EXPOSED_COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.WAXED_EXPOSED_COPPER_LANTERN)
                     .build();
         }
@@ -10718,7 +10718,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_OXIDIZED_COPPER_LANTERN == null) {
             ItemTypes.WAXED_OXIDIZED_COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.WAXED_OXIDIZED_COPPER_LANTERN)
                     .build();
         }
@@ -10814,7 +10814,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_WEATHERED_COPPER_LANTERN == null) {
             ItemTypes.WAXED_WEATHERED_COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.WAXED_WEATHERED_COPPER_LANTERN)
                     .build();
         }
@@ -10916,7 +10916,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WEATHERED_COPPER_LANTERN == null) {
             ItemTypes.WEATHERED_COPPER_LANTERN = AllayItemType
-                    .builder(ItemCopperLanternStackImpl.class)
+                    .builder(ItemLanternStackImpl.class)
                     .vanillaItem(ItemId.WEATHERED_COPPER_LANTERN)
                     .build();
         }

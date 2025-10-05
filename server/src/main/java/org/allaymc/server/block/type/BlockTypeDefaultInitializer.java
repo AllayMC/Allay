@@ -7007,7 +7007,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SOUL_LANTERN == null) {
             BlockTypes.SOUL_LANTERN = AllayBlockType
-                    .builder(BlockSoulLanternBehaviorImpl.class)
+                    .builder(BlockLanternBehaviorImpl.class)
                     .vanillaBlock(BlockId.SOUL_LANTERN)
                     .setProperties(BlockPropertyTypes.HANGING)
                     .build();

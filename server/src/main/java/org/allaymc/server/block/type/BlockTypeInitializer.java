@@ -1771,6 +1771,7 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockEndRodBaseComponentImpl::new)
                 .build();
+
         BiFunction<OxidationLevel, Boolean, BlockType<?>> lightningRod = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_LIGHTNING_ROD : BlockTypes.LIGHTNING_ROD;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_LIGHTNING_ROD : BlockTypes.EXPOSED_LIGHTNING_ROD;
@@ -1795,6 +1796,46 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockLightningRodBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                .build();
+    }
+
+    public static void initLanterns() {
+        BlockTypes.LANTERN = buildLantern(BlockId.LANTERN);
+        BlockTypes.SOUL_LANTERN = buildLantern(BlockId.SOUL_LANTERN);
+
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperLantern = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_LANTERN : BlockTypes.COPPER_LANTERN;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_LANTERN : BlockTypes.EXPOSED_COPPER_LANTERN;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_LANTERN : BlockTypes.WEATHERED_COPPER_LANTERN;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_COPPER_LANTERN : BlockTypes.OXIDIZED_COPPER_LANTERN;
+        };
+
+        BlockTypes.COPPER_LANTERN = buildCopperLantern(BlockId.COPPER_LANTERN, OxidationLevel.UNAFFECTED, copperLantern);
+        BlockTypes.EXPOSED_COPPER_LANTERN = buildCopperLantern(BlockId.EXPOSED_COPPER_LANTERN, OxidationLevel.EXPOSED, copperLantern);
+        BlockTypes.WEATHERED_COPPER_LANTERN = buildCopperLantern(BlockId.WEATHERED_COPPER_LANTERN, OxidationLevel.WEATHERED, copperLantern);
+        BlockTypes.OXIDIZED_COPPER_LANTERN = buildCopperLantern(BlockId.OXIDIZED_COPPER_LANTERN, OxidationLevel.OXIDIZED, copperLantern);
+        BlockTypes.WAXED_COPPER_LANTERN = buildCopperLantern(BlockId.WAXED_COPPER_LANTERN, OxidationLevel.UNAFFECTED, copperLantern);
+        BlockTypes.WAXED_EXPOSED_COPPER_LANTERN = buildCopperLantern(BlockId.WAXED_EXPOSED_COPPER_LANTERN, OxidationLevel.EXPOSED, copperLantern);
+        BlockTypes.WAXED_WEATHERED_COPPER_LANTERN = buildCopperLantern(BlockId.WAXED_WEATHERED_COPPER_LANTERN, OxidationLevel.WEATHERED, copperLantern);
+        BlockTypes.WAXED_OXIDIZED_COPPER_LANTERN = buildCopperLantern(BlockId.WAXED_OXIDIZED_COPPER_LANTERN, OxidationLevel.OXIDIZED, copperLantern);
+    }
+
+    private static BlockType<BlockLanternBehavior> buildLantern(BlockId blockId) {
+        return AllayBlockType
+                .builder(BlockLanternBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(BlockLanternBaseComponentImpl::new)
+                .setProperties(BlockPropertyTypes.HANGING)
+                .build();
+    }
+
+    private static BlockType<BlockCopperLanternBehavior> buildCopperLantern(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+        return AllayBlockType
+                .builder(BlockCopperLanternBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(BlockCopperLanternBaseComponentImpl::new)
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .setProperties(BlockPropertyTypes.HANGING)
                 .build();
     }
 }

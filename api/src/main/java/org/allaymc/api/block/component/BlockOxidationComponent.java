@@ -4,6 +4,8 @@ import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.type.BlockType;
 
 /**
+ * BlockOxidationComponent is implemented by all blocks that can be oxidized.
+ *
  * @author IWareQ
  */
 public interface BlockOxidationComponent extends BlockComponent {
@@ -11,7 +13,6 @@ public interface BlockOxidationComponent extends BlockComponent {
      * Gets the block with the specified oxidation level.
      *
      * @param oxidationLevel the {@link OxidationLevel}
-     *
      * @return the corresponding {@link BlockType}
      */
     BlockType<?> getBlockWithOxidationLevel(OxidationLevel oxidationLevel);
@@ -43,7 +44,6 @@ public interface BlockOxidationComponent extends BlockComponent {
      * Gets the block with the specified waxed state.
      *
      * @param waxed the waxed state
-     *
      * @return the corresponding {@link BlockType}
      */
     BlockType<?> getBlockWithWaxed(boolean waxed);

@@ -4170,7 +4170,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#HANGING}
      */
-    public static BlockType<BlockSoulLanternBehavior> SOUL_LANTERN;
+    public static BlockType<BlockLanternBehavior> SOUL_LANTERN;
 
     public static BlockType<BlockSoulSandBehavior> SOUL_SAND;
 

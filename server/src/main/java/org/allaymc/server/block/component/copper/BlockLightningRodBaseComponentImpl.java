@@ -1,11 +1,10 @@
-package org.allaymc.server.block.component;
+package org.allaymc.server.block.component.copper;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.copper.BlockCopperBaseComponentImpl;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
