@@ -1872,4 +1872,32 @@ public final class BlockTypeInitializer {
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
+
+    public static void initCopperChains() {
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperChain = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_CHAIN : BlockTypes.COPPER_CHAIN;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_CHAIN : BlockTypes.EXPOSED_COPPER_CHAIN;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_CHAIN : BlockTypes.WEATHERED_COPPER_CHAIN;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_COPPER_CHAIN : BlockTypes.OXIDIZED_COPPER_CHAIN;
+        };
+
+        BlockTypes.COPPER_CHAIN = buildCopperChain(BlockId.COPPER_CHAIN, OxidationLevel.UNAFFECTED, copperChain);
+        BlockTypes.EXPOSED_COPPER_CHAIN = buildCopperChain(BlockId.EXPOSED_COPPER_CHAIN, OxidationLevel.EXPOSED, copperChain);
+        BlockTypes.WEATHERED_COPPER_CHAIN = buildCopperChain(BlockId.WEATHERED_COPPER_CHAIN, OxidationLevel.WEATHERED, copperChain);
+        BlockTypes.OXIDIZED_COPPER_CHAIN = buildCopperChain(BlockId.OXIDIZED_COPPER_CHAIN, OxidationLevel.OXIDIZED, copperChain);
+        BlockTypes.WAXED_COPPER_CHAIN = buildCopperChain(BlockId.WAXED_COPPER_CHAIN, OxidationLevel.UNAFFECTED, copperChain);
+        BlockTypes.WAXED_EXPOSED_COPPER_CHAIN = buildCopperChain(BlockId.WAXED_EXPOSED_COPPER_CHAIN, OxidationLevel.EXPOSED, copperChain);
+        BlockTypes.WAXED_WEATHERED_COPPER_CHAIN = buildCopperChain(BlockId.WAXED_WEATHERED_COPPER_CHAIN, OxidationLevel.WEATHERED, copperChain);
+        BlockTypes.WAXED_OXIDIZED_COPPER_CHAIN = buildCopperChain(BlockId.WAXED_OXIDIZED_COPPER_CHAIN, OxidationLevel.OXIDIZED, copperChain);
+    }
+
+    private static BlockType<BlockCopperChainBehavior> buildCopperChain(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+        return AllayBlockType
+                .builder(BlockCopperChainBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .setBaseComponentSupplier(BlockCopperBaseComponentImpl::new)
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
 }
