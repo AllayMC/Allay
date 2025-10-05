@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented (copper) lanterns.
 - (API) Implemented copper golem statues.
 - (API) Implemented copper chains.
+- (API) Implemented heads.
 
 ### Changed
 

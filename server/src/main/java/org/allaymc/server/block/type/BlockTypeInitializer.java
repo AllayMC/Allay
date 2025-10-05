@@ -1900,4 +1900,23 @@ public final class BlockTypeInitializer {
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
+
+    public static void initHeads() {
+        BlockTypes.CREEPER_HEAD = buildHead(BlockId.CREEPER_HEAD);
+        BlockTypes.DRAGON_HEAD = buildHead(BlockId.DRAGON_HEAD);
+        BlockTypes.PIGLIN_HEAD = buildHead(BlockId.PIGLIN_HEAD);
+        BlockTypes.PLAYER_HEAD = buildHead(BlockId.PLAYER_HEAD);
+        BlockTypes.ZOMBIE_HEAD = buildHead(BlockId.ZOMBIE_HEAD);
+        BlockTypes.SKELETON_SKULL = buildHead(BlockId.SKELETON_SKULL);
+        BlockTypes.WITHER_SKELETON_SKULL = buildHead(BlockId.WITHER_SKELETON_SKULL);
+    }
+
+    private static BlockType<BlockHeadBehavior> buildHead(BlockId blockId) {
+        return AllayBlockType
+                .builder(BlockHeadBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                .setBaseComponentSupplier(BlockHeadBaseComponentImpl::new)
+                .build();
+    }
 }
