@@ -17,6 +17,7 @@ import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -241,7 +242,7 @@ public class StatusCommand extends VanillaCommand {
         // MAC address detection
         var networkIFs = hardware.getNetworkIFs();
         for (var nif : networkIFs) {
-            var mac = nif.getMacaddr().toUpperCase();
+            var mac = nif.getMacaddr().toUpperCase(Locale.ROOT);
             var oui = mac.length() > 7 ? mac.substring(0, 8) : mac;
             var vmMac = VM_MAC.get(oui);
             if (vmMac != null) {
@@ -269,7 +270,7 @@ public class StatusCommand extends VanillaCommand {
 
         // Check Windows system parameters
         // WMI virtual machine query only on Windows
-        var osName = System.getProperties().getProperty("os.name", "").toUpperCase();
+        var osName = System.getProperties().getProperty("os.name", "").toUpperCase(Locale.ROOT);
         if (osName.contains("WINDOWS")) {
             var wmiQuery = new WbemcliUtil.WmiQuery<>("Win32_ComputerSystem", ComputerSystemEntry.class);
             var result = WmiQueryHandler.createInstance().queryWMI(wmiQuery);

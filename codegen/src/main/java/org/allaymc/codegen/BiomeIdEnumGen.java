@@ -7,10 +7,7 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author daoge_cmd | IWareQ | Cool_Loong
@@ -80,7 +77,7 @@ public class BiomeIdEnumGen {
             var identifier = "minecraft:" + entry.getKey();
             var id = entry.getValue().id;
             var type = entry.getValue().type;
-            codeBuilder.addEnumConstant(entry.getKey().toUpperCase(), TypeSpec.anonymousClassBuilder("$S, $L, $S", identifier, id, type).build());
+            codeBuilder.addEnumConstant(entry.getKey().toUpperCase(Locale.ROOT), TypeSpec.anonymousClassBuilder("$S, $L, $S", identifier, id, type).build());
         }
 
         codeBuilder.addMethod(MethodSpec

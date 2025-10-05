@@ -2,11 +2,11 @@ package org.allaymc.api.entity.component;
 
 public interface EntityUndeadComponent extends EntityComponent {
     /**
-     * Check if the entity will catch fire under sunlight.
+     * Check if sunlight will ignite the entity.
      *
-     * @return {@code true} if the entity will catch fire under sunlight, otherwise {@code false}.
+     * @return {@code true} if the entity will be ignited by sunlight, {@code false} otherwise
      */
-    default boolean getCatchesFireUnderSunlight() {
+    default boolean ignitedBySunlight() {
         return true;
     }
 }

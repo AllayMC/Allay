@@ -32,7 +32,7 @@ public class EnumNode extends BaseNode {
 
     protected String[] checkValues(String[] values) {
         for (int index = 0; index < values.length; index++) {
-            var lowerCase = values[index].toLowerCase();
+            var lowerCase = values[index].toLowerCase(Locale.ROOT);
             if (!values[index].equals(lowerCase)) {
                 log.warn("Upper case character is not allowed in command enum value! Value: {}", values[index]);
                 values[index] = lowerCase;

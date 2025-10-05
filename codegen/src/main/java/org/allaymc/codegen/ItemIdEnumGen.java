@@ -87,7 +87,7 @@ public class ItemIdEnumGen {
             var split = StringUtils.fastTwoPartSplit(
                     StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1],
                     ".", "");
-            var valueName = split[0].isBlank() ? split[1].toUpperCase() : split[0].toUpperCase() + "_" + split[1].toUpperCase();
+            var valueName = split[0].isBlank() ? split[1].toUpperCase(Locale.ROOT) : split[0].toUpperCase(Locale.ROOT) + "_" + split[1].toUpperCase(Locale.ROOT);
             codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue()).build());
         }
     }

@@ -635,9 +635,9 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
      * Check existence of config section element
      */
     public boolean exists(String key, boolean ignoreCase) {
-        if (ignoreCase) key = key.toLowerCase();
+        if (ignoreCase) key = key.toLowerCase(Locale.ROOT);
         for (String existKey : this.getKeys(true)) {
-            if (ignoreCase) existKey = existKey.toLowerCase();
+            if (ignoreCase) existKey = existKey.toLowerCase(Locale.ROOT);
             if (existKey.equals(key)) return true;
         }
         return false;

@@ -25,13 +25,15 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
-- (API) Renamed `SimpleSound.SIGN_WAXED` to `SimpleSound.WAXED`.
+- (API) Renamed field `SimpleSound.SIGN_WAXED` to `SimpleSound.WAXED`.
+- (API) Renamed method `EntityUndeadComponent.getCatchesFireUnderSunlight()` to `EntityUndeadComponent.ignitedBySunlight()`.
 
 ### Fixed
 
 - Disabled dead timer for item entity.
 - Fixed fire damage wasn't given when the on fire tick is continuously updated.
 - Fixed the bug that air supply, effect particle, and on fire state are invisible.
+- Fixed an issue where the server could not be launched in certain locales (e.g. Turkey).
 
 ### Removed
 

@@ -7,6 +7,7 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class BlockPropertyTypeGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(MINECRAFT_VERSION_SENSITIVE);
         for (var entry : BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.entrySet()) {
-            var key = entry.getKey().toUpperCase();
+            var key = entry.getKey().toUpperCase(Locale.ROOT);
             var blockPropertyTypeInfo = entry.getValue();
             var name = blockPropertyTypeInfo.serializationName;
             switch (blockPropertyTypeInfo.valueType) {
@@ -89,7 +90,7 @@ public class BlockPropertyTypeGen {
             }
         }
         var listClass = ParameterizedTypeName.get(LIST, ParameterizedTypeName.get(BLOCK_PROPERTY_TYPE, WildcardTypeName.subtypeOf(Object.class)));
-        String paramStr = BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.keySet().stream().map(String::toUpperCase).collect(Collectors.joining(", "));
+        String paramStr = BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.keySet().stream().map(s -> s.toUpperCase(Locale.ROOT)).collect(Collectors.joining(", "));
         codeBuilder.addField(
                 FieldSpec
                         .builder(listClass, "VALUES", Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
@@ -109,7 +110,7 @@ public class BlockPropertyTypeGen {
         TypeSpec.Builder enumBuilder = TypeSpec.enumBuilder(enumName)
                 .addModifiers(Modifier.PUBLIC);
         for (var value : info.values) {
-            enumBuilder.addEnumConstant(value.toUpperCase());
+            enumBuilder.addEnumConstant(value.toUpperCase(Locale.ROOT));
         }
 
         var path = ENUM_PATH.resolve(enumName + ".java");

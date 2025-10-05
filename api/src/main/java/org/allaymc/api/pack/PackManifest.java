@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.utils.SemVersion;
 
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents the manifest for a pack.
@@ -95,7 +92,7 @@ public class PackManifest {
 
             @Override
             public JsonElement serialize(Capability src, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.name().toLowerCase());
+                return new JsonPrimitive(src.name().toLowerCase(Locale.ROOT));
             }
         }
 
@@ -103,7 +100,7 @@ public class PackManifest {
 
             @Override
             public Capability deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return Capability.valueOf(json.getAsString().toUpperCase());
+                return Capability.valueOf(json.getAsString().toUpperCase(Locale.ROOT));
             }
         }
     }

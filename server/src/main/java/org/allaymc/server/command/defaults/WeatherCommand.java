@@ -4,6 +4,8 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.world.data.Weather;
 
+import java.util.Locale;
+
 /**
  * @author daoge_cmd
  */
@@ -26,7 +28,7 @@ public class WeatherCommand extends VanillaCommand {
             return context.success();
         }).root().key("query").exec(context -> {
             var weather = context.getSender().getCommandExecuteLocation().dimension().getWorld().getWeather();
-            context.getSender().sendTranslatable(TrKeys.MC_COMMANDS_WEATHER_QUERY, weather.name().toLowerCase());
+            context.getSender().sendTranslatable(TrKeys.MC_COMMANDS_WEATHER_QUERY, weather.name().toLowerCase(Locale.ROOT));
             return context.success();
         });
     }

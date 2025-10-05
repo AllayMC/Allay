@@ -6,6 +6,7 @@ import org.allaymc.api.utils.Utils;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * @author daoge_cmd
@@ -44,7 +45,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
         if (enumClass.isInstance(value)) {
             return cachedValues.get(enumClass.cast(value));
         } else if (value instanceof String str) {
-            return cachedValues.get(Enum.valueOf(enumClass, str.toUpperCase()));
+            return cachedValues.get(Enum.valueOf(enumClass, str.toUpperCase(Locale.ROOT)));
         }
         throw new IllegalArgumentException("Invalid value for enum property type: " + value);
     }
@@ -55,7 +56,7 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
 
         EnumPropertyValue(T value) {
             super(EnumPropertyType.this, value);
-            this.serializedValue = value.name().toLowerCase();
+            this.serializedValue = value.name().toLowerCase(Locale.ROOT);
         }
 
         @Override

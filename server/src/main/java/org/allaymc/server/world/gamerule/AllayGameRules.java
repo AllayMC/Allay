@@ -9,10 +9,7 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -55,7 +52,7 @@ public class AllayGameRules implements GameRules {
     public static AllayGameRules readFromNBT(NbtMap nbt) {
         Map<GameRule, Object> gameRules = new HashMap<>();
         for (GameRule gameRule : GameRule.values()) {
-            var key = gameRule.getName().toLowerCase();
+            var key = gameRule.getName().toLowerCase(Locale.ROOT);
             if (nbt.containsKey(key)) {
                 switch (gameRule.getType()) {
                     case INT -> gameRules.put(gameRule, nbt.getInt(key));
@@ -103,7 +100,7 @@ public class AllayGameRules implements GameRules {
     public void writeToNBT(NbtMapBuilder builder) {
         for (Map.Entry<GameRule, Object> entry : this.gameRules.entrySet()) {
             // Lower case name should be used for key
-            var key = entry.getKey().getName().toLowerCase();
+            var key = entry.getKey().getName().toLowerCase(Locale.ROOT);
             switch (entry.getKey().getType()) {
                 case INT -> builder.putInt(key, (Integer) entry.getValue());
                 case BOOLEAN -> builder.putBoolean(key, (Boolean) entry.getValue());

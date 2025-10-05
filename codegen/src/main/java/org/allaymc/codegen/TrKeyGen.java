@@ -10,6 +10,7 @@ import org.allaymc.dependence.Identifier;
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 
 /**
  * @author daoge_cmd | IWareQ
@@ -30,7 +31,7 @@ public class TrKeyGen {
         for (var key : keys) {
             var identifier = new Identifier(key);
             var namespace = handleNamespace(identifier.namespace());
-            var path = identifier.path().replaceAll("\\.", "_").replaceAll("-", "_").toUpperCase();
+            var path = identifier.path().replaceAll("\\.", "_").replaceAll("-", "_").toUpperCase(Locale.ROOT);
             var fieldName = namespace + "_" + path;
             codeBuilder.addField(
                     FieldSpec
@@ -54,7 +55,7 @@ public class TrKeyGen {
         return switch (origin) {
             case "minecraft" -> "MC";
             case "allay" -> "ALLAY";
-            default -> origin.toUpperCase();
+            default -> origin.toUpperCase(Locale.ROOT);
         };
     }
 }

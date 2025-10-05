@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 import static org.allaymc.codegen.ClassNames.*;
 
@@ -43,7 +44,7 @@ public class TagGen {
         }
 
         for (var key : keys) {
-            var fieldName = key.split(":")[1].toUpperCase();
+            var fieldName = key.split(":")[1].toUpperCase(Locale.ROOT);
             interfaceBuilder.addField(
                     FieldSpec.builder(tagClass, fieldName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

@@ -2,6 +2,8 @@ package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandNode;
 
+import java.util.Locale;
+
 import static org.allaymc.api.player.GameMode.*;
 
 /**
@@ -22,7 +24,7 @@ public class GameModeNode extends EnumNode {
 
     @Override
     protected Object argToResult(String arg) {
-        return switch (arg.trim().toLowerCase()) {
+        return switch (arg.trim().toLowerCase(Locale.ROOT)) {
             case "0", "survival", "s" -> SURVIVAL;
             case "1", "creative", "c" -> CREATIVE;
             case "2", "adventure", "a" -> ADVENTURE;

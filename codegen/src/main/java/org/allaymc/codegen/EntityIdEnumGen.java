@@ -9,6 +9,7 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -61,10 +62,7 @@ public class EntityIdEnumGen {
                         .build()
                 );
         for (var entry : ENTITY_ID_MAP.entrySet()) {
-            var valueName = StringUtils.fastTwoPartSplit(
-                    entry.getKey(),
-                    ":",
-                    "")[1].toUpperCase();
+            var valueName = StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1].toUpperCase(Locale.ROOT);
             codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
         }
 
@@ -89,10 +87,7 @@ public class EntityIdEnumGen {
                         .build()
                 );
         for (var entry : ENTITY_ID_MAP.entrySet()) {
-            var valueName = StringUtils.fastTwoPartSplit(
-                    entry.getKey(),
-                    ":",
-                    "")[1].toUpperCase();
+            var valueName = StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1].toUpperCase(Locale.ROOT);
             codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S", entry.getKey()).build());
         }
 

@@ -8,6 +8,7 @@ import org.allaymc.api.utils.SemVersion;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
+import java.util.Locale;
 import java.util.UUID;
 
 /**
@@ -121,14 +122,14 @@ public abstract class Pack implements AutoCloseable {
         public static class Serializer implements JsonSerializer<Type> {
             @Override
             public JsonElement serialize(Type src, java.lang.reflect.Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.name().toLowerCase());
+                return new JsonPrimitive(src.name().toLowerCase(Locale.ROOT));
             }
         }
 
         public static class Deserializer implements JsonDeserializer<Type> {
             @Override
             public Type deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return Type.valueOf(json.getAsString().toUpperCase());
+                return Type.valueOf(json.getAsString().toUpperCase(Locale.ROOT));
             }
         }
     }

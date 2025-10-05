@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.lang.reflect.Array;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
@@ -65,7 +66,7 @@ public class PersistentDataContainerTest {
     }
 
     private static Identifier requestKey(String keyName) {
-        return new Identifier("test-plugin", keyName.toLowerCase());
+        return new Identifier("test-plugin", keyName.toLowerCase(Locale.ROOT));
     }
 
     private static ItemStack createNewItemStack() {

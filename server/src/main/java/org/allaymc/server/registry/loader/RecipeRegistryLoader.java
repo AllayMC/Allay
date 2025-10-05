@@ -161,7 +161,7 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
         return new FurnaceRecipe(
                 RecipeJsonUtils.parseItemStack(obj.getAsJsonObject("input")),
                 RecipeJsonUtils.parseOutput(obj.getAsJsonObject("output")),
-                FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase())
+                FurnaceRecipe.Type.valueOf(obj.get("tag").getAsString().toUpperCase(Locale.ROOT))
         );
     }
 

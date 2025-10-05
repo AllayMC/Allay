@@ -2,6 +2,8 @@ package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandNode;
 
+import java.util.Locale;
+
 /**
  * @author daoge_cmd
  */
@@ -24,7 +26,7 @@ public class EnumClassNode extends EnumIgnoreCaseNode {
         var values = new String[enumConstants.length];
         for (int index = 0; index < enumConstants.length; index++) {
             var e = enumConstants[index];
-            values[index] = e.name().toLowerCase();
+            values[index] = e.name().toLowerCase(Locale.ROOT);
         }
         return values;
     }

@@ -48,7 +48,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("creative_groups.json")))) {
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
                 var group = entry.getAsJsonObject();
-                var category = getCategory(Type.valueOf(group.get("category").getAsString().toUpperCase()));
+                var category = getCategory(Type.valueOf(group.get("category").getAsString().toUpperCase(Locale.ROOT)));
                 var name = group.get("name").getAsString();
                 if (name.isEmpty()) {
                     category.registerUnnamedGroup();
@@ -69,7 +69,7 @@ public class AllayCreativeItemRegistry implements CreativeItemRegistry {
                 var itemType = Registries.ITEMS.get(itemTypeName);
                 Objects.requireNonNull(itemType, "Unknown item type: " + itemTypeName);
 
-                var category = getCategory(Type.valueOf(item.getString("category").toUpperCase()));
+                var category = getCategory(Type.valueOf(item.getString("category").toUpperCase(Locale.ROOT)));
                 var itemStack = itemType.createItemStack(
                         ItemStackInitInfo
                                 .builder().count(1).meta(item.getShort("damage"))

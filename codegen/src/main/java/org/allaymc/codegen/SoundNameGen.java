@@ -10,6 +10,7 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -29,7 +30,7 @@ public class SoundNameGen {
 
         for (var name : names) {
             codeBuilder.addField(
-                    FieldSpec.builder(ClassNames.STRING, name.replace(".", "_").toUpperCase(), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                    FieldSpec.builder(ClassNames.STRING, name.replace(".", "_").toUpperCase(Locale.ROOT), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("$S", name)
                             .build()
             );
