@@ -24,6 +24,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
+- (API) Renamed `SimpleSound.SIGN_WAXED` to `SimpleSound.WAXED`.
+
 ### Fixed
 
 - Disabled dead timer for item entity.

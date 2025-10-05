@@ -889,7 +889,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 this.clientComponent.sendPacket(levelEvent);
                 return;
             }
-            case SimpleSound.SIGN_WAXED -> {
+            case SimpleSound.WAXED -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.PARTICLE_WAX_ON);
                 levelEvent.setPosition(pos.toFloat());

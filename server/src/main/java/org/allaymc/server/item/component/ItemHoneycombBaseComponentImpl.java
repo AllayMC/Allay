@@ -35,7 +35,7 @@ public class ItemHoneycombBaseComponentImpl extends ItemBaseComponentImpl {
         var oldBlock = new Block(dimension.getBlockState(clickedBlockPos), new Position3i(clickedBlockPos, dimension), 0);
         dimension.setBlockState(clickedBlockPos, nextBlockType.copyPropertyValuesFrom(oldBlock.getBlockState()));
         interactInfo.player().tryConsumeItemInHand();
-        dimension.addSound(clickedBlockPos, SimpleSound.SIGN_WAXED);
+        dimension.addSound(clickedBlockPos, SimpleSound.WAXED);
         return true;
     }
 }

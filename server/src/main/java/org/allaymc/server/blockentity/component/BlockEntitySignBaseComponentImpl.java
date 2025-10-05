@@ -131,7 +131,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
             setWaxed(true);
             player.tryConsumeItemInHand();
-            player.getDimension().addSound(position.x(), position.y(), position.z(), SimpleSound.SIGN_WAXED);
+            player.getDimension().addSound(position.x(), position.y(), position.z(), SimpleSound.WAXED);
             event.setSuccess(true);
             return;
         }
