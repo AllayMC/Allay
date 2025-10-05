@@ -903,21 +903,6 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockBaseComponentSupplier);
     }
 
-    public static void initRods() {
-        BlockTypes.END_ROD = AllayBlockType
-                .builder(BlockEndRodBehaviorImpl.class)
-                .vanillaBlock(BlockId.END_ROD)
-                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockEndRodBaseComponentImpl::new)
-                .build();
-        BlockTypes.LIGHTNING_ROD = AllayBlockType
-                .builder(BlockLightningRodBehaviorImpl.class)
-                .vanillaBlock(BlockId.LIGHTNING_ROD)
-                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
-                .setBaseComponentSupplier(BlockLightningRodBaseComponentImpl::new)
-                .build();
-    }
-
     private static <T extends BlockBehavior> BlockType<T> buildWoodenButton(BlockId blockId) {
         return buildButton(blockId, BlockWoodenButtonBaseComponentImpl::new);
     }
@@ -1776,6 +1761,40 @@ public final class BlockTypeInitializer {
                 .builder(BlockNoteblockBehaviorImpl.class)
                 .vanillaBlock(BlockId.NOTEBLOCK)
                 .bindBlockEntity(BlockEntityTypes.NOTEBLOCK)
+                .build();
+    }
+
+    public static void initRods() {
+        BlockTypes.END_ROD = AllayBlockType
+                .builder(BlockEndRodBehaviorImpl.class)
+                .vanillaBlock(BlockId.END_ROD)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                .setBaseComponentSupplier(BlockEndRodBaseComponentImpl::new)
+                .build();
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> lightningRod = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_LIGHTNING_ROD : BlockTypes.LIGHTNING_ROD;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_LIGHTNING_ROD : BlockTypes.EXPOSED_LIGHTNING_ROD;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_LIGHTNING_ROD : BlockTypes.WEATHERED_LIGHTNING_ROD;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_LIGHTNING_ROD : BlockTypes.OXIDIZED_LIGHTNING_ROD;
+        };
+
+        BlockTypes.LIGHTNING_ROD = buildLightningRod(BlockId.LIGHTNING_ROD, OxidationLevel.UNAFFECTED, lightningRod);
+        BlockTypes.EXPOSED_LIGHTNING_ROD = buildLightningRod(BlockId.EXPOSED_LIGHTNING_ROD, OxidationLevel.EXPOSED, lightningRod);
+        BlockTypes.WEATHERED_LIGHTNING_ROD = buildLightningRod(BlockId.WEATHERED_LIGHTNING_ROD, OxidationLevel.WEATHERED, lightningRod);
+        BlockTypes.OXIDIZED_LIGHTNING_ROD = buildLightningRod(BlockId.OXIDIZED_LIGHTNING_ROD, OxidationLevel.OXIDIZED, lightningRod);
+        BlockTypes.WAXED_LIGHTNING_ROD = buildLightningRod(BlockId.WAXED_LIGHTNING_ROD, OxidationLevel.UNAFFECTED, lightningRod);
+        BlockTypes.WAXED_EXPOSED_LIGHTNING_ROD = buildLightningRod(BlockId.WAXED_EXPOSED_LIGHTNING_ROD, OxidationLevel.EXPOSED, lightningRod);
+        BlockTypes.WAXED_WEATHERED_LIGHTNING_ROD = buildLightningRod(BlockId.WAXED_WEATHERED_LIGHTNING_ROD, OxidationLevel.WEATHERED, lightningRod);
+        BlockTypes.WAXED_OXIDIZED_LIGHTNING_ROD = buildLightningRod(BlockId.WAXED_OXIDIZED_LIGHTNING_ROD, OxidationLevel.OXIDIZED, lightningRod);
+    }
+
+    private static BlockType<BlockLightningRodBehavior> buildLightningRod(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+        return AllayBlockType
+                .builder(BlockLightningRodBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(BlockLightningRodBaseComponentImpl::new)
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
                 .build();
     }
 }

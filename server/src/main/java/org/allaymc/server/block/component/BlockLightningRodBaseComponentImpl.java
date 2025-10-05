@@ -5,6 +5,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.component.copper.BlockCopperBaseComponentImpl;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
@@ -12,7 +13,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRE
 /**
  * @author IWareQ
  */
-public class BlockLightningRodBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockLightningRodBaseComponentImpl extends BlockCopperBaseComponentImpl {
     public BlockLightningRodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }

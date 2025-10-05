@@ -138,6 +138,7 @@ public abstract class ComponentClass {
                 if (count == 0) {
                     throw new ComponentInjectException("Cannot find component " + type.getName() + " for " + instance.getClass().getName());
                 }
+
                 // Inject component
                 var component = components.getFirst();
                 try {

@@ -41,7 +41,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         }
 
         var current = event.getBlock();
-        var currentLevel = this.getOxidationLevel().ordinal();
+        var currentLevel = this.oxidationLevel.ordinal();
 
         int higherOxidizedBlocks = 0;
         int sameOxidizedBlocks = 0;
@@ -83,7 +83,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
 
     @Override
     public BlockType<?> getBlockWithOxidationLevel(OxidationLevel oxidationLevel) {
-        return blockTypeFunction.apply(oxidationLevel, this.isWaxed());
+        return blockTypeFunction.apply(oxidationLevel, isWaxed());
     }
 
     @Override
@@ -93,6 +93,6 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
 
     @Override
     public BlockType<?> getBlockWithWaxed(boolean waxed) {
-        return blockTypeFunction.apply(this.getOxidationLevel(), waxed);
+        return blockTypeFunction.apply(this.oxidationLevel, waxed);
     }
 }
