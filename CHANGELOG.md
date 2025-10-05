@@ -19,6 +19,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented void damage. New methods `EntityLivingComponent.hasVoidDamage()` and `DamageContainer.voidDamage()` were added.
 - (API) Implemented lightning rods.
 - (API) Implemented (copper) lanterns.
+- (API) Implemented copper golem statues.
 
 ### Changed
 
@@ -26,7 +27,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Disabled dead timer for item entity.
 - Fixed fire damage wasn't given when the on fire tick is continuously updated.
-- Fixed the bug that air supply, effect particle and on fire state are invisible.
+- Fixed the bug that air supply, effect particle, and on fire state are invisible.
 
 ### Removed
 
@@ -414,8 +415,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added `DamageContainer#fallingBlock(float)`.
 - (API) Added `BlockStateWithPos#updateBlockProperty(BlockPropertyType<DATATYPE>, DATATYPE)` method.
-- Added Glided Blackstone, Gravel and Glowstone drop.
-- Implemented ladder, infested blocks, ice, snow, sea lantern, dead bush and end portal frame behavior.
+- Added Glided Blackstone, Gravel, and Glowstone drop.
+- Implemented ladder, infested blocks, ice, snow, sea lantern, dead bush, and end portal frame behavior.
 - Implemented basic behavior for scaffolding.
 - Implemented chorus plant & flower behavior.
 - Implemented walls & fence gate behavior.
@@ -435,7 +436,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Fixed `DIRECTION_4` mapper.
 - Fixed swords block breaking time.
 - Fixed `NullPointerException` when breathe disabled.
-- Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass and Wheat drops.
+- Fixed Beetroot, Carrots, Leaves, Potatoes, Redstone Ore, Grass, and Wheat drops.
 - Fixed `SetTimePacket` spamming.
 - Fixed random bounds.
 - Fixed `BlockBreakEvent` cancelling.
@@ -541,14 +542,14 @@ Unless otherwise specified, any version comparison below is the comparison of se
   that will be shown to the client when cancelling these events.
 - (API) Implemented flower pot, and add custom block tag `allay:pottable_plant` which mark thant the plant can be potted.
 - (API) Introduced PDC (Persistent Data Container) system. The PDC is a way to store custom data on a whole range of objects, such as
-  items, entities, block entities and world. More PDC types will be added in the future.
+  items, entities, block entities, and world. More PDC types will be added in the future.
 - (API) Added `ItemType#getItemData` method which replaces the old `ItemDataComponent`.
 - (API) Introduced new option `entity-auto-save-cycle` in `ServerSettings` to control the interval of entity auto save.
 - (API) Entities are now held by `EntityService` directly, and a variety of new methods are added into `EntityService`. See the commit
   history for more details.
 - (API) Introduced `WorldStorage#readEntities`, `WorldStorage#writeEntities` and their correspond sync methods. These methods are used
   to read and write entities in a specified chunk area.
-- (API) Introduced a variety of methods for sending toast, title, subtitle and actionbar text to player, and new command `/title` is added.
+- (API) Introduced a variety of methods for sending toast, title, subtitle, and actionbar text to player, and new command `/title` is added.
 - (API) Introduced `CommandNode#permission` method which can be used to set the permission requirement for accessing a specified command node.
   This is useful for setting permission for sub commands.
 - Add support for bedrock 1.21.60.
@@ -562,7 +563,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
-- (API) We now used `double`  instead of `float` in entity location, motion, aabb and some other classes which require high precision.
+- (API) We now used `double`  instead of `float` in entity location, motion, aabb, and some other classes which require high precision.
   This should improve the accuracy of entity movement and collision detection.
 - (API) Renamed `FullContainerTypeBuilder` to `Builder`.
 - (API) Moved method `Chunk#isLoaded` to `UnsafeChunk#isLoaded`.
@@ -670,11 +671,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
   which can be used to customize the drag factor of an entity.
 - (API) Introduced event `EntityExplodeEvent` which will be called when tnt or creeper(WIP) is about to explode.
 - (API) Introduced method `EntityBaseComponent#isTouchingWater` to check if an entity is touching water.
-- (API) Implemented TNT entity, block and related features. Several related interfaces are added to api module.
+- (API) Implemented TNT entity, block, and related features. Several related interfaces are added to api module.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Implemented farmland and hoe.
-- Implemented most of the crops, including wheat, potato, carrot, beetroot, melon and pumpkin.
+- Implemented most of the crops, including wheat, potato, carrot, beetroot, melon, and pumpkin.
 - Introduced [sentry](https://www.sentry.io) to capture exception and upload them to sentry server automatically, which
   helps us to track and fix bug more efficiently. Sentry is only enabled in non-dev version.
 - Server version will also be uploaded to bStats now.
@@ -790,7 +791,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   `BlockBehavior#onPlace` and `BlockBehavior#onReplace`.
 - (API) Added `BlockStateData#liquidReactionOnTouch`, there are also a number of new methods in `BlockStateData`.
 - Added `/structure` command to manage structures.
-- Implemented liquid features including water, lava and related features.
+- Implemented liquid features including water, lava, and related features.
 
 ### Changed
 

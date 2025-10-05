@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component;
+package org.allaymc.server.block.component.slab;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockSlabBaseComponent;
@@ -9,6 +9,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.data.BlockId;
 import org.joml.Vector3ic;
 

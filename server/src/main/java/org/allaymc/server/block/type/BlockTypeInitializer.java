@@ -16,8 +16,8 @@ import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
-import org.allaymc.server.block.component.copper.*;
 import org.allaymc.server.block.component.crops.*;
+import org.allaymc.server.block.component.door.BlockCopperDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
@@ -32,6 +32,12 @@ import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
+import org.allaymc.server.block.component.slab.BlockCopperDoubleSlabBaseComponentImpl;
+import org.allaymc.server.block.component.slab.BlockCopperSlabBaseComponentImpl;
+import org.allaymc.server.block.component.slab.BlockDoubleSlabBaseComponentImpl;
+import org.allaymc.server.block.component.slab.BlockSlabBaseComponentImpl;
+import org.allaymc.server.block.component.stairs.BlockCopperStairsBaseComponentImpl;
+import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.data.BlockId;
@@ -1836,6 +1842,34 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockCopperLanternBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .setProperties(BlockPropertyTypes.HANGING)
+                .build();
+    }
+
+    public static void initCopperGolemStatues() {
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperGolemStatue = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_GOLEM_STATUE : BlockTypes.COPPER_GOLEM_STATUE;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_GOLEM_STATUE : BlockTypes.EXPOSED_COPPER_GOLEM_STATUE;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_GOLEM_STATUE : BlockTypes.WEATHERED_COPPER_GOLEM_STATUE;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_COPPER_GOLEM_STATUE : BlockTypes.OXIDIZED_COPPER_GOLEM_STATUE;
+        };
+
+        BlockTypes.COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.COPPER_GOLEM_STATUE, OxidationLevel.UNAFFECTED, copperGolemStatue);
+        BlockTypes.EXPOSED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.EXPOSED_COPPER_GOLEM_STATUE, OxidationLevel.EXPOSED, copperGolemStatue);
+        BlockTypes.WEATHERED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.WEATHERED_COPPER_GOLEM_STATUE, OxidationLevel.WEATHERED, copperGolemStatue);
+        BlockTypes.OXIDIZED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.OXIDIZED_COPPER_GOLEM_STATUE, OxidationLevel.OXIDIZED, copperGolemStatue);
+        BlockTypes.WAXED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.WAXED_COPPER_GOLEM_STATUE, OxidationLevel.UNAFFECTED, copperGolemStatue);
+        BlockTypes.WAXED_EXPOSED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.WAXED_EXPOSED_COPPER_GOLEM_STATUE, OxidationLevel.EXPOSED, copperGolemStatue);
+        BlockTypes.WAXED_WEATHERED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.WAXED_WEATHERED_COPPER_GOLEM_STATUE, OxidationLevel.WEATHERED, copperGolemStatue);
+        BlockTypes.WAXED_OXIDIZED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.WAXED_OXIDIZED_COPPER_GOLEM_STATUE, OxidationLevel.OXIDIZED, copperGolemStatue);
+    }
+
+    private static BlockType<BlockCopperGolemStatueBehavior> buildCopperGolemStatue(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+        return AllayBlockType
+                .builder(BlockCopperGolemStatueBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockCopperBaseComponentImpl::new)
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
 }

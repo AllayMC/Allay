@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.copper;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.PlayerInteractInfo;

@@ -26,18 +26,13 @@ public class ItemHoneycombBaseComponentImpl extends ItemBaseComponentImpl {
             return false;
         }
 
-        var waxed = oxidationComponent.isWaxed();
-        if (waxed) {
+        if (oxidationComponent.isWaxed()) {
             return false;
         }
 
         var clickedBlockPos = interactInfo.clickedBlockPos();
         var nextBlockType = oxidationComponent.getBlockWithWaxed(true);
-        var oldBlock = new Block(
-                dimension.getBlockState(clickedBlockPos),
-                new Position3i(clickedBlockPos, dimension),
-                0
-        );
+        var oldBlock = new Block(dimension.getBlockState(clickedBlockPos), new Position3i(clickedBlockPos, dimension), 0);
         dimension.setBlockState(clickedBlockPos, nextBlockType.copyPropertyValuesFrom(oldBlock.getBlockState()));
         interactInfo.player().tryConsumeItemInHand();
         dimension.addSound(clickedBlockPos, SimpleSound.SIGN_WAXED);

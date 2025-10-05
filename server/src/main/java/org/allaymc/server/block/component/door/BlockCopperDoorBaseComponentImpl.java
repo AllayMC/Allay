@@ -1,10 +1,9 @@
-package org.allaymc.server.block.component.copper;
+package org.allaymc.server.block.component.door;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockOxidationComponent;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.component.annotation.Dependency;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
