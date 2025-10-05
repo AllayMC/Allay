@@ -1917,6 +1917,7 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockHeadBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HEAD)
                 .build();
     }
 }

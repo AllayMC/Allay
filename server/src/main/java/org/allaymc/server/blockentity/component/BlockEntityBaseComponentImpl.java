@@ -118,7 +118,6 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         return true;
     }
 
-
     /**
      * @see #sendBlockEntityToViewers(boolean)
      */

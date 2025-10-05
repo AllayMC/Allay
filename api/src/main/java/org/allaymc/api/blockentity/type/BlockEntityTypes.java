@@ -24,4 +24,5 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityItemFrame> ITEM_FRAME;
     public static BlockEntityType<BlockEntityGlowItemFrame> GLOW_ITEM_FRAME;
     public static BlockEntityType<BlockEntityNoteblock> NOTEBLOCK;
+    public static BlockEntityType<BlockEntityHead> HEAD;
 }

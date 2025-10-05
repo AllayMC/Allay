@@ -13,10 +13,13 @@ import java.util.List;
  * @author harry-xi
  */
 public class BlockEntityBedImpl extends BlockEntityImpl implements BlockEntityBed {
-    @Delegate
-    BlockEntityBedBaseComponent blockEntityBed;
-
     public BlockEntityBedImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
+    }
+
+    @Delegate
+    @Override
+    public BlockEntityBedBaseComponent getBaseComponent() {
+        return (BlockEntityBedBaseComponent) super.getBaseComponent();
     }
 }
