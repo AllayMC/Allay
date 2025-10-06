@@ -38,10 +38,13 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.VisibleForTesting;
 import org.joml.Vector3ic;
+import org.joml.primitives.AABBd;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
 
 /**
  * @author daoge_cmd
@@ -397,12 +400,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
-        var blockAABB = blockState.getBlockStateData().computeOffsetCollisionShape(
-                placePos.x(),
-                placePos.y(),
-                placePos.z()
-        );
-        return !dimension.getEntityManager().getPhysicsService().computeCollidingEntities(blockAABB).isEmpty();
+        var collisionShape = blockState.getBlockStateData().computeOffsetCollisionShape(placePos);
+        return dimension.getEntityManager().getPhysicsService()
+                .computeCollidingEntities(collisionShape)
+                .stream()
+                // Shrink the entities' aabb slightly and check if there are still collisions. This allows placing block next to entities like painting
+                .anyMatch(entity -> collisionShape.intersectsAABB(entity.getOffsetAABB().expand(-FAT_AABB_MARGIN, new AABBd())));
     }
 
     @Override

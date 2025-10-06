@@ -400,8 +400,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     @Override
     public List<Entity> computeCollidingEntities(AABBdc aabb, AABBOverlapFilter<Entity> predicate) {
         var result = new LinkedList<Entity>();
-        // Entities must intersect to a certain extent (FAT_AABB_MARGIN) before they are considered to have collided
-        entityAABBTree.detectOverlaps(aabb.expand(-FAT_AABB_MARGIN, new AABBd()), predicate, result);
+        entityAABBTree.detectOverlaps(aabb, predicate, result);
         return result;
     }
 

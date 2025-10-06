@@ -4,10 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.world.Dimension;
-import org.joml.Vector3ic;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
@@ -119,47 +116,5 @@ public enum PaintingType {
         MathUtils.grow(aabb, BlockFace.UP, -verticalStart + this.height - 1);
 
         return aabb;
-    }
-
-    /**
-     * Determines whether a painting of this type can be placed at the specified block position and facing.
-     * The method checks whether the blocks below and opposite the painting's placement are solid, and,
-     * optionally, whether the space overlaps with other painting entities.
-     *
-     * @param dimension    the dimension where the painting is being placed
-     * @param paintingPos  the painting's position
-     * @param blockFace    the face of the block where the painting should be oriented
-     * @param checkOverlap {@code true} if the method should check for collisions with other entities, {@code false} otherwise
-     * @return {@code true} if the painting can be placed at the specified position and facing, {@code false} otherwise
-     */
-    public boolean canPlace(Dimension dimension, Vector3ic paintingPos, BlockFace blockFace, boolean checkOverlap) {
-        var horizontalStart = (int) (Math.ceil(this.width / 2d) - 1);
-        var verticalStart = (int) (Math.ceil(this.height / 2d) - 1);
-
-        var rotatedFace = blockFace.rotateYCCW();
-        var oppositeFace = blockFace.opposite();
-
-        var startPos = BlockFace.DOWN.offsetPos(rotatedFace.opposite().offsetPos(paintingPos, horizontalStart), verticalStart);
-
-        for (var w = 0; w < this.width; w++) {
-            for (var h = 0; h < this.height; h++) {
-                var pos = BlockFace.UP.offsetPos(rotatedFace.offsetPos(startPos, w), h);
-                if (dimension.getBlockState(pos).getBlockStateData().isSolid() ||
-                    !dimension.getBlockState(oppositeFace.offsetPos(pos)).getBlockStateData().isSolid()) {
-                    return false;
-                }
-            }
-        }
-
-        if (checkOverlap) {
-            var aabb = getAABB(blockFace).translate(paintingPos.x(), paintingPos.y(), paintingPos.z(), new AABBd());
-            for (var entity : dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb)) {
-                if (entity.getEntityType() == EntityTypes.PAINTING) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 }

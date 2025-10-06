@@ -35,8 +35,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed method `EntityUndeadComponent.getCatchesFireUnderSunlight()` to `EntityUndeadComponent.ignitedBySunlight()`.
 - (API) Changed the return type of methods `Entity.getOffsetAABB()` and `Entity.getOffsetAABBForCollisionCheck()`. They return `AABBdc` instead of `AABBd` now.
 - Changed the behavior of method `EntityLivingComponent.kill()`. It now applies 1,000,000 damage to the entity instead of setting the health to zero directly.
-- Changed collision rules between entities. Entities must now intersect to a certain extent before they are considered colliding, which allows entities such as
-  paintings to be placed side by side.
 
 ### Fixed
 
