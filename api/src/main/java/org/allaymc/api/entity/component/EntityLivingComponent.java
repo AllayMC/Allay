@@ -281,10 +281,10 @@ public interface EntityLivingComponent extends EntityComponent {
     }
 
     /**
-     * Kills the entity by setting its health to zero.
+     * Kills the entity by applying 1,000,000 points of damage.
      */
     default void kill() {
-        setHealth(0);
+        attack(DamageContainer.api(1_000_000));
     }
 
     /**

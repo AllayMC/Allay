@@ -295,7 +295,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the offset aabb of this entity
      */
-    default AABBd getOffsetAABB() {
+    default AABBdc getOffsetAABB() {
         return getAABB().translate(getLocation(), new AABBd());
     }
 
@@ -304,7 +304,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the offset aabb of this entity for collision check
      */
-    AABBd getOffsetAABBForCollisionCheck();
+    AABBdc getOffsetAABBForCollisionCheck();
 
     /**
      * Check if this entity has entity collision. If return {@code true}, method {@link #onCollideWithEntity(Entity)}
@@ -422,11 +422,21 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void despawnFromAll();
 
     /**
+     * @see #remove(Runnable)
+     */
+    default void remove() {
+        remove(() -> {
+        });
+    }
+
+    /**
      * Remove the entity from the current dimension's {@link EntityManager}. Compared to {@link #despawnFromAll()},
      * this method will also remove the entity from the world, and {@link #willBeDespawnedNextTick()} will return
      * {@code true} after this method is called.
+     *
+     * @param callback the callback to be called after the entity is removed from the world. Can be {@code null}.
      */
-    void remove();
+    void remove(Runnable callback);
 
     /**
      * Save the entity to NBT.

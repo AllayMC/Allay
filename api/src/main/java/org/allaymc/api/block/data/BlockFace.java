@@ -108,23 +108,47 @@ public enum BlockFace {
     /**
      * Adds the current block face offset to the specified coordinates.
      *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
-     * @return a new Vector3ic representing the resulting position
+     * @param x the x coordinate to offset
+     * @param y the y coordinate to offset
+     * @param z the z coordinate to offset
+     * @return a new {@code Vector3ic} representing the resulting position
      */
     public Vector3ic offsetPos(int x, int y, int z) {
         return offset.add(x, y, z, new Vector3i());
     }
 
     /**
+     * Offsets the current block face based on the specified coordinates and a scaling step.
+     *
+     * @param x    the x-coordinate to offset
+     * @param y    the y-coordinate to offset
+     * @param z    the z-coordinate to offset
+     * @param step the scaling step by which the current block face's offset is multiplied
+     * @return a new {@code Vector3ic} representing the resulting position
+     */
+    public Vector3ic offsetPos(int x, int y, int z, int step) {
+        return offset.mul(step, new Vector3i()).add(x, y, z, new Vector3i());
+    }
+
+    /**
      * Adds the current block face offset to the specified position.
      *
      * @param pos the position to offset
-     * @return a new Vector3ic representing the resulting position
+     * @return a new {@code Vector3ic} representing the resulting position
      */
     public Vector3ic offsetPos(Vector3ic pos) {
         return offset.add(pos, new Vector3i());
+    }
+
+    /**
+     * Offsets the given position by the product of the block face offset and the specified scaling step.
+     *
+     * @param pos  the position to offset
+     * @param step the scaling factor to apply to the block face offset
+     * @return a new {@code Vector3ic} representing the resulting position
+     */
+    public Vector3ic offsetPos(Vector3ic pos, int step) {
+        return offset.mul(step, new Vector3i()).add(pos, new Vector3i());
     }
 
     /**
@@ -195,6 +219,11 @@ public enum BlockFace {
         return result.add(0.5, 0.5, 0.5);
     }
 
+    /**
+     * Gets the opposite {@link BlockFace} of this block face.
+     *
+     * @return the opposite {@link BlockFace}
+     */
     public BlockFace opposite() {
         return switch (this) {
             case DOWN -> UP;
@@ -203,6 +232,21 @@ public enum BlockFace {
             case WEST -> EAST;
             case EAST -> WEST;
             default -> NORTH;
+        };
+    }
+
+    /**
+     * Gets the yaw rotation in degrees associated with this block face.
+     *
+     * @return the yaw rotation in degrees corresponding to this block face
+     */
+    public double yaw() {
+        return switch (this) {
+            case WEST -> 90;
+            case NORTH -> 180;
+            case EAST -> 270;
+            // SOUTH or vertical faces
+            default -> 0;
         };
     }
 

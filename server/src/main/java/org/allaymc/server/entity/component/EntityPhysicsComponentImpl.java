@@ -157,7 +157,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         var mx = motion.x();
         var my = motion.y();
         var mz = motion.z();
-        var aabb = thisEntity.getOffsetAABB();
+        var aabb = new AABBd(thisEntity.getOffsetAABB());
 
         // First move along the Y axis
         var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Axis.Y);

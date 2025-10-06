@@ -230,6 +230,16 @@ public class DamageContainer {
     }
 
     /**
+     * Creates an API damage container with the specified source damage.
+     *
+     * @param sourceDamage the initial damage value from the source
+     * @return a new {@code DamageContainer} instance with the API damage type
+     */
+    public static DamageContainer api(float sourceDamage) {
+        return new DamageContainer(null, API, sourceDamage);
+    }
+
+    /**
      * Get the attacker.
      *
      * @param <T> the type of the attacker

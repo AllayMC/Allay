@@ -16,6 +16,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3i;
+import org.joml.primitives.AABBd;
 
 /**
  * @author daoge_cmd
@@ -62,7 +63,7 @@ public class EntitySplashPotionPhysicsComponentImpl extends EntityProjectilePhys
 
         dimension.addParticle(thisEntity.getLocation(), new SplashParticle(potionType.getColor()));
         var effects = potionType.getEffects();
-        var aabb = MathUtils.grow(thisEntity.getOffsetAABB(), new Vector3d(4.125, 2.125, 4.125));
+        var aabb = MathUtils.grow(new AABBd(thisEntity.getOffsetAABB()), new Vector3d(4.125, 2.125, 4.125));
         if (!effects.isEmpty()) {
             var entities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
             for (var entity : entities) {

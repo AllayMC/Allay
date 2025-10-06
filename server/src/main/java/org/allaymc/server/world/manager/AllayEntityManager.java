@@ -47,7 +47,7 @@ public class AllayEntityManager implements EntityManager {
     }
 
     public void tick(long currentTick) {
-        // Check auto saving firstly, so that pending removed entities will be
+        // Check auto saving first, so that pending removed entities will be
         // removed this tick instead of remaining loading until the next tick.
         checkAutoSave();
         processQueue();

@@ -1,6 +1,7 @@
 package org.allaymc.api.math;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
@@ -318,6 +319,28 @@ public final class MathUtils {
         aabb.maxX += growth.x();
         aabb.maxY += growth.y();
         aabb.maxZ += growth.z();
+        return aabb;
+    }
+
+    /**
+     * Grows the given axis-aligned bounding box (AABB) in the direction of the specified block face by a given growth value.
+     *
+     * @param aabb      the axis-aligned bounding box (AABB) to grow
+     * @param blockFace the block face direction to grow towards (e.g., DOWN, UP, NORTH, SOUTH, WEST, EAST)
+     * @param growth    the value by which to grow the AABB along the specified block face direction
+     * @return the grown AABB
+     * @throws IllegalArgumentException if the specified block face is invalid
+     */
+    public static AABBd grow(AABBd aabb, BlockFace blockFace, double growth) {
+        switch (blockFace) {
+            case DOWN -> aabb.minY -= growth;
+            case UP -> aabb.maxY += growth;
+            case NORTH -> aabb.minZ -= growth;
+            case SOUTH -> aabb.maxZ += growth;
+            case WEST -> aabb.minX -= growth;
+            case EAST -> aabb.maxX += growth;
+            default -> throw new IllegalArgumentException("Invalid block face: " + blockFace);
+        }
         return aabb;
     }
 }

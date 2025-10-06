@@ -26,8 +26,10 @@ import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
 import org.joml.Vector3d;
+import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.*;
@@ -350,7 +352,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 }
                 // ClientMove is not calculated by the server, but we need to calculate the onGround status
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
-                var aabb = clientMove.player.getOffsetAABB();
+                var aabb = new AABBd(clientMove.player.getOffsetAABB());
                 // Here we should subtract twice FAT_AABB_MARGIN, because the client pos has an extra FAT_AABB_MARGIN in y coordinate
                 aabb.minY -= 2 * FAT_AABB_MARGIN;
                 physicsComponent.setOnGround(dimension.getCollidingBlockStates(aabb) != null);
@@ -385,7 +387,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link PacketProcessor#handleAsync(EntityPlayer, org.cloudburstmc.protocol.bedrock.packet.BedrockPacket, long)}
+     * See {@link PacketProcessor#handleAsync(EntityPlayer, BedrockPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3dc newLoc) {
         if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {
@@ -398,7 +400,8 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     @Override
     public List<Entity> computeCollidingEntities(AABBdc aabb, AABBOverlapFilter<Entity> predicate) {
         var result = new LinkedList<Entity>();
-        entityAABBTree.detectOverlaps(aabb, predicate, result);
+        // Entities must intersect to a certain extent (FAT_AABB_MARGIN) before they are considered to have collided
+        entityAABBTree.detectOverlaps(aabb.expand(-FAT_AABB_MARGIN, new AABBd()), predicate, result);
         return result;
     }
 

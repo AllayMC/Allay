@@ -204,4 +204,13 @@ public final class EntityTypeInitializer {
                 }, EntityLivingComponentImpl.class)
                 .build();
     }
+
+    public static void initPainting() {
+        EntityTypes.PAINTING = AllayEntityType
+                .builder(EntityPaintingImpl.class)
+                .vanillaEntity(EntityId.PAINTING)
+                .addComponent(EntityPaintingBaseComponentImpl::new, EntityPaintingBaseComponentImpl.class)
+                .addComponent(EntityLivingComponentImpl::new, EntityLivingComponentImpl.class)
+                .build();
+    }
 }

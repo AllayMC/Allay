@@ -223,8 +223,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void remove() {
-        getDimension().getEntityManager().removeEntity(thisEntity);
+    public void remove(Runnable callback) {
+        getDimension().getEntityManager().removeEntity(thisEntity, callback);
     }
 
     public synchronized boolean setState(EntityState status) {
@@ -336,8 +336,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public AABBd getOffsetAABBForCollisionCheck() {
-        return getOffsetAABB().expand(2 * FAT_AABB_MARGIN);
+    public AABBdc getOffsetAABBForCollisionCheck() {
+        return new AABBd(getOffsetAABB()).expand(2 * FAT_AABB_MARGIN);
     }
 
     @Override

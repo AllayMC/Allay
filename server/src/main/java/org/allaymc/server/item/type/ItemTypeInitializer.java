@@ -874,4 +874,12 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.BED)
                 .build();
     }
+
+    public static void initPainting() {
+        ItemTypes.PAINTING = AllayItemType
+                .builder(ItemPaintingStackImpl.class)
+                .addComponent(ItemPaintingBaseComponentImpl::new, ItemPaintingBaseComponentImpl.class)
+                .vanillaItem(ItemId.PAINTING)
+                .build();
+    }
 }

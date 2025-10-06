@@ -171,6 +171,22 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.getMetadata().putAll(parseMetadata(entity));
                 yield p;
             }
+            case EntityPainting painting -> {
+                var p = new AddPaintingPacket();
+                p.setRuntimeEntityId(painting.getRuntimeId());
+                p.setUniqueEntityId(painting.getUniqueId());
+                p.setMotive(painting.getPaintingType().getTitle());
+                // NOTICE: The position being sent in AddPaintingPacket is the center of the painting's
+                // aabb. It is not the position of the painting.
+                var aabb = painting.getOffsetAABB();
+                p.setPosition(Vector3f.from(
+                        (aabb.minX() + aabb.maxX()) / 2,
+                        (aabb.minY() + aabb.maxY()) / 2,
+                        (aabb.minZ() + aabb.maxZ()) / 2
+                ));
+                p.setDirection(painting.getHorizontalFace().getHorizontalIndex());
+                yield p;
+            }
             default -> {
                 var p = new AddEntityPacket();
                 p.setRuntimeEntityId(entity.getRuntimeId());
@@ -861,6 +877,13 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case SimpleSound.CHORUS_FLOWER_GROW -> packet.setSound(SoundEvent.CHORUS_GROW);
             case SimpleSound.END_PORTAL_FRAME_FILLED -> packet.setSound(SoundEvent.BLOCK_END_PORTAL_FRAME_FILL);
             case SimpleSound.END_PORTAL_SPAWN -> packet.setSound(SoundEvent.BLOCK_END_PORTAL_SPAWN);
+            case SimpleSound.PAINTING_PLACE -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_PLACE);
+                levelEvent.setPosition(pos.toFloat());
+                this.clientComponent.sendPacket(levelEvent);
+                return;
+            }
             case SimpleSound.GLOW_INK_SAC_USED -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_INK_SACE_USED);
