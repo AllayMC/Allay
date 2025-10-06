@@ -12,7 +12,19 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ## 0.8.1 (API 0.13.0) - Unreleased
 
-<small>[Compare with 0.8.0](https://github.com/AllayMC/Allay/compare/0.8.0...HEAD)</small>
+<small>[Compare with 0.8.1](https://github.com/AllayMC/Allay/compare/0.8.1...HEAD)</small>
+
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## 0.8.1 (API 0.13.0) - 2025/10/7
+
+<small>[Compare with 0.8.0](https://github.com/AllayMC/Allay/compare/0.8.0...0.8.1)</small>
 
 ### Added
 
@@ -42,8 +54,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed fire damage wasn't given when the on fire tick is continuously updated.
 - Fixed the bug that air supply, effect particle, and on fire state are invisible.
 - Fixed an issue where the server could not be launched in certain locales (e.g. Turkey).
-
-### Removed
 
 ## 0.8.0 (API 0.12.0) - 2025/10/4
 
