@@ -186,7 +186,7 @@ public final class Allay {
         );
         InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataRegistryLoader());
         InternalRegistries.ITEM_TAGS = SimpleMappedRegistry.create(new ItemTagRegistryLoader());
-        InternalRegistries.ITEM_COMPONENT_DATA = SimpleMappedRegistry.create(new ItemComponentRegistryLoader());
+        InternalRegistries.ITEM_DEFINITIONS = SimpleMappedRegistry.create(new ItemDefinitionRegistryLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
                 r -> Registries.ITEMS = r,

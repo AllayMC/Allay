@@ -19,10 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * CustomItemDefinitionGenerator is the default implementation of {@link ItemDefinitionGenerator}, it contains
+ * a number of useful methods for defining the behavior of the item type client-side.
+ *
  * @author daoge_cmd
  */
 @Builder
-public class CustomItemComponentDataGenerator implements ItemComponentDataGenerator {
+public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
 
     /**
      * The texture of the item, which is used to render the item in the inventory and on the ground.
@@ -38,7 +41,7 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
      */
     protected final RenderOffsets renderOffsets;
     /**
-     * Whether item is displayed with enchantment glint even when not enchanted (like enchanted golden apple).
+     * Whether the item is displayed with enchantment glints even when not enchanted (like enchanted golden apple).
      */
     protected final boolean foil;
     /**
@@ -59,7 +62,7 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
     protected final Map<String, NbtMap> customComponents;
 
     @Override
-    public ItemComponentData generate(ItemType<?> itemType) {
+    public ItemDefinition generate(ItemType<?> itemType) {
         var itemData = itemType.getItemData();
         var itemStack = itemType.createItemStack();
 
@@ -140,7 +143,7 @@ public class CustomItemComponentDataGenerator implements ItemComponentDataGenera
             components.putAll(customComponents);
         }
 
-        return new ItemComponentData(true, NbtMap.builder().putCompound("components", components.build()).build(), ItemVersion.DATA_DRIVEN);
+        return new ItemDefinition(true, NbtMap.builder().putCompound("components", components.build()).build(), ItemVersion.DATA_DRIVEN);
     }
 
     /**

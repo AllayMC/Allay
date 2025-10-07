@@ -19,6 +19,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - Optimized memory performance when loading chunks by reducing the large number of temporary objects generated in the light update queue.
+- Renamed `ItemComponent` to `ItemDefinition` in many places.
 
 ### Fixed
 

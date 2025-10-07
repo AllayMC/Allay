@@ -71,10 +71,10 @@ public final class NetworkHelper {
     }
 
     public ItemDefinition toNetwork(ItemType<?> itemType) {
-        var itemComponentData = ((AllayItemType<?>) itemType).getItemComponentData();
+        var itemDefinition = ((AllayItemType<?>) itemType).getItemDefinition();
         return new SimpleItemDefinition(
-                itemType.getIdentifier().toString(), itemType.getRuntimeId(), itemComponentData.version(),
-                itemComponentData.componentBased(), itemComponentData.components()
+                itemType.getIdentifier().toString(), itemType.getRuntimeId(), itemDefinition.version(),
+                itemDefinition.componentBased(), itemDefinition.components()
         );
     }
 

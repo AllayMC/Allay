@@ -461,7 +461,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
         helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
 
-        sendPacketImmediately(NetworkData.ITEM_COMPONENT_PACKET.get());
+        sendPacketImmediately(NetworkData.ITEM_REGISTRY_PACKET.get());
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());

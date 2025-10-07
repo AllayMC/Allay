@@ -103,7 +103,7 @@ public class AllayLightEngine implements LightEngine {
         this.chunkAndBlockUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.blockLightUpdateQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.chunks = new NonBlockingHashSet<>();
-        // Will only be read and wrote in chunk & block update thread, so no need to use thread-safe set
+        // Will only be read and wrote in chunk & block update thread, so no need to use a thread-safe set
         this.awaitingLightCalculationChunks = new LongOpenHashSet();
         this.lightDampening = new NonBlockingHashMapLong<>();
         this.lightEmission = new NonBlockingHashMapLong<>();
