@@ -3797,7 +3797,7 @@ public enum ItemId {
 
     public static ItemId fromIdentifier(Identifier identifier) {
         try {
-            return valueOf(identifier.path().replace(".", "_").toUpperCase(Locale.ENGLISH));
+            return valueOf(identifier.path().replace(".", "_").toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException ignore) {
             return null;
         }

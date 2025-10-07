@@ -61,7 +61,7 @@ public class ItemIdEnumGen {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addParameter(ClassNames.API_IDENTIFIER, "identifier")
                         .beginControlFlow("try")
-                        .addStatement("return valueOf(identifier.path().replace(\".\", \"_\").toUpperCase($T.ENGLISH))", Locale.class)
+                        .addStatement("return valueOf(identifier.path().replace(\".\", \"_\").toUpperCase($T.ROOT))", Locale.class)
                         .nextControlFlow("catch ($T ignore)", IllegalArgumentException.class)
                         .addStatement("return null")
                         .endControlFlow()
