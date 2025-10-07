@@ -24,6 +24,7 @@ fastutil-int-short-maps = { group = "org.cloudburstmc.fastutil.maps", name = "in
 fastutil-int-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "int-int-maps", version.ref = "fastutil" }
 fastutil-int-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "int-object-maps", version.ref = "fastutil" }
 fastutil-int-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "int-reference-maps", version.ref = "fastutil" }
+fastutil-int-queues = { group = "org.cloudburstmc.fastutil.queues", name = "int-queues", version.ref = "fastutil" }
 fastutil-long-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "long-object-maps", version.ref = "fastutil" }
 fastutil-long-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "long-int-maps", version.ref = "fastutil" }
 fastutil-long-byte-maps = { group = "org.cloudburstmc.fastutil.maps", name = "long-byte-maps", version.ref = "fastutil" }
@@ -94,11 +95,12 @@ jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 junit = ["junit-jupiter", "mockito-junit-jupiter"]
 fastutil = [
-    "fastutil-object-int-maps", "fastutil-object-reference-maps", "fastutil-object-object-maps", "fastutil-int-short-maps",
-    "fastutil-int-int-maps", "fastutil-int-object-maps", "fastutil-int-reference-maps", "fastutil-long-object-maps",
-    "fastutil-long-int-maps", "fastutil-long-byte-maps", "fastutil-long-long-maps", "fastutil-long-queues",
+    "fastutil-object-int-maps", "fastutil-object-reference-maps", "fastutil-object-object-maps",
+    "fastutil-int-short-maps", "fastutil-int-int-maps", "fastutil-int-object-maps", "fastutil-int-reference-maps", "fastutil-int-queues",
+    "fastutil-long-object-maps", "fastutil-long-int-maps", "fastutil-long-byte-maps", "fastutil-long-long-maps", "fastutil-long-queues",
     "fastutil-reference-int-maps", "fastutil-reference-object-maps", "fastutil-reference-reference-maps",
-    "fastutil-short-sets", "fastutil-short-object-maps", "fastutil-byte-object-maps", "fastutil-io"
+    "fastutil-short-sets", "fastutil-short-object-maps",
+    "fastutil-byte-object-maps", "fastutil-io"
 ]
 leveldb = ["leveldb", "leveldb-api"]
 rng = ["rng-simple", "rng-sampling"]
