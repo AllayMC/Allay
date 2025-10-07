@@ -70,8 +70,6 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
         var components = NbtMap.builder();
 
         properties.putInt("max_stack_size", itemData.maxStackSize())
-                // When item is a tool, it is displayed as hand equipped which is different from normal items
-                .putBoolean("hand_equipped", itemStack instanceof ItemToolComponent)
                 .putBoolean("allow_off_hand", this.allowOffHand)
                 .putBoolean("can_destroy_in_creative", this.canDestroyInCreative);
 
@@ -132,6 +130,8 @@ public class CustomItemDefinitionGenerator implements ItemDefinitionGenerator {
         }
 
         if (itemStack instanceof ItemToolComponent) {
+            // When the item is a tool, it is displayed as hand equipped, which is different from normal items
+            properties.putBoolean("hand_equipped", true);
             properties.putInt("damage", itemData.attackDamage());
         }
 
