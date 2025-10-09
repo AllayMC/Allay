@@ -3,6 +3,7 @@ package org.allaymc.api.world.generator.context;
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
@@ -62,7 +63,6 @@ public abstract class OtherChunkAccessibleContext extends Context {
      * @param x The x-coordinate (world)
      * @param y The y-coordinate (world)
      * @param z The z-coordinate (world)
-     *
      * @return The block state at the given position
      */
     public BlockState getBlockState(int x, int y, int z) {
@@ -77,13 +77,30 @@ public abstract class OtherChunkAccessibleContext extends Context {
      * @param y     The y-coordinate (world)
      * @param z     The z-coordinate (world)
      * @param layer The block layer
-     *
      * @return The block state at the given position and layer
      */
     public BlockState getBlockState(int x, int y, int z, int layer) {
         return isInCurrentChunk(x, y, z) ?
                 currentChunk.getBlockState(x & 15, y, z & 15, layer) :
                 getBlockStateInOtherChunk(x, y, z, layer);
+    }
+
+    /**
+     * Retrieves the {@code BlockEntity} at the specified world coordinates.
+     * If the coordinates refer to a block in the current chunk, the {@code BlockEntity}
+     * is fetched directly from the current chunk. Otherwise, it is fetched
+     * from the appropriate chunk using other chunk access.
+     *
+     * @param x The x-coordinate (world).
+     * @param y The y-coordinate (world).
+     * @param z The z-coordinate (world).
+     * @return The {@code BlockEntity} at the specified coordinates, or {@code null} if no
+     * {@code BlockEntity} exists at that position.
+     */
+    public BlockEntity getBlockEntity(int x, int y, int z) {
+        return isInCurrentChunk(x, y, z) ?
+                currentChunk.getBlockEntity(x & 15, y, z & 15) :
+                getBlockEntityInOtherChunk(x, y, z);
     }
 
     private void setBlockStateInOtherChunk(int x, int y, int z, BlockState blockState, int layer) {
@@ -98,6 +115,11 @@ public abstract class OtherChunkAccessibleContext extends Context {
     private BlockState getBlockStateInOtherChunk(int x, int y, int z, int layer) {
         var chunk = chunkSource.getChunk(x >> 4, z >> 4);
         return chunk == null ? AIR : chunk.getBlockState(x & 15, y, z & 15, layer);
+    }
+
+    private BlockEntity getBlockEntityInOtherChunk(int x, int y, int z) {
+        var chunk = chunkSource.getChunk(x >> 4, z >> 4);
+        return chunk == null ? null : chunk.getBlockEntity(x & 15, y, z & 15);
     }
 
     private boolean isInCurrentChunk(int x, int y, int z) {
