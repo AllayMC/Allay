@@ -210,7 +210,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerTypes.OFFHAND));
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerTypes.ARMOR));
         thisPlayer.viewPlayerPermission(thisPlayer);
-        thisPlayer.viewPlayerSkin(thisPlayer);
+        thisPlayer.viewPlayerListChange(playerManager.getPlayers().values(), true);
 
         sendSpeed(thisPlayer.getSpeed());
         sendExperienceLevel(thisPlayer.getExperienceLevel());

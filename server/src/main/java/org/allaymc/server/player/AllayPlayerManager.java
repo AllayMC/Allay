@@ -253,7 +253,8 @@ public class AllayPlayerManager implements PlayerManager {
         networkInterface.setPlayerCount(players.size());
         Server.getInstance().getMessageChannel().addReceiver(player);
         broadcastPlayerListChange(player, true);
-        player.viewPlayerListChange(this.players.values(), true);
+        // NOTICE: player list should be sent to the player itself later when the client is fully loaded.
+        // Otherwise, the player's skin will not be shown correctly client-side.
     }
 
     public synchronized void removePlayer(EntityPlayer player) {
@@ -287,8 +288,13 @@ public class AllayPlayerManager implements PlayerManager {
         networkInterface.setPlayerCount(players.size());
     }
 
+    /// Broadcast the player list change to other players except the player itself
     protected void broadcastPlayerListChange(EntityPlayer player, boolean add) {
         for (var other : players.values()) {
+            if (other == player) {
+                continue;
+            }
+
             other.viewPlayerListChange(Collections.singleton(player), add);
         }
     }
