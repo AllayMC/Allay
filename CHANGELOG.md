@@ -18,9 +18,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added method `OtherChunkAccessibleContext.getBlockEntity()`.
 - (API) Added methods `EntityPlayerClientComponent.viewPlayerListChange()` and `EntityPlayerClientComponent.viewPlayerPermission()`.
+- (API) Added method `DyeColor.getColor()` to get the corresponded `Color` object of the dye color.
+- (API) Implemented firework and firework star. Multiple classes including `FireworkType`, `FireworkExplosion` were added.
 
 ### Changed
 
+- (API) Method `ItemStack.saveExtraTag()` won't return a `null` value when the encoded extra tag is empty now.
 - Optimized memory performance when loading chunks by reducing the large number of temporary objects generated in the light update queue.
 - Renamed `ItemComponent` to `ItemDefinition` in many places.
 

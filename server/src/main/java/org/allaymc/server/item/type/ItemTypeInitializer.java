@@ -882,4 +882,12 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.PAINTING)
                 .build();
     }
+
+    public static void initFireWork() {
+        ItemTypes.FIREWORK_STAR = AllayItemType
+                .builder(ItemFireworkStarStackImpl.class)
+                .vanillaItem(ItemId.FIREWORK_STAR)
+                .addComponent(ItemFireworkStarBaseComponentImpl::new, ItemFireworkStarBaseComponentImpl.class)
+                .build();
+    }
 }

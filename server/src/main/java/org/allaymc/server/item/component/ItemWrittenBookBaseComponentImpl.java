@@ -61,9 +61,8 @@ public class ItemWrittenBookBaseComponentImpl extends ItemBaseComponentImpl impl
 
     @Override
     public NbtMap saveExtraTag() {
-        var extraTag = super.saveExtraTag();
-        var builder = extraTag != null ? extraTag.toBuilder() : NbtMap.builder();
-        return builder.putList(TAG_PAGES, NbtType.COMPOUND, this.pages.stream().map(page -> NbtMap.builder().putString(TAG_TEXT, page).build()).toList())
+        return super.saveExtraTag().toBuilder()
+                .putList(TAG_PAGES, NbtType.COMPOUND, this.pages.stream().map(page -> NbtMap.builder().putString(TAG_TEXT, page).build()).toList())
                 .putString(TAG_AUTHOR, this.author)
                 .putString(TAG_XUID, this.xuid)
                 .putString(TAG_TITLE, this.title)
