@@ -225,10 +225,10 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
     }
 
-    public void sendSpeed(float value) {
+    public void sendSpeed(double value) {
         sendAttribute(new AttributeData(
-                "minecraft:movement", 0, Float.MAX_VALUE, value, 0,
-                Float.MAX_VALUE, EntityPlayerBaseComponent.DEFAULT_SPEED, Collections.emptyList()
+                "minecraft:movement", 0, Float.MAX_VALUE, (float) value, 0,
+                Float.MAX_VALUE, (float) EntityPlayerBaseComponent.DEFAULT_SPEED, Collections.emptyList()
         ));
     }
 
@@ -371,9 +371,9 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
         layer.getAbilityValues().addAll(calculateAbilities(player));
         // NOTICE: this shouldn't be changed
-        layer.setWalkSpeed(EntityPlayerBaseComponent.DEFAULT_SPEED);
-        layer.setFlySpeed(player.getFlySpeed());
-        layer.setVerticalFlySpeed(player.getVerticalFlySpeed());
+        layer.setWalkSpeed((float) EntityPlayerBaseComponent.DEFAULT_SPEED);
+        layer.setFlySpeed((float) player.getFlySpeed());
+        layer.setVerticalFlySpeed((float) player.getVerticalFlySpeed());
         packet.getAbilityLayers().add(layer);
 
         sendPacket(packet);

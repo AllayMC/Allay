@@ -16,9 +16,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
-    float DEFAULT_SPEED = 0.1f;
-    float DEFAULT_FLY_SPEED = 0.05f;
-    float DEFAULT_VERTICAL_FLY_SPEED = 1.0f;
+    double DEFAULT_SPEED = 0.1;
+    double DEFAULT_FLY_SPEED = 0.05;
+    double DEFAULT_VERTICAL_FLY_SPEED = 1.0;
 
     int MAX_FOOD_LEVEL = 20;
     float MAX_FOOD_SATURATION_LEVEL = 20;
@@ -213,42 +213,42 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      *
      * @return The speed of the player
      */
-    float getSpeed();
+    double getSpeed();
 
     /**
      * Set the speed of the player.
      *
      * @param speed The speed to set
      */
-    void setSpeed(float speed);
+    void setSpeed(double speed);
 
     /**
      * Get the fly speed of the player.
      *
      * @return The fly speed of the player
      */
-    float getFlySpeed();
+    double getFlySpeed();
 
     /**
      * Sets the fly speed of the player.
      *
      * @param flySpeed the fly speed to set
      */
-    void setFlySpeed(float flySpeed);
+    void setFlySpeed(double flySpeed);
 
     /**
      * Get the vertical fly speed of the player.
      *
      * @return The vertical fly speed of the player
      */
-    float getVerticalFlySpeed();
+    double getVerticalFlySpeed();
 
     /**
      * Sets the vertical fly speed of the player.
      *
      * @param verticalFlySpeed the vertical fly speed to set
      */
-    void setVerticalFlySpeed(float verticalFlySpeed);
+    void setVerticalFlySpeed(double verticalFlySpeed);
 
     /**
      * Determines whether the player is currently flying.

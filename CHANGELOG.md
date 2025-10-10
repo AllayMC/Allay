@@ -24,6 +24,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - (API) Method `ItemStack.saveExtraTag()` won't return a `null` value when the encoded extra tag is empty now.
+- (API) Used `double` instead of `float` for player speed, fly speed, and vertical fly speed.
 - Optimized memory performance when loading chunks by reducing the large number of temporary objects generated in the light update queue.
 - Renamed `ItemComponent` to `ItemDefinition` in many places.
 
