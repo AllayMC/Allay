@@ -60,6 +60,7 @@ import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -1067,6 +1068,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public boolean hasEntityCollision() {
         return this.gameMode != GameMode.SPECTATOR;
+    }
+
+    @Override
+    public AABBdc getAABB() {
+        var height = 1.8;
+        if (this.sneaking) {
+            height = 1.5;
+        } else if (this.swimming || this.gliding) {
+            height = 0.6;
+        } else if (this.crawling) {
+            height = 0.625;
+        }
+        
+        return new AABBd(-0.3, 0.0, -0.3, 0.3, height, 0.3);
     }
 
     @EventHandler
