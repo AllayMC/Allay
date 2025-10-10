@@ -25,6 +25,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Fixed
 
+- Player in spectator mode will no longer lose the saturation level.
+
 ### Removed
 
 ## 0.8.1 (API 0.13.0) - 2025/10/7

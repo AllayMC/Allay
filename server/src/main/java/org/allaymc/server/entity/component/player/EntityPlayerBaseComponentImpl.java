@@ -531,7 +531,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void exhaust(float level) {
-        if (this.gameMode == GameMode.CREATIVE || getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL) {
+        if (this.gameMode == GameMode.CREATIVE ||
+            this.gameMode == GameMode.SPECTATOR ||
+            getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL) {
             return;
         }
 
