@@ -40,6 +40,7 @@ import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayerManager;
+import org.allaymc.server.player.SkinConvertor;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -59,11 +60,9 @@ import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 
+import java.awt.*;
 import java.net.SocketAddress;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
@@ -77,17 +76,14 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_client_component");
-
+    protected final PacketProcessorHolder packetProcessorHolder;
+    protected final AtomicInteger fullyJoinChunkThreshold;
     @Manager
     protected ComponentManager manager;
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Dependency
     protected EntityPlayerBaseComponent baseComponent;
-
-    protected final PacketProcessorHolder packetProcessorHolder;
-    protected final AtomicInteger fullyJoinChunkThreshold;
-
     @Getter
     @Setter
     protected AllayLoginData loginData;
@@ -201,9 +197,10 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
     protected void onFullyJoin() {
         var server = Server.getInstance();
+        var playerManager = server.getPlayerManager();
         var world = thisPlayer.getWorld();
 
-        thisPlayer.loadNBT(server.getPlayerManager().getPlayerStorage().readPlayerData(thisPlayer).getNbt());
+        thisPlayer.loadNBT(playerManager.getPlayerStorage().readPlayerData(thisPlayer).getNbt());
         thisPlayer.viewEntityState(thisPlayer);
         thisPlayer.viewPlayerGameMode(thisPlayer);
         thisPlayer.forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
@@ -212,85 +209,20 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerTypes.INVENTORY));
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerTypes.OFFHAND));
         thisPlayer.viewContents(thisPlayer.getContainer(ContainerTypes.ARMOR));
+        thisPlayer.viewPlayerPermission(thisPlayer);
+        thisPlayer.viewPlayerSkin(thisPlayer);
+
         sendSpeed(thisPlayer.getSpeed());
         sendExperienceLevel(thisPlayer.getExperienceLevel());
         sendExperienceProgress(thisPlayer.getExperienceProgress());
         sendFoodLevel(thisPlayer.getFoodLevel());
         sendFoodSaturationLevel(thisPlayer.getFoodSaturationLevel());
         sendFoodExhaustionLevel(thisPlayer.getFoodExhaustionLevel());
-        sendAbilities(thisPlayer);
-
-        var playerManager = (AllayPlayerManager) server.getPlayerManager();
-        playerManager.broadcastPlayerListChange(thisPlayer, true);
-        if (server.getPlayerManager().getPlayerCount() > 1) {
-            playerManager.sendPlayerListTo(thisPlayer);
-        }
 
         // Save player data the first time it joins
-        server.getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
+        playerManager.getPlayerStorage().savePlayerData(thisPlayer);
 
         sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
-    }
-
-    public void sendAbilities(EntityPlayer player) {
-        var packet = new UpdateAbilitiesPacket();
-
-        packet.setUniqueEntityId(player.getRuntimeId());
-        // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
-        // If this player does not have specific command permissions, the command description won't even be sent to the client
-        packet.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
-        // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
-        packet.setPlayerPermission(calculatePlayerPermission(player));
-
-        var layer = new AbilityLayer();
-        layer.setLayerType(AbilityLayer.Type.BASE);
-        layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
-        layer.getAbilityValues().addAll(calculateAbilities(player));
-        // NOTICE: this shouldn't be changed
-        layer.setWalkSpeed(EntityPlayerBaseComponent.DEFAULT_SPEED);
-        layer.setFlySpeed(player.getFlySpeed());
-        layer.setVerticalFlySpeed(player.getVerticalFlySpeed());
-        packet.getAbilityLayers().add(layer);
-
-        sendPacket(packet);
-    }
-
-    private EnumSet<Ability> calculateAbilities(EntityPlayer player) {
-        var abilities = EnumSet.noneOf(Ability.class);
-        abilities.add(Ability.TELEPORT);
-        abilities.add(Ability.WALK_SPEED);
-        abilities.add(Ability.FLY_SPEED);
-        abilities.add(Ability.VERTICAL_FLY_SPEED);
-        if (player.getGameMode() != GameMode.SPECTATOR) {
-            abilities.add(Ability.BUILD);
-            abilities.add(Ability.MINE);
-            abilities.add(Ability.DOORS_AND_SWITCHES);
-            abilities.add(Ability.OPEN_CONTAINERS);
-            abilities.add(Ability.ATTACK_PLAYERS);
-            abilities.add(Ability.ATTACK_MOBS);
-        } else {
-            abilities.add(Ability.NO_CLIP);
-            abilities.add(Ability.FLYING);
-        }
-        if (player.getGameMode() == GameMode.CREATIVE) {
-            abilities.add(Ability.INSTABUILD);
-        }
-        if (player.hasPermission(Permissions.ABILITY_FLY)) {
-            abilities.add(Ability.MAY_FLY);
-        }
-        if (player.isFlying()) {
-            abilities.add(Ability.FLYING);
-        }
-        return abilities;
-    }
-
-    protected PlayerPermission calculatePlayerPermission(EntityPlayer player) {
-        if (player.hasPermissions(PermissionGroups.OPERATOR, true)) {
-            return PlayerPermission.OPERATOR;
-        } else if (player.hasPermissions(PermissionGroups.MEMBER, true)) {
-            return PlayerPermission.MEMBER;
-        }
-        return PlayerPermission.VISITOR;
     }
 
     public void sendSpeed(float value) {
@@ -423,6 +355,91 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         return (int) rakSessionCodec.getPing();
     }
 
+    @Override
+    public void viewPlayerPermission(EntityPlayer player) {
+        var packet = new UpdateAbilitiesPacket();
+
+        packet.setUniqueEntityId(player.getRuntimeId());
+        // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
+        // If this player does not have specific command permissions, the command description won't even be sent to the client
+        packet.setCommandPermission(player.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
+        // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
+        packet.setPlayerPermission(calculatePlayerPermission(player));
+
+        var layer = new AbilityLayer();
+        layer.setLayerType(AbilityLayer.Type.BASE);
+        layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
+        layer.getAbilityValues().addAll(calculateAbilities(player));
+        // NOTICE: this shouldn't be changed
+        layer.setWalkSpeed(EntityPlayerBaseComponent.DEFAULT_SPEED);
+        layer.setFlySpeed(player.getFlySpeed());
+        layer.setVerticalFlySpeed(player.getVerticalFlySpeed());
+        packet.getAbilityLayers().add(layer);
+
+        sendPacket(packet);
+    }
+
+    protected EnumSet<Ability> calculateAbilities(EntityPlayer player) {
+        var abilities = EnumSet.noneOf(Ability.class);
+        abilities.add(Ability.TELEPORT);
+        abilities.add(Ability.WALK_SPEED);
+        abilities.add(Ability.FLY_SPEED);
+        abilities.add(Ability.VERTICAL_FLY_SPEED);
+        if (player.getGameMode() != GameMode.SPECTATOR) {
+            abilities.add(Ability.BUILD);
+            abilities.add(Ability.MINE);
+            abilities.add(Ability.DOORS_AND_SWITCHES);
+            abilities.add(Ability.OPEN_CONTAINERS);
+            abilities.add(Ability.ATTACK_PLAYERS);
+            abilities.add(Ability.ATTACK_MOBS);
+        } else {
+            abilities.add(Ability.NO_CLIP);
+            abilities.add(Ability.FLYING);
+        }
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            abilities.add(Ability.INSTABUILD);
+        }
+        if (player.hasPermission(Permissions.ABILITY_FLY)) {
+            abilities.add(Ability.MAY_FLY);
+        }
+        if (player.isFlying()) {
+            abilities.add(Ability.FLYING);
+        }
+        return abilities;
+    }
+
+    protected PlayerPermission calculatePlayerPermission(EntityPlayer player) {
+        if (player.hasPermissions(PermissionGroups.OPERATOR, true)) {
+            return PlayerPermission.OPERATOR;
+        } else if (player.hasPermissions(PermissionGroups.MEMBER, true)) {
+            return PlayerPermission.MEMBER;
+        }
+        return PlayerPermission.VISITOR;
+    }
+
+    @Override
+    public void viewPlayerListChange(Collection<EntityPlayer> players, boolean add) {
+        var packet = new PlayerListPacket();
+        packet.setAction(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE);
+        for (var player : players) {
+            packet.getEntries().add(buildEntry(player));
+        }
+        sendPacket(packet);
+    }
+
+    protected PlayerListPacket.Entry buildEntry(EntityPlayer player) {
+        var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
+        entry.setEntityId(player.getRuntimeId());
+        entry.setName(player.getOriginName());
+        entry.setXuid(player.getLoginData().getXuid());
+        entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
+        entry.setBuildPlatform(player.getLoginData().getDeviceInfo().device().getId());
+        entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
+        entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
+        entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
+        return entry;
+    }
+
     public void initializePlayer() {
         var server = Server.getInstance();
         // initializePlayer() method will read all the data in PlayerData except nbt
@@ -546,8 +563,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
         playerManager.addPlayer(thisPlayer);
         this.manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
-        Object[] args = new Object[]{thisPlayer.getOriginName()};
-        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), args);
+        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), thisPlayer.getOriginName());
 
         sendPacket(NetworkData.RESOURCE_PACKS_INFO_PACKET.get());
     }

@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.component.player;
 
 import org.allaymc.api.entity.component.EntityComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
@@ -8,6 +9,7 @@ import org.allaymc.api.player.LoginData;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.net.SocketAddress;
+import java.util.Collection;
 
 /**
  * EntityPlayerClientComponent is the component that manages network-related things of a player. It
@@ -114,6 +116,22 @@ public interface EntityPlayerClientComponent extends EntityComponent {
      * @return the ping of the client
      */
     int getPing();
+
+    /**
+     * Views the specified player's permission. This will update the permission level shown in the player list and some
+     * in-game permissions/properties like whether the player can fly, chat, and the player's (vertical) fly speed etc.
+     *
+     * @param player the player to view
+     */
+    void viewPlayerPermission(EntityPlayer player);
+
+    /**
+     * Views a player list change. The provided players will be added to the player list.
+     *
+     * @param players the players to be added or removed from the player list
+     * @param add     {@code true} to add the players to the list, {@code false} to remove the players
+     */
+    void viewPlayerListChange(Collection<EntityPlayer> players, boolean add);
 
     /**
      * Sends a packet to the client.

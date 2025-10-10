@@ -216,7 +216,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         setPermission(Permissions.ABILITY_FLY, gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE);
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
-        this.clientComponent.sendAbilities(thisPlayer);
+        this.clientComponent.viewPlayerPermission(thisPlayer);
         thisPlayer.viewPlayerGameMode(thisPlayer);
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
@@ -232,7 +232,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setFlySpeed(float flySpeed) {
         if (this.flySpeed != flySpeed) {
             this.flySpeed = flySpeed;
-            this.clientComponent.sendAbilities(thisPlayer);
+            this.clientComponent.viewPlayerPermission(thisPlayer);
         }
     }
 
@@ -240,7 +240,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setVerticalFlySpeed(float verticalFlySpeed) {
         if (this.verticalFlySpeed != verticalFlySpeed) {
             this.verticalFlySpeed = verticalFlySpeed;
-            this.clientComponent.sendAbilities(thisPlayer);
+            this.clientComponent.viewPlayerPermission(thisPlayer);
         }
     }
 
@@ -248,7 +248,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setFlying(boolean flying) {
         if (this.flying != flying) {
             this.flying = flying;
-            this.clientComponent.sendAbilities(thisPlayer);
+            this.clientComponent.viewPlayerPermission(thisPlayer);
         }
     }
 
@@ -998,7 +998,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setLocationBeforeSpawn(Location3dc location) {
         if (this.location.dimension() != null && location.dimension() == null) {
-            // Different from normal entity, reset the dimension of player entity back to null is not allowed
+            // Different from the normal entity, reset the dimension of the player back to null is not allowed
             throw new IllegalArgumentException("Reset dimension back to null is not allowed for player!");
         }
 

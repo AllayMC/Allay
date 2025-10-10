@@ -4,8 +4,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionListener;
 import org.allaymc.api.permission.Permissions;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 
 import java.util.function.BiConsumer;
 
@@ -27,12 +25,12 @@ public class PermissionRegistryPopulator implements Runnable {
         Permissions.ABILITY_CHAT = Permission.create(
                 "ability.chat",
                 "The permission to chat",
-                ifIsPlayer((player, value) -> getClientComponent(player).sendAbilities(player))
+                ifIsPlayer((player, value) -> player.viewPlayerPermission(player))
         );
         Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR = Permission.create(
                 "ability.operator_command_quick_bar",
                 "The permission to have operator command quick bar in chat screen",
-                ifIsPlayer((player, value) -> getClientComponent(player).sendAbilities(player))
+                ifIsPlayer((player, value) -> player.viewPlayerPermission(player))
         );
     }
 
@@ -42,9 +40,5 @@ public class PermissionRegistryPopulator implements Runnable {
                 consumer.accept(player, value);
             }
         };
-    }
-
-    private static EntityPlayerClientComponentImpl getClientComponent(EntityPlayer player) {
-        return (EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent();
     }
 }

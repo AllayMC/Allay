@@ -24,14 +24,10 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.AllayNetworkInterface;
 import org.allaymc.server.utils.Utils;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.awt.*;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
@@ -244,10 +240,6 @@ public class AllayPlayerManager implements PlayerManager {
         return Collections.unmodifiableSet(whitelist.whitelist());
     }
 
-    public void broadcastPacket(BedrockPacket packet) {
-        players.values().forEach(player -> ((EntityPlayerImpl) player).sendPacket(packet));
-    }
-
     public void startNetworkInterface() {
         this.networkInterface.start();
     }
@@ -260,13 +252,15 @@ public class AllayPlayerManager implements PlayerManager {
         players.put(player.getLoginData().getUuid(), player);
         networkInterface.setPlayerCount(players.size());
         Server.getInstance().getMessageChannel().addReceiver(player);
+        broadcastPlayerListChange(player, true);
+        player.viewPlayerListChange(this.players.values(), true);
     }
 
     public synchronized void removePlayer(EntityPlayer player) {
         var server = Server.getInstance();
         server.sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getSocketAddress().toString());
 
-        // At this time the client have disconnected
+        // At this time the client has disconnected
         if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
@@ -281,8 +275,8 @@ public class AllayPlayerManager implements PlayerManager {
             // will crash every time he logs on to the server
             if (player.getDimension() != null) {
                 // The dimension of the player may be null, that because the client is still handling resource packs
-                // and is not added or going to be added (willBeSpawnedNextTick == true) to any dimension. After handled
-                // resources packs, the dimension of the player should always be non-null regardless the status of the
+                // and is not added or going to be added (willBeSpawnedNextTick == true) to any dimension. After handling
+                // resource packs, the dimension of the player should always be non-null regardless of the status of the
                 // player because there is a check in EntityPlayerBaseComponentImpl#setLocationBeforeSpawn()
                 player.getDimension().removePlayer(player);
                 playerStorage.savePlayerData(player);
@@ -293,39 +287,10 @@ public class AllayPlayerManager implements PlayerManager {
         networkInterface.setPlayerCount(players.size());
     }
 
-    public void broadcastPlayerListChange(EntityPlayer player, boolean add) {
-        var packet = new PlayerListPacket();
-        if (add) {
-            packet.setAction(PlayerListPacket.Action.ADD);
-        } else {
-            packet.setAction(PlayerListPacket.Action.REMOVE);
-        }
-        packet.getEntries().add(buildEntry(player));
-        broadcastPacket(packet);
-    }
-
-    public void sendPlayerListTo(EntityPlayer player) {
-        var packet = new PlayerListPacket();
-        packet.setAction(PlayerListPacket.Action.ADD);
+    protected void broadcastPlayerListChange(EntityPlayer player, boolean add) {
         for (var other : players.values()) {
-            if (other != player) {
-                packet.getEntries().add(buildEntry(other));
-            }
+            other.viewPlayerListChange(Collections.singleton(player), add);
         }
-        player.sendPacket(packet);
-    }
-
-    private static PlayerListPacket.Entry buildEntry(EntityPlayer player) {
-        var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
-        entry.setEntityId(player.getRuntimeId());
-        entry.setName(player.getOriginName());
-        entry.setXuid(player.getLoginData().getXuid());
-        entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
-        entry.setBuildPlatform(player.getLoginData().getDeviceInfo().device().getId());
-        entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
-        entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
-        entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
-        return entry;
     }
 
     /**
