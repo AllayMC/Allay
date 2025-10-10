@@ -213,4 +213,13 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityLivingComponentImpl::new, EntityLivingComponentImpl.class)
                 .build();
     }
+
+    public static void initFireworkRocket() {
+        EntityTypes.FIREWORKS_ROCKET = AllayEntityType
+                .builder(EntityFireworksRocketImpl.class)
+                .vanillaEntity(EntityId.FIREWORKS_ROCKET)
+                // TODO: physics component
+                .addComponent(EntityFireworksRocketBaseComponentImpl::new, EntityFireworksRocketBaseComponentImpl.class)
+                .build();
+    }
 }

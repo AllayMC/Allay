@@ -883,11 +883,19 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
-    public static void initFireWork() {
+    public static void initFireworkStar() {
         ItemTypes.FIREWORK_STAR = AllayItemType
                 .builder(ItemFireworkStarStackImpl.class)
                 .vanillaItem(ItemId.FIREWORK_STAR)
                 .addComponent(ItemFireworkStarBaseComponentImpl::new, ItemFireworkStarBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initFireworkRocket() {
+        ItemTypes.FIREWORK_ROCKET = AllayItemType
+                .builder(ItemFireworkRocketStackImpl.class)
+                .vanillaItem(ItemId.FIREWORK_ROCKET)
+                .addComponent(ItemFireworkRocketBaseComponentImpl::new, ItemFireworkRocketBaseComponentImpl.class)
                 .build();
     }
 }

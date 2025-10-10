@@ -60,7 +60,7 @@ public record FireworkExplosion(
      */
     public NbtMap saveNBT() {
         var builder = NbtMap.builder()
-                .putShort(TAG_FIREWORK_TYPE, (short) this.type.ordinal())
+                .putByte(TAG_FIREWORK_TYPE, (byte) this.type.ordinal())
                 .putByteArray(TAG_FIREWORK_COLOR, new byte[]{(byte) this.color.ordinal()})
                 .putBoolean(TAG_FIREWORK_FLICKER, this.flicker)
                 .putBoolean(TAG_FIREWORK_TRAIL, this.trail);
