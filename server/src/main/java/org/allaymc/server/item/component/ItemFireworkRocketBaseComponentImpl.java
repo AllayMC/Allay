@@ -58,6 +58,7 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
         firework.setExplosions(this.explosions);
         dimension.getEntityManager().addEntity(firework);
 
+        player.tryConsumeItemInHand();
         return true;
     }
 
