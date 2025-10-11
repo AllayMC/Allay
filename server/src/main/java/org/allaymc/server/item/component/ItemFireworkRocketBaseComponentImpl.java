@@ -55,6 +55,7 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
         );
         firework.setExistenceTicks(getRandomizedFireworkDuration());
         firework.setAttachedPlayer(player);
+        firework.setFireworkExplosions(this.fireworkExplosions);
         dimension.getEntityManager().addEntity(firework);
 
         return true;
@@ -78,6 +79,7 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
                         .build()
         );
         firework.setExistenceTicks(getRandomizedFireworkDuration());
+        firework.setFireworkExplosions(this.fireworkExplosions);
         dimension.getEntityManager().addEntity(firework);
         dimension.addSound(pos, SimpleSound.FIREWORK_LAUNCH);
 

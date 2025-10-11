@@ -53,7 +53,7 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
     protected void explode() {
         var dimension = getDimension();
 
-        applyAction(SimpleEntityAction.FIREWORK_EXPLOSION);
+        applyAction(SimpleEntityAction.FIREWORK_EXPLODE);
         if (this.fireworkExplosions.isEmpty()) {
             return;
         }

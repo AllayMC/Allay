@@ -34,6 +34,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.FireworkExplosion;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.Weather;
@@ -57,6 +58,7 @@ import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -414,11 +416,14 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 }
             }
             case EntityFireworksRocket firework -> {
-                // Client expected a firework item nbt in the entity's nbt, let's mock one c:
-                var item = ItemTypes.FIREWORK_ROCKET.createItemStack();
-                item.setFireworkExplosions(firework.getFireworkExplosions());
-                item.setFireworkDuration(1);
-                map.put(EntityDataTypes.DISPLAY_FIREWORK, item.saveNBT());
+                var nbt = NbtMap.builder()
+                        .putCompound("Fireworks", NbtMap.builder()
+                                .putList("Explosions", NbtType.COMPOUND, firework.getFireworkExplosions().stream().map(FireworkExplosion::saveNBT).toList())
+                                .putByte("Flight", (byte) 1)
+                                .build()
+                        )
+                        .build();
+                map.put(EntityDataTypes.DISPLAY_FIREWORK, nbt);
 
                 var attachedPlayer = firework.getAttachedPlayer();
                 if (attachedPlayer != null) {
@@ -560,7 +565,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                     this.clientComponent.sendPacket(packet);
                 }
             }
-            case SimpleEntityAction.FIREWORK_EXPLOSION -> {
+            case SimpleEntityAction.FIREWORK_EXPLODE -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.FIREWORK_EXPLODE);
                 packet.setRuntimeEntityId(entity.getRuntimeId());

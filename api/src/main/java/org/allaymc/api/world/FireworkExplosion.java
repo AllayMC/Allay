@@ -67,6 +67,8 @@ public record FireworkExplosion(
 
         if (fade != null) {
             builder.putByteArray(TAG_FIREWORK_FADE, new byte[]{(byte) this.fade.ordinal()});
+        } else {
+            builder.putByteArray(TAG_FIREWORK_FADE, new byte[0]);
         }
 
         return builder.build();

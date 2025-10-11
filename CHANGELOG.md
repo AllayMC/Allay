@@ -26,7 +26,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Method `ItemStack.saveExtraTag()` won't return a `null` value when the encoded extra tag is empty now.
 - (API) Used `double` instead of `float` for player speed, fly speed, and vertical fly speed.
-- (API) Renamed field `SoundEvent.TWINKLE` to `SoundEvent.FLICKER`.
+- (API) Renamed field `SimpleSoundEvent.TWINKLE` to `SimpleSoundEvent.FLICKER`.
+- (API) Renamed field `SimpleEntityAction.FIREWORK_EXPLOSION` to `SimpleEntityAction.FIREWORK_EXPLODE`.
 - (API) Flattened packages except `events` under package `org.allaymc.api.entity.component`.
 - Optimized memory performance when loading chunks by reducing the large number of temporary objects generated in the light update queue.
 - Renamed `ItemComponent` to `ItemDefinition` in many places.
