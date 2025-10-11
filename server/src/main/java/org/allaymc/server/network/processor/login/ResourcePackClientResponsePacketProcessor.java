@@ -5,7 +5,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.entity.component.EntityPlayerClientComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.NetworkData;

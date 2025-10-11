@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.player;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

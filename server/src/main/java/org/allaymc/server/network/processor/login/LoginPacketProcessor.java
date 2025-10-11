@@ -5,7 +5,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.entity.component.EntityPlayerClientComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayLoginData;

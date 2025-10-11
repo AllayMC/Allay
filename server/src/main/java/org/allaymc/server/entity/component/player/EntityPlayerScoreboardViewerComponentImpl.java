@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.entity.component.EntityPlayerScoreboardViewerComponent;

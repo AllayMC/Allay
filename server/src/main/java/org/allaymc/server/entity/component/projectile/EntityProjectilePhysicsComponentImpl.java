@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
@@ -11,6 +11,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.EntityPhysicsComponentImpl;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;

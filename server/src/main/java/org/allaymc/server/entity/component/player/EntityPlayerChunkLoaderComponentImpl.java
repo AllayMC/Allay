@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.player;
 
 import com.google.common.base.Suppliers;
 import lombok.Getter;

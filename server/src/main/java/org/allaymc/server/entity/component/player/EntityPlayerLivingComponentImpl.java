@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPlayerClientComponent;
@@ -11,6 +11,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.EntityLivingComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;

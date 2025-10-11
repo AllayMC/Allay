@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.projectile;
 
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;

@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.player;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.bossbar.BossBar;

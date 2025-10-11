@@ -5,6 +5,8 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
+import org.allaymc.server.entity.component.player.*;
+import org.allaymc.server.entity.component.projectile.*;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 

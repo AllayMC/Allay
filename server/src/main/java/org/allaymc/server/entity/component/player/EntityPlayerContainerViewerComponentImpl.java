@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.player;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

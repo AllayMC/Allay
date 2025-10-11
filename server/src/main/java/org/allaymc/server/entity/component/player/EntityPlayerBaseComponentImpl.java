@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component;
+package org.allaymc.server.entity.component.player;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
@@ -43,6 +43,7 @@ import org.allaymc.server.AllayServer;
 import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.allaymc.server.entity.component.event.CEntityAttackEvent;
 import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
