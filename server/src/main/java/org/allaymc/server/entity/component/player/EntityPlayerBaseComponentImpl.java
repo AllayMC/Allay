@@ -13,7 +13,7 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -60,6 +60,7 @@ import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -148,7 +149,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Map<String, Long> cooldowns;
 
     @Getter
-    protected float speed, flySpeed, verticalFlySpeed;
+    protected double speed, flySpeed, verticalFlySpeed;
     @Getter
     protected String scoreTag;
     @Getter
@@ -221,7 +222,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
 
-    public void setSpeed(float speed) {
+    public void setSpeed(double speed) {
         if (this.speed != speed) {
             this.speed = speed;
             this.clientComponent.sendSpeed(this.speed);
@@ -229,7 +230,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setFlySpeed(float flySpeed) {
+    public void setFlySpeed(double flySpeed) {
         if (this.flySpeed != flySpeed) {
             this.flySpeed = flySpeed;
             this.clientComponent.viewPlayerPermission(thisPlayer);
@@ -237,7 +238,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setVerticalFlySpeed(float verticalFlySpeed) {
+    public void setVerticalFlySpeed(double verticalFlySpeed) {
         if (this.verticalFlySpeed != verticalFlySpeed) {
             this.verticalFlySpeed = verticalFlySpeed;
             this.clientComponent.viewPlayerPermission(thisPlayer);
@@ -738,9 +739,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putFloat(TAG_FOOD_EXHAUSTION_LEVEL, this.foodExhaustionLevel)
                 .putInt(TAG_FOOD_TICK_TIMER, this.foodTickTimer)
                 // Speed
-                .putFloat(TAG_SPEED, this.speed)
-                .putFloat(TAG_FLY_SPEED, this.flySpeed)
-                .putFloat(TAG_VERTICAL_FLY_SPEED, this.verticalFlySpeed)
+                .putDouble(TAG_SPEED, this.speed)
+                .putDouble(TAG_FLY_SPEED, this.flySpeed)
+                .putDouble(TAG_VERTICAL_FLY_SPEED, this.verticalFlySpeed)
                 .build();
     }
 
@@ -795,9 +796,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         nbt.listenForInt(TAG_FOOD_TICK_TIMER, value -> this.foodTickTimer = value);
 
         // Speed
-        nbt.listenForFloat(TAG_SPEED, value -> this.speed = value);
-        nbt.listenForFloat(TAG_FLY_SPEED, value -> this.flySpeed = value);
-        nbt.listenForFloat(TAG_VERTICAL_FLY_SPEED, value -> this.verticalFlySpeed = value);
+        nbt.listenForDouble(TAG_SPEED, value -> this.speed = value);
+        nbt.listenForDouble(TAG_FLY_SPEED, value -> this.flySpeed = value);
+        nbt.listenForDouble(TAG_VERTICAL_FLY_SPEED, value -> this.verticalFlySpeed = value);
     }
 
     protected void loadSpawnPoint(NbtMap nbt) {
@@ -1015,7 +1016,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setSprinting(boolean sprinting) {
         if (this.sprinting != sprinting) {
             this.sprinting = sprinting;
-            var speed = this.getSpeed();
+            var speed = this.speed;
             if (sprinting) {
                 speed *= 1.3f;
             } else {
@@ -1067,6 +1068,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public boolean hasEntityCollision() {
         return this.gameMode != GameMode.SPECTATOR;
+    }
+
+    @Override
+    public AABBdc getAABB() {
+        var height = 1.8;
+        if (this.sneaking) {
+            height = 1.5;
+        } else if (this.swimming || this.gliding) {
+            height = 0.6;
+        } else if (this.crawling) {
+            height = 0.625;
+        }
+
+        return new AABBd(-0.3, 0.0, -0.3, 0.3, height, 0.3);
     }
 
     @EventHandler

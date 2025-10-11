@@ -18,8 +18,8 @@ public enum SimpleEntityAction implements EntityAction {
     DEATH,
     // EAT makes an entity display the eating particles at its mouth to viewers with the item in its hand being eaten
     EAT,
-    // FIREWORK_EXPLOSION makes a firework rocket display an explosion particle
-    FIREWORK_EXPLOSION,
+    // FIREWORK_EXPLODE makes a firework rocket display an explosion particle
+    FIREWORK_EXPLODE,
     // TOTEM_USE displays the totem use particles and animation
     TOTEM_USE
 }

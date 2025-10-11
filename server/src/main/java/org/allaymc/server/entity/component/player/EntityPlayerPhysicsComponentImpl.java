@@ -1,6 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntitySetMotionEvent;
 import org.allaymc.api.math.MathUtils;

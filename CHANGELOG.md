@@ -17,10 +17,19 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added method `OtherChunkAccessibleContext.getBlockEntity()`.
+- (API) Added method `DyeColor.getColor()` to get the corresponded `Color` object of the dye color.
 - (API) Added methods `EntityPlayerClientComponent.viewPlayerListChange()` and `EntityPlayerClientComponent.viewPlayerPermission()`.
+- (API) Added particle `SimpleParticle.FIREWORK_CONTRAIL`.
+- (API) Implemented firework and firework star. Multiple classes including `FireworkType`, `FireworkExplosion` were added.
+- Player's height will be changed when the player is sneaking, swimming, gliding, or crawling now.
 
 ### Changed
 
+- (API) Method `ItemStack.saveExtraTag()` won't return a `null` value when the encoded extra tag is empty now.
+- (API) Used `double` instead of `float` for player speed, fly speed, and vertical fly speed.
+- (API) Renamed field `SimpleSoundEvent.TWINKLE` to `SimpleSoundEvent.FLICKER`.
+- (API) Renamed field `SimpleEntityAction.FIREWORK_EXPLOSION` to `SimpleEntityAction.FIREWORK_EXPLODE`.
+- (API) Flattened packages except `events` under package `org.allaymc.api.entity.component`.
 - Optimized memory performance when loading chunks by reducing the large number of temporary objects generated in the light update queue.
 - Renamed `ItemComponent` to `ItemDefinition` in many places.
 

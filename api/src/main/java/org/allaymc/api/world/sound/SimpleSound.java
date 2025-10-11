@@ -150,8 +150,8 @@ public enum SimpleSound implements Sound {
     FIREWORK_HUGE_BLAST,
     // FIREWORK_BLAST is a sound played when a small sphere firework explodes.
     FIREWORK_BLAST,
-    // FIREWORK_TWINKLE is a sound played when a firework explodes and should twinkle.
-    FIREWORK_TWINKLE,
+    // FIREWORK_FLICKER is a sound played when a firework explodes and should flicker.
+    FIREWORK_FLICKER,
     // PAINTING_PLACE is a sound played when a painting is placed.
     PAINTING_PLACE
 }
