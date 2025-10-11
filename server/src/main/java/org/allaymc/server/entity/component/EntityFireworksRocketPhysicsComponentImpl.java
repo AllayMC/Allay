@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.entity.component.EntityFireworksRocketBaseComponent;
 import org.allaymc.api.entity.component.EntityFireworksRocketPhysicsComponent;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityTickEvent;
 import org.joml.Vector3d;
@@ -49,10 +50,12 @@ public class EntityFireworksRocketPhysicsComponentImpl extends EntityPhysicsComp
 
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
-        if (!this.fireworkBaseComponent.isAttached()) {
+        var attachedPlayer = this.fireworkBaseComponent.getAttachedPlayer();
+        if (attachedPlayer == null) {
             return;
         }
 
-        this.fireworkBaseComponent.teleport(this.fireworkBaseComponent.getAttachedPlayer().getLocation());
+        this.fireworkBaseComponent.teleport(attachedPlayer.getLocation());
+        attachedPlayer.getDimension().addParticle(attachedPlayer.getLocation(), SimpleParticle.FIREWORK_CONTRAIL);
     }
 }

@@ -40,12 +40,11 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
     }
 
     @Override
-    public boolean canUseItemInAir(EntityPlayer player) {
-        return player.isGliding();
-    }
+    public void clickItemInAir(EntityPlayer player) {
+        if (!player.isGliding()) {
+            return;
+        }
 
-    @Override
-    public boolean useItemInAir(EntityPlayer player, long usedTime) {
         var location = player.getLocation();
         var dimension = player.getDimension();
         dimension.addSound(location, SimpleSound.FIREWORK_LAUNCH);
@@ -59,7 +58,6 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
         dimension.getEntityManager().addEntity(firework);
 
         player.tryConsumeItemInHand();
-        return true;
     }
 
     @Override
