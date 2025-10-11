@@ -418,8 +418,8 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case EntityFireworksRocket firework -> {
                 var nbt = NbtMap.builder()
                         .putCompound("Fireworks", NbtMap.builder()
-                                .putList("Explosions", NbtType.COMPOUND, firework.getFireworkExplosions().stream().map(FireworkExplosion::saveNBT).toList())
-                                .putByte("Flight", (byte) 1)
+                                .putList("Explosions", NbtType.COMPOUND, firework.getExplosions().stream().map(FireworkExplosion::saveNBT).toList())
+                                .putByte("Flight", (byte) (firework.getExistenceTicks() / 20))
                                 .build()
                         )
                         .build();

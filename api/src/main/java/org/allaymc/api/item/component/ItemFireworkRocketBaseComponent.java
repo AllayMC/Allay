@@ -16,7 +16,7 @@ public interface ItemFireworkRocketBaseComponent extends ItemBaseComponent {
      * @return The duration of the firework in seconds. Returns an integer value representing the time
      * the firework will last when launched
      */
-    int getFireworkDuration();
+    int getDuration();
 
     /**
      * Calculates and retrieves a randomized duration for the firework in ticks.
@@ -25,8 +25,8 @@ public interface ItemFireworkRocketBaseComponent extends ItemBaseComponent {
      *
      * @return The randomized firework duration in ticks as an integer value.
      */
-    default int getRandomizedFireworkDuration() {
-        return getFireworkDuration() * 20 + ThreadLocalRandom.current().nextInt(12);
+    default int getRandomizedDuration() {
+        return getDuration() * 20 + ThreadLocalRandom.current().nextInt(12);
     }
 
     /**
@@ -35,7 +35,7 @@ public interface ItemFireworkRocketBaseComponent extends ItemBaseComponent {
      *
      * @param duration the duration of the firework in seconds. It must be a non-negative integer.
      */
-    void setFireworkDuration(int duration);
+    void setDuration(int duration);
 
     /**
      * Retrieves the set of firework explosions associated with the firework rocket.
@@ -43,13 +43,13 @@ public interface ItemFireworkRocketBaseComponent extends ItemBaseComponent {
      * @return a {@code Set} of {@code FireworkExplosion} objects representing the explosions configured for the firework rocket
      */
     @UnmodifiableView
-    Set<FireworkExplosion> getFireworkExplosions();
+    Set<FireworkExplosion> getExplosions();
 
     /**
      * Sets the firework explosions associated with this item.
      *
-     * @param fireworkExplosions a set of {@link FireworkExplosion} that specifies the various explosions to be used for this
-     *                           firework rocket. Passing an empty set will result in no explosions
+     * @param explosions a set of {@link FireworkExplosion} that specifies the various explosions to be used for this
+     *                   firework rocket. Passing an empty set will result in no explosions
      */
-    void setFireworkExplosions(Set<FireworkExplosion> fireworkExplosions);
+    void setExplosions(Set<FireworkExplosion> explosions);
 }

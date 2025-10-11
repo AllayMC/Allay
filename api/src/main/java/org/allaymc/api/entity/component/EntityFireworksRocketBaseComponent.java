@@ -45,15 +45,15 @@ public interface EntityFireworksRocketBaseComponent extends EntityBaseComponent 
      * @return a {@code Set} of {@code FireworkExplosion} objects representing the explosions configured for the firework rocket
      */
     @UnmodifiableView
-    Set<FireworkExplosion> getFireworkExplosions();
+    Set<FireworkExplosion> getExplosions();
 
     /**
      * Sets the firework explosions associated with this item.
      *
-     * @param fireworkExplosions a set of {@link FireworkExplosion} that specifies the various explosions to be used for this
-     *                           firework rocket. Passing an empty set will result in no explosions
+     * @param explosions a set of {@link FireworkExplosion} that specifies the various explosions to be used for this
+     *                   firework rocket. Passing an empty set will result in no explosions
      */
-    void setFireworkExplosions(Set<FireworkExplosion> fireworkExplosions);
+    void setExplosions(Set<FireworkExplosion> explosions);
 
     /**
      * Gets the player attached to this firework rocket. When a firework rocket is attached to a player,

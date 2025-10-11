@@ -31,12 +31,12 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
     protected static final String TAG_LIFE = "Life";
 
     protected int existenceTicks, existedTicks;
-    protected Set<FireworkExplosion> fireworkExplosions;
+    protected Set<FireworkExplosion> explosions;
     protected EntityPlayer attachedPlayer;
 
     public EntityFireworksRocketBaseComponentImpl(EntityInitInfo info) {
         super(info);
-        this.fireworkExplosions = new HashSet<>();
+        this.explosions = new HashSet<>();
     }
 
     @Override
@@ -54,11 +54,11 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
         var dimension = getDimension();
 
         applyAction(SimpleEntityAction.FIREWORK_EXPLODE);
-        if (this.fireworkExplosions.isEmpty()) {
+        if (this.explosions.isEmpty()) {
             return;
         }
 
-        for (var explosion : this.fireworkExplosions) {
+        for (var explosion : this.explosions) {
             if (explosion.type() == FireworkType.HUGE_SPHERE) {
                 dimension.addSound(this.location, SimpleSound.FIREWORK_HUGE_BLAST);
             } else {
@@ -70,7 +70,7 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
             }
         }
 
-        var force = this.fireworkExplosions.size() * 2 + 5.0;
+        var force = this.explosions.size() * 2 + 5.0;
         var affectedEntities = dimension.getEntityManager().getPhysicsService()
                 .computeCollidingEntities(getOffsetAABB().expand(5.25, new AABBd()));
         for (var affectedEntity : affectedEntities) {
@@ -97,7 +97,7 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
     public NbtMap saveNBT() {
         return super.saveNBT()
                 .toBuilder()
-                .putList(TAG_EXPLOSIONS, NbtType.COMPOUND, this.fireworkExplosions.stream().map(FireworkExplosion::saveNBT).toList())
+                .putList(TAG_EXPLOSIONS, NbtType.COMPOUND, this.explosions.stream().map(FireworkExplosion::saveNBT).toList())
                 .putInt(TAG_LIFE_TIME, this.existenceTicks)
                 .putInt(TAG_LIFE, this.existedTicks)
                 .build();
@@ -109,7 +109,7 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
 
         nbt.listenForList(TAG_EXPLOSIONS, NbtType.COMPOUND, entries -> {
             for (var entry : entries) {
-                this.fireworkExplosions.add(FireworkExplosion.fromNBT(entry));
+                this.explosions.add(FireworkExplosion.fromNBT(entry));
             }
         });
 

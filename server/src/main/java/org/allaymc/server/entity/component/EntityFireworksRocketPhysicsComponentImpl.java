@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.component.EntityFireworksRocketBaseComponent;
 import org.allaymc.api.entity.component.EntityFireworksRocketPhysicsComponent;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.entity.component.event.CEntityTickEvent;
 import org.joml.Vector3d;
 
 /**
@@ -13,7 +15,7 @@ import org.joml.Vector3d;
 public class EntityFireworksRocketPhysicsComponentImpl extends EntityPhysicsComponentImpl implements EntityFireworksRocketPhysicsComponent {
 
     @Dependency
-    protected EntityFireworksRocketBaseComponent fireworksRocketBaseComponent;
+    protected EntityFireworksRocketBaseComponent fireworkBaseComponent;
 
     @Getter
     @Setter
@@ -27,26 +29,30 @@ public class EntityFireworksRocketPhysicsComponentImpl extends EntityPhysicsComp
 
     @Override
     public Vector3d updateMotion(boolean hasLiquidMotion) {
-        var attachedPlayer = fireworksRocketBaseComponent.getAttachedPlayer();
-        if (attachedPlayer == null) {
+        if (!this.fireworkBaseComponent.isAttached()) {
             return new Vector3d(
                     this.motion.x * this.sidewaysMotionMultiplier,
                     this.motion.y + this.upwardsMotion,
                     this.motion.z * this.sidewaysMotionMultiplier
             );
-        } else {
-            var currentPos = this.fireworksRocketBaseComponent.getLocation();
-            var targetPos = attachedPlayer.getLocation();
-            return new Vector3d(
-                    targetPos.x() - currentPos.x(),
-                    targetPos.y() - currentPos.y(),
-                    targetPos.z() - currentPos.z()
-            );
         }
+
+        // If the rocket is attached to a player, the firework rocket will be teleported to the player every
+        // tick, so we do not need to update the motion of the rocket.
+        return new Vector3d(0, 0, 0);
     }
 
     @Override
     public boolean computeEntityCollisionMotion() {
         return false;
+    }
+
+    @EventHandler
+    protected void onTick(CEntityTickEvent event) {
+        if (!this.fireworkBaseComponent.isAttached()) {
+            return;
+        }
+
+        this.fireworkBaseComponent.teleport(this.fireworkBaseComponent.getAttachedPlayer().getLocation());
     }
 }

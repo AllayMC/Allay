@@ -31,12 +31,12 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
     protected static final String TAG_EXPLOSIONS = "Explosions";
     protected static final String TAG_FLIGHT = "Flight";
 
-    protected int fireworkDuration;
-    protected Set<FireworkExplosion> fireworkExplosions;
+    protected int duration;
+    protected Set<FireworkExplosion> explosions;
 
     public ItemFireworkRocketBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
-        this.fireworkExplosions = new HashSet<>();
+        this.explosions = new HashSet<>();
     }
 
     @Override
@@ -53,9 +53,9 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
         var firework = EntityTypes.FIREWORKS_ROCKET.createEntity(
                 EntityInitInfo.builder().loc(location).build()
         );
-        firework.setExistenceTicks(getRandomizedFireworkDuration());
+        firework.setExistenceTicks(getRandomizedDuration());
         firework.setAttachedPlayer(player);
-        firework.setFireworkExplosions(this.fireworkExplosions);
+        firework.setExplosions(this.explosions);
         dimension.getEntityManager().addEntity(firework);
 
         return true;
@@ -78,8 +78,8 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
                         .rot(ThreadLocalRandom.current().nextDouble() * 360, 90)
                         .build()
         );
-        firework.setExistenceTicks(getRandomizedFireworkDuration());
-        firework.setFireworkExplosions(this.fireworkExplosions);
+        firework.setExistenceTicks(getRandomizedDuration());
+        firework.setExplosions(this.explosions);
         dimension.getEntityManager().addEntity(firework);
         dimension.addSound(pos, SimpleSound.FIREWORK_LAUNCH);
 
@@ -103,17 +103,17 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
     protected void loadFireworks(NbtMap nbt) {
         nbt.listenForList(TAG_EXPLOSIONS, NbtType.COMPOUND, entries -> {
             for (var entry : entries) {
-                this.fireworkExplosions.add(FireworkExplosion.fromNBT(entry));
+                this.explosions.add(FireworkExplosion.fromNBT(entry));
             }
         });
 
-        nbt.listenForByte(TAG_FLIGHT, value -> this.fireworkDuration = value);
+        nbt.listenForByte(TAG_FLIGHT, value -> this.duration = value);
     }
 
     protected NbtMap saveFireworks() {
         return NbtMap.builder()
-                .putList(TAG_EXPLOSIONS, NbtType.COMPOUND, this.fireworkExplosions.stream().map(FireworkExplosion::saveNBT).toList())
-                .putByte(TAG_FLIGHT, (byte) this.fireworkDuration)
+                .putList(TAG_EXPLOSIONS, NbtType.COMPOUND, this.explosions.stream().map(FireworkExplosion::saveNBT).toList())
+                .putByte(TAG_FLIGHT, (byte) this.duration)
                 .build();
     }
 }

@@ -17,7 +17,7 @@ public class ItemFireworkStarBaseComponentImpl extends ItemBaseComponentImpl imp
 
     @Getter
     @Setter
-    protected FireworkExplosion fireworkExplosion;
+    protected FireworkExplosion explosion;
 
     public ItemFireworkStarBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
@@ -26,16 +26,16 @@ public class ItemFireworkStarBaseComponentImpl extends ItemBaseComponentImpl imp
     @Override
     public void loadExtraTag(NbtMap extraTag) {
         super.loadExtraTag(extraTag);
-        extraTag.listenForCompound(TAG_FIREWORKS_ITEM, nbt -> this.fireworkExplosion = FireworkExplosion.fromNBT(nbt));
+        extraTag.listenForCompound(TAG_FIREWORKS_ITEM, nbt -> this.explosion = FireworkExplosion.fromNBT(nbt));
     }
 
     @Override
     public NbtMap saveExtraTag() {
         var builder = super.saveExtraTag().toBuilder();
-        if (this.fireworkExplosion != null) {
-            builder.putCompound(TAG_FIREWORKS_ITEM, this.fireworkExplosion.saveNBT());
+        if (this.explosion != null) {
+            builder.putCompound(TAG_FIREWORKS_ITEM, this.explosion.saveNBT());
             // 'customColor' controls the color shown in the firework star. So we need to set it, although we never read it
-            builder.putInt(TAG_CUSTOM_COLOR, this.fireworkExplosion.color().getColor().getRGB());
+            builder.putInt(TAG_CUSTOM_COLOR, this.explosion.color().getColor().getRGB());
         }
 
         return builder.build();

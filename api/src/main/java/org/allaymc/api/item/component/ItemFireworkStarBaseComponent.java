@@ -12,12 +12,12 @@ public interface ItemFireworkStarBaseComponent extends ItemBaseComponent {
      * @return the {@code FireworkExplosion} representing the explosion of the firework,
      * or {@code null} if no explosion is set.
      */
-    FireworkExplosion getFireworkExplosion();
+    FireworkExplosion getExplosion();
 
     /**
      * Sets the {@code FireworkExplosion} for this component.
      *
      * @param explosion the {@code FireworkExplosion} to set. Provide {@code null} to remove the explosion.
      */
-    void setFireworkExplosion(FireworkExplosion explosion);
+    void setExplosion(FireworkExplosion explosion);
 }
