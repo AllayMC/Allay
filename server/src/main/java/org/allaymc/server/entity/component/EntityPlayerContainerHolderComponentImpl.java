@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component.player;
+package org.allaymc.server.entity.component;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
@@ -10,7 +10,6 @@ import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.*;
-import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;

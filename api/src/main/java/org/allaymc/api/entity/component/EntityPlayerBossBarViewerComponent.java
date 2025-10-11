@@ -1,7 +1,6 @@
-package org.allaymc.api.entity.component.player;
+package org.allaymc.api.entity.component;
 
 import org.allaymc.api.bossbar.BossBarViewer;
-import org.allaymc.api.entity.component.EntityComponent;
 
 /**
  * @author daoge_cmd

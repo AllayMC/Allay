@@ -1,6 +1,5 @@
-package org.allaymc.api.entity.component.player;
+package org.allaymc.api.entity.component;
 
-import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.GameMode;

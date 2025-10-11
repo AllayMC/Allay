@@ -5,8 +5,6 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
-import org.allaymc.server.entity.component.player.*;
-import org.allaymc.server.entity.component.projectile.*;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
 
@@ -218,7 +216,7 @@ public final class EntityTypeInitializer {
         EntityTypes.FIREWORKS_ROCKET = AllayEntityType
                 .builder(EntityFireworksRocketImpl.class)
                 .vanillaEntity(EntityId.FIREWORKS_ROCKET)
-                // TODO: physics component
+                .addComponent(EntityFireworksRocketPhysicsComponentImpl::new, EntityFireworksRocketPhysicsComponentImpl.class)
                 .addComponent(EntityFireworksRocketBaseComponentImpl::new, EntityFireworksRocketBaseComponentImpl.class)
                 .build();
     }

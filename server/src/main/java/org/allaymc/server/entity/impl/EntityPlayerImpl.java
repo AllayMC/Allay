@@ -4,14 +4,10 @@ import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.entity.EntityInitInfo;
-import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.EntityContainerViewerComponent;
-import org.allaymc.api.entity.component.EntityLivingComponent;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.player.*;
+import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.component.ComponentProvider;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
+import org.allaymc.server.entity.component.EntityPlayerClientComponentImpl;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
 import java.util.List;

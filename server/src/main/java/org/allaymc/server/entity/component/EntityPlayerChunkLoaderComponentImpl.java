@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component.player;
+package org.allaymc.server.entity.component;
 
 import com.google.common.base.Suppliers;
 import lombok.Getter;
@@ -18,12 +18,7 @@ import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.action.SimpleEntityAction;
-import org.allaymc.api.entity.component.EntityBaseComponent;
-import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.EntityLivingComponent;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerChunkLoaderComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
@@ -416,6 +411,18 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 var potionType = arrow.getPotionType();
                 if (potionType != null) {
                     map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) (potionType.ordinal() + 1));
+                }
+            }
+            case EntityFireworksRocket firework -> {
+                // Client expected a firework item nbt in the entity's nbt, let's mock one c:
+                var item = ItemTypes.FIREWORK_ROCKET.createItemStack();
+                item.setFireworkExplosions(firework.getFireworkExplosions());
+                item.setFireworkDuration(1);
+                map.put(EntityDataTypes.DISPLAY_FIREWORK, item.saveNBT());
+
+                var attachedPlayer = firework.getAttachedPlayer();
+                if (attachedPlayer != null) {
+                    map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) attachedPlayer.getRuntimeId());
                 }
             }
             default -> {
@@ -836,7 +843,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case SimpleSound.FIREWORK_LAUNCH -> packet.setSound(SoundEvent.LAUNCH);
             case SimpleSound.FIREWORK_HUGE_BLAST -> packet.setSound(SoundEvent.LARGE_BLAST);
             case SimpleSound.FIREWORK_BLAST -> packet.setSound(SoundEvent.BLAST);
-            case SimpleSound.FIREWORK_TWINKLE -> packet.setSound(SoundEvent.TWINKLE);
+            case SimpleSound.FIREWORK_FLICKER -> packet.setSound(SoundEvent.TWINKLE);
             case SimpleSound.FURNACE_CRACKLE -> packet.setSound(SoundEvent.FURNACE_USE);
             case SimpleSound.CAMPFIRE_CRACKLE -> packet.setSound(SoundEvent.CAMPFIRE_CRACKLE);
             case SimpleSound.BLAST_FURNACE_CRACKLE -> packet.setSound(SoundEvent.BLAST_FURNACE_USE);

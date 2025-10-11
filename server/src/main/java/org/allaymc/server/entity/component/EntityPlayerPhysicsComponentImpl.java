@@ -1,12 +1,11 @@
-package org.allaymc.server.entity.component.player;
+package org.allaymc.server.entity.component;
 
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntitySetMotionEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.entity.component.EntityHumanPhysicsComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.SetEntityMotionPacket;

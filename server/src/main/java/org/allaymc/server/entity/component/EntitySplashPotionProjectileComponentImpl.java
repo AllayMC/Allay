@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component.projectile;
+package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;

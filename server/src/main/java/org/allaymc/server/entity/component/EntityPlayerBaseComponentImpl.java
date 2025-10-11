@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component.player;
+package org.allaymc.server.entity.component;
 
 import com.google.common.base.Preconditions;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -43,7 +43,6 @@ import org.allaymc.server.AllayServer;
 import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.allaymc.server.entity.component.event.CEntityAttackEvent;
 import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
@@ -1080,7 +1079,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         } else if (this.crawling) {
             height = 0.625;
         }
-        
+
         return new AABBd(-0.3, 0.0, -0.3, 0.3, height, 0.3);
     }
 

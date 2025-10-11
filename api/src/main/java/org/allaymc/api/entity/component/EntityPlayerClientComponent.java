@@ -1,6 +1,5 @@
-package org.allaymc.api.entity.component.player;
+package org.allaymc.api.entity.component;
 
-import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;

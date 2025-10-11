@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
+import org.allaymc.server.entity.component.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;

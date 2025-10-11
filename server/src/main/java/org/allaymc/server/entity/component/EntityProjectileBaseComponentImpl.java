@@ -1,7 +1,6 @@
-package org.allaymc.server.entity.component.projectile;
+package org.allaymc.server.entity.component;
 
 import org.allaymc.api.entity.EntityInitInfo;
-import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 

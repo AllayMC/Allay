@@ -1,9 +1,9 @@
-package org.allaymc.server.entity.component.player;
+package org.allaymc.server.entity.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.bossbar.BossBar;
-import org.allaymc.api.entity.component.player.EntityPlayerBossBarViewerComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.EntityPlayerBossBarViewerComponent;
+import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.component.annotation.ComponentObject;
