@@ -39,6 +39,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Player in spectator mode will no longer lose the saturation level.
 - Speed, fly speed, and vertical fly speed for the player won't be saved now.
 - The online player list shown in the dashboard will be correctly updated when a player quits now.
+- Fixed an issue where the client would sometimes get stuck on the screen of death.
 
 ### Removed
 

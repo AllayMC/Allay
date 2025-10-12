@@ -259,10 +259,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void tick(long currentTick) {
         super.tick(currentTick);
 
-        tickFood();
-        tryPickUpEntities();
-        tickPlayerDataAutoSave();
+        if (isAlive()) {
+            tickFood();
+            tryPickUpEntities();
+        }
 
+        tickPlayerDataAutoSave();
         if (this.requireResendingCommands) {
             sendCommands();
             this.requireResendingCommands = false;
@@ -352,7 +354,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     protected void tryPickUpEntities() {
-        if (isDead() || !isSpawned() || willBeDespawnedNextTick() || !isCurrentChunkLoaded()) {
+        if (!isCurrentChunkLoaded()) {
             return;
         }
 
