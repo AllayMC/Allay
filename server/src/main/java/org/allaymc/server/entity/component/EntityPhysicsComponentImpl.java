@@ -126,15 +126,13 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
             // fall distance > 0 -> move down
             this.fallDistance -= newLocation.y() - location.y();
 
-            if (shouldResetFallDistance(newLocation)) {
-                this.fallDistance = 0;
-            }
+            tryResetFallDistance(newLocation);
         }
     }
 
-    /// Check if the entity's fall distance should be reset. This usually happens if it falls into a block
+    /// Try to reset the entity's fall distance. This usually happens if it falls into a block
     /// (e.g., water and slime block) that can reset fall distance.
-    protected boolean shouldResetFallDistance(Location3dc location) {
+    protected void tryResetFallDistance(Location3dc location) {
         var blockState0 = location.dimension().getBlockState(location);
         var blockState1 = location.dimension().getBlockState(location, 1);
         var newEntityAABB = thisEntity.getAABB().translate(location, new AABBd());
@@ -142,11 +140,13 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         if (!blockState0.getBlockStateData().hasCollision() &&
             blockState1.getBehavior().canResetFallDamage() &&
             blockState1.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
-            return true;
+            this.fallDistance = 0;
         }
 
-        return blockState0.getBehavior().canResetFallDamage() &&
-               blockState0.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB);
+        if (blockState0.getBehavior().canResetFallDamage() &&
+            blockState0.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
+            this.fallDistance = 0;
+        }
     }
 
     @Override

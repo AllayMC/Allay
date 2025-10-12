@@ -439,7 +439,10 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     }
 
     /**
-     * Get the enchantment seed of the player.
+     * Get the enchantment seed of the player. Enchantment seed is used to generate random enchant options
+     * when the player is using an enchant table to enchant an item. The seed will only be regenerated when
+     * the player enchanted an item to make sure that the enchantment options are always the same for the same
+     * item.
      *
      * @return The enchantment seed of the player
      */

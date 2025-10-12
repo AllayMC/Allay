@@ -95,10 +95,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_FOOD_EXHAUSTION_LEVEL = "FoodExhaustionLevel";
     protected static final String TAG_FOOD_TICK_TIMER = "FoodTickTimer";
 
-    protected static final String TAG_SPEED = "Speed";
-    protected static final String TAG_FLY_SPEED = "FlySpeed";
-    protected static final String TAG_VERTICAL_FLY_SPEED = "VerticalFlySpeed";
-
     protected static final int FOOD_TICK_THRESHOLD = 80;
     /**
      * To reduce network traffic, we only update food data every 10 blocks of movement
@@ -738,10 +734,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putFloat(TAG_FOOD_SATURATION_LEVEL, this.foodSaturationLevel)
                 .putFloat(TAG_FOOD_EXHAUSTION_LEVEL, this.foodExhaustionLevel)
                 .putInt(TAG_FOOD_TICK_TIMER, this.foodTickTimer)
-                // Speed
-                .putDouble(TAG_SPEED, this.speed)
-                .putDouble(TAG_FLY_SPEED, this.flySpeed)
-                .putDouble(TAG_VERTICAL_FLY_SPEED, this.verticalFlySpeed)
                 .build();
     }
 
@@ -794,11 +786,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         nbt.listenForFloat(TAG_FOOD_SATURATION_LEVEL, value -> this.foodSaturationLevel = value);
         nbt.listenForFloat(TAG_FOOD_EXHAUSTION_LEVEL, value -> this.foodExhaustionLevel = value);
         nbt.listenForInt(TAG_FOOD_TICK_TIMER, value -> this.foodTickTimer = value);
-
-        // Speed
-        nbt.listenForDouble(TAG_SPEED, value -> this.speed = value);
-        nbt.listenForDouble(TAG_FLY_SPEED, value -> this.flySpeed = value);
-        nbt.listenForDouble(TAG_VERTICAL_FLY_SPEED, value -> this.verticalFlySpeed = value);
     }
 
     protected void loadSpawnPoint(NbtMap nbt) {
