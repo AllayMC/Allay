@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added methods `EntityPlayerClientComponent.viewPlayerListChange()` and `EntityPlayerClientComponent.viewPlayerPermission()`.
 - (API) Added particle `SimpleParticle.FIREWORK_CONTRAIL`.
 - (API) Implemented firework and firework star. Multiple classes including `FireworkType`, `FireworkExplosion` were added.
+- Implemented elytra. The fall distance for the player will be reset if the player is gliding.
 - Player's height will be changed when the player is sneaking, swimming, gliding, or crawling now.
 
 ### Changed

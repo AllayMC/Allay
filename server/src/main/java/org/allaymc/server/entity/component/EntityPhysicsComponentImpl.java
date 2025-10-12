@@ -119,16 +119,22 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
                 // Entity start falling
                 this.fallDistance = 0;
             }
+
             var location = thisEntity.getLocation();
             var newLocation = event.getLocation();
             // fall distance < 0 -> move up
             // fall distance > 0 -> move down
             this.fallDistance -= newLocation.y() - location.y();
-            tryResetFallDistance(newLocation);
+
+            if (shouldResetFallDistance(newLocation)) {
+                this.fallDistance = 0;
+            }
         }
     }
 
-    protected void tryResetFallDistance(Location3dc location) {
+    /// Check if the entity's fall distance should be reset. This usually happens if it falls into a block
+    /// (e.g., water and slime block) that can reset fall distance.
+    protected boolean shouldResetFallDistance(Location3dc location) {
         var blockState0 = location.dimension().getBlockState(location);
         var blockState1 = location.dimension().getBlockState(location, 1);
         var newEntityAABB = thisEntity.getAABB().translate(location, new AABBd());
@@ -136,14 +142,11 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         if (!blockState0.getBlockStateData().hasCollision() &&
             blockState1.getBehavior().canResetFallDamage() &&
             blockState1.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
-            this.fallDistance = 0;
-            return;
+            return true;
         }
 
-        if (blockState0.getBehavior().canResetFallDamage() &&
-            blockState0.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
-            this.fallDistance = 0;
-        }
+        return blockState0.getBehavior().canResetFallDamage() &&
+               blockState0.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB);
     }
 
     @Override
@@ -192,17 +195,15 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         }
     }
 
-    /**
-     * Applies motion to the object's position along the specified axis, considering potential collisions and intersections with other objects.
-     *
-     * @param stepHeight     The step height the object can overcome
-     * @param pos            The current position of the object
-     * @param motion         The component of the object's movement velocity along the specified axis (X or Z)
-     * @param aabb           The Axis-Aligned Bounding Box (AABB) of the object
-     * @param enableStepping Flag indicating whether the object can step over obstacles
-     * @param axis           The axis along which the motion is applied (X or Z)
-     * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections
-     */
+    /// Applies motion to the object's position along the specified axis, considering potential collisions and intersections with other objects.
+    ///
+    /// @param stepHeight     The step height the object can overcome
+    /// @param pos            The current position of the object
+    /// @param motion         The component of the object's movement velocity along the specified axis (X or Z)
+    /// @param aabb           The Axis-Aligned Bounding Box (AABB) of the object
+    /// @param enableStepping Flag indicating whether the object can step over obstacles
+    /// @param axis           The axis along which the motion is applied (X or Z)
+    /// @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections
     private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, Axis axis) {
         if (motion == 0) {
             return motion;
@@ -229,18 +230,16 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
         return motion;
     }
 
-    /**
-     * Moves an axis-aligned bounding box (AABB) along a specified axis direction and stops when a collision occurs.
-     *
-     * @param aabb     The axis-aligned bounding box to move
-     * @param motion   The distance to move along the specified axis
-     * @param recorder The vector to record the movement along the axis
-     * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis
-     * @return A pair containing the remaining movement distance along the axis after collision detection (Double)
-     * and a boolean indicating whether a collision occurred (Boolean) or whether the entity will be on ground (if axis == Y).
-     * If no movement was specified (motion = 0), an empty pair is returned.
-     * @throws IllegalArgumentException if an invalid axis is provided
-     */
+    /// Moves an axis-aligned bounding box (AABB) along a specified axis direction and stops when a collision occurs.
+    ///
+    /// @param aabb     The axis-aligned bounding box to move
+    /// @param motion   The distance to move along the specified axis
+    /// @param recorder The vector to record the movement along the axis
+    /// @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis
+    /// @return A pair containing the remaining movement distance along the axis after collision detection (Double)
+    /// and a boolean indicating whether a collision occurred (Boolean) or whether the entity will be on ground (if axis == Y).
+    /// If no movement was specified (motion = 0), an empty pair is returned.
+    /// @throws IllegalArgumentException if an invalid axis is provided
     private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, Axis axis) {
         if (motion == 0) {
             return EMPTY_DOUBLE_BOOLEAN_PAIR;
