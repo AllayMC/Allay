@@ -105,6 +105,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         map.put(EntityTypes.FALLING_BLOCK, 0.49f);
         map.put(EntityTypes.ITEM, 0.125f);
         map.put(EntityTypes.TNT, 0.49f);
+        map.put(EntityTypes.FIREWORKS_ROCKET, 0.49f);
         return map;
     });
 
