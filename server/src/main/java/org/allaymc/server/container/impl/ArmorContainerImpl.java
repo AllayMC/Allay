@@ -25,8 +25,7 @@ public class ArmorContainerImpl extends AbstractPlayerContainer implements Armor
         addSlotChangeListener(3, this::onArmorChange);
     }
 
-    @Override
-    public void onArmorChange(ItemStack newItemStack) {
+    protected void onArmorChange(ItemStack newItemStack) {
         // Recalculate knockback resistance
         var knockbackResistance = 0.0f;
         for (var itemStack : content) {

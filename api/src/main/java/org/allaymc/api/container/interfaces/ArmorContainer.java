@@ -30,13 +30,6 @@ public interface ArmorContainer extends Container {
     int BOOTS_SLOT = 3;
 
     /**
-     * Called when an armor item is changed in the container.
-     *
-     * @param newItemStack the new ItemStack that was set in an armor slot
-     */
-    void onArmorChange(ItemStack newItemStack);
-
-    /**
      * Gets the item in the helmet slot.
      *
      * @return the ItemStack in the helmet slot

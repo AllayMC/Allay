@@ -261,7 +261,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         if (isAlive()) {
             tickFood();
-            tryPickUpEntities();
+            tickPickUpEntities();
         }
 
         tickPlayerDataAutoSave();
@@ -269,54 +269,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             sendCommands();
             this.requireResendingCommands = false;
         }
-    }
-
-    protected void sendCommands() {
-        var packet = new AvailableCommandsPacket();
-        Registries.COMMANDS.getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
-                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
-        this.clientComponent.sendPacket(packet);
-    }
-
-    protected CommandData encodeCommand(Command command) {
-        // Aliases
-        CommandEnumData aliases = null;
-        if (!command.getAliases().isEmpty()) {
-            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
-            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
-            values.put(command.getName(), Collections.emptySet());
-            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
-        }
-
-        // Overloads
-        var overloads = new ArrayList<CommandOverloadData>();
-        for (var leaf : command.getCommandTree().getLeaves()) {
-            var params = new CommandParamData[leaf.depth()];
-            var node = leaf;
-            var index = leaf.depth() - 1;
-            while (!node.isRoot()) {
-                params[index] = ((BaseNode) node).toNetworkData();
-                node = node.parent();
-                index--;
-            }
-            overloads.add(new CommandOverloadData(false, params));
-        }
-        if (overloads.isEmpty()) {
-            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
-        }
-
-        // Flags
-        var flags = new HashSet<CommandData.Flag>();
-        flags.add(CommandData.Flag.NOT_CHEAT);
-        if (command.isDebugCommand()) {
-            flags.add(CommandData.Flag.TEST_USAGE);
-        }
-
-        return new CommandData(
-                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
-                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
-        );
     }
 
     protected void tickFood() {
@@ -353,7 +305,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
     }
 
-    protected void tryPickUpEntities() {
+    protected void tickPickUpEntities() {
         if (!isCurrentChunkLoaded()) {
             return;
         }
@@ -442,6 +394,54 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
             nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
         }
+    }
+
+    protected void sendCommands() {
+        var packet = new AvailableCommandsPacket();
+        Registries.COMMANDS.getContent().values().stream()
+                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
+                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
+        this.clientComponent.sendPacket(packet);
+    }
+
+    protected CommandData encodeCommand(Command command) {
+        // Aliases
+        CommandEnumData aliases = null;
+        if (!command.getAliases().isEmpty()) {
+            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
+            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
+            values.put(command.getName(), Collections.emptySet());
+            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
+        }
+
+        // Overloads
+        var overloads = new ArrayList<CommandOverloadData>();
+        for (var leaf : command.getCommandTree().getLeaves()) {
+            var params = new CommandParamData[leaf.depth()];
+            var node = leaf;
+            var index = leaf.depth() - 1;
+            while (!node.isRoot()) {
+                params[index] = ((BaseNode) node).toNetworkData();
+                node = node.parent();
+                index--;
+            }
+            overloads.add(new CommandOverloadData(false, params));
+        }
+        if (overloads.isEmpty()) {
+            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
+        }
+
+        // Flags
+        var flags = new HashSet<CommandData.Flag>();
+        flags.add(CommandData.Flag.NOT_CHEAT);
+        if (command.isDebugCommand()) {
+            flags.add(CommandData.Flag.TEST_USAGE);
+        }
+
+        return new CommandData(
+                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
+                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
+        );
     }
 
     protected void regenerate(boolean exhaust) {

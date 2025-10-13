@@ -44,6 +44,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
+- (API) Removed internal method `ArmorContainer.onArmorChange()`.
+
 ## 0.8.1 (API 0.13.0) - 2025/10/7
 
 <small>[Compare with 0.8.0](https://github.com/AllayMC/Allay/compare/0.8.0...0.8.1)</small>

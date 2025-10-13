@@ -36,6 +36,7 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
 
     public ItemFireworkRocketBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
+        this.duration = 1;
         this.explosions = new HashSet<>();
     }
 
