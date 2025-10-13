@@ -119,6 +119,6 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
 
     @Override
     public AABBdc getAABB() {
-        return new AABBd(-0.025, 0.0, -0.025, 0.025, 0.05, 0.025);
+        return new AABBd(-0.0625, 0.0, -0.0625, 0.0625, 0.5, 0.0625);
     }
 }

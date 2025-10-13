@@ -101,15 +101,17 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
             var collidedBlocks = dimension.getCollidingBlockStates(entity.getOffsetAABB());
             if (collidedBlocks == null || !physicsComponent.computeBlockCollisionMotion()) {
-                // 1. The entity is not stuck in the block
+                // The entity is not stuck in the block
                 if (physicsComponent.computeEntityCollisionMotion()) {
                     computeEntityCollisionMotion(entity);
                 }
+
                 var hasLiquidMotion = false;
                 if (physicsComponent.computeLiquidMotion()) {
                     hasLiquidMotion = computeLiquidMotion(entity);
                 }
-                // We should always check threshold for motion after we modified it
+
+                // We should always check the threshold for motion after we modified it
                 physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
                 if (physicsComponent.applyMotion()) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
@@ -118,8 +120,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 // Update and set motion again
                 physicsComponent.setMotion(checkMotionThreshold(physicsComponent.updateMotion(hasLiquidMotion)));
             } else if (physicsComponent.computeBlockCollisionMotion()) {
-                // 2. The entity is stuck in the block
-                // Do not calculate other motion exclude block collision motion
+                // The entity is stuck in the block. Do not calculate other motions exclude block collision motion
                 computeBlockCollisionMotion(entity, collidedBlocks);
                 physicsComponent.setMotion(checkMotionThreshold(new Vector3d(physicsComponent.getMotion())));
                 if (forceApplyMotion(entity)) {
@@ -328,16 +329,15 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
                 var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
                 if (baseComponent.getExpectedTeleportPos() != null) {
-                    // It is possible that client move already get into the move queue
-                    // before we set awatingTeleportACK to true, so here we should ignore all
-                    // client move until awatingTeleportACK become false.
+                    // It is possible that client move already get into the move queue before we set 'awatingTeleportACK' to true,
+                    // so here we should ignore all client moves until 'awatingTeleportACK' become false.
                     continue;
                 }
 
                 var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
                 if (!event.call()) {
-                    // Teleport player to specified revert position, if specified.
                     if (event.getRevertTo() != null) {
+                        // Teleport player to the specified revert position.
                         player.teleport(event.getRevertTo());
                     }
                     continue;

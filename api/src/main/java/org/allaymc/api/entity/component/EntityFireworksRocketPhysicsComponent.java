@@ -5,7 +5,14 @@ package org.allaymc.api.entity.component;
  */
 public interface EntityFireworksRocketPhysicsComponent extends EntityPhysicsComponent {
 
+    /**
+     * The default multiplier for sideways motion applied to the entity's horizontal movement along the x and z axes
+     * in each tick.
+     */
     double DEFAULT_SIDEWAYS_MOTION_MULTIPLIER = 1.15;
+    /**
+     * The default value for upwards motion that is applied to the vertical (y-axis) motion of an entity every tick.
+     */
     double DEFAULT_UPWARDS_MOTION = 0.04;
 
     /**

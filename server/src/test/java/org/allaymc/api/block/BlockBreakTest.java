@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class BlockBreakTest {
     private static final EntityPlayer player = mock(EntityPlayer.class);
 
-    private static void testCalculatingBreakTime(double expectedSeconds, BlockBehavior breakingBlock, ItemStack usedItem, boolean isOnGround, boolean isInWater) {
+    private static void testBreakTime(double expectedSeconds, BlockBehavior breakingBlock, ItemStack usedItem, boolean isOnGround, boolean isInWater) {
         when(player.isOnGround()).thenReturn(isOnGround);
         when(player.isEyesInWater()).thenReturn(isInWater);
         assertEquals(expectedSeconds, breakingBlock.calculateBreakTime(
@@ -38,61 +38,61 @@ public class BlockBreakTest {
      * This tests based on <a href="https://minecraft.wiki/w/Breaking#Calculator">this calculator</a>.
      */
     @Test
-    void testCalculatingBreakTime_by_hand() {
+    void testByHand() {
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemAirStack.AIR_STACK;
 
-        testCalculatingBreakTime(50, cobblestone, usedItem, true, true);
-        testCalculatingBreakTime(250, cobblestone, usedItem, false, true);
-        testCalculatingBreakTime(10, cobblestone, usedItem, true, false);
-        testCalculatingBreakTime(50, cobblestone, usedItem, false, false);
+        testBreakTime(50, cobblestone, usedItem, true, true);
+        testBreakTime(250, cobblestone, usedItem, false, true);
+        testBreakTime(10, cobblestone, usedItem, true, false);
+        testBreakTime(50, cobblestone, usedItem, false, false);
     }
 
     @Test
-    void testCalculatingBreakTime_by_valid_tool() {
+    void testByValidTool() {
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemTypes.DIAMOND_PICKAXE.createItemStack();
 
-        testCalculatingBreakTime(1.9, cobblestone, usedItem, true, true);
-        testCalculatingBreakTime(9.4, cobblestone, usedItem, false, true);
-        testCalculatingBreakTime(0.4, cobblestone, usedItem, true, false);
-        testCalculatingBreakTime(1.9, cobblestone, usedItem, false, false);
+        testBreakTime(1.9, cobblestone, usedItem, true, true);
+        testBreakTime(9.4, cobblestone, usedItem, false, true);
+        testBreakTime(0.4, cobblestone, usedItem, true, false);
+        testBreakTime(1.9, cobblestone, usedItem, false, false);
     }
 
     @Test
-    void testCalculatingBreakTime_with_haste_or_conduit_power() {
+    void testWithHasteOrConduitPower() {
         when(player.hasEffect(EffectTypes.CONDUIT_POWER)).thenReturn(true);
         when(player.getEffectLevel(EffectTypes.CONDUIT_POWER)).thenReturn(1);
 
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemAirStack.AIR_STACK;
 
-        testCalculatingBreakTime(34.75, cobblestone, usedItem, true, true);
-        testCalculatingBreakTime(173.65, cobblestone, usedItem, false, true);
-        testCalculatingBreakTime(6.95, cobblestone, usedItem, true, false);
-        testCalculatingBreakTime(34.75, cobblestone, usedItem, false, false);
+        testBreakTime(34.75, cobblestone, usedItem, true, true);
+        testBreakTime(173.65, cobblestone, usedItem, false, true);
+        testBreakTime(6.95, cobblestone, usedItem, true, false);
+        testBreakTime(34.75, cobblestone, usedItem, false, false);
 
         when(player.hasEffect(EffectTypes.CONDUIT_POWER)).thenReturn(false);
     }
 
     @Test
-    void testCalculatingBreakTime_with_mining_fatigue() {
+    void testWithMiningFatigue() {
         when(player.hasEffect(EffectTypes.MINING_FATIGUE)).thenReturn(true);
         when(player.getEffectLevel(EffectTypes.MINING_FATIGUE)).thenReturn(2);
 
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemAirStack.AIR_STACK;
 
-        testCalculatingBreakTime(1133.8, cobblestone, usedItem, true, true);
-        testCalculatingBreakTime(5668.95, cobblestone, usedItem, false, true);
-        testCalculatingBreakTime(226.8, cobblestone, usedItem, true, false);
-        testCalculatingBreakTime(1133.8, cobblestone, usedItem, false, false);
+        testBreakTime(1133.8, cobblestone, usedItem, true, true);
+        testBreakTime(5668.95, cobblestone, usedItem, false, true);
+        testBreakTime(226.8, cobblestone, usedItem, true, false);
+        testBreakTime(1133.8, cobblestone, usedItem, false, false);
 
         when(player.hasEffect(EffectTypes.MINING_FATIGUE)).thenReturn(false);
     }
 
     @Test
-    void testCalculatingBreakTime_with_aqua_affinity() {
+    void testWithAquaAffinity() {
         var armorContainer = mock(ArmorContainerImpl.class);
         var helmet = ItemTypes.DIAMOND_HELMET.createItemStack();
         helmet.addEnchantment(EnchantmentTypes.AQUA_AFFINITY, 1);
@@ -105,75 +105,75 @@ public class BlockBreakTest {
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemAirStack.AIR_STACK;
 
-        testCalculatingBreakTime(10, cobblestone, usedItem, true, true);
-        testCalculatingBreakTime(50, cobblestone, usedItem, false, true);
-        testCalculatingBreakTime(10, cobblestone, usedItem, true, false);
-        testCalculatingBreakTime(50, cobblestone, usedItem, false, false);
+        testBreakTime(10, cobblestone, usedItem, true, true);
+        testBreakTime(50, cobblestone, usedItem, false, true);
+        testBreakTime(10, cobblestone, usedItem, true, false);
+        testBreakTime(50, cobblestone, usedItem, false, false);
 
         when(player.hasContainer(ContainerTypes.ARMOR)).thenReturn(false);
     }
 
     @Test
-    void testCalculatingBreakTime_with_efficiency() {
+    void testWithEfficiency() {
         var cobblestone = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemTypes.DIAMOND_PICKAXE.createItemStack();
         usedItem.addEnchantment(EnchantmentTypes.EFFICIENCY, 5);
 
-        testCalculatingBreakTime(0.45, cobblestone, usedItem, true, true);
-        testCalculatingBreakTime(2.25, cobblestone, usedItem, false, true);
-        testCalculatingBreakTime(0.1, cobblestone, usedItem, true, false);
-        testCalculatingBreakTime(0.45, cobblestone, usedItem, false, false);
+        testBreakTime(0.45, cobblestone, usedItem, true, true);
+        testBreakTime(2.25, cobblestone, usedItem, false, true);
+        testBreakTime(0.1, cobblestone, usedItem, true, false);
+        testBreakTime(0.45, cobblestone, usedItem, false, false);
     }
 
     @Test
-    void testCalculatingBreakTime_by_sword() {
+    void testBySword() {
         var blockToBreak = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemTypes.DIAMOND_SWORD.createItemStack();
 
-        testCalculatingBreakTime(33.35, blockToBreak, usedItem, true, true);
-        testCalculatingBreakTime(166.7, blockToBreak, usedItem, false, true);
-        testCalculatingBreakTime(6.7, blockToBreak, usedItem, true, false);
-        testCalculatingBreakTime(33.35, blockToBreak, usedItem, false, false);
+        testBreakTime(33.35, blockToBreak, usedItem, true, true);
+        testBreakTime(166.7, blockToBreak, usedItem, false, true);
+        testBreakTime(6.7, blockToBreak, usedItem, true, false);
+        testBreakTime(33.35, blockToBreak, usedItem, false, false);
 
         blockToBreak = BlockTypes.WEB.getDefaultState().getBehavior();
-        testCalculatingBreakTime(2, blockToBreak, usedItem, true, true);
-        testCalculatingBreakTime(10, blockToBreak, usedItem, false, true);
-        testCalculatingBreakTime(0.4, blockToBreak, usedItem, true, false);
-        testCalculatingBreakTime(2, blockToBreak, usedItem, false, false);
+        testBreakTime(2, blockToBreak, usedItem, true, true);
+        testBreakTime(10, blockToBreak, usedItem, false, true);
+        testBreakTime(0.4, blockToBreak, usedItem, true, false);
+        testBreakTime(2, blockToBreak, usedItem, false, false);
 
         blockToBreak = BlockTypes.BAMBOO.getDefaultState().getBehavior();
-        testCalculatingBreakTime(0, blockToBreak, usedItem, true, true);
-        testCalculatingBreakTime(0, blockToBreak, usedItem, false, true);
-        testCalculatingBreakTime(0, blockToBreak, usedItem, true, false);
-        testCalculatingBreakTime(0, blockToBreak, usedItem, false, false);
+        testBreakTime(0, blockToBreak, usedItem, true, true);
+        testBreakTime(0, blockToBreak, usedItem, false, true);
+        testBreakTime(0, blockToBreak, usedItem, true, false);
+        testBreakTime(0, blockToBreak, usedItem, false, false);
     }
 
     @Test
-    void testCalculatingBreakTime_by_shears() {
+    void testByShears() {
         var breakingBlock = BlockTypes.COBBLESTONE.getDefaultState().getBehavior();
         var usedItem = ItemTypes.SHEARS.createItemStack();
 
-        testCalculatingBreakTime(50, breakingBlock, usedItem, true, true);
-        testCalculatingBreakTime(250, breakingBlock, usedItem, false, true);
-        testCalculatingBreakTime(10, breakingBlock, usedItem, true, false);
-        testCalculatingBreakTime(50, breakingBlock, usedItem, false, false);
+        testBreakTime(50, breakingBlock, usedItem, true, true);
+        testBreakTime(250, breakingBlock, usedItem, false, true);
+        testBreakTime(10, breakingBlock, usedItem, true, false);
+        testBreakTime(50, breakingBlock, usedItem, false, false);
 
         breakingBlock = BlockTypes.BLACK_WOOL.getDefaultState().getBehavior();
-        testCalculatingBreakTime(1.25, breakingBlock, usedItem, true, true);
-        testCalculatingBreakTime(6.05, breakingBlock, usedItem, false, true);
-        testCalculatingBreakTime(0.25, breakingBlock, usedItem, true, false);
-        testCalculatingBreakTime(1.25, breakingBlock, usedItem, false, false);
+        testBreakTime(1.25, breakingBlock, usedItem, true, true);
+        testBreakTime(6.05, breakingBlock, usedItem, false, true);
+        testBreakTime(0.25, breakingBlock, usedItem, true, false);
+        testBreakTime(1.25, breakingBlock, usedItem, false, false);
 
         breakingBlock = BlockTypes.WEB.getDefaultState().getBehavior();
-        testCalculatingBreakTime(2, breakingBlock, usedItem, true, true);
-        testCalculatingBreakTime(10, breakingBlock, usedItem, false, true);
-        testCalculatingBreakTime(0.4, breakingBlock, usedItem, true, false);
-        testCalculatingBreakTime(2, breakingBlock, usedItem, false, false);
+        testBreakTime(2, breakingBlock, usedItem, true, true);
+        testBreakTime(10, breakingBlock, usedItem, false, true);
+        testBreakTime(0.4, breakingBlock, usedItem, true, false);
+        testBreakTime(2, breakingBlock, usedItem, false, false);
 
         breakingBlock = BlockTypes.OAK_LEAVES.getDefaultState().getBehavior();
-        testCalculatingBreakTime(0.15, breakingBlock, usedItem, true, true);
-        testCalculatingBreakTime(0.55, breakingBlock, usedItem, false, true);
-        testCalculatingBreakTime(0.05, breakingBlock, usedItem, true, false);
-        testCalculatingBreakTime(0.15, breakingBlock, usedItem, false, false);
+        testBreakTime(0.15, breakingBlock, usedItem, true, true);
+        testBreakTime(0.55, breakingBlock, usedItem, false, true);
+        testBreakTime(0.05, breakingBlock, usedItem, true, false);
+        testBreakTime(0.15, breakingBlock, usedItem, false, false);
     }
 }

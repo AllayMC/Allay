@@ -13,6 +13,9 @@ import org.joml.Vector3dc;
  */
 public interface EntityPhysicsComponent extends EntityComponent {
 
+    /**
+     * Represents the default knockback value.
+     */
     double DEFAULT_KNOCKBACK = 0.4;
 
     /**

@@ -48,6 +48,11 @@ public class EntityFireworksRocketPhysicsComponentImpl extends EntityPhysicsComp
         return false;
     }
 
+    @Override
+    public boolean computeBlockCollisionMotion() {
+        return false;
+    }
+
     @EventHandler
     protected void onTick(CEntityTickEvent event) {
         var attachedPlayer = this.fireworkBaseComponent.getAttachedPlayer();
