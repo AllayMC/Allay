@@ -6,18 +6,23 @@ import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityFireworksRocketBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityFireworksRocket;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.entity.FireworkExplodeEvent;
 import org.allaymc.api.world.FireworkExplosion;
 import org.allaymc.api.world.data.FireworkType;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
+import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
+import org.joml.primitives.Rayd;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author daoge_cmd
@@ -70,7 +75,11 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
             }
         }
 
-        var force = this.explosions.size() * 2 + 5.0;
+        var event = new FireworkExplodeEvent((EntityFireworksRocket) thisEntity, this.explosions.size() * 2 + 5.0);
+        if (!event.call()) {
+            return;
+        }
+
         var affectedEntities = dimension.getEntityManager().getPhysicsService()
                 .computeCollidingEntities(getOffsetAABB().expand(5.25, new AABBd()));
         for (var affectedEntity : affectedEntities) {
@@ -82,13 +91,31 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
                     continue;
                 }
 
-                // TODO: check if any block is in the ray path
-
-                var damage = DamageContainer.entityExplosion(
-                        thisEntity,
-                        (float) (force * Math.sqrt((5.0 - distance) / 5.0))
+                // Perform ray cast to check if we should apply damage to the entity. This is simply determined
+                // by just checking if there are solid blocks between the firework and the entity.
+                var hasDamage = new AtomicBoolean(true);
+                var aabb = new AABBd(
+                        Math.min(this.location.x(), pos.x()),
+                        Math.min(this.location.y(), pos.y()),
+                        Math.min(this.location.z(), pos.z()),
+                        Math.max(this.location.x(), pos.x()),
+                        Math.max(this.location.y(), pos.y()),
+                        Math.max(this.location.z(), pos.z())
                 );
-                living.attack(damage);
+                var ray = new Rayd(location, pos.sub(this.location, new Vector3d()));
+                dimension.forEachBlockStates(aabb, 0, (x, y, z, block) -> {
+                    if (hasDamage.get() && block.getBlockStateData().computeOffsetCollisionShape(x, y, z).intersectsRay(ray)) {
+                        hasDamage.set(false);
+                    }
+                });
+
+                if (hasDamage.get()) {
+                    var damage = DamageContainer.entityExplosion(
+                            thisEntity,
+                            (float) (event.getForce() * Math.sqrt((5.0 - distance) / 5.0))
+                    );
+                    living.attack(damage);
+                }
             }
         }
     }

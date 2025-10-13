@@ -7,7 +7,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.world.Explosion;
 
 /**
- * Called when an entity is about to explode, used by tnt and creeper for example.
+ * Called when an entity is about to explode. This event is used by some entities like tnt and creeper.
+ * <p>
+ * Notes that firework does not use this event, but use {@link FireworkExplodeEvent} instead. That's
+ * because firework does not use the {@link Explosion} class.
  *
  * @author daoge_cmd
  */
