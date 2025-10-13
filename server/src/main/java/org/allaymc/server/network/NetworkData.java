@@ -9,6 +9,7 @@ import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -28,7 +29,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.PotionMixData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -179,6 +179,12 @@ public final class NetworkData {
                     packet.getCraftingData().add(data);
                     NetworkData.INDEXED_RECIPES.add(recipe);
                 }
+                case ComplexRecipe complex -> {
+                    var id = idCounter++;
+                    var data = MultiRecipeData.of(complex.getUuid(), id);
+                    packet.getCraftingData().add(data);
+                    NetworkData.INDEXED_RECIPES.add(recipe);
+                }
                 // Unindexed recipe (doesn't have network id)
                 case FurnaceRecipe furnace -> {
                     var data = FurnaceRecipeData.of(
@@ -203,7 +209,7 @@ public final class NetworkData {
         return packet;
     }
 
-    private static @NotNull List<ItemData> buildNetworkOutputs(ItemStack[] shaped) {
+    private static List<ItemData> buildNetworkOutputs(ItemStack[] shaped) {
         return Arrays.stream(shaped).map(NetworkHelper::toNetwork).toList();
     }
 

@@ -22,6 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added particle `SimpleParticle.FIREWORK_CONTRAIL`.
 - (API) Added event `FireworkExplodeEvent` which will be called when a firework rocket is about to explode.
 - (API) Implemented firework and firework star. Multiple classes including `FireworkType`, `FireworkExplosion` were added.
+- Implemented recipes for fireworks.
 - Implemented elytra. The fall distance for the player will be reset if the player is gliding.
 - Player's height will be changed when the player is sneaking, swimming, gliding, or crawling now.
 

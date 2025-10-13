@@ -10,6 +10,8 @@ import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.item.recipe.ComplexRecipe;
+import org.allaymc.server.item.recipe.FireworkRecipe;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -81,6 +83,11 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier
             var recipe = parsePotion(potionRecipe.getAsJsonObject());
             recipes.put(recipe.getIdentifier(), recipe);
         }
+
+        // Complex
+        var complexRecipes = new HashSet<ComplexRecipe>();
+        complexRecipes.add(FireworkRecipe.INSTANCE);
+        complexRecipes.forEach(complexRecipe -> recipes.put(complexRecipe.getIdentifier(), complexRecipe));
 
         return recipes;
     }
