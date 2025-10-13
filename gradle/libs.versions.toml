@@ -74,8 +74,8 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 # Native Operating System and Hardware Information
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.0" }
 # GUI
-flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.1" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.26830.102" }
+flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.2" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.26830.108" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.0" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
