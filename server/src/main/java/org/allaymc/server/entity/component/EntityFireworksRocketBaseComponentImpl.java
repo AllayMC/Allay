@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.EntityInitInfo;
@@ -36,6 +37,7 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
     protected static final String TAG_LIFE = "Life";
 
     protected int existenceTicks, existedTicks;
+    @Setter(AccessLevel.NONE)
     protected Set<FireworkExplosion> explosions;
     protected EntityPlayer attachedPlayer;
 
@@ -119,6 +121,12 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
                 }
             }
         }
+    }
+
+    @Override
+    public void setExplosions(Set<FireworkExplosion> explosions) {
+        this.explosions = explosions;
+        broadcastState();
     }
 
     @Override
