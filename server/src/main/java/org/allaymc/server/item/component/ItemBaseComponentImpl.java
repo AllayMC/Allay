@@ -201,7 +201,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             nbtBuilder.put(TAG_PDC, persistentDataContainer.toNbt());
         }
 
-        return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
+        return nbtBuilder.build();
     }
 
     @Override
@@ -212,7 +212,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                 .putString(TAG_NAME, getItemType().getIdentifier().toString());
 
         var extraTag = saveExtraTag();
-        if (extraTag != null) {
+        if (!extraTag.isEmpty()) {
             builder.putCompound(TAG_EXTRA_TAG, extraTag);
         }
 
@@ -292,13 +292,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public ItemStack copy(boolean newStackNetworkId) {
-        var extraTag = saveExtraTag();
         return itemType.createItemStack(
                 ItemStackInitInfo
                         .builder()
                         .count(count)
                         .meta(meta)
-                        .extraTag(extraTag != null ? extraTag : NbtMap.EMPTY)
+                        .extraTag(saveExtraTag())
                         .uniqueId(newStackNetworkId ? EMPTY_UNIQUE_ID : uniqueId)
                         .assignUniqueId(newStackNetworkId)
                         .build()
@@ -411,16 +410,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Override
     public boolean canMerge(ItemStack itemStack, boolean ignoreCount) {
         Objects.requireNonNull(itemStack);
-
-        var extraTag1 = saveExtraTag();
-        if (extraTag1 == null) extraTag1 = NbtMap.EMPTY;
-
-        var extraTag2 = itemStack.saveExtraTag();
-        if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
         return itemStack.getItemType() == getItemType() &&
                itemStack.getMeta() == getMeta() &&
                (ignoreCount || count + itemStack.getCount() <= itemType.getItemData().maxStackSize()) &&
-               extraTag1.equals(extraTag2) &&
+               saveExtraTag().equals(itemStack.saveExtraTag()) &&
                itemStack.toBlockState() == toBlockState();
     }
 

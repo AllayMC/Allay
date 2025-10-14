@@ -1,7 +1,7 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerScoreboardViewerComponent;
+import org.allaymc.api.entity.component.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.EntityPlayerScoreboardViewerComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;

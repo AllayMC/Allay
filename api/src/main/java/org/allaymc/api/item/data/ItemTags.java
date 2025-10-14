@@ -79,6 +79,8 @@ public interface ItemTags {
 
     ItemTag DECORATED_POT_SHERDS = create("minecraft:decorated_pot_sherds");
 
+    ItemTag DYE = create("minecraft:dye");
+
     ItemTag VIBRATION_DAMPER = create("minecraft:vibration_damper");
 
     ItemTag LEATHER_TIER = create("minecraft:leather_tier");

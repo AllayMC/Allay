@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.NBTIO;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
@@ -223,9 +223,9 @@ public record Structure(
         }
         for (var nbt : entities) {
             var builder = nbt.toBuilder();
-            var oldPos = AllayNbtUtils.readVector3f(nbt, "Pos");
+            var oldPos = AllayNBTUtils.readVector3f(nbt, "Pos");
             // Calculate the new position for this entity
-            AllayNbtUtils.writeVector3f(
+            AllayNBTUtils.writeVector3f(
                     builder, "Pos",
                     oldPos.x - this.x + x,
                     oldPos.y - this.y + y,

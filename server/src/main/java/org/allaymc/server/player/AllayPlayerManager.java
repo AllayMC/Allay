@@ -249,8 +249,8 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     public synchronized void addPlayer(EntityPlayer player) {
-        players.put(player.getLoginData().getUuid(), player);
-        networkInterface.setPlayerCount(players.size());
+        this.players.put(player.getLoginData().getUuid(), player);
+        this.networkInterface.setPlayerCount(this.players.size());
         Server.getInstance().getMessageChannel().addReceiver(player);
         broadcastPlayerListChange(player, true);
         // NOTICE: player list should be sent to the player itself later when the client is fully loaded.
@@ -263,12 +263,14 @@ public class AllayPlayerManager implements PlayerManager {
 
         // At this time the client has disconnected
         if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
+            this.players.remove(player.getLoginData().getUuid());
+            this.networkInterface.setPlayerCount(this.players.size());
+
             var event = new PlayerQuitEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_LEFT);
             event.call();
-            Object[] args = new Object[]{player.getOriginName()};
-            server.getMessageChannel().broadcastTranslatable(event.getQuitMessage(), args);
+
+            server.getMessageChannel().broadcastTranslatable(event.getQuitMessage(), player.getOriginName());
             server.getMessageChannel().removeReceiver(player);
-            players.remove(player.getLoginData().getUuid());
 
             // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off
             // the server without waiting for the status change to IN_GAME, which is why the session remains and the
@@ -280,12 +282,11 @@ public class AllayPlayerManager implements PlayerManager {
                 // resource packs, the dimension of the player should always be non-null regardless of the status of the
                 // player because there is a check in EntityPlayerBaseComponentImpl#setLocationBeforeSpawn()
                 player.getDimension().removePlayer(player);
-                playerStorage.savePlayerData(player);
+                this.playerStorage.savePlayerData(player);
                 broadcastPlayerListChange(player, false);
             }
         }
 
-        networkInterface.setPlayerCount(players.size());
     }
 
     /// Broadcast the player list change to other players except the player itself

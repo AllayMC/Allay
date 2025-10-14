@@ -1,9 +1,11 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntitySetMotionEvent;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityHumanPhysicsComponentImpl;
@@ -18,6 +20,8 @@ import org.joml.Vector3dc;
  */
 public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponentImpl {
 
+    @Dependency
+    protected EntityPlayerBaseComponent playerBaseComponent;
     @Dependency
     protected EntityPlayerClientComponent clientComponent;
 
@@ -56,5 +60,17 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
         }
 
         return false;
+    }
+
+    /// Fall distance for the player will be reset to 1 if the player is gliding and the absolute value of the
+    /// vertical motion is smaller than 0.5
+    @Override
+    protected void tryResetFallDistance(Location3dc location) {
+        if (this.playerBaseComponent.isGliding() &&
+            Math.abs(this.motion.y()) < 0.5) {
+            this.fallDistance = 1;
+        } else {
+            super.tryResetFallDistance(location);
+        }
     }
 }

@@ -3,14 +3,14 @@ package org.allaymc.api.eventbus.event.player;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.message.MayContainTrKey;
 
 /**
  * PlayerQuitEvent will be called when a player quit the server.
  * <p>
- * Different from {@link org.allaymc.api.eventbus.event.network.ClientDisconnectEvent}, this event
- * will only be called when an already logged in player quit the server. If the client disconnect
- * without logging in, this event will not be called.
+ * Different from {@link ClientDisconnectEvent}, this event will only be called when an already logged in player
+ * quit the server. If the client disconnects without logging in, this event will not be called.
  *
  * @author daoge_cmd
  */

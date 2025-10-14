@@ -18,12 +18,7 @@ import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.action.SimpleEntityAction;
-import org.allaymc.api.entity.component.EntityBaseComponent;
-import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.EntityLivingComponent;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerChunkLoaderComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
@@ -39,6 +34,7 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.api.world.FireworkExplosion;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.Weather;
@@ -62,6 +58,7 @@ import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -108,6 +105,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         map.put(EntityTypes.FALLING_BLOCK, 0.49f);
         map.put(EntityTypes.ITEM, 0.125f);
         map.put(EntityTypes.TNT, 0.49f);
+        map.put(EntityTypes.FIREWORKS_ROCKET, 0.49f);
         return map;
     });
 
@@ -418,6 +416,21 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                     map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) (potionType.ordinal() + 1));
                 }
             }
+            case EntityFireworksRocket firework -> {
+                var nbt = NbtMap.builder()
+                        .putCompound("Fireworks", NbtMap.builder()
+                                .putList("Explosions", NbtType.COMPOUND, firework.getExplosions().stream().map(FireworkExplosion::saveNBT).toList())
+                                .putByte("Flight", (byte) (firework.getExistenceTicks() / 20))
+                                .build()
+                        )
+                        .build();
+                map.put(EntityDataTypes.DISPLAY_FIREWORK, nbt);
+
+                var attachedPlayer = firework.getAttachedPlayer();
+                if (attachedPlayer != null) {
+                    map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) attachedPlayer.getRuntimeId());
+                }
+            }
             default -> {
             }
         }
@@ -553,7 +566,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                     this.clientComponent.sendPacket(packet);
                 }
             }
-            case SimpleEntityAction.FIREWORK_EXPLOSION -> {
+            case SimpleEntityAction.FIREWORK_EXPLODE -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.FIREWORK_EXPLODE);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
@@ -836,7 +849,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case SimpleSound.FIREWORK_LAUNCH -> packet.setSound(SoundEvent.LAUNCH);
             case SimpleSound.FIREWORK_HUGE_BLAST -> packet.setSound(SoundEvent.LARGE_BLAST);
             case SimpleSound.FIREWORK_BLAST -> packet.setSound(SoundEvent.BLAST);
-            case SimpleSound.FIREWORK_TWINKLE -> packet.setSound(SoundEvent.TWINKLE);
+            case SimpleSound.FIREWORK_FLICKER -> packet.setSound(SoundEvent.TWINKLE);
             case SimpleSound.FURNACE_CRACKLE -> packet.setSound(SoundEvent.FURNACE_USE);
             case SimpleSound.CAMPFIRE_CRACKLE -> packet.setSound(SoundEvent.CAMPFIRE_CRACKLE);
             case SimpleSound.BLAST_FURNACE_CRACKLE -> packet.setSound(SoundEvent.BLAST_FURNACE_USE);
@@ -1202,6 +1215,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
             case SimpleParticle.LAVA -> packet.setType(ParticleType.LAVA);
             case SimpleParticle.DUST_PLUME -> packet.setType(ParticleType.DUST_PLUME);
             case SimpleParticle.WHITE_SMOKE -> packet.setType(ParticleType.WHITE_SMOKE);
+            case SimpleParticle.FIREWORK_CONTRAIL -> packet.setType(ParticleType.FIREWORKS);
             case CustomParticle pa -> {
                 var pk = new SpawnParticleEffectPacket();
                 pk.setDimensionId(thisPlayer.getDimension().getDimensionInfo().dimensionId());

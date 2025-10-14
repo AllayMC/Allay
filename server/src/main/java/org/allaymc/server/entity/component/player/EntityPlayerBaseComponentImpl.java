@@ -13,7 +13,7 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -34,7 +34,7 @@ import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
@@ -60,6 +60,7 @@ import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -93,10 +94,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_FOOD_SATURATION_LEVEL = "FoodSaturationLevel";
     protected static final String TAG_FOOD_EXHAUSTION_LEVEL = "FoodExhaustionLevel";
     protected static final String TAG_FOOD_TICK_TIMER = "FoodTickTimer";
-
-    protected static final String TAG_SPEED = "Speed";
-    protected static final String TAG_FLY_SPEED = "FlySpeed";
-    protected static final String TAG_VERTICAL_FLY_SPEED = "VerticalFlySpeed";
 
     protected static final int FOOD_TICK_THRESHOLD = 80;
     /**
@@ -148,7 +145,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Map<String, Long> cooldowns;
 
     @Getter
-    protected float speed, flySpeed, verticalFlySpeed;
+    protected double speed, flySpeed, verticalFlySpeed;
     @Getter
     protected String scoreTag;
     @Getter
@@ -221,7 +218,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
 
-    public void setSpeed(float speed) {
+    public void setSpeed(double speed) {
         if (this.speed != speed) {
             this.speed = speed;
             this.clientComponent.sendSpeed(this.speed);
@@ -229,7 +226,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setFlySpeed(float flySpeed) {
+    public void setFlySpeed(double flySpeed) {
         if (this.flySpeed != flySpeed) {
             this.flySpeed = flySpeed;
             this.clientComponent.viewPlayerPermission(thisPlayer);
@@ -237,7 +234,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setVerticalFlySpeed(float verticalFlySpeed) {
+    public void setVerticalFlySpeed(double verticalFlySpeed) {
         if (this.verticalFlySpeed != verticalFlySpeed) {
             this.verticalFlySpeed = verticalFlySpeed;
             this.clientComponent.viewPlayerPermission(thisPlayer);
@@ -262,62 +259,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void tick(long currentTick) {
         super.tick(currentTick);
 
-        tickFood();
-        tryPickUpEntities();
-        tickPlayerDataAutoSave();
+        if (isAlive()) {
+            tickFood();
+            tickPickUpEntities();
+        }
 
+        tickPlayerDataAutoSave();
         if (this.requireResendingCommands) {
             sendCommands();
             this.requireResendingCommands = false;
         }
-    }
-
-    protected void sendCommands() {
-        var packet = new AvailableCommandsPacket();
-        Registries.COMMANDS.getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
-                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
-        this.clientComponent.sendPacket(packet);
-    }
-
-    protected CommandData encodeCommand(Command command) {
-        // Aliases
-        CommandEnumData aliases = null;
-        if (!command.getAliases().isEmpty()) {
-            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
-            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
-            values.put(command.getName(), Collections.emptySet());
-            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
-        }
-
-        // Overloads
-        var overloads = new ArrayList<CommandOverloadData>();
-        for (var leaf : command.getCommandTree().getLeaves()) {
-            var params = new CommandParamData[leaf.depth()];
-            var node = leaf;
-            var index = leaf.depth() - 1;
-            while (!node.isRoot()) {
-                params[index] = ((BaseNode) node).toNetworkData();
-                node = node.parent();
-                index--;
-            }
-            overloads.add(new CommandOverloadData(false, params));
-        }
-        if (overloads.isEmpty()) {
-            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
-        }
-
-        // Flags
-        var flags = new HashSet<CommandData.Flag>();
-        flags.add(CommandData.Flag.NOT_CHEAT);
-        if (command.isDebugCommand()) {
-            flags.add(CommandData.Flag.TEST_USAGE);
-        }
-
-        return new CommandData(
-                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
-                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
-        );
     }
 
     protected void tickFood() {
@@ -354,8 +305,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
     }
 
-    protected void tryPickUpEntities() {
-        if (isDead() || !isSpawned() || willBeDespawnedNextTick() || !isCurrentChunkLoaded()) {
+    protected void tickPickUpEntities() {
+        if (!isCurrentChunkLoaded()) {
             return;
         }
 
@@ -443,6 +394,54 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
             nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
         }
+    }
+
+    protected void sendCommands() {
+        var packet = new AvailableCommandsPacket();
+        Registries.COMMANDS.getContent().values().stream()
+                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
+                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
+        this.clientComponent.sendPacket(packet);
+    }
+
+    protected CommandData encodeCommand(Command command) {
+        // Aliases
+        CommandEnumData aliases = null;
+        if (!command.getAliases().isEmpty()) {
+            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
+            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
+            values.put(command.getName(), Collections.emptySet());
+            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
+        }
+
+        // Overloads
+        var overloads = new ArrayList<CommandOverloadData>();
+        for (var leaf : command.getCommandTree().getLeaves()) {
+            var params = new CommandParamData[leaf.depth()];
+            var node = leaf;
+            var index = leaf.depth() - 1;
+            while (!node.isRoot()) {
+                params[index] = ((BaseNode) node).toNetworkData();
+                node = node.parent();
+                index--;
+            }
+            overloads.add(new CommandOverloadData(false, params));
+        }
+        if (overloads.isEmpty()) {
+            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
+        }
+
+        // Flags
+        var flags = new HashSet<CommandData.Flag>();
+        flags.add(CommandData.Flag.NOT_CHEAT);
+        if (command.isDebugCommand()) {
+            flags.add(CommandData.Flag.TEST_USAGE);
+        }
+
+        return new CommandData(
+                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
+                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
+        );
     }
 
     protected void regenerate(boolean exhaust) {
@@ -737,10 +736,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putFloat(TAG_FOOD_SATURATION_LEVEL, this.foodSaturationLevel)
                 .putFloat(TAG_FOOD_EXHAUSTION_LEVEL, this.foodExhaustionLevel)
                 .putInt(TAG_FOOD_TICK_TIMER, this.foodTickTimer)
-                // Speed
-                .putFloat(TAG_SPEED, this.speed)
-                .putFloat(TAG_FLY_SPEED, this.flySpeed)
-                .putFloat(TAG_VERTICAL_FLY_SPEED, this.verticalFlySpeed)
                 .build();
     }
 
@@ -748,7 +743,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
                 .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId());
-        AllayNbtUtils.writeVector3i(builder, TAG_POS, spawnPoint);
+        AllayNBTUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
     }
 
@@ -793,11 +788,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         nbt.listenForFloat(TAG_FOOD_SATURATION_LEVEL, value -> this.foodSaturationLevel = value);
         nbt.listenForFloat(TAG_FOOD_EXHAUSTION_LEVEL, value -> this.foodExhaustionLevel = value);
         nbt.listenForInt(TAG_FOOD_TICK_TIMER, value -> this.foodTickTimer = value);
-
-        // Speed
-        nbt.listenForFloat(TAG_SPEED, value -> this.speed = value);
-        nbt.listenForFloat(TAG_FLY_SPEED, value -> this.flySpeed = value);
-        nbt.listenForFloat(TAG_VERTICAL_FLY_SPEED, value -> this.verticalFlySpeed = value);
     }
 
     protected void loadSpawnPoint(NbtMap nbt) {
@@ -814,7 +804,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.spawnPoint = new Location3i(
-                AllayNbtUtils.readVector3i(nbt, TAG_POS),
+                AllayNBTUtils.readVector3i(nbt, TAG_POS),
                 0, 0, 0, dimension
         );
     }
@@ -1015,7 +1005,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setSprinting(boolean sprinting) {
         if (this.sprinting != sprinting) {
             this.sprinting = sprinting;
-            var speed = this.getSpeed();
+            var speed = this.speed;
             if (sprinting) {
                 speed *= 1.3f;
             } else {
@@ -1067,6 +1057,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public boolean hasEntityCollision() {
         return this.gameMode != GameMode.SPECTATOR;
+    }
+
+    @Override
+    public AABBdc getAABB() {
+        var height = 1.8;
+        if (this.sneaking) {
+            height = 1.5;
+        } else if (this.swimming || this.gliding) {
+            height = 0.6;
+        } else if (this.crawling) {
+            height = 0.625;
+        }
+
+        return new AABBd(-0.3, 0.0, -0.3, 0.3, height, 0.3);
     }
 
     @EventHandler

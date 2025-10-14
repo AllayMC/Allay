@@ -31,5 +31,7 @@ public enum SimpleParticle implements Particle {
     // ENTITY_FLAME is a particle shown when an entity is set on fire.
     ENTITY_FLAME,
     // WHITE_SMOKE is a particle shown when the flame on an entity is extinguished by water.
-    WHITE_SMOKE
+    WHITE_SMOKE,
+    // FIREWORK_CONTRAIL is a particle shown at the location where the firework rocket flew across.
+    FIREWORK_CONTRAIL
 }

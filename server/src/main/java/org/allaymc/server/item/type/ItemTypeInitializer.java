@@ -11,6 +11,7 @@ import org.allaymc.api.item.data.PotionType;
 import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.utils.DyeColor;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.item.component.*;
@@ -880,6 +881,51 @@ public final class ItemTypeInitializer {
                 .builder(ItemPaintingStackImpl.class)
                 .addComponent(ItemPaintingBaseComponentImpl::new, ItemPaintingBaseComponentImpl.class)
                 .vanillaItem(ItemId.PAINTING)
+                .build();
+    }
+
+    public static void initFireworkStar() {
+        ItemTypes.FIREWORK_STAR = AllayItemType
+                .builder(ItemFireworkStarStackImpl.class)
+                .vanillaItem(ItemId.FIREWORK_STAR)
+                .addComponent(ItemFireworkStarBaseComponentImpl::new, ItemFireworkStarBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initFireworkRocket() {
+        ItemTypes.FIREWORK_ROCKET = AllayItemType
+                .builder(ItemFireworkRocketStackImpl.class)
+                .vanillaItem(ItemId.FIREWORK_ROCKET)
+                .addComponent(ItemFireworkRocketBaseComponentImpl::new, ItemFireworkRocketBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initDye() {
+        ItemTypes.WHITE_DYE = buildDye(ItemId.WHITE_DYE, DyeColor.WHITE);
+        ItemTypes.ORANGE_DYE = buildDye(ItemId.ORANGE_DYE, DyeColor.ORANGE);
+        ItemTypes.MAGENTA_DYE = buildDye(ItemId.MAGENTA_DYE, DyeColor.MAGENTA);
+        ItemTypes.LIGHT_BLUE_DYE = buildDye(ItemId.LIGHT_BLUE_DYE, DyeColor.LIGHT_BLUE);
+        ItemTypes.YELLOW_DYE = buildDye(ItemId.YELLOW_DYE, DyeColor.YELLOW);
+        ItemTypes.LIME_DYE = buildDye(ItemId.LIME_DYE, DyeColor.LIME);
+        ItemTypes.PINK_DYE = buildDye(ItemId.PINK_DYE, DyeColor.PINK);
+        ItemTypes.GRAY_DYE = buildDye(ItemId.GRAY_DYE, DyeColor.GRAY);
+        ItemTypes.LIGHT_GRAY_DYE = buildDye(ItemId.LIGHT_GRAY_DYE, DyeColor.LIGHT_GRAY);
+        ItemTypes.CYAN_DYE = buildDye(ItemId.CYAN_DYE, DyeColor.CYAN);
+        ItemTypes.PURPLE_DYE = buildDye(ItemId.PURPLE_DYE, DyeColor.PURPLE);
+        ItemTypes.BLUE_DYE = buildDye(ItemId.BLUE_DYE, DyeColor.BLUE);
+        ItemTypes.BROWN_DYE = buildDye(ItemId.BROWN_DYE, DyeColor.BROWN);
+        ItemTypes.GREEN_DYE = buildDye(ItemId.GREEN_DYE, DyeColor.GREEN);
+        ItemTypes.RED_DYE = buildDye(ItemId.RED_DYE, DyeColor.RED);
+        ItemTypes.BLACK_DYE = buildDye(ItemId.BLACK_DYE, DyeColor.BLACK);
+        // This item type is replaced by 'minecraft:ink_sac', but I don't know why mojang doesn't remove it
+        ItemTypes.DYE = buildDye(ItemId.DYE, DyeColor.BLACK);
+    }
+
+    private static ItemType<ItemDyeStack> buildDye(ItemId itemId, DyeColor dyeColor) {
+        return AllayItemType
+                .builder(ItemDyeStackImpl.class)
+                .vanillaItem(itemId)
+                .addComponent(() -> new ItemDyeComponentImpl(dyeColor), ItemDyeComponentImpl.class)
                 .build();
     }
 }

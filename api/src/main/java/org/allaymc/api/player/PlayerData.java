@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
 
-import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
 
 /**
  * PlayerData represents the entry stores in {@link PlayerStorage}. It includes the player's nbt and the world & dimension

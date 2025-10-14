@@ -9,7 +9,7 @@ import org.allaymc.api.item.recipe.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -29,7 +29,7 @@ public final class RecipeJsonUtils {
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
         var count = jsonObject.get("count").getAsInt();
         var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;
-        var nbtMap = jsonObject.has("nbt") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt").getAsString()) : NbtMap.EMPTY;
+        var nbtMap = jsonObject.has("nbt") ? AllayNBTUtils.base64ToNbt(jsonObject.get("nbt").getAsString()) : NbtMap.EMPTY;
         return itemType.createItemStack(
                 ItemStackInitInfo
                         .builder()

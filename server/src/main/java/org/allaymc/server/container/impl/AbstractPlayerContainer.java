@@ -27,7 +27,7 @@ public abstract class AbstractPlayerContainer extends BaseContainer {
     public void notifySlotChange(int slot, boolean send) {
         super.notifySlotChange(slot, send);
         if (send) {
-            // Because even if the client has not opened player container, they can always see their own hot bar.
+            // Because even if the client has not opened the player container, they can always see their own hot bar.
             // Therefore, we need to send an inventory packet to the client as well.
             var player = playerSupplier.get();
             // The player object we get may be empty because some container types can be used by non-player entities (e.g. zombie)

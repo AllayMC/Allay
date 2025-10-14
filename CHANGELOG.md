@@ -17,18 +17,37 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added method `OtherChunkAccessibleContext.getBlockEntity()`.
+- (API) Added method `DyeColor.getColor()` to get the corresponded `Color` object of the dye color.
 - (API) Added methods `EntityPlayerClientComponent.viewPlayerListChange()` and `EntityPlayerClientComponent.viewPlayerPermission()`.
+- (API) Added particle `SimpleParticle.FIREWORK_CONTRAIL`.
+- (API) Added event `FireworkExplodeEvent` which will be called when a firework rocket is about to explode.
+- (API) Added class `ItemDyeComponent` which is used in all items that can be used as dye.
+- (API) Implemented firework and firework star. Multiple classes including `FireworkType`, `FireworkExplosion` were added.
+- Implemented recipes for fireworks.
+- Implemented elytra. The fall distance for the player will be reset if the player is gliding.
+- Player's height will be changed when the player is sneaking, swimming, gliding, or crawling now.
 
 ### Changed
 
+- (API) Method `ItemStack.saveExtraTag()` won't return a `null` value when the encoded extra tag is empty now.
+- (API) Used `double` instead of `float` for player speed, fly speed, and vertical fly speed.
+- (API) Renamed field `SimpleSoundEvent.TWINKLE` to `SimpleSoundEvent.FLICKER`.
+- (API) Renamed field `SimpleEntityAction.FIREWORK_EXPLOSION` to `SimpleEntityAction.FIREWORK_EXPLODE`.
+- (API) Renamed class `AllayNbtUtils` to `AllayNBTUtils`.
+- (API) Flattened packages except `events` under package `org.allaymc.api.entity.component`.
 - Optimized memory performance when loading chunks by reducing the large number of temporary objects generated in the light update queue.
 - Renamed `ItemComponent` to `ItemDefinition` in many places.
 
 ### Fixed
 
 - Player in spectator mode will no longer lose the saturation level.
+- Speed, fly speed, and vertical fly speed for the player won't be saved now.
+- The online player list shown in the dashboard will be correctly updated when a player quits now.
+- Fixed an issue where the client would sometimes get stuck on the screen of death.
 
 ### Removed
+
+- (API) Removed internal method `ArmorContainer.onArmorChange()`.
 
 ## 0.8.1 (API 0.13.0) - 2025/10/7
 

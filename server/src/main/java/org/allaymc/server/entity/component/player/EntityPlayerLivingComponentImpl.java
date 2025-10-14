@@ -1,7 +1,7 @@
 package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.entity.component.EntityLivingComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerClientComponent;
+import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.effect.EffectInstance;

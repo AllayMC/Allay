@@ -25,7 +25,7 @@ import org.allaymc.api.permission.Permissible;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
@@ -46,8 +46,8 @@ import org.joml.primitives.AABBdc;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static org.allaymc.api.utils.AllayNbtUtils.readVector2f;
-import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.readVector2f;
+import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
 import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
 
 /**
@@ -380,8 +380,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.manager.callEvent(new CEntitySaveNBTEvent(builder));
 
         builder.putString(TAG_IDENTIFIER, this.entityType.getIdentifier().toString());
-        AllayNbtUtils.writeVector3f(builder, TAG_POS, (float) this.location.x, (float) this.location.y, (float) this.location.z);
-        AllayNbtUtils.writeVector2f(builder, TAG_ROTATION, (float) this.location.yaw(), (float) this.location.pitch());
+        AllayNBTUtils.writeVector3f(builder, TAG_POS, (float) this.location.x, (float) this.location.y, (float) this.location.z);
+        AllayNBTUtils.writeVector2f(builder, TAG_ROTATION, (float) this.location.yaw(), (float) this.location.pitch());
 
         if (!tags.isEmpty()) {
             builder.putList(TAG_TAGS, NbtType.STRING, new ArrayList<>(tags));

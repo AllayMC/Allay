@@ -369,8 +369,7 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
 
     @Override
     public NbtMap saveExtraTag() {
-        var extraTag = super.saveExtraTag();
-        var builder = extraTag != null ? extraTag.toBuilder() : NbtMap.builder();
+        var builder = super.saveExtraTag().toBuilder();
         builder.putLong(TAG_MAP_UUID, mapId);
         if (image != null) {
             try {
