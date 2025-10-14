@@ -64,59 +64,61 @@ gitProperties {
     }
 }
 
-tasks.processResources {
-    dependsOn("generateGitProperties")
-    // input directory
-    from("${rootProject.projectDir}/data/resources")
-    // exclude unpacked folder and block_palette.nbt
-    exclude("unpacked")
-}
-
-tasks.sourcesJar {
-    dependsOn("generateGitProperties")
-}
-
-tasks.runShadow {
-    workingDir = file("${rootProject.projectDir}/.run/")
-}
-
-tasks.shadowJar {
-    archiveFileName = getShadedJarName()
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-
-    transform<Log4j2PluginsCacheFileTransformer>()
-    mergeServiceFiles()
-
-    exclude("META-INF/DEPENDENCIES")
-    exclude("META-INF/LICENSE")
-    exclude("META-INF/NOTICE")
-    exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
-}
-
-tasks.jacocoTestReport {
-    reports {
-        xml.required = true
-        html.required = false
-    }
-    additionalClassDirs(file("${rootProject.projectDir}/api/build/classes/java/main"))
-    additionalSourceDirs(file("${rootProject.projectDir}/api/src/main/java"))
-}
-
-tasks.test {
-    useJUnitPlatform()
-    workingDir = file("${rootProject.projectDir}/.test/")
-}
-
 jacoco {
     reportsDirectory = layout.buildDirectory.dir("${rootProject.projectDir}/.jacoco")
 }
 
-tasks.register("cleanWorkingDir") {
-    description = "Clean all files in `.run` directory except `Allay.run.xml` file"
-    group = "application"
-    doLast {
-        rootProject.rootDir.resolve(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
-            delete(it)
+tasks {
+    processResources {
+        dependsOn("generateGitProperties")
+        // input directory
+        from("${rootProject.projectDir}/data/resources")
+        // exclude unpacked folder and block_palette.nbt
+        exclude("unpacked")
+    }
+
+    sourcesJar {
+        dependsOn("generateGitProperties")
+    }
+
+    shadowJar {
+        archiveFileName = getShadedJarName()
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        transform<Log4j2PluginsCacheFileTransformer>()
+        mergeServiceFiles()
+
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+    }
+
+    runShadow {
+        workingDir = file("${rootProject.projectDir}/.run/")
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.required = true
+            html.required = false
+        }
+        additionalClassDirs(file("${rootProject.projectDir}/api/build/classes/java/main"))
+        additionalSourceDirs(file("${rootProject.projectDir}/api/src/main/java"))
+    }
+
+    test {
+        useJUnitPlatform()
+        workingDir = file("${rootProject.projectDir}/.test/")
+    }
+
+    register("cleanWorkingDir") {
+        description = "Clean all files in `.run` directory except `Allay.run.xml` file"
+        group = "application"
+        doLast {
+            rootProject.rootDir.resolve(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
+                delete(it)
+            }
         }
     }
 }
