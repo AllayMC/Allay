@@ -46,7 +46,6 @@ dependencies {
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)
-    testAnnotationProcessor(libs.lombok)
 }
 
 gitProperties {

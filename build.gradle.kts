@@ -1,7 +1,9 @@
+import com.github.monosoul.yadegrap.DelombokTask
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 
 plugins {
     id("java-library")
+    alias(libs.plugins.delombok) apply false
     alias(libs.plugins.publish) apply false
 }
 
@@ -11,14 +13,12 @@ subprojects {
     group = "org.allaymc.allay"
 
     tasks {
-        withType<JavaCompile> {
+        withType<JavaCompile>().configureEach {
             options.encoding = "UTF-8"
-            configureEach {
-                options.isFork = true
-            }
+            options.isFork = true
         }
 
-        withType<Copy> {
+        withType<Copy>().configureEach {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
     }
@@ -46,18 +46,38 @@ subprojects {
     }
 
     if (project.name in listOf("api", "server")) {
+        apply(plugin = "com.github.monosoul.yadegrap")
         apply(plugin = "com.vanniktech.maven.publish")
 
         project.version = rootProject.property(project.name + ".version").toString() +
                 if (rootProject.property("allay.is-dev-build").toString().toBoolean()) "-dev" else ""
 
-        java {
-            withSourcesJar()
-        }
+        tasks {
+            withType<DelombokTask>().configureEach {
+                formatOptions.set(
+                    mapOf(
+                        "generateDelombokComment" to "skip",
+                        "javaLangAsFQN" to "skip",
+                        "generated" to "skip",
+                        "suppressWarnings" to "skip",
+                        "finalParams" to "skip",
+                        "constructorProperties" to "skip",
+                    )
+                )
+            }
 
-        // We already have sources jar, so no need to build Javadoc, which would cause a lot of warnings
-        tasks.withType<Javadoc> {
-            enabled = false
+            register<Jar>("sourcesJar").configure {
+                group = "build"
+                archiveClassifier.set("sources")
+                val delombokTask = named<DelombokTask>("delombok")
+                dependsOn(delombokTask)
+                from(delombokTask.map { it.outputDir })
+            }
+
+            // We already have sources jar, so no need to build Javadoc, which would cause a lot of warnings
+            withType<Javadoc>().configureEach {
+                enabled = false
+            }
         }
 
         configure<MavenPublishBaseExtension> {
