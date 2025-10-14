@@ -10,7 +10,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.World;
@@ -436,7 +436,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return;
         }
 
-        var nbt = AllayNbtUtils.bytesToNbtLE(scheduledUpdatesBytes);
+        var nbt = AllayNBTUtils.bytesToNbtLE(scheduledUpdatesBytes);
         var tickList = nbt.getList(TAG_TICK_LIST, NbtType.COMPOUND);
         var scheduledUpdates = new NonBlockingHashMap<Integer, ScheduledUpdateInfo>(tickList.size());
         for (var entry : tickList) {
@@ -597,7 +597,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 continue;
             }
 
-            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNbtUtils.bytesToNbtLE(nbt));
+            var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), AllayNBTUtils.bytesToNbtLE(nbt));
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
                 continue;
@@ -616,7 +616,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
 
         var map = new Long2ObjectOpenHashMap<Entity>();
-        for (var nbt : AllayNbtUtils.bytesToNbtListLE(entityBytes)) {
+        for (var nbt : AllayNBTUtils.bytesToNbtListLE(entityBytes)) {
             var entity = NBTIO.getAPI().fromEntityNBT(world.getDimension(dimensionInfo.dimensionId()), nbt);
             if (entity == null) {
                 log.error("Failed to load entity from NBT {} in chunk ({}, {})", nbt, chunkX, chunkZ);
@@ -661,7 +661,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 }
 
                 idsBuf.writeLongLE(entry.getKey());
-                writeBatch.put(LevelDBKey.indexEntity(entry.getKey()), AllayNbtUtils.nbtToBytesLE(entity.saveNBT()));
+                writeBatch.put(LevelDBKey.indexEntity(entry.getKey()), AllayNBTUtils.nbtToBytesLE(entity.saveNBT()));
             }
 
             writeBatch.put(idsKey, ByteBufUtil.getBytes(idsBuf));
@@ -829,7 +829,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
 
         var blockEntities = new NonBlockingHashMap<Integer, BlockEntity>();
-        for (var nbt : AllayNbtUtils.bytesToNbtListLE(tileBytes)) {
+        for (var nbt : AllayNBTUtils.bytesToNbtListLE(tileBytes)) {
             BlockEntity blockEntity;
             try {
                 blockEntity = NBTIO.getAPI().fromBlockEntityNBT(world.getDimension(builder.getDimensionInfo().dimensionId()), nbt);

@@ -16,7 +16,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.Dimension;
@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.floor;
-import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
 import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
 
 /**
@@ -102,7 +102,7 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
         var builder = event.getNbt();
         builder.putBoolean(TAG_ON_GROUND, onGround);
-        AllayNbtUtils.writeVector3f(builder, TAG_MOTION, (float) motion.x, (float) motion.y, (float) motion.z);
+        AllayNBTUtils.writeVector3f(builder, TAG_MOTION, (float) motion.x, (float) motion.y, (float) motion.z);
         builder.putFloat(TAG_KNOCKBACK_RESISTANCE, knockbackResistance);
     }
 

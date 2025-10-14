@@ -41,6 +41,7 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
 
     public EntityFireworksRocketBaseComponentImpl(EntityInitInfo info) {
         super(info);
+        this.existenceTicks = 20;
         this.explosions = new HashSet<>();
     }
 

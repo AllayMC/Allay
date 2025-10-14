@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added methods `EntityPlayerClientComponent.viewPlayerListChange()` and `EntityPlayerClientComponent.viewPlayerPermission()`.
 - (API) Added particle `SimpleParticle.FIREWORK_CONTRAIL`.
 - (API) Added event `FireworkExplodeEvent` which will be called when a firework rocket is about to explode.
+- (API) Added class `ItemDyeComponent` which is used in all items that can be used as dye.
 - (API) Implemented firework and firework star. Multiple classes including `FireworkType`, `FireworkExplosion` were added.
 - Implemented recipes for fireworks.
 - Implemented elytra. The fall distance for the player will be reset if the player is gliding.
@@ -32,6 +33,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Used `double` instead of `float` for player speed, fly speed, and vertical fly speed.
 - (API) Renamed field `SimpleSoundEvent.TWINKLE` to `SimpleSoundEvent.FLICKER`.
 - (API) Renamed field `SimpleEntityAction.FIREWORK_EXPLOSION` to `SimpleEntityAction.FIREWORK_EXPLODE`.
+- (API) Renamed class `AllayNbtUtils` to `AllayNBTUtils`.
 - (API) Flattened packages except `events` under package `org.allaymc.api.entity.component`.
 - Optimized memory performance when loading chunks by reducing the large number of temporary objects generated in the light update queue.
 - Renamed `ItemComponent` to `ItemDefinition` in many places.

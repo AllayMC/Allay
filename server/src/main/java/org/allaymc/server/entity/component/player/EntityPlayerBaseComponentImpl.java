@@ -34,7 +34,7 @@ import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
@@ -743,7 +743,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var builder = NbtMap.builder()
                 .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
                 .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId());
-        AllayNbtUtils.writeVector3i(builder, TAG_POS, spawnPoint);
+        AllayNBTUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
     }
 
@@ -804,7 +804,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.spawnPoint = new Location3i(
-                AllayNbtUtils.readVector3i(nbt, TAG_POS),
+                AllayNBTUtils.readVector3i(nbt, TAG_POS),
                 0, 0, 0, dimension
         );
     }

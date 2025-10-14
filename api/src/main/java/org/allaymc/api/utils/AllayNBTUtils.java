@@ -16,12 +16,11 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Slf4j
-public final class AllayNbtUtils {
+public final class AllayNBTUtils {
     /**
      * Convert NBT to Base64 (LE).
      *
      * @param nbtMap the NBT map
-     *
      * @return the Base64 string
      */
     public static String nbtToBase64LE(NbtMap nbtMap) {
@@ -39,7 +38,6 @@ public final class AllayNbtUtils {
      * Convert NBT to Base64.
      *
      * @param nbtMap the NBT map
-     *
      * @return the Base64 string
      */
     public static String nbtToBase64(NbtMap nbtMap) {
@@ -57,7 +55,6 @@ public final class AllayNbtUtils {
      * Convert Base64 to NBT (LE).
      *
      * @param base64 the Base64 string
-     *
      * @return the NBT map
      */
     @SneakyThrows
@@ -69,7 +66,6 @@ public final class AllayNbtUtils {
      * Convert Base64 to NBT.
      *
      * @param base64 the Base64 string
-     *
      * @return the NBT map
      */
     @SneakyThrows
@@ -81,7 +77,6 @@ public final class AllayNbtUtils {
      * Convert bytes to nbt list.
      *
      * @param bytes the bytes
-     *
      * @return the nbt list
      */
     @SneakyThrows
@@ -101,7 +96,6 @@ public final class AllayNbtUtils {
      * Convert nbt list to bytes.
      *
      * @param tags the nbt list
-     *
      * @return the bytes
      */
     @SneakyThrows
@@ -119,7 +113,6 @@ public final class AllayNbtUtils {
      * Convert bytes to nbt.
      *
      * @param bytes the bytes
-     *
      * @return the nbt
      */
     @SneakyThrows
@@ -134,7 +127,6 @@ public final class AllayNbtUtils {
      * Convert nbt to bytes.
      *
      * @param nbt the nbt
-     *
      * @return the bytes
      */
     @SneakyThrows
@@ -151,7 +143,6 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT map
      * @param rootName the root name
-     *
      * @return the vector3
      */
     public static Vector3f readVector3f(NbtMap nbt, String rootName) {
@@ -191,7 +182,6 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT map
      * @param rootName the root name
-     *
      * @return the vector3
      */
     public static Vector3i readVector3i(NbtMap nbt, String rootName) {
@@ -218,7 +208,6 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT map
      * @param rootName the root name
-     *
      * @return the vector2
      */
     public static Vector2f readVector2f(NbtMap nbt, String rootName) {

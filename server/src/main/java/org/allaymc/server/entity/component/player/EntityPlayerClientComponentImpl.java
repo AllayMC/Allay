@@ -65,8 +65,8 @@ import java.net.SocketAddress;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
-import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
+import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
 
 /**
  * @author daoge_cmd

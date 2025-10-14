@@ -6,9 +6,11 @@ import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemFireworkStarBaseComponent;
 import org.allaymc.api.utils.DyeColor;
 import org.allaymc.api.world.FireworkExplosion;
+import org.allaymc.api.world.data.FireworkType;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,6 +27,10 @@ public class ItemFireworkStarBaseComponentImpl extends ItemBaseComponentImpl imp
 
     public ItemFireworkStarBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
+        this.explosion = new FireworkExplosion(
+                FireworkType.SMALL_SPHERE, List.of(DyeColor.WHITE),
+                Collections.emptyList(), false, false
+        );
     }
 
     @Override

@@ -249,7 +249,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> BLACK_CONCRETE_POWDER;
 
-    public static ItemType<ItemBlackDyeStack> BLACK_DYE;
+    public static ItemType<ItemDyeStack> BLACK_DYE;
 
     public static ItemType<ItemTerracottaStack> BLACK_GLAZED_TERRACOTTA;
 
@@ -299,7 +299,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> BLUE_CONCRETE_POWDER;
 
-    public static ItemType<ItemBlueDyeStack> BLUE_DYE;
+    public static ItemType<ItemDyeStack> BLUE_DYE;
 
     public static ItemType<ItemBlueEggStack> BLUE_EGG;
 
@@ -389,7 +389,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> BROWN_CONCRETE_POWDER;
 
-    public static ItemType<ItemBrownDyeStack> BROWN_DYE;
+    public static ItemType<ItemDyeStack> BROWN_DYE;
 
     public static ItemType<ItemBrownEggStack> BROWN_EGG;
 
@@ -835,7 +835,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> CYAN_CONCRETE_POWDER;
 
-    public static ItemType<ItemCyanDyeStack> CYAN_DYE;
+    public static ItemType<ItemDyeStack> CYAN_DYE;
 
     public static ItemType<ItemTerracottaStack> CYAN_GLAZED_TERRACOTTA;
 
@@ -1593,7 +1593,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> GRAY_CONCRETE_POWDER;
 
-    public static ItemType<ItemGrayDyeStack> GRAY_DYE;
+    public static ItemType<ItemDyeStack> GRAY_DYE;
 
     public static ItemType<ItemTerracottaStack> GRAY_GLAZED_TERRACOTTA;
 
@@ -1621,7 +1621,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> GREEN_CONCRETE_POWDER;
 
-    public static ItemType<ItemGreenDyeStack> GREEN_DYE;
+    public static ItemType<ItemDyeStack> GREEN_DYE;
 
     public static ItemType<ItemTerracottaStack> GREEN_GLAZED_TERRACOTTA;
 
@@ -2023,7 +2023,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> LIGHT_BLUE_CONCRETE_POWDER;
 
-    public static ItemType<ItemLightBlueDyeStack> LIGHT_BLUE_DYE;
+    public static ItemType<ItemDyeStack> LIGHT_BLUE_DYE;
 
     public static ItemType<ItemTerracottaStack> LIGHT_BLUE_GLAZED_TERRACOTTA;
 
@@ -2051,7 +2051,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> LIGHT_GRAY_CONCRETE_POWDER;
 
-    public static ItemType<ItemLightGrayDyeStack> LIGHT_GRAY_DYE;
+    public static ItemType<ItemDyeStack> LIGHT_GRAY_DYE;
 
     public static ItemType<ItemHarnessStack> LIGHT_GRAY_HARNESS;
 
@@ -2085,7 +2085,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> LIME_CONCRETE_POWDER;
 
-    public static ItemType<ItemLimeDyeStack> LIME_DYE;
+    public static ItemType<ItemDyeStack> LIME_DYE;
 
     public static ItemType<ItemTerracottaStack> LIME_GLAZED_TERRACOTTA;
 
@@ -2143,7 +2143,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> MAGENTA_CONCRETE_POWDER;
 
-    public static ItemType<ItemMagentaDyeStack> MAGENTA_DYE;
+    public static ItemType<ItemDyeStack> MAGENTA_DYE;
 
     public static ItemType<ItemTerracottaStack> MAGENTA_GLAZED_TERRACOTTA;
 
@@ -2453,7 +2453,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> ORANGE_CONCRETE_POWDER;
 
-    public static ItemType<ItemOrangeDyeStack> ORANGE_DYE;
+    public static ItemType<ItemDyeStack> ORANGE_DYE;
 
     public static ItemType<ItemTerracottaStack> ORANGE_GLAZED_TERRACOTTA;
 
@@ -2601,7 +2601,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> PINK_CONCRETE_POWDER;
 
-    public static ItemType<ItemPinkDyeStack> PINK_DYE;
+    public static ItemType<ItemDyeStack> PINK_DYE;
 
     public static ItemType<ItemTerracottaStack> PINK_GLAZED_TERRACOTTA;
 
@@ -2787,7 +2787,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> PURPLE_CONCRETE_POWDER;
 
-    public static ItemType<ItemPurpleDyeStack> PURPLE_DYE;
+    public static ItemType<ItemDyeStack> PURPLE_DYE;
 
     public static ItemType<ItemTerracottaStack> PURPLE_GLAZED_TERRACOTTA;
 
@@ -2873,7 +2873,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> RED_CONCRETE_POWDER;
 
-    public static ItemType<ItemRedDyeStack> RED_DYE;
+    public static ItemType<ItemDyeStack> RED_DYE;
 
     public static ItemType<ItemRedFlowerStack> RED_FLOWER;
 
@@ -3677,7 +3677,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> WHITE_CONCRETE_POWDER;
 
-    public static ItemType<ItemWhiteDyeStack> WHITE_DYE;
+    public static ItemType<ItemDyeStack> WHITE_DYE;
 
     public static ItemType<ItemTerracottaStack> WHITE_GLAZED_TERRACOTTA;
 
@@ -3753,7 +3753,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemConcretePowderStack> YELLOW_CONCRETE_POWDER;
 
-    public static ItemType<ItemYellowDyeStack> YELLOW_DYE;
+    public static ItemType<ItemDyeStack> YELLOW_DYE;
 
     public static ItemType<ItemTerracottaStack> YELLOW_GLAZED_TERRACOTTA;
 

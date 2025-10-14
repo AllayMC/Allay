@@ -493,6 +493,13 @@ public class GameTestCommand extends VanillaCommand {
                     }
 
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("clonehanditem")
+                .exec((context, player) -> {
+                    player.getItemInHand().setCount(player.getItemInHand().getItemType().getItemData().maxStackSize());
+                    player.notifyItemInHandChange();
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }

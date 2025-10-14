@@ -40,6 +40,17 @@ public enum DyeColor {
     private final Color color;
 
     /**
+     * Calculates the inverted ordinal value of the enum constant. The result is determined by subtracting
+     * the current ordinal value from the total number of constants in the enumeration minus one.
+     *
+     * @return the inverted ordinal value, where {@code 0} corresponds to the last enum constant,
+     * and the highest value corresponds to the first enum constant
+     */
+    public int ordinalInverted() {
+        return VALUES.length - ordinal() - 1;
+    }
+
+    /**
      * Gets the dye color by its index.
      *
      * @param index the index of the dye color
@@ -47,5 +58,17 @@ public enum DyeColor {
      */
     public static DyeColor from(int index) {
         return VALUES[index];
+    }
+
+    /**
+     * Retrieves a {@code DyeColor} based on an inverted index. The inverted index is calculated
+     * in reverse order, with {@code 0} mapping to the last color and the highest index mapping
+     * to the first color.
+     *
+     * @param indexInverted the inverted index of the dye color
+     * @return the corresponding {@code DyeColor}, or {@code null} if the provided index is invalid
+     */
+    public static DyeColor fromInverted(int indexInverted) {
+        return VALUES[VALUES.length - indexInverted - 1];
     }
 }

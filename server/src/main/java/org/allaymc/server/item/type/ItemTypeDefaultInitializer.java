@@ -740,7 +740,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLACK_DYE == null) {
             ItemTypes.BLACK_DYE = AllayItemType
-                    .builder(ItemBlackDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.BLACK_DYE)
                     .build();
         }
@@ -890,7 +890,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLUE_DYE == null) {
             ItemTypes.BLUE_DYE = AllayItemType
-                    .builder(ItemBlueDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.BLUE_DYE)
                     .build();
         }
@@ -1160,7 +1160,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BROWN_DYE == null) {
             ItemTypes.BROWN_DYE = AllayItemType
-                    .builder(ItemBrownDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.BROWN_DYE)
                     .build();
         }
@@ -2498,7 +2498,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CYAN_DYE == null) {
             ItemTypes.CYAN_DYE = AllayItemType
-                    .builder(ItemCyanDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.CYAN_DYE)
                     .build();
         }
@@ -4772,7 +4772,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GRAY_DYE == null) {
             ItemTypes.GRAY_DYE = AllayItemType
-                    .builder(ItemGrayDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.GRAY_DYE)
                     .build();
         }
@@ -4856,7 +4856,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GREEN_DYE == null) {
             ItemTypes.GREEN_DYE = AllayItemType
-                    .builder(ItemGreenDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.GREEN_DYE)
                     .build();
         }
@@ -6062,7 +6062,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIGHT_BLUE_DYE == null) {
             ItemTypes.LIGHT_BLUE_DYE = AllayItemType
-                    .builder(ItemLightBlueDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.LIGHT_BLUE_DYE)
                     .build();
         }
@@ -6146,7 +6146,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIGHT_GRAY_DYE == null) {
             ItemTypes.LIGHT_GRAY_DYE = AllayItemType
-                    .builder(ItemLightGrayDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.LIGHT_GRAY_DYE)
                     .build();
         }
@@ -6248,7 +6248,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIME_DYE == null) {
             ItemTypes.LIME_DYE = AllayItemType
-                    .builder(ItemLimeDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.LIME_DYE)
                     .build();
         }
@@ -6422,7 +6422,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MAGENTA_DYE == null) {
             ItemTypes.MAGENTA_DYE = AllayItemType
-                    .builder(ItemMagentaDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.MAGENTA_DYE)
                     .build();
         }
@@ -7352,7 +7352,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ORANGE_DYE == null) {
             ItemTypes.ORANGE_DYE = AllayItemType
-                    .builder(ItemOrangeDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.ORANGE_DYE)
                     .build();
         }
@@ -7796,7 +7796,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PINK_DYE == null) {
             ItemTypes.PINK_DYE = AllayItemType
-                    .builder(ItemPinkDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.PINK_DYE)
                     .build();
         }
@@ -8354,7 +8354,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PURPLE_DYE == null) {
             ItemTypes.PURPLE_DYE = AllayItemType
-                    .builder(ItemPurpleDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.PURPLE_DYE)
                     .build();
         }
@@ -8612,7 +8612,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.RED_DYE == null) {
             ItemTypes.RED_DYE = AllayItemType
-                    .builder(ItemRedDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.RED_DYE)
                     .build();
         }
@@ -11024,7 +11024,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WHITE_DYE == null) {
             ItemTypes.WHITE_DYE = AllayItemType
-                    .builder(ItemWhiteDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.WHITE_DYE)
                     .build();
         }
@@ -11252,7 +11252,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.YELLOW_DYE == null) {
             ItemTypes.YELLOW_DYE = AllayItemType
-                    .builder(ItemYellowDyeStackImpl.class)
+                    .builder(ItemDyeStackImpl.class)
                     .vanillaItem(ItemId.YELLOW_DYE)
                     .build();
         }

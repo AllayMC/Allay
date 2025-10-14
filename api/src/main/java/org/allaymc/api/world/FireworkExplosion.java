@@ -40,7 +40,7 @@ public record FireworkExplosion(
 
         var colors = new ArrayList<DyeColor>();
         for (var colorIndex : nbt.getByteArray(TAG_FIREWORK_COLOR, new byte[0])) {
-            colors.add(DyeColor.from(colorIndex));
+            colors.add(DyeColor.fromInverted(colorIndex));
         }
         if (colors.isEmpty()) {
             colors.add(DyeColor.WHITE);
@@ -48,7 +48,7 @@ public record FireworkExplosion(
 
         var fadeColors = new ArrayList<DyeColor>();
         for (var fadeColorIndex : nbt.getByteArray(TAG_FIREWORK_FADE, new byte[0])) {
-            fadeColors.add(DyeColor.from(fadeColorIndex));
+            fadeColors.add(DyeColor.fromInverted(fadeColorIndex));
         }
 
         var flicker = nbt.getBoolean(TAG_FIREWORK_FLICKER);
@@ -75,7 +75,7 @@ public record FireworkExplosion(
     private static byte[] encodeColors(List<DyeColor> colors) {
         var array = new byte[colors.size()];
         for (int i = 0; i < colors.size(); i++) {
-            array[i] = (byte) colors.get(i).ordinal();
+            array[i] = (byte) colors.get(i).ordinalInverted();
         }
         return array;
     }
