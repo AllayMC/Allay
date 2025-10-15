@@ -76,7 +76,7 @@ public final class GameLoop {
             onTick.accept(this);
             tick++;
             long timeTakenToTick = System.nanoTime() - startTickTime;
-            updateMSTP(timeTakenToTick, MSPTSummary);
+            updateMSPT(timeTakenToTick, MSPTSummary);
             updateTPS(timeTakenToTick);
 
             long sumOperateTime = System.nanoTime() - startTickTime;
@@ -108,9 +108,9 @@ public final class GameLoop {
         tickSummary[tickSummary.length - 1] = tick;
     }
 
-    private void updateMSTP(float timeTakenToTick, float[] mstpSummary) {
-        System.arraycopy(mstpSummary, 1, mstpSummary, 0, mstpSummary.length - 1);
-        mstpSummary[mstpSummary.length - 1] = timeTakenToTick / 1000000f;
+    private void updateMSPT(float timeTakenToTick, float[] msptSummary) {
+        System.arraycopy(msptSummary, 1, msptSummary, 0, msptSummary.length - 1);
+        msptSummary[msptSummary.length - 1] = timeTakenToTick / 1000000f;
     }
 
     public void stop() {

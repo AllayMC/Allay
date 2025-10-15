@@ -111,8 +111,8 @@ public final class Allay {
             ((AllayServer) Server.getInstance()).start(initialTime);
         } catch (Throwable t) {
             log.error("Error while starting the server!", t);
-            // The server may not be initialized correctly
-            // So we can't call Server::shutdown() to stop the server
+            // The server may not be initialized correctly, so we can't call Server::shutdown()
+            // to stop the server
             if (DASHBOARD != null) {
                 sleep(5000);
             }

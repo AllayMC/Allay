@@ -131,7 +131,7 @@ public final class AllayServer implements Server {
     }
 
     private void onServerStart() {
-        state.set(ServerState.RUNNING);
+        this.state.set(ServerState.RUNNING);
 
         if (System.console() != null) {
             Thread.ofVirtual().name("Console Thread").start(terminalConsole::start);
@@ -213,7 +213,7 @@ public final class AllayServer implements Server {
 
     private void tick(long currentTick) {
         this.scheduler.tick();
-        ((AllayPlayerManager) this.playerManager).tick(currentTick);
+        this.playerManager.tick(currentTick);
     }
 
     @Override
@@ -224,19 +224,19 @@ public final class AllayServer implements Server {
     @Override
     public void shutdown() {
         // Mark the server as STOPPING, the real shutdown logic is in shutdownReally() method
-        state.compareAndSet(ServerState.RUNNING, ServerState.STOPPING);
+        this.state.compareAndSet(ServerState.RUNNING, ServerState.STOPPING);
     }
 
     @Override
     public ServerState getState() {
-        return state.get();
+        return this.state.get();
     }
 
     @SneakyThrows
     private void shutdownReally() {
         // Disconnect all players
-        playerManager.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
-        // Shutdown network server to prevent new client connecting to the server
+        this.playerManager.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
+        // Shutdown network server to prevent new clients connecting to the server
         this.playerManager.shutdownNetworkInterface();
         this.scheduler.shutdown();
 
