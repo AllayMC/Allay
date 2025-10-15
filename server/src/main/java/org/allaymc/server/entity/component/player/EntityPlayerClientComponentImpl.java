@@ -473,7 +473,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
         startGame(dimension.getWorld(), playerData, dimension);
 
-        sendPacketImmediately(NetworkData.ITEM_REGISTRY_PACKET.get());
+        sendPacket(NetworkData.ITEM_REGISTRY_PACKET.get());
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
@@ -542,7 +542,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setOwnerId("");
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
         MultiVersion.adaptExperimentData(thisPlayer, packet.getExperiments());
-        sendPacketImmediately(packet);
+        sendPacket(packet);
     }
 
     public void completeLogin() {
