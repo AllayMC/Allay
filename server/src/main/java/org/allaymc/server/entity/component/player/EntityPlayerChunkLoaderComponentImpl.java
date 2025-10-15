@@ -50,10 +50,10 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.container.impl.UnopenedContainerId;
 import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
+import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.player.SkinConvertor;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkEncoder;
-import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -726,7 +726,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewGameRules(GameRules gameRules) {
         var packet = new GameRulesChangedPacket();
-        packet.getGameRules().addAll(((AllayGameRules) gameRules).toNetworkGameRuleData());
+        packet.getGameRules().addAll(NetworkHelper.toNetwork(gameRules.getGameRules()));
         this.clientComponent.sendPacket(packet);
     }
 

@@ -6,11 +6,12 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
-import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author daoge_cmd
@@ -79,17 +80,6 @@ public class AllayGameRules implements GameRules {
     @SuppressWarnings("unchecked")
     public <V> V get(GameRule gameRule) {
         return (V) gameRules.getOrDefault(gameRule, gameRule.getDefaultValue());
-    }
-
-    /**
-     * Converts the game rules to a list of GameRuleData.
-     *
-     * @return the list of GameRuleData
-     */
-    public List<GameRuleData<?>> toNetworkGameRuleData() {
-        return this.getGameRules().entrySet().stream()
-                .map(entry -> new GameRuleData<>(entry.getKey().getName(), entry.getValue()))
-                .collect(Collectors.toList());
     }
 
     /**

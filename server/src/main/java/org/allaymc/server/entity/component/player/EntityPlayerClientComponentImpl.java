@@ -42,7 +42,6 @@ import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayerManager;
 import org.allaymc.server.player.SkinConvertor;
 import org.allaymc.server.world.AllayWorld;
-import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -474,10 +473,6 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
         startGame(dimension.getWorld(), playerData, dimension);
 
-        var helper = clientSession.getPeer().getCodecHelper();
-        helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
-        helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
-
         sendPacketImmediately(NetworkData.ITEM_REGISTRY_PACKET.get());
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
@@ -487,8 +482,13 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     }
 
     protected void startGame(World spawnWorld, PlayerData playerData, Dimension dimension) {
+        var helper = clientSession.getPeer().getCodecHelper();
+        helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
+        helper.setBlockDefinitions(SimpleDefinitionRegistry.<BlockDefinition>builder().addAll(NetworkData.BLOCK_DEFINITIONS.get()).build());
+
         var packet = new StartGamePacket();
-        packet.getGamerules().addAll(((AllayGameRules) spawnWorld.getWorldData().getGameRules()).toNetworkGameRuleData());
+
+        packet.getGamerules().addAll(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameRules().getGameRules()));
         packet.setUniqueEntityId(thisPlayer.getRuntimeId());
         packet.setRuntimeEntityId(thisPlayer.getRuntimeId());
         packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()).ordinal())));
@@ -508,14 +508,14 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         packet.setTrustingPlayers(true);
         packet.setLevelName(AllayServer.getSettings().genericSettings().motd());
-        packet.setLevelId("");
+        packet.setLevelId(AllayServer.getSettings().genericSettings().motd());
         packet.setDefaultPlayerPermission(PlayerPermission.valueOf(AllayServer.getSettings().genericSettings().defaultPermission()));
         packet.setServerChunkTickRange(AllayServer.getSettings().worldSettings().tickRadius());
         // VanillaVersion is the version of the game from which Vanilla features will be used
         packet.setVanillaVersion(ProtocolInfo.getLatestCodec().getMinecraftVersion());
         // ServerEngine(aka.GameVersion) is the version of the game the server is running
         packet.setServerEngine(ProtocolInfo.getLatestCodec().getMinecraftVersion());
-        packet.setPremiumWorldTemplateId("");
+        packet.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
         packet.setInventoriesServerAuthoritative(true);
         packet.setServerAuthoritativeBlockBreaking(true);
         // MultiVersion: set to ensure compatibility for client below 1.21.90

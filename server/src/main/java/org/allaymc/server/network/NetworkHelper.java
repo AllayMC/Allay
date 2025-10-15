@@ -12,7 +12,9 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.item.type.AllayItemType;
+import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.biome.BiomeDefinitionData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
@@ -24,6 +26,8 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescri
 import org.joml.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Helper class to convert types between allay and the protocol library.
@@ -32,6 +36,12 @@ import java.util.List;
  */
 @UtilityClass
 public final class NetworkHelper {
+
+    public static List<GameRuleData<?>> toNetwork(Map<GameRule, Object> gameRules) {
+        return gameRules.entrySet().stream()
+                .map(entry -> new GameRuleData<>(entry.getKey().getName(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
 
     public static org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork(ItemDescriptor descriptor) {
         return switch (descriptor) {
