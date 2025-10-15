@@ -44,6 +44,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Speed, fly speed, and vertical fly speed for the player won't be saved now.
 - The online player list shown in the dashboard will be correctly updated when a player quits now.
 - Fixed an issue where the client would sometimes get stuck on the screen of death.
+- The client will be disconnected now if failed to decode the login packet sent from the client.
 
 ### Removed
 

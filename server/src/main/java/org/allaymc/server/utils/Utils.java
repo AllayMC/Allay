@@ -37,7 +37,7 @@ public class Utils {
             Preconditions.checkArgument(!dependency.name().isBlank(), "Dependency name cannot be blank");
         }
         Preconditions.checkNotNull(descriptor.getWebsite(), "Plugin website cannot be null");
-        Preconditions.checkNotNull(Semver.coerce(descriptor.getVersion()), "Plugin version cannot be coerced (Use https://semver.org/)");
+        Preconditions.checkNotNull(Semver.coerce(descriptor.getVersion()), "Plugin version is invalid (check https://semver.org/)");
     }
 
     /**

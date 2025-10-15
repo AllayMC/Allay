@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import lombok.*;
+import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.Skin;
@@ -21,10 +23,9 @@ import java.util.UUID;
 /**
  * @author LucGamesYT | daoge_cmd
  */
+@Slf4j
 @ToString
 @Getter
-@Builder
-@AllArgsConstructor
 public class AllayLoginData implements LoginData {
     private static final Gson GSON = new Gson();
 
@@ -38,14 +39,25 @@ public class AllayLoginData implements LoginData {
     private Skin skin;
     private String identityPublicKey;
 
-    @SneakyThrows
-    private AllayLoginData(LoginPacket loginPacket) {
-        this.decodeChainData(EncryptionUtils.validatePayload(loginPacket.getAuthPayload()));
-        this.decodeSkinData(loginPacket.getClientJwt());
-    }
-
+    /// Decode the given {@link LoginPacket} and return a {@link LoginData}. If there is any error
+    /// during the decoding, {@code null} will be returned.
     public static AllayLoginData decode(LoginPacket loginPacket) {
-        return new AllayLoginData(loginPacket);
+        var loginData = new AllayLoginData();
+        try {
+            loginData.decodeChainData(EncryptionUtils.validatePayload(loginPacket.getAuthPayload()));
+        } catch (Throwable t) {
+            log.warn("Failed to decode chain data!", t);
+            return null;
+        }
+
+        try {
+            loginData.decodeSkinData(loginPacket.getClientJwt());
+        } catch (Throwable t) {
+            log.warn("Failed to decode skin data!", t);
+            return null;
+        }
+
+        return loginData;
     }
 
     private void decodeChainData(ChainValidationResult result) {
