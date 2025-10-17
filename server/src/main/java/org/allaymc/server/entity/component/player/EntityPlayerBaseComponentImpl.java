@@ -1081,6 +1081,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.skin = loginData.getSkin();
         this.uniqueId = loginData.getUuid().getMostSignificantBits();
         setDisplayName(loginData.getXname());
+        setNameTag(loginData.getXname());
     }
 
     @EventHandler
