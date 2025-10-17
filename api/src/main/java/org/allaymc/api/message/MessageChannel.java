@@ -38,6 +38,16 @@ public class MessageChannel {
     }
 
     /**
+     * Checks if the specified {@link MessageReceiver} is registered in this {@code MessageChannel}.
+     *
+     * @param receiver the {@code MessageReceiver} to check for existence
+     * @return {@code true} if the receiver is registered, otherwise {@code false}
+     */
+    public boolean hasReceiver(MessageReceiver receiver) {
+        return this.receivers.contains(receiver);
+    }
+
+    /**
      * Broadcasts a plain message to all registered receivers.
      *
      * @param message the plain message text to send

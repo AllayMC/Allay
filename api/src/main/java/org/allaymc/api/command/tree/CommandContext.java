@@ -5,9 +5,7 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.message.MayContainTrKey;
-import org.allaymc.api.message.TrContainer;
-import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.message.*;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
 
@@ -123,7 +121,9 @@ public interface CommandContext {
     void clearResults();
 
     /**
-     * Add an output.
+     * Add an output to the command result. The output will be sent to all {@link MessageReceiver} registered
+     * in the default {@link MessageChannel} if gamerule {@link GameRule#SEND_COMMAND_FEEDBACK} is enabled in
+     * the command sender's world.
      *
      * @param output the output to add
      * @param args   the arguments for the output

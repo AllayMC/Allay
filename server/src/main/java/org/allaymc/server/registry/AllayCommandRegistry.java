@@ -144,8 +144,13 @@ public class AllayCommandRegistry extends CommandRegistry {
             var status = result.status();
             var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
             if (result.isSuccess()) {
-                CommandSender sender1 = result.context().getSender();
-                Server.getInstance().getMessageChannel().broadcastCommandOutputs(sender1, status, outputs);
+                var messageChannel = Server.getInstance().getMessageChannel();
+                messageChannel.broadcastCommandOutputs(sender, status, outputs);
+                if (!messageChannel.hasReceiver(sender)) {
+                    // The command sender used to execute this command is not registered to the message channel,
+                    // but we still need to send the command outputs to itself. Let's do it manually
+                    sender.sendCommandOutputs(sender, status, outputs);
+                }
             } else {
                 // If there is an error, only send the message to itself
                 sender.sendCommandOutputs(result.context().getSender(), status, outputs);

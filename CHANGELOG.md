@@ -16,9 +16,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
+- (API) Added method `MessageChannel.hasReceiver()` to check if the specific message receiver is registered in the message channel.
+
 ### Changed
 
 ### Fixed
+
+- Fixed the bug that custom command sender (which is not registered in the default message channel) cannot receive command outputs.
 
 ### Removed
 
