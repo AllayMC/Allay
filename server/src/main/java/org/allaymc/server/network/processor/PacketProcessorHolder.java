@@ -76,18 +76,21 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.LOGGED_IN, new RequestChunkRadiusPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new EmoteListPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new SetLocalPlayerAsInitializedPacketProcessor());
-        // Client will send sub chunk request packet during
-        // logged in stage if sub chunk sending system is enabled
+
+        // Client will send sub chunk request packets during logged-in stage if the sub chunk
+        // sending system is enabled
         registerProcessor(ClientState.LOGGED_IN, new SubChunkRequestPacketProcessor());
 
-        // Client will start sending auth input packet after logged in, however these packets will be ignored.
+        // Client will start sending the auth input packet after logged in, however, these packets will be ignored.
         // See PlayerAuthInputPacketProcessor#notReadyForInput()
         registerProcessor(ClientState.LOGGED_IN, new PlayerAuthInputPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ServerboundLoadingScreenPacketProcessor());
+
         // These three packets seem are also sent during initialize chunk sending stage, so we also added them
         registerProcessor(ClientState.LOGGED_IN, new MobEquipmentPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new InteractPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new MapInfoRequestPacketProcessor());
+        registerProcessor(ClientState.LOGGED_IN, new ServerboundDiagnosticsPacketProcessor());
     }
 
     private void registerInGamePacketProcessors() {
