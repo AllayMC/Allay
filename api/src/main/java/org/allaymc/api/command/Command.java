@@ -54,10 +54,22 @@ public abstract class Command {
      * @param description The description of the command
      */
     public Command(String name, @MayContainTrKey String description) {
+        this(name, description, Permission.createForCommand(name, DEFAULT_COMMAND_PERMISSION_PREFIX + name));
+    }
+
+    /**
+     * Constructs a new {@code Command} instance with the specified name, description, and permission.
+     * This allows the creation of a command with a specific permission required for execution.
+     *
+     * @param name        The name of the command. Cannot be {@code null}.
+     * @param description The description of the command, which may contain a translation key. Cannot be {@code null}.
+     * @param permission  The {@code Permission} object representing the required permission to execute the command.
+     */
+    public Command(String name, @MayContainTrKey String description, Permission permission) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         this.permissions = new ArrayList<>();
-        this.permissions.add(Permission.createForCommand(name, DEFAULT_COMMAND_PERMISSION_PREFIX + name));
+        this.permissions.add(permission);
         this.aliases = new ArrayList<>();
         this.commandTree = CommandTree.create(this);
         prepareCommandTree(this.commandTree);
