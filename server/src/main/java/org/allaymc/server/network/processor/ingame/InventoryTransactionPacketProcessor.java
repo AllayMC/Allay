@@ -8,6 +8,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerInteractAirEvent;
 import org.allaymc.api.eventbus.event.player.PlayerInteractBlockEvent;
 import org.allaymc.api.eventbus.event.player.PlayerInteractEntityEvent;
 import org.allaymc.server.network.NetworkHelper;
@@ -121,6 +122,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
+                        var event = new PlayerInteractAirEvent(player, itemInHand);
+                        if (!event.call()) {
+                            break;
+                        }
                         itemInHand.clickItemInAir(player);
                         if (!player.isUsingItemInAir()) {
                             if (itemInHand.canUseItemInAir(player)) {
