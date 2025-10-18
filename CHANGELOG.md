@@ -17,7 +17,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added method `MessageChannel.hasReceiver()` to check if the specific message receiver is registered in the message channel.
-- (API) Added events `PlayerRightClickItemInAirEvent`, `PlayerStartUseItemInAirEvent`, `PlayerUseItemInAirEvent`, `PlayerPunchBlockEvent`, and `PlayerPunchAirEvent`.
+- (API) Added events `PlayerRightClickItemInAirEvent`, `PlayerStartUseItemInAirEvent`, `PlayerUseItemInAirEvent`.
+- (API) Added events `PlayerPunchBlockEvent` and `PlayerPunchAirEvent`.
+- (API) Added event `PlayerCraftItemEvent`.
 
 ### Changed
 

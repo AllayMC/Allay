@@ -5,6 +5,7 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.RecipeContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerCraftItemEvent;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -93,6 +94,11 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             case ComplexRecipe complex -> complex.getOutputs(recipeInput);
             default -> recipe.getOutputs();
         };
+
+        var event = new PlayerCraftItemEvent(player, recipe, outputs);
+        if (!event.call()) {
+            return error();
+        }
 
         if (outputs != null && outputs.length == 1) {
             // If the recipe outputs a single item, the client will not send a CreateAction,
