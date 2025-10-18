@@ -7,9 +7,6 @@ import org.allaymc.api.item.ItemStack;
 
 /**
  * Event triggered when a player interacts with air (right-click in air).
- * 
- * This is a specialized event for air interactions, separate from the general
- * PlayerInteractEvent which handles all types of interactions.
  *
  * @author galyckyj
  */
