@@ -8,6 +8,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerInteractAirEvent;
 import org.allaymc.api.eventbus.event.player.PlayerInteractBlockEvent;
 import org.allaymc.api.eventbus.event.player.PlayerInteractEntityEvent;
 import org.allaymc.server.network.NetworkHelper;
@@ -50,9 +51,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
         }
 
         boolean isSpam = (currentTime - lastRightClick.time()) < SPAM_BUG_TIME_THRESHOLD &&
-                         lastRightClick.playerPos().distanceSquared(playerPos) < SPAM_BUG_POS_THRESHOLD &&
-                         lastRightClick.blockPos().equals(clickBlockPos) &&
-                         lastRightClick.clickPos().distanceSquared(clickPos) < SPAM_BUG_POS_THRESHOLD;
+                lastRightClick.playerPos().distanceSquared(playerPos) < SPAM_BUG_POS_THRESHOLD &&
+                lastRightClick.blockPos().equals(clickBlockPos) &&
+                lastRightClick.clickPos().distanceSquared(clickPos) < SPAM_BUG_POS_THRESHOLD;
 
         lastRightClick = new LastRightClickData(playerPos, clickBlockPos, clickPos, currentTime);
         return isSpam;
@@ -71,20 +72,22 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         var clickBlockPos = NetworkHelper.fromNetwork(packet.getBlockPosition());
                         var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
                         // https://github.com/pmmp/PocketMine-MP/blob/835c383d4e126df6f38000e3217ad6a325b7a1f7/src/network/mcpe/handler/InGamePacketHandler.php#L475
-                        if (isSpamClick(clickPos, clickBlockPos, NetworkHelper.fromNetwork(packet.getPlayerPosition()))) {
+                        if (isSpamClick(clickPos, clickBlockPos,
+                                NetworkHelper.fromNetwork(packet.getPlayerPosition()))) {
                             break;
                         }
 
                         var dimension = player.getDimension();
-                        var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType().hasBlockTag(BlockTags.REPLACEABLE);
-                        var placeBlockPos = clickedBlockStateReplaceable ? clickBlockPos : Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
+                        var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType()
+                                .hasBlockTag(BlockTags.REPLACEABLE);
+                        var placeBlockPos = clickedBlockStateReplaceable ? clickBlockPos
+                                : Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
                         var interactedBlock = world.getBlockState(clickBlockPos);
                         var interactInfo = new PlayerInteractInfo(
                                 player, clickBlockPos,
-                                clickPos, blockFace
-                        );
-
-                        var event = new PlayerInteractBlockEvent(player, interactInfo, PlayerInteractBlockEvent.Action.RIGHT_CLICK);
+                                clickPos, blockFace);
+                        var event = new PlayerInteractBlockEvent(player, interactInfo,
+                                PlayerInteractBlockEvent.Action.RIGHT_CLICK);
                         if (!event.call()) {
                             break;
                         }
@@ -93,12 +96,14 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         itemInHand.rightClickItemOn(dimension, placeBlockPos, interactInfo);
                         if (player.isUsingItemOnBlock()) {
                             if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
-                                // Using item on the block successfully, no need to call BlockBehavior::onInteract()
+                                // Using item on the block successfully, no need to call
+                                // BlockBehavior::onInteract()
                                 break;
                             }
 
                             if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
-                                // Player interaction with the block was unsuccessful, and we need to override the
+                                // Player interaction with the block was unsuccessful, and we need to override
+                                // the
                                 // client block change by sending block update
                                 var blockStateClicked = dimension.getBlockState(clickBlockPos);
                                 player.viewBlockUpdate(clickBlockPos, 0, blockStateClicked);
@@ -116,6 +121,12 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
+                        // Call PlayerInteractAirEvent
+                        var airEvent = new PlayerInteractAirEvent(player, itemInHand);
+                        if (!airEvent.call()) {
+                            break;
+                        }
+                        
                         itemInHand.clickItemInAir(player);
                         if (!player.isUsingItemInAir()) {
                             if (itemInHand.canUseItemInAir(player)) {
@@ -135,8 +146,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     case ITEM_RELEASE_RELEASE -> {
                         itemInHand.releaseItem(player, player.getItemUsingInAirTime(receiveTime));
                         // When a player is interrupted from eating, the ITEM_USE_CLICK_AIR is not sent
-                        // However ITEM_RELEASE_RELEASE will always be sent when the player stops using the item, regardless of whether it was used successfully or not
-                        // Therefore, when we receive ITEM_RELEASE_RELEASE, we also refresh the player's item usage status as a supplement to the ITEM_USE_CLICK_AIR
+                        // However ITEM_RELEASE_RELEASE will always be sent when the player stops using
+                        // the item, regardless of whether it was used successfully or not
+                        // Therefore, when we receive ITEM_RELEASE_RELEASE, we also refresh the player's
+                        // item usage status as a supplement to the ITEM_USE_CLICK_AIR
                         player.setUsingItemInAir(false);
                     }
                     case ITEM_RELEASE_CONSUME -> {
@@ -146,10 +159,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             }
             case ITEM_USE_ON_ENTITY -> {
                 var target = player.getDimension().getEntityManager().getEntity(packet.getRuntimeEntityId());
-                // In some cases, for example when a falling block entity solidifies, latency may allow attacking an entity that
-                // no longer exists server side. This is expected, so we shouldn't throw NullPointerException.
+                // In some cases, for example when a falling block entity solidifies, latency
+                // may allow attacking an entity that
+                // no longer exists server side. This is expected, so we shouldn't throw
+                // NullPointerException.
                 if (target == null) {
-                    log.debug("Player {} try to attack a entity which doesn't exist! Entity id: {}", player.getOriginName(), packet.getRuntimeEntityId());
+                    log.debug("Player {} try to attack a entity which doesn't exist! Entity id: {}",
+                            player.getOriginName(), packet.getRuntimeEntityId());
                     return;
                 }
                 if (!player.canReach(target.getLocation())) {
@@ -187,19 +203,25 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case NORMAL -> {
-                // When the ItemStackRequest system is used, this transaction type is used for dropping items by pressing Q.
-                // I don't know why they don't just use ItemStackRequest for that too, which already supports dropping items by
-                // clicking them outside an open inventory menu, but for now it is what it is. Fortunately, this means we can
-                // be much stricter about the validation criteria. For more details, see item_throwing.md
+                // When the ItemStackRequest system is used, this transaction type is used for
+                // dropping items by pressing Q.
+                // I don't know why they don't just use ItemStackRequest for that too, which
+                // already supports dropping items by
+                // clicking them outside an open inventory menu, but for now it is what it is.
+                // Fortunately, this means we can
+                // be much stricter about the validation criteria. For more details, see
+                // item_throwing.md
                 if (packet.getActions().size() != 2) {
-                    // Editing writable book will also send this packet with three actions, so just don't warn it
+                    // Editing writable book will also send this packet with three actions, so just
+                    // don't warn it
                     log.debug("Expected two actions for dropping an item, got {}", packet.getActions().size());
                     return;
                 }
 
                 var worldInteractionAction = packet.getActions().getFirst();
                 if (!worldInteractionAction.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
-                    log.warn("Expected WORLD_INTERACTION action type, got {}", worldInteractionAction.getSource().getType());
+                    log.warn("Expected WORLD_INTERACTION action type, got {}",
+                            worldInteractionAction.getSource().getType());
                     return;
                 }
 
