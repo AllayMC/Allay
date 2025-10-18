@@ -7,16 +7,18 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a block is broken.
+ *
  * @author daoge_cmd
  */
 @Getter
 public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
     /**
-     * Can be null
+     * The item used to break the block. Can be {@code null}.
      */
     protected ItemStack usedItem;
     /**
-     * Can be null
+     * The entity breaks the block. Can be {@code null}.
      */
     protected Entity entity;
 

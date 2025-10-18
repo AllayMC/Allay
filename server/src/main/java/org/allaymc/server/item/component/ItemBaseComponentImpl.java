@@ -228,7 +228,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+    public void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         manager.callEvent(new CItemRightClickOnBlockEvent(dimension, placeBlockPos, interactInfo));
     }
 
@@ -315,7 +315,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void clickItemInAir(EntityPlayer player) {
+    public void rightClickItemInAir(EntityPlayer player) {
         manager.callEvent(new CItemClickInAirEvent(player));
     }
 
@@ -334,8 +334,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public boolean useItemInAir(EntityPlayer player, long usedTime) {
-        var event = new CItemUsedInAirEvent(player, usedTime, false);
+    public boolean useItemInAir(EntityPlayer player, long usingTime) {
+        var event = new CItemUseInAirEvent(player, usingTime, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }

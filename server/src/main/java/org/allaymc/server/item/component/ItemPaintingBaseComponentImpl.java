@@ -24,8 +24,8 @@ public class ItemPaintingBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        super.rightClickItemOn(dimension, placeBlockPos, interactInfo);
+    public void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+        super.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
 
         var player = interactInfo.player();
         if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SPECTATOR) {

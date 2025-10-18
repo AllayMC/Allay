@@ -17,8 +17,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Added method `MessageChannel.hasReceiver()` to check if the specific message receiver is registered in the message channel.
+- (API) Added events `PlayerRightClickItemInAirEvent`, `PlayerStartUseItemInAirEvent`, `PlayerUseItemInAirEvent`, `PlayerPunchBlockEvent`, and `PlayerPunchAirEvent`.
 
 ### Changed
+
+- (API) Renamed method `ItemStack.clickItemInAir()` to `ItemStack.rightClickItemInAir()`.
+- (API) Renamed method `ItemStack.rightClickItemOn()` to `ItemStack.rightClickItemOnBlock()`.
 
 ### Fixed
 
@@ -26,8 +30,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed a bug where all player skins would be set to the same skin.
 - Fixed an issue where commands had two permission nodes.
 - Fixed a bug where players' name tags are not always shown.
+- Fixed a bug where using firework rocket in a block won't decrease the item count.
 
 ### Removed
+
+- (API) Removed method `ItemStack.releaseItem()` which is duplicated with method `ItemStack.useItemInAir()`.
 
 ## 0.8.2 (API 0.14.0) - 2025/10/16
 

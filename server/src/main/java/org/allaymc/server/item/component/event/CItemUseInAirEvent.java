@@ -12,8 +12,8 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CItemUsedInAirEvent extends Event {
+public class CItemUseInAirEvent extends Event {
     protected EntityPlayer player;
-    protected long usedTime;
+    protected long usingTime;
     protected boolean canBeUsed;
 }

@@ -33,9 +33,9 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public void releaseItem(EntityPlayer player, long usedTime) {
+    public boolean useItemInAir(EntityPlayer player, long usedTime) {
         if (usedTime < 3) {
-            return;
+            return false;
         }
 
         var creative = player.getGameMode() == GameMode.CREATIVE;
@@ -47,7 +47,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
         if (!creative) {
             var arrow = findArrow(player, infinity);
             if (arrow == null) {
-                return;
+                return false;
             }
 
             potionType = arrow.getPotionType();
@@ -86,7 +86,7 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
 
         var event = new EntityShootBowEvent(player, thisItemStack, arrow);
         if (!event.call()) {
-            return;
+            return false;
         }
 
         dimension.getEntityManager().addEntity(arrow);
@@ -94,6 +94,8 @@ public class ItemBowBaseComponentImpl extends ItemBaseComponentImpl {
             tryIncreaseDamage(1);
         }
         player.getDimension().addSound(shootPos, SimpleSound.BOW_SHOOT);
+
+        return true;
     }
 
     protected boolean hasArrow(EntityPlayer player) {

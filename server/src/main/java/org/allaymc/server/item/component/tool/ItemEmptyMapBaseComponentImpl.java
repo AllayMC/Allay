@@ -15,7 +15,7 @@ public class ItemEmptyMapBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public void clickItemInAir(EntityPlayer player) {
+    public void rightClickItemInAir(EntityPlayer player) {
         player.tryConsumeItemInHand();
         var itemStack = ItemTypes.FILLED_MAP.createItemStack();
         player.getContainer(ContainerTypes.INVENTORY).tryAddItem(itemStack);

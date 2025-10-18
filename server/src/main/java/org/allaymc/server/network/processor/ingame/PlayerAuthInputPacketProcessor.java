@@ -11,6 +11,8 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPunchAirEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPunchBlockEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
@@ -174,7 +176,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.breakingPosX = x;
         this.breakingPosY = y;
         this.breakingPosZ = z;
-        this.blockToBreak.getBlockType().getBlockBehavior().onPunch(new Block(blockToBreak, new Position3i(x, y, z, dimension)), faceToBreak, player.getItemInHand(), player);
+
+        var block = new Block(blockToBreak, new Position3i(x, y, z, dimension));
+        var event = new PlayerPunchBlockEvent(player, block, faceToBreak);
+        if (event.call()) {
+            this.blockToBreak.getBlockType().getBlockBehavior().onPunch(block, faceToBreak, player.getItemInHand(), player);
+        }
+
         if (player.getGameMode() != GameMode.CREATIVE) {
             this.breakTime = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
         } else {
@@ -283,6 +291,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     player.setFlying(true);
                 }
                 case STOP_FLYING -> player.setFlying(false);
+                case MISSED_SWING -> new PlayerPunchAirEvent(player).call();
             }
         }
     }

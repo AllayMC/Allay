@@ -12,7 +12,7 @@ import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
-import org.allaymc.server.item.component.event.CItemUsedInAirEvent;
+import org.allaymc.server.item.component.event.CItemUseInAirEvent;
 
 /**
  * @author IWareQ
@@ -59,8 +59,8 @@ public class ItemEdibleComponentImpl implements ItemEdibleComponent {
     }
 
     @EventHandler
-    protected void onItemUsed(CItemUsedInAirEvent event) {
-        if (event.getUsedTime() < eatingTime) {
+    protected void onItemUse(CItemUseInAirEvent event) {
+        if (event.getUsingTime() < eatingTime) {
             event.setCanBeUsed(false);
             return;
         }

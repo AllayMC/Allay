@@ -8,8 +8,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.player.PlayerInteractBlockEvent;
-import org.allaymc.api.eventbus.event.player.PlayerInteractEntityEvent;
+import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -90,7 +89,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
 
                         player.setUsingItemInAir(false);
-                        itemInHand.rightClickItemOn(dimension, placeBlockPos, interactInfo);
+                        itemInHand.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
                         if (player.isUsingItemOnBlock()) {
                             if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
                                 // Using item on the block successfully, no need to call BlockBehavior::onInteract()
@@ -116,16 +115,18 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
-                        itemInHand.clickItemInAir(player);
                         if (!player.isUsingItemInAir()) {
                             if (itemInHand.canUseItemInAir(player)) {
-                                // Start using item
-                                player.setUsingItemInAir(true, receiveTime);
+                                if (new PlayerStartUseItemInAirEvent(player).call()) {
+                                    player.setUsingItemInAir(true, receiveTime);
+                                }
+                            } else {
+                                if (new PlayerRightClickItemInAirEvent(player).call()) {
+                                    itemInHand.rightClickItemInAir(player);
+                                }
                             }
                         } else if (player.isUsingItemInAir()) {
-                            // Item used
                             player.setUsingItemInAir(false);
-                            itemInHand.useItemInAir(player, player.getItemUsingInAirTime(receiveTime));
                         }
                     }
                 }
@@ -133,11 +134,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             case ITEM_RELEASE -> {
                 switch (packet.getActionType()) {
                     case ITEM_RELEASE_RELEASE -> {
-                        itemInHand.releaseItem(player, player.getItemUsingInAirTime(receiveTime));
-                        // When a player is interrupted from eating, the ITEM_USE_CLICK_AIR is not sent
-                        // However ITEM_RELEASE_RELEASE will always be sent when the player stops using the item, regardless of whether it was used successfully or not
-                        // Therefore, when we receive ITEM_RELEASE_RELEASE, we also refresh the player's item usage status as a supplement to the ITEM_USE_CLICK_AIR
-                        player.setUsingItemInAir(false);
+                        if (player.isUsingItemInAir()) {
+                            player.setUsingItemInAir(false);
+                            var event = new PlayerUseItemInAirEvent(player, player.getItemUsingInAirTime(receiveTime));
+                            if (event.call()) {
+                                itemInHand.useItemInAir(player, event.getUsingTime());
+                            }
+                        }
                     }
                     case ITEM_RELEASE_CONSUME -> {
                         // TODO: It seems that this value is deprecated

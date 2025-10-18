@@ -34,7 +34,7 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
     }
 
     @Override
-    public void clickItemInAir(EntityPlayer player) {
+    public void rightClickItemInAir(EntityPlayer player) {
         equipArmor(player, thisItemStack);
     }
 

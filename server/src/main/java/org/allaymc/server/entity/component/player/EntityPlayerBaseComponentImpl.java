@@ -1080,8 +1080,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var loginData = this.clientComponent.getLoginData();
         this.skin = loginData.getSkin();
         this.uniqueId = loginData.getUuid().getMostSignificantBits();
-        setDisplayName(loginData.getXname());
-        setNameTag(loginData.getXname());
+        this.displayName = loginData.getXname();
+        // NOTICE: Do not use method setNameTag() here, since at that time the player is not added to
+        // any dimension and no one is viewing the player. Calling method setNameTag() will cause a NPE
+        this.nameTag = loginData.getXname();
     }
 
     @EventHandler

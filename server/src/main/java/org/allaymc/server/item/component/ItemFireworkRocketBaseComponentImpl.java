@@ -41,7 +41,7 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
     }
 
     @Override
-    public void clickItemInAir(EntityPlayer player) {
+    public void rightClickItemInAir(EntityPlayer player) {
         if (!player.isGliding()) {
             return;
         }
@@ -83,6 +83,7 @@ public class ItemFireworkRocketBaseComponentImpl extends ItemBaseComponentImpl i
         dimension.getEntityManager().addEntity(firework);
         dimension.addSound(pos, SimpleSound.FIREWORK_LAUNCH);
 
+        interactInfo.player().tryConsumeItemInHand();
         return true;
     }
 

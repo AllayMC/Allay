@@ -268,12 +268,11 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
      * @param interactInfo  the {@link PlayerInteractInfo}
      */
     @ApiStatus.OverrideOnly
-    void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
+    void rightClickItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
-     * Attempts to use the item on a block.
-     * <p>
-     * Called when client allows use. Handles count/durability changes.
+     * Attempts to use the item on a block. Different from {@link #rightClickItemOnBlock(Dimension, Vector3ic, PlayerInteractInfo)},
+     * this method will only be called when the client thinks he can use the item on the block.
      *
      * @param dimension     the {@link Dimension}
      * @param placeBlockPos the block position ({@link Vector3ic})
@@ -296,17 +295,22 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Called when a player click this item in air.
+     * Called when a player right-clicks this item in air. This method is only called when {@link #canUseItemInAir(EntityPlayer)}
+     * return {@code false}.
      *
      * @param player the {@link EntityPlayer} that click this item in air
      */
     @ApiStatus.OverrideOnly
-    void clickItemInAir(EntityPlayer player);
+    void rightClickItemInAir(EntityPlayer player);
 
     /**
      * Checks if the item can be used in air. If return {@code true}, method {@link #useItemInAir} will be
-     * called later with the time used when player finish using the item (usually when they release the right
-     * mouse button or screen).
+     * called later with the time used when the player finishes using the item (usually when they release the
+     * right mouse button or screen).
+     * <p>
+     * This method usually return {@code true} for those items which need time to be used. For the items that
+     * can be used immediately, this method should return {@code false} and method {@link #rightClickItemInAir(EntityPlayer)}
+     * will be called instead.
      *
      * @param player the {@link EntityPlayer} that try to use this item in air
      * @return {@code true} if usable, {@code false} otherwise
@@ -314,29 +318,14 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     boolean canUseItemInAir(EntityPlayer player);
 
     /**
-     * Called when client finish using certain item (e.g. foods). Different from {@link #releaseItem(EntityPlayer, long)},
-     * this method will only be called when the client think he has finished using certain item. This means that if the
-     * player stops using an item early, this method will not be called.
+     * Called when the player finishes using certain item (e.g. foods).
      *
-     * @param player   the {@link EntityPlayer}
-     * @param usedTime the usage duration
+     * @param player    the player
+     * @param usingTime the time the player has been using the item in air in game ticks
      * @return {@code true} if used, {@code false} otherwise
      */
     @ApiStatus.OverrideOnly
-    boolean useItemInAir(EntityPlayer player, long usedTime);
-
-    /**
-     * Called when client release an item, and it is usually the right click/screen that is held down for a while and then
-     * released. Please note that no matter whether the used time is enough, this method will always being called, and that's
-     * different from {@link #useItemInAir(EntityPlayer, long)} which require enough used time to be called. This method is
-     * used in bow.
-     *
-     * @param player   the {@link EntityPlayer}
-     * @param usedTime the usage duration
-     */
-    @ApiStatus.OverrideOnly
-    default void releaseItem(EntityPlayer player, long usedTime) {
-    }
+    boolean useItemInAir(EntityPlayer player, long usingTime);
 
     /**
      * Checks if this item can merge with another.
@@ -349,10 +338,11 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     }
 
     /**
-     * Checks if this item can merge with another, with count option.
+     * Checks if this item can merge with another.
      *
      * @param itemStack   the {@link ItemStack} to check
-     * @param ignoreCount whether to ignore count in comparison
+     * @param ignoreCount whether to ignore count in comparison. If set to {code false}, this method will check if the merged
+     *                    count exceeds the maximum item count of a single stack for this item type
      * @return {@code true} if mergeable, {@code false} otherwise
      */
     boolean canMerge(ItemStack itemStack, boolean ignoreCount);

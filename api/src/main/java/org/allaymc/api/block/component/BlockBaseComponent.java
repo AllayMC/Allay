@@ -160,9 +160,10 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when the block is punched by an entity.
      *
-     * @param block    the block being punched
-     * @param usedItem the item used to punch the block, can be {@code null}
-     * @param entity   the entity who punched the block, can be {@code null}
+     * @param block     the block being punched
+     * @param blockFace the face of the block being punched
+     * @param usedItem  the item used to punch the block, can be {@code null}
+     * @param entity    the entity who punched the block, can be {@code null}
      */
     @ApiStatus.OverrideOnly
     void onPunch(Block block, BlockFace blockFace, ItemStack usedItem, Entity entity);
