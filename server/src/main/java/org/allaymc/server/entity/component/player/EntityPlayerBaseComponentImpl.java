@@ -178,6 +178,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.verticalFlySpeed = DEFAULT_VERTICAL_FLY_SPEED;
         this.foodLevel = MAX_FOOD_LEVEL;
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
+        // Player's name tag is always shown
+        this.nameTagAlwaysShow = true;
     }
 
     @Override
@@ -1079,6 +1081,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.skin = loginData.getSkin();
         this.uniqueId = loginData.getUuid().getMostSignificantBits();
         setDisplayName(loginData.getXname());
+        setNameTag(loginData.getXname());
     }
 
     @EventHandler

@@ -23,6 +23,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Fixed
 
 - Fixed the bug that custom command sender (which is not registered in the default message channel) cannot receive command outputs.
+- Fixed a bug where all player skins would be set to the same skin.
+- Fixed an issue where commands had two permission nodes.
+- Fixed a bug where players' name tags are not always shown.
 
 ### Removed
 

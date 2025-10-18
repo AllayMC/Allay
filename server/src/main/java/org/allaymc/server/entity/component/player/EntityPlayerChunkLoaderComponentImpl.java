@@ -501,7 +501,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     public void viewPlayerSkin(EntityPlayer player) {
         var skin = SkinConvertor.toSerializedSkin(player.getSkin());
         var packet = new PlayerSkinPacket();
-        packet.setUuid(clientComponent.getLoginData().getUuid());
+        packet.setUuid(player.getLoginData().getUuid());
         packet.setSkin(skin);
         packet.setNewSkinName(skin.getSkinId());
         // It seems that old skin name is unused
