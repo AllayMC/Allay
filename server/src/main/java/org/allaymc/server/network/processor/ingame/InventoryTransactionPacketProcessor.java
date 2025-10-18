@@ -122,7 +122,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
-                        var event = new PlayerInteractAirEvent(player, itemInHand);
+                        var event = new PlayerInteractAirEvent(player);
                         if (!event.call()) {
                             break;
                         }
