@@ -100,7 +100,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public void onCollideWithEntity(Block block, Entity entity) {
-        if (entity instanceof EntityLiving living && living.getOnFireTicks() > 0) {
+        if (entity instanceof EntityLiving living && living.isOnFire()) {
             living.extinguish();
             living.getDimension().addParticle(living.getLocation(), SimpleParticle.WHITE_SMOKE);
             living.getDimension().addSound(living.getLocation(), SimpleSound.FIRE_EXTINGUISH);

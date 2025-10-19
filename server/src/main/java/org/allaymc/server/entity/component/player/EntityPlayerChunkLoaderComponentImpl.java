@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.component.player;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,7 +66,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
@@ -607,14 +607,13 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewEntityEffectChange(Entity entity, EffectInstance newEffect, EffectInstance oldEffect) {
         var packet = new MobEffectPacket();
+        packet.setRuntimeEntityId(entity.getRuntimeId());
         if (newEffect == null) {
             Preconditions.checkNotNull(oldEffect);
             // Effect is removed
-            packet.setRuntimeEntityId(entity.getRuntimeId());
             packet.setEffectId(oldEffect.getType().getId());
             packet.setEvent(MobEffectPacket.Event.REMOVE);
         } else {
-            packet.setRuntimeEntityId(entity.getRuntimeId());
             packet.setEffectId(newEffect.getType().getId());
             packet.setAmplifier(newEffect.getAmplifier());
             packet.setParticles(newEffect.isVisible());

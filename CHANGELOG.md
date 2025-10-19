@@ -33,6 +33,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed an issue where commands had two permission nodes.
 - Fixed a bug where players' name tags are not always shown.
 - Fixed a bug where using firework rocket in a block won't decrease the item count.
+- Fixed a client crash bug due to the incorrect absorption attribute sending.
 
 ### Removed
 

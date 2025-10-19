@@ -66,7 +66,12 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     @Override
     public void setAbsorption(float absorption) {
         super.setAbsorption(absorption);
-        sendAttribute(new AttributeData("minecraft:absorption", 0, Float.MAX_VALUE, this.absorption));
+        var maxAbsorption = 16.0f;
+        sendAttribute(new AttributeData(
+                "minecraft:absorption", 0, maxAbsorption,
+                this.absorption, 0, maxAbsorption, 0,
+                Collections.emptyList()
+        ));
     }
 
     @Override
