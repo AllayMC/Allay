@@ -52,10 +52,6 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     }
 
     @Override
-    public void onLoaderChunkPosChange() {
-    }
-
-    @Override
     public void viewEntity(Entity entity) {
     }
 

@@ -634,26 +634,26 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         this.chunkLoadingRadius = Math.min(radius, AllayServer.getSettings().worldSettings().viewDistance());
         var packet = new ChunkRadiusUpdatedPacket();
         packet.setRadius(chunkLoadingRadius);
-        clientComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void onLoaderChunkPosChange() {
-        var location = thisPlayer.getLocation();
-        var packet = new NetworkChunkPublisherUpdatePacket();
-        packet.setPosition(Vector3i.from(location.x(), location.y(), location.z()));
-        packet.setRadius(getChunkLoadingRadius() << 4);
-        clientComponent.sendPacket(packet);
+        this.clientComponent.sendPacket(packet);
     }
 
     @Override
     public void viewChunk(Chunk chunk) {
+        this.clientComponent.sendPacket(createNetworkChunkPublisherUpdatePacket());
         this.clientComponent.sendPacket(createLevelChunkPacket(chunk));
         // This method will be called in non-ticking thread if async chunk sending is enabled. Let's
         // send the entities in this chunk to the player next tick in the main thread: use forEachEntitiesInChunk()
         // instead of forEachEntitiesInChunkImmediately()
         thisPlayer.getDimension().getEntityManager().forEachEntitiesInChunk(chunk.getX(), chunk.getZ(), entity -> entity.spawnTo(thisPlayer));
-        manager.callEvent(CPlayerChunkInRangeSendEvent.INSTANCE);
+        this.manager.callEvent(CPlayerChunkInRangeSendEvent.INSTANCE);
+    }
+
+    protected NetworkChunkPublisherUpdatePacket createNetworkChunkPublisherUpdatePacket() {
+        var packet = new NetworkChunkPublisherUpdatePacket();
+        var location = thisPlayer.getLocation();
+        packet.setPosition(Vector3i.from(location.x(), location.y(), location.z()));
+        packet.setRadius(getChunkLoadingRadius() << 4);
+        return packet;
     }
 
     protected LevelChunkPacket createLevelChunkPacket(Chunk chunk) {

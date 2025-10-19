@@ -2,7 +2,6 @@ package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.world.WorldViewer;
-import org.jetbrains.annotations.ApiStatus;
 
 /**
  * ChunkLoader represents a loader that will load chunks in the dimension. A chunk loader
@@ -40,10 +39,4 @@ public interface ChunkLoader extends WorldViewer {
      * @return the maximum chunk count try to send per tick
      */
     int getChunkMaxSendCountPerTick();
-
-    /**
-     * A method which will be called when the chunk pos of the loader is changed.
-     */
-    @ApiStatus.OverrideOnly
-    void onLoaderChunkPosChange();
 }

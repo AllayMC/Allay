@@ -100,7 +100,6 @@ public final class ChunkLoaderHolder {
         var floor = MathUtils.floor(chunkLoader.getLocation());
         if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
             lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
-            chunkLoader.onLoaderChunkPosChange();
             updateInRadiusChunks(floor);
             removeOutOfRadiusChunks();
             updateChunkSendingQueue();
@@ -179,6 +178,7 @@ public final class ChunkLoaderHolder {
         } while (!chunkSendingQueue.isEmpty() && sentChunkCount < chunkLoader.getChunkMaxSendCountPerTick());
 
         if (!chunkReadyToSend.isEmpty()) {
+            // TODO: send NCP here
             var chunkSendingStrategy = AllayServer.getSettings().worldSettings().chunkSendingStrategy();
             if (chunkSendingStrategy == ASYNC) {
                 asyncChunkSender.addChunkToSendingQueue(chunkReadyToSend.values());

@@ -37,6 +37,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed a bug where water block cannot extinguish the fire on the entity.
 - Fixed a bug where the player dying in a non-overworld dimension could not be properly teleported back to the spawn point in overworld.
 - Fixed a NPE when interacting bed block in a non-overworld dimension.
+- Fixed a bug where chunks sent to the client sometimes did not display immediately.
 
 ### Removed
 
