@@ -397,6 +397,7 @@ public class Explosion {
             if (blockType == BlockTypes.AIR) {
                 continue;
             }
+
             if (blockType == BlockTypes.TNT) {
                 // Explosion can prime tnt around
                 BlockTypes.TNT.getBlockBehavior().prime(
@@ -406,13 +407,17 @@ public class Explosion {
                 continue;
             }
 
-            dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
             if (itemDropChance > rand.nextDouble()) {
                 var centerPos = MathUtils.center(pos);
                 for (var item : block.getBehavior().getDrops(new Block(block, new Position3i(pos, dimension)), null, null)) {
                     dimension.dropItem(item, centerPos);
                 }
             }
+
+            // Set the block to air after we drop the items. This is because some blocks, such as beds, need to acquire block entities in their
+            // location to determine their drops. If we set the block to air in advance, a NPE will be generated when getting the drop via the
+            // `BlockBehavior.getDrop()` method
+            dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
         }
 
         if (spawnFire) {

@@ -25,6 +25,7 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
 
     public BlockEntityBedBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
+        this.color = DyeColor.RED;
     }
 
     public void setColor(DyeColor color) {
@@ -55,9 +56,7 @@ public class BlockEntityBedBaseComponentImpl extends BlockEntityBaseComponentImp
     @EventHandler
     protected void onBlockPlace(CBlockOnPlaceEvent event) {
         var placementInfo = event.getPlacementInfo();
-        if (placementInfo == null) {
-            this.color = DyeColor.RED;
-        } else {
+        if (placementInfo != null) {
             this.color = Preconditions.checkNotNull(DyeColor.from(placementInfo.player().getItemInHand().getMeta()));
         }
     }
