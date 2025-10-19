@@ -33,13 +33,13 @@ public class EntityTeleportEvent extends EntityEvent implements CancellableEvent
     @Getter
     @AllArgsConstructor
     public enum Reason {
-        // Unknown reason, may be caused by plugin
+        // Unknown reason
         UNKNOWN,
         // Ender pearl
         PROJECTILE,
         // Chorus fruit
         CHORUS_FRUIT,
         // Command
-        COMMAND;
+        COMMAND
     }
 }

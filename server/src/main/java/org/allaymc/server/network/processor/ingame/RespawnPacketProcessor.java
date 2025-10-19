@@ -3,8 +3,6 @@ package org.allaymc.server.network.processor.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
-import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -34,22 +32,15 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         respawnPacket.setState(RespawnPacket.State.SERVER_READY);
         player.sendPacket(respawnPacket);
 
-        var oldDimension = player.getDimension();
-        var spawnDimension = spawnPoint.dimension();
-        if (oldDimension != spawnDimension) {
-            // Respawn dimension and player's current dimension are different, need to remove player from the old dimension
-            oldDimension.removePlayer(player, () -> {
-                resetData(player, spawnPoint);
-                spawnDimension.addPlayer(player, () -> player.teleport(spawnPoint));
-            });
-        } else {
-            resetData(player, spawnPoint);
-            spawnDimension.getEntityManager().addEntity(player, () -> player.teleport(spawnPoint));
-        }
+        // Respawn the player at the current dimension first, reset its data and then teleport to
+        // the spawn point
+        player.getDimension().addPlayer(player, () -> {
+            resetData(player);
+            player.teleport(spawnPoint);
+        });
     }
 
-    private void resetData(EntityPlayer player, Location3ic spawnPoint) {
-        player.setLocationBeforeSpawn(new Location3d(spawnPoint));
+    private void resetData(EntityPlayer player) {
         player.removeAllEffects();
         player.resetHealth();
         player.resetFoodData();
