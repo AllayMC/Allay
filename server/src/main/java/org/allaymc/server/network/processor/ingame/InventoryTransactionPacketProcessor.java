@@ -127,6 +127,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             }
                         } else if (player.isUsingItemInAir()) {
                             player.setUsingItemInAir(false);
+                            var event = new PlayerUseItemInAirEvent(player, player.getItemUsingInAirTime(receiveTime));
+                            if (event.call()) {
+                                itemInHand.useItemInAir(player, event.getUsingTime());
+                            }
                         }
                     }
                 }
