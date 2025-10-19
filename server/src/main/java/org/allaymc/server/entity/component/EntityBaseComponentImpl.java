@@ -141,17 +141,19 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void tickBlockCollision() {
-        var aabb = getOffsetAABBForCollisionCheck();
+        var aabb = getOffsetAABB();
+        var aabbFat = getOffsetAABBForCollisionCheck();
         var dimension = getDimension();
-        dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
+        dimension.forEachBlockStates(aabbFat, 0, (x, y, z, blockState) -> {
             var block = new Block(blockState, new Position3i(x, y, z, dimension), 0);
 
-            if (blockState.getBlockStateData().collisionShape().translate(x, y, z).intersectsAABB(aabb)) {
+            if (blockState.getBlockStateData().collisionShape().translate(x, y, z).intersectsAABB(aabbFat)) {
                 this.onCollideWithBlock(block);
                 blockState.getBehavior().onCollideWithEntity(block, thisEntity);
             }
 
-            // Check if the entity is inside block
+            // Check if the entity is inside a block. Here we use the normal aabb instead of the aabb
+            // for collision check
             if (blockState.getBlockStateData().shape().translate(x, y, z).intersectsAABB(aabb)) {
                 blockState.getBehavior().onEntityInside(block, thisEntity);
                 this.onInsideBlock(block);
