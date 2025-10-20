@@ -174,10 +174,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return true;
     }
 
-    protected boolean hasDeadTimer() {
-        return true;
-    }
-
     @Override
     public void setNameTag(String nameTag) {
         this.nameTag = nameTag;

@@ -92,8 +92,4 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         return builder.build();
     }
 
-    @Override
-    protected boolean hasDeadTimer() {
-        return false;
-    }
 }

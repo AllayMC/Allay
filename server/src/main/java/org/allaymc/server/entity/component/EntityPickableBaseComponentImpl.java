@@ -32,11 +32,6 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     }
 
     @Override
-    protected boolean hasDeadTimer() {
-        return false;
-    }
-
-    @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
         nbt.listenForInt(TAG_PICKUP_DELAY, pickupDelay -> this.pickupDelay = pickupDelay);
