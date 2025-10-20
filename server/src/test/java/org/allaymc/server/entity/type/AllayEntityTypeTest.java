@@ -28,6 +28,6 @@ class AllayEntityTypeTest {
 
     @Test
     void testCommon() {
-        assertEquals(new Location3d(0f, 1f, 2f, 0, 0, 0, mockDimension), sheep.getLocation());
+        assertEquals(new Location3d(0f, 1f, 2f, 0, 0, mockDimension), sheep.getLocation());
     }
 }
