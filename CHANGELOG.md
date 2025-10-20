@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added events `PlayerPunchBlockEvent` and `PlayerPunchAirEvent`.
 - (API) Added event `PlayerCraftItemEvent`.
 - (API) Added tooltip field to `Dropdown`, `Input`, `Slider`, `StepSlider`, and `Toggle` which are used in `CustomForm`.
+- Implemented short and tall dry grass.
 
 ### Changed
 

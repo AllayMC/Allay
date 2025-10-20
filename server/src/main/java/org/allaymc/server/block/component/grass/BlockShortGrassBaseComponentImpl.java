@@ -6,7 +6,6 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.block.FortuneDropHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -50,6 +49,6 @@ public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {
             return Set.of(ItemTypes.WHEAT_SEEDS.createItemStack());
         }
 
-        return Set.of(ItemAirStack.AIR_STACK);
+        return Set.of();
     }
 }

@@ -23,6 +23,7 @@ import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockConcretePowderFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
+import org.allaymc.server.block.component.grass.BlockDryGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
@@ -372,6 +373,11 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.SHORT_GRASS)
                 .setBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
+        BlockTypes.SHORT_DRY_GRASS = AllayBlockType
+                .builder(BlockShortDryGrassBehaviorImpl.class)
+                .vanillaBlock(BlockId.SHORT_DRY_GRASS)
+                .setBaseComponentSupplier(BlockDryGrassBaseComponentImpl::new)
+                .build();
         BlockTypes.FERN = AllayBlockType
                 .builder(BlockFernBehaviorImpl.class)
                 .vanillaBlock(BlockId.FERN)
@@ -385,6 +391,12 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.TALL_GRASS)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.SHORT_GRASS))
+                .build();
+        // Actually, tall dry grass is only one block height
+        BlockTypes.TALL_DRY_GRASS = AllayBlockType
+                .builder(BlockTallDryGrassBehaviorImpl.class)
+                .vanillaBlock(BlockId.TALL_DRY_GRASS)
+                .setBaseComponentSupplier(BlockDryGrassBaseComponentImpl::new)
                 .build();
         BlockTypes.LARGE_FERN = AllayBlockType
                 .builder(BlockLargeFernBehaviorImpl.class)

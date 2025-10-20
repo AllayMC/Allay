@@ -322,6 +322,15 @@ public class GameTestCommand extends VanillaCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
+                .key("testcustomfrom")
+                .exec((context, player) -> {
+                    Forms.custom()
+                            .title("Test Custom Form")
+                            .input("test input", "type sth here", "", "this is a tooltip")
+                            .sendTo(player);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
                 .key("blockstate")
                 .bool("enable")
                 .exec((context, player) -> {
