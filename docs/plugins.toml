@@ -52,3 +52,8 @@ github = "https://github.com/HuHoBot/AllayMCAdapter"
 description = "The official placeholder api for Allay."
 authors = ["daoge_cmd"]
 github = "https://github.com/AllayMC/PlaceholderAPI"
+
+[SimpleScoreboard]
+description = "A lightweight and customizable scoreboard plugin for AllayMC."
+authors = ["Acktar"]
+github = "https://github.com/Mythical-Games/SimpleScoreboard"
