@@ -135,7 +135,20 @@ public class CustomForm extends Form {
      * @return the form
      */
     public CustomForm dropdown(String text, List<String> options, int defaultOptionIndex) {
-        return element(new Dropdown(text, options, defaultOptionIndex));
+        return dropdown(text, options, defaultOptionIndex, null);
+    }
+
+    /**
+     * Add a dropdown element to the form.
+     *
+     * @param text               the text of the element
+     * @param options            the options of the element
+     * @param defaultOptionIndex the index of the default option
+     * @param tooltip            the tooltip of the element. Can be {@code null}
+     * @return the form
+     */
+    public CustomForm dropdown(String text, List<String> options, int defaultOptionIndex, String tooltip) {
+        return element(new Dropdown(text, options, defaultOptionIndex, tooltip));
     }
 
     /**
@@ -168,7 +181,20 @@ public class CustomForm extends Form {
      * @return the form
      */
     public CustomForm input(String text, String placeholder, String defaultText) {
-        return element(new Input(text, placeholder, defaultText));
+        return input(text, placeholder, defaultText, null);
+    }
+
+    /**
+     * Add an input element to the form.
+     *
+     * @param text        the text of the element
+     * @param placeholder the placeholder of the element
+     * @param defaultText the default text of the element
+     * @param tooltip     the tooltip of the element. Can be {@code null}
+     * @return the form
+     */
+    public CustomForm input(String text, String placeholder, String defaultText, String tooltip) {
+        return element(new Input(text, placeholder, defaultText, tooltip));
     }
 
     /**
@@ -215,7 +241,22 @@ public class CustomForm extends Form {
      * @return the form
      */
     public CustomForm slider(String text, float min, float max, int step, float defaultValue) {
-        return element(new Slider(text, min, max, step, defaultValue));
+        return slider(text, min, max, step, defaultValue, null);
+    }
+
+    /**
+     * Add a slider element to the form.
+     *
+     * @param text         the text of the element
+     * @param min          the minimum value of the element
+     * @param max          the maximum value of the element
+     * @param step         the step of the element
+     * @param defaultValue the default value of the element
+     * @param tooltip      the tooltip of the element. Can be {@code null}
+     * @return the form
+     */
+    public CustomForm slider(String text, float min, float max, int step, float defaultValue, String tooltip) {
+        return element(new Slider(text, min, max, step, defaultValue, tooltip));
     }
 
     /**
@@ -259,7 +300,20 @@ public class CustomForm extends Form {
      * @return the form
      */
     public CustomForm stepSlider(String text, List<String> steps, int defaultStep) {
-        return element(new StepSlider(text, steps, defaultStep));
+        return stepSlider(text, steps, defaultStep, null);
+    }
+
+    /**
+     * Add a step slider element to the form.
+     *
+     * @param text        the text of the element
+     * @param steps       the steps of the element
+     * @param defaultStep the default step of the element
+     * @param tooltip     the tooltip of the element. Can be {@code null}
+     * @return the form
+     */
+    public CustomForm stepSlider(String text, List<String> steps, int defaultStep, String tooltip) {
+        return element(new StepSlider(text, steps, defaultStep, tooltip));
     }
 
     /**
@@ -280,7 +334,19 @@ public class CustomForm extends Form {
      * @return the form
      */
     public CustomForm toggle(String text, boolean defaultValue) {
-        return element(new Toggle(text, defaultValue));
+        return toggle(text, defaultValue, null);
+    }
+
+    /**
+     * Add a toggle element to the form.
+     *
+     * @param text         the text of the element
+     * @param defaultValue the default value of the element
+     * @param tooltip      the tooltip of the element. Can be {@code null}
+     * @return the form
+     */
+    public CustomForm toggle(String text, boolean defaultValue, String tooltip) {
+        return element(new Toggle(text, defaultValue, tooltip));
     }
 
     /**

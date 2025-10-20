@@ -18,6 +18,8 @@ public final class Toggle implements CustomFormElement {
     @Getter
     @SerializedName("default")
     private boolean defaultValue;
+    @Getter
+    private final String tooltip;
 
     /**
      * Create a new toggle.
@@ -25,9 +27,10 @@ public final class Toggle implements CustomFormElement {
      * @param text         the text of the toggle
      * @param defaultValue the default value of the toggle
      */
-    public Toggle(String text, boolean defaultValue) {
+    public Toggle(String text, boolean defaultValue, String tooltip) {
         this.text = text;
         this.defaultValue = defaultValue;
+        this.tooltip = tooltip;
     }
 
     @Override

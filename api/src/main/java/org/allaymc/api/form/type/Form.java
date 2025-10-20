@@ -1,6 +1,7 @@
 package org.allaymc.api.form.type;
 
 import com.google.gson.Gson;
+import lombok.Getter;
 import org.allaymc.api.form.FormCancelReason;
 import org.allaymc.api.form.FormViewer;
 
@@ -17,6 +18,10 @@ public abstract class Form {
 
     protected transient Consumer<FormCancelReason> onClose = reason -> {
     };
+    /**
+     * The response from the viewer.
+     */
+    @Getter
     protected transient Object response;
 
     /**
@@ -39,7 +44,7 @@ public abstract class Form {
     public abstract void handleResponse(String data);
 
     /**
-     * Handle the close of the form. This method will be called when the viewer close the form.
+     * Handle the close of the form. This method will be called when the viewer closes the form.
      *
      * @param reason the reason why the form is closed
      */
@@ -73,14 +78,5 @@ public abstract class Form {
      */
     public String toJson() {
         return GSON.toJson(this);
-    }
-
-    /**
-     * Get the response from the viewer.
-     *
-     * @return the response
-     */
-    public Object getResponse() {
-        return this.response;
     }
 }

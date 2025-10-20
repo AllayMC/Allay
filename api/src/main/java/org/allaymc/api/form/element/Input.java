@@ -20,6 +20,8 @@ public final class Input implements CustomFormElement {
     @Getter
     @SerializedName("default")
     private String defaultText;
+    @Getter
+    private final String tooltip;
 
     /**
      * Create a new input.
@@ -27,11 +29,13 @@ public final class Input implements CustomFormElement {
      * @param text        the text of the input
      * @param placeholder the placeholder of the input
      * @param defaultText the default text of the input
+     * @param tooltip     the tooltip of the input. Can be {@code null}
      */
-    public Input(String text, String placeholder, String defaultText) {
+    public Input(String text, String placeholder, String defaultText, String tooltip) {
         this.text = text;
         this.placeholder = placeholder;
         this.defaultText = defaultText;
+        this.tooltip = tooltip;
     }
 
     @Override

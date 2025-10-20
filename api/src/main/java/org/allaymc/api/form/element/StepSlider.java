@@ -22,6 +22,8 @@ public final class StepSlider implements CustomFormElement {
     @Getter
     @SerializedName("default")
     private int defaultStepIndex;
+    @Getter
+    private final String tooltip;
 
     /**
      * Create a new step slider.
@@ -30,10 +32,11 @@ public final class StepSlider implements CustomFormElement {
      * @param steps       the steps of the step slider
      * @param defaultStep the default step of the step slider
      */
-    public StepSlider(String text, List<String> steps, int defaultStep) {
+    public StepSlider(String text, List<String> steps, int defaultStep, String tooltip) {
         this.text = text;
         this.steps = steps;
         this.defaultStepIndex = defaultStep;
+        this.tooltip = tooltip;
     }
 
     @Override

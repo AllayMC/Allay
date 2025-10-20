@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added events `PlayerRightClickItemInAirEvent`, `PlayerStartUseItemInAirEvent`, `PlayerUseItemInAirEvent`.
 - (API) Added events `PlayerPunchBlockEvent` and `PlayerPunchAirEvent`.
 - (API) Added event `PlayerCraftItemEvent`.
+- (API) Added tooltip field to `Dropdown`, `Input`, `Slider`, `StepSlider`, and `Toggle` which are used in `CustomForm`.
 
 ### Changed
 

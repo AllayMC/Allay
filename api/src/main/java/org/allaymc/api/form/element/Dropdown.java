@@ -22,6 +22,8 @@ public final class Dropdown implements CustomFormElement {
     @Getter
     @SerializedName("default")
     private int defaultOptionIndex;
+    @Getter
+    private final String tooltip;
 
     /**
      * Create a new dropdown.
@@ -29,11 +31,13 @@ public final class Dropdown implements CustomFormElement {
      * @param text          the text of the dropdown
      * @param options       the options of the dropdown
      * @param defaultOption the default option of the dropdown
+     * @param tooltip       the tooltip of the dropdown. Can be {@code null}
      */
-    public Dropdown(String text, List<String> options, int defaultOption) {
+    public Dropdown(String text, List<String> options, int defaultOption, String tooltip) {
         this.text = text;
         this.options = options;
         this.defaultOptionIndex = defaultOption;
+        this.tooltip = tooltip;
     }
 
     @Override
