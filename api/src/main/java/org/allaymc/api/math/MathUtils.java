@@ -267,7 +267,7 @@ public final class MathUtils {
      */
     public static boolean hasNaN(Location3fc l) {
         return Float.isNaN(l.x()) || Float.isNaN(l.y()) || Float.isNaN(l.z()) ||
-               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw()) || Double.isNaN(l.headYaw());
+               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw());
     }
 
     /**
@@ -278,7 +278,7 @@ public final class MathUtils {
      */
     public static boolean hasNaN(Location3dc l) {
         return Double.isNaN(l.x()) || Double.isNaN(l.y()) || Double.isNaN(l.z()) ||
-               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw()) || Double.isNaN(l.headYaw());
+               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw());
     }
 
     /**

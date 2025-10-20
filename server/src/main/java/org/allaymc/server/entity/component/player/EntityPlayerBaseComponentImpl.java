@@ -807,7 +807,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         this.spawnPoint = new Location3i(
                 AllayNBTUtils.readVector3i(nbt, TAG_POS),
-                0, 0, 0, dimension
+                0, 0, dimension
         );
     }
 

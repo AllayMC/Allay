@@ -10,5 +10,4 @@ public interface Location3ic extends Position3ic {
 
     double yaw();
 
-    double headYaw();
 }

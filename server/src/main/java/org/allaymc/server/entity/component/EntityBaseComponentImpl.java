@@ -210,7 +210,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.lastLocation.set(this.location);
         this.location.set(location);
         this.location.setYaw(location.yaw());
-        this.location.setHeadYaw(location.headYaw());
         this.location.setPitch(location.pitch());
         this.location.setDimension(location.dimension());
     }
@@ -404,7 +403,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (nbt.containsKey(TAG_POS)) {
             var pos = readVector3f(nbt, TAG_POS);
             this.location.set(pos.x, pos.y, pos.z);
-            this.lastLocation.set(location);
+            this.lastLocation.set(pos.x, pos.y, pos.z);
         }
 
         if (nbt.containsKey(TAG_ROTATION)) {

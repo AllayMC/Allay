@@ -49,6 +49,7 @@ public class SummonCommand extends VanillaCommand {
                                 EntityInitInfo.builder()
                                         .dimension(dim)
                                         .pos(pos)
+                                        .rot(sender.getLocation().yaw(), sender.getLocation().pitch())
                                         .build()
                         );
                         dim.getEntityManager().addEntity(entity);

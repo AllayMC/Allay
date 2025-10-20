@@ -22,6 +22,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
+- (API) Removed `headYaw` from `Location3d(c)`, `Location3f(c)`, and `Location3i(c)`.
+
 ## 0.8.3 (API 0.15.0) - 2025/10/20
 
 <small>[Compare with 0.8.2](https://github.com/AllayMC/Allay/compare/0.8.2...0.8.3)</small>

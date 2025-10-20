@@ -38,7 +38,7 @@ public class SpawnPointCommand extends VanillaCommand {
                     for (EntityPlayer player : players) {
                         player.setSpawnPoint(new Location3i(
                                 (int) pos.x(), (int) pos.y(), (int) pos.z(),
-                                senderLoc.pitch(), senderLoc.yaw(), senderLoc.headYaw(),
+                                senderLoc.pitch(), senderLoc.yaw(),
                                 senderLoc.dimension())
                         );
                         context.addOutput(

@@ -37,7 +37,6 @@ public class MathTest {
         var loc = new Location3i(1, 1, 1, dim);
         assertNotNull(loc.dimension());
         assertEquals(0d, loc.yaw());
-        assertEquals(0d, loc.headYaw());
         assertEquals(0d, loc.pitch());
         assertEquals(1, loc.x());
         assertEquals(1, loc.y());
@@ -48,9 +47,7 @@ public class MathTest {
         assertEquals(4, loc.z());
         loc.setPitch(3);
         loc.setYaw(2);
-        loc.setHeadYaw(1);
         assertEquals(3d, loc.pitch());
         assertEquals(2d, loc.yaw());
-        assertEquals(1d, loc.headYaw());
     }
 }

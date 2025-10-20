@@ -152,7 +152,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 // NOTICE: Player network offset is not used in AddPlayerPacket
                 p.setPosition(Vector3f.from(l.x(), l.y(), l.z()));
                 p.setMotion(motion);
-                p.setRotation(Vector3f.from(l.pitch(), l.yaw(), l.headYaw()));
+                p.setRotation(Vector3f.from(l.pitch(), l.yaw(), l.yaw()));
                 p.setGameType(toNetwork(player.getGameMode()));
                 p.getMetadata().putAll(parseMetadata(entity));
                 p.setDeviceId(loginData.getDeviceInfo().deviceId());
@@ -193,6 +193,8 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
                 p.setPosition(position);
                 p.setMotion(motion);
                 p.setRotation(Vector2f.from(l.pitch(), l.yaw()));
+                p.setHeadRotation((float) l.yaw());
+                p.setBodyRotation((float) l.yaw());
                 p.getMetadata().putAll(parseMetadata(entity));
                 yield p;
             }
@@ -264,11 +266,8 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         }
         if (moveFlags.contains(HAS_YAW)) {
             packet.setYaw((float) newLocation.yaw());
+            packet.setHeadYaw((float) newLocation.yaw());
             locationLastSent.yaw = newLocation.yaw();
-        }
-        if (moveFlags.contains(HAS_HEAD_YAW)) {
-            packet.setHeadYaw((float) newLocation.headYaw());
-            locationLastSent.headYaw = newLocation.headYaw();
         }
         if (teleporting) {
             packet.getFlags().add(TELEPORTING);
@@ -289,9 +288,6 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         if (Math.abs(locationLastSent.z() - newLocation.z()) > diffPositionThreshold) flags.add(HAS_Z);
         if (Math.abs(locationLastSent.yaw() - newLocation.yaw()) > diffRotationThreshold) flags.add(HAS_YAW);
         if (Math.abs(locationLastSent.pitch() - newLocation.pitch()) > diffRotationThreshold) flags.add(HAS_PITCH);
-        if (entity.isHeadYawEnabled() && Math.abs(locationLastSent.headYaw() - newLocation.headYaw()) > diffRotationThreshold) {
-            flags.add(HAS_HEAD_YAW);
-        }
         return flags;
     }
 
@@ -299,12 +295,11 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
         locationLastSent.set(newLocation);
         locationLastSent.setPitch(newLocation.pitch());
         locationLastSent.setYaw(newLocation.yaw());
-        locationLastSent.setHeadYaw(newLocation.headYaw());
 
         var packet = new MoveEntityAbsolutePacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         packet.setPosition(Vector3f.from(newLocation.x(), newLocation.y() + NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), newLocation.z()));
-        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), newLocation.headYaw()));
+        packet.setRotation(Vector3f.from(newLocation.pitch(), newLocation.yaw(), newLocation.yaw()));
         packet.setTeleported(teleporting);
         if (entity instanceof EntityPhysicsComponent physicsComponent) {
             packet.setOnGround(physicsComponent.isOnGround());

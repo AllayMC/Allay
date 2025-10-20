@@ -76,8 +76,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var world = player.getLocation().dimension();
         ((AllayEntityPhysicsEngine) world.getEntityManager().getPhysicsService()).offerClientMove(player, new Location3d(
                 newPos.getX(), newPos.getY(), newPos.getZ(),
-                newRot.getX(), newRot.getY(), newRot.getZ(),
-                world
+                newRot.getX(), newRot.getY(), world
         ));
     }
 
@@ -361,7 +360,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
         var location = player.getLocation();
         return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + PLAYER_NETWORK_OFFSET, pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
-               Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0 || Double.compare(location.headYaw(), rot.getZ()) != 0;
+               Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0;
     }
 
     protected void handleSingleItemStackRequest(EntityPlayer player, ItemStackRequest request, long receiveTime) {

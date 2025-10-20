@@ -10,6 +10,4 @@ public interface Location3dc extends Position3dc {
     double pitch();
 
     double yaw();
-
-    double headYaw();
 }
