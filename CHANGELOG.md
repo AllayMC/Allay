@@ -10,9 +10,21 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.8.3 (API 0.15.0) - Unreleased
+# 0.8.4 (API 0.16.0) - Unreleased
 
-<small>[Compare with 0.8.2](https://github.com/AllayMC/Allay/compare/0.8.2...HEAD)</small>
+<small>[Compare with 0.8.3](https://github.com/AllayMC/Allay/compare/0.8.3...HEAD)</small>
+
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## 0.8.3 (API 0.15.0) - 2025/10/20
+
+<small>[Compare with 0.8.2](https://github.com/AllayMC/Allay/compare/0.8.2...0.8.3)</small>
 
 ### Added
 
