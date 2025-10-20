@@ -280,8 +280,11 @@ public class AllayLightEngine implements LightEngine {
             for (var blockFace : BlockFace.values()) {
                 // The following are world pos not chunk local pos
                 var neighborX = x + blockFace.getOffset().x();
-                var neighborY = y + blockFace.getOffset().y();
                 var neighborZ = z + blockFace.getOffset().z();
+                var neighborY = y + blockFace.getOffset().y();
+                if (!lightDataAccessor.isYInRange(neighborY)) {
+                    continue;
+                }
 
                 int neighborLightEmission = lightDataAccessor.getLightEmission(neighborX, neighborY, neighborZ);
                 if (neighborLightEmission > lightEmissionValue) {
