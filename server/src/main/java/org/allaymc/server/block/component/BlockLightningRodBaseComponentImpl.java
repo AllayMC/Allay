@@ -12,7 +12,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRE
 /**
  * @author IWareQ
  */
-public class BlockLightningRodBaseComponentImpl extends BlockCopperBaseComponentImpl {
+public class BlockLightningRodBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockLightningRodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }

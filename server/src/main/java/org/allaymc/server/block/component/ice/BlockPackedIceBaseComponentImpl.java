@@ -20,9 +20,4 @@ public class BlockPackedIceBaseComponentImpl extends BlockIceBaseComponentImpl {
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of();
     }
-
-    @Override
-    public boolean canRandomUpdate() {
-        return false;
-    }
 }

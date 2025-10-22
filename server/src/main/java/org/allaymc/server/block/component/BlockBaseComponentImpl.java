@@ -54,6 +54,13 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
+    public boolean canRandomUpdate() {
+        var event = new CBlockTryRandomUpdateEvent();
+        manager.callEvent(event);
+        return event.canRandomUpdate();
+    }
+
+    @Override
     public void onRandomUpdate(Block block) {
         manager.callEvent(new CBlockRandomUpdateEvent(block));
     }

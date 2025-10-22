@@ -15,7 +15,7 @@ public interface BlockOxidationComponent extends BlockComponent {
      * @param oxidationLevel the {@link OxidationLevel}
      * @return the corresponding {@link BlockType}
      */
-    BlockType<?> getBlockWithOxidationLevel(OxidationLevel oxidationLevel);
+    BlockType<? extends BlockOxidationComponent> getBlockWithOxidationLevel(OxidationLevel oxidationLevel);
 
     /**
      * Checks if the block can oxidize further.
@@ -46,5 +46,5 @@ public interface BlockOxidationComponent extends BlockComponent {
      * @param waxed the waxed state
      * @return the corresponding {@link BlockType}
      */
-    BlockType<?> getBlockWithWaxed(boolean waxed);
+    BlockType<? extends BlockOxidationComponent> getBlockWithWaxed(boolean waxed);
 }

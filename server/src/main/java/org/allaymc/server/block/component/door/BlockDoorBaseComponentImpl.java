@@ -71,16 +71,18 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var keep = true;
         if (face == BlockFace.UP) {
-            keep = block.getPropertyValue(UPPER_BLOCK_BIT) || neighbor.getBlockType() == getBlockType();
+            keep = block.getPropertyValue(UPPER_BLOCK_BIT) || isSameDoor(neighbor);
         } else if (face == BlockFace.DOWN) {
-            keep = block.getPropertyValue(UPPER_BLOCK_BIT)
-                    ? neighbor.getBlockType() == getBlockType()
-                    : neighbor.getBlockStateData().isSolid();
+            keep = block.getPropertyValue(UPPER_BLOCK_BIT) ? isSameDoor(neighbor) : neighbor.getBlockStateData().isSolid();
         }
 
         if (!keep) {
             block.breakBlock();
         }
+    }
+
+    protected boolean isSameDoor(Block neighbor) {
+        return neighbor.getBlockType() == getBlockType();
     }
 
     @Override

@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
+import org.allaymc.api.block.component.BlockOxidationComponent;
 import org.allaymc.api.block.data.OxidationLevel;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -33,11 +34,8 @@ import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
-import org.allaymc.server.block.component.slab.BlockCopperDoubleSlabBaseComponentImpl;
-import org.allaymc.server.block.component.slab.BlockCopperSlabBaseComponentImpl;
 import org.allaymc.server.block.component.slab.BlockDoubleSlabBaseComponentImpl;
 import org.allaymc.server.block.component.slab.BlockSlabBaseComponentImpl;
-import org.allaymc.server.block.component.stairs.BlockCopperStairsBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
@@ -56,7 +54,7 @@ import java.util.function.Function;
 @UtilityClass
 public final class BlockTypeInitializer {
     public static void initCopperGrate() {
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperGrate = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperGrate = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_GRATE : BlockTypes.COPPER_GRATE;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_GRATE : BlockTypes.EXPOSED_COPPER_GRATE;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_GRATE : BlockTypes.WEATHERED_COPPER_GRATE;
@@ -72,17 +70,16 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_OXIDIZED_COPPER_GRATE = buildCopperGrate(BlockId.WAXED_OXIDIZED_COPPER_GRATE, OxidationLevel.OXIDIZED, copperGrate);
     }
 
-    private static BlockType<BlockCopperGrateBehavior> buildCopperGrate(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockCopperGrateBehavior> buildCopperGrate(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return AllayBlockType
                 .builder(BlockCopperGrateBehaviorImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(BlockCopperBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
 
     public static void initCopperBulb() {
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperBulb = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperBulb = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_BULB : BlockTypes.COPPER_BULB;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_BULB : BlockTypes.EXPOSED_COPPER_BULB;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_BULB : BlockTypes.WEATHERED_COPPER_BULB;
@@ -98,18 +95,17 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_OXIDIZED_COPPER_BULB = buildCopperBulb(BlockId.WAXED_OXIDIZED_COPPER_BULB, OxidationLevel.OXIDIZED, copperBulb);
     }
 
-    private static BlockType<BlockCopperBulbBehavior> buildCopperBulb(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockCopperBulbBehavior> buildCopperBulb(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return AllayBlockType
                 .builder(BlockCopperBulbBehaviorImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(BlockCopperBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                 .build();
     }
 
     public static void initCopper() {
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> copper = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copper = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER : BlockTypes.COPPER_BLOCK;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER : BlockTypes.EXPOSED_COPPER;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER : BlockTypes.WEATHERED_COPPER;
@@ -124,7 +120,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_WEATHERED_COPPER = buildCopper(BlockId.WAXED_WEATHERED_COPPER, OxidationLevel.WEATHERED, copper);
         BlockTypes.WAXED_OXIDIZED_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_COPPER, OxidationLevel.OXIDIZED, copper);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> chiseledCopper = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> chiseledCopper = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CHISELED_COPPER : BlockTypes.CHISELED_COPPER;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CHISELED_COPPER : BlockTypes.EXPOSED_CHISELED_COPPER;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CHISELED_COPPER : BlockTypes.WEATHERED_CHISELED_COPPER;
@@ -139,7 +135,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_WEATHERED_CHISELED_COPPER = buildCopper(BlockId.WAXED_WEATHERED_CHISELED_COPPER, OxidationLevel.WEATHERED, chiseledCopper);
         BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_CHISELED_COPPER, OxidationLevel.OXIDIZED, chiseledCopper);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopper = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> cutCopper = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER : BlockTypes.CUT_COPPER;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CUT_COPPER : BlockTypes.EXPOSED_CUT_COPPER;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER : BlockTypes.WEATHERED_CUT_COPPER;
@@ -155,11 +151,10 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_CUT_COPPER, OxidationLevel.OXIDIZED, cutCopper);
     }
 
-    private static BlockType<BlockCopperBehavior> buildCopper(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockCopperBehavior> buildCopper(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return AllayBlockType
                 .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(BlockCopperBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
@@ -484,7 +479,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_STAIRS = buildStairs(BlockId.WARPED_STAIRS);
         BlockTypes.PALE_OAK_STAIRS = buildStairs(BlockId.PALE_OAK_STAIRS);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperStairs = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> cutCopperStairs = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER_STAIRS : BlockTypes.CUT_COPPER_STAIRS;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS : BlockTypes.EXPOSED_CUT_COPPER_STAIRS;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS : BlockTypes.WEATHERED_CUT_COPPER_STAIRS;
@@ -504,9 +499,8 @@ public final class BlockTypeInitializer {
         return stairsBuilder(BlockStairsBehaviorImpl.class, id).setBaseComponentSupplier(BlockStairsBaseComponentImpl::new).build();
     }
 
-    private static BlockType<BlockCopperStairsBehavior> buildCopperStairs(BlockId id, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockCopperStairsBehavior> buildCopperStairs(BlockId id, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return stairsBuilder(BlockCopperStairsBehaviorImpl.class, id)
-                .setBaseComponentSupplier(BlockCopperStairsBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
@@ -574,7 +568,7 @@ public final class BlockTypeInitializer {
         BlockTypes.TUFF_SLAB = buildSlab(BlockId.TUFF_SLAB, BlockId.TUFF_DOUBLE_SLAB);
         BlockTypes.WARPED_SLAB = buildSlab(BlockId.WARPED_SLAB, BlockId.WARPED_DOUBLE_SLAB);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperSlab = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> cutCopperSlab = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER_SLAB : BlockTypes.CUT_COPPER_SLAB;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB : BlockTypes.EXPOSED_CUT_COPPER_SLAB;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB : BlockTypes.WEATHERED_CUT_COPPER_SLAB;
@@ -646,7 +640,7 @@ public final class BlockTypeInitializer {
         BlockTypes.TUFF_DOUBLE_SLAB = buildDoubleSlab(BlockId.TUFF_DOUBLE_SLAB, BlockId.TUFF_SLAB);
         BlockTypes.WARPED_DOUBLE_SLAB = buildDoubleSlab(BlockId.WARPED_DOUBLE_SLAB, BlockId.WARPED_SLAB);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperSlab = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> cutCopperSlab = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.DOUBLE_CUT_COPPER_SLAB;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB;
@@ -668,9 +662,9 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static BlockType<BlockCopperSlabBehavior> buildCopperSlab(BlockId id, BlockId doubleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    public static BlockType<BlockCopperSlabBehavior> buildCopperSlab(BlockId id, BlockId doubleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return slabBuilder(BlockCopperSlabBehaviorImpl.class, id)
-                .setBaseComponentSupplier(blockType -> new BlockCopperSlabBaseComponentImpl(blockType, doubleSlabId))
+                .setBaseComponentSupplier(blockType -> new BlockSlabBaseComponentImpl(blockType, doubleSlabId))
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
@@ -681,9 +675,9 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static BlockType<BlockDoubleCopperSlabBehavior> buildCopperDoubleSlab(BlockId id, BlockId singleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    public static BlockType<BlockDoubleCopperSlabBehavior> buildCopperDoubleSlab(BlockId id, BlockId singleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return slabBuilder(BlockDoubleCopperSlabBehaviorImpl.class, id)
-                .setBaseComponentSupplier(blockType -> new BlockCopperDoubleSlabBaseComponentImpl(blockType, singleSlabId))
+                .setBaseComponentSupplier(blockType -> new BlockDoubleSlabBaseComponentImpl(blockType, singleSlabId))
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
@@ -892,7 +886,7 @@ public final class BlockTypeInitializer {
 
         BlockTypes.IRON_DOOR = doorBuilder(BlockIronDoorBehaviorImpl.class, BlockId.IRON_DOOR, BlockIronDoorBaseComponentImpl::new).build();
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperDoor = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperDoor = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_DOOR : BlockTypes.COPPER_DOOR;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_DOOR : BlockTypes.EXPOSED_COPPER_DOOR;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_DOOR : BlockTypes.WEATHERED_COPPER_DOOR;
@@ -912,7 +906,7 @@ public final class BlockTypeInitializer {
         return doorBuilder(BlockDoorBehaviorImpl.class, blockId, BlockDoorBaseComponentImpl::new).build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildCopperDoor(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static <T extends BlockBehavior> BlockType<T> buildCopperDoor(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return doorBuilder(BlockCopperDoorBehaviorImpl.class, blockId, BlockCopperDoorBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
@@ -1795,7 +1789,7 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockEndRodBaseComponentImpl::new)
                 .build();
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> lightningRod = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> lightningRod = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_LIGHTNING_ROD : BlockTypes.LIGHTNING_ROD;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_LIGHTNING_ROD : BlockTypes.EXPOSED_LIGHTNING_ROD;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_LIGHTNING_ROD : BlockTypes.WEATHERED_LIGHTNING_ROD;
@@ -1812,7 +1806,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_OXIDIZED_LIGHTNING_ROD = buildLightningRod(BlockId.WAXED_OXIDIZED_LIGHTNING_ROD, OxidationLevel.OXIDIZED, lightningRod);
     }
 
-    private static BlockType<BlockLightningRodBehavior> buildLightningRod(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockLightningRodBehavior> buildLightningRod(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return AllayBlockType
                 .builder(BlockLightningRodBehaviorImpl.class)
                 .vanillaBlock(blockId)
@@ -1826,7 +1820,7 @@ public final class BlockTypeInitializer {
         BlockTypes.LANTERN = buildLantern(BlockId.LANTERN);
         BlockTypes.SOUL_LANTERN = buildLantern(BlockId.SOUL_LANTERN);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperLantern = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperLantern = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_LANTERN : BlockTypes.COPPER_LANTERN;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_LANTERN : BlockTypes.EXPOSED_COPPER_LANTERN;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_LANTERN : BlockTypes.WEATHERED_COPPER_LANTERN;
@@ -1852,18 +1846,18 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    private static BlockType<BlockCopperLanternBehavior> buildCopperLantern(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockCopperLanternBehavior> buildCopperLantern(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return AllayBlockType
                 .builder(BlockCopperLanternBehaviorImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(BlockCopperLanternBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockLanternBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .setProperties(BlockPropertyTypes.HANGING)
                 .build();
     }
 
     public static void initCopperGolemStatues() {
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperGolemStatue = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperGolemStatue = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_GOLEM_STATUE : BlockTypes.COPPER_GOLEM_STATUE;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_GOLEM_STATUE : BlockTypes.EXPOSED_COPPER_GOLEM_STATUE;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_GOLEM_STATUE : BlockTypes.WEATHERED_COPPER_GOLEM_STATUE;
@@ -1880,18 +1874,17 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_OXIDIZED_COPPER_GOLEM_STATUE = buildCopperGolemStatue(BlockId.WAXED_OXIDIZED_COPPER_GOLEM_STATUE, OxidationLevel.OXIDIZED, copperGolemStatue);
     }
 
-    private static BlockType<BlockCopperGolemStatueBehavior> buildCopperGolemStatue(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockCopperGolemStatueBehavior> buildCopperGolemStatue(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return AllayBlockType
                 .builder(BlockCopperGolemStatueBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBaseComponentSupplier(BlockCopperBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
 
     public static void initCopperChains() {
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperChain = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperChain = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_CHAIN : BlockTypes.COPPER_CHAIN;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_CHAIN : BlockTypes.EXPOSED_COPPER_CHAIN;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_CHAIN : BlockTypes.WEATHERED_COPPER_CHAIN;
@@ -1908,12 +1901,11 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_OXIDIZED_COPPER_CHAIN = buildCopperChain(BlockId.WAXED_OXIDIZED_COPPER_CHAIN, OxidationLevel.OXIDIZED, copperChain);
     }
 
-    private static BlockType<BlockCopperChainBehavior> buildCopperChain(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    private static BlockType<BlockCopperChainBehavior> buildCopperChain(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return AllayBlockType
                 .builder(BlockCopperChainBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                .setBaseComponentSupplier(BlockCopperBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }

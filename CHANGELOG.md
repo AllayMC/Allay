@@ -18,6 +18,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Implemented copper torch.
 
+- Implemented copper torch.
+- Implemented copper door.
+
 ### Changed
 
 ### Fixed

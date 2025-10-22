@@ -10,7 +10,8 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockRandomUpdateEvent;
-import org.allaymc.server.component.annotation.ComponentObject;
+import org.allaymc.server.block.component.event.CBlockTryRandomUpdateEvent;
+import org.allaymc.server.component.annotation.Dependency;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
@@ -28,9 +29,9 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
     private static final int SCAN_RANGE = 4;
 
     private final OxidationLevel oxidationLevel;
-    private final BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction;
+    private final BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction;
 
-    @ComponentObject
+    @Dependency
     private BlockBaseComponent baseComponent;
 
     @EventHandler
@@ -82,7 +83,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
     }
 
     @Override
-    public BlockType<?> getBlockWithOxidationLevel(OxidationLevel oxidationLevel) {
+    public BlockType<? extends BlockOxidationComponent> getBlockWithOxidationLevel(OxidationLevel oxidationLevel) {
         return blockTypeFunction.apply(oxidationLevel, isWaxed());
     }
 
@@ -92,7 +93,12 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
     }
 
     @Override
-    public BlockType<?> getBlockWithWaxed(boolean waxed) {
+    public BlockType<? extends BlockOxidationComponent> getBlockWithWaxed(boolean waxed) {
         return blockTypeFunction.apply(this.oxidationLevel, waxed);
+    }
+
+    @EventHandler
+    protected void onTryRandomUpdate(CBlockTryRandomUpdateEvent event) {
+        event.canRandomUpdate(canOxidate());
     }
 }
