@@ -16,6 +16,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
+- Implemented copper torch.
+
 ### Changed
 
 ### Fixed

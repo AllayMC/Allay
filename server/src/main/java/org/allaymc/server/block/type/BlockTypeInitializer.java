@@ -738,10 +738,15 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-
         BlockTypes.UNDERWATER_TORCH = AllayBlockType
                 .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNDERWATER_TORCH)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
+                .build();
+        BlockTypes.COPPER_TORCH = AllayBlockType
+                .builder(BlockTorchBehaviorImpl.class)
+                .vanillaBlock(BlockId.COPPER_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
