@@ -17,13 +17,15 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - Implemented copper torch.
-
-- Implemented copper torch.
 - Implemented copper door.
 
 ### Changed
 
+- (API) Event `ContainerCloseEvent` is not cancellable now.
+
 ### Fixed
+
+- Fixed (maybe a bug) sometime event `ContainerOpenEvent` will be called twice.
 
 ### Removed
 

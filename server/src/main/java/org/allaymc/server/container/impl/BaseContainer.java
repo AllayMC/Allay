@@ -84,15 +84,15 @@ public class BaseContainer implements Container {
 
     @Override
     public void addViewer(ContainerViewer viewer) {
-        var event = new ContainerOpenEvent(viewer, this);
-        if (!event.call()) {
-            return;
-        }
-
         if (viewers.containsValue(viewer)) {
             log.warn("Viewer already exists! Container: {}, Viewer: {}", this.containerType, viewer);
             removeViewer(viewer);
             addViewer(viewer);
+            return;
+        }
+
+        var event = new ContainerOpenEvent(viewer, this);
+        if (!event.call()) {
             return;
         }
 
@@ -106,10 +106,7 @@ public class BaseContainer implements Container {
 
     @Override
     public void removeViewer(ContainerViewer viewer) {
-        var event = new ContainerCloseEvent(viewer, this);
-        if (!event.call()) {
-            return;
-        }
+        new ContainerCloseEvent(viewer, this).call();
 
         var removed = viewers.inverse().remove(viewer);
         if (removed != null) {
