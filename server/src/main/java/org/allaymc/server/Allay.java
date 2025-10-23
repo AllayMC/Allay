@@ -11,6 +11,7 @@ import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.EventBus;
@@ -32,6 +33,7 @@ import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
+import org.allaymc.server.container.AllayFakeContainerFactory;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.extension.ExtensionManager;
 import org.allaymc.server.gui.Dashboard;
@@ -162,6 +164,7 @@ public final class Allay {
         // Misc
         api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
         api.bind(NBTIO.class, AllayNBTIO::new);
+        api.bind(FakeContainerFactory.class, AllayFakeContainerFactory::new);
 
         api.implement("allay", GitProperties.isDevBuild());
 

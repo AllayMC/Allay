@@ -201,6 +201,14 @@ public record ContainerNetworkInfo(
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
             .build();
 
+    // Fake Container Types
+
+    public static final ContainerNetworkInfo FAKE_CHEST = builder()
+            .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.CONTAINER)
+            .type(ContainerTypes.FAKE_CHEST)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
     public ContainerNetworkInfo(int networkId, ContainerType<?> type, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.networkId = networkId;
         this.type = type;

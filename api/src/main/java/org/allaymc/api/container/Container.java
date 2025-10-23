@@ -171,15 +171,17 @@ public interface Container {
      * Adds a viewer to this container.
      *
      * @param viewer the {@link ContainerViewer} to add
+     * @return {@code true} if the viewer was added successfully, {@code false} otherwise
      */
-    void addViewer(ContainerViewer viewer);
+    boolean addViewer(ContainerViewer viewer);
 
     /**
      * Removes a viewer from this container.
      *
      * @param viewer the {@link ContainerViewer} to remove
+     * @return {@code true} if the viewer was removed successfully, {@code false} otherwise
      */
-    void removeViewer(ContainerViewer viewer);
+    boolean removeViewer(ContainerViewer viewer);
 
     /**
      * Removes all viewers from this container.

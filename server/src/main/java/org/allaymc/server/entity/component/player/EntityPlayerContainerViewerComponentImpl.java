@@ -4,10 +4,12 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.SneakyThrows;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
+import org.allaymc.api.container.interfaces.FakeContainer;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
@@ -140,16 +142,20 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         ContainerNetworkInfo.getInfo(container.getContainerType()).heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
     }
 
+    @SneakyThrows
     protected void sendContainerOpenPacket(byte assignedId, Container container) {
         var packet = new ContainerOpenPacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
         if (container instanceof BlockContainer blockContainer) {
             packet.setBlockPosition(NetworkHelper.toNetwork(blockContainer.getBlockPos()));
+        } else if (container instanceof FakeContainer) {
+            packet.setBlockPosition(Vector3i.from(0, 0, 0));
         } else {
             var location = baseComponent.getLocation();
             packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
         }
+        Thread.sleep(500);
         this.clientComponent.sendPacket(packet);
     }
 
@@ -169,10 +175,12 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         ContainerNetworkInfo.getInfo(container.getContainerType()).heldSlotTypes().forEach(slotType -> slotTypeToFullType.remove(slotType));
     }
 
+    @SneakyThrows
     protected void sendContainerClosePacket(byte assignedId, Container container) {
         var packet = new ContainerClosePacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
+        Thread.sleep(500);
         clientComponent.sendPacket(packet);
     }
 

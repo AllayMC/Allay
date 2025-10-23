@@ -3,6 +3,7 @@ package org.allaymc.server.container.processor;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.container.ContainerNetworkInfo;
+import org.allaymc.server.container.impl.FakeContainerImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerViewerComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -81,24 +82,29 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
         return (T) container;
     }
 
-    /**
-     * Gets slot type of slot in a container.
-     */
     static ContainerSlotType getSlotType(Container container, int slot) {
         return ContainerNetworkInfo.getInfo(container.getContainerType()).getSlotType(slot);
     }
 
-    /**
-     * Maps the slot in a container to network slot index.
-     */
     static int toNetworkSlotIndex(Container container, int index) {
         return ContainerNetworkInfo.getInfo(container.getContainerType()).networkSlotIndexMapper().inverse().get(index);
     }
 
-    /**
-     * Maps the slot in a container from network slot index.
-     */
     static int fromNetworkSlotIndex(Container container, int index) {
         return ContainerNetworkInfo.getInfo(container.getContainerType()).networkSlotIndexMapper().get(index);
+    }
+
+    static boolean tryHandleFakeContainer(Container source, int sourceSlot, Container destination, int destinationSlot) {
+        if (source instanceof FakeContainerImpl fakeContainer) {
+            fakeContainer.onClick(sourceSlot);
+            return true;
+        }
+
+        if (destination instanceof FakeContainerImpl fakeContainer) {
+            fakeContainer.onClick(destinationSlot);
+            return true;
+        }
+
+        return false;
     }
 }

@@ -25,16 +25,20 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
     @Override
     public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var source = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
-        var destination = ContainerActionProcessor.getContainerFrom(player, action.getDestination().getContainerName());
+        var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
+        var destinationContainer = ContainerActionProcessor.getContainerFrom(player, action.getDestination().getContainerName());
 
-        int sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(source, action.getSource().getSlot());
+        int sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.getSource().getSlot());
         int sourceStackNetworkId = action.getSource().getStackNetworkId();
 
-        int destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destination, action.getDestination().getSlot());
+        int destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.getDestination().getSlot());
         int destinationStackNetworkId = action.getDestination().getStackNetworkId();
 
-        var sourItem = source.getItemStack(sourceSlot);
+        if (ContainerActionProcessor.tryHandleFakeContainer(sourceContainer, sourceSlot, destinationContainer, destinationSlot)) {
+            return error();
+        }
+
+        var sourItem = sourceContainer.getItemStack(sourceSlot);
         if (sourItem.getItemType() == AIR) {
             log.warn("pick an air item is not allowed!");
             return error();
@@ -51,7 +55,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             return error();
         }
 
-        var destItem = destination.getItemStack(destinationSlot);
+        var destItem = destinationContainer.getItemStack(destinationSlot);
         if (destItem.getItemType() != AIR && destItem.getItemType() != sourItem.getItemType()) {
             log.warn("place an item to a slot that has a different item is not allowed");
             return error();
@@ -68,8 +72,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         }
 
         var event = new ContainerItemMoveEvent(
-                source, sourceSlot,
-                destination, destinationSlot,
+                sourceContainer, sourceSlot,
+                destinationContainer, destinationSlot,
                 sourItem.getItemType(), count
         );
         if (!event.call()) {
@@ -81,45 +85,45 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         if (sourItem.getCount() == count) {
             // Case 1: Take all
             resultSourItem = ItemAirStack.AIR_STACK;
-            source.setItemStack(sourceSlot, resultSourItem, false);
+            sourceContainer.setItemStack(sourceSlot, resultSourItem, false);
             if (destItem.getItemType() != AIR) {
                 resultDestItem = destItem;
                 // Destination item is not empty, just add count, and keep the same stack unique id
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.notifySlotChange(destinationSlot, false);
+                destinationContainer.notifySlotChange(destinationSlot, false);
             } else {
                 // Destination item is empty, move the original stack to the new position, and use the source item's stack unique id (like changing positions)
-                if (source.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
+                if (sourceContainer.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
                     // HACK: If taken from CREATED_OUTPUT, the server needs to create a new stack unique id
                     sourItem = sourItem.copy(true);
                 }
                 resultDestItem = sourItem;
-                destination.setItemStack(destinationSlot, resultDestItem, false);
+                destinationContainer.setItemStack(destinationSlot, resultDestItem, false);
             }
         } else {
             // Case 2: Take part of the item
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
-            source.notifySlotChange(sourceSlot, false);
+            sourceContainer.notifySlotChange(sourceSlot, false);
             if (destItem.getItemType() != AIR) {
                 // Destination item is not empty
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.notifySlotChange(destinationSlot, false);
+                destinationContainer.notifySlotChange(destinationSlot, false);
             } else {
                 // Destination item is empty, create a new stack unique id for the separated sub-item stack
                 resultDestItem = sourItem.copy(true);
                 resultDestItem.setCount(count);
-                destination.setItemStack(destinationSlot, resultDestItem, false);
+                destinationContainer.setItemStack(destinationSlot, resultDestItem, false);
             }
         }
 
         var destItemStackResponseSlot = new ItemStackResponseContainer(
-                ContainerActionProcessor.getSlotType(destination, destinationSlot),
+                ContainerActionProcessor.getSlotType(destinationContainer, destinationSlot),
                 List.of(
                         new ItemStackResponseSlot(
-                                ContainerActionProcessor.toNetworkSlotIndex(destination, destinationSlot),
-                                ContainerActionProcessor.toNetworkSlotIndex(destination, destinationSlot),
+                                ContainerActionProcessor.toNetworkSlotIndex(destinationContainer, destinationSlot),
+                                ContainerActionProcessor.toNetworkSlotIndex(destinationContainer, destinationSlot),
                                 resultDestItem.getCount(),
                                 resultDestItem.getUniqueId(),
                                 resultDestItem.getCustomName(),
@@ -127,22 +131,22 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 ""
                         )
                 ),
-                new FullContainerName(ContainerActionProcessor.getSlotType(destination, destinationSlot), null)
+                new FullContainerName(ContainerActionProcessor.getSlotType(destinationContainer, destinationSlot), null)
         );
 
         // Special case: no need to respond to CREATED_OUTPUT
-        if (source.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
+        if (sourceContainer.getContainerType() == ContainerTypes.CREATED_OUTPUT) {
             return new ActionResponse(true, List.of(destItemStackResponseSlot));
         }
 
         return new ActionResponse(
                 true,
                 List.of(new ItemStackResponseContainer(
-                        ContainerActionProcessor.getSlotType(source, sourceSlot),
+                        ContainerActionProcessor.getSlotType(sourceContainer, sourceSlot),
                         List.of(
                                 new ItemStackResponseSlot(
-                                        ContainerActionProcessor.toNetworkSlotIndex(source, sourceSlot),
-                                        ContainerActionProcessor.toNetworkSlotIndex(source, sourceSlot),
+                                        ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, sourceSlot),
+                                        ContainerActionProcessor.toNetworkSlotIndex(sourceContainer, sourceSlot),
                                         resultSourItem.getCount(),
                                         resultSourItem.getUniqueId(),
                                         resultSourItem.getCustomName(),
@@ -150,7 +154,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                         ""
                                 )
                         ),
-                        new FullContainerName(ContainerActionProcessor.getSlotType(source, sourceSlot), null)
+                        new FullContainerName(ContainerActionProcessor.getSlotType(sourceContainer, sourceSlot), null)
                 ), destItemStackResponseSlot)
         );
     }

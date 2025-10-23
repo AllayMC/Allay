@@ -4,6 +4,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.debugshape.DebugLine;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -12,6 +13,7 @@ import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
@@ -508,6 +510,16 @@ public class GameTestCommand extends VanillaCommand {
                 .exec((context, player) -> {
                     player.getItemInHand().setCount(player.getItemInHand().getItemType().getItemData().maxStackSize());
                     player.notifyItemInHandChange();
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("openfakechest")
+                .exec((context, player) -> {
+                    var fakeChest = FakeContainerFactory.getFactory().createFakeChestContainer();
+                    fakeChest.setItemStackWithListener(0, ItemTypes.DIAMOND.createItemStack(), () -> {
+                        player.sendMessage("You clicked the diamond item");
+                    });
+                    fakeChest.addViewer(player);
                     return context.success();
                 }, SenderType.PLAYER);
     }

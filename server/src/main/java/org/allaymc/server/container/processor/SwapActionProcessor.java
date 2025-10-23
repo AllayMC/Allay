@@ -26,6 +26,10 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
         var sourceSlot = ContainerActionProcessor.fromNetworkSlotIndex(sourceContainer, action.getSource().getSlot());
         var destinationSlot = ContainerActionProcessor.fromNetworkSlotIndex(destinationContainer, action.getDestination().getSlot());
 
+        if (ContainerActionProcessor.tryHandleFakeContainer(sourceContainer, sourceSlot, destinationContainer, destinationSlot)) {
+            return error();
+        }
+
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
         if (failToValidateStackUniqueId(sourceItem.getUniqueId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack unique id!");
