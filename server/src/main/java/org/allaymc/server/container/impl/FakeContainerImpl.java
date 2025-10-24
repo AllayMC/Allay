@@ -73,9 +73,9 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
     @Override
     public void addPlayer(EntityPlayer player, Consumer<Boolean> callback) {
         sendFakeBlocks(player);
-        runLater(() -> {
+        runDelayed(() -> {
             if (!super.addViewer(player)) {
-                runLater(() -> removeFakeBlocks(player));
+                runDelayed(() -> removeFakeBlocks(player));
                 callback.accept(false);
             }
 
@@ -105,9 +105,12 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
         }
     }
 
-    protected void runLater(Runnable runnable) {
+    protected void runDelayed(Runnable runnable) {
         var server = Server.getInstance();
-        server.getScheduler().runLater(server, runnable);
+        server.getScheduler().scheduleDelayed(server, () -> {
+            runnable.run();
+            return true;
+        }, 8);
     }
 
     protected Vector3ic computeFakeBlockPos(EntityPlayer player) {

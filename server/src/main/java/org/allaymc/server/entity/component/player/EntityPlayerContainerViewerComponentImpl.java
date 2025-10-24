@@ -161,7 +161,6 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
                 packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
             }
         }
-        Thread.sleep(500);
         this.clientComponent.sendPacket(packet);
     }
 
@@ -186,7 +185,6 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         var packet = new ContainerClosePacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
-        Thread.sleep(500);
         clientComponent.sendPacket(packet);
     }
 
