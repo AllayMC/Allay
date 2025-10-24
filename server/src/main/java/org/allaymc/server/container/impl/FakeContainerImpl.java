@@ -68,6 +68,15 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
         return false;
     }
 
+    public Vector3ic getFakeBlockPos(ContainerViewer viewer) {
+        var array = this.fakeBlockPositions.get(viewer);
+        if (array != null) {
+            return array[0];
+        }
+
+        return null;
+    }
+
     public void onClick(int slot) {
         this.clickListeners.get(slot).forEach(Runnable::run);
     }

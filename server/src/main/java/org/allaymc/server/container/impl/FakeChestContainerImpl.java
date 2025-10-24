@@ -4,9 +4,11 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.blockentity.data.BlockEntityId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
+import org.joml.RoundingMode;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -23,15 +25,14 @@ public class FakeChestContainerImpl extends FakeContainerImpl {
     @Override
     protected void sendFakeBlock(ContainerViewer viewer) {
         if (viewer instanceof EntityPlayer player) {
-//            var pos = player.getLocation().get(RoundingMode.FLOOR, new Vector3i()).add(0, 3, 0);
-            var pos = new Vector3i(0, 0, 0);
+            var pos = computeFakeBlockPos(player);
             player.viewBlockUpdate(pos, 0, BlockTypes.CHEST.getDefaultState());
 
             var nbt = NbtMap.builder()
                     .putString("id", BlockEntityId.CHEST)
-                    .putInt("x", pos.x)
-                    .putInt("y", pos.y)
-                    .putInt("z", pos.z);
+                    .putInt("x", pos.x())
+                    .putInt("y", pos.y())
+                    .putInt("z", pos.z());
 
             if (this.customName != null) {
                 nbt.putString("CustomName", this.customName);
@@ -54,5 +55,14 @@ public class FakeChestContainerImpl extends FakeContainerImpl {
                 player.viewBlockUpdate(pos, 0, dimension.getBlockState(pos, 0));
             }
         }
+    }
+
+    protected Vector3ic computeFakeBlockPos(EntityPlayer player) {
+        var pos = MathUtils.getDirectionVector(player.getLocation());
+        var aabb = player.getAABB();
+        pos.x *= -(1 + aabb.lengthX());
+        pos.y *= -(1 + aabb.lengthY());
+        pos.z *= -(1 + aabb.lengthZ());
+        return pos.get(RoundingMode.FLOOR, new Vector3i());
     }
 }
