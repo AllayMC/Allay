@@ -22,15 +22,10 @@ public class FakeDoubleChestContainerImpl extends FakeContainerImpl {
     @Override
     protected void sendFakeBlocks(EntityPlayer player) {
         var pos1 = computeFakeBlockPos(player);
-        Vector3ic pos2;
-        if ((pos1.x() & 1) == 1) {
-            pos2 = BlockFace.EAST.offsetPos(pos1);
-        } else {
-            pos2 = BlockFace.WEST.offsetPos(pos1);
-        }
+        var pos2 = BlockFace.EAST.offsetPos(pos1);
+
         player.viewBlockUpdate(pos1, 0, BlockTypes.CHEST.getDefaultState());
         player.viewBlockUpdate(pos2, 0, BlockTypes.CHEST.getDefaultState());
-
         sendFakeBlockEntities(player, pos1, pos2);
 
         this.fakeBlockPositions.put(player, new Vector3ic[]{pos1, pos2});
