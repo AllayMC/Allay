@@ -98,9 +98,6 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
 
     protected void runLater(Runnable runnable) {
         var server = Server.getInstance();
-        server.getScheduler().scheduleDelayed(server, () -> {
-            runnable.run();
-            return true;
-        }, 5);
+        server.getScheduler().runLater(server, runnable);
     }
 }

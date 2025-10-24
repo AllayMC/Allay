@@ -2,6 +2,7 @@ package org.allaymc.api.container.interfaces;
 
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerHolder;
+import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
@@ -16,11 +17,26 @@ import java.util.function.Consumer;
  */
 public interface FakeContainer extends Container {
 
+    /**
+     * @see #addPlayer(EntityPlayer, Consumer)
+     */
     default void addPlayer(EntityPlayer player) {
         addPlayer(player, $ -> {
         });
     }
 
+    /**
+     * Adds a player to the fake container, allowing them to interact with it.
+     * The callback is invoked with {@code true} if the player was successfully added,
+     * or {@code false} otherwise.
+     * <p>
+     * Please note that you should use this method instead of using {@link #addViewer(ContainerViewer)},
+     * since we need to send fake blocks to the client before we can open the container. This requires
+     * a delay between the two operations (send fake blocks, open container) due to the client limitation.
+     *
+     * @param player   the player to be added to the container
+     * @param callback a callback function that handles whether the addition was successful
+     */
     void addPlayer(EntityPlayer player, Consumer<Boolean> callback);
 
     /**
