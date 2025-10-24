@@ -520,6 +520,15 @@ public class GameTestCommand extends VanillaCommand {
                     fakeChest.setItemStackWithListener(0, ItemTypes.DIAMOND.createItemStack(), () -> player.sendMessage("You clicked the diamond item"));
                     fakeChest.addPlayer(player);
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("openfakedoublechest")
+                .exec((context, player) -> {
+                    var fakeDoubleChest = FakeContainerFactory.getFactory().createFakeDoubleChestContainer();
+                    fakeDoubleChest.setCustomName("Fake Double Chest Container");
+                    fakeDoubleChest.setItemStackWithListener(0, ItemTypes.DIAMOND.createItemStack(), () -> player.sendMessage("You clicked the diamond item"));
+                    fakeDoubleChest.addPlayer(player);
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }

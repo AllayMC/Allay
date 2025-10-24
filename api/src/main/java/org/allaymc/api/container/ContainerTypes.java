@@ -35,4 +35,5 @@ public interface ContainerTypes {
 
     // Fake Container Types
     ContainerType<FakeContainer> FAKE_CHEST = new ContainerType<>(27);
+    ContainerType<FakeContainer> FAKE_DOUBLE_CHEST = new ContainerType<>(54);
 }

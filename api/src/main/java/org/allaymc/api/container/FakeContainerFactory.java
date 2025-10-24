@@ -21,4 +21,12 @@ public interface FakeContainerFactory {
      * @return A new chest {@code FakeContainer} instance.
      */
     FakeContainer createFakeChestContainer();
+
+    /**
+     * Creates an instance of a double chest {@code FakeContainer}.
+     * A double chest container typically has twice the storage capacity of a regular chest container.
+     *
+     * @return A new double chest {@code FakeContainer} instance.
+     */
+    FakeContainer createFakeDoubleChestContainer();
 }

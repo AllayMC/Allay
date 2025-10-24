@@ -3,13 +3,9 @@ package org.allaymc.server.container.impl;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.blockentity.data.BlockEntityId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
-import org.joml.RoundingMode;
-import org.joml.Vector3d;
-import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
@@ -23,7 +19,7 @@ public class FakeChestContainerImpl extends FakeContainerImpl {
     }
 
     @Override
-    protected void sendFakeBlock(EntityPlayer player) {
+    protected void sendFakeBlocks(EntityPlayer player) {
         var pos = computeFakeBlockPos(player);
         player.viewBlockUpdate(pos, 0, BlockTypes.CHEST.getDefaultState());
 
@@ -43,23 +39,5 @@ public class FakeChestContainerImpl extends FakeContainerImpl {
         player.sendPacket(packet);
 
         this.fakeBlockPositions.put(player, new Vector3ic[]{pos});
-    }
-
-    @Override
-    protected void removeFakeBlock(EntityPlayer player) {
-        var dimension = player.getDimension();
-        for (var pos : this.fakeBlockPositions.getOrDefault(player, new Vector3ic[0])) {
-            player.viewBlockUpdate(pos, 0, dimension.getBlockState(pos, 0));
-        }
-    }
-
-    protected Vector3ic computeFakeBlockPos(EntityPlayer player) {
-        var location = player.getLocation();
-        var pos = MathUtils.getDirectionVector(location);
-        var aabb = player.getAABB();
-        pos.x *= -(1 + aabb.lengthX());
-        pos.y *= -(1 + aabb.lengthY());
-        pos.z *= -(1 + aabb.lengthZ());
-        return location.add(pos, new Vector3d()).get(RoundingMode.FLOOR, new Vector3i());
     }
 }
