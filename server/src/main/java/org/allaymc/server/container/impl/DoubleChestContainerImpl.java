@@ -159,17 +159,16 @@ public class DoubleChestContainerImpl implements BlockContainer {
     }
 
     @Override
-    public void addViewer(ContainerViewer viewer) {
+    public boolean addViewer(ContainerViewer viewer) {
         if (viewers.containsValue(viewer)) {
             log.warn("Viewer already exists! Container: {}, Viewer: {}", getContainerType(), viewer);
             removeViewer(viewer);
-            addViewer(viewer);
-            return;
+            return addViewer(viewer);
         }
 
         var event = new ContainerOpenEvent(viewer, this);
         if (!event.call()) {
-            return;
+            return false;
         }
 
         var assignedId = viewer.viewOpen(this);
@@ -178,17 +177,22 @@ public class DoubleChestContainerImpl implements BlockContainer {
         }
         viewers.put(assignedId, viewer);
         onOpen(viewer);
+
+        return true;
     }
 
     @Override
-    public void removeViewer(ContainerViewer viewer) {
+    public boolean removeViewer(ContainerViewer viewer) {
         new ContainerCloseEvent(viewer, this).call();
 
         var removed = viewers.inverse().remove(viewer);
         if (removed != null) {
             viewer.viewClose(this);
             onClose(viewer);
+            return true;
         }
+
+        return false;
     }
 
     protected void onOpen(ContainerViewer viewer) {

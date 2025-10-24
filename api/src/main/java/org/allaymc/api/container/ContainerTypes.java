@@ -32,4 +32,8 @@ public interface ContainerTypes {
     ContainerType<SmithingTableContainer> SMITHING_TABLE = new ContainerType<>(4);
     ContainerType<FurnaceContainer> SMOKER = new ContainerType<>(3);
     ContainerType<StonecutterContainer> STONECUTTER = new ContainerType<>(2);
+
+    // Fake Container Types
+    ContainerType<FakeContainer> FAKE_CHEST = new ContainerType<>(27);
+    ContainerType<FakeContainer> FAKE_DOUBLE_CHEST = new ContainerType<>(54);
 }

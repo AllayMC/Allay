@@ -4,6 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.SneakyThrows;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
@@ -12,10 +13,13 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.EntityPlayerClientComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.identifier.Identifier;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.AbstractPlayerContainer;
+import org.allaymc.server.container.impl.FakeContainerImpl;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -34,12 +38,16 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_viewer_component");
 
     protected byte idCounter = 1;
+
     @Dependency
     protected EntityPlayerBaseComponent baseComponent;
     @Dependency
     protected EntityPlayerClientComponent clientComponent;
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
+
+    @ComponentObject
+    protected EntityPlayer thisPlayer;
 
     protected BiMap<Byte, Container> idToContainer;
     protected BiMap<ContainerType<?>, Container> typeToContainer;
@@ -126,7 +134,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         registerOpenedContainer(assignedId, container);
 
         var containerType = container.getContainerType();
-        // We should send the container's contents to client if the container is not held by the entity
+        // We should send the container's contents to the client if the container is not held by the entity
         if (containerHolderComponent.getContainer(containerType) == null) {
             viewContents(container);
         }
@@ -140,16 +148,20 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         ContainerNetworkInfo.getInfo(container.getContainerType()).heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
     }
 
+    @SneakyThrows
     protected void sendContainerOpenPacket(byte assignedId, Container container) {
         var packet = new ContainerOpenPacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
         if (container instanceof BlockContainer blockContainer) {
             packet.setBlockPosition(NetworkHelper.toNetwork(blockContainer.getBlockPos()));
+        } else if (container instanceof FakeContainerImpl fakeContainer) {
+            packet.setBlockPosition(NetworkHelper.toNetwork(fakeContainer.getFakeBlockPos(thisPlayer)));
         } else {
             var location = baseComponent.getLocation();
             packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
         }
+        Thread.sleep(500);
         this.clientComponent.sendPacket(packet);
     }
 
@@ -169,10 +181,12 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         ContainerNetworkInfo.getInfo(container.getContainerType()).heldSlotTypes().forEach(slotType -> slotTypeToFullType.remove(slotType));
     }
 
+    @SneakyThrows
     protected void sendContainerClosePacket(byte assignedId, Container container) {
         var packet = new ContainerClosePacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
+        Thread.sleep(500);
         clientComponent.sendPacket(packet);
     }
 
