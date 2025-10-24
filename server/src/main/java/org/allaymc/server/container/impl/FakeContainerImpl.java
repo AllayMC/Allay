@@ -8,12 +8,12 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.interfaces.FakeContainer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.server.Server;
 import org.joml.Vector3ic;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * @author daoge_cmd
@@ -49,23 +49,34 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
 
     @Override
     public boolean addViewer(ContainerViewer viewer) {
-        sendFakeBlock(viewer);
-        if (!super.addViewer(viewer)) {
-            removeFakeBlock(viewer);
-            return false;
-        }
-
-        return true;
+        throw new UnsupportedOperationException("Calling addViewer() in FakeContainer is unsupported! Please use addPlayer() method!");
     }
 
     @Override
     public boolean removeViewer(ContainerViewer viewer) {
-        if (super.removeViewer(viewer)) {
-            removeFakeBlock(viewer);
+        if (!(viewer instanceof EntityPlayer player)) {
+            return false;
+        }
+
+        if (super.removeViewer(player)) {
+            removeFakeBlock(player);
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void addPlayer(EntityPlayer player, Consumer<Boolean> callback) {
+        sendFakeBlock(player);
+        runLater(() -> {
+            if (!super.addViewer(player)) {
+                runLater(() -> removeFakeBlock(player));
+                callback.accept(false);
+            }
+
+            callback.accept(true);
+        });
     }
 
     public Vector3ic getFakeBlockPos(ContainerViewer viewer) {
@@ -78,10 +89,18 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
     }
 
     public void onClick(int slot) {
-        this.clickListeners.get(slot).forEach(Runnable::run);
+        this.clickListeners.getOrDefault(slot, Collections.emptySet()).forEach(Runnable::run);
     }
 
-    protected abstract void sendFakeBlock(ContainerViewer viewer);
+    protected abstract void sendFakeBlock(EntityPlayer player);
 
-    protected abstract void removeFakeBlock(ContainerViewer viewer);
+    protected abstract void removeFakeBlock(EntityPlayer player);
+
+    protected void runLater(Runnable runnable) {
+        var server = Server.getInstance();
+        server.getScheduler().scheduleDelayed(server, () -> {
+            runnable.run();
+            return true;
+        }, 5);
+    }
 }

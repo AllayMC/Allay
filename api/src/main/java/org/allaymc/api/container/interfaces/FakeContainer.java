@@ -2,9 +2,11 @@ package org.allaymc.api.container.interfaces;
 
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerHolder;
-import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FakeContainerFactory;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+
+import java.util.function.Consumer;
 
 /**
  * FakeContainer is a type of container that is `fake`. They are not held by any {@link ContainerHolder}, and
@@ -13,9 +15,17 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 public interface FakeContainer extends Container {
+
+    default void addPlayer(EntityPlayer player) {
+        addPlayer(player, $ -> {
+        });
+    }
+
+    void addPlayer(EntityPlayer player, Consumer<Boolean> callback);
+
     /**
      * Adds a click listener to the fake container. The listener will be called when
-     * the item in the specified slot is clicked/moved by an {@link ContainerViewer}.
+     * the item in the specified slot is clicked/moved by an {@link EntityPlayer}.
      *
      * @param listener the listener to add
      */
@@ -49,7 +59,7 @@ public interface FakeContainer extends Container {
 
     /**
      * Sets an {@link ItemStack} to a specific slot in the container and attaches a listener
-     * that will be notified when the item in the slot is clicked or interacted with by a {@link ContainerViewer}.
+     * that will be notified when the item in the slot is clicked or interacted with by a {@link EntityPlayer}.
      *
      * @param slot      the slot index where the {@link ItemStack} will be placed
      * @param itemStack the {@link ItemStack} to set in the specified slot
