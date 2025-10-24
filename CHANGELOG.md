@@ -16,8 +16,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- Implemented copper torch.
-
+- (API) Implemented `FakeChestContainer` and `FakeDoubleChestContainer`. Plugin developer can obtain fake container instance through
+  the new `FakeContainerFactory` class.
 - Implemented copper torch.
 - Implemented copper door.
 
