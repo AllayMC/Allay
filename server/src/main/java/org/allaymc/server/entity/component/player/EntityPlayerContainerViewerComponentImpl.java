@@ -153,13 +153,13 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         var packet = new ContainerOpenPacket();
         packet.setId(assignedId);
         packet.setType(ContainerNetworkInfo.getInfo(container.getContainerType()).toNetworkType());
-        if (container instanceof BlockContainer blockContainer) {
-            packet.setBlockPosition(NetworkHelper.toNetwork(blockContainer.getBlockPos()));
-        } else if (container instanceof FakeContainerImpl fakeContainer) {
-            packet.setBlockPosition(NetworkHelper.toNetwork(fakeContainer.getFakeBlockPos(thisPlayer)));
-        } else {
-            var location = baseComponent.getLocation();
-            packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
+        switch (container) {
+            case BlockContainer blockContainer -> packet.setBlockPosition(NetworkHelper.toNetwork(blockContainer.getBlockPos()));
+            case FakeContainerImpl fakeContainer -> packet.setBlockPosition(NetworkHelper.toNetwork(fakeContainer.getFakeBlockPos(thisPlayer)));
+            default -> {
+                var location = baseComponent.getLocation();
+                packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
+            }
         }
         Thread.sleep(500);
         this.clientComponent.sendPacket(packet);
