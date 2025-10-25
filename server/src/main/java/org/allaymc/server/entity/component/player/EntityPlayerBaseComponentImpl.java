@@ -145,7 +145,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Map<String, Long> cooldowns;
 
     @Getter
-    protected double speed, flySpeed, verticalFlySpeed;
+    protected Speed speed, flySpeed, verticalFlySpeed;
     @Getter
     protected String scoreTag;
     @Getter
@@ -220,24 +220,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
 
-    public void setSpeed(double speed) {
-        if (this.speed != speed) {
+    public void setSpeed(Speed speed) {
+        if (!this.speed.equals(speed)) {
             this.speed = speed;
             this.clientComponent.sendSpeed(this.speed);
         }
     }
 
     @Override
-    public void setFlySpeed(double flySpeed) {
-        if (this.flySpeed != flySpeed) {
+    public void setFlySpeed(Speed flySpeed) {
+        if (!this.flySpeed.equals(flySpeed)) {
             this.flySpeed = flySpeed;
             this.clientComponent.viewPlayerPermission(thisPlayer);
         }
     }
 
     @Override
-    public void setVerticalFlySpeed(double verticalFlySpeed) {
-        if (this.verticalFlySpeed != verticalFlySpeed) {
+    public void setVerticalFlySpeed(Speed verticalFlySpeed) {
+        if (!this.verticalFlySpeed.equals(verticalFlySpeed)) {
             this.verticalFlySpeed = verticalFlySpeed;
             this.clientComponent.viewPlayerPermission(thisPlayer);
         }
@@ -1007,11 +1007,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setSprinting(boolean sprinting) {
         if (this.sprinting != sprinting) {
             this.sprinting = sprinting;
+
             var speed = this.speed;
             if (sprinting) {
-                speed *= 1.3f;
+                speed = speed.addMultiplier(0.3);
             } else {
-                speed /= 1.3f;
+                speed = speed.addMultiplier(-0.3);
             }
 
             setSpeed(speed);

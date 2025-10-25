@@ -18,16 +18,20 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Implemented `FakeChestContainer` and `FakeDoubleChestContainer`. Plugin developer can obtain fake container instance through
   the new `FakeContainerFactory` class.
+- (API) Introduced record `EntityPlayerBaseComponent.Speed` to represent the `speed`, `flySpeed`, and `verticalFlySpeed` for player.
 - Implemented copper torch.
 - Implemented copper door.
 
 ### Changed
 
 - (API) Event `ContainerCloseEvent` is not cancellable now.
+- (API) Changed the getter/setter methods for `speed`, `flySpeed`, and `verticalFlySpeed` to use the new `Speed` record.
 
 ### Fixed
 
 - Fixed (maybe a bug) sometime event `ContainerOpenEvent` will be called twice.
+- Fixed incorrect player speed after applying `speed` and `slowness` effect. These effects now will also affect the fly speed and vertical
+  fly speed of the player.
 
 ### Removed
 

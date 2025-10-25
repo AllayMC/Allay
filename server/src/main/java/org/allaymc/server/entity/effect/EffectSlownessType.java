@@ -18,19 +18,23 @@ public class EffectSlownessType extends AbstractEffectType {
 
     @Override
     public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityPlayer player)) return;
-        var level = effectInstance.getLevel();
-        var slowness = 1 - level * 0.15f;
-        if (slowness <= 0) slowness = 0.00001f;
-        player.setSpeed(player.getSpeed() * slowness);
+        if (entity instanceof EntityPlayer player) {
+            var level = effectInstance.getLevel();
+            var multiplier = Math.max(-level * 0.15, -1);
+            player.setSpeed(player.getSpeed().addMultiplier(multiplier));
+            player.setFlySpeed(player.getFlySpeed().addMultiplier(multiplier));
+            player.setVerticalFlySpeed(player.getVerticalFlySpeed().addMultiplier(multiplier));
+        }
     }
 
     @Override
     public void onRemove(EntityLiving entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityPlayer player)) return;
-        var level = effectInstance.getLevel();
-        var slowness = 1 - level * 0.15f;
-        if (slowness <= 0) slowness = 0.00001f;
-        player.setSpeed(player.getSpeed() / slowness);
+        if (entity instanceof EntityPlayer player) {
+            var level = effectInstance.getLevel();
+            var multiplier = Math.min(level * 0.15, 1);
+            player.setSpeed(player.getSpeed().addMultiplier(multiplier));
+            player.setFlySpeed(player.getFlySpeed().addMultiplier(multiplier));
+            player.setVerticalFlySpeed(player.getVerticalFlySpeed().addMultiplier(multiplier));
+        }
     }
 }

@@ -420,15 +420,11 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
         effectInstance = event.getEffect();
         var old = effects.put(effectInstance.getType(), effectInstance);
-        if (old != null && old.getType() != effectInstance.getType()) {
-            old.getType().onRemove(thisEntity, old);
-            effectInstance.getType().onAdd(thisEntity, effectInstance);
-        }
-
-        sendEffects(effectInstance, old);
         if (old == null) {
+            effectInstance.getType().onAdd(thisEntity, effectInstance);
             this.baseComponent.broadcastState();
         }
+        sendEffects(effectInstance, old);
 
         return true;
     }

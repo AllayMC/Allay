@@ -20,8 +20,10 @@ public class EffectSpeedType extends AbstractEffectType {
     public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
         if (entity instanceof EntityPlayer player) {
             var level = effectInstance.getLevel();
-            var speed = 1 + level * 0.2f;
-            player.setSpeed(player.getSpeed() * speed);
+            var multiplier = level * 0.2;
+            player.setSpeed(player.getSpeed().addMultiplier(multiplier));
+            player.setFlySpeed(player.getFlySpeed().addMultiplier(multiplier));
+            player.setVerticalFlySpeed(player.getVerticalFlySpeed().addMultiplier(multiplier));
         }
     }
 
@@ -29,8 +31,10 @@ public class EffectSpeedType extends AbstractEffectType {
     public void onRemove(EntityLiving entity, EffectInstance effectInstance) {
         if (entity instanceof EntityPlayer player) {
             var level = effectInstance.getLevel();
-            var speed = 1 + level * 0.2f;
-            player.setSpeed(player.getSpeed() / speed);
+            var multiplier = -level * 0.2;
+            player.setSpeed(player.getSpeed().addMultiplier(multiplier));
+            player.setFlySpeed(player.getFlySpeed().addMultiplier(multiplier));
+            player.setVerticalFlySpeed(player.getVerticalFlySpeed().addMultiplier(multiplier));
         }
     }
 }
