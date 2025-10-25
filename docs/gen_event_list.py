@@ -41,6 +41,8 @@ with mkdocs_gen_files.open("advanced/event-list.md", "w") as f:
     el()
     fp("This page contains all the available events in Allay.")
     el()
+    fp(f"Current event count: {sum(len(files) for files in entries.values())}")
+    el()
 
     for category, files in entries.items():
         fp(f"## {category.capitalize()}")
