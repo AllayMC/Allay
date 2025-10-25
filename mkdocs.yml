@@ -29,7 +29,8 @@ plugins:
       branch: master
   - gen-files:
       scripts:
-        - docs/gen_plugins.py
+        - docs/gen_plugin_list.py
+        - docs/gen_event_list.py
 
 theme:
   name: 'material'
@@ -131,7 +132,7 @@ nav:
       - Installation: getting-started/installation.md
       - Use Terra: getting-started/use-terra.md
 
-  - Plugins: plugins.md
+  - Plugin List: plugin_list.md
 
   - Tutorials:
       - Create Your First Plugin: tutorials/create-your-first-plugin.md
@@ -142,11 +143,11 @@ nav:
       - Use Scoreboards: tutorials/use-scoreboards.md
       - Use Debug Shapes: tutorials/use-debug-shapes.md
       - Block: tutorials/block.md
-      - Item and Container: tutorials/item-and-container.md
       - Persistent Data Container: tutorials/persistent-data-container.md
 
   - Advanced:
       - Use Color Codes: advanced/use-color-codes.md
+      - Event List: advanced/event-list.md
       - Block and Item Id: advanced/block-and-item-id.md
 
   - Development:

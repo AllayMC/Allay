@@ -20,7 +20,7 @@ def parse_github_url(url):
     
     return organization, repository
 
-with mkdocs_gen_files.open("plugins.md", "w") as f:
+with mkdocs_gen_files.open("plugin_list.md", "w") as f:
     def fp(str):
         print(str, file=f)
 
@@ -35,7 +35,7 @@ with mkdocs_gen_files.open("plugins.md", "w") as f:
     fp("---")
     el()
 
-    fp("# Plugins")
+    fp("# Plugin List")
     el()
     fp("This page holds some available plugins that can be installed into your Allay server.")
     el()
@@ -50,7 +50,7 @@ with mkdocs_gen_files.open("plugins.md", "w") as f:
     fp("<div class=\"grid cards\" markdown>")
     el()
 
-    config = toml.load("docs/plugins.toml")
+    config = toml.load("docs/plugin_list.toml")
     for name, info in config.items():
         description = info["description"]
         authors = info["authors"]

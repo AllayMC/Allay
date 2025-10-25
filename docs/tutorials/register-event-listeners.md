@@ -52,3 +52,8 @@ public class MyPlugin extends Plugin {
 
 **:partying_face: And that's it!** Your plugin should now listen to and handle events when player joins.
 Remember, you can add as many methods as you want to listen to any event.
+
+## Explore Available Events
+
+Allay provides a wide range of events that you can listen to. To see a list of all available events,
+visit the [Event List](/advanced/event-list) page.
