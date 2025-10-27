@@ -70,7 +70,7 @@ jobs:
           echo "shaded_jar_name=$SHADED_JAR_NAME" >> $GITHUB_OUTPUT
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: success()
         with:
           name: allay-server
