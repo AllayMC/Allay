@@ -398,6 +398,7 @@ public final class PermissionGroup {
     public PermissionGroup setOperator(boolean value, Permissible permissible) {
         if (value) {
             addParent(PermissionGroups.OPERATOR, permissible);
+            removeParent(PermissionGroups.MEMBER, permissible);
         } else {
             // Add MEMBER to the parents first to avoid unnecessary permission changes since
             addParent(PermissionGroups.MEMBER, permissible);
