@@ -160,7 +160,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             networkVersion = ProtocolInfo.FEATURE_VERSION.getProtocolVersion();
         }
         if (networkVersion > ProtocolInfo.FEATURE_VERSION.getProtocolVersion()) {
-            log.warn("LevelDB world storage network version {} is currently unsupported", networkVersion);
+            throw new WorldStorageException("LevelDB world storage network version " + networkVersion + " is currently unsupported");
         }
 
         var pdc = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);

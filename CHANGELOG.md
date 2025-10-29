@@ -21,6 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced record `EntityPlayerBaseComponent.Speed` to represent the `speed`, `flySpeed`, and `verticalFlySpeed` for player.
 - Implemented copper torch.
 - Implemented copper door.
+- Add support for bedrock 1.21.120.
 
 ### Changed
 
