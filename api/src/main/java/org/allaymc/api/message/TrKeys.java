@@ -1950,7 +1950,7 @@ public interface TrKeys {
     String MC_CHAT_TYPE_EMOTE = "minecraft:chat.type.emote";
 
     /**
-     * %s is sleeping in a bed. To skip to dawn, %s more users need to sleep in beds at the same time.
+     * %s is sleeping in a bed. To skip to dawn, %s more players need to sleep in beds at the same time.
      */
     String MC_CHAT_TYPE_SLEEPING = "minecraft:chat.type.sleeping";
 
@@ -2630,7 +2630,7 @@ public interface TrKeys {
     String MC_COMMANDS_AIMASSIST_SUCCESS = "minecraft:commands.aimassist.success";
 
     /**
-     * Target player's camera type does not support aim assist: %s
+     * Current camera type does not support aim assist. The following types are supported: third_person, fixed_boom, follow_orbit, free
      */
     String MC_COMMANDS_AIMASSIST_UNSUPPORTEDCAMERATYPE = "minecraft:commands.aimassist.unsupportedCameraType";
 
@@ -7150,6 +7150,16 @@ public interface TrKeys {
     String MC_CONTENT_IMPORT_SUCCEEDED_WITH_WARNINGS_SUBTITLE = "minecraft:content.import.succeeded_with_warnings.subtitle";
 
     /**
+     * Failed to load content for pack %s  
+     */
+    String MC_CONTENT_LOAD_FAILED = "minecraft:content.load.failed";
+
+    /**
+     * Check your pack for errors and try importing again 
+     */
+    String MC_CONTENT_LOAD_FAILED_SUBTITLE = "minecraft:content.load.failed.subtitle";
+
+    /**
      * Delete Old Logs
      */
     String MC_CONTENTLOG_CLEAR_FILES = "minecraft:contentlog.clear_files";
@@ -8160,6 +8170,11 @@ public interface TrKeys {
     String MC_DISCONNECTIONSCREEN_BODY_CHECKDEVICESTORAGE = "minecraft:disconnectionScreen.body.checkDeviceStorage";
 
     /**
+     * Your discovery environment does not match the host's.
+     */
+    String MC_DISCONNECTIONSCREEN_BODY_DISCOVERYMISMATCH = "minecraft:disconnectionScreen.body.discoveryMismatch";
+
+    /**
      * The game version you are using is out of date. Update your game to the latest version and try again.
      */
     String MC_DISCONNECTIONSCREEN_BODY_GAMEOUTOFDATE = "minecraft:disconnectionScreen.body.gameOutOfDate";
@@ -8168,6 +8183,11 @@ public interface TrKeys {
      * The host you are trying to join is using an older version of Minecraft. Try again when the host has updated its version.
      */
     String MC_DISCONNECTIONSCREEN_BODY_HOSTVERSIONOLDER = "minecraft:disconnectionScreen.body.hostVersionOlder";
+
+    /**
+     * The host you are trying to join is not prepared to accept authenticated connections. Try again in a few minutes.
+     */
+    String MC_DISCONNECTIONSCREEN_BODY_HOSTWITHOUTKEYS = "minecraft:disconnectionScreen.body.hostWithoutKeys";
 
     /**
      * You have been idle for too long.
@@ -11833,6 +11853,31 @@ public interface TrKeys {
      * Running %s tests with tag '%s'...
      */
     String MC_GAMETEST_SUCCESS_TESTSSTARTED = "minecraft:gameTest.success.testsStarted";
+
+    /**
+     * Your game is missing a required component. To resolve this, choose Install to initiate installation and restart the game.
+     */
+    String MC_GAMEINPUT_LOAD_ERROR_MESSAGE = "minecraft:gameinput_load.error.message";
+
+    /**
+     * Your game is missing a required component. To resolve this, choose Ok to initiate installation and restart the game.
+     */
+    String MC_GAMEINPUT_LOAD_ERROR_MESSAGE2 = "minecraft:gameinput_load.error.message2";
+
+    /**
+     * Your game is missing a required component. To resolve this, run GameInputRedist.msi (on your local installation) and restart the game.
+     */
+    String MC_GAMEINPUT_LOAD_ERROR_MESSAGE3 = "minecraft:gameinput_load.error.message3";
+
+    /**
+     * Error
+     */
+    String MC_GAMEINPUT_LOAD_ERROR_TITLE = "minecraft:gameinput_load.error.title";
+
+    /**
+     * Install
+     */
+    String MC_GAMEINPUT_LOAD_INSTALLBUTTON = "minecraft:gameinput_load.installButton";
 
     /**
      * Page %1 of %2
@@ -21125,6 +21170,81 @@ public interface TrKeys {
     String MC_PACK_AUTHORS_NONE = "minecraft:pack.authors.none";
 
     /**
+     * Failed to accept invite
+     */
+    String MC_PARTIES_TOAST_ACCEPTINVITEFAILED = "minecraft:parties.toast.acceptInviteFailed";
+
+    /**
+     * Failed to create party
+     */
+    String MC_PARTIES_TOAST_CREATEFAILED = "minecraft:parties.toast.createFailed";
+
+    /**
+     * Failed to join party
+     */
+    String MC_PARTIES_TOAST_JOINFAILED = "minecraft:parties.toast.joinFailed";
+
+    /**
+     * You joined a party
+     */
+    String MC_PARTIES_TOAST_JOINEDPARTY = "minecraft:parties.toast.joinedParty";
+
+    /**
+     * %s is now the party leader
+     */
+    String MC_PARTIES_TOAST_LEADERCHANGED = "minecraft:parties.toast.leaderChanged";
+
+    /**
+     * Failed to leave party
+     */
+    String MC_PARTIES_TOAST_LEAVEFAILED = "minecraft:parties.toast.leaveFailed";
+
+    /**
+     * You left the party
+     */
+    String MC_PARTIES_TOAST_LEFTPARTY = "minecraft:parties.toast.leftParty";
+
+    /**
+     * %s joined the party
+     */
+    String MC_PARTIES_TOAST_MEMBERJOINED = "minecraft:parties.toast.memberJoined";
+
+    /**
+     * %s left the party
+     */
+    String MC_PARTIES_TOAST_MEMBERLEFT = "minecraft:parties.toast.memberLeft";
+
+    /**
+     * Party invite
+     */
+    String MC_PARTIES_TOAST_PARTYINVITE = "minecraft:parties.toast.partyInvite";
+
+    /**
+     * Failed to remove party member
+     */
+    String MC_PARTIES_TOAST_REMOVEMEMBERFAILED = "minecraft:parties.toast.removeMemberFailed";
+
+    /**
+     * Failed to send invite
+     */
+    String MC_PARTIES_TOAST_SENDINVITEFAILED = "minecraft:parties.toast.sendInviteFailed";
+
+    /**
+     * Failed to set party leader
+     */
+    String MC_PARTIES_TOAST_SETLEADERFAILED = "minecraft:parties.toast.setLeaderFailed";
+
+    /**
+     * Party loading - Main Menu
+     */
+    String MC_PARTIES_TOAST_TRAVELTOMENU = "minecraft:parties.toast.travelToMenu";
+
+    /**
+     * Party loading - Player world
+     */
+    String MC_PARTIES_TOAST_TRAVELTOWORLD = "minecraft:parties.toast.travelToWorld";
+
+    /**
      * Continue
      */
     String MC_PATCHNOTES_CONTINUE = "minecraft:patchNotes.continue";
@@ -22040,6 +22160,11 @@ public interface TrKeys {
      * System Requirements Warning
      */
     String MC_RAYCASTING_PURCHASE_ERROR_TITLE = "minecraft:raycasting.purchase.error.title";
+
+    /**
+     * This pack is not available to download as your device doesn't meet the minimum system requirements. These requirements can be found in the pack description.
+     */
+    String MC_RAYCASTING_PURCHASE_ERROR_TOOLTIP = "minecraft:raycasting.purchase.error.tooltip";
 
     /**
      * Joining Realm...

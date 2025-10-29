@@ -13,7 +13,6 @@ Before updating Allay, you need to extract the latest data from BDS using **Ends
 First, update [Endstone](https://github.com/EndstoneMC/endstone/releases) to the latest version.
 Then, use it to export the following files:
 
-- `biomes.json`
 - `block_palette.nbt`
 - `block_states.json`
 - `block_tags.json`
