@@ -157,10 +157,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         var networkVersion = nbt.getInt(TAG_NETWORK_VERSION, Integer.MAX_VALUE);
         if (networkVersion == Integer.MAX_VALUE) {
             log.warn("Missing " + TAG_NETWORK_VERSION + " field in " + FILE_LEVEL_DAT);
-            networkVersion = ProtocolInfo.getLatestCodec().getProtocolVersion();
+            networkVersion = ProtocolInfo.FEATURE_VERSION.getProtocolVersion();
         }
-        if (networkVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
-            throw new WorldStorageException("LevelDB world storage network version " + networkVersion + " is currently unsupported");
+        if (networkVersion > ProtocolInfo.FEATURE_VERSION.getProtocolVersion()) {
+            log.warn("LevelDB world storage network version {} is currently unsupported", networkVersion);
         }
 
         var pdc = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
@@ -800,12 +800,12 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         builder.putInt(TAG_STORAGE_VERSION, CURRENT_STORAGE_VERSION);
         // StorageVersion is rarely updated. Instead, the game relies on the NetworkVersion tag,
         // which is synced with the network protocol version for that version
-        builder.putInt(TAG_NETWORK_VERSION, ProtocolInfo.getLatestCodec().getProtocolVersion());
+        builder.putInt(TAG_NETWORK_VERSION, ProtocolInfo.FEATURE_VERSION.getProtocolVersion());
         builder.putLong(TAG_LAST_PLAYED, System.currentTimeMillis() / 1000);
         // Badly named, this actually determines whether achievements can be earned in this world...
         builder.putByte(TAG_ACHIEVEMENTS_DISABLED, (byte) 1);
         builder.putByte(TAG_COMMANDS_ENABLED, (byte) 1);
-        builder.putList(TAG_LAST_OPENED_WITH_VERSION, NbtType.INT, ProtocolInfo.getLatestMinecraftVersion().toBoxedArray());
+        builder.putList(TAG_LAST_OPENED_WITH_VERSION, NbtType.INT, ProtocolInfo.getFeatureMinecraftVersion().toBoxedArray());
         builder.putByte(TAG_IS_EDU, (byte) 0);
         builder.putByte(TAG_FORCE_GAME_TYPE, (byte) 0);
 

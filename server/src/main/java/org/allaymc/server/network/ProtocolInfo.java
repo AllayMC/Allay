@@ -38,6 +38,11 @@ public final class ProtocolInfo {
     );
 
     /**
+     * Feature version is the version of the game from which vanilla features will be used.
+     */
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v844.CODEC;
+
+    /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
      * <p>
      * This is different from the current game version. It should match the nearest version
@@ -94,6 +99,15 @@ public final class ProtocolInfo {
         }
 
         return null;
+    }
+
+    /**
+     * Get the feature minecraft version.
+     *
+     * @return the feature minecraft version
+     */
+    public static SemVersion getFeatureMinecraftVersion() {
+        return SemVersion.from(FEATURE_VERSION.getMinecraftVersion());
     }
 
     /**

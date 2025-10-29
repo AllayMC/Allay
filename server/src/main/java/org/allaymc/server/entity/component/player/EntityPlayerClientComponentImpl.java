@@ -512,9 +512,9 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         packet.setDefaultPlayerPermission(PlayerPermission.valueOf(AllayServer.getSettings().genericSettings().defaultPermission()));
         packet.setServerChunkTickRange(AllayServer.getSettings().worldSettings().tickRadius());
         // VanillaVersion is the version of the game from which Vanilla features will be used
-        packet.setVanillaVersion(ProtocolInfo.getLatestCodec().getMinecraftVersion());
+        packet.setVanillaVersion(ProtocolInfo.FEATURE_VERSION.getMinecraftVersion());
         // ServerEngine(aka.GameVersion) is the version of the game the server is running
-        packet.setServerEngine(ProtocolInfo.getLatestCodec().getMinecraftVersion());
+        packet.setServerEngine(ProtocolInfo.FEATURE_VERSION.getMinecraftVersion());
         packet.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
         packet.setInventoriesServerAuthoritative(true);
         packet.setServerAuthoritativeBlockBreaking(true);
