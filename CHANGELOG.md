@@ -8,15 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Each release is associated with a specific API version,
 and any changes to API will have a prefix `(API)`.
 
-Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
+Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.9.0 (API 0.16.0) - Unreleased
+# 0.9.1 (API 0.17.0) - Unreleased
+
+<small>[Compare with 0.9.0](https://github.com/AllayMC/Allay/compare/0.9.0...HEAD)</small>
+
+### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+# 0.9.0 (API 0.16.0) - 2025/10/30
 
 <small>[Compare with 0.8.3](https://github.com/AllayMC/Allay/compare/0.8.3...HEAD)</small>
 
 ### Added
 
-- (API) Implemented `FakeChestContainer` and `FakeDoubleChestContainer`. Plugin developer can obtain fake container instance through
+- (API) Implemented `FakeChestContainer` and `FakeDoubleChestContainer`. Plugin developer can get fake container instance through
   the new `FakeContainerFactory` class.
 - (API) Introduced record `EntityPlayerBaseComponent.Speed` to represent the `speed`, `flySpeed`, and `verticalFlySpeed` for player.
 - Implemented copper torch.
