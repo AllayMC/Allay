@@ -48,9 +48,11 @@ public class AllayNetworkInterface implements NetworkInterface {
 
     protected final Server server;
     protected final Set<Channel> channels;
+
     protected InetSocketAddress address;
     // Can be null if ipv6 is not enabled
     protected InetSocketAddress addressv6;
+
     protected BedrockPong pong;
 
     public AllayNetworkInterface(Server server) {

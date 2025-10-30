@@ -33,6 +33,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed (maybe a bug) sometime event `ContainerOpenEvent` will be called twice.
 - Fixed incorrect player speed after applying `speed` and `slowness` effect. These effects now will also affect the fly speed and vertical
   fly speed of the player.
+- Fixed a rare NPE when the client disconnects while haven't logged in.
 
 ### Removed
 

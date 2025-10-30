@@ -308,17 +308,24 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
 
     @Override
     public void disconnect(@MayContainTrKey String reason) {
-        if (!packetProcessorHolder.setClientState(ClientState.DISCONNECTED)) {
+        if (!this.packetProcessorHolder.setClientState(ClientState.DISCONNECTED)) {
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
 
-        var disconnectReason = I18n.get().tr(thisPlayer.getLoginData().getLangCode(), reason);
+        String translatedReason;
+        if (this.packetProcessorHolder.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
+            translatedReason = I18n.get().tr(this.loginData.getLangCode(), reason);
+        } else {
+            // At that time login data is null
+            translatedReason = I18n.get().tr(reason);
+        }
+
         try {
-            onDisconnect(disconnectReason);
+            onDisconnect(translatedReason);
             // Tell the client that it should disconnect
             if (this.clientSession.isConnected()) {
-                this.clientSession.disconnect(disconnectReason);
+                this.clientSession.disconnect(translatedReason);
             }
         } catch (Throwable t) {
             log.error("Error while disconnecting the session", t);
