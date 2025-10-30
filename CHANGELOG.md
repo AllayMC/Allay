@@ -16,6 +16,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
+  be resent when the specific permission changes.
+
 ### Changed
 
 ### Fixed

@@ -420,14 +420,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var overloads = new ArrayList<CommandOverloadData>();
         for (var leaf : command.getCommandTree().getLeaves()) {
             var params = new CommandParamData[leaf.depth()];
+
+            var hasPermission = true;
             var node = leaf;
             var index = leaf.depth() - 1;
             while (!node.isRoot()) {
+                if (!thisPlayer.hasPermissions(node.getPermissions())) {
+                    hasPermission = false;
+                    break;
+                }
+
                 params[index] = ((BaseNode) node).toNetworkData();
                 node = node.parent();
                 index--;
             }
-            overloads.add(new CommandOverloadData(false, params));
+
+            if (hasPermission) {
+                overloads.add(new CommandOverloadData(false, params));
+            }
         }
         if (overloads.isEmpty()) {
             overloads.add(new CommandOverloadData(false, new CommandParamData[0]));

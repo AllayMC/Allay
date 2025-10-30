@@ -261,6 +261,11 @@ public interface CommandNode {
      * Add a permission requirement for this node. If the command sender does not have the required
      * permission, it will not be able to access this command node. In other words, the sub commands
      * under this node will not be executable for the command sender.
+     * <p>
+     * When the command is sent to a player, command nodes that the player does not have access to
+     * are not sent. This is useful for hiding command nodes from players that do not have access to
+     * them. To automatically resend commands to the player when the player's permissions change, use
+     * {@link Permission#createForCommand(String, String)} to create permission here.
      *
      * @param permission the permissions to check
      * @return the current {@code CommandNode}

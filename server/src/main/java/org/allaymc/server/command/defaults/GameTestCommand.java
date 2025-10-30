@@ -529,6 +529,13 @@ public class GameTestCommand extends VanillaCommand {
                     fakeDoubleChest.setItemStackWithListener(0, ItemTypes.DIAMOND.createItemStack(), () -> player.sendMessage("You clicked the diamond item"));
                     fakeDoubleChest.addPlayer(player);
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.PLAYER)
+                .root()
+                .key("invisiblenode")
+                .permission(Permission.createForCommand("gametest invisiblenode", "allay.command.gametest.invisiblenode"))
+                .exec(context -> {
+                    context.getSender().sendMessage("QAQ");
+                    return context.success();
+                });
     }
 }
