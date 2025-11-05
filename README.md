@@ -87,6 +87,11 @@ You can check out the following plugin templates:
 - [KotlinPluginTemplate](https://github.com/MineBuilders/allaymc-kotlin-plugin-template)
 - [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
 
+### Use Allay Gradle Plugin
+
+Allay provides a Gradle plugin to make it much easier to develop Allay plugin. Check out
+[AllayGradle](https://github.com/AllayMC/AllayGradle) for more information about how to use it.
+
 ### Use Allay in Existing Project
 
 Allay API is published to the Maven Central. If you have an existing project and want to use Allay in it, simply
