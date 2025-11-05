@@ -39,78 +39,68 @@ git clone https://github.com/yourusername/MyPlugin.git
 cd MyPlugin
 ```
 
-## Editing the Project
+## Initialize the Project
 
-Open the project in IntelliJ IDEA and follow these steps:
+Open the project in IntelliJ IDEA and then open `README.md`. Follow the instructions in the file to initialize the project. After that,
+reload the gradle project.
 
-1. **Change the package name:**
-   Replace `org.allaymc.javaplugintemplate` with `your.group.name.myplugin`.
-2. **Rename the main class:**
-   Rename the file:
+!!! tip
 
-   ```text
-   src/main/java/org/allaymc/javaplugintemplate/JavaPluginTemplate.java
-   → 
-   src/main/java/your/group/name/myplugin/MyPlugin.java
-   ```
+    If you are not using `JavaPluginTemplate`, you'll need to write the `plugin.json` file manually:
+    
+    ```json linenums="1"
+    {
+      "name": "MyPlugin",
+      "entrance": "your.group.name.myplugin.MyPlugin",
+      "authors": ["yourname"],
+      "version": "0.1.0",
+      "api_version": ">=0.1.0",
+      "description": "The description of your plugin",
+      "website": "The website of your plugin",
+      "dependencies": [
+         {
+             "name": "AnotherPlugin1"
+         },
+         {
+             "name": "AnotherPlugin2",
+             "version": ">=0.1.0",
+             "optional": true
+         }
+     ]
+    }
+    ```
+    
+    When editing the plugin.json, there are a few things worth noting:
+    
+    - Fields `api_version`, `description`, `website` and `dependencies` can be missing.
+    - The `version` of your plugin must be a valid [Semantic Version](https://semver.org/spec/v2.0.0.html), otherwise the plugin won't be loaded.
+    - The `api_version` of your plugin and the `version` of entries in `dependencies` can be an expression, and here are some examples:
+    - Single version
+        - `1.2.3`
+    - NPM Style
+        - `>1.2.2`
+        - `1.1.1 || 1.2.3 - 2.0.0`
+        - `1.1.*`
+        - `~1.2.1`
+        - `^1.1.1`
+    - COCOAPODS Style
+        - `> 1.2.2`
+        - `~> 1.2.1`
+        - `<= 1.1.1`
+    - IVY Style
+        - `1.2.+`
+        - `(,1.8.9]`
+        - `[0.2,1.4]`
 
-   Also change the class name inside the file. Make sure it has a default constructor.
-3. **Update `build.gradle.kts`:**
-   ```kotlin
-   group = "your.group.name.myplugin"
-   description = "My first Allay plugin"
-   ```
-4. **Update `settings.gradle.kts`:**
-   ```kotlin
-   rootProject.name = "MyPlugin"
-   ```
-5. **Edit `plugin.json`:**
-   ```json linenums="1"
-   {
-     "name": "MyPlugin",
-     "entrance": "your.group.name.myplugin.MyPlugin",
-     "authors": ["yourname"],
-     "version": "0.1.0",
-     "api_version": ">=0.1.0",
-     "description": "The description of your plugin",
-     "website": "The website of your plugin",
-     "dependencies": [
-        {
-            "name": "AnotherPlugin1"
-        },
-        {
-            "name": "AnotherPlugin2",
-            "version": ">=0.1.0",
-            "optional": true
-        }
-    ]
-   }
-   ```
-6. **Reload the Gradle project.**
+## Run the Server with the Plugin
 
-When editing the plugin.json, there are a few things worth noting:
+If you are using the `AllayGradle` plugin (which is already included in `JavaPluginTemplate`), you can run the server directly from the project:
 
-- Fields `api_version`, `description`, `website` and `dependencies` can be missing.
-- The `version` of your plugin must be a valid [Semantic Version](https://semver.org/spec/v2.0.0.html), otherwise the plugin won't be loaded.
-- The `api_version` of your plugin and the `version` of entries in `dependencies` can be an expression, and here are some examples:
-  - Single version
-    - `1.2.3`
-  - NPM Style
-    - `>1.2.2`
-    - `1.1.1 || 1.2.3 - 2.0.0`
-    - `1.1.*`
-    - `~1.2.1`
-    - `^1.1.1`
-  - COCOAPODS Style
-    - `> 1.2.2`
-    - `~> 1.2.1`
-    - `<= 1.1.1`
-  - IVY Style
-    - `1.2.+`
-    - `(,1.8.9]`
-    - `[0.2,1.4]`
+```bash
+./gradlew runServer
+```
 
-## Building and Installing the Plugin
+## Build the Plugin
 
 To build the plugin, run:
 
@@ -124,22 +114,7 @@ The resulting file will be located at:
 build/libs/MyPlugin-1.0.0-shaded.jar
 ```
 
-Copy it to the `plugins` directory of your Allay server and start the server.
-
-## Quickly Run the Server with the Plugin
-
-If you are using the `JavaPluginTemplate`, you can run the server directly from the project:
-
-```bash
-./gradlew runServer
-```
-
-This task will:
-
-- Download the Allay server
-- Build your plugin
-- Place it in the `plugins` directory
-- Start the server
+You can then copy it to the `plugins` directory of your Allay server and use it.
 
 ---
 
