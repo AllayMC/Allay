@@ -15,7 +15,7 @@ This is a powerful tool for visual debugging and development.
 | Box           | √         | √     | √     |      | √         |                 |                 |                 |                               |
 | Sphere        | √         | √     | √     |      |           |                 |                 |                 | √                             |
 | Circle        | √         | √     | √     |      |           |                 |                 |                 | √                             |
-| Text          | √         |       | √     | √    |           |                 |                 |                 |                               |
+| Text          | √         | √     | √     | √    |           |                 |                 |                 |                               |
 | Arrow         | √         | √     | √     |      |           | √               | √               | √               | √                             |
 | Default value | (0, 0, 0) | 1     | white |      | (1, 1, 1) | (0, 0, 0)       | 1               | 0.5             | 20 (circle/sphere), 4 (arrow) |
 

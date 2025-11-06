@@ -110,13 +110,14 @@ DebugSphere debugSphere = new DebugSphere(
 ```
 
 ### DebugText
-A text marker with customizable position, color, and text content.
+A text marker with customizable position, color, scale, and text content.
 
 ```java linenums="1"
 DebugText debugText = new DebugText(
     new Vector3f(100, 64, 100),
     Color.WHITE,
-    "Hello, Debug!"
+    "Hello, Debug!",
+    1.0f // Scale
 );
 ```
 

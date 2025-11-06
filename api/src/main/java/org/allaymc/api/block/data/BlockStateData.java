@@ -122,7 +122,7 @@ public class BlockStateData {
     @Builder.Default
     protected float thickness = 0;
     /**
-     * Whether the block requires correct tool for drops.
+     * Whether the block requires the correct tool for drops.
      * If set to {@code false}, breaking this block with
      * wrong tool won't have any drop.
      */

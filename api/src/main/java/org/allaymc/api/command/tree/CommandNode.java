@@ -248,9 +248,7 @@ public interface CommandNode {
     }
 
     /**
-     * Redirect to the root node.
-     * <p>
-     * the is useful for commands like /execute, which has multiple subcommands.
+     * Redirect to the root node, which is useful for commands like /execute, which has multiple subcommands.
      *
      * @param onRedirect Called when redirecting
      * @return the root node
