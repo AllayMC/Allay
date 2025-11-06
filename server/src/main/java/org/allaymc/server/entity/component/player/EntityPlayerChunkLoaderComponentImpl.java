@@ -12,7 +12,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.container.ContainerHolder;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.debugshape.*;
+import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.action.EntityAction;
@@ -72,6 +72,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 import static org.allaymc.server.network.NetworkHelper.toNetwork;
+import static org.allaymc.server.network.NetworkHelper.toNetworkRemovalNotice;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
@@ -1300,7 +1301,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void viewDebugShape(DebugShape debugShape) {
         var packet = new DebugDrawerPacket();
-        packet.getShapes().add(toNetworkData(debugShape));
+        packet.getShapes().add(toNetwork(debugShape, this.baseComponent.getDimension().getDimensionInfo().dimensionId()));
         clientComponent.sendPacket(packet);
     }
 
@@ -1308,7 +1309,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     public void viewDebugShapes(Set<DebugShape> debugShapes) {
         var packet = new DebugDrawerPacket();
         for (var debugShape : debugShapes) {
-            packet.getShapes().add(toNetworkData(debugShape));
+            packet.getShapes().add(toNetwork(debugShape, this.baseComponent.getDimension().getDimensionInfo().dimensionId()));
         }
         clientComponent.sendPacket(packet);
     }
@@ -1316,7 +1317,7 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     @Override
     public void removeDebugShape(DebugShape debugShape) {
         var packet = new DebugDrawerPacket();
-        packet.getShapes().add(createRemovalNotice(debugShape));
+        packet.getShapes().add(toNetworkRemovalNotice(debugShape));
         clientComponent.sendPacket(packet);
     }
 
@@ -1324,45 +1325,9 @@ public class EntityPlayerChunkLoaderComponentImpl implements EntityPlayerChunkLo
     public void removeDebugShapes(Set<DebugShape> debugShapes) {
         var packet = new DebugDrawerPacket();
         for (var debugShape : debugShapes) {
-            packet.getShapes().add(createRemovalNotice(debugShape));
+            packet.getShapes().add(toNetworkRemovalNotice(debugShape));
         }
         clientComponent.sendPacket(packet);
-    }
-
-    protected static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape createRemovalNotice(DebugShape shape) {
-        return new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape(shape.getId());
-    }
-
-    protected static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetworkData(DebugShape shape) {
-        return switch (shape) {
-            case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugArrow(
-                    arrow.getId(), 0, toNetwork(arrow.getPosition()), arrow.getArrowHeadScale(),
-                    null, null, arrow.getColor(), toNetwork(arrow.getEndPosition()),
-                    arrow.getArrowHeadLength(), arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments()
-            );
-            case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugBox(
-                    box.getId(), 0, toNetwork(box.getPosition()), box.getScale(),
-                    null, null, box.getColor(), toNetwork(box.getBoxBounds())
-            );
-            case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugCircle(
-                    circle.getId(), 0, toNetwork(circle.getPosition()), circle.getScale(),
-                    null, null, circle.getColor(), circle.getSegments()
-            );
-            case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugLine(
-                    line.getId(), 0, toNetwork(line.getPosition()), null,
-                    null, null, line.getColor(), toNetwork(line.getEndPosition())
-            );
-            case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugSphere(
-                    sphere.getId(), 0, toNetwork(sphere.getPosition()), sphere.getScale(),
-                    null, null, sphere.getColor(), sphere.getSegments()
-            );
-            case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugText(
-                    text.getId(), 0, toNetwork(text.getPosition()), null,
-                    null, null, text.getColor(),
-                    text.getText()
-            );
-            default -> throw new IllegalStateException("Unexpected value: " + shape);
-        };
     }
 
     @Override

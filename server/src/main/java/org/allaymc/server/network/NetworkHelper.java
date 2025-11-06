@@ -1,6 +1,7 @@
 package org.allaymc.server.network;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.debugshape.*;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -177,5 +178,41 @@ public final class NetworkHelper {
             case SPECTATOR -> GameMode.SPECTATOR;
             default -> null;
         };
+    }
+
+    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetwork(DebugShape shape, int dimension) {
+        return switch (shape) {
+            case DebugArrow arrow -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugArrow(
+                    arrow.getId(), dimension, toNetwork(arrow.getPosition()), arrow.getArrowHeadScale(),
+                    null, null, arrow.getColor(), toNetwork(arrow.getEndPosition()),
+                    arrow.getArrowHeadLength(), arrow.getArrowHeadRadius(), arrow.getArrowHeadSegments()
+            );
+            case DebugBox box -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugBox(
+                    box.getId(), dimension, toNetwork(box.getPosition()), box.getScale(),
+                    null, null, box.getColor(), toNetwork(box.getBoxBounds())
+            );
+            case DebugCircle circle -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugCircle(
+                    circle.getId(), dimension, toNetwork(circle.getPosition()), circle.getScale(),
+                    null, null, circle.getColor(), circle.getSegments()
+            );
+            case DebugLine line -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugLine(
+                    line.getId(), dimension, toNetwork(line.getPosition()), null,
+                    null, null, line.getColor(), toNetwork(line.getEndPosition())
+            );
+            case DebugSphere sphere -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugSphere(
+                    sphere.getId(), dimension, toNetwork(sphere.getPosition()), sphere.getScale(),
+                    null, null, sphere.getColor(), sphere.getSegments()
+            );
+            case DebugText text -> new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugText(
+                    text.getId(), dimension, toNetwork(text.getPosition()), null,
+                    null, null, text.getColor(),
+                    text.getText()
+            );
+            default -> throw new IllegalStateException("Unexpected value: " + shape);
+        };
+    }
+
+    public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetworkRemovalNotice(DebugShape shape) {
+        return new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape(shape.getId());
     }
 }
