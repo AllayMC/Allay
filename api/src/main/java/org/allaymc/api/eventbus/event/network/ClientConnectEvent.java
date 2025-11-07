@@ -3,6 +3,8 @@ package org.allaymc.api.eventbus.event.network;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.message.MayContainTrKey;
 
@@ -13,6 +15,7 @@ import java.net.SocketAddress;
  */
 @AllArgsConstructor
 @Getter
+@CallerThread(ThreadType.NETWORK)
 public class ClientConnectEvent extends NetworkEvent implements CancellableEvent {
     protected SocketAddress socketAddress;
     /**

@@ -8,7 +8,7 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
  * @author daoge_cmd
  */
 @Getter
-public class ScoreboardLineEvent extends ScoreboardEvent {
+public abstract class ScoreboardLineEvent extends ScoreboardEvent {
     protected ScoreboardLine line;
 
     public ScoreboardLineEvent(Scoreboard scoreboard, ScoreboardLine line) {

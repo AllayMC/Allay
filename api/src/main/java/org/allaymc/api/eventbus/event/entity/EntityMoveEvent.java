@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3dc;
 
@@ -9,6 +11,7 @@ import org.allaymc.api.math.location.Location3dc;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.COMPUTE)
 public class EntityMoveEvent extends EntityEvent {
     protected Location3dc from;
     @Setter

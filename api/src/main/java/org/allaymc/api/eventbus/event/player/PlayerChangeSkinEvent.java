@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.player.Skin;
@@ -10,6 +12,7 @@ import org.allaymc.api.player.Skin;
  * @author daoge_cmd | Dhaiven
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class PlayerChangeSkinEvent extends PlayerEvent implements CancellableEvent {
     protected Skin oldSkin;
     @Setter

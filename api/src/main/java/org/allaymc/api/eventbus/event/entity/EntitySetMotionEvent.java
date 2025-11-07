@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.joml.Vector3dc;
@@ -11,6 +13,7 @@ import org.joml.Vector3dc;
  */
 @Getter
 @Setter
+@CallerThread(ThreadType.UNKNOWN)
 public class EntitySetMotionEvent extends EntityEvent implements CancellableEvent {
     protected Vector3dc motion;
 

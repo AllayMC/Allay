@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - (API) `DebugText` now support `scale` property.
+- (API) Introduced `CallerThread` annotation to events to specify the execution thread's type.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
   be resent when the specific permission changes.
 

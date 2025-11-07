@@ -1,6 +1,8 @@
 package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
@@ -11,6 +13,7 @@ import org.joml.Vector3dc;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.COMPUTE)
 public class ProjectileHitEvent extends EntityEvent implements CancellableEvent {
 
     protected Vector3dc hitPos;

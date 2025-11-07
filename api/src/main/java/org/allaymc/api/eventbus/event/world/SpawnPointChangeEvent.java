@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.world;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.world.World;
 import org.joml.Vector3ic;
@@ -10,6 +12,7 @@ import org.joml.Vector3ic;
  * @author Dhaiven
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class SpawnPointChangeEvent extends WorldEvent implements CancellableEvent {
     protected Vector3ic oldPos;
     @Setter

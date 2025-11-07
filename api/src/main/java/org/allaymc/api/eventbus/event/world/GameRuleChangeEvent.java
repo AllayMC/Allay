@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.world;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -10,6 +12,7 @@ import org.allaymc.api.world.gamerule.GameRule;
  * @author Dhaiven
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class GameRuleChangeEvent extends WorldEvent implements CancellableEvent {
     protected GameRule gameRule;
     protected Object oldValue;

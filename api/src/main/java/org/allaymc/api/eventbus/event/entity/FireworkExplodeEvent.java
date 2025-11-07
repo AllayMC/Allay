@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityFireworksRocket;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -12,6 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
+@CallerThread(ThreadType.WORLD)
 public class FireworkExplodeEvent extends EntityEvent implements CancellableEvent {
     /**
      * The force of the explosion. Bigger force would cause bigger damage to the affected entities.

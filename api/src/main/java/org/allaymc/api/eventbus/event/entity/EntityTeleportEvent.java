@@ -3,6 +3,8 @@ package org.allaymc.api.eventbus.event.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.math.location.Location3d;
@@ -12,6 +14,7 @@ import org.allaymc.api.math.location.Location3dc;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class EntityTeleportEvent extends EntityEvent implements CancellableEvent {
     protected Location3dc from;
     @Setter

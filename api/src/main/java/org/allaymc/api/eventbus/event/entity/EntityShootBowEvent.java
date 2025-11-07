@@ -1,6 +1,8 @@
 package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.eventbus.event.CancellableEvent;
@@ -12,6 +14,7 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class EntityShootBowEvent extends EntityEvent implements CancellableEvent {
     /**
      * The bow item used to shoot the arrow.

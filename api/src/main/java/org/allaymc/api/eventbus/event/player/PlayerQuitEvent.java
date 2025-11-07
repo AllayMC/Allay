@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.ClientDisconnectEvent;
 import org.allaymc.api.message.MayContainTrKey;
@@ -15,6 +17,7 @@ import org.allaymc.api.message.MayContainTrKey;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.UNKNOWN)
 public class PlayerQuitEvent extends PlayerEvent {
     /**
      * The message that will be broadcast.

@@ -1,5 +1,7 @@
 package org.allaymc.api.eventbus.event.player;
 
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
@@ -10,6 +12,7 @@ import org.allaymc.api.item.recipe.Recipe;
  *
  * @author daoge_cmd
  */
+@CallerThread(ThreadType.WORLD)
 public class PlayerCraftItemEvent extends PlayerEvent implements CancellableEvent {
     /**
      * The recipe that the player used to craft the item.

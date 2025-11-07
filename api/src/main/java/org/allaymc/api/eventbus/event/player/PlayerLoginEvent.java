@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.message.MayContainTrKey;
@@ -9,6 +11,7 @@ import org.allaymc.api.message.MayContainTrKey;
 /**
  * @author daoge_cmd
  */
+@CallerThread(ThreadType.NETWORK)
 public class PlayerLoginEvent extends PlayerEvent implements CancellableEvent {
 
     /**

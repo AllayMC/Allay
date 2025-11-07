@@ -2,19 +2,22 @@ package org.allaymc.api.eventbus.event.network;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 
 import java.net.SocketAddress;
 
 /**
- * ClientDisconnectEvent will be called when client disconnect.
+ * ClientDisconnectEvent will be called when the client disconnects.
  * <p>
  * Different from {@link org.allaymc.api.eventbus.event.player.PlayerQuitEvent}, this event will always
- * be called when client disconnect, even if the client is not logged in.
+ * be called when the client disconnects, even if the client is not logged in.
  *
  * @author daoge_cmd
  */
 @AllArgsConstructor
 @Getter
+@CallerThread(ThreadType.UNKNOWN)
 public class ClientDisconnectEvent extends NetworkEvent {
     protected SocketAddress socketAddress;
     /**

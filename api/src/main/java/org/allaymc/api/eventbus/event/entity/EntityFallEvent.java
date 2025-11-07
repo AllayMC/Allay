@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
@@ -10,6 +12,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
+@CallerThread(ThreadType.COMPUTE)
 public class EntityFallEvent extends EntityEvent implements CancellableEvent {
     protected double fallDistance;
 

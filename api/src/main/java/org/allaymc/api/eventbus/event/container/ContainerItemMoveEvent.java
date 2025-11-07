@@ -1,6 +1,8 @@
 package org.allaymc.api.eventbus.event.container;
 
 import lombok.Getter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.type.ItemType;
@@ -9,6 +11,7 @@ import org.allaymc.api.item.type.ItemType;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class ContainerItemMoveEvent extends ContainerEvent implements CancellableEvent {
     protected Container source;
     protected int sourceSlot;

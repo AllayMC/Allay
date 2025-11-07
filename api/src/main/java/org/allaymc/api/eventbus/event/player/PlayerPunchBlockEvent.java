@@ -1,6 +1,8 @@
 package org.allaymc.api.eventbus.event.player;
 
 import lombok.Getter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -12,6 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class PlayerPunchBlockEvent extends PlayerEvent implements CancellableEvent {
     /**
      * The block being punched.

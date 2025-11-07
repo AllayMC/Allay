@@ -57,7 +57,6 @@ public class EntityFireworksRocketBaseComponentImpl extends EntityBaseComponentI
         }
     }
 
-    // TODO: event
     protected void explode() {
         var dimension = getDimension();
 
