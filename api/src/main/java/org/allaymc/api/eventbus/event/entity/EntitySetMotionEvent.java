@@ -13,7 +13,7 @@ import org.joml.Vector3dc;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class EntitySetMotionEvent extends EntityEvent implements CancellableEvent {
     protected Vector3dc motion;
 

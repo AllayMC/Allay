@@ -17,7 +17,7 @@ import org.allaymc.api.message.MayContainTrKey;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class PlayerQuitEvent extends PlayerEvent {
     /**
      * The message that will be broadcast.

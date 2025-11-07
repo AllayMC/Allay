@@ -42,7 +42,7 @@ public enum ThreadType {
      */
     VIRTUAL,
     /**
-     * Represents an unknown thread type.
+     * Represents any thread type.
      */
-    UNKNOWN
+    ANY
 }

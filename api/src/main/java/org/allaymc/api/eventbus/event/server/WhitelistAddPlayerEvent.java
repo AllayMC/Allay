@@ -11,7 +11,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @AllArgsConstructor
 @Getter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class WhitelistAddPlayerEvent extends ServerEvent implements CancellableEvent {
     protected String uuidOrName;
 }

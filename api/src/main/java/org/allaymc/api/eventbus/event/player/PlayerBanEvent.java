@@ -12,7 +12,7 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @AllArgsConstructor
 @Getter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class PlayerBanEvent extends Event implements CancellableEvent {
     protected String uuidOrName;
 }

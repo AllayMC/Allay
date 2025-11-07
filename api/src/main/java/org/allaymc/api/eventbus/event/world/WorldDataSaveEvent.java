@@ -7,7 +7,7 @@ import org.allaymc.api.world.World;
 /**
  * @author Dhaiven
  */
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class WorldDataSaveEvent extends WorldEvent {
     public WorldDataSaveEvent(World world) {
         super(world);

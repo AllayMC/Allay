@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @AllArgsConstructor
 @Getter
 @Setter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class CommandExecuteEvent extends CommandEvent implements CancellableEvent {
     protected CommandSender commandSender;
     protected String command;

@@ -11,7 +11,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @AllArgsConstructor
 @Getter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class IPUnbanEvent extends NetworkEvent implements CancellableEvent {
     protected String ip;
 }

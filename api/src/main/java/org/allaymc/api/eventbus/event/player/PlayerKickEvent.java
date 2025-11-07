@@ -12,7 +12,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class PlayerKickEvent extends PlayerEvent implements CancellableEvent {
 
     protected String reason;

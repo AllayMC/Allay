@@ -10,7 +10,7 @@ import org.allaymc.api.world.World;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class WorldLoadEvent extends WorldEvent implements CancellableEvent {
     public WorldLoadEvent(World world) {
         super(world);

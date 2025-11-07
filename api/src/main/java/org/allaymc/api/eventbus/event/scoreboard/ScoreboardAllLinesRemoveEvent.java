@@ -8,7 +8,7 @@ import org.allaymc.api.scoreboard.Scoreboard;
 /**
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class ScoreboardAllLinesRemoveEvent extends ScoreboardEvent implements CancellableEvent {
     public ScoreboardAllLinesRemoveEvent(Scoreboard scoreboard) {
         super(scoreboard);

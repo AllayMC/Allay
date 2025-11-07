@@ -17,7 +17,7 @@ import java.net.SocketAddress;
  */
 @AllArgsConstructor
 @Getter
-@CallerThread(ThreadType.UNKNOWN)
+@CallerThread(ThreadType.ANY)
 public class ClientDisconnectEvent extends NetworkEvent {
     protected SocketAddress socketAddress;
     /**
