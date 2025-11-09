@@ -3,11 +3,11 @@
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout
-                    pattern="[%cyan{%d{HH:mm:ss} %level}] [%yellow{%t}] [%blue{%c{0}}] %minecraftFormatting{%msg}%n"/>
+                    pattern="[%cyan{%d{HH:mm:ss} %level}] [%yellow{%t}] [%blue{%logger{0}}] %minecraftFormatting{%msg}%n"/>
         </Console>
         <RollingRandomAccessFile name="File" fileName="logs/server.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout
-                    pattern="[%d{HH:mm:ss} %level] [%t] [%c{0}] %replace{%msg}{§([0-9]|[a|b|c|d|e|f|k|l|o|r])}{}%n"/>
+                    pattern="[%d{HH:mm:ss} %level] [%t] [%logger{0}] %replace{%msg}{§([0-9]|[a|b|c|d|e|f|k|l|o|r])}{}%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <OnStartupTriggeringPolicy/>

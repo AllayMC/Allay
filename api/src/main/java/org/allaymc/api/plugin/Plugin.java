@@ -51,7 +51,7 @@ public abstract class Plugin implements TaskCreator {
         if (!isReloadable()) {
             throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
         } else {
-            log.warn("Plugin {} is marked as reloadable but do nothing in reload() method!", pluginContainer.descriptor().getName());
+            log.warn("Plugin {} is marked as reloadable but do nothing in reload() method!", this.pluginContainer.descriptor().getName());
         }
     }
 
@@ -61,7 +61,7 @@ public abstract class Plugin implements TaskCreator {
      * @return the plugin's logger
      */
     public Logger getPluginLogger() {
-        return pluginLogger;
+        return this.pluginLogger;
     }
 
     /**
@@ -70,7 +70,7 @@ public abstract class Plugin implements TaskCreator {
      * @return the plugin container
      */
     public PluginContainer getPluginContainer() {
-        return pluginContainer;
+        return this.pluginContainer;
     }
 
     /**
@@ -81,7 +81,7 @@ public abstract class Plugin implements TaskCreator {
     @ApiStatus.OverrideOnly
     public void setPluginContainer(PluginContainer pluginContainer) {
         this.pluginContainer = pluginContainer;
-        pluginLogger = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
+        this.pluginLogger = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
     }
 
     /**
@@ -91,6 +91,6 @@ public abstract class Plugin implements TaskCreator {
      */
     @Override
     public boolean isValid() {
-        return Server.getInstance().getPluginManager().isPluginEnabled(pluginContainer.descriptor().getName());
+        return Server.getInstance().getPluginManager().isPluginEnabled(this.pluginContainer.descriptor().getName());
     }
 }

@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Introduced `CallerThread` annotation to events to specify the execution thread's type.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
   be resent when the specific permission changes.
+- Updated log4j2 patterns to use `%logger{0}` instead of `%c{0}`.
 
 ### Changed
 
