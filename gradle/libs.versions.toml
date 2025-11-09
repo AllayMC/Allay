@@ -49,7 +49,7 @@ disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.20.0" }
 # Cache
-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.2" }
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.3" }
 # LevelDB
 leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version.ref = "leveldb" }
 leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version.ref = "leveldb" }
@@ -75,11 +75,11 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.1" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.2" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.27397.106" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.27397.122" }
 # JUnit
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.0" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.1" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
-junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "6.0.0" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "6.0.1" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.20.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
@@ -87,7 +87,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.24.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.25.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
