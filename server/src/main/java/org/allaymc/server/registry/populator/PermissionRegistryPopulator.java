@@ -18,7 +18,10 @@ public class PermissionRegistryPopulator implements Runnable {
                 "The permission to fly in the sky",
                 ifIsPlayer((player, value) -> {
                     if (!value && player.isFlying()) {
+                        // NOTICE: viewPlayerPermission() method will be called by the setFlying() method
                         player.setFlying(false);
+                    } else {
+                        player.viewPlayerPermission(player);
                     }
                 })
         );

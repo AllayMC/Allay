@@ -3,6 +3,11 @@ package org.allaymc.api.permission;
 import com.google.common.base.Preconditions;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.registry.Registries;
+import org.jetbrains.annotations.UnmodifiableView;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a permission.
@@ -18,13 +23,15 @@ public final class Permission {
 
     private final String name;
     private final String description;
-    // Can be null if no listener is set
-    private final PermissionListener listener;
+    private final Set<PermissionListener> listeners;
 
     private Permission(String name, String description, PermissionListener listener) {
         this.name = Preconditions.checkNotNull(name);
         this.description = Preconditions.checkNotNull(description);
-        this.listener = listener;
+        this.listeners = new HashSet<>();
+        if (listener != null) {
+            this.listeners.add(listener);
+        }
     }
 
     /**
@@ -104,12 +111,23 @@ public final class Permission {
     }
 
     /**
-     * Gets the listener associated with this permission, if any.
+     * Retrieves an unmodifiable set of {@link PermissionListener}s associated with this permission.
      *
-     * @return the permission listener, or {@code null} if none is set
+     * @return an unmodifiable view of the set of {@link PermissionListener}s associated with this permission
      */
-    public PermissionListener getPermissionListener() {
-        return listener;
+    @UnmodifiableView
+    public Set<PermissionListener> getListeners() {
+        return Collections.unmodifiableSet(listeners);
+    }
+
+    /**
+     * Adds a {@link PermissionListener} to this permission. The listener will be triggered when changes
+     * are made to permissions associated with permissible entities.
+     *
+     * @param listener the {@link PermissionListener} to be added; must not be {@code null}
+     */
+    public void addListener(PermissionListener listener) {
+        listeners.add(listener);
     }
 
     @Override

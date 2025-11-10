@@ -18,11 +18,15 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) `DebugText` now support `scale` property.
 - (API) Introduced `CallerThread` annotation to events to specify the execution thread's type.
+- (API) `Permission` object now can have multiple attached listeners.
+- (API) `PermissionGroup` can now override the permissions of the parent permission group to `false`.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
   be resent when the specific permission changes.
 - Updated log4j2 patterns to use `%logger{0}` instead of `%c{0}`.
 
 ### Changed
+
+- (API) Replaced method `Permission.getPermissionListener()` with `Permission.getListeners()` which returns a set of listeners.
 
 ### Fixed
 

@@ -53,7 +53,7 @@ public class PermissionCommand extends VanillaCommand {
                     var target = targets.getFirst();
                     context.getSender().sendMessage("The player " + target.getOriginName() + " has the following permissions:");
                     target.getPermissionGroup()
-                            .getPermissions(true)
+                            .getPermissions()
                             .stream()
                             .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
                             .forEach(permission -> context.getSender().sendMessage(" - " + permission.getName() + ": " + TextFormat.GREEN + permission.getDescription()));

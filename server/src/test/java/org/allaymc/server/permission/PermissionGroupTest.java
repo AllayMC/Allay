@@ -108,4 +108,18 @@ public class PermissionGroupTest {
         assertTrue(group.isOperator());
         assertTrue(group.hasPermissions(PermissionGroups.OPERATOR, true));
     }
+
+    @Test
+    void testOverriding() {
+        var parent = PermissionGroup
+                .create("test parent", Set.of(), Set.of(), false)
+                .addPermission(a);
+        var group = PermissionGroup
+                .create("test", Set.of(), Set.of(parent), false)
+                // This will override the parent's permission
+                .removePermission(a);
+        assertTrue(parent.hasPermission(a));
+        assertFalse(group.hasPermission(a));
+        assertTrue(group.getPermissions().isEmpty());
+    }
 }

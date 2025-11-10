@@ -19,18 +19,34 @@ import java.util.Set;
  */
 @Slf4j
 public final class PermissionGroup {
+
     private static final String TAG_PERMISSIONS = "Permissions";
+    private static final String TAG_EXCLUDED_PERMISSIONS = "ExcludedPermissions";
     private static final String TAG_PARENTS = "Parents";
 
     private final String name;
-    private final Set<Permission> permissions;
+    /**
+     * If a permission is in the `permissions` set, its value is `true` <br>
+     * If a permission is in the `excludedPermissions` set, its value is `false` <br>
+     * If a permission is neither in the `permissions` set nor in the `excludedPermissions` set, its value is `default` (decided by the parents) <br>
+     */
+    private final Set<Permission> permissions, excludedPermissions;
     private final Set<PermissionGroup> parents;
 
     private PermissionGroup(String name, Set<Permission> permissions, Set<PermissionGroup> parents) {
         this.name = name;
         // Make sure the permissions set is mutable and independent
         this.permissions = new HashSet<>(permissions);
+        this.excludedPermissions = new HashSet<>();
         this.parents = new HashSet<>(parents);
+
+        // Remove permissions that are already held by the parents since they can be safely removed
+        var parentPermissions = getParentPermissions();
+        for (var permission : permissions) {
+            if (parentPermissions.contains(permission)) {
+                this.permissions.remove(permission);
+            }
+        }
     }
 
     /**
@@ -62,7 +78,7 @@ public final class PermissionGroup {
      * @param permissions the permissions associated with the permission group
      * @param parents     the parent permission groups of this permission group
      * @return a new permission group instance
-     * @throws PermissionException if the name is already exists
+     * @throws PermissionException if the name already exists
      */
     public static PermissionGroup create(String name, Set<Permission> permissions, Set<PermissionGroup> parents, boolean register) {
         var group = new PermissionGroup(name, permissions, parents);
@@ -102,7 +118,17 @@ public final class PermissionGroup {
      */
     @UnmodifiableView
     public Set<Permission> getPermissions() {
-        return getPermissions(false);
+        return getPermissions(true);
+    }
+
+    /**
+     * Retrieves an unmodifiable view of the set of permissions that are excluded.
+     *
+     * @return an unmodifiable {@code Set} of {@code Permission} objects representing the excluded permissions.
+     */
+    @UnmodifiableView
+    public Set<Permission> getExcludedPermissions() {
+        return Collections.unmodifiableSet(excludedPermissions);
     }
 
     /**
@@ -119,7 +145,10 @@ public final class PermissionGroup {
 
         var set = new HashSet<>(permissions);
         for (var parent : parents) {
-            set.addAll(parent.getPermissions(true));
+            var parentPermissions = new HashSet<>(parent.getPermissions());
+            // Parent's permissions may have been excluded in the current permission group, remove excluded permissions.
+            parentPermissions.removeAll(excludedPermissions);
+            set.addAll(parentPermissions);
         }
 
         return set;
@@ -132,9 +161,9 @@ public final class PermissionGroup {
      */
     @UnmodifiableView
     public Set<Permission> getParentPermissions() {
-        var set = new HashSet<>(permissions);
+        var set = new HashSet<Permission>();
         for (var parent : parents) {
-            set.addAll(parent.getPermissions(true));
+            set.addAll(parent.getPermissions());
         }
         return set;
     }
@@ -150,7 +179,7 @@ public final class PermissionGroup {
     }
 
     /**
-     * Checks if this permission group have a specific parent.
+     * Checks if this permission group has a specific parent.
      *
      * @param parent the parent to check
      * @return {@code true} if this permission group have the specific parent, otherwise {@code false}
@@ -169,6 +198,11 @@ public final class PermissionGroup {
         // Check if this permission group has the permission directly
         if (permissions.contains(permission)) {
             return true;
+        }
+
+        // Check if this permission is excluded from this permission group
+        if (excludedPermissions.contains(permission)) {
+            return false;
         }
 
         // Check the parent's permissions
@@ -279,18 +313,23 @@ public final class PermissionGroup {
      * @return this permission group instance
      */
     public PermissionGroup setPermission(Permission permission, boolean value, Permissible permissible) {
-        boolean success;
-        if (value) {
-            success = permissions.add(permission);
-        } else {
-            success = permissions.remove(permission);
+        if (hasPermission(permission) == value) {
+            return this;
         }
-        if (success) {
-            var listener = permission.getPermissionListener();
-            if (listener != null) {
-                listener.onChange(permissible, value);
+
+        if (value) {
+            excludedPermissions.remove(permission);
+            if (!hasPermission(permission)) {
+                permissions.add(permission);
+            }
+        } else {
+            permissions.remove(permission);
+            if (hasPermission(permission)) {
+                excludedPermissions.add(permission);
             }
         }
+
+        permission.getListeners().forEach(listener -> listener.onChange(permissible, value));
         return this;
     }
 
@@ -302,7 +341,7 @@ public final class PermissionGroup {
     }
 
     /**
-     * Adds a parent permission group of this permission group.
+     * Adds a parent permission group to this permission group.
      *
      * @param parent      the parent permission group to add
      * @param permissible the permissible entity that this permission group belongs to. Can be {@code null} if the
@@ -314,16 +353,19 @@ public final class PermissionGroup {
             return this;
         }
 
-        var oldPermissions = getParentPermissions();
+        var oldPermissions = getPermissions();
         this.parents.add(parent);
-        var newPermissions = getParentPermissions();
+        // Remove permissions that are already held by the new parent since they can be safely removed
+        for (var permission : new HashSet<>(permissions)) {
+            if (parent.hasPermission(permission)) {
+                permissions.remove(permission);
+            }
+        }
+        var newPermissions = getPermissions();
 
         var addedPermissions = Sets.difference(newPermissions, oldPermissions);
         for (var permission : addedPermissions) {
-            var listener = permission.getPermissionListener();
-            if (listener != null) {
-                listener.onChange(permissible, true);
-            }
+            permission.getListeners().forEach(listener -> listener.onChange(permissible, true));
         }
 
         return this;
@@ -349,16 +391,13 @@ public final class PermissionGroup {
             return this;
         }
 
-        var oldPermissions = getParentPermissions();
+        var oldPermissions = getPermissions();
         this.parents.remove(parent);
-        var newPermissions = getParentPermissions();
+        var newPermissions = getPermissions();
 
         var removedPermissions = Sets.difference(oldPermissions, newPermissions);
         for (var permission : removedPermissions) {
-            var listener = permission.getPermissionListener();
-            if (listener != null) {
-                listener.onChange(permissible, false);
-            }
+            permission.getListeners().forEach(listener -> listener.onChange(permissible, false));
         }
 
         return this;
@@ -370,11 +409,6 @@ public final class PermissionGroup {
      * @return {@code true} if this permission group has all permissions that are existing in {@link PermissionGroups#OPERATOR}, {@code false} otherwise.
      */
     public boolean isOperator() {
-        // Return true directly if the parent is already the operator group
-        if (parents.contains(PermissionGroups.OPERATOR)) {
-            return true;
-        }
-
         return hasPermissions(PermissionGroups.OPERATOR, true);
     }
 
@@ -388,8 +422,8 @@ public final class PermissionGroup {
     /**
      * Sets the operator status of this permission group.
      * <p>
-     * This method call may not be effective since there may also be custom parent permission group which has all the permissions
-     * exist in {@link PermissionGroups#OPERATOR}.
+     * This method call may not be effective since the current permission group already has all the permissions exist in {@link PermissionGroups#OPERATOR}.
+     * When a permission group has all the permissions that are existing in {@link PermissionGroups#OPERATOR}, we consider its operator status as {@code true}.
      *
      * @param value       {@code true} to set this permission group as operator, {@code false} to remove the operator status
      * @param permissible the permissible entity that this permission group belongs to. Can be {@code null} if the permission does not belong to any entity
@@ -416,7 +450,8 @@ public final class PermissionGroup {
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
 
-        builder.putList(TAG_PERMISSIONS, NbtType.STRING, getPermissions().stream().map(Permission::getName).toList());
+        builder.putList(TAG_PERMISSIONS, NbtType.STRING, getPermissions(false).stream().map(Permission::getName).toList());
+        builder.putList(TAG_EXCLUDED_PERMISSIONS, NbtType.STRING, getExcludedPermissions().stream().map(Permission::getName).toList());
         if (!parents.isEmpty()) {
             builder.putList(TAG_PARENTS, NbtType.STRING, parents.stream().map(PermissionGroup::getName).toList());
         }
@@ -446,6 +481,15 @@ public final class PermissionGroup {
             }
 
             addPermission(permission, permissible);
+        });
+        nbt.getList(TAG_EXCLUDED_PERMISSIONS, NbtType.STRING).forEach(name -> {
+            var permission = Permission.get(name);
+            if (permission == null) {
+                log.warn("Find unknown permission '{}' when loading permission group '{}'", name, this.name);
+                return;
+            }
+
+            removePermission(permission, permissible);
         });
         nbt.listenForList(TAG_PARENTS, NbtType.STRING, names -> {
             for (var name : names) {
