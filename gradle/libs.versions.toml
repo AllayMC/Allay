@@ -47,7 +47,7 @@ semver4j = { group = "org.semver4j", name = "semver4j", version = "6.0.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.20.0" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.21.0" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.3" }
 # LevelDB
