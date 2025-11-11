@@ -39,14 +39,6 @@ public final class PermissionGroup {
         this.permissions = new HashSet<>(permissions);
         this.excludedPermissions = new HashSet<>();
         this.parents = new HashSet<>(parents);
-
-        // Remove permissions that are already held by the parents since they can be safely removed
-        var parentPermissions = getParentPermissions();
-        for (var permission : permissions) {
-            if (parentPermissions.contains(permission)) {
-                this.permissions.remove(permission);
-            }
-        }
     }
 
     /**
@@ -355,12 +347,6 @@ public final class PermissionGroup {
 
         var oldPermissions = getPermissions();
         this.parents.add(parent);
-        // Remove permissions that are already held by the new parent since they can be safely removed
-        for (var permission : new HashSet<>(permissions)) {
-            if (parent.hasPermission(permission)) {
-                permissions.remove(permission);
-            }
-        }
         var newPermissions = getPermissions();
 
         var addedPermissions = Sets.difference(newPermissions, oldPermissions);
