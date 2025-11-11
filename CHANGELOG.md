@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Introduced `CallerThread` annotation to events to specify the execution thread's type.
 - (API) `Permission` object now can have multiple attached listeners.
 - (API) `PermissionGroup` can now override the permissions of the parent permission group to `false`.
+- (API) Added `resetPermission` method to `PermissionGroup` and `Permissible` which would set the permission status to `default`.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
   be resent when the specific permission changes.
 - Updated log4j2 patterns to use `%logger{0}` instead of `%c{0}`.

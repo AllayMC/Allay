@@ -80,6 +80,14 @@ public interface Permissible {
     }
 
     /**
+     * @see PermissionGroup#resetPermission(Permission, Permissible)
+     */
+    default Permissible resetPermission(Permission permission) {
+        getPermissionGroup().resetPermission(permission, getPermissible());
+        return this;
+    }
+
+    /**
      * @see PermissionGroup#getPermissions()
      */
     default Set<Permission> getPermissions() {

@@ -26,9 +26,9 @@ public final class PermissionGroup {
 
     private final String name;
     /**
-     * If a permission is in the `permissions` set, its value is `true` <br>
-     * If a permission is in the `excludedPermissions` set, its value is `false` <br>
-     * If a permission is neither in the `permissions` set nor in the `excludedPermissions` set, its value is `default` (decided by the parents) <br>
+     * If a permission is in the `permissions` set, its status is `true` <br>
+     * If a permission is in the `excludedPermissions` set, its status is `false` <br>
+     * If a permission is neither in the `permissions` set nor in the `excludedPermissions` set, its status is `default` (decided by the parents) <br>
      */
     private final Set<Permission> permissions, excludedPermissions;
     private final Set<PermissionGroup> parents;
@@ -322,6 +322,28 @@ public final class PermissionGroup {
         }
 
         permission.getListeners().forEach(listener -> listener.onChange(permissible, value));
+        return this;
+    }
+
+    /**
+     * Resets a permission for this permission group. This would set the permission status to `default`, which means
+     * that the parents decide the value for this permission (the value may change or may not change).
+     *
+     * @param permission  the permission to reset
+     * @param permissible the permissible entity that this permission group belongs to.
+     *                    Can be {@code null} if the permission does not belong to any entity.
+     * @return this permission group instance
+     */
+    public PermissionGroup resetPermission(Permission permission, Permissible permissible) {
+        var oldValue = hasPermission(permission);
+        permissions.remove(permission);
+        excludedPermissions.remove(permission);
+        var newValue = hasPermission(permission);
+
+        if (oldValue != newValue) {
+            permission.getListeners().forEach(listener -> listener.onChange(permissible, newValue));
+        }
+
         return this;
     }
 
