@@ -221,6 +221,32 @@ public interface PlayerManager {
     Set<String> getWhitelistedPlayers();
 
     /**
+     * Checks if the specified player is an operator.
+     *
+     * @param player the player whose operator status is to be checked
+     * @return {@code true} if the player is an operator, otherwise {@code false}
+     */
+    default boolean isOperator(EntityPlayer player) {
+        return isOperator(player.getLoginData().getUuid().toString());
+    }
+
+    /**
+     * Checks if the player, identified by their UUID or name, is an operator.
+     *
+     * @param uuidOrName the UUID or name of the player
+     * @return {@code true} if the player is an operator, otherwise {@code false}
+     */
+    boolean isOperator(String uuidOrName);
+
+    /**
+     * Sets the operator status for a specific player identified by their UUID or name.
+     *
+     * @param uuidOrName the UUID or name of the player
+     * @param value      {@code true} to set the player as an operator, {@code false} to remove operator status
+     */
+    void setOperator(String uuidOrName, boolean value);
+
+    /**
      * Get the network interface.
      *
      * @return the network interface

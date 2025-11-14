@@ -28,7 +28,7 @@ public final class PermissionGroup {
     /**
      * If a permission is in the `permissions` set, its status is `true` <br>
      * If a permission is in the `excludedPermissions` set, its status is `false` <br>
-     * If a permission is neither in the `permissions` set nor in the `excludedPermissions` set, its status is `default` (decided by the parents) <br>
+     * If a permission is neither in the `permissions` set nor in the `excludedPermissions` set, its status is `undefined` (decided by the parents) <br>
      */
     private final Set<Permission> permissions, excludedPermissions;
     private final Set<PermissionGroup> parents;
@@ -326,7 +326,7 @@ public final class PermissionGroup {
     }
 
     /**
-     * Resets a permission for this permission group. This would set the permission status to `default`, which means
+     * Resets a permission for this permission group. This would set the permission status to `undefined`, which means
      * that the parents decide the value for this permission (the value may change or may not change).
      *
      * @param permission  the permission to reset
@@ -433,17 +433,17 @@ public final class PermissionGroup {
      * This method call may not be effective since the current permission group already has all the permissions exist in {@link PermissionGroups#OPERATOR}.
      * When a permission group has all the permissions that are existing in {@link PermissionGroups#OPERATOR}, we consider its operator status as {@code true}.
      *
-     * @param value       {@code true} to set this permission group as operator, {@code false} to remove the operator status
+     * @param value       {@code true} to set this permission group as operator, {@code false} to remove the operator status and add default permission group to the parents.
      * @param permissible the permissible entity that this permission group belongs to. Can be {@code null} if the permission does not belong to any entity
      * @return this permission group instance
      */
     public PermissionGroup setOperator(boolean value, Permissible permissible) {
         if (value) {
             addParent(PermissionGroups.OPERATOR, permissible);
-            removeParent(PermissionGroups.MEMBER, permissible);
+            removeParent(PermissionGroups.DEFAULT.get(), permissible);
         } else {
             // Add MEMBER to the parents first to avoid unnecessary permission changes since
-            addParent(PermissionGroups.MEMBER, permissible);
+            addParent(PermissionGroups.DEFAULT.get(), permissible);
             removeParent(PermissionGroups.OPERATOR, permissible);
         }
 

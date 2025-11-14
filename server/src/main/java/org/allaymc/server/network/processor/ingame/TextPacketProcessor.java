@@ -22,7 +22,6 @@ public class TextPacketProcessor extends PacketProcessor<TextPacket> {
         }
 
         if (!player.hasPermission(Permissions.ABILITY_CHAT)) {
-            log.warn("Player {} attempted to chat without permission", player.getOriginName());
             return;
         }
 

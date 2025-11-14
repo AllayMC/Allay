@@ -74,7 +74,6 @@ import static org.allaymc.server.network.NetworkHelper.toNetwork;
 @Slf4j
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl implements EntityPlayerBaseComponent {
 
-    protected static final String TAG_PERMISSION = "Permission";
     protected static final String TAG_ENCHANTMENT_SEED = "EnchantmentSeed";
     protected static final String TAG_PLAYER_GAME_MODE = "PlayerGameMode";
 
@@ -186,11 +185,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void initPermissionGroup() {
         // Do not register the player's permission group
         this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
-        // Add the parent permission group alone, so that the permission listeners will be triggered
-        // Commands will be sent to the client during this method call
-        this.permissionGroup.addParent(PermissionGroups.DEFAULT.get(), thisPlayer);
-        // The default game mode may be creative/spectator, and in that case we should give player fly ability
-        setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
     }
 
     @Override
@@ -718,7 +712,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
                 // General
-                .putCompound(TAG_PERMISSION, this.permissionGroup.saveNBT())
                 .putInt(TAG_ENCHANTMENT_SEED, this.enchantmentSeed)
                 .putInt(TAG_PLAYER_GAME_MODE, toNetwork(this.gameMode).ordinal())
                 // SpawnPoint
@@ -763,7 +756,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
         // General
-        nbt.listenForCompound(TAG_PERMISSION, permNbt -> this.permissionGroup.loadNBT(permNbt, thisPlayer));
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
         nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> {
             this.gameMode = fromNetwork(GameType.from(id));
@@ -1095,6 +1087,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // NOTICE: Do not use method setNameTag() here, since at that time the player is not added to
         // any dimension and no one is viewing the player. Calling method setNameTag() will cause a NPE
         this.nameTag = loginData.getXname();
+        // Add the parent permission group alone, so that the permission listeners will be triggered
+        // Commands will be sent to the client during this method call
+        this.permissionGroup.addParent(Server.getInstance().getPlayerManager().isOperator(thisPlayer) ? PermissionGroups.OPERATOR : PermissionGroups.DEFAULT.get(), thisPlayer);
+        // The default game mode may be creative/spectator, and in that case we should give player fly ability
+        setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
     }
 
     @EventHandler

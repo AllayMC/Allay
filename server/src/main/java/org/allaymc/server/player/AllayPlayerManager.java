@@ -41,6 +41,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     protected static final String BAN_INFO_FILE_NAME = "ban-info.yml";
     protected static final String WHITELIST_FILE_NAME = "whitelist.yml";
+    protected static final String OPERATORS_FILE_NAME = "operators.yml";
 
     @Getter
     protected final AllayPlayerStorage playerStorage;
@@ -50,6 +51,7 @@ public class AllayPlayerManager implements PlayerManager {
     protected final Map<UUID, EntityPlayer> players;
     protected final BanInfo banInfo;
     protected final Whitelist whitelist;
+    protected final Operators operators;
 
     public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayNetworkInterface networkInterface) {
         this.playerStorage = playerStorage;
@@ -57,6 +59,7 @@ public class AllayPlayerManager implements PlayerManager {
         this.players = new Object2ObjectOpenHashMap<>();
         this.banInfo = ConfigManager.create(BanInfo.class, org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
+        this.operators = ConfigManager.create(Operators.class, Utils.createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
     }
 
     public void tick(long currentTick) {
@@ -67,6 +70,7 @@ public class AllayPlayerManager implements PlayerManager {
         this.playerStorage.shutdown();
         this.banInfo.save();
         this.whitelist.save();
+        this.operators.save();
     }
 
     @Override
@@ -240,6 +244,25 @@ public class AllayPlayerManager implements PlayerManager {
         return Collections.unmodifiableSet(whitelist.whitelist());
     }
 
+    @Override
+    public boolean isOperator(String uuidOrName) {
+        return operators.operators().contains(uuidOrName);
+    }
+
+    @Override
+    public void setOperator(String uuidOrName, boolean value) {
+        var player = players.values().stream()
+                .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
+                .findFirst();
+        if (value) {
+            operators.operators().add(uuidOrName);
+            player.ifPresent(p -> p.setOperator(true));
+        } else {
+            operators.operators().remove(uuidOrName);
+            player.ifPresent(p -> p.setOperator(false));
+        }
+    }
+
     public void startNetworkInterface() {
         this.networkInterface.start();
     }
@@ -300,11 +323,6 @@ public class AllayPlayerManager implements PlayerManager {
         }
     }
 
-    /**
-     * Whitelist is used to store the whitelisted player list.
-     *
-     * @author daoge_cmd
-     */
     @Getter
     @Accessors(fluent = true)
     public static class Whitelist extends OkaeriConfig {
@@ -312,11 +330,6 @@ public class AllayPlayerManager implements PlayerManager {
         private Set<String> whitelist = Sets.newConcurrentHashSet();
     }
 
-    /**
-     * BanInfo is used to store the banned player and ip list.
-     *
-     * @author daoge_cmd
-     */
     @Getter
     @Accessors(fluent = true)
     public static class BanInfo extends OkaeriConfig {
@@ -327,5 +340,13 @@ public class AllayPlayerManager implements PlayerManager {
         @CustomKey("banned-ips")
         @Comment("Banned ip list")
         private Set<String> bannedIps = Sets.newConcurrentHashSet();
+    }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class Operators extends OkaeriConfig {
+        @CustomKey("operators")
+        @Comment("Operators list. The value can be player's name or uuid")
+        private Set<String> operators = Sets.newConcurrentHashSet();
     }
 }
