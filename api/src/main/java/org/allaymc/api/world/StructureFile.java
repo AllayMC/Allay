@@ -17,10 +17,16 @@ import org.joml.Vector3ic;
 import java.util.*;
 
 /**
+ * Represents a structure file containing block states, block entities, entities, and
+ * metadata about the size and position of a structure.
+ * <p>
+ * This class can perform operations like saving structures to NBT, loading structures
+ * from NBT, placing structures in dimensions, and picking structures from dimensions.
+ *
  * @author harry-xi | daoge_cmd
  */
 @Slf4j
-public record Structure(
+public record StructureFile(
         // layer-x-y-z
         BlockState[][][][] blockStates,
         Map<Vector3ic, NbtMap> blockEntities,
@@ -34,7 +40,7 @@ public record Structure(
     /**
      * @see #pick(Dimension, int, int, int, int, int, int, boolean)
      */
-    public static Structure pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
+    public static StructureFile pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
         return pick(dimension, x, y, z, sizeX, sizeY, sizeZ, true);
     }
 
@@ -51,7 +57,7 @@ public record Structure(
      * @param saveEntities whether to save the entities in the structure
      * @return the picked structure
      */
-    public static Structure pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
+    public static StructureFile pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
         var blockEntities = new HashMap<Vector3ic, NbtMap>();
         var entities = new ArrayList<NbtMap>();
@@ -89,7 +95,7 @@ public record Structure(
             });
         }
 
-        return new Structure(blockStates, blockEntities, entities, sizeX, sizeY, sizeZ, x, y, z);
+        return new StructureFile(blockStates, blockEntities, entities, sizeX, sizeY, sizeZ, x, y, z);
     }
 
     /**
@@ -98,7 +104,7 @@ public record Structure(
      * @param nbt the nbt data to load
      * @return the loaded structure
      */
-    public static Structure formNBT(NbtMap nbt) {
+    public static StructureFile formNBT(NbtMap nbt) {
         if (nbt.getInt("format_version") != FORMAT_VERSION) {
             throw new StructureException("format_version should be " + FORMAT_VERSION);
         }
@@ -163,7 +169,7 @@ public record Structure(
         }
 
         var origin = nbt.getList("structure_world_origin", NbtType.INT);
-        return new Structure(
+        return new StructureFile(
                 blockStates, blockEntities,
                 structureNBT.getList("entities", NbtType.COMPOUND),
                 sizeX, sizeY, sizeZ,
