@@ -227,7 +227,7 @@ public interface PlayerManager {
      * @return {@code true} if the player is an operator, otherwise {@code false}
      */
     default boolean isOperator(EntityPlayer player) {
-        return isOperator(player.getLoginData().getUuid().toString());
+        return isOperator(player.getLoginData().getUuid().toString()) || isOperator(player.getOriginName());
     }
 
     /**
