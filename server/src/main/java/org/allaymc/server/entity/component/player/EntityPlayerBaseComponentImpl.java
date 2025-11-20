@@ -3,9 +3,8 @@ package org.allaymc.server.entity.component.player;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.command.CommandResult;
-import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
@@ -13,6 +12,7 @@ import org.allaymc.api.entity.action.PickedUpAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityArrow;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -23,8 +23,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.message.I18n;
-import org.allaymc.api.message.TrContainer;
+import org.allaymc.api.message.MessageReceiver;
 import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.permission.Permissions;
@@ -33,7 +32,6 @@ import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
-import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
@@ -51,11 +49,9 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
-import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.cloudburstmc.protocol.bedrock.packet.ChangeDimensionPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
+import org.cloudburstmc.protocol.bedrock.packet.PlayerStartItemCooldownPacket;
 import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -105,7 +101,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
-    protected EntityPlayerClientComponentImpl clientComponent;
+    @Delegate(types = MessageReceiver.class)
+    protected EntityPlayerClientComponent clientComponent;
     @ComponentObject
     protected EntityPlayer thisPlayer;
 
@@ -134,8 +131,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Map<String, Long> cooldowns;
 
     @Getter
-    protected Speed speed, flySpeed, verticalFlySpeed;
-    @Getter
     protected String scoreTag;
     @Getter
     protected boolean sprinting, sneaking, swimming, gliding, crawling, flying;
@@ -162,9 +157,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
         this.startUsingItemInAirTime = -1;
         this.cooldowns = new NonBlockingHashMap<>();
-        this.speed = DEFAULT_SPEED;
-        this.flySpeed = DEFAULT_FLY_SPEED;
-        this.verticalFlySpeed = DEFAULT_VERTICAL_FLY_SPEED;
         this.foodLevel = MAX_FOOD_LEVEL;
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
         // Player's name tag is always shown
@@ -202,29 +194,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.clientComponent.viewPlayerPermission(thisPlayer);
         thisPlayer.viewPlayerGameMode(thisPlayer);
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
-    }
-
-    public void setSpeed(Speed speed) {
-        if (!this.speed.equals(speed)) {
-            this.speed = speed;
-            this.clientComponent.sendSpeed(this.speed);
-        }
-    }
-
-    @Override
-    public void setFlySpeed(Speed flySpeed) {
-        if (!this.flySpeed.equals(flySpeed)) {
-            this.flySpeed = flySpeed;
-            this.clientComponent.viewPlayerPermission(thisPlayer);
-        }
-    }
-
-    @Override
-    public void setVerticalFlySpeed(Speed verticalFlySpeed) {
-        if (!this.verticalFlySpeed.equals(verticalFlySpeed)) {
-            this.verticalFlySpeed = verticalFlySpeed;
-            this.clientComponent.viewPlayerPermission(thisPlayer);
-        }
     }
 
     @Override
@@ -742,30 +711,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
-        if (sender == thisPlayer) {
-            var packet = new CommandOutputPacket();
-            packet.setType(CommandOutputType.ALL_OUTPUT);
-            packet.setCommandOriginData(new CommandOriginData(CommandOriginType.PLAYER, thisPlayer.getLoginData().getUuid(), "", 0));
-            for (var output : outputs) {
-                packet.getMessages().add(new CommandOutputMessage(
-                        // Indicates if the output message was one of a successful command execution
-                        status != CommandResult.FAIL_STATUS,
-                        I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()),
-                        new String[0]
-                ));
-            }
-            packet.setSuccessCount(status);
-            this.clientComponent.sendPacket(packet);
-        } else {
-            for (var output : outputs) {
-                var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()) + "]";
-                sendMessage(str);
-            }
-        }
-    }
-
-    @Override
     public PlayerData savePlayerData() {
         return PlayerData.builder()
                 .nbt(saveNBT())
@@ -807,13 +752,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendMessage(String message) {
-        this.clientComponent.sendSimpleMessage(message, TextPacket.Type.RAW);
-    }
-
-    @Override
     public void sendTranslatable(String translatable, Object... args) {
-        sendMessage(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), translatable, args));
     }
 
     @Override
@@ -853,14 +792,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.sprinting != sprinting) {
             this.sprinting = sprinting;
 
-            var speed = this.speed;
+            var speed = this.clientComponent.getSpeed();
             if (sprinting) {
                 speed = speed.addMultiplier(0.3);
             } else {
                 speed = speed.addMultiplier(-0.3);
             }
 
-            setSpeed(speed);
+            this.clientComponent.setSpeed(speed);
             broadcastState();
             new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
         }

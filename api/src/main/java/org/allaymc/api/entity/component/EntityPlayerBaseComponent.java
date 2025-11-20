@@ -14,10 +14,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent {
 
-    Speed DEFAULT_SPEED = new Speed(0.1, 1.0);
-    Speed DEFAULT_FLY_SPEED = new Speed(0.05, 1.0);
-    Speed DEFAULT_VERTICAL_FLY_SPEED = new Speed(1.0, 1.0);
-
     int MAX_FOOD_LEVEL = 20;
     float MAX_FOOD_SATURATION_LEVEL = 20;
     float MAX_FOOD_EXHAUSTION_LEVEL = 4;
@@ -197,76 +193,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
      * @param gameMode The game mode to set
      */
     void setGameMode(GameMode gameMode);
-
-    /**
-     * Represents a speed value controlled by a base speed and a multiplier. The actual
-     * speed value is the multiplication of the base speed with the multiplier.
-     *
-     * @param baseSpeed  the base speed value
-     * @param multiplier the multiplier of the base speed value
-     */
-    record Speed(double baseSpeed, double multiplier) {
-        /**
-         * Calculates the actual speed by multiplying the base speed with the multiplier.
-         *
-         * @return the calculated speed as a product of the base speed and multiplier
-         */
-        public double calculate() {
-            return baseSpeed * multiplier;
-        }
-
-        /**
-         * Creates a new {@code Speed} instance by adding the specified multiplier to the current multiplier.
-         *
-         * @param multiplier the multiplier to be added to the current multiplier
-         * @return a new {@code Speed} instance with the updated multiplier
-         */
-        public Speed addMultiplier(double multiplier) {
-            return new Speed(this.baseSpeed, this.multiplier + multiplier);
-        }
-    }
-
-    /**
-     * Get the speed of the player.
-     *
-     * @return The speed of the player
-     */
-    Speed getSpeed();
-
-    /**
-     * Set the speed of the player.
-     *
-     * @param speed The speed to set
-     */
-    void setSpeed(Speed speed);
-
-    /**
-     * Get the fly speed of the player.
-     *
-     * @return The fly speed of the player
-     */
-    Speed getFlySpeed();
-
-    /**
-     * Sets the fly speed of the player.
-     *
-     * @param flySpeed the fly speed to set
-     */
-    void setFlySpeed(Speed flySpeed);
-
-    /**
-     * Get the vertical fly speed of the player.
-     *
-     * @return The vertical fly speed of the player
-     */
-    Speed getVerticalFlySpeed();
-
-    /**
-     * Sets the vertical fly speed of the player.
-     *
-     * @param verticalFlySpeed the vertical fly speed to set
-     */
-    void setVerticalFlySpeed(Speed verticalFlySpeed);
 
     /**
      * Determines whether the player is currently flying.

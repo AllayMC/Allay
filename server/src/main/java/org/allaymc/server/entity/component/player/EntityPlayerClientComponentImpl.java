@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.Command;
+import org.allaymc.api.command.CommandResult;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.EntityPlayerClientComponent;
@@ -14,6 +16,7 @@ import org.allaymc.api.eventbus.event.player.PlayerLoginEvent;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.permission.Permissions;
@@ -99,11 +102,16 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     protected boolean clientCacheEnabled;
     protected boolean shouldSendCommands;
     @Getter
+    protected Speed speed, flySpeed, verticalFlySpeed;
+    @Getter
     protected BedrockServerSession clientSession;
 
     public EntityPlayerClientComponentImpl() {
         this.packetProcessorHolder = new PacketProcessorHolder();
         this.fullyJoinChunkThreshold = new AtomicInteger(AllayServer.getSettings().worldSettings().fullyJoinChunkThreshold());
+        this.speed = DEFAULT_SPEED;
+        this.flySpeed = DEFAULT_FLY_SPEED;
+        this.verticalFlySpeed = DEFAULT_VERTICAL_FLY_SPEED;
     }
 
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
@@ -230,21 +238,17 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         sendPlayStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
     }
 
-    public void sendSpeed(EntityPlayerBaseComponent.Speed speed) {
-        sendAttribute(new AttributeData(
-                "minecraft:movement", 0, Float.MAX_VALUE, (float) speed.calculate(), 0,
-                Float.MAX_VALUE, (float) EntityPlayerBaseComponent.DEFAULT_SPEED.calculate(), Collections.emptyList()
-        ));
-    }
-
+    @Override
     public void sendExperienceLevel(int value) {
         sendAttribute(new AttributeData("minecraft:player.level", 0, Float.MAX_VALUE, value));
     }
 
+    @Override
     public void sendExperienceProgress(float value) {
         sendAttribute(new AttributeData("minecraft:player.experience", 0, 1, value));
     }
 
+    @Override
     public void sendFoodLevel(int value) {
         var max = EntityPlayerBaseComponent.MAX_FOOD_LEVEL;
         sendAttribute(new AttributeData(
@@ -253,6 +257,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         ));
     }
 
+    @Override
     public void sendFoodSaturationLevel(float value) {
         var max = EntityPlayerBaseComponent.MAX_FOOD_SATURATION_LEVEL;
         sendAttribute(new AttributeData(
@@ -261,6 +266,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         ));
     }
 
+    @Override
     public void sendFoodExhaustionLevel(float value) {
         var max = EntityPlayerBaseComponent.MAX_FOOD_EXHAUSTION_LEVEL;
         sendAttribute(new AttributeData(
@@ -286,7 +292,41 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         sendSimpleMessage(message, TextPacket.Type.POPUP);
     }
 
-    public void sendSimpleMessage(String message, TextPacket.Type type) {
+    @Override
+    public void sendTranslatable(String translatable, Object... args) {
+        sendMessage(I18n.get().tr(thisPlayer.getLoginData().getLangCode(), translatable, args));
+    }
+
+    @Override
+    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+        if (sender == thisPlayer) {
+            var packet = new CommandOutputPacket();
+            packet.setType(CommandOutputType.ALL_OUTPUT);
+            packet.setCommandOriginData(new CommandOriginData(CommandOriginType.PLAYER, thisPlayer.getLoginData().getUuid(), "", 0));
+            for (var output : outputs) {
+                packet.getMessages().add(new CommandOutputMessage(
+                        // Indicates if the output message was one of a successful command execution
+                        status != CommandResult.FAIL_STATUS,
+                        I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()),
+                        new String[0]
+                ));
+            }
+            packet.setSuccessCount(status);
+            sendPacket(packet);
+        } else {
+            for (var output : outputs) {
+                var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLoginData().getLangCode(), output.str(), output.args()) + "]";
+                sendMessage(str);
+            }
+        }
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        sendSimpleMessage(message, TextPacket.Type.RAW);
+    }
+
+    protected void sendSimpleMessage(String message, TextPacket.Type type) {
         var packet = new TextPacket();
         packet.setType(type);
         packet.setXuid(this.loginData.getXuid());
@@ -395,14 +435,6 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     @Override
     public void sendCommands() {
         this.shouldSendCommands = true;
-    }
-
-    protected void sendCommands0() {
-        var packet = new AvailableCommandsPacket();
-        Registries.COMMANDS.getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
-                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
-        sendPacket(packet);
     }
 
     protected CommandData encodeCommand(Command command) {
@@ -526,7 +558,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         layer.getAbilitiesSet().addAll(Arrays.asList(Ability.values()));
         layer.getAbilityValues().addAll(calculateAbilities(player));
         // NOTICE: this shouldn't be changed
-        layer.setWalkSpeed((float) EntityPlayerBaseComponent.DEFAULT_SPEED.calculate());
+        layer.setWalkSpeed((float) DEFAULT_SPEED.calculate());
         layer.setFlySpeed((float) player.getFlySpeed().calculate());
         layer.setVerticalFlySpeed((float) player.getVerticalFlySpeed().calculate());
         packet.getAbilityLayers().add(layer);
@@ -593,6 +625,37 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
         entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
         return entry;
+    }
+
+    @Override
+    public void setSpeed(Speed speed) {
+        if (!this.speed.equals(speed)) {
+            this.speed = speed;
+            sendSpeed(this.speed);
+        }
+    }
+
+    protected void sendSpeed(Speed speed) {
+        sendAttribute(new AttributeData(
+                "minecraft:movement", 0, Float.MAX_VALUE, (float) speed.calculate(), 0,
+                Float.MAX_VALUE, (float) DEFAULT_SPEED.calculate(), Collections.emptyList()
+        ));
+    }
+
+    @Override
+    public void setFlySpeed(Speed flySpeed) {
+        if (!this.flySpeed.equals(flySpeed)) {
+            this.flySpeed = flySpeed;
+            viewPlayerPermission(thisPlayer);
+        }
+    }
+
+    @Override
+    public void setVerticalFlySpeed(Speed verticalFlySpeed) {
+        if (!this.verticalFlySpeed.equals(verticalFlySpeed)) {
+            this.verticalFlySpeed = verticalFlySpeed;
+            viewPlayerPermission(thisPlayer);
+        }
     }
 
     public void initializePlayer() {
@@ -736,5 +799,13 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
             this.sendCommands0();
             this.shouldSendCommands = false;
         }
+    }
+
+    protected void sendCommands0() {
+        var packet = new AvailableCommandsPacket();
+        Registries.COMMANDS.getContent().values().stream()
+                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
+                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
+        sendPacket(packet);
     }
 }

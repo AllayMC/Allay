@@ -32,6 +32,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Replaced method `Permission.getPermissionListener()` with `Permission.getListeners()` which returns a set of listeners.
 - (API) Renamed class `Structure` to `StructureFile` to avoid confusion with the upcoming structure feature in world gen.
 - (API) Moved a number of client-related methods from `EntityPlayerBaseComponent` to `EntityPlayerClientComponent`.
+- (API) Moved speed-related logic to `EntityPlayerClientComponent`.
 - Permission data now will not be saved into the player's nbt data, which allows third permission plugins to store the permission data in their own way.
   The core will only saved a `operator` list now.
 
