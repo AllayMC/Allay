@@ -153,20 +153,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     }
 
     /**
-     * Get the hand slot of the player.
-     *
-     * @return The hand slot of the player
-     */
-    int getHandSlot();
-
-    /**
-     * Set the hand slot of the player.
-     *
-     * @param handSlot the hand slot of the player
-     */
-    void setHandSlot(int handSlot);
-
-    /**
      * Get the skin of the player.
      *
      * @return the skin of the player

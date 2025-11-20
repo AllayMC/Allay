@@ -1,10 +1,12 @@
 package org.allaymc.api.entity.interfaces;
 
+import com.google.common.base.Preconditions;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.*;
 import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
+import org.allaymc.api.eventbus.event.player.PlayerItemHeldEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
@@ -145,6 +147,29 @@ public interface EntityPlayer extends
                 MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.4f),
                 40
         );
+    }
+
+    /**
+     * Get the hand slot of the player.
+     *
+     * @return The hand slot of the player
+     */
+    default int getHandSlot() {
+        return getContainer(ContainerTypes.INVENTORY).getHandSlot();
+    }
+
+    /**
+     * Set the hand slot of the player.
+     *
+     * @param handSlot the hand slot of the player
+     */
+    default void setHandSlot(int handSlot) {
+        Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
+        var container = getContainer(ContainerTypes.INVENTORY);
+        container.setHandSlot(handSlot);
+        new PlayerItemHeldEvent(this, container.getItemInHand(), handSlot).call();
+        viewEntityHand(this);
+        forEachViewers(viewer -> viewer.viewEntityHand(this));
     }
 
     /**

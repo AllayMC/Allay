@@ -1,25 +1,17 @@
 package org.allaymc.server.entity.component.player;
 
-import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
-import org.allaymc.api.entity.action.PickedUpAction;
-import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.interfaces.EntityArrow;
-import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.*;
-import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
@@ -46,7 +38,6 @@ import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
-import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.packet.ChangeDimensionPacket;
@@ -59,7 +50,6 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -74,11 +64,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     protected static final String TAG_ENCHANTMENT_SEED = "EnchantmentSeed";
     protected static final String TAG_PLAYER_GAME_MODE = "PlayerGameMode";
-
-    protected static final String TAG_OFFHAND = "Offhand";
-    protected static final String TAG_INVENTORY = "Inventory";
-    protected static final String TAG_ARMOR = "Armor";
-    protected static final String TAG_ENDER_ITEMS = "EnderChestInventory";
 
     protected static final String TAG_SPAWN_POINT = "SpawnPoint";
     protected static final String TAG_WORLD = "World";
@@ -98,8 +83,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
      */
     protected static final int EXHAUSTION_MOVEMENT_THRESHOLD = 10;
 
-    @Dependency
-    protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
     @Delegate(types = MessageReceiver.class)
     protected EntityPlayerClientComponent clientComponent;
@@ -216,7 +199,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         if (isAlive()) {
             tickFood();
-            tickPickUpEntities();
         }
 
         tickPlayerDataAutoSave();
@@ -253,82 +235,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         if (currentFoodLevel <= 6 && thisPlayer.isSprinting()) {
             setSprinting(false);
-        }
-    }
-
-    protected void tickPickUpEntities() {
-        if (!isCurrentChunkLoaded()) {
-            return;
-        }
-
-        var dimension = location.dimension();
-        var pickUpArea = new AABBd(
-                location.x - 1.425,
-                location.y - 1.425,
-                location.z - 1.425,
-                location.x + 1.425,
-                location.y + 1.425,
-                location.z + 1.425
-        );
-
-        // Pick up items
-        var entityItems = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
-                .stream()
-                .filter(EntityItem.class::isInstance)
-                .map(EntityItem.class::cast)
-                .filter(EntityItemBaseComponent::canBePicked)
-                .toList();
-        for (var entityItem : entityItems) {
-            var item = entityItem.getItemStack();
-            if (item == null) {
-                // Have been picked by others
-                continue;
-            }
-
-            var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(ContainerTypes.INVENTORY));
-            var slot = inventory.tryAddItem(item);
-            if (slot == -1) {
-                // Player's inventory is full and cannot pick up the item
-                continue;
-            }
-
-            if (item.getCount() == 0) {
-                entityItem.applyAction(new PickedUpAction(thisPlayer));
-                // Set the item to null to prevent others from picking this item twice
-                entityItem.setItemStack(null);
-                entityItem.remove();
-            }
-        }
-
-        // Pick up arrows
-        var entityArrows = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(pickUpArea, true)
-                .stream()
-                .filter(EntityArrow.class::isInstance)
-                .map(EntityArrow.class::cast)
-                .filter(arrow -> arrow.getMotion().lengthSquared() == 0)
-                .toList();
-        for (var entityArrow : entityArrows) {
-            if (entityArrow.willBeDespawnedNextTick()) {
-                // Have been picked by others
-                continue;
-            }
-
-            if (entityArrow.isPickUpDisabled()) {
-                continue;
-            }
-
-            if (entityArrow.isInfinite()) {
-                // Arrow shot by bow with infinity enchantment or shot by creative player can't be picked up
-                entityArrow.remove();
-                continue;
-            }
-
-            var arrow = ItemTypes.ARROW.createItemStack(1);
-            arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrow) != -1) {
-                entityArrow.applyAction(new PickedUpAction(thisPlayer));
-                entityArrow.remove();
-            }
         }
     }
 
@@ -577,28 +483,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public int getHandSlot() {
-        return containerHolderComponent.getContainer(ContainerTypes.INVENTORY).getHandSlot();
-    }
-
-    @Override
-    public void setHandSlot(int handSlot) {
-        setHandSlot(handSlot, true);
-    }
-
-    public void setHandSlot(int handSlot, boolean sendToSelf) {
-        Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
-
-        var container = containerHolderComponent.getContainer(ContainerTypes.INVENTORY);
-        container.setHandSlot(handSlot);
-        new PlayerItemHeldEvent(thisPlayer, container.getItemInHand(), handSlot).call();
-        if (sendToSelf) {
-            thisPlayer.viewEntityHand(thisPlayer);
-        }
-        forEachViewers(viewer -> viewer.viewEntityHand(thisPlayer));
-    }
-
-    @Override
     public void setSkin(Skin skin) {
         this.skin = skin;
         var server = Server.getInstance();
@@ -613,23 +497,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .putInt(TAG_PLAYER_GAME_MODE, toNetwork(this.gameMode).ordinal())
                 // SpawnPoint
                 .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
-                // Container
-                .putList(
-                        TAG_OFFHAND,
-                        NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerTypes.OFFHAND).saveNBT())
-                .putList(
-                        TAG_INVENTORY,
-                        NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerTypes.INVENTORY).saveNBT())
-                .putList(
-                        TAG_ARMOR,
-                        NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerTypes.ARMOR).saveNBT())
-                .putList(
-                        TAG_ENDER_ITEMS,
-                        NbtType.COMPOUND,
-                        containerHolderComponent.getContainer(ContainerTypes.ENDER_CHEST).saveNBT())
                 // Experience
                 .putInt(TAG_PLAYER_LEVEL, this.experienceLevel)
                 .putFloat(TAG_PLAYER_LEVEL_PROGRESS, this.experienceProgress)
@@ -665,20 +532,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         } else {
             this.spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
         }
-
-        // Container
-        nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
-                this.containerHolderComponent.getContainer(ContainerTypes.OFFHAND).loadNBT(offhandNbt)
-        );
-        nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt ->
-                this.containerHolderComponent.getContainer(ContainerTypes.INVENTORY).loadNBT(inventoryNbt)
-        );
-        nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
-                this.containerHolderComponent.getContainer(ContainerTypes.ARMOR).loadNBT(armorNbt)
-        );
-        nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt ->
-                this.containerHolderComponent.getContainer(ContainerTypes.ENDER_CHEST).loadNBT(enderItemsNbt)
-        );
 
         // Experience
         nbt.listenForInt(TAG_PLAYER_LEVEL, value -> this.experienceLevel = value);
