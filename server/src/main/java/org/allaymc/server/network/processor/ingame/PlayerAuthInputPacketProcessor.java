@@ -266,7 +266,14 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         for (var input : inputData) {
             switch (input) {
-                case START_SPRINTING -> player.setSprinting(true);
+                case START_SPRINTING -> {
+                    if (player.getFoodLevel() <= 6) {
+                        log.warn("Player {} tried to start sprinting without enough food level", player.getOriginName());
+                        return;
+                    }
+
+                    player.setSprinting(true);
+                }
                 case STOP_SPRINTING -> player.setSprinting(false);
                 case START_SNEAKING -> player.setSneaking(true);
                 case STOP_SNEAKING -> player.setSneaking(false);

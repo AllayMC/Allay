@@ -115,18 +115,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected Skin skin;
     protected Location3ic spawnPoint;
     /**
-     * expectedTeleportPos is used to solve the desynchronization of data at both ends. Because PlayerAuthInputPacket
-     * will be sent from the client to the server at a rate of 20 per second. After teleporting, the server still
-     * receives the PlayerAuthInputPacket sent by the client before teleporting. The following is a simple simulation
-     * (initial player position is (0, 1000, 0)):
-     * <p>
-     * [C -> S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                              <br>
-     * [Server] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
-     * [S -> C] Send new pos (0, 100, 0) `pk2`                                                     <br>
-     * [Server] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
-     * [Client] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
-     * [C -> S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                              <br>
-     * [Server] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
+     * Used to solve the desynchronization of data at both ends.
      *
      * @see <a href="https://github.com/AllayMC/Allay/issues/517">Teleport method should reset fall distance</a>
      */
@@ -286,7 +275,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 if (
                         (difficulty == Difficulty.EASY && thisPlayer.getHealth() > 10) ||
                         (difficulty == Difficulty.NORMAL && thisPlayer.getHealth() > 1) ||
-                        difficulty == Difficulty.HARD
+                        (difficulty == Difficulty.HARD)
                 ) {
                     thisPlayer.attack(DamageContainer.starve(1));
                 }

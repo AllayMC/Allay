@@ -461,15 +461,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
 
     /**
-     * Check if the entity has head yaw.
-     *
-     * @return {@code true} if the entity has head yaw, otherwise {@code false}.
-     */
-    default boolean isHeadYawEnabled() {
-        return false;
-    }
-
-    /**
      * Get the eye height of this entity.
      *
      * @return the eye height of this entity

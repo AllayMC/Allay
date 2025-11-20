@@ -41,6 +41,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Removed
 
+- (API) Removed useless method `Entity.isHeadYawEnabled()`.
+
 # 0.9.0 (API 0.16.0) - 2025/10/30
 
 <small>[Compare with 0.8.3](https://github.com/AllayMC/Allay/compare/0.8.3...HEAD)</small>

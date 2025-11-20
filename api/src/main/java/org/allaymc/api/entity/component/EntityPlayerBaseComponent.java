@@ -171,14 +171,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     void setHandSlot(int handSlot);
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    default boolean isHeadYawEnabled() {
-        return true;
-    }
-
-    /**
      * Get the skin of the player.
      *
      * @return the skin of the player
