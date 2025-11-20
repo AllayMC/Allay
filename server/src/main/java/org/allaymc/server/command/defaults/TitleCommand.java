@@ -1,7 +1,6 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 
@@ -35,7 +34,7 @@ public class TitleCommand extends VanillaCommand {
                 .playerTarget("players")
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(1);
-                    players.forEach(EntityPlayerBaseComponent::clearTitle);
+                    players.forEach(EntityPlayer::clearTitle);
                     context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
@@ -59,7 +58,7 @@ public class TitleCommand extends VanillaCommand {
                 .playerTarget("players")
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(1);
-                    players.forEach(EntityPlayerBaseComponent::resetTitleSettings);
+                    players.forEach(EntityPlayer::resetTitleSettings);
                     context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 });

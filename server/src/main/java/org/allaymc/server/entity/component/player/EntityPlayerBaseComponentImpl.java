@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.container.ContainerTypes;
@@ -32,7 +31,6 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.TextFormat;
@@ -40,7 +38,6 @@ import org.allaymc.api.world.WorldState;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -54,7 +51,10 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
-import org.cloudburstmc.protocol.bedrock.data.command.*;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
+import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
@@ -62,7 +62,9 @@ import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.server.network.NetworkHelper.fromNetwork;
@@ -112,7 +114,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected Skin skin;
     protected Location3ic spawnPoint;
-    protected boolean requireResendingCommands;
     /**
      * expectedTeleportPos is used to solve the desynchronization of data at both ends. Because PlayerAuthInputPacket
      * will be sent from the client to the server at a rate of 20 per second. After teleporting, the server still
@@ -261,10 +262,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         tickPlayerDataAutoSave();
-        if (this.requireResendingCommands) {
-            sendCommands();
-            this.requireResendingCommands = false;
-        }
     }
 
     protected void tickFood() {
@@ -339,7 +336,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
             if (item.getCount() == 0) {
                 entityItem.applyAction(new PickedUpAction(thisPlayer));
-                // Set item to null to prevent others from picking this item twice
+                // Set the item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
                 entityItem.remove();
             }
@@ -390,64 +387,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
             nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
         }
-    }
-
-    protected void sendCommands() {
-        var packet = new AvailableCommandsPacket();
-        Registries.COMMANDS.getContent().values().stream()
-                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
-                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
-        this.clientComponent.sendPacket(packet);
-    }
-
-    protected CommandData encodeCommand(Command command) {
-        // Aliases
-        CommandEnumData aliases = null;
-        if (!command.getAliases().isEmpty()) {
-            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
-            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
-            values.put(command.getName(), Collections.emptySet());
-            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
-        }
-
-        // Overloads
-        var overloads = new ArrayList<CommandOverloadData>();
-        for (var leaf : command.getCommandTree().getLeaves()) {
-            var params = new CommandParamData[leaf.depth()];
-
-            var hasPermission = true;
-            var node = leaf;
-            var index = leaf.depth() - 1;
-            while (!node.isRoot()) {
-                if (!thisPlayer.hasPermissions(node.getPermissions())) {
-                    hasPermission = false;
-                    break;
-                }
-
-                params[index] = ((BaseNode) node).toNetworkData();
-                node = node.parent();
-                index--;
-            }
-
-            if (hasPermission) {
-                overloads.add(new CommandOverloadData(false, params));
-            }
-        }
-        if (overloads.isEmpty()) {
-            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
-        }
-
-        // Flags
-        var flags = new HashSet<CommandData.Flag>();
-        flags.add(CommandData.Flag.NOT_CHEAT);
-        if (command.isDebugCommand()) {
-            flags.add(CommandData.Flag.TEST_USAGE);
-        }
-
-        return new CommandData(
-                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
-                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
-        );
     }
 
     protected void regenerate(boolean exhaust) {
@@ -838,78 +777,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendTip(String message) {
-        sendSimpleMessage(message, TextPacket.Type.TIP);
-    }
-
-    @Override
-    public void sendPopup(String message) {
-        sendSimpleMessage(message, TextPacket.Type.POPUP);
-    }
-
-    @Override
-    public void sendToast(String title, String content) {
-        ToastRequestPacket pk = new ToastRequestPacket();
-        pk.setTitle(title);
-        pk.setContent(content);
-        this.clientComponent.sendPacket(pk);
-    }
-
-    @Override
-    public void sendTitle(String title) {
-        var pk = new SetTitlePacket();
-        pk.setText(title);
-        pk.setType(SetTitlePacket.Type.TITLE);
-        pk.setXuid("");
-        pk.setPlatformOnlineId("");
-        this.clientComponent.sendPacket(pk);
-    }
-
-    @Override
-    public void sendSubtitle(String subtitle) {
-        var pk = new SetTitlePacket();
-        pk.setText(subtitle);
-        pk.setType(SetTitlePacket.Type.SUBTITLE);
-        pk.setXuid("");
-        pk.setPlatformOnlineId("");
-        this.clientComponent.sendPacket(pk);
-    }
-
-    @Override
-    public void sendActionBar(String actionBar) {
-        var pk = new SetTitlePacket();
-        pk.setText(actionBar);
-        pk.setType(SetTitlePacket.Type.ACTIONBAR);
-        pk.setXuid("");
-        pk.setPlatformOnlineId("");
-        this.clientComponent.sendPacket(pk);
-    }
-
-    @Override
-    public void setTitleSettings(int fadeInTime, int duration, int fadeOutTime) {
-        var pk = new SetTitlePacket();
-        pk.setType(SetTitlePacket.Type.TIMES);
-        pk.setFadeInTime(fadeInTime);
-        pk.setFadeOutTime(fadeOutTime);
-        pk.setStayTime(duration);
-        this.clientComponent.sendPacket(pk);
-    }
-
-    @Override
-    public void resetTitleSettings() {
-        var pk = new SetTitlePacket();
-        pk.setType(SetTitlePacket.Type.RESET);
-        this.clientComponent.sendPacket(pk);
-    }
-
-    @Override
-    public void clearTitle() {
-        var pk = new SetTitlePacket();
-        pk.setType(SetTitlePacket.Type.CLEAR);
-        this.clientComponent.sendPacket(pk);
-    }
-
-    @Override
     public PlayerData savePlayerData() {
         return PlayerData.builder()
                 .nbt(saveNBT())
@@ -952,15 +819,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void sendMessage(String message) {
-        sendSimpleMessage(message, TextPacket.Type.RAW);
-    }
-
-    protected void sendSimpleMessage(String message, TextPacket.Type type) {
-        var packet = new TextPacket();
-        packet.setType(type);
-        packet.setXuid(this.clientComponent.getLoginData().getXuid());
-        packet.setMessage(message);
-        this.clientComponent.sendPacket(packet);
+        this.clientComponent.sendSimpleMessage(message, TextPacket.Type.RAW);
     }
 
     @Override
@@ -982,11 +841,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public EntityPlayer asPlayer() {
         return thisPlayer;
-    }
-
-    @Override
-    public void requireResendingCommands() {
-        this.requireResendingCommands = true;
     }
 
     @Override

@@ -22,7 +22,7 @@ public interface I18n {
      */
     AllayAPI.APIInstanceHolder<I18n> I18N = AllayAPI.APIInstanceHolder.create();
     /**
-     * The namespace used in vanilla translation key.
+     * The namespace used in the vanilla translation key.
      */
     String VANILLA_LANG_NAMESPACE = Identifier.DEFAULT_NAMESPACE;
 
@@ -117,16 +117,16 @@ public interface I18n {
     }
 
     /**
-     * Convert the translation key to client friendly style.
+     * Convert the translation key to a client-friendly style.
      * <p>
-     * Translation key in allay is in the format of 'namespace:path'. Namespace "minecraft"
-     * will be used for vanilla translation key, and "allay" will be used for allay translation key.
+     * The translation key in Allay is in the format of 'namespace:path'. Namespace "minecraft"
+     * will be used for the vanilla translation key, and "allay" will be used for Allay's translation key.
      * <p>
-     * However, the translation key in vanilla client does not have namespace, so if we want to translate the
+     * However, the translation key in the vanilla client does not have a namespace, so if we want to translate the
      * text client-side, we need to remove the namespace.
      * <p>
-     * This method will find and remove "minecraft" namespace in the translation key, and does not translate
-     * these text. Only translation key that does not in "minecraft" namespace will be translated.
+     * This method will find and remove "minecraft" namespace in the translation key and does not translate
+     * these texts. Only a translation key that does not in "minecraft" namespace will be translated.
      *
      * @param langCode the lang code
      * @param tr       the translation key

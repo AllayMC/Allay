@@ -3,6 +3,7 @@ package org.allaymc.server.entity.component.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.EntityPlayerClientComponent;
@@ -19,16 +20,19 @@ import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.command.tree.node.BaseNode;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.entity.component.event.CEntityTickEvent;
 import org.allaymc.server.entity.component.event.CPlayerChunkInRangeSendEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
@@ -50,7 +54,7 @@ import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.*;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandPermission;
+import org.cloudburstmc.protocol.bedrock.data.command.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -62,6 +66,7 @@ import org.joml.Vector3fc;
 import java.awt.*;
 import java.net.SocketAddress;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNBTUtils.readVector3f;
@@ -92,6 +97,7 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     @Getter
     @Setter
     protected boolean clientCacheEnabled;
+    protected boolean shouldSendCommands;
     @Getter
     protected BedrockServerSession clientSession;
 
@@ -271,6 +277,86 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
     }
 
     @Override
+    public void sendTip(String message) {
+        sendSimpleMessage(message, TextPacket.Type.TIP);
+    }
+
+    @Override
+    public void sendPopup(String message) {
+        sendSimpleMessage(message, TextPacket.Type.POPUP);
+    }
+
+    public void sendSimpleMessage(String message, TextPacket.Type type) {
+        var packet = new TextPacket();
+        packet.setType(type);
+        packet.setXuid(this.loginData.getXuid());
+        packet.setMessage(message);
+        sendPacket(packet);
+    }
+
+    @Override
+    public void sendToast(String title, String content) {
+        ToastRequestPacket pk = new ToastRequestPacket();
+        pk.setTitle(title);
+        pk.setContent(content);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void sendTitle(String title) {
+        var pk = new SetTitlePacket();
+        pk.setText(title);
+        pk.setType(SetTitlePacket.Type.TITLE);
+        pk.setXuid("");
+        pk.setPlatformOnlineId("");
+        sendPacket(pk);
+    }
+
+    @Override
+    public void sendSubtitle(String subtitle) {
+        var pk = new SetTitlePacket();
+        pk.setText(subtitle);
+        pk.setType(SetTitlePacket.Type.SUBTITLE);
+        pk.setXuid("");
+        pk.setPlatformOnlineId("");
+        sendPacket(pk);
+    }
+
+    @Override
+    public void sendActionBar(String actionBar) {
+        var pk = new SetTitlePacket();
+        pk.setText(actionBar);
+        pk.setType(SetTitlePacket.Type.ACTIONBAR);
+        pk.setXuid("");
+        pk.setPlatformOnlineId("");
+        sendPacket(pk);
+    }
+
+    @Override
+    public void setTitleSettings(int fadeInTime, int duration, int fadeOutTime) {
+        var pk = new SetTitlePacket();
+        pk.setType(SetTitlePacket.Type.TIMES);
+        pk.setFadeInTime(fadeInTime);
+        pk.setFadeOutTime(fadeOutTime);
+        pk.setStayTime(duration);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void resetTitleSettings() {
+        var pk = new SetTitlePacket();
+        pk.setType(SetTitlePacket.Type.RESET);
+        sendPacket(pk);
+    }
+
+    @Override
+    public void clearTitle() {
+        var pk = new SetTitlePacket();
+        pk.setType(SetTitlePacket.Type.CLEAR);
+        sendPacket(pk);
+    }
+
+    @Override
     public void sendPacket(Object p) {
         if (!(p instanceof BedrockPacket packet)) {
             return;
@@ -304,6 +390,69 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         }
 
         this.clientSession.sendPacketImmediately(event.getPacket());
+    }
+
+    @Override
+    public void sendCommands() {
+        this.shouldSendCommands = true;
+    }
+
+    protected void sendCommands0() {
+        var packet = new AvailableCommandsPacket();
+        Registries.COMMANDS.getContent().values().stream()
+                .filter(command -> !command.isServerSideOnly() && thisPlayer.hasPermissions(command.getPermissions()))
+                .forEach(command -> packet.getCommands().add(encodeCommand(command)));
+        sendPacket(packet);
+    }
+
+    protected CommandData encodeCommand(Command command) {
+        // Aliases
+        CommandEnumData aliases = null;
+        if (!command.getAliases().isEmpty()) {
+            var values = new LinkedHashMap<String, Set<CommandEnumConstraint>>();
+            command.getAliases().forEach(alias -> values.put(alias, Collections.emptySet()));
+            values.put(command.getName(), Collections.emptySet());
+            aliases = new CommandEnumData(command.getName() + "CommandAliases", values, false);
+        }
+
+        // Overloads
+        var overloads = new ArrayList<CommandOverloadData>();
+        for (var leaf : command.getCommandTree().getLeaves()) {
+            var params = new CommandParamData[leaf.depth()];
+
+            var hasPermission = true;
+            var node = leaf;
+            var index = leaf.depth() - 1;
+            while (!node.isRoot()) {
+                if (!thisPlayer.hasPermissions(node.getPermissions())) {
+                    hasPermission = false;
+                    break;
+                }
+
+                params[index] = ((BaseNode) node).toNetworkData();
+                node = node.parent();
+                index--;
+            }
+
+            if (hasPermission) {
+                overloads.add(new CommandOverloadData(false, params));
+            }
+        }
+        if (overloads.isEmpty()) {
+            overloads.add(new CommandOverloadData(false, new CommandParamData[0]));
+        }
+
+        // Flags
+        var flags = new HashSet<CommandData.Flag>();
+        flags.add(CommandData.Flag.NOT_CHEAT);
+        if (command.isDebugCommand()) {
+            flags.add(CommandData.Flag.TEST_USAGE);
+        }
+
+        return new CommandData(
+                command.getName(), I18n.get().tr(thisPlayer.getLoginData().getLangCode(), command.getDescription()),
+                flags, CommandPermission.ANY, aliases, List.of(), overloads.toArray(CommandOverloadData[]::new)
+        );
     }
 
     @Override
@@ -579,5 +728,13 @@ public class EntityPlayerClientComponentImpl implements EntityPlayerClientCompon
         var packet = new PlayStatusPacket();
         packet.setStatus(status);
         sendPacket(packet);
+    }
+
+    @EventHandler
+    protected void onTick(CEntityTickEvent event) {
+        if (this.shouldSendCommands) {
+            this.sendCommands0();
+            this.shouldSendCommands = false;
+        }
     }
 }

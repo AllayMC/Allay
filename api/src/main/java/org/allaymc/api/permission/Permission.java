@@ -17,7 +17,7 @@ import java.util.Set;
 public final class Permission {
     private static final PermissionListener COMMAND_PERMISSION_LISTENER = (permissible, value) -> {
         if (permissible instanceof EntityPlayer player) {
-            player.requireResendingCommands();
+            player.sendCommands();
         }
     };
 

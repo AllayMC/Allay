@@ -5,7 +5,6 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.Skin;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -315,71 +314,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     }
 
     /**
-     * Sends a tip to the player.
-     *
-     * @param message The message to send
-     */
-    void sendTip(String message);
-
-    /**
-     * Sends a popup to the player.
-     *
-     * @param message The message to send
-     */
-    void sendPopup(String message);
-
-    /**
-     * Send a toast to the player. The toast will be displayed at the top of the screen
-     * with a title and content in a period of time.
-     *
-     * @param title   the title of the toast
-     * @param content the content of the toast
-     */
-    void sendToast(String title, String content);
-
-    /**
-     * Send a title to the player which will be shown in the middle of the screen.
-     *
-     * @param title the title to send
-     */
-    void sendTitle(String title);
-
-    /**
-     * Send a subtitle to the player which will be shown below the main title.
-     * If no title is set, the subtitle won't be shown, in other words title must
-     * be set before set subtitle.
-     *
-     * @param subtitle the subtitle to send
-     */
-    void sendSubtitle(String subtitle);
-
-    /**
-     * Send an action bar message to the player which will be shown above player's hot bar.
-     *
-     * @param actionBar the action bar message to send
-     */
-    void sendActionBar(String actionBar);
-
-    /**
-     * Set the title settings of this player. These settings will be used for the next title, subtitle and actionbar.
-     *
-     * @param fadeInTime  the time in ticks for the title to fade in
-     * @param duration    the time in ticks for the title to stay
-     * @param fadeOutTime the time in ticks for the title to fade out
-     */
-    void setTitleSettings(int fadeInTime, int duration, int fadeOutTime);
-
-    /**
-     * Reset the title settings of this player to the default values.
-     */
-    void resetTitleSettings();
-
-    /**
-     * Clear the title that is being displayed on the player's screen
-     */
-    void clearTitle();
-
-    /**
      * Save the player's data.
      *
      * @return The saved player data
@@ -489,14 +423,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     default void regenerateEnchantmentSeed() {
         setEnchantmentSeed(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE));
     }
-
-    /**
-     * Require encoding and resending all commands to the player next tick. This method should be called when
-     * command permissions change, but usually you don't need to call this method manually since the permission
-     * listener does it.
-     */
-    @ApiStatus.Internal
-    void requireResendingCommands();
 
     /**
      * {@inheritDoc}

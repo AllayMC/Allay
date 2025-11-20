@@ -22,6 +22,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) `PermissionGroup` can now override the permissions of the parent permission group to `false`.
 - (API) Added `resetPermission` method to `PermissionGroup` and `Permissible` which would set the permission status to `default`.
 - (API) Added methods `PlayerManager.isOperator()` and `PlayerManager.setOperaotor()`.
+- (API) Readded `DebugShapeViewer`, and `WorldViewer` now extends `DebugShapeViewer`. There should be no breaking changes.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
   be resent when the specific permission changes.
 - Updated log4j2 patterns to use `%logger{0}` instead of `%c{0}`.
@@ -30,6 +31,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Replaced method `Permission.getPermissionListener()` with `Permission.getListeners()` which returns a set of listeners.
 - (API) Renamed class `Structure` to `StructureFile` to avoid confusion with the upcoming structure feature in world gen.
+- (API) Moved a number of client-related methods from `EntityPlayerBaseComponent` to `EntityPlayerClientComponent`.
 - Permission data now will not be saved into the player's nbt data, which allows third permission plugins to store the permission data in their own way.
   The core will only saved a `operator` list now.
 
