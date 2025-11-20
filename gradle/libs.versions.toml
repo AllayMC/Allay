@@ -41,13 +41,13 @@ fastutil-io = { group = "org.cloudburstmc.fastutil", name = "io", version.ref = 
 gson = { group = "com.google.code.gson", name = "gson", version = "2.13.2" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.5" }
 # Util library
-commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.19.0" }
+commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.20.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2-1" }
 semver4j = { group = "org.semver4j", name = "semver4j", version = "6.0.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.20.0" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.21.0" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.3" }
 # LevelDB
@@ -60,7 +60,7 @@ log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.
 # CLI dependencie
 mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 # Code generating
-javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.7.0" }
+javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.8.0" }
 # Reflections
 fastreflect = { group = "me.sunlan", name = "fast-reflection", version = "1.0.3" }
 # Math computing
@@ -75,7 +75,7 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.1" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.2" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "252.27397.122" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.28294.113" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.1" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
@@ -87,7 +87,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.25.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.26.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
@@ -111,4 +111,4 @@ shadow = { id = "com.gradleup.shadow", version = "9.2.2" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.3" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
 delombok = { id = "com.github.monosoul.yadegrap", version = "1.0.0" }
-publish = { id = "com.vanniktech.maven.publish", version = "0.34.0" }
+publish = { id = "com.vanniktech.maven.publish", version = "0.35.0" }
