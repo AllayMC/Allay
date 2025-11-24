@@ -40,7 +40,7 @@ public final class ProtocolInfo {
     /**
      * Feature version is the version of the game from which vanilla features will be used.
      */
-    public static final BedrockCodec FEATURE_VERSION = Bedrock_v859.CODEC;
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v860.CODEC;
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
@@ -48,7 +48,7 @@ public final class ProtocolInfo {
      * This is different from the current game version. It should match the nearest version
      * that has block state changes.
      */
-    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 110, 26, 0);
+    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 124, 26, 0);
 
     /**
      * The currently used block state updater instance.
