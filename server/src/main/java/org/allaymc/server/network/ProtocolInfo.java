@@ -29,7 +29,7 @@ public final class ProtocolInfo {
      */
     public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
             // Order is important. The first codec is the latest supported version.
-            Bedrock_v860.CODEC,
+            CODEC_v859,
             Bedrock_v859.CODEC,
             Bedrock_v844.CODEC,
             Bedrock_v827.CODEC,
