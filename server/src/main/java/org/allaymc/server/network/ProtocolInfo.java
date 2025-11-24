@@ -24,6 +24,12 @@ import java.util.List;
 @UtilityClass
 public final class ProtocolInfo {
 
+    public static final BedrockCodec CODEC_v859 = Bedrock_v859.CODEC.toBuilder()
+            .raknetProtocolVersion(11)
+            .protocolVersion(860)
+            .minecraftVersion("1.21.124")
+            .build();
+
     /**
      * A list which contains the supported protocol versions, and the first element is the latest version.
      */
