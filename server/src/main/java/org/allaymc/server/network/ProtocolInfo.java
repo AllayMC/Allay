@@ -35,7 +35,7 @@ public final class ProtocolInfo {
      */
     public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
             // Order is important. The first codec is the latest supported version.
-            CODEC_v859,
+            CODEC_v860,
             Bedrock_v859.CODEC,
             Bedrock_v844.CODEC,
             Bedrock_v827.CODEC,
@@ -47,7 +47,7 @@ public final class ProtocolInfo {
     /**
      * Feature version is the version of the game from which vanilla features will be used.
      */
-    public static final BedrockCodec FEATURE_VERSION = Bedrock_v859.CODEC;
+    public static final BedrockCodec FEATURE_VERSION = Bedrock_v860.CODEC;
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.
