@@ -1,7 +1,7 @@
 package org.allaymc.server.network;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.api.player.Player;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v800.Bedrock_v800;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 public final class MultiVersion {
-    public static void adaptExperimentData(EntityPlayer player, List<ExperimentData> experiments) {
+    public static void adaptExperimentData(Player player, List<ExperimentData> experiments) {
         if (is1_21_80(player)) {
             // Enables 2025 Content Drop 2 features
             experiments.add(new ExperimentData("y_2025_drop_2", true));
@@ -27,15 +27,15 @@ public final class MultiVersion {
         }
     }
 
-    private static boolean is1_21_100(EntityPlayer player) {
+    private static boolean is1_21_100(Player player) {
         return getCodec(player) == Bedrock_v827.CODEC;
     }
 
-    private static boolean is1_21_80(EntityPlayer player) {
+    private static boolean is1_21_80(Player player) {
         return getCodec(player) == Bedrock_v800.CODEC;
     }
 
-    private static BedrockCodec getCodec(EntityPlayer player) {
-        return ((EntityPlayerImpl) player).getClientSession().getCodec();
+    private static BedrockCodec getCodec(Player player) {
+        return ((AllayPlayer) player).getSession().getCodec();
     }
 }

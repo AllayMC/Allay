@@ -1,8 +1,8 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -21,7 +21,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 @Slf4j
 public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeAction> {
     @Override
-    public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+    public ActionResponse handle(ConsumeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
         var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
         var sourceStackNetworkId = action.getSource().getStackNetworkId();

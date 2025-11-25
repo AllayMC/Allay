@@ -8,7 +8,6 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
 import org.allaymc.api.eventbus.event.player.PlayerPunchAirEvent;
@@ -18,13 +17,14 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.world.physics.AllayEntityPhysicsEngine;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
@@ -64,29 +64,31 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     // Ticks
     protected double stopBreakingTime;
 
-    private static boolean isInvalidGameType(EntityPlayer player) {
+    private static boolean isInvalidGameType(Player player) {
+        var entity = player.getControlledEntity();
         // Creative mode player can break blocks just like they are in
         // survival mode if "delayed block breaking" option is enabled
         // TODO: implement canBreak & canPlace feature
-        return player.getGameMode() == GameMode.ADVENTURE ||
-               player.getGameMode() == GameMode.SPECTATOR;
+        return entity.getGameMode() == GameMode.ADVENTURE ||
+               entity.getGameMode() == GameMode.SPECTATOR;
     }
 
-    protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
-        var world = player.getLocation().dimension();
-        ((AllayEntityPhysicsEngine) world.getEntityManager().getPhysicsService()).offerClientMove(player, new Location3d(
+    protected void handleMovement(Player player, Vector3f newPos, Vector3f newRot) {
+        var entity = player.getControlledEntity();
+        var world = entity.getLocation().dimension();
+        ((AllayEntityPhysicsEngine) world.getEntityManager().getPhysicsService()).offerClientMove(entity, new Location3d(
                 newPos.getX(), newPos.getY(), newPos.getZ(),
                 newRot.getX(), newRot.getY(), world
         ));
     }
 
-    protected void handleBlockAction(EntityPlayer player, List<PlayerBlockActionData> blockActions, long time) {
+    protected void handleBlockAction(Player player, List<PlayerBlockActionData> blockActions, long time) {
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.canReachBlock(NetworkHelper.fromNetwork(pos))) {
+                    if (!player.getControlledEntity().canReachBlock(NetworkHelper.fromNetwork(pos))) {
                         log.debug("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -138,8 +140,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return this.blockToBreak != null;
     }
 
-    protected void startBreak(EntityPlayer player, int x, int y, int z, int blockFaceId, long startBreakingTime) {
-        var dimension = player.getDimension();
+    protected void startBreak(Player player, int x, int y, int z, int blockFaceId, long startBreakingTime) {
+        var entity = player.getControlledEntity();
+        var dimension = entity.getDimension();
         if (this.blockToBreak != null) {
             log.debug("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
             stopBreak(player);
@@ -162,7 +165,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var sidePos = this.faceToBreak.offsetPos(x, y, z);
         var sideBlock = dimension.getBlockState(sidePos);
         if (sideBlock.getBlockType() == BlockTypes.FIRE || sideBlock.getBlockType() == BlockTypes.SOUL_FIRE) {
-            var event = new BlockBreakEvent(new Block(sideBlock, new Position3i(sidePos, dimension)), player.getItemInHand(), player);
+            var event = new BlockBreakEvent(new Block(sideBlock, new Position3i(sidePos, dimension)), entity.getItemInHand(), entity);
             if (!event.call()) {
                 // Resend the block because on client side that was extinguished
                 player.viewBlockUpdate(sidePos, 0, sideBlock);
@@ -177,13 +180,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.breakingPosZ = z;
 
         var block = new Block(blockToBreak, new Position3i(x, y, z, dimension));
-        var event = new PlayerPunchBlockEvent(player, block, faceToBreak);
+        var event = new PlayerPunchBlockEvent(entity, block, faceToBreak);
         if (event.call()) {
-            this.blockToBreak.getBlockType().getBlockBehavior().onPunch(block, faceToBreak, player.getItemInHand(), player);
+            this.blockToBreak.getBlockType().getBlockBehavior().onPunch(block, faceToBreak, entity.getItemInHand(), entity);
         }
 
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            this.breakTime = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
+        if (entity.getGameMode() != GameMode.CREATIVE) {
+            this.breakTime = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, entity.getItemInHand(), entity);
         } else {
             // Creative mode players can break blocks instantly
             this.breakTime = 0;
@@ -197,13 +200,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         );
     }
 
-    protected void stopBreak(EntityPlayer player) {
+    protected void stopBreak(Player player) {
         if (this.blockToBreak == null) {
             log.debug("Player {} tried to stop breaking a block while not breaking any block", player.getOriginName());
             return;
         }
 
-        player.getDimension().addBlockAction(this.breakingPosX, this.breakingPosY, this.breakingPosZ, SimpleBlockAction.STOP_BREAK);
+        player.getControlledEntity().getDimension().addBlockAction(this.breakingPosX, this.breakingPosY, this.breakingPosZ, SimpleBlockAction.STOP_BREAK);
         this.breakingPosX = Integer.MAX_VALUE;
         this.breakingPosY = Integer.MAX_VALUE;
         this.breakingPosZ = Integer.MAX_VALUE;
@@ -213,22 +216,23 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.stopBreakingTime = 0;
     }
 
-    protected void completeBreak(EntityPlayer player, int x, int y, int z) {
+    protected void completeBreak(Player player, int x, int y, int z) {
         if (this.breakingPosX != x || this.breakingPosY != y || this.breakingPosZ != z) {
             log.debug("Player {} tried to complete breaking a different block", player.getOriginName());
             return;
         }
 
-        var currentTime = player.getWorld().getTick();
+        var entity = player.getControlledEntity();
+        var currentTime = entity.getWorld().getTick();
         if (Math.abs(currentTime - this.stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
-            var world = player.getDimension();
-            var itemInHand = player.getItemInHand();
-            world.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, player);
-            itemInHand.onBreakBlock(this.blockToBreak, player);
+            var world = entity.getDimension();
+            var itemInHand = entity.getItemInHand();
+            world.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, entity);
+            itemInHand.onBreakBlock(this.blockToBreak, entity);
             if (itemInHand.isBroken()) {
-                player.clearItemInHand();
+                entity.clearItemInHand();
             } else {
-                player.notifyItemInHandChange();
+                entity.notifyItemInHandChange();
             }
         } else {
             log.debug("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", this.stopBreakingTime, currentTime);
@@ -237,8 +241,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         stopBreak(player);
     }
 
-    protected boolean checkInteractDistance(EntityPlayer player) {
-        if (!player.canReach(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f)) {
+    protected boolean checkInteractDistance(Player player) {
+        if (!player.getControlledEntity().canReach(this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f)) {
             log.debug("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
             return false;
@@ -247,8 +251,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return true;
     }
 
-    protected void updateBreakingTime(EntityPlayer player, long currentTime) {
-        var newBreakingTime = this.blockToBreak.getBehavior().calculateBreakTime(this.blockToBreak, player.getItemInHand(), player);
+    protected void updateBreakingTime(Player player, long currentTime) {
+        var entity = player.getControlledEntity();
+        var newBreakingTime = this.blockToBreak.getBehavior().calculateBreakTime(this.blockToBreak, entity.getItemInHand(), entity);
         if (this.breakTime == newBreakingTime) {
             return;
         }
@@ -259,57 +264,58 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.breakTime = newBreakingTime;
     }
 
-    protected void handleInputData(EntityPlayer player, Set<PlayerAuthInputData> inputData) {
-        if (player.isDead()) {
+    protected void handleInputData(Player player, Set<PlayerAuthInputData> inputData) {
+        var entity = player.getControlledEntity();
+        if (entity.isDead()) {
             return;
         }
 
         for (var input : inputData) {
             switch (input) {
                 case START_SPRINTING -> {
-                    if (player.getFoodLevel() <= 6) {
+                    if (entity.getFoodLevel() <= 6) {
                         log.warn("Player {} tried to start sprinting without enough food level", player.getOriginName());
                         return;
                     }
 
-                    player.setSprinting(true);
+                    entity.setSprinting(true);
                 }
-                case STOP_SPRINTING -> player.setSprinting(false);
-                case START_SNEAKING -> player.setSneaking(true);
-                case STOP_SNEAKING -> player.setSneaking(false);
-                case START_SWIMMING -> player.setSwimming(true);
-                case STOP_SWIMMING -> player.setSwimming(false);
-                case START_GLIDING -> player.setGliding(true);
-                case STOP_GLIDING -> player.setGliding(false);
-                case START_CRAWLING -> player.setCrawling(true);
-                case STOP_CRAWLING -> player.setCrawling(false);
+                case STOP_SPRINTING -> entity.setSprinting(false);
+                case START_SNEAKING -> entity.setSneaking(true);
+                case STOP_SNEAKING -> entity.setSneaking(false);
+                case START_SWIMMING -> entity.setSwimming(true);
+                case STOP_SWIMMING -> entity.setSwimming(false);
+                case START_GLIDING -> entity.setGliding(true);
+                case STOP_GLIDING -> entity.setGliding(false);
+                case START_CRAWLING -> entity.setCrawling(true);
+                case STOP_CRAWLING -> entity.setCrawling(false);
                 case START_JUMPING -> {
-                    new PlayerJumpEvent(player).call();
-                    player.exhaust(player.isSprinting() ? 0.2f : 0.05f);
+                    new PlayerJumpEvent(entity).call();
+                    entity.exhaust(entity.isSprinting() ? 0.2f : 0.05f);
                 }
                 case START_FLYING -> {
-                    if (!player.hasPermission(Permissions.ABILITY_FLY)) {
-                        player.setFlying(false);
+                    if (!entity.hasPermission(Permissions.ABILITY_FLY)) {
+                        entity.setFlying(false);
                         log.warn("Player {} tried to start flying without permission", player.getOriginName());
                         return;
                     }
 
-                    player.setFlying(true);
+                    entity.setFlying(true);
                 }
-                case STOP_FLYING -> player.setFlying(false);
-                case MISSED_SWING -> new PlayerPunchAirEvent(player).call();
+                case STOP_FLYING -> entity.setFlying(false);
+                case MISSED_SWING -> new PlayerPunchAirEvent(entity).call();
             }
         }
     }
 
     @Override
-    public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
+    public void handleSync(Player player, PlayerAuthInputPacket packet, long receiveTime) {
         handleInputData(player, packet.getInputData());
         handleSingleItemStackRequest(player, packet.getItemStackRequest(), receiveTime);
     }
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(Player player, PlayerAuthInputPacket packet, long receiveTime) {
         if (notReadyForInput(player)) {
             return PacketSignal.HANDLED;
         }
@@ -338,12 +344,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
         if (isBreakingBlock() && checkInteractDistance(player)) {
-            player.getDimension().addParticle(
+            var dimension = player.getControlledEntity().getDimension();
+            dimension.addParticle(
                     this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
                     new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
             );
             updateBreakingTime(player, receiveTime);
-            player.getDimension().addBlockAction(
+            dimension.addBlockAction(
                     this.breakingPosX, this.breakingPosY, this.breakingPosZ,
                     new ContinueBreakAction(this.breakTime)
             );
@@ -351,7 +358,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return PacketSignal.UNHANDLED;
     }
 
-    protected boolean validateClientLocation(EntityPlayer player, Vector3f pos, Vector3f rot) {
+    protected boolean validateClientLocation(Player player, Vector3f pos, Vector3f rot) {
         var valid = !Float.isNaN(pos.getX()) && !Float.isNaN(pos.getY()) && !Float.isNaN(pos.getZ()) &&
                     !Float.isNaN(rot.getX()) && !Float.isNaN(rot.getY()) && !Float.isNaN(rot.getZ());
         if (!valid) {
@@ -363,14 +370,14 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return valid;
     }
 
-    protected boolean isLocationChanged(EntityPlayer player, Vector3f pos, Vector3f rot) {
+    protected boolean isLocationChanged(Player player, Vector3f pos, Vector3f rot) {
         // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
-        var location = player.getLocation();
+        var location = player.getControlledEntity().getLocation();
         return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + PLAYER_NETWORK_OFFSET, pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
                Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0;
     }
 
-    protected void handleSingleItemStackRequest(EntityPlayer player, ItemStackRequest request, long receiveTime) {
+    protected void handleSingleItemStackRequest(Player player, ItemStackRequest request, long receiveTime) {
         // We had no idea why the client still use PlayerAuthInputPacket to hold ItemStackRequest
         // Instead of using ItemStackRequestPacket
         // This seems only happen when player break a block (MineBlockAction)
@@ -381,11 +388,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
-        ((EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent()).handlePacketSync(pk, receiveTime);
+        ((AllayPlayer) player).handlePacketSync(pk, receiveTime);
     }
 
-    protected boolean notReadyForInput(EntityPlayer player) {
-        return !player.isInitialized() || !player.isSpawned() || player.willBeDespawnedNextTick();
+    protected boolean notReadyForInput(Player player) {
+        var entity = player.getControlledEntity();
+        return !player.isInitialized() || entity == null || !entity.isSpawned() || entity.willBeDespawnedNextTick();
     }
 
     @Override

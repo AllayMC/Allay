@@ -4,8 +4,8 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
-import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerQuitEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.plugin.PluginDependency;
@@ -119,7 +119,7 @@ public final class Dashboard {
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
                     var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
-                    var pos = player.getLocation();
+                    var pos = player.getControlledEntity().getLocation();
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_ADDRESS) + ": " + player.getSocketAddress().toString() + "\n" +

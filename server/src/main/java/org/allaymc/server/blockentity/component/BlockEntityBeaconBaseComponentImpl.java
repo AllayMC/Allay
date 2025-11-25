@@ -8,6 +8,7 @@ import org.allaymc.api.blockentity.component.BlockEntityBeaconBaseComponent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -120,6 +121,7 @@ public class BlockEntityBeaconBaseComponentImpl extends BlockEntityBaseComponent
         var playersInRange = position.dimension()
                 .getPlayers()
                 .stream()
+                .map(Player::getControlledEntity)
                 .filter(entity -> {
                     var ex = entity.getLocation().x();
                     var ez = entity.getLocation().z();

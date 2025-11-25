@@ -1,15 +1,14 @@
 package org.allaymc.server.network.processor.login;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackClientResponsePacket;
@@ -22,7 +21,7 @@ import java.util.UUID;
  */
 public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProcessor<ResourcePackClientResponsePacket> {
     @Override
-    public void handle(EntityPlayer player, ResourcePackClientResponsePacket packet) {
+    public void handle(Player player, ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
             case SEND_PACKS -> {
                 for (var packId : packet.getPackIds()) {
@@ -40,7 +39,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                 MultiVersion.adaptExperimentData(player, packetToSend.getExperiments());
                 player.sendPacket(packetToSend);
             }
-            case COMPLETED -> ((EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent()).initializePlayer();
+            case COMPLETED -> ((AllayPlayer) player).spawnEntityPlayer();
             default -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         }
     }

@@ -5,8 +5,8 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityBeacon;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BeaconContainer;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.data.ItemTags;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.BeaconPaymentAction;
@@ -22,8 +22,8 @@ import java.util.Map;
 @Slf4j
 public class BeaconPaymentActionProcessor implements ContainerActionProcessor<BeaconPaymentAction> {
     @Override
-    public ActionResponse handle(BeaconPaymentAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getContainer(ContainerTypes.BEACON);
+    public ActionResponse handle(BeaconPaymentAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+        var container = player.getControlledEntity().getContainer(ContainerTypes.BEACON);
         var itemType = container.getBeaconPayment().getItemType();
         if (!itemType.hasItemTag(ItemTags.BEACON_PAYMENT)) {
             log.warn("Invalid item type for beacon payment: {}", itemType.getIdentifier());

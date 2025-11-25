@@ -10,6 +10,7 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
@@ -419,7 +420,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
         var collectedBlockUpdates = collectUpdates(blockUpdates);
         var collectedExtraBlockUpdates = collectUpdates(extraBlockUpdates);
-        chunkLoaders.forEach(chunkLoader -> chunkLoader.viewBlockUpdates(toSafeChunk(), collectedBlockUpdates, collectedExtraBlockUpdates));
+        chunkLoaders.forEach(loader -> {
+            if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
+                player.getController().viewBlockUpdates(toSafeChunk(), collectedBlockUpdates, collectedExtraBlockUpdates);
+            }
+        });
     }
 
     public void performChunkTasks() {

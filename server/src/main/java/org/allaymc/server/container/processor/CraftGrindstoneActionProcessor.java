@@ -2,10 +2,10 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.container.GrindstoneTakeResultEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftGrindstoneAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 @Slf4j
 public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<CraftGrindstoneAction> {
     @Override
-    public ActionResponse handle(CraftGrindstoneAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+    public ActionResponse handle(CraftGrindstoneAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getOpenedContainer(ContainerTypes.GRINDSTONE);
         if (container == null) {
             log.warn("Received a CraftGrindstoneAction without an opened container!");
@@ -83,14 +83,14 @@ public class CraftGrindstoneActionProcessor implements ContainerActionProcessor<
 
         if (xp > 0) {
             var blockPos = container.getBlockPos();
-            player.getDimension().dropXpOrb(new Vector3d(
+            player.getControlledEntity().getDimension().dropXpOrb(new Vector3d(
                     blockPos.x() + 0.5,
                     blockPos.y() + 1.5,
                     blockPos.z() + 0.5
             ), xp);
         }
 
-        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
+        player.getControlledEntity().getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
         return null;
     }
 

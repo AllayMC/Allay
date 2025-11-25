@@ -8,17 +8,10 @@ import eu.okaeri.configs.annotation.CustomKey;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.network.IPBanEvent;
-import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
-import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
-import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
-import org.allaymc.api.eventbus.event.player.PlayerUnbanEvent;
-import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
-import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
-import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
+import org.allaymc.api.eventbus.event.server.*;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -48,7 +41,7 @@ public class AllayPlayerManager implements PlayerManager {
     @Getter
     protected final AllayNetworkInterface networkInterface;
 
-    protected final Map<UUID, EntityPlayer> players;
+    protected final Map<UUID, Player> players;
     protected final BanInfo banInfo;
     protected final Whitelist whitelist;
     protected final Operators operators;
@@ -64,6 +57,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     public void tick(long currentTick) {
         this.playerStorage.tick(currentTick);
+        this.players.values().forEach(player -> ((AllayPlayer) player).tick());
     }
 
     public void shutdown() {
@@ -75,7 +69,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     @UnmodifiableView
-    public Map<UUID, EntityPlayer> getPlayers() {
+    public Map<UUID, Player> getPlayers() {
         return Collections.unmodifiableMap(players);
     }
 
@@ -91,7 +85,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public void savePlayerData() {
-        players.values().stream().filter(EntityPlayer::isInitialized).forEach(playerStorage::savePlayerData);
+        players.values().stream().filter(Player::isInitialized).forEach(playerStorage::savePlayerData);
     }
 
     @Override
@@ -256,10 +250,10 @@ public class AllayPlayerManager implements PlayerManager {
                 .findFirst();
         if (value) {
             operators.operators().add(uuidOrName);
-            player.ifPresent(p -> p.setOperator(true));
+            player.ifPresent(p -> p.getControlledEntity().setOperator(true));
         } else {
             operators.operators().remove(uuidOrName);
-            player.ifPresent(p -> p.setOperator(false));
+            player.ifPresent(p -> p.getControlledEntity().setOperator(false));
         }
     }
 
@@ -271,7 +265,7 @@ public class AllayPlayerManager implements PlayerManager {
         this.networkInterface.shutdown();
     }
 
-    public synchronized void addPlayer(EntityPlayer player) {
+    public synchronized void addPlayer(Player player) {
         this.players.put(player.getLoginData().getUuid(), player);
         this.networkInterface.setPlayerCount(this.players.size());
         Server.getInstance().getMessageChannel().addReceiver(player);
@@ -280,7 +274,7 @@ public class AllayPlayerManager implements PlayerManager {
         // Otherwise, the player's skin will not be shown correctly client-side.
     }
 
-    public synchronized void removePlayer(EntityPlayer player) {
+    public synchronized void removePlayer(Player player) {
         var server = Server.getInstance();
         server.sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getSocketAddress().toString());
 
@@ -295,16 +289,9 @@ public class AllayPlayerManager implements PlayerManager {
             server.getMessageChannel().broadcastTranslatable(event.getQuitMessage(), player.getOriginName());
             server.getMessageChannel().removeReceiver(player);
 
-            // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off
-            // the server without waiting for the status change to IN_GAME, which is why the session remains and the
-            // server thinks that the player is still on the server, but after such manipulations, the player client
-            // will crash every time he logs on to the server
-            if (player.getDimension() != null) {
-                // The dimension of the player may be null, that because the client is still handling resource packs
-                // and is not added or going to be added (willBeSpawnedNextTick == true) to any dimension. After handling
-                // resource packs, the dimension of the player should always be non-null regardless of the status of the
-                // player because there is a check in EntityPlayerBaseComponentImpl#setLocationBeforeSpawn()
-                player.getDimension().removePlayer(player);
+            var entity = player.getControlledEntity();
+            if (entity != null) {
+                entity.remove();
                 this.playerStorage.savePlayerData(player);
                 broadcastPlayerListChange(player, false);
             }
@@ -313,7 +300,7 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     /// Broadcast the player list change to other players except the player itself
-    protected void broadcastPlayerListChange(EntityPlayer player, boolean add) {
+    protected void broadcastPlayerListChange(Player player, boolean add) {
         for (var other : players.values()) {
             if (other == player) {
                 continue;

@@ -89,7 +89,7 @@ public class Scores extends CachedSimpleSelectorArgument {
                 return false;
             }
 
-            var scorer = entity instanceof EntityPlayer player ? new PlayerScorer(player) : new EntityScorer(entity);
+            var scorer = entity instanceof EntityPlayer player && player.isActualPlayer() ? new PlayerScorer(player.getController()) : new EntityScorer(entity);
             if (!scoreboard.containLine(scorer)) {
                 return false;
             }

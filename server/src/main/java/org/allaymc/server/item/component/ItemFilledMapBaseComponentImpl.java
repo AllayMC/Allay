@@ -7,15 +7,14 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.data.TintMethod;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemFilledMapBaseComponent;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypes;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ClientboundMapItemDataPacket;
@@ -330,19 +329,19 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
     }
 
     @Override
-    public void sendToPlayer(EntityPlayer player) {
+    public void sendToPlayer(Player player) {
         if (image == null) {
             throw new IllegalStateException("Image is not set for the filled map.");
         }
 
-        var pk = new ClientboundMapItemDataPacket();
-        pk.setUniqueMapId(mapId);
+        var packet = new ClientboundMapItemDataPacket();
+        packet.setUniqueMapId(mapId);
         // Required since 1.19.20
-        pk.setOrigin(Vector3i.ZERO);
+        packet.setOrigin(Vector3i.ZERO);
         // Required as of 1.19.50
-        pk.getTrackedEntityIds().add(mapId);
-        pk.setHeight(IMAGE_HW);
-        pk.setWidth(IMAGE_HW);
+        packet.getTrackedEntityIds().add(mapId);
+        packet.setHeight(IMAGE_HW);
+        packet.setWidth(IMAGE_HW);
         var colors = new int[IMAGE_HW * IMAGE_HW];
         int index = 0;
         for (int y = 0; y < IMAGE_HW; y++) {
@@ -350,8 +349,8 @@ public class ItemFilledMapBaseComponentImpl extends ItemBaseComponentImpl implem
                 colors[index++] = toABGR(image.getRGB(x, y));
             }
         }
-        pk.setColors(colors);
-        ((EntityPlayerImpl) player).sendPacket(pk);
+        packet.setColors(colors);
+        player.sendPacket(packet);
     }
 
     @Override

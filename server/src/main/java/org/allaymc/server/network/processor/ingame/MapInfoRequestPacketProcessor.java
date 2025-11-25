@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.interfaces.BlockEntityItemFrame;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMapInfoRequestEvent;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.MapInfoRequestPacket;
@@ -19,19 +19,20 @@ import org.joml.Vector3d;
 public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoRequestPacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, MapInfoRequestPacket packet, long receiveTime) {
+    public void handleSync(Player player, MapInfoRequestPacket packet, long receiveTime) {
         var mapId = packet.getUniqueMapId();
+        var entity = player.getControlledEntity();
 
         // Try to find the map item in the player's offhand and inventory
-        ItemFilledMapStack mapItem = findMapItemIn(mapId, player.getContainer(ContainerTypes.OFFHAND));
+        ItemFilledMapStack mapItem = findMapItemIn(mapId, entity.getContainer(ContainerTypes.OFFHAND));
         if (mapItem == null) {
-            mapItem = findMapItemIn(mapId, player.getContainer(ContainerTypes.INVENTORY));
+            mapItem = findMapItemIn(mapId, entity.getContainer(ContainerTypes.INVENTORY));
         }
 
         // Try to find the map item in item frames
         BlockEntityItemFrame itemFrame = null;
         if (mapItem == null) {
-            for (var blockEntity : player.getDimension().getBlockEntities().values()) {
+            for (var blockEntity : entity.getDimension().getBlockEntities().values()) {
                 if (blockEntity instanceof BlockEntityItemFrame frame &&
                     frame.getItemStack() instanceof ItemFilledMapStack item &&
                     item.getMapId() == mapId) {
@@ -46,16 +47,16 @@ public class MapInfoRequestPacketProcessor extends PacketProcessor<MapInfoReques
             return;
         }
 
-        var event = new PlayerMapInfoRequestEvent(player, mapItem, itemFrame);
+        var event = new PlayerMapInfoRequestEvent(entity, mapItem, itemFrame);
         if (!event.call()) {
             return;
         }
 
         var finalMapItem = mapItem;
         if (mapItem.getImage() == null) {
-            var floorPos = player.getLocation().floor(new Vector3d());
+            var floorPos = entity.getLocation().floor(new Vector3d());
             finalMapItem.renderMap(
-                    player.getDimension(),
+                    entity.getDimension(),
                     ((int) floorPos.x / 128) * 128,
                     ((int) floorPos.z / 128) * 128
             ).thenRun(() -> finalMapItem.sendToPlayer(player));

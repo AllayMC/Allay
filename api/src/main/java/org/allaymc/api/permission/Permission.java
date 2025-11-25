@@ -1,7 +1,7 @@
 package org.allaymc.api.permission;
 
 import com.google.common.base.Preconditions;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public final class Permission {
     private static final PermissionListener COMMAND_PERMISSION_LISTENER = (permissible, value) -> {
-        if (permissible instanceof EntityPlayer player) {
+        if (permissible instanceof Player player) {
             player.sendCommands();
         }
     };

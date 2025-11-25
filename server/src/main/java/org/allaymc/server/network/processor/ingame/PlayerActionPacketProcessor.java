@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
@@ -13,24 +13,25 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 @Slf4j
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(Player player, PlayerActionPacket packet, long receiveTime) {
+        var entity = player.getControlledEntity();
         return switch (packet.getAction()) {
             case START_ITEM_USE_ON -> {
-                if (player.isUsingItemOnBlock()) {
+                if (entity.isUsingItemOnBlock()) {
                     log.debug("Player {} tried to start item use on without stopping", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 
-                player.setUsingItemOnBlock(true);
+                entity.setUsingItemOnBlock(true);
                 yield PacketSignal.HANDLED;
             }
             case STOP_ITEM_USE_ON -> {
-                if (!player.isUsingItemOnBlock()) {
+                if (!entity.isUsingItemOnBlock()) {
                     log.debug("Player {} tried to stop item use on without starting", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 
-                player.setUsingItemOnBlock(false);
+                entity.setUsingItemOnBlock(false);
                 yield PacketSignal.HANDLED;
             }
             default -> PacketSignal.UNHANDLED;

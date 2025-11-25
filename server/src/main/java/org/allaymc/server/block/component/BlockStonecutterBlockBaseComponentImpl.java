@@ -27,9 +27,11 @@ public class BlockStonecutterBlockBaseComponentImpl extends BlockBaseComponentIm
             return false;
         }
 
-        var stonecutterContainer = new StonecutterContainerImpl();
-        stonecutterContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        stonecutterContainer.addViewer(player);
+        if (player.isActualPlayer()) {
+            var stonecutterContainer = new StonecutterContainerImpl();
+            stonecutterContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            stonecutterContainer.addViewer(player.getController());
+        }
         return true;
     }
 }

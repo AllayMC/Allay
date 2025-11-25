@@ -5,7 +5,10 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
-import org.allaymc.server.entity.component.player.*;
+import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerLivingComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerPhysicsComponentImpl;
 import org.allaymc.server.entity.component.projectile.*;
 import org.allaymc.server.entity.data.EntityId;
 import org.allaymc.server.entity.impl.*;
@@ -77,15 +80,9 @@ public final class EntityTypeInitializer {
                 .builder(EntityPlayerImpl.class)
                 .vanillaEntity(EntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
-                .addComponent(EntityPlayerClientComponentImpl::new, EntityPlayerClientComponentImpl.class)
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
-                .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
                 .addComponent(EntityPlayerLivingComponentImpl::new, EntityPlayerLivingComponentImpl.class)
                 .addComponent(EntityPlayerPhysicsComponentImpl::new, EntityPlayerPhysicsComponentImpl.class)
-                .addComponent(EntityPlayerScoreboardViewerComponentImpl::new, EntityPlayerScoreboardViewerComponentImpl.class)
-                .addComponent(EntityPlayerChunkLoaderComponentImpl::new, EntityPlayerChunkLoaderComponentImpl.class)
-                .addComponent(EntityPlayerBossBarViewerComponentImpl::new, EntityPlayerBossBarViewerComponentImpl.class)
-                .addComponent(EntityPlayerFormViewerComponentImpl::new, EntityPlayerFormViewerComponentImpl.class)
                 .build();
     }
 

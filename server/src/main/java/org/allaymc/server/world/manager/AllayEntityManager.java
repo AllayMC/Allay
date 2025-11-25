@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
 import org.allaymc.api.utils.hash.HashUtils;
@@ -141,7 +142,7 @@ public class AllayEntityManager implements EntityManager {
             if (predicate.test(entity)) {
                 removedEntities
                         .computeIfAbsent(hashXZ, $ -> new Long2ObjectOpenHashMap<>())
-                        .put(entity.getUniqueId(), entity);
+                        .put(entity.getUniqueId().getLeastSignificantBits(), entity);
                 removeEntity(entity);
             }
         }
@@ -189,7 +190,11 @@ public class AllayEntityManager implements EntityManager {
         physicsService.addEntity(entity);
         var chunk = entity.getCurrentChunk();
         if (chunk != null) {
-            entity.spawnTo(chunk.getChunkLoaders());
+            chunk.getChunkLoaders().forEach(loader -> {
+                if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
+                    entity.spawnTo(player.getController());
+                }
+            });
         }
         ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setState(EntityState.ALIVE);
     }

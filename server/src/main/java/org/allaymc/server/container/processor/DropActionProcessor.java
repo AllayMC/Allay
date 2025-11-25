@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DropAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -20,7 +20,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 @Slf4j
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
     @Override
-    public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+    public ActionResponse handle(DropAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
         var count = action.getCount();
         var slot = ContainerActionProcessor.fromNetworkSlotIndex(container, action.getSource().getSlot());
@@ -41,7 +41,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
             return error();
         }
 
-        player.forceDropItem(container, slot, count);
+        player.getControlledEntity().forceDropItem(container, slot, count);
         item = container.getItemStack(slot);
         return new ActionResponse(
                 true,

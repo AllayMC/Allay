@@ -31,13 +31,13 @@ public class DeOpCommand extends VanillaCommand {
 
             var player = players.stream().findFirst().get();
             if (!player.isOperator()) {
-                context.addError("%" + TrKeys.MC_COMMANDS_DEOP_FAILED, player.getOriginName());
+                context.addError("%" + TrKeys.MC_COMMANDS_DEOP_FAILED, player.getDisplayName());
                 return context.fail();
             }
 
             player.setOperator(false);
 
-            context.addOutput(TrKeys.MC_COMMANDS_DEOP_SUCCESS, player.getOriginName());
+            context.addOutput(TrKeys.MC_COMMANDS_DEOP_SUCCESS, player.getDisplayName());
             player.sendTranslatable(TrKeys.MC_COMMANDS_DEOP_MESSAGE);
             return context.success();
         });

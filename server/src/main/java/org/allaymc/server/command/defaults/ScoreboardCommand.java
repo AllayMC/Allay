@@ -54,15 +54,15 @@ public class ScoreboardCommand extends VanillaCommand {
             scorers = EntitySelectorAPI.getAPI()
                     .matchEntities(sender, wildcardTargetStr)
                     .stream()
-                    .map(e -> e instanceof EntityPlayer p ?
-                            new PlayerScorer(p) :
+                    .map(e -> e instanceof EntityPlayer p && p.isActualPlayer() ?
+                            new PlayerScorer(p.getController()) :
                             new EntityScorer(e))
                     .collect(Collectors.toSet());
             return scorers;
         }
 
-        if ((player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(wildcardTargetStr)) != null) {
-            scorers.add(new PlayerScorer(player));
+        if ((player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(wildcardTargetStr).getControlledEntity()) != null) {
+            scorers.add(new PlayerScorer(player.getController()));
         } else {
             scorers.add(new FakeScorer(wildcardTargetStr));
         }

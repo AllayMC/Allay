@@ -3,11 +3,10 @@ package org.allaymc.server.network.processor.ingame;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
@@ -33,13 +32,13 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
     protected final ContainerActionProcessorHolder processorHolder = new ContainerActionProcessorHolder();
 
     @Override
-    public void handleSync(EntityPlayer player, ItemStackRequestPacket packet, long receiveTime) {
+    public void handleSync(Player player, ItemStackRequestPacket packet, long receiveTime) {
         List<ItemStackResponse> encodedResponses = new LinkedList<>();
         label:
         for (var request : packet.getRequests()) {
             // It is possible to have two same type actions in one request!
             List<ActionResponse> responses = new LinkedList<>();
-            // Indicate that subsequent destroy action do not return a response
+            // Indicate that the further destroy action does not return a response
             // For more details, see inventory_stack_packet.md
             var noResponseForDestroyAction = false;
             var actions = request.getActions();
@@ -81,7 +80,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
 
         var itemStackResponsePacket = new ItemStackResponsePacket();
         itemStackResponsePacket.getEntries().addAll(encodedResponses);
-        ((EntityPlayerImpl) player).sendPacket(itemStackResponsePacket);
+        player.sendPacket(itemStackResponsePacket);
     }
 
     private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {

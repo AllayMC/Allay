@@ -4,6 +4,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.permission.Permission;
 import org.allaymc.api.permission.PermissionListener;
 import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.player.Player;
 
 import java.util.function.BiConsumer;
 
@@ -17,9 +18,9 @@ public class PermissionRegistryPopulator implements Runnable {
                 "ability.fly",
                 "The permission to fly in the sky",
                 ifIsPlayer((player, value) -> {
-                    if (!value && player.isFlying()) {
+                    if (!value && player.getControlledEntity().isFlying()) {
                         // NOTICE: viewPlayerPermission() method will be called by the setFlying() method
-                        player.setFlying(false);
+                        player.getControlledEntity().setFlying(false);
                     } else {
                         player.viewPlayerPermission(player);
                     }
@@ -37,10 +38,10 @@ public class PermissionRegistryPopulator implements Runnable {
         );
     }
 
-    private static PermissionListener ifIsPlayer(BiConsumer<EntityPlayer, Boolean> consumer) {
+    private static PermissionListener ifIsPlayer(BiConsumer<Player, Boolean> consumer) {
         return (permissible, value) -> {
-            if (permissible instanceof EntityPlayer player) {
-                consumer.accept(player, value);
+            if (permissible instanceof EntityPlayer player && player.isActualPlayer()) {
+                consumer.accept(player.getController(), value);
             }
         };
     }

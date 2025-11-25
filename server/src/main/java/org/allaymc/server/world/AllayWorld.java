@@ -8,7 +8,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.world.WeatherChangeEvent;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
 import org.allaymc.api.math.location.Location3d;
@@ -16,6 +15,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
@@ -27,8 +27,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -157,6 +156,10 @@ public class AllayWorld implements World {
         }
     }
 
+    public void addSyncPacketToQueue(Player player, BedrockPacket packet, long time) {
+        this.packetQueue.offer(new PacketQueueEntry(player, packet, time));
+    }
+
     protected void handleSyncPackets(PacketQueueEntry firstEntry) {
         try {
             PacketQueueEntry entry = firstEntry;
@@ -167,18 +170,19 @@ public class AllayWorld implements World {
                     continue;
                 }
 
-                if (entry.player.getWorld() != this) {
-                    log.warn("Trying to handle sync packet in world {} which the player {} is not in!", name, entry.player.getOriginName());
+                // The player should still in the same world
+                if (entry.player.getControlledEntity().getWorld() != this) {
+                    log.error("Trying to handle sync packet in world {} which the player {} is not in!", name, entry.player.getOriginName());
+                    continue;
                 }
+
                 // The player may have been disconnected,
                 // which is possible because this is a synced packet
                 if (!entry.player.getClientState().canHandlePackets()) {
                     continue;
                 }
 
-                var playerImpl = (EntityPlayerImpl) entry.player;
-                var networkComponent = (EntityPlayerClientComponentImpl) playerImpl.getPlayerClientComponent();
-                networkComponent.handlePacketSync(entry.packet(), entry.time());
+                ((AllayPlayer) entry.player).handlePacketSync(entry.packet(), entry.time());
                 count++;
             } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);
         } catch (Throwable throwable) {
@@ -248,10 +252,6 @@ public class AllayWorld implements World {
         }
         return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z()).getBlockType() == BlockTypes.AIR &&
                pos.dimension().getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockType() == BlockTypes.AIR;
-    }
-
-    public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
-        this.packetQueue.offer(new PacketQueueEntry(player, packet, time));
     }
 
     protected void tickTime(long currentTick) {
@@ -346,7 +346,7 @@ public class AllayWorld implements World {
 
     @Override
     @UnmodifiableView
-    public Collection<EntityPlayer> getPlayers() {
+    public Collection<Player> getPlayers() {
         return this.dimensionMap.values().stream()
                 .flatMap(dimension -> dimension.getPlayers().stream())
                 .toList();
@@ -370,7 +370,7 @@ public class AllayWorld implements World {
 
     protected void shutdownReally() {
         log.info(I18n.get().tr(TrKeys.ALLAY_WORLD_UNLOADING, name));
-        getPlayers().forEach(EntityPlayer::disconnect);
+        getPlayers().forEach(Player::disconnect);
         this.scheduler.shutdown();
         this.dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
@@ -399,6 +399,6 @@ public class AllayWorld implements World {
         getPlayers().forEach(player -> player.viewWeather(this.weather));
     }
 
-    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {
+    protected record PacketQueueEntry(Player player, BedrockPacket packet, long time) {
     }
 }

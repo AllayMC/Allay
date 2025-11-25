@@ -2,7 +2,7 @@ package org.allaymc.server.container.impl;
 
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.blockentity.data.BlockEntityId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
@@ -19,7 +19,7 @@ public class FakeChestContainerImpl extends FakeContainerImpl {
     }
 
     @Override
-    protected void sendFakeBlocks(EntityPlayer player) {
+    protected void sendFakeBlocks(Player player) {
         var pos = computeFakeBlockPos(player);
         player.viewBlockUpdate(pos, 0, BlockTypes.CHEST.getDefaultState());
 

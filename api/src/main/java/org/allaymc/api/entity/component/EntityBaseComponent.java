@@ -19,6 +19,7 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
+import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.PlayerStorage;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -37,6 +38,7 @@ import org.joml.primitives.AABBdc;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
@@ -277,11 +279,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the unique id of this entity.
+     * Get the unique id of this entity. Non-player entities only have the last 8 bytes of the UUID set
+     * {@link UUID#getLeastSignificantBits()} while the most 8 bytes {@link UUID#getMostSignificantBits()}
+     * will be zero. For actual player, this should be same to {@link LoginData#getUuid()}.
      *
      * @return the unique id of this entity
      */
-    long getUniqueId();
+    UUID getUniqueId();
 
     /**
      * Get the aabb of this entity.
@@ -633,8 +637,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * will not remove and save the entity even if the entity is in unloaded chunk. The entity can only be removed
      * manually in this case.
      * <p>
-     * For example, {@link EntityPlayer} is handled by {@link PlayerStorage},
-     * and this method is override to return {@code false} in {@link EntityPlayer}.
+     * For example, player data is handled by {@link PlayerStorage}, so this method is override to return
+     * {@code false} in {@link EntityPlayer} if the player is not a fake player.
      *
      * @return {@code true} if the entity will be saved, otherwise {@code false}.
      */

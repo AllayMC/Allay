@@ -18,23 +18,25 @@ public class EffectSpeedType extends AbstractEffectType {
 
     @Override
     public void onAdd(EntityLiving entity, EffectInstance effectInstance) {
-        if (entity instanceof EntityPlayer player) {
+        if (entity instanceof EntityPlayer player && player.isActualPlayer()) {
             var level = effectInstance.getLevel();
             var multiplier = level * 0.2;
-            player.setSpeed(player.getSpeed().addMultiplier(multiplier));
-            player.setFlySpeed(player.getFlySpeed().addMultiplier(multiplier));
-            player.setVerticalFlySpeed(player.getVerticalFlySpeed().addMultiplier(multiplier));
+            var controller = player.getController();
+            controller.setSpeed(controller.getSpeed().addMultiplier(multiplier));
+            controller.setFlySpeed(controller.getFlySpeed().addMultiplier(multiplier));
+            controller.setVerticalFlySpeed(controller.getVerticalFlySpeed().addMultiplier(multiplier));
         }
     }
 
     @Override
     public void onRemove(EntityLiving entity, EffectInstance effectInstance) {
-        if (entity instanceof EntityPlayer player) {
+        if (entity instanceof EntityPlayer player && player.isActualPlayer()) {
             var level = effectInstance.getLevel();
             var multiplier = -level * 0.2;
-            player.setSpeed(player.getSpeed().addMultiplier(multiplier));
-            player.setFlySpeed(player.getFlySpeed().addMultiplier(multiplier));
-            player.setVerticalFlySpeed(player.getVerticalFlySpeed().addMultiplier(multiplier));
+            var controller = player.getController();
+            controller.setSpeed(controller.getSpeed().addMultiplier(multiplier));
+            controller.setFlySpeed(controller.getFlySpeed().addMultiplier(multiplier));
+            controller.setVerticalFlySpeed(controller.getVerticalFlySpeed().addMultiplier(multiplier));
         }
     }
 }

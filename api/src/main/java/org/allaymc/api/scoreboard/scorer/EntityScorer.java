@@ -16,7 +16,7 @@ public final class EntityScorer implements Scorer {
     private final long uniqueId;
 
     public EntityScorer(Entity entity) {
-        this(entity.getUniqueId());
+        this(entity.getUniqueId().getLeastSignificantBits());
     }
 
     @Override

@@ -65,7 +65,10 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         if (container instanceof BlockContainer blockContainer) {
             blockContainer.setBlockPos(baseComponent.getPosition());
         }
-        container.addViewer(player);
+
+        if (player.isActualPlayer()) {
+            container.addViewer(player.getController());
+        }
         event.setSuccess(true);
     }
 

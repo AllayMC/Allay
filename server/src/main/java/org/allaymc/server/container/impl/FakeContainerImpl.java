@@ -8,8 +8,8 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.interfaces.FakeContainer;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.joml.RoundingMode;
 import org.joml.Vector3d;
@@ -58,7 +58,7 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
 
     @Override
     public boolean removeViewer(ContainerViewer viewer) {
-        if (!(viewer instanceof EntityPlayer player)) {
+        if (!(viewer instanceof Player player)) {
             return false;
         }
 
@@ -71,7 +71,7 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
     }
 
     @Override
-    public void addPlayer(EntityPlayer player, Consumer<Boolean> callback) {
+    public void addPlayer(Player player, Consumer<Boolean> callback) {
         sendFakeBlocks(player);
         runDelayed(() -> {
             if (!super.addViewer(player)) {
@@ -96,10 +96,10 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
         this.clickListeners.getOrDefault(slot, Collections.emptySet()).forEach(Runnable::run);
     }
 
-    protected abstract void sendFakeBlocks(EntityPlayer player);
+    protected abstract void sendFakeBlocks(Player player);
 
-    protected void removeFakeBlocks(EntityPlayer player) {
-        var dimension = player.getDimension();
+    protected void removeFakeBlocks(Player player) {
+        var dimension = player.getControlledEntity().getDimension();
         for (var pos : this.fakeBlockPositions.getOrDefault(player, new Vector3ic[0])) {
             player.viewBlockUpdate(pos, 0, dimension.getBlockState(pos, 0));
         }
@@ -113,10 +113,11 @@ public abstract class FakeContainerImpl extends BaseContainer implements FakeCon
         }, 8);
     }
 
-    protected Vector3ic computeFakeBlockPos(EntityPlayer player) {
-        var location = player.getLocation();
+    protected Vector3ic computeFakeBlockPos(Player player) {
+        var entity = player.getControlledEntity();
+        var location = entity.getLocation();
         var pos = MathUtils.getDirectionVector(location);
-        var aabb = player.getAABB();
+        var aabb = entity.getAABB();
         pos.x *= -(1 + aabb.lengthX());
         pos.y *= -(1 + aabb.lengthY());
         pos.z *= -(1 + aabb.lengthZ());

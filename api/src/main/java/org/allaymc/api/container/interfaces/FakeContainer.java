@@ -6,6 +6,7 @@ import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.player.Player;
 
 import java.util.function.Consumer;
 
@@ -18,9 +19,9 @@ import java.util.function.Consumer;
 public interface FakeContainer extends Container {
 
     /**
-     * @see #addPlayer(EntityPlayer, Consumer)
+     * @see #addPlayer(Player, Consumer)
      */
-    default void addPlayer(EntityPlayer player) {
+    default void addPlayer(Player player) {
         addPlayer(player, $ -> {
         });
     }
@@ -37,7 +38,7 @@ public interface FakeContainer extends Container {
      * @param player   the player to be added to the container
      * @param callback a callback function that handles whether the addition was successful
      */
-    void addPlayer(EntityPlayer player, Consumer<Boolean> callback);
+    void addPlayer(Player player, Consumer<Boolean> callback);
 
     /**
      * Adds a click listener to the fake container. The listener will be called when

@@ -41,7 +41,7 @@ public class XpCommand extends VanillaCommand {
             }
 
             String playersName = players.stream()
-                    .map(EntityPlayer::getOriginName)
+                    .map(EntityPlayer::getDisplayName)
                     .collect(Collectors.joining(", "));
             context.addOutput(
                     isLevel ? TrKeys.MC_COMMANDS_XP_SUCCESS_LEVELS : TrKeys.MC_COMMANDS_XP_SUCCESS,

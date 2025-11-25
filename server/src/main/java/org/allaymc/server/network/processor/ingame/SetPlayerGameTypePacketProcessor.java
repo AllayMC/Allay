@@ -1,6 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -13,9 +13,12 @@ import org.cloudburstmc.protocol.bedrock.packet.SetPlayerGameTypePacket;
 public class SetPlayerGameTypePacketProcessor extends PacketProcessor<SetPlayerGameTypePacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, SetPlayerGameTypePacket packet, long receiveTime) {
-        if (!player.isOperator()) return;
-        player.setGameMode(NetworkHelper.fromNetwork(GameType.from(packet.getGamemode())));
+    public void handleSync(Player player, SetPlayerGameTypePacket packet, long receiveTime) {
+        if (!player.getControlledEntity().isOperator()) {
+            return;
+        }
+
+        player.getControlledEntity().setGameMode(NetworkHelper.fromNetwork(GameType.from(packet.getGamemode())));
     }
 
     @Override

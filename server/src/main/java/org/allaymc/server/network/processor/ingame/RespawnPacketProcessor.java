@@ -3,7 +3,9 @@ package org.allaymc.server.network.processor.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
+import org.allaymc.server.world.AllayDimension;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
@@ -15,14 +17,15 @@ import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
 public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, RespawnPacket packet, long receiveTime) {
+    public void handleSync(Player player, RespawnPacket packet, long receiveTime) {
         if (packet.getState() != RespawnPacket.State.CLIENT_READY) {
             log.warn("Respawn state must be CLIENT_READY, but got {}", packet.getState());
             return;
         }
 
-        var event = new PlayerRespawnEvent(player);
-        event.setRespawnLocation(player.validateAndGetSpawnPoint());
+        var entity = player.getControlledEntity();
+        var event = new PlayerRespawnEvent(entity);
+        event.setRespawnLocation(entity.validateAndGetSpawnPoint());
         event.call();
         var spawnPoint = event.getRespawnLocation();
 
@@ -34,9 +37,9 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
         // Respawn the player at the current dimension first, reset its data and then teleport to
         // the spawn point
-        player.getDimension().addPlayer(player, () -> {
-            resetData(player);
-            player.teleport(spawnPoint);
+        ((AllayDimension) entity.getDimension()).addPlayer(player, () -> {
+            resetData(entity);
+            entity.teleport(spawnPoint);
         });
     }
 

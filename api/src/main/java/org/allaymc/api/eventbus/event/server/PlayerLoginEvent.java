@@ -1,18 +1,24 @@
-package org.allaymc.api.eventbus.event.player;
+package org.allaymc.api.eventbus.event.server;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.message.MayContainTrKey;
+import org.allaymc.api.player.Player;
 
 /**
  * @author daoge_cmd
  */
 @CallerThread(ThreadType.NETWORK)
-public class PlayerLoginEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerLoginEvent extends ServerEvent implements CancellableEvent {
+
+    /**
+     * Represents the player associated with this event.
+     */
+    @Getter
+    protected Player player;
 
     /**
      * The reason that will be shown to the player if the event is cancelled.
@@ -32,8 +38,8 @@ public class PlayerLoginEvent extends PlayerEvent implements CancellableEvent {
     @Getter
     protected String joinMessage;
 
-    public PlayerLoginEvent(EntityPlayer player, String disconnectReason, String joinMessage) {
-        super(player);
+    public PlayerLoginEvent(Player player, String disconnectReason, String joinMessage) {
+        this.player = player;
         this.disconnectReason = disconnectReason;
         this.joinMessage = joinMessage;
     }

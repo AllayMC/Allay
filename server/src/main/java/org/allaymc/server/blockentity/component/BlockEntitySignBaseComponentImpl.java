@@ -12,11 +12,11 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.NetworkHelper;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
@@ -68,16 +68,15 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     }
 
     @Override
-    public void openSignEditorFor(EntityPlayer player, boolean frontSide) {
-        var pk = new OpenSignPacket();
-        pk.setPosition(NetworkHelper.toNetwork(getPosition()));
-        pk.setFrontSide(frontSide);
-
-        ((EntityPlayerImpl) player).sendPacket(pk);
+    public void openSignEditorFor(Player player, boolean frontSide) {
+        var packet = new OpenSignPacket();
+        packet.setPosition(NetworkHelper.toNetwork(getPosition()));
+        packet.setFrontSide(frontSide);
+        player.sendPacket(packet);
     }
 
     @Override
-    public void applyClientChange(EntityPlayer player, NbtMap nbt) {
+    public void applyPlayerChange(EntityPlayer player, NbtMap nbt) {
         String[] newText;
         boolean isFrontSide = true;
         if (!frontText.flattenText().equals(nbt.getCompound(TAG_FRONT_TEXT).getString(TAG_TEXT))) {
@@ -160,8 +159,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             return;
         }
 
-        openSignEditorFor(player, isFrontSideInteracted);
-        event.setSuccess(true);
+        if (player.isActualPlayer()) {
+            openSignEditorFor(player.getController(), isFrontSideInteracted);
+            event.setSuccess(true);
+        }
     }
 
     protected boolean isFrontSideInteracted(BlockFace interactedFace) {
@@ -256,7 +257,13 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
     @EventHandler
     protected void onBlockPlace(CBlockOnPlaceEvent event) {
-        if (event.getPlacementInfo() == null) return;
-        openSignEditorFor(event.getPlacementInfo().player(), true);
+        if (event.getPlacementInfo() == null) {
+            return;
+        }
+
+        var player = event.getPlacementInfo().player();
+        if (player.isActualPlayer()) {
+            openSignEditorFor(player.getController(), true);
+        }
     }
 }

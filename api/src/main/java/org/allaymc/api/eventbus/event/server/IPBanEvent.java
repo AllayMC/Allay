@@ -1,4 +1,4 @@
-package org.allaymc.api.eventbus.event.network;
+package org.allaymc.api.eventbus.event.server;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +12,6 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.ANY)
-public class IPBanEvent extends NetworkEvent implements CancellableEvent {
+public class IPBanEvent extends ServerEvent implements CancellableEvent {
     protected String ip;
 }

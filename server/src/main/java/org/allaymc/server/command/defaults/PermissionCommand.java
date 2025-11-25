@@ -51,7 +51,7 @@ public class PermissionCommand extends VanillaCommand {
                     }
 
                     var target = targets.getFirst();
-                    context.getSender().sendMessage("The player " + target.getOriginName() + " has the following permissions:");
+                    context.getSender().sendMessage("The player " + target.getDisplayName() + " has the following permissions:");
                     target.getPermissionGroup()
                             .getPermissions()
                             .stream()
@@ -87,7 +87,7 @@ public class PermissionCommand extends VanillaCommand {
                     boolean value = context.getResult(3);
                     var target = targets.getFirst();
                     target.setPermission(permission, value);
-                    context.getSender().sendMessage("Set permission " + permission.getName() + " for player " + target.getOriginName() + " to " + (value ? TextFormat.GREEN + "true" : TextFormat.RED + "false"));
+                    context.getSender().sendMessage("Set permission " + permission.getName() + " for player " + target.getDisplayName() + " to " + (value ? TextFormat.GREEN + "true" : TextFormat.RED + "false"));
 
                     return context.success();
                 });

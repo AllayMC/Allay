@@ -72,9 +72,10 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
         EntityPlayer nearestPlayer = null;
         var nearestDistanceSquared = MAX_MOVE_DISTANCE_SQUARED;
         for (var player : getDimension().getPlayers()) {
-            var distanceSquared = player.getLocation().distanceSquared(location);
+            var entity = player.getControlledEntity();
+            var distanceSquared = entity.getLocation().distanceSquared(location);
             if (distanceSquared < nearestDistanceSquared) {
-                nearestPlayer = player;
+                nearestPlayer = entity;
             }
         }
         return nearestPlayer;

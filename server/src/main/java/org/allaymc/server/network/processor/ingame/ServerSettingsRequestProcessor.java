@@ -1,6 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -14,9 +14,9 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettingsRequestPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, ServerSettingsRequestPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(Player player, ServerSettingsRequestPacket packet, long receiveTime) {
         // Geyser: fixes https://bugs.mojang.com/browse/MCPE-94012 because of the delay
-        player.getWorld().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
+        Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
             var serverSettingForm = player.getServerSettingForm();
             if (serverSettingForm == null) {
                 return false;

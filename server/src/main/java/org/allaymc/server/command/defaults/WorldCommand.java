@@ -93,7 +93,7 @@ public class WorldCommand extends VanillaCommand {
                         return context.fail();
                     }
 
-                    world.getPlayers().forEach(player -> player.teleport(Server.getInstance().getWorldPool().getGlobalSpawnPoint()));
+                    world.getPlayers().forEach(player -> player.getControlledEntity().teleport(Server.getInstance().getWorldPool().getGlobalSpawnPoint()));
                     // Unload the world after 1 second, because teleport players to another world will take some time
                     Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
                         Server.getInstance().getWorldPool().unloadWorld(worldName);
@@ -104,7 +104,7 @@ public class WorldCommand extends VanillaCommand {
                 .root()
                 .key("create")
                 .exec((context, player) -> {
-                    var langCode = player.getLoginData().getLangCode();
+                    var langCode = player.getController().getLoginData().getLangCode();
                     var storageTypes = new ArrayList<>(Registries.WORLD_STORAGE_FACTORIES.getContent().keySet());
                     var generatorTypes = new ArrayList<>(Registries.WORLD_GENERATOR_FACTORIES.getContent().keySet());
                     Forms.custom()
@@ -147,9 +147,9 @@ public class WorldCommand extends VanillaCommand {
 
                                 Server.getInstance().getWorldPool().loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
                             })
-                            .sendTo(player);
+                            .sendTo(player.getController());
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.ACTUAL_PLAYER);
 
     }
 }

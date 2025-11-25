@@ -1,6 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
@@ -10,8 +10,8 @@ import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
  */
 public class MobEquipmentPacketProcessor extends PacketProcessor<MobEquipmentPacket> {
     @Override
-    public void handleSync(EntityPlayer player, MobEquipmentPacket packet, long receiveTime) {
-        player.setHandSlot(packet.getHotbarSlot());
+    public void handleSync(Player player, MobEquipmentPacket packet, long receiveTime) {
+        player.getControlledEntity().setHandSlot(packet.getHotbarSlot());
     }
 
     @Override

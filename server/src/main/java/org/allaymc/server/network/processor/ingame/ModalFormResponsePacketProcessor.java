@@ -1,9 +1,9 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.form.FormCancelReason;
 import org.allaymc.api.form.type.CustomForm;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ModalFormResponsePacket;
@@ -15,7 +15,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ModalFormResponsePacket;
 public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormResponsePacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, ModalFormResponsePacket packet, long receiveTime) {
+    public void handleSync(Player player, ModalFormResponsePacket packet, long receiveTime) {
         var id = packet.getFormId();
         var form = player.removeForm(id);
         var isServerSettingsForm = false;

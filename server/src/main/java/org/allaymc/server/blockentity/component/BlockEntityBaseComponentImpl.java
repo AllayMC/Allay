@@ -105,9 +105,14 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     }
 
     /**
-     * Called when the client sends back BlockEntityDataPacket.
+     * Called when a player entity changes the block entity. This is mostly used in sign block where
+     * the player can edit the content of the sign. Different from {@link #loadNBT(NbtMap)}, this method
+     * may do more secure checks to protect the server from being hacked by malformed nbt data.
+     *
+     * @param player the player entity who changes the block entity
+     * @param nbt    the new nbt of the block entity.
      */
-    public void applyClientChange(EntityPlayer player, NbtMap nbt) {
+    public void applyPlayerChange(EntityPlayer player, NbtMap nbt) {
         loadNBT(nbt);
     }
 
@@ -136,9 +141,17 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         var chunk = pos.dimension().getChunkManager().getChunkByDimensionPos(pos.x(), pos.z());
         Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
         if (immediately) {
-            chunk.forEachChunkLoaders(loader -> loader.viewBlockEntity(thisBlockEntity));
+            chunk.forEachChunkLoaders(loader -> {
+                if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
+                    player.getController().viewBlockEntity(thisBlockEntity);
+                }
+            });
         } else {
-            chunk.forEachChunkLoaderLater(loader -> loader.viewBlockEntity(thisBlockEntity));
+            chunk.forEachChunkLoaderLater(loader -> {
+                if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
+                    player.getController().viewBlockEntity(thisBlockEntity);
+                }
+            });
         }
     }
 }

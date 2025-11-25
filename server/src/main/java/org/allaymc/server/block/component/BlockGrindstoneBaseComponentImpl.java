@@ -55,9 +55,11 @@ public class BlockGrindstoneBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var grindstoneContainer = new GrindstoneContainerImpl();
-        grindstoneContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        grindstoneContainer.addViewer(player);
+        if (player.isActualPlayer()) {
+            var grindstoneContainer = new GrindstoneContainerImpl();
+            grindstoneContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            grindstoneContainer.addViewer(player.getController());
+        }
         return true;
     }
 }

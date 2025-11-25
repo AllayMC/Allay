@@ -1,11 +1,11 @@
 package org.allaymc.server.network.processor.login;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.NetworkSettingsPacket;
@@ -17,11 +17,12 @@ import org.cloudburstmc.protocol.bedrock.packet.RequestNetworkSettingsPacket;
  */
 public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor<RequestNetworkSettingsPacket> {
     @Override
-    public void handle(EntityPlayer player, RequestNetworkSettingsPacket packet) {
+    public void handle(Player player, RequestNetworkSettingsPacket packet) {
+        var allayPlayer = (AllayPlayer) player;
         var protocolVersion = packet.getProtocolVersion();
         var codec = ProtocolInfo.findCodec(protocolVersion);
         if (codec == null) {
-            // Can not find a suitable codec for the client protocol version, let's check if it's too old or too new
+            // Cannot find a suitable codec for the client protocol version, let's check if it's too old or too new
             var loginFailedPacket = new PlayStatusPacket();
             if (protocolVersion > ProtocolInfo.getLatestCodec().getProtocolVersion()) {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_SERVER_OLD);
@@ -39,7 +40,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             return;
         }
 
-        var session = ((EntityPlayerImpl) player).getClientSession();
+        var session = allayPlayer.getSession();
         session.setCodec(codec);
 
         var settingsPacket = new NetworkSettingsPacket();

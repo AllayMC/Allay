@@ -52,9 +52,11 @@ public class BlockAnvilBaseComponentImpl extends BlockBaseComponentImpl implemen
             return false;
         }
 
-        var anvilContainer = player.getContainer(ContainerTypes.ANVIL);
-        anvilContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        anvilContainer.addViewer(player);
+        if (player.isActualPlayer()) {
+            var anvilContainer = player.getContainer(ContainerTypes.ANVIL);
+            anvilContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            anvilContainer.addViewer(player.getController());
+        }
         return true;
     }
 
