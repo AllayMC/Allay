@@ -24,7 +24,7 @@ import java.util.List;
 @UtilityClass
 public final class ProtocolInfo {
 
-    public static final BedrockCodec CODEC_v860 = Bedrock_v860.CODEC.toBuilder()
+    public static final BedrockCodec CODEC_v860 = Bedrock_v859.CODEC.toBuilder()
             .raknetProtocolVersion(11)
             .protocolVersion(860)
             .minecraftVersion("1.21.124")
