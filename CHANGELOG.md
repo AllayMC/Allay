@@ -23,6 +23,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `resetPermission` method to `PermissionGroup` and `Permissible` which would set the permission status to `default`.
 - (API) Added methods `PlayerManager.isOperator()` and `PlayerManager.setOperaotor()`.
 - (API) Readded `DebugShapeViewer`, and `WorldViewer` now extends `DebugShapeViewer`. There should be no breaking changes.
+- (API) Added `SenderType.ACTUAL_PLAYER` which limits the command sender from must be an actual player.
+- (API) Introduced new `Player` class, there are some things worth noting:
+  - A `Player` object is basically controlling an `EntityPlayer` object now. Most client-related methods
+    are moved to the new `Player` class (e.g. most of the methods in the old `EntityPlayerClientComponent`).
+  - A `EntityPlayer` object now can be either a real player or a fake player. This is determined by checking
+    if the player entity is `controlled` by a `Player` object (use `EntityPlayer.isActualPlayer()` method).
+  - You can now create fake player via `EntityTypes.PLAYER` just like how you created the other entity. Before
+    spawn the fake player, you'll need to set the fake player's skin, otherwise there will be a NPE.
+  - The type of some variables has been changed from `EntityPlayer` to `Player` to better fit their purpose,
+    such as the `player` variable in `PlayerJoinEvent`.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
   be resent when the specific permission changes.
 - Updated log4j2 patterns to use `%logger{0}` instead of `%c{0}`.
@@ -31,8 +41,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Replaced method `Permission.getPermissionListener()` with `Permission.getListeners()` which returns a set of listeners.
 - (API) Renamed class `Structure` to `StructureFile` to avoid confusion with the upcoming structure feature in world gen.
-- (API) Moved a number of client-related methods from `EntityPlayerBaseComponent` to `Client`.
-- (API) Moved speed-related logic to `EntityPlayerClientComponent`.
+- (API) Refactored the permission system. The permission system has now been reconstructed into a lightweight, easy-to-interface
+  system in preparation for docking with LuckPerms. There are some breaking changes, especially in command creation. Check the updated
+  documentation on our website for details.
+- (API) Update some events:
+  - `IPBanEvent` and `IPUnbanEvent` are moved from `network` to `server` package.
+  - `PlayerBanEvent`, `PlayerUnbanEvent`, `PlayerLoginEvent`, `PlayerJoinEvent` and `PlayerQuitEvent` are moved from `player` to `server` package.
+  - `ClientConnectEvent` and `ClientDisconnectEvent` are renamed to `PlayerXXXEvent`. They are also moved from `network` to `server` package.
+- (API) Added a new `permissions` parameter to the parameter list of method `MessageReceiver.sendCommandOutputs()`.
+- (API) Changed member `SimpleEntityAction.CRITICAL_HIT` to independent `CriticalHit(int count)` record (the same to `ENCHANTED_HIT`) due
+  to the addition of the newly added `count` parameter since protocol version 859.
 - Permission data now will not be saved into the player's nbt data, which allows third permission plugins to store the permission data in their own way.
   The core will only saved a `operator` list now.
 
@@ -43,6 +61,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Removed
 
 - (API) Removed useless method `Entity.isHeadYawEnabled()`.
+- (API) Removed classes `EntityPlayerBossBarViewerComponent`, `EntityPlayerChunkLoaderComponent`, `EntityPlayerFormViewerComponent` and `EntityPlayerScoreboardViewerComponent`.
 
 # 0.9.0 (API 0.16.0) - 2025/10/30
 
