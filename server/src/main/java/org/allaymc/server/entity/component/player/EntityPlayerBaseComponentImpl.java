@@ -413,7 +413,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     protected void beforeTeleport(Location3dc target) {
         super.beforeTeleport(target);
-        this.expectedTeleportPos = new Vector3d(target);
+        if (isActualPlayer()) {
+            this.expectedTeleportPos = new Vector3d(target);
+        }
     }
 
     @Override
