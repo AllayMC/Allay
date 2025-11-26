@@ -312,7 +312,6 @@ public class AllayPlayer implements Player {
         var playerManager = server.getPlayerManager();
         var world = this.controlledEntity.getWorld();
 
-        ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) this.controlledEntity).getBaseComponent()).setController(this);
         this.controlledEntity.loadNBT(playerManager.getPlayerStorage().readPlayerData(this).getNbt());
 
         viewEntityState(this.controlledEntity);
@@ -2324,7 +2323,7 @@ public class AllayPlayer implements Player {
 
     /**
      * Reads all the data in {@link PlayerData} except nbt. To be more exact, this method will validate and set
-     * player entity's current pos and then spawn it. The nbt will be used in EntityPlayer::loadNBT() later in
+     * the player entity's current pos and then spawn it. The nbt will be used in EntityPlayer::loadNBT() later in
      * doFirstSpawn() method instead of here because some packets must be sent after the player fully joined the server.
      */
     public void spawnEntityPlayer() {
@@ -2355,20 +2354,22 @@ public class AllayPlayer implements Player {
 
         this.controlledEntity = EntityTypes.PLAYER.createEntity();
         this.controlledEntity.setSkin(this.loginData.getSkin());
-        ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) this.controlledEntity).getBaseComponent()).setUniqueId(this.loginData.getUuid());
         this.controlledEntity.setDisplayName(loginData.getXname());
-        // TODO: check this line
-        // NOTICE: Do not use method setNameTag() here, since at that time the player is not added to
-        // any dimension and no one is viewing the player. Calling method setNameTag() will cause a NPE
         this.controlledEntity.setNameTag(loginData.getXname());
         this.controlledEntity.setNameTagAlwaysShow(true);
         // TODO: perm refactor
-//        // Add the parent permission group alone, so that the permission listeners will be triggered
-//        // Commands will be sent to the client during this method call
-//        this.controlledEntity.getPermissionGroup().addParent(Server.getInstance().getPlayerManager().isOperator(this) ? PermissionGroups.OPERATOR : PermissionGroups.DEFAULT.get(), thisPlayer);
-//        // The default game mode may be creative/spectator, and in that case we should give player fly ability
-//        this.controlledEntity.setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
+        // Add the parent permission group alone, so that the permission listeners will be triggered
+        // Commands will be sent to the client during this method call
+        this.controlledEntity.getPermissionGroup().addParent(Server.getInstance().getPlayerManager().isOperator(this) ? PermissionGroups.OPERATOR : PermissionGroups.DEFAULT.get(), this.controlledEntity);
+        // The default game mode may be creative/spectator, and in that case we should give player fly ability
+        var gamemode = this.controlledEntity.getGameMode();
+        this.controlledEntity.setPermission(Permissions.ABILITY_FLY, gamemode != GameMode.SURVIVAL && gamemode != GameMode.ADVENTURE);
         this.controlledEntity.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
+
+        var baseComponent = (EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) this.controlledEntity).getBaseComponent();
+        baseComponent.setController(this);
+        baseComponent.setUniqueId(this.loginData.getUuid());
+
         dimension.addPlayer(this);
 
         startGame(dimension.getWorld(), playerData, dimension);
