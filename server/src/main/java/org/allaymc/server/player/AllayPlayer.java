@@ -274,7 +274,7 @@ public class AllayPlayer implements Player {
     }
 
     protected static int toNetworkBreakTime(double breakTime) {
-        return breakTime == 0 ? 65535 : (int) (65535 / breakTime);
+        return breakTime == 0 ? 65535 : (int) (65535 / (breakTime * 20));
     }
 
     public void tick(long currentTick) {
