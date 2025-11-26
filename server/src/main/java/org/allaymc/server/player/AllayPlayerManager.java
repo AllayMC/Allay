@@ -272,7 +272,7 @@ public class AllayPlayerManager implements PlayerManager {
     public synchronized void addPlayer(Player player) {
         this.players.put(player.getLoginData().getUuid(), player);
         this.networkInterface.setPlayerCount(this.players.size());
-        Server.getInstance().getMessageChannel().addReceiver(player);
+        Server.getInstance().getMessageChannel().addReceiver(player.getControlledEntity());
         broadcastPlayerListChange(player, true);
         // NOTICE: player list should be sent to the player itself later when the client is fully loaded.
         // Otherwise, the player's skin will not be shown correctly client-side.
@@ -283,7 +283,7 @@ public class AllayPlayerManager implements PlayerManager {
         server.sendTranslatable(TrKeys.ALLAY_NETWORK_CLIENT_DISCONNECTED, player.getSocketAddress().toString());
 
         // At this time the client has disconnected
-        if (player.getLastClientState().ordinal() >= ClientState.LOGGED_IN.ordinal()) {
+        if (player.getLastClientState().ordinal() >= ClientState.SPAWNED.ordinal()) {
             this.players.remove(player.getLoginData().getUuid());
             this.networkInterface.setPlayerCount(this.players.size());
 
@@ -291,14 +291,13 @@ public class AllayPlayerManager implements PlayerManager {
             event.call();
 
             server.getMessageChannel().broadcastTranslatable(event.getQuitMessage(), player.getOriginName());
-            server.getMessageChannel().removeReceiver(player);
 
             var entity = player.getControlledEntity();
-            if (entity != null) {
-                entity.remove();
-                this.playerStorage.savePlayerData(player);
-                broadcastPlayerListChange(player, false);
-            }
+            server.getMessageChannel().removeReceiver(entity);
+            entity.remove();
+            
+            this.playerStorage.savePlayerData(player);
+            broadcastPlayerListChange(player, false);
         }
 
     }

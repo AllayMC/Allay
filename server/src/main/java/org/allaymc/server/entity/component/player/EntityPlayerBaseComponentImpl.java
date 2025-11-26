@@ -44,6 +44,7 @@ import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -641,9 +642,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+    public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
         if (isActualPlayer()) {
-            this.controller.sendCommandOutputs(sender, status, outputs);
+            this.controller.sendCommandOutputs(sender, status, permissions, outputs);
         }
     }
 

@@ -9,6 +9,8 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.permission.PermissionCalculator;
 
+import java.util.List;
+
 /**
  * @author daoge_cmd
  */
@@ -39,7 +41,7 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+    public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
         // Do nothing
     }
 

@@ -346,8 +346,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     @Override
     default boolean willBeSaved() {
-        // Save the player entity along with other non-player entities if it is a fake player
-        return !isActualPlayer();
+        return false;
     }
 
     /**

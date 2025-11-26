@@ -217,8 +217,6 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
     protected void computeEntityCollisionMotion(Entity entity) {
         var collidedEntities = getCachedEntityCollidingResult(entity);
-        collidedEntities.removeIf(e -> e instanceof EntityPhysicsComponent physicsComponent && !physicsComponent.computeEntityCollisionMotion());
-
         var collisionMotion = new Vector3d(0, 0, 0);
 
         var location = entity.getLocation();

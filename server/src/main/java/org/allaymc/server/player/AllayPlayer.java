@@ -2,6 +2,7 @@ package org.allaymc.server.player;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -128,7 +129,6 @@ import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
-import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3dc;
@@ -814,7 +814,7 @@ public class AllayPlayer implements Player {
         var packet = new MobEffectPacket();
         packet.setRuntimeEntityId(entity.getRuntimeId());
         if (newEffect == null) {
-            com.google.common.base.Preconditions.checkNotNull(oldEffect);
+            Preconditions.checkNotNull(oldEffect);
             // Effect is removed
             packet.setEffectId(oldEffect.getType().getId());
             packet.setEvent(MobEffectPacket.Event.REMOVE);
@@ -1957,7 +1957,11 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+    public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
+        if (!this.controlledEntity.hasPermissions(permissions)) {
+            return;
+        }
+
         if (sender == this.controlledEntity) {
             var packet = new CommandOutputPacket();
             packet.setType(CommandOutputType.ALL_OUTPUT);
@@ -2335,7 +2339,8 @@ public class AllayPlayer implements Player {
      */
     public void spawnEntityPlayer() {
         var server = Server.getInstance();
-        var playerData = server.getPlayerManager().getPlayerStorage().readPlayerData(this);
+        var playerManager = (AllayPlayerManager) server.getPlayerManager();
+        var playerData = playerManager.getPlayerStorage().readPlayerData(this);
 
         // Validate and set player pos
         AllayDimension dimension;
@@ -2353,7 +2358,7 @@ public class AllayPlayer implements Player {
             playerData.setNbt(builder.build());
 
             // Save new player data back to storage
-            server.getPlayerManager().getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
+            playerManager.getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
         } else {
             dimension = (AllayDimension) logOffWorld.getDimension(playerData.getDimension());
             currentPos = readVector3f(playerData.getNbt(), "Pos");
@@ -2372,6 +2377,8 @@ public class AllayPlayer implements Player {
         baseComponent.setPermissionCalculator(new OpPermissionCalculator(this));
 
         dimension.addPlayer(this);
+        this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
+        playerManager.addPlayer(this);
 
         startGame(dimension.getWorld(), playerData, dimension);
 
@@ -2466,7 +2473,6 @@ public class AllayPlayer implements Player {
         this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
         sendPlayStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
 
-        playerManager.addPlayer(this);
         Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), this.loginData.getXname());
 
         sendPacket(NetworkData.RESOURCE_PACKS_INFO_PACKET.get());

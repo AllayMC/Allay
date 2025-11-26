@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import org.allaymc.api.annotation.ThreadSafe;
 import org.allaymc.api.command.CommandSender;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -78,11 +79,12 @@ public class MessageChannel {
     /**
      * Broadcasts command outputs originating from a specific {@link CommandSender}.
      *
-     * @param sender  the source that executed the command
-     * @param status  status code of the command execution result
-     * @param outputs one or more translatable output containers to forward
+     * @param sender      the source that executed the command
+     * @param status      status code of the command execution result
+     * @param permissions the permissions required to view the command outputs
+     * @param outputs     one or more translatable output containers to forward
      */
-    public void broadcastCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
-        this.receivers.forEach(receiver -> receiver.sendCommandOutputs(sender, status, outputs));
+    public void broadcastCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
+        this.receivers.forEach(receiver -> receiver.sendCommandOutputs(sender, status, permissions, outputs));
     }
 }
