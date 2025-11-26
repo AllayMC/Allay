@@ -701,6 +701,10 @@ public class AllayPlayer implements Player {
 
     @Override
     public void viewPlayerSkin(EntityPlayer player) {
+        if (player.getSkin() == null) {
+            return;
+        }
+
         var skin = SkinConvertor.toSerializedSkin(player.getSkin());
         var packet = new PlayerSkinPacket();
         packet.setUuid(player.getUniqueId());

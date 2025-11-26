@@ -175,7 +175,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Get the skin of the player.
      *
-     * @return the skin of the player
+     * @return the skin of the player, or {@code null} if the player has no custom skin (the skin will be Steve in that case)
      */
     Skin getSkin();
 

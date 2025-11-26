@@ -29,8 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
     are moved to the new `Player` class (e.g. most of the methods in the old `EntityPlayerClientComponent`).
   - A `EntityPlayer` object now can be either a real player or a fake player. This is determined by checking
     if the player entity is `controlled` by a `Player` object (use `EntityPlayer.isActualPlayer()` method).
-  - You can now create fake player via `EntityTypes.PLAYER` just like how you created the other entity. Before
-    spawn the fake player, you'll need to set the fake player's skin, otherwise there will be a NPE.
+  - You can now create fake player via `EntityTypes.PLAYER` just like how you created the other entity.
   - The type of some variables has been changed from `EntityPlayer` to `Player` to better fit their purpose,
     such as the `player` variable in `PlayerJoinEvent`.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
