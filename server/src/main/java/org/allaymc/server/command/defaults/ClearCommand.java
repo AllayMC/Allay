@@ -1,5 +1,6 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.Container;
@@ -9,6 +10,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,9 +18,9 @@ import java.util.stream.Stream;
 /**
  * @author daoge_cmd
  */
-public class ClearCommand extends VanillaCommand {
+public class ClearCommand extends Command {
     public ClearCommand() {
-        super("clear", TrKeys.MC_COMMANDS_CLEAR_DESCRIPTION);
+        super("clear", TrKeys.MC_COMMANDS_CLEAR_DESCRIPTION, Permissions.COMMAND_CLEAR);
     }
 
     @Override

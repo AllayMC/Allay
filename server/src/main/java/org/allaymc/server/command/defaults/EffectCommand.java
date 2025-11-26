@@ -1,18 +1,20 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.Collection;
 
 /**
  * @author IWareQ
  */
-public class EffectCommand extends VanillaCommand {
+public class EffectCommand extends Command {
     public EffectCommand() {
-        super("effect", TrKeys.MC_COMMANDS_EFFECT_DESCRIPTION);
+        super("effect", TrKeys.MC_COMMANDS_EFFECT_DESCRIPTION, Permissions.COMMAND_EFFECT);
     }
 
     @Override

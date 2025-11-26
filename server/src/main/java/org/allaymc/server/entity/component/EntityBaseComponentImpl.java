@@ -21,9 +21,9 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.pdc.PersistentDataContainer;
-import org.allaymc.api.permission.Permissible;
-import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.ConstantPermissionCalculator;
+import org.allaymc.api.permission.PermissionCalculator;
+import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -79,8 +79,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected final long runtimeId;
 
-    @Getter
-    protected PermissionGroup permissionGroup;
     // Will be reset in method loadUniqueId()
     @Getter
     @Setter
@@ -103,6 +101,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     @Setter
     protected PersistentDataContainer persistentDataContainer;
+    @Getter
+    @Setter
+    protected PermissionCalculator permissionCalculator;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -112,28 +113,19 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
         this.state = EntityState.DESPAWNED;
+        this.displayName = entityType.getIdentifier().toString();
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
-        this.displayName = entityType.getIdentifier().toString();
+        this.permissionCalculator = new ConstantPermissionCalculator(Tristate.TRUE);
     }
 
     @OnInitFinish
     public void onInitFinish(EntityInitInfo initInfo) {
         loadNBT(initInfo.nbt());
-        initPermissionGroup();
     }
 
     public void broadcastState() {
         forEachViewers(viewer -> viewer.viewEntityState(thisEntity));
-    }
-
-    protected void initPermissionGroup() {
-        this.permissionGroup = PermissionGroup.create("Permission group for entity " + uniqueId, Set.of(), Set.of(PermissionGroups.OPERATOR), false);
-    }
-
-    @Override
-    public Permissible getPermissible() {
-        return thisEntity;
     }
 
     public void tick(long currentTick) {

@@ -1,10 +1,12 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.joml.Vector3d;
 
 import java.util.List;
@@ -12,9 +14,9 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class TeleportCommand extends VanillaCommand {
+public class TeleportCommand extends Command {
     public TeleportCommand() {
-        super("teleport", TrKeys.MC_COMMANDS_TP_DESCRIPTION);
+        super("teleport", TrKeys.MC_COMMANDS_TP_DESCRIPTION, Permissions.COMMAND_TELEPORT);
         aliases.add("tp");
     }
 

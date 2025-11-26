@@ -1,11 +1,13 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.data.DimensionInfo;
@@ -19,10 +21,10 @@ import java.util.function.Function;
 /**
  * @author daoge_cmd
  */
-public class ExecuteCommand extends VanillaCommand {
+public class ExecuteCommand extends Command {
 
     public ExecuteCommand() {
-        super("execute", TrKeys.MC_COMMANDS_EXECUTE_DESCRIPTION);
+        super("execute", TrKeys.MC_COMMANDS_EXECUTE_DESCRIPTION, Permissions.COMMAND_EXECUTE);
     }
 
     @Override

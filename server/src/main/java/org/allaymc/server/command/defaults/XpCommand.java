@@ -1,8 +1,10 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -10,10 +12,10 @@ import java.util.stream.Collectors;
 /**
  * @author xingchentye
  */
-public class XpCommand extends VanillaCommand {
+public class XpCommand extends Command {
 
     public XpCommand() {
-        super("xp", TrKeys.MC_COMMANDS_XP_DESCRIPTION);
+        super("xp", TrKeys.MC_COMMANDS_XP_DESCRIPTION, Permissions.COMMAND_XP);
     }
 
     @Override

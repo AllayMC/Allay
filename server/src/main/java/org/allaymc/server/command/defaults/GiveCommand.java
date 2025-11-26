@@ -1,10 +1,12 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -12,10 +14,10 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class GiveCommand extends VanillaCommand {
+public class GiveCommand extends Command {
 
     public GiveCommand() {
-        super("give", TrKeys.MC_COMMANDS_GIVE_DESCRIPTION);
+        super("give", TrKeys.MC_COMMANDS_GIVE_DESCRIPTION, Permissions.COMMAND_GIVE);
     }
 
     @Override

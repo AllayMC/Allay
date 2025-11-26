@@ -1,8 +1,10 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,10 +12,10 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class TestforCommand extends VanillaCommand {
+public class TestforCommand extends Command {
 
     public TestforCommand() {
-        super("testfor", TrKeys.MC_COMMANDS_TESTFOR_DESCRIPTION);
+        super("testfor", TrKeys.MC_COMMANDS_TESTFOR_DESCRIPTION, Permissions.COMMAND_TESTFOR);
     }
 
     @Override

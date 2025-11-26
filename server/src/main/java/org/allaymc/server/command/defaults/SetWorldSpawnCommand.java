@@ -1,8 +1,10 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.joml.Vector3d;
 import org.joml.Vector3i;
@@ -10,9 +12,9 @@ import org.joml.Vector3i;
 /**
  * @author daoge_cmd
  */
-public class SetWorldSpawnCommand extends VanillaCommand {
+public class SetWorldSpawnCommand extends Command {
     public SetWorldSpawnCommand() {
-        super("setworldspawn", TrKeys.MC_COMMANDS_SETWORLDSPAWN_DESCRIPTION);
+        super("setworldspawn", TrKeys.MC_COMMANDS_SETWORLDSPAWN_DESCRIPTION, Permissions.COMMAND_SETWORLDSPAWN);
     }
 
     @Override

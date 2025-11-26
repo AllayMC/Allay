@@ -4,6 +4,7 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.command.tree.node.BaseNode;
@@ -16,11 +17,11 @@ import java.util.Locale;
 /**
  * @author harryxi | daoge_cmd
  */
-public class HelpCommand extends VanillaCommand {
+public class HelpCommand extends Command {
     private static final int COMMANDS_PER_PAGE = 7;
 
     public HelpCommand() {
-        super("help", TrKeys.MC_COMMANDS_HELP_DESCRIPTION);
+        super("help", TrKeys.MC_COMMANDS_HELP_DESCRIPTION, Permissions.COMMAND_HELP);
         aliases.add("?");
     }
 

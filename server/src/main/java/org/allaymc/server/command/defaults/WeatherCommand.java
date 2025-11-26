@@ -1,7 +1,9 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.world.data.Weather;
 
 import java.util.Locale;
@@ -9,10 +11,10 @@ import java.util.Locale;
 /**
  * @author daoge_cmd
  */
-public class WeatherCommand extends VanillaCommand {
+public class WeatherCommand extends Command {
 
     public WeatherCommand() {
-        super("weather", TrKeys.MC_COMMANDS_WEATHER_DESCRIPTION);
+        super("weather", TrKeys.MC_COMMANDS_WEATHER_DESCRIPTION, Permissions.COMMAND_WEATHER);
     }
 
     @Override

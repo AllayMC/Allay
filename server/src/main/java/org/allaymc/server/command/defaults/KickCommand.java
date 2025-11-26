@@ -1,19 +1,21 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerKickEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.List;
 
 /**
  * @author daoge_cmd
  */
-public class KickCommand extends VanillaCommand {
+public class KickCommand extends Command {
     public KickCommand() {
-        super("kick", TrKeys.MC_COMMANDS_KICK_DESCRIPTION);
+        super("kick", TrKeys.MC_COMMANDS_KICK_DESCRIPTION, Permissions.COMMAND_KICK);
     }
 
     @Override

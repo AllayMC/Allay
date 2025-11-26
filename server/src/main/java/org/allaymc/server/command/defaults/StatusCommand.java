@@ -2,9 +2,11 @@ package org.allaymc.server.command.defaults;
 
 import com.sun.jna.platform.win32.COM.WbemcliUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Dimension;
@@ -28,7 +30,7 @@ import static org.allaymc.api.math.MathUtils.round;
  * @author daoge_cmd
  */
 @Slf4j
-public class StatusCommand extends VanillaCommand {
+public class StatusCommand extends Command {
     protected static final String UPTIME_FORMAT = "%d days %d hours %d minutes %d seconds";
 
     protected static final Map<String, String> VM_VENDOR = new HashMap<>(10, 0.99f);
@@ -69,7 +71,7 @@ public class StatusCommand extends VanillaCommand {
     }
 
     public StatusCommand() {
-        super("status", TrKeys.ALLAY_COMMAND_STATUS_DESCRIPTION);
+        super("status", TrKeys.ALLAY_COMMAND_STATUS_DESCRIPTION, Permissions.COMMAND_STATUS);
     }
 
     protected static void printOperationSystemMemoryInfo(CommandSender sender) {

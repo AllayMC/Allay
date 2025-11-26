@@ -3,7 +3,6 @@ package org.allaymc.api.command;
 import lombok.Getter;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.MayContainTrKey;
-import org.allaymc.api.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +12,6 @@ import java.util.Objects;
  * @author daoge_cmd
  */
 public abstract class Command {
-
-    /**
-     * The default prefix for command permissions.
-     */
-    public static final String DEFAULT_COMMAND_PERMISSION_PREFIX = "command.";
 
     /**
      * The name of the command.
@@ -34,7 +28,7 @@ public abstract class Command {
      * The permissions required to execute this command.
      */
     @Getter
-    protected final List<Permission> permissions;
+    protected final List<String> permissions;
     /**
      * The aliases of this command.
      */
@@ -47,25 +41,14 @@ public abstract class Command {
     protected final CommandTree commandTree;
 
     /**
-     * Create a new command with the given name and description. The permission to execute this
-     * command is simply "command.&lt;command name&gt".
-     *
-     * @param name        The name of the command
-     * @param description The description of the command
-     */
-    public Command(String name, @MayContainTrKey String description) {
-        this(name, description, Permission.createForCommand(name, DEFAULT_COMMAND_PERMISSION_PREFIX + name));
-    }
-
-    /**
      * Constructs a new {@code Command} instance with the specified name, description, and permission.
      * This allows the creation of a command with a specific permission required for execution.
      *
      * @param name        The name of the command. Cannot be {@code null}.
      * @param description The description of the command, which may contain a translation key. Cannot be {@code null}.
-     * @param permission  The {@code Permission} object representing the required permission to execute the command.
+     * @param permission  The string representing the required permission to execute the command.
      */
-    public Command(String name, @MayContainTrKey String description, Permission permission) {
+    public Command(String name, @MayContainTrKey String description, String permission) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         this.permissions = new ArrayList<>();

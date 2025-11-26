@@ -1,5 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.Player;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
@@ -14,11 +15,9 @@ public class SetPlayerGameTypePacketProcessor extends PacketProcessor<SetPlayerG
 
     @Override
     public void handleSync(Player player, SetPlayerGameTypePacket packet, long receiveTime) {
-        if (!player.getControlledEntity().isOperator()) {
-            return;
+        if (player.getControlledEntity().hasPermission(Permissions.COMMAND_GAMEMODE).asBoolean()) {
+            player.getControlledEntity().setGameMode(NetworkHelper.fromNetwork(GameType.from(packet.getGamemode())));
         }
-
-        player.getControlledEntity().setGameMode(NetworkHelper.fromNetwork(GameType.from(packet.getGamemode())));
     }
 
     @Override

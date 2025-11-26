@@ -1,18 +1,21 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.server.Server;
 
 import java.util.Collection;
 
 /**
  * @author xingchentye
  */
-public class DeOpCommand extends VanillaCommand {
+public class DeOpCommand extends Command {
 
     public DeOpCommand() {
-        super("deop", TrKeys.MC_COMMANDS_DEOP_DESCRIPTION);
+        super("deop", TrKeys.MC_COMMANDS_DEOP_DESCRIPTION, Permissions.COMMAND_DEOP);
     }
 
     @Override
@@ -30,12 +33,18 @@ public class DeOpCommand extends VanillaCommand {
             }
 
             var player = players.stream().findFirst().get();
-            if (!player.isOperator()) {
+            if (!player.isActualPlayer()) {
+                context.addPlayerNotFoundError();
+                return context.fail();
+            }
+
+            var manager = Server.getInstance().getPlayerManager();
+            if (!manager.isOperator(player.getController())) {
                 context.addError("%" + TrKeys.MC_COMMANDS_DEOP_FAILED, player.getDisplayName());
                 return context.fail();
             }
 
-            player.setOperator(false);
+            manager.setOperator(player.getController().getOriginName(), false);
 
             context.addOutput(TrKeys.MC_COMMANDS_DEOP_SUCCESS, player.getDisplayName());
             player.sendTranslatable(TrKeys.MC_COMMANDS_DEOP_MESSAGE);

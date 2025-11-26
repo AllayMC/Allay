@@ -5,7 +5,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.permission_old.Permissions;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.joml.Vector3d;

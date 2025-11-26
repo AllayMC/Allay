@@ -56,8 +56,9 @@ import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
@@ -279,8 +280,9 @@ public class AllayPlayer implements Player {
         return breakTime == 0 ? 65535 : (int) (65535 / breakTime);
     }
 
-    public void tick() {
-        if (this.shouldSendCommands) {
+    public void tick(long currentTick) {
+        // Send commands only once in one second to prevent lagging the client
+        if (this.shouldSendCommands && currentTick % 20 == 0) {
             this.sendCommands0();
             this.shouldSendCommands = false;
         }
@@ -289,7 +291,7 @@ public class AllayPlayer implements Player {
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
         var processor = packetProcessorHolder.getProcessor(packet);
         if (processor == null) {
-            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
+            log.warn("Received a sync packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
             return;
         }
         processor.handleSync(this, packet, receiveTime);
@@ -2089,11 +2091,6 @@ public class AllayPlayer implements Player {
         this.session.sendPacketImmediately(event.getPacket());
     }
 
-    @Override
-    public void sendCommands() {
-        this.shouldSendCommands = true;
-    }
-
     protected CommandData encodeCommand(Command command) {
         // Aliases
         CommandEnumData aliases = null;
@@ -2211,7 +2208,7 @@ public class AllayPlayer implements Player {
         packet.setUniqueEntityId(entity.getRuntimeId());
         // The command permissions set here are actually not very useful. Their main function is to allow OPs to have quick command options.
         // If this player does not have specific command permissions, the command description won't even be sent to the client
-        packet.setCommandPermission(entity.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR) ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
+        packet.setCommandPermission(entity.hasPermission(Permissions.ABILITY_OPERATOR_COMMAND_QUICK_BAR).asBoolean() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
         // PlayerPermissions is the permission level of the player as it shows up in the player list built up using the PlayerList packet
         packet.setPlayerPermission(calculatePlayerPermission(entity));
 
@@ -2226,15 +2223,22 @@ public class AllayPlayer implements Player {
         packet.getAbilityLayers().add(layer);
 
         sendPacket(packet);
+
+        if (player == this) {
+            this.shouldSendCommands = true;
+        }
     }
 
     protected EnumSet<Ability> calculateAbilities(EntityPlayer player) {
+        var gameMode = player.getGameMode();
+
         var abilities = EnumSet.noneOf(Ability.class);
         abilities.add(Ability.TELEPORT);
         abilities.add(Ability.WALK_SPEED);
         abilities.add(Ability.FLY_SPEED);
         abilities.add(Ability.VERTICAL_FLY_SPEED);
-        if (player.getGameMode() != GameMode.SPECTATOR) {
+
+        if (gameMode != GameMode.SPECTATOR) {
             abilities.add(Ability.BUILD);
             abilities.add(Ability.MINE);
             abilities.add(Ability.DOORS_AND_SWITCHES);
@@ -2245,25 +2249,28 @@ public class AllayPlayer implements Player {
             abilities.add(Ability.NO_CLIP);
             abilities.add(Ability.FLYING);
         }
-        if (player.getGameMode() == GameMode.CREATIVE) {
+
+        if (gameMode == GameMode.CREATIVE) {
             abilities.add(Ability.INSTABUILD);
         }
-        if (player.hasPermission(Permissions.ABILITY_FLY)) {
+
+        if (player.hasPermission(Permissions.ABILITY_FLY) != Tristate.FALSE && (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR)) {
             abilities.add(Ability.MAY_FLY);
         }
+
         if (player.isFlying()) {
             abilities.add(Ability.FLYING);
         }
+
         return abilities;
     }
 
     protected PlayerPermission calculatePlayerPermission(EntityPlayer player) {
-        if (player.hasPermissions(PermissionGroups.OPERATOR, true)) {
+        if (!player.isActualPlayer() || Server.getInstance().getPlayerManager().isOperator(player.getController())) {
             return PlayerPermission.OPERATOR;
-        } else if (player.hasPermissions(PermissionGroups.MEMBER, true)) {
-            return PlayerPermission.MEMBER;
         }
-        return PlayerPermission.VISITOR;
+
+        return PlayerPermission.MEMBER;
     }
 
     @Override
@@ -2357,18 +2364,12 @@ public class AllayPlayer implements Player {
         this.controlledEntity.setDisplayName(loginData.getXname());
         this.controlledEntity.setNameTag(loginData.getXname());
         this.controlledEntity.setNameTagAlwaysShow(true);
-        // TODO: perm refactor
-        // Add the parent permission group alone, so that the permission listeners will be triggered
-        // Commands will be sent to the client during this method call
-        this.controlledEntity.getPermissionGroup().addParent(Server.getInstance().getPlayerManager().isOperator(this) ? PermissionGroups.OPERATOR : PermissionGroups.DEFAULT.get(), this.controlledEntity);
-        // The default game mode may be creative/spectator, and in that case we should give player fly ability
-        var gamemode = this.controlledEntity.getGameMode();
-        this.controlledEntity.setPermission(Permissions.ABILITY_FLY, gamemode != GameMode.SURVIVAL && gamemode != GameMode.ADVENTURE);
         this.controlledEntity.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
 
         var baseComponent = (EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) this.controlledEntity).getBaseComponent();
         baseComponent.setController(this);
         baseComponent.setUniqueId(this.loginData.getUuid());
+        baseComponent.setPermissionCalculator(new OpPermissionCalculator(this));
 
         dimension.addPlayer(this);
 

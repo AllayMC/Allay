@@ -1,7 +1,9 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 import java.util.StringJoiner;
@@ -9,9 +11,9 @@ import java.util.StringJoiner;
 /**
  * @author daoge_cmd
  */
-public class ListCommand extends VanillaCommand {
+public class ListCommand extends Command {
     public ListCommand() {
-        super("list", TrKeys.MC_COMMANDS_LIST_DESCRIPTION);
+        super("list", TrKeys.MC_COMMANDS_LIST_DESCRIPTION, Permissions.COMMAND_LIST);
     }
 
     @Override

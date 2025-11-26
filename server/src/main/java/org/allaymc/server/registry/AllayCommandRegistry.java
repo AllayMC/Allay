@@ -9,7 +9,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -84,7 +83,6 @@ public class AllayCommandRegistry extends CommandRegistry {
     @Override
     public void register(Command command) {
         content.put(command.getName(), command);
-        command.getPermissions().forEach(permission -> PermissionGroups.OPERATOR.addPermission(permission, null));
     }
 
     @Override
@@ -101,11 +99,7 @@ public class AllayCommandRegistry extends CommandRegistry {
 
     @Override
     public Command unregister(String name) {
-        var cmd = getContent().remove(name);
-        if (cmd != null) {
-            cmd.getPermissions().forEach(permission -> PermissionGroups.OPERATOR.removePermission(permission, null));
-        }
-        return cmd;
+        return getContent().remove(name);
     }
 
     @Override

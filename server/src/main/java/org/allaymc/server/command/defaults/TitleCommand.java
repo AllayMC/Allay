@@ -1,8 +1,10 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.Player;
 
 import java.util.Collection;
@@ -10,9 +12,9 @@ import java.util.Collection;
 /**
  * @author daoge_cmd
  */
-public class TitleCommand extends VanillaCommand {
+public class TitleCommand extends Command {
     public TitleCommand() {
-        super("title", TrKeys.MC_COMMANDS_TITLE_DESCRIPTION);
+        super("title", TrKeys.MC_COMMANDS_TITLE_DESCRIPTION, Permissions.COMMAND_TITLE);
     }
 
     @Override

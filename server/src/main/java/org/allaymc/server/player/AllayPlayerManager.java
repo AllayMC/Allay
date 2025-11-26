@@ -57,7 +57,7 @@ public class AllayPlayerManager implements PlayerManager {
 
     public void tick(long currentTick) {
         this.playerStorage.tick(currentTick);
-        this.players.values().forEach(player -> ((AllayPlayer) player).tick());
+        this.players.values().forEach(player -> ((AllayPlayer) player).tick(currentTick));
     }
 
     public void shutdown() {
@@ -245,16 +245,20 @@ public class AllayPlayerManager implements PlayerManager {
 
     @Override
     public void setOperator(String uuidOrName, boolean value) {
-        var player = players.values().stream()
-                .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
-                .findFirst();
+        if (value == isOperator(uuidOrName)) {
+            return;
+        }
+
         if (value) {
             operators.operators().add(uuidOrName);
-            player.ifPresent(p -> p.getControlledEntity().setOperator(true));
         } else {
             operators.operators().remove(uuidOrName);
-            player.ifPresent(p -> p.getControlledEntity().setOperator(false));
         }
+
+        players.values().stream()
+                .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
+                .findFirst()
+                .ifPresent(player -> player.viewPlayerPermission(player));
     }
 
     public void startNetworkInterface() {

@@ -48,7 +48,7 @@ Let's make the following changes to our code:
 ```java linenums="1" hl_lines="9"
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission_old.PermissionGroups;
 import org.allaymc.api.server.Server;
 
 public class HelloCommand extends Command {

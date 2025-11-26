@@ -1,11 +1,13 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -23,10 +25,10 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class ScoreboardCommand extends VanillaCommand {
+public class ScoreboardCommand extends Command {
 
     public ScoreboardCommand() {
-        super("scoreboard", TrKeys.MC_COMMANDS_SCOREBOARD_DESCRIPTION);
+        super("scoreboard", TrKeys.MC_COMMANDS_SCOREBOARD_DESCRIPTION, Permissions.COMMAND_SCOREBOARD);
     }
 
     private static Set<Scorer> parseScorers(CommandSender sender, String wildcardTargetStr) throws SelectorSyntaxException {

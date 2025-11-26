@@ -1,23 +1,23 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.AllayAPI;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.utils.GitProperties;
 
 /**
  * @author daoge_cmd
  */
-public class VersionCommand extends VanillaCommand {
+public class VersionCommand extends Command {
 
     public VersionCommand() {
-        super("version", TrKeys.ALLAY_COMMAND_VERSION_DESCRIPTION);
+        super("version", TrKeys.ALLAY_COMMAND_VERSION_DESCRIPTION, Permissions.COMMAND_VERSION);
         aliases.add("ver");
         aliases.add("about");
-        getPermissions().forEach(PermissionGroups.MEMBER::addPermission);
     }
 
     @Override

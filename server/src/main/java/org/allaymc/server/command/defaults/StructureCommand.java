@@ -1,7 +1,9 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.world.StructureFile;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -16,13 +18,13 @@ import java.nio.file.Path;
  *
  * @author daoge_cmd
  */
-public class StructureCommand extends VanillaCommand {
+public class StructureCommand extends Command {
 
     private static final Path STRUCTURE_DIR = Path.of("structures");
     private static final String STRUCTURE_FILE_EXT = ".mcstructure";
 
     public StructureCommand() {
-        super("structure", "Manage structure");
+        super("structure", "Manage structure", Permissions.COMMAND_STRUCTURE);
         aliases.add("struct");
     }
 

@@ -1,11 +1,13 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.joml.Vector3d;
 
@@ -14,10 +16,10 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class SpawnPointCommand extends VanillaCommand {
+public class SpawnPointCommand extends Command {
 
     public SpawnPointCommand() {
-        super("spawnpoint", TrKeys.MC_COMMANDS_SPAWNPOINT_DESCRIPTION);
+        super("spawnpoint", TrKeys.MC_COMMANDS_SPAWNPOINT_DESCRIPTION, Permissions.COMMAND_SPAWNPOINT);
     }
 
     @Override

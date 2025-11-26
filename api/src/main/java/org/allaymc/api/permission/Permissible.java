@@ -1,155 +1,74 @@
 package org.allaymc.api.permission;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
- * Represents an entity that can have permissions.
+ * Represents an object that can have permissions.
  *
  * @author daoge_cmd
  */
 public interface Permissible {
 
     /**
-     * Gets the permission group of this entity.
+     * Checks if this permissible object has a certain permission. This is simply done by
+     * calling {@link PermissionCalculator#calculatePermission(String)}.
      *
-     * @return the permission group of this entity
+     * @param permission the permission to check
+     * @return the {@link Tristate} state of the permission
      */
-    PermissionGroup getPermissionGroup();
+    default Tristate hasPermission(String permission) {
+        var calculator = getPermissionCalculator();
+        if (calculator == null) {
+            return Tristate.UNDEFINED;
+        }
+
+        return calculator.calculatePermission(permission);
+    }
 
     /**
-     * Override this method to return the actual permissible object. Useful when you want the
-     * {@link PermissionListener} can get the actual permissible object.
+     * Checks if this permissible object has all the specified permissions.
+     * Each permission is evaluated, and the method returns {@code true}
+     * only if all permissions resolve to {@link Tristate#TRUE}.
      *
-     * @return the actual permissible object
+     * @param permissions a collection of permission strings to check
+     * @return {@code true} if all permissions resolve to {@link Tristate#TRUE};
+     * {@code false} otherwise
      */
-    default Permissible getPermissible() {
-        return this;
+    default boolean hasPermissions(Collection<String> permissions) {
+        return permissions.stream().map(this::hasPermission).allMatch(Tristate::asBoolean);
     }
 
     /**
-     * @see PermissionGroup#hasPermission(Permission)
+     * Retrieves the {@code PermissionCalculator} associated with this permissible object.
+     * The {@code PermissionCalculator} is responsible for determining whether a certain
+     * permission is granted to a subject.
+     *
+     * @return the {@code PermissionCalculator} instance currently associated with this object,
+     * or {@code null} if no {@code PermissionCalculator} has been assigned (in that case, any
+     * permission check will return {@link Tristate#UNDEFINED}).
      */
-    default boolean hasPermission(Permission permission) {
-        return getPermissionGroup().hasPermission(permission);
-    }
+    PermissionCalculator getPermissionCalculator();
 
     /**
-     * @see PermissionGroup#hasPermissions(Permission...)
+     * Sets the {@link PermissionCalculator} instance to be used for calculating permissions
+     * associated with this object.
+     *
+     * @param calculator the {@link PermissionCalculator} to assign. If set to {@code null},
+     *                   any permission check will return {@link Tristate#UNDEFINED}.
      */
-    default boolean hasPermissions(Permission... permissions) {
-        return getPermissionGroup().hasPermissions(permissions);
-    }
+    void setPermissionCalculator(PermissionCalculator calculator);
 
     /**
-     * @see PermissionGroup#hasPermissions(Collection)
+     * Called when the permissions associated with this permissible object change. This method
+     * is used to update the state of the permissible object if any permission changes.
+     * <p>
+     * For example, if a player's "flight permission" changes, the server should send an update
+     * to the client to enable the player to fly.
+     * <p>
+     * This method is expected to be called by the implementation of the {@link PermissionCalculator},
+     * since the permissible itself won't know if any permissions have changed.
      */
-    default boolean hasPermissions(Collection<Permission> permissions) {
-        return getPermissionGroup().hasPermissions(permissions);
-    }
-
-    /**
-     * @see PermissionGroup#hasPermissions(PermissionGroup, boolean)
-     */
-    default boolean hasPermissions(PermissionGroup group, boolean includeParentPermissions) {
-        return getPermissionGroup().hasPermissions(group, includeParentPermissions);
-    }
-
-    /**
-     * @see PermissionGroup#addPermission(Permission, Permissible)
-     */
-    default Permissible addPermission(Permission permission) {
-        getPermissionGroup().addPermission(permission, getPermissible());
-        return this;
-    }
-
-    /**
-     * @see PermissionGroup#removePermission(Permission, Permissible)
-     */
-    default Permissible removePermission(Permission permission) {
-        getPermissionGroup().removePermission(permission, getPermissible());
-        return this;
-    }
-
-    /**
-     * @see PermissionGroup#setPermission(Permission, boolean, Permissible)
-     */
-    default Permissible setPermission(Permission permission, boolean value) {
-        getPermissionGroup().setPermission(permission, value, getPermissible());
-        return this;
-    }
-
-    /**
-     * @see PermissionGroup#resetPermission(Permission, Permissible)
-     */
-    default Permissible resetPermission(Permission permission) {
-        getPermissionGroup().resetPermission(permission, getPermissible());
-        return this;
-    }
-
-    /**
-     * @see PermissionGroup#getPermissions()
-     */
-    default Set<Permission> getPermissions() {
-        return getPermissionGroup().getPermissions();
-    }
-
-    /**
-     * @see PermissionGroup#getPermissions(boolean)
-     */
-    default Set<Permission> getPermissions(boolean includeParentPermissions) {
-        return getPermissionGroup().getPermissions(includeParentPermissions);
-    }
-
-    /**
-     * @see PermissionGroup#getParentPermissions()
-     */
-    default Set<Permission> getParentPermissions() {
-        return getPermissionGroup().getParentPermissions();
-    }
-
-    /**
-     * @see PermissionGroup#isOperator()
-     */
-    default boolean isOperator() {
-        return getPermissionGroup().isOperator();
-    }
-
-    /**
-     * @see PermissionGroup#setOperator(boolean, Permissible)
-     */
-    default Permissible setOperator(boolean value) {
-        getPermissionGroup().setOperator(value, getPermissible());
-        return this;
-    }
-
-    /**
-     * @see PermissionGroup#addParent(PermissionGroup, Permissible)
-     */
-    default Permissible addParent(PermissionGroup parent) {
-        getPermissionGroup().addParent(parent, this);
-        return this;
-    }
-
-    /**
-     * @see PermissionGroup#removeParent(PermissionGroup, Permissible)
-     */
-    default Permissible removeParent(PermissionGroup parent) {
-        getPermissionGroup().removeParent(parent, this);
-        return this;
-    }
-
-    /**
-     * @see PermissionGroup#hasParent(PermissionGroup)
-     */
-    default boolean hasParent(PermissionGroup parent) {
-        return getPermissionGroup().hasParent(parent);
-    }
-
-    /**
-     * @see PermissionGroup#getParents()
-     */
-    default Set<PermissionGroup> getParents() {
-        return getPermissionGroup().getParents();
+    default void onPermissionChange() {
+        // no-op
     }
 }

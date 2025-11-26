@@ -333,13 +333,4 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
      */
     @ApiStatus.Internal
     void sendPacketImmediately(Object packet);
-
-    /**
-     * Require encoding and resending all commands to the player next tick. This method should be called when
-     * command permissions change, but usually you don't need to call this method manually since the permission
-     * listener does it.
-     */
-    // TODO: replace with Player#viewPlayerPermission()
-    @ApiStatus.Internal
-    void sendCommands();
 }

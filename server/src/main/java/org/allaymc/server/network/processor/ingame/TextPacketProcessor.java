@@ -22,7 +22,7 @@ public class TextPacketProcessor extends PacketProcessor<TextPacket> {
         }
 
         var entity = player.getControlledEntity();
-        if (!entity.hasPermission(Permissions.ABILITY_CHAT)) {
+        if (!entity.hasPermission(Permissions.ABILITY_CHAT).asBoolean()) {
             return;
         }
 

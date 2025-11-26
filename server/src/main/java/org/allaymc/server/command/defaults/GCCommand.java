@@ -1,7 +1,9 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 import static java.lang.Runtime.getRuntime;
@@ -10,9 +12,9 @@ import static org.allaymc.api.math.MathUtils.round;
 /**
  * @author daoge_cmd
  */
-public class GCCommand extends VanillaCommand {
+public class GCCommand extends Command {
     public GCCommand() {
-        super("gc", TrKeys.ALLAY_COMMAND_GC_DESCRIPTION);
+        super("gc", TrKeys.ALLAY_COMMAND_GC_DESCRIPTION, Permissions.COMMAND_GC);
     }
 
     @Override
@@ -27,7 +29,7 @@ public class GCCommand extends VanillaCommand {
             }
             System.gc();
             var freedMemory = memory - getCurrentMemoryUsage();
-            context.getSender().sendTranslatable(TrKeys.ALLAY_COMMAND_GC_COMPLETED, String.format("%.2f",freedMemory));
+            context.getSender().sendTranslatable(TrKeys.ALLAY_COMMAND_GC_COMPLETED, String.format("%.2f", freedMemory));
             return context.success();
         });
     }

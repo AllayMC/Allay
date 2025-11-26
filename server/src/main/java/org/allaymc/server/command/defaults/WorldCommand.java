@@ -1,11 +1,13 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
@@ -18,9 +20,9 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class WorldCommand extends VanillaCommand {
+public class WorldCommand extends Command {
     public WorldCommand() {
-        super("world", TrKeys.ALLAY_COMMAND_WORLD_DESCRIPTION);
+        super("world", TrKeys.ALLAY_COMMAND_WORLD_DESCRIPTION, Permissions.COMMAND_WORLD);
     }
 
     @Override

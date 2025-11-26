@@ -1,11 +1,13 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
 
 import java.util.ArrayList;
@@ -14,9 +16,9 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class GameModeCommand extends VanillaCommand {
+public class GameModeCommand extends Command {
     public GameModeCommand() {
-        super("gamemode", TrKeys.MC_COMMANDS_GAMEMODE_DESCRIPTION);
+        super("gamemode", TrKeys.MC_COMMANDS_GAMEMODE_DESCRIPTION, Permissions.COMMAND_FILL);
         aliases.add("gm");
     }
 

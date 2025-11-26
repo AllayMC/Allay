@@ -2,9 +2,11 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.joml.Vector3d;
 
 import java.util.List;
@@ -12,9 +14,9 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class SetBlockCommand extends VanillaCommand {
+public class SetBlockCommand extends Command {
     public SetBlockCommand() {
-        super("setblock", TrKeys.MC_COMMANDS_SETBLOCK_DESCRIPTION);
+        super("setblock", TrKeys.MC_COMMANDS_SETBLOCK_DESCRIPTION, Permissions.COMMAND_SETBLOCK);
     }
 
     @Override

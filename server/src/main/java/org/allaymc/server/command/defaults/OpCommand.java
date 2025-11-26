@@ -1,16 +1,18 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 /**
  * @author daoge_cmd
  */
-public class OpCommand extends VanillaCommand {
+public class OpCommand extends Command {
 
     public OpCommand() {
-        super("op", TrKeys.MC_COMMANDS_OP_DESCRIPTION);
+        super("op", TrKeys.MC_COMMANDS_OP_DESCRIPTION, Permissions.COMMAND_OP);
     }
 
     @Override

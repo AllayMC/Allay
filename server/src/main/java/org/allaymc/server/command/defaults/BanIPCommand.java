@@ -1,16 +1,18 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 /**
  * @author daoge_cmd
  */
-public class BanIPCommand extends VanillaCommand {
+public class BanIPCommand extends Command {
 
     public BanIPCommand() {
-        super("ban-ip", TrKeys.MC_COMMANDS_BANIP_DESCRIPTION);
+        super("ban-ip", TrKeys.MC_COMMANDS_BANIP_DESCRIPTION, Permissions.COMMAND_BAN_IP);
     }
 
     @Override

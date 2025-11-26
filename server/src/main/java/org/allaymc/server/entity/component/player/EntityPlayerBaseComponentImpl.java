@@ -3,6 +3,7 @@ package org.allaymc.server.entity.component.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
@@ -13,8 +14,7 @@ import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
@@ -45,7 +45,6 @@ import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.server.network.NetworkHelper.fromNetwork;
@@ -88,6 +87,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected Skin skin;
     protected Location3ic spawnPoint;
+
     /**
      * Used to solve the desynchronization of data at both ends.
      *
@@ -96,6 +96,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected Vector3dc expectedTeleportPos;
+
     @Getter
     @Setter
     protected int enchantmentSeed;
@@ -105,7 +106,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected boolean usingItemOnBlock, usingItemInAir;
     protected long startUsingItemInAirTime;
 
-    // TODO: move to player class
     protected Map<String, Long> cooldowns;
 
     @Getter
@@ -156,9 +156,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void initPermissionGroup() {
-        // Do not register the player's permission group
-        this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
+    public void onPermissionChange() {
+        if (isActualPlayer()) {
+            this.controller.viewPlayerPermission(this.controller);
+        }
     }
 
     @Override
@@ -186,7 +187,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         gameMode = event.getNewGameMode();
         this.gameMode = gameMode;
-        setPermission(Permissions.ABILITY_FLY, gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE);
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
         if (isActualPlayer()) {
@@ -259,7 +259,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     protected void tickPlayerDataAutoSave() {
         if (!isActualPlayer()) {
-            // Do not save fake player
+            // Do not save fake players
             return;
         }
 
@@ -561,10 +561,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.loadNBT(nbt);
         // General
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> {
-            this.gameMode = fromNetwork(GameType.from(id));
-            setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
-        });
+        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> this.gameMode = fromNetwork(GameType.from(id)));
 
         // SpawnPoint
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
@@ -630,7 +627,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public void sendMessage(String message) {
+        if (isActualPlayer()) {
+            this.controller.sendMessage(message);
+        }
+    }
+
+    @Override
     public void sendTranslatable(String translatable, Object... args) {
+        if (isActualPlayer()) {
+            this.controller.sendTranslatable(translatable, args);
+        }
+    }
+
+    @Override
+    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+        if (isActualPlayer()) {
+            this.controller.sendCommandOutputs(sender, status, outputs);
+        }
     }
 
     @Override

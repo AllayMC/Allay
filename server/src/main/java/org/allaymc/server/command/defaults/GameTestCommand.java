@@ -1,6 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
@@ -18,7 +19,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.Permission;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -45,10 +45,10 @@ import java.util.function.Consumer;
 /**
  * @author daoge_cmd
  */
-public class GameTestCommand extends VanillaCommand {
+public class GameTestCommand extends Command {
 
     public GameTestCommand() {
-        super("gametest", TrKeys.MC_GAMETEST_DESCRIPTION);
+        super("gametest", TrKeys.MC_GAMETEST_DESCRIPTION, "allay.command.gametest");
         aliases.add("gt");
     }
 
@@ -165,23 +165,6 @@ public class GameTestCommand extends VanillaCommand {
                     player.getDimension().getEntityManager().addEntity(entity);
                     return context.success();
                 }, SenderType.PLAYER)
-                .root()
-                .key("setperm")
-                .str("perm")
-                .bool("value")
-                .exec((context) -> {
-                    String name = context.getResult(1);
-                    var permission = Permission.get(name);
-                    if (permission == null) {
-                        context.addError("Unknown permission: " + name);
-                        return context.fail();
-                    }
-
-                    boolean value = context.getResult(2);
-                    context.getSender().setPermission(permission, value);
-                    context.addOutput("Perm " + permission + " was set to " + value);
-                    return context.success();
-                })
                 .root()
                 .key("spawnxporb")
                 .intNum("xp")
@@ -543,7 +526,7 @@ public class GameTestCommand extends VanillaCommand {
                 }, SenderType.PLAYER)
                 .root()
                 .key("invisiblenode")
-                .permission(Permission.createForCommand("gametest invisiblenode", "allay.command.gametest.invisiblenode"))
+                .permission("allay.command.gametest.invisiblenode")
                 .exec(context -> {
                     context.getSender().sendMessage("QAQ");
                     return context.success();

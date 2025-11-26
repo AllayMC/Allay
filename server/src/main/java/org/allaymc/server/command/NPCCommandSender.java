@@ -7,7 +7,7 @@ import org.allaymc.api.entity.interfaces.EntityNpc;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.message.TrContainer;
-import org.allaymc.api.permission.PermissionGroup;
+import org.allaymc.api.permission.PermissionCalculator;
 
 /**
  * @author daoge_cmd
@@ -44,8 +44,13 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public PermissionGroup getPermissionGroup() {
-        return npc.getPermissionGroup();
+    public PermissionCalculator getPermissionCalculator() {
+        return npc.getPermissionCalculator();
+    }
+
+    @Override
+    public void setPermissionCalculator(PermissionCalculator calculator) {
+        npc.setPermissionCalculator(calculator);
     }
 
     @Override
