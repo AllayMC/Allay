@@ -530,6 +530,23 @@ public class GameTestCommand extends Command {
                 .exec(context -> {
                     context.getSender().sendMessage("QAQ");
                     return context.success();
-                });
+                })
+                .root()
+                .key("spawnplayer")
+                .exec((context, sender) -> {
+                    var player = EntityTypes.PLAYER.createEntity(
+                            EntityInitInfo.builder()
+                                    .loc(sender.getLocation())
+                                    .build()
+                    );
+                    player.setNameTag(sender.getNameTag());
+                    player.setNameTagAlwaysShow(true);
+                    player.setDisplayName(sender.getDisplayName());
+                    player.setSkin(sender.getSkin());
+                    sender.getDimension().getEntityManager().addEntity(player);
+
+                    context.addOutput(TrKeys.MC_COMMANDS_SUMMON_SUCCESS);
+                    return context.success();
+                }, SenderType.PLAYER);
     }
 }
