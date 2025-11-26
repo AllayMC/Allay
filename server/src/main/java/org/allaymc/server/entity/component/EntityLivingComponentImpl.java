@@ -7,6 +7,8 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.ArmorContainer;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityState;
+import org.allaymc.api.entity.action.CriticalHit;
+import org.allaymc.api.entity.action.EnchantedHit;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
@@ -115,10 +117,10 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         setHealth(this.health - damage.getFinalDamage());
         thisEntity.applyAction(SimpleEntityAction.HURT);
         if (damage.isCritical()) {
-            thisEntity.applyAction(SimpleEntityAction.CRITICAL_HIT);
+            thisEntity.applyAction(new CriticalHit(55));
         }
         if (damage.isEnchanted()) {
-            thisEntity.applyAction(SimpleEntityAction.ENCHANTED_HIT);
+            thisEntity.applyAction(new EnchantedHit(15));
         }
 
         // Call the event in advance, as it may return early due to a short circuit later
