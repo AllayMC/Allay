@@ -146,6 +146,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
         this.chunkLoadingRadius = AllayServer.getSettings().worldSettings().viewDistance();
         this.chunkMaxSendCountPerTick = AllayServer.getSettings().worldSettings().chunkMaxSendCountPerTick();
+        // Player entity must have a non-null name tag, otherwise it will not be shown client-side
+        this.nameTag = "Player";
+        this.nameTagAlwaysShow = true;
     }
 
     public void setController(Player controller) {
