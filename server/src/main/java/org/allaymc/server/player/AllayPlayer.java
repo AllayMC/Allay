@@ -29,10 +29,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.debugshape.DebugShape;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.action.ArrowShakeAction;
-import org.allaymc.api.entity.action.EntityAction;
-import org.allaymc.api.entity.action.PickedUpAction;
-import org.allaymc.api.entity.action.SimpleEntityAction;
+import org.allaymc.api.entity.action.*;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
@@ -743,18 +740,6 @@ public class AllayPlayer implements Player {
                 packet.setRuntimeEntityId(entity.getRuntimeId());
                 sendPacket(packet);
             }
-            case SimpleEntityAction.CRITICAL_HIT -> {
-                var packet = new AnimatePacket();
-                packet.setAction(AnimatePacket.Action.CRITICAL_HIT);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
-            case SimpleEntityAction.ENCHANTED_HIT -> {
-                var packet = new AnimatePacket();
-                packet.setAction(AnimatePacket.Action.MAGIC_CRITICAL_HIT);
-                packet.setRuntimeEntityId(entity.getRuntimeId());
-                sendPacket(packet);
-            }
             case SimpleEntityAction.DEATH -> {
                 var packet = new EntityEventPacket();
                 packet.setType(EntityEventType.DEATH);
@@ -794,6 +779,20 @@ public class AllayPlayer implements Player {
                 packet.setType(EntityEventType.ARROW_SHAKE);
                 packet.setRuntimeEntityId(entity.getRuntimeId());
                 packet.setData(times);
+                sendPacket(packet);
+            }
+            case CriticalHit(int count) -> {
+                var packet = new AnimatePacket();
+                packet.setAction(AnimatePacket.Action.CRITICAL_HIT);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                packet.setData(count);
+                sendPacket(packet);
+            }
+            case EnchantedHit(int count) -> {
+                var packet = new AnimatePacket();
+                packet.setAction(AnimatePacket.Action.MAGIC_CRITICAL_HIT);
+                packet.setRuntimeEntityId(entity.getRuntimeId());
+                packet.setData(count);
                 sendPacket(packet);
             }
             default -> throw new IllegalStateException("Unhandled entity action type: " + action.getClass().getSimpleName());
