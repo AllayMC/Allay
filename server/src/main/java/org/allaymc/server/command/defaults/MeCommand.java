@@ -3,6 +3,7 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
@@ -12,6 +13,7 @@ import org.allaymc.api.server.Server;
 public class MeCommand extends Command {
     public MeCommand() {
         super("me", TrKeys.MC_COMMANDS_ME_DESCRIPTION, Permissions.COMMAND_ME);
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(this.permissions);
     }
 
     @Override
