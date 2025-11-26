@@ -1,11 +1,8 @@
 package org.allaymc.server.command;
 
 import org.allaymc.api.command.Command;
-import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNodeFactory;
-import org.allaymc.api.math.location.Location3d;
-import org.allaymc.api.permission_old.Permissions;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.joml.Vector3d;
@@ -22,13 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class CommandTreeTest {
     static Command mockCmd = Mockito.mock(Command.class);
-    static CommandSender mockSender = Mockito.mock(CommandSender.class);
-    static Location3d cmdExecLoc = new Location3d(0, 0, 0, null);
+    static MockCommandSender mockSender = new MockCommandSender();
 
     @BeforeAll
     static void init() {
         Mockito.when(mockCmd.getName()).thenReturn("test");
-        Mockito.when(mockSender.getCommandExecuteLocation()).thenReturn(cmdExecLoc);
         CommandNodeFactory.FACTORY.set(new AllayCommandNodeFactory());
     }
 
@@ -91,8 +86,8 @@ public class CommandTreeTest {
     @Test
     void testAddPermissionToOptionalParam() {
         var tree = AllayCommandTree.create(mockCmd);
-        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").optional().permission(Permissions.ABILITY_FLY));
-        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").permission(Permissions.ABILITY_FLY).optional());
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").optional().permission("test.permission"));
+        assertThrows(IllegalArgumentException.class, () -> tree.getRoot().intNum("test_optional").permission("test.permission").optional());
     }
 
     @Test
@@ -174,7 +169,7 @@ public class CommandTreeTest {
                 });
         tree.parse(mockSender, new String[]{"11", "45", "14"});
         assertEquals(new Vector3d(11, 45, 14), dest);
-        cmdExecLoc.set(19, 19, 810);
+        mockSender.getFakeLocation().set(19, 19, 810);
         tree.parse(mockSender, new String[]{"~1", "~2", "~3"});
         assertEquals(new Vector3d(19 + 1, 19 + 2, 810 + 3), dest);
         tree.parse(mockSender, new String[]{"~-1", "~-2", "~-3"});
