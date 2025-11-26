@@ -1,11 +1,13 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
 
 import java.util.HashMap;
@@ -16,10 +18,10 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class KillCommand extends VanillaCommand {
+public class KillCommand extends Command {
 
     public KillCommand() {
-        super("kill", TrKeys.MC_COMMANDS_KILL_DESCRIPTION);
+        super("kill", TrKeys.MC_COMMANDS_KILL_DESCRIPTION, Permissions.COMMAND_KILL);
     }
 
     @Override

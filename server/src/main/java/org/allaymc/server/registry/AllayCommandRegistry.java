@@ -9,7 +9,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.PermissionGroups;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -84,7 +83,6 @@ public class AllayCommandRegistry extends CommandRegistry {
     @Override
     public void register(Command command) {
         content.put(command.getName(), command);
-        command.getPermissions().forEach(permission -> PermissionGroups.OPERATOR.addPermission(permission, null));
     }
 
     @Override
@@ -101,11 +99,7 @@ public class AllayCommandRegistry extends CommandRegistry {
 
     @Override
     public Command unregister(String name) {
-        var cmd = getContent().remove(name);
-        if (cmd != null) {
-            cmd.getPermissions().forEach(permission -> PermissionGroups.OPERATOR.removePermission(permission, null));
-        }
-        return cmd;
+        return getContent().remove(name);
     }
 
     @Override
@@ -142,18 +136,19 @@ public class AllayCommandRegistry extends CommandRegistry {
             }
 
             var status = result.status();
+            var permissions = result.context().getPermissions();
             var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
             if (result.isSuccess()) {
                 var messageChannel = Server.getInstance().getMessageChannel();
-                messageChannel.broadcastCommandOutputs(sender, status, outputs);
+                messageChannel.broadcastCommandOutputs(sender, status, permissions, outputs);
                 if (!messageChannel.hasReceiver(sender)) {
                     // The command sender used to execute this command is not registered to the message channel,
                     // but we still need to send the command outputs to itself. Let's do it manually
-                    sender.sendCommandOutputs(sender, status, outputs);
+                    sender.sendCommandOutputs(sender, status, permissions, outputs);
                 }
             } else {
                 // If there is an error, only send the message to itself
-                sender.sendCommandOutputs(result.context().getSender(), status, outputs);
+                sender.sendCommandOutputs(result.context().getSender(), status, permissions, outputs);
             }
 
             return result;

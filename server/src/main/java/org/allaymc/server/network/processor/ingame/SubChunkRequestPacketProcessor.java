@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.server.network.processor.PacketProcessor;
@@ -32,9 +32,10 @@ import java.util.Objects;
 public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequestPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, SubChunkRequestPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(Player player, SubChunkRequestPacket packet, long receiveTime) {
+        var entity = player.getControlledEntity();
         var dimensionInfo = Objects.requireNonNull(DimensionInfo.of(packet.getDimension()));
-        if (dimensionInfo != player.getDimension().getDimensionInfo()) {
+        if (dimensionInfo != entity.getDimension().getDimensionInfo()) {
             // Outdated sub chunk request from a previous dimension
             var subChunkPacket = new SubChunkPacket();
             subChunkPacket.setDimension(packet.getDimension());
@@ -57,7 +58,8 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         return PacketSignal.HANDLED;
     }
 
-    private SubChunkData createSubChunkDataForPlayer(EntityPlayer player, DimensionInfo dimensionInfo, Vector3i center, Vector3i offset) {
+    private SubChunkData createSubChunkDataForPlayer(Player player, DimensionInfo dimensionInfo, Vector3i center, Vector3i offset) {
+        var entity = player.getControlledEntity();
         var subChunkData = new SubChunkData();
         subChunkData.setPosition(offset);
 
@@ -72,7 +74,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 
         int chunkX = center.getX() + offset.getX();
         int chunkZ = center.getZ() + offset.getZ();
-        var chunk = player.getDimension().getChunkManager().getChunk(chunkX, chunkZ);
+        var chunk = entity.getDimension().getChunkManager().getChunk(chunkX, chunkZ);
         if (chunk == null) {
             // This is possible since the chunk may still remain loading
             subChunkData.setResult(SubChunkRequestResult.CHUNK_NOT_FOUND);

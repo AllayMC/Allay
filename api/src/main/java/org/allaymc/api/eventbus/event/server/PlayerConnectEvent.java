@@ -1,4 +1,4 @@
-package org.allaymc.api.eventbus.event.network;
+package org.allaymc.api.eventbus.event.server;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,8 +7,7 @@ import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.message.MayContainTrKey;
-
-import java.net.SocketAddress;
+import org.allaymc.api.player.Player;
 
 /**
  * @author daoge_cmd
@@ -16,8 +15,8 @@ import java.net.SocketAddress;
 @AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.NETWORK)
-public class ClientConnectEvent extends NetworkEvent implements CancellableEvent {
-    protected SocketAddress socketAddress;
+public class PlayerConnectEvent extends ServerEvent implements CancellableEvent {
+    protected Player player;
     /**
      * The reason that will be shown to the player if the event is cancelled.
      * If the event is not cancelled, this field will be ignored.

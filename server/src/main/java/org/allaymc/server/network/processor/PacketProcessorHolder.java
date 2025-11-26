@@ -27,6 +27,7 @@ public final class PacketProcessorHolder {
 
         registerConnectedPacketProcessors();
         registerLoggedInPacketProcessors();
+        registerSpawnedPacketProcessors();
         registerInGamePacketProcessors();
     }
 
@@ -73,24 +74,27 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.LOGGED_IN, new ClientCacheStatusPacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ResourcePackClientResponsePacketProcessor());
         registerProcessor(ClientState.LOGGED_IN, new ResourcePackChunkRequestPacketProcessor());
-        registerProcessor(ClientState.LOGGED_IN, new RequestChunkRadiusPacketProcessor());
-        registerProcessor(ClientState.LOGGED_IN, new EmoteListPacketProcessor());
-        registerProcessor(ClientState.LOGGED_IN, new SetLocalPlayerAsInitializedPacketProcessor());
+    }
 
-        // Client will send sub chunk request packets during logged-in stage if the sub chunk
+    private void registerSpawnedPacketProcessors() {
+        registerProcessor(ClientState.SPAWNED, new RequestChunkRadiusPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new EmoteListPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new SetLocalPlayerAsInitializedPacketProcessor());
+
+        // Client will send sub chunk request packets during spawned stage if the sub chunk
         // sending system is enabled
-        registerProcessor(ClientState.LOGGED_IN, new SubChunkRequestPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new SubChunkRequestPacketProcessor());
 
-        // Client will start sending the auth input packet after logged in, however, these packets will be ignored.
+        // Client will start sending the auth input packet after spawned, however, these packets will be ignored.
         // See PlayerAuthInputPacketProcessor#notReadyForInput()
-        registerProcessor(ClientState.LOGGED_IN, new PlayerAuthInputPacketProcessor());
-        registerProcessor(ClientState.LOGGED_IN, new ServerboundLoadingScreenPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new PlayerAuthInputPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new ServerboundLoadingScreenPacketProcessor());
 
         // These three packets seem are also sent during initialize chunk sending stage, so we also added them
-        registerProcessor(ClientState.LOGGED_IN, new MobEquipmentPacketProcessor());
-        registerProcessor(ClientState.LOGGED_IN, new InteractPacketProcessor());
-        registerProcessor(ClientState.LOGGED_IN, new MapInfoRequestPacketProcessor());
-        registerProcessor(ClientState.LOGGED_IN, new ServerboundDiagnosticsPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new MobEquipmentPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new InteractPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new MapInfoRequestPacketProcessor());
+        registerProcessor(ClientState.SPAWNED, new ServerboundDiagnosticsPacketProcessor());
     }
 
     private void registerInGamePacketProcessors() {

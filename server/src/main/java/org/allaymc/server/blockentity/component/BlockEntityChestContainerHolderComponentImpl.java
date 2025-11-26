@@ -32,7 +32,7 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
     protected void onInteract(CBlockOnInteractEvent event) {
         var interactInfo = event.getInteractInfo();
         var player = interactInfo.player();
-        if (player == null || player.isSneaking()) {
+        if (player == null || player.isSneaking() || !player.isActualPlayer()) {
             return;
         }
 
@@ -58,12 +58,12 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
             this.doubleChestContainer.setLeft(left);
             this.doubleChestContainer.setRight(right);
             this.doubleChestContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), event.getDimension()));
-            this.doubleChestContainer.addViewer(player);
+            this.doubleChestContainer.addViewer(player.getController());
         } else {
             if (this.container instanceof BlockContainer blockContainer) {
                 blockContainer.setBlockPos(this.baseComponent.getPosition());
             }
-            this.container.addViewer(player);
+            this.container.addViewer(player.getController());
         }
 
         event.setSuccess(true);

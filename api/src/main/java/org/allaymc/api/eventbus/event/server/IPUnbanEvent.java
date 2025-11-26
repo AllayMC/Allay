@@ -1,11 +1,10 @@
-package org.allaymc.api.eventbus.event.player;
+package org.allaymc.api.eventbus.event.server;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.eventbus.event.Event;
 
 /**
  * @author daoge_cmd
@@ -13,6 +12,6 @@ import org.allaymc.api.eventbus.event.Event;
 @AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.ANY)
-public class PlayerBanEvent extends Event implements CancellableEvent {
-    protected String uuidOrName;
+public class IPUnbanEvent extends ServerEvent implements CancellableEvent {
+    protected String ip;
 }

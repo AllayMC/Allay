@@ -1,14 +1,13 @@
 package org.allaymc.server.network.processor.login;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayLoginData;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ServerToClientHandshakePacket;
@@ -25,7 +24,9 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
-    public void handle(EntityPlayer player, LoginPacket packet) {
+    public void handle(Player player, LoginPacket packet) {
+        var allayPlayer = (AllayPlayer) player;
+
         var loginData = AllayLoginData.decode(packet);
         if (loginData == null) {
             log.warn("Failed to decode login packet received from {}. The client will be disconnected", player.getSocketAddress());
@@ -33,8 +34,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var clientComponent = (EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent();
-        clientComponent.setLoginData(loginData);
+        allayPlayer.setLoginData(loginData);
 
         var server = Server.getInstance();
         if (AllayServer.getSettings().genericSettings().enableWhitelist() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
@@ -70,12 +70,12 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         }
 
         if (!AllayServer.getSettings().networkSettings().enableNetworkEncryption()) {
-            clientComponent.completeLogin();
+            allayPlayer.completeLogin();
             return;
         }
 
         try {
-            clientComponent.setNetworkEncryptionEnabled(true);
+            allayPlayer.setNetworkEncryptionEnabled(true);
 
             var clientKey = EncryptionUtils.parseKey(loginData.getIdentityPublicKey());
             var serverKeyPair = EncryptionUtils.createKeyPair();
@@ -86,7 +86,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             player.sendPacketImmediately(handshakePacket);
 
             var encryptionSecretKey = EncryptionUtils.getSecretKey(serverKeyPair.getPrivate(), clientKey, token);
-            ((EntityPlayerImpl) player).getClientSession().enableEncryption(encryptionSecretKey);
+            allayPlayer.getSession().enableEncryption(encryptionSecretKey);
             // completeLogin() when client send back ClientToServerHandshakePacket
         } catch (Exception exception) {
             log.warn("Failed to initialize encryption for client {}", name, exception);

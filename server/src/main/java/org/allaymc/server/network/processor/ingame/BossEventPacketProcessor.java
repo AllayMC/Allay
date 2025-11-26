@@ -1,6 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BossEventPacket;
@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class BossEventPacketProcessor extends PacketProcessor<BossEventPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, BossEventPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(Player player, BossEventPacket packet, long receiveTime) {
         return PacketSignal.HANDLED;
     }
 

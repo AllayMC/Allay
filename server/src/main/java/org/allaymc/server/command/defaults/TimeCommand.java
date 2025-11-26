@@ -3,16 +3,18 @@ package org.allaymc.server.command.defaults;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.world.WorldData;
 
 /**
  * @author daoge_cmd
  */
-public class TimeCommand extends VanillaCommand {
+public class TimeCommand extends Command {
     public TimeCommand() {
-        super("time", TrKeys.MC_COMMANDS_TIME_DESCRIPTION);
+        super("time", TrKeys.MC_COMMANDS_TIME_DESCRIPTION, Permissions.COMMAND_TIME);
     }
 
     @Override

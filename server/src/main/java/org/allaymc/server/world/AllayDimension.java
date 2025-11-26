@@ -1,5 +1,6 @@
 package org.allaymc.server.world;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.Block;
@@ -13,6 +14,7 @@ import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.ClientState;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
@@ -46,7 +48,7 @@ public class AllayDimension implements Dimension {
     protected final AllayEntityManager entityManager;
     protected final AllayBlockUpdateManager blockUpdateManager;
     protected final AllayLightEngine lightEngine;
-    protected final Set<EntityPlayer> players;
+    protected final Set<Player> players;
     protected final Set<DebugShape> debugShapes;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
@@ -87,11 +89,16 @@ public class AllayDimension implements Dimension {
         this.entityManager.shutdown();
     }
 
-    @Override
-    public void addPlayer(EntityPlayer player, Runnable runnable) {
+    public void addPlayer(Player player) {
+        addPlayer(player, () -> {
+        });
+    }
+
+    public void addPlayer(Player player, Runnable runnable) {
+        var entity = Preconditions.checkNotNull(player.getControlledEntity());
         this.players.add(player);
-        this.chunkManager.addChunkLoader(player);
-        this.entityManager.addEntity(player, runnable);
+        this.chunkManager.addChunkLoader(entity);
+        this.entityManager.addEntity(entity, runnable);
         if (player.getClientState() == ClientState.IN_GAME) {
             // Only send debug shapes to the players when they are in-game. This
             // solves the issue that debug shapes won't be displayed if the player
@@ -113,16 +120,21 @@ public class AllayDimension implements Dimension {
         viewer.viewDebugShapes(debugShapes);
     }
 
-    @Override
-    public void removePlayer(EntityPlayer player, Runnable runnable) {
-        if (player.isSpawned()) {
+    public void removePlayer(Player player) {
+        removePlayer(player, () -> {
+        });
+    }
+
+    public void removePlayer(Player player, Runnable runnable) {
+        var entity = Preconditions.checkNotNull(player.getControlledEntity());
+        if (entity.isSpawned()) {
             // When the player respawns to another dimension after death, the player entity has already been unloaded
             // Therefore, when unloading the player entity, we need to check if the player entity has been spawned
-            this.entityManager.removeEntity(player, runnable);
-            this.chunkManager.removeChunkLoader(player);
+            this.entityManager.removeEntity(entity, runnable);
+            this.chunkManager.removeChunkLoader(entity);
             this.players.remove(player);
         } else {
-            this.chunkManager.removeChunkLoader(player);
+            this.chunkManager.removeChunkLoader(entity);
             this.players.remove(player);
             // Run the callback directly
             runnable.run();
@@ -140,7 +152,7 @@ public class AllayDimension implements Dimension {
 
     @Override
     @UnmodifiableView
-    public Set<EntityPlayer> getPlayers() {
+    public Set<Player> getPlayers() {
         return Collections.unmodifiableSet(this.players);
     }
 

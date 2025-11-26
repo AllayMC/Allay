@@ -2,12 +2,11 @@ package org.allaymc.server.entity.component.player;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.EntityPlayerClientComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -15,12 +14,9 @@ import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.message.MessageReceiver;
-import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.permission.PermissionGroups;
-import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.player.PlayerData;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
@@ -29,12 +25,11 @@ import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.allaymc.server.entity.component.event.CEntityAttackEvent;
 import org.allaymc.server.entity.component.event.CPlayerGameModeChangeEvent;
-import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
+import org.allaymc.server.world.AllayDimension;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -49,8 +44,8 @@ import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.server.network.NetworkHelper.fromNetwork;
@@ -83,17 +78,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
      */
     protected static final int EXHAUSTION_MOVEMENT_THRESHOLD = 10;
 
-    @Dependency
-    @Delegate(types = MessageReceiver.class)
-    protected EntityPlayerClientComponent clientComponent;
     @ComponentObject
     protected EntityPlayer thisPlayer;
 
+    @Getter
+    protected Player controller;
     @Getter
     protected GameMode gameMode;
     @Getter
     protected Skin skin;
     protected Location3ic spawnPoint;
+
     /**
      * Used to solve the desynchronization of data at both ends.
      *
@@ -102,6 +97,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected Vector3dc expectedTeleportPos;
+
     @Getter
     @Setter
     protected int enchantmentSeed;
@@ -132,6 +128,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     protected long nextSavePlayerDataTime;
 
+    @Getter
+    @Setter
+    protected int chunkLoadingRadius;
+    @Getter
+    protected int chunkMaxSendCountPerTick;
+
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
         this.gameMode = AllayServer.getSettings().genericSettings().defaultGameMode();
@@ -142,24 +144,39 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.cooldowns = new NonBlockingHashMap<>();
         this.foodLevel = MAX_FOOD_LEVEL;
         this.nextSavePlayerDataTime = Integer.MAX_VALUE;
-        // Player's name tag is always shown
-        this.nameTagAlwaysShow = true;
+        this.chunkLoadingRadius = AllayServer.getSettings().worldSettings().viewDistance();
+        this.chunkMaxSendCountPerTick = AllayServer.getSettings().worldSettings().chunkMaxSendCountPerTick();
+    }
+
+    public void setController(Player controller) {
+        if (isActualPlayer()) {
+            throw new IllegalStateException("Player's controller cannot be changed");
+        }
+
+        this.controller = controller;
     }
 
     @Override
-    protected void initPermissionGroup() {
-        // Do not register the player's permission group
-        this.permissionGroup = PermissionGroup.create("Permission group for player " + runtimeId, Set.of(), Set.of(), false);
+    public void onPermissionChange() {
+        if (isActualPlayer()) {
+            this.controller.viewPlayerPermission(this.controller);
+        }
     }
 
     @Override
     protected void saveUniqueId(NbtMapBuilder builder) {
-        // Do nothing
+        if (!isActualPlayer()) {
+            // Only save the unique id from nbt if the player is a fake player
+            super.saveUniqueId(builder);
+        }
     }
 
     @Override
     protected void loadUniqueId(NbtMap nbt) {
-        // Do nothing, as the uniqueId will be set in method onPlayerLoggedIn()
+        if (!isActualPlayer()) {
+            // Only load the unique id from nbt if the player is a fake player
+            super.loadUniqueId(nbt);
+        }
     }
 
     @Override
@@ -171,11 +188,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         gameMode = event.getNewGameMode();
         this.gameMode = gameMode;
-        setPermission(Permissions.ABILITY_FLY, gameMode != GameMode.SURVIVAL && gameMode != GameMode.ADVENTURE);
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
-        this.clientComponent.viewPlayerPermission(thisPlayer);
-        thisPlayer.viewPlayerGameMode(thisPlayer);
+        if (isActualPlayer()) {
+            this.controller.viewPlayerPermission(this.controller);
+            this.controller.viewPlayerGameMode(thisPlayer);
+        }
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
 
@@ -183,7 +201,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void setFlying(boolean flying) {
         if (this.flying != flying) {
             this.flying = flying;
-            this.clientComponent.viewPlayerPermission(thisPlayer);
+            if (isActualPlayer()) {
+                this.controller.viewPlayerPermission(this.controller);
+            }
         }
     }
 
@@ -239,6 +259,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     protected void tickPlayerDataAutoSave() {
+        if (!isActualPlayer()) {
+            // Do not save fake players
+            return;
+        }
+
         // We use server's tick instead of world's tick
         // because player may teleport between worlds
         // and the tick in different worlds may not be same
@@ -248,7 +273,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             return;
         }
         if (currentServerTick >= nextSavePlayerDataTime) {
-            Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(thisPlayer);
+            Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(this.controller);
             nextSavePlayerDataTime = currentServerTick + AllayServer.getSettings().storageSettings().playerDataAutoSaveCycle();
         }
     }
@@ -271,7 +296,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             var packet = new PlayerStartItemCooldownPacket();
             packet.setItemCategory(category);
             packet.setCooldownDuration(duration);
-            this.clientComponent.sendPacket(packet);
+            this.controller.sendPacket(packet);
         }
     }
 
@@ -293,7 +318,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.experienceLevel = event.getNewExperienceLevel();
-        this.clientComponent.sendExperienceLevel(this.experienceLevel);
+        this.controller.sendExperienceLevel(this.experienceLevel);
     }
 
     @Override
@@ -304,7 +329,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.experienceProgress = value;
-        this.clientComponent.sendExperienceProgress(this.experienceProgress);
+        this.controller.sendExperienceProgress(this.experienceProgress);
     }
 
     @Override
@@ -316,19 +341,25 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         this.foodLevel = event.getNewFoodLevel();
-        this.clientComponent.sendFoodLevel(this.foodLevel);
+        if (isActualPlayer()) {
+            this.controller.sendFoodLevel(this.foodLevel);
+        }
     }
 
     @Override
     public void setFoodSaturationLevel(float value) {
         this.foodSaturationLevel = Math.max(0, Math.min(value, MAX_FOOD_SATURATION_LEVEL));
-        this.clientComponent.sendFoodSaturationLevel(this.foodSaturationLevel);
+        if (isActualPlayer()) {
+            this.controller.sendFoodSaturationLevel(this.foodSaturationLevel);
+        }
     }
 
     @Override
     public void setFoodExhaustionLevel(float value) {
         this.foodExhaustionLevel = Math.max(0, Math.min(value, MAX_FOOD_EXHAUSTION_LEVEL));
-        this.clientComponent.sendFoodExhaustionLevel(this.foodExhaustionLevel);
+        if (isActualPlayer()) {
+            this.controller.sendFoodExhaustionLevel(this.foodExhaustionLevel);
+        }
     }
 
     @Override
@@ -383,53 +414,63 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     protected void beforeTeleport(Location3dc target) {
         super.beforeTeleport(target);
-        this.expectedTeleportPos = new Vector3d(target);
+        if (isActualPlayer()) {
+            this.expectedTeleportPos = new Vector3d(target);
+        }
     }
 
     @Override
     protected void teleportInDimension(Location3dc target) {
         super.teleportInDimension(target);
-        // For player, we also need to send move packet to client
-        // However, there is no need to send motion packet as we are teleporting the player
-        sendLocationToSelf();
+        // For player, we also need to send the move packet to client
+        // However, there is no need to send the motion packet as we are teleporting the player
+        if (isActualPlayer()) {
+            this.controller.viewEntityLocation(thisPlayer, lastSentLocation, location, true);
+        }
     }
 
     @Override
     protected void teleportOverDimension(Location3dc target) {
-        var currentDim = location.dimension();
-        var targetDim = target.dimension();
-        if (currentDim.getWorld() != targetDim.getWorld()) {
-            // Send new world's time
-            thisPlayer.viewTime(targetDim.getWorld().getWorldData().getTimeOfDay());
-            // Send new world's game rules
-            thisPlayer.viewGameRules(targetDim.getWorld().getWorldData().getGameRules());
-            thisPlayer.viewWeather(targetDim.getWorld().getWeather());
-        }
-        location.dimension().removePlayer(thisPlayer, () -> {
-            setLocationBeforeSpawn(target);
-            if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
-                // TODO: implement boolean changingDimension here
-                var packet1 = new ChangeDimensionPacket();
-                packet1.setDimension(targetDim.getDimensionInfo().dimensionId());
-                packet1.setPosition(Vector3f.from(target.x(), target.y() + 1.62f, target.z()));
-                this.clientComponent.sendPacket(packet1);
-
-                // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server. The client
-                // still sends the ack, but after the server has sent it. Thanks to Mojang for another groundbreaking change.
-                var packet2 = new PlayerActionPacket();
-                packet2.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
-                packet2.setRuntimeEntityId(this.runtimeId);
-                packet2.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-                packet2.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
-                this.clientComponent.sendPacket(packet2);
+        if (isActualPlayer()) {
+            var currentDim = (AllayDimension) location.dimension();
+            var targetDim = (AllayDimension) target.dimension();
+            if (currentDim.getWorld() != targetDim.getWorld()) {
+                // Send new world's time
+                this.controller.viewTime(targetDim.getWorld().getWorldData().getTimeOfDay());
+                // Send new world's game rules
+                this.controller.viewGameRules(targetDim.getWorld().getWorldData().getGameRules());
+                this.controller.viewWeather(targetDim.getWorld().getWeather());
             }
-            targetDim.addPlayer(thisPlayer, this::sendLocationToSelf);
-        });
+            currentDim.removePlayer(this.controller, () -> {
+                setLocationBeforeSpawn(target);
+                if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
+                    // TODO: implement boolean changingDimension here
+                    var packet1 = new ChangeDimensionPacket();
+                    packet1.setDimension(targetDim.getDimensionInfo().dimensionId());
+                    packet1.setPosition(Vector3f.from(target.x(), target.y() + 1.62f, target.z()));
+                    this.controller.sendPacket(packet1);
+
+                    // As of v1.19.50, the dimension ack that is meant to be sent by the client is now sent by the server. The client
+                    // still sends the ack, but after the server has sent it. Thanks to Mojang for another groundbreaking change.
+                    var packet2 = new PlayerActionPacket();
+                    packet2.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
+                    packet2.setRuntimeEntityId(this.runtimeId);
+                    packet2.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
+                    packet2.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
+                    this.controller.sendPacket(packet2);
+                }
+                targetDim.addPlayer(this.controller, () -> {
+                    this.controller.viewEntityLocation(thisPlayer, lastSentLocation, location, true);
+                });
+            });
+        } else {
+            super.teleportOverDimension(target);
+        }
     }
 
     @Override
     public void spawnTo(WorldViewer viewer) {
-        if (thisPlayer != viewer) {
+        if (this.controller != viewer) {
             super.spawnTo(viewer);
             viewer.viewEntityArmors(thisPlayer);
             viewer.viewEntityHand(thisPlayer);
@@ -441,7 +482,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void despawnFrom(WorldViewer viewer) {
-        if (thisPlayer != viewer) {
+        if (this.controller != viewer) {
             super.despawnFrom(viewer);
         }
     }
@@ -472,7 +513,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     public long getStartUsingItemInAirTime() {
         if (!isUsingItemInAir()) {
-            log.warn("Player {} is not using item in air", thisPlayer.getOriginName());
+            log.warn("Player {} is not using item in air", this.controller.getOriginName());
         }
         return this.startUsingItemInAirTime;
     }
@@ -521,10 +562,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         super.loadNBT(nbt);
         // General
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
-        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> {
-            this.gameMode = fromNetwork(GameType.from(id));
-            setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
-        });
+        nbt.listenForInt(TAG_PLAYER_GAME_MODE, id -> this.gameMode = fromNetwork(GameType.from(id)));
 
         // SpawnPoint
         if (nbt.containsKey(TAG_SPAWN_POINT)) {
@@ -564,15 +602,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public PlayerData savePlayerData() {
-        return PlayerData.builder()
-                .nbt(saveNBT())
-                .world(getWorld().getWorldData().getDisplayName())
-                .dimension(getDimension().getDimensionInfo().dimensionId())
-                .build();
-    }
-
-    @Override
     public Location3ic validateAndGetSpawnPoint() {
         if (spawnPoint.dimension().getWorld().getState() != WorldState.RUNNING) {
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
@@ -589,12 +618,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.spawnPoint = new Location3i(spawnPoint);
     }
 
-    public void sendLocationToSelf() {
-        // NOTICE: do not use MovePlayerPacket. Sometimes this packet does not have any
-        // effect especially when teleporting player to another world or a far away place.
-        thisPlayer.viewEntityLocation(thisPlayer, lastSentLocation, location, true);
-    }
-
     @Override
     public void setUsingItemInAir(boolean value, long time) {
         this.usingItemInAir = value;
@@ -605,13 +628,32 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public void sendMessage(String message) {
+        if (isActualPlayer()) {
+            this.controller.sendMessage(message);
+        }
+    }
+
+    @Override
     public void sendTranslatable(String translatable, Object... args) {
+        if (isActualPlayer()) {
+            this.controller.sendTranslatable(translatable, args);
+        }
+    }
+
+    @Override
+    public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
+        if (isActualPlayer()) {
+            this.controller.sendCommandOutputs(sender, status, permissions, outputs);
+        }
     }
 
     @Override
     public void applyAction(EntityAction action) {
         super.applyAction(action);
-        thisPlayer.viewEntityAction(thisPlayer, action);
+        if (isActualPlayer()) {
+            this.controller.viewEntityAction(thisPlayer, action);
+        }
     }
 
     @Override
@@ -637,7 +679,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void broadcastState() {
         super.broadcastState();
-        thisPlayer.viewEntityState(thisPlayer);
+        if (isActualPlayer()) {
+            this.controller.viewEntityState(thisPlayer);
+        }
     }
 
     @Override
@@ -645,14 +689,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.sprinting != sprinting) {
             this.sprinting = sprinting;
 
-            var speed = this.clientComponent.getSpeed();
-            if (sprinting) {
-                speed = speed.addMultiplier(0.3);
-            } else {
-                speed = speed.addMultiplier(-0.3);
+            if (isActualPlayer()) {
+                var speed = this.controller.getSpeed();
+                if (sprinting) {
+                    speed = speed.addMultiplier(0.3);
+                } else {
+                    speed = speed.addMultiplier(-0.3);
+                }
+                this.controller.setSpeed(speed);
             }
 
-            this.clientComponent.setSpeed(speed);
             broadcastState();
             new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
         }
@@ -711,22 +757,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
 
         return new AABBd(-0.3, 0.0, -0.3, 0.3, height, 0.3);
-    }
-
-    @EventHandler
-    protected void onPlayerLoggedIn(CPlayerLoggedInEvent event) {
-        var loginData = this.clientComponent.getLoginData();
-        this.skin = loginData.getSkin();
-        this.uniqueId = loginData.getUuid().getMostSignificantBits();
-        this.displayName = loginData.getXname();
-        // NOTICE: Do not use method setNameTag() here, since at that time the player is not added to
-        // any dimension and no one is viewing the player. Calling method setNameTag() will cause a NPE
-        this.nameTag = loginData.getXname();
-        // Add the parent permission group alone, so that the permission listeners will be triggered
-        // Commands will be sent to the client during this method call
-        this.permissionGroup.addParent(Server.getInstance().getPlayerManager().isOperator(thisPlayer) ? PermissionGroups.OPERATOR : PermissionGroups.DEFAULT.get(), thisPlayer);
-        // The default game mode may be creative/spectator, and in that case we should give player fly ability
-        setPermission(Permissions.ABILITY_FLY, this.gameMode != GameMode.SURVIVAL && this.gameMode != GameMode.ADVENTURE);
     }
 
     @EventHandler

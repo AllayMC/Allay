@@ -2,6 +2,8 @@ package org.allaymc.api.message;
 
 import org.allaymc.api.command.CommandSender;
 
+import java.util.List;
+
 /**
  * MessageReceiver represents an object that can receive messages.
  *
@@ -33,9 +35,10 @@ public interface MessageReceiver {
     /**
      * Send the command outputs to the receiver.
      *
-     * @param sender  the sender of the command
-     * @param status  the status of the command
-     * @param outputs the command outputs
+     * @param sender      the sender of the command
+     * @param status      the status of the command
+     * @param permissions the permissions required to view the command outputs
+     * @param outputs     the command outputs
      */
-    void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs);
+    void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs);
 }

@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InteractPacket;
@@ -11,9 +11,9 @@ import org.cloudburstmc.protocol.bedrock.packet.InteractPacket;
  */
 public class InteractPacketProcessor extends PacketProcessor<InteractPacket> {
     @Override
-    public void handleSync(EntityPlayer player, InteractPacket packet, long receiveTime) {
+    public void handleSync(Player player, InteractPacket packet, long receiveTime) {
         if (packet.getAction() == InteractPacket.Action.OPEN_INVENTORY) {
-            player.getContainer(ContainerTypes.INVENTORY).addViewer(player);
+            player.getControlledEntity().getContainer(ContainerTypes.INVENTORY).addViewer(player);
         }
     }
 

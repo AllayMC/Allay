@@ -12,7 +12,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.permission.Permission;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.data.Difficulty;
 import org.jetbrains.annotations.ApiStatus;
@@ -262,13 +261,12 @@ public interface CommandNode {
      * <p>
      * When the command is sent to a player, command nodes that the player does not have access to
      * are not sent. This is useful for hiding command nodes from players that do not have access to
-     * them. To automatically resend commands to the player when the player's permissions change, use
-     * {@link Permission#createForCommand(String, String)} to create permission here.
+     * them.
      *
      * @param permission the permissions to check
      * @return the current {@code CommandNode}
      */
-    CommandNode permission(Permission permission);
+    CommandNode permission(String permission);
 
     /**
      * Get the permissions required to access this node.
@@ -276,7 +274,7 @@ public interface CommandNode {
      * @return the permissions
      */
     @UnmodifiableView
-    List<Permission> getPermissions();
+    List<String> getPermissions();
 
     /**
      * Check if the command sender has all the required permissions for accessing this node.
@@ -285,7 +283,7 @@ public interface CommandNode {
      * @return {@code true} if the sender has all permissions, {@code false} otherwise.
      */
     default boolean checkPermissions(CommandSender sender) {
-        return getPermissions().stream().allMatch(sender::hasPermission);
+        return sender.hasPermissions(getPermissions());
     }
 
     /**

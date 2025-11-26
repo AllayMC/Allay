@@ -3,6 +3,7 @@ package org.allaymc.api.player;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -14,6 +15,7 @@ import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
  *
  * @author daoge_cmd
  */
+@Slf4j
 @Getter
 @Setter
 @Builder
@@ -32,6 +34,20 @@ public class PlayerData {
     // world and dimension the player is in.
     protected String world;
     protected int dimension;
+
+    public static PlayerData save(Player player) {
+        var entity = player.getControlledEntity();
+        if (entity == null) {
+            log.warn("Player is not controlling any entity!");
+            return PlayerData.createEmpty();
+        }
+
+        return PlayerData.builder()
+                .nbt(entity.saveNBT())
+                .world(entity.getWorld().getWorldData().getDisplayName())
+                .dimension(entity.getDimension().getDimensionInfo().dimensionId())
+                .build();
+    }
 
     /**
      * Creates an empty player data entry.

@@ -5,12 +5,12 @@ import org.allaymc.api.block.component.BlockAnvilBaseComponent;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.AnvilDamageEvent;
 import org.allaymc.api.eventbus.event.container.AnvilTakeResultEvent;
 import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeOptionalAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -33,7 +33,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
     private static final int ANVIL_COST_LIMIT = 39;
 
     @Override
-    public ActionResponse handle(CraftRecipeOptionalAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+    public ActionResponse handle(CraftRecipeOptionalAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = player.getOpenedContainer(ContainerTypes.ANVIL);
         if (container == null) {
             log.warn("Received a CraftRecipeOptionalAction without an opened container");
@@ -184,35 +184,36 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             totalCost = ANVIL_COST_LIMIT;
         }
 
-        if (player.getGameMode() != GameMode.CREATIVE) {
+        var entity = player.getControlledEntity();
+        if (entity.getGameMode() != GameMode.CREATIVE) {
             if (totalCost > ANVIL_COST_LIMIT) {
                 log.warn("Repair cost exceeds anvil limit of {}", ANVIL_COST_LIMIT);
                 return error();
             }
 
-            if (player.getExperienceLevel() < totalCost) {
+            if (entity.getExperienceLevel() < totalCost) {
                 log.warn("Player doesn't have enough experience levels");
                 return error();
             }
 
             var anvilPos = container.getBlockPos();
             if (ThreadLocalRandom.current().nextFloat() < ANVIL_DAMAGE_CHANCE) {
-                var anvilState = player.getDimension().getBlockState(anvilPos);
+                var anvilState = entity.getDimension().getBlockState(anvilPos);
                 if (anvilState.getBehavior() instanceof BlockAnvilBaseComponent anvilComponent) {
                     var newAnvilState = anvilComponent.damage(anvilState);
                     var event = new AnvilDamageEvent(new Block(anvilState, anvilPos), newAnvilState);
                     if (event.call()) {
                         if (newAnvilState.getBlockType() == BlockTypes.AIR) {
-                            player.getDimension().addSound(anvilPos, SimpleSound.ANVIL_BREAK);
+                            entity.getDimension().addSound(anvilPos, SimpleSound.ANVIL_BREAK);
                         }
 
-                        player.getDimension().setBlockState(anvilPos, event.getNewState());
+                        entity.getDimension().setBlockState(anvilPos, event.getNewState());
                     }
                 }
             }
 
-            player.getDimension().addSound(anvilPos, SimpleSound.ANVIL_USE);
-            player.setExperienceLevel(player.getExperienceLevel() - totalCost);
+            entity.getDimension().addSound(anvilPos, SimpleSound.ANVIL_USE);
+            entity.setExperienceLevel(entity.getExperienceLevel() - totalCost);
         }
 
         var newRepairCost = Math.max(inputItem.getRepairCost(), materialItem.getRepairCost());
@@ -227,7 +228,7 @@ public class CraftRecipeOptionalActionProcessor implements ContainerActionProces
             return error();
         }
 
-        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
+        entity.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, event.getResultItem(), false);
         return null;
     }
 

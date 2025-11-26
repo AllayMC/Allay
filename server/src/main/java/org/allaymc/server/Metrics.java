@@ -3,8 +3,8 @@ package org.allaymc.server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.player.LoginData;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerState;
 import org.allaymc.server.network.ProtocolInfo;
@@ -590,13 +590,13 @@ public class Metrics {
             metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> AllayServer.getSettings().networkSettings().xboxAuth() ? "Required" : "Not required"));
 
             metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getPlayerManager().getPlayers().values().stream()
-                    .map(EntityPlayer::getLoginData)
+                    .map(Player::getLoginData)
                     .map(LoginData::getDeviceInfo)
                     .map(LoginData.DeviceInfo::device)
                     .collect(groupingBy(LoginData.Device::getName, countingInt()))));
 
             metrics.addCustomChart(new Metrics.AdvancedPie("player_game_version", () -> server.getPlayerManager().getPlayers().values().stream()
-                    .map(EntityPlayer::getLoginData)
+                    .map(Player::getLoginData)
                     .collect(groupingBy(LoginData::getGameVersion, countingInt()))));
 
             metrics.addCustomChart(new Metrics.DrilldownPie("java_version", new JavaVersionRetriever()));

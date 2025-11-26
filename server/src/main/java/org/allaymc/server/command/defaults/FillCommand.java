@@ -2,8 +2,10 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.joml.Vector3d;
 
 import java.util.List;
@@ -11,9 +13,9 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class FillCommand extends VanillaCommand {
+public class FillCommand extends Command {
     public FillCommand() {
-        super("fill", TrKeys.MC_COMMANDS_FILL_DESCRIPTION);
+        super("fill", TrKeys.MC_COMMANDS_FILL_DESCRIPTION, Permissions.COMMAND_FILL);
     }
 
     @Override

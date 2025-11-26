@@ -31,8 +31,8 @@ public abstract class AbstractPlayerContainer extends BaseContainer {
             // Therefore, we need to send an inventory packet to the client as well.
             var player = playerSupplier.get();
             // The player object we get may be empty because some container types can be used by non-player entities (e.g. zombie)
-            if (player != null && !viewers.containsValue(player)) {
-                player.viewSlot(this, slot);
+            if (player != null && player.isActualPlayer() && !viewers.containsValue(player.getController())) {
+                player.getController().viewSlot(this, slot);
             }
         }
     }

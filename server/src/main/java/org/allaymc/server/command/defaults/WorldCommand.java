@@ -1,11 +1,13 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
@@ -18,9 +20,9 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class WorldCommand extends VanillaCommand {
+public class WorldCommand extends Command {
     public WorldCommand() {
-        super("world", TrKeys.ALLAY_COMMAND_WORLD_DESCRIPTION);
+        super("world", TrKeys.ALLAY_COMMAND_WORLD_DESCRIPTION, Permissions.COMMAND_WORLD);
     }
 
     @Override
@@ -93,7 +95,7 @@ public class WorldCommand extends VanillaCommand {
                         return context.fail();
                     }
 
-                    world.getPlayers().forEach(player -> player.teleport(Server.getInstance().getWorldPool().getGlobalSpawnPoint()));
+                    world.getPlayers().forEach(player -> player.getControlledEntity().teleport(Server.getInstance().getWorldPool().getGlobalSpawnPoint()));
                     // Unload the world after 1 second, because teleport players to another world will take some time
                     Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
                         Server.getInstance().getWorldPool().unloadWorld(worldName);
@@ -104,7 +106,7 @@ public class WorldCommand extends VanillaCommand {
                 .root()
                 .key("create")
                 .exec((context, player) -> {
-                    var langCode = player.getLoginData().getLangCode();
+                    var langCode = player.getController().getLoginData().getLangCode();
                     var storageTypes = new ArrayList<>(Registries.WORLD_STORAGE_FACTORIES.getContent().keySet());
                     var generatorTypes = new ArrayList<>(Registries.WORLD_GENERATOR_FACTORIES.getContent().keySet());
                     Forms.custom()
@@ -147,9 +149,9 @@ public class WorldCommand extends VanillaCommand {
 
                                 Server.getInstance().getWorldPool().loadWorld(name, storage, overworldGenerator, netherGenerator, theEndGenerator);
                             })
-                            .sendTo(player);
+                            .sendTo(player.getController());
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.ACTUAL_PLAYER);
 
     }
 }

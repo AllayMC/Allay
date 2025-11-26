@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -21,7 +21,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 @Slf4j
 public class DestroyActionProcessor implements ContainerActionProcessor<DestroyAction> {
     @Override
-    public ActionResponse handle(DestroyAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+    public ActionResponse handle(DestroyAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var container = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
         var count = action.getCount();
         var slot = ContainerActionProcessor.fromNetworkSlotIndex(container, action.getSource().getSlot());

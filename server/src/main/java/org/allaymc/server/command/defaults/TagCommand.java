@@ -1,8 +1,10 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,10 +12,10 @@ import java.util.stream.Collectors;
 /**
  * @author daoge_cmd
  */
-public class TagCommand extends VanillaCommand {
+public class TagCommand extends Command {
 
     public TagCommand() {
-        super("tag", TrKeys.MC_COMMANDS_TAG_DESCRIPTION);
+        super("tag", TrKeys.MC_COMMANDS_TAG_DESCRIPTION, Permissions.COMMAND_TAG);
     }
 
     @Override

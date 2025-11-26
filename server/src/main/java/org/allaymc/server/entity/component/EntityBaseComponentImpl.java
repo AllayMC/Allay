@@ -21,9 +21,9 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.pdc.PersistentDataContainer;
-import org.allaymc.api.permission.Permissible;
-import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.ConstantPermissionCalculator;
+import org.allaymc.api.permission.PermissionCalculator;
+import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -79,11 +79,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     protected final long runtimeId;
 
-    @Getter
-    protected PermissionGroup permissionGroup;
     // Will be reset in method loadUniqueId()
     @Getter
-    protected long uniqueId = Long.MAX_VALUE;
+    @Setter
+    protected UUID uniqueId;
     @Getter
     protected EntityType<? extends Entity> entityType;
     protected Set<WorldViewer> viewers;
@@ -102,6 +101,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     @Setter
     protected PersistentDataContainer persistentDataContainer;
+    @Getter
+    @Setter
+    protected PermissionCalculator permissionCalculator;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -111,28 +113,19 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
         this.state = EntityState.DESPAWNED;
+        this.displayName = entityType.getIdentifier().toString();
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
-        this.displayName = entityType.getIdentifier().toString();
+        this.permissionCalculator = new ConstantPermissionCalculator(Tristate.TRUE);
     }
 
     @OnInitFinish
     public void onInitFinish(EntityInitInfo initInfo) {
         loadNBT(initInfo.nbt());
-        initPermissionGroup();
     }
 
     public void broadcastState() {
         forEachViewers(viewer -> viewer.viewEntityState(thisEntity));
-    }
-
-    protected void initPermissionGroup() {
-        this.permissionGroup = PermissionGroup.create("Permission group for entity " + uniqueId, Set.of(), Set.of(PermissionGroups.OPERATOR), false);
-    }
-
-    @Override
-    public Permissible getPermissible() {
-        return thisEntity;
     }
 
     public void tick(long currentTick) {
@@ -273,8 +266,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         Set<ChunkLoader> newChunkOnlyLoaders = new HashSet<>(newChunkLoaders);
         newChunkOnlyLoaders.removeAll(oldChunkLoaders);
 
-        oldChunkOnlyLoaders.stream().filter(loader -> loader != thisEntity).forEach(this::despawnFrom);
-        newChunkOnlyLoaders.stream().filter(loader -> loader != thisEntity).forEach(this::spawnTo);
+        oldChunkOnlyLoaders.stream()
+                .filter(loader -> loader != thisEntity && loader instanceof WorldViewer)
+                .map(loader -> (WorldViewer) loader)
+                .forEach(this::despawnFrom);
+        newChunkOnlyLoaders.stream()
+                .filter(loader -> loader != thisEntity && loader instanceof WorldViewer)
+                .map(loader -> (WorldViewer) loader)
+                .forEach(this::spawnTo);
     }
 
     @Override
@@ -393,7 +392,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void saveUniqueId(NbtMapBuilder builder) {
-        builder.putLong(TAG_UNIQUE_ID, uniqueId);
+        builder.putLong(TAG_UNIQUE_ID, uniqueId.getLeastSignificantBits());
     }
 
     @Override
@@ -424,11 +423,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void loadUniqueId(NbtMap nbt) {
         if (nbt.containsKey(TAG_UNIQUE_ID)) {
-            this.uniqueId = nbt.getLong(TAG_UNIQUE_ID);
+            this.uniqueId = new UUID(0, nbt.getLong(TAG_UNIQUE_ID));
             return;
         }
 
-        this.uniqueId = UUID.randomUUID().getMostSignificantBits();
+        // Generate a new UUID with only the upper 8 bytes filled since this UUID
+        // needs to be translatable to a 64bits value
+        this.uniqueId = new UUID(0, UUID.randomUUID().getLeastSignificantBits());
     }
 
     @Override
@@ -462,7 +463,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+    public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
         // Do nothing
     }
 

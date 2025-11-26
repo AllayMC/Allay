@@ -2,7 +2,7 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -19,9 +19,9 @@ import java.util.Map;
 @Slf4j
 public class MineBlockActionProcessor implements ContainerActionProcessor<MineBlockAction> {
     @Override
-    public ActionResponse handle(MineBlockAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        var container = player.getContainer(ContainerTypes.INVENTORY);
-        int handSlot = player.getHandSlot();
+    public ActionResponse handle(MineBlockAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+        var container = player.getControlledEntity().getContainer(ContainerTypes.INVENTORY);
+        int handSlot = player.getControlledEntity().getHandSlot();
         if (handSlot != action.getHotbarSlot()) {
             log.warn("The held Item Index on the server side does not match the client side!");
             return error();

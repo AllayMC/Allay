@@ -2,7 +2,7 @@ package org.allaymc.api.scoreboard.scorer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.server.Server;
 
 import java.util.UUID;
@@ -24,12 +24,15 @@ public final class PlayerScorer implements Scorer {
         this(UUID.fromString(uuid));
     }
 
-    public PlayerScorer(EntityPlayer player) {
+    public PlayerScorer(Player player) {
         this(player.getLoginData().getUuid());
     }
 
-    public EntityPlayer getPlayer() {
-        if (uuid == null) return null;
+    public Player getPlayer() {
+        if (uuid == null) {
+            return null;
+        }
+
         return Server.getInstance().getPlayerManager().getPlayers().get(uuid);
     }
 

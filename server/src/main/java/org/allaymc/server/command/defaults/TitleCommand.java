@@ -1,17 +1,20 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
+import org.allaymc.api.player.Player;
 
 import java.util.Collection;
 
 /**
  * @author daoge_cmd
  */
-public class TitleCommand extends VanillaCommand {
+public class TitleCommand extends Command {
     public TitleCommand() {
-        super("title", TrKeys.MC_COMMANDS_TITLE_DESCRIPTION);
+        super("title", TrKeys.MC_COMMANDS_TITLE_DESCRIPTION, Permissions.COMMAND_TITLE);
     }
 
     @Override
@@ -25,7 +28,11 @@ public class TitleCommand extends VanillaCommand {
                     Collection<EntityPlayer> players = context.getResult(1);
                     TitleType type = context.getResult(2);
                     String text = context.getResult(3);
-                    players.forEach(p -> type.send(p, text));
+                    players.forEach(player -> {
+                        if (player.isActualPlayer()) {
+                            type.send(player.getController(), text);
+                        }
+                    });
                     context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
@@ -34,7 +41,11 @@ public class TitleCommand extends VanillaCommand {
                 .playerTarget("players")
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(1);
-                    players.forEach(EntityPlayer::clearTitle);
+                    players.forEach(player -> {
+                        if (player.isActualPlayer()) {
+                            player.getController().clearTitle();
+                        }
+                    });
                     context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
@@ -49,7 +60,11 @@ public class TitleCommand extends VanillaCommand {
                     int fadeInTime = context.getResult(2);
                     int duration = context.getResult(3);
                     int fadeOutTime = context.getResult(4);
-                    players.forEach(p -> p.setTitleSettings(fadeInTime, duration, fadeOutTime));
+                    players.forEach(player -> {
+                        if (player.isActualPlayer()) {
+                            player.getController().setTitleSettings(fadeInTime, duration, fadeOutTime);
+                        }
+                    });
                     context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 })
@@ -58,7 +73,11 @@ public class TitleCommand extends VanillaCommand {
                 .playerTarget("players")
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(1);
-                    players.forEach(EntityPlayer::resetTitleSettings);
+                    players.forEach(player -> {
+                        if (player.isActualPlayer()) {
+                            player.getController().resetTitleSettings();
+                        }
+                    });
                     context.addOutput(TrKeys.MC_COMMANDS_TITLE_SUCCESS);
                     return context.success();
                 });
@@ -67,23 +86,23 @@ public class TitleCommand extends VanillaCommand {
     protected enum TitleType {
         TITLE {
             @Override
-            public void send(EntityPlayer player, String text) {
+            public void send(Player player, String text) {
                 player.sendTitle(text);
             }
         },
         SUBTITLE {
             @Override
-            public void send(EntityPlayer player, String text) {
+            public void send(Player player, String text) {
                 player.sendSubtitle(text);
             }
         },
         ACTIONBAR {
             @Override
-            public void send(EntityPlayer player, String text) {
+            public void send(Player player, String text) {
                 player.sendActionBar(text);
             }
         };
 
-        public abstract void send(EntityPlayer player, String text);
+        public abstract void send(Player player, String text);
     }
 }

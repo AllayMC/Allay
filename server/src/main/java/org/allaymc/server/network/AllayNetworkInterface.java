@@ -18,17 +18,16 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
-import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
+import org.allaymc.api.eventbus.event.server.PlayerConnectEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
+import org.allaymc.api.player.ClientState;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.ServerSettings;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
-import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
@@ -116,15 +115,26 @@ public class AllayNetworkInterface implements NetworkInterface {
                             return;
                         }
 
-                        var event = new ClientConnectEvent(session.getSocketAddress(), "disconnect.disconnected");
+                        var player = new AllayPlayer(session);
+                        var event = new PlayerConnectEvent(player, "disconnect.disconnected");
                         if (!event.call()) {
                             session.disconnect(event.getDisconnectReason());
                             return;
                         }
 
-                        var player = EntityTypes.PLAYER.createEntity();
+                        var maxLoginTime = AllayServer.getSettings().networkSettings().maxLoginTime();
+                        if (maxLoginTime > 0) {
+                            Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
+                                var status = player.getClientState();
+                                if (status != ClientState.DISCONNECTED && status.ordinal() < ClientState.IN_GAME.ordinal()) {
+                                    log.warn("Session {} didn't log in within {} seconds, disconnecting...", session.getSocketAddress(), maxLoginTime / 20d);
+                                    player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);
+                                }
+                                return true;
+                            }, maxLoginTime);
+                        }
+
                         log.info(I18n.get().tr(TrKeys.ALLAY_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
-                        ((EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent()).setClientSession(session);
                     }
                 });
 

@@ -1,8 +1,8 @@
 package org.allaymc.api.world;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.world.data.DimensionInfo;
@@ -122,7 +122,7 @@ public interface World extends TaskCreator {
      * @return the players in this world
      */
     @UnmodifiableView
-    Collection<EntityPlayer> getPlayers();
+    Collection<Player> getPlayers();
 
     /**
      * Get the scheduler of the world.

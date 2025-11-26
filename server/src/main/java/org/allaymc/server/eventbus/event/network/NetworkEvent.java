@@ -1,4 +1,4 @@
-package org.allaymc.api.eventbus.event.network;
+package org.allaymc.server.eventbus.event.network;
 
 import org.allaymc.api.eventbus.event.Event;
 

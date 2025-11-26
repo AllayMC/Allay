@@ -1,21 +1,23 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 /**
  * @author daoge_cmd
  */
-public class SummonCommand extends VanillaCommand {
+public class SummonCommand extends Command {
 
     public SummonCommand() {
-        super("summon", TrKeys.MC_COMMANDS_SUMMON_DESCRIPTION);
+        super("summon", TrKeys.MC_COMMANDS_SUMMON_DESCRIPTION, Permissions.COMMAND_SUMMON);
     }
 
     @Override

@@ -38,10 +38,12 @@ public class BlockEnderChestBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var enderChestContainer = player.getContainer(ContainerTypes.ENDER_CHEST);
-        enderChestContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        enderChestContainer.addViewer(player);
-        enderChestContainer.sendContents(player);
+        if (player.isActualPlayer()) {
+            var enderChestContainer = player.getContainer(ContainerTypes.ENDER_CHEST);
+            enderChestContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            enderChestContainer.addViewer(player.getController());
+            enderChestContainer.sendContents(player.getController());
+        }
         return true;
     }
 

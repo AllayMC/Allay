@@ -1,17 +1,19 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 
 /**
  * @author daoge_cmd
  */
-public class PluginCommand extends VanillaCommand {
+public class PluginCommand extends Command {
 
     public PluginCommand() {
-        super("plugin", TrKeys.ALLAY_COMMAND_PLUGIN_DESCRIPTION);
+        super("plugin", TrKeys.ALLAY_COMMAND_PLUGIN_DESCRIPTION, Permissions.COMMAND_PERMISSION);
         aliases.add("pl");
     }
 

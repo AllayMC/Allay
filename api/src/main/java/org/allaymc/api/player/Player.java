@@ -1,27 +1,36 @@
-package org.allaymc.api.entity.component;
+package org.allaymc.api.player;
 
+import org.allaymc.api.bossbar.BossBarViewer;
+import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.form.FormViewer;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.MessageReceiver;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.player.ClientState;
-import org.allaymc.api.player.LoginData;
+import org.allaymc.api.scoreboard.ScoreboardViewer;
+import org.allaymc.api.world.WorldViewer;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.net.SocketAddress;
 import java.util.Collection;
 
 /**
- * EntityPlayerClientComponent is the component that manages network-related things of a player. It
- * holds a session and exposes the relevant interface.
+ * Represents a player in the server. A {@link Player} basically 'control' an {@link EntityPlayer}.
  *
  * @author daoge_cmd
  */
-public interface EntityPlayerClientComponent extends EntityComponent, MessageReceiver {
+public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, BossBarViewer, FormViewer, ScoreboardViewer {
 
     Speed DEFAULT_SPEED = new Speed(0.1, 1.0);
     Speed DEFAULT_FLY_SPEED = new Speed(0.05, 1.0);
     Speed DEFAULT_VERTICAL_FLY_SPEED = new Speed(1.0, 1.0);
+
+    /**
+     * Retrieves the {@link EntityPlayer} currently controlled by the player.
+     *
+     * @return the {@link EntityPlayer} that this player is controlling, or {@code null} if no entity is being controlled.
+     */
+    EntityPlayer getControlledEntity();
 
     /**
      * Get the login data of the client.
@@ -33,8 +42,9 @@ public interface EntityPlayerClientComponent extends EntityComponent, MessageRec
     /**
      * Get the origin name of the client.
      * <p>
-     * Origin name is the xbox id of a client, which won't be changed unless the client do changes in his xbox account
-     * This name is used for identifying a client in the server. Check display name if you want to edit the appearance of client's name.
+     * Origin name is the xbox id of a client, which won't be changed unless the client does changes in his xbox account
+     * This name is used for identifying a client in the server. Check the display name if you want to edit the appearance
+     * of the client's name.
      *
      * @return the origin name of the client
      */
@@ -128,7 +138,7 @@ public interface EntityPlayerClientComponent extends EntityComponent, MessageRec
      *
      * @param player the player to view
      */
-    void viewPlayerPermission(EntityPlayer player);
+    void viewPlayerPermission(Player player);
 
     /**
      * Views a player list change. The provided players will be added to the player list.
@@ -136,7 +146,7 @@ public interface EntityPlayerClientComponent extends EntityComponent, MessageRec
      * @param players the players to be added or removed from the player list
      * @param add     {@code true} to add the players to the list, {@code false} to remove the players
      */
-    void viewPlayerListChange(Collection<EntityPlayer> players, boolean add);
+    void viewPlayerListChange(Collection<Player> players, boolean add);
 
     /**
      * Sends a tip to the player.
@@ -323,12 +333,4 @@ public interface EntityPlayerClientComponent extends EntityComponent, MessageRec
      */
     @ApiStatus.Internal
     void sendPacketImmediately(Object packet);
-
-    /**
-     * Require encoding and resending all commands to the player next tick. This method should be called when
-     * command permissions change, but usually you don't need to call this method manually since the permission
-     * listener does it.
-     */
-    @ApiStatus.Internal
-    void sendCommands();
 }

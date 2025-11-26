@@ -7,7 +7,9 @@ import it.unimi.dsi.fastutil.longs.LongComparator;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import lombok.Getter;
 import org.allaymc.api.annotation.NotThreadSafe;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.hash.HashUtils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -44,6 +46,10 @@ public final class ChunkLoaderHolder {
     @Getter
     private final ChunkLoader chunkLoader;
     /**
+     * The actual player if the chunk loader is an actual player. Can be {@code null}.
+     */
+    private final Player player;
+    /**
      * A comparator that will decode chunk pos hash and compare chunk by its distance.
      */
     private final LongComparator chunkDistanceComparatorHashed;
@@ -76,12 +82,13 @@ public final class ChunkLoaderHolder {
     ChunkLoaderHolder(ChunkManager chunkManager, ChunkLoader chunkLoader) {
         this.chunkManager = chunkManager;
         this.chunkLoader = chunkLoader;
+        this.player = chunkLoader instanceof EntityPlayer p && p.isActualPlayer() ? p.getController() : null;
         this.chunkDistanceComparatorHashed = new HashedChunkDistanceComparator();
         this.chunkDistanceComparator = new ChunkDistanceComparator();
         this.sentChunks = new LongOpenHashSet();
         this.inRadiusChunks = new LongOpenHashSet();
         this.chunkSendingQueue = new LongArrayFIFOQueue((chunkLoader.getChunkLoadingRadius() * 2 + 1) * (chunkLoader.getChunkLoadingRadius() * 2 + 1));
-        if (AllayServer.getSettings().worldSettings().chunkSendingStrategy() == ASYNC) {
+        if (isActualPlayer() && AllayServer.getSettings().worldSettings().chunkSendingStrategy() == ASYNC) {
             this.asyncChunkSender = new AsyncChunkSender();
         }
         this.lastLoaderChunkPosHashed = Long.MAX_VALUE;
@@ -89,7 +96,9 @@ public final class ChunkLoaderHolder {
 
     public void onRemoved() {
         removeChunkLoaderInChunks(sentChunks);
-        sentChunks.forEach(chunkLoader::removeChunk);
+        if (isActualPlayer()) {
+            sentChunks.forEach(player::removeChunk);
+        }
         if (asyncChunkSender != null) {
             asyncChunkSender.stop();
         }
@@ -131,7 +140,9 @@ public final class ChunkLoaderHolder {
         var difference = Sets.difference(sentChunks, inRadiusChunks);
         removeChunkLoaderInChunks(difference);
         // Unload chunks out of range
-        difference.forEach(chunkLoader::removeChunk);
+        if (isActualPlayer()) {
+            difference.forEach(player::removeChunk);
+        }
         // The intersection of sentChunks and inRadiusChunks
         sentChunks.removeAll(difference);
     }
@@ -178,16 +189,18 @@ public final class ChunkLoaderHolder {
         } while (!chunkSendingQueue.isEmpty() && sentChunkCount < chunkLoader.getChunkMaxSendCountPerTick());
 
         if (!chunkReadyToSend.isEmpty()) {
-            // TODO: send NCP here
-            var chunkSendingStrategy = AllayServer.getSettings().worldSettings().chunkSendingStrategy();
-            if (chunkSendingStrategy == ASYNC) {
-                asyncChunkSender.addChunkToSendingQueue(chunkReadyToSend.values());
-            } else {
-                // Priority is given to sending chunks that are close to the chunk loader
-                chunkReadyToSend.values()
-                        .stream()
-                        .sorted(chunkDistanceComparator)
-                        .forEachOrdered(chunkLoader::viewChunk);
+            if (isActualPlayer()) {
+                // Only really send the chunks if the loader is an actual player
+                var chunkSendingStrategy = AllayServer.getSettings().worldSettings().chunkSendingStrategy();
+                if (chunkSendingStrategy == ASYNC) {
+                    asyncChunkSender.addChunkToSendingQueue(chunkReadyToSend.values());
+                } else {
+                    // Priority is given to sending chunks that are close to the chunk loader
+                    chunkReadyToSend.values()
+                            .stream()
+                            .sorted(chunkDistanceComparator)
+                            .forEachOrdered(player::viewChunk);
+                }
             }
 
             sentChunks.addAll(chunkReadyToSend.keySet());
@@ -196,6 +209,10 @@ public final class ChunkLoaderHolder {
 
     private boolean isChunkInRadius(int chunkX, int chunkZ, int radius) {
         return chunkX * chunkX + chunkZ * chunkZ <= radius * radius;
+    }
+
+    private boolean isActualPlayer() {
+        return this.player != null;
     }
 
     private class AsyncChunkSender {
@@ -209,7 +226,7 @@ public final class ChunkLoaderHolder {
             Thread.ofVirtual().start(() -> {
                 while (isRunning.get()) {
                     try {
-                        chunkLoader.viewChunk(chunkSendingQueue.take());
+                        player.viewChunk(chunkSendingQueue.take());
                     } catch (InterruptedException e) {
                         return;
                     }

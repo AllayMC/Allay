@@ -27,9 +27,11 @@ public class BlockSmithingTableBaseComponentImpl extends BlockBaseComponentImpl 
             return false;
         }
 
-        var container = new SmithingTableContainerImpl();
-        container.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        container.addViewer(player);
+        if (player.isActualPlayer()) {
+            var container = new SmithingTableContainerImpl();
+            container.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            container.addViewer(player.getController());
+        }
         return true;
     }
 }

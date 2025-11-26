@@ -27,9 +27,11 @@ public class BlockBrewingStandBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var brewingStandContainer = player.getContainer(ContainerTypes.BREWING_STAND);
-        brewingStandContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        brewingStandContainer.addViewer(player);
+        if (player.isActualPlayer()) {
+            var brewingStandContainer = player.getContainer(ContainerTypes.BREWING_STAND);
+            brewingStandContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            brewingStandContainer.addViewer(player.getController());
+        }
         return true;
     }
 }

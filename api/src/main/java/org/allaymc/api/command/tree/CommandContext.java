@@ -213,7 +213,8 @@ public interface CommandContext {
     }
 
     /**
-     * Sends a whisper message to a specified player.
+     * Sends a whisper message to a specified player. The message will only be sent if the command sender's world
+     * has the {@link GameRule#SEND_COMMAND_FEEDBACK} gamerule enabled.
      *
      * @param player  the {@link EntityPlayer} to send the message to
      * @param message the message to send
@@ -238,6 +239,34 @@ public interface CommandContext {
      * @param outputs the list of translation containers to add
      */
     void addOutputs(Collection<TrContainer> outputs);
+
+    /**
+     * The permissions required to receive the output messages. When broadcasting the command outputs
+     * in the server's {@link MessageChannel}, only {@link MessageReceiver} that has all the permissions
+     * in this list will receive the outputs. This is useful to prevent normal players from receiving
+     * sensitive messages.
+     * <p>
+     * By default, permissions required in the path to reach the leaf command node will be added to the
+     * list automatically.
+     *
+     * @return The permissions required to receive the output messages.
+     */
+    List<String> getPermissions();
+
+    /**
+     * Adds a permission required to receive the output messages.
+     *
+     * @param permission the name of the permission to add
+     */
+    void addPermission(String permission);
+
+    /**
+     * Adds a collection of permissions required to receive the output messages.
+     * Each permission in the provided collection is added individually.
+     *
+     * @param permissions the collection of permissions to be added
+     */
+    void addPermissions(Collection<String> permissions);
 
     /**
      * Return a successful command result.

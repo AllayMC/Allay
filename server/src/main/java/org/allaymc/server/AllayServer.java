@@ -1,6 +1,5 @@
 package org.allaymc.server;
 
-import com.google.common.base.Suppliers;
 import eu.okaeri.configs.ConfigManager;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +14,9 @@ import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.MessageChannel;
 import org.allaymc.api.message.TrContainer;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.PermissionGroup;
-import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.ConstantPermissionCalculator;
+import org.allaymc.api.permission.PermissionCalculator;
+import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardManager;
 import org.allaymc.api.server.Server;
@@ -41,12 +41,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 
 import java.nio.file.Path;
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
 
 /**
  * @author daoge_cmd
@@ -76,13 +75,15 @@ public final class AllayServer implements Server {
     private final AllayPluginManager pluginManager;
     @Getter
     private final Scheduler scheduler;
-    private final Supplier<PermissionGroup> permissionGroup;
     private final AllayTerminalConsole terminalConsole;
     private final GameLoop gameLoop;
 
     @Getter
     @Setter
     private MessageChannel messageChannel;
+    @Getter
+    @Setter
+    private PermissionCalculator permissionCalculator;
     @Getter
     private long startTime;
 
@@ -96,8 +97,6 @@ public final class AllayServer implements Server {
         this.scoreboardManager = new ScoreboardManager(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
         this.pluginManager = new AllayPluginManager();
         this.scheduler = new AllayScheduler(virtualThreadPool);
-        // Initialize the permission group with a memoized supplier to avoid NPE during server startup
-        this.permissionGroup = Suppliers.memoize(() -> PermissionGroup.create("Permission group for server instance", Set.of(), Set.of(PermissionGroups.OPERATOR), false));
         this.terminalConsole = new AllayTerminalConsole(AllayServer.this);
         this.gameLoop = GameLoop.builder()
                 .loopCountPerSec(20)
@@ -107,6 +106,7 @@ public final class AllayServer implements Server {
                 .build();
         this.messageChannel = new MessageChannel();
         this.messageChannel.addReceiver(this);
+        this.permissionCalculator = new ConstantPermissionCalculator(Tristate.TRUE);
     }
 
     public static AllayServer getInstance() {
@@ -276,7 +276,11 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
+    public void sendCommandOutputs(CommandSender sender, int status, List<String> permissions, TrContainer... outputs) {
+        if (!hasPermissions(permissions)) {
+            return;
+        }
+
         for (var output : outputs) {
             log.info("[{}] {}{}", sender.getCommandSenderName(), status <= 0 ? TextFormat.RED : "", I18n.get().tr(output.str(), output.args()));
         }
@@ -290,10 +294,5 @@ public final class AllayServer implements Server {
     @Override
     public Location3dc getCommandExecuteLocation() {
         return new Location3d(0, 0, 0, getWorldPool().getDefaultWorld().getOverWorld());
-    }
-
-    @Override
-    public PermissionGroup getPermissionGroup() {
-        return permissionGroup.get();
     }
 }

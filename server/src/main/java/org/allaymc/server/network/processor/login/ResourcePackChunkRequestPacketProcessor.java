@@ -1,9 +1,9 @@
 package org.allaymc.server.network.processor.login;
 
 import io.netty.buffer.Unpooled;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.pack.Pack;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
@@ -18,7 +18,7 @@ import static org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType.RESOURC
  */
 public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcessor<ResourcePackChunkRequestPacket> {
     @Override
-    public void handle(EntityPlayer player, ResourcePackChunkRequestPacket packet) {
+    public void handle(Player player, ResourcePackChunkRequestPacket packet) {
         var pack = Registries.PACKS.get(packet.getPackId());
         if (pack == null) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_RESOURCEPACK);

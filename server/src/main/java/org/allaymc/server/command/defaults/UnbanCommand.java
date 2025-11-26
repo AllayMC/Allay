@@ -1,16 +1,18 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 /**
  * @author daoge_cmd
  */
-public class UnbanCommand extends VanillaCommand {
+public class UnbanCommand extends Command {
 
     public UnbanCommand() {
-        super("unban", "Unban a player");
+        super("unban", "Unban a player", Permissions.COMMAND_UNBAN);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
 @Slf4j
 public class ContainerClosePacketProcessor extends PacketProcessor<ContainerClosePacket> {
     @Override
-    public void handleSync(EntityPlayer player, ContainerClosePacket packet, long receiveTime) {
+    public void handleSync(Player player, ContainerClosePacket packet, long receiveTime) {
         var opened = player.getOpenedContainer(packet.getId());
         if (opened == null) {
             log.warn("Player is not viewing an inventory");

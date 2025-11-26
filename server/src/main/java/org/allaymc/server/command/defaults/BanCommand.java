@@ -1,16 +1,18 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.server.Server;
 
 /**
  * @author daoge_cmd
  */
-public class BanCommand extends VanillaCommand {
+public class BanCommand extends Command {
 
     public BanCommand() {
-        super("ban", TrKeys.MC_COMMANDS_BAN_DESCRIPTION);
+        super("ban", TrKeys.MC_COMMANDS_BAN_DESCRIPTION, Permissions.COMMAND_BAN);
     }
 
     @Override

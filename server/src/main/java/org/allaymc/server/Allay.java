@@ -19,8 +19,6 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.Permission;
-import org.allaymc.api.permission.PermissionGroup;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.SimpleMappedRegistry;
@@ -251,18 +249,6 @@ public final class Allay {
 
         // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());
-
-        // Permission
-        SimpleMappedRegistry.create(
-                RegistryLoaders.empty(() -> new HashMap<String, Permission>()),
-                r -> Registries.PERMISSIONS = r,
-                new PermissionRegistryPopulator()
-        );
-        SimpleMappedRegistry.create(
-                RegistryLoaders.empty(() -> new HashMap<String, PermissionGroup>()),
-                r -> Registries.PERMISSION_GROUPS = r,
-                new PermissionGroupRegistryPopulator()
-        );
 
         // Command
         Registries.COMMANDS = new AllayCommandRegistry();

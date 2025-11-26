@@ -603,7 +603,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 continue;
             }
 
-            map.put(entity.getUniqueId(), entity);
+            map.put(entity.getUniqueId().getLeastSignificantBits(), entity);
         }
 
         return map;
@@ -623,7 +623,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 continue;
             }
 
-            map.put(entity.getUniqueId(), entity);
+            map.put(entity.getUniqueId().getLeastSignificantBits(), entity);
         }
 
         return map;

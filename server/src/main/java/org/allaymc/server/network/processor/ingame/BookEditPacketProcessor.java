@@ -1,11 +1,11 @@
 package org.allaymc.server.network.processor.ingame;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBookEditEvent;
 import org.allaymc.api.item.data.WrittenBookGeneration;
 import org.allaymc.api.item.interfaces.ItemWritableBookStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
@@ -16,14 +16,15 @@ import org.cloudburstmc.protocol.bedrock.packet.BookEditPacket;
 @Slf4j
 public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
     @Override
-    public void handleSync(EntityPlayer player, BookEditPacket packet, long receiveTime) {
-        if (player.getHandSlot() != packet.getInventorySlot()) {
-            log.warn("Invalid inventory slot: {}, should be {}", packet.getInventorySlot(), player.getHandSlot());
+    public void handleSync(Player player, BookEditPacket packet, long receiveTime) {
+        var entity = player.getControlledEntity();
+        if (entity.getHandSlot() != packet.getInventorySlot()) {
+            log.warn("Invalid inventory slot: {}, should be {}", packet.getInventorySlot(), entity.getHandSlot());
             return;
         }
 
-        if (!(player.getItemInHand() instanceof ItemWritableBookStack book)) {
-            log.warn("Inventory slot {} does not contain a writable book", player.getHandSlot());
+        if (!(entity.getItemInHand() instanceof ItemWritableBookStack book)) {
+            log.warn("Inventory slot {} does not contain a writable book", entity.getHandSlot());
             return;
         }
 
@@ -40,7 +41,7 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
         }
 
         var event = new PlayerBookEditEvent(
-                player, book,
+                entity, book,
                 switch (packet.getAction()) {
                     case REPLACE_PAGE -> PlayerBookEditEvent.Action.REPLACE_PAGE;
                     case ADD_PAGE -> PlayerBookEditEvent.Action.ADD_PAGE;
@@ -75,7 +76,7 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
             }
             case DELETE_PAGE -> {
                 if (book.getPageText(page) == null) {
-                    // We break here instead of returning an error because the client can be a page or two ahead in the UI then
+                    // We break here instead of returning an error because the client can be a page or two ahead in the UI than
                     // the actual pages representation server side. The client still sends the deletion indexes.
                     break;
                 }
@@ -91,7 +92,7 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
 
                 if (book.getPageText(page) == null || book.getPageText(secondPage) == null) {
                     // We break here instead of returning an error because the client can try to swap pages that don't exist.
-                    // This happens as a result of the client being a page or two ahead in the UI then the actual pages
+                    // This happens as a result of the client being a page or two ahead in the UI than the actual pages
                     // representation server side. The client still sends the swap indexes.
                     break;
                 }
@@ -110,11 +111,11 @@ public class BookEditPacketProcessor extends PacketProcessor<BookEditPacket> {
                 writtenBook.setXuid(packet.getXuid());
                 writtenBook.setPages(book.getPages());
                 writtenBook.setGeneration(WrittenBookGeneration.ORIGINAL_GENERATION);
-                player.setItemInHand(writtenBook);
+                entity.setItemInHand(writtenBook);
             }
         }
 
-        player.notifyItemInHandChange();
+        entity.notifyItemInHandChange();
     }
 
     @Override

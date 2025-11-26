@@ -1,6 +1,6 @@
 package org.allaymc.api.item.component;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.world.Dimension;
 
 import java.awt.image.BufferedImage;
@@ -47,7 +47,6 @@ public interface ItemFilledMapBaseComponent extends ItemBaseComponent {
      * @param startZ    the start z coordinate of the map
      * @param zoom      the zoom level of the map, which will be multiplied by the width and height of the area
      *                  Default value should be 1, which means the map will cover a 128x128 area.
-     *
      * @return the rendered map image
      */
     CompletableFuture<BufferedImage> renderMap(Dimension dimension, int startX, int startZ, int zoom);
@@ -58,8 +57,7 @@ public interface ItemFilledMapBaseComponent extends ItemBaseComponent {
      * see the updated map image.
      *
      * @param player the player to send the map to
-     *
      * @throws IllegalStateException if the map image is not set
      */
-    void sendToPlayer(EntityPlayer player);
+    void sendToPlayer(Player player);
 }

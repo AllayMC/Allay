@@ -1,7 +1,5 @@
 package org.allaymc.api.player;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-
 import java.util.UUID;
 
 /**
@@ -23,7 +21,7 @@ public interface PlayerStorage {
      * @param player The player
      * @return The player data for the given player
      */
-    default PlayerData readPlayerData(EntityPlayer player) {
+    default PlayerData readPlayerData(Player player) {
         return readPlayerData(player.getLoginData().getUuid());
     }
 
@@ -40,8 +38,8 @@ public interface PlayerStorage {
      *
      * @param player The player
      */
-    default void savePlayerData(EntityPlayer player) {
-        savePlayerData(player.getLoginData().getUuid(), player.savePlayerData());
+    default void savePlayerData(Player player) {
+        savePlayerData(player.getLoginData().getUuid(), PlayerData.save(player));
     }
 
     /**
@@ -66,7 +64,7 @@ public interface PlayerStorage {
      * @param player The player
      * @return {@code true} if the player data exists, {@code false} otherwise.
      */
-    default boolean hasPlayerData(EntityPlayer player) {
+    default boolean hasPlayerData(Player player) {
         return hasPlayerData(player.getLoginData().getUuid());
     }
 }

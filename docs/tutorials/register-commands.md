@@ -17,7 +17,7 @@ import org.allaymc.api.server.Server;
 
 public class HelloCommand extends Command {
     public HelloCommand() {
-        super("hello", "Greets the command sender.");
+        super("hello", "Greets the command sender.", "myplugin.command.hello");
     }
 }
 ```
@@ -39,22 +39,21 @@ public class MyPlugin extends Plugin {
 
 ## Add permissions
 
-By the default, permissions of the newly created commands are only being added to `PermissionGroups.OPERATOR` so
-only operators can use these commands. Since we are creating a simple command here, we might want to change its
-permission for everyone to use.
+By default, only server operators can use newly created commands. Since we are creating a hello world
+command here, we might want to change its permission for everyone to use.
 
 Let's make the following changes to our code:
 
 ```java linenums="1" hl_lines="9"
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.permission.PermissionGroups;
+import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.server.Server;
 
 public class HelloCommand extends Command {
     public HelloCommand() {
         super("hello", "Greets the command sender.");
-        getPermissions().forEach(PermissionGroups.MEMBER::addPermission); /*(1)!*/
+        OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(this.permissions); /*(1)!*/
     }
 }
 ```
@@ -64,13 +63,10 @@ public class HelloCommand extends Command {
 !!! tip
 
     The `getPermissions()` method returns a list of permissions that the command requires, 
-    and PermissionGroups.MEMBER is the default permission group for new players.
+    and `OpPermissionCalculator` is the default permission calculator for new players.
 
-    PermissionGroups class contains the following values:
-
-    - `PermissionGroups.OPERATOR`: default permission tree for operators.
-    - `PermissionGroups.MEMBER`: default permission tree for new players.
-    - `PermissionGroups.VISITOR`: default permission tree for visitors.
+    3rd party permission plugin (e.g. LuckPerms) may replace it (`OpPermissionCalculator`) with
+    their own permission calculator, and in that case this line of code will be meaningless.
 
 ## Handle the commands
 

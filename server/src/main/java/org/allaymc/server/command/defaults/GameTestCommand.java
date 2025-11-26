@@ -1,6 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
@@ -18,7 +19,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.message.TrKeys;
-import org.allaymc.api.permission.Permission;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -45,10 +45,10 @@ import java.util.function.Consumer;
 /**
  * @author daoge_cmd
  */
-public class GameTestCommand extends VanillaCommand {
+public class GameTestCommand extends Command {
 
     public GameTestCommand() {
-        super("gametest", TrKeys.MC_GAMETEST_DESCRIPTION);
+        super("gametest", TrKeys.MC_GAMETEST_DESCRIPTION, "allay.command.gametest");
         aliases.add("gt");
     }
 
@@ -75,13 +75,14 @@ public class GameTestCommand extends VanillaCommand {
                 }, SenderType.PLAYER)
                 .root()
                 .key("rfinv")
-                .exec((context, player) -> {
-                    player.viewContents(player.getContainer(ContainerTypes.INVENTORY));
-                    player.viewContents(player.getContainer(ContainerTypes.ARMOR));
-                    player.viewContents(player.getContainer(ContainerTypes.OFFHAND));
+                .exec((context, p) -> {
+                    var player = p.getController();
+                    player.viewContents(p.getContainer(ContainerTypes.INVENTORY));
+                    player.viewContents(p.getContainer(ContainerTypes.ARMOR));
+                    player.viewContents(p.getContainer(ContainerTypes.OFFHAND));
                     context.addOutput("Inventory is refreshed!");
                     return context.success();
-                }, SenderType.PLAYER)
+                }, SenderType.ACTUAL_PLAYER)
                 .root()
                 .key("trs")
                 .str("key")
@@ -164,23 +165,6 @@ public class GameTestCommand extends VanillaCommand {
                     player.getDimension().getEntityManager().addEntity(entity);
                     return context.success();
                 }, SenderType.PLAYER)
-                .root()
-                .key("setperm")
-                .str("perm")
-                .bool("value")
-                .exec((context) -> {
-                    String name = context.getResult(1);
-                    var permission = Permission.get(name);
-                    if (permission == null) {
-                        context.addError("Unknown permission: " + name);
-                        return context.fail();
-                    }
-
-                    boolean value = context.getResult(2);
-                    context.getSender().setPermission(permission, value);
-                    context.addOutput("Perm " + permission + " was set to " + value);
-                    return context.success();
-                })
                 .root()
                 .key("spawnxporb")
                 .intNum("xp")
@@ -320,18 +304,18 @@ public class GameTestCommand extends VanillaCommand {
                             .header("test header")
                             .button("test button 2")
                             .onClick(button -> player.sendMessage("You clicked button 2"))
-                            .sendTo(player);
+                            .sendTo(player.getController());
                     return context.success();
-                }, SenderType.PLAYER)
+                }, SenderType.ACTUAL_PLAYER)
                 .root()
                 .key("testcustomfrom")
                 .exec((context, player) -> {
                     Forms.custom()
                             .title("Test Custom Form")
                             .input("test input", "type sth here", "", "this is a tooltip")
-                            .sendTo(player);
+                            .sendTo(player.getController());
                     return context.success();
-                }, SenderType.PLAYER)
+                }, SenderType.ACTUAL_PLAYER)
                 .root()
                 .key("blockstate")
                 .bool("enable")
@@ -483,7 +467,7 @@ public class GameTestCommand extends VanillaCommand {
                         }
 
                         map.setImage(image);
-                        map.sendToPlayer(player);
+                        map.sendToPlayer(player.getController());
                         context.addOutput("Map image set successfully!");
                     } catch (IOException e) {
                         context.addError("Error reading file: " + e.getMessage());
@@ -491,7 +475,7 @@ public class GameTestCommand extends VanillaCommand {
                     }
 
                     return context.success();
-                }, SenderType.PLAYER)
+                }, SenderType.ACTUAL_PLAYER)
                 .root()
                 .key("addcooldown")
                 .str("category", null).optional()
@@ -515,27 +499,54 @@ public class GameTestCommand extends VanillaCommand {
                 .root()
                 .key("openfakechest")
                 .exec((context, player) -> {
+                    var controller = player.getController();
+                    if (controller == null) {
+                        return context.fail();
+                    }
+
                     var fakeChest = FakeContainerFactory.getFactory().createFakeChestContainer();
                     fakeChest.setCustomName("Fake Chest Container");
                     fakeChest.setItemStackWithListener(0, ItemTypes.DIAMOND.createItemStack(), () -> player.sendMessage("You clicked the diamond item"));
-                    fakeChest.addPlayer(player);
+                    fakeChest.addPlayer(controller);
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("openfakedoublechest")
                 .exec((context, player) -> {
+                    var controller = player.getController();
+                    if (controller == null) {
+                        return context.fail();
+                    }
+
                     var fakeDoubleChest = FakeContainerFactory.getFactory().createFakeDoubleChestContainer();
                     fakeDoubleChest.setCustomName("Fake Double Chest Container");
                     fakeDoubleChest.setItemStackWithListener(0, ItemTypes.DIAMOND.createItemStack(), () -> player.sendMessage("You clicked the diamond item"));
-                    fakeDoubleChest.addPlayer(player);
+                    fakeDoubleChest.addPlayer(controller);
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("invisiblenode")
-                .permission(Permission.createForCommand("gametest invisiblenode", "allay.command.gametest.invisiblenode"))
+                .permission("allay.command.gametest.invisiblenode")
                 .exec(context -> {
                     context.getSender().sendMessage("QAQ");
                     return context.success();
-                });
+                })
+                .root()
+                .key("spawnplayer")
+                .exec((context, sender) -> {
+                    var player = EntityTypes.PLAYER.createEntity(
+                            EntityInitInfo.builder()
+                                    .loc(sender.getLocation())
+                                    .build()
+                    );
+                    player.setNameTag(sender.getNameTag());
+                    player.setNameTagAlwaysShow(true);
+                    player.setDisplayName(sender.getDisplayName());
+                    player.setSkin(sender.getSkin());
+                    sender.getDimension().getEntityManager().addEntity(player);
+
+                    context.addOutput(TrKeys.MC_COMMANDS_SUMMON_SUCCESS);
+                    return context.success();
+                }, SenderType.PLAYER);
     }
 }

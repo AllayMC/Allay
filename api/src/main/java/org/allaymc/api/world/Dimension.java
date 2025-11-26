@@ -18,6 +18,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.utils.function.QuadConsumer;
 import org.allaymc.api.utils.function.TriFunction;
 import org.allaymc.api.utils.tuple.Pair;
@@ -160,44 +161,12 @@ public interface Dimension {
     }
 
     /**
-     * @see #addPlayer(EntityPlayer, Runnable)
-     */
-    default void addPlayer(EntityPlayer player) {
-        addPlayer(player, () -> {
-        });
-    }
-
-    /**
-     * Add a player to this dimension.
-     *
-     * @param player   the player to add
-     * @param runnable the callback to run after the player is added
-     */
-    void addPlayer(EntityPlayer player, Runnable runnable);
-
-    /**
-     * @see #removePlayer(EntityPlayer, Runnable)
-     */
-    default void removePlayer(EntityPlayer player) {
-        removePlayer(player, () -> {
-        });
-    }
-
-    /**
-     * Remove a player from this dimension.
-     *
-     * @param player   the player to remove
-     * @param runnable the callback to run after the player is removed
-     */
-    void removePlayer(EntityPlayer player, Runnable runnable);
-
-    /**
      * Get all the players in this dimension.
      *
      * @return all the players in this dimension
      */
     @UnmodifiableView
-    Set<EntityPlayer> getPlayers();
+    Set<Player> getPlayers();
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
@@ -878,7 +847,11 @@ public interface Dimension {
     default void addBlockAction(int x, int y, int z, BlockAction action) {
         var chunk = getChunkManager().getChunkByDimensionPos(x, z);
         if (chunk != null) {
-            chunk.forEachChunkLoaders(loader -> loader.viewBlockAction(new Vector3i(x, y, z), action));
+            chunk.forEachChunkLoaders(loader -> {
+                if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
+                    player.getController().viewBlockAction(new Vector3i(x, y, z), action);
+                }
+            });
         }
     }
 
@@ -907,7 +880,11 @@ public interface Dimension {
     default void addParticle(double x, double y, double z, Particle particle) {
         var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
         if (chunk != null) {
-            chunk.forEachChunkLoaders(loader -> loader.viewParticle(particle, new Vector3d(x, y, z)));
+            chunk.forEachChunkLoaders(loader -> {
+                if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
+                    player.getController().viewParticle(particle, new Vector3d(x, y, z));
+                }
+            });
         }
     }
 
@@ -960,7 +937,11 @@ public interface Dimension {
     default void addSound(double x, double y, double z, Sound sound, boolean relative) {
         var chunk = getChunkManager().getChunkByDimensionPos((int) x, (int) z);
         if (chunk != null) {
-            chunk.forEachChunkLoaders(loader -> loader.viewSound(sound, new Vector3d(x, y, z), relative));
+            chunk.forEachChunkLoaders(loader -> {
+                if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
+                    player.getController().viewSound(sound, new Vector3d(x, y, z), relative);
+                }
+            });
         }
     }
 

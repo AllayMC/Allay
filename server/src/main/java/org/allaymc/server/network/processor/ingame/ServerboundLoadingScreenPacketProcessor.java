@@ -1,6 +1,6 @@
 package org.allaymc.server.network.processor.ingame;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ServerboundLoadingScreenPacket;
@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class ServerboundLoadingScreenPacketProcessor extends PacketProcessor<ServerboundLoadingScreenPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, ServerboundLoadingScreenPacket packet, long receiveTime) {
+    public PacketSignal handleAsync(Player player, ServerboundLoadingScreenPacket packet, long receiveTime) {
         return PacketSignal.HANDLED;
     }
 

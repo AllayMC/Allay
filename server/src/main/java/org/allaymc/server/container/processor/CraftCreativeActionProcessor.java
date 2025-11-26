@@ -2,8 +2,8 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -17,8 +17,9 @@ import java.util.Map;
 @Slf4j
 public class CraftCreativeActionProcessor implements ContainerActionProcessor<CraftCreativeAction> {
     @Override
-    public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
-        if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR) {
+    public ActionResponse handle(CraftCreativeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+        var entity = player.getControlledEntity();
+        if (entity.getGameMode() != GameMode.CREATIVE && entity.getGameMode() != GameMode.SPECTATOR) {
             return error();
         }
 
@@ -31,7 +32,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
 
         item = item.copy(true);
         item.setCount(item.getItemType().getItemData().maxStackSize());
-        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, item, false);
+        entity.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, item, false);
         // Taking items from the creative inventory does not require a response
         return null;
     }

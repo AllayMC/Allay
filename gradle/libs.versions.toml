@@ -87,7 +87,7 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.26.0" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.27.1" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 

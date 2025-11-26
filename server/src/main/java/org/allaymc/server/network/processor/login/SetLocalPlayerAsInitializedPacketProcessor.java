@@ -1,13 +1,13 @@
 package org.allaymc.server.network.processor.login;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
-import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerClientComponentImpl;
+import org.allaymc.api.player.Player;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
+import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.world.AllayDimension;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SetLocalPlayerAsInitializedPacket;
@@ -17,20 +17,23 @@ import org.cloudburstmc.protocol.bedrock.packet.SetLocalPlayerAsInitializedPacke
  */
 public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProcessor<SetLocalPlayerAsInitializedPacket> {
     @Override
-    public void handle(EntityPlayer player, SetLocalPlayerAsInitializedPacket packet) {
+    public void handle(Player player, SetLocalPlayerAsInitializedPacket packet) {
+        var allayPlayer = (AllayPlayer) player;
         var event = new PlayerJoinEvent(player);
         if (!event.call()) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
             return;
         }
 
-        ((EntityPlayerClientComponentImpl) ((EntityPlayerImpl) player).getPlayerClientComponent()).setClientStatus(ClientState.IN_GAME);
+        allayPlayer.setClientState(ClientState.IN_GAME);
+        var entity = player.getControlledEntity();
+        var baseComponent = (EntityBaseComponentImpl) ((EntityPlayerImpl) entity).getBaseComponent();
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
-        // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
-        // Otherwise the client will snap into the ground
-        ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).sendLocationToSelf();
-        // Send debug shapes to the player after player fully joined
-        ((AllayDimension) player.getDimension()).addDebugShapesTo(player);
+        // So after the player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with the
+        // client, otherwise the client will snap into the ground
+        player.viewEntityLocation(entity, baseComponent.getLastSentLocation(), baseComponent.getLocation(), true);
+        // Send debug shapes to the player after the player fully joined
+        ((AllayDimension) entity.getDimension()).addDebugShapesTo(player);
     }
 
     @Override

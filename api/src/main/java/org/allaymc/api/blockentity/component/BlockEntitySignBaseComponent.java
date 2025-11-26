@@ -1,6 +1,6 @@
 package org.allaymc.api.blockentity.component;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -41,7 +41,7 @@ public interface BlockEntitySignBaseComponent extends BlockEntityBaseComponent {
      * @param player    the player to open the editor for
      * @param frontSide {@code true} if the front side of the sign should be edited, {@code false} otherwise
      */
-    void openSignEditorFor(EntityPlayer player, boolean frontSide);
+    void openSignEditorFor(Player player, boolean frontSide);
 
     /**
      * Represents the text on a sign.

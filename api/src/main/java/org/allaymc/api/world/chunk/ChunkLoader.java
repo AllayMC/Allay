@@ -1,15 +1,13 @@
 package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.math.location.Location3dc;
-import org.allaymc.api.world.WorldViewer;
 
 /**
- * ChunkLoader represents a loader that will load chunks in the dimension. A chunk loader
- * is also a {@link WorldViewer} since it will view stuff like entities when loading chunks.
+ * ChunkLoader represents a loader that will load chunks in the dimension.
  *
  * @author daoge_cmd
  */
-public interface ChunkLoader extends WorldViewer {
+public interface ChunkLoader {
 
     /**
      * Get the location of the chunk loader.

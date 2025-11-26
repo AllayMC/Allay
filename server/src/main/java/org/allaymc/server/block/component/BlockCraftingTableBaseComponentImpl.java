@@ -27,9 +27,11 @@ public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl 
             return false;
         }
 
-        var craftingTableContainer = player.getContainer(ContainerTypes.CRAFTING_TABLE);
-        craftingTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        craftingTableContainer.addViewer(player);
+        if (player.isActualPlayer()) {
+            var craftingTableContainer = player.getContainer(ContainerTypes.CRAFTING_TABLE);
+            craftingTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            craftingTableContainer.addViewer(player.getController());
+        }
         return true;
     }
 }

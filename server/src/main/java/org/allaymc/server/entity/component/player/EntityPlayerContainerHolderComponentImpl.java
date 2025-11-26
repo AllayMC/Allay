@@ -71,18 +71,20 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     }
 
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
-        var packet = new PlayerEnchantOptionsPacket();
-        if (item != ItemAirStack.AIR_STACK) {
-            var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
-            var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
-            if (!event.call()) {
-                return;
+        if (thisPlayer.isActualPlayer()) {
+            var packet = new PlayerEnchantOptionsPacket();
+            if (item != ItemAirStack.AIR_STACK) {
+                var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
+                var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
+                if (!event.call()) {
+                    return;
+                }
+
+                packet.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
             }
 
-            packet.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
+            thisPlayer.getController().sendPacket(packet);
         }
-
-        thisPlayer.sendPacket(packet);
     }
 
     @Override

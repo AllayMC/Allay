@@ -26,6 +26,7 @@ public class AllayCommandContext implements CommandContext {
     protected String[] args;
     protected Map<Integer, Object> results;
     protected List<TrContainer> outputs;
+    protected List<String> permissions;
 
     public AllayCommandContext(Command command, CommandSender sender, String[] args) {
         this.command = command;
@@ -33,6 +34,8 @@ public class AllayCommandContext implements CommandContext {
         this.args = args;
         this.results = new Int2ObjectOpenHashMap<>();
         this.outputs = new ArrayList<>();
+        this.permissions = new ArrayList<>();
+        this.permissions.addAll(command.getPermissions());
     }
 
     @Override
@@ -63,6 +66,7 @@ public class AllayCommandContext implements CommandContext {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T getResult(int index) {
         var result = results.get(index);
         try {
@@ -80,5 +84,15 @@ public class AllayCommandContext implements CommandContext {
     @Override
     public void addOutputs(Collection<TrContainer> outputs) {
         this.outputs.addAll(outputs);
+    }
+
+    @Override
+    public void addPermission(String permission) {
+        this.permissions.add(permission);
+    }
+
+    @Override
+    public void addPermissions(Collection<String> permissions) {
+        this.permissions.addAll(permissions);
     }
 }

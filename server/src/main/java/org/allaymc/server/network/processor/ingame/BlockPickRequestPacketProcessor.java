@@ -5,9 +5,9 @@ import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBlockPickEvent;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -22,13 +22,14 @@ import java.util.stream.IntStream;
 @Slf4j
 public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
-    public void handleSync(EntityPlayer player, BlockPickRequestPacket packet, long receiveTime) {
+    public void handleSync(Player player, BlockPickRequestPacket packet, long receiveTime) {
         var blockPos = NetworkHelper.fromNetwork(packet.getBlockPosition());
-        if (!player.canReachBlock(blockPos) || player.getGameMode() != GameMode.CREATIVE) {
+        var entity = player.getControlledEntity();
+        if (!entity.canReachBlock(blockPos) || entity.getGameMode() != GameMode.CREATIVE) {
             return;
         }
 
-        var block = new Block(player.getDimension(), blockPos);
+        var block = new Block(entity.getDimension(), blockPos);
         if (block.getBlockType() == BlockTypes.AIR) {
             log.warn("Player {} tried to pick air!", player.getOriginName());
             return;
@@ -36,7 +37,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
 
         var item = block.toItemStack();
 
-        var event = new PlayerBlockPickEvent(player, block, packet.isAddUserData(), item);
+        var event = new PlayerBlockPickEvent(entity, block, packet.isAddUserData(), item);
         if (!event.call()) {
             return;
         }
@@ -50,12 +51,12 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
             }
         }
 
-        var inventory = player.getContainer(ContainerTypes.INVENTORY);
+        var inventory = entity.getContainer(ContainerTypes.INVENTORY);
         // Step 1: Search for an existing item in the hotbar
         for (int slot = 0; slot < 9; slot++) {
             var hotBarItem = inventory.getItemStack(slot);
             if (hotBarItem.getItemType() == item.getItemType()) {
-                player.setHandSlot(slot);
+                entity.setHandSlot(slot);
                 return;
             }
         }
@@ -68,9 +69,9 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
                 if (emptySlot != -1) {
                     inventory.setItemStack(emptySlot, hotBarItem);
                     inventory.clearSlot(slot);
-                    player.setHandSlot(emptySlot);
+                    entity.setHandSlot(emptySlot);
                 } else {
-                    var handSlot = player.getHandSlot();
+                    var handSlot = entity.getHandSlot();
                     inventory.setItemStack(slot, inventory.getItemStack(handSlot));
                     inventory.setItemStack(handSlot, hotBarItem);
                 }
@@ -82,9 +83,9 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         var emptySlot = findFirstEmptyHotbarSlot(inventory);
         if (emptySlot != -1) {
             inventory.setItemStack(emptySlot, item);
-            player.setHandSlot(emptySlot);
+            entity.setHandSlot(emptySlot);
         } else {
-            var handSlot = player.getHandSlot();
+            var handSlot = entity.getHandSlot();
             inventory.setItemStack(handSlot, item);
         }
     }

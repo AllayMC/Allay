@@ -27,9 +27,11 @@ public class BlockBeaconBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var beaconContainer = player.getContainer(ContainerTypes.BEACON);
-        beaconContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        beaconContainer.addViewer(player);
+        if (player.isActualPlayer()) {
+            var beaconContainer = player.getContainer(ContainerTypes.BEACON);
+            beaconContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            beaconContainer.addViewer(player.getController());
+        }
         return true;
     }
 }

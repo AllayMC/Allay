@@ -1,5 +1,6 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.Container;
@@ -9,6 +10,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -16,9 +18,9 @@ import java.util.stream.Stream;
 /**
  * @author daoge_cmd
  */
-public class ClearCommand extends VanillaCommand {
+public class ClearCommand extends Command {
     public ClearCommand() {
-        super("clear", TrKeys.MC_COMMANDS_CLEAR_DESCRIPTION);
+        super("clear", TrKeys.MC_COMMANDS_CLEAR_DESCRIPTION, Permissions.COMMAND_CLEAR);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class ClearCommand extends VanillaCommand {
                             int count = containers.stream()
                                     .mapToInt(container -> countMatchingItems(container.getItemStacks(), itemType, data))
                                     .sum();
-                            context.addOutput(TrKeys.MC_COMMANDS_CLEAR_TESTING, target.getOriginName(), count);
+                            context.addOutput(TrKeys.MC_COMMANDS_CLEAR_TESTING, target.getDisplayName(), count);
                             status = count;
                         } else {
                             int removed = 0;
@@ -72,9 +74,9 @@ public class ClearCommand extends VanillaCommand {
                             }
 
                             if (removed > 0) {
-                                context.addOutput(TrKeys.MC_COMMANDS_CLEAR_SUCCESS, target.getOriginName(), removed);
+                                context.addOutput(TrKeys.MC_COMMANDS_CLEAR_SUCCESS, target.getDisplayName(), removed);
                             } else {
-                                context.addError("%" + TrKeys.MC_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getOriginName());
+                                context.addError("%" + TrKeys.MC_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getDisplayName());
                                 success = false;
                             }
 

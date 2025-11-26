@@ -1,21 +1,23 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.permission.Permissions;
 
 import java.util.Collection;
 
 /**
  * @author daoge_cmd
  */
-public class EnchantCommand extends VanillaCommand {
+public class EnchantCommand extends Command {
 
     public EnchantCommand() {
-        super("enchant", TrKeys.MC_COMMANDS_ENCHANT_DESCRIPTION);
+        super("enchant", TrKeys.MC_COMMANDS_ENCHANT_DESCRIPTION, Permissions.COMMAND_ENCHANT);
     }
 
     @Override

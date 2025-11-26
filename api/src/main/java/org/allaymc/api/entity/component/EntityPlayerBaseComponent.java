@@ -3,8 +3,9 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.player.GameMode;
-import org.allaymc.api.player.PlayerData;
+import org.allaymc.api.player.Player;
 import org.allaymc.api.player.Skin;
+import org.allaymc.api.world.chunk.ChunkLoader;
 import org.jetbrains.annotations.Range;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -12,11 +13,30 @@ import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public interface EntityPlayerBaseComponent extends EntityBaseComponent {
+public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader {
 
     int MAX_FOOD_LEVEL = 20;
     float MAX_FOOD_SATURATION_LEVEL = 20;
     float MAX_FOOD_EXHAUSTION_LEVEL = 4;
+
+    /**
+     * Gets the controller of this entity player.
+     *
+     * @return the controller of this entity player. Can be {@code null} if this entity player
+     * is not controlled by a player. In other words, this entity player is a simulated (fake)
+     * player.
+     */
+    Player getController();
+
+    /**
+     * Checks if this player entity is an actual player. This is simply done by checking if
+     * it is controlled by a player (client).
+     *
+     * @return {@code true} if this player entity is an actual player, {@code false} otherwise
+     */
+    default boolean isActualPlayer() {
+        return getController() != null;
+    }
 
     /**
      * Check if the player is sprinting.
@@ -216,13 +236,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent {
     default boolean hasScoreTag() {
         return getScoreTag() != null;
     }
-
-    /**
-     * Save the player's data.
-     *
-     * @return The saved player data
-     */
-    PlayerData savePlayerData();
 
     /**
      * Validate and get the spawn point of the player.

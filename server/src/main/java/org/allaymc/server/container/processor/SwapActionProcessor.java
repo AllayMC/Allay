@@ -1,7 +1,7 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
-    public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+    public ActionResponse handle(SwapAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var sourceContainer = ContainerActionProcessor.getContainerFrom(player, action.getSource().getContainerName());
         var destinationContainer = ContainerActionProcessor.getContainerFrom(player, action.getDestination().getContainerName());
 

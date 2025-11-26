@@ -217,8 +217,6 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
     protected void computeEntityCollisionMotion(Entity entity) {
         var collidedEntities = getCachedEntityCollidingResult(entity);
-        collidedEntities.removeIf(e -> e instanceof EntityPhysicsComponent physicsComponent && !physicsComponent.computeEntityCollisionMotion());
-
         var collisionMotion = new Vector3d(0, 0, 0);
 
         var location = entity.getLocation();
@@ -387,7 +385,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link PacketProcessor#handleAsync(EntityPlayer, BedrockPacket, long)}
+     * See {@link PacketProcessor#handleAsync(org.allaymc.api.player.Player, BedrockPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3dc newLoc) {
         if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {

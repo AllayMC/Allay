@@ -13,7 +13,6 @@ import java.util.function.Function;
  * @param caster        Caster function to cast the sender to the correct type
  * @param errorMsg      Error message to display if the sender is not of the correct type
  * @param <SENDER_TYPE> The type of command sender
- *
  * @author daoge_cmd
  */
 public record SenderType<SENDER_TYPE extends CommandSender>(
@@ -38,6 +37,12 @@ public record SenderType<SENDER_TYPE extends CommandSender>(
     public static final SenderType<EntityPlayer> PLAYER = new SenderType<>(CommandSender::isPlayer, CommandSender::asPlayer, TrKeys.ALLAY_COMMAND_GENERIC_SENDER_NOTPLAYER);
 
     /**
+     * Represents a player command sender, where the player must be an actual player instead of a fake player.
+     */
+    public static final SenderType<EntityPlayer> ACTUAL_PLAYER = new SenderType<>(
+            sender -> sender.isPlayer() && sender.asPlayer().isActualPlayer(), CommandSender::asPlayer, TrKeys.ALLAY_COMMAND_GENERIC_SENDER_NOTPLAYER);
+
+    /**
      * Represents an entity command sender.
      */
     public static final SenderType<Entity> ENTITY = new SenderType<>(CommandSender::isEntity, CommandSender::asEntity, TrKeys.ALLAY_COMMAND_GENERIC_SENDER_NOTENTITY);
@@ -46,7 +51,6 @@ public record SenderType<SENDER_TYPE extends CommandSender>(
      * Validates if the sender is of the correct type.
      *
      * @param sender The command sender to validate
-     *
      * @return Whether the sender is of the correct type
      */
     public boolean validate(CommandSender sender) {

@@ -4,31 +4,29 @@ import com.google.common.base.Preconditions;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
-import org.allaymc.api.entity.component.*;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
 import org.allaymc.api.eventbus.event.player.PlayerItemHeldEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.Player;
 import org.joml.Vector3d;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * EntityPlayer represents a player in the server.
+ * EntityPlayer represents a player entity. An {@link EntityPlayer} may be (or may not be) controlled
+ * by a {@link Player} object.
  */
 public interface EntityPlayer extends
         EntityLiving,
         EntityContainerHolderComponent,
-        EntityContainerViewerComponent,
         EntityPhysicsComponent,
-        EntityPlayerBaseComponent,
-        EntityPlayerClientComponent,
-        EntityPlayerScoreboardViewerComponent,
-        EntityPlayerChunkLoaderComponent,
-        EntityPlayerBossBarViewerComponent,
-        EntityPlayerFormViewerComponent {
+        EntityPlayerBaseComponent {
 
     /**
      * Returns the reachable container for the given full container type. This
@@ -39,7 +37,12 @@ public interface EntityPlayer extends
      * @return the reachable container, or {@code null} if none
      */
     default <T extends Container> T getReachableContainer(ContainerType<T> slotType) {
-        var container = getOpenedContainer(slotType);
+        T container = null;
+        var controller = getController();
+        if (controller != null) {
+            container = controller.getOpenedContainer(slotType);
+        }
+
         if (container == null) {
             container = getContainer(slotType);
         }
@@ -168,7 +171,10 @@ public interface EntityPlayer extends
         var container = getContainer(ContainerTypes.INVENTORY);
         container.setHandSlot(handSlot);
         new PlayerItemHeldEvent(this, container.getItemInHand(), handSlot).call();
-        viewEntityHand(this);
+        var controller = getController();
+        if (controller != null) {
+            controller.viewEntityHand(this);
+        }
         forEachViewers(viewer -> viewer.viewEntityHand(this));
     }
 

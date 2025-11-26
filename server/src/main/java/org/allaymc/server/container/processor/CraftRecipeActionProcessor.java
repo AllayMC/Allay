@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.RecipeContainer;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerCraftItemEvent;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
 import org.allaymc.api.item.component.ItemTrimmableComponent;
@@ -17,6 +16,7 @@ import org.allaymc.api.item.recipe.SmithingTrimRecipe;
 import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.allaymc.server.network.NetworkData;
@@ -40,7 +40,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
     public static final String RECIPE_OUTPUTS_DATA_KEY = "recipe_outputs";
 
     @Override
-    public ActionResponse handle(CraftRecipeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
+    public ActionResponse handle(CraftRecipeAction action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool) {
         var recipeNetworkId = action.getRecipeNetworkId();
         if (recipeNetworkId >= EnchantmentOptionGenerator.NETWORK_ID_COUNTER_INITIAL_VALUE) {
             return handleEnchantTableRecipe(player, recipeNetworkId);
@@ -95,7 +95,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             default -> recipe.getOutputs();
         };
 
-        var event = new PlayerCraftItemEvent(player, recipe, outputs);
+        var event = new PlayerCraftItemEvent(player.getControlledEntity(), recipe, outputs);
         if (!event.call()) {
             return error();
         }
@@ -105,7 +105,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
             var output = outputs[0].copy(false);
             output.setCount(output.getCount() * numberOfRequestedCrafts);
-            player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, output, false);
+            player.getControlledEntity().getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, output, false);
         } else {
             if (numberOfRequestedCrafts != 1) {
                 log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
@@ -120,7 +120,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         return null;
     }
 
-    protected ActionResponse handleEnchantTableRecipe(EntityPlayer player, int recipeNetworkId) {
+    protected ActionResponse handleEnchantTableRecipe(Player player, int recipeNetworkId) {
         var data = EnchantmentOptionGenerator.removeEnchantOption(recipeNetworkId);
         if (data == null) {
             log.warn("Can't find enchant table recipe by network id {}", recipeNetworkId);
@@ -137,7 +137,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         List<EnchantmentInstance> enchantments = data.enchantments();
         int requiredLapisLazuliCount = data.requiredLapisLazuliCount();
         int requiredXpLevel = data.requiredXpLevel();
-        var event = new PlayerEnchantItemEvent(player, inputItem, enchantments, requiredLapisLazuliCount);
+        var event = new PlayerEnchantItemEvent(player.getControlledEntity(), inputItem, enchantments, requiredLapisLazuliCount);
         if (!event.call()) {
             return error();
         }
@@ -145,36 +145,37 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         enchantments = event.getEnchantments();
         requiredLapisLazuliCount = event.getRequiredLapisLazuliCount();
 
-        if (player.getGameMode() != GameMode.CREATIVE) {
+        var entity = player.getControlledEntity();
+        if (entity.getGameMode() != GameMode.CREATIVE) {
             var material = enchantTableContainer.getMaterial();
             if (material.getItemType() != ItemTypes.LAPIS_LAZULI || material.getCount() < requiredLapisLazuliCount) {
                 log.warn("Not enough lapis lazuli! Need: {}, Current: {}", requiredLapisLazuliCount, enchantTableContainer.getMaterial().getCount());
                 return error();
             }
 
-            if (player.getExperienceLevel() < requiredXpLevel) {
-                log.warn("Not enough experience level! Need: {}, Current: {}", requiredXpLevel, player.getExperienceLevel());
+            if (entity.getExperienceLevel() < requiredXpLevel) {
+                log.warn("Not enough experience level! Need: {}, Current: {}", requiredXpLevel, entity.getExperienceLevel());
                 return error();
             }
             // Required lapis lazuli count is also the cost of xp level
-            player.setExperienceLevel(player.getExperienceLevel() - requiredLapisLazuliCount);
+            entity.setExperienceLevel(entity.getExperienceLevel() - requiredLapisLazuliCount);
         }
 
         var enchantedItem = inputItem.copy(true);
         enchantedItem.addEnchantments(enchantments);
         // Copy the enchanted item to CREATED_OUTPUT, and the client will send a PlaceAction
         // to move the enchanted item back to the input slot of the enchant table container
-        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, enchantedItem, false);
-        player.regenerateEnchantmentSeed();
+        entity.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, enchantedItem, false);
+        entity.regenerateEnchantmentSeed();
 
         return null;
     }
 
-    protected ActionResponse handleCraftingTable(EntityPlayer player, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
+    protected ActionResponse handleCraftingTable(Player player, int numberOfRequestedCrafts, int currentActionIndex, ItemStackRequestAction[] actions) {
         RecipeContainer craftingContainer = player.getOpenedContainer(ContainerTypes.CRAFTING_TABLE);
         if (craftingContainer == null) {
             // The player is not opening a crafting table, using the crafting grid instead
-            craftingContainer = player.getContainer(ContainerTypes.CRAFTING_GRID);
+            craftingContainer = player.getControlledEntity().getContainer(ContainerTypes.CRAFTING_GRID);
         }
 
         // Validate if the player has provided enough ingredients
@@ -208,7 +209,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         return (int) IntStream.range(0, container.getContainerType().getSize()).filter(i -> !container.isEmpty(i)).count();
     }
 
-    protected ActionResponse handleSmithingTableTrim(EntityPlayer player) {
+    protected ActionResponse handleSmithingTableTrim(Player player) {
         var container = player.getOpenedContainer(ContainerTypes.SMITHING_TABLE);
         if (container == null) {
             log.warn("Received a CraftRecipeActionProcessor without an opened container!");
@@ -250,7 +251,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         }
 
         trimComponent.trim(trimPattern, trimMaterial);
-        player.getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, result, false);
+        player.getControlledEntity().getContainer(ContainerTypes.CREATED_OUTPUT).setItemStack(0, result, false);
         return null;
     }
 

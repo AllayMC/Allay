@@ -1,12 +1,12 @@
 package org.allaymc.server.container.processor;
 
 import org.allaymc.api.container.Container;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.container.ContainerNetworkInfo;
 import org.allaymc.server.container.impl.FakeContainerImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerContainerViewerComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -26,13 +26,13 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
      * Processes an item stack request action and returns the response.
      *
      * @param action             the specific {@link ItemStackRequestAction} to handle
-     * @param player             the {@link EntityPlayer} who initiated the action
+     * @param player             the {@link Player} who initiated the action
      * @param currentActionIndex the index of this action within the request's action array
      * @param actions            the full array of {@link ItemStackRequestAction} objects in the request
      * @param dataPool           a {@link Map} for storing temporary data between actions in the request
      * @return the {@link ActionResponse} indicating the result of processing the action
      */
-    ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool);
+    ActionResponse handle(T action, Player player, int currentActionIndex, ItemStackRequestAction[] actions, Map<String, Object> dataPool);
 
     /**
      * Retrieves the type of action this processor handles.
@@ -73,9 +73,9 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
      * containers that the player holds.
      */
     @SuppressWarnings("unchecked")
-    static <T extends Container> T getContainerFrom(EntityPlayer player, FullContainerName containerName) {
-        var playerImpl = (EntityPlayerImpl) player;
-        var container = ((EntityPlayerContainerViewerComponentImpl) playerImpl.getContainerViewerComponent()).getOpenedContainer(containerName.getContainer());
+    static <T extends Container> T getContainerFrom(Player player, FullContainerName containerName) {
+        var playerImpl = (EntityPlayerImpl) player.getControlledEntity();
+        var container = ((AllayPlayer) player).getOpenedContainer(containerName.getContainer());
         if (container == null) {
             container = ((EntityPlayerContainerHolderComponentImpl) playerImpl.getContainerHolderComponent()).getContainer(containerName.getContainer());
         }

@@ -1,6 +1,5 @@
 package org.allaymc.api.player;
 
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.network.NetworkInterface;
@@ -25,14 +24,14 @@ public interface PlayerManager {
      * @return the online players
      */
     @UnmodifiableView
-    Map<UUID, EntityPlayer> getPlayers();
+    Map<UUID, Player> getPlayers();
 
     /**
      * For-each the online players.
      *
      * @param consumer the consumer which will be applied to each player
      */
-    default void forEachPlayer(Consumer<EntityPlayer> consumer) {
+    default void forEachPlayer(Consumer<Player> consumer) {
         getPlayers().values().forEach(consumer);
     }
 
@@ -93,9 +92,9 @@ public interface PlayerManager {
      * @param playerName the name of the player
      * @return the player if found, otherwise {@code null}
      */
-    default EntityPlayer getOnlinePlayerByName(String playerName) {
+    default Player getOnlinePlayerByName(String playerName) {
         return getPlayers().values().stream()
-                .filter(player -> player.getCommandSenderName().equals(playerName))
+                .filter(player -> player.getOriginName().equals(playerName))
                 .findFirst()
                 .orElse(null);
     }
@@ -184,7 +183,7 @@ public interface PlayerManager {
      * @param player the player to check
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
-    default boolean isWhitelisted(EntityPlayer player) {
+    default boolean isWhitelisted(Player player) {
         return isWhitelisted(player.getLoginData().getUuid().toString()) || isWhitelisted(player.getOriginName());
     }
 
@@ -226,7 +225,7 @@ public interface PlayerManager {
      * @param player the player whose operator status is to be checked
      * @return {@code true} if the player is an operator, otherwise {@code false}
      */
-    default boolean isOperator(EntityPlayer player) {
+    default boolean isOperator(Player player) {
         return isOperator(player.getLoginData().getUuid().toString()) || isOperator(player.getOriginName());
     }
 

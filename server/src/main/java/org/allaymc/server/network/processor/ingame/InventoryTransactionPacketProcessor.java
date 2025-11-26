@@ -7,8 +7,8 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.*;
+import org.allaymc.api.player.Player;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
@@ -58,13 +58,14 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     }
 
     @Override
-    public void handleSync(EntityPlayer player, InventoryTransactionPacket packet, long receiveTime) {
-        var itemInHand = player.getItemInHand();
+    public void handleSync(Player player, InventoryTransactionPacket packet, long receiveTime) {
+        var entity = player.getControlledEntity();
+        var itemInHand = entity.getItemInHand();
         var transactionType = packet.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
                 var blockFace = BlockFace.fromIndex(packet.getBlockFace());
-                var world = player.getLocation().dimension();
+                var world = entity.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
                         var clickBlockPos = NetworkHelper.fromNetwork(packet.getBlockPosition());
@@ -74,23 +75,23 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             break;
                         }
 
-                        var dimension = player.getDimension();
+                        var dimension = entity.getDimension();
                         var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType().hasBlockTag(BlockTags.REPLACEABLE);
                         var placeBlockPos = clickedBlockStateReplaceable ? clickBlockPos : Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
                         var interactedBlock = world.getBlockState(clickBlockPos);
                         var interactInfo = new PlayerInteractInfo(
-                                player, clickBlockPos,
+                                entity, clickBlockPos,
                                 clickPos, blockFace
                         );
 
-                        var event = new PlayerInteractBlockEvent(player, interactInfo, PlayerInteractBlockEvent.Action.RIGHT_CLICK);
+                        var event = new PlayerInteractBlockEvent(entity, interactInfo, PlayerInteractBlockEvent.Action.RIGHT_CLICK);
                         if (!event.call()) {
                             break;
                         }
 
-                        player.setUsingItemInAir(false);
+                        entity.setUsingItemInAir(false);
                         itemInHand.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
-                        if (player.isUsingItemOnBlock()) {
+                        if (entity.isUsingItemOnBlock()) {
                             if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
                                 // Using item on the block successfully, no need to call BlockBehavior::onInteract()
                                 break;
@@ -115,21 +116,21 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
-                        if (!player.isUsingItemInAir()) {
-                            if (itemInHand.canUseItemInAir(player)) {
-                                if (new PlayerStartUseItemInAirEvent(player).call()) {
-                                    player.setUsingItemInAir(true, receiveTime);
+                        if (!entity.isUsingItemInAir()) {
+                            if (itemInHand.canUseItemInAir(entity)) {
+                                if (new PlayerStartUseItemInAirEvent(entity).call()) {
+                                    entity.setUsingItemInAir(true, receiveTime);
                                 }
                             } else {
-                                if (new PlayerRightClickItemInAirEvent(player).call()) {
-                                    itemInHand.rightClickItemInAir(player);
+                                if (new PlayerRightClickItemInAirEvent(entity).call()) {
+                                    itemInHand.rightClickItemInAir(entity);
                                 }
                             }
-                        } else if (player.isUsingItemInAir()) {
-                            player.setUsingItemInAir(false);
-                            var event = new PlayerUseItemInAirEvent(player, player.getItemUsingInAirTime(receiveTime));
+                        } else if (entity.isUsingItemInAir()) {
+                            entity.setUsingItemInAir(false);
+                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime(receiveTime));
                             if (event.call()) {
-                                itemInHand.useItemInAir(player, event.getUsingTime());
+                                itemInHand.useItemInAir(entity, event.getUsingTime());
                             }
                         }
                     }
@@ -138,11 +139,11 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             case ITEM_RELEASE -> {
                 switch (packet.getActionType()) {
                     case ITEM_RELEASE_RELEASE -> {
-                        if (player.isUsingItemInAir()) {
-                            player.setUsingItemInAir(false);
-                            var event = new PlayerUseItemInAirEvent(player, player.getItemUsingInAirTime(receiveTime));
+                        if (entity.isUsingItemInAir()) {
+                            entity.setUsingItemInAir(false);
+                            var event = new PlayerUseItemInAirEvent(entity, entity.getItemUsingInAirTime(receiveTime));
                             if (event.call()) {
-                                itemInHand.useItemInAir(player, event.getUsingTime());
+                                itemInHand.useItemInAir(entity, event.getUsingTime());
                             }
                         }
                     }
@@ -152,27 +153,27 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case ITEM_USE_ON_ENTITY -> {
-                var target = player.getDimension().getEntityManager().getEntity(packet.getRuntimeEntityId());
+                var target = entity.getDimension().getEntityManager().getEntity(packet.getRuntimeEntityId());
                 // In some cases, for example when a falling block entity solidifies, latency may allow attacking an entity that
                 // no longer exists server side. This is expected, so we shouldn't throw NullPointerException.
                 if (target == null) {
                     log.debug("Player {} try to attack a entity which doesn't exist! Entity id: {}", player.getOriginName(), packet.getRuntimeEntityId());
                     return;
                 }
-                if (!player.canReach(target.getLocation())) {
+                if (!entity.canReach(target.getLocation())) {
                     return;
                 }
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
                         var clickPos = NetworkHelper.fromNetwork(packet.getClickPosition());
-                        var event = new PlayerInteractEntityEvent(player, target, itemInHand, clickPos);
+                        var event = new PlayerInteractEntityEvent(entity, target, itemInHand, clickPos);
                         if (!event.call()) {
                             return;
                         }
 
-                        if (!itemInHand.interactEntity(player, target)) {
-                            target.onInteract(player, itemInHand);
+                        if (!itemInHand.interactEntity(entity, target)) {
+                            target.onInteract(entity, itemInHand);
                         }
                     }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
@@ -186,9 +187,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                             damage = 1;
                         }
 
-                        var damageContainer = DamageContainer.entityAttack(player, damage);
+                        var damageContainer = DamageContainer.entityAttack(entity, damage);
                         if (damageable.attack(damageContainer)) {
-                            itemInHand.onAttackEntity(player, target);
+                            itemInHand.onAttackEntity(entity, target);
                         }
                     }
                 }
@@ -218,7 +219,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 var dropSlot = containerAction.getSlot();
                 var dropCount = containerAction.getFromItem().getCount() - containerAction.getToItem().getCount();
-                if (!player.tryDropItem(ContainerTypes.INVENTORY, dropSlot, dropCount)) {
+                if (!entity.tryDropItem(ContainerTypes.INVENTORY, dropSlot, dropCount)) {
                     log.warn("Failed to drop item from slot {} with count {}", dropSlot, dropCount);
                 }
             }
@@ -227,9 +228,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
         // The item may have been changed or broken
         // So we need to send update to client
         if (itemInHand.isBroken()) {
-            player.clearItemInHand();
+            entity.clearItemInHand();
         } else {
-            player.notifyItemInHandChange();
+            entity.notifyItemInHandChange();
         }
     }
 

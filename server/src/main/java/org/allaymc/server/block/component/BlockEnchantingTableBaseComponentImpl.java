@@ -27,9 +27,11 @@ public class BlockEnchantingTableBaseComponentImpl extends BlockBaseComponentImp
             return false;
         }
 
-        var enchantTableContainer = player.getContainer(ContainerTypes.ENCHANT_TABLE);
-        enchantTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        enchantTableContainer.addViewer(player);
+        if (player.isActualPlayer()) {
+            var enchantTableContainer = player.getContainer(ContainerTypes.ENCHANT_TABLE);
+            enchantTableContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+            enchantTableContainer.addViewer(player.getController());
+        }
         return true;
     }
 }
