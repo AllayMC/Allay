@@ -2379,8 +2379,8 @@ public class AllayPlayer implements Player {
         baseComponent.setUniqueId(this.loginData.getUuid());
         baseComponent.setPermissionCalculator(new OpPermissionCalculator(this));
 
-        dimension.addPlayer(this);
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
+        dimension.addPlayer(this);
         playerManager.addPlayer(this);
 
         startGame(dimension.getWorld(), playerData, dimension);
