@@ -41,6 +41,18 @@ public abstract class Command {
     protected final CommandTree commandTree;
 
     /**
+     * Constructs a new {@code Command} instance with the specified name and description.
+     * This allows the creation of a command without specifying permissions. Everyone can
+     * execute this command.
+     *
+     * @param name        The name of the command.
+     * @param description The description of the command, which may contain a translation key.
+     */
+    public Command(String name, @MayContainTrKey String description) {
+        this(name, description, null);
+    }
+
+    /**
      * Constructs a new {@code Command} instance with the specified name, description, and permission.
      * This allows the creation of a command with a specific permission required for execution.
      *
