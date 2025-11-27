@@ -118,7 +118,7 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerManager().getPlayerByName(playerName);
                     var pos = player.getControlledEntity().getLocation();
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.ALLAY_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
@@ -137,7 +137,7 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerManager().getPlayerByName(playerName);
                     player.disconnect(TrKeys.MC_DISCONNECT_DISCONNECTED);
                 });
                 popupMenu.add(kickItem);
@@ -147,7 +147,7 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerManager().getPlayerByName(playerName);
                     Server.getInstance().getPlayerManager().ban(player.getLoginData().getUuid().toString());
                 });
                 popupMenu.add(banItem);
@@ -157,7 +157,7 @@ public final class Dashboard {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
-                    var player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(playerName);
+                    var player = Server.getInstance().getPlayerManager().getPlayerByName(playerName);
                     Server.getInstance().getPlayerManager().banIP(AllayStringUtils.fastTwoPartSplit(player.getSocketAddress().toString().substring(1), ":", "")[0]);
                 });
                 popupMenu.add(banIpItem);

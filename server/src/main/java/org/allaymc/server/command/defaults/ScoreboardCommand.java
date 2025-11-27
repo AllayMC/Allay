@@ -63,7 +63,7 @@ public class ScoreboardCommand extends Command {
             return scorers;
         }
 
-        if ((player = Server.getInstance().getPlayerManager().getOnlinePlayerByName(wildcardTargetStr).getControlledEntity()) != null) {
+        if ((player = Server.getInstance().getPlayerManager().getPlayerByName(wildcardTargetStr).getControlledEntity()) != null) {
             scorers.add(new PlayerScorer(player.getController()));
         } else {
             scorers.add(new FakeScorer(wildcardTargetStr));

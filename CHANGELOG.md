@@ -48,6 +48,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added a new `permissions` parameter to the parameter list of method `MessageReceiver.sendCommandOutputs()`.
 - (API) Changed member `SimpleEntityAction.CRITICAL_HIT` to independent `CriticalHit(int count)` record (the same to `ENCHANTED_HIT`) due
   to the addition of the newly added `count` parameter since protocol version 859.
+- (API) Renamed method `PlayerManager.getOnlinePlayerByName()` to `PlayerManager.getPlayerByName()` for clarity and consistency.
 - Permission data now will not be saved into the player's nbt data, which allows third permission plugins to store the permission data in their own way.
   The core will only saved a `operator` list now.
 

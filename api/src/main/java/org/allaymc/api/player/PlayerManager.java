@@ -92,7 +92,7 @@ public interface PlayerManager {
      * @param playerName the name of the player
      * @return the player if found, otherwise {@code null}
      */
-    default Player getOnlinePlayerByName(String playerName) {
+    default Player getPlayerByName(String playerName) {
         return getPlayers().values().stream()
                 .filter(player -> player.getOriginName().equals(playerName))
                 .findFirst()
