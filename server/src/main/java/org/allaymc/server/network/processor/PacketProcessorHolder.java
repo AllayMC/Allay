@@ -130,6 +130,7 @@ public final class PacketProcessorHolder {
         registerProcessor(ClientState.IN_GAME, new BookEditPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new MapInfoRequestPacketProcessor());
         registerProcessor(ClientState.IN_GAME, new ServerboundDiagnosticsPacketProcessor());
+        registerProcessor(ClientState.IN_GAME, new RequestAbilityPacketProcessor());
     }
 
     @SuppressWarnings("unchecked")

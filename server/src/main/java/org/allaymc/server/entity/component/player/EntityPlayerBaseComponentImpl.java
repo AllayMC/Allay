@@ -194,8 +194,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.manager.callEvent(new CPlayerGameModeChangeEvent(this.gameMode));
 
         if (isActualPlayer()) {
-            this.controller.viewPlayerPermission(this.controller);
             this.controller.viewPlayerGameMode(thisPlayer);
+            // Send permission after game mode to make overriding client's state (e.g., mayfly) possible
+            this.controller.viewPlayerPermission(this.controller);
         }
         forEachViewers(viewer -> viewer.viewPlayerGameMode(thisPlayer));
     }
