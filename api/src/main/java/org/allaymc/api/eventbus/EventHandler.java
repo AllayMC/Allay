@@ -21,7 +21,7 @@ public @interface EventHandler {
     boolean async() default false;
 
     /**
-     * The priority of the event handler.
+     * The priority of the event handler. Event handler with the bigger priority will be called first.
      *
      * @return the priority of the event handler
      */

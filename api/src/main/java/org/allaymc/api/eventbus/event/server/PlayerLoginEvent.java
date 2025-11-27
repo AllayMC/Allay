@@ -9,6 +9,8 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
+ * Called when a player logged in the server successfully.
+ *
  * @author daoge_cmd
  */
 @CallerThread(ThreadType.NETWORK)

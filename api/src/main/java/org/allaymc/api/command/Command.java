@@ -44,15 +44,18 @@ public abstract class Command {
      * Constructs a new {@code Command} instance with the specified name, description, and permission.
      * This allows the creation of a command with a specific permission required for execution.
      *
-     * @param name        The name of the command. Cannot be {@code null}.
-     * @param description The description of the command, which may contain a translation key. Cannot be {@code null}.
-     * @param permission  The string representing the required permission to execute the command.
+     * @param name        The name of the command.
+     * @param description The description of the command, which may contain a translation key.
+     * @param permission  The string representing the required permission to execute the command. Can be {@code null}
+     *                    if the command does not require any permission to execute.
      */
     public Command(String name, @MayContainTrKey String description, String permission) {
         this.name = Objects.requireNonNull(name);
         this.description = Objects.requireNonNull(description);
         this.permissions = new ArrayList<>();
-        this.permissions.add(permission);
+        if (permission != null) {
+            this.permissions.add(permission);
+        }
         this.aliases = new ArrayList<>();
         this.commandTree = CommandTree.create(this);
         prepareCommandTree(this.commandTree);
