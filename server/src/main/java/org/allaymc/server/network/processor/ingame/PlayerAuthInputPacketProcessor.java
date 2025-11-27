@@ -275,6 +275,11 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             switch (input) {
                 case START_SPRINTING -> {
                     if (entity.getFoodLevel() <= 6) {
+
+                        // Reset client-side flying state
+                        // TODO: this seems cannot stop client-side sprinting state
+                        entity.getController().viewEntityState(entity);
+
                         log.warn("Player {} tried to start sprinting without enough food level", player.getOriginName());
                         return;
                     }
@@ -386,9 +391,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void handleSingleItemStackRequest(Player player, ItemStackRequest request, long receiveTime) {
-        // We had no idea why the client still use PlayerAuthInputPacket to hold ItemStackRequest
+        // We had no idea why the client still uses PlayerAuthInputPacket to hold ItemStackRequest
         // Instead of using ItemStackRequestPacket
-        // This seems only happen when player break a block (MineBlockAction)
+        // This seems to only happen when player breaks a block (MineBlockAction)
         if (request == null) {
             return;
         }
