@@ -10,19 +10,26 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
- * Called when a player logged in the server successfully.
+ * Called when a player is about to be spawned in the dimension.
  *
  * @author daoge_cmd
  */
 @AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.NETWORK)
-public class PlayerLoginEvent extends ServerEvent implements CancellableEvent {
+public class PlayerSpawnEvent extends ServerEvent implements CancellableEvent {
 
     /**
-     * The player associated with this event.
+     * Represents the player associated with this event.
      */
     protected Player player;
+
+    /**
+     * The message that will be broadcast if the event is not cancelled.
+     */
+    @MayContainTrKey
+    @Setter
+    protected String joinMessage;
 
     /**
      * The reason that will be shown to the player if the event is cancelled.

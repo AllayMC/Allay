@@ -41,6 +41,7 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.server.PlayerDisconnectEvent;
 import org.allaymc.api.eventbus.event.server.PlayerLoginEvent;
+import org.allaymc.api.eventbus.event.server.PlayerSpawnEvent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.item.ItemHelper;
@@ -2379,9 +2380,16 @@ public class AllayPlayer implements Player {
         baseComponent.setUniqueId(this.loginData.getUuid());
         baseComponent.setPermissionCalculator(new OpPermissionCalculator(this));
 
+        var event = new PlayerSpawnEvent(this, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_JOINED, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
+        if (!event.call()) {
+            disconnect(event.getDisconnectReason());
+            return;
+        }
+
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
         dimension.addPlayer(this);
         playerManager.addPlayer(this);
+        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), this.loginData.getXname());
 
         startGame(dimension.getWorld(), playerData, dimension);
 
@@ -2467,7 +2475,7 @@ public class AllayPlayer implements Player {
             return;
         }
 
-        var event = new PlayerLoginEvent(this, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_JOINED);
+        var event = new PlayerLoginEvent(this, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         if (!event.call()) {
             disconnect(event.getDisconnectReason());
             return;
@@ -2475,9 +2483,6 @@ public class AllayPlayer implements Player {
 
         this.packetProcessorHolder.setClientState(ClientState.LOGGED_IN);
         sendPlayStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
-
-        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), this.loginData.getXname());
-
         sendPacket(NetworkData.RESOURCE_PACKS_INFO_PACKET.get());
     }
 

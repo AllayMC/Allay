@@ -31,6 +31,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - You can now create fake player via `EntityTypes.PLAYER` just like how you created the other entity.
   - The type of some variables has been changed from `EntityPlayer` to `Player` to better fit their purpose,
     such as the `player` variable in `PlayerJoinEvent`.
+- (API) Added `PlayerSpawnEvent` event.
 - Command nodes that the player doesn't have permission to access will not be sent to the player, and the commands will
   be resent when the specific permission changes.
 - Updated log4j2 patterns to use `%logger{0}` instead of `%c{0}`.
@@ -49,6 +50,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Changed member `SimpleEntityAction.CRITICAL_HIT` to independent `CriticalHit(int count)` record (the same to `ENCHANTED_HIT`) due
   to the addition of the newly added `count` parameter since protocol version 859.
 - (API) Renamed method `PlayerManager.getOnlinePlayerByName()` to `PlayerManager.getPlayerByName()` for clarity and consistency.
+- (API) Moved field `joinMessage` in `PlayerLoginEvent` to `PlayerSpawnEvent` since the server now will broadcast the join message when the player
+  spawns instead of when logged in.
 - Permission data now will not be saved into the player's nbt data, which allows third permission plugins to store the permission data in their own way.
   The core will only saved a `operator` list now.
 
