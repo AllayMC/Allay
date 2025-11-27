@@ -18,7 +18,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) `DebugText` now support `scale` property.
 - (API) Introduced `CallerThread` annotation to events to specify the execution thread's type.
-- (API) `Permission` object now can have multiple attached listeners.
 - (API) `PermissionGroup` can now override the permissions of the parent permission group to `false`.
 - (API) Added `resetPermission` method to `PermissionGroup` and `Permissible` which would set the permission status to `default`.
 - (API) Added methods `PlayerManager.isOperator()` and `PlayerManager.setOperaotor()`.
@@ -38,7 +37,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Changed
 
-- (API) Replaced method `Permission.getPermissionListener()` with `Permission.getListeners()` which returns a set of listeners.
 - (API) Renamed class `Structure` to `StructureFile` to avoid confusion with the upcoming structure feature in world gen.
 - (API) Refactored the permission system. The permission system has now been reconstructed into a lightweight, easy-to-interface
   system in preparation for docking with LuckPerms. There are some breaking changes, especially in command creation. Check the updated
