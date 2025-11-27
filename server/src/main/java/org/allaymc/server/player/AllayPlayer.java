@@ -2262,7 +2262,8 @@ public class AllayPlayer implements Player {
             abilities.add(Ability.INSTABUILD);
         }
 
-        if (player.hasPermission(Permissions.ABILITY_FLY) != Tristate.FALSE && (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR)) {
+        var tristate = player.hasPermission(Permissions.ABILITY_FLY);
+        if (tristate.asBoolean() || (tristate != Tristate.FALSE && (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR))) {
             abilities.add(Ability.MAY_FLY);
         }
 
