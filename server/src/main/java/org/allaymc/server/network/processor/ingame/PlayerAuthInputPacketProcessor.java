@@ -275,11 +275,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             switch (input) {
                 case START_SPRINTING -> {
                     if (entity.getFoodLevel() <= 6) {
-
-                        // Reset client-side flying state
-                        // TODO: this seems cannot stop client-side sprinting state
-                        entity.getController().viewEntityState(entity);
-
+                        // TODO: stop client-side sprinting state
                         log.warn("Player {} tried to start sprinting without enough food level", player.getOriginName());
                         return;
                     }
