@@ -296,9 +296,14 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 }
                 case START_FLYING -> {
                     var gameMode = entity.getGameMode();
-                    if ((gameMode != GameMode.CREATIVE && gameMode != GameMode.SPECTATOR) ||
-                        entity.hasPermission(Permissions.ABILITY_FLY) == Tristate.FALSE) {
-                        entity.setFlying(false);
+                    var tristate = entity.hasPermission(Permissions.ABILITY_FLY);
+                    if (tristate == Tristate.FALSE ||
+                        (gameMode != GameMode.CREATIVE && gameMode != GameMode.SPECTATOR && !tristate.asBoolean())) {
+
+                        // Reset client-side flying state
+                        var controller = entity.getController();
+                        controller.viewPlayerPermission(controller);
+
                         log.warn("Player {} tried to start flying without permission", player.getOriginName());
                         return;
                     }

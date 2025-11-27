@@ -81,10 +81,16 @@ public class EntityPlayerPhysicsComponentImpl extends EntityHumanPhysicsComponen
         }
     }
 
-    /// Fall distance for the player will be reset to 1 if the player is gliding and the absolute value of the
-    /// vertical motion is smaller than 0.5
     @Override
     protected void tryResetFallDistance(Location3dc location) {
+        // Reset fall distance when the player is flying
+        if (thisPlayer.isFlying()) {
+            this.fallDistance = 0;
+            return;
+        }
+
+        // Fall distance for the player will be reset to 1 if the player is gliding and the absolute value of the
+        // vertical motion is smaller than 0.5
         if (thisPlayer.isGliding() &&
             Math.abs(this.motion.y()) < 0.5) {
             this.fallDistance = 1;

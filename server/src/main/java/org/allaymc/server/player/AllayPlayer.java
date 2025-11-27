@@ -2267,7 +2267,7 @@ public class AllayPlayer implements Player {
             abilities.add(Ability.MAY_FLY);
         }
 
-        if (player.isFlying()) {
+        if (player.isFlying() && abilities.contains(Ability.MAY_FLY)) {
             abilities.add(Ability.FLYING);
         }
 
