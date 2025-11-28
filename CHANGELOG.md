@@ -30,8 +30,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) `DebugText` now support `scale` property.
 - (API) Introduced `CallerThread` annotation to events to specify the execution thread's type.
-- (API) `PermissionGroup` can now override the permissions of the parent permission group to `false`.
-- (API) Added `resetPermission` method to `PermissionGroup` and `Permissible` which would set the permission status to `default`.
 - (API) Added methods `PlayerManager.isOperator()` and `PlayerManager.setOperaotor()`.
 - (API) Readded `DebugShapeViewer`, and `WorldViewer` now extends `DebugShapeViewer`. There should be no breaking changes.
 - (API) Added `SenderType.ACTUAL_PLAYER` which limits the command sender from must be an actual player.
