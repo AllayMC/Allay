@@ -1,7 +1,19 @@
-[ServerInfo]
-description = "Show some information through scoreboard & bossbar."
+# Recommended Plugins
+
+[PlaceholderAPI]
+description = "The official placeholder api for Allay."
 authors = ["daoge_cmd"]
-github = "https://github.com/AllayMC/ServerInfo"
+github = "https://github.com/AllayMC/PlaceholderAPI"
+
+[EconomyAPI]
+description = "EconomyAPI is a plugin that unifies all economy plugins under one single API."
+authors = ["daoge_cmd"]
+github = "https://github.com/AllayMC/EconomyAPI"
+
+[LuckPerms]
+description = "A permission plugin for Minecraft servers."
+authors = ["Luck", "daoge_cmd"]
+github = "https://github.com/AllayMC/LuckPerms"
 
 [Spark]
 description = "A performance profiler for Minecraft clients, servers, and proxies."
@@ -13,10 +25,37 @@ description = "Voxel world generation modding platform."
 authors = ["daoge_cmd", "IWareQ", "dfsek", "duplexsystem", "Astrash", "solonovamax", "Sancires", "Aureus", "RogueShade"]
 github = "https://github.com/PolyhedralDev/Terra"
 
+# Other Plugins
+
+[HuHoBot]
+description = "HuHoBot for AllayMC, enabling the official QQ bot to connect to your server."
+authors = ["HuoHuas001", "daoge_cmd"]
+github = "https://github.com/HuHoBot/AllayMCAdapter"
+
+[ServerInfo]
+description = "Show some information through scoreboard & bossbar."
+authors = ["daoge_cmd"]
+github = "https://github.com/AllayMC/ServerInfo"
+
 [RemoteCommand]
 description = "Execute server command through http interface."
 authors = ["daoge_cmd"]
 github = "https://github.com/AllayMC/RemoteCommand"
+
+[AllayScalaLibrary]
+description = "Scala standard library and scala toolkit packages for allay."
+authors = ["scala"]
+github = "https://github.com/ScAllay/AllayScalaLibrary"
+
+[DiscordRelay]
+description = "A Simple Minecraft to Discord Relay for the AllayMC Server Software!"
+authors = ["Acktar"]
+github = "https://github.com/acktarbadulla/DiscordRelay-AllayMC"
+
+[SimpleScoreboard]
+description = "A lightweight and customizable scoreboard plugin for AllayMC."
+authors = ["Acktar"]
+github = "https://github.com/Mythical-Games/SimpleScoreboard"
 
 [allaymc-kotlinx]
 description = "Kotlin-style Extension Library and Shared Standard Library for Allay Server"
@@ -32,28 +71,3 @@ github = "https://github.com/MineBuilders/allaymc-nodejs-runtime"
 description = "Load Kotlin Script in Allay!"
 authors = ["MineBuilder"]
 github = "https://github.com/MineBuilders/allaymc-kts-host"
-
-[AllayScalaLibrary]
-description = "Scala standard library and scala toolkit packages for allay."
-authors = ["scala"]
-github = "https://github.com/ScAllay/AllayScalaLibrary"
-
-[DiscordRelay]
-description = "A Simple Minecraft to Discord Relay for the AllayMC Server Software!"
-authors = ["Acktar"]
-github = "https://github.com/acktarbadulla/DiscordRelay-AllayMC"
-
-[HuHoBot]
-description = "HuHoBot for AllayMC, enabling the official QQ bot to connect to your server."
-authors = ["HuoHuas001", "daoge_cmd"]
-github = "https://github.com/HuHoBot/AllayMCAdapter"
-
-[PlaceholderAPI]
-description = "The official placeholder api for Allay."
-authors = ["daoge_cmd"]
-github = "https://github.com/AllayMC/PlaceholderAPI"
-
-[SimpleScoreboard]
-description = "A lightweight and customizable scoreboard plugin for AllayMC."
-authors = ["Acktar"]
-github = "https://github.com/Mythical-Games/SimpleScoreboard"
