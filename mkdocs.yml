@@ -141,6 +141,7 @@ nav:
       - Use Debug Shapes: tutorials/use-debug-shapes.md
       - Block: tutorials/block.md
       - Persistent Data Container: tutorials/persistent-data-container.md
+      - Use Permission: tutorials/use-permission.md
 
   - Advanced:
       - Use Color Codes: advanced/use-color-codes.md

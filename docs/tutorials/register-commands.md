@@ -94,7 +94,7 @@ public class HelloCommand extends Command {
 }
 ```
 
-Now, [install](create-your-first-plugin#build-and-install-your-plugin) your plugin and restart your server. Join the game and type `/help hello`. You should see the usage
+Now, [install](create-your-first-plugin#build-the-plugin) your plugin and restart your server. Join the game and type `/help hello`. You should see the usage
 information, which indicates that our command has been successfully added to the game!
 
 Now, type `/hello`, and you should receive the message "Hello World!".

@@ -10,7 +10,7 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
- * Called when a player is about to be spawned in the dimension.
+ * Called when a player is about to be spawned in the dimension during the login sequence.
  *
  * @author daoge_cmd
  */
