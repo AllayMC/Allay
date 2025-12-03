@@ -15,6 +15,11 @@ description = "A permission plugin for Minecraft servers."
 authors = ["Luck", "daoge_cmd"]
 github = "https://github.com/AllayMC/LuckPerms"
 
+[LuckPermsPlaceholders]
+description = "Optional plugin which provides LuckPerms placeholders for Allay's PlaceholderAPI."
+authors = ["Luck", "daoge_cmd"]
+github = "https://github.com/AllayMC/LuckPermsPlaceholders"
+
 [Spark]
 description = "A performance profiler for Minecraft clients, servers, and proxies."
 authors = ["Luck", "IWareQ", "daoge_cmd"]
