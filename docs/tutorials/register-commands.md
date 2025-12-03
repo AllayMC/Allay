@@ -52,7 +52,7 @@ import org.allaymc.api.server.Server;
 
 public class HelloCommand extends Command {
     public HelloCommand() {
-        super("hello", "Greets the command sender.");
+        super("hello", "Greets the command sender.", "myplugin.command.hello");
         OpPermissionCalculator.NON_OP_PERMISSIONS.addAll(this.permissions); /*(1)!*/
     }
 }
@@ -80,7 +80,7 @@ import org.allaymc.api.server.Server;
 
 public class HelloCommand extends Command {
     public HelloCommand() {
-        super("hello", "Greets the command sender.");
+        super("hello", "Greets the command sender.", "myplugin.command.hello");
     }
 
     @Override
@@ -113,7 +113,7 @@ import org.allaymc.api.server.Server;
 
 public class HelloCommand extends Command {
     public HelloCommand() {
-        super("hello", "Greets the command sender.");
+        super("hello", "Greets the command sender.", "myplugin.command.hello");
     }
 
     @Override
