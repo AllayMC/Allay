@@ -24,9 +24,6 @@ plugins:
   - search
   - git-revision-date-localized:
       enable_creation_date: true
-  - git-committers:
-      repository: AllayMC/Allay
-      branch: master
   - gen-files:
       scripts:
         - docs/gen_plugin_list.py
