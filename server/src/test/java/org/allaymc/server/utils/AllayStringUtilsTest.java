@@ -27,4 +27,15 @@ class AllayStringUtilsTest {
         assertEquals(List.of("aaa", "bbb;ccc:ddd"), List.of(AllayStringUtils.fastTwoPartSplit(testStr, ":", "")));
         assertEquals(List.of("", "aaa:bbb;ccc:ddd"), List.of(AllayStringUtils.fastTwoPartSplit(testStr, "?", "")));
     }
+
+    @Test
+    void testSplitCommandArgs() {
+        assertEquals(List.of("a", "b", "c"), AllayStringUtils.splitCommandArgs("a b c"));
+        assertEquals(List.of("a b", "c"), AllayStringUtils.splitCommandArgs("\"a b\" c"));
+        assertEquals(List.of("a", "b c"), AllayStringUtils.splitCommandArgs("a \"b c\""));
+        assertEquals(List.of("a", "{b}"), AllayStringUtils.splitCommandArgs("a \"{b}\""));
+        assertEquals(List.of("a", "{b} {c}"), AllayStringUtils.splitCommandArgs("a \"{b} {c}\""));
+        assertEquals(List.of("a", "@e[name=daoge cmd]"), AllayStringUtils.splitCommandArgs("a @e[name=\"daoge cmd\"]"));
+        assertEquals(List.of("@a", "{\"rawtext\":[{\"text\":\"§9Hello everyone!\"}]}"), AllayStringUtils.splitCommandArgs("@a {\"rawtext\":[{\"text\":\"§9Hello everyone!\"}]}"));
+    }
 }

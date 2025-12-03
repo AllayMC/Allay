@@ -56,7 +56,6 @@ public class AllayStringUtils {
      * Parses the given text to split command arguments
      *
      * @param cmdLine the command line
-     *
      * @return a List of command arguments
      */
     public static LinkedList<String> splitCommandArgs(String cmdLine) {
@@ -67,9 +66,9 @@ public class AllayStringUtils {
         int start = 0;
 
         for (int i = 0; i < sb.length(); i++) {
-            if ((sb.charAt(i) == '{' && curlyBraceCount >= 1) || (sb.charAt(i) == '{' && sb.charAt(i - 1) == ' ' && curlyBraceCount == 0)) {
+            if (notQuoted && ((sb.charAt(i) == '{' && curlyBraceCount >= 1) || (sb.charAt(i) == '{' && sb.charAt(i - 1) == ' ' && curlyBraceCount == 0))) {
                 curlyBraceCount++;
-            } else if (sb.charAt(i) == '}' && curlyBraceCount > 0) {
+            } else if (notQuoted && sb.charAt(i) == '}' && curlyBraceCount > 0) {
                 curlyBraceCount--;
                 if (curlyBraceCount == 0) {
                     args.add(sb.substring(start, i + 1));

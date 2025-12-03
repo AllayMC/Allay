@@ -20,6 +20,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Fixed
 
+- Fixed method AllayStringUtils.splitCommandArgs() when using quote and curly brace together.
+
 ### Removed
 
 # 0.9.1 (API 0.17.0) - 2025/11/28
