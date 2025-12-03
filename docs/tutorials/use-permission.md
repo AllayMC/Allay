@@ -16,7 +16,7 @@ others are added with plugins. Most of these actions have a permission associate
 can control which users have access to each feature or command.
 
 A permission is just a string (a sequence of letters/digits) and is separated into parts using periods.
-For example, `allay.command.say` is the permission for Allay's `/ban` command.
+For example, `allay.command.say` is the permission for Allay's `/say` command.
 
 The string that represents a certain permission is also sometimes called a "permission node" or just
 "node" for short. Permission nodes can have three values: `true`, `false`, and `undefined`.
