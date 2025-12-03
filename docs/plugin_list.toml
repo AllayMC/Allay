@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[ChatFormatter]
+description = "A simple chat formatter plugin for Allay."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/ChatFormatter"
+
 [HuHoBot]
 description = "HuHoBot for AllayMC, enabling the official QQ bot to connect to your server."
 authors = ["HuoHuas001", "daoge_cmd"]
