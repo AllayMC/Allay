@@ -10,11 +10,13 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.9.2 (API 0.18.0) - Unreleased
+# 0.10.0 (API 0.18.0) - Unreleased
 
 <small>[Compare with 0.9.1](https://github.com/AllayMC/Allay/compare/0.9.1...HEAD)</small>
 
 ### Added
+
+- Added support for bedrock 1.21.130 (protocol version 897).
 
 ### Changed
 

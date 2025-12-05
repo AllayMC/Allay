@@ -13,6 +13,8 @@ import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
 import org.cloudburstmc.protocol.bedrock.codec.v827.Bedrock_v827;
 import org.cloudburstmc.protocol.bedrock.codec.v844.Bedrock_v844;
 import org.cloudburstmc.protocol.bedrock.codec.v859.Bedrock_v859;
+import org.cloudburstmc.protocol.bedrock.codec.v860.Bedrock_v860;
+import org.cloudburstmc.protocol.bedrock.codec.v897.Bedrock_v897;
 
 import java.util.List;
 
@@ -24,18 +26,13 @@ import java.util.List;
 @UtilityClass
 public final class ProtocolInfo {
 
-    private static final BedrockCodec CODEC_v860 = Bedrock_v859.CODEC.toBuilder()
-            .raknetProtocolVersion(11)
-            .protocolVersion(860)
-            .minecraftVersion("1.21.124")
-            .build();
-
     /**
      * A list which contains the supported protocol versions, and the first element is the latest version.
      */
     public static final List<BedrockCodec> SUPPORTED_VERSIONS = List.of(
             // Order is important. The first codec is the latest supported version.
-            CODEC_v860,
+            Bedrock_v897.CODEC,
+            Bedrock_v860.CODEC,
             Bedrock_v859.CODEC,
             Bedrock_v844.CODEC,
             Bedrock_v827.CODEC,
