@@ -22,7 +22,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Fixed
 
-- Fixed method AllayStringUtils.splitCommandArgs() when using quote and curly brace together.
+- Fixed method `AllayStringUtils.splitCommandArgs()` when using quote and curly brace together.
+- Fixed `relative` parameter of method `WorldViewer.viewSound()` being inverted unexpectedly.
 
 ### Removed
 

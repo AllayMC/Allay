@@ -207,8 +207,8 @@ public interface WorldViewer extends DebugShapeViewer {
      *
      * @param sound    the sound to view
      * @param pos      the pos of the sound
-     * @param relative whether the sound is relative. If set to {@code true}, the sound will have full volume,
-     *                 regardless of where the Position is, whereas if set to {@code false}, the sound's volume
+     * @param relative whether the sound is relative. If set to {@code false}, the sound will have full volume,
+     *                 regardless of where the Position is, whereas if set to {@code true}, the sound's volume
      *                 will be based on the distance to the pos passed
      */
     void viewSound(Sound sound, Vector3dc pos, boolean relative);

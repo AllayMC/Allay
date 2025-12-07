@@ -996,7 +996,7 @@ public class AllayPlayer implements Player {
         packet.setPosition(pos);
         packet.setIdentifier(":");
         packet.setExtraData(-1);
-        packet.setRelativeVolumeDisabled(relative);
+        packet.setRelativeVolumeDisabled(!relative);
 
         switch (sound) {
             case SimpleSound.FIREWORK_LAUNCH -> packet.setSound(SoundEvent.LAUNCH);

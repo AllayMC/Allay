@@ -930,8 +930,8 @@ public interface Dimension {
      * @param y        the y coordinate of the pos
      * @param z        the z coordinate of the pos
      * @param sound    the sound
-     * @param relative whether the sound is relative. If set to {@code true}, the sound will have full volume,
-     *                 regardless of where the Position is, whereas if set to {@code false}, the sound's volume
+     * @param relative whether the sound is relative. If set to {@code false}, the sound will have full volume,
+     *                 regardless of where the Position is, whereas if set to {@code true}, the sound's volume
      *                 will be based on the distance to the pos passed
      */
     default void addSound(double x, double y, double z, Sound sound, boolean relative) {
