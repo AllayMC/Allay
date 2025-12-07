@@ -37,6 +37,11 @@ description = "Show image in your Allay server!"
 authors = ["daoge_cmd"]
 github = "https://github.com/smartcmd/Imager"
 
+[NBSAllay]
+description = "Note block song player for Allay server."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/NBSAllay"
+
 [ChatFormatter]
 description = "A simple chat formatter plugin for Allay."
 authors = ["daoge_cmd"]
