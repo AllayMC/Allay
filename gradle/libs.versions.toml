@@ -60,7 +60,7 @@ log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.
 # CLI dependencie
 mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 # Code generating
-javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.8.0" }
+javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.9.0" }
 # Reflections
 fastreflect = { group = "me.sunlan", name = "fast-reflection", version = "1.0.3" }
 # Math computing
@@ -75,7 +75,7 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.1" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.2" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.28294.190" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.28294.238" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.1" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
