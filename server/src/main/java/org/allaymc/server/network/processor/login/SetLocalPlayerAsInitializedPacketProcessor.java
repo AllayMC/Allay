@@ -4,6 +4,8 @@ import org.allaymc.api.eventbus.event.server.PlayerJoinEvent;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
@@ -19,9 +21,9 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
     @Override
     public void handle(Player player, SetLocalPlayerAsInitializedPacket packet) {
         var allayPlayer = (AllayPlayer) player;
-        var event = new PlayerJoinEvent(player);
+        var event = new PlayerJoinEvent(player, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_JOINED, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         if (!event.call()) {
-            player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
+            player.disconnect(event.getDisconnectReason());
             return;
         }
 
@@ -34,6 +36,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         player.viewEntityLocation(entity, baseComponent.getLastSentLocation(), baseComponent.getLocation(), true);
         // Send debug shapes to the player after the player fully joined
         ((AllayDimension) entity.getDimension()).addDebugShapesTo(player);
+        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), allayPlayer.getLoginData().getXname());
     }
 
     @Override

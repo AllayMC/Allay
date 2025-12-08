@@ -2381,7 +2381,7 @@ public class AllayPlayer implements Player {
         baseComponent.setUniqueId(this.loginData.getUuid());
         baseComponent.setPermissionCalculator(new OpPermissionCalculator(this));
 
-        var event = new PlayerSpawnEvent(this, TextFormat.YELLOW + "%" + TrKeys.MC_MULTIPLAYER_PLAYER_JOINED, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
+        var event = new PlayerSpawnEvent(this, TrKeys.MC_DISCONNECTIONSCREEN_NOREASON);
         if (!event.call()) {
             disconnect(event.getDisconnectReason());
             return;
@@ -2390,7 +2390,6 @@ public class AllayPlayer implements Player {
         this.packetProcessorHolder.setClientState(ClientState.SPAWNED);
         dimension.addPlayer(this);
         playerManager.addPlayer(this);
-        Server.getInstance().getMessageChannel().broadcastTranslatable(event.getJoinMessage(), this.loginData.getXname());
 
         startGame(dimension.getWorld(), playerData, dimension);
 

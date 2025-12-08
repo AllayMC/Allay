@@ -20,6 +20,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Changed
 
+- (API) Moved field `joinMessage` from `PlayerSpawnEvent` to `PlayerJoinEvent`.
+- (API) Added field `disconnectReason` to `PlayerJoinEvent`.
+
 ### Fixed
 
 - Fixed method `AllayStringUtils.splitCommandArgs()` when using quote and curly brace together.

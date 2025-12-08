@@ -25,13 +25,6 @@ public class PlayerSpawnEvent extends ServerEvent implements CancellableEvent {
     protected Player player;
 
     /**
-     * The message that will be broadcast if the event is not cancelled.
-     */
-    @MayContainTrKey
-    @Setter
-    protected String joinMessage;
-
-    /**
      * The reason that will be shown to the player if the event is cancelled.
      */
     @MayContainTrKey
