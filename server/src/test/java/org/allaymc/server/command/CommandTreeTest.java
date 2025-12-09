@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -198,5 +199,18 @@ public class CommandTreeTest {
         tree.parse(mockSender, new String[]{"v2", "1", "v1", "2"});
         assertEquals(2, v1.get());
         assertEquals(1, v2.get());
+    }
+
+    @Test
+    void testRootExec() {
+        var tree = AllayCommandTree.create(mockCmd);
+        AtomicBoolean b = new AtomicBoolean();
+        tree.getRoot().exec(ctx -> {
+            b.set(true);
+            return ctx.success();
+        });
+        tree.getRoot().key("test_key");
+        tree.parse(mockSender, new String[0]);
+        assertFalse(b.get());
     }
 }
