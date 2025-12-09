@@ -32,8 +32,13 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[BlackBE]
+description = "BlackBE integration for Allay server."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/BlackBE"
+
 [Essentials]
-description = "Essential plugin for Allay server (vibe coded)."
+description = "Essential plugin for Allay server."
 authors = ["daoge_cmd"]
 github = "https://github.com/smartcmd/Essentials"
 
