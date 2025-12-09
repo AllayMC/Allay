@@ -32,7 +32,7 @@ public abstract class BaseClassGen {
                         .constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(initInfoClass, "initInfo")
-                        .addParameter(ParameterizedTypeName.get(ClassNames.LIST, ParameterizedTypeName.get(ClassNames.COMPONENT_PROVIDER, WildcardTypeName.subtypeOf(ClassNames.COMPONENT))), "componentProviders")
+                        .addParameter(ParameterizedTypeName.get(TypeNames.LIST, ParameterizedTypeName.get(TypeNames.COMPONENT_PROVIDER, WildcardTypeName.subtypeOf(TypeNames.COMPONENT))), "componentProviders")
                         .addStatement("super(initInfo, componentProviders)")
                         .build()
         );

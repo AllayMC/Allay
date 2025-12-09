@@ -39,13 +39,13 @@ public class ItemClassGen extends BaseClassGen {
         }
 
         var typesClass = TypeSpec
-                .classBuilder(ClassNames.ITEM_TYPES)
+                .classBuilder(TypeNames.ITEM_TYPES)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE);
+                .addAnnotation(TypeNames.MINECRAFT_VERSION_SENSITIVE);
 
         for (var id : ItemId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(ClassNames.ITEM_TYPE, generateClassFullName(id)), id.name())
+                    FieldSpec.builder(ParameterizedTypeName.get(TypeNames.ITEM_TYPE, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
@@ -58,7 +58,7 @@ public class ItemClassGen extends BaseClassGen {
                 if (!Files.exists(interfaceDir)) {
                     Files.createDirectories(interfaceDir);
                 }
-                generateInterface(ClassNames.ITEM_STACK, interfaceFullName, interfacePath);
+                generateInterface(TypeNames.ITEM_STACK, interfaceFullName, interfacePath);
             }
 
             var implSimpleName = generateClassSimpleName(id) + "Impl";
@@ -69,7 +69,7 @@ public class ItemClassGen extends BaseClassGen {
                 if (!Files.exists(implDir)) {
                     Files.createDirectories(implDir);
                 }
-                generateImpl(ClassNames.ITEM_STACK_IMPL, interfaceFullName, implFullName, ClassNames.ITEM_STACK_INIT_INFO, implPath);
+                generateImpl(TypeNames.ITEM_STACK_IMPL, interfaceFullName, implFullName, TypeNames.ITEM_STACK_INIT_INFO, implPath);
             }
 
             addDefaultItemTypeInitializer(id, implFullName);
@@ -77,23 +77,23 @@ public class ItemClassGen extends BaseClassGen {
 
         generateDefaultItemTypeInitializer();
 
-        var javaFile = JavaFile.builder(ClassNames.ITEM_TYPES.packageName(), typesClass.build())
+        var javaFile = JavaFile.builder(TypeNames.ITEM_TYPES.packageName(), typesClass.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ClassNames.ITEM_TYPES.simpleName() + ".java ...");
-        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/item/type/" + ClassNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
+        System.out.println("Generating " + TypeNames.ITEM_TYPES.simpleName() + ".java ...");
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/item/type/" + TypeNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultItemTypeInitializer(ItemId id, ClassName itemClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ClassNames.ITEM_TYPES, id.name(), ClassNames.ALLAY_ITEM_TYPE)
+                .add("$T.$N = $T\n", TypeNames.ITEM_TYPES, id.name(), TypeNames.ALLAY_ITEM_TYPE)
                 .add("        .builder($T.class)\n", itemClassName)
-                .add("        .vanillaItem($T.$N)\n", ClassNames.ITEM_ID, id.name())
+                .add("        .vanillaItem($T.$N)\n", TypeNames.ITEM_ID, id.name())
                 .add("        .build()");
         ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER
-                .beginControlFlow("if ($T.$N == null)", ClassNames.ITEM_TYPES, id.name())
+                .beginControlFlow("if ($T.$N == null)", TypeNames.ITEM_TYPES, id.name())
                 .addStatement(initializer.build())
                 .endControlFlow();
     }
@@ -108,15 +108,15 @@ public class ItemClassGen extends BaseClassGen {
         }
 
         TypeSpec.Builder builder =
-                TypeSpec.classBuilder(ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER)
+                TypeSpec.classBuilder(TypeNames.ITEM_TYPE_DEFAULT_INITIALIZER)
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addMethod(ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER.build());
 
-        var javaFile = JavaFile.builder(ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER.packageName(), builder.build())
+        var javaFile = JavaFile.builder(TypeNames.ITEM_TYPE_DEFAULT_INITIALIZER.packageName(), builder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
+        System.out.println("Generating " + TypeNames.ITEM_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
         Utils.writeFileWithCRLF(filePath, javaFile.toString());
     }
 

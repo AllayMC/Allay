@@ -32,10 +32,10 @@ public class EntityClassGen extends BaseClassGen {
             Files.createDirectories(implDir);
         }
         var typesClass = TypeSpec
-                .classBuilder(ClassNames.ENTITY_TYPES).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+                .classBuilder(TypeNames.ENTITY_TYPES).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : EntityId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(ClassNames.ENTITY_TYPE, generateClassFullName(id)), id.name())
+                    FieldSpec.builder(ParameterizedTypeName.get(TypeNames.ENTITY_TYPE, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
@@ -45,7 +45,7 @@ public class EntityClassGen extends BaseClassGen {
             var interfacePath = interfaceDir.resolve(interfaceSimpleName + ".java");
             if (!Files.exists(interfacePath)) {
                 System.out.println("Generating " + interfaceSimpleName + "...");
-                generateInterface(ClassNames.ENTITY, interfaceFullName, interfacePath);
+                generateInterface(TypeNames.ENTITY, interfaceFullName, interfacePath);
             }
 
             var implSimpleName = generateClassSimpleName(id) + "Impl";
@@ -53,29 +53,29 @@ public class EntityClassGen extends BaseClassGen {
             var implPath = implDir.resolve(implSimpleName + ".java");
             if (!Files.exists(implPath)) {
                 System.out.println("Generating " + implSimpleName + "...");
-                generateImpl(ClassNames.ENTITY_IMPL, interfaceFullName, implFullName, ClassNames.ENTITY_INIT_INFO, implPath);
+                generateImpl(TypeNames.ENTITY_IMPL, interfaceFullName, implFullName, TypeNames.ENTITY_INIT_INFO, implPath);
             }
 
             addDefaultEntityTypeInitializer(id, implFullName);
         }
         generateDefaultEntityTypeInitializer();
-        var javaFile = JavaFile.builder(ClassNames.ENTITY_TYPES.packageName(), typesClass.build())
+        var javaFile = JavaFile.builder(TypeNames.ENTITY_TYPES.packageName(), typesClass.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ClassNames.ENTITY_TYPES.simpleName() + ".java ...");
-        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/entity/type/" + ClassNames.ENTITY_TYPES.simpleName() + ".java"), javaFile.toString());
+        System.out.println("Generating " + TypeNames.ENTITY_TYPES.simpleName() + ".java ...");
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/entity/type/" + TypeNames.ENTITY_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultEntityTypeInitializer(EntityId id, ClassName entityClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ClassNames.ENTITY_TYPES, id.name(), ClassNames.ALLAY_ENTITY_TYPE)
+                .add("$T.$N = $T\n", TypeNames.ENTITY_TYPES, id.name(), TypeNames.ALLAY_ENTITY_TYPE)
                 .add("        .builder($T.class)\n", entityClassName)
-                .add("        .vanillaEntity($T.$N)\n", ClassNames.ENTITY_ID, id.name())
+                .add("        .vanillaEntity($T.$N)\n", TypeNames.ENTITY_ID, id.name())
                 .add("        .build()");
         ENTITY_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER
-                .beginControlFlow("if ($T.$N == null)", ClassNames.ENTITY_TYPES, id.name())
+                .beginControlFlow("if ($T.$N == null)", TypeNames.ENTITY_TYPES, id.name())
                 .addStatement(initializer.build())
                 .endControlFlow();
     }
@@ -90,15 +90,15 @@ public class EntityClassGen extends BaseClassGen {
         }
 
         TypeSpec.Builder builder =
-                TypeSpec.classBuilder(ClassNames.ENTITY_TYPE_DEFAULT_INITIALIZER)
+                TypeSpec.classBuilder(TypeNames.ENTITY_TYPE_DEFAULT_INITIALIZER)
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addMethod(ENTITY_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER.build());
 
-        var javaFile = JavaFile.builder(ClassNames.ENTITY_TYPE_DEFAULT_INITIALIZER.packageName(), builder.build())
+        var javaFile = JavaFile.builder(TypeNames.ENTITY_TYPE_DEFAULT_INITIALIZER.packageName(), builder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ClassNames.ENTITY_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
+        System.out.println("Generating " + TypeNames.ENTITY_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
         Utils.writeFileWithCRLF(filePath, javaFile.toString());
     }
 

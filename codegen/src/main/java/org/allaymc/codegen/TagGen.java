@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 
-import static org.allaymc.codegen.ClassNames.*;
+import static org.allaymc.codegen.TypeNames.*;
 
 /**
  * @author IWareQ

@@ -157,9 +157,6 @@ public class ModalForm extends Form {
         return (ModalForm) super.onClose(onClose);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getResponse() {
         return response != null ? (String) response : "null";

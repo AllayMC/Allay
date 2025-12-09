@@ -21,6 +21,11 @@ subprojects {
         withType<Copy>().configureEach {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }
+
+        // Javadoc task is only enabled for api module
+        withType<Javadoc>().configureEach {
+            enabled = false;
+        }
     }
 
     java {
@@ -72,11 +77,6 @@ subprojects {
                 val delombokTask = named<DelombokTask>("delombok")
                 dependsOn(delombokTask)
                 from(delombokTask.map { it.outputDir })
-            }
-
-            // We already have sources jar, so no need to build Javadoc, which would cause a lot of warnings
-            withType<Javadoc>().configureEach {
-                enabled = false
             }
         }
 

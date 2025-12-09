@@ -10,8 +10,8 @@ import org.cloudburstmc.nbt.NbtMap;
 import static org.allaymc.api.utils.AllayNBTUtils.writeVector3f;
 
 /**
- * PlayerData represents the entry stores in {@link PlayerStorage}. It includes the player's nbt and the world & dimension
- * that the player is currently in.
+ * PlayerData represents the entry stores in {@link PlayerStorage}. It includes the player's nbt, the world, and
+ * the dimension that the player is currently in.
  *
  * @author daoge_cmd
  */

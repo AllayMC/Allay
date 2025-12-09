@@ -51,7 +51,7 @@ public class BlockIdEnumGen {
 
     @SneakyThrows
     public static void generateToDependenceModule() {
-        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.DEP_IDENTIFIER);
+        TypeSpec.Builder codeBuilder = commonBuilder(TypeNames.DEP_IDENTIFIER);
         addEnums(codeBuilder);
         var javaFile = JavaFile.builder("org.allaymc.dependence", codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
@@ -62,22 +62,22 @@ public class BlockIdEnumGen {
 
     @SneakyThrows
     public static void generateToServerModule() {
-        var blockTypeClass = ParameterizedTypeName.get(ClassNames.BLOCK_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT));
-        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
+        var blockTypeClass = ParameterizedTypeName.get(TypeNames.BLOCK_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT));
+        TypeSpec.Builder codeBuilder = commonBuilder(TypeNames.API_IDENTIFIER)
                 .addMethod(MethodSpec.methodBuilder("fromIdentifier")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .addParameter(ClassNames.API_IDENTIFIER, "identifier")
+                        .addParameter(TypeNames.API_IDENTIFIER, "identifier")
                         .beginControlFlow("try")
                         .addStatement("return valueOf(identifier.path().toUpperCase($T.ENGLISH))", Locale.class)
                         .nextControlFlow("catch ($T ignore)", IllegalArgumentException.class)
                         .addStatement("return null")
                         .endControlFlow()
-                        .returns(ClassNames.BLOCK_ID)
+                        .returns(TypeNames.BLOCK_ID)
                         .build()
                 )
                 .addMethod(MethodSpec.methodBuilder("getBlockType")
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.BLOCKS.get(this.getIdentifier())", ClassNames.REGISTRIES)
+                        .addStatement("return $T.BLOCKS.get(this.getIdentifier())", TypeNames.REGISTRIES)
                         .returns(blockTypeClass)
                         .build()
                 );
@@ -104,10 +104,10 @@ public class BlockIdEnumGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
                         .builder(identifierClass, "identifier", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(ClassNames.GETTER)
+                        .addAnnotation(TypeNames.GETTER)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(ClassNames.STRING, "identifier")
+                        .addParameter(TypeNames.STRING, "identifier")
                         .addStatement("this.identifier = new $T(identifier)", identifierClass)
                         .build()
                 );

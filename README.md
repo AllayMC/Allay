@@ -11,6 +11,7 @@ The next-generation Minecraft: Bedrock Edition server software aims to be reliab
 
 <a href="https://github.com/AllayMC/Allay/actions"><img src="https://github.com/AllayMC/Allay/actions/workflows/gradle.yml/badge.svg" alt="Build"/></a>
 <a href="https://docs.allaymc.org"><img src="https://readthedocs.org/projects/allaymc/badge/?version=latest" alt="Documentation Status"></a>
+[![javadoc](https://javadoc.io/badge2/org.allaymc.allay/api/javadoc.svg)](https://javadoc.io/doc/org.allaymc.allay/api)
 [![api](https://img.shields.io/maven-central/v/org.allaymc.allay/api?label=api)](https://central.sonatype.com/artifact/org.allaymc.allay/api)
 [![server](https://img.shields.io/maven-central/v/org.allaymc.allay/server?label=server)](https://central.sonatype.com/artifact/org.allaymc.allay/server)
 [![codecov](https://codecov.io/gh/AllayMC/Allay/graph/badge.svg?token=EI8EDEKI51)](https://codecov.io/gh/AllayMC/Allay)

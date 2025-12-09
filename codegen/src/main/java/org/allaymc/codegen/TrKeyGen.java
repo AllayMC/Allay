@@ -25,9 +25,9 @@ public class TrKeyGen {
                 .parseReader(Files.newBufferedReader(TR_EN_FILE_PATH))
                 .getAsJsonObject();
         var keys = langJson.keySet();
-        var codeBuilder = TypeSpec.interfaceBuilder(ClassNames.TR_KEYS)
+        var codeBuilder = TypeSpec.interfaceBuilder(TypeNames.TR_KEYS)
                 .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE);
+                .addAnnotation(TypeNames.MINECRAFT_VERSION_SENSITIVE);
         for (var key : keys) {
             var identifier = new Identifier(key);
             var namespace = handleNamespace(identifier.namespace());
@@ -35,17 +35,17 @@ public class TrKeyGen {
             var fieldName = namespace + "_" + path;
             codeBuilder.addField(
                     FieldSpec
-                            .builder(ClassNames.STRING, fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            .builder(TypeNames.STRING, fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("\"" + key + "\"")
-                            .addJavadoc(langJson.get(key).getAsString().replaceAll("\\$", "#"))
+                            .addJavadoc("{@literal " + langJson.get(key).getAsString().replaceAll("\\$", "#") + "}")
                             .build()
             );
         }
-        var javaFile = JavaFile.builder(ClassNames.TR_KEYS.packageName(), codeBuilder.build())
+        var javaFile = JavaFile.builder(TypeNames.TR_KEYS.packageName(), codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ClassNames.TR_KEYS.simpleName() + ".java ...");
+        System.out.println("Generating " + TypeNames.TR_KEYS.simpleName() + ".java ...");
         Files.deleteIfExists(OUTPUT_PATH);
         Files.createFile(OUTPUT_PATH);
         Utils.writeFileWithCRLF(OUTPUT_PATH, javaFile.toString());

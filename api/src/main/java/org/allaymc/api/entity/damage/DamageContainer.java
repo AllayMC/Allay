@@ -3,7 +3,7 @@ package org.allaymc.api.entity.damage;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.action.SimpleEntityAction;
+import org.allaymc.api.entity.action.EnchantedHit;
 
 import java.util.Objects;
 import java.util.function.UnaryOperator;
@@ -55,7 +55,7 @@ public class DamageContainer {
     @Setter
     protected boolean critical;
     /**
-     * Whether this damage is enchanted. If this value is {@code true}, action {@link SimpleEntityAction#ENCHANTED_HIT} will
+     * Whether this damage is enchanted. If this value is {@code true}, action {@link EnchantedHit} will
      * be applied to the victim.
      */
     @Setter

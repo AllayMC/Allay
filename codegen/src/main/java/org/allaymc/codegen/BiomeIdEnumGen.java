@@ -38,7 +38,7 @@ public class BiomeIdEnumGen {
     public static void generate() {
         TypeSpec.Builder codeBuilder = TypeSpec.enumBuilder("BiomeId")
                 .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(ClassNames.GETTER)
+                .addAnnotation(TypeNames.GETTER)
                 .addStaticBlock(
                         CodeBlock.builder()
                                 .addStatement("MAP1 = $L", "new BiomeId[256]")
@@ -50,25 +50,25 @@ public class BiomeIdEnumGen {
                                 .build()
                 )
                 .addField(FieldSpec
-                        .builder(ClassNames.BIOME_ID_ARRAY, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                        .builder(TypeNames.BIOME_ID_ARRAY, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
-                        .builder(ParameterizedTypeName.get(ClassNames.HASH_MAP, ClassNames.API_IDENTIFIER, ClassNames.BIOME_ID), "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
+                        .builder(ParameterizedTypeName.get(TypeNames.HASH_MAP, TypeNames.API_IDENTIFIER, TypeNames.BIOME_ID), "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
                         .build())
                 .addField(FieldSpec
-                        .builder(ClassNames.API_IDENTIFIER, "identifier", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(TypeNames.API_IDENTIFIER, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
                         .builder(int.class, "id", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
-                        .builder(ClassNames.STRING, "type", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(TypeNames.STRING, "type", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(ClassNames.STRING, "identifier")
+                        .addParameter(TypeNames.STRING, "identifier")
                         .addParameter(int.class, "id")
-                        .addParameter(ClassNames.STRING, "type")
-                        .addStatement("this.identifier = new $T(identifier)", ClassNames.API_IDENTIFIER)
+                        .addParameter(TypeNames.STRING, "type")
+                        .addStatement("this.identifier = new $T(identifier)", TypeNames.API_IDENTIFIER)
                         .addStatement("this.id = id")
                         .addStatement("this.type = type")
                         .build()
@@ -85,14 +85,14 @@ public class BiomeIdEnumGen {
                 .addParameter(int.class, "id")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP1[id];")
-                .returns(ClassNames.BIOME_ID)
+                .returns(TypeNames.BIOME_ID)
                 .build());
         codeBuilder.addMethod(MethodSpec
                 .methodBuilder("fromIdentifier")
-                .addParameter(ClassNames.API_IDENTIFIER, "identifier")
+                .addParameter(TypeNames.API_IDENTIFIER, "identifier")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP2.get(identifier);")
-                .returns(ClassNames.BIOME_ID)
+                .returns(TypeNames.BIOME_ID)
                 .build());
         var builtCode = codeBuilder.build();
         var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode)

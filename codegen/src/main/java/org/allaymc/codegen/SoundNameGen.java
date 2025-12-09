@@ -24,19 +24,19 @@ public class SoundNameGen {
         names.addAll(getMusicNames());
         names.addAll(getSoundNames());
 
-        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(ClassNames.SOUND_NAMES)
-                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE)
+        TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(TypeNames.SOUND_NAMES)
+                .addAnnotation(TypeNames.MINECRAFT_VERSION_SENSITIVE)
                 .addModifiers(Modifier.PUBLIC);
 
         for (var name : names) {
             codeBuilder.addField(
-                    FieldSpec.builder(ClassNames.STRING, name.replace(".", "_").toUpperCase(Locale.ROOT), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                    FieldSpec.builder(TypeNames.STRING, name.replace(".", "_").toUpperCase(Locale.ROOT), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("$S", name)
                             .build()
             );
         }
 
-        var javaFile = JavaFile.builder(ClassNames.SOUND_NAMES.packageName(), codeBuilder.build())
+        var javaFile = JavaFile.builder(TypeNames.SOUND_NAMES.packageName(), codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();

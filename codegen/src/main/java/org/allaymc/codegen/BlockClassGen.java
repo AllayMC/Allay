@@ -47,19 +47,19 @@ public class BlockClassGen extends BaseClassGen {
         Set<String> generatedFiles = new HashSet<>();
 
         var typesClass = TypeSpec
-                .classBuilder(ClassNames.BLOCK_TYPES)
+                .classBuilder(TypeNames.BLOCK_TYPES)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE);
+                .addAnnotation(TypeNames.MINECRAFT_VERSION_SENSITIVE);
 
         for (var id : BlockId.values()) {
             var fieldBuilder = FieldSpec
-                    .builder(ParameterizedTypeName.get(ClassNames.BLOCK_TYPE, generateClassFullName(id)), id.name())
+                    .builder(ParameterizedTypeName.get(TypeNames.BLOCK_TYPE, generateClassFullName(id)), id.name())
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
 
             var states = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString()).getCompound("states");
             if (!states.isEmpty()) {
                 states.forEach((name, value) -> {
-                    fieldBuilder.addJavadoc("{@link $T#$N}\n", ClassNames.BLOCK_PROPERTY_TYPES, getSizedBlockPropertyTypeName(id, name));
+                    fieldBuilder.addJavadoc("{@link $T#$N}\n", TypeNames.BLOCK_PROPERTY_TYPES, getSizedBlockPropertyTypeName(id, name));
                 });
             }
 
@@ -74,7 +74,7 @@ public class BlockClassGen extends BaseClassGen {
                 if (!Files.exists(interfaceDir)) {
                     Files.createDirectories(interfaceDir);
                 }
-                generateInterface(ClassNames.BLOCK_BEHAVIOR, interfaceFullName, path);
+                generateInterface(TypeNames.BLOCK_BEHAVIOR, interfaceFullName, path);
             }
 
             var implSimpleName = generateClassSimpleName(id) + "Impl";
@@ -97,12 +97,12 @@ public class BlockClassGen extends BaseClassGen {
 
         generateDefaultBlockTypeInitializer();
 
-        var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPES.packageName(), typesClass.build())
+        var javaFile = JavaFile.builder(TypeNames.BLOCK_TYPES.packageName(), typesClass.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ClassNames.BLOCK_TYPES.simpleName() + ".java ...");
-        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/block/type/" + ClassNames.BLOCK_TYPES.simpleName() + ".java"), javaFile.toString());
+        System.out.println("Generating " + TypeNames.BLOCK_TYPES.simpleName() + ".java ...");
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/block/type/" + TypeNames.BLOCK_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void deleteOldFiles(Path dir, Set<String> generatedFiles) {
@@ -128,14 +128,14 @@ public class BlockClassGen extends BaseClassGen {
 
     protected static void generateBlockImpl(ClassName superInterfaceName, ClassName className, Path path) throws IOException {
         TypeSpec.Builder codeBuilder = TypeSpec.classBuilder(className)
-                .superclass(ClassNames.BLOCK_BEHAVIOR_IMPL)
+                .superclass(TypeNames.BLOCK_BEHAVIOR_IMPL)
                 .addSuperinterface(superInterfaceName)
                 .addModifiers(Modifier.PUBLIC);
         codeBuilder.addMethod(
                 MethodSpec
                         .constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
-                        .addParameter(ParameterizedTypeName.get(ClassNames.LIST, ParameterizedTypeName.get(ClassNames.COMPONENT_PROVIDER, WildcardTypeName.subtypeOf(ClassNames.COMPONENT))), "componentProviders")
+                        .addParameter(ParameterizedTypeName.get(TypeNames.LIST, ParameterizedTypeName.get(TypeNames.COMPONENT_PROVIDER, WildcardTypeName.subtypeOf(TypeNames.COMPONENT))), "componentProviders")
                         .addStatement("super(componentProviders)")
                         .build()
         );
@@ -150,21 +150,21 @@ public class BlockClassGen extends BaseClassGen {
     private static void addDefaultBlockTypeInitializer(BlockId id, ClassName blockClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ClassNames.BLOCK_TYPES, id.name(), ClassNames.ALLAY_BLOCK_TYPE)
+                .add("$T.$N = $T\n", TypeNames.BLOCK_TYPES, id.name(), TypeNames.ALLAY_BLOCK_TYPE)
                 .add("        .builder($T.class)\n", blockClassName)
-                .add("        .vanillaBlock($T.$N)\n", ClassNames.BLOCK_ID, id.name());
+                .add("        .vanillaBlock($T.$N)\n", TypeNames.BLOCK_ID, id.name());
         var states = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString()).getCompound("states");
         if (!states.isEmpty()) {
             initializer.add("        .setProperties(");
             AtomicInteger count = new AtomicInteger();
             states.forEach((name, value) -> {
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), ClassNames.BLOCK_PROPERTY_TYPES, getSizedBlockPropertyTypeName(id, name));
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), TypeNames.BLOCK_PROPERTY_TYPES, getSizedBlockPropertyTypeName(id, name));
             });
             initializer.add(")\n");
         }
         initializer.add("        .build()");
         BLOCK_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER
-                .beginControlFlow("if ($T.$N == null)", ClassNames.BLOCK_TYPES, id.name())
+                .beginControlFlow("if ($T.$N == null)", TypeNames.BLOCK_TYPES, id.name())
                 .addStatement(initializer.build())
                 .endControlFlow();
     }
@@ -189,15 +189,15 @@ public class BlockClassGen extends BaseClassGen {
         }
 
         TypeSpec.Builder builder =
-                TypeSpec.classBuilder(ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER)
+                TypeSpec.classBuilder(TypeNames.BLOCK_TYPE_DEFAULT_INITIALIZER)
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         builder.addMethod(BLOCK_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER.build());
 
-        var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER.packageName(), builder.build())
+        var javaFile = JavaFile.builder(TypeNames.BLOCK_TYPE_DEFAULT_INITIALIZER.packageName(), builder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
+        System.out.println("Generating " + TypeNames.BLOCK_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
         Utils.writeFileWithCRLF(filePath, javaFile.toString());
     }
 

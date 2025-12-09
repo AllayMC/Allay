@@ -38,8 +38,8 @@ public class EntityIdEnumGen {
     }
 
     public static void generate() {
-        generateServer(PACKAGE_NAME, Path.of("server/src/main/java/org/allaymc/server/entity/data/EntityId.java"), ClassNames.API_IDENTIFIER, ClassNames.ENTITY_TYPE);
-        generateDep("org.allaymc.dependence", Path.of("codegen/src/main/java/org/allaymc/dependence/EntityId.java"), ClassNames.DEP_IDENTIFIER);
+        generateServer(PACKAGE_NAME, Path.of("server/src/main/java/org/allaymc/server/entity/data/EntityId.java"), TypeNames.API_IDENTIFIER, TypeNames.ENTITY_TYPE);
+        generateDep("org.allaymc.dependence", Path.of("codegen/src/main/java/org/allaymc/dependence/EntityId.java"), TypeNames.DEP_IDENTIFIER);
     }
 
     @SneakyThrows
@@ -48,16 +48,16 @@ public class EntityIdEnumGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
                         .builder(identifierClassName, "identifier", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(ClassNames.GETTER)
+                        .addAnnotation(TypeNames.GETTER)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(ClassNames.STRING, "identifier")
+                        .addParameter(TypeNames.STRING, "identifier")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClassName, "identifier")
                         .build()
                 )
                 .addMethod(MethodSpec.methodBuilder("getEntityType")
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.ENTITIES.get(this.getIdentifier())", ClassNames.REGISTRIES)
+                        .addStatement("return $T.ENTITIES.get(this.getIdentifier())", TypeNames.REGISTRIES)
                         .returns(ParameterizedTypeName.get(entityTypeClassName, WildcardTypeName.subtypeOf(ClassName.OBJECT)))
                         .build()
                 );
@@ -79,10 +79,10 @@ public class EntityIdEnumGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
                         .builder(identifierClassName, "identifier", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(ClassNames.GETTER)
+                        .addAnnotation(TypeNames.GETTER)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(ClassNames.STRING, "identifier")
+                        .addParameter(TypeNames.STRING, "identifier")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClassName, "identifier")
                         .build()
                 );

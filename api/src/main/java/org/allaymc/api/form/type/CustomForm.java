@@ -422,9 +422,6 @@ public class CustomForm extends Form {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<String> getResponse() {
         return response != null ? (List<String>) response : null;

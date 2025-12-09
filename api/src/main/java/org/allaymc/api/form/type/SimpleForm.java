@@ -188,9 +188,6 @@ public class SimpleForm extends Form {
         onClose.accept(reason);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Button getResponse() {
         return response != null ? (Button) response : null;

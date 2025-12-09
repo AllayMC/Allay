@@ -1,11 +1,12 @@
 package org.allaymc.codegen;
 
+import com.palantir.javapoet.ArrayTypeName;
 import com.palantir.javapoet.ClassName;
 
 /**
  * @author daoge_cmd
  */
-public interface ClassNames {
+public interface TypeNames {
     // jdk
     ClassName STRING = ClassName.get("java.lang", "String");
     ClassName HASH_MAP = ClassName.get("java.util", "HashMap");
@@ -40,7 +41,7 @@ public interface ClassNames {
 
     ClassName BIOME_TYPE = ClassName.get("org.allaymc.api.world.biome", "BiomeType");
     ClassName BIOME_ID = ClassName.get("org.allaymc.server.world.biome", "BiomeId");
-    ClassName BIOME_ID_ARRAY = ClassName.get("org.allaymc.server.world.biome", "BiomeId[]");
+    ArrayTypeName BIOME_ID_ARRAY = ArrayTypeName.of(BIOME_ID.box());
 
     ClassName ENTITY = ClassName.get("org.allaymc.api.entity", "Entity");
     ClassName ENTITY_IMPL = ClassName.get("org.allaymc.server.entity.impl", "EntityImpl");

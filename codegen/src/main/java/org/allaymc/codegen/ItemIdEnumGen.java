@@ -45,7 +45,7 @@ public class ItemIdEnumGen {
 
     @SneakyThrows
     public static void generateToDependenceModule() {
-        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.DEP_IDENTIFIER);
+        TypeSpec.Builder codeBuilder = commonBuilder(TypeNames.DEP_IDENTIFIER);
         addEnums(codeBuilder);
         var javaFile = JavaFile.builder("org.allaymc.dependence", codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
@@ -56,22 +56,22 @@ public class ItemIdEnumGen {
 
     @SneakyThrows
     public static void generateToServerModule() {
-        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
+        TypeSpec.Builder codeBuilder = commonBuilder(TypeNames.API_IDENTIFIER)
                 .addMethod(MethodSpec.methodBuilder("fromIdentifier")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .addParameter(ClassNames.API_IDENTIFIER, "identifier")
+                        .addParameter(TypeNames.API_IDENTIFIER, "identifier")
                         .beginControlFlow("try")
                         .addStatement("return valueOf(identifier.path().replace(\".\", \"_\").toUpperCase($T.ROOT))", Locale.class)
                         .nextControlFlow("catch ($T ignore)", IllegalArgumentException.class)
                         .addStatement("return null")
                         .endControlFlow()
-                        .returns(ClassNames.ITEM_ID)
+                        .returns(TypeNames.ITEM_ID)
                         .build()
                 )
                 .addMethod(MethodSpec.methodBuilder("getItemType")
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.ITEMS.get(this.getIdentifier())", ClassNames.REGISTRIES)
-                        .returns(ParameterizedTypeName.get(ClassNames.ITEM_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT)))
+                        .addStatement("return $T.ITEMS.get(this.getIdentifier())", TypeNames.REGISTRIES)
+                        .returns(ParameterizedTypeName.get(TypeNames.ITEM_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT)))
                         .build()
                 );
         addEnums(codeBuilder);
@@ -97,14 +97,14 @@ public class ItemIdEnumGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
                         .builder(identifierClass, "identifier", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(ClassNames.GETTER)
+                        .addAnnotation(TypeNames.GETTER)
                         .build())
                 .addField(FieldSpec
                         .builder(int.class, "runtimeId", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(ClassNames.GETTER)
+                        .addAnnotation(TypeNames.GETTER)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(ClassNames.STRING, "identifier")
+                        .addParameter(TypeNames.STRING, "identifier")
                         .addParameter(int.class, "runtimeId")
                         .addStatement("this.identifier = new $T(identifier)", identifierClass)
                         .addStatement("this.runtimeId = runtimeId")

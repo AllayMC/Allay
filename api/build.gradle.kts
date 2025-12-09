@@ -20,3 +20,16 @@ dependencies {
     }
     api(libs.snakeyaml)
 }
+
+tasks.withType<Javadoc>().configureEach {
+    enabled = true;
+    isFailOnError = false
+
+    (options as StandardJavadocDocletOptions).apply {
+        locale = "en_US"
+        encoding = "UTF-8"
+        charSet = "UTF-8"
+
+        addStringOption("Xdoclint:none", "-quiet")
+    }
+}

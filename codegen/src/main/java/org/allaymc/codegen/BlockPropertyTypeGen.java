@@ -11,7 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.allaymc.codegen.ClassNames.*;
+import static org.allaymc.codegen.TypeNames.*;
 import static org.allaymc.codegen.Utils.convertToPascalCase;
 
 /**

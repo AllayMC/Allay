@@ -30,19 +30,19 @@ public class CreativeItemGroupNameGen {
         }
 
         TypeSpec.Builder codeBuilder = TypeSpec
-                .interfaceBuilder(ClassNames.CREATIVE_ITEM_GROUPS)
-                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE)
+                .interfaceBuilder(TypeNames.CREATIVE_ITEM_GROUPS)
+                .addAnnotation(TypeNames.MINECRAFT_VERSION_SENSITIVE)
                 .addModifiers(Modifier.PUBLIC);
 
         for (var name : names) {
             codeBuilder.addField(
-                    FieldSpec.builder(ClassNames.STRING, Utils.camelCaseToSnakeCase(StringUtils.fastSplit(name, ".").get(2)).toUpperCase(Locale.ROOT), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                    FieldSpec.builder(TypeNames.STRING, Utils.camelCaseToSnakeCase(StringUtils.fastSplit(name, ".").get(2)).toUpperCase(Locale.ROOT), Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("$S", name)
                             .build()
             );
         }
 
-        var javaFile = JavaFile.builder(ClassNames.CREATIVE_ITEM_GROUPS.packageName(), codeBuilder.build())
+        var javaFile = JavaFile.builder(TypeNames.CREATIVE_ITEM_GROUPS.packageName(), codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
