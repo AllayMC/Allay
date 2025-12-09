@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - Added support for bedrock 1.21.130 (protocol version 897).
+- Javadoc for allay-api is now published to maven central and is available [here](https://javadoc.io/doc/org.allaymc.allay/api).
 
 ### Changed
 

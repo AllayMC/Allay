@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[Essentials]
+description = "Essential plugin for Allay server (vibe coded)."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/Essentials"
+
 [Imager]
 description = "Show image in your Allay server!"
 authors = ["daoge_cmd"]

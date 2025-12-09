@@ -26,10 +26,7 @@ tasks.withType<Javadoc>().configureEach {
     isFailOnError = false
 
     (options as StandardJavadocDocletOptions).apply {
-        locale = "en_US"
         encoding = "UTF-8"
-        charSet = "UTF-8"
-
         addStringOption("Xdoclint:none", "-quiet")
     }
 }
