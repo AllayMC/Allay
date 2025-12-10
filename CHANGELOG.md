@@ -10,9 +10,17 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.10.1 (API 0.19.0) - Unreleased
+# 0.10.2 (API 0.19.0) - Unreleased
 
-<small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.0...HEAD)</small>
+<small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.1...HEAD)</small>
+
+# 0.10.1 (API 0.18.0) - 2025/12/10
+
+<small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.0...0.10.1)</small>
+
+### Fixed
+
+- Used explicit version numbers for the Cloudburst protocol library to resolve compilation inconsistencies due to upstream maven repository updates.
 
 # 0.10.0 (API 0.18.0) - 2025/12/10
 
