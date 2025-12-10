@@ -154,4 +154,6 @@ nav:
       - Chunk Freezing Issue: development/chunk-freezing-issue.md
       - Component Injection System: development/component-injection-system.md
 
+  - Javadoc: https://javadoc.io/doc/org.allaymc.allay/api/latest/index.html
+
   - Changelog: changelog.md
