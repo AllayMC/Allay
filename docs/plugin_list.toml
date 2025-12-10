@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[Aenu]
+description = "A powerful, configurable menu plugin for AllayMC servers with full PlaceholderAPI support."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/Aenu"
+
 [BlackBE]
 description = "BlackBE integration for Allay server."
 authors = ["daoge_cmd"]
