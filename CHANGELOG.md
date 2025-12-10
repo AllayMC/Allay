@@ -10,9 +10,13 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.10.0 (API 0.18.0) - Unreleased
+# 0.10.1 (API 0.19.0) - Unreleased
 
-<small>[Compare with 0.9.1](https://github.com/AllayMC/Allay/compare/0.9.1...HEAD)</small>
+<small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.0...HEAD)</small>
+
+# 0.10.0 (API 0.18.0) - 2025/12/10
+
+<small>[Compare with 0.9.1](https://github.com/AllayMC/Allay/compare/0.9.1...0.10.0)</small>
 
 ### Added
 
@@ -28,8 +32,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Fixed method `AllayStringUtils.splitCommandArgs()` when using quote and curly brace together.
 - Fixed `relative` parameter of method `WorldViewer.viewSound()` being inverted unexpectedly.
-
-### Removed
 
 # 0.9.1 (API 0.17.0) - 2025/11/28
 
