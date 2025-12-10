@@ -18,7 +18,7 @@ The next-generation Minecraft: Bedrock Edition server software aims to be reliab
 <a href="https://app.codacy.com/gh/AllayMC/Allay/dashboard"><img src="https://app.codacy.com/project/badge/Grade/30e264923da2425a8b777a84b4028334"></a>
 <a href="https://discord.gg/ngkkE4hPTU"><img src="https://img.shields.io/discord/1147136608290750526?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
 [![qq](https://img.shields.io/badge/QQ-1072132791-purple)](https://qm.qq.com/q/peseHA0xN0)
-<a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-1.21.80 ~ 1.21.120%20(Bedrock)-green" /></a>
+<a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-1.21.80 ~ 1.21.130%20(Bedrock)-green" /></a>
 [![GitHub License](https://img.shields.io/github/license/allaymc/allay)](LICENSE)
 [![Ko-Fi](https://img.shields.io/badge/Buy_Me_a_Coffee-f37574?logo=kofi&logoColor=white)](https://ko-fi.com/AllayMC)
 
