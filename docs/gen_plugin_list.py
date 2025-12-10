@@ -60,7 +60,7 @@ with mkdocs_gen_files.open("plugin_list.md", "w") as f:
         fp(f"-   **{name}** <small>by {", ".join(authors)}</small>")
         el()
         fp(f"    ![Stars](https://img.shields.io/github/stars/{user}/{repo})")
-        fp(f"    ![Release](https://img.shields.io/github/release/{user}/{repo}))")
+        fp(f"    ![Release](https://img.shields.io/github/release/{user}/{repo})")
         fp(f"    ![License](https://img.shields.io/github/license/{user}/{repo})")
         fp(f"    ![Last Commit](https://img.shields.io/github/last-commit/{user}/{repo})")
         fp(f"    ![Top Language](https://img.shields.io/github/languages/top/{user}/{repo})")
