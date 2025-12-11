@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[Aconomy]
+description = "Aconomy is an simple implementation of AllayMC's official EconomyAPI."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/Aconomy"
+
 [Sidebar]
 description = "Sidebar plugin for Allay server."
 authors = ["daoge_cmd"]
