@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[Sidebar]
+description = "Sidebar plugin for Allay server."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/Sidebar"
+
 [Aenu]
 description = "A powerful, configurable menu plugin for AllayMC servers with full PlaceholderAPI support."
 authors = ["daoge_cmd"]
