@@ -18,6 +18,8 @@ public interface CreativeItemGroups {
 
     String POTION = "itemGroup.name.potion";
 
+    String SPEAR = "itemGroup.name.spear";
+
     String CHESTPLATE = "itemGroup.name.chestplate";
 
     String SHULKER_BOX = "itemGroup.name.shulkerBox";
@@ -107,6 +109,8 @@ public interface CreativeItemGroups {
     String ARROW = "itemGroup.name.arrow";
 
     String CHAINS = "itemGroup.name.chains";
+
+    String NAUTILUS_ARMOR = "itemGroup.name.nautilus_armor";
 
     String GLASS = "itemGroup.name.glass";
 

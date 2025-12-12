@@ -925,6 +925,11 @@ public interface TrKeys {
     String MC_ACTION_HINT_EXIT_CAMEL = "minecraft:action.hint.exit.camel";
 
     /**
+     * {@literal Press :_input_key.sneak: to dismount}
+     */
+    String MC_ACTION_HINT_EXIT_CAMEL_HUSK = "minecraft:action.hint.exit.camel_husk";
+
+    /**
      * {@literal Tap jump to exit the boat}
      */
     String MC_ACTION_HINT_EXIT_CHEST_BOAT = "minecraft:action.hint.exit.chest_boat";
@@ -938,6 +943,11 @@ public interface TrKeys {
      * {@literal Press :_input_key.sneak: to dismount}
      */
     String MC_ACTION_HINT_EXIT_CONSOLE_CAMEL = "minecraft:action.hint.exit.console.camel";
+
+    /**
+     * {@literal Press :_input_key.sneak: to dismount}
+     */
+    String MC_ACTION_HINT_EXIT_CONSOLE_CAMEL_HUSK = "minecraft:action.hint.exit.console.camel_husk";
 
     /**
      * {@literal Press :_input_key.jump: to exit the boat}
@@ -977,6 +987,11 @@ public interface TrKeys {
     /**
      * {@literal Press :_input_key.sneak: to dismount}
      */
+    String MC_ACTION_HINT_EXIT_CONSOLE_NAUTILUS = "minecraft:action.hint.exit.console.nautilus";
+
+    /**
+     * {@literal Press :_input_key.sneak: to dismount}
+     */
     String MC_ACTION_HINT_EXIT_CONSOLE_PIG = "minecraft:action.hint.exit.console.pig";
 
     /**
@@ -998,6 +1013,11 @@ public interface TrKeys {
      * {@literal Press :_input_key.sneak: to dismount}
      */
     String MC_ACTION_HINT_EXIT_CONSOLE_TRADER_LLAMA = "minecraft:action.hint.exit.console.trader_llama";
+
+    /**
+     * {@literal Press :_input_key.sneak: to dismount}
+     */
+    String MC_ACTION_HINT_EXIT_CONSOLE_ZOMBIE_NAUTILUS = "minecraft:action.hint.exit.console.zombie_nautilus";
 
     /**
      * {@literal Tap sneak to dismount}
@@ -1032,6 +1052,11 @@ public interface TrKeys {
     /**
      * {@literal Tap sneak to dismount}
      */
+    String MC_ACTION_HINT_EXIT_NAUTILUS = "minecraft:action.hint.exit.nautilus";
+
+    /**
+     * {@literal Tap sneak to dismount}
+     */
     String MC_ACTION_HINT_EXIT_PIG = "minecraft:action.hint.exit.pig";
 
     /**
@@ -1043,6 +1068,11 @@ public interface TrKeys {
      * {@literal Tap dismount to dismount}
      */
     String MC_ACTION_HINT_EXIT_SCHEME_CAMEL = "minecraft:action.hint.exit.scheme.camel";
+
+    /**
+     * {@literal Tap dismount to dismount}
+     */
+    String MC_ACTION_HINT_EXIT_SCHEME_CAMEL_HUSK = "minecraft:action.hint.exit.scheme.camel_husk";
 
     /**
      * {@literal Tap dismount to dismount}
@@ -1075,6 +1105,11 @@ public interface TrKeys {
     String MC_ACTION_HINT_EXIT_SCHEME_MULE = "minecraft:action.hint.exit.scheme.mule";
 
     /**
+     * {@literal Tap sneak to dismount}
+     */
+    String MC_ACTION_HINT_EXIT_SCHEME_NAUTILUS = "minecraft:action.hint.exit.scheme.nautilus";
+
+    /**
      * {@literal Tap dismount to dismount}
      */
     String MC_ACTION_HINT_EXIT_SCHEME_PIG = "minecraft:action.hint.exit.scheme.pig";
@@ -1097,6 +1132,11 @@ public interface TrKeys {
     /**
      * {@literal Tap sneak to dismount}
      */
+    String MC_ACTION_HINT_EXIT_SCHEME_ZOMBIE_NAUTILUS = "minecraft:action.hint.exit.scheme.zombie_nautilus";
+
+    /**
+     * {@literal Tap sneak to dismount}
+     */
     String MC_ACTION_HINT_EXIT_SKELETON_HORSE = "minecraft:action.hint.exit.skeleton_horse";
 
     /**
@@ -1108,6 +1148,16 @@ public interface TrKeys {
      * {@literal Tap sneak to dismount}
      */
     String MC_ACTION_HINT_EXIT_TRADER_LLAMA = "minecraft:action.hint.exit.trader_llama";
+
+    /**
+     * {@literal Press :_input_key.sneak: to dismount}
+     */
+    String MC_ACTION_HINT_EXIT_ZOMBIE_HORSE = "minecraft:action.hint.exit.zombie_horse";
+
+    /**
+     * {@literal Tap sneak to dismount}
+     */
+    String MC_ACTION_HINT_EXIT_ZOMBIE_NAUTILUS = "minecraft:action.hint.exit.zombie_nautilus";
 
     /**
      * {@literal Give item to Allay}
@@ -1195,6 +1245,11 @@ public interface TrKeys {
     String MC_ACTION_INTERACT_EQUIPHORSEARMOR = "minecraft:action.interact.equiphorsearmor";
 
     /**
+     * {@literal Equip Nautilus Armor}
+     */
+    String MC_ACTION_INTERACT_EQUIPNAUTILUSARMOR = "minecraft:action.interact.equipnautilusarmor";
+
+    /**
      * {@literal Equip Wolf Armor}
      */
     String MC_ACTION_INTERACT_EQUIPWOLFARMOR = "minecraft:action.interact.equipwolfarmor";
@@ -1273,6 +1328,11 @@ public interface TrKeys {
      * {@literal Remove Horse Armor }
      */
     String MC_ACTION_INTERACT_REMOVEHORSEARMOR = "minecraft:action.interact.removehorsearmor";
+
+    /**
+     * {@literal Remove Nautilus Armor}
+     */
+    String MC_ACTION_INTERACT_REMOVENAUTILUSARMOR = "minecraft:action.interact.removenautilusarmor";
 
     /**
      * {@literal Remove Saddle }
@@ -2008,121 +2068,6 @@ public interface TrKeys {
      * {@literal Update %s}
      */
     String MC_CLIENT_VERSION_GENERIC = "minecraft:client.version.generic";
-
-    /**
-     * {@literal Privacy Statement}
-     */
-    String MC_CLOUD_UPLOAD_BUTTON_PRIVACY_STATEMENT = "minecraft:cloud_upload.button.privacy_statement";
-
-    /**
-     * {@literal Terms of Use}
-     */
-    String MC_CLOUD_UPLOAD_BUTTON_SERVICE_AGREEMENT = "minecraft:cloud_upload.button.service_agreement";
-
-    /**
-     * {@literal Upload World (%s)}
-     */
-    String MC_CLOUD_UPLOAD_BUTTON_UPLOAD = "minecraft:cloud_upload.button.upload";
-
-    /**
-     * {@literal Your world could not be uploaded because %s}
-     */
-    String MC_CLOUD_UPLOAD_FAILED_DESCRIPTION = "minecraft:cloud_upload.failed.description";
-
-    /**
-     * {@literal Your world could not be uploaded because %s}
-     */
-    String MC_CLOUD_UPLOAD_FAILED_RETRYABLE_DESCRIPTION = "minecraft:cloud_upload.failed.retryable.description";
-
-    /**
-     * {@literal one of the files is too big. Please get in touch with LiveOps if you want to try again.}
-     */
-    String MC_CLOUD_UPLOAD_INPUT_ERROR_MAXIMUM_SIZE = "minecraft:cloud_upload.input_error_maximum_size";
-
-    /**
-     * {@literal it consists of too many files. Please get in touch with LiveOps if you want to try again.}
-     */
-    String MC_CLOUD_UPLOAD_INPUT_ERROR_NUMBER_OF_FILES = "minecraft:cloud_upload.input_error_number_of_files";
-
-    /**
-     * {@literal it has already been successfully uploaded. Please get in touch with LiveOps for more information.}
-     */
-    String MC_CLOUD_UPLOAD_INPUT_ERROR_RECORD_ALREADY_COMPLETED = "minecraft:cloud_upload.input_error_record_already_completed";
-
-    /**
-     * {@literal of a network error. Please try again or get in touch with LiveOps.}
-     */
-    String MC_CLOUD_UPLOAD_OPERATION_ERROR_MISSING_FILES_ON_COMPLETE_UPLOAD = "minecraft:cloud_upload.operation_error_missing_files_on_complete_upload";
-
-    /**
-     * {@literal Learn More}
-     */
-    String MC_CLOUD_UPLOAD_PROMPT_BUTTON_LEARN_MORE = "minecraft:cloud_upload.prompt.button.learn_more";
-
-    /**
-     * {@literal Go to Worlds}
-     */
-    String MC_CLOUD_UPLOAD_PROMPT_BUTTON_WORLDS = "minecraft:cloud_upload.prompt.button.worlds";
-
-    /**
-     * {@literal Based on your recent support ticket, Mojang Player Support has granted permission to upload your world. You can upload your affected world from the World Select screen or under World Settings.}
-     */
-    String MC_CLOUD_UPLOAD_PROMPT_DESCRIPTION = "minecraft:cloud_upload.prompt.description";
-
-    /**
-     * {@literal Do not show this screen again}
-     */
-    String MC_CLOUD_UPLOAD_PROMPT_DO_NOT_SHOW_TOGGLE = "minecraft:cloud_upload.prompt.do_not_show_toggle";
-
-    /**
-     * {@literal Your world upload has completed successfully. Thank you!}
-     */
-    String MC_CLOUD_UPLOAD_SUCCEEDED_DESCRIPTION = "minecraft:cloud_upload.succeeded.description";
-
-    /**
-     * {@literal To upload your world, accept the Microsoft Services Agreement. Uploaded worlds are subject to the Microsoft Services Agreement, which can be found under Terms of Use. You can still play with your world once uploaded.}
-     */
-    String MC_CLOUD_UPLOAD_TERMS_DESCRIPTION = "minecraft:cloud_upload.terms.description";
-
-    /**
-     * {@literal Terms & Conditions}
-     */
-    String MC_CLOUD_UPLOAD_TERMS_TITLE = "minecraft:cloud_upload.terms.title";
-
-    /**
-     * {@literal Mojang Player Support}
-     */
-    String MC_CLOUD_UPLOAD_TITLE = "minecraft:cloud_upload.title";
-
-    /**
-     * {@literal Accept Microsoft Services Agreement}
-     */
-    String MC_CLOUD_UPLOAD_TOGGLE_ACCEPT_TERMS = "minecraft:cloud_upload.toggle.accept_terms";
-
-    /**
-     * {@literal Uploading world files}
-     */
-    String MC_CLOUD_UPLOAD_TTS_MESSAGE = "minecraft:cloud_upload.tts.message";
-
-    /**
-     * {@literal of an unknown error. Please try again or get in touch with LiveOps. (Error code: %s)}
-     */
-    String MC_CLOUD_UPLOAD_UNKNOWN_ERROR = "minecraft:cloud_upload.unknown_error";
-
-    /**
-     * {@literal Uploading your world files may take a few minutes. Do not turn off the game or leave this screen during the upload process.}
-     */
-    String MC_CLOUD_UPLOAD_UPLOADING_DESCRIPTION_1 = "minecraft:cloud_upload.uploading.description_1";
-
-    /**
-     * {@literal World sizes can be large. Please connect to WiFi to avoid using mobile data.}
-     */
-    String MC_CLOUD_UPLOAD_UPLOADING_DESCRIPTION_2 = "minecraft:cloud_upload.uploading.description_2";
-
-    /**
-     * {@literal Uploading world files [%d/%d]}
-     */
-    String MC_CLOUD_UPLOAD_UPLOADING_TITLE = "minecraft:cloud_upload.uploading.title";
 
     /**
      * {@literal Aqua}
@@ -7600,6 +7545,11 @@ public interface TrKeys {
     String MC_DEATH_ATTACK_CACTUS_PLAYER = "minecraft:death.attack.cactus.player";
 
     /**
+     * {@literal %1#s died from dehydration}
+     */
+    String MC_DEATH_ATTACK_DEHYDRATION = "minecraft:death.attack.dehydration";
+
+    /**
      * {@literal %1#s drowned}
      */
     String MC_DEATH_ATTACK_DROWN = "minecraft:death.attack.drown";
@@ -8178,6 +8128,11 @@ public interface TrKeys {
      * {@literal The game version you are using is out of date. Update your game to the latest version and try again.}
      */
     String MC_DISCONNECTIONSCREEN_BODY_GAMEOUTOFDATE = "minecraft:disconnectionScreen.body.gameOutOfDate";
+
+    /**
+     * {@literal The host signed out.}
+     */
+    String MC_DISCONNECTIONSCREEN_BODY_HOSTSIGNEDOUT = "minecraft:disconnectionScreen.body.hostSignedOut";
 
     /**
      * {@literal The host you are trying to join is using an older version of Minecraft. Try again when the host has updated its version.}
@@ -10265,6 +10220,11 @@ public interface TrKeys {
     String MC_EFFECT_BADOMEN = "minecraft:effect.badOmen";
 
     /**
+     * {@literal  Breath of the Nautilus}
+     */
+    String MC_EFFECT_CUSTOMNAUTILUS = "minecraft:effect.customNautilus";
+
+    /**
      * {@literal Darkness}
      */
     String MC_EFFECT_DARKNESS = "minecraft:effect.darkness";
@@ -10525,6 +10485,11 @@ public interface TrKeys {
     String MC_ENCHANTMENT_LOOTBONUSFISHING = "minecraft:enchantment.lootBonusFishing";
 
     /**
+     * {@literal Lunge}
+     */
+    String MC_ENCHANTMENT_LUNGE = "minecraft:enchantment.lunge";
+
+    /**
      * {@literal Mending}
      */
     String MC_ENCHANTMENT_MENDING = "minecraft:enchantment.mending";
@@ -10678,6 +10643,11 @@ public interface TrKeys {
      * {@literal Camel}
      */
     String MC_ENTITY_CAMEL_NAME = "minecraft:entity.camel.name";
+
+    /**
+     * {@literal Camel Husk}
+     */
+    String MC_ENTITY_CAMEL_HUSK_NAME = "minecraft:entity.camel_husk.name";
 
     /**
      * {@literal Cat}
@@ -10955,6 +10925,11 @@ public interface TrKeys {
     String MC_ENTITY_MULE_NAME = "minecraft:entity.mule.name";
 
     /**
+     * {@literal Nautilus}
+     */
+    String MC_ENTITY_NAUTILUS_NAME = "minecraft:entity.nautilus.name";
+
+    /**
      * {@literal Ocelot}
      */
     String MC_ENTITY_OCELOT_NAME = "minecraft:entity.ocelot.name";
@@ -10968,6 +10943,11 @@ public interface TrKeys {
      * {@literal Panda}
      */
     String MC_ENTITY_PANDA_NAME = "minecraft:entity.panda.name";
+
+    /**
+     * {@literal Parched}
+     */
+    String MC_ENTITY_PARCHED_NAME = "minecraft:entity.parched.name";
 
     /**
      * {@literal Parrot}
@@ -11308,6 +11288,11 @@ public interface TrKeys {
      * {@literal Zombie Horse}
      */
     String MC_ENTITY_ZOMBIE_HORSE_NAME = "minecraft:entity.zombie_horse.name";
+
+    /**
+     * {@literal Zombie Nautilus}
+     */
+    String MC_ENTITY_ZOMBIE_NAUTILUS_NAME = "minecraft:entity.zombie_nautilus.name";
 
     /**
      * {@literal Zombified Piglin}
@@ -16285,6 +16270,11 @@ public interface TrKeys {
     String MC_ITEM_COPPER_LEGGINGS_NAME = "minecraft:item.copper_leggings.name";
 
     /**
+     * {@literal Copper Nautilus Armor}
+     */
+    String MC_ITEM_COPPER_NAUTILUS_ARMOR_NAME = "minecraft:item.copper_nautilus_armor.name";
+
+    /**
      * {@literal Copper Nugget}
      */
     String MC_ITEM_COPPER_NUGGET_NAME = "minecraft:item.copper_nugget.name";
@@ -16298,6 +16288,11 @@ public interface TrKeys {
      * {@literal Copper Shovel}
      */
     String MC_ITEM_COPPER_SHOVEL_NAME = "minecraft:item.copper_shovel.name";
+
+    /**
+     * {@literal Copper Spear}
+     */
+    String MC_ITEM_COPPER_SPEAR_NAME = "minecraft:item.copper_spear.name";
 
     /**
      * {@literal Copper Sword}
@@ -16400,6 +16395,11 @@ public interface TrKeys {
     String MC_ITEM_DIAMOND_LEGGINGS_NAME = "minecraft:item.diamond_leggings.name";
 
     /**
+     * {@literal Diamond Nautilus Armor}
+     */
+    String MC_ITEM_DIAMOND_NAUTILUS_ARMOR_NAME = "minecraft:item.diamond_nautilus_armor.name";
+
+    /**
      * {@literal Diamond Pickaxe}
      */
     String MC_ITEM_DIAMOND_PICKAXE_NAME = "minecraft:item.diamond_pickaxe.name";
@@ -16408,6 +16408,11 @@ public interface TrKeys {
      * {@literal Diamond Shovel}
      */
     String MC_ITEM_DIAMOND_SHOVEL_NAME = "minecraft:item.diamond_shovel.name";
+
+    /**
+     * {@literal Diamond Spear}
+     */
+    String MC_ITEM_DIAMOND_SPEAR_NAME = "minecraft:item.diamond_spear.name";
 
     /**
      * {@literal Diamond Sword}
@@ -16925,6 +16930,11 @@ public interface TrKeys {
     String MC_ITEM_GOLDEN_LEGGINGS_NAME = "minecraft:item.golden_leggings.name";
 
     /**
+     * {@literal Golden Nautilus Armor}
+     */
+    String MC_ITEM_GOLDEN_NAUTILUS_ARMOR_NAME = "minecraft:item.golden_nautilus_armor.name";
+
+    /**
      * {@literal Golden Pickaxe}
      */
     String MC_ITEM_GOLDEN_PICKAXE_NAME = "minecraft:item.golden_pickaxe.name";
@@ -16933,6 +16943,11 @@ public interface TrKeys {
      * {@literal Golden Shovel}
      */
     String MC_ITEM_GOLDEN_SHOVEL_NAME = "minecraft:item.golden_shovel.name";
+
+    /**
+     * {@literal Golden Spear}
+     */
+    String MC_ITEM_GOLDEN_SPEAR_NAME = "minecraft:item.golden_spear.name";
 
     /**
      * {@literal Golden Sword}
@@ -17010,7 +17025,7 @@ public interface TrKeys {
     String MC_ITEM_HORSEARMORDIAMOND_NAME = "minecraft:item.horsearmordiamond.name";
 
     /**
-     * {@literal Gold Horse Armor}
+     * {@literal Golden Horse Armor}
      */
     String MC_ITEM_HORSEARMORGOLD_NAME = "minecraft:item.horsearmorgold.name";
 
@@ -17075,6 +17090,11 @@ public interface TrKeys {
     String MC_ITEM_IRON_LEGGINGS_NAME = "minecraft:item.iron_leggings.name";
 
     /**
+     * {@literal Iron Nautilus Armor}
+     */
+    String MC_ITEM_IRON_NAUTILUS_ARMOR_NAME = "minecraft:item.iron_nautilus_armor.name";
+
+    /**
      * {@literal Iron Nugget}
      */
     String MC_ITEM_IRON_NUGGET_NAME = "minecraft:item.iron_nugget.name";
@@ -17088,6 +17108,11 @@ public interface TrKeys {
      * {@literal Iron Shovel}
      */
     String MC_ITEM_IRON_SHOVEL_NAME = "minecraft:item.iron_shovel.name";
+
+    /**
+     * {@literal Iron Spear}
+     */
+    String MC_ITEM_IRON_SPEAR_NAME = "minecraft:item.iron_spear.name";
 
     /**
      * {@literal Iron Sword}
@@ -17475,6 +17500,11 @@ public interface TrKeys {
     String MC_ITEM_NETHERITE_HOE_NAME = "minecraft:item.netherite_hoe.name";
 
     /**
+     * {@literal Netherite Horse Armor}
+     */
+    String MC_ITEM_NETHERITE_HORSE_ARMOR_NAME = "minecraft:item.netherite_horse_armor.name";
+
+    /**
      * {@literal Netherite Ingot}
      */
     String MC_ITEM_NETHERITE_INGOT_NAME = "minecraft:item.netherite_ingot.name";
@@ -17483,6 +17513,11 @@ public interface TrKeys {
      * {@literal Netherite Leggings}
      */
     String MC_ITEM_NETHERITE_LEGGINGS_NAME = "minecraft:item.netherite_leggings.name";
+
+    /**
+     * {@literal Netherite Nautilus Armor}
+     */
+    String MC_ITEM_NETHERITE_NAUTILUS_ARMOR_NAME = "minecraft:item.netherite_nautilus_armor.name";
 
     /**
      * {@literal Netherite Pickaxe}
@@ -17498,6 +17533,11 @@ public interface TrKeys {
      * {@literal Netherite Shovel}
      */
     String MC_ITEM_NETHERITE_SHOVEL_NAME = "minecraft:item.netherite_shovel.name";
+
+    /**
+     * {@literal Netherite Spear}
+     */
+    String MC_ITEM_NETHERITE_SPEAR_NAME = "minecraft:item.netherite_spear.name";
 
     /**
      * {@literal Netherite Sword}
@@ -18165,6 +18205,11 @@ public interface TrKeys {
     String MC_ITEM_SPAWN_EGG_ENTITY_CAMEL_NAME = "minecraft:item.spawn_egg.entity.camel.name";
 
     /**
+     * {@literal Camel Husk Spawn Egg}
+     */
+    String MC_ITEM_SPAWN_EGG_ENTITY_CAMEL_HUSK_NAME = "minecraft:item.spawn_egg.entity.camel_husk.name";
+
+    /**
      * {@literal Cat Spawn Egg}
      */
     String MC_ITEM_SPAWN_EGG_ENTITY_CAT_NAME = "minecraft:item.spawn_egg.entity.cat.name";
@@ -18320,6 +18365,11 @@ public interface TrKeys {
     String MC_ITEM_SPAWN_EGG_ENTITY_MULE_NAME = "minecraft:item.spawn_egg.entity.mule.name";
 
     /**
+     * {@literal Nautilus Spawn Egg}
+     */
+    String MC_ITEM_SPAWN_EGG_ENTITY_NAUTILUS_NAME = "minecraft:item.spawn_egg.entity.nautilus.name";
+
+    /**
      * {@literal You need Creative + Operator to spawn an NPC}
      */
     String MC_ITEM_SPAWN_EGG_ENTITY_NPC_FAILED = "minecraft:item.spawn_egg.entity.npc.failed";
@@ -18338,6 +18388,11 @@ public interface TrKeys {
      * {@literal Panda Spawn Egg}
      */
     String MC_ITEM_SPAWN_EGG_ENTITY_PANDA_NAME = "minecraft:item.spawn_egg.entity.panda.name";
+
+    /**
+     * {@literal Parched Spawn Egg}
+     */
+    String MC_ITEM_SPAWN_EGG_ENTITY_PARCHED_NAME = "minecraft:item.spawn_egg.entity.parched.name";
 
     /**
      * {@literal Parrot Spawn Egg}
@@ -18545,6 +18600,11 @@ public interface TrKeys {
     String MC_ITEM_SPAWN_EGG_ENTITY_ZOMBIE_HORSE_NAME = "minecraft:item.spawn_egg.entity.zombie_horse.name";
 
     /**
+     * {@literal Zombie Nautilus Spawn Egg}
+     */
+    String MC_ITEM_SPAWN_EGG_ENTITY_ZOMBIE_NAUTILUS_NAME = "minecraft:item.spawn_egg.entity.zombie_nautilus.name";
+
+    /**
      * {@literal Zombified Piglin Spawn Egg}
      */
     String MC_ITEM_SPAWN_EGG_ENTITY_ZOMBIE_PIGMAN_NAME = "minecraft:item.spawn_egg.entity.zombie_pigman.name";
@@ -18623,6 +18683,11 @@ public interface TrKeys {
      * {@literal Stone Shovel}
      */
     String MC_ITEM_STONE_SHOVEL_NAME = "minecraft:item.stone_shovel.name";
+
+    /**
+     * {@literal Stone Spear}
+     */
+    String MC_ITEM_STONE_SPEAR_NAME = "minecraft:item.stone_spear.name";
 
     /**
      * {@literal Stone Sword}
@@ -19125,6 +19190,11 @@ public interface TrKeys {
     String MC_ITEM_WOODEN_SHOVEL_NAME = "minecraft:item.wooden_shovel.name";
 
     /**
+     * {@literal Wooden Spear}
+     */
+    String MC_ITEM_WOODEN_SPEAR_NAME = "minecraft:item.wooden_spear.name";
+
+    /**
      * {@literal Wooden Sword}
      */
     String MC_ITEM_WOODEN_SWORD_NAME = "minecraft:item.wooden_sword.name";
@@ -19430,6 +19500,11 @@ public interface TrKeys {
     String MC_ITEMGROUP_NAME_MUSHROOM = "minecraft:itemGroup.name.mushroom";
 
     /**
+     * {@literal Nautilus Armor}
+     */
+    String MC_ITEMGROUP_NAME_NAUTILUS_ARMOR = "minecraft:itemGroup.name.nautilus_armor";
+
+    /**
      * {@literal Nether Warts}
      */
     String MC_ITEMGROUP_NAME_NETHERWARTBLOCK = "minecraft:itemGroup.name.netherWartBlock";
@@ -19548,6 +19623,11 @@ public interface TrKeys {
      * {@literal Smithing Templates}
      */
     String MC_ITEMGROUP_NAME_SMITHING_TEMPLATES = "minecraft:itemGroup.name.smithing_templates";
+
+    /**
+     * {@literal Spears}
+     */
+    String MC_ITEMGROUP_NAME_SPEAR = "minecraft:itemGroup.name.spear";
 
     /**
      * {@literal Splash Potions}
@@ -21185,6 +21265,11 @@ public interface TrKeys {
     String MC_PARTIES_TOAST_JOINFAILED = "minecraft:parties.toast.joinFailed";
 
     /**
+     * {@literal Joinable party expired}
+     */
+    String MC_PARTIES_TOAST_JOINABLEPARTYEXPIRED = "minecraft:parties.toast.joinablePartyExpired";
+
+    /**
      * {@literal You joined a party}
      */
     String MC_PARTIES_TOAST_JOINEDPARTY = "minecraft:parties.toast.joinedParty";
@@ -21220,6 +21305,11 @@ public interface TrKeys {
     String MC_PARTIES_TOAST_PARTYINVITE = "minecraft:parties.toast.partyInvite";
 
     /**
+     * {@literal Party invite expired}
+     */
+    String MC_PARTIES_TOAST_PARTYINVITEEXPIRED = "minecraft:parties.toast.partyInviteExpired";
+
+    /**
      * {@literal Failed to remove party member}
      */
     String MC_PARTIES_TOAST_REMOVEMEMBERFAILED = "minecraft:parties.toast.removeMemberFailed";
@@ -21240,7 +21330,7 @@ public interface TrKeys {
     String MC_PARTIES_TOAST_TRAVELTOMENU = "minecraft:parties.toast.travelToMenu";
 
     /**
-     * {@literal Party loading - Player world}
+     * {@literal Party loading - %s}
      */
     String MC_PARTIES_TOAST_TRAVELTOWORLD = "minecraft:parties.toast.travelToWorld";
 

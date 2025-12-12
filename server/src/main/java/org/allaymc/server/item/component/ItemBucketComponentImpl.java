@@ -17,6 +17,7 @@ import org.allaymc.api.item.interfaces.ItemBucketStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.data.EntityId;
@@ -29,8 +30,12 @@ import org.joml.Vector3ic;
 @Slf4j
 public class ItemBucketComponentImpl implements ItemBucketComponent {
 
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_bucket_component");
+
     protected final BlockId liquidId;
     protected final EntityId entityId;
+
     @ComponentObject
     protected ItemBucketStack thisBucketStack;
 

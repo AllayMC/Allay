@@ -443,6 +443,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemCalibratedSculkSensorStack> CALIBRATED_SCULK_SENSOR;
 
+    public static ItemType<ItemSpawnEggStack> CAMEL_HUSK_SPAWN_EGG;
+
     public static ItemType<ItemSpawnEggStack> CAMEL_SPAWN_EGG;
 
     public static ItemType<ItemCameraStack> CAMERA;
@@ -711,6 +713,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemLeggingsStack> COPPER_LEGGINGS;
 
+    public static ItemType<ItemNautilusArmorStack> COPPER_NAUTILUS_ARMOR;
+
     public static ItemType<ItemCopperNuggetStack> COPPER_NUGGET;
 
     public static ItemType<ItemCopperOreStack> COPPER_ORE;
@@ -718,6 +722,8 @@ public final class ItemTypes {
     public static ItemType<ItemPickaxeStack> COPPER_PICKAXE;
 
     public static ItemType<ItemShovelStack> COPPER_SHOVEL;
+
+    public static ItemType<ItemSpearStack> COPPER_SPEAR;
 
     public static ItemType<ItemSwordStack> COPPER_SWORD;
 
@@ -1021,11 +1027,15 @@ public final class ItemTypes {
 
     public static ItemType<ItemLeggingsStack> DIAMOND_LEGGINGS;
 
+    public static ItemType<ItemNautilusArmorStack> DIAMOND_NAUTILUS_ARMOR;
+
     public static ItemType<ItemDiamondOreStack> DIAMOND_ORE;
 
     public static ItemType<ItemPickaxeStack> DIAMOND_PICKAXE;
 
     public static ItemType<ItemShovelStack> DIAMOND_SHOVEL;
+
+    public static ItemType<ItemSpearStack> DIAMOND_SPEAR;
 
     public static ItemType<ItemSwordStack> DIAMOND_SWORD;
 
@@ -1557,11 +1567,15 @@ public final class ItemTypes {
 
     public static ItemType<ItemLeggingsStack> GOLDEN_LEGGINGS;
 
+    public static ItemType<ItemNautilusArmorStack> GOLDEN_NAUTILUS_ARMOR;
+
     public static ItemType<ItemPickaxeStack> GOLDEN_PICKAXE;
 
     public static ItemType<ItemGoldenRailStack> GOLDEN_RAIL;
 
     public static ItemType<ItemShovelStack> GOLDEN_SHOVEL;
+
+    public static ItemType<ItemSpearStack> GOLDEN_SPEAR;
 
     public static ItemType<ItemSwordStack> GOLDEN_SWORD;
 
@@ -1819,6 +1833,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemLeggingsStack> IRON_LEGGINGS;
 
+    public static ItemType<ItemNautilusArmorStack> IRON_NAUTILUS_ARMOR;
+
     public static ItemType<ItemIronNuggetStack> IRON_NUGGET;
 
     public static ItemType<ItemIronOreStack> IRON_ORE;
@@ -1826,6 +1842,8 @@ public final class ItemTypes {
     public static ItemType<ItemPickaxeStack> IRON_PICKAXE;
 
     public static ItemType<ItemShovelStack> IRON_SHOVEL;
+
+    public static ItemType<ItemSpearStack> IRON_SPEAR;
 
     public static ItemType<ItemSwordStack> IRON_SWORD;
 
@@ -2335,6 +2353,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemNautilusShellStack> NAUTILUS_SHELL;
 
+    public static ItemType<ItemSpawnEggStack> NAUTILUS_SPAWN_EGG;
+
     public static ItemType<ItemNetherBrickStack> NETHER_BRICK;
 
     public static ItemType<ItemSlabStack> NETHER_BRICK_DOUBLE_SLAB;
@@ -2371,15 +2391,21 @@ public final class ItemTypes {
 
     public static ItemType<ItemHoeStack> NETHERITE_HOE;
 
+    public static ItemType<ItemHorseArmorStack> NETHERITE_HORSE_ARMOR;
+
     public static ItemType<ItemNetheriteIngotStack> NETHERITE_INGOT;
 
     public static ItemType<ItemLeggingsStack> NETHERITE_LEGGINGS;
+
+    public static ItemType<ItemNautilusArmorStack> NETHERITE_NAUTILUS_ARMOR;
 
     public static ItemType<ItemPickaxeStack> NETHERITE_PICKAXE;
 
     public static ItemType<ItemNetheriteScrapStack> NETHERITE_SCRAP;
 
     public static ItemType<ItemShovelStack> NETHERITE_SHOVEL;
+
+    public static ItemType<ItemSpearStack> NETHERITE_SPEAR;
 
     public static ItemType<ItemSwordStack> NETHERITE_SWORD;
 
@@ -2562,6 +2588,8 @@ public final class ItemTypes {
     public static ItemType<ItemSpawnEggStack> PANDA_SPAWN_EGG;
 
     public static ItemType<ItemPaperStack> PAPER;
+
+    public static ItemType<ItemSpawnEggStack> PARCHED_SPAWN_EGG;
 
     public static ItemType<ItemSpawnEggStack> PARROT_SPAWN_EGG;
 
@@ -3233,6 +3261,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemShovelStack> STONE_SHOVEL;
 
+    public static ItemType<ItemSpearStack> STONE_SPEAR;
+
     public static ItemType<ItemStairsStack> STONE_STAIRS;
 
     public static ItemType<ItemSwordStack> STONE_SWORD;
@@ -3733,6 +3763,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemSlabStack> WOODEN_SLAB;
 
+    public static ItemType<ItemSpearStack> WOODEN_SPEAR;
+
     public static ItemType<ItemSwordStack> WOODEN_SWORD;
 
     public static ItemType<ItemWoolStack> WOOL;
@@ -3774,6 +3806,8 @@ public final class ItemTypes {
     public static ItemType<ItemHeadStack> ZOMBIE_HEAD;
 
     public static ItemType<ItemSpawnEggStack> ZOMBIE_HORSE_SPAWN_EGG;
+
+    public static ItemType<ItemSpawnEggStack> ZOMBIE_NAUTILUS_SPAWN_EGG;
 
     public static ItemType<ItemSpawnEggStack> ZOMBIE_PIGMAN_SPAWN_EGG;
 

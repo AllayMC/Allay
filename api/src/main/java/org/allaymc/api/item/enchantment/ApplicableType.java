@@ -189,6 +189,15 @@ public enum ApplicableType {
         public boolean canBeAppliedTo(ItemType<?> itemType) {
             return itemType == ItemTypes.MACE;
         }
+    },
+    /**
+     * Represents a spear item.
+     */
+    SPEAR {
+        @Override
+        public boolean canBeAppliedTo(ItemType<?> itemType) {
+            return ItemHelper.isSpear(itemType);
+        }
     };
 
     public abstract boolean canBeAppliedTo(ItemType<?> itemType);

@@ -1320,6 +1320,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.CALIBRATED_SCULK_SENSOR)
                     .build();
         }
+        if (ItemTypes.CAMEL_HUSK_SPAWN_EGG == null) {
+            ItemTypes.CAMEL_HUSK_SPAWN_EGG = AllayItemType
+                    .builder(ItemSpawnEggStackImpl.class)
+                    .vanillaItem(ItemId.CAMEL_HUSK_SPAWN_EGG)
+                    .build();
+        }
         if (ItemTypes.CAMEL_SPAWN_EGG == null) {
             ItemTypes.CAMEL_SPAWN_EGG = AllayItemType
                     .builder(ItemSpawnEggStackImpl.class)
@@ -2124,6 +2130,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.COPPER_LEGGINGS)
                     .build();
         }
+        if (ItemTypes.COPPER_NAUTILUS_ARMOR == null) {
+            ItemTypes.COPPER_NAUTILUS_ARMOR = AllayItemType
+                    .builder(ItemNautilusArmorStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_NAUTILUS_ARMOR)
+                    .build();
+        }
         if (ItemTypes.COPPER_NUGGET == null) {
             ItemTypes.COPPER_NUGGET = AllayItemType
                     .builder(ItemCopperNuggetStackImpl.class)
@@ -2146,6 +2158,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.COPPER_SHOVEL = AllayItemType
                     .builder(ItemShovelStackImpl.class)
                     .vanillaItem(ItemId.COPPER_SHOVEL)
+                    .build();
+        }
+        if (ItemTypes.COPPER_SPEAR == null) {
+            ItemTypes.COPPER_SPEAR = AllayItemType
+                    .builder(ItemSpearStackImpl.class)
+                    .vanillaItem(ItemId.COPPER_SPEAR)
                     .build();
         }
         if (ItemTypes.COPPER_SWORD == null) {
@@ -3054,6 +3072,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.DIAMOND_LEGGINGS)
                     .build();
         }
+        if (ItemTypes.DIAMOND_NAUTILUS_ARMOR == null) {
+            ItemTypes.DIAMOND_NAUTILUS_ARMOR = AllayItemType
+                    .builder(ItemNautilusArmorStackImpl.class)
+                    .vanillaItem(ItemId.DIAMOND_NAUTILUS_ARMOR)
+                    .build();
+        }
         if (ItemTypes.DIAMOND_ORE == null) {
             ItemTypes.DIAMOND_ORE = AllayItemType
                     .builder(ItemDiamondOreStackImpl.class)
@@ -3070,6 +3094,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.DIAMOND_SHOVEL = AllayItemType
                     .builder(ItemShovelStackImpl.class)
                     .vanillaItem(ItemId.DIAMOND_SHOVEL)
+                    .build();
+        }
+        if (ItemTypes.DIAMOND_SPEAR == null) {
+            ItemTypes.DIAMOND_SPEAR = AllayItemType
+                    .builder(ItemSpearStackImpl.class)
+                    .vanillaItem(ItemId.DIAMOND_SPEAR)
                     .build();
         }
         if (ItemTypes.DIAMOND_SWORD == null) {
@@ -4662,6 +4692,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.GOLDEN_LEGGINGS)
                     .build();
         }
+        if (ItemTypes.GOLDEN_NAUTILUS_ARMOR == null) {
+            ItemTypes.GOLDEN_NAUTILUS_ARMOR = AllayItemType
+                    .builder(ItemNautilusArmorStackImpl.class)
+                    .vanillaItem(ItemId.GOLDEN_NAUTILUS_ARMOR)
+                    .build();
+        }
         if (ItemTypes.GOLDEN_PICKAXE == null) {
             ItemTypes.GOLDEN_PICKAXE = AllayItemType
                     .builder(ItemPickaxeStackImpl.class)
@@ -4678,6 +4714,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.GOLDEN_SHOVEL = AllayItemType
                     .builder(ItemShovelStackImpl.class)
                     .vanillaItem(ItemId.GOLDEN_SHOVEL)
+                    .build();
+        }
+        if (ItemTypes.GOLDEN_SPEAR == null) {
+            ItemTypes.GOLDEN_SPEAR = AllayItemType
+                    .builder(ItemSpearStackImpl.class)
+                    .vanillaItem(ItemId.GOLDEN_SPEAR)
                     .build();
         }
         if (ItemTypes.GOLDEN_SWORD == null) {
@@ -5448,6 +5490,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.IRON_LEGGINGS)
                     .build();
         }
+        if (ItemTypes.IRON_NAUTILUS_ARMOR == null) {
+            ItemTypes.IRON_NAUTILUS_ARMOR = AllayItemType
+                    .builder(ItemNautilusArmorStackImpl.class)
+                    .vanillaItem(ItemId.IRON_NAUTILUS_ARMOR)
+                    .build();
+        }
         if (ItemTypes.IRON_NUGGET == null) {
             ItemTypes.IRON_NUGGET = AllayItemType
                     .builder(ItemIronNuggetStackImpl.class)
@@ -5470,6 +5518,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.IRON_SHOVEL = AllayItemType
                     .builder(ItemShovelStackImpl.class)
                     .vanillaItem(ItemId.IRON_SHOVEL)
+                    .build();
+        }
+        if (ItemTypes.IRON_SPEAR == null) {
+            ItemTypes.IRON_SPEAR = AllayItemType
+                    .builder(ItemSpearStackImpl.class)
+                    .vanillaItem(ItemId.IRON_SPEAR)
                     .build();
         }
         if (ItemTypes.IRON_SWORD == null) {
@@ -6996,6 +7050,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.NAUTILUS_SHELL)
                     .build();
         }
+        if (ItemTypes.NAUTILUS_SPAWN_EGG == null) {
+            ItemTypes.NAUTILUS_SPAWN_EGG = AllayItemType
+                    .builder(ItemSpawnEggStackImpl.class)
+                    .vanillaItem(ItemId.NAUTILUS_SPAWN_EGG)
+                    .build();
+        }
         if (ItemTypes.NETHER_BRICK == null) {
             ItemTypes.NETHER_BRICK = AllayItemType
                     .builder(ItemNetherBrickStackImpl.class)
@@ -7104,6 +7164,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.NETHERITE_HOE)
                     .build();
         }
+        if (ItemTypes.NETHERITE_HORSE_ARMOR == null) {
+            ItemTypes.NETHERITE_HORSE_ARMOR = AllayItemType
+                    .builder(ItemHorseArmorStackImpl.class)
+                    .vanillaItem(ItemId.NETHERITE_HORSE_ARMOR)
+                    .build();
+        }
         if (ItemTypes.NETHERITE_INGOT == null) {
             ItemTypes.NETHERITE_INGOT = AllayItemType
                     .builder(ItemNetheriteIngotStackImpl.class)
@@ -7114,6 +7180,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.NETHERITE_LEGGINGS = AllayItemType
                     .builder(ItemLeggingsStackImpl.class)
                     .vanillaItem(ItemId.NETHERITE_LEGGINGS)
+                    .build();
+        }
+        if (ItemTypes.NETHERITE_NAUTILUS_ARMOR == null) {
+            ItemTypes.NETHERITE_NAUTILUS_ARMOR = AllayItemType
+                    .builder(ItemNautilusArmorStackImpl.class)
+                    .vanillaItem(ItemId.NETHERITE_NAUTILUS_ARMOR)
                     .build();
         }
         if (ItemTypes.NETHERITE_PICKAXE == null) {
@@ -7132,6 +7204,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.NETHERITE_SHOVEL = AllayItemType
                     .builder(ItemShovelStackImpl.class)
                     .vanillaItem(ItemId.NETHERITE_SHOVEL)
+                    .build();
+        }
+        if (ItemTypes.NETHERITE_SPEAR == null) {
+            ItemTypes.NETHERITE_SPEAR = AllayItemType
+                    .builder(ItemSpearStackImpl.class)
+                    .vanillaItem(ItemId.NETHERITE_SPEAR)
                     .build();
         }
         if (ItemTypes.NETHERITE_SWORD == null) {
@@ -7678,6 +7756,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.PAPER = AllayItemType
                     .builder(ItemPaperStackImpl.class)
                     .vanillaItem(ItemId.PAPER)
+                    .build();
+        }
+        if (ItemTypes.PARCHED_SPAWN_EGG == null) {
+            ItemTypes.PARCHED_SPAWN_EGG = AllayItemType
+                    .builder(ItemSpawnEggStackImpl.class)
+                    .vanillaItem(ItemId.PARCHED_SPAWN_EGG)
                     .build();
         }
         if (ItemTypes.PARROT_SPAWN_EGG == null) {
@@ -9690,6 +9774,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.STONE_SHOVEL)
                     .build();
         }
+        if (ItemTypes.STONE_SPEAR == null) {
+            ItemTypes.STONE_SPEAR = AllayItemType
+                    .builder(ItemSpearStackImpl.class)
+                    .vanillaItem(ItemId.STONE_SPEAR)
+                    .build();
+        }
         if (ItemTypes.STONE_STAIRS == null) {
             ItemTypes.STONE_STAIRS = AllayItemType
                     .builder(ItemStairsStackImpl.class)
@@ -11190,6 +11280,12 @@ public final class ItemTypeDefaultInitializer {
                     .vanillaItem(ItemId.WOODEN_SLAB)
                     .build();
         }
+        if (ItemTypes.WOODEN_SPEAR == null) {
+            ItemTypes.WOODEN_SPEAR = AllayItemType
+                    .builder(ItemSpearStackImpl.class)
+                    .vanillaItem(ItemId.WOODEN_SPEAR)
+                    .build();
+        }
         if (ItemTypes.WOODEN_SWORD == null) {
             ItemTypes.WOODEN_SWORD = AllayItemType
                     .builder(ItemSwordStackImpl.class)
@@ -11314,6 +11410,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.ZOMBIE_HORSE_SPAWN_EGG = AllayItemType
                     .builder(ItemSpawnEggStackImpl.class)
                     .vanillaItem(ItemId.ZOMBIE_HORSE_SPAWN_EGG)
+                    .build();
+        }
+        if (ItemTypes.ZOMBIE_NAUTILUS_SPAWN_EGG == null) {
+            ItemTypes.ZOMBIE_NAUTILUS_SPAWN_EGG = AllayItemType
+                    .builder(ItemSpawnEggStackImpl.class)
+                    .vanillaItem(ItemId.ZOMBIE_NAUTILUS_SPAWN_EGG)
                     .build();
         }
         if (ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG == null) {

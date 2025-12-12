@@ -221,5 +221,8 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*CopperGolemStatueStack"), "ItemCopperGolemStatueStack");
         registerMergedItem(Pattern.compile(".*CopperChainStack"), "ItemCopperChainStack");
         registerMergedItem(Pattern.compile(".*DyeStack"), "ItemDyeStack");
+        registerMergedItem(Pattern.compile(".*SwordStack"), "ItemSwordStack");
+        registerMergedItem(Pattern.compile(".*NautilusArmorStack"), "ItemNautilusArmorStack");
+        registerMergedItem(Pattern.compile(".*SpearStack"), "ItemSpearStack");
     }
 }

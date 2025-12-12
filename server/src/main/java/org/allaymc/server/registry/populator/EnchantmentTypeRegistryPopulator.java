@@ -52,5 +52,6 @@ public class EnchantmentTypeRegistryPopulator implements Runnable {
         EnchantmentTypes.UNBREAKING = new EnchantmentUnbreakingType();
         EnchantmentTypes.VANISHING = new EnchantmentVanishingType();
         EnchantmentTypes.WIND_BURST = new EnchantmentWindBurstType();
+        EnchantmentTypes.LUNGE = new EnchantmentLungeType();
     }
 }

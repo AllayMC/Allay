@@ -14,6 +14,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.1...HEAD)</small>
 
+### Added
+
+- Updated feature version to 1.21.130.
+
+### Fixed
+
+- (API) Fixed the issue that some item class do not extend `ItemToolComponent` interface.
+
 # 0.10.1 (API 0.18.0) - 2025/12/10
 
 <small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.0...0.10.1)</small>

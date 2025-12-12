@@ -130,4 +130,14 @@ public final class ItemHelper {
     public static boolean isTrimmableArmor(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.TRIMMABLE_ARMORS);
     }
+
+    /**
+     * Checks if the given item is classified as a spear.
+     *
+     * @param itemType The {@link ItemType} of the item to check.
+     * @return {@code true} if the item is a spear, {@code false} otherwise.
+     */
+    public static boolean isSpear(ItemType<?> itemType) {
+        return itemType.hasItemTag(ItemTags.IS_SPEAR);
+    }
 }

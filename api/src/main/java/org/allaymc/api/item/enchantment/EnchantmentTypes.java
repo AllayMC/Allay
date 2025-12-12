@@ -46,4 +46,5 @@ public final class EnchantmentTypes {
     public static EnchantmentType UNBREAKING;
     public static EnchantmentType VANISHING;
     public static EnchantmentType WIND_BURST;
+    public static EnchantmentType LUNGE;
 }

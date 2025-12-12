@@ -22,9 +22,8 @@ import org.allaymc.server.item.component.seeds.ItemBeetrootSeedsBaseComponentImp
 import org.allaymc.server.item.component.seeds.ItemMelonSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemPumpkinSeedsBaseComponentImpl;
 import org.allaymc.server.item.component.seeds.ItemWheatSeedsBaseComponentImpl;
-import org.allaymc.server.item.component.tool.ItemEmptyMapBaseComponentImpl;
-import org.allaymc.server.item.component.tool.ItemHoeComponentImpl;
-import org.allaymc.server.item.component.tool.ItemSwordComponentImpl;
+import org.allaymc.server.item.component.tool.ItemHoeToolComponentImpl;
+import org.allaymc.server.item.component.tool.ItemSwordToolComponentImpl;
 import org.allaymc.server.item.component.tool.ItemToolComponentImpl;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.item.impl.*;
@@ -476,7 +475,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemSwordStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .addComponent(ItemSwordToolComponentImpl::new, ItemSwordToolComponentImpl.class)
                 .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
@@ -553,7 +552,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemHoeStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponentImpl.class)
+                .addComponent(ItemHoeToolComponentImpl::new, ItemHoeToolComponentImpl.class)
                 .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
@@ -926,6 +925,25 @@ public final class ItemTypeInitializer {
                 .builder(ItemDyeStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(() -> new ItemDyeComponentImpl(dyeColor), ItemDyeComponentImpl.class)
+                .build();
+    }
+
+    public static void initSpear() {
+        ItemTypes.COPPER_SPEAR = buildSpear(ItemId.COPPER_SPEAR, ItemId.COPPER_INGOT);
+        ItemTypes.IRON_SPEAR = buildSpear(ItemId.IRON_SPEAR, ItemId.IRON_INGOT);
+        ItemTypes.DIAMOND_SPEAR = buildSpear(ItemId.DIAMOND_SPEAR, ItemId.DIAMOND);
+        ItemTypes.NETHERITE_SPEAR = buildSpear(ItemId.NETHERITE_SPEAR, ItemId.NETHERITE_INGOT);
+        ItemTypes.GOLDEN_SPEAR = buildSpear(ItemId.GOLDEN_SPEAR, ItemId.GOLD_INGOT);
+        ItemTypes.STONE_SPEAR = buildSpear(ItemId.STONE_SPEAR, ItemId.COBBLESTONE);
+        ItemTypes.WOODEN_SPEAR = buildSpear(ItemId.WOODEN_SPEAR, ItemId.PLANKS);
+    }
+
+    // TODO: implement spear
+    private static ItemType<ItemSpearStack> buildSpear(ItemId itemId, ItemId repairItemId) {
+        return AllayItemType
+                .builder(ItemSpearStackImpl.class)
+                .vanillaItem(itemId)
+                .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
 }

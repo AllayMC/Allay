@@ -81,6 +81,8 @@ public interface ItemTags {
 
     ItemTag DYE = create("minecraft:dye");
 
+    ItemTag NAUTILUS_ARMOR = create("minecraft:nautilus_armor");
+
     ItemTag VIBRATION_DAMPER = create("minecraft:vibration_damper");
 
     ItemTag LEATHER_TIER = create("minecraft:leather_tier");
@@ -134,6 +136,8 @@ public interface ItemTags {
     ItemTag MUSIC_DISC = create("minecraft:music_disc");
 
     ItemTag HORSE_ARMOR = create("minecraft:horse_armor");
+
+    ItemTag IS_SPEAR = create("minecraft:is_spear");
 
     ItemTag IS_AXE = create("minecraft:is_axe");
 
