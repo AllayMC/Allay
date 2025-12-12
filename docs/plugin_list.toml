@@ -32,6 +32,16 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[KDR]
+description = "Simple and Efficient Kill/Death Ratio Statistics for Allay."
+authors = ["Miroshka"]
+github = "https://github.com/Miroshka000/KDR"
+
+[Aegis]
+description = "Advanced Region Management System for Allay."
+authors = ["Miroshka"]
+github = "https://github.com/Miroshka000/Aegis"
+
 [Aconomy]
 description = "Aconomy is an simple implementation of AllayMC's official EconomyAPI."
 authors = ["daoge_cmd"]
