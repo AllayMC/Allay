@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[NoSpaceInName]
+description = "NoSpaceInName automatically detects spaces in player names upon login and replaces them with a configured character."
+authors = ["Miroshka"]
+github = "https://github.com/Miroshka000/NoSpaceInName"
+
 [KDR]
 description = "Simple and Efficient Kill/Death Ratio Statistics for Allay."
 authors = ["Miroshka"]

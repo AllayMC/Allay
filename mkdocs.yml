@@ -139,10 +139,11 @@ nav:
       - Schedule Tasks: tutorials/schedule-tasks.md
       - Use Forms: tutorials/use-forms.md
       - Use Scoreboards: tutorials/use-scoreboards.md
-      - Use BossBars: tutorials/use-bossbar.md
+      - Use BossBars: tutorials/use-bossbars.md
       - Use Debug Shapes: tutorials/use-debug-shapes.md
-      - Block API: tutorials/block.md
-      - Item API: tutorials/item.md
+      - Block API: tutorials/block-api.md
+      - Item API: tutorials/item-api.md
+      - Container API: tutorials/container-api.md
       - Persistent Data Container: tutorials/persistent-data-container.md
       - Use i18n: tutorials/use-i18n.md
 
