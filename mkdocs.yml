@@ -137,6 +137,7 @@ nav:
       - Use Permission: tutorials/use-permission.md
       - Register Event Handlers: tutorials/register-event-listeners.md
       - Schedule Tasks: tutorials/schedule-tasks.md
+      - Use Color Codes: tutorials/use-color-codes.md
       - Use Forms: tutorials/use-forms.md
       - Use Scoreboards: tutorials/use-scoreboards.md
       - Use BossBars: tutorials/use-bossbars.md
@@ -148,7 +149,6 @@ nav:
       - Use i18n: tutorials/use-i18n.md
 
   - Advanced:
-      - Use Color Codes: advanced/use-color-codes.md
       - Event List: advanced/event-list.md
       - Block and Item Id: advanced/block-and-item-id.md
 
