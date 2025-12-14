@@ -87,7 +87,7 @@ public class HelloCommand extends Command {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .exec(context -> {
-                    context.getSender().sendText("Hello World!");
+                    context.getSender().sendMessage("Hello World!");
                     return context.success();
                 });
     }
@@ -124,9 +124,9 @@ public class HelloCommand extends Command {
                 .exec(context -> {
                     String message = context.getResult(0);
                     if (message.isBlank()) { /*(1)!*/
-                        context.getSender().sendText("Hello World!");
+                        context.getSender().sendMessage("Hello World!");
                     } else {
-                        context.getSender().sendText(message);
+                        context.getSender().sendMessage(message);
                     }
                     return context.success();
                 });
@@ -210,13 +210,13 @@ public class MyCommand extends Command {
         tree.getRoot()
                 .key("help") // /mycommand help
                 .exec(context -> {
-                    context.getSender().sendText("Available commands: help, reload, set");
+                    context.getSender().sendMessage("Available commands: help, reload, set");
                     return context.success();
                 })
                 .root() /*(1)!*/
                 .key("reload") // /mycommand reload
                 .exec(context -> {
-                    context.getSender().sendText("Reloading configuration...");
+                    context.getSender().sendMessage("Reloading configuration...");
                     return context.success();
                 })
                 .root()
@@ -226,7 +226,7 @@ public class MyCommand extends Command {
                 .exec(context -> {
                     String key = context.getResult(1);
                     String value = context.getResult(2);
-                    context.getSender().sendText("Set " + key + " to " + value);
+                    context.getSender().sendMessage("Set " + key + " to " + value);
                     return context.success();
                 });
     }

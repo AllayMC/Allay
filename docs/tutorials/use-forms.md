@@ -51,8 +51,8 @@ public class MyEventListener {
         Forms.modal() /*(1)!*/
                 .title(TextFormat.YELLOW + "Do You Like Allay?")
                 .content(TextFormat.GREEN + "Please tell us if you like allay-chan!")
-                .trueButton(TextFormat.GREEN + "Yes", () -> player.sendText("Thank you!"))
-                .falseButton(TextFormat.RED + "No", () -> player.sendText("Sorry to hear that!"))
+                .trueButton(TextFormat.GREEN + "Yes", () -> player.sendMessage("Thank you!"))
+                .falseButton(TextFormat.RED + "No", () -> player.sendMessage("Sorry to hear that!"))
                 .sendTo(player);
     }
 }
@@ -88,7 +88,7 @@ public void showFeedbackForm(EntityPlayer player) {
             .onResponse(responses -> {
                 String name = responses.get(0);
                 String comments = responses.get(1);
-                player.sendText("Thank you " + name + " for your feedback!");
+                player.sendMessage("Thank you " + name + " for your feedback!");
             })
             .sendTo(player);
 }
@@ -202,13 +202,13 @@ public void showRegistrationForm(EntityPlayer player) {
                 boolean notifications = Boolean.parseBoolean(responses.get(5)); // Toggle
                 boolean pvp = Boolean.parseBoolean(responses.get(6)); // Toggle
 
-                player.sendText(TextFormat.GREEN + "Registration complete!");
-                player.sendText("Username: " + username);
-                player.sendText("Email: " + email);
-                player.sendText("Render Distance: " + renderDistance);
+                player.sendMessage(TextFormat.GREEN + "Registration complete!");
+                player.sendMessage("Username: " + username);
+                player.sendMessage("Email: " + email);
+                player.sendMessage("Render Distance: " + renderDistance);
             })
             .onClose(reason -> {
-                player.sendText(TextFormat.RED + "Registration cancelled");
+                player.sendMessage(TextFormat.RED + "Registration cancelled");
             })
             .sendTo(player);
 }

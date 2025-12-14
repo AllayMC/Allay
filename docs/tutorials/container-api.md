@@ -263,14 +263,14 @@ public void createInteractiveMenu(Player player) {
 
     // Add item with click listener
     menu.setItemStackWithListener(0, ItemTypes.DIAMOND_SWORD.createItemStack(), () -> {
-        player.sendText("You clicked on the Diamond Sword!");
+        player.sendMessage("You clicked on the Diamond Sword!");
         // Add your shop logic here
     });
 
     // Or add listener separately
     menu.setItemStack(4, ItemTypes.GOLDEN_APPLE.createItemStack());
     menu.addClickListener(4, () -> {
-        player.sendText("You clicked on the Golden Apple!");
+        player.sendMessage("You clicked on the Golden Apple!");
     });
 
     // Show the menu to the player
@@ -366,7 +366,7 @@ public class ShopMenu {
     }
 
     private void buyItem(String itemName, int price) {
-        player.sendText("You purchased " + itemName + " for " + price + " emeralds!");
+        player.sendMessage("You purchased " + itemName + " for " + price + " emeralds!");
         // Add your purchase logic here
     }
 
@@ -427,7 +427,7 @@ public class PaginatedMenu {
             int slot = i - startIndex;
             ItemStack item = items.get(i);
             menu.setItemStackWithListener(slot, item, () -> {
-                player.sendText("You selected: " + item.getItemType().getIdentifier());
+                player.sendMessage("You selected: " + item.getItemType().getIdentifier());
             });
         }
 
@@ -491,8 +491,8 @@ public class ConfirmationDialog {
 
 // Usage:
 // ConfirmationDialog.show(player, "Delete all items?",
-//     () -> player.sendText("Confirmed!"),
-//     () -> player.sendText("Cancelled!")
+//     () -> player.sendMessage("Confirmed!"),
+//     () -> player.sendMessage("Cancelled!")
 // );
 ```
 

@@ -270,7 +270,7 @@ class MyListener {
         var player = event.getPlayer();
         // Translate server-side and send to player
         String message = I18n.get().tr("myplugin:greeting.welcome", player.getDisplayName());
-        player.sendText(message);
+        player.sendMessage(message);
     }
 
     @EventHandler
