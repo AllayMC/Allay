@@ -142,6 +142,7 @@ nav:
       - Block: tutorials/block.md
       - Persistent Data Container: tutorials/persistent-data-container.md
       - Use Permission: tutorials/use-permission.md
+      - Use i18n: tutorials/use-i18n.md
 
   - Advanced:
       - Use Color Codes: advanced/use-color-codes.md
