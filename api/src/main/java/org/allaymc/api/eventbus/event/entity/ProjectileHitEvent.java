@@ -10,6 +10,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.joml.Vector3dc;
 
 /**
+ * Called when a projectile hits a block or an entity.
+ *
  * @author daoge_cmd
  */
 @Getter

@@ -8,6 +8,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.type.ItemType;
 
 /**
+ * Called when an item is moved between containers, such as by a hopper.
+ *
  * @author daoge_cmd
  */
 @Getter

@@ -1,7 +1,6 @@
 package org.allaymc.api.scoreboard;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
@@ -15,10 +14,7 @@ import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.allaymc.api.server.Server;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 /**
  * Manages and stores a batch of scoreboards.
@@ -31,13 +27,17 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public final class ScoreboardManager {
 
-    private final Map<DisplaySlot, Scoreboard> display = new ConcurrentHashMap<>();
-    private final Set<ScoreboardViewer> viewers = Sets.newConcurrentHashSet();
     private final ScoreboardStorage storage;
-    private Map<String, Scoreboard> scoreboards = new ConcurrentHashMap<>();
+    private final Map<DisplaySlot, Scoreboard> display;
+    private final Set<ScoreboardViewer> viewers;
+    private Map<String, Scoreboard> scoreboards;
 
     public ScoreboardManager(Server server, ScoreboardStorage storage) {
         this.storage = storage;
+        this.display = new HashMap<>();
+        this.viewers = new HashSet<>();
+        this.scoreboards = new HashMap<>();
+
         var eventBus = server.getEventBus();
         eventBus.registerListenerFor(EntityDespawnEvent.class, event -> {
             var entity = event.getEntity();

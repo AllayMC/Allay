@@ -9,11 +9,13 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.joml.Vector3dc;
 
 /**
+ * Called when an entity's motion (velocity) is set.
+ *
  * @author daoge_cmd
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.WORLD)
 public class EntitySetMotionEvent extends EntityEvent implements CancellableEvent {
     protected Vector3dc motion;
 

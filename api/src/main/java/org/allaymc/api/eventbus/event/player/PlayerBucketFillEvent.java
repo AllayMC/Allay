@@ -7,6 +7,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.interfaces.ItemBucketStack;
 
 /**
+ * Called when a player fills a bucket with liquid.
+ *
  * @author daoge_cmd
  */
 @CallerThread(ThreadType.WORLD)

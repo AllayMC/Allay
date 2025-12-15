@@ -8,6 +8,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when an entity lands on the ground after falling.
+ *
  * @author daoge_cmd
  */
 @Getter

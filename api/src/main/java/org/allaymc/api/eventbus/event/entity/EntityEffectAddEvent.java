@@ -6,6 +6,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectInstance;
 
 /**
+ * Called when an effect is added to an entity.
+ *
  * @author daoge_cmd
  */
 @CallerThread(ThreadType.WORLD)

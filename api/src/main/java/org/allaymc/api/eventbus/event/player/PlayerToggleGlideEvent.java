@@ -6,6 +6,8 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
+ * Called when a player starts or stops gliding with elytra.
+ *
  * @author daoge_cmd
  */
 @Getter

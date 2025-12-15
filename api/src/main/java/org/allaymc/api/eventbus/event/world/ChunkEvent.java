@@ -5,6 +5,8 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 
 /**
+ * The base class for all chunk events.
+ *
  * @author daoge_cmd
  */
 @Getter

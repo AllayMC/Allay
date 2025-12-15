@@ -1,0 +1,31 @@
+package org.allaymc.api.eventbus.event.server;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
+import org.allaymc.api.eventbus.event.CancellableEvent;
+import org.allaymc.api.player.Player;
+
+/**
+ * Called when a player is kicked from the server by using command /kick
+ *
+ * @author daoge_cmd
+ */
+@Getter
+@CallerThread(ThreadType.ANY)
+public class PlayerKickEvent extends ServerEvent implements CancellableEvent {
+
+    /**
+     * The player associated with this event.
+     */
+    protected Player player;
+
+    @Setter
+    protected String reason;
+
+    public PlayerKickEvent(Player player, String reason) {
+        this.player = player;
+        this.reason = reason;
+    }
+}

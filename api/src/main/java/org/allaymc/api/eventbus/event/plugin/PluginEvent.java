@@ -6,6 +6,8 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.plugin.Plugin;
 
 /**
+ * The base class for all plugin events.
+ *
  * @author IWareQ
  */
 @Getter

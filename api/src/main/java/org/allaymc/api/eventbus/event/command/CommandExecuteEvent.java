@@ -9,6 +9,8 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when a command is about to be executed.
+ *
  * @author daoge_cmd
  */
 @AllArgsConstructor

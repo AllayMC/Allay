@@ -9,6 +9,8 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.gamerule.GameRule;
 
 /**
+ * Called when a game rule is changed.
+ *
  * @author Dhaiven
  */
 @Getter

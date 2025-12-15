@@ -9,6 +9,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.player.GameMode;
 
 /**
+ * Called when a player's game mode changes.
+ *
  * @author daoge_cmd | Dhaiven
  */
 @Getter

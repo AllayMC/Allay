@@ -18,6 +18,12 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Updated feature version to 1.21.130.
 
+### Changed
+
+- (API) Moved `PlayerKickEvent` from `player` package to `server` package.
+- (API) Renamed field `blockEntityBrewingStand` to `brewingStand` in classes `BrewingStandBrewEvent`, `BrewingStandConsumeFuelEvent`, and `BrewingStandStartBrewEvent`.
+- (API) Renamed field `blockEntityFurnace` to `furnace` in classes `FurnaceConsumeFuelEvent` and `FurnaceSmeltEvent`.
+
 ### Fixed
 
 - (API) Fixed the issue that some item class do not extend `ItemToolComponent` interface.

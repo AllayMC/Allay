@@ -9,6 +9,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.player.Skin;
 
 /**
+ * Called when a player changes their skin.
+ *
  * @author daoge_cmd | Dhaiven
  */
 @Getter

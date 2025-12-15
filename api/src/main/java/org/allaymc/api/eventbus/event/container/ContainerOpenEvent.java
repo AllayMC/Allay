@@ -9,6 +9,8 @@ import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when a viewer opens a container.
+ *
  * @author daoge_cmd
  */
 @AllArgsConstructor

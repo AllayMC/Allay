@@ -10,6 +10,10 @@ import org.allaymc.api.message.MayContainTrKey;
 import org.allaymc.api.player.Player;
 
 /**
+ * Called when a player connects to the server.
+ * <p>
+ * This event is called before the player is logged in.
+ *
  * @author daoge_cmd
  */
 @AllArgsConstructor

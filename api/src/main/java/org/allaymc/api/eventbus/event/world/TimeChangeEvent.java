@@ -9,6 +9,8 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 
 /**
+ * Called when the world time changes.
+ *
  * @author Dhaiven
  */
 @Getter

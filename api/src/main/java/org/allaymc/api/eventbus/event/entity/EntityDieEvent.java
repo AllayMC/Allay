@@ -5,6 +5,8 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.Entity;
 
 /**
+ * Called when an entity dies.
+ *
  * @author daoge_cmd
  */
 @CallerThread(ThreadType.WORLD)

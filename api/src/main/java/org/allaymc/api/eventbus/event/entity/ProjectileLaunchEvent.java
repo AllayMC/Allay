@@ -9,6 +9,8 @@ import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when a projectile is launched by an entity.
+ *
  * @author daoge_cmd
  */
 @Getter

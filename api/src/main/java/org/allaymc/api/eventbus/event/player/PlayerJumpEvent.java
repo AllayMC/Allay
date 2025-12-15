@@ -5,6 +5,8 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
+ * Called when a player jumps.
+ *
  * @author daoge_cmd
  */
 @CallerThread(ThreadType.WORLD)

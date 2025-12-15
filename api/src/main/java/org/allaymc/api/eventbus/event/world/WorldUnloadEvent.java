@@ -7,10 +7,12 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.world.World;
 
 /**
+ * Called when a world is about to be unloaded.
+ *
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.SERVER)
 public class WorldUnloadEvent extends WorldEvent implements CancellableEvent {
     public WorldUnloadEvent(World world) {
         super(world);

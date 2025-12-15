@@ -8,6 +8,8 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.data.Weather;
 
 /**
+ * Called when the weather changes in a world.
+ *
  * @author daoge_cmd
  */
 @Getter

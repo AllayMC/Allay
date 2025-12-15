@@ -5,6 +5,8 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.plugin.Plugin;
 
 /**
+ * Called when a plugin is disabled.
+ *
  * @author IWareQ
  */
 @CallerThread(ThreadType.SERVER)

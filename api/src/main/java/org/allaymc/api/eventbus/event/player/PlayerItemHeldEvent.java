@@ -7,6 +7,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a player changes the item they are holding in their hand.
+ *
  * @author daoge_cmd
  */
 @Getter

@@ -6,6 +6,8 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
+ * Called when a player starts or stops sneaking.
+ *
  * @author daoge_cmd
  */
 @Getter

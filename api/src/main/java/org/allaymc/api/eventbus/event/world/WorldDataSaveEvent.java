@@ -5,9 +5,11 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.world.World;
 
 /**
+ * Called when the world data is saved.
+ *
  * @author Dhaiven
  */
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.WORLD)
 public class WorldDataSaveEvent extends WorldEvent {
     public WorldDataSaveEvent(World world) {
         super(world);

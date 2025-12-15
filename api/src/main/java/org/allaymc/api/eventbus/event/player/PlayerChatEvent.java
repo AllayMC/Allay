@@ -8,6 +8,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when a player sends a chat message.
+ *
  * @author daoge_cmd | Dhaiven
  */
 @Getter

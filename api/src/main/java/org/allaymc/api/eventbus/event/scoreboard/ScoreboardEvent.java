@@ -6,6 +6,8 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.scoreboard.Scoreboard;
 
 /**
+ * The base class for all scoreboard events.
+ *
  * @author daoge_cmd
  */
 @Getter

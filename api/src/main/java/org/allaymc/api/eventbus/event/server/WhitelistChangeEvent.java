@@ -7,11 +7,13 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when the whitelist is enabled or disabled.
+ *
  * @author Dhaiven
  */
 @AllArgsConstructor
 @Getter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.SERVER)
 public class WhitelistChangeEvent extends ServerEvent implements CancellableEvent {
     protected boolean enable;
 }

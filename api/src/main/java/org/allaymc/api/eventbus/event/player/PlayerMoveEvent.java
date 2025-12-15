@@ -9,6 +9,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.math.location.Location3dc;
 
 /**
+ * Called when a player moves from one location to another.
+ *
  * @author daoge_cmd | Dhaiven
  */
 @Getter

@@ -5,6 +5,8 @@ import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 
 /**
+ * The base class for all scoreboard line events.
+ *
  * @author daoge_cmd
  */
 @Getter

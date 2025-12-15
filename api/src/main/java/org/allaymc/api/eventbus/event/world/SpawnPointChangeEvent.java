@@ -9,6 +9,8 @@ import org.allaymc.api.world.World;
 import org.joml.Vector3ic;
 
 /**
+ * Called when the spawn point of a world changes.
+ *
  * @author Dhaiven
  */
 @Getter

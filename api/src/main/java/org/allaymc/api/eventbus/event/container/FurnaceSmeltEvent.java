@@ -9,13 +9,15 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a furnace finishes smelting an item.
+ *
  * @author daoge_cmd
  */
 @Getter
 @AllArgsConstructor
 @CallerThread(ThreadType.WORLD)
 public class FurnaceSmeltEvent extends ContainerEvent implements CancellableEvent {
-    protected BlockEntityFurnace blockEntityFurnace;
+    protected BlockEntityFurnace furnace;
     protected ItemStack ingredient;
     protected ItemStack output;
 }

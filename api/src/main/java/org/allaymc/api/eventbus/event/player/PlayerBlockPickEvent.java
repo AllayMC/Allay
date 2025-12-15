@@ -10,6 +10,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a player picks a block using the pick block key (middle mouse button).
+ *
  * @author daoge_cmd
  */
 @Getter

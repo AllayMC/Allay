@@ -9,12 +9,14 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a brewing stand consumes fuel (blaze powder).
+ *
  * @author IWareQ
  */
 @Getter
 @AllArgsConstructor
 @CallerThread(ThreadType.WORLD)
 public class BrewingStandConsumeFuelEvent extends ContainerEvent implements CancellableEvent {
-    protected BlockEntityBrewingStand blockEntityBrewingStand;
+    protected BlockEntityBrewingStand brewingStand;
     protected ItemStack fuel;
 }

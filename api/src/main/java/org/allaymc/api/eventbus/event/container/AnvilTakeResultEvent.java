@@ -11,6 +11,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a player takes the result item from an anvil.
+ *
  * @author IWareQ
  */
 @Getter

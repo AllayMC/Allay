@@ -8,6 +8,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when a player executes a command.
+ *
  * @author daoge_cmd
  */
 @Getter

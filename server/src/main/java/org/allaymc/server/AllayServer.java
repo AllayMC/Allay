@@ -234,13 +234,13 @@ public final class AllayServer implements Server {
 
     @SneakyThrows
     private void shutdownReally() {
+        new ServerStopEvent().call();
+
         // Disconnect all players
         this.playerManager.disconnectAllPlayers(TrKeys.ALLAY_SERVER_STOPPED);
         // Shutdown network server to prevent new clients connecting to the server
         this.playerManager.shutdownNetworkInterface();
         this.scheduler.shutdown();
-
-        new ServerStopEvent().call();
 
         // Disable all plugins
         this.pluginManager.disablePlugins();

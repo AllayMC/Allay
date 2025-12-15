@@ -8,6 +8,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when an entity's health changes.
+ *
  * @author daoge_cmd
  */
 @Getter

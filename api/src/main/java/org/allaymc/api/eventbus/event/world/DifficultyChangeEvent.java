@@ -9,6 +9,8 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.data.Difficulty;
 
 /**
+ * Called when the difficulty of a world changes.
+ *
  * @author daoge_cmd
  */
 @Getter

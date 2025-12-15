@@ -12,6 +12,8 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import java.util.List;
 
 /**
+ * Called when a player enchants an item using an enchanting table.
+ *
  * @author daoge_cmd
  */
 @Getter

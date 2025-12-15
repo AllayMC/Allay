@@ -11,6 +11,8 @@ import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 
 /**
+ * Called when an entity is teleported from one location to another.
+ *
  * @author daoge_cmd
  */
 @Getter

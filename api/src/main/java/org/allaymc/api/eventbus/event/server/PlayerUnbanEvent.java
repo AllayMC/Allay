@@ -7,11 +7,13 @@ import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when a player is unbanned from the server.
+ *
  * @author daoge_cmd
  */
 @AllArgsConstructor
 @Getter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.SERVER)
 public class PlayerUnbanEvent extends ServerEvent implements CancellableEvent {
     protected String uuidOrName;
 }

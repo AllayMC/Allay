@@ -8,6 +8,8 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 
 /**
+ * Called when a viewer closes a container.
+ *
  * @author daoge_cmd
  */
 @AllArgsConstructor

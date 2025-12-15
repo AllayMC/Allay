@@ -8,6 +8,8 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when an entity takes damage.
+ *
  * @author daoge_cmd
  */
 @Getter

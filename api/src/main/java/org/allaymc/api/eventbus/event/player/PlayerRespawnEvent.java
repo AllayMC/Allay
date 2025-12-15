@@ -8,6 +8,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3ic;
 
 /**
+ * Called when a player respawns after dying.
+ *
  * @author daoge_cmd
  */
 @Getter

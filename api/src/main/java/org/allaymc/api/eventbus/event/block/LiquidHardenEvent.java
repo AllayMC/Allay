@@ -2,6 +2,8 @@ package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.annotation.CallerThread;
+import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
@@ -13,6 +15,7 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 public class LiquidHardenEvent extends BlockEvent implements CancellableEvent {
     /**
      * Represent the liquid that cause the hardening.

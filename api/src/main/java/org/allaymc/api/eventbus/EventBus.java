@@ -6,6 +6,11 @@ import org.allaymc.api.eventbus.event.Event;
 import java.util.function.Consumer;
 
 /**
+ * The EventBus interface represents a system used for managing and dispatching events.
+ * It allows for the registration and unregistration of listeners, as well as the
+ * dispatching of events to appropriate listeners. This interface supports both synchronous
+ * and asynchronous event calling, along with prioritized event handling.
+ *
  * @author daoge_cmd
  */
 public interface EventBus {

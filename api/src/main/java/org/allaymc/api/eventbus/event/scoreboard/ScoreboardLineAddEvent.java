@@ -9,7 +9,7 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 /**
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.SERVER)
 public class ScoreboardLineAddEvent extends ScoreboardLineEvent implements CancellableEvent {
     public ScoreboardLineAddEvent(Scoreboard scoreboard, ScoreboardLine line) {
         super(scoreboard, line);

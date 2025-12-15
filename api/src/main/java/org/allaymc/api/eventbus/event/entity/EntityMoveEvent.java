@@ -8,6 +8,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3dc;
 
 /**
+ * Called when an entity moves from one location to another.
+ *
  * @author daoge_cmd
  */
 @Getter

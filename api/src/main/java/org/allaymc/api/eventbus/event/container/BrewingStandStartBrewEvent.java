@@ -9,13 +9,15 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityBrewingStand;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
+ * Called when a brewing stand starts brewing potions.
+ *
  * @author IWareQ
  */
 @Getter
 @AllArgsConstructor
 @CallerThread(ThreadType.WORLD)
 public class BrewingStandStartBrewEvent extends ContainerEvent implements CancellableEvent {
-    protected BlockEntityBrewingStand blockEntityBrewingStand;
+    protected BlockEntityBrewingStand brewingStand;
     @Setter
     protected int brewingTime;
 }

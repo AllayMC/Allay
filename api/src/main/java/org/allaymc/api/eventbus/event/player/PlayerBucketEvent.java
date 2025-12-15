@@ -7,6 +7,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.interfaces.ItemBucketStack;
 
 /**
+ * Represents an event related to a player using a bucket. This is the base class for bucket events.
+ *
  * @author daoge_cmd
  */
 @Getter

@@ -9,6 +9,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.interfaces.ItemFilledMapStack;
 
 /**
+ * Called when a player requests map data for a filled map item.
+ *
  * @author daoge_cmd
  */
 @Getter

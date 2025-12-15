@@ -8,6 +8,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Called when a player drops an item from their inventory.
+ *
  * @author daoge_cmd
  */
 @Getter

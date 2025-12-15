@@ -11,7 +11,7 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.SERVER)
 public class ScoreboardLineValueChangeEvent extends ScoreboardLineEvent implements CancellableEvent {
     protected int oldValue;
     protected int newValue;
