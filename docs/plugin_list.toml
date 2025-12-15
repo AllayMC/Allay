@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[AllayMap]
+description = "A minimalistic and lightweight world map viewer for Allay servers, using the vanilla map rendering style."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/AllayMap"
+
 [NoSpaceInName]
 description = "NoSpaceInName automatically detects spaces in player names upon login and replaces them with a configured character."
 authors = ["Miroshka"]
