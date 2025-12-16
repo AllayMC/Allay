@@ -34,6 +34,7 @@ public class EntityPaintingBaseComponentImpl extends EntityBaseComponentImpl imp
 
     public EntityPaintingBaseComponentImpl(EntityInitInfo info) {
         super(info);
+        this.paintingType = PaintingType.KEBAB;
     }
 
     @Override
