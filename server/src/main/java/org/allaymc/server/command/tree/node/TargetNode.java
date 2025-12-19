@@ -33,9 +33,9 @@ public class TargetNode extends BaseNode {
                 return false;
             }
         } else {
-            var player = Server.getInstance().getPlayerManager().getPlayerByName(token).getControlledEntity();
+            var player = Server.getInstance().getPlayerManager().getPlayerByName(token);
             if (player != null) {
-                entities = Lists.newArrayList(player);
+                entities = Lists.newArrayList(player.getControlledEntity());
             } else {
                 // Not finding a target isn't considered invalid; this has special uses in some commands (e.g., /testfor)
                 entities = Collections.emptyList();

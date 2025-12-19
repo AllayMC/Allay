@@ -17,6 +17,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - Updated feature version to 1.21.130.
+- Implemented `/tell` (aka. `/msg` and `/w`) command.
+- Implemented `/say` command.
 
 ### Changed
 
@@ -28,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Fixed the issue that some item class do not extend `ItemToolComponent` interface.
 - Fixed a rare NPE when saving the nbt of painting entity.
+- Fixed a NPE when using TargetNode (`.target()`) in command.
 
 # 0.10.1 (API 0.18.0) - 2025/12/10
 
