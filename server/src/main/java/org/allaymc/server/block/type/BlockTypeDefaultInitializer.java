@@ -4382,7 +4382,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LEAF_LITTER == null) {
             BlockTypes.LEAF_LITTER = AllayBlockType
-                    .builder(BlockLeafLitterBehaviorImpl.class)
+                    .builder(BlockPlantPileImpl.class)
                     .vanillaBlock(BlockId.LEAF_LITTER)
                     .setProperties(BlockPropertyTypes.GROWTH, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
@@ -5798,7 +5798,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PINK_PETALS == null) {
             BlockTypes.PINK_PETALS = AllayBlockType
-                    .builder(BlockPinkPetalsBehaviorImpl.class)
+                    .builder(BlockPlantPileImpl.class)
                     .vanillaBlock(BlockId.PINK_PETALS)
                     .setProperties(BlockPropertyTypes.GROWTH, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
@@ -8533,7 +8533,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WILDFLOWERS == null) {
             BlockTypes.WILDFLOWERS = AllayBlockType
-                    .builder(BlockWildflowersBehaviorImpl.class)
+                    .builder(BlockPlantPileImpl.class)
                     .vanillaBlock(BlockId.WILDFLOWERS)
                     .setProperties(BlockPropertyTypes.GROWTH, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();

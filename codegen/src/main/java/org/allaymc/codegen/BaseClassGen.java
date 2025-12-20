@@ -46,13 +46,13 @@ public abstract class BaseClassGen {
         Utils.writeFileWithCRLF(path, javaFile.toString());
     }
 
-    protected static void deleteOldFiles(Path dir, Set<String> generatedFiles) {
+    protected static void deleteOldFiles(Path dir, Set<String> generatedFiles, Set<String> ignoredFiles) {
         if (!Files.exists(dir)) {
             return;
         }
 
         try (var files = Files.list(dir)) {
-            files.filter(path -> Files.isRegularFile(path) && !BlockClassGen.IGNORED_FILES.contains(path.getFileName().toString())).forEach(file -> {
+            files.filter(path -> Files.isRegularFile(path) && !ignoredFiles.contains(path.getFileName().toString())).forEach(file -> {
                 try {
                     if (!generatedFiles.contains(file.getFileName().toString())) {
                         System.out.println("Deleting unused file: " + file.getFileName());

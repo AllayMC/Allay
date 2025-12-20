@@ -92,8 +92,8 @@ public class BlockClassGen extends BaseClassGen {
             addDefaultBlockTypeInitializer(id, implFullName);
         }
 
-        deleteOldFiles(interfaceDir, generatedFiles);
-        deleteOldFiles(implDir, generatedFiles);
+        deleteOldFiles(interfaceDir, generatedFiles, IGNORED_FILES);
+        deleteOldFiles(implDir, generatedFiles, IGNORED_FILES);
 
         generateDefaultBlockTypeInitializer();
 
@@ -275,6 +275,6 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*CopperChainBehavior"), "BlockCopperChainBehavior");
         registerMergedBlock(Pattern.compile(".*(Dandelion|Poppy|BlueOrchid|Allium|AzureBluet|RedTulip|OrangeTulip|WhiteTulip|PinkTulip|OxeyeDaisy|Cornflower|LilyOfTheValley|WitherRose|Torchflower|ClosedEyeblossom|OpenEyeblossom)Behavior"), "BlockSmallFlower");
         registerMergedBlock(Pattern.compile(".*(Sunflower|Lilac|RoseBush|Peony|PitcherPlant)Behavior"), "BlockBigFlower");
-        // TODO: petals
+        registerMergedBlock(Pattern.compile(".*(LeafLitter|PinkPetals|Wildflowers)Behavior"), "BlockPlantPile");
     }
 }

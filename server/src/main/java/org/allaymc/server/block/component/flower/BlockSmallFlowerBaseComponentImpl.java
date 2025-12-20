@@ -4,12 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
-import org.allaymc.server.item.data.ItemId;
-
-import java.util.Set;
 
 import static org.allaymc.api.block.type.BlockTypes.*;
 
@@ -18,11 +13,8 @@ import static org.allaymc.api.block.type.BlockTypes.*;
  */
 public class BlockSmallFlowerBaseComponentImpl extends BlockBaseComponentImpl {
 
-    protected final ItemId flowerItemId;
-
-    public BlockSmallFlowerBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId flowerItemId) {
+    public BlockSmallFlowerBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
-        this.flowerItemId = flowerItemId;
     }
 
     @Override
@@ -44,10 +36,5 @@ public class BlockSmallFlowerBaseComponentImpl extends BlockBaseComponentImpl {
                blockType == MUD ||
                blockType == MUDDY_MANGROVE_ROOTS ||
                blockType == MOSS_BLOCK;
-    }
-
-    @Override
-    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
-        return Set.of(flowerItemId.getItemType().createItemStack());
     }
 }

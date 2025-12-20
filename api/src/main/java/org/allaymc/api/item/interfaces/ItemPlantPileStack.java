@@ -2,5 +2,5 @@ package org.allaymc.api.item.interfaces;
 
 import org.allaymc.api.item.ItemStack;
 
-public interface ItemWildflowersStack extends ItemStack {
+public interface ItemPlantPileStack extends ItemStack {
 }

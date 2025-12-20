@@ -1973,7 +1973,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemLeadStack> LEAD;
 
-    public static ItemType<ItemLeafLitterStack> LEAF_LITTER;
+    public static ItemType<ItemPlantPileStack> LEAF_LITTER;
 
     public static ItemType<ItemLeatherStack> LEATHER;
 
@@ -2635,7 +2635,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemHarnessStack> PINK_HARNESS;
 
-    public static ItemType<ItemPinkPetalsStack> PINK_PETALS;
+    public static ItemType<ItemPlantPileStack> PINK_PETALS;
 
     public static ItemType<ItemShulkerBoxStack> PINK_SHULKER_BOX;
 
@@ -3727,7 +3727,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemWildArmorTrimSmithingTemplateStack> WILD_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static ItemType<ItemWildflowersStack> WILDFLOWERS;
+    public static ItemType<ItemPlantPileStack> WILDFLOWERS;
 
     public static ItemType<ItemWindChargeStack> WIND_CHARGE;
 

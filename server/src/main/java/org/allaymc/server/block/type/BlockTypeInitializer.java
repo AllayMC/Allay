@@ -1937,46 +1937,61 @@ public final class BlockTypeInitializer {
     }
 
     public static void initSmallFlowers() {
-        BlockTypes.DANDELION = buildSmallFlower(BlockId.DANDELION, ItemId.DANDELION);
-        BlockTypes.POPPY = buildSmallFlower(BlockId.POPPY, ItemId.POPPY);
-        BlockTypes.BLUE_ORCHID = buildSmallFlower(BlockId.BLUE_ORCHID, ItemId.BLUE_ORCHID);
-        BlockTypes.ALLIUM = buildSmallFlower(BlockId.ALLIUM, ItemId.ALLIUM);
-        BlockTypes.AZURE_BLUET = buildSmallFlower(BlockId.AZURE_BLUET, ItemId.AZURE_BLUET);
-        BlockTypes.RED_TULIP = buildSmallFlower(BlockId.RED_TULIP, ItemId.RED_TULIP);
-        BlockTypes.ORANGE_TULIP = buildSmallFlower(BlockId.ORANGE_TULIP, ItemId.ORANGE_TULIP);
-        BlockTypes.WHITE_TULIP = buildSmallFlower(BlockId.WHITE_TULIP, ItemId.WHITE_TULIP);
-        BlockTypes.PINK_TULIP = buildSmallFlower(BlockId.PINK_TULIP, ItemId.PINK_TULIP);
-        BlockTypes.OXEYE_DAISY = buildSmallFlower(BlockId.OXEYE_DAISY, ItemId.OXEYE_DAISY);
-        BlockTypes.CORNFLOWER = buildSmallFlower(BlockId.CORNFLOWER, ItemId.CORNFLOWER);
-        BlockTypes.LILY_OF_THE_VALLEY = buildSmallFlower(BlockId.LILY_OF_THE_VALLEY, ItemId.LILY_OF_THE_VALLEY);
-        BlockTypes.WITHER_ROSE = buildSmallFlower(BlockId.WITHER_ROSE, ItemId.WITHER_ROSE);
-        BlockTypes.TORCHFLOWER = buildSmallFlower(BlockId.TORCHFLOWER, ItemId.TORCHFLOWER);
-        BlockTypes.CLOSED_EYEBLOSSOM = buildSmallFlower(BlockId.CLOSED_EYEBLOSSOM, ItemId.CLOSED_EYEBLOSSOM);
-        BlockTypes.OPEN_EYEBLOSSOM = buildSmallFlower(BlockId.OPEN_EYEBLOSSOM, ItemId.OPEN_EYEBLOSSOM);
+        BlockTypes.DANDELION = buildSmallFlower(BlockId.DANDELION);
+        BlockTypes.POPPY = buildSmallFlower(BlockId.POPPY);
+        BlockTypes.BLUE_ORCHID = buildSmallFlower(BlockId.BLUE_ORCHID);
+        BlockTypes.ALLIUM = buildSmallFlower(BlockId.ALLIUM);
+        BlockTypes.AZURE_BLUET = buildSmallFlower(BlockId.AZURE_BLUET);
+        BlockTypes.RED_TULIP = buildSmallFlower(BlockId.RED_TULIP);
+        BlockTypes.ORANGE_TULIP = buildSmallFlower(BlockId.ORANGE_TULIP);
+        BlockTypes.WHITE_TULIP = buildSmallFlower(BlockId.WHITE_TULIP);
+        BlockTypes.PINK_TULIP = buildSmallFlower(BlockId.PINK_TULIP);
+        BlockTypes.OXEYE_DAISY = buildSmallFlower(BlockId.OXEYE_DAISY);
+        BlockTypes.CORNFLOWER = buildSmallFlower(BlockId.CORNFLOWER);
+        BlockTypes.LILY_OF_THE_VALLEY = buildSmallFlower(BlockId.LILY_OF_THE_VALLEY);
+        BlockTypes.WITHER_ROSE = buildSmallFlower(BlockId.WITHER_ROSE);
+        BlockTypes.TORCHFLOWER = buildSmallFlower(BlockId.TORCHFLOWER);
+        BlockTypes.CLOSED_EYEBLOSSOM = buildSmallFlower(BlockId.CLOSED_EYEBLOSSOM);
+        BlockTypes.OPEN_EYEBLOSSOM = buildSmallFlower(BlockId.OPEN_EYEBLOSSOM);
     }
 
-    private static BlockType<BlockSmallFlower> buildSmallFlower(BlockId blockId, ItemId itemId) {
+    private static BlockType<BlockSmallFlower> buildSmallFlower(BlockId blockId) {
         return AllayBlockType
                 .builder(BlockSmallFlowerImpl.class)
                 .vanillaBlock(blockId)
-                .setBaseComponentSupplier(blockType -> new BlockSmallFlowerBaseComponentImpl(blockType, itemId))
+                .setBaseComponentSupplier(BlockSmallFlowerBaseComponentImpl::new)
                 .build();
     }
 
     public static void initBigFlowers() {
-        BlockTypes.SUNFLOWER = buildBigFlower(BlockId.SUNFLOWER, ItemId.SUNFLOWER);
-        BlockTypes.LILAC = buildBigFlower(BlockId.LILAC, ItemId.LILAC);
-        BlockTypes.ROSE_BUSH = buildBigFlower(BlockId.ROSE_BUSH, ItemId.ROSE_BUSH);
-        BlockTypes.PEONY = buildBigFlower(BlockId.PEONY, ItemId.PEONY);
-        BlockTypes.PITCHER_PLANT = buildBigFlower(BlockId.PITCHER_PLANT, ItemId.PITCHER_PLANT);
+        BlockTypes.SUNFLOWER = buildBigFlower(BlockId.SUNFLOWER);
+        BlockTypes.LILAC = buildBigFlower(BlockId.LILAC);
+        BlockTypes.ROSE_BUSH = buildBigFlower(BlockId.ROSE_BUSH);
+        BlockTypes.PEONY = buildBigFlower(BlockId.PEONY);
+        BlockTypes.PITCHER_PLANT = buildBigFlower(BlockId.PITCHER_PLANT);
     }
 
-    private static BlockType<BlockBigFlower> buildBigFlower(BlockId blockId, ItemId itemId) {
+    private static BlockType<BlockBigFlower> buildBigFlower(BlockId blockId) {
         return AllayBlockType
                 .builder(BlockBigFlowerImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBaseComponentSupplier(blockType -> new BlockBigFlowerBaseComponentImpl(blockType, itemId))
+                .setBaseComponentSupplier(BlockBigFlowerBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initPlantPiles() {
+        BlockTypes.LEAF_LITTER = buildPlantPile(BlockId.LEAF_LITTER);
+        BlockTypes.PINK_PETALS = buildPlantPile(BlockId.PINK_PETALS);
+        BlockTypes.WILDFLOWERS = buildPlantPile(BlockId.WILDFLOWERS);
+    }
+
+    private static BlockType<BlockPlantPile> buildPlantPile(BlockId blockId) {
+        return AllayBlockType
+                .builder(BlockPlantPileImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.GROWTH, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockPlantPileBaseComponentImpl::new)
                 .build();
     }
 }

@@ -9,7 +9,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.item.data.ItemId;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
@@ -19,8 +18,8 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK
  */
 public class BlockBigFlowerBaseComponentImpl extends BlockSmallFlowerBaseComponentImpl {
 
-    public BlockBigFlowerBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId flowerItemId) {
-        super(blockType, flowerItemId);
+    public BlockBigFlowerBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+        super(blockType);
     }
 
     @Override

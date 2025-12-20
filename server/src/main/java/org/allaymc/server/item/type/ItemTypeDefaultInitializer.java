@@ -5912,7 +5912,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LEAF_LITTER == null) {
             ItemTypes.LEAF_LITTER = AllayItemType
-                    .builder(ItemLeafLitterStackImpl.class)
+                    .builder(ItemPlantPileStackImpl.class)
                     .vanillaItem(ItemId.LEAF_LITTER)
                     .build();
         }
@@ -7898,7 +7898,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PINK_PETALS == null) {
             ItemTypes.PINK_PETALS = AllayItemType
-                    .builder(ItemPinkPetalsStackImpl.class)
+                    .builder(ItemPlantPileStackImpl.class)
                     .vanillaItem(ItemId.PINK_PETALS)
                     .build();
         }
@@ -11174,7 +11174,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WILDFLOWERS == null) {
             ItemTypes.WILDFLOWERS = AllayItemType
-                    .builder(ItemWildflowersStackImpl.class)
+                    .builder(ItemPlantPileStackImpl.class)
                     .vanillaItem(ItemId.WILDFLOWERS)
                     .build();
         }

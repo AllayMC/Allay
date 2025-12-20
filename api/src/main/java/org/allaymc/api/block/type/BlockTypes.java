@@ -2526,7 +2526,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#GROWTH}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockLeafLitterBehavior> LEAF_LITTER;
+    public static BlockType<BlockPlantPile> LEAF_LITTER;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
@@ -3385,7 +3385,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#GROWTH}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockPinkPetalsBehavior> PINK_PETALS;
+    public static BlockType<BlockPlantPile> PINK_PETALS;
 
     public static BlockType<BlockShulkerBoxBehavior> PINK_SHULKER_BOX;
 
@@ -5220,7 +5220,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#GROWTH}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockWildflowersBehavior> WILDFLOWERS;
+    public static BlockType<BlockPlantPile> WILDFLOWERS;
 
     public static BlockType<BlockSmallFlower> WITHER_ROSE;
 

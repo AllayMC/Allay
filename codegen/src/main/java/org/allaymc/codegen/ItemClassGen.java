@@ -83,8 +83,8 @@ public class ItemClassGen extends BaseClassGen {
             addDefaultItemTypeInitializer(id, implFullName);
         }
 
-        deleteOldFiles(interfaceDir, generatedFiles);
-        deleteOldFiles(implDir, generatedFiles);
+        deleteOldFiles(interfaceDir, generatedFiles, IGNORED_FILES);
+        deleteOldFiles(implDir, generatedFiles, IGNORED_FILES);
 
         generateDefaultItemTypeInitializer();
 
@@ -236,6 +236,6 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*SpearStack"), "ItemSpearStack");
         registerMergedItem(Pattern.compile(".*(Dandelion|Poppy|BlueOrchid|Allium|AzureBluet|RedTulip|OrangeTulip|WhiteTulip|PinkTulip|OxeyeDaisy|Cornflower|LilyOfTheValley|WitherRose|Torchflower|ClosedEyeblossom|OpenEyeblossom)Stack"), "ItemSmallFlowerStack");
         registerMergedItem(Pattern.compile(".*(Sunflower|Lilac|RoseBush|Peony|PitcherPlant)Stack"), "ItemBigFlowerStack");
-        // TODO: petals
+        registerMergedItem(Pattern.compile(".*(LeafLitter|PinkPetals|Wildflowers)Stack"), "ItemPlantPileStack");
     }
 }
