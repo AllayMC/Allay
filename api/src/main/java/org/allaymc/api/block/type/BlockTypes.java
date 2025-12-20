@@ -113,7 +113,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockAirBehavior> AIR;
 
-    public static BlockType<BlockAlliumBehavior> ALLIUM;
+    public static BlockType<BlockSmallFlower> ALLIUM;
 
     public static BlockType<BlockAllowBehavior> ALLOW;
 
@@ -172,7 +172,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockLeavesBehavior> AZALEA_LEAVES_FLOWERED;
 
-    public static BlockType<BlockAzureBluetBehavior> AZURE_BLUET;
+    public static BlockType<BlockSmallFlower> AZURE_BLUET;
 
     /**
      * {@link BlockPropertyTypes#AGE_BIT}
@@ -532,7 +532,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockIceBehavior> BLUE_ICE;
 
-    public static BlockType<BlockBlueOrchidBehavior> BLUE_ORCHID;
+    public static BlockType<BlockSmallFlower> BLUE_ORCHID;
 
     public static BlockType<BlockShulkerBoxBehavior> BLUE_SHULKER_BOX;
 
@@ -907,7 +907,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockClientRequestPlaceholderBlockBehavior> CLIENT_REQUEST_PLACEHOLDER_BLOCK;
 
-    public static BlockType<BlockClosedEyeblossomBehavior> CLOSED_EYEBLOSSOM;
+    public static BlockType<BlockSmallFlower> CLOSED_EYEBLOSSOM;
 
     public static BlockType<BlockCoalBlockBehavior> COAL_BLOCK;
 
@@ -1061,7 +1061,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockCopperTrapdoorBehavior> COPPER_TRAPDOOR;
 
-    public static BlockType<BlockCornflowerBehavior> CORNFLOWER;
+    public static BlockType<BlockSmallFlower> CORNFLOWER;
 
     public static BlockType<BlockBricksBehavior> CRACKED_DEEPSLATE_BRICKS;
 
@@ -1264,7 +1264,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockAnvilBehavior> DAMAGED_ANVIL;
 
-    public static BlockType<BlockDandelionBehavior> DANDELION;
+    public static BlockType<BlockSmallFlower> DANDELION;
 
     /**
      * {@link BlockPropertyTypes#BUTTON_PRESSED_BIT}
@@ -2645,9 +2645,9 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockLilacBehavior> LILAC;
+    public static BlockType<BlockBigFlower> LILAC;
 
-    public static BlockType<BlockLilyOfTheValleyBehavior> LILY_OF_THE_VALLEY;
+    public static BlockType<BlockSmallFlower> LILY_OF_THE_VALLEY;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -3104,7 +3104,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockOchreFroglightBehavior> OCHRE_FROGLIGHT;
 
-    public static BlockType<BlockOpenEyeblossomBehavior> OPEN_EYEBLOSSOM;
+    public static BlockType<BlockSmallFlower> OPEN_EYEBLOSSOM;
 
     /**
      * {@link BlockPropertyTypes#CANDLES}
@@ -3136,11 +3136,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> ORANGE_TERRACOTTA;
 
-    public static BlockType<BlockOrangeTulipBehavior> ORANGE_TULIP;
+    public static BlockType<BlockSmallFlower> ORANGE_TULIP;
 
     public static BlockType<BlockWoolBehavior> ORANGE_WOOL;
 
-    public static BlockType<BlockOxeyeDaisyBehavior> OXEYE_DAISY;
+    public static BlockType<BlockSmallFlower> OXEYE_DAISY;
 
     public static BlockType<BlockCopperBehavior> OXIDIZED_CHISELED_COPPER;
 
@@ -3342,7 +3342,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockPeonyBehavior> PEONY;
+    public static BlockType<BlockBigFlower> PEONY;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_VERTICAL_HALF}
@@ -3395,7 +3395,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> PINK_TERRACOTTA;
 
-    public static BlockType<BlockPinkTulipBehavior> PINK_TULIP;
+    public static BlockType<BlockSmallFlower> PINK_TULIP;
 
     public static BlockType<BlockWoolBehavior> PINK_WOOL;
 
@@ -3418,7 +3418,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockPitcherPlantBehavior> PITCHER_PLANT;
+    public static BlockType<BlockBigFlower> PITCHER_PLANT;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}
@@ -3611,7 +3611,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWallBehavior> POLISHED_TUFF_WALL;
 
-    public static BlockType<BlockPoppyBehavior> POPPY;
+    public static BlockType<BlockSmallFlower> POPPY;
 
     /**
      * {@link BlockPropertyTypes#PORTAL_AXIS}
@@ -3886,7 +3886,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> RED_TERRACOTTA;
 
-    public static BlockType<BlockRedTulipBehavior> RED_TULIP;
+    public static BlockType<BlockSmallFlower> RED_TULIP;
 
     public static BlockType<BlockWoolBehavior> RED_WOOL;
 
@@ -3963,7 +3963,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockRoseBushBehavior> ROSE_BUSH;
+    public static BlockType<BlockBigFlower> ROSE_BUSH;
 
     public static BlockType<BlockSandBehavior> SAND;
 
@@ -4482,7 +4482,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#UPPER_BLOCK_BIT}
      */
-    public static BlockType<BlockSunflowerBehavior> SUNFLOWER;
+    public static BlockType<BlockBigFlower> SUNFLOWER;
 
     /**
      * {@link BlockPropertyTypes#BRUSHED_PROGRESS}
@@ -4522,12 +4522,12 @@ public final class BlockTypes {
      */
     public static BlockType<BlockTorchBehavior> TORCH;
 
-    public static BlockType<BlockTorchBehavior> TORCHFLOWER;
+    public static BlockType<BlockSmallFlower> TORCHFLOWER;
 
     /**
      * {@link BlockPropertyTypes#GROWTH}
      */
-    public static BlockType<BlockTorchBehavior> TORCHFLOWER_CROP;
+    public static BlockType<BlockTorchflowerCropBehavior> TORCHFLOWER_CROP;
 
     /**
      * {@link BlockPropertyTypes#DIRECTION_4}
@@ -5212,7 +5212,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> WHITE_TERRACOTTA;
 
-    public static BlockType<BlockWhiteTulipBehavior> WHITE_TULIP;
+    public static BlockType<BlockSmallFlower> WHITE_TULIP;
 
     public static BlockType<BlockWoolBehavior> WHITE_WOOL;
 
@@ -5222,7 +5222,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockWildflowersBehavior> WILDFLOWERS;
 
-    public static BlockType<BlockWitherRoseBehavior> WITHER_ROSE;
+    public static BlockType<BlockSmallFlower> WITHER_ROSE;
 
     /**
      * {@link BlockPropertyTypes#FACING_DIRECTION}

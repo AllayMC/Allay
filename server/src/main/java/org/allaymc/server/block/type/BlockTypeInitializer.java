@@ -24,6 +24,8 @@ import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockAnvilFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockConcretePowderFallableComponentImpl;
 import org.allaymc.server.block.component.fallable.BlockFallableComponentImpl;
+import org.allaymc.server.block.component.flower.BlockBigFlowerBaseComponentImpl;
+import org.allaymc.server.block.component.flower.BlockSmallFlowerBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockDryGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
@@ -1931,6 +1933,50 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockHeadBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.HEAD)
+                .build();
+    }
+
+    public static void initSmallFlowers() {
+        BlockTypes.DANDELION = buildSmallFlower(BlockId.DANDELION, ItemId.DANDELION);
+        BlockTypes.POPPY = buildSmallFlower(BlockId.POPPY, ItemId.POPPY);
+        BlockTypes.BLUE_ORCHID = buildSmallFlower(BlockId.BLUE_ORCHID, ItemId.BLUE_ORCHID);
+        BlockTypes.ALLIUM = buildSmallFlower(BlockId.ALLIUM, ItemId.ALLIUM);
+        BlockTypes.AZURE_BLUET = buildSmallFlower(BlockId.AZURE_BLUET, ItemId.AZURE_BLUET);
+        BlockTypes.RED_TULIP = buildSmallFlower(BlockId.RED_TULIP, ItemId.RED_TULIP);
+        BlockTypes.ORANGE_TULIP = buildSmallFlower(BlockId.ORANGE_TULIP, ItemId.ORANGE_TULIP);
+        BlockTypes.WHITE_TULIP = buildSmallFlower(BlockId.WHITE_TULIP, ItemId.WHITE_TULIP);
+        BlockTypes.PINK_TULIP = buildSmallFlower(BlockId.PINK_TULIP, ItemId.PINK_TULIP);
+        BlockTypes.OXEYE_DAISY = buildSmallFlower(BlockId.OXEYE_DAISY, ItemId.OXEYE_DAISY);
+        BlockTypes.CORNFLOWER = buildSmallFlower(BlockId.CORNFLOWER, ItemId.CORNFLOWER);
+        BlockTypes.LILY_OF_THE_VALLEY = buildSmallFlower(BlockId.LILY_OF_THE_VALLEY, ItemId.LILY_OF_THE_VALLEY);
+        BlockTypes.WITHER_ROSE = buildSmallFlower(BlockId.WITHER_ROSE, ItemId.WITHER_ROSE);
+        BlockTypes.TORCHFLOWER = buildSmallFlower(BlockId.TORCHFLOWER, ItemId.TORCHFLOWER);
+        BlockTypes.CLOSED_EYEBLOSSOM = buildSmallFlower(BlockId.CLOSED_EYEBLOSSOM, ItemId.CLOSED_EYEBLOSSOM);
+        BlockTypes.OPEN_EYEBLOSSOM = buildSmallFlower(BlockId.OPEN_EYEBLOSSOM, ItemId.OPEN_EYEBLOSSOM);
+    }
+
+    private static BlockType<BlockSmallFlower> buildSmallFlower(BlockId blockId, ItemId itemId) {
+        return AllayBlockType
+                .builder(BlockSmallFlowerImpl.class)
+                .vanillaBlock(blockId)
+                .setBaseComponentSupplier(blockType -> new BlockSmallFlowerBaseComponentImpl(blockType, itemId))
+                .build();
+    }
+
+    public static void initBigFlowers() {
+        BlockTypes.SUNFLOWER = buildBigFlower(BlockId.SUNFLOWER, ItemId.SUNFLOWER);
+        BlockTypes.LILAC = buildBigFlower(BlockId.LILAC, ItemId.LILAC);
+        BlockTypes.ROSE_BUSH = buildBigFlower(BlockId.ROSE_BUSH, ItemId.ROSE_BUSH);
+        BlockTypes.PEONY = buildBigFlower(BlockId.PEONY, ItemId.PEONY);
+        BlockTypes.PITCHER_PLANT = buildBigFlower(BlockId.PITCHER_PLANT, ItemId.PITCHER_PLANT);
+    }
+
+    private static BlockType<BlockBigFlower> buildBigFlower(BlockId blockId, ItemId itemId) {
+        return AllayBlockType
+                .builder(BlockBigFlowerImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockBigFlowerBaseComponentImpl(blockType, itemId))
                 .build();
     }
 }

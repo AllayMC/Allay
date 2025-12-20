@@ -158,7 +158,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ALLIUM == null) {
             ItemTypes.ALLIUM = AllayItemType
-                    .builder(ItemAlliumStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.ALLIUM)
                     .build();
         }
@@ -308,7 +308,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.AZURE_BLUET == null) {
             ItemTypes.AZURE_BLUET = AllayItemType
-                    .builder(ItemAzureBluetStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.AZURE_BLUET)
                     .build();
         }
@@ -920,7 +920,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLUE_ORCHID == null) {
             ItemTypes.BLUE_ORCHID = AllayItemType
-                    .builder(ItemBlueOrchidStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.BLUE_ORCHID)
                     .build();
         }
@@ -1760,7 +1760,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CLOSED_EYEBLOSSOM == null) {
             ItemTypes.CLOSED_EYEBLOSSOM = AllayItemType
-                    .builder(ItemClosedEyeblossomStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.CLOSED_EYEBLOSSOM)
                     .build();
         }
@@ -2210,7 +2210,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CORNFLOWER == null) {
             ItemTypes.CORNFLOWER = AllayItemType
-                    .builder(ItemCornflowerStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.CORNFLOWER)
                     .build();
         }
@@ -2570,7 +2570,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DANDELION == null) {
             ItemTypes.DANDELION = AllayItemType
-                    .builder(ItemDandelionStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.DANDELION)
                     .build();
         }
@@ -6254,13 +6254,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LILAC == null) {
             ItemTypes.LILAC = AllayItemType
-                    .builder(ItemLilacStackImpl.class)
+                    .builder(ItemBigFlowerStackImpl.class)
                     .vanillaItem(ItemId.LILAC)
                     .build();
         }
         if (ItemTypes.LILY_OF_THE_VALLEY == null) {
             ItemTypes.LILY_OF_THE_VALLEY = AllayItemType
-                    .builder(ItemLilyOfTheValleyStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.LILY_OF_THE_VALLEY)
                     .build();
         }
@@ -7388,7 +7388,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.OPEN_EYEBLOSSOM == null) {
             ItemTypes.OPEN_EYEBLOSSOM = AllayItemType
-                    .builder(ItemOpenEyeblossomStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.OPEN_EYEBLOSSOM)
                     .build();
         }
@@ -7472,7 +7472,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ORANGE_TULIP == null) {
             ItemTypes.ORANGE_TULIP = AllayItemType
-                    .builder(ItemOrangeTulipStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.ORANGE_TULIP)
                     .build();
         }
@@ -7484,7 +7484,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.OXEYE_DAISY == null) {
             ItemTypes.OXEYE_DAISY = AllayItemType
-                    .builder(ItemOxeyeDaisyStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.OXEYE_DAISY)
                     .build();
         }
@@ -7778,7 +7778,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PEONY == null) {
             ItemTypes.PEONY = AllayItemType
-                    .builder(ItemPeonyStackImpl.class)
+                    .builder(ItemBigFlowerStackImpl.class)
                     .vanillaItem(ItemId.PEONY)
                     .build();
         }
@@ -7928,7 +7928,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PINK_TULIP == null) {
             ItemTypes.PINK_TULIP = AllayItemType
-                    .builder(ItemPinkTulipStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.PINK_TULIP)
                     .build();
         }
@@ -7958,7 +7958,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PITCHER_PLANT == null) {
             ItemTypes.PITCHER_PLANT = AllayItemType
-                    .builder(ItemPitcherPlantStackImpl.class)
+                    .builder(ItemBigFlowerStackImpl.class)
                     .vanillaItem(ItemId.PITCHER_PLANT)
                     .build();
         }
@@ -8228,7 +8228,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POPPY == null) {
             ItemTypes.POPPY = AllayItemType
-                    .builder(ItemPoppyStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.POPPY)
                     .build();
         }
@@ -8822,7 +8822,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.RED_TULIP == null) {
             ItemTypes.RED_TULIP = AllayItemType
-                    .builder(ItemRedTulipStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.RED_TULIP)
                     .build();
         }
@@ -8954,7 +8954,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ROSE_BUSH == null) {
             ItemTypes.ROSE_BUSH = AllayItemType
-                    .builder(ItemRoseBushStackImpl.class)
+                    .builder(ItemBigFlowerStackImpl.class)
                     .vanillaItem(ItemId.ROSE_BUSH)
                     .build();
         }
@@ -9992,7 +9992,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SUNFLOWER == null) {
             ItemTypes.SUNFLOWER = AllayItemType
-                    .builder(ItemSunflowerStackImpl.class)
+                    .builder(ItemBigFlowerStackImpl.class)
                     .vanillaItem(ItemId.SUNFLOWER)
                     .build();
         }
@@ -10094,19 +10094,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.TORCHFLOWER == null) {
             ItemTypes.TORCHFLOWER = AllayItemType
-                    .builder(ItemTorchflowerStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.TORCHFLOWER)
                     .build();
         }
         if (ItemTypes.TORCHFLOWER_CROP == null) {
             ItemTypes.TORCHFLOWER_CROP = AllayItemType
-                    .builder(ItemTorchflowerStackImpl.class)
+                    .builder(ItemTorchflowerCropStackImpl.class)
                     .vanillaItem(ItemId.TORCHFLOWER_CROP)
                     .build();
         }
         if (ItemTypes.TORCHFLOWER_SEEDS == null) {
             ItemTypes.TORCHFLOWER_SEEDS = AllayItemType
-                    .builder(ItemTorchflowerStackImpl.class)
+                    .builder(ItemTorchflowerSeedsStackImpl.class)
                     .vanillaItem(ItemId.TORCHFLOWER_SEEDS)
                     .build();
         }
@@ -11156,7 +11156,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WHITE_TULIP == null) {
             ItemTypes.WHITE_TULIP = AllayItemType
-                    .builder(ItemWhiteTulipStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.WHITE_TULIP)
                     .build();
         }
@@ -11192,7 +11192,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WITHER_ROSE == null) {
             ItemTypes.WITHER_ROSE = AllayItemType
-                    .builder(ItemWitherRoseStackImpl.class)
+                    .builder(ItemSmallFlowerStackImpl.class)
                     .vanillaItem(ItemId.WITHER_ROSE)
                     .build();
         }

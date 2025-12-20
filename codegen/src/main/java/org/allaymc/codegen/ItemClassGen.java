@@ -7,8 +7,10 @@ import org.allaymc.dependence.ItemId;
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -19,6 +21,8 @@ public class ItemClassGen extends BaseClassGen {
     public static final MethodSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER =
             MethodSpec.methodBuilder("init")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+    public static final Set<String> IGNORED_FILES = Set.of("ItemStackImpl.java", "ItemBlockImpl.java", "package-info.java");
+
     public static Map<Pattern, String> MERGED_ITEMS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
@@ -38,6 +42,8 @@ public class ItemClassGen extends BaseClassGen {
             Files.createDirectories(implDir);
         }
 
+        Set<String> generatedFiles = new HashSet<>();
+
         var typesClass = TypeSpec
                 .classBuilder(TypeNames.ITEM_TYPES)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -53,6 +59,7 @@ public class ItemClassGen extends BaseClassGen {
             var interfaceSimpleName = generateClassSimpleName(id);
             var interfaceFullName = generateClassFullName(id);
             var interfacePath = interfaceDir.resolve(interfaceSimpleName + ".java");
+            generatedFiles.add(interfacePath.getFileName().toString());
             if (!Files.exists(interfacePath)) {
                 System.out.println("Generating " + interfaceSimpleName + "...");
                 if (!Files.exists(interfaceDir)) {
@@ -64,6 +71,7 @@ public class ItemClassGen extends BaseClassGen {
             var implSimpleName = generateClassSimpleName(id) + "Impl";
             var implFullName = ClassName.get("org.allaymc.server.item.impl", implSimpleName);
             var implPath = implDir.resolve(implSimpleName + ".java");
+            generatedFiles.add(implPath.getFileName().toString());
             if (!Files.exists(implPath)) {
                 System.out.println("Generating " + implSimpleName + "...");
                 if (!Files.exists(implDir)) {
@@ -74,6 +82,9 @@ public class ItemClassGen extends BaseClassGen {
 
             addDefaultItemTypeInitializer(id, implFullName);
         }
+
+        deleteOldFiles(interfaceDir, generatedFiles);
+        deleteOldFiles(implDir, generatedFiles);
 
         generateDefaultItemTypeInitializer();
 
@@ -202,8 +213,7 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*GlassPaneStack"), "ItemGlassPaneStack");
         registerMergedItem(Pattern.compile(".*SandstoneStack"), "ItemSandstoneStack");
         registerMergedItem(Pattern.compile(".*SandStack"), "ItemSandStack");
-        registerMergedItem(Pattern.compile(".*Torchflower.*Stack"), "ItemTorchflowerStack");
-        registerMergedItem(Pattern.compile(".*Torch.*Stack"), "ItemTorchStack");
+        registerMergedItem(Pattern.compile(".*Torch(?!flower).*Stack"), "ItemTorchStack");
         registerMergedItem(Pattern.compile(".*LightBlock.*Stack"), "ItemLightBlockStack");
         registerMergedItem(Pattern.compile(".*DirtStack"), "ItemDirtStack");
         registerMergedItem(Pattern.compile(".*AnvilStack"), "ItemAnvilStack");
@@ -224,5 +234,8 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*SwordStack"), "ItemSwordStack");
         registerMergedItem(Pattern.compile(".*NautilusArmorStack"), "ItemNautilusArmorStack");
         registerMergedItem(Pattern.compile(".*SpearStack"), "ItemSpearStack");
+        registerMergedItem(Pattern.compile(".*(Dandelion|Poppy|BlueOrchid|Allium|AzureBluet|RedTulip|OrangeTulip|WhiteTulip|PinkTulip|OxeyeDaisy|Cornflower|LilyOfTheValley|WitherRose|Torchflower|ClosedEyeblossom|OpenEyeblossom)Stack"), "ItemSmallFlowerStack");
+        registerMergedItem(Pattern.compile(".*(Sunflower|Lilac|RoseBush|Peony|PitcherPlant)Stack"), "ItemBigFlowerStack");
+        // TODO: petals
     }
 }

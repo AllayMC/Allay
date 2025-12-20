@@ -67,14 +67,14 @@ public class BlockClassGen extends BaseClassGen {
 
             var interfaceSimpleName = generateClassSimpleName(id);
             var interfaceFullName = generateClassFullName(id);
-            var path = interfaceDir.resolve(interfaceSimpleName + ".java");
-            generatedFiles.add(path.getFileName().toString());
-            if (!Files.exists(path)) {
+            var interfacePath = interfaceDir.resolve(interfaceSimpleName + ".java");
+            generatedFiles.add(interfacePath.getFileName().toString());
+            if (!Files.exists(interfacePath)) {
                 System.out.println("Generating " + interfaceSimpleName + "...");
                 if (!Files.exists(interfaceDir)) {
                     Files.createDirectories(interfaceDir);
                 }
-                generateInterface(TypeNames.BLOCK_BEHAVIOR, interfaceFullName, path);
+                generateInterface(TypeNames.BLOCK_BEHAVIOR, interfaceFullName, interfacePath);
             }
 
             var implSimpleName = generateClassSimpleName(id) + "Impl";
@@ -103,27 +103,6 @@ public class BlockClassGen extends BaseClassGen {
                 .build();
         System.out.println("Generating " + TypeNames.BLOCK_TYPES.simpleName() + ".java ...");
         Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/block/type/" + TypeNames.BLOCK_TYPES.simpleName() + ".java"), javaFile.toString());
-    }
-
-    private static void deleteOldFiles(Path dir, Set<String> generatedFiles) {
-        if (!Files.exists(dir)) {
-            return;
-        }
-
-        try (var files = Files.list(dir)) {
-            files.filter(path -> Files.isRegularFile(path) && !IGNORED_FILES.contains(path.getFileName().toString())).forEach(file -> {
-                try {
-                    if (!generatedFiles.contains(file.getFileName().toString())) {
-                        System.out.println("Deleting unused file: " + file.getFileName());
-                        Files.delete(file);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     protected static void generateBlockImpl(ClassName superInterfaceName, ClassName className, Path path) throws IOException {
@@ -285,7 +264,7 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*Infested.*"), "BlockInfestedBlockBehavior");
         registerMergedBlock(Pattern.compile(".*IceBehavior"), "BlockIceBehavior");
         registerMergedBlock(Pattern.compile(".*PressurePlateBehavior"), "BlockPressurePlateBehavior");
-        registerMergedBlock(Pattern.compile(".*Torch.*"), "BlockTorchBehavior");
+        registerMergedBlock(Pattern.compile(".*Torch(?!flower).*"), "BlockTorchBehavior");
         registerMergedBlock(Pattern.compile(".*ShelfBehavior"), "BlockShelfBehavior");
         registerMergedBlock(Pattern.compile(".*LightningRodBehavior"), "BlockLightningRodBehavior");
         registerMergedBlock(Pattern.compile(".*CopperBarsBehavior"), "BlockCopperBarsBehavior");
@@ -294,5 +273,8 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile("Block(?=.*Copper).*?LanternBehavior"), "BlockCopperLanternBehavior");
         registerMergedBlock(Pattern.compile(".*CopperGolemStatueBehavior"), "BlockCopperGolemStatueBehavior");
         registerMergedBlock(Pattern.compile(".*CopperChainBehavior"), "BlockCopperChainBehavior");
+        registerMergedBlock(Pattern.compile(".*(Dandelion|Poppy|BlueOrchid|Allium|AzureBluet|RedTulip|OrangeTulip|WhiteTulip|PinkTulip|OxeyeDaisy|Cornflower|LilyOfTheValley|WitherRose|Torchflower|ClosedEyeblossom|OpenEyeblossom)Behavior"), "BlockSmallFlower");
+        registerMergedBlock(Pattern.compile(".*(Sunflower|Lilac|RoseBush|Peony|PitcherPlant)Behavior"), "BlockBigFlower");
+        // TODO: petals
     }
 }

@@ -4,7 +4,9 @@ import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Set;
 
 /**
  * @author daoge_cmd | IWareQ
@@ -42,5 +44,26 @@ public abstract class BaseClassGen {
                 .build();
         System.out.println("Generating " + className + ".java ...");
         Utils.writeFileWithCRLF(path, javaFile.toString());
+    }
+
+    protected static void deleteOldFiles(Path dir, Set<String> generatedFiles) {
+        if (!Files.exists(dir)) {
+            return;
+        }
+
+        try (var files = Files.list(dir)) {
+            files.filter(path -> Files.isRegularFile(path) && !BlockClassGen.IGNORED_FILES.contains(path.getFileName().toString())).forEach(file -> {
+                try {
+                    if (!generatedFiles.contains(file.getFileName().toString())) {
+                        System.out.println("Deleting unused file: " + file.getFileName());
+                        Files.delete(file);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

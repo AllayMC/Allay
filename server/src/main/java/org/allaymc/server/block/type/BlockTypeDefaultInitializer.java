@@ -146,7 +146,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ALLIUM == null) {
             BlockTypes.ALLIUM = AllayBlockType
-                    .builder(BlockAlliumBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.ALLIUM)
                     .build();
         }
@@ -238,7 +238,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.AZURE_BLUET == null) {
             BlockTypes.AZURE_BLUET = AllayBlockType
-                    .builder(BlockAzureBluetBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.AZURE_BLUET)
                     .build();
         }
@@ -742,7 +742,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLUE_ORCHID == null) {
             BlockTypes.BLUE_ORCHID = AllayBlockType
-                    .builder(BlockBlueOrchidBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.BLUE_ORCHID)
                     .build();
         }
@@ -1357,7 +1357,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CLOSED_EYEBLOSSOM == null) {
             BlockTypes.CLOSED_EYEBLOSSOM = AllayBlockType
-                    .builder(BlockClosedEyeblossomBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.CLOSED_EYEBLOSSOM)
                     .build();
         }
@@ -1584,7 +1584,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CORNFLOWER == null) {
             BlockTypes.CORNFLOWER = AllayBlockType
-                    .builder(BlockCornflowerBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.CORNFLOWER)
                     .build();
         }
@@ -1917,7 +1917,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DANDELION == null) {
             BlockTypes.DANDELION = AllayBlockType
-                    .builder(BlockDandelionBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.DANDELION)
                     .build();
         }
@@ -4644,14 +4644,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LILAC == null) {
             BlockTypes.LILAC = AllayBlockType
-                    .builder(BlockLilacBehaviorImpl.class)
+                    .builder(BlockBigFlowerImpl.class)
                     .vanillaBlock(BlockId.LILAC)
                     .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
         }
         if (BlockTypes.LILY_OF_THE_VALLEY == null) {
             BlockTypes.LILY_OF_THE_VALLEY = AllayBlockType
-                    .builder(BlockLilyOfTheValleyBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.LILY_OF_THE_VALLEY)
                     .build();
         }
@@ -5374,7 +5374,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OPEN_EYEBLOSSOM == null) {
             BlockTypes.OPEN_EYEBLOSSOM = AllayBlockType
-                    .builder(BlockOpenEyeblossomBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.OPEN_EYEBLOSSOM)
                     .build();
         }
@@ -5443,7 +5443,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ORANGE_TULIP == null) {
             BlockTypes.ORANGE_TULIP = AllayBlockType
-                    .builder(BlockOrangeTulipBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.ORANGE_TULIP)
                     .build();
         }
@@ -5455,7 +5455,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXEYE_DAISY == null) {
             BlockTypes.OXEYE_DAISY = AllayBlockType
-                    .builder(BlockOxeyeDaisyBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.OXEYE_DAISY)
                     .build();
         }
@@ -5731,7 +5731,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PEONY == null) {
             BlockTypes.PEONY = AllayBlockType
-                    .builder(BlockPeonyBehaviorImpl.class)
+                    .builder(BlockBigFlowerImpl.class)
                     .vanillaBlock(BlockId.PEONY)
                     .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
@@ -5829,7 +5829,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PINK_TULIP == null) {
             BlockTypes.PINK_TULIP = AllayBlockType
-                    .builder(BlockPinkTulipBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.PINK_TULIP)
                     .build();
         }
@@ -5862,7 +5862,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PITCHER_PLANT == null) {
             BlockTypes.PITCHER_PLANT = AllayBlockType
-                    .builder(BlockPitcherPlantBehaviorImpl.class)
+                    .builder(BlockBigFlowerImpl.class)
                     .vanillaBlock(BlockId.PITCHER_PLANT)
                     .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
@@ -6127,7 +6127,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POPPY == null) {
             BlockTypes.POPPY = AllayBlockType
-                    .builder(BlockPoppyBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.POPPY)
                     .build();
         }
@@ -6568,7 +6568,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_TULIP == null) {
             BlockTypes.RED_TULIP = AllayBlockType
-                    .builder(BlockRedTulipBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.RED_TULIP)
                     .build();
         }
@@ -6692,7 +6692,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ROSE_BUSH == null) {
             BlockTypes.ROSE_BUSH = AllayBlockType
-                    .builder(BlockRoseBushBehaviorImpl.class)
+                    .builder(BlockBigFlowerImpl.class)
                     .vanillaBlock(BlockId.ROSE_BUSH)
                     .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
@@ -7445,7 +7445,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SUNFLOWER == null) {
             BlockTypes.SUNFLOWER = AllayBlockType
-                    .builder(BlockSunflowerBehaviorImpl.class)
+                    .builder(BlockBigFlowerImpl.class)
                     .vanillaBlock(BlockId.SUNFLOWER)
                     .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                     .build();
@@ -7512,13 +7512,13 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TORCHFLOWER == null) {
             BlockTypes.TORCHFLOWER = AllayBlockType
-                    .builder(BlockTorchBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.TORCHFLOWER)
                     .build();
         }
         if (BlockTypes.TORCHFLOWER_CROP == null) {
             BlockTypes.TORCHFLOWER_CROP = AllayBlockType
-                    .builder(BlockTorchBehaviorImpl.class)
+                    .builder(BlockTorchflowerCropBehaviorImpl.class)
                     .vanillaBlock(BlockId.TORCHFLOWER_CROP)
                     .setProperties(BlockPropertyTypes.GROWTH)
                     .build();
@@ -8521,7 +8521,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WHITE_TULIP == null) {
             BlockTypes.WHITE_TULIP = AllayBlockType
-                    .builder(BlockWhiteTulipBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.WHITE_TULIP)
                     .build();
         }
@@ -8540,7 +8540,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WITHER_ROSE == null) {
             BlockTypes.WITHER_ROSE = AllayBlockType
-                    .builder(BlockWitherRoseBehaviorImpl.class)
+                    .builder(BlockSmallFlowerImpl.class)
                     .vanillaBlock(BlockId.WITHER_ROSE)
                     .build();
         }

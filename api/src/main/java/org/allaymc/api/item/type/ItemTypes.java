@@ -55,7 +55,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemSpawnEggStack> ALLAY_SPAWN_EGG;
 
-    public static ItemType<ItemAlliumStack> ALLIUM;
+    public static ItemType<ItemSmallFlowerStack> ALLIUM;
 
     public static ItemType<ItemAllowStack> ALLOW;
 
@@ -105,7 +105,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemLeavesStack> AZALEA_LEAVES_FLOWERED;
 
-    public static ItemType<ItemAzureBluetStack> AZURE_BLUET;
+    public static ItemType<ItemSmallFlowerStack> AZURE_BLUET;
 
     public static ItemType<ItemBakedPotatoStack> BAKED_POTATO;
 
@@ -309,7 +309,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemBlueIceStack> BLUE_ICE;
 
-    public static ItemType<ItemBlueOrchidStack> BLUE_ORCHID;
+    public static ItemType<ItemSmallFlowerStack> BLUE_ORCHID;
 
     public static ItemType<ItemShulkerBoxStack> BLUE_SHULKER_BOX;
 
@@ -589,7 +589,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemClockStack> CLOCK;
 
-    public static ItemType<ItemClosedEyeblossomStack> CLOSED_EYEBLOSSOM;
+    public static ItemType<ItemSmallFlowerStack> CLOSED_EYEBLOSSOM;
 
     public static ItemType<ItemCoalStack> COAL;
 
@@ -739,7 +739,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemCoralFanStack> CORAL_FAN_DEAD;
 
-    public static ItemType<ItemCornflowerStack> CORNFLOWER;
+    public static ItemType<ItemSmallFlowerStack> CORNFLOWER;
 
     public static ItemType<ItemSpawnEggStack> COW_SPAWN_EGG;
 
@@ -859,7 +859,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemAnvilStack> DAMAGED_ANVIL;
 
-    public static ItemType<ItemDandelionStack> DANDELION;
+    public static ItemType<ItemSmallFlowerStack> DANDELION;
 
     public static ItemType<ItemDangerPotterySherdStack> DANGER_POTTERY_SHERD;
 
@@ -2087,9 +2087,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemLightningRodStack> LIGHTNING_ROD;
 
-    public static ItemType<ItemLilacStack> LILAC;
+    public static ItemType<ItemBigFlowerStack> LILAC;
 
-    public static ItemType<ItemLilyOfTheValleyStack> LILY_OF_THE_VALLEY;
+    public static ItemType<ItemSmallFlowerStack> LILY_OF_THE_VALLEY;
 
     public static ItemType<ItemBundleStack> LIME_BUNDLE;
 
@@ -2465,7 +2465,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemOminousTrialKeyStack> OMINOUS_TRIAL_KEY;
 
-    public static ItemType<ItemOpenEyeblossomStack> OPEN_EYEBLOSSOM;
+    public static ItemType<ItemSmallFlowerStack> OPEN_EYEBLOSSOM;
 
     public static ItemType<ItemBundleStack> ORANGE_BUNDLE;
 
@@ -2493,11 +2493,11 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> ORANGE_TERRACOTTA;
 
-    public static ItemType<ItemOrangeTulipStack> ORANGE_TULIP;
+    public static ItemType<ItemSmallFlowerStack> ORANGE_TULIP;
 
     public static ItemType<ItemWoolStack> ORANGE_WOOL;
 
-    public static ItemType<ItemOxeyeDaisyStack> OXEYE_DAISY;
+    public static ItemType<ItemSmallFlowerStack> OXEYE_DAISY;
 
     public static ItemType<ItemCopperStack> OXIDIZED_CHISELED_COPPER;
 
@@ -2595,7 +2595,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemPearlescentFroglightStack> PEARLESCENT_FROGLIGHT;
 
-    public static ItemType<ItemPeonyStack> PEONY;
+    public static ItemType<ItemBigFlowerStack> PEONY;
 
     public static ItemType<ItemSlabStack> PETRIFIED_OAK_DOUBLE_SLAB;
 
@@ -2645,7 +2645,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> PINK_TERRACOTTA;
 
-    public static ItemType<ItemPinkTulipStack> PINK_TULIP;
+    public static ItemType<ItemSmallFlowerStack> PINK_TULIP;
 
     public static ItemType<ItemWoolStack> PINK_WOOL;
 
@@ -2655,7 +2655,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemPitcherCropStack> PITCHER_CROP;
 
-    public static ItemType<ItemPitcherPlantStack> PITCHER_PLANT;
+    public static ItemType<ItemBigFlowerStack> PITCHER_PLANT;
 
     public static ItemType<ItemPitcherPodStack> PITCHER_POD;
 
@@ -2745,7 +2745,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemPoppedChorusFruitStack> POPPED_CHORUS_FRUIT;
 
-    public static ItemType<ItemPoppyStack> POPPY;
+    public static ItemType<ItemSmallFlowerStack> POPPY;
 
     public static ItemType<ItemPorkchopStack> PORKCHOP;
 
@@ -2943,7 +2943,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> RED_TERRACOTTA;
 
-    public static ItemType<ItemRedTulipStack> RED_TULIP;
+    public static ItemType<ItemSmallFlowerStack> RED_TULIP;
 
     public static ItemType<ItemWoolStack> RED_WOOL;
 
@@ -2987,7 +2987,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemRibArmorTrimSmithingTemplateStack> RIB_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static ItemType<ItemRoseBushStack> ROSE_BUSH;
+    public static ItemType<ItemBigFlowerStack> ROSE_BUSH;
 
     public static ItemType<ItemRottenFleshStack> ROTTEN_FLESH;
 
@@ -3333,7 +3333,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemSugarCaneStack> SUGAR_CANE;
 
-    public static ItemType<ItemSunflowerStack> SUNFLOWER;
+    public static ItemType<ItemBigFlowerStack> SUNFLOWER;
 
     public static ItemType<ItemSuspiciousGravelStack> SUSPICIOUS_GRAVEL;
 
@@ -3367,11 +3367,11 @@ public final class ItemTypes {
 
     public static ItemType<ItemTorchStack> TORCH;
 
-    public static ItemType<ItemTorchflowerStack> TORCHFLOWER;
+    public static ItemType<ItemSmallFlowerStack> TORCHFLOWER;
 
-    public static ItemType<ItemTorchflowerStack> TORCHFLOWER_CROP;
+    public static ItemType<ItemTorchflowerCropStack> TORCHFLOWER_CROP;
 
-    public static ItemType<ItemTorchflowerStack> TORCHFLOWER_SEEDS;
+    public static ItemType<ItemTorchflowerSeedsStack> TORCHFLOWER_SEEDS;
 
     public static ItemType<ItemTotemOfUndyingStack> TOTEM_OF_UNDYING;
 
@@ -3721,7 +3721,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemTerracottaStack> WHITE_TERRACOTTA;
 
-    public static ItemType<ItemWhiteTulipStack> WHITE_TULIP;
+    public static ItemType<ItemSmallFlowerStack> WHITE_TULIP;
 
     public static ItemType<ItemWoolStack> WHITE_WOOL;
 
@@ -3733,7 +3733,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemSpawnEggStack> WITCH_SPAWN_EGG;
 
-    public static ItemType<ItemWitherRoseStack> WITHER_ROSE;
+    public static ItemType<ItemSmallFlowerStack> WITHER_ROSE;
 
     public static ItemType<ItemHeadStack> WITHER_SKELETON_SKULL;
 

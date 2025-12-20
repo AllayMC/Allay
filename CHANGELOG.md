@@ -19,6 +19,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Updated feature version to 1.21.130.
 - Implemented `/tell` (aka. `/msg` and `/w`) command.
 - Implemented `/say` command.
+- Implemented small and big flowers:
+  - Small flowers: Dandelion, Poppy, Blue Orchid, Allium, Azure Bluet, Red Tulip, Orange Tulip, White Tulip, Pink Tulip, Oxeye Daisy, Cornflower, Lily of the Valley, Wither Rose, Torchflower, Closed Eyeblossom, Open Eyeblossom.
+  - Big flowers: Sunflower, Lilac, Rose Bush, Peony, Pitcher Plant
 
 ### Changed
 
