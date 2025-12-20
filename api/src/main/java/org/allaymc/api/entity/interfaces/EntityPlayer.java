@@ -14,6 +14,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3d;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
@@ -167,15 +168,36 @@ public interface EntityPlayer extends
      * @param handSlot the hand slot of the player
      */
     default void setHandSlot(int handSlot) {
+        setHandSlot(handSlot, true);
+    }
+
+    @ApiStatus.Internal
+    default void setHandSlot(int handSlot, boolean serverSide) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
         var container = getContainer(ContainerTypes.INVENTORY);
-        container.setHandSlot(handSlot);
-        new PlayerItemHeldEvent(this, container.getItemInHand(), handSlot).call();
-        var controller = getController();
-        if (controller != null) {
-            controller.viewEntityHand(this);
+
+        var oldItemStack = container.getItemInHand();
+        var oldHandSlot = container.getHandSlot();
+        var newItemStack = container.getItemStack(handSlot);
+        var event = new PlayerItemHeldEvent(this, oldItemStack, oldHandSlot, newItemStack, handSlot);
+        if (!event.call()) {
+            if (!serverSide) {
+                var controller = getController();
+                if (controller != null) {
+                    controller.viewEntityHand(this);
+                }
+            }
+            return;
         }
+
+        container.setHandSlot(handSlot);
         forEachViewers(viewer -> viewer.viewEntityHand(this));
+        if (serverSide) {
+            var controller = getController();
+            if (controller != null) {
+                controller.viewEntityHand(this);
+            }
+        }
     }
 
     /**

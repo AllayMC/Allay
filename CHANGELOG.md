@@ -25,12 +25,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Moved `PlayerKickEvent` from `player` package to `server` package.
 - (API) Renamed field `blockEntityBrewingStand` to `brewingStand` in classes `BrewingStandBrewEvent`, `BrewingStandConsumeFuelEvent`, and `BrewingStandStartBrewEvent`.
 - (API) Renamed field `blockEntityFurnace` to `furnace` in classes `FurnaceConsumeFuelEvent` and `FurnaceSmeltEvent`.
+- (API) Event `PlayerItemHeldEvent` is now cancellable with some field name changes.
 
 ### Fixed
 
 - (API) Fixed the issue that some item class do not extend `ItemToolComponent` interface.
 - Fixed a rare NPE when saving the nbt of painting entity.
 - Fixed a NPE when using TargetNode (`.target()`) in command.
+- Fixed a client-side hotbar flicking issue when changing the hotbar slot quickly.
 
 # 0.10.1 (API 0.18.0) - 2025/12/10
 

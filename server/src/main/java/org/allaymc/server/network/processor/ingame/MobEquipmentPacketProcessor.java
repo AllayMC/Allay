@@ -11,7 +11,9 @@ import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
 public class MobEquipmentPacketProcessor extends PacketProcessor<MobEquipmentPacket> {
     @Override
     public void handleSync(Player player, MobEquipmentPacket packet, long receiveTime) {
-        player.getControlledEntity().setHandSlot(packet.getHotbarSlot());
+        // Do not send the hand slot back to the client, which is meaningless and will cause
+        // the hand slot jumping back and forth client-side
+        player.getControlledEntity().setHandSlot(packet.getHotbarSlot(), false);
     }
 
     @Override

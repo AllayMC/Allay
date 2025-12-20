@@ -4,7 +4,7 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * PlayerInventoryContainer represents a container that holds a player's inventory items.
+ * InventoryContainer represents a container that holds a player's inventory items.
  *
  * @author daoge_cmd
  */

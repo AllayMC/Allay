@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
@@ -13,13 +14,30 @@ import org.allaymc.api.item.ItemStack;
  */
 @Getter
 @CallerThread(ThreadType.WORLD)
-public class PlayerItemHeldEvent extends PlayerEvent {
-    protected ItemStack itemStack;
-    protected int slot;
+public class PlayerItemHeldEvent extends PlayerEvent implements CancellableEvent {
 
-    public PlayerItemHeldEvent(EntityPlayer player, ItemStack itemStack, int slot) {
+    /**
+     * The item that the player was holding in their hand.
+     */
+    protected ItemStack oldItemStack;
+    /**
+     * The index of the hand slot that the player previously had selected.
+     */
+    protected int oldHandSlot;
+    /**
+     * The item that the player is holding in their hand.
+     */
+    protected ItemStack newItemStack;
+    /**
+     * The index of the hand slot that the player now has selected.
+     */
+    protected int newHandSlot;
+
+    public PlayerItemHeldEvent(EntityPlayer player, ItemStack oldItemStack, int oldHandSlot, ItemStack newItemStack, int newHandSlot) {
         super(player);
-        this.itemStack = itemStack;
-        this.slot = slot;
+        this.oldItemStack = oldItemStack;
+        this.oldHandSlot = oldHandSlot;
+        this.newItemStack = newItemStack;
+        this.newHandSlot = newHandSlot;
     }
 }
