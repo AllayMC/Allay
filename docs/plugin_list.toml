@@ -32,6 +32,11 @@ github = "https://github.com/PolyhedralDev/Terra"
 
 # Other Plugins
 
+[Aether]
+description = "Aether is a blazing-fast, low-latency TCP bridge connecting WaterdogPE Proxy (Master) with multiple AllayMC Servers (Nodes)."
+authors = ["Miroshka"]
+github = "https://github.com/Miroshka000/Aether"
+
 [Holograms]
 description = "Holograms is a feature-rich hologram plugin for Allay servers."
 authors = ["Miroshka"]
