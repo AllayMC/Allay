@@ -33,6 +33,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a rare NPE when saving the nbt of painting entity.
 - Fixed a NPE when using TargetNode (`.target()`) in command.
 - Fixed a client-side hotbar flicking issue when changing the hotbar slot quickly.
+- Fixed a bug where right-clicking on a bow briefly would cause the wrong charge state.
 
 # 0.10.1 (API 0.18.0) - 2025/12/10
 

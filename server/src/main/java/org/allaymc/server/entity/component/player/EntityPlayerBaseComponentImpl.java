@@ -103,7 +103,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected int enchantmentSeed;
 
     @Getter
-    @Setter
     protected boolean usingItemOnBlock, usingItemInAir;
     protected long startUsingItemInAirTime;
 
@@ -757,6 +756,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             broadcastState();
             new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
         }
+    }
+
+    @Override
+    public void setUsingItemOnBlock(boolean usingItemOnBlock) {
+        this.usingItemOnBlock = usingItemOnBlock;
     }
 
     @Override
