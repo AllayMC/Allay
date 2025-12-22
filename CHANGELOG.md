@@ -16,8 +16,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
-- (API) Added API for npc dialog. The related classes are under `org.allaymc.api.npc.dialog` package.
-- Updated feature version to 1.21.130.
+- (API) Added API for npc dialog. The related classes are under `org.allaymc.api.dialog` package.
+- Updated the feature version to 1.21.130.
 - Implemented `/tell` (aka. `/msg` and `/w`) command.
 - Implemented `/say` command.
 - Implemented small and big flowers:
