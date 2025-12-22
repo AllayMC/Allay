@@ -7,6 +7,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.debugshape.DebugLine;
+import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -314,6 +315,28 @@ public class GameTestCommand extends Command {
                             .title("Test Custom Form")
                             .input("test input", "type sth here", "", "this is a tooltip")
                             .sendTo(player.getController());
+                    return context.success();
+                }, SenderType.ACTUAL_PLAYER)
+                .root()
+                .key("testdialog")
+                .exec((context, player) -> {
+                    var controller = player.getController();
+                    var dialog = Dialog.create();
+                    dialog.title("Test Dialog")
+                            .body("I'm allay-chan QAQ\nCounter=1")
+                            .button("baka")
+                            .onClick(button -> controller.sendMessage("You are baka!"))
+                            .button("super baka")
+                            .onClick(button -> controller.sendMessage("You are super baka!"))
+                            .button("Add One!", button -> {
+                                var oldBody = dialog.getBody();
+                                var index = oldBody.lastIndexOf("=");
+                                var counter = Integer.parseInt(oldBody.substring(index + 1)) + 1;
+                                dialog.body("I'm allay-chan QAQ\nCounter=" + counter);
+                            })
+                            .nextDialog(dialog)
+                            .onClose(() -> controller.sendMessage("You closed the dialog!"));
+                    dialog.sendTo(controller, player);
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER)
                 .root()

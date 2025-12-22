@@ -28,6 +28,8 @@ import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.debugshape.DebugShape;
+import org.allaymc.api.dialog.Dialog;
+import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.*;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
@@ -101,6 +103,7 @@ import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
+import org.allaymc.server.utils.JSONUtils;
 import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -129,6 +132,7 @@ import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.Vector3fc;
 import org.joml.Vector3ic;
@@ -209,6 +213,9 @@ public class AllayPlayer implements Player {
     protected Cache<@NotNull Integer, Form> forms;
     @Getter
     protected Pair<Integer, CustomForm> serverSettingForm;
+
+    // Dialog
+    protected Pair<Dialog, Entity> dialog;
 
     public AllayPlayer(BedrockServerSession session) {
         this.session = session;
@@ -562,6 +569,8 @@ public class AllayPlayer implements Player {
                 (float) (aabb.maxY() - aabb.minY()),
                 (float) (aabb.maxZ() - aabb.minZ())
         ));
+        // Alwyas set HAS_NPC to true so that every entity can be rendered in the npc dialog
+        map.put(EntityDataTypes.HAS_NPC, true);
         if (entity.hasNameTag()) {
             map.setFlag(EntityFlag.CAN_SHOW_NAME, true);
             map.put(EntityDataTypes.NAME, entity.getNameTag());
@@ -1774,7 +1783,7 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void removeAllForms() {
+    public void closeAllForms() {
         sendPacket(new ClientboundCloseFormPacket());
         this.forms.invalidateAll();
     }
@@ -2498,6 +2507,64 @@ public class AllayPlayer implements Player {
                 .filter(command -> !command.isServerSideOnly() && this.controlledEntity.hasPermissions(command.getPermissions()))
                 .forEach(command -> packet.getCommands().add(encodeCommand(command)));
         sendPacket(packet);
+    }
+
+    @Override
+    public void viewDialog(Dialog dialog, Entity entity) {
+        this.dialog = new Pair<>(dialog, entity);
+
+        var buttonJson = JSONUtils.to(NetworkHelper.toNetworkDialogButtons(dialog.getButtons()));
+        var modelSettings = dialog.getModelSettings();
+        var portraitOffsetJson = JSONUtils.to(Map.of("portrait_offsets", toNetwork(new ModelSettings(
+                modelSettings.scale(),
+                modelSettings.offset().add(0, NETWORK_OFFSETS.get().getOrDefault(entity.getEntityType(), 0.0f), 0, new Vector3d()),
+                modelSettings.rotation()
+        ))));
+
+        var metadata = parseMetadata(entity);
+        metadata.put(EntityDataTypes.NPC_DATA, portraitOffsetJson);
+
+        var packet1 = new SetEntityDataPacket();
+        packet1.setRuntimeEntityId(entity.getRuntimeId());
+        packet1.setMetadata(metadata);
+        sendPacket(packet1);
+
+        var packet2 = new NpcDialoguePacket();
+        packet2.setUniqueEntityId(entity.getRuntimeId());
+        packet2.setAction(NpcDialoguePacket.Action.OPEN);
+        packet2.setDialogue(dialog.getBody());
+        packet2.setSceneName("default");
+        packet2.setNpcName(dialog.getTitle());
+        packet2.setActionJson(buttonJson);
+        sendPacket(packet2);
+    }
+
+    @Override
+    public Pair<Dialog, Entity> getDialog() {
+        return this.dialog;
+    }
+
+    @Override
+    public void removeDialog() {
+        this.dialog = null;
+    }
+
+    @Override
+    public void closeDialog() {
+        if (this.dialog == null) {
+            return;
+        }
+
+        var packet = new NpcDialoguePacket();
+        packet.setUniqueEntityId(this.dialog.right().getRuntimeId());
+        packet.setDialogue("");
+        packet.setSceneName("");
+        packet.setNpcName("");
+        packet.setActionJson("");
+        packet.setAction(NpcDialoguePacket.Action.CLOSE);
+        sendPacket(packet);
+
+        this.dialog = null;
     }
 
     private class AllayPacketHandler implements BedrockPacketHandler {
