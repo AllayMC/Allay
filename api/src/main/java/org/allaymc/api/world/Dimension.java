@@ -147,7 +147,7 @@ public interface Dimension {
      *
      * @return all the entities in this dimension
      */
-    @Unmodifiable
+    @UnmodifiableView
     default Map<Long, Entity> getEntities() {
         return getEntityManager().getEntities();
     }
