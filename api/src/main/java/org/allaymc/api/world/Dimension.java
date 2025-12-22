@@ -54,7 +54,8 @@ import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
- * Represents a dimension in the world
+ * Represents a dimension in the world. Each world can have at most three dimensions and at least one
+ * overworld dimension.
  *
  * @author daoge_cmd | Cool_Loong
  */
@@ -103,7 +104,7 @@ public interface Dimension {
     /**
      * Gets all debug shapes in the dimension.
      *
-     * @return a set of debug shapes, where the key is the debug shape ID and the value is the debug shape
+     * @return a set of debug shapes in the dimension
      */
     @UnmodifiableView
     Set<DebugShape> getDebugShapes();

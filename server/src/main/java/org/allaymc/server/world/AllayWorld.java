@@ -128,7 +128,7 @@ public class AllayWorld implements World {
             // Get the permit to handle packets
             networkSemaphore.acquire();
             handleSyncPackets(firstEntry);
-            // Return the permit, so that the world thread can run
+            // Return the permit so that the world thread can run
             networkSemaphore.release();
         }
     }
