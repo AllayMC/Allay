@@ -1,9 +1,9 @@
 [versions]
-log4j = "2.25.2"
+log4j = "2.25.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.1.0"
-netty = "4.2.7.Final"
+netty = "4.2.9.Final"
 
 [libraries]
 # NBT
@@ -74,22 +74,22 @@ netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", ve
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.13" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.1" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.9.2" }
 # GUI
-flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.6.2" }
-formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.28294.238" }
+flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.7" }
+formsrt = { group = "com.jetbrains.intellij.java", name = "java-gui-forms-rt", version = "253.29346.145" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "6.0.1" }
 # IDK why, but the junit-platform-launcher is missing from junit-jupiter version 5.12.0
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "6.0.1" }
-mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.20.0" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.21.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.42" }
 # Random generator
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 # Sentry
-sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.27.1" }
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.29.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
@@ -110,7 +110,7 @@ rng = ["rng-simple", "rng-sampling"]
 stateupdater = ["updater-common", "item-updater", "block-updater"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "9.2.2" }
+shadow = { id = "com.gradleup.shadow", version = "9.3.0" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.5.4" }
 jmh = { id = "me.champeau.jmh", version = "0.7.3" }
 delombok = { id = "com.github.monosoul.yadegrap", version = "1.0.0" }
