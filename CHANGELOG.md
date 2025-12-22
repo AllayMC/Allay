@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Added API for npc dialog. The related classes are under `org.allaymc.api.npc.dialog` package.
 - Updated feature version to 1.21.130.
 - Implemented `/tell` (aka. `/msg` and `/w`) command.
 - Implemented `/say` command.
@@ -29,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Moved `PlayerKickEvent` from `player` package to `server` package.
 - (API) Renamed field `blockEntityBrewingStand` to `brewingStand` in classes `BrewingStandBrewEvent`, `BrewingStandConsumeFuelEvent`, and `BrewingStandStartBrewEvent`.
 - (API) Renamed field `blockEntityFurnace` to `furnace` in classes `FurnaceConsumeFuelEvent` and `FurnaceSmeltEvent`.
+- (API) Renamed method `FormViewer.removeAllForms()` to `FormViewer.closeAllForms()`.
 - (API) Event `PlayerItemHeldEvent` is now cancellable with some field name changes.
 
 ### Fixed

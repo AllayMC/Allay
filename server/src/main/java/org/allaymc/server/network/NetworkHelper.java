@@ -1,7 +1,10 @@
 package org.allaymc.server.network;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.debugshape.*;
+import org.allaymc.api.dialog.Button;
+import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -214,5 +217,43 @@ public final class NetworkHelper {
 
     public static org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape toNetworkRemovalNotice(DebugShape shape) {
         return new org.cloudburstmc.protocol.bedrock.data.debugshape.DebugShape(shape.getId());
+    }
+
+    public record PortraitOffsets(double[] translate, double[] rotate, double[] scale) {
+    }
+
+    public static PortraitOffsets toNetwork(ModelSettings settings) {
+        // Translate needs to be multiplied by -32 to get a rough block equivalent
+        var translate = settings.offset().mul(-32, new Vector3d());
+        // Entity is rotated by 32 degrees by default
+        var rotate = settings.rotation();
+        var scale = settings.scale();
+        return new PortraitOffsets(
+                toDoubleArray(translate),
+                toDoubleArray(rotate),
+                toDoubleArray(scale)
+        );
+    }
+
+    private static double[] toDoubleArray(Vector3dc vec) {
+        return new double[]{vec.x(), vec.y(), vec.z()};
+    }
+
+    public record NetworkDialogButton(
+            @SerializedName("button_name")
+            String buttonName,
+            String text,
+            // "Click" activation
+            int mode,
+            // "Command" type
+            int type
+    ) {
+        public NetworkDialogButton(Button button) {
+            this(button.getText(), "", 0, 1);
+        }
+    }
+
+    public static List<NetworkDialogButton> toNetworkDialogButtons(List<Button> buttons) {
+        return buttons.stream().map(NetworkDialogButton::new).toList();
     }
 }

@@ -7,6 +7,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.debugshape.DebugLine;
+import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -314,6 +315,20 @@ public class GameTestCommand extends Command {
                             .title("Test Custom Form")
                             .input("test input", "type sth here", "", "this is a tooltip")
                             .sendTo(player.getController());
+                    return context.success();
+                }, SenderType.ACTUAL_PLAYER)
+                .root()
+                .key("testdialog")
+                .exec((context, player) -> {
+                    var controller = player.getController();
+                    Dialog.create()
+                            .title("Test Dialog")
+                            .body("I'm allay-chan QAQ")
+                            .button("baka")
+                            .onClick(button -> controller.sendMessage("You are baka!"))
+                            .button("super baka").onClick(button -> controller.sendMessage("You are super baka!"))
+                            .onClose(() -> controller.sendMessage("You closed the dialog!"))
+                            .sendTo(controller, player);
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER)
                 .root()

@@ -3,6 +3,7 @@ package org.allaymc.api.form;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.utils.tuple.Pair;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -55,15 +56,17 @@ public interface FormViewer {
     Map<Integer, Form> getForms();
 
     /**
-     * Removes a form with the specified form ID that the viewer is currently viewing.
+     * Removes a form with the specified form ID that the viewer is currently viewing. This method won't
+     * send any packet to the client.
      *
      * @param formId the ID of the form to be removed
      * @return the removed form if it exists, or {@code null} if no form with the specified ID is found
      */
+    @ApiStatus.Internal
     Form removeForm(int formId);
 
     /**
-     * Removes all the forms that the viewer is viewing currently.
+     * Closes all the forms that the viewer is viewing currently.
      */
-    void removeAllForms();
+    void closeAllForms();
 }
