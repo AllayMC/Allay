@@ -11,7 +11,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.server.command.NPCCommandSender;
 import org.allaymc.server.command.selector.args.*;
 
 import java.util.*;
@@ -103,13 +102,6 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
             if (sender.isEntity())
                 entities = Lists.newArrayList(sender.asEntity());
                 // There is no entity that meets the condition.
-            else return Lists.newArrayList();
-        }
-
-        // If the NPC triggers the selector, only the player who triggers the NPC dialogue is processed
-        if (selectorType == NPC_INITIATOR) {
-            if (sender instanceof NPCCommandSender npc)
-                entities = Lists.newArrayList(npc.getInitiator());
             else return Lists.newArrayList();
         }
 

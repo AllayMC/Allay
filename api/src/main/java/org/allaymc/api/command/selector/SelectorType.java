@@ -15,8 +15,7 @@ public enum SelectorType {
     // https://zh.minecraft.wiki/w/%E7%9B%AE%E6%A0%87%E9%80%89%E6%8B%A9%E5%99%A8
     RANDOM_PLAYER("r"),
     SELF("s"),
-    NEAREST_PLAYER("p"),
-    NPC_INITIATOR("initiator");
+    NEAREST_PLAYER("p");
 
     private final String token;
 
@@ -24,9 +23,7 @@ public enum SelectorType {
      * Parses a string to determine the corresponding {@code SelectorType}.
      *
      * @param type The string representation of the selector type
-     *
      * @return The corresponding {@code SelectorType}
-     *
      * @throws SelectorSyntaxException If the provided type does not match any known selector type
      */
     public static SelectorType parseSelectorType(String type) throws SelectorSyntaxException {
@@ -36,7 +33,6 @@ public enum SelectorType {
             case "r" -> SelectorType.RANDOM_PLAYER;
             case "s" -> SelectorType.SELF;
             case "p" -> SelectorType.NEAREST_PLAYER;
-            case "initiator" -> SelectorType.NPC_INITIATOR;
             default -> throw new SelectorSyntaxException("Unknown selector type: " + type);
         };
     }

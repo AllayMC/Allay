@@ -17,7 +17,7 @@ public interface EntitySelectorAPI {
     /**
      * Pattern for matching entity selector tokens (e.g., @a, @e, etc.).
      */
-    Pattern ENTITY_SELECTOR = Pattern.compile("^@([aeprs]|initiator)(?:\\[(.*)])?$");
+    Pattern ENTITY_SELECTOR = Pattern.compile("^@([aeprs])(?:\\[(.*)])?$");
 
     /**
      * String used to join selector arguments.

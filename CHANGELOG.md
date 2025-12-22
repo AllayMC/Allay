@@ -41,6 +41,12 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a client-side hotbar flicking issue when changing the hotbar slot quickly.
 - Fixed a bug where right-clicking on a bow briefly would cause the wrong charge state.
 
+### Removed
+
+- (API) Removed selector type `@initiator` since it is useless in third server software implementation:
+  - `EntitySelectorAPI` no longer regard `@initiator` as a valid selector type.
+  - Removed enum member `SelectorType.NPC_INITIATOR`.
+
 # 0.10.1 (API 0.18.0) - 2025/12/10
 
 <small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.0...0.10.1)</small>
