@@ -119,7 +119,7 @@ repositories {
 }
 
 dependencies {
-    // Add `-SNAPSHOT` suffix to the version to use the snapshot version, an example is `0.12.0-SNAPSHOT`
+    // Add `-SNAPSHOT` suffix to the version to use the snapshot version, an example is `0.19.0-SNAPSHOT`
     compileOnly(group = "org.allaymc.allay", name = "api", version = "<version>-SNAPSHOT")
 }
 ```
