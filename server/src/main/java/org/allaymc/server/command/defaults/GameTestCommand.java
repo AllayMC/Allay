@@ -321,14 +321,22 @@ public class GameTestCommand extends Command {
                 .key("testdialog")
                 .exec((context, player) -> {
                     var controller = player.getController();
-                    Dialog.create()
-                            .title("Test Dialog")
-                            .body("I'm allay-chan QAQ")
+                    var dialog = Dialog.create();
+                    dialog.title("Test Dialog")
+                            .body("I'm allay-chan QAQ\nCounter=1")
                             .button("baka")
                             .onClick(button -> controller.sendMessage("You are baka!"))
-                            .button("super baka").onClick(button -> controller.sendMessage("You are super baka!"))
-                            .onClose(() -> controller.sendMessage("You closed the dialog!"))
-                            .sendTo(controller, player);
+                            .button("super baka")
+                            .onClick(button -> controller.sendMessage("You are super baka!"))
+                            .button("Add One!", button -> {
+                                var oldBody = dialog.getBody();
+                                var index = oldBody.lastIndexOf("=");
+                                var counter = Integer.parseInt(oldBody.substring(index + 1)) + 1;
+                                dialog.body("I'm allay-chan QAQ\nCounter=" + counter);
+                            })
+                            .nextDialog(dialog)
+                            .onClose(() -> controller.sendMessage("You closed the dialog!"));
+                    dialog.sendTo(controller, player);
                     return context.success();
                 }, SenderType.ACTUAL_PLAYER)
                 .root()

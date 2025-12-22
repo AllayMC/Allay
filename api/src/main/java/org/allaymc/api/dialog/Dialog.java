@@ -5,6 +5,7 @@ import org.allaymc.api.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Dialog represents a dialogue menu. This menu can consist of a title, a
@@ -96,6 +97,19 @@ public final class Dialog {
      */
     public Button button(String text) {
         return button(new Button(text));
+    }
+
+    /**
+     * Creates a new {@code Button} instance with the specified text and click behavior,
+     * then adds it to the dialog. The dialog instance is assigned to the button.
+     *
+     * @param text    the text to display on the button
+     * @param onClick a {@link Consumer} that accepts a {@link Button} instance and defines the behavior to execute when the button is clicked
+     * @return the created {@link Button} instance that was added to the dialog
+     * @throws IllegalArgumentException if more than 6 buttons are added to the dialog
+     */
+    public Button button(String text, Consumer<Button> onClick) {
+        return button(new Button(text, onClick));
     }
 
     /**

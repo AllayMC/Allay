@@ -36,14 +36,27 @@ public final class Button {
     private Dialog nextDialog;
 
     /**
-     * Create a new button.
+     * Constructs a new {@code Button} instance with the specified text. The button will have
+     * a default no-op click behavior, meaning no action will be performed when the button is clicked
+     * until a specific behavior is defined using {@link #onClick(Consumer)}.
      *
-     * @param text the text of the button
+     * @param text the text to display on the button
      */
     public Button(String text) {
         this.text = text;
         this.onClick = button -> {
         };
+    }
+
+    /**
+     * Creates a new {@code Button} instance with specified text and a callback function to be invoked upon clicking the button.
+     *
+     * @param text    the text to display on the button
+     * @param onClick a {@link Consumer} that accepts a {@link Button} instance and defines the behavior to execute when the button is clicked
+     */
+    public Button(String text, Consumer<Button> onClick) {
+        this.text = text;
+        this.onClick = onClick;
     }
 
     /**

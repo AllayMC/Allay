@@ -569,6 +569,8 @@ public class AllayPlayer implements Player {
                 (float) (aabb.maxY() - aabb.minY()),
                 (float) (aabb.maxZ() - aabb.minZ())
         ));
+        // Alwyas set HAS_NPC to true so that every entity can be rendered in the npc dialog
+        map.put(EntityDataTypes.HAS_NPC, true);
         if (entity.hasNameTag()) {
             map.setFlag(EntityFlag.CAN_SHOW_NAME, true);
             map.put(EntityDataTypes.NAME, entity.getNameTag());
@@ -2520,13 +2522,12 @@ public class AllayPlayer implements Player {
         ))));
 
         var metadata = parseMetadata(entity);
-        metadata.put(EntityDataTypes.HAS_NPC, true);
         metadata.put(EntityDataTypes.NPC_DATA, portraitOffsetJson);
 
         var packet1 = new SetEntityDataPacket();
         packet1.setRuntimeEntityId(entity.getRuntimeId());
         packet1.setMetadata(metadata);
-        sendPacketImmediately(packet1);
+        sendPacket(packet1);
 
         var packet2 = new NpcDialoguePacket();
         packet2.setUniqueEntityId(entity.getRuntimeId());

@@ -13,16 +13,21 @@ import org.cloudburstmc.protocol.bedrock.packet.NpcRequestPacket;
 @Slf4j
 public class NPCRequestPacketProcessor extends PacketProcessor<NpcRequestPacket> {
 
+    protected boolean openingNextDialog = false;
+
     @Override
     public void handleSync(Player player, NpcRequestPacket packet, long receiveTime) {
         var requestType = packet.getRequestType();
-        if (requestType != NpcRequestType.EXECUTE_COMMAND_ACTION && requestType != NpcRequestType.EXECUTE_CLOSING_COMMANDS) {
+        if (requestType != NpcRequestType.EXECUTE_COMMAND_ACTION &&
+            requestType != NpcRequestType.EXECUTE_OPENING_COMMANDS &&
+            requestType != NpcRequestType.EXECUTE_CLOSING_COMMANDS) {
             return;
         }
 
         var pair = player.getDialog();
         if (pair == null) {
-            // Call DialogViewer.closeDialog() will making the client send back EXECUTE_CLOSING_COMMANDS
+            // DialogViewer.closeDialog() will making the client send back EXECUTE_CLOSING_COMMANDS,
+            // and in that case we can safely ignore it c:
             if (requestType != NpcRequestType.EXECUTE_CLOSING_COMMANDS) {
                 log.warn("Player {} does not have any opened dialog!", player.getOriginName());
             }
@@ -44,14 +49,20 @@ public class NPCRequestPacketProcessor extends PacketProcessor<NpcRequestPacket>
 
                 var nextDialog = button.getNextDialog();
                 if (nextDialog != null) {
-                    player.viewDialog(dialog, pair.right());
+                    this.openingNextDialog = true;
+                    player.viewDialog(nextDialog, pair.right());
                 } else {
                     player.closeDialog();
                 }
             }
             case NpcRequestType.EXECUTE_CLOSING_COMMANDS -> {
-                player.removeDialog();
-                dialog.getOnClose().run();
+                if (!this.openingNextDialog) {
+                    player.removeDialog();
+                    dialog.getOnClose().run();
+                }
+            }
+            case NpcRequestType.EXECUTE_OPENING_COMMANDS -> {
+                this.openingNextDialog = false;
             }
         }
     }
