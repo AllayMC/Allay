@@ -14,6 +14,7 @@ import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
+import org.allaymc.api.player.HudElement;
 import org.allaymc.api.utils.tuple.Pair;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -255,5 +256,23 @@ public final class NetworkHelper {
 
     public static List<NetworkDialogButton> toNetworkDialogButtons(List<Button> buttons) {
         return buttons.stream().map(NetworkDialogButton::new).toList();
+    }
+
+    public org.cloudburstmc.protocol.bedrock.data.HudElement toNetwork(HudElement element) {
+        return switch (element) {
+            case PAPER_DOLL -> org.cloudburstmc.protocol.bedrock.data.HudElement.PAPER_DOLL;
+            case ARMOR -> org.cloudburstmc.protocol.bedrock.data.HudElement.ARMOR;
+            case TOOL_TIPS -> org.cloudburstmc.protocol.bedrock.data.HudElement.TOOL_TIPS;
+            case TOUCH_CONTROLS -> org.cloudburstmc.protocol.bedrock.data.HudElement.TOUCH_CONTROLS;
+            case CROSSHAIR -> org.cloudburstmc.protocol.bedrock.data.HudElement.CROSSHAIR;
+            case HOTBAR -> org.cloudburstmc.protocol.bedrock.data.HudElement.HOTBAR;
+            case HEALTH -> org.cloudburstmc.protocol.bedrock.data.HudElement.HEALTH;
+            case EXPERIENCE_BAR -> org.cloudburstmc.protocol.bedrock.data.HudElement.PROGRESS_BAR;
+            case FOOD_BAR -> org.cloudburstmc.protocol.bedrock.data.HudElement.FOOD_BAR;
+            case AIR_SUPPLY_BAR -> org.cloudburstmc.protocol.bedrock.data.HudElement.AIR_BUBBLES_BAR;
+            case VEHICLE_HEALTH -> org.cloudburstmc.protocol.bedrock.data.HudElement.VEHICLE_HEALTH;
+            case EFFECTS -> org.cloudburstmc.protocol.bedrock.data.HudElement.EFFECTS_BAR;
+            case ITEM_TEXT -> org.cloudburstmc.protocol.bedrock.data.HudElement.ITEM_TEXT_POPUP;
+        };
     }
 }

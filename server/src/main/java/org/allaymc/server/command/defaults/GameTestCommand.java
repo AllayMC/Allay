@@ -20,6 +20,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.message.TrKeys;
+import org.allaymc.api.player.HudElement;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -570,6 +571,16 @@ public class GameTestCommand extends Command {
 
                     context.addOutput(TrKeys.MC_COMMANDS_SUMMON_SUCCESS);
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.PLAYER)
+                .root()
+                .key("sethudelement")
+                .enumClass("element", HudElement.class)
+                .bool("visible", true)
+                .exec((context, sender) -> {
+                    HudElement element = context.getResult(1);
+                    boolean visible = context.getResult(2);
+                    sender.getController().setHudElementVisibility(element, visible);
+                    return context.success();
+                }, SenderType.ACTUAL_PLAYER);
     }
 }

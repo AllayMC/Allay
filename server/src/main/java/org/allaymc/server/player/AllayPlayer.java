@@ -60,10 +60,8 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.OpPermissionCalculator;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.permission.Tristate;
-import org.allaymc.api.player.ClientState;
-import org.allaymc.api.player.GameMode;
-import org.allaymc.api.player.Player;
-import org.allaymc.api.player.PlayerData;
+import org.allaymc.api.player.*;
+import org.allaymc.api.player.HudElement;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
@@ -217,6 +215,10 @@ public class AllayPlayer implements Player {
     // Dialog
     protected Pair<Dialog, Entity> dialog;
 
+    // Hud
+    protected Set<HudElement> hiddenHudElements;
+    protected boolean shouldSendHudElements;
+
     public AllayPlayer(BedrockServerSession session) {
         this.session = session;
         this.session.setPacketHandler(new AllayPacketHandler());
@@ -241,6 +243,9 @@ public class AllayPlayer implements Player {
                 // Opened form will be expired after 10 minutes
                 .expireAfterWrite(10, TimeUnit.MINUTES)
                 .build();
+
+        // Hud
+        this.hiddenHudElements = EnumSet.noneOf(HudElement.class);
     }
 
     public static LevelChunkPacket createSubChunkLevelChunkPacket(AllayUnsafeChunk chunk) {
@@ -288,8 +293,13 @@ public class AllayPlayer implements Player {
     public void tick(long currentTick) {
         // Send commands only once in one second to prevent lagging the client
         if (this.shouldSendCommands && currentTick % 20 == 0) {
-            this.sendCommands0();
+            this.sendCommands();
             this.shouldSendCommands = false;
+        }
+
+        if (this.shouldSendHudElements) {
+            this.sendHudElements();
+            this.shouldSendHudElements = false;
         }
     }
 
@@ -2346,6 +2356,26 @@ public class AllayPlayer implements Player {
         }
     }
 
+    @Override
+    public void setHudElementVisibility(HudElement element, boolean visible) {
+        if (visible == getHudElementVisibility(element)) {
+            return;
+        }
+
+        if (!visible) {
+            this.hiddenHudElements.add(element);
+        } else {
+            this.hiddenHudElements.remove(element);
+        }
+
+        this.shouldSendHudElements = true;
+    }
+
+    @Override
+    public boolean getHudElementVisibility(HudElement element) {
+        return !this.hiddenHudElements.contains(element);
+    }
+
     /**
      * Reads all the data in {@link PlayerData} except nbt. To be more exact, this method will validate and set
      * the player entity's current pos and then spawn it. The nbt will be used in EntityPlayer::loadNBT() later in
@@ -2501,12 +2531,34 @@ public class AllayPlayer implements Player {
         sendPacket(packet);
     }
 
-    protected void sendCommands0() {
+    protected void sendCommands() {
         var packet = new AvailableCommandsPacket();
         Registries.COMMANDS.getContent().values().stream()
                 .filter(command -> !command.isServerSideOnly() && this.controlledEntity.hasPermissions(command.getPermissions()))
                 .forEach(command -> packet.getCommands().add(encodeCommand(command)));
         sendPacket(packet);
+    }
+
+    protected void sendHudElements() {
+        var show = new SetHudPacket();
+        var hide = new SetHudPacket();
+        show.setVisibility(HudVisibility.RESET);
+        hide.setVisibility(HudVisibility.HIDE);
+
+        for (var element : HudElement.values()) {
+            if (getHudElementVisibility(element)) {
+                show.getElements().add(toNetwork(element));
+            } else {
+                hide.getElements().add(toNetwork(element));
+            }
+        }
+
+        if (!show.getElements().isEmpty()) {
+            sendPacket(show);
+        }
+        if (!hide.getElements().isEmpty()) {
+            sendPacket(hide);
+        }
     }
 
     @Override

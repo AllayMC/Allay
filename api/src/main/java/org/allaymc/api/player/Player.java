@@ -320,6 +320,22 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void setVerticalFlySpeed(Speed verticalFlySpeed);
 
     /**
+     * Sets the visibility of a specific HUD element for the player.
+     *
+     * @param element the {@link HudElement} whose visibility is to be modified
+     * @param visible {@code true} to make the HUD element visible, {@code false} to hide it
+     */
+    void setHudElementVisibility(HudElement element, boolean visible);
+
+    /**
+     * Determines the visibility of the specified HUD (Heads-Up Display) element.
+     *
+     * @param element the {@code HudElement} whose visibility status is to be checked
+     * @return {@code true} if the HUD element is visible, {@code false} otherwise
+     */
+    boolean getHudElementVisibility(HudElement element);
+
+    /**
      * Sends a packet to the client.
      *
      * @param packet the packet object to be sent to the client. The type of the packet depends on the implementation.

@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Added API for setting player hud element's visibility.
 - Implemented Totem of Undying activation for players.
 
 ### Changed
