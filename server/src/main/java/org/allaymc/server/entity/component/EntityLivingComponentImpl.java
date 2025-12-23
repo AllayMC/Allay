@@ -18,15 +18,20 @@ import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.*;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.interfaces.ItemTotemOfUndyingStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.particle.SimpleParticle;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.ComponentClass;
 import org.allaymc.server.component.ComponentManager;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -36,6 +41,8 @@ import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;
+import org.allaymc.api.container.interfaces.OffhandContainer;
+import org.allaymc.api.container.interfaces.InventoryContainer;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -114,6 +121,9 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
     }
 
     protected void applyDamage(DamageContainer damage) {
+        if (tryConsumeTotem(damage)) {
+            return;
+        }
         setHealth(this.health - damage.getFinalDamage());
         thisEntity.applyAction(SimpleEntityAction.HURT);
         if (damage.isCritical()) {
@@ -152,6 +162,75 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
 
             physicsComponent.knockback(entity.getLocation(), kb, kby, additionalMotion);
         }
+    }
+
+    protected boolean tryConsumeTotem(DamageContainer damage) {
+        if (!(thisEntity instanceof EntityPlayer player)) {
+            return false;
+        }
+
+        if (damage.getDamageType() == DamageType.VOID || damage.getDamageType() == DamageType.COMMAND) {
+            return false;
+        }
+
+        if (this.health - damage.getFinalDamage() >= 1f) {
+            return false;
+        }
+
+        OffhandContainer offhand = player.getContainer(ContainerTypes.OFFHAND);
+        InventoryContainer inventory = player.getContainer(ContainerTypes.INVENTORY);
+        if (offhand == null || inventory == null) {
+            return false;
+        }
+
+        var offhandItem = offhand.getOffhand();
+        var hasOffhandTotem = isTotem(offhandItem);
+        var handItem = inventory.getItemInHand();
+        var hasHandTotem = isTotem(handItem);
+
+        if (!hasOffhandTotem && !hasHandTotem) {
+            return false;
+        }
+
+        player.extinguish();
+        player.removeAllEffects();
+        player.setHealth(1f);
+
+        player.addEffect(new EffectInstance(EffectTypes.REGENERATION, 1, 900, false, true));
+        player.addEffect(new EffectInstance(EffectTypes.FIRE_RESISTANCE, 0, 800, false, true));
+        player.addEffect(new EffectInstance(EffectTypes.ABSORPTION, 1, 100, false, true));
+
+        player.applyAction(SimpleEntityAction.TOTEM_USE);
+        var location = player.getLocation();
+        var dimension = location.dimension();
+        if (dimension != null) {
+            dimension.addSound(location, SimpleSound.TOTEM);
+        }
+
+        if (hasOffhandTotem) {
+            offhand.clearSlot(OffhandContainer.OFFHAND_SLOT);
+            if (hasHandTotem) {
+                inventory.notifySlotChange(inventory.getHandSlot());
+            }
+        } else {
+            inventory.clearItemInHand();
+        }
+
+        return true;
+    }
+
+    private boolean isTotem(ItemStack itemStack) {
+        if (itemStack == null || itemStack == ItemAirStack.AIR_STACK) {
+            return false;
+        }
+        if (itemStack.getCount() <= 0) {
+            return false;
+        }
+        if (itemStack instanceof ItemTotemOfUndyingStack) {
+            return true;
+        }
+        var type = itemStack.getItemType();
+        return type == ItemTypes.TOTEM_OF_UNDYING;
     }
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {

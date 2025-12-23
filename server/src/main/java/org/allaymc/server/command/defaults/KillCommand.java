@@ -6,6 +6,8 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.permission.Permissions;
 import org.allaymc.api.player.GameMode;
@@ -46,7 +48,7 @@ public class KillCommand extends Command {
                 }
 
                 if (target instanceof EntityLiving living) {
-                    living.kill();
+                    living.attack(new DamageContainer(null, DamageType.COMMAND, 1_000_000));
                 } else {
                     target.remove();
                 }
