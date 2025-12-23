@@ -4,10 +4,18 @@ import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.message.I18n;
+import org.allaymc.api.container.ContainerTypes;
+import org.allaymc.api.container.interfaces.InventoryContainer;
+import org.allaymc.api.container.interfaces.OffhandContainer;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityLivingComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -51,6 +59,66 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
     public boolean hasVoidDamage() {
         return thisPlayer.getGameMode() != GameMode.CREATIVE &&
                thisPlayer.getGameMode() != GameMode.SPECTATOR;
+    }
+
+    @Override
+    protected void applyDamage(DamageContainer damage) {
+        if (tryConsumeTotem(damage)) {
+            return;
+        }
+        super.applyDamage(damage);
+    }
+
+    private boolean tryConsumeTotem(DamageContainer damage) {
+        if (damage.getDamageType() == DamageType.VOID ||
+            damage.getDamageType() == DamageType.COMMAND ||
+            damage.getDamageType() == DamageType.API) {
+            return false;
+        }
+
+        if (this.health - damage.getFinalDamage() >= 1f) {
+            return false;
+        }
+
+        OffhandContainer offhand = thisPlayer.getContainer(ContainerTypes.OFFHAND);
+        InventoryContainer inventory = thisPlayer.getContainer(ContainerTypes.INVENTORY);
+
+        var offhandItem = offhand.getOffhand();
+        var hasOffhandTotem = isTotem(offhandItem);
+        var handItem = inventory.getItemInHand();
+        var hasHandTotem = isTotem(handItem);
+
+        if (!hasOffhandTotem && !hasHandTotem) {
+            return false;
+        }
+
+        thisPlayer.extinguish();
+        thisPlayer.removeAllEffects();
+        thisPlayer.setHealth(1f);
+
+        thisPlayer.addEffect(new EffectInstance(EffectTypes.REGENERATION, 1, 900, false, true));
+        thisPlayer.addEffect(new EffectInstance(EffectTypes.FIRE_RESISTANCE, 0, 800, false, true));
+        thisPlayer.addEffect(new EffectInstance(EffectTypes.ABSORPTION, 1, 100, false, true));
+
+        thisPlayer.applyAction(SimpleEntityAction.TOTEM_USE);
+        var location = thisPlayer.getLocation();
+        var dimension = location.dimension();
+        if (dimension != null) {
+            dimension.addSound(location, SimpleSound.TOTEM);
+        }
+
+        if (hasOffhandTotem) {
+            offhand.clearSlot(OffhandContainer.OFFHAND_SLOT);
+        } else {
+            inventory.clearItemInHand();
+        }
+
+        return true;
+    }
+
+    private boolean isTotem(ItemStack itemStack) {
+        var type = itemStack.getItemType();
+        return type == ItemTypes.TOTEM_OF_UNDYING;
     }
 
     @Override
