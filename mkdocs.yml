@@ -137,6 +137,7 @@ nav:
       - Use Permission: tutorials/use-permission.md
       - Register Event Handlers: tutorials/register-event-listeners.md
       - Schedule Tasks: tutorials/schedule-tasks.md
+      - Use Config: tutorials/use-config.md
       - Use Color Codes: tutorials/use-color-codes.md
       - Use Forms: tutorials/use-forms.md
       - Use Scoreboards: tutorials/use-scoreboards.md
