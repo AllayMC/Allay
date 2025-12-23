@@ -14,11 +14,9 @@ import org.allaymc.api.player.Player;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.NETWORK)
-public class PlayerSpawnEvent extends ServerEvent implements CancellableEvent {
-
+public class PlayerSpawnEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
      * Represents the player associated with this event.
      */
@@ -30,4 +28,9 @@ public class PlayerSpawnEvent extends ServerEvent implements CancellableEvent {
     @MayContainTrKey
     @Setter
     protected String disconnectReason;
+
+    public PlayerSpawnEvent(Player player, String disconnectReason) {
+        super(player);
+        this.disconnectReason = disconnectReason;
+    }
 }

@@ -16,11 +16,9 @@ import org.allaymc.api.player.Player;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.ANY)
-public class PlayerQuitEvent extends ServerEvent {
-
+public class PlayerQuitEvent extends ServerPlayerEvent {
     /**
      * The player who has quit the server.
      */
@@ -32,4 +30,9 @@ public class PlayerQuitEvent extends ServerEvent {
     @MayContainTrKey
     @Setter
     protected String quitMessage;
+
+    public PlayerQuitEvent(Player player, String quitMessage) {
+        super(player);
+        this.quitMessage = quitMessage;
+    }
 }
