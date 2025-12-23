@@ -18,6 +18,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Implemented Totem of Undying activation for players.
 
+### Changed
+
+- (API) Refactor and clean up the config util under `org.allaymc.api.config`. This refactor is backward-compatible and shouldn't affect any plugin.
+
 # 0.10.2 (API 0.19.0) - 2025/12/22
 
 <small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.1...0.10.2)</small>
