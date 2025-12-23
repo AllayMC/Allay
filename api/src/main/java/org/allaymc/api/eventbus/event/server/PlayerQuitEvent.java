@@ -20,11 +20,6 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.ANY)
 public class PlayerQuitEvent extends ServerPlayerEvent {
     /**
-     * The player who has quit the server.
-     */
-    protected Player player;
-
-    /**
      * The message that will be broadcast.
      */
     @MayContainTrKey

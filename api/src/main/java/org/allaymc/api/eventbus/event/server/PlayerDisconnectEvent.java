@@ -18,11 +18,6 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.ANY)
 public class PlayerDisconnectEvent extends ServerPlayerEvent {
     /**
-     * The player associated with this event.
-     */
-    protected Player player;
-
-    /**
      * The reason why the player disconnected.
      */
     protected String disconnectReason;

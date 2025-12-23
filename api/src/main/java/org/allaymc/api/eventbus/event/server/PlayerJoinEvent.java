@@ -18,11 +18,6 @@ import org.allaymc.api.player.Player;
 @Getter
 public class PlayerJoinEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
-     * The player associated with this event.
-     */
-    protected Player player;
-
-    /**
      * The message that will be broadcast if the event is not cancelled.
      */
     @MayContainTrKey

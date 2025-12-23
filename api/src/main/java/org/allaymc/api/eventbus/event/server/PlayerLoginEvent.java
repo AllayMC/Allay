@@ -18,11 +18,6 @@ import org.allaymc.api.player.Player;
 @CallerThread(ThreadType.NETWORK)
 public class PlayerLoginEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
-     * The player associated with this event.
-     */
-    protected Player player;
-
-    /**
      * The reason that will be shown to the player if the event is cancelled.
      */
     @MayContainTrKey

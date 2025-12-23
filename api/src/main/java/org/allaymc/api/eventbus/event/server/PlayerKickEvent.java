@@ -15,11 +15,6 @@ import org.allaymc.api.player.Player;
 @Getter
 @CallerThread(ThreadType.ANY)
 public class PlayerKickEvent extends ServerPlayerEvent implements CancellableEvent {
-    /**
-     * The player associated with this event.
-     */
-    protected Player player;
-
     @Setter
     protected String reason;
 
