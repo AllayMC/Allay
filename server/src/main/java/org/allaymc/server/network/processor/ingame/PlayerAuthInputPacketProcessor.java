@@ -65,6 +65,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     // Ticks
     protected double stopBreakingTime;
 
+    private boolean useExplicitSneakState;
+
     private static boolean isInvalidGameType(Player player) {
         var entity = player.getControlledEntity();
         // Creative mode player can break blocks just like they are in
@@ -271,6 +273,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
+        var hasExplicitSneak = inputData.contains(PlayerAuthInputData.SNEAKING) ||
+                               inputData.contains(PlayerAuthInputData.SNEAK_DOWN) ||
+                               inputData.contains(PlayerAuthInputData.SNEAK_TOGGLE_DOWN) ||
+                               inputData.contains(PlayerAuthInputData.PERSIST_SNEAK);
+        if (hasExplicitSneak) {
+            useExplicitSneakState = true;
+        }
+        if (useExplicitSneakState) {
+            entity.setSneaking(hasExplicitSneak);
+        }
+
         for (var input : inputData) {
             switch (input) {
                 case START_SPRINTING -> {
@@ -283,8 +296,16 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     entity.setSprinting(true);
                 }
                 case STOP_SPRINTING -> entity.setSprinting(false);
-                case START_SNEAKING -> entity.setSneaking(true);
-                case STOP_SNEAKING -> entity.setSneaking(false);
+                case START_SNEAKING -> {
+                    if (!useExplicitSneakState) {
+                        entity.setSneaking(true);
+                    }
+                }
+                case STOP_SNEAKING -> {
+                    if (!useExplicitSneakState) {
+                        entity.setSneaking(false);
+                    }
+                }
                 case START_SWIMMING -> entity.setSwimming(true);
                 case STOP_SWIMMING -> entity.setSwimming(false);
                 case START_GLIDING -> entity.setGliding(true);
