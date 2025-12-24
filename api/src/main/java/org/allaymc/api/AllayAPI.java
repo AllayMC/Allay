@@ -184,7 +184,6 @@ public final class AllayAPI {
      * @author daoge_cmd
      */
     @NoArgsConstructor
-    @ApiStatus.Internal
     public static final class APIInstanceHolder<T> {
 
         private T instance;
