@@ -12,5 +12,8 @@ import org.allaymc.api.player.Player;
 @Getter
 @AllArgsConstructor
 public abstract class ServerPlayerEvent extends ServerEvent {
+    /**
+     * The {@code Player} instance associated with this event.
+     */
     protected Player player;
 }
