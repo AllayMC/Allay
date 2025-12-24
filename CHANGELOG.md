@@ -25,6 +25,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `ServerPlayerEvent` base class for all `Player` related events under `org.allaymc.api.eventbus.event.server` package.
 - (API) Made `AllayAPI.APIInstanceHolder<T>` public in allay-api by removing the `@ApiStatus.Internal` annotation.
 
+### Removed
+
+- (API) Removed `@ApiStatus.OverrideOnly` annotation in `WorldStorage.shutdown()` method.
+
 # 0.10.2 (API 0.19.0) - 2025/12/22
 
 <small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.1...0.10.2)</small>
