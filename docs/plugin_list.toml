@@ -30,6 +30,11 @@ description = "Voxel world generation modding platform."
 authors = ["daoge_cmd", "IWareQ", "dfsek", "duplexsystem", "Astrash", "solonovamax", "Sancires", "Aureus", "RogueShade"]
 github = "https://github.com/PolyhedralDev/Terra"
 
+[TemplateWorld]
+description = "TemplateWorld is a plugin to make it able to create a runtime-only world based on a 'template world'."
+authors = ["daoge_cmd"]
+github = "https://github.com/AllayMC/TemplateWorld"
+
 # Other Plugins
 
 [Amoji]
