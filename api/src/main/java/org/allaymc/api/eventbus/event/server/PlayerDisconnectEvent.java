@@ -14,16 +14,16 @@ import org.allaymc.api.player.Player;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.ANY)
-public class PlayerDisconnectEvent extends ServerEvent {
-    /**
-     * The player associated with this event.
-     */
-    protected Player player;
+public class PlayerDisconnectEvent extends ServerPlayerEvent {
     /**
      * The reason why the player disconnected.
      */
     protected String disconnectReason;
+
+    public PlayerDisconnectEvent(Player player, String disconnectReason) {
+        super(player);
+        this.disconnectReason = disconnectReason;
+    }
 }

@@ -14,20 +14,18 @@ import org.allaymc.api.player.Player;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
 @CallerThread(ThreadType.NETWORK)
-public class PlayerLoginEvent extends ServerEvent implements CancellableEvent {
-
-    /**
-     * The player associated with this event.
-     */
-    protected Player player;
-
+public class PlayerLoginEvent extends ServerPlayerEvent implements CancellableEvent {
     /**
      * The reason that will be shown to the player if the event is cancelled.
      */
     @MayContainTrKey
     @Setter
     protected String disconnectReason;
+
+    public PlayerLoginEvent(Player player, String disconnectReason) {
+        super(player);
+        this.disconnectReason = disconnectReason;
+    }
 }
