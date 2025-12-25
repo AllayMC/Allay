@@ -35,6 +35,10 @@ public class DoubleChestContainerImpl implements BlockContainer {
     protected final Set<Consumer<ContainerViewer>> closeListeners;
     protected final Int2ObjectMap<Set<Consumer<ItemStack>>> leftSlotChangeListeners;
     protected final Int2ObjectMap<Set<Consumer<ItemStack>>> rightSlotChangeListeners;
+    @SuppressWarnings("unchecked")
+    protected final Consumer<ItemStack>[] leftViewListeners = new Consumer[CHEST_SIZE];
+    @SuppressWarnings("unchecked")
+    protected final Consumer<ItemStack>[] rightViewListeners = new Consumer[CHEST_SIZE];
 
     @Getter
     @Setter
@@ -61,8 +65,12 @@ public class DoubleChestContainerImpl implements BlockContainer {
                 this.left.removeSlotChangeListener(slot, listener);
                 left.addSlotChangeListener(slot, listener);
             }));
+            detachViewListeners(this.left, leftViewListeners);
         }
         this.left = left;
+        if (left != null) {
+            attachViewListeners(left, leftViewListeners, 0);
+        }
     }
 
     public void setRight(Container right) {
@@ -71,8 +79,12 @@ public class DoubleChestContainerImpl implements BlockContainer {
                 this.right.removeSlotChangeListener(slot, listener);
                 right.addSlotChangeListener(slot, listener);
             }));
+            detachViewListeners(this.right, rightViewListeners);
         }
         this.right = right;
+        if (right != null) {
+            attachViewListeners(right, rightViewListeners, CHEST_SIZE);
+        }
     }
 
     @Override
@@ -226,6 +238,31 @@ public class DoubleChestContainerImpl implements BlockContainer {
     @Override
     public void loadNBT(List<NbtMap> nbtList) {
         throw new UnsupportedOperationException();
+    }
+
+    private void attachViewListeners(Container container, Consumer<ItemStack>[] listeners, int slotOffset) {
+        for (int slot = 0; slot < CHEST_SIZE; slot++) {
+            int viewSlot = slot + slotOffset;
+            Consumer<ItemStack> listener = item -> notifyViewers(viewSlot);
+            listeners[slot] = listener;
+            container.addSlotChangeListener(slot, listener);
+        }
+    }
+
+    private void detachViewListeners(Container container, Consumer<ItemStack>[] listeners) {
+        for (int slot = 0; slot < CHEST_SIZE; slot++) {
+            Consumer<ItemStack> listener = listeners[slot];
+            if (listener != null) {
+                container.removeSlotChangeListener(slot, listener);
+                listeners[slot] = null;
+            }
+        }
+    }
+
+    private void notifyViewers(int slot) {
+        for (var viewer : viewers.values()) {
+            viewer.viewSlot(this, slot);
+        }
     }
 
     private static boolean isLeft(int slot) {

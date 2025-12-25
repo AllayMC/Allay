@@ -421,6 +421,16 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initHopper() {
+        BlockTypes.HOPPER = AllayBlockType
+                .builder(BlockHopperBehaviorImpl.class)
+                .vanillaBlock(BlockId.HOPPER)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.TOGGLE_BIT)
+                .bindBlockEntity(BlockEntityTypes.HOPPER)
+                .setBaseComponentSupplier(BlockHopperBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initCraftingTable() {
         BlockTypes.CRAFTING_TABLE = AllayBlockType
                 .builder(BlockCraftingTableBehaviorImpl.class)
