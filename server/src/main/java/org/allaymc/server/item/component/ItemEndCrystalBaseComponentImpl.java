@@ -1,6 +1,7 @@
 package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityInitInfo;
@@ -8,14 +9,13 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.world.Dimension;
-import org.joml.Vector3d;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBd;
 
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author ClexaGod
+ * @author ClexaGod | daoge_cmd
  */
 public class ItemEndCrystalBaseComponentImpl extends ItemBaseComponentImpl {
     public ItemEndCrystalBaseComponentImpl(ItemStackInitInfo initInfo) {
@@ -24,50 +24,41 @@ public class ItemEndCrystalBaseComponentImpl extends ItemBaseComponentImpl {
 
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
-
-        if (interactInfo == null || interactInfo.player() == null) {
-            return false;
+        if (super.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
+            return true;
         }
 
         var player = interactInfo.player();
-        if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SPECTATOR) {
+        var gameMode = player.getGameMode();
+        if (gameMode == GameMode.ADVENTURE || gameMode == GameMode.SPECTATOR) {
             return false;
         }
 
-        if (interactInfo.blockFace() != BlockFace.UP) {
-            return false;
-        }
-
-        var clickedBlockState = interactInfo.getClickedBlock();
-        var clickedBlockType = clickedBlockState.getBlockType();
+        var clickedBlockType = interactInfo.getClickedBlock().getBlockType();
         if (clickedBlockType != BlockTypes.OBSIDIAN && clickedBlockType != BlockTypes.BEDROCK) {
             return false;
         }
 
-        if (dimension.getBlockState(placeBlockPos).getBlockType() != BlockTypes.AIR) {
-            return false;
-        }
-        var abovePos = BlockFace.UP.offsetPos(placeBlockPos);
-        if (dimension.getBlockState(abovePos).getBlockType() != BlockTypes.AIR) {
+        var clickedBlockPos = interactInfo.clickedBlockPos();
+        if (!dimension.getBlockState(BlockFace.UP.offsetPos(clickedBlockPos)).getBlockType().hasBlockTag(BlockTags.REPLACEABLE) ||
+            !dimension.getBlockState(BlockFace.UP.offsetPos(clickedBlockPos, 2)).getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return false;
         }
 
-        var basePos = interactInfo.clickedBlockPos();
-        var aabb = new AABBd(basePos.x(), basePos.y(), basePos.z(), basePos.x() + 1, basePos.y() + 2, basePos.z() + 1);
-        var collidingEntities = dimension.getEntityManager()
-                .getPhysicsService()
-                .computeCollidingEntities(aabb, entity -> true);
+        var crystalPos = BlockFace.UP.offsetPos(interactInfo.clickedBlockPos());
+        var collidingEntities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(new AABBd(
+                crystalPos.x(), crystalPos.y(), crystalPos.z(),
+                crystalPos.x() + 1, crystalPos.y() + 2, crystalPos.z() + 1
+        ));
         if (!collidingEntities.isEmpty()) {
             return false;
         }
 
-        var spawnPos = new Vector3d(basePos.x() + 0.5, basePos.y() + 1.0, basePos.z() + 0.5);
         var crystal = EntityTypes.ENDER_CRYSTAL.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
-                        .pos(spawnPos)
-                        .rot(ThreadLocalRandom.current().nextDouble() * 360.0d, 0)
+                        .pos(crystalPos.x() + 0.5, crystalPos.y(), crystalPos.z() + 0.5)
+                        .rot(ThreadLocalRandom.current().nextDouble() * 360, 0)
                         .build()
         );
         dimension.getEntityManager().addEntity(crystal);

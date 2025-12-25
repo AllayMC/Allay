@@ -142,12 +142,8 @@ public final class EntityTypeInitializer {
                             if (damage.getAttacker() instanceof EntityEnderDragon) {
                                 return false;
                             }
-                            return super.canBeAttacked(damage);
-                        }
 
-                        @Override
-                        public boolean hasFallDamage() {
-                            return false;
+                            return super.canBeAttacked(damage);
                         }
 
                         @Override
