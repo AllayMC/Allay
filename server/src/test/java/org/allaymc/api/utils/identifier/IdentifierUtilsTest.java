@@ -1,7 +1,5 @@
-package org.allaymc.api.identifier;
+package org.allaymc.api.utils.identifier;
 
-import org.allaymc.api.utils.identifier.IdentifierUtils;
-import org.allaymc.api.utils.identifier.InvalidIdentifierException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

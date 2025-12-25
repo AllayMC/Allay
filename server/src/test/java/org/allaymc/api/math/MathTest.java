@@ -1,4 +1,4 @@
-package org.allaymc.server.math;
+package org.allaymc.api.math;
 
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.position.Position3i;

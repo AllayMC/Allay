@@ -1,9 +1,7 @@
-package org.allaymc.api.item.descriptor;
+package org.allaymc.api.item.recipe.descriptor;
 
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.data.ItemTags;
-import org.allaymc.api.item.recipe.descriptor.ItemTagDescriptor;
-import org.allaymc.api.item.recipe.descriptor.ItemTypeDescriptor;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
