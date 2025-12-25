@@ -22,3 +22,26 @@ coverage:
         if_ci_failed: error
         informational: true
         only_pulls: false
+
+ignore:
+  # Block related auto-generated files
+  - "api/src/main/java/org/allaymc/api/block/interfaces/**"
+  - "api/src/main/java/org/allaymc/api/block/property/enums/**"
+  - "api/src/main/java/org/allaymc/api/block/property/type/BlockPropertyTypes.java"
+  - "api/src/main/java/org/allaymc/api/block/type/BlockTypes.java"
+  - "server/src/main/java/org/allaymc/server/block/impl/**"
+  - "server/src/main/java/org/allaymc/server/block/type/BlockTypeDefaultInitializer.java"
+  # BlockEntity related auto-generated files
+  - "api/src/main/java/org/allaymc/api/blockentity/interfaces/**"
+  - "api/src/main/java/org/allaymc/api/blockentity/type/BlockEntityTypes.java"
+  - "server/src/main/java/org/allaymc/server/blockentity/impl/**"
+  # Entity related auto-generated files
+  - "api/src/main/java/org/allaymc/api/entity/interfaces/**"
+  - "api/src/main/java/org/allaymc/api/entity/type/EntityTypes.java"
+  - "server/src/main/java/org/allaymc/server/entity/impl/**"
+  - "server/src/main/java/org/allaymc/server/entity/type/EntityTypeDefaultInitializer.java"
+  # Item related auto-generated files
+  - "api/src/main/java/org/allaymc/api/item/interfaces/**"
+  - "api/src/main/java/org/allaymc/api/item/type/ItemTypes.java"
+  - "server/src/main/java/org/allaymc/server/item/impl/**"
+  - "server/src/main/java/org/allaymc/server/item/type/ItemTypeDefaultInitializer.java"
