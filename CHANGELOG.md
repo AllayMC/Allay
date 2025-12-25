@@ -28,6 +28,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Made `AllayAPI.APIInstanceHolder<T>` public in allay-api by removing the `@ApiStatus.Internal` annotation.
 - (API) `EntityEnderCrystal` now extends `EntityLiving` and `EntityEnderCrystalBaseComponent` interfaces.
 
+### Fixed
+
+- (API) Fixed method `Container.removeAllViewers()` won't remove all viewers from the container.
+
 ### Removed
 
 - (API) Removed `@ApiStatus.OverrideOnly` annotation in `WorldStorage.shutdown()` method.

@@ -5,6 +5,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -187,7 +188,7 @@ public interface Container {
      * Removes all viewers from this container.
      */
     default void removeAllViewers() {
-        getViewers().values().forEach(this::removeViewer);
+        new ArrayList<>(getViewers().values()).forEach(this::removeViewer);
     }
 
     /**
