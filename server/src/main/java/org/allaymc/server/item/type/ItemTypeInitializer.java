@@ -749,6 +749,14 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    public static void initEndCrystal() {
+        ItemTypes.END_CRYSTAL = AllayItemType
+                .builder(ItemEndCrystalStackImpl.class)
+                .vanillaItem(ItemId.END_CRYSTAL)
+                .addComponent(ItemEndCrystalBaseComponentImpl::new, ItemEndCrystalBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initSeeds() {
         ItemTypes.WHEAT_SEEDS = AllayItemType
                 .builder(ItemWheatSeedsStackImpl.class)
