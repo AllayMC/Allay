@@ -26,6 +26,7 @@ public final class Button implements SimpleFormElement {
     @Getter
     private transient Consumer<Button> onClick = button -> {
     };
+    @Getter
     private transient SimpleForm form;
 
     /**
@@ -52,7 +53,6 @@ public final class Button implements SimpleFormElement {
      * Set the callback that will be called when the button is clicked.
      *
      * @param onClick the callback
-     *
      * @return the form
      */
     public SimpleForm onClick(Consumer<Button> onClick) {
