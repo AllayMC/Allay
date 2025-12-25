@@ -35,14 +35,6 @@ public class AllayEventBus implements EventBus {
             return;
         }
 
-        var listenerClass = listener.getClass();
-        if (listenerClass.isAnonymousClass() || listenerClass.isLocalClass()) {
-            throw new EventException(
-                    "Cannot register anonymous or local class as event listener: " + listenerClass.getName() +
-                    ". Please use a named class or registerListenerFor() with lambda instead."
-            );
-        }
-
         for (var method : ReflectionUtils.getAllMethods(listener.getClass())) {
             var annotation = method.getAnnotation(EventHandler.class);
             if (annotation == null) continue;

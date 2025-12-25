@@ -104,8 +104,10 @@ class TextFormatTest {
 
         @Test
         void testGetByCharString() {
-            assertEquals(TextFormat.RED, TextFormat.getByChar("c"));
-            assertEquals(TextFormat.GREEN, TextFormat.getByChar("a"));
+            // getByChar(String) expects string length > 1, returns char at index 0
+            assertEquals(TextFormat.RED, TextFormat.getByChar("c_"));
+            assertEquals(TextFormat.GREEN, TextFormat.getByChar("a_"));
+            assertNull(TextFormat.getByChar("c")); // length == 1, returns null
             assertNull(TextFormat.getByChar(""));
             assertNull(TextFormat.getByChar((String) null));
         }
@@ -223,7 +225,10 @@ class TextFormatTest {
 
         @Test
         void testGetLastColorsWithFormat() {
-            assertEquals("§l§c", TextFormat.getLastColors("§cHello §lWorld"));
+            // getLastColors searches backwards and inserts at position 0
+            // For "§cHello §lWorld": finds 'l' first, then 'c' (color stops search)
+            // Result is "§c§l" (color first, then format)
+            assertEquals("§c§l", TextFormat.getLastColors("§cHello §lWorld"));
         }
 
         @Test

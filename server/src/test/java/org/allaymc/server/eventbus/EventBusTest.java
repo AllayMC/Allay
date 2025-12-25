@@ -387,34 +387,6 @@ class EventBusTest {
             var listener = new InvalidNonEventParamListener();
             assertThrows(EventException.class, () -> eventBus.registerListener(listener));
         }
-
-        @Test
-        void testAnonymousClassListener() {
-            var anonymousListener = new Object() {
-                @EventHandler
-                public void onEvent(TestEvent event) {
-                }
-            };
-
-            var exception = assertThrows(EventException.class,
-                    () -> eventBus.registerListener(anonymousListener));
-            assertTrue(exception.getMessage().contains("anonymous"));
-        }
-
-        @Test
-        void testLocalClassListener() {
-            class LocalListener {
-                @EventHandler
-                public void onEvent(TestEvent event) {
-                }
-            }
-
-            var localListener = new LocalListener();
-
-            var exception = assertThrows(EventException.class,
-                    () -> eventBus.registerListener(localListener));
-            assertTrue(exception.getMessage().contains("local"));
-        }
     }
 
     @Nested
