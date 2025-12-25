@@ -6,15 +6,18 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author daoge_cmd
  */
 class GameLoopTest {
+
     @Test
     void testLoop() {
         var counter = new AtomicInteger(0);
@@ -49,5 +52,202 @@ class GameLoopTest {
         thread.start();
         thread.join();
         assertTrue(gameLoop.getTPS() <= 20);
+    }
+
+    @Test
+    void testOnStartAndOnStopCallbacks() {
+        var startCalled = new AtomicBoolean(false);
+        var stopCalled = new AtomicBoolean(false);
+
+        GameLoop.builder()
+                .loopCountPerSec(1024)
+                .onStart(() -> startCalled.set(true))
+                .onStop(() -> stopCalled.set(true))
+                .onTick(GameLoop::stop)
+                .build()
+                .startLoop();
+
+        assertTrue(startCalled.get());
+        assertTrue(stopCalled.get());
+    }
+
+    @Test
+    void testCurrentTickInitialization() {
+        long initialTick = 100;
+        var tickRecorded = new AtomicInteger();
+
+        GameLoop.builder()
+                .loopCountPerSec(1024)
+                .currentTick(initialTick)
+                .onTick(loop -> {
+                    tickRecorded.set((int) loop.getTick());
+                    loop.stop();
+                })
+                .build()
+                .startLoop();
+
+        assertEquals(initialTick, tickRecorded.get());
+    }
+
+    @Test
+    void testTickIncrement() {
+        var ticks = new ArrayList<Long>();
+
+        GameLoop.builder()
+                .loopCountPerSec(1024)
+                .onTick(loop -> {
+                    ticks.add(loop.getTick());
+                    if (ticks.size() >= 5) {
+                        loop.stop();
+                    }
+                })
+                .build()
+                .startLoop();
+
+        assertEquals(List.of(0L, 1L, 2L, 3L, 4L), ticks);
+    }
+
+    @Test
+    void testGetLoopCountPerSec() {
+        GameLoop gameLoop = GameLoop.builder()
+                .loopCountPerSec(50)
+                .onTick(GameLoop::stop)
+                .build();
+
+        assertEquals(50, gameLoop.getLoopCountPerSec());
+        gameLoop.startLoop();
+    }
+
+    @SneakyThrows
+    @Test
+    void testIsRunning() {
+        var latch = new CountDownLatch(1);
+        var runningDuringLoop = new AtomicBoolean(false);
+
+        GameLoop gameLoop = GameLoop.builder()
+                .loopCountPerSec(1024)
+                .onTick(loop -> {
+                    runningDuringLoop.set(loop.isRunning());
+                    loop.stop();
+                    latch.countDown();
+                })
+                .build();
+
+        assertTrue(gameLoop.isRunning());
+
+        Thread thread = new Thread(gameLoop::startLoop);
+        thread.start();
+        latch.await(1, TimeUnit.SECONDS);
+        thread.join();
+
+        assertTrue(runningDuringLoop.get());
+        assertFalse(gameLoop.isRunning());
+    }
+
+    @SneakyThrows
+    @Test
+    void testMSPTAndTickUsage() {
+        GameLoop gameLoop = GameLoop.builder()
+                .loopCountPerSec(20)
+                .onTick(loop -> {
+                    if (loop.getTick() >= 25) {
+                        loop.stop();
+                    }
+                })
+                .build();
+
+        Thread thread = new Thread(gameLoop::startLoop);
+        thread.start();
+        thread.join();
+
+        float mspt = gameLoop.getMSPT();
+        float tickUsage = gameLoop.getTickUsage();
+
+        assertTrue(mspt >= 0);
+        assertTrue(tickUsage >= 0);
+    }
+
+    @Test
+    void testInvalidLoopCountPerSecZero() {
+        assertThrows(IllegalArgumentException.class, () ->
+                GameLoop.builder().loopCountPerSec(0).build()
+        );
+    }
+
+    @Test
+    void testInvalidLoopCountPerSecNegative() {
+        assertThrows(IllegalArgumentException.class, () ->
+                GameLoop.builder().loopCountPerSec(-1).build()
+        );
+    }
+
+    @Test
+    void testInvalidLoopCountPerSecTooHigh() {
+        assertThrows(IllegalArgumentException.class, () ->
+                GameLoop.builder().loopCountPerSec(1025).build()
+        );
+    }
+
+    @Test
+    void testMaxValidLoopCountPerSec() {
+        GameLoop gameLoop = GameLoop.builder()
+                .loopCountPerSec(1024)
+                .onTick(GameLoop::stop)
+                .build();
+
+        assertEquals(1024, gameLoop.getLoopCountPerSec());
+        gameLoop.startLoop();
+    }
+
+    @SneakyThrows
+    @Test
+    void testStopFromAnotherThread() {
+        var tickCount = new AtomicInteger(0);
+
+        GameLoop gameLoop = GameLoop.builder()
+                .loopCountPerSec(1024)
+                .onTick(loop -> tickCount.incrementAndGet())
+                .build();
+
+        Thread loopThread = new Thread(gameLoop::startLoop);
+        loopThread.start();
+
+        Thread.sleep(50);
+        gameLoop.stop();
+        loopThread.join(1000);
+
+        assertFalse(loopThread.isAlive());
+        assertTrue(tickCount.get() > 0);
+    }
+
+    @Test
+    void testDefaultBuilderValues() {
+        GameLoop gameLoop = GameLoop.builder()
+                .onTick(GameLoop::stop)
+                .build();
+
+        assertEquals(20, gameLoop.getLoopCountPerSec());
+        assertEquals(0, gameLoop.getTick());
+        gameLoop.startLoop();
+    }
+
+    @SneakyThrows
+    @Test
+    void testTPSWithNormalLoad() {
+        GameLoop gameLoop = GameLoop.builder()
+                .loopCountPerSec(20)
+                .onTick(loop -> {
+                    if (loop.getTick() >= 40) {
+                        loop.stop();
+                    }
+                })
+                .build();
+
+        Thread thread = new Thread(gameLoop::startLoop);
+        thread.start();
+        thread.join();
+
+        float tps = gameLoop.getTPS();
+        assertTrue(tps > 0 && tps <= 20);
     }
 }
