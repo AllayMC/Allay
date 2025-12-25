@@ -320,6 +320,83 @@ class SchedulerTest {
         }
     }
 
+    @Test
+    void testScheduleDelayedWithRunnable() {
+        AtomicBoolean executed = new AtomicBoolean(false);
+
+        scheduler.scheduleDelayed(VALID_TASK_CREATOR, () -> executed.set(true), 2);
+
+        scheduler.tick();
+        assertFalse(executed.get());
+
+        scheduler.tick();
+        assertTrue(executed.get());
+    }
+
+    @Test
+    void testScheduleDelayedAsyncWithRunnable() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicBoolean executed = new AtomicBoolean(false);
+
+        scheduler.scheduleDelayed(VALID_TASK_CREATOR, () -> {
+            executed.set(true);
+            latch.countDown();
+        }, 1, true);
+
+        scheduler.tick();
+        assertTrue(latch.await(1, TimeUnit.SECONDS));
+        assertTrue(executed.get());
+    }
+
+    @Test
+    void testScheduleRepeatingWithRunnable() {
+        AtomicInteger counter = new AtomicInteger(0);
+        AtomicBoolean valid = new AtomicBoolean(true);
+
+        TaskCreator invalidatableCreator = valid::get;
+
+        scheduler.scheduleRepeating(invalidatableCreator, counter::incrementAndGet, 1);
+
+        for (int i = 0; i < 5; i++) {
+            scheduler.tick();
+        }
+        assertEquals(5, counter.get());
+
+        valid.set(false);
+        scheduler.tick();
+
+        assertEquals(5, counter.get());
+    }
+
+    @Test
+    void testScheduleDelayedRepeatingWithRunnable() {
+        AtomicInteger counter = new AtomicInteger(0);
+        AtomicBoolean valid = new AtomicBoolean(true);
+        int delay = 2;
+        int period = 1;
+
+        TaskCreator invalidatableCreator = valid::get;
+
+        scheduler.scheduleDelayedRepeating(invalidatableCreator, counter::incrementAndGet, delay, period);
+
+        // During delay, task should not run
+        scheduler.tick();
+        scheduler.tick();
+        assertEquals(0, counter.get());
+
+        // After delay, task starts repeating
+        scheduler.tick();
+        assertEquals(1, counter.get());
+
+        scheduler.tick();
+        assertEquals(2, counter.get());
+
+        // Invalidate creator to stop
+        valid.set(false);
+        scheduler.tick();
+        assertEquals(2, counter.get());
+    }
+
     private void runSchedulerUntilEmpty(int loopCountPerSec) {
         GameLoop.builder()
                 .loopCountPerSec(loopCountPerSec)

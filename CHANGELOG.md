@@ -17,6 +17,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - (API) Added API for setting player hud element's visibility.
+- (API) Added `Runnable` overloads to `Scheduler` for `scheduleDelayed`, `scheduleRepeating`, and `scheduleDelayedRepeating` methods.
 - Implemented Totem of Undying activation for players.
 - Implemented End Crystal placement and explosion behavior.
 

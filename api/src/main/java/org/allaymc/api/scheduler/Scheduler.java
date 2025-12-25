@@ -76,6 +76,32 @@ public interface Scheduler {
     /**
      * Schedule a delayed task.
      *
+     * @param creator  the task creator
+     * @param runnable the runnable to execute
+     * @param delay    the delay in ticks
+     */
+    default void scheduleDelayed(TaskCreator creator, Runnable runnable, int delay) {
+        scheduleDelayed(creator, runnable, delay, false);
+    }
+
+    /**
+     * Schedule a delayed task.
+     *
+     * @param creator  the task creator
+     * @param runnable the runnable to execute
+     * @param delay    the delay in ticks
+     * @param async    whether to run the task asynchronously
+     */
+    default void scheduleDelayed(TaskCreator creator, Runnable runnable, int delay, boolean async) {
+        scheduleDelayed(creator, () -> {
+            runnable.run();
+            return false;
+        }, delay, async);
+    }
+
+    /**
+     * Schedule a delayed task.
+     *
      * @param creator the task creator
      * @param task    the task
      * @param delay   the delay in ticks
@@ -92,6 +118,36 @@ public interface Scheduler {
      */
     default void scheduleRepeating(TaskCreator creator, Task task, int period) {
         scheduleRepeating(creator, task, period, false);
+    }
+
+    /**
+     * Schedule a repeating task.
+     * <p>
+     * The task will run indefinitely until the task creator becomes invalid.
+     *
+     * @param creator  the task creator
+     * @param runnable the runnable to execute
+     * @param period   the period in ticks
+     */
+    default void scheduleRepeating(TaskCreator creator, Runnable runnable, int period) {
+        scheduleRepeating(creator, runnable, period, false);
+    }
+
+    /**
+     * Schedule a repeating task.
+     * <p>
+     * The task will run indefinitely until the task creator becomes invalid.
+     *
+     * @param creator  the task creator
+     * @param runnable the runnable to execute
+     * @param period   the period in ticks
+     * @param async    whether to run the task asynchronously
+     */
+    default void scheduleRepeating(TaskCreator creator, Runnable runnable, int period, boolean async) {
+        scheduleRepeating(creator, () -> {
+            runnable.run();
+            return true;
+        }, period, async);
     }
 
     /**
@@ -114,6 +170,38 @@ public interface Scheduler {
      */
     default void scheduleDelayedRepeating(TaskCreator creator, Task task, int delay, int period) {
         scheduleDelayedRepeating(creator, task, delay, period, false);
+    }
+
+    /**
+     * Schedule a delayed repeating task.
+     * <p>
+     * The task will run indefinitely until the task creator becomes invalid.
+     *
+     * @param creator  the task creator
+     * @param runnable the runnable to execute
+     * @param delay    the delay in ticks
+     * @param period   the period in ticks
+     */
+    default void scheduleDelayedRepeating(TaskCreator creator, Runnable runnable, int delay, int period) {
+        scheduleDelayedRepeating(creator, runnable, delay, period, false);
+    }
+
+    /**
+     * Schedule a delayed repeating task.
+     * <p>
+     * The task will run indefinitely until the task creator becomes invalid.
+     *
+     * @param creator  the task creator
+     * @param runnable the runnable to execute
+     * @param delay    the delay in ticks
+     * @param period   the period in ticks
+     * @param async    whether to run the task asynchronously
+     */
+    default void scheduleDelayedRepeating(TaskCreator creator, Runnable runnable, int delay, int period, boolean async) {
+        scheduleDelayedRepeating(creator, () -> {
+            runnable.run();
+            return true;
+        }, delay, period, async);
     }
 
     /**
