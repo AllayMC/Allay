@@ -12,18 +12,20 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 # 0.10.3 (API 0.20.0) - Unreleased
 
-<small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.2...HEAD)</small>
+<small>[Compare with 0.10.2](https://github.com/AllayMC/Allay/compare/0.10.2...HEAD)</small>
 
 ### Added
 
 - (API) Added API for setting player hud element's visibility.
 - Implemented Totem of Undying activation for players.
+- Implemented End Crystal placement and explosion behavior.
 
 ### Changed
 
 - (API) Refactor and clean up the config util under `org.allaymc.api.config`. This refactor is backward-compatible and shouldn't affect any plugin.
 - (API) Added `ServerPlayerEvent` base class for all `Player` related events under `org.allaymc.api.eventbus.event.server` package.
 - (API) Made `AllayAPI.APIInstanceHolder<T>` public in allay-api by removing the `@ApiStatus.Internal` annotation.
+- (API) `EntityEnderCrystal` now extends `EntityLiving` and `EntityEnderCrystalBaseComponent` interfaces.
 
 ### Removed
 
@@ -31,7 +33,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 # 0.10.2 (API 0.19.0) - 2025/12/22
 
-<small>[Compare with 0.10.0](https://github.com/AllayMC/Allay/compare/0.10.1...0.10.2)</small>
+<small>[Compare with 0.10.1](https://github.com/AllayMC/Allay/compare/0.10.1...0.10.2)</small>
 
 ### Added
 

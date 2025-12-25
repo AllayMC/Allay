@@ -3,6 +3,7 @@ package org.allaymc.server.entity.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
+import org.allaymc.api.entity.interfaces.EntityEnderDragon;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
@@ -126,6 +127,48 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.TNT)
                 .addComponent(EntityTntBaseComponentImpl::new, EntityTntBaseComponentImpl.class)
                 .addComponent(EntityTntPhysicsComponentImpl::new, EntityTntPhysicsComponentImpl.class)
+                .build();
+    }
+
+    public static void initEnderCrystal() {
+        EntityTypes.ENDER_CRYSTAL = AllayEntityType
+                .builder(EntityEnderCrystalImpl.class)
+                .vanillaEntity(EntityId.ENDER_CRYSTAL)
+                .addComponent(EntityEnderCrystalBaseComponentImpl::new, EntityEnderCrystalBaseComponentImpl.class)
+                .addComponent(() -> {
+                    var component = new EntityLivingComponentImpl() {
+                        @Override
+                        public boolean canBeAttacked(DamageContainer damage) {
+                            if (damage.getAttacker() instanceof EntityEnderDragon) {
+                                return false;
+                            }
+
+                            return super.canBeAttacked(damage);
+                        }
+
+                        @Override
+                        public boolean hasFireDamage() {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean hasDrowningDamage() {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean isFireproof() {
+                            return true;
+                        }
+
+                        @Override
+                        protected boolean hasDeadTimer() {
+                            return false;
+                        }
+                    };
+                    component.setMaxHealth(5);
+                    return component;
+                }, EntityLivingComponentImpl.class)
                 .build();
     }
 

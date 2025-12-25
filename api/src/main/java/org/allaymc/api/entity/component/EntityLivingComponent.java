@@ -65,7 +65,7 @@ public interface EntityLivingComponent extends EntityComponent {
     /**
      * Get the last damage that was dealt to this entity.
      *
-     * @return the last damage container
+     * @return the last damage container, or {@code null} if there is no last damage
      */
     DamageContainer getLastDamage();
 
