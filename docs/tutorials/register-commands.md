@@ -148,31 +148,34 @@ be shown to them instead of "Hello World!".
 In the section above, we added a parameter with type `msg` which is a **built-in type** supported by Allay.
 Here is a full list of all built-in parameter types:
 
-| Type                               | Description                                           | Result Type          |
-|------------------------------------|-------------------------------------------------------|----------------------|
-| `str(name)`                        | Single word string                                    | `String`             |
-| `msg(name)`                        | Message (can contain spaces, consumes remaining args) | `String`             |
-| `intNum(name)`                     | Integer number                                        | `int`                |
-| `floatNum(name)`                   | Float number                                          | `float`              |
-| `doubleNum(name)`                  | Double number                                         | `double`             |
-| `longNum(name)`                    | Long number                                           | `long`               |
-| `shortNum(name)`                   | Short number                                          | `short`              |
-| `bool(name)`                       | Boolean (true/false)                                  | `boolean`            |
-| `enums(name, values...)`           | String enumeration                                    | `String`             |
-| `enumClass(name, EnumClass.class)` | Enum class (auto-mapped)                              | `EnumClass`          |
-| `target(name)`                     | Entity selector (@a, @e, @p, etc.)                    | `List<Entity>`       |
-| `playerTarget(name)`               | Player selector                                       | `List<EntityPlayer>` |
-| `pos(name)`                        | Position (x y z, supports ~)                          | `Vector3fc`          |
-| `gameMode(name)`                   | Game mode                                             | `GameMode`           |
-| `difficulty(name)`                 | Difficulty                                            | `Difficulty`         |
-| `effect(name)`                     | Effect type                                           | `EffectType`         |
-| `enchantment(name)`                | Enchantment type                                      | `EnchantmentType`    |
-| `itemType(name)`                   | Item type                                             | `ItemType<?>`        |
-| `blockType(name)`                  | Block type                                            | `BlockType<?>`       |
-| `entityType(name)`                 | Entity type                                           | `EntityType<?>`      |
-| `remain(name)`                     | Remaining arguments as list                           | `List<String>`       |
-| `key(name)`                        | Literal keyword (for subcommands)                     | `String`             |
-| `cmd(name)`                        | Command string                                        | `String`             |
+| Type                               | Description                                           | Result Type                |
+|------------------------------------|-------------------------------------------------------|----------------------------|
+| `str(name)`                        | Single word string                                    | `String`                   |
+| `msg(name)`                        | Message (can contain spaces, consumes remaining args) | `String`                   |
+| `intNum(name)`                     | Integer number                                        | `Integer`                  |
+| `floatNum(name)`                   | Float number                                          | `Float`                    |
+| `doubleNum(name)`                  | Double number                                         | `Double`                   |
+| `longNum(name)`                    | Long number                                           | `Long`                     |
+| `shortNum(name)`                   | Short number                                          | `Short`                    |
+| `bool(name)`                       | Boolean (true/false)                                  | `Boolean`                  |
+| `enums(name, values...)`           | String enumeration                                    | `String`                   |
+| `enumsIgnoreCase(name, values...)` | String enumeration (case-insensitive)                 | `String`                   |
+| `enumClass(name, EnumClass.class)` | Enum class (auto-mapped)                              | `EnumClass`                |
+| `target(name)`                     | Entity selector (@a, @e, @p, etc.)                    | `List<Entity>`             |
+| `playerTarget(name)`               | Player selector                                       | `List<Entity>`             |
+| `wildcardTarget(name)`             | Wildcard target selector                              | `String`                   |
+| `pos(name)`                        | Position (x y z, supports ~)                          | `Vector3d`                 |
+| `gameMode(name)`                   | Game mode                                             | `GameMode`                 |
+| `difficulty(name)`                 | Difficulty                                            | `Difficulty`               |
+| `effect(name)`                     | Effect type                                           | `EffectType`               |
+| `enchantment(name)`                | Enchantment type                                      | `EnchantmentType`          |
+| `itemType(name)`                   | Item type                                             | `ItemType<?>`              |
+| `blockType(name)`                  | Block type                                            | `BlockType<?>`             |
+| `blockPropertyValues(name)`        | Block property values                                 | `List<BlockPropertyValue>` |
+| `entityType(name)`                 | Entity type                                           | `EntityType<?>`            |
+| `remain(name)`                     | Remaining arguments as list                           | `List<String>`             |
+| `key(name)`                        | Literal keyword (for subcommands)                     | `String`                   |
+| `cmd(name)`                        | Command string                                        | `String`                   |
 
 ## Add command aliases
 

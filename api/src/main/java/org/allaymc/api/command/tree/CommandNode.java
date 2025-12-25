@@ -302,6 +302,8 @@ public interface CommandNode {
 
     /**
      * Add a key parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param key          the key of the parameter
      * @param defaultValue the default value of the parameter
@@ -313,6 +315,8 @@ public interface CommandNode {
 
     /**
      * Add a key parameter to this command node with an empty default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param key the key of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -323,6 +327,8 @@ public interface CommandNode {
 
     /**
      * Add a string parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -334,6 +340,8 @@ public interface CommandNode {
 
     /**
      * Add a string parameter to this command node with an empty default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -344,6 +352,8 @@ public interface CommandNode {
 
     /**
      * Add a short integer parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link Short}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -355,6 +365,8 @@ public interface CommandNode {
 
     /**
      * Add a short integer parameter to this command node with a default value of zero.
+     * <p>
+     * Result type: {@link Short}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -365,6 +377,8 @@ public interface CommandNode {
 
     /**
      * Add an integer parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link Integer}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -376,6 +390,8 @@ public interface CommandNode {
 
     /**
      * Add an integer parameter to this command node with a default value of zero.
+     * <p>
+     * Result type: {@link Integer}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -386,6 +402,8 @@ public interface CommandNode {
 
     /**
      * Add a long integer parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link Long}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -397,6 +415,8 @@ public interface CommandNode {
 
     /**
      * Add a long integer parameter to this command node with a default value of zero.
+     * <p>
+     * Result type: {@link Long}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -407,6 +427,8 @@ public interface CommandNode {
 
     /**
      * Add a float parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link Float}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -418,6 +440,8 @@ public interface CommandNode {
 
     /**
      * Add a float parameter to this command node with a default value of zero.
+     * <p>
+     * Result type: {@link Float}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -428,6 +452,8 @@ public interface CommandNode {
 
     /**
      * Add a double parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link Double}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -439,6 +465,8 @@ public interface CommandNode {
 
     /**
      * Add a double parameter to this command node with a default value of zero.
+     * <p>
+     * Result type: {@link Double}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -449,6 +477,8 @@ public interface CommandNode {
 
     /**
      * Add a boolean parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link Boolean}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -460,6 +490,8 @@ public interface CommandNode {
 
     /**
      * Add a boolean parameter to this command node with a default value of false.
+     * <p>
+     * Result type: {@link Boolean}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -470,6 +502,8 @@ public interface CommandNode {
 
     /**
      * Add an enum parameter to this command node with a default value and allowed values.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -482,6 +516,8 @@ public interface CommandNode {
 
     /**
      * Add an enum parameter to this command node with a default value, allowed values, and an enum name.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -495,6 +531,8 @@ public interface CommandNode {
 
     /**
      * Add an enum parameter to this command node with allowed values and an empty default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name   the name of the parameter
      * @param values the allowed values for the parameter
@@ -511,6 +549,8 @@ public interface CommandNode {
      * Unlike {@link #enums}, the string result will then be mapped back to the type of
      * the provided enum class, which means that you don't need to map string back to
      * enum manually.
+     * <p>
+     * Result type: {@code T} (the enum constant of the specified type)
      *
      * @param name      the name of the command node
      * @param enumClass the class of the enumeration to be used for this command node
@@ -526,6 +566,8 @@ public interface CommandNode {
      * Unlike {@link #enums}, the string result will then be mapped back to the type of
      * the provided enum class, which means that you don't need to map string back to
      * enum manually.
+     * <p>
+     * Result type: {@code T} (the enum constant of the specified type)
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -542,6 +584,8 @@ public interface CommandNode {
      * Unlike {@link #enums}, the string result will then be mapped back to the type of
      * the provided enum class, which means that you don't need to map string back to
      * enum manually.
+     * <p>
+     * Result type: {@code T} (the enum constant of the specified type)
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -555,6 +599,8 @@ public interface CommandNode {
 
     /**
      * Add an enum parameter to this command node with a default value and allowed values, ignoring case.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -567,6 +613,8 @@ public interface CommandNode {
 
     /**
      * Add an enum parameter to this command node with a default value, allowed values, and an enum name, ignoring case.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -580,6 +628,8 @@ public interface CommandNode {
 
     /**
      * Add a message parameter to this command node with an empty default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -590,6 +640,8 @@ public interface CommandNode {
 
     /**
      * Add a message parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -601,6 +653,8 @@ public interface CommandNode {
 
     /**
      * Add a remaining parameters node to this command node with an empty default value.
+     * <p>
+     * Result type: {@code List<String>}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -611,6 +665,8 @@ public interface CommandNode {
 
     /**
      * Add a remaining parameters node to this command node with a default value.
+     * <p>
+     * Result type: {@code List<String>}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -622,6 +678,8 @@ public interface CommandNode {
 
     /**
      * Add a target parameter to this command node with an empty default value.
+     * <p>
+     * Result type: {@code List<Entity>}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -632,6 +690,8 @@ public interface CommandNode {
 
     /**
      * Add a target parameter to this command node with a default value.
+     * <p>
+     * Result type: {@code List<Entity>}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -643,6 +703,8 @@ public interface CommandNode {
 
     /**
      * Add a player target parameter to this command node with an empty default value.
+     * <p>
+     * Result type: {@code List<Entity>} (filtered to only contain {@link EntityPlayer} instances)
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -653,6 +715,8 @@ public interface CommandNode {
 
     /**
      * Add a player target parameter to this command node with a default value.
+     * <p>
+     * Result type: {@code List<Entity>} (filtered to only contain {@link EntityPlayer} instances)
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -664,6 +728,8 @@ public interface CommandNode {
 
     /**
      * Add a game mode parameter to this command node with a default name of "gameMode".
+     * <p>
+     * Result type: {@link GameMode}
      *
      * @return the {@code CommandNode} that created by this method
      */
@@ -673,6 +739,8 @@ public interface CommandNode {
 
     /**
      * Add a game mode parameter to this command node with a specified name.
+     * <p>
+     * Result type: {@link GameMode}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -683,6 +751,8 @@ public interface CommandNode {
 
     /**
      * Add a game mode parameter to this command node with a specified name and default value.
+     * <p>
+     * Result type: {@link GameMode}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -694,6 +764,8 @@ public interface CommandNode {
 
     /**
      * Add a position parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@link org.joml.Vector3d}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -704,6 +776,8 @@ public interface CommandNode {
 
     /**
      * Add a position parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link org.joml.Vector3d}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -715,6 +789,8 @@ public interface CommandNode {
 
     /**
      * Add a wildcard target parameter to this command node with an empty default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -725,6 +801,8 @@ public interface CommandNode {
 
     /**
      * Add a wildcard target parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -736,6 +814,8 @@ public interface CommandNode {
 
     /**
      * Add an enchantment parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@link EnchantmentType}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -746,6 +826,8 @@ public interface CommandNode {
 
     /**
      * Add an enchantment parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link EnchantmentType}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -757,6 +839,8 @@ public interface CommandNode {
 
     /**
      * Add an effect parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@link EffectType}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -767,6 +851,8 @@ public interface CommandNode {
 
     /**
      * Add an effect parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link EffectType}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -778,6 +864,8 @@ public interface CommandNode {
 
     /**
      * Add an item type parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@code ItemType<?>}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -788,6 +876,8 @@ public interface CommandNode {
 
     /**
      * Add an item type parameter to this command node with a default value.
+     * <p>
+     * Result type: {@code ItemType<?>}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -799,6 +889,8 @@ public interface CommandNode {
 
     /**
      * Add a block type parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@code BlockType<?>}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -809,6 +901,8 @@ public interface CommandNode {
 
     /**
      * Add a block type parameter to this command node with a default value.
+     * <p>
+     * Result type: {@code BlockType<?>}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -820,6 +914,8 @@ public interface CommandNode {
 
     /**
      * Add an entity type parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@code EntityType<?>}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -830,6 +926,8 @@ public interface CommandNode {
 
     /**
      * Add an entity type parameter to this command node with a default value.
+     * <p>
+     * Result type: {@code EntityType<?>}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -841,6 +939,8 @@ public interface CommandNode {
 
     /**
      * Add a difficulty parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@link Difficulty}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -851,6 +951,8 @@ public interface CommandNode {
 
     /**
      * Add a difficulty parameter to this command node with a default value.
+     * <p>
+     * Result type: {@link Difficulty}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -862,6 +964,8 @@ public interface CommandNode {
 
     /**
      * Add a block property values parameter to this command node with an empty default value.
+     * <p>
+     * Result type: {@code List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -872,6 +976,8 @@ public interface CommandNode {
 
     /**
      * Add a block property values parameter to this command node with a default value.
+     * <p>
+     * Result type: {@code List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
@@ -883,6 +989,8 @@ public interface CommandNode {
 
     /**
      * Add a command parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name the name of the parameter
      * @return the {@code CommandNode} that created by this method
@@ -893,6 +1001,8 @@ public interface CommandNode {
 
     /**
      * Add a command parameter to this command node with a default value of {@code null}.
+     * <p>
+     * Result type: {@link String}
      *
      * @param name         the name of the parameter
      * @param defaultValue the default value of the parameter
