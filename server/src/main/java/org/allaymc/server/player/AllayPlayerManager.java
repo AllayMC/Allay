@@ -46,8 +46,6 @@ public class AllayPlayerManager implements PlayerManager {
     protected final BanInfo banInfo;
     protected final Whitelist whitelist;
     protected final Operators operators;
-    @Getter
-    protected final UserCache userCache;
 
     public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayNetworkInterface networkInterface) {
         this.playerStorage = playerStorage;
@@ -59,7 +57,6 @@ public class AllayPlayerManager implements PlayerManager {
                 createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
         this.operators = ConfigManager.create(Operators.class,
                 createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
-        this.userCache = new UserCache();
     }
 
     public void tick(long currentTick) {
@@ -72,21 +69,12 @@ public class AllayPlayerManager implements PlayerManager {
         this.banInfo.save();
         this.whitelist.save();
         this.operators.save();
-        this.userCache.save();
     }
 
     @Override
     @UnmodifiableView
     public Map<UUID, Player> getPlayers() {
         return Collections.unmodifiableMap(players);
-    }
-
-    @Override
-    public String getOfflinePlayerName(UUID uuid) {
-        if (players.containsKey(uuid)) {
-            return players.get(uuid).getOriginName();
-        }
-        return userCache.getOfflinePlayerName(uuid);
     }
 
     @Override
@@ -292,12 +280,9 @@ public class AllayPlayerManager implements PlayerManager {
     public synchronized void addPlayer(Player player) {
         this.players.put(player.getLoginData().getUuid(), player);
         this.networkInterface.setPlayerCount(this.players.size());
-        this.userCache.add(player);
+        this.playerStorage.cachePlayer(player);
         Server.getInstance().getMessageChannel().addReceiver(player.getControlledEntity());
         broadcastPlayerListChange(player, true);
-        // NOTICE: player list should be sent to the player itself later when the client
-        // is fully loaded.
-        // Otherwise, the player's skin will not be shown correctly client-side.
     }
 
     public synchronized void removePlayer(Player player) {

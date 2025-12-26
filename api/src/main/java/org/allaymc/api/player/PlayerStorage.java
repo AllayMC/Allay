@@ -67,4 +67,27 @@ public interface PlayerStorage {
     default boolean hasPlayerData(Player player) {
         return hasPlayerData(player.getLoginData().getUuid());
     }
+
+    /**
+     * Get the name of an offline player.
+     *
+     * @param uuid the UUID of the player
+     * @return the name of the player if found, otherwise {@code null}
+     */
+    String getOfflinePlayerName(UUID uuid);
+
+    /**
+     * Get the UUID of an offline player.
+     *
+     * @param name the name of the player
+     * @return the UUID of the player if found, otherwise {@code null}
+     */
+    UUID getOfflinePlayerUUID(String name);
+
+    /**
+     * Called when a player joins the server to update the cache.
+     *
+     * @param player the player who joined
+     */
+    void cachePlayer(Player player);
 }

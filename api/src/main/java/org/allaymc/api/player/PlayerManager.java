@@ -101,14 +101,6 @@ public interface PlayerManager {
     }
 
     /**
-     * Get the name of an offline player.
-     *
-     * @param uuid the UUID of the player
-     * @return the name of the player if found, otherwise {@code null}
-     */
-    String getOfflinePlayerName(UUID uuid);
-
-    /**
      * Check if the player is banned.
      *
      * @param uuidOrName the UUID or name of the player
