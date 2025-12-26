@@ -111,4 +111,33 @@ public class AllayStringUtils {
         }
         return options;
     }
+
+    /**
+     * Converts a snake_case string to Title Case with spaces.
+     * <p>
+     * For example: "aaa_bbb_ccc" -> "Aaa Bbb Ccc"
+     *
+     * @param snakeCase the snake_case string to convert
+     * @return the Title Case string with spaces
+     */
+    public static String snakeCaseToTitleCase(String snakeCase) {
+        if (snakeCase == null || snakeCase.isEmpty()) {
+            return snakeCase;
+        }
+        var parts = fastSplit(snakeCase, "_");
+        var sb = new StringBuilder();
+        for (int i = 0; i < parts.size(); i++) {
+            var part = parts.get(i);
+            if (!part.isEmpty()) {
+                sb.append(Character.toUpperCase(part.charAt(0)));
+                if (part.length() > 1) {
+                    sb.append(part.substring(1).toLowerCase());
+                }
+            }
+            if (i < parts.size() - 1) {
+                sb.append(' ');
+            }
+        }
+        return sb.toString();
+    }
 }
