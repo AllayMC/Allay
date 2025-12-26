@@ -55,6 +55,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     EntityType<? extends Entity> getEntityType();
 
     /**
+     * Broadcasts the current entity state to all its viewers.
+     */
+    void broadcastState();
+
+    /**
      * Get the display name of the entity.
      * <p>
      * Display name is used in chat, damage message, etc. Normally, it is equal to the origin name.

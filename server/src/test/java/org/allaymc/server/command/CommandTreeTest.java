@@ -1,15 +1,30 @@
 package org.allaymc.server.command;
 
+import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNodeFactory;
+import org.allaymc.api.entity.effect.EffectType;
+import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.player.GameMode;
+import org.allaymc.api.world.data.Difficulty;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
+import org.allaymc.testutils.AllayTestExtension;
 import org.joml.Vector3d;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 
 import java.util.List;
@@ -22,6 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author daoge_cmd
  */
+@ExtendWith(AllayTestExtension.class)
 class CommandTreeTest {
 
     static Command mockCmd;
@@ -206,6 +222,220 @@ class CommandTreeTest {
 
             tree.parse(mockSender, new String[]{"cmd", "arg1", "arg2", "arg3"});
             assertEquals(List.of("arg1", "arg2", "arg3"), result.get());
+        }
+
+        @Test
+        void testEnumsIgnoreCaseNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<String> result = new AtomicReference<>();
+            tree.getRoot()
+                    .enumsIgnoreCase("value", "", new String[]{"alpha", "beta", "gamma"})
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"alpha"}).isSuccess());
+            assertEquals("alpha", result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"ALPHA"}).isSuccess());
+            assertEquals("ALPHA", result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"AlPhA"}).isSuccess());
+            assertEquals("AlPhA", result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"Beta"}).isSuccess());
+            assertEquals("Beta", result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"Delta"}).isSuccess());
+        }
+
+        @Test
+        void testEnumClassNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<TestColor> result = new AtomicReference<>();
+            tree.getRoot()
+                    .enumClass("color", TestColor.class)
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"red"}).isSuccess());
+            assertEquals(TestColor.RED, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"GREEN"}).isSuccess());
+            assertEquals(TestColor.GREEN, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"Blue"}).isSuccess());
+            assertEquals(TestColor.BLUE, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"yellow"}).isSuccess());
+        }
+
+        @Test
+        void testEnumClassNodeWithDefault() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<TestColor> result = new AtomicReference<>();
+            tree.getRoot()
+                    .enumClass("color", TestColor.GREEN, TestColor.class)
+                    .optional()
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            tree.parse(mockSender, new String[0]);
+            assertEquals(TestColor.GREEN, result.get());
+
+            tree.parse(mockSender, new String[]{"blue"});
+            assertEquals(TestColor.BLUE, result.get());
+        }
+
+        @Test
+        void testWildcardTargetNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<String> result = new AtomicReference<>();
+            tree.getRoot()
+                    .wildcardTarget("target")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"@a"}).isSuccess());
+            assertEquals("@a", result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"@e[type=zombie]"}).isSuccess());
+            assertEquals("@e[type=zombie]", result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"PlayerName"}).isSuccess());
+            assertEquals("PlayerName", result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"*"}).isSuccess());
+            assertEquals("*", result.get());
+        }
+
+        @Test
+        void testCmdNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<String> result = new AtomicReference<>();
+            tree.getRoot()
+                    .cmd("command")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            tree.parse(mockSender, new String[]{"say", "hello", "world"});
+            assertEquals("say hello world", result.get());
+
+            tree.parse(mockSender, new String[]{"gamemode", "creative"});
+            assertEquals("gamemode creative", result.get());
+        }
+
+        @Test
+        void testGameModeNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<GameMode> result = new AtomicReference<>();
+            tree.getRoot()
+                    .gameMode("mode")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"survival"}).isSuccess());
+            assertEquals(GameMode.SURVIVAL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"s"}).isSuccess());
+            assertEquals(GameMode.SURVIVAL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"0"}).isSuccess());
+            assertEquals(GameMode.SURVIVAL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"creative"}).isSuccess());
+            assertEquals(GameMode.CREATIVE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"c"}).isSuccess());
+            assertEquals(GameMode.CREATIVE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"1"}).isSuccess());
+            assertEquals(GameMode.CREATIVE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"adventure"}).isSuccess());
+            assertEquals(GameMode.ADVENTURE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"a"}).isSuccess());
+            assertEquals(GameMode.ADVENTURE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"2"}).isSuccess());
+            assertEquals(GameMode.ADVENTURE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"spectator"}).isSuccess());
+            assertEquals(GameMode.SPECTATOR, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"spc"}).isSuccess());
+            assertEquals(GameMode.SPECTATOR, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"3"}).isSuccess());
+            assertEquals(GameMode.SPECTATOR, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"invalid"}).isSuccess());
+        }
+
+        @Test
+        void testDifficultyNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<Difficulty> result = new AtomicReference<>();
+            tree.getRoot()
+                    .difficulty("diff")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"peaceful"}).isSuccess());
+            assertEquals(Difficulty.PEACEFUL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"p"}).isSuccess());
+            assertEquals(Difficulty.PEACEFUL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"0"}).isSuccess());
+            assertEquals(Difficulty.PEACEFUL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"easy"}).isSuccess());
+            assertEquals(Difficulty.EASY, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"e"}).isSuccess());
+            assertEquals(Difficulty.EASY, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"1"}).isSuccess());
+            assertEquals(Difficulty.EASY, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"normal"}).isSuccess());
+            assertEquals(Difficulty.NORMAL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"n"}).isSuccess());
+            assertEquals(Difficulty.NORMAL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"2"}).isSuccess());
+            assertEquals(Difficulty.NORMAL, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"hard"}).isSuccess());
+            assertEquals(Difficulty.HARD, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"h"}).isSuccess());
+            assertEquals(Difficulty.HARD, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"3"}).isSuccess());
+            assertEquals(Difficulty.HARD, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"invalid"}).isSuccess());
+        }
+
+        enum TestColor {
+            RED, GREEN, BLUE
         }
     }
 
@@ -628,6 +858,170 @@ class CommandTreeTest {
 
             tree.parse(mockSender, new String[0]);
             assertEquals("default", result.get());
+        }
+    }
+
+    @Nested
+    class RegistryDependentNodeTests {
+
+        @Test
+        void testEffectNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<EffectType> result = new AtomicReference<>();
+            tree.getRoot()
+                    .effect("effect")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"speed"}).isSuccess());
+            assertEquals(EffectTypes.SPEED, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"regeneration"}).isSuccess());
+            assertEquals(EffectTypes.REGENERATION, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"night_vision"}).isSuccess());
+            assertEquals(EffectTypes.NIGHT_VISION, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"invalid_effect"}).isSuccess());
+        }
+
+        @Test
+        void testEnchantmentNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<EnchantmentType> result = new AtomicReference<>();
+            tree.getRoot()
+                    .enchantment("enchant")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"sharpness"}).isSuccess());
+            assertEquals(EnchantmentTypes.SHARPNESS, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"protection"}).isSuccess());
+            assertEquals(EnchantmentTypes.PROTECTION, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"minecraft:efficiency"}).isSuccess());
+            assertEquals(EnchantmentTypes.EFFICIENCY, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"invalid_enchant"}).isSuccess());
+        }
+
+        @Test
+        void testItemTypeNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<ItemType<?>> result = new AtomicReference<>();
+            tree.getRoot()
+                    .itemType("item")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"diamond_sword"}).isSuccess());
+            assertEquals(ItemTypes.DIAMOND_SWORD, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"minecraft:apple"}).isSuccess());
+            assertEquals(ItemTypes.APPLE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"stone"}).isSuccess());
+            assertEquals(ItemTypes.STONE, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"invalid_item"}).isSuccess());
+        }
+
+        @Test
+        void testBlockTypeNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<BlockType<?>> result = new AtomicReference<>();
+            tree.getRoot()
+                    .blockType("block")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"stone"}).isSuccess());
+            assertEquals(BlockTypes.STONE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"minecraft:dirt"}).isSuccess());
+            assertEquals(BlockTypes.DIRT, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"oak_planks"}).isSuccess());
+            assertEquals(BlockTypes.OAK_PLANKS, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"invalid_block"}).isSuccess());
+        }
+
+        @Test
+        void testEntityTypeNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<EntityType<?>> result = new AtomicReference<>();
+            tree.getRoot()
+                    .entityType("entity")
+                    .exec(context -> {
+                        result.set(context.getResult(0));
+                        return context.success();
+                    });
+
+            assertTrue(tree.parse(mockSender, new String[]{"zombie"}).isSuccess());
+            assertEquals(EntityTypes.ZOMBIE, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"minecraft:creeper"}).isSuccess());
+            assertEquals(EntityTypes.CREEPER, result.get());
+
+            assertTrue(tree.parse(mockSender, new String[]{"pig"}).isSuccess());
+            assertEquals(EntityTypes.PIG, result.get());
+
+            assertFalse(tree.parse(mockSender, new String[]{"invalid_entity"}).isSuccess());
+        }
+
+        @Test
+        void testBlockPropertyValuesNode() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<BlockType<?>> blockResult = new AtomicReference<>();
+            AtomicReference<List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>> propertyResult = new AtomicReference<>();
+            tree.getRoot()
+                    .blockType("block")
+                    .blockPropertyValues("properties")
+                    .exec(context -> {
+                        blockResult.set(context.getResult(0));
+                        propertyResult.set(context.getResult(1));
+                        return context.success();
+                    });
+
+            // Test with empty properties
+            assertTrue(tree.parse(mockSender, new String[]{"stone", "[]"}).isSuccess());
+            assertEquals(BlockTypes.STONE, blockResult.get());
+            assertTrue(propertyResult.get().isEmpty());
+
+            // Test with torch and facing direction
+            assertTrue(tree.parse(mockSender, new String[]{"torch", "[torch_facing_direction=top]"}).isSuccess());
+            assertEquals(BlockTypes.TORCH, blockResult.get());
+            assertFalse(propertyResult.get().isEmpty());
+
+            // Test without property values (should fail because blockPropertyValues expects [...])
+            assertFalse(tree.parse(mockSender, new String[]{"stone", "invalid"}).isSuccess());
+        }
+
+        @Test
+        void testBlockPropertyValuesNodeWithQuotedValues() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicReference<List<BlockPropertyType.BlockPropertyValue<?, ?, ?>>> propertyResult = new AtomicReference<>();
+            tree.getRoot()
+                    .blockType("block")
+                    .blockPropertyValues("properties")
+                    .exec(context -> {
+                        propertyResult.set(context.getResult(1));
+                        return context.success();
+                    });
+
+            // Test with quoted property names and values
+            assertTrue(tree.parse(mockSender, new String[]{"torch", "[\"torch_facing_direction\"=\"top\"]"}).isSuccess());
+            assertFalse(propertyResult.get().isEmpty());
         }
     }
 }

@@ -71,10 +71,15 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new SetMaxPlayersCommand());
         register(new ExecuteCommand());
         register(new HelpCommand());
+        register(new HudCommand());
         register(new StructureCommand());
         register(new FillCommand());
         register(new TitleCommand());
+        register(new ParticleCommand());
         register(new PermissionCommand());
+        register(new PlayAnimationCommand());
+        register(new PlaySoundCommand());
+        register(new StopSoundCommand());
         register(new TellCommand());
         register(new SayCommand());
         if (AllayAPI.getInstance().isDevBuild()) {

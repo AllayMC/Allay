@@ -17,6 +17,7 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.particle.Particle;
+import org.allaymc.api.world.sound.CustomSound;
 import org.allaymc.api.world.sound.Sound;
 import org.joml.Vector3dc;
 import org.joml.Vector3ic;
@@ -212,6 +213,21 @@ public interface WorldViewer extends DebugShapeViewer {
      *                 will be based on the distance to the pos passed
      */
     void viewSound(Sound sound, Vector3dc pos, boolean relative);
+
+    /**
+     * Stops the sound with the specific name, or stop all sounds if the name is {@code null}.
+     * The sound name is same to the name sent in {@link CustomSound}.
+     *
+     * @param soundName the name of the sound to stop, or {@code null} to stop all sounds
+     */
+    void stopSound(String soundName);
+
+    /**
+     * Stops all currently playing sounds. This is achieved by internally invoking {@code stopSound(null)}.
+     */
+    default void stopAllSounds() {
+        stopSound(null);
+    }
 
     /**
      * Views a particle at the pos passed.

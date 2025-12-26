@@ -26,6 +26,7 @@ import org.allaymc.api.permission.PermissionCalculator;
 import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNBTUtils;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
@@ -113,7 +114,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.entityType = info.getEntityType();
         this.viewers = new HashSet<>();
         this.state = EntityState.DESPAWNED;
-        this.displayName = entityType.getIdentifier().toString();
+        this.displayName = AllayStringUtils.snakeCaseToTitleCase(entityType.getIdentifier().path());
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
         this.permissionCalculator = new ConstantPermissionCalculator(Tristate.TRUE);
@@ -124,6 +125,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         loadNBT(initInfo.nbt());
     }
 
+    @Override
     public void broadcastState() {
         forEachViewers(viewer -> viewer.viewEntityState(thisEntity));
     }

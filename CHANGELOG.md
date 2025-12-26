@@ -19,11 +19,22 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added API for setting player hud element's visibility.
 - (API) Added `Runnable` overloads to `Scheduler` for `scheduleDelayed`, `scheduleRepeating`, and `scheduleDelayedRepeating` methods.
 - (API) Added hopper block entity interfaces and base component.
+
 - (API) Added hopper container type and `BlockEntityTypes.HOPPER`.
+
 - (API) Added `ContainerItemPickupEvent` for item entity pickups into containers.
-- Implemented Totem of Undying activation for players.
-- Implemented End Crystal placement and explosion behavior.
+
 - Implemented hopper item transfer with furnace and brewing stand slot rules.
+
+- (API) Added methods `WorldViewer.stopSound(String)` and `WorldViewer.stopAllSounds()`.
+
+- Implemented commands `/playsound`, `/stopsound`, `/playanimation`, `/hud`, and `/particle`.
+
+- List plugin command (`/plugin list`) now will show the plugin version.
+
+- Implemented Totem of Undying activation for players.
+
+- Implemented End Crystal placement and explosion behavior.
 
 ### Changed
 
@@ -31,6 +42,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `ServerPlayerEvent` base class for all `Player` related events under `org.allaymc.api.eventbus.event.server` package.
 - (API) Made `AllayAPI.APIInstanceHolder<T>` public in allay-api by removing the `@ApiStatus.Internal` annotation.
 - (API) `EntityEnderCrystal` now extends `EntityLiving` and `EntityEnderCrystalBaseComponent` interfaces.
+- Entity's display name is now default to the title case. For example: `minecraft:arrow` -> `Arrow`.
 
 ### Fixed
 

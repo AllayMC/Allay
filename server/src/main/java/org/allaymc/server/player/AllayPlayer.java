@@ -1368,6 +1368,14 @@ public class AllayPlayer implements Player {
         sendPacket(packet);
     }
 
+    @Override
+    public void stopSound(String soundName) {
+        var packet = new StopSoundPacket();
+        packet.setSoundName(Objects.requireNonNullElse(soundName, ""));
+        packet.setStoppingAllSound(soundName == null);
+        sendPacket(packet);
+    }
+
     protected SoundEvent getEquipSound(ItemType<?> itemType) {
         if (itemType == ItemTypes.ELYTRA) {
             return SoundEvent.ARMOR_EQUIP_ELYTRA;
