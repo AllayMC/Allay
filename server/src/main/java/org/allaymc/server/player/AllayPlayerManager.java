@@ -18,7 +18,6 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.AllayNetworkInterface;
-import org.allaymc.server.utils.Utils;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Path;
@@ -26,6 +25,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.allaymc.server.utils.Utils.createConfigInitializer;
 
 /**
  * @author daoge_cmd
@@ -53,11 +54,11 @@ public class AllayPlayerManager implements PlayerManager {
         this.networkInterface = networkInterface;
         this.players = new Object2ObjectOpenHashMap<>();
         this.banInfo = ConfigManager.create(BanInfo.class,
-                org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
+                createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class,
-                Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
+                createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
         this.operators = ConfigManager.create(Operators.class,
-                Utils.createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
+                createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
         this.userCache = new UserCache();
     }
 
