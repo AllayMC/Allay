@@ -2026,4 +2026,31 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockPlantPileBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initCopperBars() {
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperBars = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_BARS : BlockTypes.COPPER_BARS;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_BARS : BlockTypes.EXPOSED_COPPER_BARS;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_BARS : BlockTypes.WEATHERED_COPPER_BARS;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_COPPER_BARS : BlockTypes.OXIDIZED_COPPER_BARS;
+        };
+        BlockTypes.COPPER_BARS = buildCopperBars(BlockId.COPPER_BARS, OxidationLevel.UNAFFECTED, copperBars);
+        BlockTypes.EXPOSED_COPPER_BARS = buildCopperBars(BlockId.EXPOSED_COPPER_BARS, OxidationLevel.EXPOSED, copperBars);
+        BlockTypes.WEATHERED_COPPER_BARS = buildCopperBars(BlockId.WEATHERED_COPPER_BARS, OxidationLevel.WEATHERED, copperBars);
+        BlockTypes.OXIDIZED_COPPER_BARS = buildCopperBars(BlockId.OXIDIZED_COPPER_BARS, OxidationLevel.OXIDIZED, copperBars);
+        BlockTypes.WAXED_COPPER_BARS = buildCopperBars(BlockId.WAXED_COPPER_BARS, OxidationLevel.UNAFFECTED, copperBars);
+        BlockTypes.WAXED_EXPOSED_COPPER_BARS = buildCopperBars(BlockId.WAXED_EXPOSED_COPPER_BARS, OxidationLevel.EXPOSED, copperBars);
+        BlockTypes.WAXED_WEATHERED_COPPER_BARS = buildCopperBars(BlockId.WAXED_WEATHERED_COPPER_BARS, OxidationLevel.WEATHERED, copperBars);
+        BlockTypes.WAXED_OXIDIZED_COPPER_BARS = buildCopperBars(BlockId.WAXED_OXIDIZED_COPPER_BARS, OxidationLevel.OXIDIZED, copperBars);
+    }
+
+    public static BlockType<BlockCopperBarsBehavior> buildCopperBars(
+            BlockId id, OxidationLevel oxidationLevel,
+            BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction
+    ) {
+        return AllayBlockType.builder(BlockCopperBarsBehaviorImpl.class)
+                .vanillaBlock(id)
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
 }
