@@ -494,6 +494,8 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS, OxidationLevel.EXPOSED, cutCopperStairs);
         BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS, OxidationLevel.WEATHERED, cutCopperStairs);
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS, OxidationLevel.OXIDIZED, cutCopperStairs);
+
+        BlockTypes.RESIN_BRICK_STAIRS = buildStairs(BlockId.RESIN_BRICK_STAIRS);
     }
 
     private static BlockType<BlockStairsBehavior> buildStairs(BlockId id) {
@@ -502,6 +504,7 @@ public final class BlockTypeInitializer {
 
     private static BlockType<BlockCopperStairsBehavior> buildCopperStairs(BlockId id, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
         return stairsBuilder(BlockCopperStairsBehaviorImpl.class, id)
+                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
