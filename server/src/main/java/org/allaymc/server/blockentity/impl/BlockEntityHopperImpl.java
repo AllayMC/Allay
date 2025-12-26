@@ -17,10 +17,14 @@ public class BlockEntityHopperImpl extends BlockEntityImpl implements BlockEntit
 
     @Delegate
     protected BlockEntityContainerHolderComponent containerHolderComponent;
-    @Delegate
-    protected BlockEntityHopperBaseComponent hopperBaseComponent;
 
     public BlockEntityHopperImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
+    }
+
+    @Delegate
+    @Override
+    public BlockEntityHopperBaseComponent getBaseComponent() {
+        return (BlockEntityHopperBaseComponent) super.getBaseComponent();
     }
 }

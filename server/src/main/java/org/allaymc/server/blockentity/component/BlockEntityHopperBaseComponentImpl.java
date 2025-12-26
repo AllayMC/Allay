@@ -9,14 +9,12 @@ import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent
 import org.allaymc.api.blockentity.component.BlockEntityHopperBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.interfaces.BrewingStandContainer;
-import org.allaymc.api.container.interfaces.FurnaceContainer;
+import org.allaymc.api.container.interfaces.SidedContainer;
 import org.allaymc.api.eventbus.event.container.ContainerItemMoveEvent;
 import org.allaymc.api.eventbus.event.container.ContainerItemPickupEvent;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.server.container.impl.DoubleChestContainerImpl;
@@ -61,12 +59,11 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
     @Override
     public void tick(long currentTick) {
         super.tick(currentTick);
-        if (transferCooldown > 0) {
-            transferCooldown--;
+        if (isDisabled()) {
             return;
         }
-
-        if (isDisabled()) {
+        if (transferCooldown > 0) {
+            transferCooldown--;
             return;
         }
 
@@ -104,7 +101,9 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
             if (stacks[slot] == ItemAirStack.AIR_STACK) {
                 continue;
             }
-            var allowedSlots = getAllowedInsertSlots(target.container, targetSide, stacks[slot]);
+            var allowedSlots = target.container instanceof SidedContainer sided
+                    ? sided.getAllowedInsertSlots(targetSide, stacks[slot])
+                    : null;
             if (allowedSlots != null && allowedSlots.length == 0) {
                 continue;
             }
@@ -132,7 +131,9 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
 
     protected boolean tryPullFromContainer(TransferTarget source, Container hopperContainer) {
         var sourceSide = BlockFace.DOWN;
-        var allowedSlots = getAllowedExtractSlots(source.container, sourceSide);
+        var allowedSlots = source.container instanceof SidedContainer sided
+                ? sided.getAllowedExtractSlots(sourceSide)
+                : null;
         if (allowedSlots != null) {
             for (var slot : allowedSlots) {
                 var stack = source.container.getItemStack(slot);
@@ -392,83 +393,6 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
         return true;
     }
 
-    protected int[] getAllowedInsertSlots(Container target, BlockFace side, ItemStack stack) {
-        if (!(target instanceof FurnaceContainer)) {
-            if (!(target instanceof BrewingStandContainer)) {
-                return null;
-            }
-
-            if (side == BlockFace.UP) {
-                return isBrewingReagent(stack) ? new int[]{BrewingStandContainer.REAGENT_SLOT} : new int[0];
-            }
-            if (side == BlockFace.DOWN) {
-                return new int[0];
-            }
-            if (isBrewingFuel(stack)) {
-                return new int[]{BrewingStandContainer.FUEL_SLOT};
-            }
-            if (isBrewingBottle(stack)) {
-                return new int[]{1, 2, 3};
-            }
-            return new int[0];
-        }
-
-        if (side == BlockFace.UP) {
-            return new int[]{FurnaceContainer.INGREDIENT_SLOT};
-        }
-        if (side == BlockFace.DOWN) {
-            return new int[0];
-        }
-        if (isFuel(stack)) {
-            return new int[]{FurnaceContainer.FUEL_SLOT};
-        }
-        return new int[0];
-    }
-
-    protected int[] getAllowedExtractSlots(Container source, BlockFace side) {
-        if (!(source instanceof FurnaceContainer)) {
-            if (!(source instanceof BrewingStandContainer)) {
-                return null;
-            }
-            if (side == BlockFace.DOWN) {
-                return new int[]{1, 2, 3};
-            }
-            return new int[0];
-        }
-        if (side == BlockFace.DOWN) {
-            return new int[]{FurnaceContainer.RESULT_SLOT};
-        }
-        return new int[0];
-    }
-
-    protected boolean isFuel(ItemStack stack) {
-        if (stack == null || stack == ItemAirStack.AIR_STACK) {
-            return false;
-        }
-        return stack.getItemType().getItemData().furnaceBurnDuration() > 0;
-    }
-
-    protected boolean isBrewingFuel(ItemStack stack) {
-        if (stack == null || stack == ItemAirStack.AIR_STACK) {
-            return false;
-        }
-        return stack.getItemType() == ItemTypes.BLAZE_POWDER;
-    }
-
-    protected boolean isBrewingBottle(ItemStack stack) {
-        if (stack == null || stack == ItemAirStack.AIR_STACK) {
-            return false;
-        }
-        var type = stack.getItemType();
-        return type == ItemTypes.GLASS_BOTTLE ||
-                type == ItemTypes.POTION ||
-                type == ItemTypes.SPLASH_POTION ||
-                type == ItemTypes.LINGERING_POTION;
-    }
-
-    protected boolean isBrewingReagent(ItemStack stack) {
-        return !isBrewingFuel(stack) && !isBrewingBottle(stack);
-    }
     protected boolean isContainerFull(Container container) {
         for (var stack : container.getItemStackArray()) {
             if (stack == ItemAirStack.AIR_STACK || !stack.isFull()) {
