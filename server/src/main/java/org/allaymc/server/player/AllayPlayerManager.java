@@ -45,14 +45,20 @@ public class AllayPlayerManager implements PlayerManager {
     protected final BanInfo banInfo;
     protected final Whitelist whitelist;
     protected final Operators operators;
+    @Getter
+    protected final UserCache userCache;
 
     public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayNetworkInterface networkInterface) {
         this.playerStorage = playerStorage;
         this.networkInterface = networkInterface;
         this.players = new Object2ObjectOpenHashMap<>();
-        this.banInfo = ConfigManager.create(BanInfo.class, org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
-        this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
-        this.operators = ConfigManager.create(Operators.class, Utils.createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
+        this.banInfo = ConfigManager.create(BanInfo.class,
+                org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
+        this.whitelist = ConfigManager.create(Whitelist.class,
+                Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
+        this.operators = ConfigManager.create(Operators.class,
+                Utils.createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
+        this.userCache = new UserCache();
     }
 
     public void tick(long currentTick) {
@@ -65,12 +71,21 @@ public class AllayPlayerManager implements PlayerManager {
         this.banInfo.save();
         this.whitelist.save();
         this.operators.save();
+        this.userCache.save();
     }
 
     @Override
     @UnmodifiableView
     public Map<UUID, Player> getPlayers() {
         return Collections.unmodifiableMap(players);
+    }
+
+    @Override
+    public String getOfflinePlayerName(UUID uuid) {
+        if (players.containsKey(uuid)) {
+            return players.get(uuid).getOriginName();
+        }
+        return userCache.getOfflinePlayerName(uuid);
     }
 
     @Override
@@ -106,7 +121,8 @@ public class AllayPlayerManager implements PlayerManager {
 
         banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName)
+                        || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect("You are banned!"));
 
         return true;
@@ -150,7 +166,8 @@ public class AllayPlayerManager implements PlayerManager {
 
         banInfo.bannedIps().add(ip);
         players.values().stream()
-                .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
+                .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getSocketAddress().toString().substring(1),
+                        ":", "")[0].equals(ip))
                 .forEach(player -> player.disconnect(TrKeys.ALLAY_DISCONNECT_BANIP));
 
         return true;
@@ -228,7 +245,8 @@ public class AllayPlayerManager implements PlayerManager {
 
         whitelist.whitelist().remove(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getLoginData().getUuid().toString().equals(uuidOrName)
+                        || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED));
         return true;
     }
@@ -256,7 +274,8 @@ public class AllayPlayerManager implements PlayerManager {
         }
 
         players.values().stream()
-                .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName) || p.getOriginName().equals(uuidOrName))
+                .filter(p -> p.getLoginData().getUuid().toString().equals(uuidOrName)
+                        || p.getOriginName().equals(uuidOrName))
                 .findFirst()
                 .ifPresent(player -> player.viewPlayerPermission(player));
     }
@@ -272,9 +291,11 @@ public class AllayPlayerManager implements PlayerManager {
     public synchronized void addPlayer(Player player) {
         this.players.put(player.getLoginData().getUuid(), player);
         this.networkInterface.setPlayerCount(this.players.size());
+        this.userCache.add(player);
         Server.getInstance().getMessageChannel().addReceiver(player.getControlledEntity());
         broadcastPlayerListChange(player, true);
-        // NOTICE: player list should be sent to the player itself later when the client is fully loaded.
+        // NOTICE: player list should be sent to the player itself later when the client
+        // is fully loaded.
         // Otherwise, the player's skin will not be shown correctly client-side.
     }
 
@@ -295,7 +316,7 @@ public class AllayPlayerManager implements PlayerManager {
             var entity = player.getControlledEntity();
             server.getMessageChannel().removeReceiver(entity);
             entity.remove();
-            
+
             this.playerStorage.savePlayerData(player);
             broadcastPlayerListChange(player, false);
         }
