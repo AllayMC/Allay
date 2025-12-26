@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserCacheTest {
 
-    private static final String TEST_CACHE_FILE = "usercache.json";
+    private static final String TEST_CACHE_DIR = "players";
+    private static final String TEST_CACHE_FILE = "players/players.json";
     private UserCache userCache;
 
     @BeforeEach
@@ -29,6 +30,10 @@ class UserCacheTest {
         File file = new File(TEST_CACHE_FILE);
         if (file.exists()) {
             file.delete();
+        }
+        File dir = new File(TEST_CACHE_DIR);
+        if (dir.exists() && dir.isDirectory() && dir.list().length == 0) {
+            dir.delete();
         }
     }
 

@@ -17,7 +17,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 @Slf4j
 public class UserCache {
-    private static final String USER_CACHE_FILE = "usercache.json";
+    private static final String PLAYERS_DIR = "players";
+    private static final String USER_CACHE_FILE = "players.json";
 
     private final Map<UUID, UserCacheEntry> getByUUID = new ConcurrentHashMap<>();
     private final Map<String, UserCacheEntry> getByName = new ConcurrentHashMap<>();
@@ -26,7 +27,15 @@ public class UserCache {
     private final File userCacheFile;
 
     public UserCache() {
-        this.userCacheFile = Path.of(USER_CACHE_FILE).toFile();
+        Path playersDir = Path.of(PLAYERS_DIR);
+        if (!java.nio.file.Files.exists(playersDir)) {
+            try {
+                java.nio.file.Files.createDirectories(playersDir);
+            } catch (Exception e) {
+                log.error("Failed to create players directory", e);
+            }
+        }
+        this.userCacheFile = playersDir.resolve(USER_CACHE_FILE).toFile();
         load();
     }
 

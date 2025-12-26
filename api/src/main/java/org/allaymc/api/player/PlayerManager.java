@@ -11,8 +11,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
- * PlayerManager is used to manage player related things. It holds all online
- * players,
+ * PlayerManager is used to manage player related things. It holds all online players,
  * storage implementation for saving player data and ban/whitelist information.
  *
  * @author daoge_cmd
@@ -182,8 +181,7 @@ public interface PlayerManager {
      * Check if the player is in the whitelist.
      *
      * @param player the player to check
-     * @return {@code true} if the player is in the whitelist, otherwise
-     *         {@code false}.
+     * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     default boolean isWhitelisted(Player player) {
         return isWhitelisted(player.getLoginData().getUuid().toString()) || isWhitelisted(player.getOriginName());
@@ -193,8 +191,7 @@ public interface PlayerManager {
      * Check if the player is in the whitelist.
      *
      * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is in the whitelist, otherwise
-     *         {@code false}.
+     * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     boolean isWhitelisted(String uuidOrName);
 
@@ -202,8 +199,7 @@ public interface PlayerManager {
      * Add the player to the whitelist.
      *
      * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is added to the whitelist, otherwise
-     *         {@code false}.
+     * @return {@code true} if the player is added to the whitelist, otherwise {@code false}.
      */
     boolean addToWhitelist(String uuidOrName);
 
@@ -211,8 +207,7 @@ public interface PlayerManager {
      * Remove the player from the whitelist.
      *
      * @param uuidOrName the UUID or name of the player
-     * @return {@code true} if the player is removed from the whitelist, otherwise
-     *         {@code false}.
+     * @return {@code true} if the player is removed from the whitelist, otherwise {@code false}.
      */
     boolean removeFromWhitelist(String uuidOrName);
 
@@ -243,12 +238,10 @@ public interface PlayerManager {
     boolean isOperator(String uuidOrName);
 
     /**
-     * Sets the operator status for a specific player identified by their UUID or
-     * name.
+     * Sets the operator status for a specific player identified by their UUID or name.
      *
      * @param uuidOrName the UUID or name of the player
-     * @param value      {@code true} to set the player as an operator,
-     *                   {@code false} to remove operator status
+     * @param value      {@code true} to set the player as an operator, {@code false} to remove operator status
      */
     void setOperator(String uuidOrName, boolean value);
 

@@ -83,11 +83,4 @@ public interface PlayerStorage {
      * @return the UUID of the player if found, otherwise {@code null}
      */
     UUID getOfflinePlayerUUID(String name);
-
-    /**
-     * Called when a player joins the server to update the cache.
-     *
-     * @param player the player who joined
-     */
-    void cachePlayer(Player player);
 }

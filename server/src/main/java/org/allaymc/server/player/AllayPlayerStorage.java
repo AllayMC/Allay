@@ -2,6 +2,7 @@ package org.allaymc.server.player;
 
 import lombok.Getter;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.player.PlayerData;
 import org.allaymc.api.player.PlayerStorage;
 
 import java.util.UUID;
@@ -32,7 +33,8 @@ public abstract class AllayPlayerStorage implements PlayerStorage {
     }
 
     @Override
-    public void cachePlayer(Player player) {
+    public void savePlayerData(Player player) {
         userCache.add(player);
+        PlayerStorage.super.savePlayerData(player);
     }
 }

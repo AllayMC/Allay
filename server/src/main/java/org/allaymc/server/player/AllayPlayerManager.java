@@ -280,7 +280,6 @@ public class AllayPlayerManager implements PlayerManager {
     public synchronized void addPlayer(Player player) {
         this.players.put(player.getLoginData().getUuid(), player);
         this.networkInterface.setPlayerCount(this.players.size());
-        this.playerStorage.cachePlayer(player);
         Server.getInstance().getMessageChannel().addReceiver(player.getControlledEntity());
         broadcastPlayerListChange(player, true);
     }
