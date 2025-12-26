@@ -18,8 +18,12 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added API for setting player hud element's visibility.
 - (API) Added `Runnable` overloads to `Scheduler` for `scheduleDelayed`, `scheduleRepeating`, and `scheduleDelayedRepeating` methods.
+- (API) Added hopper block entity interfaces and base component.
+- (API) Added hopper container type and `BlockEntityTypes.HOPPER`.
+- (API) Added `ContainerItemPickupEvent` for item entity pickups into containers.
 - Implemented Totem of Undying activation for players.
 - Implemented End Crystal placement and explosion behavior.
+- Implemented hopper item transfer with furnace and brewing stand slot rules.
 
 ### Changed
 
@@ -31,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Fixed
 
 - (API) Fixed method `Container.removeAllViewers()` won't remove all viewers from the container.
+- Fixed double chest live updates when items are moved by hoppers.
 
 ### Removed
 
