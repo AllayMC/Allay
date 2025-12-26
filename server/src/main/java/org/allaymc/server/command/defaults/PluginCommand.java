@@ -22,11 +22,12 @@ public class PluginCommand extends Command {
         tree.getRoot()
                 .key("list")
                 .exec(context -> {
-                    var str = String.join(", ", Server.getInstance()
-                            .getPluginManager()
-                            .getEnabledPlugins()
-                            .keySet());
-                    context.addOutput("Enabled plugins: " + TextFormat.GREEN + str);
+                    var enabledPlugins = Server.getInstance().getPluginManager().getEnabledPlugins();
+                    var pluginList = enabledPlugins.entrySet().stream()
+                            .map(entry -> TextFormat.GREEN + entry.getKey() + TextFormat.GRAY + " v" + entry.getValue().descriptor().getVersion() + TextFormat.RESET)
+                            .toList();
+                    var str = String.join(", ", pluginList);
+                    context.addOutput("Enabled plugins " + TextFormat.YELLOW + "(" + enabledPlugins.size() + ")" + TextFormat.RESET + ": " + TextFormat.GREEN + str);
                     return context.success();
                 })
                 .root()

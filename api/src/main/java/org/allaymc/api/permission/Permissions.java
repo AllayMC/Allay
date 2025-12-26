@@ -92,6 +92,10 @@ public interface Permissions {
      */
     String COMMAND_HELP = "allay.command.help";
     /**
+     * The permission to use /hud command.
+     */
+    String COMMAND_HUD = "allay.command.hud";
+    /**
      * The permission to use /kick command.
      */
     String COMMAND_KICK = "allay.command.kick";
@@ -112,9 +116,21 @@ public interface Permissions {
      */
     String COMMAND_OP = "allay.command.op";
     /**
+     * The permission to use /particle command.
+     */
+    String COMMAND_PARTICLE = "allay.command.particle";
+    /**
      * The permission to use /permission command.
      */
     String COMMAND_PERMISSION = "allay.command.permission";
+    /**
+     * The permission to use /playanimation command.
+     */
+    String COMMAND_PLAYANIMATION = "allay.command.playanimation";
+    /**
+     * The permission to use /playsound command.
+     */
+    String COMMAND_PLAYSOUND = "allay.command.playsound";
     /**
      * The permission to use /plugin command.
      */
@@ -147,6 +163,10 @@ public interface Permissions {
      * The permission to use /stop command.
      */
     String COMMAND_STOP = "allay.command.stop";
+    /**
+     * The permission to use /stopsound command.
+     */
+    String COMMAND_STOPSOUND = "allay.command.stopsound";
     /**
      * The permission to use /structure command.
      */

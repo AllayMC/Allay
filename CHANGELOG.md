@@ -18,8 +18,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added API for setting player hud element's visibility.
 - (API) Added `Runnable` overloads to `Scheduler` for `scheduleDelayed`, `scheduleRepeating`, and `scheduleDelayedRepeating` methods.
+- (API) Added methods `WorldViewer.stopSound(String)` and `WorldViewer.stopAllSounds()`.
 - Implemented Totem of Undying activation for players.
 - Implemented End Crystal placement and explosion behavior.
+- Implemented commands `/playsound`, `/stopsound`, `/playanimation`, `/hud`, and `/particle`.
+- List plugin command (`/plugin list`) now will show the plugin version.
 
 ### Changed
 

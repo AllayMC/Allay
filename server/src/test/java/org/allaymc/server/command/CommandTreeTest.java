@@ -229,7 +229,7 @@ class CommandTreeTest {
             var tree = AllayCommandTree.create(mockCmd);
             AtomicReference<String> result = new AtomicReference<>();
             tree.getRoot()
-                    .enumsIgnoreCase("value", "", new String[]{"Alpha", "Beta", "Gamma"})
+                    .enumsIgnoreCase("value", "", new String[]{"alpha", "beta", "gamma"})
                     .exec(context -> {
                         result.set(context.getResult(0));
                         return context.success();
