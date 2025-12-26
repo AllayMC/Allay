@@ -499,12 +499,14 @@ public final class BlockTypeInitializer {
     }
 
     private static BlockType<BlockStairsBehavior> buildStairs(BlockId id) {
-        return stairsBuilder(BlockStairsBehaviorImpl.class, id).setBaseComponentSupplier(BlockStairsBaseComponentImpl::new).build();
+        return stairsBuilder(BlockStairsBehaviorImpl.class, id).build();
     }
 
-    private static BlockType<BlockCopperStairsBehavior> buildCopperStairs(BlockId id, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction) {
+    private static BlockType<BlockCopperStairsBehavior> buildCopperStairs(
+            BlockId id, OxidationLevel oxidationLevel,
+            BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction
+    ) {
         return stairsBuilder(BlockCopperStairsBehaviorImpl.class, id)
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
@@ -513,7 +515,8 @@ public final class BlockTypeInitializer {
         return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(id)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION);
+                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new);
     }
 
     public static void initSlab() {
@@ -1202,14 +1205,6 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static BlockType<BlockTrapdoorBehavior> buildTrapdoor(BlockId blockId) {
-        return AllayBlockType.builder(BlockTrapdoorBehaviorImpl.class)
-                .vanillaBlock(blockId)
-                .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
-                .setBaseComponentSupplier(BlockTrapdoorBaseComponentImpl::new)
-                .build();
-    }
-
     public static void initTrapdoor() {
         BlockTypes.ACACIA_TRAPDOOR = buildTrapdoor(BlockId.ACACIA_TRAPDOOR);
         BlockTypes.BAMBOO_TRAPDOOR = buildTrapdoor(BlockId.BAMBOO_TRAPDOOR);
@@ -1229,6 +1224,41 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .setBaseComponentSupplier(BlockIronTrapdoorBaseComponentImpl::new)
                 .build();
+
+        BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> copperTrapdoor = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_COPPER_TRAPDOOR : BlockTypes.COPPER_TRAPDOOR;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR : BlockTypes.EXPOSED_COPPER_TRAPDOOR;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR : BlockTypes.WEATHERED_COPPER_TRAPDOOR;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR : BlockTypes.OXIDIZED_COPPER_TRAPDOOR;
+        };
+        BlockTypes.COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.COPPER_TRAPDOOR, OxidationLevel.UNAFFECTED, copperTrapdoor);
+        BlockTypes.EXPOSED_COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.EXPOSED_COPPER_TRAPDOOR, OxidationLevel.EXPOSED, copperTrapdoor);
+        BlockTypes.WEATHERED_COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.WEATHERED_COPPER_TRAPDOOR, OxidationLevel.WEATHERED, copperTrapdoor);
+        BlockTypes.OXIDIZED_COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.OXIDIZED_COPPER_TRAPDOOR, OxidationLevel.OXIDIZED, copperTrapdoor);
+        BlockTypes.WAXED_COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.WAXED_COPPER_TRAPDOOR, OxidationLevel.UNAFFECTED, copperTrapdoor);
+        BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.WAXED_EXPOSED_COPPER_TRAPDOOR, OxidationLevel.EXPOSED, copperTrapdoor);
+        BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.WAXED_WEATHERED_COPPER_TRAPDOOR, OxidationLevel.WEATHERED, copperTrapdoor);
+        BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR = buildCopperTrapdoor(BlockId.WAXED_OXIDIZED_COPPER_TRAPDOOR, OxidationLevel.OXIDIZED, copperTrapdoor);
+    }
+
+    public static BlockType<BlockTrapdoorBehavior> buildTrapdoor(BlockId blockId) {
+        return trapdoorBuilder(BlockTrapdoorBehaviorImpl.class, blockId).build();
+    }
+
+    public static BlockType<BlockCopperTrapdoorBehavior> buildCopperTrapdoor(
+            BlockId id, OxidationLevel oxidationLevel,
+            BiFunction<OxidationLevel, Boolean, BlockType<? extends BlockOxidationComponent>> blockTypeFunction
+    ) {
+        return trapdoorBuilder(BlockCopperStairsBehaviorImpl.class, id)
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
+
+    public static <T extends BlockBehavior> AllayBlockType.Builder trapdoorBuilder(Class<T> clazz, BlockId id) {
+        return AllayBlockType.builder(clazz)
+                .vanillaBlock(id)
+                .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
+                .setBaseComponentSupplier(BlockTrapdoorBaseComponentImpl::new);
     }
 
     public static void initSponge() {
