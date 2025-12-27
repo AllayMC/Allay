@@ -271,6 +271,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
+        entity.setSneaking(resolveSneaking(player, inputData));
+
         for (var input : inputData) {
             switch (input) {
                 case START_SPRINTING -> {
@@ -283,8 +285,6 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     entity.setSprinting(true);
                 }
                 case STOP_SPRINTING -> entity.setSprinting(false);
-                case START_SNEAKING -> entity.setSneaking(true);
-                case STOP_SNEAKING -> entity.setSneaking(false);
                 case START_SWIMMING -> entity.setSwimming(true);
                 case STOP_SWIMMING -> entity.setSwimming(false);
                 case START_GLIDING -> entity.setGliding(true);
@@ -315,6 +315,23 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case MISSED_SWING -> new PlayerPunchAirEvent(entity).call();
             }
         }
+    }
+
+    private boolean resolveSneaking(Player player, Set<PlayerAuthInputData> inputData) {
+        var entity = player.getControlledEntity();
+        if (entity.isFlying()) {
+            return inputData.contains(PlayerAuthInputData.DESCEND) ||
+                   inputData.contains(PlayerAuthInputData.SNEAK_DOWN);
+        }
+
+        boolean sneaking = entity.isSneaking();
+        for (var input : inputData) {
+            switch (input) {
+                case START_SNEAKING -> sneaking = true;
+                case STOP_SNEAKING -> sneaking = false;
+            }
+        }
+        return sneaking;
     }
 
     @Override
