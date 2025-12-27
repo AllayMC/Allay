@@ -2399,6 +2399,14 @@ public class AllayPlayer implements Player {
         return !this.hiddenHudElements.contains(element);
     }
 
+    @Override
+    public void transfer(String ip, int port) {
+        var packet = new TransferPacket();
+        packet.setAddress(ip);
+        packet.setPort(port);
+        sendPacket(packet);
+    }
+
     /**
      * Reads all the data in {@link PlayerData} except nbt. To be more exact, this method will validate and set
      * the player entity's current pos and then spawn it. The nbt will be used in EntityPlayer::loadNBT() later in
