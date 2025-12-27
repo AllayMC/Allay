@@ -581,6 +581,14 @@ public class GameTestCommand extends Command {
                     boolean visible = context.getResult(2);
                     sender.getController().setHudElementVisibility(element, visible);
                     return context.success();
-                }, SenderType.ACTUAL_PLAYER);
+                }, SenderType.ACTUAL_PLAYER)
+                .root()
+                .key("setimmobile")
+                .bool("value")
+                .exec((context, sender) -> {
+                    boolean value = context.getResult(1);
+                    sender.setImmobile(value);
+                    return context.success();
+                }, SenderType.PLAYER);
     }
 }

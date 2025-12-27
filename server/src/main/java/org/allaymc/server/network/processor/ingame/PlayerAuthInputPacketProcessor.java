@@ -343,12 +343,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
 
         if (!validateClientLocation(player, packet.getPosition(), packet.getRotation())) {
-            // Ignore this auth packet if the pos provided by client is not valid
+            // Ignore this auth packet if the pos provided by the client is not valid
             return PacketSignal.HANDLED;
         }
 
         if (isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
-            // The pos which client sends to the server is higher than the actual coordinates (one base offset)
+            // The pos which the client sends to the server is higher than the actual coordinates (one base offset)
             handleMovement(player, packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0), packet.getRotation());
         }
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
@@ -381,9 +381,15 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected boolean isLocationChanged(Player player, Vector3f pos, Vector3f rot) {
         // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
-        var location = player.getControlledEntity().getLocation();
-        return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + PLAYER_NETWORK_OFFSET, pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
-               Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0;
+        var entity = player.getControlledEntity();
+        var location = entity.getLocation();
+        // If the entity is immobile, ignore the pos changes directly
+        var posChanged = !entity.isImmobile() &&
+                         (Double.compare(location.x(), pos.getX()) != 0 ||
+                          Double.compare(location.y() + PLAYER_NETWORK_OFFSET, pos.getY()) != 0 ||
+                          Double.compare(location.z(), pos.getZ()) != 0);
+
+        return posChanged || Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0;
     }
 
     protected void handleSingleItemStackRequest(Player player, ItemStackRequest request, long receiveTime) {

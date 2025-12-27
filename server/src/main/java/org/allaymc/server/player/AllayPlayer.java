@@ -564,6 +564,7 @@ public class AllayPlayer implements Player {
         map.setFlag(EntityFlag.HAS_COLLISION, entity.hasEntityCollision());
         map.setFlag(EntityFlag.CAN_CLIMB, true);
         map.setFlag(EntityFlag.INVISIBLE, entity.isInvisible());
+        map.setFlag(EntityFlag.NO_AI, entity.isImmobile());
         var aabb = entity.getAABB();
         var nbt = NbtMap.builder()
                 .putFloat("MinX", 0)

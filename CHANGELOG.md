@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `Runnable` overloads to `Scheduler` for `scheduleDelayed`, `scheduleRepeating`, and `scheduleDelayedRepeating` methods.
 - (API) Added methods `WorldViewer.stopSound(String)` and `WorldViewer.stopAllSounds()`.
 - (API) Added method `Player.transfer()` to transfer the player to another server.
+- (API) Added method `Entity.setImmobile()` to make the entity immobile.
 - Added properties `network-settings.raknet-send-cookie` and `network-settings.raknet-max-mtu` to `server.properties`.
 - Implemented Totem of Undying activation for players.
 - Implemented End Crystal placement and explosion behavior.
