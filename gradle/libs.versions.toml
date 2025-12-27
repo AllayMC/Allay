@@ -12,6 +12,7 @@ nbt = { group = "org.allaymc", name = "nbt", version = "3.0.10" }
 protocol-connection = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta11-20251210.195537-15" }
 protocol-common = { group = "org.cloudburstmc.protocol", name = "common", version = "3.0.0.Beta11-20251210.195537-14" }
 protocol-codec = { group = "org.cloudburstmc.protocol", name = "bedrock-codec", version = "3.0.0.Beta11-20251210.195537-15" }
+protocol-raknet = { group = "org.cloudburstmc.netty", name = "netty-transport-raknet", version = "1.0.0.CR3-20251208.214317-23" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
 item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.110-R1" }
@@ -94,7 +95,7 @@ sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.29.0" }
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
 
 [bundles]
-protocol = ["protocol-connection", "protocol-common", "protocol-codec"]
+protocol = ["protocol-connection", "protocol-common", "protocol-codec", "protocol-raknet"]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 junit = ["junit-jupiter", "mockito-junit-jupiter"]
 fastutil = [
