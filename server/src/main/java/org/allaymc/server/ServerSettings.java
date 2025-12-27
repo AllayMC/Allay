@@ -143,6 +143,17 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("raknet-global-packet-limit")
         private int raknetGlobalPacketLimit = 100000;
 
+        @Comment("Whether to send a cookie to the client during the connection process for additional security")
+        @Comment("Default value is true")
+        @CustomKey("raknet-send-cookie")
+        private boolean raknetSendCookie = true;
+
+        @Comment("Maximum allowed MTU that the RakNet server connection can use")
+        @Comment("The internet supports a maximum MTU of 1492 but could cause issues with packet fragmentation.")
+        @Comment("Default value is 1400")
+        @CustomKey("raknet-max-mtu")
+        private int raknetMaxMtu = 1400;
+
         @Comment("The max time (unit: gt) that a client can have in login stage")
         @Comment("This would prevent the server from being stuck by a lot")
         @Comment("of fake clients that are keep in login stage maliciously")
