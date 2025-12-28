@@ -32,7 +32,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented Totem of Undying.
 - Implemented End Crystal.
 - Implemented commands `/playsound`, `/stopsound`, `/playanimation`, `/hud`, and `/particle`.
-- List plugin command (`/plugin list`) now will show the plugin version.
 
 ### Changed
 
@@ -41,6 +40,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Made `AllayAPI.APIInstanceHolder<T>` public in allay-api by removing the `@ApiStatus.Internal` annotation.
 - (API) `EntityEnderCrystal` now extends `EntityLiving` and `EntityEnderCrystalBaseComponent` interfaces.
 - Entity's display name is now default to the title case. For example: `minecraft:arrow` -> `Arrow`.
+- List plugin command (`/plugin list`) now will show the plugin version.
 
 ### Fixed
 
