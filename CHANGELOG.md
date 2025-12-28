@@ -18,14 +18,23 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added API for setting player hud element's visibility.
 - (API) Added `Runnable` overloads to `Scheduler` for `scheduleDelayed`, `scheduleRepeating`, and `scheduleDelayedRepeating` methods.
+- (API) Added hopper block entity interfaces and base component.
+- (API) Added hopper container type and `BlockEntityTypes.HOPPER`.
+- (API) Added `ContainerItemPickupEvent` for item entity pickups into containers.
 - (API) Added methods `WorldViewer.stopSound(String)` and `WorldViewer.stopAllSounds()`.
 - (API) Added method `Player.transfer()` to transfer the player to another server.
 - (API) Added method `Entity.setImmobile()` to make the entity immobile.
 - Added properties `network-settings.raknet-send-cookie` and `network-settings.raknet-max-mtu` to `server.properties`.
+- Implemented hopper item transfer with furnace and brewing stand slot rules.
 - Implemented Totem of Undying activation for players.
 - Implemented End Crystal placement and explosion behavior.
 - Implemented commands `/playsound`, `/stopsound`, `/playanimation`, `/hud`, and `/particle`.
+
 - List plugin command (`/plugin list`) now will show the plugin version.
+
+- Implemented Totem of Undying activation for players.
+
+- Implemented End Crystal placement and explosion behavior.
 
 ### Changed
 
@@ -38,6 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Fixed
 
 - (API) Fixed method `Container.removeAllViewers()` won't remove all viewers from the container.
+- Fixed double chest live updates when items are moved by hoppers.
 - `RAK_SEND_COOKIE` is set to `true` by default in `AllayNetworkInterface` to resolve connection issue.
 
 ### Removed

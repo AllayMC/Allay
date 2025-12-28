@@ -67,6 +67,12 @@ public record ContainerNetworkInfo(
             .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
             .build();
 
+    public static final ContainerNetworkInfo HOPPER = builder()
+            .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.HOPPER)
+            .type(ContainerTypes.HOPPER)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
     public static final ContainerNetworkInfo CRAFTING_GRID = builder()
             .networkId(org.cloudburstmc.protocol.bedrock.data.inventory.ContainerType.INVENTORY)
             .type(ContainerTypes.CRAFTING_GRID)

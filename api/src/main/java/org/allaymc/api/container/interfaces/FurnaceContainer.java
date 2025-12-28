@@ -1,13 +1,15 @@
 package org.allaymc.api.container.interfaces;
 
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 
 /**
  * FurnaceContainer represents a container for a furnace block.
  *
  * @author daoge_cmd
  */
-public interface FurnaceContainer extends BlockContainer {
+public interface FurnaceContainer extends BlockContainer, SidedContainer {
     /**
      * The constant representing the ingredient slot index in the furnace container.
      */
@@ -75,5 +77,31 @@ public interface FurnaceContainer extends BlockContainer {
      */
     default void setResult(ItemStack itemStack) {
         setItemStack(RESULT_SLOT, itemStack);
+    }
+
+    @Override
+    default int[] getAllowedInsertSlots(BlockFace side, ItemStack stack) {
+        if (side == BlockFace.UP) {
+            return new int[]{INGREDIENT_SLOT};
+        }
+        if (side == BlockFace.DOWN) {
+            return new int[0];
+        }
+        return isFuel(stack) ? new int[]{FUEL_SLOT} : new int[0];
+    }
+
+    @Override
+    default int[] getAllowedExtractSlots(BlockFace side) {
+        if (side == BlockFace.DOWN) {
+            return new int[]{RESULT_SLOT};
+        }
+        return new int[0];
+    }
+
+    private static boolean isFuel(ItemStack stack) {
+        if (stack == null || stack == ItemAirStack.AIR_STACK) {
+            return false;
+        }
+        return stack.getItemType().getItemData().furnaceBurnDuration() > 0;
     }
 }
