@@ -7,8 +7,6 @@ import org.allaymc.api.item.ItemStack;
 /**
  * A container that restricts insertion/extraction by side.
  *
- * Return {@code null} to indicate no slot restrictions.
- *
  * @author ClexaGod
  */
 public interface SidedContainer extends Container {

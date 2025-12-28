@@ -23,7 +23,13 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * @author IWareQ | daoge_cmd
+ * A virtual container that combines two adjacent chest containers into a single double chest view.
+ * <p>
+ * This class does not store items directly, but delegates to the underlying left and right
+ * chest containers. It manages viewer synchronization to ensure players see updates when
+ * either chest is modified (e.g., by hoppers).
+ *
+ * @author IWareQ | daoge_cmd | ClexaGod
  */
 @Slf4j
 public class DoubleChestContainerImpl implements BlockContainer {
@@ -31,14 +37,18 @@ public class DoubleChestContainerImpl implements BlockContainer {
     protected static final int CHEST_SIZE = ContainerTypes.CHEST.getSize();
 
     protected final BiMap<Byte, ContainerViewer> viewers;
+
+    // Listeners triggered when the container is opened/closed
     protected final Set<Consumer<ContainerViewer>> openListeners;
     protected final Set<Consumer<ContainerViewer>> closeListeners;
+
+    // External slot change listeners registered via API
     protected final Int2ObjectMap<Set<Consumer<ItemStack>>> leftSlotChangeListeners;
     protected final Int2ObjectMap<Set<Consumer<ItemStack>>> rightSlotChangeListeners;
-    @SuppressWarnings("unchecked")
-    protected final Consumer<ItemStack>[] leftViewListeners = new Consumer[CHEST_SIZE];
-    @SuppressWarnings("unchecked")
-    protected final Consumer<ItemStack>[] rightViewListeners = new Consumer[CHEST_SIZE];
+
+    // Listeners that sync underlying container changes to double chest viewers
+    protected final Int2ObjectMap<Consumer<ItemStack>> leftSyncListeners;
+    protected final Int2ObjectMap<Consumer<ItemStack>> rightSyncListeners;
 
     @Getter
     @Setter
@@ -52,6 +62,12 @@ public class DoubleChestContainerImpl implements BlockContainer {
         this.closeListeners = new HashSet<>();
         this.leftSlotChangeListeners = new Int2ObjectOpenHashMap<>();
         this.rightSlotChangeListeners = new Int2ObjectOpenHashMap<>();
+        this.leftSyncListeners = new Int2ObjectOpenHashMap<>();
+        this.rightSyncListeners = new Int2ObjectOpenHashMap<>();
+    }
+
+    private static boolean isLeft(int slot) {
+        return slot < CHEST_SIZE;
     }
 
     @Override
@@ -65,11 +81,11 @@ public class DoubleChestContainerImpl implements BlockContainer {
                 this.left.removeSlotChangeListener(slot, listener);
                 left.addSlotChangeListener(slot, listener);
             }));
-            detachViewListeners(this.left, leftViewListeners);
+            detachSyncListeners(this.left, leftSyncListeners);
         }
         this.left = left;
-        if (left != null) {
-            attachViewListeners(left, leftViewListeners, 0);
+        if (this.left != null) {
+            attachSyncListeners(left, leftSyncListeners, 0);
         }
     }
 
@@ -79,11 +95,11 @@ public class DoubleChestContainerImpl implements BlockContainer {
                 this.right.removeSlotChangeListener(slot, listener);
                 right.addSlotChangeListener(slot, listener);
             }));
-            detachViewListeners(this.right, rightViewListeners);
+            detachSyncListeners(this.right, rightSyncListeners);
         }
         this.right = right;
-        if (right != null) {
-            attachViewListeners(right, rightViewListeners, CHEST_SIZE);
+        if (this.right != null) {
+            attachSyncListeners(right, rightSyncListeners, CHEST_SIZE);
         }
     }
 
@@ -240,32 +256,17 @@ public class DoubleChestContainerImpl implements BlockContainer {
         throw new UnsupportedOperationException();
     }
 
-    private void attachViewListeners(Container container, Consumer<ItemStack>[] listeners, int slotOffset) {
+    private void attachSyncListeners(Container container, Int2ObjectMap<Consumer<ItemStack>> listeners, int slotOffset) {
         for (int slot = 0; slot < CHEST_SIZE; slot++) {
             int viewSlot = slot + slotOffset;
-            Consumer<ItemStack> listener = item -> notifyViewers(viewSlot);
-            listeners[slot] = listener;
+            Consumer<ItemStack> listener = $ -> viewers.values().forEach(viewer -> viewer.viewSlot(this, viewSlot));
+            listeners.put(slot, listener);
             container.addSlotChangeListener(slot, listener);
         }
     }
 
-    private void detachViewListeners(Container container, Consumer<ItemStack>[] listeners) {
-        for (int slot = 0; slot < CHEST_SIZE; slot++) {
-            Consumer<ItemStack> listener = listeners[slot];
-            if (listener != null) {
-                container.removeSlotChangeListener(slot, listener);
-                listeners[slot] = null;
-            }
-        }
-    }
-
-    private void notifyViewers(int slot) {
-        for (var viewer : viewers.values()) {
-            viewer.viewSlot(this, slot);
-        }
-    }
-
-    private static boolean isLeft(int slot) {
-        return slot < CHEST_SIZE;
+    private void detachSyncListeners(Container container, Int2ObjectMap<Consumer<ItemStack>> listeners) {
+        listeners.forEach(container::removeSlotChangeListener);
+        listeners.clear();
     }
 }
