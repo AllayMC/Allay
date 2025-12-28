@@ -7,7 +7,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityHopperBaseComponent;
-import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
+import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.blockentity.interfaces.BlockEntityHopper;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.interfaces.SidedContainer;
@@ -198,7 +198,7 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
     }
 
     protected boolean tryMoveOneItem(Container source, int sourceSlot, BlockEntityHopper sourceHopper,
-                                      Container target, BlockEntityHopper targetHopper, int[] allowedTargetSlots) {
+                                     Container target, BlockEntityHopper targetHopper, int[] allowedTargetSlots) {
         var stack = source.getItemStack(sourceSlot);
         if (stack == ItemAirStack.AIR_STACK) {
             return false;
@@ -236,30 +236,26 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
 
     protected Container getTargetContainer(Position3ic targetPos) {
         var blockEntity = position.dimension().getBlockEntity(targetPos);
-        if (!(blockEntity instanceof BlockEntityContainerHolderComponent holder)) {
+        if (!(blockEntity instanceof BlockEntityContainerHolderComponent containerHolder)) {
             return null;
         }
 
-        if (blockEntity instanceof BlockEntityPairableComponent pairable && pairable.isPaired()) {
-            var pair = pairable.getPair();
-            if (!(pair instanceof BlockEntityContainerHolderComponent pairHolder)) {
-                return holder.getContainer();
-            }
-
-            var doubleChest = new DoubleChestContainerImpl();
-            var left = holder.getContainer();
-            var right = pairHolder.getContainer();
-            if (!pairable.isLead()) {
+        if (containerHolder instanceof BlockEntityChest chest && chest.isPaired()) {
+            var left = chest.getContainer();
+            var right = ((BlockEntityChest) chest.getPair()).getContainer();
+            if (!chest.isLead()) {
                 var temp = left;
                 left = right;
                 right = temp;
             }
+
+            var doubleChest = new DoubleChestContainerImpl();
             doubleChest.setLeft(left);
             doubleChest.setRight(right);
             return doubleChest;
         }
 
-        return holder.getContainer();
+        return containerHolder.getContainer();
     }
 
     protected BlockEntityHopper getHopperAt(Position3ic targetPos) {
@@ -273,9 +269,7 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
 
     protected BlockFace getFacing() {
         var blockState = position.dimension().getBlockState(position);
-        var facingIndex = blockState.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION);
-        var facing = BlockFace.fromIndex(facingIndex);
-        return facing == null ? BlockFace.DOWN : facing;
+        return BlockFace.fromIndex(blockState.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION));
     }
 
     protected boolean isDisabled() {
