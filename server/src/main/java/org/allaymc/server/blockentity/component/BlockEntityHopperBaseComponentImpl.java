@@ -10,15 +10,15 @@ import org.allaymc.api.blockentity.component.BlockEntityHopperBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.interfaces.SidedContainer;
+import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.eventbus.event.container.ContainerItemMoveEvent;
 import org.allaymc.api.eventbus.event.container.ContainerItemPickupEvent;
-import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.server.container.impl.DoubleChestContainerImpl;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.container.impl.DoubleChestContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -375,19 +375,11 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
             return false;
         }
         if (sourceContainer != null) {
-            var event = new ContainerItemMoveEvent(
-                    sourceContainer, sourceSlot,
-                    target, targetSlot,
-                    sourceStack.getItemType(), move
-            );
+            var event = new ContainerItemMoveEvent(sourceContainer, sourceSlot, target, targetSlot, sourceStack.getItemType(), move);
             return event.call();
         }
         if (pickupEntity != null) {
-            var event = new ContainerItemPickupEvent(
-                    pickupEntity,
-                    target, targetSlot,
-                    sourceStack.getItemType(), move
-            );
+            var event = new ContainerItemPickupEvent(pickupEntity, target, targetSlot, move);
             return event.call();
         }
         return true;

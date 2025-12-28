@@ -7,5 +7,5 @@ import org.allaymc.api.blockentity.component.BlockEntityHopperBaseComponent;
 /**
  * @author ClexaGod
  */
-public interface BlockEntityHopper extends BlockEntity, BlockEntityContainerHolderComponent, BlockEntityHopperBaseComponent {
+public interface BlockEntityHopper extends BlockEntity, BlockEntityHopperBaseComponent, BlockEntityContainerHolderComponent {
 }
