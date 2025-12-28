@@ -27,16 +27,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added method `Container.isFull()` to check if a container is full.
 - (API) Added method `BlockEntityChest.getDoubleChestContainer()` to get the container object to use when the chest is paired.
 - Added properties `network-settings.raknet-send-cookie` and `network-settings.raknet-max-mtu` to `server.properties`.
-- Implemented hopper item transfer with furnace and brewing stand slot rules.
-- Implemented Totem of Undying activation for players.
-- Implemented End Crystal placement and explosion behavior.
+- Implemented hopper.
+- Implemented Totem of Undying.
+- Implemented End Crystal.
 - Implemented commands `/playsound`, `/stopsound`, `/playanimation`, `/hud`, and `/particle`.
-
 - List plugin command (`/plugin list`) now will show the plugin version.
-
-- Implemented Totem of Undying activation for players.
-
-- Implemented End Crystal placement and explosion behavior.
 
 ### Changed
 
