@@ -13,6 +13,7 @@ import org.allaymc.server.component.annotation.OnInitFinish;
  * @author daoge_cmd
  */
 public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentImpl {
+
     @Dependency
     private BlockEntityChestContainerHolderComponentImpl containerHolderComponent;
     @Dependency
@@ -27,7 +28,7 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
 
-        var doubleChestContainer = containerHolderComponent.getDoubleChestContainer();
+        var doubleChestContainer = containerHolderComponent.getDoubleChestContainerDirectly();
         doubleChestContainer.addOpenListener(viewer -> {
             if (doubleChestContainer.getViewers().size() == 1) {
                 changeChestState(getPosition(), true);

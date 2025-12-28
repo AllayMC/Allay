@@ -20,7 +20,6 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.allaymc.server.container.impl.DoubleChestContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
@@ -241,18 +240,7 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
         }
 
         if (containerHolder instanceof BlockEntityChest chest && chest.isPaired()) {
-            var left = chest.getContainer();
-            var right = ((BlockEntityChest) chest.getPair()).getContainer();
-            if (!chest.isLead()) {
-                var temp = left;
-                left = right;
-                right = temp;
-            }
-
-            var doubleChest = new DoubleChestContainerImpl();
-            doubleChest.setLeft(left);
-            doubleChest.setRight(right);
-            return doubleChest;
+            return chest.getDoubleChestContainer();
         }
 
         return containerHolder.getContainer();
