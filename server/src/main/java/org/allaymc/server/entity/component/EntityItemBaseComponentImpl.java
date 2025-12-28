@@ -8,7 +8,6 @@ import org.allaymc.api.entity.component.EntityAgeComponent;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityItem;
-import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.server.component.annotation.Dependency;
@@ -50,8 +49,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
         }
 
         // check can merge
-        if (itemStack != null && other.getEntityType() == EntityTypes.ITEM && other.isAlive()) {
-            var otherEntityItem = (EntityItem) other;
+        if (itemStack != null && other instanceof EntityItem otherEntityItem && other.isAlive()) {
             var otherItemStack = otherEntityItem.getItemStack();
             if (otherItemStack != null && otherItemStack.canMerge(itemStack)) {
                 itemStack.setCount(itemStack.getCount() + otherItemStack.getCount());

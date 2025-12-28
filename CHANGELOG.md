@@ -21,11 +21,17 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added methods `WorldViewer.stopSound(String)` and `WorldViewer.stopAllSounds()`.
 - (API) Added method `Player.transfer()` to transfer the player to another server.
 - (API) Added method `Entity.setImmobile()` to make the entity immobile.
+- (API) Added method `Container.isFull()` to check if a container is full.
+- (API) Added method `BlockEntityChest.getDoubleChestContainer()` to get the container object to use when the chest is paired.
+- (API) Implemented hopper:
+  - (API) Added `BlockEntityHopper` and related interfaces.
+  - (API) Added `SidedContainer` interface to represent a container that restricts insertion/extraction by side.
+  - (API) Added `ContainerItemPickupEvent` for item entity pickups into containers.
+  - (API) Added `ContainerTypes.HOPPER`.
 - Added properties `network-settings.raknet-send-cookie` and `network-settings.raknet-max-mtu` to `server.properties`.
-- Implemented Totem of Undying activation for players.
-- Implemented End Crystal placement and explosion behavior.
+- Implemented Totem of Undying.
+- Implemented End Crystal.
 - Implemented commands `/playsound`, `/stopsound`, `/playanimation`, `/hud`, and `/particle`.
-- List plugin command (`/plugin list`) now will show the plugin version.
 
 ### Changed
 
@@ -34,6 +40,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Made `AllayAPI.APIInstanceHolder<T>` public in allay-api by removing the `@ApiStatus.Internal` annotation.
 - (API) `EntityEnderCrystal` now extends `EntityLiving` and `EntityEnderCrystalBaseComponent` interfaces.
 - Entity's display name is now default to the title case. For example: `minecraft:arrow` -> `Arrow`.
+- List plugin command (`/plugin list`) now will show the plugin version.
 
 ### Fixed
 

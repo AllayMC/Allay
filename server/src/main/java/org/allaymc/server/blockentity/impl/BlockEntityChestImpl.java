@@ -2,7 +2,7 @@ package org.allaymc.server.blockentity.impl;
 
 import lombok.experimental.Delegate;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
-import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
+import org.allaymc.api.blockentity.component.BlockEntityChestContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.component.Component;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class BlockEntityChestImpl extends BlockEntityImpl implements BlockEntityChest {
     @Delegate
-    protected BlockEntityContainerHolderComponent containerHolderComponent;
+    protected BlockEntityChestContainerHolderComponent chestContainerHolderComponent;
     @Delegate
     protected BlockEntityPairableComponent pairableComponent;
 

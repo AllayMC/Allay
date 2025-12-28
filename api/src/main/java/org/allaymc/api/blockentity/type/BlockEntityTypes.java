@@ -9,6 +9,7 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityBarrel> BARREL;
     public static BlockEntityType<BlockEntityBed> BED;
     public static BlockEntityType<BlockEntityChest> CHEST;
+    public static BlockEntityType<BlockEntityHopper> HOPPER;
     public static BlockEntityType<BlockEntityShulkerBox> SHULKER_BOX;
     public static BlockEntityType<BlockEntityFurnace> FURNACE;
     public static BlockEntityType<BlockEntityBlastFurnace> BLAST_FURNACE;

@@ -16,6 +16,7 @@ public interface ContainerTypes {
     ContainerType<BrewingStandContainer> BREWING_STAND = new ContainerType<>(5);
     ContainerType<CartographyTableContainer> CARTOGRAPHY_TABLE = new ContainerType<>(3);
     ContainerType<BlockContainer> CHEST = new ContainerType<>(27);
+    ContainerType<BlockContainer> HOPPER = new ContainerType<>(5);
     ContainerType<RecipeContainer> CRAFTING_GRID = new ContainerType<>(4);
     ContainerType<CraftingTableContainer> CRAFTING_TABLE = new ContainerType<>(9);
     ContainerType<Container> CREATED_OUTPUT = new ContainerType<>(1);

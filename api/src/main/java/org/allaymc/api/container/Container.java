@@ -109,6 +109,20 @@ public interface Container {
     }
 
     /**
+     * Check if the container is full.
+     *
+     * @return {@code true} if the container is full, otherwise {@code false}.
+     */
+    default boolean isFull() {
+        for (var stack : getItemStackArray()) {
+            if (stack == ItemAirStack.AIR_STACK || !stack.isFull()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Get the item stacks of the container.
      *
      * @return the item stacks

@@ -4,6 +4,7 @@ import org.allaymc.api.container.*;
 import org.allaymc.api.container.interfaces.FakeContainer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.server.container.impl.BaseContainer;
+import org.allaymc.server.container.impl.DoubleChestContainerImpl;
 import org.allaymc.server.container.impl.FakeContainerImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeEach;
@@ -672,6 +673,239 @@ class ContainerTest {
             var container1 = containerSupplier.get();
             var container2 = containerSupplier.get();
             assertNotSame(container1, container2);
+        }
+    }
+
+    @Nested
+    class DoubleChestContainerTests {
+
+        static final int CHEST_SIZE = ContainerTypes.CHEST.getSize();
+
+        DoubleChestContainerImpl doubleChest;
+        BaseContainer leftChest;
+        BaseContainer rightChest;
+
+        @BeforeEach
+        void setUp() {
+            doubleChest = new DoubleChestContainerImpl();
+            leftChest = new BaseContainer(ContainerTypes.CHEST);
+            rightChest = new BaseContainer(ContainerTypes.CHEST);
+            doubleChest.setLeft(leftChest);
+            doubleChest.setRight(rightChest);
+        }
+
+        @Test
+        void testContainerType() {
+            assertEquals(ContainerTypes.DOUBLE_CHEST, doubleChest.getContainerType());
+            assertEquals(CHEST_SIZE * 2, doubleChest.getContainerType().getSize());
+        }
+
+        @Test
+        void testGetItemStackDelegatesToLeft() {
+            var item = STONE.createItemStack(10);
+            leftChest.setItemStack(5, item);
+
+            assertSame(item, doubleChest.getItemStack(5));
+        }
+
+        @Test
+        void testGetItemStackDelegatesToRight() {
+            var item = DIAMOND.createItemStack(20);
+            rightChest.setItemStack(10, item);
+
+            assertSame(item, doubleChest.getItemStack(CHEST_SIZE + 10));
+        }
+
+        @Test
+        void testSetItemStackDelegatesToLeft() {
+            var item = STONE.createItemStack(15);
+            doubleChest.setItemStack(3, item);
+
+            assertSame(item, leftChest.getItemStack(3));
+        }
+
+        @Test
+        void testSetItemStackDelegatesToRight() {
+            var item = DIAMOND.createItemStack(25);
+            doubleChest.setItemStack(CHEST_SIZE + 5, item);
+
+            assertSame(item, rightChest.getItemStack(5));
+        }
+
+        @Test
+        void testGetItemStacksCombinesBothChests() {
+            leftChest.setItemStack(0, STONE.createItemStack());
+            rightChest.setItemStack(0, DIAMOND.createItemStack());
+
+            var items = doubleChest.getItemStacks();
+            assertEquals(CHEST_SIZE * 2, items.size());
+        }
+
+        @Test
+        void testGetItemStackArray() {
+            var array = doubleChest.getItemStackArray();
+            assertEquals(CHEST_SIZE * 2, array.length);
+        }
+
+        @Test
+        void testAddViewer() {
+            assertTrue(doubleChest.addViewer(viewer));
+            assertEquals(1, doubleChest.getViewers().size());
+            assertTrue(doubleChest.getViewers().containsValue(viewer));
+        }
+
+        @Test
+        void testRemoveViewer() {
+            doubleChest.addViewer(viewer);
+            assertTrue(doubleChest.removeViewer(viewer));
+            assertEquals(0, doubleChest.getViewers().size());
+        }
+
+        @Test
+        void testOpenListener() {
+            AtomicBoolean opened = new AtomicBoolean(false);
+            doubleChest.addOpenListener(v -> opened.set(true));
+
+            doubleChest.addViewer(viewer);
+            assertTrue(opened.get());
+        }
+
+        @Test
+        void testCloseListener() {
+            AtomicBoolean closed = new AtomicBoolean(false);
+            doubleChest.addCloseListener(v -> closed.set(true));
+
+            doubleChest.addViewer(viewer);
+            doubleChest.removeViewer(viewer);
+            assertTrue(closed.get());
+        }
+
+        @Test
+        void testSlotChangeListenerOnLeftSlot() {
+            AtomicReference<ItemStack> changedItem = new AtomicReference<>();
+            doubleChest.addSlotChangeListener(5, changedItem::set);
+
+            var item = STONE.createItemStack();
+            doubleChest.setItemStack(5, item);
+
+            assertSame(item, changedItem.get());
+        }
+
+        @Test
+        void testSlotChangeListenerOnRightSlot() {
+            AtomicReference<ItemStack> changedItem = new AtomicReference<>();
+            doubleChest.addSlotChangeListener(CHEST_SIZE + 10, changedItem::set);
+
+            var item = DIAMOND.createItemStack();
+            doubleChest.setItemStack(CHEST_SIZE + 10, item);
+
+            assertSame(item, changedItem.get());
+        }
+
+        @Test
+        void testRemoveSlotChangeListener() {
+            AtomicInteger count = new AtomicInteger(0);
+            Consumer<ItemStack> listener = item -> count.incrementAndGet();
+
+            doubleChest.addSlotChangeListener(0, listener);
+            doubleChest.setItemStack(0, STONE.createItemStack());
+            assertEquals(1, count.get());
+
+            doubleChest.removeSlotChangeListener(0, listener);
+            doubleChest.setItemStack(0, DIAMOND.createItemStack());
+            assertEquals(1, count.get());
+        }
+
+        @Test
+        void testSyncListenersNotifyViewersOnLeftChange() {
+            AtomicInteger viewCount = new AtomicInteger(0);
+            var trackingViewer = new FakeContainerViewer() {
+                @Override
+                public void viewSlot(Container container, int slot) {
+                    viewCount.incrementAndGet();
+                }
+            };
+
+            doubleChest.addViewer(trackingViewer);
+
+            // Change left chest directly - should notify double chest viewers
+            leftChest.setItemStack(0, STONE.createItemStack());
+
+            assertEquals(1, viewCount.get());
+        }
+
+        @Test
+        void testSyncListenersNotifyViewersOnRightChange() {
+            AtomicInteger viewCount = new AtomicInteger(0);
+            var trackingViewer = new FakeContainerViewer() {
+                @Override
+                public void viewSlot(Container container, int slot) {
+                    viewCount.incrementAndGet();
+                }
+            };
+
+            doubleChest.addViewer(trackingViewer);
+
+            // Change right chest directly - should notify double chest viewers
+            rightChest.setItemStack(5, DIAMOND.createItemStack());
+
+            assertEquals(1, viewCount.get());
+        }
+
+        @Test
+        void testSaveNBTThrowsException() {
+            assertThrows(UnsupportedOperationException.class, () -> doubleChest.saveNBT());
+        }
+
+        @Test
+        void testLoadNBTThrowsException() {
+            assertThrows(UnsupportedOperationException.class, () -> doubleChest.loadNBT(null));
+        }
+
+        @Test
+        void testGetViewersUnmodifiable() {
+            doubleChest.addViewer(viewer);
+            var viewers = doubleChest.getViewers();
+
+            assertThrows(UnsupportedOperationException.class, () ->
+                    viewers.put((byte) 99, new FakeContainerViewer())
+            );
+        }
+
+        @Test
+        void testSetLeftTransfersListeners() {
+            AtomicInteger count = new AtomicInteger(0);
+            Consumer<ItemStack> listener = item -> count.incrementAndGet();
+
+            doubleChest.addSlotChangeListener(0, listener);
+            leftChest.setItemStack(0, STONE.createItemStack());
+            assertEquals(1, count.get());
+
+            // Replace left chest
+            var newLeftChest = new BaseContainer(ContainerTypes.CHEST);
+            doubleChest.setLeft(newLeftChest);
+
+            // Listener should now be on new chest
+            newLeftChest.setItemStack(0, DIAMOND.createItemStack());
+            assertEquals(2, count.get());
+        }
+
+        @Test
+        void testSetRightTransfersListeners() {
+            AtomicInteger count = new AtomicInteger(0);
+            Consumer<ItemStack> listener = item -> count.incrementAndGet();
+
+            doubleChest.addSlotChangeListener(CHEST_SIZE + 5, listener);
+            rightChest.setItemStack(5, STONE.createItemStack());
+            assertEquals(1, count.get());
+
+            // Replace right chest
+            var newRightChest = new BaseContainer(ContainerTypes.CHEST);
+            doubleChest.setRight(newRightChest);
+
+            // Listener should now be on new chest
+            newRightChest.setItemStack(5, DIAMOND.createItemStack());
+            assertEquals(2, count.get());
         }
     }
 }
