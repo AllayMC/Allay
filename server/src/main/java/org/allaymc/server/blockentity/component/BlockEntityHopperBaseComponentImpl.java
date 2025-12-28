@@ -8,38 +8,41 @@ import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityHopperBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
+import org.allaymc.api.blockentity.interfaces.BlockEntityHopper;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.interfaces.SidedContainer;
 import org.allaymc.api.entity.interfaces.EntityItem;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.container.ContainerItemMoveEvent;
 import org.allaymc.api.eventbus.event.container.ContainerItemPickupEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.container.impl.DoubleChestContainerImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 
 /**
- * @author ClexaGod
+ * @author ClexaGod | daoge_cmd
  */
 public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityHopperBaseComponent {
 
     protected static final String TAG_TRANSFER_COOLDOWN = "TransferCooldown";
-    protected static final int TRANSFER_COOLDOWN_TICKS = 8;
+    protected static final int TRANSFER_COOLDOWN = 8;
 
-    @Dependency
-    protected BlockEntityContainerHolderComponent containerHolderComponent;
+    @ComponentObject
+    protected BlockEntityHopper thisHopper;
 
     @Getter
     @Setter
-    protected int transferCooldown = TRANSFER_COOLDOWN_TICKS;
+    protected int transferCooldown;
 
     public BlockEntityHopperBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
+        this.transferCooldown = TRANSFER_COOLDOWN;
     }
 
     @Override
@@ -62,47 +65,51 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
         if (isDisabled()) {
             return;
         }
+
         if (transferCooldown > 0) {
             transferCooldown--;
             return;
         }
 
         if (tryTransfer()) {
-            transferCooldown = TRANSFER_COOLDOWN_TICKS;
+            transferCooldown = TRANSFER_COOLDOWN;
         }
     }
 
     protected boolean tryTransfer() {
-        var hopperContainer = containerHolderComponent.getContainer();
-        boolean changed = false;
+        var hopperContainer = thisHopper.getContainer();
+        var changed = false;
+
         if (!hopperContainer.isEmpty()) {
-            changed |= tryPushItems(hopperContainer);
+            changed |= tryPushItems();
         }
-        if (!isContainerFull(hopperContainer)) {
-            changed |= tryPullItems(hopperContainer);
+
+        if (!hopperContainer.isFull()) {
+            changed |= tryPullItems();
         }
+
         return changed;
     }
 
-    protected boolean tryPushItems(Container hopperContainer) {
+    protected boolean tryPushItems() {
+        var hopperContainer = thisHopper.getContainer();
         if (hopperContainer.isEmpty()) {
             return false;
         }
 
-        var facing = getFacing();
         var target = getTargetContainer(getFacingPos());
         if (target == null) {
             return false;
         }
-        var targetSide = facing.opposite();
 
         var stacks = hopperContainer.getItemStackArray();
         for (int slot = 0; slot < stacks.length; slot++) {
             if (stacks[slot] == ItemAirStack.AIR_STACK) {
                 continue;
             }
-            var allowedSlots = target.container instanceof SidedContainer sided
-                    ? sided.getAllowedInsertSlots(targetSide, stacks[slot])
+
+            var allowedSlots = target.container instanceof SidedContainer sidedContainer
+                    ? sidedContainer.getAllowedInsertSlots(getFacing().opposite(), stacks[slot])
                     : null;
             if (allowedSlots != null && allowedSlots.length == 0) {
                 continue;
@@ -115,35 +122,29 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
         return false;
     }
 
-    protected boolean tryPullItems(Container hopperContainer) {
-        var dimension = position.dimension();
-        if (dimension == null) {
-            return false;
-        }
-        var sourcePos = new Position3i(BlockFace.UP.offsetPos(position), dimension);
-        var source = getTargetContainer(sourcePos);
-        if (source != null && tryPullFromContainer(source, hopperContainer)) {
+    protected boolean tryPullItems() {
+        var source = getTargetContainer(new Position3i(BlockFace.UP.offsetPos(position), position.dimension()));
+        if (source != null && tryPullFromContainer(source)) {
             return true;
         }
 
-        return tryPullFromItemEntities(hopperContainer);
+        return tryPullFromItemEntities();
     }
 
-    protected boolean tryPullFromContainer(TransferTarget source, Container hopperContainer) {
-        var sourceSide = BlockFace.DOWN;
-        var allowedSlots = source.container instanceof SidedContainer sided
-                ? sided.getAllowedExtractSlots(sourceSide)
-                : null;
-        if (allowedSlots != null) {
-            for (var slot : allowedSlots) {
-                var stack = source.container.getItemStack(slot);
+    protected boolean tryPullFromContainer(TransferTarget source) {
+        var hopperContainer = thisHopper.getContainer();
+        if (source.container instanceof SidedContainer sidedContainer) {
+            for (var slot : sidedContainer.getAllowedExtractSlots(BlockFace.DOWN)) {
+                var stack = sidedContainer.getItemStack(slot);
                 if (stack == ItemAirStack.AIR_STACK) {
                     continue;
                 }
-                if (tryMoveOneItem(source.container, slot, source, new TransferTarget(hopperContainer, this), null)) {
+
+                if (tryMoveOneItem(sidedContainer, slot, source, new TransferTarget(hopperContainer, thisHopper), null)) {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -152,41 +153,35 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
             if (stacks[slot] == ItemAirStack.AIR_STACK) {
                 continue;
             }
-            if (tryMoveOneItem(source.container, slot, source, new TransferTarget(hopperContainer, this), null)) {
+
+            if (tryMoveOneItem(source.container, slot, source, new TransferTarget(hopperContainer, thisHopper), null)) {
                 return true;
             }
         }
         return false;
     }
 
-    protected boolean tryPullFromItemEntities(Container hopperContainer) {
-        var dimension = position.dimension();
-        if (dimension == null) {
-            return false;
-        }
-
-        var entities = dimension.getEntityManager()
+    protected boolean tryPullFromItemEntities() {
+        var entities = position.dimension().getEntityManager()
                 .getPhysicsService()
-                .computeCollidingEntities(getPickupAABB(), entity -> entity instanceof EntityItem);
+                .computeCollidingEntities(getPickupAABB(), entity -> entity.getEntityType() == EntityTypes.ITEM);
         for (var entity : entities) {
-            if (!(entity instanceof EntityItem itemEntity)) {
-                continue;
-            }
-            if (tryPullFromItemEntity(itemEntity, hopperContainer)) {
+            if (tryPullFromItemEntity((EntityItem) entity)) {
                 return true;
             }
         }
         return false;
     }
 
-    protected boolean tryPullFromItemEntity(EntityItem itemEntity, Container hopperContainer) {
+    protected boolean tryPullFromItemEntity(EntityItem itemEntity) {
+        var hopperContainer = thisHopper.getContainer();
         var stack = itemEntity.getItemStack();
         if (stack == null || stack == ItemAirStack.AIR_STACK) {
             return false;
         }
 
-        var moved = insertIntoContainer(stack, hopperContainer, Integer.MAX_VALUE, null, null, -1, itemEntity);
-        if (moved <= 0) {
+        var movedCount = insertIntoContainer(stack, hopperContainer, Integer.MAX_VALUE, null, null, -1, itemEntity);
+        if (movedCount <= 0) {
             return false;
         }
 
@@ -213,11 +208,11 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
         } else {
             source.notifySlotChange(sourceSlot);
         }
-        if (sourceTarget != null && sourceTarget.hopperComponent != null) {
-            sourceTarget.hopperComponent.setTransferCooldown(TRANSFER_COOLDOWN_TICKS);
+        if (sourceTarget != null && sourceTarget.hopper != null) {
+            sourceTarget.hopper.setTransferCooldown(TRANSFER_COOLDOWN);
         }
-        if (target.hopperComponent != null) {
-            target.hopperComponent.setTransferCooldown(TRANSFER_COOLDOWN_TICKS);
+        if (target.hopper != null) {
+            target.hopper.setTransferCooldown(TRANSFER_COOLDOWN);
         }
         return true;
     }
@@ -227,16 +222,12 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
     }
 
     protected TransferTarget getTargetContainer(Position3ic targetPos) {
-        var dimension = position.dimension();
-        if (dimension == null) {
-            return null;
-        }
-
-        var blockEntity = dimension.getBlockEntity(targetPos);
+        var blockEntity = position.dimension().getBlockEntity(targetPos);
         if (!(blockEntity instanceof BlockEntityContainerHolderComponent holder)) {
             return null;
         }
 
+        // TODO: refactor it
         if (blockEntity instanceof BlockEntityPairableComponent pairable && pairable.isPaired()) {
             var pair = pairable.getPair();
             if (!(pair instanceof BlockEntityContainerHolderComponent pairHolder)) {
@@ -256,39 +247,22 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
             return new TransferTarget(doubleChest, null);
         }
 
-        return new TransferTarget(holder.getContainer(), blockEntity instanceof BlockEntityHopperBaseComponent hopperComponent ? hopperComponent : null);
+        return new TransferTarget(holder.getContainer(), blockEntity instanceof BlockEntityHopper hopper ? hopper : null);
     }
 
     protected Position3ic getFacingPos() {
-        var dimension = position.dimension();
-        if (dimension == null) {
-            return position;
-        }
-
-        var facing = getFacing();
-        return new Position3i(facing.offsetPos(position), dimension);
+        return new Position3i(getFacing().offsetPos(position), position.dimension());
     }
 
     protected BlockFace getFacing() {
-        var dimension = position.dimension();
-        if (dimension == null) {
-            return BlockFace.DOWN;
-        }
-
-        var blockState = dimension.getBlockState(position);
+        var blockState = position.dimension().getBlockState(position);
         var facingIndex = blockState.getPropertyValue(BlockPropertyTypes.FACING_DIRECTION);
         var facing = BlockFace.fromIndex(facingIndex);
         return facing == null ? BlockFace.DOWN : facing;
     }
 
     protected boolean isDisabled() {
-        var dimension = position.dimension();
-        if (dimension == null) {
-            return true;
-        }
-
-        var blockState = dimension.getBlockState(position);
-        return blockState.getPropertyValue(BlockPropertyTypes.TOGGLE_BIT);
+        return position.dimension().getBlockState(position).getPropertyValue(BlockPropertyTypes.TOGGLE_BIT);
     }
 
     protected AABBdc getPickupAABB() {
@@ -298,18 +272,14 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
         return new AABBd(x, y, z, x + 1, y + 2, z + 1);
     }
 
-    protected int insertIntoContainer(ItemStack sourceStack, Container target, int maxMove) {
-        return insertIntoContainer(sourceStack, target, maxMove, null, null, -1, null);
-    }
-
-    protected int insertIntoContainer(ItemStack sourceStack, Container target, int maxMove, int[] allowedSlots,
+    protected int insertIntoContainer(ItemStack sourceStack, Container target, int maxMoveCount, int[] allowedSlots,
                                       Container sourceContainer, int sourceSlot, EntityItem pickupEntity) {
-        if (sourceStack == null || sourceStack == ItemAirStack.AIR_STACK || maxMove <= 0) {
+        if (sourceStack == null || sourceStack == ItemAirStack.AIR_STACK || maxMoveCount <= 0) {
             return 0;
         }
 
-        int remaining = Math.min(sourceStack.getCount(), maxMove);
-        int moved = 0;
+        int remaining = Math.min(sourceStack.getCount(), maxMoveCount);
+        int movedCount = 0;
         int maxStackSize = sourceStack.getItemType().getItemData().maxStackSize();
 
         if (allowedSlots == null) {
@@ -318,37 +288,40 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
                 if (remaining <= 0) {
                     break;
                 }
-                moved += tryMoveToSlot(target, sourceStack, slot, maxStackSize, remaining, sourceContainer, sourceSlot, pickupEntity);
-                remaining = Math.min(sourceStack.getCount(), maxMove) - moved;
+
+                movedCount += tryMoveToSlot(target, sourceStack, slot, maxStackSize, remaining, sourceContainer, sourceSlot, pickupEntity);
+                remaining = Math.min(sourceStack.getCount(), maxMoveCount) - movedCount;
             }
         } else {
             for (int slot : allowedSlots) {
                 if (remaining <= 0) {
                     break;
                 }
-                moved += tryMoveToSlot(target, sourceStack, slot, maxStackSize, remaining, sourceContainer, sourceSlot, pickupEntity);
-                remaining = Math.min(sourceStack.getCount(), maxMove) - moved;
+
+                movedCount += tryMoveToSlot(target, sourceStack, slot, maxStackSize, remaining, sourceContainer, sourceSlot, pickupEntity);
+                remaining = Math.min(sourceStack.getCount(), maxMoveCount) - movedCount;
             }
         }
 
-        if (moved > 0) {
-            sourceStack.reduceCount(moved);
+        if (movedCount > 0) {
+            sourceStack.reduceCount(movedCount);
         }
-        return moved;
+        return movedCount;
     }
 
     protected int tryMoveToSlot(Container target, ItemStack sourceStack, int slot, int maxStackSize, int remaining,
                                 Container sourceContainer, int sourceSlot, EntityItem pickupEntity) {
         var targetStack = target.getItemStack(slot);
         if (targetStack == ItemAirStack.AIR_STACK) {
-            int move = Math.min(remaining, maxStackSize);
-            if (!isMoveAllowed(sourceContainer, sourceSlot, pickupEntity, target, slot, sourceStack, move)) {
+            int moveCount = Math.min(remaining, maxStackSize);
+            if (!isMoveAllowed(sourceContainer, sourceSlot, pickupEntity, target, slot, sourceStack, moveCount)) {
                 return 0;
             }
+
             var newStack = sourceStack.copy();
-            newStack.setCount(move);
+            newStack.setCount(moveCount);
             target.setItemStack(slot, newStack);
-            return move;
+            return moveCount;
         }
 
         if (targetStack.canMerge(sourceStack, true) && !targetStack.isFull()) {
@@ -357,43 +330,39 @@ public class BlockEntityHopperBaseComponentImpl extends BlockEntityBaseComponent
             if (space <= 0) {
                 return 0;
             }
-            int move = Math.min(remaining, space);
-            if (!isMoveAllowed(sourceContainer, sourceSlot, pickupEntity, target, slot, sourceStack, move)) {
+
+            int moveCount = Math.min(remaining, space);
+            if (!isMoveAllowed(sourceContainer, sourceSlot, pickupEntity, target, slot, sourceStack, moveCount)) {
                 return 0;
             }
-            targetStack.increaseCount(move);
+
+            targetStack.increaseCount(moveCount);
             target.notifySlotChange(slot);
-            return move;
+            return moveCount;
         }
 
         return 0;
     }
 
     protected boolean isMoveAllowed(Container sourceContainer, int sourceSlot, EntityItem pickupEntity,
-                                    Container target, int targetSlot, ItemStack sourceStack, int move) {
-        if (move <= 0) {
+                                    Container target, int targetSlot, ItemStack sourceStack, int moveCount) {
+        if (moveCount <= 0) {
             return false;
         }
+
         if (sourceContainer != null) {
-            var event = new ContainerItemMoveEvent(sourceContainer, sourceSlot, target, targetSlot, sourceStack.getItemType(), move);
+            var event = new ContainerItemMoveEvent(sourceContainer, sourceSlot, target, targetSlot, sourceStack.getItemType(), moveCount);
             return event.call();
         }
+
         if (pickupEntity != null) {
-            var event = new ContainerItemPickupEvent(pickupEntity, target, targetSlot, move);
+            var event = new ContainerItemPickupEvent(pickupEntity, target, targetSlot, moveCount);
             return event.call();
         }
+
         return true;
     }
 
-    protected boolean isContainerFull(Container container) {
-        for (var stack : container.getItemStackArray()) {
-            if (stack == ItemAirStack.AIR_STACK || !stack.isFull()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    protected record TransferTarget(Container container, BlockEntityHopperBaseComponent hopperComponent) {
+    protected record TransferTarget(Container container, BlockEntityHopper hopper) {
     }
 }

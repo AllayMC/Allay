@@ -7,6 +7,7 @@ import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.container.impl.ChestContainerImpl;
@@ -43,7 +44,7 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
 
         if (pairableComponent.isPaired()) {
             var pair = pairableComponent.getPair();
-            if (!hasSpaceAbove((Position3i) pair.getPosition())) {
+            if (!hasSpaceAbove(pair.getPosition())) {
                 return;
             }
 
@@ -69,7 +70,7 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
         event.setSuccess(true);
     }
 
-    protected boolean hasSpaceAbove(Position3i pos) {
+    protected boolean hasSpaceAbove(Position3ic pos) {
         return pos.dimension().getBlockState(BlockFace.UP.offsetPos(pos)).getBlockStateData().isTransparent();
     }
 }
