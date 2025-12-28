@@ -133,6 +133,21 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void setInvisible(boolean invisible);
 
     /**
+     * Checks if the entity is currently immobile.
+     *
+     * @return {@code true} if the Player is currently immobile.
+     */
+    boolean isImmobile();
+
+    /**
+     * Sets the immobile state of an object. When set to {@code true}, the entity can't move
+     * around, but is still allowed to look around.
+     *
+     * @param immobile {@code true} to make the entity immobile, {@code false} to make it mobile.
+     */
+    void setImmobile(boolean immobile);
+
+    /**
      * Gets the last location of this entity.
      *
      * @return the last location of this entity
@@ -381,11 +396,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Try to set this entity's location. This method is intended to be called by physics engine,
-     * and user is not expected to call it.
-     * <p>
-     * The implementation will call {@link EntityMoveEvent}, and because this event is cancellable,
-     * the method call may not be valid.
+     * Try to set this entity's location. This method is intended to be called by the physics engine, and the
+     * user is not expected to call it. The implementation will call {@link EntityMoveEvent}, and because this
+     * event is cancellable, the method call may not be valid.
      *
      * @param newLocation the new location that this entity moves to
      * @return {@code true} if the method call is valid, {@code false} otherwise.

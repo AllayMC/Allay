@@ -98,6 +98,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected boolean nameTagAlwaysShow;
     @Getter
     protected boolean invisible;
+    @Getter
+    protected boolean immobile;
     protected Set<String> tags;
     @Getter
     @Setter
@@ -164,6 +166,18 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         newLocation = event.getTo();
+        if (this.immobile) {
+            // immobile entity cannot move around, but is still allowed to look around
+            var loc = new Location3d(newLocation);
+            loc.set(this.location.x, this.location.y, this.location.z);
+            if (loc.equals(this.location)) {
+                // Same to the current location
+                return false;
+            }
+
+            newLocation = loc;
+        }
+
         setLocation(newLocation);
         broadcastMoveToViewers(newLocation, false);
         return true;
@@ -184,6 +198,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void setInvisible(boolean invisible) {
         this.invisible = invisible;
+        broadcastState();
+    }
+
+    @Override
+    public void setImmobile(boolean immobile) {
+        this.immobile = immobile;
         broadcastState();
     }
 

@@ -38,6 +38,7 @@ import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitiali
 import java.net.InetSocketAddress;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author daoge_cmd
@@ -47,6 +48,7 @@ public class AllayNetworkInterface implements NetworkInterface {
 
     protected final Server server;
     protected final Set<Channel> channels;
+    protected final long serverId;
 
     protected InetSocketAddress address;
     // Can be null if ipv6 is not enabled
@@ -57,6 +59,7 @@ public class AllayNetworkInterface implements NetworkInterface {
     public AllayNetworkInterface(Server server) {
         this.server = server;
         this.channels = new HashSet<>();
+        this.serverId = ThreadLocalRandom.current().nextLong();
     }
 
     @SneakyThrows
@@ -98,6 +101,9 @@ public class AllayNetworkInterface implements NetworkInterface {
         var bootstrap = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
+                .option(RakChannelOption.RAK_SEND_COOKIE, networkSettings.raknetSendCookie())
+                .option(RakChannelOption.RAK_MAX_MTU, networkSettings.raknetMaxMtu())
+                .option(RakChannelOption.RAK_GUID, serverId)
                 // Integer.MAX_VALUE fixed localhost blocking address
                 .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : networkSettings.raknetPacketLimit())
                 .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : networkSettings.raknetGlobalPacketLimit())
@@ -200,7 +206,8 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .version(ProtocolInfo.getLatestCodec().getMinecraftVersion())
                 .protocolVersion(ProtocolInfo.getLatestCodec().getProtocolVersion())
                 .ipv4Port(networkSettings.port())
-                .ipv6Port(networkSettings.enablev6() ? networkSettings.portv6() : -1);
+                .ipv6Port(networkSettings.enablev6() ? networkSettings.portv6() : -1)
+                .serverId(serverId);
     }
 
     protected void updatePong() {

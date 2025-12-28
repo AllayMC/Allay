@@ -336,6 +336,14 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     boolean getHudElementVisibility(HudElement element);
 
     /**
+     * Transfers the player to another server.
+     *
+     * @param address the address of the server to transfer to
+     * @param port    the port of the server to transfer to
+     */
+    void transfer(String address, int port);
+
+    /**
      * Sends a packet to the client.
      *
      * @param packet the packet object to be sent to the client. The type of the packet depends on the implementation.
