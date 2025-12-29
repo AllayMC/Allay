@@ -9,9 +9,9 @@ netty = "4.2.9.Final"
 # NBT
 nbt = { group = "org.allaymc", name = "nbt", version = "3.0.10" }
 # Protocol
-protocol-connection = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta11-20251210.195537-15" }
-protocol-common = { group = "org.cloudburstmc.protocol", name = "common", version = "3.0.0.Beta11-20251210.195537-14" }
-protocol-codec = { group = "org.cloudburstmc.protocol", name = "bedrock-codec", version = "3.0.0.Beta11-20251210.195537-15" }
+protocol-connection = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.9-SNAPSHOT" }
+protocol-common = { group = "org.cloudburstmc.protocol", name = "common", version = "3.0.9-SNAPSHOT" }
+protocol-codec = { group = "org.cloudburstmc.protocol", name = "bedrock-codec", version = "3.0.9-SNAPSHOT" }
 # State Updater
 updater-common = { group = "org.allaymc.stateupdater", name = "common", version = "0.1.1" }
 item-updater = { group = "org.allaymc.stateupdater", name = "item-updater", version = "1.21.110-R1" }
