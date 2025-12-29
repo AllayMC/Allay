@@ -46,6 +46,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Fixed method `Container.removeAllViewers()` won't remove all viewers from the container.
 - Fixed a bug where calling method `Container.removeViewer()` server-side will make the client no longer able to open any container.
+- Fixed a bug where the speed of the player would be incorrect in some special cases.
 - `RAK_SEND_COOKIE` is set to `true` by default in `AllayNetworkInterface` to resolve connection issue.
 
 ### Removed

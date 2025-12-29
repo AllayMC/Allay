@@ -692,7 +692,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.sprinting != sprinting) {
             this.sprinting = sprinting;
             if (sprinting) {
-                this.sneaking = false;
+                setSneaking(false);
             }
 
             if (isActualPlayer()) {
@@ -715,7 +715,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.sneaking != sneaking) {
             this.sneaking = sneaking;
             if (sneaking && !this.flying) {
-                this.sprinting = false;
+                setSprinting(false);
             }
 
             broadcastState();
@@ -728,7 +728,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.swimming != swimming) {
             this.swimming = swimming;
             if (swimming) {
-                this.sneaking = false;
+                setSneaking(false);
             }
 
             broadcastState();
@@ -750,7 +750,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (this.crawling != crawling) {
             this.crawling = crawling;
             if (crawling) {
-                this.sneaking = false;
+                setSneaking(false);
             }
 
             broadcastState();
