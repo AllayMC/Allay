@@ -586,8 +586,9 @@ public class AllayPlayer implements Player {
                 (float) (aabb.maxY() - aabb.minY()),
                 (float) (aabb.maxZ() - aabb.minZ())
         ));
-        // Alwyas set HAS_NPC to true so that every entity can be rendered in the npc dialog
-        map.put(EntityDataTypes.HAS_NPC, true);
+        // Minecraft 1.21.101 client crashes if HAS_NPC is set to true for EntityItem.
+        // Other entity types are not affected. The issue is fixed in newer client versions.
+        map.put(EntityDataTypes.HAS_NPC, !(entity instanceof EntityItem));
         if (entity.hasNameTag()) {
             map.setFlag(EntityFlag.CAN_SHOW_NAME, true);
             map.put(EntityDataTypes.NAME, entity.getNameTag());
