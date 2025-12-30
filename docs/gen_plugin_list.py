@@ -37,12 +37,7 @@ with mkdocs_gen_files.open("plugin_list.md", "w") as f:
 
     fp("# Plugin List")
     el()
-    fp("This page holds some available plugins that can be installed into your Allay server.")
-    el()
-
-    fp("## Adding Your Plugins")
-    el()
-    fp("You are free to add your plugins and themes to the site, just open a new issue.")
+    fp("This page holds some available plugins that can be installed into your Allay server. You are free to add your plugins to the site, just open a new issue.")
     el()
 
     fp("## Available Plugins")
