@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[Aitokoto]
+description = "An AllayMC plugin that send a random quote from Hitokoto to the newly joined player."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/Aitokoto"
+
 [Amoji]
 description = "An emoji plugin for AllayMC server that displays emoji particle effects above players' heads!"
 authors = ["daoge_cmd"]
