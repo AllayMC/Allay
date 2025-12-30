@@ -11,6 +11,5 @@ public class EntitySquidImpl extends EntityImpl implements EntitySquid {
     public EntitySquidImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

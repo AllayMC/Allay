@@ -12,7 +12,7 @@ import java.util.List;
 public class BlockFurnaceBehaviorImpl extends BlockBehaviorImpl implements BlockFurnaceBehavior {
 
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityFurnace> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityFurnace> blockEntityHolderComponent;
 
     public BlockFurnaceBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

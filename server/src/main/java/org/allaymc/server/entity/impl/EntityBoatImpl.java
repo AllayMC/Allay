@@ -11,6 +11,5 @@ public class EntityBoatImpl extends EntityImpl implements EntityBoat {
     public EntityBoatImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

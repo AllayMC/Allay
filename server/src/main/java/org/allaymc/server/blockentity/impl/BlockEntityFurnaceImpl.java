@@ -17,15 +17,11 @@ import java.util.List;
  */
 public class BlockEntityFurnaceImpl extends BlockEntityImpl implements BlockEntityFurnace, BlockEntitySmoker, BlockEntityBlastFurnace {
     @Delegate
-    protected BlockEntityContainerHolderComponent containerHolderComponent;
+    private BlockEntityContainerHolderComponent containerHolderComponent;
+    @Delegate
+    private BlockEntityFurnaceBaseComponent furnaceBaseComponent;
 
     public BlockEntityFurnaceImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public BlockEntityFurnaceBaseComponent getBaseComponent() {
-        return (BlockEntityFurnaceBaseComponent) super.getBaseComponent();
     }
 }

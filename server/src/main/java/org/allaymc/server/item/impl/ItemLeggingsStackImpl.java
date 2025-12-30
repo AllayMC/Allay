@@ -12,15 +12,11 @@ import java.util.List;
 
 public class ItemLeggingsStackImpl extends ItemStackImpl implements ItemLeggingsStack {
     @Delegate
-    protected ItemTrimmableComponent trimComponent;
+    private ItemArmorBaseComponent armorBaseComponent;
+    @Delegate
+    private ItemTrimmableComponent trimComponent;
 
     public ItemLeggingsStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    protected ItemArmorBaseComponent getBaseComponent() {
-        return (ItemArmorBaseComponent) super.getBaseComponent();
     }
 }

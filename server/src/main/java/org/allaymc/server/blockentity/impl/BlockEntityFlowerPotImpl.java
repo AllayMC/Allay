@@ -13,13 +13,11 @@ import java.util.List;
  * @author Cdm2883
  */
 public class BlockEntityFlowerPotImpl extends BlockEntityImpl implements BlockEntityFlowerPot {
-    public BlockEntityFlowerPotImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockEntityFlowerPotBaseComponent getBaseComponent() {
-        return (BlockEntityFlowerPotBaseComponent) super.getBaseComponent();
+    private BlockEntityFlowerPotBaseComponent flowerPotBaseComponent;
+
+    public BlockEntityFlowerPotImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

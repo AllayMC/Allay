@@ -16,15 +16,11 @@ import java.util.List;
 public class BlockEntityHopperImpl extends BlockEntityImpl implements BlockEntityHopper {
 
     @Delegate
-    protected BlockEntityContainerHolderComponent containerHolderComponent;
+    private BlockEntityContainerHolderComponent containerHolderComponent;
+    @Delegate
+    private BlockEntityHopperBaseComponent hopperBaseComponent;
 
     public BlockEntityHopperImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public BlockEntityHopperBaseComponent getBaseComponent() {
-        return (BlockEntityHopperBaseComponent) super.getBaseComponent();
     }
 }

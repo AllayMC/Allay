@@ -11,6 +11,5 @@ public class EntityVindicatorImpl extends EntityImpl implements EntityVindicator
     public EntityVindicatorImpl(EntityInitInfo initInfo,
                                 List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

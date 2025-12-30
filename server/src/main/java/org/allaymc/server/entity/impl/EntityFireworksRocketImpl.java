@@ -13,16 +13,12 @@ import java.util.List;
 public class EntityFireworksRocketImpl extends EntityImpl implements EntityFireworksRocket {
 
     @Delegate
-    protected EntityFireworksRocketPhysicsComponent physicsComponent;
+    private EntityFireworksRocketBaseComponent fireworksRocketBaseComponent;
+    @Delegate
+    private EntityFireworksRocketPhysicsComponent physicsComponent;
 
     public EntityFireworksRocketImpl(EntityInitInfo initInfo,
                                      List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityFireworksRocketBaseComponent getBaseComponent() {
-        return (EntityFireworksRocketBaseComponent) super.getBaseComponent();
     }
 }

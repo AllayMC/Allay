@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemPotionStackImpl extends ItemStackImpl implements ItemPotionStack {
     @Delegate
-    protected ItemPotionComponent potionComponent;
+    private ItemPotionComponent potionComponent;
 
     public ItemPotionStackImpl(ItemStackInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {

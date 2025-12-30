@@ -11,6 +11,5 @@ public class EntityHopperMinecartImpl extends EntityImpl implements EntityHopper
     public EntityHopperMinecartImpl(EntityInitInfo initInfo,
                                     List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

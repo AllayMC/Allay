@@ -13,17 +13,13 @@ import java.util.List;
 
 public class ItemHelmetStackImpl extends ItemStackImpl implements ItemHelmetStack {
     @Delegate
-    protected ItemTrimmableComponent trimmableComponent;
+    private ItemArmorBaseComponent armorBaseComponent;
     @Delegate
-    protected ItemRepairableComponent repairableComponent;
+    private ItemTrimmableComponent trimmableComponent;
+    @Delegate
+    private ItemRepairableComponent repairableComponent;
 
     public ItemHelmetStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    protected ItemArmorBaseComponent getBaseComponent() {
-        return (ItemArmorBaseComponent) super.getBaseComponent();
     }
 }

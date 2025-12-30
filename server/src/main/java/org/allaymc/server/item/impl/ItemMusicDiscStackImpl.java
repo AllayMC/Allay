@@ -10,13 +10,11 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class ItemMusicDiscStackImpl extends ItemStackImpl implements ItemMusicDiscStack {
-    public ItemMusicDiscStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    protected ItemMusicDiscBaseComponent getBaseComponent() {
-        return (ItemMusicDiscBaseComponent) super.getBaseComponent();
+    private ItemMusicDiscBaseComponent musicDiscBaseComponent;
+
+    public ItemMusicDiscStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

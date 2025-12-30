@@ -11,6 +11,5 @@ public class EntityCowImpl extends EntityImpl implements EntityCow {
     public EntityCowImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

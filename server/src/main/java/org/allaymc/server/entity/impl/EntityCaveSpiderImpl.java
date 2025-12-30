@@ -11,6 +11,5 @@ public class EntityCaveSpiderImpl extends EntityImpl implements EntityCaveSpider
     public EntityCaveSpiderImpl(EntityInitInfo initInfo,
                                 List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

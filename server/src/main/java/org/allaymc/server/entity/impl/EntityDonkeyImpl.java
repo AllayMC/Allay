@@ -11,6 +11,5 @@ public class EntityDonkeyImpl extends EntityImpl implements EntityDonkey {
     public EntityDonkeyImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

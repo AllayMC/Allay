@@ -11,6 +11,5 @@ public class EntityFoxImpl extends EntityImpl implements EntityFox {
     public EntityFoxImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

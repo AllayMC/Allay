@@ -11,6 +11,5 @@ public class EntityPolarBearImpl extends EntityImpl implements EntityPolarBear {
     public EntityPolarBearImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

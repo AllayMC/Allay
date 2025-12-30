@@ -11,6 +11,5 @@ public class EntityBreezeWindChargeProjectileImpl extends EntityImpl implements 
     public EntityBreezeWindChargeProjectileImpl(EntityInitInfo initInfo,
                                                 List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,6 +11,5 @@ public class EntityLlamaSpitImpl extends EntityImpl implements EntityLlamaSpit {
     public EntityLlamaSpitImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

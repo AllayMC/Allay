@@ -11,6 +11,5 @@ public class EntitySilverfishImpl extends EntityImpl implements EntitySilverfish
     public EntitySilverfishImpl(EntityInitInfo initInfo,
                                 List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

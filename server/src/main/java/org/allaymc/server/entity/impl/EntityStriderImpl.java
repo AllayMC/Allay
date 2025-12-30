@@ -11,6 +11,5 @@ public class EntityStriderImpl extends EntityImpl implements EntityStrider {
     public EntityStriderImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

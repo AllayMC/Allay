@@ -11,6 +11,5 @@ public class EntityBeeImpl extends EntityImpl implements EntityBee {
     public EntityBeeImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

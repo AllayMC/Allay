@@ -11,6 +11,5 @@ public class EntityTropicalfishImpl extends EntityImpl implements EntityTropical
     public EntityTropicalfishImpl(EntityInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemSnowballStackImpl extends ItemStackImpl implements ItemSnowballStack {
     @Delegate
-    protected ItemProjectileComponent projectileComponent;
+    private ItemProjectileComponent projectileComponent;
 
     public ItemSnowballStackImpl(ItemStackInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {

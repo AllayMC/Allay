@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemDriedKelpStackImpl extends ItemStackImpl implements ItemDriedKelpStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemDriedKelpStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

@@ -11,6 +11,5 @@ public class EntityDrownedImpl extends EntityImpl implements EntityDrowned {
     public EntityDrownedImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

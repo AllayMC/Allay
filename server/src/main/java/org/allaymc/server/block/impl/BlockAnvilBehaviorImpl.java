@@ -12,14 +12,10 @@ import java.util.List;
 public class BlockAnvilBehaviorImpl extends BlockBehaviorImpl implements BlockAnvilBehavior {
     @Delegate
     private BlockFallableComponent fallableComponent;
+    @Delegate
+    private BlockAnvilBaseComponent anvilBaseComponent;
 
     public BlockAnvilBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public BlockAnvilBaseComponent getBaseComponent() {
-        return (BlockAnvilBaseComponent) super.getBaseComponent();
     }
 }

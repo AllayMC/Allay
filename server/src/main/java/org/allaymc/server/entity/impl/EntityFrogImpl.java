@@ -11,6 +11,5 @@ public class EntityFrogImpl extends EntityImpl implements EntityFrog {
     public EntityFrogImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

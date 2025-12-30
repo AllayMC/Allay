@@ -14,13 +14,11 @@ import java.util.List;
  * @author daoge_cmd
  */
 public class BlockEntitySignImpl extends BlockEntityImpl implements BlockEntitySign, BlockEntityHangingSign {
-    public BlockEntitySignImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockEntitySignBaseComponent getBaseComponent() {
-        return (BlockEntitySignBaseComponent) super.getBaseComponent();
+    private BlockEntitySignBaseComponent signBaseComponent;
+
+    public BlockEntitySignImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

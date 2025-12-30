@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BlockCopperBulbBehaviorImpl extends BlockBehaviorImpl implements BlockCopperBulbBehavior {
     @Delegate
-    protected BlockOxidationComponent oxidationComponent;
+    private BlockOxidationComponent oxidationComponent;
 
     public BlockCopperBulbBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

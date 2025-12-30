@@ -13,13 +13,11 @@ import java.util.List;
  * @author IWareQ
  */
 public class BlockEntityEnderChestImpl extends BlockEntityImpl implements BlockEntityEnderChest {
-    public BlockEntityEnderChestImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockEntityEnderChestBaseComponent getBaseComponent() {
-        return (BlockEntityEnderChestBaseComponent) super.getBaseComponent();
+    private BlockEntityEnderChestBaseComponent enderChestBaseComponent;
+
+    public BlockEntityEnderChestImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

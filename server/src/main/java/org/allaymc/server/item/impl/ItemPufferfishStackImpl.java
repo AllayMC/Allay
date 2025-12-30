@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemPufferfishStackImpl extends ItemStackImpl implements ItemPufferfishStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemPufferfishStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

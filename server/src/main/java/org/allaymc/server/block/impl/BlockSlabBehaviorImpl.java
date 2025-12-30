@@ -9,13 +9,11 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class BlockSlabBehaviorImpl extends BlockBehaviorImpl implements BlockSlabBehavior {
-    public BlockSlabBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
-        super(componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockSlabBaseComponent getBaseComponent() {
-        return (BlockSlabBaseComponent) super.getBaseComponent();
+    private BlockSlabBaseComponent slabBaseComponent;
+
+    public BlockSlabBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
+        super(componentProviders);
     }
 }

@@ -11,6 +11,5 @@ public class EntityIceBombImpl extends EntityImpl implements EntityIceBomb {
     public EntityIceBombImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

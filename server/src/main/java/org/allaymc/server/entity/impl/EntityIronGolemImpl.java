@@ -11,6 +11,5 @@ public class EntityIronGolemImpl extends EntityImpl implements EntityIronGolem {
     public EntityIronGolemImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

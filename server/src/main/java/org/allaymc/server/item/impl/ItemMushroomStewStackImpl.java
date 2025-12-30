@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemMushroomStewStackImpl extends ItemStackImpl implements ItemMushroomStewStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemMushroomStewStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

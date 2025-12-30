@@ -11,6 +11,5 @@ public class EntityEvocationFangImpl extends EntityImpl implements EntityEvocati
     public EntityEvocationFangImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

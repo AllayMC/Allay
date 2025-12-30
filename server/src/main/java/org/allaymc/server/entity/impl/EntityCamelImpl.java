@@ -11,6 +11,5 @@ public class EntityCamelImpl extends EntityImpl implements EntityCamel {
     public EntityCamelImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

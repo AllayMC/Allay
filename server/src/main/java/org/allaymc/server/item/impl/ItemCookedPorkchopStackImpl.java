@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemCookedPorkchopStackImpl extends ItemStackImpl implements ItemCookedPorkchopStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemCookedPorkchopStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

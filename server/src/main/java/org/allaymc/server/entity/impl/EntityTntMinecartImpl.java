@@ -11,6 +11,5 @@ public class EntityTntMinecartImpl extends EntityImpl implements EntityTntMineca
     public EntityTntMinecartImpl(EntityInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

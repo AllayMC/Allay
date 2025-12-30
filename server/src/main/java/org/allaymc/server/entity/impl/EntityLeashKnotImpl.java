@@ -11,6 +11,5 @@ public class EntityLeashKnotImpl extends EntityImpl implements EntityLeashKnot {
     public EntityLeashKnotImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

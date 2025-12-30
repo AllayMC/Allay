@@ -11,6 +11,5 @@ public class EntityWitherSkullImpl extends EntityImpl implements EntityWitherSku
     public EntityWitherSkullImpl(EntityInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

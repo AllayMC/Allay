@@ -11,6 +11,5 @@ public class EntityWitherSkullDangerousImpl extends EntityImpl implements Entity
     public EntityWitherSkullDangerousImpl(EntityInitInfo initInfo,
                                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

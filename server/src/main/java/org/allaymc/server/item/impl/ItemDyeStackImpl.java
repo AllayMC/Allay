@@ -10,9 +10,9 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class ItemDyeStackImpl extends ItemStackImpl implements ItemDyeStack {
-    
+
     @Delegate
-    protected ItemDyeComponent dyeComponent;
+    private ItemDyeComponent dyeComponent;
 
     public ItemDyeStackImpl(ItemStackInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {

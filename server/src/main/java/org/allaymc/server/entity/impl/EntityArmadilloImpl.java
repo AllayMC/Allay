@@ -11,6 +11,5 @@ public class EntityArmadilloImpl extends EntityImpl implements EntityArmadillo {
     public EntityArmadilloImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,6 +11,5 @@ public class EntitySnifferImpl extends EntityImpl implements EntitySniffer {
     public EntitySnifferImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

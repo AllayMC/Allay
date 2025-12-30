@@ -11,6 +11,5 @@ public class EntityThrownTridentImpl extends EntityImpl implements EntityThrownT
     public EntityThrownTridentImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class BlockBeaconBehaviorImpl extends BlockBehaviorImpl implements BlockBeaconBehavior {
 
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityBeacon> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityBeacon> blockEntityHolderComponent;
 
     public BlockBeaconBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

@@ -11,6 +11,5 @@ public class EntityWitherSkeletonImpl extends EntityImpl implements EntityWither
     public EntityWitherSkeletonImpl(EntityInitInfo initInfo,
                                     List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

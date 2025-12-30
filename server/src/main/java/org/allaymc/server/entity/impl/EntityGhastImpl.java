@@ -11,6 +11,5 @@ public class EntityGhastImpl extends EntityImpl implements EntityGhast {
     public EntityGhastImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public class BlockBedBehaviorImpl extends BlockBehaviorImpl implements BlockBedBehavior {
 
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityBed> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityBed> blockEntityHolderComponent;
 
     public BlockBedBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

@@ -12,7 +12,7 @@ import java.util.List;
 public class BlockSmokerBehaviorImpl extends BlockBehaviorImpl implements BlockSmokerBehavior {
 
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntitySmoker> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntitySmoker> blockEntityHolderComponent;
 
     public BlockSmokerBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

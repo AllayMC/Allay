@@ -11,6 +11,5 @@ public class EntityPigImpl extends EntityImpl implements EntityPig {
     public EntityPigImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

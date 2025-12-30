@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class BlockEntityChestImpl extends BlockEntityImpl implements BlockEntityChest {
     @Delegate
-    protected BlockEntityChestContainerHolderComponent chestContainerHolderComponent;
+    private BlockEntityChestContainerHolderComponent chestContainerHolderComponent;
     @Delegate
-    protected BlockEntityPairableComponent pairableComponent;
+    private BlockEntityPairableComponent pairableComponent;
 
     public BlockEntityChestImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

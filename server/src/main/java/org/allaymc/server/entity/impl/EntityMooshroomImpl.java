@@ -11,6 +11,5 @@ public class EntityMooshroomImpl extends EntityImpl implements EntityMooshroom {
     public EntityMooshroomImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

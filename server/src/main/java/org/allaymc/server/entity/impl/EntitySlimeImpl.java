@@ -11,6 +11,5 @@ public class EntitySlimeImpl extends EntityImpl implements EntitySlime {
     public EntitySlimeImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

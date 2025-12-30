@@ -11,6 +11,5 @@ public class EntityMagmaCubeImpl extends EntityImpl implements EntityMagmaCube {
     public EntityMagmaCubeImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

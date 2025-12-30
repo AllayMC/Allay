@@ -13,13 +13,11 @@ import java.util.List;
  * @author daoge_cmd
  */
 public class BlockEntityNoteblockImpl extends BlockEntityImpl implements BlockEntityNoteblock {
-    public BlockEntityNoteblockImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockEntityNoteblockBaseComponent getBaseComponent() {
-        return (BlockEntityNoteblockBaseComponent) super.getBaseComponent();
+    private BlockEntityNoteblockBaseComponent noteblockBaseComponent;
+
+    public BlockEntityNoteblockImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

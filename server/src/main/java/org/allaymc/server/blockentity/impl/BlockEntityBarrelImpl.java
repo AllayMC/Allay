@@ -15,7 +15,7 @@ import java.util.List;
 public class BlockEntityBarrelImpl extends BlockEntityImpl implements BlockEntityBarrel {
 
     @Delegate
-    protected BlockEntityContainerHolderComponent containerHolderComponent;
+    private BlockEntityContainerHolderComponent containerHolderComponent;
 
     public BlockEntityBarrelImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

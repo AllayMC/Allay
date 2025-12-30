@@ -11,6 +11,5 @@ public class EntityWindChargeProjectileImpl extends EntityImpl implements Entity
     public EntityWindChargeProjectileImpl(EntityInitInfo initInfo,
                                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

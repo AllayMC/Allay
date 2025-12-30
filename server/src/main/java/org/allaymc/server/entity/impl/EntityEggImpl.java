@@ -11,6 +11,5 @@ public class EntityEggImpl extends EntityImpl implements EntityEgg {
     public EntityEggImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

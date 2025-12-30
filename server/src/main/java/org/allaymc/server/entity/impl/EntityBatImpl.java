@@ -11,6 +11,5 @@ public class EntityBatImpl extends EntityImpl implements EntityBat {
     public EntityBatImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

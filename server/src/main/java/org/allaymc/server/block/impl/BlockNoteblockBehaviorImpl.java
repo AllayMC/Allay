@@ -12,7 +12,7 @@ import java.util.List;
 public class BlockNoteblockBehaviorImpl extends BlockBehaviorImpl implements BlockNoteblockBehavior {
 
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityNoteblock> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityNoteblock> blockEntityHolderComponent;
 
     public BlockNoteblockBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

@@ -11,6 +11,5 @@ public class EntityChestBoatImpl extends EntityImpl implements EntityChestBoat {
     public EntityChestBoatImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,6 +11,5 @@ public class EntityNpcImpl extends EntityImpl implements EntityNpc {
     public EntityNpcImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

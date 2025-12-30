@@ -11,6 +11,5 @@ public class EntityVexImpl extends EntityImpl implements EntityVex {
     public EntityVexImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

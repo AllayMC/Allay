@@ -11,6 +11,5 @@ public class EntityAxolotlImpl extends EntityImpl implements EntityAxolotl {
     public EntityAxolotlImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

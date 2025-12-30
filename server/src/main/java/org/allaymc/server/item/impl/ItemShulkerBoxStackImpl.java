@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemShulkerBoxStackImpl extends ItemStackImpl implements ItemShulkerBoxStack {
     @Delegate
-    protected ItemStuffStorableComponent stuffStorableComponent;
+    private ItemStuffStorableComponent stuffStorableComponent;
 
     public ItemShulkerBoxStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

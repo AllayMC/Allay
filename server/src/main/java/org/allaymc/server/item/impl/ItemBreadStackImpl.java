@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemBreadStackImpl extends ItemStackImpl implements ItemBreadStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemBreadStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

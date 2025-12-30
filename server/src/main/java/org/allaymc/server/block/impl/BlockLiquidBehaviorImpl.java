@@ -10,14 +10,11 @@ import java.util.List;
 
 public class BlockLiquidBehaviorImpl extends BlockBehaviorImpl implements BlockLiquidBehavior {
 
+    @Delegate
+    private BlockLiquidBaseComponent liquidBaseComponent;
+
     public BlockLiquidBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public BlockLiquidBaseComponent getBaseComponent() {
-        return (BlockLiquidBaseComponent) super.getBaseComponent();
     }
 }

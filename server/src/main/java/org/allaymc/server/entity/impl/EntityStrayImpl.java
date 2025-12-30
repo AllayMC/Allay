@@ -11,6 +11,5 @@ public class EntityStrayImpl extends EntityImpl implements EntityStray {
     public EntityStrayImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

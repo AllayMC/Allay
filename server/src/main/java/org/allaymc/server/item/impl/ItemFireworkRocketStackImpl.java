@@ -10,14 +10,12 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class ItemFireworkRocketStackImpl extends ItemStackImpl implements ItemFireworkRocketStack {
+
+    @Delegate
+    private ItemFireworkRocketBaseComponent fireworkRocketBaseComponent;
+
     public ItemFireworkRocketStackImpl(ItemStackInitInfo initInfo,
                                        List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    protected ItemFireworkRocketBaseComponent getBaseComponent() {
-        return (ItemFireworkRocketBaseComponent) super.getBaseComponent();
     }
 }

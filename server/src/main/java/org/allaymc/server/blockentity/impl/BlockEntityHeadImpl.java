@@ -13,13 +13,11 @@ import java.util.List;
  * @author daoge_cmd
  */
 public class BlockEntityHeadImpl extends BlockEntityImpl implements BlockEntityHead {
-    public BlockEntityHeadImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockEntityHeadBaseComponent getBaseComponent() {
-        return (BlockEntityHeadBaseComponent) super.getBaseComponent();
+    private BlockEntityHeadBaseComponent headBaseComponent;
+
+    public BlockEntityHeadImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

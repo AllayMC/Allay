@@ -11,6 +11,5 @@ public class EntityTripodCameraImpl extends EntityImpl implements EntityTripodCa
     public EntityTripodCameraImpl(EntityInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

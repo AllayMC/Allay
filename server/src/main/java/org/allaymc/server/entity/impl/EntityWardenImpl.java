@@ -11,6 +11,5 @@ public class EntityWardenImpl extends EntityImpl implements EntityWarden {
     public EntityWardenImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

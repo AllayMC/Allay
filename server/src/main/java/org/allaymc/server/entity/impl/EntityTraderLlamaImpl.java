@@ -11,6 +11,5 @@ public class EntityTraderLlamaImpl extends EntityImpl implements EntityTraderLla
     public EntityTraderLlamaImpl(EntityInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

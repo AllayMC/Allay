@@ -11,6 +11,5 @@ public class EntityParrotImpl extends EntityImpl implements EntityParrot {
     public EntityParrotImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

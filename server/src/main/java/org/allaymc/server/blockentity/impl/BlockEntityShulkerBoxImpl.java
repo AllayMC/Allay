@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class BlockEntityShulkerBoxImpl extends BlockEntityImpl implements BlockEntityShulkerBox {
     @Delegate
-    protected BlockEntityContainerHolderComponent containerHolderComponent;
+    private BlockEntityContainerHolderComponent containerHolderComponent;
 
     public BlockEntityShulkerBoxImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

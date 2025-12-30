@@ -9,13 +9,11 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class BlockInfestedBlockBehaviorImpl extends BlockBehaviorImpl implements BlockInfestedBlockBehavior {
-    public BlockInfestedBlockBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
-        super(componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockInfestedBlockBaseComponent getBaseComponent() {
-        return (BlockInfestedBlockBaseComponent) super.getBaseComponent();
+    private BlockInfestedBlockBaseComponent infestedBlockBaseComponent;
+
+    public BlockInfestedBlockBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
+        super(componentProviders);
     }
 }

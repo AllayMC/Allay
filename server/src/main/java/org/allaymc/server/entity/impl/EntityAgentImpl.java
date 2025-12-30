@@ -11,6 +11,5 @@ public class EntityAgentImpl extends EntityImpl implements EntityAgent {
     public EntityAgentImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

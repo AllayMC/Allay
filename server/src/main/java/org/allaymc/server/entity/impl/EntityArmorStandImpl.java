@@ -11,6 +11,5 @@ public class EntityArmorStandImpl extends EntityImpl implements EntityArmorStand
     public EntityArmorStandImpl(EntityInitInfo initInfo,
                                 List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemSpiderEyeStackImpl extends ItemStackImpl implements ItemSpiderEyeStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemSpiderEyeStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

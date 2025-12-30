@@ -11,6 +11,5 @@ public class EntityLingeringPotionImpl extends EntityImpl implements EntityLinge
     public EntityLingeringPotionImpl(EntityInitInfo initInfo,
                                      List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

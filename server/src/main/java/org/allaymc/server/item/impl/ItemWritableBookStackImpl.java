@@ -10,14 +10,12 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class ItemWritableBookStackImpl extends ItemStackImpl implements ItemWritableBookStack {
+
+    @Delegate
+    private ItemWritableBookBaseComponent writableBookBaseComponent;
+
     public ItemWritableBookStackImpl(ItemStackInitInfo initInfo,
                                      List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    protected ItemWritableBookBaseComponent getBaseComponent() {
-        return (ItemWritableBookBaseComponent) super.getBaseComponent();
     }
 }

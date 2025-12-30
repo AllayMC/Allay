@@ -11,6 +11,5 @@ public class EntityAreaEffectCloudImpl extends EntityImpl implements EntityAreaE
     public EntityAreaEffectCloudImpl(EntityInitInfo initInfo,
                                      List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

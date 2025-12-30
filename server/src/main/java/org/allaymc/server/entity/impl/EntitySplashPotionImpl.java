@@ -14,11 +14,11 @@ import java.util.List;
 public class EntitySplashPotionImpl extends EntityImpl implements EntitySplashPotion {
 
     @Delegate
-    protected EntitySplashPotionProjectileComponent projectileComponent;
+    private EntitySplashPotionProjectileComponent projectileComponent;
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityPhysicsComponent physicsComponent;
     @Delegate
-    protected EntityAgeComponent ageComponent;
+    private EntityAgeComponent ageComponent;
 
     public EntitySplashPotionImpl(EntityInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {

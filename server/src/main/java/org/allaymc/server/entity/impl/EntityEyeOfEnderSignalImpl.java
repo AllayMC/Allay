@@ -11,6 +11,5 @@ public class EntityEyeOfEnderSignalImpl extends EntityImpl implements EntityEyeO
     public EntityEyeOfEnderSignalImpl(EntityInitInfo initInfo,
                                       List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

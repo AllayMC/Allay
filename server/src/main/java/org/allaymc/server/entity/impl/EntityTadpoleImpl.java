@@ -11,6 +11,5 @@ public class EntityTadpoleImpl extends EntityImpl implements EntityTadpole {
     public EntityTadpoleImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

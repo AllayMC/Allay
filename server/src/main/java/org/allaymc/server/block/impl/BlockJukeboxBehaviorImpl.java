@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlockJukeboxBehaviorImpl extends BlockBehaviorImpl implements BlockJukeboxBehavior {
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityJukebox> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityJukebox> blockEntityHolderComponent;
 
     public BlockJukeboxBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

@@ -11,6 +11,5 @@ public class EntityOminousItemSpawnerImpl extends EntityImpl implements EntityOm
     public EntityOminousItemSpawnerImpl(EntityInitInfo initInfo,
                                         List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

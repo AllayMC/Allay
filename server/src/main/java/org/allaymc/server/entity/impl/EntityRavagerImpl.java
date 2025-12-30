@@ -11,6 +11,5 @@ public class EntityRavagerImpl extends EntityImpl implements EntityRavager {
     public EntityRavagerImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

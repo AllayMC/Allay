@@ -11,6 +11,5 @@ public class EntityFireballImpl extends EntityImpl implements EntityFireball {
     public EntityFireballImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

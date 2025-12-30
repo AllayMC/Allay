@@ -11,6 +11,5 @@ public class EntityElderGuardianImpl extends EntityImpl implements EntityElderGu
     public EntityElderGuardianImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

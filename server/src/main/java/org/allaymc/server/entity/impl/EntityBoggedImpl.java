@@ -11,6 +11,5 @@ public class EntityBoggedImpl extends EntityImpl implements EntityBogged {
     public EntityBoggedImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

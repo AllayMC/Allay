@@ -11,6 +11,5 @@ public class EntityTurtleImpl extends EntityImpl implements EntityTurtle {
     public EntityTurtleImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemEnderPearlStackImpl extends ItemStackImpl implements ItemEnderPearlStack {
     @Delegate
-    protected ItemProjectileComponent projectileComponent;
+    private ItemProjectileComponent projectileComponent;
 
     public ItemEnderPearlStackImpl(ItemStackInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {

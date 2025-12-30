@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BlockWoodBehaviorImpl extends BlockBehaviorImpl implements BlockWoodBehavior {
     @Delegate
-    protected BlockStrippableComponent strippableComponent;
+    private BlockStrippableComponent strippableComponent;
 
     public BlockWoodBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

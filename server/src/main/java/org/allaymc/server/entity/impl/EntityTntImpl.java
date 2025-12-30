@@ -13,16 +13,12 @@ import java.util.List;
 public class EntityTntImpl extends EntityImpl implements EntityTnt {
 
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityTntBaseComponent tntBaseComponent;
+    @Delegate
+    private EntityPhysicsComponent physicsComponent;
 
     public EntityTntImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityTntBaseComponent getBaseComponent() {
-        return (EntityTntBaseComponent) super.getBaseComponent();
     }
 }

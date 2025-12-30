@@ -12,22 +12,18 @@ import java.util.List;
 public class EntityArrowImpl extends EntityImpl implements EntityArrow {
 
     @Delegate
-    protected EntityAgeComponent ageComponent;
+    private EntityArrowBaseComponent arrowBaseComponent;
     @Delegate
-    protected EntityProjectileComponent projectileComponent;
+    private EntityAgeComponent ageComponent;
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityProjectileComponent projectileComponent;
     @Delegate
-    protected EntityLivingComponent livingComponent;
+    private EntityPhysicsComponent physicsComponent;
+    @Delegate
+    private EntityLivingComponent livingComponent;
 
     public EntityArrowImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityArrowBaseComponent getBaseComponent() {
-        return (EntityArrowBaseComponent) super.getBaseComponent();
     }
 }

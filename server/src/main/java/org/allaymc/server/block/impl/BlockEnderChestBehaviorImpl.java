@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlockEnderChestBehaviorImpl extends BlockBehaviorImpl implements BlockEnderChestBehavior {
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityEnderChest> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityEnderChest> blockEntityHolderComponent;
 
     public BlockEnderChestBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

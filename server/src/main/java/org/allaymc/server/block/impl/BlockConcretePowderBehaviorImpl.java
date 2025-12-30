@@ -12,14 +12,10 @@ import java.util.List;
 public class BlockConcretePowderBehaviorImpl extends BlockBehaviorImpl implements BlockConcretePowderBehavior {
     @Delegate
     private BlockFallableComponent fallableComponent;
+    @Delegate
+    private BlockConcretePowderBaseComponent concretePowderBaseComponent;
 
     public BlockConcretePowderBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public BlockConcretePowderBaseComponent getBaseComponent() {
-        return (BlockConcretePowderBaseComponent) super.getBaseComponent();
     }
 }

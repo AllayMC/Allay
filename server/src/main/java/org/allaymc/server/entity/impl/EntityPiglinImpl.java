@@ -11,6 +11,5 @@ public class EntityPiglinImpl extends EntityImpl implements EntityPiglin {
     public EntityPiglinImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

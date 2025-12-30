@@ -11,6 +11,5 @@ public class EntityLightningBoltImpl extends EntityImpl implements EntityLightni
     public EntityLightningBoltImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

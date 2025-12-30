@@ -13,9 +13,9 @@ import java.util.List;
 public class EntityVillagerV2Impl extends EntityImpl implements EntityVillagerV2 {
 
     @Delegate
-    protected EntityLivingComponent livingComponent;
+    private EntityLivingComponent livingComponent;
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityPhysicsComponent physicsComponent;
 
     public EntityVillagerV2Impl(EntityInitInfo initInfo,
                                 List<ComponentProvider<? extends Component>> componentProviders) {

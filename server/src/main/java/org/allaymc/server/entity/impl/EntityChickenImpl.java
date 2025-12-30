@@ -11,6 +11,5 @@ public class EntityChickenImpl extends EntityImpl implements EntityChicken {
     public EntityChickenImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

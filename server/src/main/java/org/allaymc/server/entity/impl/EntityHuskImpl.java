@@ -11,6 +11,5 @@ public class EntityHuskImpl extends EntityImpl implements EntityHusk {
     public EntityHuskImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

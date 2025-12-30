@@ -13,16 +13,12 @@ import java.util.List;
 public class EntityFallingBlockImpl extends EntityImpl implements EntityFallingBlock {
 
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityFallingBlockBaseComponent fallingBlockBaseComponent;
+    @Delegate
+    private EntityPhysicsComponent physicsComponent;
 
     public EntityFallingBlockImpl(EntityInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityFallingBlockBaseComponent getBaseComponent() {
-        return (EntityFallingBlockBaseComponent) super.getBaseComponent();
     }
 }

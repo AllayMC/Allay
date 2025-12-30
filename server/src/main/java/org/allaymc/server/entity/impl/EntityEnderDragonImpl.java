@@ -11,6 +11,5 @@ public class EntityEnderDragonImpl extends EntityImpl implements EntityEnderDrag
     public EntityEnderDragonImpl(EntityInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

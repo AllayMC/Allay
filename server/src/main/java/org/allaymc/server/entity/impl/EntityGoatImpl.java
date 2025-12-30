@@ -11,6 +11,5 @@ public class EntityGoatImpl extends EntityImpl implements EntityGoat {
     public EntityGoatImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

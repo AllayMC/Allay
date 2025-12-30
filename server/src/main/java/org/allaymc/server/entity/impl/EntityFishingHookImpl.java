@@ -11,6 +11,5 @@ public class EntityFishingHookImpl extends EntityImpl implements EntityFishingHo
     public EntityFishingHookImpl(EntityInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

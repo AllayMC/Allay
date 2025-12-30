@@ -14,16 +14,13 @@ import java.util.List;
  * @author IWareQ
  */
 public class BlockEntityBrewingStandImpl extends BlockEntityImpl implements BlockEntityBrewingStand {
+
     @Delegate
-    protected BlockEntityContainerHolderComponent containerHolderComponent;
+    private BlockEntityContainerHolderComponent containerHolderComponent;
+    @Delegate
+    private BlockEntityBrewingStandBaseComponent brewingStandBaseComponent;
 
     public BlockEntityBrewingStandImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public BlockEntityBrewingStandBaseComponent getBaseComponent() {
-        return (BlockEntityBrewingStandBaseComponent) super.getBaseComponent();
     }
 }

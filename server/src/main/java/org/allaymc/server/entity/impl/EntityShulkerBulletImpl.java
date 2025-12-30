@@ -11,6 +11,5 @@ public class EntityShulkerBulletImpl extends EntityImpl implements EntityShulker
     public EntityShulkerBulletImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

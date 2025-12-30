@@ -11,6 +11,5 @@ public class EntitySnowGolemImpl extends EntityImpl implements EntitySnowGolem {
     public EntitySnowGolemImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

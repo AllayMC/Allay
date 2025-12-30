@@ -11,6 +11,5 @@ public class EntityMuleImpl extends EntityImpl implements EntityMule {
     public EntityMuleImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

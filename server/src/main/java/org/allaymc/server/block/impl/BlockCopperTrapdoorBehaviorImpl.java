@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BlockCopperTrapdoorBehaviorImpl extends BlockBehaviorImpl implements BlockCopperTrapdoorBehavior {
     @Delegate
-    protected BlockOxidationComponent oxidationComponent;
+    private BlockOxidationComponent oxidationComponent;
 
     public BlockCopperTrapdoorBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

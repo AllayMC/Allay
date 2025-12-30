@@ -11,6 +11,5 @@ public class EntityCodImpl extends EntityImpl implements EntityCod {
     public EntityCodImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

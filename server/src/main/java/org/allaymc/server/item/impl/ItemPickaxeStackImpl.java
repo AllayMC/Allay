@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemPickaxeStackImpl extends ItemStackImpl implements ItemPickaxeStack {
     @Delegate
-    protected ItemRepairableComponent repairableComponent;
+    private ItemRepairableComponent repairableComponent;
 
     public ItemPickaxeStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

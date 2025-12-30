@@ -11,6 +11,5 @@ public class EntityWanderingTraderImpl extends EntityImpl implements EntityWande
     public EntityWanderingTraderImpl(EntityInitInfo initInfo,
                                      List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

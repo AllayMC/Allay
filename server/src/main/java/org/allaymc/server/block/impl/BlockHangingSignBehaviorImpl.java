@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlockHangingSignBehaviorImpl extends BlockBehaviorImpl implements BlockHangingSignBehavior {
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityHangingSign> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityHangingSign> blockEntityHolderComponent;
 
     public BlockHangingSignBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

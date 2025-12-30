@@ -10,13 +10,11 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class ItemSignStackImpl extends ItemStackImpl implements ItemSignStack {
-    public ItemSignStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    protected ItemSignBaseComponent getBaseComponent() {
-        return (ItemSignBaseComponent) super.getBaseComponent();
+    private ItemSignBaseComponent signBaseComponent;
+
+    public ItemSignStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlockEnchantingTableBehaviorImpl extends BlockBehaviorImpl implements BlockEnchantingTableBehavior {
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityEnchantTable> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityEnchantTable> blockEntityHolderComponent;
 
     public BlockEnchantingTableBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

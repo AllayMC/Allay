@@ -11,6 +11,5 @@ public class EntityEvocationIllagerImpl extends EntityImpl implements EntityEvoc
     public EntityEvocationIllagerImpl(EntityInitInfo initInfo,
                                       List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

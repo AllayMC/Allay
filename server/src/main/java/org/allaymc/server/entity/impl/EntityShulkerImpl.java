@@ -11,6 +11,5 @@ public class EntityShulkerImpl extends EntityImpl implements EntityShulker {
     public EntityShulkerImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

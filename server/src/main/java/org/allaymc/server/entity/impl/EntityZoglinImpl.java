@@ -11,6 +11,5 @@ public class EntityZoglinImpl extends EntityImpl implements EntityZoglin {
     public EntityZoglinImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

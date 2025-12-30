@@ -11,6 +11,5 @@ public class EntityCatImpl extends EntityImpl implements EntityCat {
     public EntityCatImpl(EntityInitInfo initInfo,
                          List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemHoeStackImpl extends ItemStackImpl implements ItemHoeStack {
     @Delegate
-    protected ItemRepairableComponent repairableComponent;
+    private ItemRepairableComponent repairableComponent;
 
     public ItemHoeStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

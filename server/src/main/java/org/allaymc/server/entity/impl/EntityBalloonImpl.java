@@ -11,6 +11,5 @@ public class EntityBalloonImpl extends EntityImpl implements EntityBalloon {
     public EntityBalloonImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,6 +11,5 @@ public class EntityPufferfishImpl extends EntityImpl implements EntityPufferfish
     public EntityPufferfishImpl(EntityInitInfo initInfo,
                                 List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

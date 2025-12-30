@@ -11,6 +11,5 @@ public class EntityWolfImpl extends EntityImpl implements EntityWolf {
     public EntityWolfImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -11,6 +11,5 @@ public class EntityAllayImpl extends EntityImpl implements EntityAllay {
     public EntityAllayImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -13,13 +13,11 @@ import java.util.List;
  * @author IWareQ
  */
 public class BlockEntityJukeboxImpl extends BlockEntityImpl implements BlockEntityJukebox {
-    public BlockEntityJukeboxImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockEntityJukeboxBaseComponent getBaseComponent() {
-        return (BlockEntityJukeboxBaseComponent) super.getBaseComponent();
+    private BlockEntityJukeboxBaseComponent jukeboxBaseComponent;
+
+    public BlockEntityJukeboxImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
     }
 }

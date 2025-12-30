@@ -11,6 +11,5 @@ public class EntityPiglinBruteImpl extends EntityImpl implements EntityPiglinBru
     public EntityPiglinBruteImpl(EntityInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

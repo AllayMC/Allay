@@ -11,6 +11,5 @@ public class EntityVillagerImpl extends EntityImpl implements EntityVillager {
     public EntityVillagerImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

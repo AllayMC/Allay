@@ -1,5 +1,6 @@
 package org.allaymc.server.block.impl;
 
+import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
@@ -19,20 +20,14 @@ public abstract class BlockBehaviorImpl extends ComponentClass implements BlockB
     private static final ComponentInitInfo EMPTY_INIT_INFO = new ComponentInitInfo() {
     };
 
-    protected BlockBaseComponent baseComponent;
-    protected BlockStateDataComponent stateDataComponent;
+    @Getter
+    @Delegate
+    private BlockBaseComponent baseComponent;
+    @Getter
+    @Delegate
+    private BlockStateDataComponent stateDataComponent;
 
     public BlockBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(EMPTY_INIT_INFO, componentProviders);
-    }
-
-    @Delegate
-    public BlockBaseComponent getBaseComponent() {
-        return baseComponent;
-    }
-
-    @Delegate
-    protected BlockStateDataComponent getStateDataComponent() {
-        return stateDataComponent;
     }
 }

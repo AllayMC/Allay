@@ -11,6 +11,5 @@ public class EntitySalmonImpl extends EntityImpl implements EntitySalmon {
     public EntitySalmonImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

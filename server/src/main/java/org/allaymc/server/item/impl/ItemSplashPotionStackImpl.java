@@ -12,9 +12,9 @@ import java.util.List;
 
 public class ItemSplashPotionStackImpl extends ItemStackImpl implements ItemSplashPotionStack {
     @Delegate
-    protected ItemProjectileComponent projectileComponent;
+    private ItemProjectileComponent projectileComponent;
     @Delegate
-    protected ItemPotionComponent potionComponent;
+    private ItemPotionComponent potionComponent;
 
     public ItemSplashPotionStackImpl(ItemStackInitInfo initInfo,
                                      List<ComponentProvider<? extends Component>> componentProviders) {

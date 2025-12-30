@@ -11,8 +11,8 @@ import java.util.List;
 
 public class BlockHeadBehaviorImpl extends BlockBehaviorImpl implements BlockHeadBehavior {
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityHead> blockEntityHolderComponent;
-    
+    private BlockBlockEntityHolderComponent<BlockEntityHead> blockEntityHolderComponent;
+
     public BlockHeadBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
     }

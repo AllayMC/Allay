@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BlockLightningRodBehaviorImpl extends BlockBehaviorImpl implements BlockLightningRodBehavior {
     @Delegate
-    protected BlockOxidationComponent oxidationComponent;
+    private BlockOxidationComponent oxidationComponent;
 
     public BlockLightningRodBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

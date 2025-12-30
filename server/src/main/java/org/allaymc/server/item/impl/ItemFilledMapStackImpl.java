@@ -10,14 +10,12 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class ItemFilledMapStackImpl extends ItemStackImpl implements ItemFilledMapStack {
+
+    @Delegate
+    private ItemFilledMapBaseComponent filledMapBaseComponent;
+
     public ItemFilledMapStackImpl(ItemStackInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    protected ItemFilledMapBaseComponent getBaseComponent() {
-        return (ItemFilledMapBaseComponent) super.getBaseComponent();
     }
 }

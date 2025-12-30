@@ -11,6 +11,5 @@ public class EntityDolphinImpl extends EntityImpl implements EntityDolphin {
     public EntityDolphinImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

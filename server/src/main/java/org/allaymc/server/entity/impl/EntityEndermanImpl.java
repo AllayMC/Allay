@@ -11,6 +11,5 @@ public class EntityEndermanImpl extends EntityImpl implements EntityEnderman {
     public EntityEndermanImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

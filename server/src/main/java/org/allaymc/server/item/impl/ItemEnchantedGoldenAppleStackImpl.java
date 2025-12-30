@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemEnchantedGoldenAppleStackImpl extends ItemStackImpl implements ItemEnchantedGoldenAppleStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemEnchantedGoldenAppleStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

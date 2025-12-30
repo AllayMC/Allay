@@ -11,6 +11,5 @@ public class EntityRabbitImpl extends EntityImpl implements EntityRabbit {
     public EntityRabbitImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

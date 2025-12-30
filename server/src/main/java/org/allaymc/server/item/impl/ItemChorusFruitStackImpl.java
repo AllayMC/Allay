@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemChorusFruitStackImpl extends ItemStackImpl implements ItemChorusFruitStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemChorusFruitStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

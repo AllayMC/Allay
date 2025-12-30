@@ -11,6 +11,5 @@ public class EntityHorseImpl extends EntityImpl implements EntityHorse {
     public EntityHorseImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

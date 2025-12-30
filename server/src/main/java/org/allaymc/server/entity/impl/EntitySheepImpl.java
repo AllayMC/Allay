@@ -11,6 +11,5 @@ public class EntitySheepImpl extends EntityImpl implements EntitySheep {
     public EntitySheepImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

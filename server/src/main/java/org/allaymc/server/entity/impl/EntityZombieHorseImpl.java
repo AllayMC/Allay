@@ -11,6 +11,5 @@ public class EntityZombieHorseImpl extends EntityImpl implements EntityZombieHor
     public EntityZombieHorseImpl(EntityInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

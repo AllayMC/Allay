@@ -11,6 +11,5 @@ public class EntityChestMinecartImpl extends EntityImpl implements EntityChestMi
     public EntityChestMinecartImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

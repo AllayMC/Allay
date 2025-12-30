@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemSwordStackImpl extends ItemStackImpl implements ItemSwordStack {
     @Delegate
-    protected ItemRepairableComponent repairableComponent;
+    private ItemRepairableComponent repairableComponent;
 
     public ItemSwordStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

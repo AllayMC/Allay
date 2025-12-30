@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemCookieStackImpl extends ItemStackImpl implements ItemCookieStack {
     @Delegate
-    protected ItemEdibleComponent edibleComponent;
+    private ItemEdibleComponent edibleComponent;
 
     public ItemCookieStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

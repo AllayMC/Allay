@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ItemBucketStackImpl extends ItemStackImpl implements ItemBucketStack {
     @Delegate
-    protected ItemBucketComponent bucketComponent;
+    private ItemBucketComponent bucketComponent;
 
     public ItemBucketStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

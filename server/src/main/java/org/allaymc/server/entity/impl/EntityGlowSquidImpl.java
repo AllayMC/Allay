@@ -11,6 +11,5 @@ public class EntityGlowSquidImpl extends EntityImpl implements EntityGlowSquid {
     public EntityGlowSquidImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

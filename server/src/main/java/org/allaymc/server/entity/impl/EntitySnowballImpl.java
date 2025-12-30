@@ -14,11 +14,11 @@ import java.util.List;
 public class EntitySnowballImpl extends EntityImpl implements EntitySnowball {
 
     @Delegate
-    protected EntityProjectileComponent projectileComponent;
+    private EntityProjectileComponent projectileComponent;
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityPhysicsComponent physicsComponent;
     @Delegate
-    protected EntityAgeComponent ageComponent;
+    private EntityAgeComponent ageComponent;
 
     public EntitySnowballImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {

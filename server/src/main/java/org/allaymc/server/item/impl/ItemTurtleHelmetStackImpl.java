@@ -12,9 +12,9 @@ import java.util.List;
 
 public class ItemTurtleHelmetStackImpl extends ItemStackImpl implements ItemTurtleHelmetStack {
     @Delegate
-    protected ItemArmorBaseComponent armorBaseComponent;
+    private ItemArmorBaseComponent armorBaseComponent;
     @Delegate
-    protected ItemRepairableComponent repairableComponent;
+    private ItemRepairableComponent repairableComponent;
 
     public ItemTurtleHelmetStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);

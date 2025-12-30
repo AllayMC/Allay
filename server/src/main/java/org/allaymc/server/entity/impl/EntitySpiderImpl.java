@@ -11,6 +11,5 @@ public class EntitySpiderImpl extends EntityImpl implements EntitySpider {
     public EntitySpiderImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

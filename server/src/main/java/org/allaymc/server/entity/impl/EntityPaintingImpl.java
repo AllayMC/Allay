@@ -19,18 +19,15 @@ import java.util.List;
 import static org.allaymc.server.world.physics.AllayEntityPhysicsEngine.FAT_AABB_MARGIN;
 
 public class EntityPaintingImpl extends EntityImpl implements EntityPainting {
+
     @Delegate
-    protected EntityLivingComponent livingComponent;
+    private EntityPaintingBaseComponent paintingBaseComponent;
+    @Delegate
+    private EntityLivingComponent livingComponent;
 
     public EntityPaintingImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityPaintingBaseComponent getBaseComponent() {
-        return (EntityPaintingBaseComponent) super.getBaseComponent();
     }
 
     /**

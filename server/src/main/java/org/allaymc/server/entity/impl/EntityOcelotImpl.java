@@ -11,6 +11,5 @@ public class EntityOcelotImpl extends EntityImpl implements EntityOcelot {
     public EntityOcelotImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

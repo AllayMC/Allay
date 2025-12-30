@@ -15,20 +15,16 @@ import java.util.List;
 public class EntityXpOrbImpl extends EntityImpl implements EntityXpOrb {
 
     @Delegate
-    protected EntityLivingComponent livingComponent;
+    private EntityXpOrbBaseComponent xpOrbBaseComponent;
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityLivingComponent livingComponent;
     @Delegate
-    protected EntityAgeComponent ageComponent;
+    private EntityPhysicsComponent physicsComponent;
+    @Delegate
+    private EntityAgeComponent ageComponent;
 
     public EntityXpOrbImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityXpOrbBaseComponent getBaseComponent() {
-        return (EntityXpOrbBaseComponent) super.getBaseComponent();
     }
 }

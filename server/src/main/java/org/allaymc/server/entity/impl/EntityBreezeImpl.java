@@ -11,6 +11,5 @@ public class EntityBreezeImpl extends EntityImpl implements EntityBreeze {
     public EntityBreezeImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

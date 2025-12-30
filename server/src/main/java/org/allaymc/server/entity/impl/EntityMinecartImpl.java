@@ -11,6 +11,5 @@ public class EntityMinecartImpl extends EntityImpl implements EntityMinecart {
     public EntityMinecartImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

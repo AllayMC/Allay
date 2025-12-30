@@ -1,6 +1,7 @@
 package org.allaymc.server.entity.impl;
 
 
+import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.entity.Entity;
@@ -15,14 +16,12 @@ import java.util.List;
  * @author daoge_cmd
  */
 public abstract class EntityImpl extends ComponentClass implements Entity {
-    protected EntityBaseComponent baseComponent;
+
+    @Getter
+    @Delegate
+    private EntityBaseComponent baseComponent;
 
     public EntityImpl(EntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    public EntityBaseComponent getBaseComponent() {
-        return baseComponent;
     }
 }

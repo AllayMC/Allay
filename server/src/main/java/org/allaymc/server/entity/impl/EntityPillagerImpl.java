@@ -11,6 +11,5 @@ public class EntityPillagerImpl extends EntityImpl implements EntityPillager {
     public EntityPillagerImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

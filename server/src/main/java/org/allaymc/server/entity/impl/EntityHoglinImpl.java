@@ -11,6 +11,5 @@ public class EntityHoglinImpl extends EntityImpl implements EntityHoglin {
     public EntityHoglinImpl(EntityInitInfo initInfo,
                             List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

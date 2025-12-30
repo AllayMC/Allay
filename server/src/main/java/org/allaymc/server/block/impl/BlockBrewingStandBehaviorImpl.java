@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlockBrewingStandBehaviorImpl extends BlockBehaviorImpl implements BlockBrewingStandBehavior {
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityBrewingStand> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityBrewingStand> blockEntityHolderComponent;
 
     public BlockBrewingStandBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);

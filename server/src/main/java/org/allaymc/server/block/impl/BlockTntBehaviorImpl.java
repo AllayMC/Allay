@@ -9,13 +9,11 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class BlockTntBehaviorImpl extends BlockBehaviorImpl implements BlockTntBehavior {
-    public BlockTntBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
-        super(componentProviders);
-    }
 
     @Delegate
-    @Override
-    public BlockTntBaseComponent getBaseComponent() {
-        return (BlockTntBaseComponent) super.getBaseComponent();
+    private BlockTntBaseComponent tntBaseComponent;
+
+    public BlockTntBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
+        super(componentProviders);
     }
 }

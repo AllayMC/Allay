@@ -11,6 +11,5 @@ public class EntityBlazeImpl extends EntityImpl implements EntityBlaze {
     public EntityBlazeImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.impl;
 
+import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
@@ -14,14 +15,12 @@ import java.util.List;
  * @author daoge_cmd
  */
 public abstract class BlockEntityImpl extends ComponentClass implements BlockEntity {
-    protected BlockEntityBaseComponent baseComponent;
+
+    @Delegate
+    @Getter
+    private BlockEntityBaseComponent baseComponent;
 
     public BlockEntityImpl(BlockEntityInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    public BlockEntityBaseComponent getBaseComponent() {
-        return baseComponent;
     }
 }

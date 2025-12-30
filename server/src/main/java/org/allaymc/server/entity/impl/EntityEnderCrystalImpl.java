@@ -11,17 +11,14 @@ import org.allaymc.server.component.ComponentProvider;
 import java.util.List;
 
 public class EntityEnderCrystalImpl extends EntityImpl implements EntityEnderCrystal {
+
     @Delegate
-    protected EntityLivingComponent livingComponent;
+    private EntityEnderCrystalBaseComponent enderCrystalBaseComponent;
+    @Delegate
+    private EntityLivingComponent livingComponent;
 
     public EntityEnderCrystalImpl(EntityInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityEnderCrystalBaseComponent getBaseComponent() {
-        return (EntityEnderCrystalBaseComponent) super.getBaseComponent();
     }
 }

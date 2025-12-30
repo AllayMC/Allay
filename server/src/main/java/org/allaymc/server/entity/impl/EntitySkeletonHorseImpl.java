@@ -11,6 +11,5 @@ public class EntitySkeletonHorseImpl extends EntityImpl implements EntitySkeleto
     public EntitySkeletonHorseImpl(EntityInitInfo initInfo,
                                    List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

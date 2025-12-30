@@ -11,6 +11,5 @@ public class EntityPandaImpl extends EntityImpl implements EntityPanda {
     public EntityPandaImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

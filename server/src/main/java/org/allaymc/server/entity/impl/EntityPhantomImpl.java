@@ -11,6 +11,5 @@ public class EntityPhantomImpl extends EntityImpl implements EntityPhantom {
     public EntityPhantomImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

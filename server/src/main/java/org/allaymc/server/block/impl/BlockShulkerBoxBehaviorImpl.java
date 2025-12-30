@@ -11,7 +11,7 @@ import java.util.List;
 
 public class BlockShulkerBoxBehaviorImpl extends BlockBehaviorImpl implements BlockShulkerBoxBehavior {
     @Delegate
-    protected BlockBlockEntityHolderComponent<BlockEntityShulkerBox> blockEntityHolderComponent;
+    private BlockBlockEntityHolderComponent<BlockEntityShulkerBox> blockEntityHolderComponent;
 
     public BlockShulkerBoxBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {

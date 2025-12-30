@@ -11,6 +11,5 @@ public class EntityZombiePigmanImpl extends EntityImpl implements EntityZombiePi
     public EntityZombiePigmanImpl(EntityInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

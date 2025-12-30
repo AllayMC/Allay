@@ -11,6 +11,5 @@ public class EntityEndermiteImpl extends EntityImpl implements EntityEndermite {
     public EntityEndermiteImpl(EntityInitInfo initInfo,
                                List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

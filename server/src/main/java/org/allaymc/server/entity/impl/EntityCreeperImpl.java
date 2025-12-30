@@ -11,6 +11,5 @@ public class EntityCreeperImpl extends EntityImpl implements EntityCreeper {
     public EntityCreeperImpl(EntityInitInfo initInfo,
                              List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

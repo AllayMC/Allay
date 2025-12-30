@@ -11,6 +11,5 @@ public class EntityWitchImpl extends EntityImpl implements EntityWitch {
     public EntityWitchImpl(EntityInitInfo initInfo,
                            List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -15,20 +15,16 @@ import java.util.List;
 public class EntityItemImpl extends EntityImpl implements EntityItem {
 
     @Delegate
-    protected EntityLivingComponent livingComponent;
+    private EntityItemBaseComponent itemBaseComponent;
     @Delegate
-    protected EntityPhysicsComponent physicsComponent;
+    private EntityLivingComponent livingComponent;
     @Delegate
-    protected EntityAgeComponent ageComponent;
+    private EntityPhysicsComponent physicsComponent;
+    @Delegate
+    private EntityAgeComponent ageComponent;
 
     public EntityItemImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-    }
-
-    @Delegate
-    @Override
-    public EntityItemBaseComponent getBaseComponent() {
-        return (EntityItemBaseComponent) super.getBaseComponent();
     }
 }

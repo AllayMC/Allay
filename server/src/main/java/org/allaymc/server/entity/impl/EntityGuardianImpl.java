@@ -11,6 +11,5 @@ public class EntityGuardianImpl extends EntityImpl implements EntityGuardian {
     public EntityGuardianImpl(EntityInitInfo initInfo,
                               List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }
