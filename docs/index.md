@@ -37,6 +37,6 @@ reliable, fast and feature-rich.
 
     Already proficient in basic plugin development? Dive into more advanced topics!
 
-    [**:octicons-arrow-right-24: Advanced**](advanced/use-color-codes)
+    [**:octicons-arrow-right-24: Advanced**](advanced/event-list)
 
 </div>
