@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[ChatBubble]
+description = "ChatBubble shows player chat messages as floating DebugText above their heads."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/ChatBubble"
+
 [Aitokoto]
 description = "An AllayMC plugin that send a random quote from Hitokoto to the newly joined player."
 authors = ["daoge_cmd"]
