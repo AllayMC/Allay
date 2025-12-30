@@ -5,8 +5,9 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.NetworkData;
+import org.allaymc.server.network.multiversion.MultiVersion;
+import org.allaymc.server.network.multiversion.MultiVersionHelper;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.protocol.bedrock.data.ResourcePackType;
@@ -21,6 +22,7 @@ import java.util.UUID;
  */
 public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProcessor<ResourcePackClientResponsePacket> {
     @Override
+    @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     public void handle(Player player, ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
             case SEND_PACKS -> {
@@ -36,7 +38,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
             }
             case HAVE_ALL_PACKS -> {
                 var packetToSend = NetworkData.RESOURCES_PACK_STACK_PACKET.get();
-                MultiVersion.adaptExperimentData(player, packetToSend.getExperiments());
+                MultiVersionHelper.adaptExperimentData(player, packetToSend.getExperiments());
                 player.sendPacket(packetToSend);
             }
             case COMPLETED -> ((AllayPlayer) player).spawnEntityPlayer();

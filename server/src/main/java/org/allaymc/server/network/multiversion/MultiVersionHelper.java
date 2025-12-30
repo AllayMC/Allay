@@ -1,4 +1,4 @@
-package org.allaymc.server.network;
+package org.allaymc.server.network.multiversion;
 
 import org.allaymc.api.player.Player;
 import org.allaymc.server.player.AllayPlayer;
@@ -12,7 +12,8 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public final class MultiVersion {
+@MultiVersion(version = "*")
+public final class MultiVersionHelper {
     public static void adaptExperimentData(Player player, List<ExperimentData> experiments) {
         if (is1_21_80(player)) {
             // Enables 2025 Content Drop 2 features

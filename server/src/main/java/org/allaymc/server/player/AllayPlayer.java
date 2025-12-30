@@ -96,10 +96,11 @@ import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
-import org.allaymc.server.network.MultiVersion;
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.NetworkHelper;
 import org.allaymc.server.network.ProtocolInfo;
+import org.allaymc.server.network.multiversion.MultiVersion;
+import org.allaymc.server.network.multiversion.MultiVersionHelper;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.utils.JSONUtils;
 import org.allaymc.server.world.AllayDimension;
@@ -563,6 +564,7 @@ public class AllayPlayer implements Player {
     /**
      * Adds generic metadata for the specified {@code entity} to the provided {@code map}.
      */
+    @MultiVersion(version = "1.21.101", details = "1.21.101 client crashes if HAS_NPC is set to true for EntityItem. Fixed in newer client versions")
     protected void addGenericMetadata(Entity entity, EntityDataMap map) {
         map.setFlag(EntityFlag.HAS_COLLISION, entity.hasEntityCollision());
         map.setFlag(EntityFlag.CAN_CLIMB, true);
@@ -2486,6 +2488,8 @@ public class AllayPlayer implements Player {
     /**
      * Sends {@link StartGamePacket} to the client.
      */
+    @MultiVersion(version = "1.21.80 - 1.21.90", details = "AuthoritativeMovementMode is explicitly set to ensure compatibility")
+    @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     protected void startGame(World spawnWorld, PlayerData playerData, Dimension dimension) {
         var helper = session.getPeer().getCodecHelper();
         helper.setItemDefinitions(SimpleDefinitionRegistry.<ItemDefinition>builder().addAll(NetworkData.ITEM_DEFINITIONS.get()).build());
@@ -2546,7 +2550,7 @@ public class AllayPlayer implements Player {
         packet.setScenarioId("");
         packet.setOwnerId("");
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
-        MultiVersion.adaptExperimentData(this, packet.getExperiments());
+        MultiVersionHelper.adaptExperimentData(this, packet.getExperiments());
         sendPacket(packet);
     }
 
