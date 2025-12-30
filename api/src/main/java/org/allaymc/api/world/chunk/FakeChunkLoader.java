@@ -1,6 +1,7 @@
 package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.world.WorldViewer;
 
 import java.util.function.Supplier;
 
@@ -28,5 +29,10 @@ public record FakeChunkLoader(Supplier<Location3dc> locationSupplier, int radius
     @Override
     public int getChunkMaxSendCountPerTick() {
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public WorldViewer toWorldViewer() {
+        return null;
     }
 }

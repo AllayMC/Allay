@@ -12,7 +12,6 @@ import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.data.EntityAnimation;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
@@ -291,25 +290,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
         oldChunkOnlyLoaders.stream()
                 .filter(loader -> loader != thisEntity)
-                .map(this::resolveViewer)
+                .map(ChunkLoader::toWorldViewer)
                 .filter(Objects::nonNull)
                 .forEach(this::despawnFrom);
         newChunkOnlyLoaders.stream()
                 .filter(loader -> loader != thisEntity)
-                .map(this::resolveViewer)
+                .map(ChunkLoader::toWorldViewer)
                 .filter(Objects::nonNull)
                 .forEach(this::spawnTo);
-    }
-
-    private WorldViewer resolveViewer(ChunkLoader loader) {
-        if (loader instanceof WorldViewer viewer) {
-            return viewer;
-        }
-        if (loader instanceof EntityPlayer player && player.isActualPlayer()) {
-            return player.getController();
-        }
-
-        return null;
     }
 
     @Override
