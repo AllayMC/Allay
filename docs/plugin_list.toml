@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[HeadShow]
+description = "An AllayMC plugin that can customize player's nametag and scoretag."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/HeadShow"
+
 [ChatBubble]
 description = "ChatBubble shows player chat messages as floating DebugText above their heads."
 authors = ["daoge_cmd"]
