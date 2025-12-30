@@ -31,26 +31,21 @@ public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        if (!(itemStack instanceof ItemMusicDiscStack musicDiscItem)) {
-            return false;
-        }
-
         var blockEntity = blockEntityHolderComponent.getBlockEntity(new Position3i(interactInfo.clickedBlockPos(), dimension));
         var oldMusicDiscItem = blockEntity.getMusicDiscItem();
         if (oldMusicDiscItem != null) {
             blockEntity.setMusicDiscItem(null);
             blockEntity.stop();
-
-            dimension.dropItem(oldMusicDiscItem, new Position3d(blockEntity.getPosition()).add(0, 1, 0));
-        } else {
-            var player = interactInfo.player();
+            dimension.dropItem(oldMusicDiscItem, new Position3d(blockEntity.getPosition()).add(0.5, 1, 0.5));
+            return true;
+        } else if (itemStack instanceof ItemMusicDiscStack musicDiscItem) {
             blockEntity.setMusicDiscItem(musicDiscItem);
-            player.clearItemInHand();
-
+            interactInfo.player().clearItemInHand();
             blockEntity.play();
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @Override
