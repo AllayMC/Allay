@@ -11,6 +11,8 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -26,9 +28,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Represents an explosion.
@@ -302,20 +304,18 @@ public class Explosion {
             var affectedEntities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
             // Skip the entity that caused the explosion
             affectedEntities.remove(entity);
-            var impactMap = affectedEntities.parallelStream()
-                    .collect(Collectors.<Entity, Entity, Double>toConcurrentMap(
-                            affectedEntity -> affectedEntity,
-                            affectedEntity -> {
-                                var pos = affectedEntity.getLocation();
-                                var dist = pos.sub(x, y, z, new Vector3d()).length();
-                                if (dist > d || dist == 0) {
-                                    return 0.0;
-                                }
+            var impactMap = new ConcurrentHashMap<Entity, Double>();
+            Utils.forEachInParallel(affectedEntities, Server.getInstance().getComputeThreadPool(), affectedEntity -> {
+                var pos = affectedEntity.getLocation();
+                var dist = pos.sub(x, y, z, new Vector3d()).length();
+                if (dist > d || dist == 0) {
+                    return;
+                }
 
-                                // Method exposure() is slow, let's calculate it in parallel
-                                return (1.0 - dist / d) * exposure(dimension, explosionPos, affectedEntity.getOffsetAABB());
-                            }
-                    ));
+                // Method exposure() is slow, let's calculate it in parallel
+                impactMap.put(affectedEntity, (1.0 - dist / d) * exposure(dimension, explosionPos, affectedEntity.getOffsetAABB()));
+            }).join();
+
             for (var affectedEntity : affectedEntities) {
                 var impact = impactMap.get(affectedEntity);
                 if (impact == 0.0) {

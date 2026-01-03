@@ -5,7 +5,11 @@ import lombok.experimental.UtilityClass;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 /**
  * @author daoge_cmd
@@ -74,5 +78,29 @@ public class Utils {
      */
     public static InputStream getResource(String resourceName) {
         return Objects.requireNonNull(Utils.class.getClassLoader().getResourceAsStream(resourceName));
+    }
+
+    /**
+     * Processes each element in the provided collection in parallel using the specified executor
+     * and consumer function.
+     *
+     * @param <T>        the type of elements in the collection
+     * @param collection the collection of elements to be processed
+     * @param executor   the executor to run the asynchronous tasks
+     * @param consumer   the function to process each element in the collection
+     * @return a {@code CompletableFuture<Void>} that completes when all elements in the collection
+     * have been processed
+     */
+    public static <T> CompletableFuture<Void> forEachInParallel(Collection<T> collection, Executor executor, Consumer<T> consumer) {
+        CompletableFuture<?>[] futures = collection.stream()
+                .map(element ->
+                        CompletableFuture.runAsync(
+                                () -> consumer.accept(element),
+                                executor
+                        )
+                )
+                .toArray(CompletableFuture[]::new);
+
+        return CompletableFuture.allOf(futures);
     }
 }

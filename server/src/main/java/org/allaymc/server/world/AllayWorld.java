@@ -18,6 +18,7 @@ import org.allaymc.api.message.TrKeys;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldState;
@@ -201,7 +202,10 @@ public class AllayWorld implements World {
         scheduler.tick();
 
         if (TICK_DIMENSION_IN_PARALLEL) {
-            dimensionMap.values().parallelStream().forEach(d -> ((AllayDimension) d).tick(currentTick));
+            Utils.forEachInParallel(
+                    dimensionMap.values(), Server.getInstance().getComputeThreadPool(),
+                    dimension -> ((AllayDimension) dimension).tick(currentTick)
+            ).join();
         } else {
             for (var dimension : dimensionMap.values()) {
                 ((AllayDimension) dimension).tick(currentTick);

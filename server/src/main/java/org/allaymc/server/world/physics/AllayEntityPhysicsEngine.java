@@ -14,6 +14,8 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.physics.AABBOverlapFilter;
@@ -87,7 +89,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         handleClientMoveQueue();
         cacheEntityCollisionResult();
         var updatedEntities = new NonBlockingHashMapLong<Entity>();
-        entities.values().parallelStream().forEach(entity -> {
+        Utils.forEachInParallel(entities.values(), Server.getInstance().getComputeThreadPool(), entity -> {
             if (!(entity instanceof EntityPhysicsComponent physicsComponent)) {
                 return;
             }
@@ -137,7 +139,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
         // Compute colliding entities in parallel, because computeCollidingEntities()
         // will be an expensive method if there are a lot of entities. Method
         // computeCollidingEntities() should be safe to call in parallel
-        entities.values().parallelStream().forEach(entity -> {
+        Utils.forEachInParallel(entities.values(), Server.getInstance().getComputeThreadPool(), entity -> {
             var collidedEntities = computeCollidingEntities(entity, true);
             if (collidedEntities.isEmpty()) {
                 return;
