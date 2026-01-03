@@ -125,7 +125,7 @@ public interface World extends TaskCreator {
     Collection<Player> getPlayers();
 
     /**
-     * Get the scheduler of the world.
+     * Get the scheduler of the world which is running on the world tick.
      *
      * @return the scheduler of the world
      */

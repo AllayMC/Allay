@@ -25,6 +25,8 @@ import org.allaymc.api.permission.ConstantPermissionCalculator;
 import org.allaymc.api.permission.PermissionCalculator;
 import org.allaymc.api.permission.Tristate;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNBTUtils;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -37,6 +39,7 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.pdc.AllayPersistentDataContainer;
+import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -107,6 +110,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Getter
     @Setter
     protected PermissionCalculator permissionCalculator;
+    @Getter
+    protected Scheduler scheduler;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -120,6 +125,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
         this.permissionCalculator = new ConstantPermissionCalculator(Tristate.TRUE);
+        this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
     }
 
     @OnInitFinish
@@ -134,6 +140,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     public void tick(long currentTick) {
         manager.callEvent(new CEntityTickEvent(currentTick));
+        this.scheduler.tick();
         tickBlockCollision();
     }
 

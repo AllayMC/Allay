@@ -9,7 +9,6 @@ import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.scoreboard.ScoreboardManager;
-import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 
 import java.util.concurrent.ExecutorService;
@@ -44,14 +43,9 @@ public interface Server extends TaskCreator, CommandSender {
     long getStartTime();
 
     /**
-     * Retrieves the server's scheduler.
-     *
-     * <p>For world-related operations, use the scheduler of the respective world instead,
-     * as this scheduler runs on the server thread and may encounter concurrency issues
-     * when modifying worlds.</p>
+     * Gets the server's scheduler which is running on the server tick.
      *
      * @return the server scheduler
-     * @see World#getScheduler()
      */
     Scheduler getScheduler();
 

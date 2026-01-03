@@ -29,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - (API) Added `ContainerItemPickupEvent` for item entity pickups into containers.
   - (API) Added `ContainerTypes.HOPPER`.
 - (API) Added methods `ChunkLoader.isWorldViewer()` and `ChunkLoader.toWorldViewer()`.
+- (API) Added entity and dimension level scheduler.
 - Added properties `network-settings.raknet-send-cookie` and `network-settings.raknet-max-mtu` to `server.properties`.
 - Implemented Totem of Undying.
 - Implemented End Crystal.

@@ -19,6 +19,8 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.utils.function.QuadConsumer;
 import org.allaymc.api.utils.function.TriFunction;
 import org.allaymc.api.utils.tuple.Pair;
@@ -59,7 +61,7 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
  *
  * @author daoge_cmd | Cool_Loong
  */
-public interface Dimension {
+public interface Dimension extends TaskCreator {
 
     /**
      * The return value of {@link #getLiquid(int, int, int)} if no liquid is found.
@@ -134,6 +136,13 @@ public interface Dimension {
      * @return the world which contains this dimension
      */
     World getWorld();
+
+    /**
+     * Get the scheduler of this dimension which is running on the dimension tick.
+     *
+     * @return the scheduler of this dimension
+     */
+    Scheduler getScheduler();
 
     /**
      * Gets the world generator associated with this dimension.
@@ -1337,5 +1346,10 @@ public interface Dimension {
         }
 
         return false;
+    }
+
+    @Override
+    default boolean isValid() {
+        return getWorld().isValid();
     }
 }

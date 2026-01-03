@@ -15,12 +15,15 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.player.ClientState;
 import org.allaymc.api.player.Player;
+import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.WorldViewer;
 import org.allaymc.api.world.data.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.particle.BlockBreakParticle;
 import org.allaymc.server.network.processor.login.SetLocalPlayerAsInitializedPacketProcessor;
+import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.light.AllayLightEngine;
 import org.allaymc.server.world.manager.AllayBlockUpdateManager;
@@ -47,6 +50,7 @@ public class AllayDimension implements Dimension {
     protected final AllayChunkManager chunkManager;
     protected final AllayEntityManager entityManager;
     protected final AllayBlockUpdateManager blockUpdateManager;
+    protected final Scheduler scheduler;
     protected final AllayLightEngine lightEngine;
     protected final Set<Player> players;
     protected final Set<DebugShape> debugShapes;
@@ -58,6 +62,7 @@ public class AllayDimension implements Dimension {
         this.chunkManager = new AllayChunkManager(this, worldGenerator, world.getWorldStorage());
         this.entityManager = new AllayEntityManager(this, world.getWorldStorage());
         this.blockUpdateManager = new AllayBlockUpdateManager(this);
+        this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
         this.lightEngine = new AllayLightEngine(this);
         this.players = new NonBlockingHashSet<>();
         this.debugShapes = new NonBlockingHashSet<>();
@@ -69,6 +74,7 @@ public class AllayDimension implements Dimension {
     }
 
     public void tick(long currentTick) {
+        this.scheduler.tick();
         this.entityManager.tick(currentTick);
         this.chunkManager.tick(currentTick);
         this.blockUpdateManager.tick();
@@ -80,6 +86,7 @@ public class AllayDimension implements Dimension {
     }
 
     public void shutdown() {
+        this.scheduler.shutdown();
         // Shutdown light service first, because when unloading chunks, chunk service
         // will send updates to light service which is meaningless
         this.lightEngine.shutdown();

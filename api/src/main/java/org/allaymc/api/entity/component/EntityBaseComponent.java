@@ -21,6 +21,8 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pdc.PersistentDataHolder;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.PlayerStorage;
+import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldViewer;
@@ -45,7 +47,7 @@ import java.util.function.Consumer;
 /**
  * @author daoge_cmd
  */
-public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder {
+public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId, PersistentDataHolder, TaskCreator {
 
     /**
      * Gets the type of this entity.
@@ -187,6 +189,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     default World getWorld() {
         return getLocation().dimension() != null ? getLocation().dimension().getWorld() : null;
     }
+
+    /**
+     * Gets the scheduler of this entity which is running on the entity tick.
+     *
+     * @return the scheduler of this entity
+     */
+    Scheduler getScheduler();
 
     /**
      * Get the state of the entity.
@@ -662,5 +671,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default boolean willBeSaved() {
         return true;
+    }
+
+    @Override
+    default boolean isValid() {
+        return getState().isSpawned();
     }
 }

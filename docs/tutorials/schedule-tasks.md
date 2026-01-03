@@ -33,16 +33,61 @@ public class MyPlugin extends Plugin {
 **:partying_face: And that's it!** The server will now send a "Hi" message to all players online
 at an interval of 20 ticks or approximately every second.
 
-## Server Scheduler :vs: World Scheduler
+## Scheduler Types
 
-Allay provides two types of scheduler: the server scheduler and the world scheduler. 
-The server scheduler is running on the server game loop and is suitable for tasks that need to run globally,
-and the world scheduler is running on the world game loop and is suitable for tasks that need to run per world.
+Allay provides four types of scheduler: server, world, dimension, and entity. Pick the smallest scope that matches the data you touch.
+Each scheduler runs on a specific thread:
 
-Let's say you want to tell players the name of the block they are standing on, and because this is a world-specific task,
-you'd better use the world scheduler for the best performance. Here's how you can do it:
+- Server scheduler: runs on the server thread.
+- World scheduler: runs on the world thread.
+- Dimension scheduler: runs on the compute thread pool when `world-settings.tick-dimension-in-parallel` is set to `true`, otherwise runs on the world thread.
+- Entity scheduler: runs on the thread of the entity's current dimension.
 
-```java linenums="1" hl_lines="7-12"
+### Server Scheduler (global, non-world work)
+
+Use the server scheduler for tasks that are global and do not mutate world, dimension, or entity state.
+
+```java linenums="1" hl_lines="7-9"
+import org.allaymc.api.plugin.Plugin;
+import org.allaymc.api.server.Server;
+
+public class MyPlugin extends Plugin {
+    @Override
+    public void onEnable() {
+        Server.getInstance().getScheduler().scheduleRepeating(this, this::cleanupExpiredSessions, 20 * 60);
+    }
+
+    private void cleanupExpiredSessions() {
+        // Clean plugin-level caches or metrics.
+    }
+}
+```
+
+### World Scheduler (per-world state)
+
+Use the world scheduler for tasks that operate on world-wide state (time, weather, world data).
+
+```java linenums="1" hl_lines="8-10"
+import org.allaymc.api.plugin.Plugin;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.world.WorldData;
+
+public class MyPlugin extends Plugin {
+    @Override
+    public void onEnable() {
+        Server.getInstance().getWorldPool().getWorlds().values().forEach(world -> {
+            world.getScheduler().scheduleRepeating(this, () -> world.getWorldData().setTimeOfDay(WorldData.TIME_NOON), 20 * 300);
+        });
+    }
+}
+```
+
+### Dimension Scheduler (per-dimension blocks and entities)
+
+Use the dimension scheduler for tasks that update blocks, particles, or entities inside one dimension.
+
+```java linenums="1" hl_lines="9-13"
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.plugin.Plugin;
 import org.allaymc.api.server.Server;
 
@@ -50,11 +95,28 @@ public class MyPlugin extends Plugin {
     @Override
     public void onEnable() {
         Server.getInstance().getWorldPool().getWorlds().values().forEach(world -> {
-            world.getScheduler().scheduleRepeating(this, () -> {
-                world.getPlayers().forEach(player -> player.sendPopup(player.getBlockStateStandingOn().getBlockType().getIdentifier().toString()));
-                return true;
-            }, 20);
+            world.getDimensions().values().forEach(dimension -> {
+                dimension.getScheduler().scheduleRepeating(this, () -> {
+                    dimension.setBlockState(0, 64, 0, BlockTypes.STONE.getDefaultState());
+                    return true;
+                }, 20);
+            });
         });
     }
+}
+```
+
+### Entity Scheduler (single-entity lifecycle)
+
+Use the entity scheduler for tasks tied to a single entity so the task stops when the entity despawns.
+
+```java linenums="1" hl_lines="6-9"
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+
+public void onSomeEvent(EntityPlayer player) {
+    player.getScheduler().scheduleRepeating(player, () -> {
+        player.sendPopup("Charging...");
+        return true;
+    }, 20);
 }
 ```
