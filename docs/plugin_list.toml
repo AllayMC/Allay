@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[AllayPlots]
+description = "Plot plugin for AllayMC."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/AllayPlots"
+
 [HeadShow]
 description = "An AllayMC plugin that can customize player's nametag and scoretag."
 authors = ["daoge_cmd"]
