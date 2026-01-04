@@ -35,6 +35,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
+import org.joml.Vector3i;
 
 import java.util.List;
 import java.util.Set;
@@ -228,12 +229,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (Math.abs(currentTime - this.stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = entity.getDimension();
             var itemInHand = entity.getItemInHand();
-            world.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, entity);
-            itemInHand.onBreakBlock(this.blockToBreak, entity);
-            if (itemInHand.isBroken()) {
-                entity.clearItemInHand();
+            if (world.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, entity)) {
+                itemInHand.onBreakBlock(this.blockToBreak, entity);
+                if (itemInHand.isBroken()) {
+                    entity.clearItemInHand();
+                } else {
+                    entity.notifyItemInHandChange();
+                }
             } else {
-                entity.notifyItemInHandChange();
+                // Failed to break the block which may due to the cancellation of BlockBreakEvent, and in
+                // this case we should send the block update to the client to recovery the old block state
+                player.viewBlockUpdate(new Vector3i(this.breakingPosX, this.breakingPosY, this.breakingPosZ), 0, this.blockToBreak);
             }
         } else {
             log.debug("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", this.stopBreakingTime, currentTime);
