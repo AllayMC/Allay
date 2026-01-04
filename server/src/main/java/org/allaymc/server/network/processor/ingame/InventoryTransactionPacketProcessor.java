@@ -86,6 +86,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                         var event = new PlayerInteractBlockEvent(entity, interactInfo, PlayerInteractBlockEvent.Action.RIGHT_CLICK);
                         if (!event.call()) {
+                            player.viewBlockUpdate(clickBlockPos, 0, dimension.getBlockState(clickBlockPos));
+                            player.viewBlockUpdate(placeBlockPos, 0, dimension.getBlockState(placeBlockPos));
                             break;
                         }
 
@@ -93,13 +95,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         itemInHand.rightClickItemOnBlock(dimension, placeBlockPos, interactInfo);
                         if (entity.isUsingItemOnBlock()) {
                             if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
-                                // Using item on the block successfully, no need to call BlockBehavior::onInteract()
+                                // Using the item on the block successfully, no need to call BlockBehavior::onInteract()
                                 break;
                             }
 
                             if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
                                 // Player interaction with the block was unsuccessful, and we need to override the
-                                // client block change by sending block update
+                                // client block change by sending a block update
                                 var blockStateClicked = dimension.getBlockState(clickBlockPos);
                                 player.viewBlockUpdate(clickBlockPos, 0, blockStateClicked);
 
