@@ -686,14 +686,6 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
-    public static void initCauldron() {
-        ItemTypes.CAULDRON = AllayItemType
-                .builder(ItemCauldronStackImpl.class)
-                .vanillaItem(ItemId.CAULDRON)
-                .addComponent(ItemCauldronBaseComponentImpl::new, ItemCauldronBaseComponentImpl.class)
-                .build();
-    }
-
     public static void initSigns() {
         ItemTypes.ACACIA_SIGN = buildSign(ItemId.ACACIA_SIGN, BlockId.ACACIA_WALL_SIGN, BlockId.ACACIA_STANDING_SIGN);
         ItemTypes.BAMBOO_SIGN = buildSign(ItemId.BAMBOO_SIGN, BlockId.BAMBOO_WALL_SIGN, BlockId.BAMBOO_STANDING_SIGN);
