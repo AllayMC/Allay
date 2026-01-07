@@ -2,17 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Each release is associated with a specific API version,
-and any changes to API will have a prefix `(API)`.
+Each release is associated with a specific API version, and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.10.3 (API 0.20.0) - Unreleased
+# 0.10.4 (API 0.21.0) - Unreleased
 
-<small>[Compare with 0.10.2](https://github.com/AllayMC/Allay/compare/0.10.2...HEAD)</small>
+<small>[Compare with 0.10.2](https://github.com/AllayMC/Allay/compare/0.10.3...HEAD)</small>
+
+# 0.10.3 (API 0.20.0) - 2026/1/7
+
+<small>[Compare with 0.10.2](https://github.com/AllayMC/Allay/compare/0.10.2...0.10.3)</small>
 
 ### Added
 
