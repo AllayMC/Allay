@@ -219,6 +219,11 @@ public interface EntityPhysicsComponent extends EntityComponent {
     void onFall(double fallDistance);
 
     /**
+     * Reset the fall distance of this entity to zero.
+     */
+    void resetFallDistance();
+
+    /**
      * @see #knockback(Vector3dc, double, double, Vector3dc, boolean)
      */
     default void knockback(Vector3dc source) {

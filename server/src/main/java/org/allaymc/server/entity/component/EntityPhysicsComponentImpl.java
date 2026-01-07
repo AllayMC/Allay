@@ -463,6 +463,11 @@ public class EntityPhysicsComponentImpl implements EntityPhysicsComponent {
     }
 
     @Override
+    public void resetFallDistance() {
+        this.fallDistance = 0;
+    }
+
+    @Override
     public Block getBlockStateStandingOn() {
         var loc = thisEntity.getLocation();
         var air = BlockTypes.AIR.getDefaultState();
