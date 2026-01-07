@@ -33,7 +33,8 @@ public enum ThreadType {
     /**
      * The thread in the compute thread pool {@link Server#getComputeThreadPool()} or
      * {@link ForkJoinPool#commonPool()}. Compute threads are used in world generation and
-     * entity physics calculation.
+     * entity physics calculation. Dimension tick is also running on the compute thread
+     * pool if the world has more than one dimension.
      */
     COMPUTE,
     /**

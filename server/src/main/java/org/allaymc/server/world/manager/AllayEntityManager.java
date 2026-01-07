@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * @author Cool_Loong| daoge_cmd
+ * @author Cool_Loong | daoge_cmd
  */
 @Slf4j
 public class AllayEntityManager implements EntityManager {
@@ -104,8 +104,9 @@ public class AllayEntityManager implements EntityManager {
     }
 
     protected void processQueue() {
-        while (!queue.isEmpty()) {
-            queue.poll().run();
+        Runnable task;
+        while ((task = queue.poll()) != null) {
+            task.run();
         }
     }
 

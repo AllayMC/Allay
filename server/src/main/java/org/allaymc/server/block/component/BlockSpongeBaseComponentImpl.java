@@ -54,8 +54,8 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         queue.add(new Entry(center, 0));
 
         int removedWaterCount = 0;
-        while (!queue.isEmpty() && removedWaterCount < MAX_REMOVED_WATER_COUNT) {
-            var entry = queue.poll();
+        Entry entry;
+        while (removedWaterCount < MAX_REMOVED_WATER_COUNT && (entry = queue.poll()) != null) {
             var currentDistance = entry.distance();
 
             for (var face : BlockFace.values()) {

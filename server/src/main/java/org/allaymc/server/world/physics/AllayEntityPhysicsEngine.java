@@ -319,8 +319,8 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
     protected void handleClientMoveQueue() {
         for (var entry : clientMoveQueue.entrySet()) {
             var queue = entry.getValue();
-            while (!queue.isEmpty()) {
-                var clientMove = queue.poll();
+            ClientMove clientMove;
+            while ((clientMove = queue.poll()) != null) {
                 var player = clientMove.player();
                 // The player may have been removed
                 if (!entities.containsKey(player.getRuntimeId())) {
