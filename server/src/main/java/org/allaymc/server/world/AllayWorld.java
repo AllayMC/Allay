@@ -5,7 +5,6 @@ import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.eventbus.event.world.WeatherChangeEvent;
@@ -27,7 +26,6 @@ import org.allaymc.api.world.data.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.player.AllayPlayer;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.GameLoop;
@@ -38,8 +36,7 @@ import org.joml.Vector3i;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -50,7 +47,6 @@ public class AllayWorld implements World {
 
     protected static final int TIME_SENDING_INTERVAL = 12 * 20;
     protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = AllayServer.getSettings().networkSettings().maxSyncedPacketsHandleCountAtOnce();
-    protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = AllayServer.getSettings().networkSettings().enableIndependentNetworkThread();
     protected static final boolean TICK_DIMENSION_IN_PARALLEL = AllayServer.getSettings().worldSettings().tickDimensionInParallel();
 
     @Getter
@@ -60,8 +56,7 @@ public class AllayWorld implements World {
     @Getter
     protected final AllayWorldData worldData;
 
-    protected final BlockingQueueWrapper<PacketQueueEntry> packetQueue;
-    protected final Semaphore networkSemaphore;
+    protected final Queue<PacketQueueEntry> packetQueue;
 
     protected final AtomicReference<WorldState> state;
     protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
@@ -69,7 +64,7 @@ public class AllayWorld implements World {
     protected final Scheduler scheduler;
     protected final GameLoop gameLoop;
     @Getter
-    protected final Thread worldThread, networkThread;
+    protected final Thread worldThread;
 
     protected long nextTimeSendTick;
 
@@ -90,8 +85,7 @@ public class AllayWorld implements World {
         this.worldData = (AllayWorldData) worldStorage.readWorldData();
         this.worldData.setWorld(this);
         this.worldData.increaseWorldStartCount();
-        this.packetQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
-        this.networkSemaphore = ENABLE_INDEPENDENT_NETWORK_THREAD ? new Semaphore(1) : null;
+        this.packetQueue = PlatformDependent.newMpscQueue();
         this.state = new AtomicReference<>(WorldState.STARTING);
         this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
@@ -99,14 +93,12 @@ public class AllayWorld implements World {
                 .currentTick(this.worldData.getTotalTime())
                 .onStart(this::onWorldStart)
                 .onTick(this::worldThreadMain)
+                .onIdle(this::handleSyncPackets)
                 .onStop(this::shutdownReally)
                 .build();
         this.worldThread = Thread.ofPlatform()
                 .name("World Thread #" + this.getName())
                 .unstarted(gameLoop::startLoop);
-        this.networkThread = ENABLE_INDEPENDENT_NETWORK_THREAD ? Thread.ofPlatform()
-                .name("World Network Thread #" + this.getName())
-                .unstarted(this::networkThreadMain) : null;
         this.weather = Weather.CLEAR;
         this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
         this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
@@ -117,23 +109,6 @@ public class AllayWorld implements World {
         this.state.set(WorldState.RUNNING);
     }
 
-    @SneakyThrows
-    protected void networkThreadMain() {
-        while (getState() == WorldState.RUNNING) {
-            // Block until there are packets to handle (up to 1 second)
-            var firstEntry = packetQueue.tryPoll(1, TimeUnit.SECONDS);
-            if (firstEntry == null) {
-                continue;
-            }
-            // Get the permit to handle packets
-            networkSemaphore.acquire();
-            handleSyncPackets(firstEntry);
-            // Return the permit so that the world thread can run
-            networkSemaphore.release();
-        }
-    }
-
-    @SneakyThrows
     private void worldThreadMain(GameLoop gameLoop) {
         this.worldData.setTotalTime(gameLoop.getTick());
         if (getState() != WorldState.RUNNING) {
@@ -141,35 +116,23 @@ public class AllayWorld implements World {
             return;
         }
 
-        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-            networkSemaphore.acquire();
-        }
-
         try {
             tick(gameLoop.getTick());
         } catch (Throwable throwable) {
             log.error("Error while ticking world {}", name, throwable);
-        } finally {
-            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-                networkSemaphore.release();
-            }
         }
     }
 
     public void addSyncPacketToQueue(Player player, BedrockPacket packet, long time) {
         this.packetQueue.offer(new PacketQueueEntry(player, packet, time));
+        this.gameLoop.wakeUp();
     }
 
-    protected void handleSyncPackets(PacketQueueEntry firstEntry) {
+    protected void handleSyncPackets() {
         try {
-            PacketQueueEntry entry = firstEntry;
+            PacketQueueEntry entry;
             int count = 0;
-            do {
-                // The first entry can be null, for why we do that see the callers
-                if (entry == null) {
-                    continue;
-                }
-
+            while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
                 // The player should still in the same world
                 if (entry.player.getControlledEntity().getWorld() != this) {
                     log.error("Trying to handle sync packet in world {} which the player {} is not in!", name, entry.player.getOriginName());
@@ -184,7 +147,7 @@ public class AllayWorld implements World {
 
                 ((AllayPlayer) entry.player).handlePacketSync(entry.packet(), entry.time());
                 count++;
-            } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);
+            }
         } catch (Throwable throwable) {
             log.error("Error while handling sync packet in world {}", this.getWorldData().getDisplayName(), throwable);
         }
@@ -192,9 +155,7 @@ public class AllayWorld implements World {
 
     protected void tick(long currentTick) {
         checkFirstTick();
-        if (!ENABLE_INDEPENDENT_NETWORK_THREAD) {
-            handleSyncPackets(null);
-        }
+        handleSyncPackets();
 
         tickTime(currentTick);
         tickWeather();
@@ -332,9 +293,6 @@ public class AllayWorld implements World {
 
         this.worldThread.start();
         this.dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).startTick());
-        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-            this.networkThread.start();
-        }
     }
 
     @Override
@@ -370,6 +328,7 @@ public class AllayWorld implements World {
     public void shutdown() {
         // Mark the world as STOPPING, the real shutdown logic is in shutdownReally() method
         state.set(WorldState.STOPPING);
+        gameLoop.wakeUp(); // Wake up the thread if it's parked so it can detect the state change
     }
 
     protected void shutdownReally() {

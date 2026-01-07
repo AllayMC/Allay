@@ -12,6 +12,19 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.10.3](https://github.com/AllayMC/Allay/compare/0.10.3...HEAD)</small>
 
+### Added
+
+- Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
+
+### Changed
+
+- Merged world tick thread and network thread into a single thread using an event-driven wake-up mechanism. This simplifies
+  the threading model while maintaining low packet processing latency through `LockSupport.parkNanos/unpark`.
+
+### Removed
+
+- Removed `enableIndependentNetworkThread` configuration option from `server-settings.yml` as it is no longer necessary.
+
 # 0.10.3 (API 0.20.0) - 2026/1/7
 
 <small>[Compare with 0.10.2](https://github.com/AllayMC/Allay/compare/0.10.2...0.10.3)</small>

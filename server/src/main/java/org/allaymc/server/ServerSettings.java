@@ -127,12 +127,6 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("The maximum number of packets that can be processed at once")
         private int maxSyncedPacketsHandleCountAtOnce = 128;
 
-        @CustomKey("enable-independent-network-thread")
-        @Comment("If set to true, the network thread will be independent of the main world thread")
-        @Comment("Which will reduce packet processing delay significantly")
-        @Comment("However, independent network threads will increase CPU usage to a certain extent")
-        private boolean enableIndependentNetworkThread = true;
-
         @Comment("The maximum number of datagram packets each address can send within one RakNet tick (10ms)")
         @Comment("Default value is 120 packets, and will be Integer.MAX_VALUE if the server is running in dev mode")
         @CustomKey("raknet-packet-limit")

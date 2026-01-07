@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 
 /**
@@ -19,24 +19,30 @@ public final class GameLoop {
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
     private final Runnable onStart;
     private final Consumer<GameLoop> onTick;
+    private final Runnable onIdle;
     private final Runnable onStop;
+    private volatile Thread loopThread;
     @Getter
     private final int loopCountPerSec;
-    private final float[] tickSummary = new float[20];
-    private final float[] MSPTSummary = new float[20];
+    private final float[] tickSummary;
+    private final float[] MSPTSummary;
     @Getter
     private long tick;
 
-    private GameLoop(Runnable onStart, Consumer<GameLoop> onTick, Runnable onStop, int loopCountPerSec, long currentTick) {
+    private GameLoop(Runnable onStart, Consumer<GameLoop> onTick, Runnable onIdle, Runnable onStop, int loopCountPerSec, long currentTick) {
         if (loopCountPerSec <= 0) {
             throw new IllegalArgumentException("Loop count per second must be greater than 0! (loopCountPerSec=" + loopCountPerSec + ")");
         }
         this.onStart = onStart;
         this.onTick = onTick;
+        this.onIdle = onIdle;
         this.onStop = onStop;
         this.loopCountPerSec = loopCountPerSec;
         this.tick = currentTick;
-        Arrays.fill(tickSummary, 20f);
+        // Sample window size = loopCountPerSec, so we always sample 1 second of data
+        this.tickSummary = new float[loopCountPerSec];
+        this.MSPTSummary = new float[loopCountPerSec];
+        Arrays.fill(tickSummary, loopCountPerSec);
         Arrays.fill(MSPTSummary, 0f);
     }
 
@@ -66,7 +72,19 @@ public final class GameLoop {
         return sum / count;
     }
 
+    /**
+     * Wake up the game loop from idle sleep.
+     * This can be called from any thread to interrupt the sleep and trigger the onIdle callback.
+     */
+    public void wakeUp() {
+        var thread = loopThread;
+        if (thread != null) {
+            LockSupport.unpark(thread);
+        }
+    }
+
     public void startLoop() {
+        loopThread = Thread.currentThread();
         onStart.run();
         long nanoSleepTime = 0;
         long idealNanoSleepPerTick = 1000000000 / loopCountPerSec;
@@ -82,28 +100,24 @@ public final class GameLoop {
             long sumOperateTime = System.nanoTime() - startTickTime;
             // Sleep for the ideal time but take into account the time spent running the tick
             nanoSleepTime += idealNanoSleepPerTick - sumOperateTime;
-            long sleepStart = System.nanoTime();
-            try {
-                if (nanoSleepTime > 0) {
-                    // noinspection BusyWait
-                    Thread.sleep(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime));
+            // Use LockSupport.parkNanos for event-driven wake up
+            while (nanoSleepTime > 0 && isRunning.get()) {
+                long sleepStart = System.nanoTime();
+                LockSupport.parkNanos(nanoSleepTime);
+                // Call onIdle callback when woken up (e.g., to process network packets)
+                if (onIdle != null && isRunning.get()) {
+                    onIdle.run();
                 }
-            } catch (InterruptedException exception) {
-                log.error("GameLoop interrupted", exception);
-                onStop.run();
-                return;
+                // Subtract total elapsed time (park + onIdle execution)
+                nanoSleepTime -= System.nanoTime() - sleepStart;
             }
-            // How long did it actually take to sleep?
-            // If we didn't sleep for the correct amount,
-            // take that into account for the next sleep by
-            // leaving extra/less for the next sleep.
-            nanoSleepTime -= System.nanoTime() - sleepStart;
         }
+        loopThread = null;
         onStop.run();
     }
 
     private void updateTPS(long timeTakenToTick) {
-        float tick = Math.max(0, Math.min(20, 1000000000f / (timeTakenToTick == 0 ? 1 : timeTakenToTick)));
+        float tick = Math.max(0, Math.min(loopCountPerSec, 1000000000f / (timeTakenToTick == 0 ? 1 : timeTakenToTick)));
         System.arraycopy(tickSummary, 1, tickSummary, 0, tickSummary.length - 1);
         tickSummary[tickSummary.length - 1] = tick;
     }
@@ -115,6 +129,7 @@ public final class GameLoop {
 
     public void stop() {
         isRunning.set(false);
+        wakeUp(); // Wake up the thread if it's parked so it can exit immediately
     }
 
     public boolean isRunning() {
@@ -126,6 +141,7 @@ public final class GameLoop {
         };
         private Consumer<GameLoop> onTick = gameLoop -> {
         };
+        private Runnable onIdle;
         private Runnable onStop = () -> {
         };
         private int loopCountPerSec = 20;
@@ -138,6 +154,18 @@ public final class GameLoop {
 
         public GameLoopBuilder onTick(Consumer<GameLoop> onTick) {
             this.onTick = onTick;
+            return this;
+        }
+
+        /**
+         * Set the callback to be called when the game loop is woken up during idle sleep.
+         * This is useful for processing events (like network packets) between ticks.
+         *
+         * @param onIdle the callback to run when woken up
+         * @return this builder
+         */
+        public GameLoopBuilder onIdle(Runnable onIdle) {
+            this.onIdle = onIdle;
             return this;
         }
 
@@ -158,7 +186,7 @@ public final class GameLoop {
         }
 
         public GameLoop build() {
-            return new GameLoop(onStart, onTick, onStop, loopCountPerSec, currentTick);
+            return new GameLoop(onStart, onTick, onIdle, onStop, loopCountPerSec, currentTick);
         }
     }
 }
