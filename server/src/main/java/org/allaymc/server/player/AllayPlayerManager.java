@@ -39,6 +39,8 @@ public class AllayPlayerManager implements PlayerManager {
     @Getter
     protected final AllayPlayerStorage playerStorage;
     @Getter
+    protected final AllayOfflinePlayerService offlinePlayerService;
+    @Getter
     protected final AllayNetworkInterface networkInterface;
 
     protected final Map<UUID, Player> players;
@@ -46,11 +48,12 @@ public class AllayPlayerManager implements PlayerManager {
     protected final Whitelist whitelist;
     protected final Operators operators;
 
-    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayNetworkInterface networkInterface) {
+    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayOfflinePlayerService offlinePlayerService, AllayNetworkInterface networkInterface) {
         this.playerStorage = playerStorage;
+        this.offlinePlayerService = offlinePlayerService;
         this.networkInterface = networkInterface;
         this.players = new Object2ObjectOpenHashMap<>();
-        this.banInfo = ConfigManager.create(BanInfo.class, org.allaymc.server.utils.Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
+        this.banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
         this.operators = ConfigManager.create(Operators.class, Utils.createConfigInitializer(Path.of(OPERATORS_FILE_NAME)));
     }
@@ -295,7 +298,7 @@ public class AllayPlayerManager implements PlayerManager {
             var entity = player.getControlledEntity();
             server.getMessageChannel().removeReceiver(entity);
             entity.remove();
-            
+
             this.playerStorage.savePlayerData(player);
             broadcastPlayerListChange(player, false);
         }

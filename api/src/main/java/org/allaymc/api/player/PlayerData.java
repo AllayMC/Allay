@@ -24,6 +24,8 @@ public class PlayerData {
     protected static final String TAG_NBT = "NBT";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
+    protected static final String TAG_NAME = "Name";
+    protected static final String TAG_XUID = "XUID";
 
     // EntityPlayer's nbt, which can be generated through the method EntityPlayer#saveNBT()
     protected NbtMap nbt;
@@ -35,6 +37,9 @@ public class PlayerData {
     protected String world;
     protected int dimension;
 
+    protected String name;
+    protected long xuid;
+
     public static PlayerData save(Player player) {
         var entity = player.getControlledEntity();
         if (entity == null) {
@@ -42,10 +47,14 @@ public class PlayerData {
             return PlayerData.createEmpty();
         }
 
+        var loginData = player.getLoginData();
+        var parsedXuid = loginData.getParsedXuid();
         return PlayerData.builder()
                 .nbt(entity.saveNBT())
                 .world(entity.getWorld().getWorldData().getDisplayName())
                 .dimension(entity.getDimension().getDimensionInfo().dimensionId())
+                .name(loginData.getXname())
+                .xuid(parsedXuid != null ? parsedXuid : 0)
                 .build();
     }
 
@@ -78,7 +87,9 @@ public class PlayerData {
         var builder = builder();
         builder.nbt(nbt.getCompound(TAG_NBT))
                 .world(nbt.getString(TAG_WORLD))
-                .dimension(nbt.getInt(TAG_DIMENSION));
+                .dimension(nbt.getInt(TAG_DIMENSION))
+                .name(nbt.getString(TAG_NAME))
+                .xuid(nbt.getLong(TAG_XUID));
         return builder.build();
     }
 
@@ -91,7 +102,9 @@ public class PlayerData {
         var builder = NbtMap.builder()
                 .putCompound(TAG_NBT, nbt)
                 .putString(TAG_WORLD, world)
-                .putInt(TAG_DIMENSION, dimension);
+                .putInt(TAG_DIMENSION, dimension)
+                .putString(TAG_NAME, name)
+                .putLong(TAG_XUID, xuid);
         return builder.build();
     }
 }

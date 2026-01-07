@@ -223,6 +223,10 @@ public class AllayPlayer implements Player {
     protected Set<HudElement> hiddenHudElements;
     protected boolean shouldSendHudElements;
 
+    @Setter
+    @Getter
+    protected UUID storageUuid;
+
     public AllayPlayer(BedrockServerSession session) {
         this.session = session;
         this.session.setPacketHandler(new AllayPacketHandler());

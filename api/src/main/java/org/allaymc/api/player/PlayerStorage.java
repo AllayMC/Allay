@@ -22,7 +22,7 @@ public interface PlayerStorage {
      * @return The player data for the given player
      */
     default PlayerData readPlayerData(Player player) {
-        return readPlayerData(player.getLoginData().getUuid());
+        return readPlayerData(player.getStorageUuid());
     }
 
     /**
@@ -39,7 +39,7 @@ public interface PlayerStorage {
      * @param player The player
      */
     default void savePlayerData(Player player) {
-        savePlayerData(player.getLoginData().getUuid(), PlayerData.save(player));
+        savePlayerData(player.getStorageUuid(), PlayerData.save(player));
     }
 
     /**
@@ -65,6 +65,6 @@ public interface PlayerStorage {
      * @return {@code true} if the player data exists, {@code false} otherwise.
      */
     default boolean hasPlayerData(Player player) {
-        return hasPlayerData(player.getLoginData().getUuid());
+        return hasPlayerData(player.getStorageUuid());
     }
 }

@@ -8,6 +8,7 @@ import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayLoginData;
 import org.allaymc.server.player.AllayPlayer;
+import org.allaymc.server.player.AllayPlayerManager;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ServerToClientHandshakePacket;
@@ -37,6 +38,10 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         allayPlayer.setLoginData(loginData);
 
         var server = Server.getInstance();
+        var playerManager = (AllayPlayerManager) server.getPlayerManager();
+        var offlinePlayer = playerManager.getOfflinePlayerService().handleUpdates(loginData);
+        allayPlayer.setStorageUuid(offlinePlayer.getStorageUuid()); // TODO: refactor giving storage uuid for player
+
         if (AllayServer.getSettings().genericSettings().enableWhitelist() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED);
             return;

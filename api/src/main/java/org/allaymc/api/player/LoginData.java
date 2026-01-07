@@ -39,6 +39,13 @@ public interface LoginData {
      */
     String getXuid();
 
+    default Long getParsedXuid() {
+        try {
+            return Long.parseLong(this.getXuid());
+        } catch (Exception ignored) {}
+        return null;
+    }
+
     /**
      * Gets the player's uuid, derived from the player's xuid when online, or from the username when offline.
      *
