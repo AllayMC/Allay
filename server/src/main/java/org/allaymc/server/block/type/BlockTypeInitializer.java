@@ -29,8 +29,8 @@ import org.allaymc.server.block.component.flower.BlockSmallFlowerBaseComponentIm
 import org.allaymc.server.block.component.grass.BlockDryGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
+import org.allaymc.server.block.component.ice.BlockHardIceBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
-import org.allaymc.server.block.component.ice.BlockPackedIceBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
@@ -1626,7 +1626,7 @@ public final class BlockTypeInitializer {
         BlockTypes.BLUE_ICE = AllayBlockType
                 .builder(BlockIceBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_ICE)
-                .setBaseComponentSupplier(BlockPackedIceBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockHardIceBaseComponentImpl::new)
                 .build();
         BlockTypes.ICE = AllayBlockType
                 .builder(BlockIceBehaviorImpl.class)
@@ -1636,7 +1636,7 @@ public final class BlockTypeInitializer {
         BlockTypes.PACKED_ICE = AllayBlockType
                 .builder(BlockIceBehaviorImpl.class)
                 .vanillaBlock(BlockId.PACKED_ICE)
-                .setBaseComponentSupplier(BlockPackedIceBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockHardIceBaseComponentImpl::new)
                 .build();
         // TODO: Frosted ice
     }

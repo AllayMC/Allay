@@ -55,6 +55,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where a player teleporting into another player's loaded area would not be visible to that player.
 - Fixed a bug where the jukebox could not eject music discs.
 - Fixed a bug where the block will not be recovered client-side when events `BlockBreakEvent` and `PlayerInteractBlockEvent` is cancelled.
+- Fixed a bug where packed and blue ice will melt.
 - `RAK_SEND_COOKIE` is set to `true` by default in `AllayNetworkInterface` to resolve connection issue.
 
 ### Removed

@@ -11,13 +11,18 @@ import java.util.Set;
 /**
  * @author IWareQ
  */
-public class BlockPackedIceBaseComponentImpl extends BlockIceBaseComponentImpl {
-    public BlockPackedIceBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockHardIceBaseComponentImpl extends BlockIceBaseComponentImpl {
+    public BlockHardIceBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         return Set.of();
+    }
+
+    @Override
+    public boolean canRandomUpdate() {
+        return false;
     }
 }
