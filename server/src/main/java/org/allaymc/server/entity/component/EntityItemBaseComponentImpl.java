@@ -78,7 +78,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         return new AABBd(-0.125, 0.0, -0.125, 0.125, 0.25, 0.125);
     }
 

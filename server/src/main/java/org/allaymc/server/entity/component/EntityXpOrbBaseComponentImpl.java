@@ -96,7 +96,7 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         return new AABBd(-0.05, 0, -0.05, 0.05, 0.1, 0.05);
     }
 

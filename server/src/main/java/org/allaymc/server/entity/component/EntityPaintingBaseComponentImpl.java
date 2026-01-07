@@ -44,7 +44,7 @@ public class EntityPaintingBaseComponentImpl extends EntityBaseComponentImpl imp
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         if (this.paintingType == null) {
             return new AABBd(0, 0, 0, 0, 0, 0);
         }

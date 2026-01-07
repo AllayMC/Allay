@@ -588,6 +588,7 @@ public class AllayPlayer implements Player {
                 (float) (aabb.maxY() - aabb.minY()),
                 (float) (aabb.maxZ() - aabb.minZ())
         ));
+        map.put(EntityDataTypes.SCALE, entity.getScale());
         // Minecraft 1.21.101 client crashes if HAS_NPC is set to true for EntityItem.
         // Other entity types are not affected. The issue is fixed in newer client versions.
         map.put(EntityDataTypes.HAS_NPC, !(entity instanceof EntityItem));

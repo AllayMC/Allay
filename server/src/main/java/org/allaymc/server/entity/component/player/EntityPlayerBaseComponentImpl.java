@@ -769,7 +769,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         var height = 1.8;
         if (this.sneaking) {
             height = 1.5;

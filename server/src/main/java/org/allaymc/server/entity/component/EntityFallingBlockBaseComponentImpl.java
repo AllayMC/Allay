@@ -105,7 +105,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         return new AABBd(-0.49, 0, -0.49, 0.49, 0.98, 0.49);
     }
 

@@ -103,6 +103,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected boolean invisible;
     @Getter
     protected boolean immobile;
+    @Getter
+    protected double scale;
     protected Set<String> tags;
     @Getter
     @Setter
@@ -122,6 +124,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.viewers = new HashSet<>();
         this.state = EntityState.DESPAWNED;
         this.displayName = AllayStringUtils.snakeCaseToTitleCase(entityType.getIdentifier().path());
+        this.scale = 1.0;
         this.tags = new HashSet<>();
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
         this.permissionCalculator = new ConstantPermissionCalculator(Tristate.TRUE);
@@ -211,6 +214,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void setImmobile(boolean immobile) {
         this.immobile = immobile;
+        broadcastState();
+    }
+
+    @Override
+    public void setScale(double scale) {
+        this.scale = scale;
         broadcastState();
     }
 
@@ -357,7 +366,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         // Default aabb is player's aabb
         return new AABBd(-0.3, 0.0, -0.3, 0.3, 1.8, 0.3);
     }

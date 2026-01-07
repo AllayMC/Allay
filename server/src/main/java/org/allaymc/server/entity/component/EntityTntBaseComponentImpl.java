@@ -78,7 +78,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         return new AABBd(-0.49, 0.0, -0.49, 0.49, 0.98, 0.49);
     }
 

@@ -30,6 +30,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - (API) Added `ContainerTypes.HOPPER`.
 - (API) Added methods `ChunkLoader.isWorldViewer()` and `ChunkLoader.toWorldViewer()`.
 - (API) Added entity and dimension level scheduler.
+- (API) Added APIs for setting the scale of entity:
+  - Added methods `Entity.setScale()` and `Entity.getScale()`.
+  - Added method `Entity.getBaseAABB()` to get the original aabb which is not affected by the scale factor.
 - Added properties `network-settings.raknet-send-cookie` and `network-settings.raknet-max-mtu` to `server.properties`.
 - Implemented Totem of Undying.
 - Implemented End Crystal.

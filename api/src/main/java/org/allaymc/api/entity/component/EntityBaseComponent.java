@@ -150,6 +150,21 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void setImmobile(boolean immobile);
 
     /**
+     * Gets the scale of the entity, greater scale will result in a bigger model and aabb.
+     * The default value is 1.0
+     *
+     * @return the scale of the entity
+     */
+    double getScale();
+
+    /**
+     * Sets the scale of the entity.
+     *
+     * @param scale the scale of the entity to set
+     */
+    void setScale(double scale);
+
+    /**
      * Gets the last location of this entity.
      *
      * @return the last location of this entity
@@ -318,11 +333,29 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     UUID getUniqueId();
 
     /**
-     * Get the aabb of this entity.
+     * Get the base aabb of this entity which is not affected by the scale factor ({@link #getScale()}).
+     *
+     * @return the base aabb of this entity
+     */
+    AABBdc getBaseAABB();
+
+    /**
+     * Gets the aabb of this entity which is affected by the scale factor ({@link #getScale()}).
      *
      * @return the aabb of this entity
      */
-    AABBdc getAABB();
+    default AABBdc getAABB() {
+        var base = getBaseAABB();
+        var scale = getScale();
+        return new AABBd(
+                base.minX() * scale,
+                base.minY() * scale,
+                base.minZ() * scale,
+                base.maxX() * scale,
+                base.maxY() * scale,
+                base.maxZ() * scale
+        );
+    }
 
     /**
      * Get the offset aabb of this entity.

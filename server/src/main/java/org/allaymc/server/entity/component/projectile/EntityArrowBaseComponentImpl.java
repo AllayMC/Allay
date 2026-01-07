@@ -60,7 +60,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     }
 
     @Override
-    public AABBdc getAABB() {
+    public AABBdc getBaseAABB() {
         return new AABBd(-0.025, 0.0, -0.025, 0.025, 0.05, 0.025);
     }
 
