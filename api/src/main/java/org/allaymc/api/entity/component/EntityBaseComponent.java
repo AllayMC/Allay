@@ -690,21 +690,30 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Check if the entity will be saved through {@link WorldStorage}. If you don't want the entity to be saved, or
-     * you want to save the entity by yourself, you can override this method and return {@code false}.
+     * Check if the entity is persistent. If the entity is not persistent, it will not be saved
+     * through {@link WorldStorage}. If you don't want the entity to be saved, or
+     * you want to save the entity by yourself, you can call {@link #setPersistent(boolean)} with
+     * {@code false}.
      * <p>
-     * When return {@code false}, the entity will always be loaded, and {@link EntityManager}
+     * When {@code false}, the entity will always be loaded, and {@link EntityManager}
      * will not remove and save the entity even if the entity is in unloaded chunk. The entity can only be removed
      * manually in this case.
      * <p>
-     * For example, player data is handled by {@link PlayerStorage}, so this method is override to return
-     * {@code false} in {@link EntityPlayer}.
+     * For example, player data is handled by {@link PlayerStorage}, so this returns
+     * {@code false} by default in {@link EntityPlayer}.
      *
-     * @return {@code true} if the entity will be saved, otherwise {@code false}.
+     * @return {@code true} if the entity is persistent, otherwise {@code false}.
      */
-    default boolean willBeSaved() {
+    default boolean isPersistent() {
         return true;
     }
+
+    /**
+     * Set whether the entity is persistent.
+     *
+     * @param persistent {@code true} if the entity should be persistent
+     */
+    void setPersistent(boolean persistent);
 
     @Override
     default boolean isValid() {

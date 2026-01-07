@@ -114,6 +114,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected PermissionCalculator permissionCalculator;
     @Getter
     protected Scheduler scheduler;
+    @Getter
+    @Setter
+    protected boolean persistent = true;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -548,5 +551,4 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void applyAnimation(EntityAnimation animation) {
         forEachViewers(viewer -> viewer.viewEntityAnimation(thisEntity, animation));
     }
-
 }

@@ -80,8 +80,8 @@ public class AllayEntityManager implements EntityManager {
             // Check if there is no entity in this chunk, and if so, remove the old saved entities in this chunk
             for (var entry : entities.long2ObjectEntrySet()) {
                 var entity = entry.getValue();
-                if (!entity.willBeSaved()) {
-                    // Discard entities that will not be saved
+                if (!entity.isPersistent()) {
+                    // Discard entities that are not persistent
                     continue;
                 }
 
@@ -134,7 +134,7 @@ public class AllayEntityManager implements EntityManager {
 
         // Find entities that should be removed
         for (var entity : entities.values()) {
-            if (!entity.willBeSaved()) {
+            if (!entity.isPersistent()) {
                 continue;
             }
 

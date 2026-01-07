@@ -656,10 +656,6 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             // Write the new entities
             for (var entry : entities.entrySet()) {
                 var entity = entry.getValue();
-                if (!entity.willBeSaved()) {
-                    continue;
-                }
-
                 idsBuf.writeLongLE(entry.getKey());
                 writeBatch.put(LevelDBKey.indexEntity(entry.getKey()), AllayNBTUtils.nbtToBytesLE(entity.saveNBT()));
             }

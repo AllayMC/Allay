@@ -148,6 +148,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // Player entity must have a non-null name tag, otherwise it will not be shown client-side
         this.nameTag = "Player";
         this.nameTagAlwaysShow = true;
+        // Player entity is stored separately
+        this.persistent = false;
     }
 
     public void setController(Player controller) {

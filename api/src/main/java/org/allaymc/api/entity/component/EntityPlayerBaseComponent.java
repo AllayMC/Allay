@@ -342,14 +342,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    default boolean willBeSaved() {
-        return false;
-    }
-
-    /**
      * Sets cool down for a specific category.
      *
      * @param category the category to set

@@ -15,9 +15,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
+- (API) Added `Entity.setPersistent()` method to control entity persistence.
 
 ### Changed
 
+- (API) Renamed `Entity.willBeSaved()` to `Entity.isPersistent()`.
 - Merged world tick thread and network thread into a single thread using an event-driven wake-up mechanism. This simplifies
   the threading model while maintaining low packet processing latency through `LockSupport.parkNanos/unpark`.
 
