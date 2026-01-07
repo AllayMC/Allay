@@ -8,6 +8,7 @@ import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.FakeContainerFactory;
 import org.allaymc.api.debugshape.DebugLine;
 import org.allaymc.api.dialog.Dialog;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -589,6 +590,19 @@ public class GameTestCommand extends Command {
                     boolean value = context.getResult(1);
                     sender.setImmobile(value);
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setscale")
+                .target("targets")
+                .doubleNum("scale")
+                .exec((context, sender) -> {
+                    List<Entity> entities = context.getResult(1);
+                    double scale = context.getResult(2);
+                    for (var entity : entities) {
+                        entity.setScale(scale);
+                    }
+                    return context.success();
                 }, SenderType.PLAYER);
+
     }
 }
