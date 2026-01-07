@@ -10,7 +10,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 # 0.10.4 (API 0.21.0) - Unreleased
 
-<small>[Compare with 0.10.2](https://github.com/AllayMC/Allay/compare/0.10.3...HEAD)</small>
+<small>[Compare with 0.10.3](https://github.com/AllayMC/Allay/compare/0.10.3...HEAD)</small>
 
 # 0.10.3 (API 0.20.0) - 2026/1/7
 
