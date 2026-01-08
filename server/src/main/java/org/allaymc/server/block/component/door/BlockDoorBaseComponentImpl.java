@@ -12,8 +12,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.DoorCloseSound;
-import org.allaymc.api.world.sound.DoorOpenSound;
+import org.allaymc.api.world.sound.DoorSound;
 import org.allaymc.server.block.RedstoneHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
@@ -117,7 +116,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, otherPos);
 
             // Play sound
-            dimension.addSound(MathUtils.center(pos), shouldBeOpen ? new DoorOpenSound(block.getBlockState()) : new DoorCloseSound(block.getBlockState()));
+            dimension.addSound(MathUtils.center(pos), shouldBeOpen ? new DoorSound(block.getBlockState(), true) : new DoorSound(block.getBlockState(), false));
         }
     }
 
@@ -143,7 +142,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
 
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
-        dimension.addSound(MathUtils.center(pos), isOpen ? new DoorOpenSound(blockState) : new DoorCloseSound(blockState));
+        dimension.addSound(MathUtils.center(pos), isOpen ? new DoorSound(blockState, true) : new DoorSound(blockState, false));
         return true;
     }
 

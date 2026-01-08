@@ -9,8 +9,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.DoorCloseSound;
-import org.allaymc.api.world.sound.DoorOpenSound;
+import org.allaymc.api.world.sound.TrapdoorSound;
 import org.allaymc.server.block.BlockPlaceHelper;
 import org.allaymc.server.block.RedstoneHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
@@ -56,7 +55,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
         dimension.addSound(
                 MathUtils.center(clickedBlockState.getPosition()),
-                isOpen ? new DoorOpenSound(clickedBlockState.getBlockState()) : new DoorCloseSound(clickedBlockState.getBlockState())
+                isOpen ? new TrapdoorSound(clickedBlockState.getBlockState(), true) : new TrapdoorSound(clickedBlockState.getBlockState(), false)
         );
         return true;
     }
@@ -87,7 +86,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, pos);
 
             // Play sound
-            dimension.addSound(MathUtils.center(pos), shouldBeOpen ? new DoorOpenSound(block.getBlockState()) : new DoorCloseSound(block.getBlockState()));
+            dimension.addSound(MathUtils.center(pos), shouldBeOpen ? new TrapdoorSound(block.getBlockState(), true) : new TrapdoorSound(block.getBlockState(), false));
         }
     }
 }

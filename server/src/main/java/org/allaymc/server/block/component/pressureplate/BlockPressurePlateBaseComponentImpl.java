@@ -7,8 +7,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.world.sound.PressurePlateActivateSound;
-import org.allaymc.api.world.sound.PressurePlateDeactivateSound;
+import org.allaymc.api.world.sound.PressurePlateSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.primitives.AABBd;
 
@@ -117,11 +116,11 @@ public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl 
 
         // Play sound
         if (newSignal > 0 && oldSignal == 0) {
-            block.addSound(new PressurePlateActivateSound(block.getBlockState()));
+            block.addSound(new PressurePlateSound(block.getBlockState(), true));
             // Schedule periodic check
             dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(pos, CHECK_INTERVAL);
         } else if (newSignal == 0 && oldSignal > 0) {
-            block.addSound(new PressurePlateDeactivateSound(block.getBlockState()));
+            block.addSound(new PressurePlateSound(block.getBlockState(), false));
         }
 
         // Update neighbors

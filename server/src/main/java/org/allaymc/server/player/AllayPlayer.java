@@ -1253,12 +1253,8 @@ public class AllayPlayer implements Player {
                     packet.setSound(SoundEvent.FALL_SMALL);
                 }
             }
-            case DoorOpenSound so -> {
-                packet.setSound(SoundEvent.DOOR_OPEN);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case DoorCloseSound so -> {
-                packet.setSound(SoundEvent.DOOR_CLOSE);
+            case DoorSound so -> {
+                packet.setSound(so.open() ? SoundEvent.DOOR_OPEN : SoundEvent.DOOR_CLOSE);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
             case ButtonPressSound so -> {
@@ -1272,20 +1268,12 @@ public class AllayPlayer implements Player {
             case PowerSound so -> {
                 packet.setSound(so.powered() ? SoundEvent.POWER_ON : SoundEvent.POWER_OFF);
             }
-            case PressurePlateActivateSound so -> {
-                packet.setSound(SoundEvent.PRESSURE_PLATE_CLICK_ON);
+            case PressurePlateSound so -> {
+                packet.setSound(so.activated() ? SoundEvent.PRESSURE_PLATE_CLICK_ON : SoundEvent.PRESSURE_PLATE_CLICK_OFF);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
-            case PressurePlateDeactivateSound so -> {
-                packet.setSound(SoundEvent.PRESSURE_PLATE_CLICK_OFF);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case TrapdoorOpenSound so -> {
-                packet.setSound(SoundEvent.TRAPDOOR_OPEN);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case TrapdoorCloseSound so -> {
-                packet.setSound(SoundEvent.TRAPDOOR_CLOSE);
+            case TrapdoorSound so -> {
+                packet.setSound(so.open() ? SoundEvent.TRAPDOOR_OPEN : SoundEvent.TRAPDOOR_CLOSE);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
             case FenceGateOpenSound so -> {

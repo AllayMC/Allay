@@ -41,6 +41,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Changed
 
 - (API) Renamed `Entity.willBeSaved()` to `Entity.isPersistent()`.
+- (API) Merged sound classes:
+  - `PressurePlateActivateSound` and `PressurePlateDeactivateSound` -> `PressurePlateSound(blockState, activated)`
+  - `DoorOpenSound` and `DoorCloseSound` -> `DoorSound(blockState, open)`
+  - `TrapdoorOpenSound` and `TrapdoorCloseSound` -> `TrapdoorSound(blockState, open)`
 - Merged world tick thread and network thread into a single thread using an event-driven wake-up mechanism. This simplifies
   the threading model while maintaining low packet processing latency through `LockSupport.parkNanos/unpark`.
 
