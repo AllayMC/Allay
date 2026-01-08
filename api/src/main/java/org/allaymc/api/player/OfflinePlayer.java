@@ -122,56 +122,12 @@ public interface OfflinePlayer {
     Player getOnlinePlayer();
 
     /**
-     * Checks if this player was forced to change their nickname due to a collision.
-     * <p>
-     * Nickname collisions occur when multiple players attempt to use the same nickname.
-     * The offline player system resolves this by assigning a unique temporary nickname
-     * (e.g., "Steve_a1b2c3d4") to the player who logs in later.
-     *
-     * @return true if the nickname was forcibly changed, false otherwise
-     */
-    default boolean wasForcedNicknameChange() {
-        var data = this.getOfflineNbtData();
-        return data.getBoolean("ForcedNicknameChange", false);
-    }
-
-    /**
-     * Gets the original nickname before it was forcibly changed.
-     * <p>
-     * Only applicable when {@link #wasForcedNicknameChange()} returns true.
+     * Gets the original nickname if player has temp nickname.
      *
      * @return The original nickname, or null if not applicable
      */
     default String getOriginalNickname() {
-        if (!this.wasForcedNicknameChange()) {
-            return null;
-        }
-
         var data = this.getOfflineNbtData();
         return data.getString("OriginalNickname", null);
     }
-
-    /**
-     * Gets the nickname that the player attempted to use but was taken.
-     * <p>
-     * Only applicable when {@link #wasForcedNicknameChange()} returns true.
-     * This is the nickname the player tried to use when logging in, but it
-     * was already in use by another player.
-     *
-     * @return The attempted nickname, or null if not applicable
-     */
-    default String getAttemptedNickname() {
-        if (!this.wasForcedNicknameChange()) {
-            return null;
-        }
-
-        var data = this.getOfflineNbtData();
-        return data.getString("AttemptedNickname", null);
-    }
-
-    /**
-     * Clears the forced nickname change flag.
-     * This should be called after the player has been notified about the change.
-     */
-    void clearForcedNicknameChange();
 }

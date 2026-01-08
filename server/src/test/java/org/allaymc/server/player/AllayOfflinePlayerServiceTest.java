@@ -2,7 +2,8 @@ package org.allaymc.server.player;
 
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.math.location.Location3i;
-import org.allaymc.api.player.*;
+import org.allaymc.api.player.LoginData;
+import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.MockedStatic;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -34,8 +36,6 @@ public class AllayOfflinePlayerServiceTest {
     private static Path dbPath;
 
     private AllayOfflinePlayerService service;
-    private PlayerStorage mockStorage;
-    private Server mockServer;
     private MockedStatic<Server> serverStatic;
 
     @BeforeEach
@@ -43,9 +43,9 @@ public class AllayOfflinePlayerServiceTest {
         dbPath = tempDir.resolve(UUID.randomUUID().toString());
         service = new AllayOfflinePlayerService(dbPath);
 
-        mockStorage = new AllayNBTFilePlayerStorage(tempDir.resolve(UUID.randomUUID().toString()));
+        var mockStorage = new AllayNBTFilePlayerStorage(tempDir.resolve(UUID.randomUUID().toString()));
 
-        mockServer = mock(Server.class);
+        var mockServer = mock(Server.class);
         var mockPlayerManager = mock(PlayerManager.class);
         var mockWorldPool = mock(WorldPool.class);
 
@@ -70,13 +70,6 @@ public class AllayOfflinePlayerServiceTest {
 
         serverStatic = mockStatic(Server.class);
         serverStatic.when(Server::getInstance).thenReturn(mockServer);
-
-//        when(mockStorage.readPlayerData(any(UUID.class))).thenAnswer(invocation -> {
-//            var data = PlayerData.createEmpty();
-//            data.setName("TestPlayer");
-//            data.setXuid(0);
-//            return data;
-//        });
     }
 
 
@@ -230,20 +223,18 @@ public class AllayOfflinePlayerServiceTest {
         assertEquals(storageA, playerA_v2.getStorageUuid());
         assertEquals("Bob", playerA_v2.getNickname());
 
-        // Act - PlayerB tries to login (should get forced unique name)
+        // Act - PlayerB changes to "Alice" (takes it from PlayerA)
         var loginB2 = createMockLoginData(222L, "Alice");
         var playerB_v2 = service.handleUpdates(loginB2);
 
-        // Assert - PlayerB gets unique temporary nickname
+        // Assert - PlayerB now has "Alice"
         assertEquals(storageB, playerB_v2.getStorageUuid());
-        assertNotEquals("Alice", playerB_v2.getNickname());
-        assertTrue(playerB_v2.getNickname().startsWith("Alice_"),
-                "Nickname should start with 'Alice_'");
+        assertEquals("Alice", playerB_v2.getNickname());
 
         // Check collision flags
-        assertTrue(playerB_v2.wasForcedNicknameChange());
         assertEquals("Bob", playerB_v2.getOriginalNickname());
-        assertEquals("Alice", playerB_v2.getAttemptedNickname());
+        // null because original nickname added only for b player, because player A join first and take player B nickname
+        assertNull(playerA_v2.getOriginalNickname());
     }
 
     @Test
@@ -266,9 +257,7 @@ public class AllayOfflinePlayerServiceTest {
         assertEquals("C", playerB_v2.getNickname());
 
         var playerC_v2 = service.handleUpdates(createMockLoginData(1003L, "A"));
-        // PlayerC should get forced unique name since "A" is taken
-        assertTrue(playerC_v2.getNickname().startsWith("A_"));
-        assertTrue(playerC_v2.wasForcedNicknameChange());
+        assertEquals("A", playerC_v2.getNickname());
 
         assertEquals(storageA, playerA_v2.getStorageUuid());
         assertEquals(storageB, playerB_v2.getStorageUuid());
@@ -277,23 +266,34 @@ public class AllayOfflinePlayerServiceTest {
 
     @Test
     @Order(22)
-    @DisplayName("Clear forced nickname change flag")
-    void testClearForcedNicknameChange() {
-        service.handleUpdates(createMockLoginData(2001L, "Name1"));
-        service.handleUpdates(createMockLoginData(2002L, "Name2"));
+    @DisplayName("Handle nickname change for single player")
+    void testNicknameChange_ForSinglePlayer() {
+        var playerXuid = 1000L;
 
-        // PlayerA takes "Name2"
-        service.handleUpdates(createMockLoginData(2001L, "Name2"));
+        var player_v1 = service.handleUpdates(createMockLoginData(playerXuid, "A"));
+        var player_v2 = service.handleUpdates(createMockLoginData(playerXuid, "B"));
+        var player_v3 = service.handleUpdates(createMockLoginData(playerXuid, "C"));
 
-        // PlayerB gets forced unique name
-        var playerB = service.handleUpdates(createMockLoginData(2002L, "Name1"));
-        assertTrue(playerB.wasForcedNicknameChange());
+        var storage_v1 = player_v1.getStorageUuid();
+        var storage_v2 = player_v2.getStorageUuid();
+        var storage_v3 = player_v3.getStorageUuid();
 
-        playerB.clearForcedNicknameChange();
+        assertEquals(storage_v1, storage_v2);
+        assertEquals(storage_v2, storage_v3);
 
-        assertFalse(playerB.wasForcedNicknameChange());
-        assertNull(playerB.getOriginalNickname());
-        assertNull(playerB.getAttemptedNickname());
+        assertNull(service.getByNickname("A"));
+        assertNull(service.getByNickname("B"));
+        assertNotNull(service.getByNickname("C"));
+
+        // all in lower case
+        assertNull(service.getByNicknameUuid(UUID.nameUUIDFromBytes("a".getBytes(StandardCharsets.UTF_8))));
+        assertNull(service.getByNicknameUuid(UUID.nameUUIDFromBytes("b".getBytes(StandardCharsets.UTF_8))));
+        assertNotNull(service.getByNicknameUuid(UUID.nameUUIDFromBytes("c".getBytes(StandardCharsets.UTF_8))));
+
+        var byXboxUserId = service.getByXboxUserId(playerXuid);
+        assertNotNull(byXboxUserId);
+        assertEquals("C", byXboxUserId.getNickname());
+        assertEquals(storage_v1, byXboxUserId.getStorageUuid());
     }
 
     // ========== Data Persistence Tests ==========
@@ -415,10 +415,7 @@ public class AllayOfflinePlayerServiceTest {
 
         var victim = service.handleUpdates(createMockLoginData(5102L, "Original"));
 
-        assertTrue(victim.wasForcedNicknameChange());
-
         var offlineData = victim.getOfflineNbtData();
-        assertTrue(offlineData.getBoolean(AllayOfflinePlayerService.TAG_FORCED_NICKNAME_CHANGE));
         assertEquals("Stolen", offlineData.getString(AllayOfflinePlayerService.TAG_ORIGINAL_NICKNAME));
     }
 

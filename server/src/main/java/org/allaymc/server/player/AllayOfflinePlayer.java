@@ -83,7 +83,7 @@ public class AllayOfflinePlayer implements OfflinePlayer {
     @Override
     public void save() {
         var nbt = this.playerData.getNbt();
-        System.out.println("nbt: " + nbt);
+//        System.out.println("nbt: " + nbt);
         Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(this.getStorageUuid(), this.playerData);
     }
 
@@ -106,19 +106,6 @@ public class AllayOfflinePlayer implements OfflinePlayer {
         }
 
         return null;
-    }
-
-    @Override
-    public void clearForcedNicknameChange() {
-        if (!this.wasForcedNicknameChange()) {
-            return;
-        }
-
-        var builder = this.getOfflineNbtData().toBuilder();
-        builder.remove("ForcedNicknameChange");
-        builder.remove("OriginalNickname");
-        builder.remove("AttemptedNickname");
-        this.setOfflineNbtData(builder.build());
     }
 
     public void updateNickname(String newNickname) {

@@ -31,23 +31,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * nickname:&lt;nickname&gt;      → &lt;storage-uuid&gt;
  * </pre>
  *
- * <h2>Nickname Collision Handling</h2>
- * When two players attempt to use the same nickname:
- * <ol>
- *   <li>First player to log in gets the nickname</li>
- *   <li>Second player's data is marked with "NicknameTaken" flag</li>
- *   <li>On next login, second player receives unique temporary nickname</li>
- *   <li>Both players retain all their data - no data loss</li>
- * </ol>
- *
  * @author IWareQ
  */
 @Slf4j
 public class AllayOfflinePlayerService implements OfflinePlayerService {
-    public static final String TAG_NICKNAME_TAKEN = "NicknameTaken";
-    public static final String TAG_FORCED_NICKNAME_CHANGE = "ForcedNicknameChange";
     public static final String TAG_ORIGINAL_NICKNAME = "OriginalNickname";
-    public static final String TAG_ATTEMPTED_NICKNAME = "AttemptedNickname";
 
     private static final String XUID_PREFIX = "xuid:";
     private static final String NICKNAME_UUID_PREFIX = "nickname_uuid:";
@@ -82,7 +70,7 @@ public class AllayOfflinePlayerService implements OfflinePlayerService {
             if (storageUuidStr != null) {
                 storageUuid = UUID.fromString(storageUuidStr);
                 player = Objects.requireNonNull(this.loadPlayer(storageUuid));
-                this.handleNicknameChange(player, xuid, nameUuid, nickname);
+                this.handleNicknameChange(player, nameUuid, nickname);
                 return player;
             }
         }
@@ -98,7 +86,7 @@ public class AllayOfflinePlayerService implements OfflinePlayerService {
         return this.createNewPlayer(xuid, nickname, nameUuid);
     }
 
-    private void handleNicknameChange(AllayOfflinePlayer player, long xuid, UUID newNicknameUuid, String newNickname) {
+    private void handleNicknameChange(AllayOfflinePlayer player, UUID newNicknameUuid, String newNickname) {
         var oldNickname = player.getNickname();
         if (oldNickname.equals(newNickname)) {
             return;
@@ -108,29 +96,7 @@ public class AllayOfflinePlayerService implements OfflinePlayerService {
         var oldNormalizedNick = oldNickname.toLowerCase(Locale.ROOT);
         var newNormalizedNick = newNickname.toLowerCase(Locale.ROOT);
 
-        var offlineNbtData = player.getOfflineNbtData();
-        var nicknameTaken = offlineNbtData.getBoolean(TAG_NICKNAME_TAKEN, false);
-        if (nicknameTaken) {
-            var attemptedNickname = newNickname;
-            var tempNickname = this.generateUniqueNickname(newNickname);
-
-            this.deleteMapping(NICKNAME_PREFIX + oldNormalizedNick);
-            this.deleteMapping(NICKNAME_UUID_PREFIX + this.nicknameToUuid(oldNormalizedNick));
-
-            newNickname = tempNickname;
-            newNormalizedNick = tempNickname.toLowerCase(Locale.ROOT);
-            newNicknameUuid = this.nicknameToUuid(tempNickname);
-
-            var updatedOfflineData = offlineNbtData.toBuilder();
-            updatedOfflineData.remove(TAG_NICKNAME_TAKEN);
-            updatedOfflineData.putBoolean(TAG_FORCED_NICKNAME_CHANGE, true);
-            updatedOfflineData.putString(TAG_ORIGINAL_NICKNAME, oldNickname);
-            updatedOfflineData.putString(TAG_ATTEMPTED_NICKNAME, attemptedNickname);
-
-            player.setOfflineNbtData(updatedOfflineData.build());
-        }
-
-        var existingStorageUuid = this.getMapping(NICKNAME_PREFIX + newNormalizedNick);
+        var existingStorageUuid = this.getMapping(NICKNAME_UUID_PREFIX + newNicknameUuid);
         var nicknameIsOccupied = existingStorageUuid != null && !existingStorageUuid.equals(storageUuid.toString());
         if (nicknameIsOccupied) {
             var conflictingStorageUuid = UUID.fromString(existingStorageUuid);
@@ -139,26 +105,24 @@ public class AllayOfflinePlayerService implements OfflinePlayerService {
             if (conflictingPlayer != null) {
                 var conflictOfflineData = conflictingPlayer.getOfflineNbtData();
                 var updated = conflictOfflineData.toBuilder()
-                        .putBoolean(TAG_NICKNAME_TAKEN, true)
+                        .putString(TAG_ORIGINAL_NICKNAME, conflictingPlayer.getNickname())
                         .build();
 
                 conflictingPlayer.setOfflineNbtData(updated);
+
+                var tempNickname = this.generateUniqueNickname(conflictingPlayer.getNickname());
+                conflictingPlayer.updateNickname(tempNickname);
                 conflictingPlayer.save();
 
+                if (this.cache.containsKey(conflictingStorageUuid)) {
+                    this.cache.put(conflictingStorageUuid, conflictingPlayer);
+                }
                 log.info("Invalidated nickname for conflicting player: {}", conflictingStorageUuid);
             }
         }
 
         this.deleteMapping(NICKNAME_PREFIX + oldNormalizedNick);
-        this.deleteMapping(NICKNAME_UUID_PREFIX + nicknameToUuid(oldNickname));
-
-        if (offlineNbtData.containsKey(TAG_FORCED_NICKNAME_CHANGE)) {
-            var clearedOfflineDataBuilder = offlineNbtData.toBuilder();
-            clearedOfflineDataBuilder.remove(TAG_FORCED_NICKNAME_CHANGE);
-            clearedOfflineDataBuilder.remove(TAG_ORIGINAL_NICKNAME);
-            clearedOfflineDataBuilder.remove(TAG_ATTEMPTED_NICKNAME);
-            player.setOfflineNbtData(clearedOfflineDataBuilder.build());
-        }
+        this.deleteMapping(NICKNAME_UUID_PREFIX + this.nicknameToUuid(oldNickname));
 
         this.setMapping(NICKNAME_PREFIX + newNormalizedNick, storageUuid.toString());
         this.setMapping(NICKNAME_UUID_PREFIX + newNicknameUuid, storageUuid.toString());
