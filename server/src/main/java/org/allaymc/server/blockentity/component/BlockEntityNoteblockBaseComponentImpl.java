@@ -26,6 +26,10 @@ public class BlockEntityNoteblockBaseComponentImpl extends BlockEntityBaseCompon
     @Setter
     protected int pitch;
 
+    @Getter
+    @Setter
+    protected boolean powered;
+
     public BlockEntityNoteblockBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
     }
@@ -118,14 +122,21 @@ public class BlockEntityNoteblockBaseComponentImpl extends BlockEntityBaseCompon
 
     @EventHandler
     protected void onBlockInteract(CBlockOnInteractEvent event) {
-        if (event.getInteractInfo().getClickedBlock().offsetPos(BlockFace.UP).getBlockType() != BlockTypes.AIR) {
+        var interactInfo = event.getInteractInfo();
+
+        // Sneaking player should not trigger noteblock (allows placing blocks on top)
+        if (interactInfo.player().isSneaking()) {
+            return;
+        }
+
+        if (interactInfo.getClickedBlock().offsetPos(BlockFace.UP).getBlockType() != BlockTypes.AIR) {
             return;
         }
 
         var dimension = event.getDimension();
-        var instrument = getInstrument(event.getInteractInfo().getClickedBlock().offsetPos(BlockFace.DOWN).getBlockType());
+        var instrument = getInstrument(interactInfo.getClickedBlock().offsetPos(BlockFace.DOWN).getBlockType());
         var nextPitch = getNextPitch();
-        var pos = event.getInteractInfo().clickedBlockPos();
+        var pos = interactInfo.clickedBlockPos();
         dimension.addSound(pos, new NoteSound(instrument, nextPitch));
         dimension.addParticle(pos, new NoteParticle(instrument, nextPitch));
         event.setSuccess(true);

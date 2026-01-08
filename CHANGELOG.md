@@ -33,6 +33,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Door
   - Trapdoor
   - Observer
+  - Noteblock (responds to redstone signal)
+- (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
 
 ### Changed
 
@@ -43,6 +45,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Removed
 
 - Removed `enableIndependentNetworkThread` configuration option from `server-settings.yml` as it is no longer necessary.
+
+### Fixed
+
+- Fixed noteblock being triggered when player is sneaking (should allow placing blocks on top instead).
 
 # 0.10.3 (API 0.20.0) - 2026/1/7
 

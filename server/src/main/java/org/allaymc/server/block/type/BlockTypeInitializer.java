@@ -1818,6 +1818,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockNoteblockBehaviorImpl.class)
                 .vanillaBlock(BlockId.NOTEBLOCK)
                 .bindBlockEntity(BlockEntityTypes.NOTEBLOCK)
+                .setBaseComponentSupplier(BlockNoteblockBaseComponentImpl::new)
                 .build();
     }
 
