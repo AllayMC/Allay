@@ -1276,12 +1276,8 @@ public class AllayPlayer implements Player {
                 packet.setSound(so.open() ? SoundEvent.TRAPDOOR_OPEN : SoundEvent.TRAPDOOR_CLOSE);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
-            case FenceGateOpenSound so -> {
-                packet.setSound(SoundEvent.FENCE_GATE_OPEN);
-                packet.setExtraData(so.blockState().blockStateHash());
-            }
-            case FenceGateCloseSound so -> {
-                packet.setSound(SoundEvent.FENCE_GATE_CLOSE);
+            case FenceGateSound so -> {
+                packet.setSound(so.open() ? SoundEvent.FENCE_GATE_OPEN : SoundEvent.FENCE_GATE_CLOSE);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
             case BlockPlaceSound so -> {
