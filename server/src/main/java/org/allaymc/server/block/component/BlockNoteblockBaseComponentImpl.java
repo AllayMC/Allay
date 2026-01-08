@@ -5,15 +5,12 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.data.Instrument;
 import org.allaymc.api.block.dto.Block;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.interfaces.BlockEntityNoteblock;
-import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.NoteParticle;
 import org.allaymc.api.world.sound.NoteSound;
-import org.joml.Vector3ic;
+import org.allaymc.server.block.RedstoneHelper;
 
 /**
  * Implementation of the noteblock.
@@ -36,59 +33,12 @@ public class BlockNoteblockBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        boolean powered = isReceivingPower(block);
+        boolean powered = RedstoneHelper.isPoweredAt(block.getPosition());
         if (powered && !blockEntity.isPowered()) {
             // Rising edge - play sound
             emitSound(block);
         }
         blockEntity.setPowered(powered);
-    }
-
-    /**
-     * Checks if the noteblock is receiving redstone power from any direction.
-     */
-    protected boolean isReceivingPower(Block block) {
-        var dimension = block.getDimension();
-        var pos = block.getPosition();
-
-        for (BlockFace face : BlockFace.values()) {
-            Vector3ic neighborPos = face.offsetPos(pos);
-            BlockState neighborState = dimension.getBlockState(neighborPos);
-            Block neighborBlock = new Block(neighborState, new Position3i(neighborPos, dimension));
-
-            // Check weak power
-            int weakPower = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
-            if (weakPower > 0) {
-                return true;
-            }
-
-            // Check power through solid blocks (only strong power can conduct through)
-            if (neighborState.getBlockStateData().isOpaqueSolid()) {
-                int powerThroughBlock = getStrongPowerIntoBlock(dimension, neighborPos, face.opposite());
-                if (powerThroughBlock > 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Gets strong power flowing into a solid block.
-     */
-    protected int getStrongPowerIntoBlock(Dimension dimension, Vector3ic blockPos, BlockFace excludeFace) {
-        int maxPower = 0;
-        for (BlockFace face : BlockFace.values()) {
-            if (face == excludeFace) continue;
-
-            Vector3ic checkPos = face.offsetPos(blockPos);
-            BlockState state = dimension.getBlockState(checkPos);
-            Block checkBlock = new Block(state, new Position3i(checkPos, dimension));
-
-            int strongPower = state.getBehavior().getStrongPower(checkBlock, face.opposite());
-            maxPower = Math.max(maxPower, strongPower);
-        }
-        return maxPower;
     }
 
     /**

@@ -74,7 +74,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
      * @param block the trapdoor block
      */
     protected void checkRedstonePower(Block block) {
-        int power = RedstoneHelper.getReceivedPowerLevel(block);
+        int power = RedstoneHelper.getPowerAt(block.getPosition());
 
         boolean shouldBeOpen = power > 0;
         boolean isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);

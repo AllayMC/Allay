@@ -102,9 +102,9 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
                 : BlockFace.UP.offsetPos(pos);
 
         // Check power at both halves and use the maximum
-        int powerAtThis = RedstoneHelper.getReceivedPowerLevel(block);
-        Block otherBlock = new Block(dimension.getBlockState(otherPos), new Position3i(otherPos, dimension));
-        int powerAtOther = RedstoneHelper.getReceivedPowerLevel(otherBlock);
+        int powerAtThis = RedstoneHelper.getPowerAt(block.getPosition());
+        var otherPosition = new Position3i(otherPos, dimension);
+        int powerAtOther = RedstoneHelper.getPowerAt(otherPosition);
         int maxPower = Math.max(powerAtThis, powerAtOther);
 
         boolean shouldBeOpen = maxPower > 0;

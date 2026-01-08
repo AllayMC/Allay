@@ -328,8 +328,10 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Gets the weak (indirect) redstone power output from this block to the specified face.
-     * Weak power can power adjacent redstone dust and components, but does not propagate through solid blocks.
+     * Gets the weak redstone power output from this block to the specified face.
+     * <p>
+     * Weak power can activate adjacent redstone components (pistons, lamps, etc.),
+     * but cannot be conducted through opaque solid blocks.
      *
      * @param block the block
      * @param face  the face from which power is being queried (the direction power flows out)
@@ -340,8 +342,11 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Gets the strong (direct) redstone power output from this block to the specified face.
-     * Strong power can propagate through solid blocks to power components on the other side.
+     * Gets the strong redstone power output from this block to the specified face.
+     * <p>
+     * Strong power can be conducted through opaque solid blocks. When a solid block
+     * receives strong power, it becomes "powered" and can activate adjacent redstone
+     * components (including redstone dust).
      *
      * @param block the block
      * @param face  the face from which power is being queried (the direction power flows out)
