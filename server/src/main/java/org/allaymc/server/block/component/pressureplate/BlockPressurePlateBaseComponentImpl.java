@@ -7,14 +7,12 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.world.sound.PressurePlateActivateSound;
 import org.allaymc.api.world.sound.PressurePlateDeactivateSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.primitives.AABBd;
 
 import java.time.Duration;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.REDSTONE_SIGNAL;
 
@@ -27,9 +25,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.REDSTONE_SI
 public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl {
 
     protected static final Duration CHECK_INTERVAL = Duration.ofMillis(500);
-    protected static final VoxelShape DETECTION_SHAPE = VoxelShape.builder()
-            .solid(0.0625, 0, 0.0625, 0.9375, 0.25, 0.9375)
-            .build();
 
     public BlockPressurePlateBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -46,7 +41,7 @@ public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     @Override
-    public void onCollideWithEntity(Block block, Entity entity) {
+    public void onEntityInside(Block block, Entity entity) {
         int currentSignal = block.getPropertyValue(REDSTONE_SIGNAL);
         if (currentSignal == 0) {
             // Activate the plate
@@ -94,20 +89,17 @@ public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl 
         var dimension = block.getDimension();
         var pos = block.getPosition();
 
-        // Create detection AABB above the plate
-        AABBd detectionAABB = DETECTION_SHAPE.unionAABB()
-                .translate(pos.x(), pos.y(), pos.z(), new AABBd());
+        // Use the block's shape for entity detection
+        AABBd detectionAABB = block.getBlockStateData().computeOffsetShape(pos).unionAABB();
 
-        AtomicInteger count = new AtomicInteger(0);
-
-        // Check all entities in the dimension
-        dimension.getEntities().values().forEach(entity -> {
+        int count = 0;
+        for (Entity entity : dimension.getEntities().values()) {
             if (entity.getOffsetAABB().intersectsAABB(detectionAABB)) {
-                count.incrementAndGet();
+                count++;
             }
-        });
+        }
 
-        return count.get();
+        return count;
     }
 
     /**
