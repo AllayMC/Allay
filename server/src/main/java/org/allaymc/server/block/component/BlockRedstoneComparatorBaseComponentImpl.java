@@ -84,8 +84,7 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
 
         // Check if output would change
         int newOutput = calculateOutput(block);
-        var blockEntity = getBlockEntity(block);
-        int currentOutput = blockEntity != null ? blockEntity.getOutputSignal() : 0;
+        int currentOutput = getBlockEntity(block).getOutputSignal();
 
         // Schedule update if output changed
         if (newOutput != currentOutput) {
@@ -97,13 +96,11 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
     public void onScheduledUpdate(Block block) {
         int output = calculateOutput(block);
         var blockEntity = getBlockEntity(block);
-        int currentOutput = blockEntity != null ? blockEntity.getOutputSignal() : 0;
+        int currentOutput = blockEntity.getOutputSignal();
         boolean shouldBePowered = output > 0;
 
         // Update block entity with new output value
-        if (blockEntity != null) {
-            blockEntity.setOutputSignal(output);
-        }
+        blockEntity.setOutputSignal(output);
 
         if (powered && !shouldBePowered) {
             switchState(block, false, output);
@@ -189,8 +186,7 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
     @Override
     protected int getRedstoneSignal(Block block) {
         // Get output from block entity
-        var blockEntity = getBlockEntity(block);
-        return blockEntity != null ? blockEntity.getOutputSignal() : 0;
+        return getBlockEntity(block).getOutputSignal();
     }
 
     @Override
@@ -217,10 +213,7 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
         dimension.setBlockState(pos.x(), pos.y(), pos.z(), newState);
 
         // Update the block entity's output signal
-        var blockEntity = getBlockEntity(new Block(newState, pos));
-        if (blockEntity != null) {
-            blockEntity.setOutputSignal(outputSignal);
-        }
+        getBlockEntity(new Block(newState, pos)).setOutputSignal(outputSignal);
 
         // Update neighbors
         BlockFace outputFace = getFacing(block);

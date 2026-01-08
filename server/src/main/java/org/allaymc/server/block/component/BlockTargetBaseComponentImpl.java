@@ -41,8 +41,7 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public int getWeakPower(Block block, BlockFace face) {
-        var blockEntity = blockEntityHolderComponent.getBlockEntity(block.getPosition());
-        return blockEntity != null ? blockEntity.getActivePower() : 0;
+        return blockEntityHolderComponent.getBlockEntity(block.getPosition()).getActivePower();
     }
 
     @Override
@@ -152,11 +151,6 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
         var dimension = block.getDimension();
         var pos = block.getPosition();
         var blockEntity = blockEntityHolderComponent.getBlockEntity(pos);
-
-        if (blockEntity == null) {
-            return;
-        }
-
         int previousPower = blockEntity.getActivePower();
 
         // Schedule update to deactivate power after the duration
@@ -177,13 +171,11 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
      */
     protected void deactivatePower(Block block) {
         var blockEntity = blockEntityHolderComponent.getBlockEntity(block.getPosition());
-        if (blockEntity != null) {
-            int currentPower = blockEntity.getActivePower();
-            blockEntity.setActivePower(0);
+        int currentPower = blockEntity.getActivePower();
+        blockEntity.setActivePower(0);
 
-            if (currentPower != 0) {
-                block.getDimension().updateAround(block.getPosition());
-            }
+        if (currentPower != 0) {
+            block.getDimension().updateAround(block.getPosition());
         }
     }
 
