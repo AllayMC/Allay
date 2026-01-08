@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
 - (API) Added `Entity.setPersistent()` method to control entity persistence.
+- (API) Added `BlockStateData.isOpaqueSolid()` method to check if a block state is solid and not transparent.
 - (API) Added redstone power methods to `BlockBaseComponent`:
   - `getWeakPower(Block, BlockFace)` - gets weak power output from a block.
   - `getStrongPower(Block, BlockFace)` - gets strong power output from a block.

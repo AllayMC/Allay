@@ -7,6 +7,9 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3i;
@@ -102,7 +105,12 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             }
 
             // Add connected wires to visit
-            addConnectedWires(dimension, pos, visited, toVisit);
+            for (Vector3i connectedPos : getConnectedWirePositions(dimension, pos)) {
+                if (!visited.contains(connectedPos) && isRedstoneWire(dimension.getBlockState(connectedPos))) {
+                    visited.add(connectedPos);
+                    toVisit.add(connectedPos);
+                }
+            }
         }
 
         // Phase 2: Calculate new power levels using BFS from power sources
@@ -172,41 +180,23 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Adds all connected wire positions to the visit queue.
-     */
-    protected void addConnectedWires(Dimension dimension, Vector3i pos, Set<Vector3i> visited, Queue<Vector3i> toVisit) {
-        for (Vector3i connectedPos : getConnectedWirePositions(dimension, pos)) {
-            if (!visited.contains(connectedPos)) {
-                BlockState state = dimension.getBlockState(connectedPos);
-                if (isRedstoneWire(state)) {
-                    visited.add(connectedPos);
-                    toVisit.add(connectedPos);
-                }
-            }
-        }
-    }
-
-    /**
      * Gets all positions that could be connected wires (horizontal and diagonal).
      * <p>
      * For redstone wire on stairs/slopes:
      * - Upward diagonal: A wire can see a wire diagonally above only if the block above us doesn't block the view
-     *   AND the neighbor block is solid (to support the wire on top)
+     * AND the neighbor block is solid (to support the wire on top)
      * - Downward diagonal: A wire can see a wire diagonally below only if the neighbor block is not solid
      */
     protected List<Vector3i> getConnectedWirePositions(Dimension dimension, Vector3ic pos) {
         List<Vector3i> positions = new ArrayList<>();
-        BlockState aboveUs = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z());
-        // An opaque solid block above blocks diagonal connections
-        boolean aboveBlocks = aboveUs.getBlockStateData().isSolid() && !aboveUs.getBlockStateData().isTransparent();
+        boolean aboveBlocks = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData().isOpaqueSolid();
 
         for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
             Vector3i horizontalPos = new Vector3i(face.offsetPos(pos));
-            BlockState neighborState = dimension.getBlockState(horizontalPos);
-            boolean neighborSolid = neighborState.getBlockStateData().isSolid() && !neighborState.getBlockStateData().isTransparent();
+            boolean neighborSolid = dimension.getBlockState(horizontalPos).getBlockStateData().isOpaqueSolid();
 
             // Always check horizontal neighbor (same Y level)
-            positions.add(new Vector3i(horizontalPos));
+            positions.add(horizontalPos);
 
             // Upward diagonal: wire at Y+1 of horizontal neighbor
             // Can only connect if block above us doesn't block AND neighbor is solid (to support wire)
@@ -251,8 +241,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             maxPower = Math.max(maxPower, signal);
 
             // Check power through solid blocks (BE edition: weak power also activates wire)
-            if (face != BlockFace.UP && neighborState.getBlockStateData().isSolid() && !neighborState.getBlockStateData().isTransparent()) {
-                // Exclude the face pointing back to the wire (face.opposite() from solid block's perspective)
+            if (face != BlockFace.UP && neighborState.getBlockStateData().isOpaqueSolid()) {
                 int powerThroughBlock = getPowerIntoSolidBlock(dimension, neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, powerThroughBlock);
             }
@@ -380,7 +369,6 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     protected boolean isConnectedTo(Dimension dimension, Vector3ic pos, BlockFace face) {
         Vector3ic neighborPos = face.offsetPos(pos);
         BlockState neighborState = dimension.getBlockState(neighborPos);
-        boolean neighborSolid = neighborState.getBlockStateData().isSolid() && !neighborState.getBlockStateData().isTransparent();
 
         // Connect to other redstone wire at same level
         if (isRedstoneWire(neighborState)) {
@@ -393,25 +381,19 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         // Check for diagonal connections (wire going up/down slopes)
-        BlockState aboveUs = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z());
-        boolean aboveBlocks = aboveUs.getBlockStateData().isSolid() && !aboveUs.getBlockStateData().isTransparent();
+        boolean neighborSolid = neighborState.getBlockStateData().isOpaqueSolid();
+        boolean aboveBlocks = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData().isOpaqueSolid();
 
         // Wire above the neighbor block (upward slope)
-        // Requires: block above us doesn't block AND neighbor is solid (to support wire)
-        if (!aboveBlocks && neighborSolid) {
-            BlockState aboveNeighbor = dimension.getBlockState(neighborPos.x(), neighborPos.y() + 1, neighborPos.z());
-            if (isRedstoneWire(aboveNeighbor)) {
-                return true;
-            }
+        if (!aboveBlocks && neighborSolid &&
+                isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() + 1, neighborPos.z()))) {
+            return true;
         }
 
         // Wire below the neighbor block (downward slope)
-        // Requires: neighbor is not solid (doesn't block line of sight)
-        if (!neighborSolid) {
-            BlockState belowNeighbor = dimension.getBlockState(neighborPos.x(), neighborPos.y() - 1, neighborPos.z());
-            if (isRedstoneWire(belowNeighbor)) {
-                return true;
-            }
+        if (!neighborSolid &&
+                isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() - 1, neighborPos.z()))) {
+            return true;
         }
 
         return false;
@@ -428,11 +410,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public int getStrongPower(Block block, BlockFace face) {
-        // Redstone wire provides strong power equal to weak power when powered
-        if (block.getPropertyValue(REDSTONE_SIGNAL) > 0) {
-            return getWeakPower(block, face);
-        }
-        return 0;
+        return getWeakPower(block, face);
     }
 
     @Override
@@ -494,9 +472,14 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
             // If neighbor is a solid opaque block, update blocks around it
             // This notifies components (like lamps) that receive weak power through this block
-            if (neighborState.getBlockStateData().isSolid() && !neighborState.getBlockStateData().isTransparent()) {
+            if (neighborState.getBlockStateData().isOpaqueSolid()) {
                 dimension.updateAround(neighborPos);
             }
         }
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        return Set.of(ItemTypes.REDSTONE.createItemStack());
     }
 }
