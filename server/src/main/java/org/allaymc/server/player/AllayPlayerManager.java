@@ -64,7 +64,11 @@ public class AllayPlayerManager implements PlayerManager {
     }
 
     public void shutdown() {
+        this.savePlayerData();
+
         this.playerStorage.shutdown();
+        this.offlinePlayerService.shutdown();
+
         this.banInfo.save();
         this.whitelist.save();
         this.operators.save();

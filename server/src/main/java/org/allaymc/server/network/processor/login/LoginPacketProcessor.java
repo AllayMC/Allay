@@ -30,8 +30,8 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
 
         var loginData = AllayLoginData.decode(packet);
         if (loginData == null) {
-            log.warn("Failed to decode login packet received from {}. The client will be disconnected", player.getSocketAddress());
-            player.disconnect();
+            log.warn("Failed to decode login packet from {}", player.getSocketAddress());
+            player.disconnect("Invalid login data");
             return;
         }
 
@@ -39,15 +39,16 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
 
         var server = Server.getInstance();
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
-        var offlinePlayer = playerManager.getOfflinePlayerService().handleUpdates(loginData);
-        allayPlayer.setStorageUuid(offlinePlayer.getStorageUuid()); // TODO: refactor giving storage uuid for player
 
-        if (AllayServer.getSettings().genericSettings().enableWhitelist() && !server.getPlayerManager().isWhitelisted(player.getOriginName())) {
+        var offlinePlayer = playerManager.getOfflinePlayerService().handleUpdates(loginData);
+        allayPlayer.setStorageUuid(offlinePlayer.getStorageUuid());
+
+        if (AllayServer.getSettings().genericSettings().enableWhitelist() && !playerManager.isWhitelisted(player.getOriginName())) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTALLOWED);
             return;
         }
 
-        if (server.getPlayerManager().isBanned(player.getLoginData().getUuid().toString()) || server.getPlayerManager().isBanned(player.getOriginName())) {
+        if (playerManager.isBanned(player.getLoginData().getUuid().toString()) || playerManager.isBanned(player.getOriginName())) {
             // TODO: I18n
             player.disconnect("You are banned!");
             return;
@@ -69,9 +70,9 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        var otherDevice = server.getPlayerManager().getPlayers().get(loginData.getUuid());
-        if (otherDevice != null) {
-            otherDevice.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
+        var existingPlayer = playerManager.getPlayers().get(loginData.getUuid());
+        if (existingPlayer != null) {
+            existingPlayer.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }
 
         if (!AllayServer.getSettings().networkSettings().enableNetworkEncryption()) {
@@ -90,9 +91,9 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             handshakePacket.setJwt(EncryptionUtils.createHandshakeJwt(serverKeyPair, token));
             player.sendPacketImmediately(handshakePacket);
 
-            var encryptionSecretKey = EncryptionUtils.getSecretKey(serverKeyPair.getPrivate(), clientKey, token);
-            allayPlayer.getSession().enableEncryption(encryptionSecretKey);
-            // completeLogin() when client send back ClientToServerHandshakePacket
+            var secretKey = EncryptionUtils.getSecretKey(serverKeyPair.getPrivate(), clientKey, token);
+            allayPlayer.getSession().enableEncryption(secretKey);
+            // completeLogin() will be called when ClientToServerHandshakePacket is received
         } catch (Exception exception) {
             log.warn("Failed to initialize encryption for client {}", name, exception);
             player.disconnect("disconnectionScreen.internalError");

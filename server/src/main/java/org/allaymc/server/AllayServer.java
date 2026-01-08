@@ -91,9 +91,10 @@ public final class AllayServer implements Server {
     private AllayServer() {
         this.state = new AtomicReference<>(ServerState.STARTING);
         var playersPath = Path.of("players");
+        var playerStorage = SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(playersPath) : AllayEmptyPlayerStorage.INSTANCE;
         this.playerManager = new AllayPlayerManager(
-                SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(playersPath) : AllayEmptyPlayerStorage.INSTANCE,
-                new AllayOfflinePlayerService(playersPath.resolve("index")),
+                playerStorage,
+                new AllayOfflinePlayerService(playersPath.resolve("index"), playerStorage),
                 new AllayNetworkInterface(this)
         );
         this.worldPool = new AllayWorldPool();

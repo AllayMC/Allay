@@ -7,7 +7,6 @@ import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.OfflinePlayer;
 import org.allaymc.api.player.OfflinePlayerService;
 import org.allaymc.api.player.PlayerData;
-import org.allaymc.api.server.Server;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.impl.Iq80DBFactory;
@@ -42,16 +41,17 @@ public class AllayOfflinePlayerService implements OfflinePlayerService {
     private static final String NICKNAME_PREFIX = "nickname:";
 
     private final DB database;
+    private final AllayPlayerStorage playerStorage;
 
     private final Map<UUID, AllayOfflinePlayer> cache;
 
     @SneakyThrows
-    public AllayOfflinePlayerService(Path dbPath) {
-        Files.createDirectories(dbPath);
-
+    public AllayOfflinePlayerService(Path dbPath, AllayPlayerStorage playerStorage) {
         this.database = Iq80DBFactory.factory.open(dbPath.toFile(), new Options().createIfMissing(true));
-
+        this.playerStorage = playerStorage;
         this.cache = new ConcurrentHashMap<>();
+
+        Files.createDirectories(dbPath);
     }
 
     @Override
@@ -210,7 +210,7 @@ public class AllayOfflinePlayerService implements OfflinePlayerService {
             return cached;
         }
 
-        var playerData = Server.getInstance().getPlayerManager().getPlayerStorage().readPlayerData(storageUuid);
+        var playerData = this.playerStorage.readPlayerData(storageUuid);
         if (playerData == null || playerData.getName() == null) {
             log.warn("Player data not found for storage UUID: {}", storageUuid);
             return null;

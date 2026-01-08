@@ -36,14 +36,15 @@ public class AllayOfflinePlayerServiceTest {
     private static Path dbPath;
 
     private AllayOfflinePlayerService service;
+    private AllayPlayerStorage mockStorage;
     private MockedStatic<Server> serverStatic;
 
     @BeforeEach
     void setUp() {
         dbPath = tempDir.resolve(UUID.randomUUID().toString());
-        service = new AllayOfflinePlayerService(dbPath);
+        mockStorage = new AllayNBTFilePlayerStorage(tempDir.resolve(UUID.randomUUID().toString()));
+        service = new AllayOfflinePlayerService(dbPath, mockStorage);
 
-        var mockStorage = new AllayNBTFilePlayerStorage(tempDir.resolve(UUID.randomUUID().toString()));
 
         var mockServer = mock(Server.class);
         var mockPlayerManager = mock(PlayerManager.class);
@@ -307,7 +308,7 @@ public class AllayOfflinePlayerServiceTest {
         var storageUuid = player1.getStorageUuid();
 
         service.shutdown();
-        service = new AllayOfflinePlayerService(dbPath);
+        service = new AllayOfflinePlayerService(dbPath, mockStorage);
 
         var player2 = service.getByXboxUserId(777888999L);
         assertNotNull(player2);
