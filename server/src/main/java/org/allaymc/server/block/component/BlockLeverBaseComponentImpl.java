@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.LeverClickSound;
+import org.allaymc.api.world.sound.PowerSound;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.LEVER_DIRECTION;
@@ -57,7 +57,7 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
         block.updateBlockProperty(OPEN_BIT, newPoweredState);
 
         // Play lever click sound
-        block.addSound(new LeverClickSound(newPoweredState));
+        block.addSound(new PowerSound(newPoweredState));
 
         // Trigger neighbor updates to propagate power change
         dimension.updateAround(block.getPosition());

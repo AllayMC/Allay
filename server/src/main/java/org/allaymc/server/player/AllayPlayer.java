@@ -1269,7 +1269,7 @@ public class AllayPlayer implements Player {
                 packet.setSound(SoundEvent.BUTTON_CLICK_OFF);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
-            case LeverClickSound so -> {
+            case PowerSound so -> {
                 packet.setSound(so.powered() ? SoundEvent.POWER_ON : SoundEvent.POWER_OFF);
             }
             case PressurePlateActivateSound so -> {

@@ -22,6 +22,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `getStrongPower(Block, BlockFace)` - gets strong power output from a block.
   - `isPowerSource()` - checks if a block is a redstone power source.
   - `MAX_REDSTONE_POWER` constant (15).
+- (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
+- (API) Added sound `PowerSound` which is used by redstone components such as lever.
 - Implemented basic redstone system:
   - Redstone Wire
   - Redstone Block
@@ -35,7 +37,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Observer
   - Noteblock (responds to redstone signal)
   - Hopper (stops transferring items when powered)
-- (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
 
 ### Changed
 
