@@ -41,6 +41,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Daylight Detector (normal and inverted)
   - Trapped Chest (outputs signal based on viewer count)
   - Redstone Repeater
+  - Redstone Comparator
 
 ### Changed
 

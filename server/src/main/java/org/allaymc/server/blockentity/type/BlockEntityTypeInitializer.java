@@ -174,4 +174,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityHeadBaseComponentImpl::new, BlockEntityHeadBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initComparator() {
+        BlockEntityTypes.COMPARATOR = AllayBlockEntityType
+                .builder(BlockEntityComparatorImpl.class)
+                .name(BlockEntityId.COMPARATOR)
+                .addComponent(BlockEntityComparatorBaseComponentImpl::new, BlockEntityComparatorBaseComponentImpl.class)
+                .build();
+    }
 }

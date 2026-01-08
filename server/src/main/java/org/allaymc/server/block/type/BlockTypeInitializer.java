@@ -2187,4 +2187,21 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, false))
                 .build();
     }
+
+    public static void initRedstoneComparator() {
+        BlockTypes.POWERED_COMPARATOR = AllayBlockType
+                .builder(BlockPoweredComparatorBehaviorImpl.class)
+                .vanillaBlock(BlockId.POWERED_COMPARATOR)
+                .bindBlockEntity(BlockEntityTypes.COMPARATOR)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, true))
+                .build();
+        BlockTypes.UNPOWERED_COMPARATOR = AllayBlockType
+                .builder(BlockUnpoweredComparatorBehaviorImpl.class)
+                .vanillaBlock(BlockId.UNPOWERED_COMPARATOR)
+                .bindBlockEntity(BlockEntityTypes.COMPARATOR)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, false))
+                .build();
+    }
 }

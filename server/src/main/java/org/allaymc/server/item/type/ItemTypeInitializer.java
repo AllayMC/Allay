@@ -962,4 +962,12 @@ public final class ItemTypeInitializer {
                 .addComponent(ItemRepeaterBaseComponentImpl::new, ItemRepeaterBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initComparator() {
+        ItemTypes.COMPARATOR = AllayItemType
+                .builder(ItemComparatorStackImpl.class)
+                .vanillaItem(ItemId.COMPARATOR)
+                .addComponent(ItemComparatorBaseComponentImpl::new, ItemComparatorBaseComponentImpl.class)
+                .build();
+    }
 }
