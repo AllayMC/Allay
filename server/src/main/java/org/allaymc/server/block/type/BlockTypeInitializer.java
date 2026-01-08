@@ -422,6 +422,13 @@ public final class BlockTypeInitializer {
                 .bindBlockEntity(BlockEntityTypes.CHEST)
                 .setBaseComponentSupplier(BlockChestBaseComponentImpl::new)
                 .build();
+        BlockTypes.TRAPPED_CHEST = AllayBlockType
+                .builder(BlockTrappedChestBehaviorImpl.class)
+                .vanillaBlock(BlockId.TRAPPED_CHEST)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.CHEST)
+                .setBaseComponentSupplier(BlockTrappedChestBaseComponentImpl::new)
+                .build();
     }
 
     public static void initHopper() {

@@ -174,8 +174,9 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         // Trigger neighbor updates for all changed positions
-        for (Vector3i pos : changedPositions) {
-            dimension.updateAround(pos);
+        // Also update second-order neighbors through solid blocks
+        for (Vector3i changedPos : changedPositions) {
+            updateNeighborsOnWireChange(dimension, changedPos);
         }
     }
 
