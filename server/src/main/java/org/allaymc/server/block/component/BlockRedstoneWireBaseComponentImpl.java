@@ -240,9 +240,9 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             int signal = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
             maxPower = Math.max(maxPower, signal);
 
-            // Check power through solid blocks (BE edition: weak power also activates wire)
+            // Check power through solid blocks (only strong power can conduct through)
             if (face != BlockFace.UP && neighborState.getBlockStateData().isOpaqueSolid()) {
-                int powerThroughBlock = getPowerIntoSolidBlock(dimension, neighborPos, face.opposite());
+                int powerThroughBlock = getStrongPowerIntoBlock(dimension, neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, powerThroughBlock);
             }
         }
@@ -251,10 +251,10 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Gets power flowing into a solid block from any direction.
-     * In Bedrock Edition, weak power through solid blocks also activates redstone wire.
+     * Gets strong power flowing into a solid block from any direction.
+     * Only strong power can be conducted through solid blocks.
      */
-    protected int getPowerIntoSolidBlock(Dimension dimension, Vector3ic solidPos, BlockFace excludeFace) {
+    protected int getStrongPowerIntoBlock(Dimension dimension, Vector3ic solidPos, BlockFace excludeFace) {
         int maxPower = 0;
 
         for (BlockFace face : BlockFace.values()) {
@@ -270,9 +270,9 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
             Block checkBlock = new Block(state, new Position3i(checkPos, dimension));
 
-            // BE edition: check weak power (which includes strong power sources)
-            int weakPower = state.getBehavior().getWeakPower(checkBlock, face.opposite());
-            maxPower = Math.max(maxPower, weakPower);
+            // Only strong power can be conducted through solid blocks
+            int strongPower = state.getBehavior().getStrongPower(checkBlock, face.opposite());
+            maxPower = Math.max(maxPower, strongPower);
         }
 
         return maxPower;
