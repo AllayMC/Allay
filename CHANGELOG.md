@@ -42,7 +42,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Trapped Chest (outputs signal based on viewer count)
   - Redstone Repeater
   - Redstone Comparator
-  - Target 
+  - Target (outputs signal when hit by projectiles)
+  - Dragon Head and Piglin Head (animate when powered)
 
 ### Changed
 
