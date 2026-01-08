@@ -42,6 +42,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Trapped Chest (outputs signal based on viewer count)
   - Redstone Repeater
   - Redstone Comparator
+  - Target 
 
 ### Changed
 

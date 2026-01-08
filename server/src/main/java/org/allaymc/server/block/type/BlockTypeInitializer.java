@@ -2204,4 +2204,13 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, false))
                 .build();
     }
+
+    public static void initTarget() {
+        BlockTypes.TARGET = AllayBlockType
+                .builder(BlockTargetBehaviorImpl.class)
+                .vanillaBlock(BlockId.TARGET)
+                .bindBlockEntity(BlockEntityTypes.TARGET)
+                .setBaseComponentSupplier(BlockTargetBaseComponentImpl::new)
+                .build();
+    }
 }

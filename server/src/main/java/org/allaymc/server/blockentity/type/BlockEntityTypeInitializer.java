@@ -182,4 +182,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityComparatorBaseComponentImpl::new, BlockEntityComparatorBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initTarget() {
+        BlockEntityTypes.TARGET = AllayBlockEntityType
+                .builder(BlockEntityTargetImpl.class)
+                .name(BlockEntityId.TARGET)
+                .addComponent(BlockEntityTargetBaseComponentImpl::new, BlockEntityTargetBaseComponentImpl.class)
+                .build();
+    }
 }

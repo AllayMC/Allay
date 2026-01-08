@@ -15,6 +15,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.component.annotation.Dependency;
 
 import java.time.Duration;
 import java.util.Set;
@@ -29,6 +30,9 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  */
 public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiodeBaseComponentImpl {
 
+    @Dependency
+    private BlockBlockEntityHolderComponent<BlockEntityComparator> blockEntityHolderComponent;
+
     public BlockRedstoneComparatorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, boolean powered) {
         super(blockType, powered);
     }
@@ -37,10 +41,8 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
      * Gets the block entity for this comparator.
      * The block entity is automatically created by BlockBlockEntityHolderComponent.
      */
-    @SuppressWarnings("unchecked")
     protected BlockEntityComparator getBlockEntity(Block block) {
-        return ((BlockBlockEntityHolderComponent<BlockEntityComparator>) block.getBlockState().getBehavior())
-                .getBlockEntity(block.getPosition());
+        return blockEntityHolderComponent.getBlockEntity(block.getPosition());
     }
 
     @Override
