@@ -37,6 +37,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Observer
   - Noteblock (responds to redstone signal)
   - Hopper (stops transferring items when powered)
+  - Daylight Detector (normal and inverted)
 
 ### Changed
 

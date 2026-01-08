@@ -2150,4 +2150,19 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, false))
                 .build();
     }
+
+    public static void initDaylightDetector() {
+        BlockTypes.DAYLIGHT_DETECTOR = AllayBlockType
+                .builder(BlockDaylightDetectorBehaviorImpl.class)
+                .vanillaBlock(BlockId.DAYLIGHT_DETECTOR)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, false))
+                .build();
+        BlockTypes.DAYLIGHT_DETECTOR_INVERTED = AllayBlockType
+                .builder(BlockDaylightDetectorInvertedBehaviorImpl.class)
+                .vanillaBlock(BlockId.DAYLIGHT_DETECTOR_INVERTED)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, true))
+                .build();
+    }
 }
