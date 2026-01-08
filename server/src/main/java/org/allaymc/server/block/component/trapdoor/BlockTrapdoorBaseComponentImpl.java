@@ -20,7 +20,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.OPEN_BIT;
 import static org.allaymc.server.block.BlockPlaceHelper.EWSN_DIRECTION_4_MAPPER;
 
 /**
- * @author harry-xi
+ * @author harry-xi | daoge_cmd
  */
 public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
 
@@ -37,6 +37,15 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         blockState = blockState.setPropertyValue(DIRECTION_4, EWSN_DIRECTION_4_MAPPER.get(placementInfo.player().getHorizontalFace().opposite()));
         blockState = BlockPlaceHelper.processUpsideDownBitProperty(blockState, placeBlockPos, placementInfo);
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
+    }
+
+    @Override
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
+
+        // Check redstone power immediately after placement
+        var newBlock = new Block(newBlockState, oldBlock.getPosition());
+        checkRedstonePower(newBlock);
     }
 
     @Override

@@ -34,6 +34,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Button
   - Door
   - Trapdoor
+  - Fence Gate
   - Observer
   - Noteblock (responds to redstone signal)
   - Hopper (stops transferring items when powered)
