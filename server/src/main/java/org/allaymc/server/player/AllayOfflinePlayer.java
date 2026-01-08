@@ -82,8 +82,6 @@ public class AllayOfflinePlayer implements OfflinePlayer {
 
     @Override
     public void save() {
-        var nbt = this.playerData.getNbt();
-//        System.out.println("nbt: " + nbt);
         Server.getInstance().getPlayerManager().getPlayerStorage().savePlayerData(this.getStorageUuid(), this.playerData);
     }
 
