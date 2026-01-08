@@ -1269,6 +1269,17 @@ public class AllayPlayer implements Player {
                 packet.setSound(SoundEvent.BUTTON_CLICK_OFF);
                 packet.setExtraData(so.blockState().blockStateHash());
             }
+            case LeverClickSound so -> {
+                packet.setSound(so.powered() ? SoundEvent.POWER_ON : SoundEvent.POWER_OFF);
+            }
+            case PressurePlateActivateSound so -> {
+                packet.setSound(SoundEvent.PRESSURE_PLATE_CLICK_ON);
+                packet.setExtraData(so.blockState().blockStateHash());
+            }
+            case PressurePlateDeactivateSound so -> {
+                packet.setSound(SoundEvent.PRESSURE_PLATE_CLICK_OFF);
+                packet.setExtraData(so.blockState().blockStateHash());
+            }
             case TrapdoorOpenSound so -> {
                 packet.setSound(SoundEvent.TRAPDOOR_OPEN);
                 packet.setExtraData(so.blockState().blockStateHash());

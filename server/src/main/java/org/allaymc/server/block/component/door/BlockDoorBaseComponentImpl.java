@@ -10,9 +10,11 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.DoorCloseSound;
 import org.allaymc.api.world.sound.DoorOpenSound;
+import org.allaymc.server.block.RedstoneHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -78,6 +80,44 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         if (!keep) {
             block.breakBlock();
+            return;
+        }
+
+        // Check redstone power and update door state
+        checkRedstonePower(block);
+    }
+
+    /**
+     * Checks if the door should be opened/closed based on redstone power.
+     *
+     * @param block the door block
+     */
+    protected void checkRedstonePower(Block block) {
+        var dimension = block.getDimension();
+        var pos = block.getPosition();
+        boolean isUpperBlock = block.getPropertyValue(UPPER_BLOCK_BIT);
+
+        // Get the position of the other door half
+        Vector3ic otherPos = isUpperBlock
+                ? BlockFace.DOWN.offsetPos(pos)
+                : BlockFace.UP.offsetPos(pos);
+
+        // Check power at both halves and use the maximum
+        int powerAtThis = RedstoneHelper.getReceivedPowerLevel(block);
+        Block otherBlock = new Block(dimension.getBlockState(otherPos), new Position3i(otherPos, dimension));
+        int powerAtOther = RedstoneHelper.getReceivedPowerLevel(otherBlock);
+        int maxPower = Math.max(powerAtThis, powerAtOther);
+
+        boolean shouldBeOpen = maxPower > 0;
+        boolean isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
+
+        if (shouldBeOpen != isCurrentlyOpen) {
+            // Update both halves
+            dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, pos);
+            dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, otherPos);
+
+            // Play sound
+            dimension.addSound(MathUtils.center(pos), shouldBeOpen ? new DoorOpenSound(block.getBlockState()) : new DoorCloseSound(block.getBlockState()));
         }
     }
 

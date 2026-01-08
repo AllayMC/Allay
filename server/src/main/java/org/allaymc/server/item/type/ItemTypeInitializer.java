@@ -946,4 +946,12 @@ public final class ItemTypeInitializer {
                 .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
+
+    public static void initRedstoneWire() {
+        ItemTypes.REDSTONE = AllayItemType
+                .builder(ItemRedstoneStackImpl.class)
+                .vanillaItem(ItemId.REDSTONE)
+                .addComponent(ItemRedstoneBaseComponentImpl::new, ItemRedstoneBaseComponentImpl.class)
+                .build();
+    }
 }

@@ -33,6 +33,9 @@ import org.allaymc.server.block.component.ice.BlockHardIceBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
+import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
+import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressurePlateBaseComponentImpl;
+import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
@@ -2061,6 +2064,63 @@ public final class BlockTypeInitializer {
         return AllayBlockType.builder(BlockCopperBarsBehaviorImpl.class)
                 .vanillaBlock(id)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
+
+    public static void initLever() {
+        BlockTypes.LEVER = AllayBlockType
+                .builder(BlockLeverBehaviorImpl.class)
+                .vanillaBlock(BlockId.LEVER)
+                .setProperties(BlockPropertyTypes.LEVER_DIRECTION, BlockPropertyTypes.OPEN_BIT)
+                .setBaseComponentSupplier(BlockLeverBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initRedstoneWire() {
+        BlockTypes.REDSTONE_WIRE = AllayBlockType
+                .builder(BlockRedstoneWireBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_WIRE)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(BlockRedstoneWireBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initRedstoneBlock() {
+        BlockTypes.REDSTONE_BLOCK = AllayBlockType
+                .builder(BlockRedstoneBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_BLOCK)
+                .setBaseComponentSupplier(BlockRedstoneBlockBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initPressurePlates() {
+        // Binary pressure plates (stone and wooden variants)
+        BlockTypes.STONE_PRESSURE_PLATE = buildPressurePlate(BlockId.STONE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.WOODEN_PRESSURE_PLATE = buildPressurePlate(BlockId.WOODEN_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.ACACIA_PRESSURE_PLATE = buildPressurePlate(BlockId.ACACIA_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.BAMBOO_PRESSURE_PLATE = buildPressurePlate(BlockId.BAMBOO_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.BIRCH_PRESSURE_PLATE = buildPressurePlate(BlockId.BIRCH_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.CHERRY_PRESSURE_PLATE = buildPressurePlate(BlockId.CHERRY_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.CRIMSON_PRESSURE_PLATE = buildPressurePlate(BlockId.CRIMSON_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.DARK_OAK_PRESSURE_PLATE = buildPressurePlate(BlockId.DARK_OAK_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.JUNGLE_PRESSURE_PLATE = buildPressurePlate(BlockId.JUNGLE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.MANGROVE_PRESSURE_PLATE = buildPressurePlate(BlockId.MANGROVE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.SPRUCE_PRESSURE_PLATE = buildPressurePlate(BlockId.SPRUCE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.WARPED_PRESSURE_PLATE = buildPressurePlate(BlockId.WARPED_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.PALE_OAK_PRESSURE_PLATE = buildPressurePlate(BlockId.PALE_OAK_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE = buildPressurePlate(BlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+
+        // Weighted pressure plates
+        BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockId.LIGHT_WEIGHTED_PRESSURE_PLATE, BlockLightWeightedPressurePlateBaseComponentImpl::new);
+        BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockId.HEAVY_WEIGHTED_PRESSURE_PLATE, BlockHeavyWeightedPressurePlateBaseComponentImpl::new);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildPressurePlate(BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
+        return AllayBlockType
+                .builder(BlockPressurePlateBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(blockBaseComponentSupplier)
                 .build();
     }
 }

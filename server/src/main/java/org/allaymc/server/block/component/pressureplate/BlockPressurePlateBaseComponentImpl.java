@@ -1,0 +1,178 @@
+package org.allaymc.server.block.component.pressureplate;
+
+import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.world.sound.PressurePlateActivateSound;
+import org.allaymc.api.world.sound.PressurePlateDeactivateSound;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.joml.primitives.AABBd;
+
+import java.time.Duration;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.REDSTONE_SIGNAL;
+
+/**
+ * Base implementation for pressure plates.
+ * Binary pressure plates (stone, wooden) output 0 or 15.
+ *
+ * @author daoge_cmd
+ */
+public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl {
+
+    protected static final Duration CHECK_INTERVAL = Duration.ofMillis(500);
+    protected static final VoxelShape DETECTION_SHAPE = VoxelShape.builder()
+            .solid(0.0625, 0, 0.0625, 0.9375, 0.25, 0.9375)
+            .build();
+
+    public BlockPressurePlateBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+        super(blockType);
+    }
+
+    @Override
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+
+        // Break if block below is removed
+        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
+            block.breakBlock();
+        }
+    }
+
+    @Override
+    public void onCollideWithEntity(Block block, Entity entity) {
+        int currentSignal = block.getPropertyValue(REDSTONE_SIGNAL);
+        if (currentSignal == 0) {
+            // Activate the plate
+            int newSignal = calculateSignal(block);
+            if (newSignal > 0) {
+                updateSignal(block, newSignal);
+            }
+        }
+    }
+
+    @Override
+    public void onScheduledUpdate(Block block) {
+        int currentSignal = block.getPropertyValue(REDSTONE_SIGNAL);
+        int newSignal = calculateSignal(block);
+
+        if (newSignal != currentSignal) {
+            updateSignal(block, newSignal);
+        }
+
+        // Schedule next check if still active
+        if (newSignal > 0) {
+            block.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(block.getPosition(), CHECK_INTERVAL);
+        }
+    }
+
+    /**
+     * Calculates the signal strength based on entities on the plate.
+     * For binary plates, returns 15 if any entity is present, 0 otherwise.
+     *
+     * @param block the pressure plate block
+     * @return the signal strength (0 or 15)
+     */
+    protected int calculateSignal(Block block) {
+        int entityCount = countEntitiesOnPlate(block);
+        return entityCount > 0 ? MAX_REDSTONE_POWER : 0;
+    }
+
+    /**
+     * Counts the number of entities standing on the pressure plate.
+     *
+     * @param block the pressure plate block
+     * @return the number of entities on the plate
+     */
+    protected int countEntitiesOnPlate(Block block) {
+        var dimension = block.getDimension();
+        var pos = block.getPosition();
+
+        // Create detection AABB above the plate
+        AABBd detectionAABB = DETECTION_SHAPE.unionAABB()
+                .translate(pos.x(), pos.y(), pos.z(), new AABBd());
+
+        AtomicInteger count = new AtomicInteger(0);
+
+        // Check all entities in the dimension
+        dimension.getEntities().values().forEach(entity -> {
+            if (entity.getOffsetAABB().intersectsAABB(detectionAABB)) {
+                count.incrementAndGet();
+            }
+        });
+
+        return count.get();
+    }
+
+    /**
+     * Updates the signal level and triggers neighbor updates.
+     *
+     * @param block     the pressure plate block
+     * @param newSignal the new signal level
+     */
+    protected void updateSignal(Block block, int newSignal) {
+        var dimension = block.getDimension();
+        var pos = block.getPosition();
+        int oldSignal = block.getPropertyValue(REDSTONE_SIGNAL);
+
+        dimension.updateBlockProperty(REDSTONE_SIGNAL, newSignal, pos);
+
+        // Play sound
+        if (newSignal > 0 && oldSignal == 0) {
+            block.addSound(new PressurePlateActivateSound(block.getBlockState()));
+            // Schedule periodic check
+            dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(pos, CHECK_INTERVAL);
+        } else if (newSignal == 0 && oldSignal > 0) {
+            block.addSound(new PressurePlateDeactivateSound(block.getBlockState()));
+        }
+
+        // Update neighbors
+        dimension.updateAround(pos);
+        // Also update the block below for strong power
+        dimension.updateAround(BlockFace.DOWN.offsetPos(pos));
+    }
+
+    @Override
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
+        // Check for entities immediately after placement
+        int signal = calculateSignal(oldBlock);
+        if (signal > 0) {
+            updateSignal(oldBlock, signal);
+        }
+    }
+
+    @Override
+    public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterReplaced(oldBlock, newBlockState, placementInfo);
+        // Update block below when removed (if was active, for strong power)
+        if (oldBlock.getPropertyValue(REDSTONE_SIGNAL) > 0) {
+            oldBlock.getDimension().updateAround(BlockFace.DOWN.offsetPos(oldBlock.getPosition()));
+        }
+    }
+
+    @Override
+    public int getWeakPower(Block block, BlockFace face) {
+        return block.getPropertyValue(REDSTONE_SIGNAL);
+    }
+
+    @Override
+    public int getStrongPower(Block block, BlockFace face) {
+        // Provide strong power downward
+        if (face == BlockFace.DOWN) {
+            return block.getPropertyValue(REDSTONE_SIGNAL);
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isPowerSource() {
+        return true;
+    }
+}

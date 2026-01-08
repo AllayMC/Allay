@@ -321,4 +321,45 @@ public interface BlockBaseComponent extends BlockComponent {
     default boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
         return true;
     }
+
+    // ==================== Redstone Methods ====================
+
+    /**
+     * Maximum redstone signal strength.
+     */
+    int MAX_REDSTONE_POWER = 15;
+
+    /**
+     * Gets the weak (indirect) redstone power output from this block to the specified face.
+     * Weak power can power adjacent redstone dust and components, but does not propagate through solid blocks.
+     *
+     * @param block the block
+     * @param face  the face from which power is being queried (the direction power flows out)
+     * @return the weak power level (0-15)
+     */
+    default int getWeakPower(Block block, BlockFace face) {
+        return 0;
+    }
+
+    /**
+     * Gets the strong (direct) redstone power output from this block to the specified face.
+     * Strong power can propagate through solid blocks to power components on the other side.
+     *
+     * @param block the block
+     * @param face  the face from which power is being queried (the direction power flows out)
+     * @return the strong power level (0-15)
+     */
+    default int getStrongPower(Block block, BlockFace face) {
+        return 0;
+    }
+
+    /**
+     * Determines if this block is a redstone power source.
+     * Power sources include levers, buttons, pressure plates, redstone blocks, etc.
+     *
+     * @return {@code true} if the block is a power source, {@code false} otherwise
+     */
+    default boolean isPowerSource() {
+        return false;
+    }
 }

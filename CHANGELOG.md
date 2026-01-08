@@ -16,6 +16,18 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
 - (API) Added `Entity.setPersistent()` method to control entity persistence.
+- (API) Added redstone power methods to `BlockBaseComponent`:
+  - `getWeakPower(Block, BlockFace)` - gets weak power output from a block.
+  - `getStrongPower(Block, BlockFace)` - gets strong power output from a block.
+  - `isPowerSource()` - checks if a block is a redstone power source.
+  - `MAX_REDSTONE_POWER` constant (15).
+- Implemented basic redstone system:
+  - Lever with proper attachment and power output.
+  - Buttons (stone and wooden variants) with timed activation.
+  - Pressure plates (stone, wooden, and weighted variants) with entity detection.
+  - Redstone wire with signal propagation and decay.
+  - Redstone block as a constant power source.
+  - Doors and trapdoors now respond to redstone power.
 
 ### Changed
 
