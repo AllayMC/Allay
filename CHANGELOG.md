@@ -34,6 +34,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Trapdoor
   - Observer
   - Noteblock (responds to redstone signal)
+  - Hopper (stops transferring items when powered)
 - (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
 
 ### Changed
