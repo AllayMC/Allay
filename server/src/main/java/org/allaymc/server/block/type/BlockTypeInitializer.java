@@ -727,18 +727,7 @@ public final class BlockTypeInitializer {
     }
 
     public static void initTorch() {
-        BlockTypes.REDSTONE_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.REDSTONE_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
-        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
+        // Note: REDSTONE_TORCH and UNLIT_REDSTONE_TORCH are registered in initRedstoneTorch()
 
         BlockTypes.SOUL_TORCH = AllayBlockType
                 .builder(BlockTorchBehaviorImpl.class)
