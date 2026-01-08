@@ -242,10 +242,11 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             int signal = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
             maxPower = Math.max(maxPower, signal);
 
-            // Check strong power through solid blocks
+            // Check power through solid blocks (BE edition: weak power also activates wire)
             if (face != BlockFace.UP && neighborState.getBlockStateData().isSolid() && !neighborState.getBlockStateData().isTransparent()) {
-                int strongPower = getStrongPowerIntoSolidBlock(dimension, neighborPos, face);
-                maxPower = Math.max(maxPower, strongPower);
+                // Exclude the face pointing back to the wire (face.opposite() from solid block's perspective)
+                int powerThroughBlock = getPowerIntoSolidBlock(dimension, neighborPos, face.opposite());
+                maxPower = Math.max(maxPower, powerThroughBlock);
             }
         }
 
@@ -253,9 +254,10 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Gets strong power flowing into a solid block from any direction.
+     * Gets power flowing into a solid block from any direction.
+     * In Bedrock Edition, weak power through solid blocks also activates redstone wire.
      */
-    protected int getStrongPowerIntoSolidBlock(Dimension dimension, Vector3ic solidPos, BlockFace excludeFace) {
+    protected int getPowerIntoSolidBlock(Dimension dimension, Vector3ic solidPos, BlockFace excludeFace) {
         int maxPower = 0;
 
         for (BlockFace face : BlockFace.values()) {
@@ -264,14 +266,16 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             Vector3ic checkPos = face.offsetPos(solidPos);
             BlockState state = dimension.getBlockState(checkPos);
 
-            // Skip redstone wire for strong power calculation
+            // Skip redstone wire for power calculation
             if (isRedstoneWire(state)) {
                 continue;
             }
 
             Block checkBlock = new Block(state, new Position3i(checkPos, dimension));
-            int strongPower = state.getBehavior().getStrongPower(checkBlock, face.opposite());
-            maxPower = Math.max(maxPower, strongPower);
+
+            // BE edition: check weak power (which includes strong power sources)
+            int weakPower = state.getBehavior().getWeakPower(checkBlock, face.opposite());
+            maxPower = Math.max(maxPower, weakPower);
         }
 
         return maxPower;

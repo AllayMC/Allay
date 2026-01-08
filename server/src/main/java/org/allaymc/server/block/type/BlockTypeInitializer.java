@@ -2123,4 +2123,41 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockBaseComponentSupplier)
                 .build();
     }
+
+    public static void initObserver() {
+        BlockTypes.OBSERVER = AllayBlockType
+                .builder(BlockObserverBehaviorImpl.class)
+                .vanillaBlock(BlockId.OBSERVER)
+                .setProperties(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                .setBaseComponentSupplier(BlockObserverBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initRedstoneLamp() {
+        BlockTypes.REDSTONE_LAMP = AllayBlockType
+                .builder(BlockRedstoneLampBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_LAMP)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, false))
+                .build();
+        BlockTypes.LIT_REDSTONE_LAMP = AllayBlockType
+                .builder(BlockLitRedstoneLampBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIT_REDSTONE_LAMP)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, true))
+                .build();
+    }
+
+    public static void initRedstoneTorch() {
+        BlockTypes.REDSTONE_TORCH = AllayBlockType
+                .builder(BlockTorchBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_TORCH)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, true))
+                .build();
+        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
+                .builder(BlockTorchBehaviorImpl.class)
+                .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, false))
+                .build();
+    }
 }

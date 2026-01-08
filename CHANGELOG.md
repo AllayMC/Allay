@@ -22,12 +22,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `isPowerSource()` - checks if a block is a redstone power source.
   - `MAX_REDSTONE_POWER` constant (15).
 - Implemented basic redstone system:
-  - Lever with proper attachment and power output.
-  - Buttons (stone and wooden variants) with timed activation.
-  - Pressure plates (stone, wooden, and weighted variants) with entity detection.
-  - Redstone wire with signal propagation and decay.
-  - Redstone block as a constant power source.
-  - Doors and trapdoors now respond to redstone power.
+  - Redstone Wire
+  - Redstone Block
+  - Redstone Lamp
+  - Redstone Torch
+  - Pressure Plate
+  - Lever
+  - Button
+  - Door
+  - Trapdoor
+  - Observer
 
 ### Changed
 
