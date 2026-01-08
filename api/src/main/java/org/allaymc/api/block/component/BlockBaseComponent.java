@@ -21,6 +21,11 @@ import java.util.Set;
  */
 public interface BlockBaseComponent extends BlockComponent {
     /**
+     * Maximum redstone signal strength.
+     */
+    int MAX_REDSTONE_POWER = 15;
+
+    /**
      * Retrieves the type of block associated with this component.
      *
      * @return the block type associated with this component
@@ -321,13 +326,6 @@ public interface BlockBaseComponent extends BlockComponent {
     default boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
         return true;
     }
-
-    // ==================== Redstone Methods ====================
-
-    /**
-     * Maximum redstone signal strength.
-     */
-    int MAX_REDSTONE_POWER = 15;
 
     /**
      * Gets the weak (indirect) redstone power output from this block to the specified face.
