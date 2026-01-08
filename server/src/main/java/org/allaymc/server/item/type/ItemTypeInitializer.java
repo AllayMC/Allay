@@ -954,4 +954,12 @@ public final class ItemTypeInitializer {
                 .addComponent(ItemRedstoneBaseComponentImpl::new, ItemRedstoneBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initRepeater() {
+        ItemTypes.REPEATER = AllayItemType
+                .builder(ItemRepeaterStackImpl.class)
+                .vanillaItem(ItemId.REPEATER)
+                .addComponent(ItemRepeaterBaseComponentImpl::new, ItemRepeaterBaseComponentImpl.class)
+                .build();
+    }
 }

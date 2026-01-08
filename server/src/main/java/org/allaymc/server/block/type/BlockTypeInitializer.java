@@ -2172,4 +2172,19 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, true))
                 .build();
     }
+
+    public static void initRedstoneRepeater() {
+        BlockTypes.POWERED_REPEATER = AllayBlockType
+                .builder(BlockPoweredRepeaterBehaviorImpl.class)
+                .vanillaBlock(BlockId.POWERED_REPEATER)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, true))
+                .build();
+        BlockTypes.UNPOWERED_REPEATER = AllayBlockType
+                .builder(BlockUnpoweredRepeaterBehaviorImpl.class)
+                .vanillaBlock(BlockId.UNPOWERED_REPEATER)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, false))
+                .build();
+    }
 }

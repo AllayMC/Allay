@@ -40,6 +40,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Hopper (stops transferring items when powered)
   - Daylight Detector (normal and inverted)
   - Trapped Chest (outputs signal based on viewer count)
+  - Redstone Repeater
 
 ### Changed
 
