@@ -134,9 +134,11 @@ public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl 
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
         // Check for entities immediately after placement
-        int signal = calculateSignal(oldBlock);
+        // Use newBlockState to get the correct shape for entity detection
+        Block newBlock = new Block(newBlockState, oldBlock.getPosition());
+        int signal = calculateSignal(newBlock);
         if (signal > 0) {
-            updateSignal(oldBlock, signal);
+            updateSignal(newBlock, signal);
         }
     }
 
