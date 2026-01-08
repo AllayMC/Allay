@@ -352,6 +352,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         // For L, T, or + shapes:
+        // Corner wire doesn't output power - only straight wire does
         // Wire points to a direction only if connected AND not connected to perpendicular
         if (connectedFaces.contains(face)) {
             BlockFace left = face.rotateYCCW();

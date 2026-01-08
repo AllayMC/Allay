@@ -49,8 +49,9 @@ public class RedstoneHelper {
             maxPower = Math.max(maxPower, signal);
 
             // Check strong power through opaque solid blocks
+            // Exclude face.opposite() because that's the direction pointing back to pos
             if (neighborState.getBlockStateData().isOpaqueSolid()) {
-                int strongPower = getStrongPowerAt(new Position3i(neighborPos, dimension), face);
+                int strongPower = getStrongPowerAt(new Position3i(neighborPos, dimension), face.opposite());
                 maxPower = Math.max(maxPower, strongPower);
             }
         }
