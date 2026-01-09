@@ -63,7 +63,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
         dimension.addSound(
                 MathUtils.center(clickedBlockState.getPosition()),
-                isOpen ? new TrapdoorSound(clickedBlockState.getBlockState(), true) : new TrapdoorSound(clickedBlockState.getBlockState(), false)
+                new TrapdoorSound(clickedBlockState.getBlockState(), isOpen)
         );
         return true;
     }
@@ -82,19 +82,14 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
      * @param block the trapdoor block
      */
     protected void checkRedstonePower(Block block) {
-        int power = block.getDimension().getPowerAt(block.getPosition());
+        var power = block.getRedstonePower();
 
-        boolean shouldBeOpen = power > 0;
-        boolean isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
+        var shouldBeOpen = power > 0;
+        var isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
 
         if (shouldBeOpen != isCurrentlyOpen) {
-            var dimension = block.getDimension();
-            var pos = block.getPosition();
-
-            dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, pos);
-
-            // Play sound
-            dimension.addSound(MathUtils.center(pos), shouldBeOpen ? new TrapdoorSound(block.getBlockState(), true) : new TrapdoorSound(block.getBlockState(), false));
+            block.updateBlockProperty(OPEN_BIT, shouldBeOpen);
+            block.addSound(new TrapdoorSound(block.getBlockState(), shouldBeOpen));
         }
     }
 }

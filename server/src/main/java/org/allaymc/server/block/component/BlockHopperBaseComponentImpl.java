@@ -38,11 +38,11 @@ public class BlockHopperBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        var powered = block.getDimension().isPoweredAt(block.getPosition());
+        var powered = block.isReceivingRedstonePower();
         var currentlyDisabled = block.getPropertyValue(BlockPropertyTypes.TOGGLE_BIT);
 
         if (powered != currentlyDisabled) {
-            block.getDimension().updateBlockProperty(BlockPropertyTypes.TOGGLE_BIT, powered, block.getPosition());
+            block.updateBlockProperty(BlockPropertyTypes.TOGGLE_BIT, powered);
         }
     }
 }

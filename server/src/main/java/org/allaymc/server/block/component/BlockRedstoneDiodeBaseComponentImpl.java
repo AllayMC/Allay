@@ -251,9 +251,7 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
      * Schedules a delayed update for the diode.
      */
     protected void scheduleUpdate(Block block) {
-        block.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(
-                block.getPosition(), getDelay(block)
-        );
+        block.scheduleUpdateInDelay(getDelay(block));
     }
 
     /**

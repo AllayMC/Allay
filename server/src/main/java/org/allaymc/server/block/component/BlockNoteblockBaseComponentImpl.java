@@ -32,7 +32,7 @@ public class BlockNoteblockBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var powered = block.getDimension().isPoweredAt(block.getPosition());
+        var powered = block.isReceivingRedstonePower();
         if (powered && !blockEntity.isPowered()) {
             // Rising edge - play sound
             emitSound(block);
