@@ -24,6 +24,15 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `MAX_REDSTONE_POWER` constant (15).
 - (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
 - (API) Added sound `PowerSound` which is used by redstone components such as lever.
+- (API) Added offline player system for managing player data and identity mappings:
+    - Added `OfflinePlayer` interface representing players whose data exists on server but are not currently online.
+    - Added `OfflinePlayerManager` interface for managing offline player data, nickname changes, and collision resolution.
+    - Added `PlayerNicknameChangeEvent` event that fires when a player's nickname changes.
+    - Added method `LoginData.getParsedXuid()` to get Xbox User ID as a Long value.
+    - Added method `Player.getStorageUuid()` to get the stable storage UUID used for player data files.
+- Implemented persistent player identity system with LevelDB index that maps XUID, nickname UUID, and nickname to storage UUID.
+- Implemented automatic nickname collision handling that preserves all player data while assigning temporary nicknames to previous owners.
+- Added automatic migration of legacy player data (pre-0.10.4) to new storage UUID system on first login.
 - Implemented basic redstone system:
   - Redstone Wire
   - Redstone Block
@@ -55,6 +64,12 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `FenceGateOpenSound` and `FenceGateCloseSound` -> `FenceGateSound(blockState, open)`
 - Merged world tick thread and network thread into a single thread using an event-driven wake-up mechanism. This simplifies
   the threading model while maintaining low packet processing latency through `LockSupport.parkNanos/unpark`.
+- Player data files are now identified by stable storage UUID instead of login UUID, preventing data loss during nickname changes.
+- Player storage now uses atomic file operations with temporary files to prevent data corruption during saves.
+- Improved player data file handling with cleanup of orphaned temporary files on server startup.
+- `PlayerData` now stores player nickname and XUID for offline player system.
+- Player login flow now processes identity resolution through `OfflinePlayerManager` before authentication checks.
+- Refactored `AllayLoginData` methods for improved code clarity and readability.
 
 ### Removed
 
@@ -63,6 +78,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Fixed
 
 - Fixed noteblock being triggered when player is sneaking (should allow placing blocks on top instead).
+- Fixed potential player data corruption during save operations by implementing atomic file writes with temporary files.
+- Fixed player data loss that could occur when players change their Xbox gamertag.
 
 # 0.10.3 (API 0.20.0) - 2026/1/7
 
