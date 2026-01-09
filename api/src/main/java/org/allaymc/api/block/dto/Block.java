@@ -206,11 +206,22 @@ public class Block {
         return getDimension().breakBlock(position, usedItem, entity);
     }
 
+    /**
+     * Replaces the block state at this block's position with a new block state.
+     *
+     * @param blockState the new block state to set at this position
+     * @return a new {@code Block} instance with the updated block state
+     */
     public Block replaceState(BlockState blockState) {
         this.getDimension().setBlockState(this.position, blockState);
         return new Block(blockState, this.position, layer);
     }
 
+    /**
+     * Schedule a block update.
+     *
+     * @param delay the duration to wait before triggering the block update
+     */
     public void scheduleUpdateInDelay(Duration delay) {
         this.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(this.position, delay);
     }
