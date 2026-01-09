@@ -203,7 +203,7 @@ public final class AllayServer implements Server {
             );
         }
 
-        Metrics.AllayMetrics.startMetrics();
+        AllayMetrics.start();
         if (SETTINGS.genericSettings().enableGui()) {
             Allay.DASHBOARD.afterServerStarted();
         }

@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.okaeri.configs.yaml.snakeyaml) {
         exclude(group = "org.yaml", module = "snakeyaml") // Use the latest version
     }
+    implementation(libs.bstats)
 
     testImplementation(libs.bundles.junit)
     testRuntimeOnly(libs.junit.platform.launcher)

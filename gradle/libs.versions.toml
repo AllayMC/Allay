@@ -92,6 +92,8 @@ rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref
 sentry = { group = "io.sentry", name = "sentry-log4j2", version = "8.29.0" }
 # JCTools
 jctools = { group = "org.jctools", name = "jctools-core", version = "4.0.5" }
+# bStats
+bstats = { group = "org.bstats", name = "bstats-base", version = "3.1.0" }
 
 [bundles]
 protocol = ["protocol-connection", "protocol-common", "protocol-codec"]
