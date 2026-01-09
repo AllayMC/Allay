@@ -21,6 +21,11 @@ import java.util.Set;
  */
 public interface BlockBaseComponent extends BlockComponent {
     /**
+     * Maximum redstone signal strength.
+     */
+    int MAX_REDSTONE_POWER = 15;
+
+    /**
      * Retrieves the type of block associated with this component.
      *
      * @return the block type associated with this component
@@ -320,5 +325,44 @@ public interface BlockBaseComponent extends BlockComponent {
      */
     default boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
         return true;
+    }
+
+    /**
+     * Gets the weak redstone power output from this block to the specified face.
+     * <p>
+     * Weak power can activate adjacent redstone components (pistons, lamps, etc.),
+     * but cannot be conducted through opaque solid blocks.
+     *
+     * @param block the block
+     * @param face  the face from which power is being queried (the direction power flows out)
+     * @return the weak power level (0-15)
+     */
+    default int getWeakPower(Block block, BlockFace face) {
+        return 0;
+    }
+
+    /**
+     * Gets the strong redstone power output from this block to the specified face.
+     * <p>
+     * Strong power can be conducted through opaque solid blocks. When a solid block
+     * receives strong power, it becomes "powered" and can activate adjacent redstone
+     * components (including redstone dust).
+     *
+     * @param block the block
+     * @param face  the face from which power is being queried (the direction power flows out)
+     * @return the strong power level (0-15)
+     */
+    default int getStrongPower(Block block, BlockFace face) {
+        return 0;
+    }
+
+    /**
+     * Determines if this block is a redstone power source.
+     * Power sources include levers, buttons, pressure plates, redstone blocks, etc.
+     *
+     * @return {@code true} if the block is a power source, {@code false} otherwise
+     */
+    default boolean isPowerSource() {
+        return false;
     }
 }

@@ -2,15 +2,17 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.RedstoneHelper;
 import org.joml.Vector3ic;
 
 /**
- * @author ClexaGod
+ * @author ClexaGod | daoge_cmd
  */
 public class BlockHopperBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockHopperBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
@@ -31,5 +33,17 @@ public class BlockHopperBaseComponentImpl extends BlockBaseComponentImpl {
 
         processedState = processedState.setPropertyValue(BlockPropertyTypes.FACING_DIRECTION, facing.ordinal());
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), processedState, placementInfo);
+    }
+
+    @Override
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+
+        boolean powered = RedstoneHelper.isPoweredAt(block.getPosition());
+        boolean currentlyDisabled = block.getPropertyValue(BlockPropertyTypes.TOGGLE_BIT);
+
+        if (powered != currentlyDisabled) {
+            block.getDimension().updateBlockProperty(BlockPropertyTypes.TOGGLE_BIT, powered, block.getPosition());
+        }
     }
 }

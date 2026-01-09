@@ -946,4 +946,28 @@ public final class ItemTypeInitializer {
                 .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
                 .build();
     }
+
+    public static void initRedstoneWire() {
+        ItemTypes.REDSTONE = AllayItemType
+                .builder(ItemRedstoneStackImpl.class)
+                .vanillaItem(ItemId.REDSTONE)
+                .addComponent(ItemRedstoneBaseComponentImpl::new, ItemRedstoneBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initRepeater() {
+        ItemTypes.REPEATER = AllayItemType
+                .builder(ItemRepeaterStackImpl.class)
+                .vanillaItem(ItemId.REPEATER)
+                .addComponent(ItemRepeaterBaseComponentImpl::new, ItemRepeaterBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initComparator() {
+        ItemTypes.COMPARATOR = AllayItemType
+                .builder(ItemComparatorStackImpl.class)
+                .vanillaItem(ItemId.COMPARATOR)
+                .addComponent(ItemComparatorBaseComponentImpl::new, ItemComparatorBaseComponentImpl.class)
+                .build();
+    }
 }

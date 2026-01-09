@@ -16,16 +16,53 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
 - (API) Added `Entity.setPersistent()` method to control entity persistence.
+- (API) Added `BlockStateData.isOpaqueSolid()` method to check if a block state is solid and not transparent.
+- (API) Added redstone power methods to `BlockBaseComponent`:
+  - `getWeakPower(Block, BlockFace)` - gets weak power output from a block.
+  - `getStrongPower(Block, BlockFace)` - gets strong power output from a block.
+  - `isPowerSource()` - checks if a block is a redstone power source.
+  - `MAX_REDSTONE_POWER` constant (15).
+- (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
+- (API) Added sound `PowerSound` which is used by redstone components such as lever.
+- Implemented basic redstone system:
+  - Redstone Wire
+  - Redstone Block
+  - Redstone Lamp
+  - Redstone Torch
+  - Pressure Plate
+  - Lever
+  - Button
+  - Door
+  - Trapdoor
+  - Fence Gate
+  - Observer
+  - Noteblock (responds to redstone signal)
+  - Hopper (stops transferring items when powered)
+  - Daylight Detector (normal and inverted)
+  - Trapped Chest (outputs signal based on viewer count)
+  - Redstone Repeater
+  - Redstone Comparator
+  - Target (outputs signal when hit by projectiles)
+  - Dragon Head and Piglin Head (animate when powered)
 
 ### Changed
 
 - (API) Renamed `Entity.willBeSaved()` to `Entity.isPersistent()`.
+- (API) Merged sound classes:
+  - `PressurePlateActivateSound` and `PressurePlateDeactivateSound` -> `PressurePlateSound(blockState, activated)`
+  - `DoorOpenSound` and `DoorCloseSound` -> `DoorSound(blockState, open)`
+  - `TrapdoorOpenSound` and `TrapdoorCloseSound` -> `TrapdoorSound(blockState, open)`
+  - `FenceGateOpenSound` and `FenceGateCloseSound` -> `FenceGateSound(blockState, open)`
 - Merged world tick thread and network thread into a single thread using an event-driven wake-up mechanism. This simplifies
   the threading model while maintaining low packet processing latency through `LockSupport.parkNanos/unpark`.
 
 ### Removed
 
 - Removed `enableIndependentNetworkThread` configuration option from `server-settings.yml` as it is no longer necessary.
+
+### Fixed
+
+- Fixed noteblock being triggered when player is sneaking (should allow placing blocks on top instead).
 
 # 0.10.3 (API 0.20.0) - 2026/1/7
 

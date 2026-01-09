@@ -64,6 +64,16 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
             clickedBlockState.updateBlockProperty(BUTTON_PRESSED_BIT, true);
             dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(clickedBlockState.getPosition(), getActivationTime());
             clickedBlockState.addSound(new ButtonPressSound(clickedBlockState.getBlockState()));
+
+            // Trigger neighbor updates for power propagation
+            dimension.updateAround(clickedBlockState.getPosition());
+
+            // Also update the block the button is attached to
+            BlockFace attachedFace = BlockFace.fromIndex(clickedBlockState.getPropertyValue(FACING_DIRECTION));
+            if (attachedFace != null) {
+                Vector3ic attachedPos = attachedFace.opposite().offsetPos(clickedBlockState.getPosition());
+                dimension.updateAround(attachedPos);
+            }
         }
         return true;
     }
@@ -73,6 +83,54 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         if (block.getPropertyValue(BUTTON_PRESSED_BIT)) {
             block.updateBlockProperty(BUTTON_PRESSED_BIT, false);
             block.addSound(new ButtonReleaseSound(block.getBlockState()));
+
+            // Trigger neighbor updates when button releases
+            Dimension dimension = block.getDimension();
+            dimension.updateAround(block.getPosition());
+
+            // Also update the block the button is attached to
+            BlockFace attachedFace = BlockFace.fromIndex(block.getPropertyValue(FACING_DIRECTION));
+            if (attachedFace != null) {
+                Vector3ic attachedPos = attachedFace.opposite().offsetPos(block.getPosition());
+                dimension.updateAround(attachedPos);
+            }
         }
+    }
+
+    @Override
+    public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterReplaced(oldBlock, newBlockState, placementInfo);
+        // If button was pressed when removed, update around attached block
+        if (oldBlock.getPropertyValue(BUTTON_PRESSED_BIT)) {
+            BlockFace attachedFace = BlockFace.fromIndex(oldBlock.getPropertyValue(FACING_DIRECTION));
+            if (attachedFace != null) {
+                Vector3ic attachedPos = attachedFace.opposite().offsetPos(oldBlock.getPosition());
+                oldBlock.getDimension().updateAround(attachedPos);
+            }
+        }
+    }
+
+    @Override
+    public int getWeakPower(Block block, BlockFace face) {
+        return block.getPropertyValue(BUTTON_PRESSED_BIT) ? MAX_REDSTONE_POWER : 0;
+    }
+
+    @Override
+    public int getStrongPower(Block block, BlockFace face) {
+        if (!block.getPropertyValue(BUTTON_PRESSED_BIT)) {
+            return 0;
+        }
+
+        // Button provides strong power to the block it's attached to
+        BlockFace attachedFace = BlockFace.fromIndex(block.getPropertyValue(FACING_DIRECTION));
+        if (attachedFace != null && face == attachedFace.opposite()) {
+            return MAX_REDSTONE_POWER;
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean isPowerSource() {
+        return true;
     }
 }

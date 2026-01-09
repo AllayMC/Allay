@@ -1,53 +1,72 @@
-package org.allaymc.server.blockentity.component;
+package org.allaymc.server.block.component;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.data.Instrument;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.blockentity.BlockEntityInitInfo;
-import org.allaymc.api.blockentity.component.BlockEntityNoteblockBaseComponent;
-import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.blockentity.interfaces.BlockEntityNoteblock;
 import org.allaymc.api.world.particle.NoteParticle;
 import org.allaymc.api.world.sound.NoteSound;
-import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
-import org.cloudburstmc.nbt.NbtMap;
+import org.allaymc.server.block.RedstoneHelper;
 
 /**
+ * Implementation of the noteblock.
+ * Plays sound when powered by redstone (on rising edge).
+ *
  * @author daoge_cmd
  */
-public class BlockEntityNoteblockBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityNoteblockBaseComponent {
+public class BlockNoteblockBaseComponentImpl extends BlockBaseComponentImpl {
 
-    protected static final String TAG_NOTE = "note";
-
-    @Getter
-    @Setter
-    protected int pitch;
-
-    @Getter
-    @Setter
-    protected boolean powered;
-
-    public BlockEntityNoteblockBaseComponentImpl(BlockEntityInitInfo initInfo) {
-        super(initInfo);
+    public BlockNoteblockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+        super(blockType);
     }
 
     @Override
-    public void loadNBT(NbtMap nbt) {
-        super.loadNBT(nbt);
-        nbt.listenForInt(TAG_NOTE, value -> pitch = value);
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+
+        var blockEntity = (BlockEntityNoteblock) block.getBlockEntity();
+        if (blockEntity == null) {
+            return;
+        }
+
+        boolean powered = RedstoneHelper.isPoweredAt(block.getPosition());
+        if (powered && !blockEntity.isPowered()) {
+            // Rising edge - play sound
+            emitSound(block);
+        }
+        blockEntity.setPowered(powered);
     }
 
-    @Override
-    public NbtMap saveNBT() {
-        return super.saveNBT()
-                .toBuilder()
-                .putInt(TAG_NOTE, pitch)
-                .build();
+    /**
+     * Emits sound and particle from the noteblock.
+     */
+    protected void emitSound(Block block) {
+        // Can't play if block above is not air
+        if (block.offsetPos(BlockFace.UP).getBlockType() != BlockTypes.AIR) {
+            return;
+        }
+
+        var blockEntity = (BlockEntityNoteblock) block.getBlockEntity();
+        if (blockEntity == null) {
+            return;
+        }
+
+        var dimension = block.getDimension();
+        var pos = block.getPosition();
+        var instrument = getInstrument(block.offsetPos(BlockFace.DOWN).getBlockType());
+        var pitch = blockEntity.getPitch();
+
+        dimension.addSound(pos, new NoteSound(instrument, pitch));
+        dimension.addParticle(pos, new NoteParticle(instrument, pitch));
     }
 
+    /**
+     * Gets the instrument based on the block below the noteblock.
+     */
     protected Instrument getInstrument(BlockType<?> block) {
         if (block.hasBlockTag(BlockTags.WOOD) ||
             block.hasBlockTag(BlockTags.LOG)) {
@@ -113,32 +132,5 @@ public class BlockEntityNoteblockBaseComponentImpl extends BlockEntityBaseCompon
         }
 
         return Instrument.PIANO;
-    }
-
-    protected int getNextPitch() {
-        this.pitch = (this.pitch + 1) % 25;
-        return this.pitch;
-    }
-
-    @EventHandler
-    protected void onBlockInteract(CBlockOnInteractEvent event) {
-        var interactInfo = event.getInteractInfo();
-
-        // Sneaking player should not trigger noteblock (allows placing blocks on top)
-        if (interactInfo.player().isSneaking()) {
-            return;
-        }
-
-        if (interactInfo.getClickedBlock().offsetPos(BlockFace.UP).getBlockType() != BlockTypes.AIR) {
-            return;
-        }
-
-        var dimension = event.getDimension();
-        var instrument = getInstrument(interactInfo.getClickedBlock().offsetPos(BlockFace.DOWN).getBlockType());
-        var nextPitch = getNextPitch();
-        var pos = interactInfo.clickedBlockPos();
-        dimension.addSound(pos, new NoteSound(instrument, nextPitch));
-        dimension.addParticle(pos, new NoteParticle(instrument, nextPitch));
-        event.setSuccess(true);
     }
 }

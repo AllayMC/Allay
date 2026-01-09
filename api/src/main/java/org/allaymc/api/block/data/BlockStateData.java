@@ -172,6 +172,16 @@ public class BlockStateData {
     }
 
     /**
+     * Check if the block state is opaque and solid.
+     * Opaque solid blocks can transmit redstone power and block diagonal wire connections.
+     *
+     * @return {@code true} if the block state is solid and not transparent.
+     */
+    public boolean isOpaqueSolid() {
+        return isSolid && !isTransparent();
+    }
+
+    /**
      * Check if the block state can contain liquid, no matter it is liquid source or not.
      *
      * @return {@code true} if the block state can contain liquid, otherwise {@code false}.
