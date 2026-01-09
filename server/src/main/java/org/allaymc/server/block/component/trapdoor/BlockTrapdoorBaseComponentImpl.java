@@ -11,7 +11,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.TrapdoorSound;
 import org.allaymc.server.block.BlockPlaceHelper;
-import org.allaymc.server.block.RedstoneHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
@@ -83,7 +82,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
      * @param block the trapdoor block
      */
     protected void checkRedstonePower(Block block) {
-        int power = RedstoneHelper.getPowerAt(block.getPosition());
+        int power = block.getDimension().getPowerAt(block.getPosition());
 
         boolean shouldBeOpen = power > 0;
         boolean isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);

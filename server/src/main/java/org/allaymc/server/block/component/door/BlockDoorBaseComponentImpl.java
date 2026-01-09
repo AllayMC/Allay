@@ -13,7 +13,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.DoorSound;
-import org.allaymc.server.block.RedstoneHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -102,9 +101,9 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
                 : BlockFace.UP.offsetPos(pos);
 
         // Check power at both halves and use the maximum
-        int powerAtThis = RedstoneHelper.getPowerAt(block.getPosition());
+        int powerAtThis = block.getDimension().getPowerAt(block.getPosition());
         var otherPosition = new Position3i(otherPos, dimension);
-        int powerAtOther = RedstoneHelper.getPowerAt(otherPosition);
+        int powerAtOther = block.getDimension().getPowerAt(otherPosition);
         int maxPower = Math.max(powerAtThis, powerAtOther);
 
         boolean shouldBeOpen = maxPower > 0;

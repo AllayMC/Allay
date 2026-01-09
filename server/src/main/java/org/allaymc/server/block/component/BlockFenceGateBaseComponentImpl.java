@@ -13,7 +13,6 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.FenceGateSound;
 import org.allaymc.server.block.BlockPlaceHelper;
-import org.allaymc.server.block.RedstoneHelper;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
@@ -88,10 +87,10 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
      * @param block the fence gate block
      */
     protected void checkRedstonePower(Block block) {
-        int power = RedstoneHelper.getPowerAt(block.getPosition());
+        int power = block.getDimension().getPowerAt(block.getPosition());
 
-        boolean shouldBeOpen = power > 0;
-        boolean isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
+        var shouldBeOpen = power > 0;
+        var isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
 
         if (shouldBeOpen != isCurrentlyOpen) {
             var dimension = block.getDimension();

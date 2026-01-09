@@ -1348,6 +1348,64 @@ public interface Dimension extends TaskCreator {
         return false;
     }
 
+    /**
+     * Checks if a position is receiving any redstone power.
+     * This considers both direct weak power and strong power through solid blocks.
+     *
+     * @param pos the position to check
+     * @return true if the position is receiving power
+     */
+    default boolean isPoweredAt(Vector3ic pos) {
+        return this.getPowerAt(pos) > 0;
+    }
+
+    /**
+     * Calculates the maximum power level received at a position from all 6 faces.
+     * This considers both direct weak power and strong power through solid blocks.
+     *
+     * @param pos the position to check
+     * @return the maximum power level (0-15)
+     */
+    int getPowerAt(Vector3ic pos);
+
+    /**
+     * Gets the maximum strong power being received at a position from all 6 faces.
+     *
+     * @param pos the position to check
+     * @return the strong power level (0-15)
+     */
+    default int getStrongPowerAt(Vector3ic pos) {
+        return this.getStrongPowerAt(pos, new BlockFace[0]);
+    }
+
+    /**
+     * Gets the maximum strong power being received at a position.
+     *
+     * @param pos          the position to check
+     * @param excludeFaces the faces to exclude from the check
+     * @return the strong power level (0-15)
+     */
+    int getStrongPowerAt(Vector3ic pos, BlockFace... excludeFaces);
+
+    /**
+     * Gets the maximum weak power being received at a position from all 6 faces.
+     *
+     * @param pos the position to check
+     * @return the weak power level (0-15)
+     */
+    default int getWeakPowerAt(Vector3ic pos) {
+        return this.getWeakPowerAt(pos, new BlockFace[0]);
+    }
+
+    /**
+     * Gets the maximum weak power being received at a position.
+     *
+     * @param pos          the position to check
+     * @param excludeFaces the faces to exclude from the check
+     * @return the weak power level (0-15)
+     */
+    int getWeakPowerAt(Vector3ic pos, BlockFace... excludeFaces);
+
     @Override
     default boolean isValid() {
         return getWorld().isValid();

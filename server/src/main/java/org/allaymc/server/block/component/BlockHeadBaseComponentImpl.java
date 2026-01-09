@@ -11,7 +11,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.interfaces.BlockEntityHead;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.RedstoneHelper;
 import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3ic;
 
@@ -49,7 +48,7 @@ public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var pos = oldBlock.getPosition();
-        if (RedstoneHelper.isPoweredAt(pos)) {
+        if (oldBlock.getDimension().isPoweredAt(pos)) {
             blockEntityHolderComponent.getBlockEntity(pos).setPlayingAnimation(true);
         }
     }
@@ -65,7 +64,7 @@ public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var blockEntity = blockEntityHolderComponent.getBlockEntity(block.getPosition());
-        boolean powered = RedstoneHelper.isPoweredAt(block.getPosition());
+        var powered = block.getDimension().isPoweredAt(block.getPosition());
         if (blockEntity.isPlayingAnimation() != powered) {
             blockEntity.setPlayingAnimation(powered);
         }
