@@ -277,7 +277,7 @@ public class AllayLightEngine implements LightEngine {
         int minNeighborLightEmission = 15;
         if (lightEmissionValue != 0) {
             var ignoreCurrentBlockLight = false;
-            for (var blockFace : BlockFace.values()) {
+            for (var blockFace : BlockFace.VALUES) {
                 // The following are world pos not chunk local pos
                 var neighborX = x + blockFace.getOffset().x();
                 var neighborZ = z + blockFace.getOffset().z();

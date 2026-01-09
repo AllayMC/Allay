@@ -193,10 +193,9 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
 
         // 2. Centered on the block pos we found (1), find out the best moving direction
         BlockFace movingDirection = null;
-        var values = BlockFace.values();
         double distanceSqrt = Integer.MAX_VALUE;
-        for (int i = values.length - 1; i >= 0; i--) {
-            var blockFace = values[i];
+        for (int i = BlockFace.VALUES.length - 1; i >= 0; i--) {
+            var blockFace = BlockFace.VALUES[i];
             var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
             var blockState = dimension.getBlockState(offsetVec);
             if (blockState.getBlockType() == AIR) {

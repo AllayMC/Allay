@@ -276,7 +276,7 @@ public final class VoxelShape {
      * @return {@code true} if this voxel shape is full block, otherwise {@code false}.
      */
     public boolean isFullBlock() {
-        return Arrays.stream(BlockFace.values()).allMatch(this::isFull);
+        return Arrays.stream(BlockFace.VALUES).allMatch(this::isFull);
     }
 
     /**

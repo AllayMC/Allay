@@ -91,7 +91,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             BlockState waterBlockState = null;
             var down = block.offsetPos(BlockFace.DOWN);
             var soulSoilUnder = down.getBlockType() == BlockTypes.SOUL_SOIL;
-            for (var face : BlockFace.values()) {
+            for (var face : BlockFace.VALUES) {
                 if (face == BlockFace.DOWN) {
                     continue;
                 }
@@ -204,7 +204,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     protected boolean canNeighborBurn(Dimension dimension, Vector3ic pos) {
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             if (dimension.getBlockState(face.offsetPos(pos)).getBlockStateData().flameOdds() > 0) {
                 return true;
             }

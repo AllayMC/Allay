@@ -25,7 +25,7 @@ public interface BlockConcretePowderBaseComponent extends BlockBaseComponent {
      * @return {@code true} if there is water adjacent to the block, {@code false} otherwise
      */
     default boolean hasAdjacentWater(Dimension dimension, Vector3ic blockPos) {
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             if (face == BlockFace.DOWN) {
                 continue;
             }

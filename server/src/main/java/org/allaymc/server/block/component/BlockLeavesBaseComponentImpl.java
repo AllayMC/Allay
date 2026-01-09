@@ -65,7 +65,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         // Slowly propagates the need to update instead of peaking down the TPS for huge trees
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             var sideBlockState = current.offsetPos(face);
             if (sideBlockState.getBlockType().hasBlockTag(BlockTags.LEAVES)) {
                 if (!sideBlockState.getPropertyValue(UPDATE_BIT)) {

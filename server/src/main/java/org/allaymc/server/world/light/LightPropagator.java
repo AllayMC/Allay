@@ -6,7 +6,7 @@ import org.allaymc.api.block.data.BlockFace;
  * @author daoge_cmd
  */
 public class LightPropagator {
-    protected static final BlockFace[] BLOCK_FACE_UPDATE_ORDER = BlockFace.values();
+    protected static final BlockFace[] BLOCK_FACE_UPDATE_ORDER = BlockFace.VALUES;
 
     protected final LightDataAccessor lightDataAccessor;
     protected final LightUpdateQueue lightIncreaseQueue;

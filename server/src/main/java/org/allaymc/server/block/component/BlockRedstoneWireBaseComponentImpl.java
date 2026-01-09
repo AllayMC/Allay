@@ -226,7 +226,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         int maxPower = 0;
 
         // Check all 6 faces for power sources
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = dimension.getBlockState(neighborPos);
 
@@ -258,7 +258,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     protected int getStrongPowerIntoBlock(Dimension dimension, Vector3ic solidPos, BlockFace excludeFace) {
         int maxPower = 0;
 
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             if (face == excludeFace) continue;
 
             Vector3ic checkPos = face.offsetPos(solidPos);
@@ -468,7 +468,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Update second-order neighbors through solid blocks (for weak power)
         // When a solid block's power state changes, blocks on the other side need to know
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = dimension.getBlockState(neighborPos);
 

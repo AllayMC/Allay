@@ -684,7 +684,7 @@ public interface Dimension extends TaskCreator {
      * @param ignoreFaces the faces to ignore
      */
     default void updateAroundIgnoreFace(Vector3ic pos, BlockFace... ignoreFaces) {
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             if (ignoreFaces != null && ignoreFaces.length > 0) {
                 var ignore = Arrays.stream(ignoreFaces).anyMatch(ignoreFace -> ignoreFace == face);
                 if (ignore) continue;
@@ -698,7 +698,7 @@ public interface Dimension extends TaskCreator {
      * @see #updateAround(Vector3ic)
      */
     default void updateAround(int x, int y, int z) {
-        for (var face : BlockFace.values()) updateAtFace(x, y, z, face);
+        for (var face : BlockFace.VALUES) updateAtFace(x, y, z, face);
     }
 
     /**
@@ -707,7 +707,7 @@ public interface Dimension extends TaskCreator {
      * @param pos the pos where the block is in
      */
     default void updateAround(Vector3ic pos) {
-        for (var face : BlockFace.values()) updateAtFace(pos, face);
+        for (var face : BlockFace.VALUES) updateAtFace(pos, face);
     }
 
     /**
@@ -753,8 +753,8 @@ public interface Dimension extends TaskCreator {
      */
     default Block[] getNeighborsBlocks(int x, int y, int z) {
         var result = new Block[6];
-        for (int i = 0; i < BlockFace.values().length; i++) {
-            var offsetPos = BlockFace.values()[i].offsetPos(x, y, z);
+        for (int i = 0; i < BlockFace.VALUES.length; i++) {
+            var offsetPos = BlockFace.VALUES[i].offsetPos(x, y, z);
             var neighborBlockState = getBlockState(offsetPos.x(), offsetPos.y(), offsetPos.z(), 0);
             result[i] = new Block(neighborBlockState, new Position3i(offsetPos, this), 0);
         }

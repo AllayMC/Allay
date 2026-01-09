@@ -156,7 +156,7 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
      * Checks if a block position is receiving power, excluding a specific source position.
      */
     protected boolean isPoweredExcluding(Dimension dimension, Vector3ic blockPos, Vector3ic excludePos) {
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(blockPos);
 
             // Skip the excluded position (the torch itself)
@@ -195,7 +195,7 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
      */
     protected int getStrongPowerIntoBlockExcluding(Dimension dimension, Vector3ic blockPos, Vector3ic excludePos, BlockFace excludeFace) {
         int maxPower = 0;
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             if (face == excludeFace) continue;
 
             Vector3ic checkPos = face.offsetPos(blockPos);

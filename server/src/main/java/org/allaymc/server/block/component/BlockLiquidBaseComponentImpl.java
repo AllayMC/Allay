@@ -246,7 +246,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * @return Whether there is a supply liquid around the position
      */
     protected boolean hasSupplyLiquidAround(Dimension dimension, Vector3ic pos, BlockState liquid) {
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             if (face == BlockFace.DOWN) {
                 // We don't care about water below this one.
                 continue;
