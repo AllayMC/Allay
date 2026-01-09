@@ -33,6 +33,9 @@ import org.allaymc.server.block.component.ice.BlockHardIceBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
+import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
+import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressurePlateBaseComponentImpl;
+import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
@@ -419,6 +422,13 @@ public final class BlockTypeInitializer {
                 .bindBlockEntity(BlockEntityTypes.CHEST)
                 .setBaseComponentSupplier(BlockChestBaseComponentImpl::new)
                 .build();
+        BlockTypes.TRAPPED_CHEST = AllayBlockType
+                .builder(BlockTrappedChestBehaviorImpl.class)
+                .vanillaBlock(BlockId.TRAPPED_CHEST)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.CHEST)
+                .setBaseComponentSupplier(BlockTrappedChestBaseComponentImpl::new)
+                .build();
     }
 
     public static void initHopper() {
@@ -724,18 +734,7 @@ public final class BlockTypeInitializer {
     }
 
     public static void initTorch() {
-        BlockTypes.REDSTONE_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.REDSTONE_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
-        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                .builder(BlockTorchBehaviorImpl.class)
-                .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
+        // Note: REDSTONE_TORCH and UNLIT_REDSTONE_TORCH are registered in initRedstoneTorch()
 
         BlockTypes.SOUL_TORCH = AllayBlockType
                 .builder(BlockTorchBehaviorImpl.class)
@@ -1826,6 +1825,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockNoteblockBehaviorImpl.class)
                 .vanillaBlock(BlockId.NOTEBLOCK)
                 .bindBlockEntity(BlockEntityTypes.NOTEBLOCK)
+                .setBaseComponentSupplier(BlockNoteblockBaseComponentImpl::new)
                 .build();
     }
 
@@ -2061,6 +2061,156 @@ public final class BlockTypeInitializer {
         return AllayBlockType.builder(BlockCopperBarsBehaviorImpl.class)
                 .vanillaBlock(id)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
+
+    public static void initLever() {
+        BlockTypes.LEVER = AllayBlockType
+                .builder(BlockLeverBehaviorImpl.class)
+                .vanillaBlock(BlockId.LEVER)
+                .setProperties(BlockPropertyTypes.LEVER_DIRECTION, BlockPropertyTypes.OPEN_BIT)
+                .setBaseComponentSupplier(BlockLeverBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initRedstoneWire() {
+        BlockTypes.REDSTONE_WIRE = AllayBlockType
+                .builder(BlockRedstoneWireBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_WIRE)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(BlockRedstoneWireBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initRedstoneBlock() {
+        BlockTypes.REDSTONE_BLOCK = AllayBlockType
+                .builder(BlockRedstoneBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_BLOCK)
+                .setBaseComponentSupplier(BlockRedstoneBlockBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initPressurePlates() {
+        // Binary pressure plates (stone and wooden variants)
+        BlockTypes.STONE_PRESSURE_PLATE = buildPressurePlate(BlockId.STONE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.WOODEN_PRESSURE_PLATE = buildPressurePlate(BlockId.WOODEN_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.ACACIA_PRESSURE_PLATE = buildPressurePlate(BlockId.ACACIA_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.BAMBOO_PRESSURE_PLATE = buildPressurePlate(BlockId.BAMBOO_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.BIRCH_PRESSURE_PLATE = buildPressurePlate(BlockId.BIRCH_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.CHERRY_PRESSURE_PLATE = buildPressurePlate(BlockId.CHERRY_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.CRIMSON_PRESSURE_PLATE = buildPressurePlate(BlockId.CRIMSON_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.DARK_OAK_PRESSURE_PLATE = buildPressurePlate(BlockId.DARK_OAK_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.JUNGLE_PRESSURE_PLATE = buildPressurePlate(BlockId.JUNGLE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.MANGROVE_PRESSURE_PLATE = buildPressurePlate(BlockId.MANGROVE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.SPRUCE_PRESSURE_PLATE = buildPressurePlate(BlockId.SPRUCE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.WARPED_PRESSURE_PLATE = buildPressurePlate(BlockId.WARPED_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.PALE_OAK_PRESSURE_PLATE = buildPressurePlate(BlockId.PALE_OAK_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+        BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE = buildPressurePlate(BlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE, BlockPressurePlateBaseComponentImpl::new);
+
+        // Weighted pressure plates
+        BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockId.LIGHT_WEIGHTED_PRESSURE_PLATE, BlockLightWeightedPressurePlateBaseComponentImpl::new);
+        BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockId.HEAVY_WEIGHTED_PRESSURE_PLATE, BlockHeavyWeightedPressurePlateBaseComponentImpl::new);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildPressurePlate(BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
+        return AllayBlockType
+                .builder(BlockPressurePlateBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(blockBaseComponentSupplier)
+                .build();
+    }
+
+    public static void initObserver() {
+        BlockTypes.OBSERVER = AllayBlockType
+                .builder(BlockObserverBehaviorImpl.class)
+                .vanillaBlock(BlockId.OBSERVER)
+                .setProperties(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, BlockPropertyTypes.POWERED_BIT)
+                .setBaseComponentSupplier(BlockObserverBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initRedstoneLamp() {
+        BlockTypes.REDSTONE_LAMP = AllayBlockType
+                .builder(BlockRedstoneLampBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_LAMP)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, false))
+                .build();
+        BlockTypes.LIT_REDSTONE_LAMP = AllayBlockType
+                .builder(BlockLitRedstoneLampBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIT_REDSTONE_LAMP)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, true))
+                .build();
+    }
+
+    public static void initRedstoneTorch() {
+        BlockTypes.REDSTONE_TORCH = AllayBlockType
+                .builder(BlockTorchBehaviorImpl.class)
+                .vanillaBlock(BlockId.REDSTONE_TORCH)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, true))
+                .build();
+        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
+                .builder(BlockTorchBehaviorImpl.class)
+                .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneTorchBaseComponentImpl(blockType, false))
+                .build();
+    }
+
+    public static void initDaylightDetector() {
+        BlockTypes.DAYLIGHT_DETECTOR = AllayBlockType
+                .builder(BlockDaylightDetectorBehaviorImpl.class)
+                .vanillaBlock(BlockId.DAYLIGHT_DETECTOR)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, false))
+                .build();
+        BlockTypes.DAYLIGHT_DETECTOR_INVERTED = AllayBlockType
+                .builder(BlockDaylightDetectorInvertedBehaviorImpl.class)
+                .vanillaBlock(BlockId.DAYLIGHT_DETECTOR_INVERTED)
+                .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+                .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, true))
+                .build();
+    }
+
+    public static void initRedstoneRepeater() {
+        BlockTypes.POWERED_REPEATER = AllayBlockType
+                .builder(BlockPoweredRepeaterBehaviorImpl.class)
+                .vanillaBlock(BlockId.POWERED_REPEATER)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, true))
+                .build();
+        BlockTypes.UNPOWERED_REPEATER = AllayBlockType
+                .builder(BlockUnpoweredRepeaterBehaviorImpl.class)
+                .vanillaBlock(BlockId.UNPOWERED_REPEATER)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, false))
+                .build();
+    }
+
+    public static void initRedstoneComparator() {
+        BlockTypes.POWERED_COMPARATOR = AllayBlockType
+                .builder(BlockPoweredComparatorBehaviorImpl.class)
+                .vanillaBlock(BlockId.POWERED_COMPARATOR)
+                .bindBlockEntity(BlockEntityTypes.COMPARATOR)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, true))
+                .build();
+        BlockTypes.UNPOWERED_COMPARATOR = AllayBlockType
+                .builder(BlockUnpoweredComparatorBehaviorImpl.class)
+                .vanillaBlock(BlockId.UNPOWERED_COMPARATOR)
+                .bindBlockEntity(BlockEntityTypes.COMPARATOR)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, false))
+                .build();
+    }
+
+    public static void initTarget() {
+        BlockTypes.TARGET = AllayBlockType
+                .builder(BlockTargetBehaviorImpl.class)
+                .vanillaBlock(BlockId.TARGET)
+                .bindBlockEntity(BlockEntityTypes.TARGET)
+                .setBaseComponentSupplier(BlockTargetBaseComponentImpl::new)
                 .build();
     }
 }

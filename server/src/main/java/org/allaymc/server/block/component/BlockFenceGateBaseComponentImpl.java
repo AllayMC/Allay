@@ -8,11 +8,12 @@ import org.allaymc.api.block.interfaces.BlockWallBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.sound.FenceGateCloseSound;
-import org.allaymc.api.world.sound.FenceGateOpenSound;
+import org.allaymc.api.world.sound.FenceGateSound;
 import org.allaymc.server.block.BlockPlaceHelper;
+import org.allaymc.server.block.RedstoneHelper;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
@@ -29,6 +30,9 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
         block.updateBlockProperty(IN_WALL_BIT, shouldBeLowered(block));
+
+        // Check redstone power and update fence gate state
+        checkRedstonePower(block);
     }
 
     @Override
@@ -37,6 +41,15 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         var current = new Block(blockState, new Position3i(placeBlockPos, dimension));
         blockState = blockState.setPropertyValue(IN_WALL_BIT, shouldBeLowered(current));
         return dimension.setBlockState(placeBlockPos, blockState);
+    }
+
+    @Override
+    public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlock, newBlockState, placementInfo);
+
+        // Check redstone power immediately after placement
+        var newBlock = new Block(newBlockState, oldBlock.getPosition());
+        checkRedstonePower(newBlock);
     }
 
     @Override
@@ -57,7 +70,7 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         clickedBlockState.updateBlockProperty(OPEN_BIT, open);
-        clickedBlockState.addSound(open ? new FenceGateOpenSound(clickedBlockState.getBlockState()) : new FenceGateCloseSound(clickedBlockState.getBlockState()));
+        clickedBlockState.addSound(new FenceGateSound(clickedBlockState.getBlockState(), open));
         return true;
     }
 
@@ -67,5 +80,27 @@ public class BlockFenceGateBaseComponentImpl extends BlockBaseComponentImpl {
         blockFace = blockFace.rotateY();
         return current.offsetPos(blockFace).getBehavior() instanceof BlockWallBehavior ||
                current.offsetPos(blockFace.opposite()).getBehavior() instanceof BlockWallBehavior;
+    }
+
+    /**
+     * Checks if the fence gate should be opened/closed based on redstone power.
+     *
+     * @param block the fence gate block
+     */
+    protected void checkRedstonePower(Block block) {
+        int power = RedstoneHelper.getPowerAt(block.getPosition());
+
+        boolean shouldBeOpen = power > 0;
+        boolean isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
+
+        if (shouldBeOpen != isCurrentlyOpen) {
+            var dimension = block.getDimension();
+            var pos = block.getPosition();
+
+            dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, pos);
+
+            // Play sound
+            dimension.addSound(MathUtils.center(pos), new FenceGateSound(block.getBlockState(), shouldBeOpen));
+        }
     }
 }
