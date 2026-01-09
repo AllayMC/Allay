@@ -1,5 +1,7 @@
 package org.allaymc.api.player;
 
+import org.allaymc.api.eventbus.event.server.PlayerNicknameChangeEvent;
+
 import java.util.UUID;
 
 /**
@@ -34,7 +36,7 @@ import java.util.UUID;
  *   <li>The previous owner is marked with "OriginalNickname" tag</li>
  *   <li>Previous owner gets a unique temporary nickname (base_uuid)</li>
  *   <li>Both players retain all their data - no data is lost</li>
- *   <li>A {@link org.allaymc.api.eventbus.event.player.PlayerNicknameChangeEvent} is fired</li>
+ *   <li>A {@link PlayerNicknameChangeEvent} is fired</li>
  * </ol>
  *
  * @author IWareQ

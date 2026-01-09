@@ -2,7 +2,7 @@ package org.allaymc.server.player;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.eventbus.event.player.PlayerNicknameChangeEvent;
+import org.allaymc.api.eventbus.event.server.PlayerNicknameChangeEvent;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.OfflinePlayer;
 import org.allaymc.api.player.OfflinePlayerManager;
