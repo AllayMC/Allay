@@ -39,7 +39,7 @@ public class RedstoneHelper {
         int maxPower = 0;
         Dimension dimension = pos.dimension();
 
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = dimension.getBlockState(neighborPos);
 
@@ -80,7 +80,7 @@ public class RedstoneHelper {
         int maxPower = 0;
         Dimension dimension = pos.dimension();
 
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             if (excludeFaces.length > 0 && containsFace(excludeFaces, face)) continue;
 
             Vector3ic checkPos = face.offsetPos(pos);
@@ -115,7 +115,7 @@ public class RedstoneHelper {
         int maxPower = 0;
         Dimension dimension = pos.dimension();
 
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             if (excludeFaces.length > 0 && containsFace(excludeFaces, face)) continue;
 
             Vector3ic checkPos = face.offsetPos(pos);

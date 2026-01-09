@@ -29,7 +29,7 @@ public enum BlockFace {
     WEST(new Vector3i(-1, 0, 0), 1, Axis.X),
     EAST(new Vector3i(1, 0, 0), 3, Axis.X);
 
-    private static final BlockFace[] FACES = values();
+    public static final BlockFace[] VALUES = values();
     /**
      * All faces with horizontal axis in order S-W-N-E
      */
@@ -50,11 +50,11 @@ public enum BlockFace {
      * @return the corresponding {@link BlockFace}, or {@code null} if the index is out of range
      */
     public static BlockFace fromIndex(int index) {
-        if (index < 0 || index >= FACES.length) {
+        if (index < 0 || index >= VALUES.length) {
             return null;
         }
 
-        return FACES[index];
+        return VALUES[index];
     }
 
     /**
