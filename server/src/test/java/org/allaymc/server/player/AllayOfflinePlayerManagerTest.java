@@ -30,12 +30,12 @@ import static org.mockito.Mockito.*;
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ExtendWith(AllayTestExtension.class)
-public class AllayOfflinePlayerServiceTest {
+public class AllayOfflinePlayerManagerTest {
     @TempDir(cleanup = CleanupMode.ALWAYS)
     private static Path tempDir;
     private static Path dbPath;
 
-    private AllayOfflinePlayerService service;
+    private AllayOfflinePlayerManager offlinePlayerManager;
     private AllayPlayerStorage mockStorage;
     private MockedStatic<Server> serverStatic;
 
@@ -43,7 +43,7 @@ public class AllayOfflinePlayerServiceTest {
     void setUp() {
         dbPath = tempDir.resolve(UUID.randomUUID().toString());
         mockStorage = new AllayNBTFilePlayerStorage(tempDir.resolve(UUID.randomUUID().toString()));
-        service = new AllayOfflinePlayerService(dbPath, mockStorage);
+        offlinePlayerManager = new AllayOfflinePlayerManager(dbPath, mockStorage);
 
 
         var mockServer = mock(Server.class);
@@ -76,8 +76,8 @@ public class AllayOfflinePlayerServiceTest {
 
     @AfterEach
     void tearDown() {
-        if (service != null) {
-            service.shutdown();
+        if (offlinePlayerManager != null) {
+            offlinePlayerManager.shutdown();
         }
         if (serverStatic != null) {
             serverStatic.close();
@@ -89,7 +89,7 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Create new player with Xbox authentication")
     void testCreateNewPlayerWithXboxAuth() {
         var loginData = createMockLoginData(123456789L, "Steve");
-        var player = service.handleUpdates(loginData);
+        var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player, "Player should be created");
         assertEquals("Steve", player.getNickname());
@@ -102,7 +102,7 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Create new player in offline mode")
     void testCreateNewPlayerOfflineMode() {
         var loginData = createMockLoginData(null, "Alex");
-        var player = service.handleUpdates(loginData);
+        var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
         assertEquals("Alex", player.getNickname());
@@ -115,9 +115,9 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Get player by Xbox User ID")
     void testGetByXboxUserId() {
         var loginData = createMockLoginData(999888777L, "TestPlayer");
-        var created = service.handleUpdates(loginData);
+        var created = offlinePlayerManager.handleUpdates(loginData);
 
-        var found = service.getByXboxUserId(999888777L);
+        var found = offlinePlayerManager.getByXboxUserId(999888777L);
 
         assertNotNull(found);
         assertEquals(created.getStorageUuid(), found.getStorageUuid());
@@ -129,11 +129,11 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Get player by nickname")
     void testGetByNickname() {
         var loginData = createMockLoginData(111222333L, "UniqueNick");
-        service.handleUpdates(loginData);
+        offlinePlayerManager.handleUpdates(loginData);
 
-        var found1 = service.getByNickname("UniqueNick");
-        var found2 = service.getByNickname("uniquenick");
-        var found3 = service.getByNickname("UNIQUENICK");
+        var found1 = offlinePlayerManager.getByNickname("UniqueNick");
+        var found2 = offlinePlayerManager.getByNickname("uniquenick");
+        var found3 = offlinePlayerManager.getByNickname("UNIQUENICK");
 
         assertNotNull(found1);
         assertNotNull(found2);
@@ -148,10 +148,10 @@ public class AllayOfflinePlayerServiceTest {
     void testGetByNicknameUuid() {
         var nickname = "TestNick";
         var loginData = createMockLoginData(null, nickname);
-        var created = service.handleUpdates(loginData);
+        var created = offlinePlayerManager.handleUpdates(loginData);
 
         var nameUuid = created.getNameUuid();
-        var found = service.getByNicknameUuid(nameUuid);
+        var found = offlinePlayerManager.getByNicknameUuid(nameUuid);
 
         assertNotNull(found);
         assertEquals(created.getStorageUuid(), found.getStorageUuid());
@@ -161,9 +161,9 @@ public class AllayOfflinePlayerServiceTest {
     @Order(6)
     @DisplayName("Return null for non-existent player")
     void testGetNonExistentPlayer() {
-        assertNull(service.getByXboxUserId(99999999L));
-        assertNull(service.getByNickname("NonExistent"));
-        assertNull(service.getByNicknameUuid(UUID.randomUUID()));
+        assertNull(offlinePlayerManager.getByXboxUserId(99999999L));
+        assertNull(offlinePlayerManager.getByNickname("NonExistent"));
+        assertNull(offlinePlayerManager.getByNicknameUuid(UUID.randomUUID()));
     }
 
     @Test
@@ -171,17 +171,17 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Handle simple nickname change")
     void testSimpleNicknameChange() {
         var login1 = createMockLoginData(555666777L, "OriginalName");
-        var player1 = service.handleUpdates(login1);
+        var player1 = offlinePlayerManager.handleUpdates(login1);
         var storageUuid = player1.getStorageUuid();
 
         var login2 = createMockLoginData(555666777L, "NewName");
-        var player2 = service.handleUpdates(login2);
+        var player2 = offlinePlayerManager.handleUpdates(login2);
 
         assertEquals(storageUuid, player2.getStorageUuid(), "Storage UUID should remain the same");
         assertEquals("NewName", player2.getNickname());
 
-        assertNull(service.getByNickname("OriginalName"));
-        assertNotNull(service.getByNickname("NewName"));
+        assertNull(offlinePlayerManager.getByNickname("OriginalName"));
+        assertNotNull(offlinePlayerManager.getByNickname("NewName"));
     }
 
     @Test
@@ -189,18 +189,18 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Handle nickname case change")
     void testNicknameCaseChange() {
         var login1 = createMockLoginData(null, "steve");
-        var player1 = service.handleUpdates(login1);
+        var player1 = offlinePlayerManager.handleUpdates(login1);
         var storageUuid = player1.getStorageUuid();
 
         var login2 = createMockLoginData(null, "Steve");
-        var player2 = service.handleUpdates(login2);
+        var player2 = offlinePlayerManager.handleUpdates(login2);
 
         assertEquals(storageUuid, player2.getStorageUuid());
         assertEquals("steve", player2.getNickname());
 
-        assertNotNull(service.getByNickname("steve"));
-        assertNotNull(service.getByNickname("Steve"));
-        assertNotNull(service.getByNickname("STEVE"));
+        assertNotNull(offlinePlayerManager.getByNickname("steve"));
+        assertNotNull(offlinePlayerManager.getByNickname("Steve"));
+        assertNotNull(offlinePlayerManager.getByNickname("STEVE"));
     }
 
     @Test
@@ -210,15 +210,15 @@ public class AllayOfflinePlayerServiceTest {
         var loginA1 = createMockLoginData(111L, "Alice");
         var loginB1 = createMockLoginData(222L, "Bob");
 
-        var playerA = service.handleUpdates(loginA1);
-        var playerB = service.handleUpdates(loginB1);
+        var playerA = offlinePlayerManager.handleUpdates(loginA1);
+        var playerB = offlinePlayerManager.handleUpdates(loginB1);
 
         var storageA = playerA.getStorageUuid();
         var storageB = playerB.getStorageUuid();
 
         // Act - PlayerA changes to "Bob" (takes it from PlayerB)
         var loginA2 = createMockLoginData(111L, "Bob");
-        var playerA_v2 = service.handleUpdates(loginA2);
+        var playerA_v2 = offlinePlayerManager.handleUpdates(loginA2);
 
         // Assert - PlayerA now has "Bob"
         assertEquals(storageA, playerA_v2.getStorageUuid());
@@ -226,7 +226,7 @@ public class AllayOfflinePlayerServiceTest {
 
         // Act - PlayerB changes to "Alice" (takes it from PlayerA)
         var loginB2 = createMockLoginData(222L, "Alice");
-        var playerB_v2 = service.handleUpdates(loginB2);
+        var playerB_v2 = offlinePlayerManager.handleUpdates(loginB2);
 
         // Assert - PlayerB now has "Alice"
         assertEquals(storageB, playerB_v2.getStorageUuid());
@@ -242,22 +242,22 @@ public class AllayOfflinePlayerServiceTest {
     @Order(21)
     @DisplayName("Handle nickname collision - three-way swap")
     void testNicknameCollision_ThreeWay() {
-        var playerA = service.handleUpdates(createMockLoginData(1001L, "A"));
-        var playerB = service.handleUpdates(createMockLoginData(1002L, "B"));
-        var playerC = service.handleUpdates(createMockLoginData(1003L, "C"));
+        var playerA = offlinePlayerManager.handleUpdates(createMockLoginData(1001L, "A"));
+        var playerB = offlinePlayerManager.handleUpdates(createMockLoginData(1002L, "B"));
+        var playerC = offlinePlayerManager.handleUpdates(createMockLoginData(1003L, "C"));
 
         var storageA = playerA.getStorageUuid();
         var storageB = playerB.getStorageUuid();
         var storageC = playerC.getStorageUuid();
 
         // Act - Circular swap: A→B, B→C, C→A
-        var playerA_v2 = service.handleUpdates(createMockLoginData(1001L, "B"));
+        var playerA_v2 = offlinePlayerManager.handleUpdates(createMockLoginData(1001L, "B"));
         assertEquals("B", playerA_v2.getNickname());
 
-        var playerB_v2 = service.handleUpdates(createMockLoginData(1002L, "C"));
+        var playerB_v2 = offlinePlayerManager.handleUpdates(createMockLoginData(1002L, "C"));
         assertEquals("C", playerB_v2.getNickname());
 
-        var playerC_v2 = service.handleUpdates(createMockLoginData(1003L, "A"));
+        var playerC_v2 = offlinePlayerManager.handleUpdates(createMockLoginData(1003L, "A"));
         assertEquals("A", playerC_v2.getNickname());
 
         assertEquals(storageA, playerA_v2.getStorageUuid());
@@ -271,9 +271,9 @@ public class AllayOfflinePlayerServiceTest {
     void testNicknameChange_ForSinglePlayer() {
         var playerXuid = 1000L;
 
-        var player_v1 = service.handleUpdates(createMockLoginData(playerXuid, "A"));
-        var player_v2 = service.handleUpdates(createMockLoginData(playerXuid, "B"));
-        var player_v3 = service.handleUpdates(createMockLoginData(playerXuid, "C"));
+        var player_v1 = offlinePlayerManager.handleUpdates(createMockLoginData(playerXuid, "A"));
+        var player_v2 = offlinePlayerManager.handleUpdates(createMockLoginData(playerXuid, "B"));
+        var player_v3 = offlinePlayerManager.handleUpdates(createMockLoginData(playerXuid, "C"));
 
         var storage_v1 = player_v1.getStorageUuid();
         var storage_v2 = player_v2.getStorageUuid();
@@ -282,16 +282,16 @@ public class AllayOfflinePlayerServiceTest {
         assertEquals(storage_v1, storage_v2);
         assertEquals(storage_v2, storage_v3);
 
-        assertNull(service.getByNickname("A"));
-        assertNull(service.getByNickname("B"));
-        assertNotNull(service.getByNickname("C"));
+        assertNull(offlinePlayerManager.getByNickname("A"));
+        assertNull(offlinePlayerManager.getByNickname("B"));
+        assertNotNull(offlinePlayerManager.getByNickname("C"));
 
         // all in lower case
-        assertNull(service.getByNicknameUuid(UUID.nameUUIDFromBytes("a".getBytes(StandardCharsets.UTF_8))));
-        assertNull(service.getByNicknameUuid(UUID.nameUUIDFromBytes("b".getBytes(StandardCharsets.UTF_8))));
-        assertNotNull(service.getByNicknameUuid(UUID.nameUUIDFromBytes("c".getBytes(StandardCharsets.UTF_8))));
+        assertNull(offlinePlayerManager.getByNicknameUuid(UUID.nameUUIDFromBytes("a".getBytes(StandardCharsets.UTF_8))));
+        assertNull(offlinePlayerManager.getByNicknameUuid(UUID.nameUUIDFromBytes("b".getBytes(StandardCharsets.UTF_8))));
+        assertNotNull(offlinePlayerManager.getByNicknameUuid(UUID.nameUUIDFromBytes("c".getBytes(StandardCharsets.UTF_8))));
 
-        var byXboxUserId = service.getByXboxUserId(playerXuid);
+        var byXboxUserId = offlinePlayerManager.getByXboxUserId(playerXuid);
         assertNotNull(byXboxUserId);
         assertEquals("C", byXboxUserId.getNickname());
         assertEquals(storage_v1, byXboxUserId.getStorageUuid());
@@ -304,13 +304,13 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Player data persists across service restarts")
     void testDataPersistence() {
         var loginData = createMockLoginData(777888999L, "PersistTest");
-        var player1 = service.handleUpdates(loginData);
+        var player1 = offlinePlayerManager.handleUpdates(loginData);
         var storageUuid = player1.getStorageUuid();
 
-        service.shutdown();
-        service = new AllayOfflinePlayerService(dbPath, mockStorage);
+        offlinePlayerManager.shutdown();
+        offlinePlayerManager = new AllayOfflinePlayerManager(dbPath, mockStorage);
 
-        var player2 = service.getByXboxUserId(777888999L);
+        var player2 = offlinePlayerManager.getByXboxUserId(777888999L);
         assertNotNull(player2);
         assertEquals(storageUuid, player2.getStorageUuid());
         assertEquals("PersistTest", player2.getNickname());
@@ -320,18 +320,18 @@ public class AllayOfflinePlayerServiceTest {
     @Order(31)
     @DisplayName("SaveAll saves all cached players")
     void testSaveAll() {
-        service.handleUpdates(createMockLoginData(3001L, "Player1"));
-        service.handleUpdates(createMockLoginData(3002L, "Player2"));
-        service.handleUpdates(createMockLoginData(3003L, "Player3"));
+        offlinePlayerManager.handleUpdates(createMockLoginData(3001L, "Player1"));
+        offlinePlayerManager.handleUpdates(createMockLoginData(3002L, "Player2"));
+        offlinePlayerManager.handleUpdates(createMockLoginData(3003L, "Player3"));
 
-        service.saveAll();
+        offlinePlayerManager.saveAll();
     }
 
     @Test
     @Order(40)
     @DisplayName("Handle null XUID gracefully")
     void testNullXuid() {
-        var player = service.handleUpdates(createMockLoginData(null, "NullXuidPlayer"));
+        var player = offlinePlayerManager.handleUpdates(createMockLoginData(null, "NullXuidPlayer"));
 
         assertNotNull(player);
         assertEquals(0L, player.getXuid());
@@ -342,8 +342,8 @@ public class AllayOfflinePlayerServiceTest {
     @Order(41)
     @DisplayName("Handle empty nickname")
     void testEmptyNickname() {
-        assertNull(service.getByNickname(""));
-        assertNull(service.getByNickname(null));
+        assertNull(offlinePlayerManager.getByNickname(""));
+        assertNull(offlinePlayerManager.getByNickname(null));
     }
 
     @Test
@@ -353,7 +353,7 @@ public class AllayOfflinePlayerServiceTest {
         var longNickname = "A".repeat(100);
         var loginData = createMockLoginData(4001L, longNickname);
 
-        var player = service.handleUpdates(loginData);
+        var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
         assertEquals(longNickname, player.getNickname());
@@ -366,12 +366,12 @@ public class AllayOfflinePlayerServiceTest {
         var specialNick = "Player_123-ABC";
         var loginData = createMockLoginData(4002L, specialNick);
 
-        var player = service.handleUpdates(loginData);
+        var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
         assertEquals(specialNick, player.getNickname());
 
-        assertNotNull(service.getByNickname(specialNick));
+        assertNotNull(offlinePlayerManager.getByNickname(specialNick));
     }
 
     @Test
@@ -381,7 +381,7 @@ public class AllayOfflinePlayerServiceTest {
         var unicodeNick = "玩家_123";
         var loginData = createMockLoginData(4003L, unicodeNick);
 
-        var player = service.handleUpdates(loginData);
+        var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
         assertEquals(unicodeNick, player.getNickname());
@@ -391,7 +391,7 @@ public class AllayOfflinePlayerServiceTest {
     @Order(50)
     @DisplayName("Offline NBT data is preserved")
     void testOfflineNbtData() {
-        var player = service.handleUpdates(createMockLoginData(5001L, "DataTest"));
+        var player = offlinePlayerManager.handleUpdates(createMockLoginData(5001L, "DataTest"));
 
         var offlineData = NbtMap.builder()
                 .putString("CustomKey", "CustomValue")
@@ -409,15 +409,15 @@ public class AllayOfflinePlayerServiceTest {
     @Order(51)
     @DisplayName("Collision metadata is stored in offline data")
     void testCollisionMetadataStorage() {
-        service.handleUpdates(createMockLoginData(5101L, "Original"));
-        service.handleUpdates(createMockLoginData(5102L, "Stolen"));
+        offlinePlayerManager.handleUpdates(createMockLoginData(5101L, "Original"));
+        offlinePlayerManager.handleUpdates(createMockLoginData(5102L, "Stolen"));
 
-        service.handleUpdates(createMockLoginData(5101L, "Stolen"));
+        offlinePlayerManager.handleUpdates(createMockLoginData(5101L, "Stolen"));
 
-        var victim = service.handleUpdates(createMockLoginData(5102L, "Original"));
+        var victim = offlinePlayerManager.handleUpdates(createMockLoginData(5102L, "Original"));
 
         var offlineData = victim.getOfflineNbtData();
-        assertEquals("Stolen", offlineData.getString(AllayOfflinePlayerService.TAG_ORIGINAL_NICKNAME));
+        assertEquals("Stolen", offlineData.getString(AllayOfflinePlayerManager.TAG_ORIGINAL_NICKNAME));
     }
 
     @Test
@@ -425,10 +425,10 @@ public class AllayOfflinePlayerServiceTest {
     @DisplayName("Players are cached after first load")
     void testPlayerCaching() {
         var loginData = createMockLoginData(6001L, "CacheTest");
-        var player1 = service.handleUpdates(loginData);
+        var player1 = offlinePlayerManager.handleUpdates(loginData);
 
-        var player2 = service.getByXboxUserId(6001L);
-        var player3 = service.getByNickname("CacheTest");
+        var player2 = offlinePlayerManager.getByXboxUserId(6001L);
+        var player3 = offlinePlayerManager.getByNickname("CacheTest");
 
         assertSame(player1, player2);
         assertSame(player1, player3);
@@ -438,12 +438,12 @@ public class AllayOfflinePlayerServiceTest {
     @Order(61)
     @DisplayName("Cache is cleared on shutdown")
     void testCacheClearedOnShutdown() {
-        service.handleUpdates(createMockLoginData(6101L, "ShutdownTest"));
+        offlinePlayerManager.handleUpdates(createMockLoginData(6101L, "ShutdownTest"));
 
-        service.shutdown();
+        offlinePlayerManager.shutdown();
 
         assertThrows(Exception.class, () -> {
-            service.getByXboxUserId(6101L);
+            offlinePlayerManager.getByXboxUserId(6101L);
         });
     }
 
@@ -453,13 +453,13 @@ public class AllayOfflinePlayerServiceTest {
     void testCompletePlayerLifecycle() {
         // 1. Create player
         var login1 = createMockLoginData(7001L, "LifecycleTest");
-        var player = service.handleUpdates(login1);
+        var player = offlinePlayerManager.handleUpdates(login1);
         assertNotNull(player);
         assertEquals("LifecycleTest", player.getNickname());
 
         // 2. Change nickname
         var login2 = createMockLoginData(7001L, "NewLifecycleTest");
-        player = service.handleUpdates(login2);
+        player = offlinePlayerManager.handleUpdates(login2);
         assertEquals("NewLifecycleTest", player.getNickname());
 
         // 3. Set custom data
@@ -468,8 +468,8 @@ public class AllayOfflinePlayerServiceTest {
         player.save();
 
         // 4. Retrieve by different methods
-        var byXuid = service.getByXboxUserId(7001L);
-        var byNick = service.getByNickname("NewLifecycleTest");
+        var byXuid = offlinePlayerManager.getByXboxUserId(7001L);
+        var byNick = offlinePlayerManager.getByNickname("NewLifecycleTest");
 
         // 5. Verify consistency
         assertEquals(player.getStorageUuid(), byXuid.getStorageUuid());
@@ -481,6 +481,7 @@ public class AllayOfflinePlayerServiceTest {
         var loginData = mock(LoginData.class);
         when(loginData.getParsedXuid()).thenReturn(xuid);
         when(loginData.getXname()).thenReturn(nickname);
+        when(loginData.getUuid()).thenReturn(UUID.randomUUID());
         return loginData;
     }
 }

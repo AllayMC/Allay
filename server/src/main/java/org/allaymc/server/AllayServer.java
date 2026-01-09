@@ -26,7 +26,7 @@ import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.network.AllayNetworkInterface;
 import org.allaymc.server.player.AllayEmptyPlayerStorage;
 import org.allaymc.server.player.AllayNBTFilePlayerStorage;
-import org.allaymc.server.player.AllayOfflinePlayerService;
+import org.allaymc.server.player.AllayOfflinePlayerManager;
 import org.allaymc.server.player.AllayPlayerManager;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -94,7 +94,7 @@ public final class AllayServer implements Server {
         var playerStorage = SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(playersPath) : AllayEmptyPlayerStorage.INSTANCE;
         this.playerManager = new AllayPlayerManager(
                 playerStorage,
-                new AllayOfflinePlayerService(playersPath.resolve("index"), playerStorage),
+                new AllayOfflinePlayerManager(playersPath.resolve("index"), playerStorage),
                 new AllayNetworkInterface(this)
         );
         this.worldPool = new AllayWorldPool();

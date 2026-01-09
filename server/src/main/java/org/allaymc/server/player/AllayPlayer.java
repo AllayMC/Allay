@@ -2452,7 +2452,7 @@ public class AllayPlayer implements Player {
             playerData.setNbt(builder.build());
 
             // Save new player data back to storage
-            playerManager.getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
+            playerManager.getPlayerStorage().savePlayerData(this.storageUuid, playerData);
         } else {
             dimension = (AllayDimension) logOffWorld.getDimension(playerData.getDimension());
             currentPos = readVector3f(playerData.getNbt(), "Pos");

@@ -3,9 +3,9 @@ package org.allaymc.api.player;
 import java.util.UUID;
 
 /**
- * Service for managing offline player data and identity mappings.
+ * Manager for managing offline player data and identity mappings.
  * <p>
- * This service maintains a persistent index that maps various player identifiers
+ * This manager maintains a persistent index that maps various player identifiers
  * (XUID, nickname UUID, and nickname) to a storage UUID that uniquely identifies
  * each player's data. It handles player login, nickname changes, and collision
  * resolution while ensuring no player data is ever lost.
@@ -39,7 +39,7 @@ import java.util.UUID;
  *
  * @author IWareQ
  */
-public interface OfflinePlayerService {
+public interface OfflinePlayerManager {
     /**
      * Handles player login by creating new player data or loading existing data,
      * and updates all identity mappings accordingly.
@@ -142,10 +142,10 @@ public interface OfflinePlayerService {
     void saveAll();
 
     /**
-     * Shuts down the offline player service and releases all resources.
+     * Shuts down the offline player manager and releases all resources.
      * <p>
      * This should be called during server shutdown. After calling this method,
-     * the service should not be used again.
+     * the manager should not be used again.
      */
     void shutdown();
 }

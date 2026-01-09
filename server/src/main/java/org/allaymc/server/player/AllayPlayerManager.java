@@ -39,7 +39,7 @@ public class AllayPlayerManager implements PlayerManager {
     @Getter
     protected final AllayPlayerStorage playerStorage;
     @Getter
-    protected final AllayOfflinePlayerService offlinePlayerService;
+    protected final AllayOfflinePlayerManager offlinePlayerService;
     @Getter
     protected final AllayNetworkInterface networkInterface;
 
@@ -48,7 +48,7 @@ public class AllayPlayerManager implements PlayerManager {
     protected final Whitelist whitelist;
     protected final Operators operators;
 
-    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayOfflinePlayerService offlinePlayerService, AllayNetworkInterface networkInterface) {
+    public AllayPlayerManager(AllayPlayerStorage playerStorage, AllayOfflinePlayerManager offlinePlayerService, AllayNetworkInterface networkInterface) {
         this.playerStorage = playerStorage;
         this.offlinePlayerService = offlinePlayerService;
         this.networkInterface = networkInterface;
