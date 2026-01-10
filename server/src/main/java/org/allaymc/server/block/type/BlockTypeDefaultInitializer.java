@@ -6993,7 +6993,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SOUL_CAMPFIRE == null) {
             BlockTypes.SOUL_CAMPFIRE = AllayBlockType
-                    .builder(BlockSoulCampfireBehaviorImpl.class)
+                    .builder(BlockCampfireBehaviorImpl.class)
                     .vanillaBlock(BlockId.SOUL_CAMPFIRE)
                     .setProperties(BlockPropertyTypes.EXTINGUISHED, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();

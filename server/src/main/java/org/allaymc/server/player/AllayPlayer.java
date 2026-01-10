@@ -392,7 +392,7 @@ public class AllayPlayer implements Player {
                 var p = new AddItemEntityPacket();
                 p.setRuntimeEntityId(item.getRuntimeId());
                 p.setUniqueEntityId(item.getUniqueId().getLeastSignificantBits());
-                p.setItemInHand(toNetwork(item.getItemStack()));
+                p.setItemInHand(toNetwork(Objects.requireNonNullElse(item.getItemStack(), ItemAirStack.AIR_STACK)));
                 p.setPosition(position);
                 p.setMotion(motion);
                 p.getMetadata().putAll(parseMetadata(entity));

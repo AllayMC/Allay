@@ -4,6 +4,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
+import org.allaymc.api.world.sound.SimpleSound;
 
 /**
  * @author daoge_cmd
@@ -31,5 +32,10 @@ public class BlockEntitySmokerFurnaceBaseComponentImpl extends BlockEntityFurnac
     @Override
     public float getIdealSpeed() {
         return 2;
+    }
+
+    @Override
+    protected SimpleSound getCrackleSound() {
+        return SimpleSound.SMOKER_CRACKLE;
     }
 }

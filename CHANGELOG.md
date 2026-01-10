@@ -24,7 +24,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `MAX_REDSTONE_POWER` constant (15).
 - (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
 - (API) Added sound `PowerSound` which is used by redstone components such as lever.
-- Implemented basic redstone system:
+- (API) Implemented basic redstone system, here is a list of implemented redstone components:
   - Redstone Wire
   - Redstone Block
   - Redstone Lamp
@@ -44,6 +44,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Redstone Comparator
   - Target (outputs signal when hit by projectiles)
   - Dragon Head and Piglin Head (animate when powered)
+- (API) Implemented campfire and soul campfire:
+  - Added `BlockEntityCampfire` and `BlockEntityCampfireBaseComponent` interfaces.
+  - Added `CampfireSmeltEvent` event.
+  - Added `DamageType.CAMPFIRE` and `DamageContainer.campfire()` for campfire damage.
 
 ### Changed
 
@@ -56,13 +60,15 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Merged world tick thread and network thread into a single thread using an event-driven wake-up mechanism. This simplifies
   the threading model while maintaining low packet processing latency through `LockSupport.parkNanos/unpark`.
 
-### Removed
-
-- Removed `enableIndependentNetworkThread` configuration option from `server-settings.yml` as it is no longer necessary.
-
 ### Fixed
 
 - Fixed noteblock being triggered when player is sneaking (should allow placing blocks on top instead).
+- Fixed eating animation incorrectly triggering after interacting with blocks while holding food.
+- Added missing ambient crackle sounds for furnace, blast furnace, smoker, and campfire.
+
+### Removed
+
+- Removed `enableIndependentNetworkThread` configuration option from `server-settings.yml` as it is no longer necessary.
 
 # 0.10.3 (API 0.20.0) - 2026/1/7
 

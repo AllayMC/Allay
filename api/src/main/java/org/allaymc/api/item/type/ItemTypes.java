@@ -1863,7 +1863,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemItemCameraStack> ITEM_CAMERA;
 
-    public static ItemType<ItemItemCampfireStack> ITEM_CAMPFIRE;
+    public static ItemType<ItemCampfireStack> ITEM_CAMPFIRE;
 
     public static ItemType<ItemItemCauldronStack> ITEM_CAULDRON;
 
@@ -1893,7 +1893,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemItemReedsStack> ITEM_REEDS;
 
-    public static ItemType<ItemItemSoulCampfireStack> ITEM_SOUL_CAMPFIRE;
+    public static ItemType<ItemCampfireStack> ITEM_SOUL_CAMPFIRE;
 
     public static ItemType<ItemDoorStack> ITEM_SPRUCE_DOOR;
 
@@ -3139,7 +3139,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemSnowballStack> SNOWBALL;
 
-    public static ItemType<ItemSoulCampfireStack> SOUL_CAMPFIRE;
+    public static ItemType<ItemCampfireStack> SOUL_CAMPFIRE;
 
     public static ItemType<ItemSoulFireStack> SOUL_FIRE;
 

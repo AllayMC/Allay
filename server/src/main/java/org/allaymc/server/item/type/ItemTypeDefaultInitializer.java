@@ -5582,7 +5582,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_CAMPFIRE == null) {
             ItemTypes.ITEM_CAMPFIRE = AllayItemType
-                    .builder(ItemItemCampfireStackImpl.class)
+                    .builder(ItemCampfireStackImpl.class)
                     .vanillaItem(ItemId.ITEM_CAMPFIRE)
                     .build();
         }
@@ -5672,7 +5672,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_SOUL_CAMPFIRE == null) {
             ItemTypes.ITEM_SOUL_CAMPFIRE = AllayItemType
-                    .builder(ItemItemSoulCampfireStackImpl.class)
+                    .builder(ItemCampfireStackImpl.class)
                     .vanillaItem(ItemId.ITEM_SOUL_CAMPFIRE)
                     .build();
         }
@@ -9410,7 +9410,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SOUL_CAMPFIRE == null) {
             ItemTypes.SOUL_CAMPFIRE = AllayItemType
-                    .builder(ItemSoulCampfireStackImpl.class)
+                    .builder(ItemCampfireStackImpl.class)
                     .vanillaItem(ItemId.SOUL_CAMPFIRE)
                     .build();
         }

@@ -4160,7 +4160,7 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#EXTINGUISHED}
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      */
-    public static BlockType<BlockSoulCampfireBehavior> SOUL_CAMPFIRE;
+    public static BlockType<BlockCampfireBehavior> SOUL_CAMPFIRE;
 
     /**
      * {@link BlockPropertyTypes#AGE_16}

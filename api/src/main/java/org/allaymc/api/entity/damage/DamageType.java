@@ -91,6 +91,10 @@ public class DamageType {
      */
     public static DamageType LIGHTNING = fixed(TrKeys.MC_DEATH_ATTACK_LIGHTNINGBOLT);
     /**
+     * Damage caused by standing on a campfire
+     */
+    public static DamageType CAMPFIRE = fixed(TrKeys.MC_DEATH_ATTACK_INFIRE);
+    /**
      * Potion or spell damage
      */
     public static DamageType MAGIC = fixed(TrKeys.MC_DEATH_ATTACK_MAGIC);

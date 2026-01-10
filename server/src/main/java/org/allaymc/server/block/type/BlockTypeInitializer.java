@@ -17,6 +17,8 @@ import org.allaymc.api.world.sound.SoundNames;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
+import org.allaymc.server.block.component.campfire.BlockCampfireBaseComponentImpl;
+import org.allaymc.server.block.component.campfire.BlockSoulCampfireBaseComponentImpl;
 import org.allaymc.server.block.component.crops.*;
 import org.allaymc.server.block.component.door.BlockCopperDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
@@ -2211,6 +2213,23 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.TARGET)
                 .bindBlockEntity(BlockEntityTypes.TARGET)
                 .setBaseComponentSupplier(BlockTargetBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initCampfire() {
+        BlockTypes.CAMPFIRE = AllayBlockType
+                .builder(BlockCampfireBehaviorImpl.class)
+                .vanillaBlock(BlockId.CAMPFIRE)
+                .bindBlockEntity(BlockEntityTypes.CAMPFIRE)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.EXTINGUISHED)
+                .setBaseComponentSupplier(BlockCampfireBaseComponentImpl::new)
+                .build();
+        BlockTypes.SOUL_CAMPFIRE = AllayBlockType
+                .builder(BlockCampfireBehaviorImpl.class)
+                .vanillaBlock(BlockId.SOUL_CAMPFIRE)
+                .bindBlockEntity(BlockEntityTypes.SOUL_CAMPFIRE)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.EXTINGUISHED)
+                .setBaseComponentSupplier(BlockSoulCampfireBaseComponentImpl::new)
                 .build();
     }
 }
