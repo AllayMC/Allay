@@ -2,7 +2,7 @@ package org.allaymc.server.player;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.eventbus.event.server.PlayerNicknameChangeEvent;
+import org.allaymc.api.eventbus.event.server.PlayerNameChangeEvent;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.OfflinePlayer;
 import org.allaymc.api.player.OfflinePlayerManager;
@@ -25,20 +25,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * <h2>Index Structure</h2>
  * The LevelDB index maintains three types of mappings:
  * <pre>
- * xuid:&lt;xuid&gt;              → &lt;storage-uuid&gt;
- * nickname_uuid:&lt;uuid&gt;     → &lt;storage-uuid&gt;
- * nickname:&lt;nickname&gt;      → &lt;storage-uuid&gt;
+ * xuid:&lt;xuid&gt;      → &lt;storage-uuid&gt;
+ * name_uuid:&lt;uuid&gt; → &lt;storage-uuid&gt;
+ * name:&lt;nickname&gt;  → &lt;storage-uuid&gt;
  * </pre>
  *
  * @author IWareQ
  */
 @Slf4j
 public class AllayOfflinePlayerManager implements OfflinePlayerManager {
-    public static final String TAG_ORIGINAL_NICKNAME = "OriginalNickname";
-
     private static final String XUID_PREFIX = "xuid:";
-    private static final String NICKNAME_UUID_PREFIX = "nickname_uuid:";
-    private static final String NICKNAME_PREFIX = "nickname:";
+    private static final String NAME_UUID_PREFIX = "name_uuid:";
+    private static final String NAME_PREFIX = "name:";
 
     private final DB database;
     private final AllayPlayerStorage playerStorage;
@@ -54,7 +52,17 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
         Files.createDirectories(dbPath);
     }
 
-    @Override
+    /**
+     * Handles player login by creating new player data or loading existing data,
+     * and updates all identity mappings accordingly.
+     * <p>
+     * This is the primary entry point for player authentication. It performs
+     * identity resolution using XUID (if available) or nickname UUID, handles
+     * nickname changes and collisions, and ensures all index mappings are current.
+     *
+     * @param loginData The login data containing XUID, nickname, and authentication info
+     * @return The OfflinePlayer instance for this player (never null)
+     */
     public OfflinePlayer handleUpdates(LoginData loginData) {
         var xuid = loginData.getParsedXuid();
         var nickname = loginData.getXname();
@@ -76,25 +84,24 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
         }
 
         // Offline mode: Find by nickname UUID
-        var storageUuidStr = this.getMapping(NICKNAME_UUID_PREFIX + nameUuid);
+        var storageUuidStr = this.getMapping(NAME_UUID_PREFIX + nameUuid);
         if (storageUuidStr != null) {
             storageUuid = UUID.fromString(storageUuidStr);
             return Objects.requireNonNull(this.loadPlayer(storageUuid));
         }
 
-        // Player not found - create new one
         return this.createNewPlayer(xuid, nickname, nameUuid, loginData.getUuid());
     }
 
     private void handleNicknameChange(AllayOfflinePlayer player, UUID newNicknameUuid, String newNickname) {
-        var oldNickname = player.getNickname();
+        var oldNickname = player.getName();
         if (oldNickname.equals(newNickname)) {
             return;
         }
 
         var storageUuid = player.getStorageUuid();
 
-        var existingStorageUuidStr = this.getMapping(NICKNAME_UUID_PREFIX + newNicknameUuid);
+        var existingStorageUuidStr = this.getMapping(NAME_UUID_PREFIX + newNicknameUuid);
         var nicknameIsOccupied = existingStorageUuidStr != null && !existingStorageUuidStr.equals(storageUuid.toString());
         if (nicknameIsOccupied) {
             var conflictingStorageUuid = UUID.fromString(existingStorageUuidStr);
@@ -103,17 +110,17 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
             if (conflictingPlayer != null) {
                 var conflictOfflineData = conflictingPlayer.getOfflineNbtData();
                 var updated = conflictOfflineData.toBuilder()
-                        .putString(TAG_ORIGINAL_NICKNAME, conflictingPlayer.getNickname())
+                        .putString(OfflinePlayer.TAG_ORIGINAL_NAME, conflictingPlayer.getName())
                         .build();
 
                 conflictingPlayer.setOfflineNbtData(updated);
 
-                var oldConflictNickname = conflictingPlayer.getNickname();
+                var oldConflictNickname = conflictingPlayer.getName();
                 var tempNickname = this.generateUniqueNickname(oldConflictNickname);
 
                 this.updateNicknameMappings(conflictingStorageUuid, oldConflictNickname, tempNickname);
 
-                conflictingPlayer.updateNickname(tempNickname);
+                conflictingPlayer.updateName(tempNickname);
                 conflictingPlayer.save();
 
                 if (this.cache.containsKey(conflictingStorageUuid)) {
@@ -125,12 +132,12 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
 
         this.updateNicknameMappings(storageUuid, oldNickname, newNickname);
 
-        player.updateNickname(newNickname);
+        player.updateName(newNickname);
         player.save();
 
         this.cache.put(storageUuid, player);
 
-        new PlayerNicknameChangeEvent(player, oldNickname, newNickname).call();
+        new PlayerNameChangeEvent(player, oldNickname, newNickname).call();
 
         log.debug("Updated nickname mappings: {} → {}", oldNickname, newNickname);
     }
@@ -139,14 +146,14 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
         var oldNormalizedNick = oldNickname.toLowerCase(Locale.ROOT);
         var oldNicknameUuid = this.nicknameToUuid(oldNickname);
 
-        this.deleteMapping(NICKNAME_PREFIX + oldNormalizedNick);
-        this.deleteMapping(NICKNAME_UUID_PREFIX + oldNicknameUuid);
+        this.deleteMapping(NAME_PREFIX + oldNormalizedNick);
+        this.deleteMapping(NAME_UUID_PREFIX + oldNicknameUuid);
 
         var newNormalizedNick = newNickname.toLowerCase(Locale.ROOT);
         var newNicknameUuid = this.nicknameToUuid(newNickname);
 
-        this.setMapping(NICKNAME_PREFIX + newNormalizedNick, storageUuid.toString());
-        this.setMapping(NICKNAME_UUID_PREFIX + newNicknameUuid, storageUuid.toString());
+        this.setMapping(NAME_PREFIX + newNormalizedNick, storageUuid.toString());
+        this.setMapping(NAME_UUID_PREFIX + newNicknameUuid, storageUuid.toString());
     }
 
     private AllayOfflinePlayer createNewPlayer(Long xuid, String nickname, UUID nameUuid, UUID legacyStorageUuid) {
@@ -157,8 +164,8 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
         if (hasXboxAuth) {
             this.setMapping(XUID_PREFIX + xuid, storageUuid.toString());
         }
-        this.setMapping(NICKNAME_UUID_PREFIX + nameUuid, storageUuid.toString());
-        this.setMapping(NICKNAME_PREFIX + normalizedNick, storageUuid.toString());
+        this.setMapping(NAME_UUID_PREFIX + nameUuid, storageUuid.toString());
+        this.setMapping(NAME_PREFIX + normalizedNick, storageUuid.toString());
 
         var playerData = PlayerData.createEmpty();
         if (this.playerStorage.hasPlayerData(legacyStorageUuid)) { // TODO: remove in 0.13+
@@ -191,12 +198,12 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
     }
 
     @Override
-    public OfflinePlayer getByNicknameUuid(UUID nameUuid) {
+    public OfflinePlayer getByNameUuid(UUID nameUuid) {
         if (nameUuid == null) {
             return null;
         }
 
-        var storageUuidStr = this.getMapping(NICKNAME_UUID_PREFIX + nameUuid);
+        var storageUuidStr = this.getMapping(NAME_UUID_PREFIX + nameUuid);
         if (storageUuidStr == null) {
             return null;
         }
@@ -206,13 +213,13 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
     }
 
     @Override
-    public OfflinePlayer getByNickname(String nickname) {
+    public OfflinePlayer getByName(String nickname) {
         if (nickname == null || nickname.isEmpty()) {
             return null;
         }
 
         var normalizedNick = nickname.toLowerCase(Locale.ROOT);
-        var storageUuidStr = this.getMapping(NICKNAME_PREFIX + normalizedNick);
+        var storageUuidStr = this.getMapping(NAME_PREFIX + normalizedNick);
         if (storageUuidStr == null) {
             return null;
         }
@@ -238,14 +245,12 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
         return player;
     }
 
-    @Override
     public void saveAll() {
         for (var player : this.cache.values()) {
             player.save();
         }
     }
 
-    @Override
     public void shutdown() {
         this.saveAll();
         this.cache.clear();
@@ -283,7 +288,7 @@ public class AllayOfflinePlayerManager implements OfflinePlayerManager {
             var uniqueName = baseName + "_" + suffix.replaceAll("-", "_");
             var normalizedUnique = uniqueName.toLowerCase(Locale.ROOT);
 
-            var existing = this.getMapping(NICKNAME_PREFIX + normalizedUnique);
+            var existing = this.getMapping(NAME_PREFIX + normalizedUnique);
             if (existing == null) {
                 log.info("Generated unique nickname: {} for base: {}", uniqueName, baseName);
                 return uniqueName;

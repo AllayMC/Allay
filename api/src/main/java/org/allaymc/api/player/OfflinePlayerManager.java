@@ -1,6 +1,6 @@
 package org.allaymc.api.player;
 
-import org.allaymc.api.eventbus.event.server.PlayerNicknameChangeEvent;
+import org.allaymc.api.eventbus.event.server.PlayerNameChangeEvent;
 
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ import java.util.UUID;
  * </ul>
  *
  * <h2>Login Flow</h2>
- * When a player logs in via {@link #handleUpdates(LoginData)}:
+ * When a player logs in server:
  * <ol>
  *   <li>If Xbox-authenticated: lookup by XUID (primary identifier)</li>
  *   <li>If found by XUID: handle any nickname changes and return existing player</li>
@@ -36,36 +36,12 @@ import java.util.UUID;
  *   <li>The previous owner is marked with "OriginalNickname" tag</li>
  *   <li>Previous owner gets a unique temporary nickname (base_uuid)</li>
  *   <li>Both players retain all their data - no data is lost</li>
- *   <li>A {@link PlayerNicknameChangeEvent} is fired</li>
+ *   <li>A {@link PlayerNameChangeEvent} is fired</li>
  * </ol>
  *
  * @author IWareQ
  */
 public interface OfflinePlayerManager {
-    /**
-     * Handles player login by creating new player data or loading existing data,
-     * and updates all identity mappings accordingly.
-     * <p>
-     * This is the primary entry point for player authentication. It performs
-     * identity resolution using XUID (if available) or nickname UUID, handles
-     * nickname changes and collisions, and ensures all index mappings are current.
-     *
-     * @param loginData The login data containing XUID, nickname, and authentication info
-     * @return The OfflinePlayer instance for this player (never null)
-     */
-    OfflinePlayer handleUpdates(LoginData loginData);
-
-    /**
-     * Handles player login using data from an active Player instance.
-     *
-     * @param player The player who is logging in
-     * @return The OfflinePlayer instance for this player (never null)
-     * @see #handleUpdates(LoginData)
-     */
-    default OfflinePlayer handleUpdates(Player player) {
-        return this.handleUpdates(player.getLoginData());
-    }
-
     /**
      * Retrieves an offline player by their Xbox User ID (XUID).
      * <p>
@@ -88,7 +64,7 @@ public interface OfflinePlayerManager {
      * @param nameUuid The UUID derived from the player's nickname
      * @return The OfflinePlayer instance, or null if not found
      */
-    OfflinePlayer getByNicknameUuid(UUID nameUuid);
+    OfflinePlayer getByNameUuid(UUID nameUuid);
 
     /**
      * Retrieves an offline player by their current nickname.
@@ -100,7 +76,7 @@ public interface OfflinePlayerManager {
      * @param nickname The nickname to search for (case-insensitive)
      * @return The OfflinePlayer instance, or null if not found
      */
-    OfflinePlayer getByNickname(String nickname);
+    OfflinePlayer getByName(String nickname);
 
     /**
      * Checks if a player with the given Xbox User ID exists in the system.
@@ -115,39 +91,22 @@ public interface OfflinePlayerManager {
     /**
      * Checks if a player with the given nickname UUID exists in the system.
      *
-     * @param nicknameUuid The nickname-based UUID to check
+     * @param nameUuid The nickname-based UUID to check
      * @return true if a player with this UUID exists, false otherwise
      */
-    default boolean hasPlayer(UUID nicknameUuid) {
-        return this.getByNicknameUuid(nicknameUuid) != null;
+    default boolean hasPlayer(UUID nameUuid) {
+        return this.getByNameUuid(nameUuid) != null;
     }
 
     /**
-     * Checks if a player with the given nickname exists in the system.
+     * Checks if a player with the given name exists in the system.
      * <p>
      * The check is case-insensitive.
      *
-     * @param nickname The nickname to check (case-insensitive)
-     * @return true if a player with this nickname exists, false otherwise
+     * @param name The name to check (case-insensitive)
+     * @return true if a player with this name exists, false otherwise
      */
-    default boolean hasPlayer(String nickname) {
-        return this.getByNickname(nickname) != null;
+    default boolean hasPlayer(String name) {
+        return this.getByName(name) != null;
     }
-
-    /**
-     * Saves all cached player data to persistent storage.
-     * <p>
-     * This method should be called periodically and definitely during server
-     * shutdown to ensure no player data is lost. It iterates through all cached
-     * players and writes their data to disk.
-     */
-    void saveAll();
-
-    /**
-     * Shuts down the offline player manager and releases all resources.
-     * <p>
-     * This should be called during server shutdown. After calling this method,
-     * the manager should not be used again.
-     */
-    void shutdown();
 }

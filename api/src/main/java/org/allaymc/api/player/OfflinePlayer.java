@@ -11,6 +11,8 @@ import java.util.UUID;
  * @author IWareQ
  */
 public interface OfflinePlayer {
+    String TAG_ORIGINAL_NAME = "OriginalName";
+
     /**
      * Gets the Xbox User ID (XUID) of this player.
      * <p>
@@ -42,7 +44,7 @@ public interface OfflinePlayer {
      *
      * @return The player's current nickname, never null
      */
-    String getNickname();
+    String getName();
 
     /**
      * Gets the storage UUID used to identify this player's data files.
@@ -75,6 +77,15 @@ public interface OfflinePlayer {
      */
     NbtMap getNbtData();
 
+    /**
+     * Sets the complete NBT data for this player.
+     * <p>
+     * This replaces all player data including inventory, position, health, etc.
+     * Changes are not automatically persisted - call {@link #save()} after setting
+     * to write the data to disk.
+     *
+     * @param nbtData The new NBT data to set, must not be null
+     */
     void setNbtData(NbtMap nbtData);
 
     /**
@@ -126,8 +137,8 @@ public interface OfflinePlayer {
      *
      * @return The original nickname, or null if not applicable
      */
-    default String getOriginalNickname() {
+    default String getOriginalName() {
         var data = this.getOfflineNbtData();
-        return data.getString("OriginalNickname", null);
+        return data.getString(TAG_ORIGINAL_NAME, null);
     }
 }

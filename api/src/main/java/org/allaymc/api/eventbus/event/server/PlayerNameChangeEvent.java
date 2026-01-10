@@ -10,8 +10,8 @@ import org.allaymc.api.player.OfflinePlayer;
  */
 @Getter
 @RequiredArgsConstructor
-public class PlayerNicknameChangeEvent extends Event {
+public class PlayerNameChangeEvent extends Event {
     protected final OfflinePlayer player;
-    protected final String oldNickname;
-    protected final String newNickname;
+    protected final String oldName;
+    protected final String newName;
 }

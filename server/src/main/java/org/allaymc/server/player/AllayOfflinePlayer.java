@@ -1,5 +1,6 @@
 package org.allaymc.server.player;
 
+import lombok.Getter;
 import org.allaymc.api.pdc.PersistentDataContainer;
 import org.allaymc.api.player.OfflinePlayer;
 import org.allaymc.api.player.Player;
@@ -21,7 +22,9 @@ public class AllayOfflinePlayer implements OfflinePlayer {
     private static final String TAG_OFFLINE_DATA = "OfflineData";
 
     private final PlayerData playerData;
+    @Getter
     private final UUID storageUuid;
+    @Getter
     private final PersistentDataContainer persistentDataContainer;
 
     public AllayOfflinePlayer(PlayerData playerData, UUID storageUuid) {
@@ -29,7 +32,6 @@ public class AllayOfflinePlayer implements OfflinePlayer {
         this.storageUuid = storageUuid;
 
         this.persistentDataContainer = new AllayPersistentDataContainer(Registries.PERSISTENT_DATA_TYPES);
-
         playerData.getNbt().listenForCompound("PDC", this.persistentDataContainer::putAll);
     }
 
@@ -40,22 +42,12 @@ public class AllayOfflinePlayer implements OfflinePlayer {
 
     @Override
     public UUID getNameUuid() {
-        return UUID.nameUUIDFromBytes(this.getNickname().toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8));
+        return UUID.nameUUIDFromBytes(this.getName().toLowerCase(Locale.ROOT).getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
-    public String getNickname() {
+    public String getName() {
         return this.playerData.getName();
-    }
-
-    @Override
-    public UUID getStorageUuid() {
-        return this.storageUuid;
-    }
-
-    @Override
-    public PersistentDataContainer getPersistentDataContainer() {
-        return this.persistentDataContainer;
     }
 
     @Override
@@ -98,7 +90,7 @@ public class AllayOfflinePlayer implements OfflinePlayer {
         }
 
         for (var player : players.values()) {
-            if (this.getNickname().equalsIgnoreCase(player.getLoginData().getXname())) {
+            if (this.getName().equalsIgnoreCase(player.getLoginData().getXname())) {
                 return player;
             }
         }
@@ -106,9 +98,9 @@ public class AllayOfflinePlayer implements OfflinePlayer {
         return null;
     }
 
-    public void updateNickname(String newNickname) {
-        if (!this.getNickname().equals(newNickname)) {
-            this.playerData.setName(newNickname);
+    public void updateName(String newName) {
+        if (!this.getName().equals(newName)) {
+            this.playerData.setName(newName);
         }
     }
 }

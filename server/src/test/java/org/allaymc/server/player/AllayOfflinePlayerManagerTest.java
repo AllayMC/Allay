@@ -3,6 +3,7 @@ package org.allaymc.server.player;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.player.LoginData;
+import org.allaymc.api.player.OfflinePlayer;
 import org.allaymc.api.player.PlayerManager;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
@@ -92,7 +93,7 @@ public class AllayOfflinePlayerManagerTest {
         var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player, "Player should be created");
-        assertEquals("Steve", player.getNickname());
+        assertEquals("Steve", player.getName());
         assertEquals(123456789L, player.getXuid());
         assertNotNull(player.getStorageUuid());
     }
@@ -105,7 +106,7 @@ public class AllayOfflinePlayerManagerTest {
         var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
-        assertEquals("Alex", player.getNickname());
+        assertEquals("Alex", player.getName());
         assertEquals(0L, player.getXuid());
         assertNotNull(player.getStorageUuid());
     }
@@ -121,19 +122,19 @@ public class AllayOfflinePlayerManagerTest {
 
         assertNotNull(found);
         assertEquals(created.getStorageUuid(), found.getStorageUuid());
-        assertEquals("TestPlayer", found.getNickname());
+        assertEquals("TestPlayer", found.getName());
     }
 
     @Test
     @Order(4)
     @DisplayName("Get player by nickname")
-    void testGetByNickname() {
+    void testGetByName() {
         var loginData = createMockLoginData(111222333L, "UniqueNick");
         offlinePlayerManager.handleUpdates(loginData);
 
-        var found1 = offlinePlayerManager.getByNickname("UniqueNick");
-        var found2 = offlinePlayerManager.getByNickname("uniquenick");
-        var found3 = offlinePlayerManager.getByNickname("UNIQUENICK");
+        var found1 = offlinePlayerManager.getByName("UniqueNick");
+        var found2 = offlinePlayerManager.getByName("uniquenick");
+        var found3 = offlinePlayerManager.getByName("UNIQUENICK");
 
         assertNotNull(found1);
         assertNotNull(found2);
@@ -145,13 +146,13 @@ public class AllayOfflinePlayerManagerTest {
     @Test
     @Order(5)
     @DisplayName("Get player by nickname UUID")
-    void testGetByNicknameUuid() {
+    void testGetByNameUuid() {
         var nickname = "TestNick";
         var loginData = createMockLoginData(null, nickname);
         var created = offlinePlayerManager.handleUpdates(loginData);
 
         var nameUuid = created.getNameUuid();
-        var found = offlinePlayerManager.getByNicknameUuid(nameUuid);
+        var found = offlinePlayerManager.getByNameUuid(nameUuid);
 
         assertNotNull(found);
         assertEquals(created.getStorageUuid(), found.getStorageUuid());
@@ -162,8 +163,8 @@ public class AllayOfflinePlayerManagerTest {
     @DisplayName("Return null for non-existent player")
     void testGetNonExistentPlayer() {
         assertNull(offlinePlayerManager.getByXboxUserId(99999999L));
-        assertNull(offlinePlayerManager.getByNickname("NonExistent"));
-        assertNull(offlinePlayerManager.getByNicknameUuid(UUID.randomUUID()));
+        assertNull(offlinePlayerManager.getByName("NonExistent"));
+        assertNull(offlinePlayerManager.getByNameUuid(UUID.randomUUID()));
     }
 
     @Test
@@ -178,10 +179,10 @@ public class AllayOfflinePlayerManagerTest {
         var player2 = offlinePlayerManager.handleUpdates(login2);
 
         assertEquals(storageUuid, player2.getStorageUuid(), "Storage UUID should remain the same");
-        assertEquals("NewName", player2.getNickname());
+        assertEquals("NewName", player2.getName());
 
-        assertNull(offlinePlayerManager.getByNickname("OriginalName"));
-        assertNotNull(offlinePlayerManager.getByNickname("NewName"));
+        assertNull(offlinePlayerManager.getByName("OriginalName"));
+        assertNotNull(offlinePlayerManager.getByName("NewName"));
     }
 
     @Test
@@ -196,11 +197,11 @@ public class AllayOfflinePlayerManagerTest {
         var player2 = offlinePlayerManager.handleUpdates(login2);
 
         assertEquals(storageUuid, player2.getStorageUuid());
-        assertEquals("steve", player2.getNickname());
+        assertEquals("steve", player2.getName());
 
-        assertNotNull(offlinePlayerManager.getByNickname("steve"));
-        assertNotNull(offlinePlayerManager.getByNickname("Steve"));
-        assertNotNull(offlinePlayerManager.getByNickname("STEVE"));
+        assertNotNull(offlinePlayerManager.getByName("steve"));
+        assertNotNull(offlinePlayerManager.getByName("Steve"));
+        assertNotNull(offlinePlayerManager.getByName("STEVE"));
     }
 
     @Test
@@ -222,7 +223,7 @@ public class AllayOfflinePlayerManagerTest {
 
         // Assert - PlayerA now has "Bob"
         assertEquals(storageA, playerA_v2.getStorageUuid());
-        assertEquals("Bob", playerA_v2.getNickname());
+        assertEquals("Bob", playerA_v2.getName());
 
         // Act - PlayerB changes to "Alice" (takes it from PlayerA)
         var loginB2 = createMockLoginData(222L, "Alice");
@@ -230,12 +231,12 @@ public class AllayOfflinePlayerManagerTest {
 
         // Assert - PlayerB now has "Alice"
         assertEquals(storageB, playerB_v2.getStorageUuid());
-        assertEquals("Alice", playerB_v2.getNickname());
+        assertEquals("Alice", playerB_v2.getName());
 
         // Check collision flags
-        assertEquals("Bob", playerB_v2.getOriginalNickname());
+        assertEquals("Bob", playerB_v2.getOriginalName());
         // null because original nickname added only for b player, because player A join first and take player B nickname
-        assertNull(playerA_v2.getOriginalNickname());
+        assertNull(playerA_v2.getOriginalName());
     }
 
     @Test
@@ -252,13 +253,13 @@ public class AllayOfflinePlayerManagerTest {
 
         // Act - Circular swap: A→B, B→C, C→A
         var playerA_v2 = offlinePlayerManager.handleUpdates(createMockLoginData(1001L, "B"));
-        assertEquals("B", playerA_v2.getNickname());
+        assertEquals("B", playerA_v2.getName());
 
         var playerB_v2 = offlinePlayerManager.handleUpdates(createMockLoginData(1002L, "C"));
-        assertEquals("C", playerB_v2.getNickname());
+        assertEquals("C", playerB_v2.getName());
 
         var playerC_v2 = offlinePlayerManager.handleUpdates(createMockLoginData(1003L, "A"));
-        assertEquals("A", playerC_v2.getNickname());
+        assertEquals("A", playerC_v2.getName());
 
         assertEquals(storageA, playerA_v2.getStorageUuid());
         assertEquals(storageB, playerB_v2.getStorageUuid());
@@ -282,18 +283,18 @@ public class AllayOfflinePlayerManagerTest {
         assertEquals(storage_v1, storage_v2);
         assertEquals(storage_v2, storage_v3);
 
-        assertNull(offlinePlayerManager.getByNickname("A"));
-        assertNull(offlinePlayerManager.getByNickname("B"));
-        assertNotNull(offlinePlayerManager.getByNickname("C"));
+        assertNull(offlinePlayerManager.getByName("A"));
+        assertNull(offlinePlayerManager.getByName("B"));
+        assertNotNull(offlinePlayerManager.getByName("C"));
 
         // all in lower case
-        assertNull(offlinePlayerManager.getByNicknameUuid(UUID.nameUUIDFromBytes("a".getBytes(StandardCharsets.UTF_8))));
-        assertNull(offlinePlayerManager.getByNicknameUuid(UUID.nameUUIDFromBytes("b".getBytes(StandardCharsets.UTF_8))));
-        assertNotNull(offlinePlayerManager.getByNicknameUuid(UUID.nameUUIDFromBytes("c".getBytes(StandardCharsets.UTF_8))));
+        assertNull(offlinePlayerManager.getByNameUuid(UUID.nameUUIDFromBytes("a".getBytes(StandardCharsets.UTF_8))));
+        assertNull(offlinePlayerManager.getByNameUuid(UUID.nameUUIDFromBytes("b".getBytes(StandardCharsets.UTF_8))));
+        assertNotNull(offlinePlayerManager.getByNameUuid(UUID.nameUUIDFromBytes("c".getBytes(StandardCharsets.UTF_8))));
 
         var byXboxUserId = offlinePlayerManager.getByXboxUserId(playerXuid);
         assertNotNull(byXboxUserId);
-        assertEquals("C", byXboxUserId.getNickname());
+        assertEquals("C", byXboxUserId.getName());
         assertEquals(storage_v1, byXboxUserId.getStorageUuid());
     }
 
@@ -313,7 +314,7 @@ public class AllayOfflinePlayerManagerTest {
         var player2 = offlinePlayerManager.getByXboxUserId(777888999L);
         assertNotNull(player2);
         assertEquals(storageUuid, player2.getStorageUuid());
-        assertEquals("PersistTest", player2.getNickname());
+        assertEquals("PersistTest", player2.getName());
     }
 
     @Test
@@ -335,15 +336,15 @@ public class AllayOfflinePlayerManagerTest {
 
         assertNotNull(player);
         assertEquals(0L, player.getXuid());
-        assertEquals("NullXuidPlayer", player.getNickname());
+        assertEquals("NullXuidPlayer", player.getName());
     }
 
     @Test
     @Order(41)
     @DisplayName("Handle empty nickname")
     void testEmptyNickname() {
-        assertNull(offlinePlayerManager.getByNickname(""));
-        assertNull(offlinePlayerManager.getByNickname(null));
+        assertNull(offlinePlayerManager.getByName(""));
+        assertNull(offlinePlayerManager.getByName(null));
     }
 
     @Test
@@ -356,7 +357,7 @@ public class AllayOfflinePlayerManagerTest {
         var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
-        assertEquals(longNickname, player.getNickname());
+        assertEquals(longNickname, player.getName());
     }
 
     @Test
@@ -369,9 +370,9 @@ public class AllayOfflinePlayerManagerTest {
         var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
-        assertEquals(specialNick, player.getNickname());
+        assertEquals(specialNick, player.getName());
 
-        assertNotNull(offlinePlayerManager.getByNickname(specialNick));
+        assertNotNull(offlinePlayerManager.getByName(specialNick));
     }
 
     @Test
@@ -384,7 +385,7 @@ public class AllayOfflinePlayerManagerTest {
         var player = offlinePlayerManager.handleUpdates(loginData);
 
         assertNotNull(player);
-        assertEquals(unicodeNick, player.getNickname());
+        assertEquals(unicodeNick, player.getName());
     }
 
     @Test
@@ -417,7 +418,7 @@ public class AllayOfflinePlayerManagerTest {
         var victim = offlinePlayerManager.handleUpdates(createMockLoginData(5102L, "Original"));
 
         var offlineData = victim.getOfflineNbtData();
-        assertEquals("Stolen", offlineData.getString(AllayOfflinePlayerManager.TAG_ORIGINAL_NICKNAME));
+        assertEquals("Stolen", offlineData.getString(OfflinePlayer.TAG_ORIGINAL_NAME));
     }
 
     @Test
@@ -428,7 +429,7 @@ public class AllayOfflinePlayerManagerTest {
         var player1 = offlinePlayerManager.handleUpdates(loginData);
 
         var player2 = offlinePlayerManager.getByXboxUserId(6001L);
-        var player3 = offlinePlayerManager.getByNickname("CacheTest");
+        var player3 = offlinePlayerManager.getByName("CacheTest");
 
         assertSame(player1, player2);
         assertSame(player1, player3);
@@ -455,12 +456,12 @@ public class AllayOfflinePlayerManagerTest {
         var login1 = createMockLoginData(7001L, "LifecycleTest");
         var player = offlinePlayerManager.handleUpdates(login1);
         assertNotNull(player);
-        assertEquals("LifecycleTest", player.getNickname());
+        assertEquals("LifecycleTest", player.getName());
 
         // 2. Change nickname
         var login2 = createMockLoginData(7001L, "NewLifecycleTest");
         player = offlinePlayerManager.handleUpdates(login2);
-        assertEquals("NewLifecycleTest", player.getNickname());
+        assertEquals("NewLifecycleTest", player.getName());
 
         // 3. Set custom data
         var customData = NbtMap.builder().putString("key", "value").build();
@@ -469,7 +470,7 @@ public class AllayOfflinePlayerManagerTest {
 
         // 4. Retrieve by different methods
         var byXuid = offlinePlayerManager.getByXboxUserId(7001L);
-        var byNick = offlinePlayerManager.getByNickname("NewLifecycleTest");
+        var byNick = offlinePlayerManager.getByName("NewLifecycleTest");
 
         // 5. Verify consistency
         assertEquals(player.getStorageUuid(), byXuid.getStorageUuid());
