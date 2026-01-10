@@ -1391,7 +1391,7 @@ public final class BlockTypes {
     /**
      * {@link BlockPropertyTypes#REDSTONE_SIGNAL}
      */
-    public static BlockType<BlockDaylightDetectorInvertedBehavior> DAYLIGHT_DETECTOR_INVERTED;
+    public static BlockType<BlockDaylightDetectorBehavior> DAYLIGHT_DETECTOR_INVERTED;
 
     public static BlockType<BlockCoralBehavior> DEAD_BRAIN_CORAL;
 
@@ -2698,7 +2698,7 @@ public final class BlockTypes {
      */
     public static BlockType<BlockLitPumpkinBehavior> LIT_PUMPKIN;
 
-    public static BlockType<BlockLitRedstoneLampBehavior> LIT_REDSTONE_LAMP;
+    public static BlockType<BlockRedstoneLampBehavior> LIT_REDSTONE_LAMP;
 
     public static BlockType<BlockOreBehavior> LIT_REDSTONE_ORE;
 
@@ -3630,13 +3630,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OUTPUT_LIT_BIT}
      * {@link BlockPropertyTypes#OUTPUT_SUBTRACT_BIT}
      */
-    public static BlockType<BlockPoweredComparatorBehavior> POWERED_COMPARATOR;
+    public static BlockType<BlockComparatorBehavior> POWERED_COMPARATOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      * {@link BlockPropertyTypes#REPEATER_DELAY}
      */
-    public static BlockType<BlockPoweredRepeaterBehavior> POWERED_REPEATER;
+    public static BlockType<BlockRepeaterBehavior> POWERED_REPEATER;
 
     public static BlockType<BlockPrismarineBehavior> PRISMARINE;
 
@@ -4665,13 +4665,13 @@ public final class BlockTypes {
      * {@link BlockPropertyTypes#OUTPUT_LIT_BIT}
      * {@link BlockPropertyTypes#OUTPUT_SUBTRACT_BIT}
      */
-    public static BlockType<BlockUnpoweredComparatorBehavior> UNPOWERED_COMPARATOR;
+    public static BlockType<BlockComparatorBehavior> UNPOWERED_COMPARATOR;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}
      * {@link BlockPropertyTypes#REPEATER_DELAY}
      */
-    public static BlockType<BlockUnpoweredRepeaterBehavior> UNPOWERED_REPEATER;
+    public static BlockType<BlockRepeaterBehavior> UNPOWERED_REPEATER;
 
     /**
      * {@link BlockPropertyTypes#MINECRAFT_CARDINAL_DIRECTION}

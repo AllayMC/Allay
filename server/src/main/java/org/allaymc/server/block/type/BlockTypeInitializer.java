@@ -2139,7 +2139,7 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, false))
                 .build();
         BlockTypes.LIT_REDSTONE_LAMP = AllayBlockType
-                .builder(BlockLitRedstoneLampBehaviorImpl.class)
+                .builder(BlockRedstoneLampBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIT_REDSTONE_LAMP)
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneLampBaseComponentImpl(blockType, true))
                 .build();
@@ -2168,7 +2168,7 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, false))
                 .build();
         BlockTypes.DAYLIGHT_DETECTOR_INVERTED = AllayBlockType
-                .builder(BlockDaylightDetectorInvertedBehaviorImpl.class)
+                .builder(BlockDaylightDetectorBehaviorImpl.class)
                 .vanillaBlock(BlockId.DAYLIGHT_DETECTOR_INVERTED)
                 .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                 .setBaseComponentSupplier(blockType -> new BlockDaylightDetectorBaseComponentImpl(blockType, true))
@@ -2177,13 +2177,13 @@ public final class BlockTypeInitializer {
 
     public static void initRedstoneRepeater() {
         BlockTypes.POWERED_REPEATER = AllayBlockType
-                .builder(BlockPoweredRepeaterBehaviorImpl.class)
+                .builder(BlockRepeaterBehaviorImpl.class)
                 .vanillaBlock(BlockId.POWERED_REPEATER)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, true))
                 .build();
         BlockTypes.UNPOWERED_REPEATER = AllayBlockType
-                .builder(BlockUnpoweredRepeaterBehaviorImpl.class)
+                .builder(BlockRepeaterBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNPOWERED_REPEATER)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneRepeaterBaseComponentImpl(blockType, false))
@@ -2192,14 +2192,14 @@ public final class BlockTypeInitializer {
 
     public static void initRedstoneComparator() {
         BlockTypes.POWERED_COMPARATOR = AllayBlockType
-                .builder(BlockPoweredComparatorBehaviorImpl.class)
+                .builder(BlockComparatorBehaviorImpl.class)
                 .vanillaBlock(BlockId.POWERED_COMPARATOR)
                 .bindBlockEntity(BlockEntityTypes.COMPARATOR)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
                 .setBaseComponentSupplier(blockType -> new BlockRedstoneComparatorBaseComponentImpl(blockType, true))
                 .build();
         BlockTypes.UNPOWERED_COMPARATOR = AllayBlockType
-                .builder(BlockUnpoweredComparatorBehaviorImpl.class)
+                .builder(BlockComparatorBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNPOWERED_COMPARATOR)
                 .bindBlockEntity(BlockEntityTypes.COMPARATOR)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)

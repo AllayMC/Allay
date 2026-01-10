@@ -238,5 +238,9 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*(Sunflower|Lilac|RoseBush|Peony|PitcherPlant)Stack"), "ItemBigFlowerStack");
         registerMergedItem(Pattern.compile(".*(LeafLitter|PinkPetals|Wildflowers)Stack"), "ItemPlantPileStack");
         registerMergedItem(Pattern.compile(".*CampfireStack"), "ItemCampfireStack");
+        registerMergedItem(Pattern.compile(".*DaylightDetector.*Stack"), "ItemDaylightDetectorStack");
+        registerMergedItem(Pattern.compile(".*RepeaterStack"), "ItemRepeaterStack");
+        registerMergedItem(Pattern.compile(".*ComparatorStack"), "ItemComparatorStack");
+        registerMergedItem(Pattern.compile(".*RedstoneLampStack"), "ItemRedstoneLampStack");
     }
 }

@@ -915,7 +915,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemDaylightDetectorStack> DAYLIGHT_DETECTOR;
 
-    public static ItemType<ItemDaylightDetectorInvertedStack> DAYLIGHT_DETECTOR_INVERTED;
+    public static ItemType<ItemDaylightDetectorStack> DAYLIGHT_DETECTOR_INVERTED;
 
     public static ItemType<ItemCoralStack> DEAD_BRAIN_CORAL;
 
@@ -2129,7 +2129,7 @@ public final class ItemTypes {
 
     public static ItemType<ItemLitPumpkinStack> LIT_PUMPKIN;
 
-    public static ItemType<ItemLitRedstoneLampStack> LIT_REDSTONE_LAMP;
+    public static ItemType<ItemRedstoneLampStack> LIT_REDSTONE_LAMP;
 
     public static ItemType<ItemLitRedstoneOreStack> LIT_REDSTONE_ORE;
 
@@ -2761,9 +2761,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemBucketStack> POWDER_SNOW_BUCKET;
 
-    public static ItemType<ItemPoweredComparatorStack> POWERED_COMPARATOR;
+    public static ItemType<ItemComparatorStack> POWERED_COMPARATOR;
 
-    public static ItemType<ItemPoweredRepeaterStack> POWERED_REPEATER;
+    public static ItemType<ItemRepeaterStack> POWERED_REPEATER;
 
     public static ItemType<ItemPrismarineStack> PRISMARINE;
 
@@ -3445,9 +3445,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemTorchStack> UNLIT_REDSTONE_TORCH;
 
-    public static ItemType<ItemUnpoweredComparatorStack> UNPOWERED_COMPARATOR;
+    public static ItemType<ItemComparatorStack> UNPOWERED_COMPARATOR;
 
-    public static ItemType<ItemUnpoweredRepeaterStack> UNPOWERED_REPEATER;
+    public static ItemType<ItemRepeaterStack> UNPOWERED_REPEATER;
 
     public static ItemType<ItemVaultStack> VAULT;
 

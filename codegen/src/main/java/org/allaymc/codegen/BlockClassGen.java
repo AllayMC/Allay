@@ -277,5 +277,9 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*(Sunflower|Lilac|RoseBush|Peony|PitcherPlant)Behavior"), "BlockBigFlower");
         registerMergedBlock(Pattern.compile(".*(LeafLitter|PinkPetals|Wildflowers)Behavior"), "BlockPlantPile");
         registerMergedBlock(Pattern.compile(".*CampfireBehavior"), "BlockCampfireBehavior");
+        registerMergedBlock(Pattern.compile(".*DaylightDetector.*Behavior"), "BlockDaylightDetectorBehavior");
+        registerMergedBlock(Pattern.compile(".*RepeaterBehavior"), "BlockRepeaterBehavior");
+        registerMergedBlock(Pattern.compile(".*ComparatorBehavior"), "BlockComparatorBehavior");
+        registerMergedBlock(Pattern.compile(".*RedstoneLampBehavior"), "BlockRedstoneLampBehavior");
     }
 }
