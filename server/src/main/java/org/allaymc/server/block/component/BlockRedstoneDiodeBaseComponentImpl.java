@@ -190,7 +190,7 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
         }
 
         // Check strong power through solid block
-        if (power < MAX_REDSTONE_POWER && inputState.getBlockStateData().isOpaqueSolid()) {
+        if (power < MAX_REDSTONE_POWER && inputState.getBlockStateData().isSolid()) {
             int strongPower = dimension.getStrongPowerAt(new Position3i(inputPos, dimension), inputFace.opposite());
             power = Math.max(power, strongPower);
         }

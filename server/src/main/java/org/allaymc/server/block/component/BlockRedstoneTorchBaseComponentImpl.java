@@ -174,7 +174,7 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
             }
 
             // Check power through solid blocks (only strong power can conduct through)
-            if (neighborState.getBlockStateData().isOpaqueSolid()) {
+            if (neighborState.getBlockStateData().isSolid()) {
                 int powerThroughBlock = getStrongPowerIntoBlockExcluding(dimension, neighborPos, excludePos, face.opposite());
                 if (powerThroughBlock > 0) {
                     return true;

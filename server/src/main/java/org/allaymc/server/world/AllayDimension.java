@@ -278,9 +278,9 @@ public class AllayDimension implements Dimension {
             int signal = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
             maxPower = Math.max(maxPower, signal);
 
-            // Check strong power through opaque solid blocks
+            // Check strong power through solid blocks
             // Exclude face.opposite() because that's the direction pointing back to pos
-            if (neighborState.getBlockStateData().isOpaqueSolid()) {
+            if (neighborState.getBlockStateData().isSolid()) {
                 int strongPower = this.getStrongPowerAt(neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, strongPower);
             }
