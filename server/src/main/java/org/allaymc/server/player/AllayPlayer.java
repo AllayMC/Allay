@@ -223,6 +223,10 @@ public class AllayPlayer implements Player {
     protected Set<HudElement> hiddenHudElements;
     protected boolean shouldSendHudElements;
 
+    @Setter
+    @Getter
+    protected UUID storageUuid;
+
     public AllayPlayer(BedrockServerSession session) {
         this.session = session;
         this.session.setPacketHandler(new AllayPacketHandler());
@@ -2443,7 +2447,7 @@ public class AllayPlayer implements Player {
             playerData.setNbt(builder.build());
 
             // Save new player data back to storage
-            playerManager.getPlayerStorage().savePlayerData(this.loginData.getUuid(), playerData);
+            playerManager.getPlayerStorage().savePlayerData(this.storageUuid, playerData);
         } else {
             dimension = (AllayDimension) logOffWorld.getDimension(playerData.getDimension());
             currentPos = readVector3f(playerData.getNbt(), "Pos");

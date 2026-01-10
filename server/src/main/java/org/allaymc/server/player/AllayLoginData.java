@@ -71,15 +71,15 @@ public class AllayLoginData implements LoginData {
     }
 
     private void decodeSkinData(String skinData) {
-        JsonObject skinMap = decodeToken(skinData);
+        var skinMap = this.decodeToken(skinData);
         if (skinMap.has("DeviceModel") && skinMap.has("DeviceId") &&
             skinMap.has("ClientRandomId") && skinMap.has("DeviceOS") &&
             skinMap.has("GuiScale")) {
-            String deviceModel = skinMap.get("DeviceModel").getAsString();
-            String deviceId = skinMap.get("DeviceId").getAsString();
-            long clientId = skinMap.get("ClientRandomId").getAsLong();
-            int deviceOS = skinMap.get("DeviceOS").getAsInt();
-            int uiProfile = skinMap.get("UIProfile").getAsInt();
+            var deviceModel = skinMap.get("DeviceModel").getAsString();
+            var deviceId = skinMap.get("DeviceId").getAsString();
+            var clientId = skinMap.get("ClientRandomId").getAsLong();
+            var deviceOS = skinMap.get("DeviceOS").getAsInt();
+            var uiProfile = skinMap.get("UIProfile").getAsInt();
             this.deviceInfo = new DeviceInfo(deviceModel, deviceId, clientId, Device.from(deviceOS), UIProfile.from(uiProfile));
         }
 
@@ -172,7 +172,7 @@ public class AllayLoginData implements LoginData {
     }
 
     private JsonObject decodeToken(String token) {
-        String[] tokenSplit = token.split("\\.");
+        var tokenSplit = token.split("\\.");
         if (tokenSplit.length < 2) {
             throw new IllegalArgumentException("Invalid token length");
         }
@@ -180,35 +180,39 @@ public class AllayLoginData implements LoginData {
     }
 
     private Skin.ImageData getImage(JsonObject skinMap, String name) {
-        if (skinMap.has(name + "Data")) {
-            byte[] skinImage = Base64.getDecoder().decode(skinMap.get(name + "Data").getAsString());
-            if (skinMap.has(name + "ImageHeight") && skinMap.has(name + "ImageWidth")) {
-                int width = skinMap.get(name + "ImageWidth").getAsInt();
-                int height = skinMap.get(name + "ImageHeight").getAsInt();
-                return new Skin.ImageData(width, height, skinImage);
-            } else {
-                return Skin.ImageData.from(skinImage);
-            }
+        var dataKey = name + "Data";
+        if (!skinMap.has(dataKey)) {
+            return Skin.ImageData.EMPTY;
         }
-        return Skin.ImageData.EMPTY;
+
+        var skinImage = Base64.getDecoder().decode(skinMap.get(dataKey).getAsString());
+        var widthKey = name + "ImageWidth";
+        var heightKey = name + "ImageHeight";
+        if (skinMap.has(widthKey) && skinMap.has(heightKey)) {
+            var width = skinMap.get(widthKey).getAsInt();
+            var height = skinMap.get(heightKey).getAsInt();
+            return new Skin.ImageData(width, height, skinImage);
+        }
+
+        return Skin.ImageData.from(skinImage);
     }
 
     private Skin.AnimationData getSkinAnimationData(JsonObject animationData) {
-        byte[] data = Base64.getDecoder().decode(animationData.get("Image").getAsString());
-        int width = animationData.get("ImageWidth").getAsInt();
-        int height = animationData.get("ImageHeight").getAsInt();
-        float frames = animationData.get("Frames").getAsFloat();
+        var data = Base64.getDecoder().decode(animationData.get("Image").getAsString());
+        var width = animationData.get("ImageWidth").getAsInt();
+        var height = animationData.get("ImageHeight").getAsInt();
+        var frames = animationData.get("Frames").getAsFloat();
         var type = Skin.AnimationType.from(animationData.get("Type").getAsInt());
         var expression = Skin.ExpressionType.from(animationData.get("AnimationExpression").getAsInt());
         return new Skin.AnimationData(new Skin.ImageData(width, height, data), type, frames, expression);
     }
 
     private Skin.PersonaPieces getPersonaPiece(JsonObject personaPiece) {
-        String pieceId = personaPiece.get("PieceId").getAsString();
-        String pieceType = personaPiece.get("PieceType").getAsString();
-        String packId = personaPiece.get("PackId").getAsString();
-        String productId = personaPiece.get("ProductId").getAsString();
-        boolean isDefault = personaPiece.get("IsDefault").getAsBoolean();
+        var pieceId = personaPiece.get("PieceId").getAsString();
+        var pieceType = personaPiece.get("PieceType").getAsString();
+        var packId = personaPiece.get("PackId").getAsString();
+        var productId = personaPiece.get("ProductId").getAsString();
+        var isDefault = personaPiece.get("IsDefault").getAsBoolean();
         return new Skin.PersonaPieces(pieceId, pieceType, packId, isDefault, productId);
     }
 

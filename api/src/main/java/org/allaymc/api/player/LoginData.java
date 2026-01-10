@@ -40,6 +40,18 @@ public interface LoginData {
     String getXuid();
 
     /**
+     * Gets the player's Xbox User ID as a parsed Long value.
+     *
+     * @return the parsed Xbox User ID as Long, or null if not available or invalid
+     */
+    default Long getParsedXuid() {
+        try {
+            return Long.parseLong(this.getXuid());
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    /**
      * Gets the player's uuid, derived from the player's xuid when online, or from the username when offline.
      *
      * @return the player's uuid
