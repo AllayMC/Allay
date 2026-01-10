@@ -48,6 +48,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `BlockEntityCampfire` and `BlockEntityCampfireBaseComponent` interfaces.
   - Added `CampfireSmeltEvent` event.
   - Added `DamageType.CAMPFIRE` and `DamageContainer.campfire()` for campfire damage.
+- (API) Implemented crossbow:
+  - Added `ItemCrossbowBaseComponent` interface with `isLoaded()`, `getLoadedProjectile()`, and `setLoadedProjectile()` methods.
+  - Added `EntityShootCrossbowEvent` event fired when shooting crossbow.
+  - Added `EntityArrowBaseComponent.getPiercingLevel()` and `setPiercingLevel()` for Piercing enchantment support.
+  - Added `ItemBaseComponent.onUseInAirTick()` callback for tick-based item usage logic.
 
 ### Changed
 

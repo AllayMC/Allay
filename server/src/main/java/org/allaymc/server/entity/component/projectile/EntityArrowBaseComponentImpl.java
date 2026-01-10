@@ -19,6 +19,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     protected static final String TAG_POWER_LEVEL = "enchantPower";
     protected static final String TAG_PUNCH_LEVEL = "enchantPunch";
     protected static final String TAG_INFINITY_LEVEL = "enchantInfinity";
+    protected static final String TAG_PIERCING_LEVEL = "enchantPiercing";
     protected static final String TAG_POTION_ID = "auxValue";
     protected static final String TAG_SHOT_BY_PLAYER = "player";
 
@@ -31,6 +32,9 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
     @Getter
     @Setter
     protected int punchLevel;
+    @Getter
+    @Setter
+    protected int piercingLevel;
     @Getter
     @Setter
     protected boolean infinite;
@@ -70,6 +74,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
         nbt.listenForByte(TAG_POWER_LEVEL, b -> this.powerLevel = b);
         nbt.listenForByte(TAG_PUNCH_LEVEL, b -> this.punchLevel = b);
         nbt.listenForByte(TAG_INFINITY_LEVEL, b -> this.infinite = b != 0);
+        nbt.listenForByte(TAG_PIERCING_LEVEL, b -> this.piercingLevel = b);
         nbt.listenForBoolean(TAG_SHOT_BY_PLAYER, b -> this.pickUpDisabled = !b);
     }
 
@@ -80,6 +85,7 @@ public class EntityArrowBaseComponentImpl extends EntityProjectileBaseComponentI
                 .putByte(TAG_POWER_LEVEL, (byte) powerLevel)
                 .putByte(TAG_PUNCH_LEVEL, (byte) punchLevel)
                 .putByte(TAG_INFINITY_LEVEL, (byte) (infinite ? 1 : 0))
+                .putByte(TAG_PIERCING_LEVEL, (byte) piercingLevel)
                 .putBoolean(TAG_SHOT_BY_PLAYER, !pickUpDisabled);
 
         // Store this for vanilla map compatibility, although we don't need to save this

@@ -15,6 +15,8 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -29,6 +31,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     // Indicates whether the arrow has already hit a block
     protected boolean hitBlock;
+    // Track entities that have been hit by piercing arrows to prevent double-hitting
+    protected Set<Long> piercedEntities = new HashSet<>();
 
     @Override
     public double getGravity() {
@@ -52,6 +56,12 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
     @Override
     protected void onHitEntity(Entity other, Vector3dc hitPos) {
         if (thisEntity.willBeDespawnedNextTick()) {
+            return;
+        }
+
+        // Skip entities that have already been hit by this piercing arrow
+        long entityId = other.getRuntimeId();
+        if (piercedEntities.contains(entityId)) {
             return;
         }
 
@@ -98,6 +108,14 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             }
         }
 
+        // Handle piercing enchantment
+        int piercingLevel = arrowBaseComponent.getPiercingLevel();
+        if (piercingLevel > 0 && piercedEntities.size() < piercingLevel) {
+            // Arrow can pierce through this entity
+            piercedEntities.add(entityId);
+            return;
+        }
+
         thisEntity.remove();
     }
 
@@ -124,5 +142,15 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
             case HARD -> 3;
             default -> 0;
         };
+    }
+
+    @Override
+    protected boolean shouldSkipEntityCollision(Entity entity) {
+        if (super.shouldSkipEntityCollision(entity)) {
+            return true;
+        }
+
+        // Skip already-pierced entities to allow arrow to continue flying through them
+        return piercedEntities.contains(entity.getRuntimeId());
     }
 }
