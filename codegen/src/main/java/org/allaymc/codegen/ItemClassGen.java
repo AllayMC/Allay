@@ -237,5 +237,10 @@ public class ItemClassGen extends BaseClassGen {
         registerMergedItem(Pattern.compile(".*(Dandelion|Poppy|BlueOrchid|Allium|AzureBluet|RedTulip|OrangeTulip|WhiteTulip|PinkTulip|OxeyeDaisy|Cornflower|LilyOfTheValley|WitherRose|Torchflower|ClosedEyeblossom|OpenEyeblossom)Stack"), "ItemSmallFlowerStack");
         registerMergedItem(Pattern.compile(".*(Sunflower|Lilac|RoseBush|Peony|PitcherPlant)Stack"), "ItemBigFlowerStack");
         registerMergedItem(Pattern.compile(".*(LeafLitter|PinkPetals|Wildflowers)Stack"), "ItemPlantPileStack");
+        registerMergedItem(Pattern.compile(".*CampfireStack"), "ItemCampfireStack");
+        registerMergedItem(Pattern.compile(".*DaylightDetector.*Stack"), "ItemDaylightDetectorStack");
+        registerMergedItem(Pattern.compile(".*RepeaterStack"), "ItemRepeaterStack");
+        registerMergedItem(Pattern.compile(".*ComparatorStack"), "ItemComparatorStack");
+        registerMergedItem(Pattern.compile(".*RedstoneLampStack"), "ItemRedstoneLampStack");
     }
 }

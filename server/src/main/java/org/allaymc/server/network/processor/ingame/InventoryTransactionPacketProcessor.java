@@ -118,6 +118,12 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
+                        // If the player is interacting with a block, ignore click-air to prevent
+                        // triggering item use (e.g., eating animation) during block interactions
+                        if (entity.isUsingItemOnBlock()) {
+                            break;
+                        }
+
                         if (!entity.isUsingItemInAir()) {
                             if (itemInHand.canUseItemInAir(entity)) {
                                 if (new PlayerStartUseItemInAirEvent(entity).call()) {

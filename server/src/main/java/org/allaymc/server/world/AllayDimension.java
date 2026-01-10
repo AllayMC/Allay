@@ -3,6 +3,7 @@ package org.allaymc.server.world;
 import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -31,6 +32,7 @@ import org.allaymc.server.world.manager.AllayChunkManager;
 import org.allaymc.server.world.manager.AllayEntityManager;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3ic;
 
 import java.util.Collections;
 import java.util.Set;
@@ -261,6 +263,75 @@ public class AllayDimension implements Dimension {
         }
 
         return true;
+    }
+
+    @Override
+    public int getPowerAt(Vector3ic pos) {
+        int maxPower = 0;
+
+        for (BlockFace face : BlockFace.VALUES) {
+            Vector3ic neighborPos = face.offsetPos(pos);
+            BlockState neighborState = this.getBlockState(neighborPos);
+
+            // Check direct weak power from neighbor
+            Block neighborBlock = new Block(neighborState, new Position3i(neighborPos, this));
+            int signal = neighborState.getBehavior().getWeakPower(neighborBlock, face.opposite());
+            maxPower = Math.max(maxPower, signal);
+
+            // Check strong power through solid blocks
+            // Exclude face.opposite() because that's the direction pointing back to pos
+            if (neighborState.getBlockStateData().isSolid()) {
+                int strongPower = this.getStrongPowerAt(neighborPos, face.opposite());
+                maxPower = Math.max(maxPower, strongPower);
+            }
+        }
+
+        return maxPower;
+    }
+
+    @Override
+    public int getStrongPowerAt(Vector3ic pos, BlockFace... excludeFaces) {
+        int maxPower = 0;
+
+        for (BlockFace face : BlockFace.VALUES) {
+            if (excludeFaces.length > 0 && containsFace(excludeFaces, face)) continue;
+
+            Vector3ic checkPos = face.offsetPos(pos);
+            BlockState state = this.getBlockState(checkPos);
+
+            Block checkBlock = new Block(state, new Position3i(checkPos, this));
+            int strongPower = state.getBehavior().getStrongPower(checkBlock, face.opposite());
+            maxPower = Math.max(maxPower, strongPower);
+        }
+
+        return maxPower;
+    }
+
+    @Override
+    public int getWeakPowerAt(Vector3ic pos, BlockFace... excludeFaces) {
+        int maxPower = 0;
+
+        for (BlockFace face : BlockFace.VALUES) {
+            if (excludeFaces.length > 0 && containsFace(excludeFaces, face)) continue;
+
+            Vector3ic checkPos = face.offsetPos(pos);
+            BlockState state = this.getBlockState(checkPos);
+
+            Block checkBlock = new Block(state, new Position3i(checkPos, this));
+            int weakPower = state.getBehavior().getWeakPower(checkBlock, face.opposite());
+            maxPower = Math.max(maxPower, weakPower);
+        }
+
+        return maxPower;
+    }
+
+    private static boolean containsFace(BlockFace[] faces, BlockFace target) {
+        for (BlockFace face : faces) {
+            if (face == target) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

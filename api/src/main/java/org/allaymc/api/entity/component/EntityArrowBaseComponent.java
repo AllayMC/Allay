@@ -106,4 +106,18 @@ public interface EntityArrowBaseComponent extends EntityBaseComponent {
      * @param disablePickUp {@code true} to disable picking up the arrow, {@code false} to enable it
      */
     void setPickUpDisabled(boolean disablePickUp);
+
+    /**
+     * Gets the piercing level of the arrow. Piercing allows the arrow to pass through entities.
+     *
+     * @return the piercing level of the arrow
+     */
+    int getPiercingLevel();
+
+    /**
+     * Sets the piercing level of the arrow. Piercing allows the arrow to pass through entities.
+     *
+     * @param level the piercing level to set
+     */
+    void setPiercingLevel(int level);
 }

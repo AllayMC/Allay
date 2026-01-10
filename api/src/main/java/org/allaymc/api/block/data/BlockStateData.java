@@ -134,7 +134,7 @@ public class BlockStateData {
     @Builder.Default
     protected boolean isSolid = true;
     /**
-     * The translucency of the block state.
+     * The translucency of the block state. Please note that this value is only used in map rendering.
      */
     @Builder.Default
     protected float translucency = 0.0f;
@@ -168,21 +168,11 @@ public class BlockStateData {
     }
 
     public boolean isTransparent() {
-        return translucency() > 0;
+        return lightDampening() == 0;
     }
 
     /**
-     * Check if the block state is opaque and solid.
-     * Opaque solid blocks can transmit redstone power and block diagonal wire connections.
-     *
-     * @return {@code true} if the block state is solid and not transparent.
-     */
-    public boolean isOpaqueSolid() {
-        return isSolid && !isTransparent();
-    }
-
-    /**
-     * Check if the block state can contain liquid, no matter it is liquid source or not.
+     * Check if the block state can contain liquid, no matter it is a liquid source or not.
      *
      * @return {@code true} if the block state can contain liquid, otherwise {@code false}.
      */

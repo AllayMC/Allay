@@ -867,6 +867,15 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
+    public static void initCrossbow() {
+        ItemTypes.CROSSBOW = AllayItemType
+                .builder(ItemCrossbowStackImpl.class)
+                .vanillaItem(ItemId.CROSSBOW)
+                .addComponent(ItemCrossbowBaseComponentImpl::new, ItemCrossbowBaseComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.STRING), ItemRepairableComponentImpl.class)
+                .build();
+    }
+
     public static void initBed() {
         ItemTypes.BED = AllayItemType
                 .builder(ItemBedStackImpl.class)

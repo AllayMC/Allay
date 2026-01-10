@@ -8,7 +8,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.server.block.RedstoneHelper;
 
 import java.time.Duration;
 
@@ -34,8 +33,8 @@ public class BlockRedstoneLampBaseComponentImpl extends BlockBaseComponentImpl {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
 
         // Check if should be lit immediately after placement
-        if (!lit && RedstoneHelper.isPoweredAt(oldBlock.getPosition())) {
-            switchToLit(oldBlock.getPosition());
+        if (!lit && oldBlock.isReceivingRedstonePower()) {
+            switchToLit(oldBlock);
         }
     }
 
@@ -43,32 +42,30 @@ public class BlockRedstoneLampBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        boolean powered = RedstoneHelper.isPoweredAt(block.getPosition());
+        var powered = block.isReceivingRedstonePower();
 
         if (lit && !powered) {
             // Schedule turn off with delay (prevents flickering)
-            block.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(
-                    block.getPosition(), TURN_OFF_DELAY
-            );
+            block.scheduleUpdateInDelay(TURN_OFF_DELAY);
         } else if (!lit && powered) {
             // Turn on immediately
-            switchToLit(block.getPosition());
+            switchToLit(block);
         }
     }
 
     @Override
     public void onScheduledUpdate(Block block) {
         // Only turn off if still not receiving power
-        if (lit && !RedstoneHelper.isPoweredAt(block.getPosition())) {
-            switchToUnlit(block.getPosition());
+        if (lit && !block.isReceivingRedstonePower()) {
+            switchToUnlit(block);
         }
     }
 
-    protected void switchToLit(Position3ic pos) {
-        pos.dimension().setBlockState(pos.x(), pos.y(), pos.z(), BlockTypes.LIT_REDSTONE_LAMP.getDefaultState());
+    protected void switchToLit(Block block) {
+        block.replaceState(BlockTypes.LIT_REDSTONE_LAMP.getDefaultState());
     }
 
-    protected void switchToUnlit(Position3ic pos) {
-        pos.dimension().setBlockState(pos.x(), pos.y(), pos.z(), BlockTypes.REDSTONE_LAMP.getDefaultState());
+    protected void switchToUnlit(Block block) {
+        block.replaceState(BlockTypes.REDSTONE_LAMP.getDefaultState());
     }
 }

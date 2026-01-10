@@ -224,9 +224,22 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         if (isAlive()) {
             tickFood();
+            tickItemUsingInAir(currentTick);
         }
 
         tickPlayerDataAutoSave();
+    }
+
+    protected void tickItemUsingInAir(long currentTick) {
+        if (!usingItemInAir) {
+            return;
+        }
+
+        var itemInHand = thisPlayer.getItemInHand();
+        if (itemInHand != null && !itemInHand.isEmptyOrAir()) {
+            long usedTime = currentTick - startUsingItemInAirTime;
+            itemInHand.onUseInAirTick(thisPlayer, usedTime);
+        }
     }
 
     protected void tickFood() {

@@ -16,7 +16,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
 - (API) Added `Entity.setPersistent()` method to control entity persistence.
-- (API) Added `BlockStateData.isOpaqueSolid()` method to check if a block state is solid and not transparent.
 - (API) Added redstone power methods to `BlockBaseComponent`:
   - `getWeakPower(Block, BlockFace)` - gets weak power output from a block.
   - `getStrongPower(Block, BlockFace)` - gets strong power output from a block.
@@ -24,16 +23,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `MAX_REDSTONE_POWER` constant (15).
 - (API) Added `BlockEntityNoteblockBaseComponent.isPowered()` and `setPowered()` methods to track redstone power state.
 - (API) Added sound `PowerSound` which is used by redstone components such as lever.
-- (API) Added offline player system for managing player data and identity mappings:
-    - Added `OfflinePlayer` interface representing players whose data exists on server but are not currently online.
-    - Added `OfflinePlayerManager` interface for managing offline player data, nickname changes, and collision resolution.
-    - Added `PlayerNicknameChangeEvent` event that fires when a player's nickname changes.
-    - Added method `LoginData.getParsedXuid()` to get Xbox User ID as a Long value.
-    - Added method `Player.getStorageUuid()` to get the stable storage UUID used for player data files.
-- Implemented persistent player identity system with LevelDB index that maps XUID, nickname UUID, and nickname to storage UUID.
-- Implemented automatic nickname collision handling that preserves all player data while assigning temporary nicknames to previous owners.
-- Added automatic migration of legacy player data (pre-0.10.4) to new storage UUID system on first login.
-- Implemented basic redstone system:
+- (API) Implemented basic redstone system, here is a list of implemented redstone components:
   - Redstone Wire
   - Redstone Block
   - Redstone Lamp
@@ -53,6 +43,24 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Redstone Comparator
   - Target (outputs signal when hit by projectiles)
   - Dragon Head and Piglin Head (animate when powered)
+- (API) Implemented campfire and soul campfire:
+  - Added `BlockEntityCampfire` and `BlockEntityCampfireBaseComponent` interfaces.
+  - Added `CampfireSmeltEvent` event.
+  - Added `DamageType.CAMPFIRE` and `DamageContainer.campfire()` for campfire damage.
+- (API) Implemented crossbow:
+  - Added `ItemCrossbowBaseComponent` interface with `isLoaded()`, `getLoadedProjectile()`, and `setLoadedProjectile()` methods.
+  - Added `EntityShootCrossbowEvent` event fired when shooting crossbow.
+  - Added `EntityArrowBaseComponent.getPiercingLevel()` and `setPiercingLevel()` for Piercing enchantment support.
+  - Added `ItemBaseComponent.onUseInAirTick()` callback for tick-based item usage logic.
+- (API) Added offline player system for managing player data and identity mappings:
+    - Added `OfflinePlayer` interface representing players whose data exists on server but are not currently online.
+    - Added `OfflinePlayerManager` interface for managing offline player data, nickname changes, and collision resolution.
+    - Added `PlayerNicknameChangeEvent` event that fires when a player's nickname changes.
+    - Added method `LoginData.getParsedXuid()` to get Xbox User ID as a Long value.
+    - Added method `Player.getStorageUuid()` to get the stable storage UUID used for player data files.
+- Implemented persistent player identity system with LevelDB index that maps XUID, nickname UUID, and nickname to storage UUID.
+- Implemented automatic nickname collision handling that preserves all player data while assigning temporary nicknames to previous owners.
+- Added automatic migration of legacy player data (pre-0.10.4) to new storage UUID system on first login.
 
 ### Changed
 
@@ -71,15 +79,17 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Player login flow now processes identity resolution through `OfflinePlayerManager` before authentication checks.
 - Refactored `AllayLoginData` methods for improved code clarity and readability.
 
-### Removed
-
-- Removed `enableIndependentNetworkThread` configuration option from `server-settings.yml` as it is no longer necessary.
-
 ### Fixed
 
 - Fixed noteblock being triggered when player is sneaking (should allow placing blocks on top instead).
+- Fixed eating animation incorrectly triggering after interacting with blocks while holding food.
+- Added missing ambient crackle sounds for furnace, blast furnace, smoker, and campfire.
 - Fixed potential player data corruption during save operations by implementing atomic file writes with temporary files.
 - Fixed player data loss that could occur when players change their Xbox gamertag.
+
+### Removed
+
+- Removed `enableIndependentNetworkThread` configuration option from `server-settings.yml` as it is no longer necessary.
 
 # 0.10.3 (API 0.20.0) - 2026/1/7
 

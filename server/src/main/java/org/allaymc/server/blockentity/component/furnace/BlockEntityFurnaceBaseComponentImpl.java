@@ -18,7 +18,9 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceRecipeInput;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
@@ -152,6 +154,15 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         if (lastBurnTime == 1 && burnTime == 0) setLit(false);
         if (lastBurnTime == 0 && burnTime > 0) setLit(true);
         sendFurnaceContainerData();
+
+        // Play crackle sound randomly when burning (approximately every 3 seconds)
+        if (burnTime > 0 && ThreadLocalRandom.current().nextFloat() <= 0.016f) {
+            getDimension().addSound(MathUtils.center(position), getCrackleSound());
+        }
+    }
+
+    protected SimpleSound getCrackleSound() {
+        return SimpleSound.FURNACE_CRACKLE;
     }
 
     protected void tickFurnace() {

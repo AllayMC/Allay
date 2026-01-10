@@ -10,7 +10,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.RedstoneHelper;
 import org.joml.Vector3ic;
 
 import java.time.Duration;
@@ -191,8 +190,8 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
         }
 
         // Check strong power through solid block
-        if (power < MAX_REDSTONE_POWER && inputState.getBlockStateData().isOpaqueSolid()) {
-            int strongPower = RedstoneHelper.getStrongPowerAt(new Position3i(inputPos, dimension), inputFace.opposite());
+        if (power < MAX_REDSTONE_POWER && inputState.getBlockStateData().isSolid()) {
+            int strongPower = dimension.getStrongPowerAt(new Position3i(inputPos, dimension), inputFace.opposite());
             power = Math.max(power, strongPower);
         }
 
@@ -252,9 +251,7 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
      * Schedules a delayed update for the diode.
      */
     protected void scheduleUpdate(Block block) {
-        block.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(
-                block.getPosition(), getDelay(block)
-        );
+        block.scheduleUpdateInDelay(getDelay(block));
     }
 
     /**

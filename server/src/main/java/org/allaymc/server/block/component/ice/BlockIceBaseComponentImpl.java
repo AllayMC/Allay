@@ -35,7 +35,7 @@ public class BlockIceBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected boolean isNeighborBlockLightBiggerThan(Dimension dimension, Vector3ic pos) {
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             if (dimension.getLightEngine().getBlockLight(face.offsetPos(pos)) > 11) {
                 return true;
             }

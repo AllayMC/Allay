@@ -13,7 +13,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.DoorSound;
-import org.allaymc.server.block.RedstoneHelper;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -94,29 +93,29 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     protected void checkRedstonePower(Block block) {
         var dimension = block.getDimension();
         var pos = block.getPosition();
-        boolean isUpperBlock = block.getPropertyValue(UPPER_BLOCK_BIT);
+        var isUpperBlock = block.getPropertyValue(UPPER_BLOCK_BIT);
 
         // Get the position of the other door half
-        Vector3ic otherPos = isUpperBlock
+        var otherPos = isUpperBlock
                 ? BlockFace.DOWN.offsetPos(pos)
                 : BlockFace.UP.offsetPos(pos);
 
         // Check power at both halves and use the maximum
-        int powerAtThis = RedstoneHelper.getPowerAt(block.getPosition());
+        var powerAtThis = block.getRedstonePower();
         var otherPosition = new Position3i(otherPos, dimension);
-        int powerAtOther = RedstoneHelper.getPowerAt(otherPosition);
-        int maxPower = Math.max(powerAtThis, powerAtOther);
+        var powerAtOther = block.getDimension().getPowerAt(otherPosition);
+        var maxPower = Math.max(powerAtThis, powerAtOther);
 
-        boolean shouldBeOpen = maxPower > 0;
-        boolean isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
+        var shouldBeOpen = maxPower > 0;
+        var isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);
 
         if (shouldBeOpen != isCurrentlyOpen) {
             // Update both halves
-            dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, pos);
+            block.updateBlockProperty(OPEN_BIT, shouldBeOpen);
             dimension.updateBlockProperty(OPEN_BIT, shouldBeOpen, otherPos);
 
             // Play sound
-            dimension.addSound(MathUtils.center(pos), shouldBeOpen ? new DoorSound(block.getBlockState(), true) : new DoorSound(block.getBlockState(), false));
+            block.addSound(new DoorSound(block.getBlockState(), shouldBeOpen));
         }
     }
 
@@ -129,10 +128,10 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
         if (interactInfo == null) return false;
 
-        Vector3i pos = (Vector3i) interactInfo.clickedBlockPos();
+        var pos = (Vector3i) interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
 
-        Vector3ic otherPos = blockState.getPropertyValue(UPPER_BLOCK_BIT)
+        var otherPos = blockState.getPropertyValue(UPPER_BLOCK_BIT)
                 ? BlockFace.DOWN.offsetPos(pos)
                 : BlockFace.UP.offsetPos(pos);
 
@@ -142,7 +141,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
 
         // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
-        dimension.addSound(MathUtils.center(pos), isOpen ? new DoorSound(blockState, true) : new DoorSound(blockState, false));
+        dimension.addSound(MathUtils.center(pos), new DoorSound(blockState, isOpen));
         return true;
     }
 

@@ -17,6 +17,7 @@ import org.joml.Vector3ic;
 
 import java.util.*;
 
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.REDSTONE_SIGNAL;
 
 /**
@@ -35,9 +36,9 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        // Redstone wire requires a solid block below
+        // Redstone wire requires a block with full top face below
         BlockState below = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
-        if (!below.getBlockStateData().isSolid()) {
+        if (!below.getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
             return false;
         }
 
@@ -57,8 +58,8 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        // Break if block below is removed
-        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
+        // Break if block below no longer has full top face
+        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
             block.breakBlock();
             return;
         }
@@ -185,29 +186,36 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
      * <p>
      * For redstone wire on stairs/slopes:
      * - Upward diagonal: A wire can see a wire diagonally above only if the block above us doesn't block the view
-     * AND the neighbor block is solid (to support the wire on top)
-     * - Downward diagonal: A wire can see a wire diagonally below only if the neighbor block is not solid
+     * (transparent blocks like glass don't block) AND the neighbor block can support wire (has full top face)
+     * - Downward diagonal: A wire can see a wire diagonally below only if the neighbor block doesn't block
+     * line of sight (transparent blocks like glass don't block)
      */
     protected List<Vector3i> getConnectedWirePositions(Dimension dimension, Vector3ic pos) {
         List<Vector3i> positions = new ArrayList<>();
-        boolean aboveBlocks = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData().isOpaqueSolid();
+        var aboveData = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData();
+        // Block above only blocks if it's solid AND not transparent (e.g., glass doesn't block)
+        boolean aboveBlocks = aboveData.isSolid() && !aboveData.isTransparent();
 
         for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
             Vector3i horizontalPos = new Vector3i(face.offsetPos(pos));
-            boolean neighborSolid = dimension.getBlockState(horizontalPos).getBlockStateData().isOpaqueSolid();
+            var neighborData = dimension.getBlockState(horizontalPos).getBlockStateData();
+            // Neighbor can support wire if it has a full top face (e.g., glass can support wire)
+            boolean neighborCanSupport = neighborData.collisionShape().isFull(BlockFace.UP);
+            // Neighbor blocks line of sight if it's solid AND not transparent
+            boolean neighborBlocksView = neighborData.isSolid() && !neighborData.isTransparent();
 
             // Always check horizontal neighbor (same Y level)
             positions.add(horizontalPos);
 
             // Upward diagonal: wire at Y+1 of horizontal neighbor
-            // Can only connect if block above us doesn't block AND neighbor is solid (to support wire)
-            if (!aboveBlocks && neighborSolid) {
+            // Can only connect if block above us doesn't block AND neighbor can support wire
+            if (!aboveBlocks && neighborCanSupport) {
                 positions.add(new Vector3i(horizontalPos.x, pos.y() + 1, horizontalPos.z));
             }
 
             // Downward diagonal: wire at Y-1 of horizontal neighbor
-            // Can only connect if neighbor block is not solid (doesn't block line of sight)
-            if (!neighborSolid) {
+            // Can only connect if neighbor block doesn't block line of sight
+            if (!neighborBlocksView) {
                 positions.add(new Vector3i(horizontalPos.x, pos.y() - 1, horizontalPos.z));
             }
         }
@@ -226,7 +234,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         int maxPower = 0;
 
         // Check all 6 faces for power sources
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = dimension.getBlockState(neighborPos);
 
@@ -242,7 +250,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             maxPower = Math.max(maxPower, signal);
 
             // Check power through solid blocks (only strong power can conduct through)
-            if (face != BlockFace.UP && neighborState.getBlockStateData().isOpaqueSolid()) {
+            if (face != BlockFace.UP && neighborState.getBlockStateData().isSolid()) {
                 int powerThroughBlock = getStrongPowerIntoBlock(dimension, neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, powerThroughBlock);
             }
@@ -258,7 +266,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     protected int getStrongPowerIntoBlock(Dimension dimension, Vector3ic solidPos, BlockFace excludeFace) {
         int maxPower = 0;
 
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             if (face == excludeFace) continue;
 
             Vector3ic checkPos = face.offsetPos(solidPos);
@@ -377,24 +385,36 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
-        // Connect to redstone components
+        // Special handling for repeater - only connect to front/back, not sides
+        // (Comparator connects on all sides because it accepts side inputs)
+        if (isRepeater(neighborState)) {
+            BlockFace repeaterFacing = getRepeaterFacing(neighborState);
+            // Connect only if wire is at the input (back) or output (front) of the repeater
+            return face == repeaterFacing || face == repeaterFacing.opposite();
+        }
+
+        // Connect to other redstone components
         if (isRedstoneComponent(neighborState)) {
             return true;
         }
 
         // Check for diagonal connections (wire going up/down slopes)
-        boolean neighborSolid = neighborState.getBlockStateData().isOpaqueSolid();
-        boolean aboveBlocks = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData().isOpaqueSolid();
+        var neighborData = neighborState.getBlockStateData();
+        boolean neighborCanSupport = neighborData.collisionShape().isFull(BlockFace.UP);
+        boolean neighborBlocksView = neighborData.isSolid() && !neighborData.isTransparent();
+
+        var aboveData = dimension.getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockStateData();
+        boolean aboveBlocks = aboveData.isSolid() && !aboveData.isTransparent();
 
         // Wire above the neighbor block (upward slope)
-        if (!aboveBlocks && neighborSolid &&
-                isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() + 1, neighborPos.z()))) {
+        if (!aboveBlocks && neighborCanSupport &&
+            isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() + 1, neighborPos.z()))) {
             return true;
         }
 
         // Wire below the neighbor block (downward slope)
-        if (!neighborSolid &&
-                isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() - 1, neighborPos.z()))) {
+        if (!neighborBlocksView &&
+            isRedstoneWire(dimension.getBlockState(neighborPos.x(), neighborPos.y() - 1, neighborPos.z()))) {
             return true;
         }
 
@@ -408,6 +428,24 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
         var behavior = state.getBehavior();
         // Connect to power sources and blocks that can receive power
         return behavior.isPowerSource();
+    }
+
+    /**
+     * Checks if a block is a repeater.
+     */
+    protected boolean isRepeater(BlockState state) {
+        var type = state.getBlockType();
+        return type == BlockTypes.POWERED_REPEATER ||
+               type == BlockTypes.UNPOWERED_REPEATER;
+    }
+
+    /**
+     * Gets the facing direction (output direction) of a repeater.
+     * Note: MINECRAFT_CARDINAL_DIRECTION stores the input direction, so we return its opposite.
+     */
+    protected BlockFace getRepeaterFacing(BlockState state) {
+        var direction = state.getPropertyValue(MINECRAFT_CARDINAL_DIRECTION);
+        return BlockFace.from(direction).opposite();
     }
 
     @Override
@@ -468,13 +506,13 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
         // Update second-order neighbors through solid blocks (for weak power)
         // When a solid block's power state changes, blocks on the other side need to know
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             Vector3ic neighborPos = face.offsetPos(pos);
             BlockState neighborState = dimension.getBlockState(neighborPos);
 
-            // If neighbor is a solid opaque block, update blocks around it
+            // If neighbor is a solid block, update blocks around it
             // This notifies components (like lamps) that receive weak power through this block
-            if (neighborState.getBlockStateData().isOpaqueSolid()) {
+            if (neighborState.getBlockStateData().isSolid()) {
                 dimension.updateAround(neighborPos);
             }
         }

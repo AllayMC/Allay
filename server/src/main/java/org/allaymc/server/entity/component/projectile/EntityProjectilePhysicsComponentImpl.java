@@ -105,6 +105,11 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
                 return;
             }
 
+            // Allow subclasses to skip specific entities (e.g., pierced entities for arrows)
+            if (shouldSkipEntityCollision(entity)) {
+                return;
+            }
+
             var result = new Vector2d();
             if (entity.getOffsetAABB().intersectsRay(ray, result)) {
                 if (result.x() < rayCastResult.result) {
@@ -154,5 +159,22 @@ public class EntityProjectilePhysicsComponentImpl extends EntityPhysicsComponent
     }
 
     protected void onHitEntity(Entity entity, Vector3dc hitPos) {
+    }
+
+    /**
+     * Check if collision with the given entity should be skipped.
+     * Override this method to skip collisions with specific entities (e.g., pierced entities for arrows).
+     *
+     * @param entity the entity to check
+     * @return {@code true} if collision should be skipped, {@code false} otherwise
+     */
+    protected boolean shouldSkipEntityCollision(Entity entity) {
+        // Skip collisions with other projectiles from the same shooter (e.g., Multishot arrows)
+        if (entity instanceof EntityProjectile otherProjectile) {
+            var shooter = projectileComponent.getShooter();
+            return shooter != null && shooter == otherProjectile.getShooter();
+        }
+
+        return false;
     }
 }

@@ -149,6 +149,16 @@ public class DamageContainer {
     }
 
     /**
+     * Create a campfire damage container.
+     *
+     * @param sourceDamage the source damage
+     * @return the damage container
+     */
+    public static DamageContainer campfire(float sourceDamage) {
+        return new DamageContainer(null, CAMPFIRE, sourceDamage);
+    }
+
+    /**
      * Create a drown damage container.
      *
      * @param sourceDamage the source damage

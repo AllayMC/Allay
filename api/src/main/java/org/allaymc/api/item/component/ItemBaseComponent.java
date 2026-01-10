@@ -328,6 +328,19 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     boolean useItemInAir(EntityPlayer player, long usingTime);
 
     /**
+     * Called every tick while the player is using this item in air.
+     * Override this method to implement tick-based logic during item use, such as
+     * playing charging sounds for crossbows.
+     *
+     * @param player   the player using the item
+     * @param usedTime the time in ticks since the player started using the item
+     */
+    @ApiStatus.OverrideOnly
+    default void onUseInAirTick(EntityPlayer player, long usedTime) {
+        // Default implementation does nothing
+    }
+
+    /**
      * Checks if this item can merge with another.
      *
      * @param itemStack the {@link ItemStack} to check

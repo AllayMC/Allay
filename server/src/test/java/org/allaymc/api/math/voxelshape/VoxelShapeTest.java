@@ -83,7 +83,7 @@ class VoxelShapeTest {
                 .solid(0, 0, 0, 1, 1, 1)
                 .build();
 
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             assertTrue(vs1.isFull(face));
         }
 
@@ -111,7 +111,7 @@ class VoxelShapeTest {
                 .build();
 
 
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             assertTrue(vs3.isFull(face));
         }
 
@@ -131,7 +131,7 @@ class VoxelShapeTest {
                 .builder()
                 .build();
 
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             assertFalse(vs5.isFull(face));
         }
 
@@ -139,7 +139,7 @@ class VoxelShapeTest {
                 .builder()
                 .build();
 
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             assertFalse(vs6.isFull(face));
         }
     }
@@ -151,7 +151,7 @@ class VoxelShapeTest {
                 .solid(0, 0, 0, 1, 1, 1)
                 .build();
 
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             assertTrue(vs1.isCenterFull(face));
         }
 
@@ -178,7 +178,7 @@ class VoxelShapeTest {
                 .build();
 
 
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             assertTrue(vs3.isCenterFull(face));
         }
 
@@ -227,7 +227,7 @@ class VoxelShapeTest {
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
                 .build();
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             assertTrue(vs1.isEdgeFull(face));
         }
 

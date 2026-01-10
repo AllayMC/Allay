@@ -3,6 +3,8 @@ package org.allaymc.server.blockentity.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.server.blockentity.component.*;
+import org.allaymc.server.blockentity.component.campfire.BlockEntityCampfireBaseComponentImpl;
+import org.allaymc.server.blockentity.component.campfire.BlockEntitySoulCampfireBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityBlastFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
@@ -188,6 +190,19 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityTargetImpl.class)
                 .name(BlockEntityId.TARGET)
                 .addComponent(BlockEntityTargetBaseComponentImpl::new, BlockEntityTargetBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initCampfire() {
+        BlockEntityTypes.CAMPFIRE = AllayBlockEntityType
+                .builder(BlockEntityCampfireImpl.class)
+                .name(BlockEntityId.CAMPFIRE)
+                .addComponent(BlockEntityCampfireBaseComponentImpl::new, BlockEntityCampfireBaseComponentImpl.class)
+                .build();
+        BlockEntityTypes.SOUL_CAMPFIRE = AllayBlockEntityType
+                .builder(BlockEntityCampfireImpl.class)
+                .name(BlockEntityId.CAMPFIRE)
+                .addComponent(BlockEntitySoulCampfireBaseComponentImpl::new, BlockEntitySoulCampfireBaseComponentImpl.class)
                 .build();
     }
 }

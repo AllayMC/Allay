@@ -20,6 +20,7 @@ import org.allaymc.api.world.sound.Sound;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
@@ -206,12 +207,89 @@ public class Block {
     }
 
     /**
+     * Replaces the block state at this block's position with a new block state.
+     *
+     * @param blockState the new block state to set at this position
+     * @return a new {@code Block} instance with the updated block state
+     */
+    public Block replaceState(BlockState blockState) {
+        this.getDimension().setBlockState(this.position, blockState);
+        return new Block(blockState, this.position, layer);
+    }
+
+    /**
+     * Schedule a block update.
+     *
+     * @param delay the duration to wait before triggering the block update
+     */
+    public void scheduleUpdateInDelay(Duration delay) {
+        this.getDimension().getBlockUpdateManager().scheduleBlockUpdateInDelay(this.position, delay);
+    }
+
+    /**
      * Checks whether the current block is air.
      *
      * @return {@code true} if the block type is {@link BlockTypes#AIR}, {@code false} otherwise.
      */
     public boolean isAir() {
         return blockState.getBlockType() == BlockTypes.AIR;
+    }
+
+    /**
+     * Checks whether this block's position is currently receiving any redstone power.
+     *
+     * @return {@code true} if this block is receiving redstone power, {@code false} otherwise
+     */
+    public boolean isReceivingRedstonePower() {
+        return this.getDimension().isPoweredAt(this.position);
+    }
+
+    /**
+     * Calculates the maximum redstone power level received at this block's position from all 6 faces.
+     * This considers both direct weak power and strong power through solid blocks.
+     *
+     * @return the maximum redstone power level (0-15)
+     */
+    public int getRedstonePower() {
+        return this.getDimension().getPowerAt(this.position);
+    }
+
+    /**
+     * Gets the maximum strong redstone power being received at this block's position from all 6 faces.
+     *
+     * @return the strong redstone power level (0-15)
+     */
+    public int getStrongRedstonePower() {
+        return this.getDimension().getStrongPowerAt(this.position);
+    }
+
+    /**
+     * Gets the maximum strong redstone power being received at this block's position.
+     *
+     * @param excludeFaces the faces to exclude from the check
+     * @return the strong redstone power level (0-15)
+     */
+    public int getStrongRedstonePower(BlockFace... excludeFaces) {
+        return this.getDimension().getStrongPowerAt(this.position, excludeFaces);
+    }
+
+    /**
+     * Gets the maximum weak redstone power being received at this block's position from all 6 faces.
+     *
+     * @return the weak redstone power level (0-15)
+     */
+    public int getWeakRedstonePower() {
+        return this.getDimension().getWeakPowerAt(this.position);
+    }
+
+    /**
+     * Gets the maximum weak redstone power being received at this block's position.
+     *
+     * @param excludeFaces the faces to exclude from the check
+     * @return the weak redstone power level (0-15)
+     */
+    public int getWeakRedstonePower(BlockFace... excludeFaces) {
+        return this.getDimension().getWeakPowerAt(this.position, excludeFaces);
     }
 
     /**

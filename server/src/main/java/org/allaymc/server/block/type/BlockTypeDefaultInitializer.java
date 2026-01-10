@@ -2081,7 +2081,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DAYLIGHT_DETECTOR_INVERTED == null) {
             BlockTypes.DAYLIGHT_DETECTOR_INVERTED = AllayBlockType
-                    .builder(BlockDaylightDetectorInvertedBehaviorImpl.class)
+                    .builder(BlockDaylightDetectorBehaviorImpl.class)
                     .vanillaBlock(BlockId.DAYLIGHT_DETECTOR_INVERTED)
                     .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
                     .build();
@@ -4753,7 +4753,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.LIT_REDSTONE_LAMP == null) {
             BlockTypes.LIT_REDSTONE_LAMP = AllayBlockType
-                    .builder(BlockLitRedstoneLampBehaviorImpl.class)
+                    .builder(BlockRedstoneLampBehaviorImpl.class)
                     .vanillaBlock(BlockId.LIT_REDSTONE_LAMP)
                     .build();
         }
@@ -6153,14 +6153,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POWERED_COMPARATOR == null) {
             BlockTypes.POWERED_COMPARATOR = AllayBlockType
-                    .builder(BlockPoweredComparatorBehaviorImpl.class)
+                    .builder(BlockComparatorBehaviorImpl.class)
                     .vanillaBlock(BlockId.POWERED_COMPARATOR)
                     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
                     .build();
         }
         if (BlockTypes.POWERED_REPEATER == null) {
             BlockTypes.POWERED_REPEATER = AllayBlockType
-                    .builder(BlockPoweredRepeaterBehaviorImpl.class)
+                    .builder(BlockRepeaterBehaviorImpl.class)
                     .vanillaBlock(BlockId.POWERED_REPEATER)
                     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
                     .build();
@@ -6993,7 +6993,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SOUL_CAMPFIRE == null) {
             BlockTypes.SOUL_CAMPFIRE = AllayBlockType
-                    .builder(BlockSoulCampfireBehaviorImpl.class)
+                    .builder(BlockCampfireBehaviorImpl.class)
                     .vanillaBlock(BlockId.SOUL_CAMPFIRE)
                     .setProperties(BlockPropertyTypes.EXTINGUISHED, BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                     .build();
@@ -7701,14 +7701,14 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.UNPOWERED_COMPARATOR == null) {
             BlockTypes.UNPOWERED_COMPARATOR = AllayBlockType
-                    .builder(BlockUnpoweredComparatorBehaviorImpl.class)
+                    .builder(BlockComparatorBehaviorImpl.class)
                     .vanillaBlock(BlockId.UNPOWERED_COMPARATOR)
                     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.OUTPUT_LIT_BIT, BlockPropertyTypes.OUTPUT_SUBTRACT_BIT)
                     .build();
         }
         if (BlockTypes.UNPOWERED_REPEATER == null) {
             BlockTypes.UNPOWERED_REPEATER = AllayBlockType
-                    .builder(BlockUnpoweredRepeaterBehaviorImpl.class)
+                    .builder(BlockRepeaterBehaviorImpl.class)
                     .vanillaBlock(BlockId.UNPOWERED_REPEATER)
                     .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.REPEATER_DELAY)
                     .build();

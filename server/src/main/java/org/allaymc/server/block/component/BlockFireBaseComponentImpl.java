@@ -42,7 +42,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             return 0;
         } else {
             int flameOdds = 0;
-            for (var face : BlockFace.values()) {
+            for (var face : BlockFace.VALUES) {
                 flameOdds = Math.max(flameOdds, block.offsetPos(face).getBlockStateData().flameOdds());
             }
             return flameOdds;
@@ -50,7 +50,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected static boolean canNeighborBurn(Block block) {
-        for (BlockFace face : BlockFace.values()) {
+        for (BlockFace face : BlockFace.VALUES) {
             if (block.offsetPos(face).getBlockStateData().flameOdds() > 0) {
                 return true;
             }

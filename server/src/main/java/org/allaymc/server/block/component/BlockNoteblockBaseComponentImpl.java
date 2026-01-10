@@ -10,7 +10,6 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.interfaces.BlockEntityNoteblock;
 import org.allaymc.api.world.particle.NoteParticle;
 import org.allaymc.api.world.sound.NoteSound;
-import org.allaymc.server.block.RedstoneHelper;
 
 /**
  * Implementation of the noteblock.
@@ -33,7 +32,7 @@ public class BlockNoteblockBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        boolean powered = RedstoneHelper.isPoweredAt(block.getPosition());
+        var powered = block.isReceivingRedstonePower();
         if (powered && !blockEntity.isPowered()) {
             // Rising edge - play sound
             emitSound(block);
@@ -55,13 +54,11 @@ public class BlockNoteblockBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var dimension = block.getDimension();
-        var pos = block.getPosition();
         var instrument = getInstrument(block.offsetPos(BlockFace.DOWN).getBlockType());
         var pitch = blockEntity.getPitch();
 
-        dimension.addSound(pos, new NoteSound(instrument, pitch));
-        dimension.addParticle(pos, new NoteParticle(instrument, pitch));
+        block.addSound(new NoteSound(instrument, pitch));
+        block.addParticle(new NoteParticle(instrument, pitch));
     }
 
     /**

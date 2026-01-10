@@ -58,7 +58,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         while (removedWaterCount < MAX_REMOVED_WATER_COUNT && (entry = queue.poll()) != null) {
             var currentDistance = entry.distance();
 
-            for (var face : BlockFace.values()) {
+            for (var face : BlockFace.VALUES) {
                 var neighbor = entry.block().offsetPos(face);
                 var neighborType = neighbor.getBlockType();
 
@@ -80,7 +80,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     private boolean hasAdjacentWater(Block center) {
-        for (var face : BlockFace.values()) {
+        for (var face : BlockFace.VALUES) {
             if (center.offsetPos(face).getBlockType().hasBlockTag(BlockTags.WATER)) {
                 return true;
             }

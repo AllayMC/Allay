@@ -2738,7 +2738,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DAYLIGHT_DETECTOR_INVERTED == null) {
             ItemTypes.DAYLIGHT_DETECTOR_INVERTED = AllayItemType
-                    .builder(ItemDaylightDetectorInvertedStackImpl.class)
+                    .builder(ItemDaylightDetectorStackImpl.class)
                     .vanillaItem(ItemId.DAYLIGHT_DETECTOR_INVERTED)
                     .build();
         }
@@ -5582,7 +5582,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_CAMPFIRE == null) {
             ItemTypes.ITEM_CAMPFIRE = AllayItemType
-                    .builder(ItemItemCampfireStackImpl.class)
+                    .builder(ItemCampfireStackImpl.class)
                     .vanillaItem(ItemId.ITEM_CAMPFIRE)
                     .build();
         }
@@ -5672,7 +5672,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_SOUL_CAMPFIRE == null) {
             ItemTypes.ITEM_SOUL_CAMPFIRE = AllayItemType
-                    .builder(ItemItemSoulCampfireStackImpl.class)
+                    .builder(ItemCampfireStackImpl.class)
                     .vanillaItem(ItemId.ITEM_SOUL_CAMPFIRE)
                     .build();
         }
@@ -6380,7 +6380,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIT_REDSTONE_LAMP == null) {
             ItemTypes.LIT_REDSTONE_LAMP = AllayItemType
-                    .builder(ItemLitRedstoneLampStackImpl.class)
+                    .builder(ItemRedstoneLampStackImpl.class)
                     .vanillaItem(ItemId.LIT_REDSTONE_LAMP)
                     .build();
         }
@@ -8276,13 +8276,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POWERED_COMPARATOR == null) {
             ItemTypes.POWERED_COMPARATOR = AllayItemType
-                    .builder(ItemPoweredComparatorStackImpl.class)
+                    .builder(ItemComparatorStackImpl.class)
                     .vanillaItem(ItemId.POWERED_COMPARATOR)
                     .build();
         }
         if (ItemTypes.POWERED_REPEATER == null) {
             ItemTypes.POWERED_REPEATER = AllayItemType
-                    .builder(ItemPoweredRepeaterStackImpl.class)
+                    .builder(ItemRepeaterStackImpl.class)
                     .vanillaItem(ItemId.POWERED_REPEATER)
                     .build();
         }
@@ -9410,7 +9410,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SOUL_CAMPFIRE == null) {
             ItemTypes.SOUL_CAMPFIRE = AllayItemType
-                    .builder(ItemSoulCampfireStackImpl.class)
+                    .builder(ItemCampfireStackImpl.class)
                     .vanillaItem(ItemId.SOUL_CAMPFIRE)
                     .build();
         }
@@ -10328,13 +10328,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.UNPOWERED_COMPARATOR == null) {
             ItemTypes.UNPOWERED_COMPARATOR = AllayItemType
-                    .builder(ItemUnpoweredComparatorStackImpl.class)
+                    .builder(ItemComparatorStackImpl.class)
                     .vanillaItem(ItemId.UNPOWERED_COMPARATOR)
                     .build();
         }
         if (ItemTypes.UNPOWERED_REPEATER == null) {
             ItemTypes.UNPOWERED_REPEATER = AllayItemType
-                    .builder(ItemUnpoweredRepeaterStackImpl.class)
+                    .builder(ItemRepeaterStackImpl.class)
                     .vanillaItem(ItemId.UNPOWERED_REPEATER)
                     .build();
         }
