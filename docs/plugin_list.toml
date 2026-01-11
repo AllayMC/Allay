@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[ChainMining]
+description = "A chain mining plugin for AllayMC that automatically breaks adjacent blocks of the same type when mining."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/ChainMining"
+
 [AllayPlots]
 description = "Plot plugin for AllayMC."
 authors = ["daoge_cmd"]
