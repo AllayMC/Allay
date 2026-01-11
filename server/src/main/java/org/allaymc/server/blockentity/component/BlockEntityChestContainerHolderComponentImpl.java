@@ -91,6 +91,6 @@ public class BlockEntityChestContainerHolderComponentImpl extends BlockEntityCon
     }
 
     protected boolean hasSpaceAbove(Position3ic pos) {
-        return pos.dimension().getBlockState(BlockFace.UP.offsetPos(pos)).getBlockStateData().isTransparent();
+        return !pos.dimension().getBlockState(BlockFace.UP.offsetPos(pos)).getBlockStateData().isSolid();
     }
 }
