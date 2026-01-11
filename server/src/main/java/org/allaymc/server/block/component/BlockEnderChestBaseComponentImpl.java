@@ -34,7 +34,7 @@ public class BlockEnderChestBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var upperBlock = dimension.getBlockState(BlockFace.UP.offsetPos(interactInfo.clickedBlockPos()));
-        if (!upperBlock.getBlockStateData().isTransparent()) {
+        if (upperBlock.getBlockStateData().isSolid()) {
             return false;
         }
 
