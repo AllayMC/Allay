@@ -48,6 +48,7 @@ import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImp
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.block.impl.*;
 import org.allaymc.server.item.data.ItemId;
+import org.allaymc.server.world.feature.tree.*;
 
 import java.time.Duration;
 import java.util.function.BiFunction;
@@ -2230,6 +2231,63 @@ public final class BlockTypeInitializer {
                 .bindBlockEntity(BlockEntityTypes.SOUL_CAMPFIRE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION, BlockPropertyTypes.EXTINGUISHED)
                 .setBaseComponentSupplier(BlockSoulCampfireBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSaplings() {
+        BlockTypes.OAK_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.OAK_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, OakTreeFeature.IDENTIFIER, FancyOakTreeFeature.IDENTIFIER, null))
+                .build();
+        BlockTypes.BIRCH_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.BIRCH_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, BirchTreeFeature.IDENTIFIER, null, null))
+                .build();
+        BlockTypes.SPRUCE_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.SPRUCE_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, SpruceTreeFeature.IDENTIFIER, null, MegaSpruceTreeFeature.IDENTIFIER))
+                .build();
+        BlockTypes.JUNGLE_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.JUNGLE_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, JungleTreeFeature.IDENTIFIER, null, MegaJungleTreeFeature.IDENTIFIER))
+                .build();
+        BlockTypes.ACACIA_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.ACACIA_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, AcaciaTreeFeature.IDENTIFIER, null, null))
+                .build();
+        BlockTypes.DARK_OAK_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.DARK_OAK_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, null, null, DarkOakTreeFeature.IDENTIFIER))
+                .build();
+        BlockTypes.CHERRY_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.CHERRY_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, CherryTreeFeature.IDENTIFIER, null, null))
+                .build();
+        BlockTypes.PALE_OAK_SAPLING = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.PALE_OAK_SAPLING)
+                .setProperties(BlockPropertyTypes.AGE_BIT)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, PaleOakTreeFeature.IDENTIFIER, null, null))
+                .build();
+        BlockTypes.MANGROVE_PROPAGULE = AllayBlockType
+                .builder(BlockSaplingBehaviorImpl.class)
+                .vanillaBlock(BlockId.MANGROVE_PROPAGULE)
+                .setProperties(BlockPropertyTypes.HANGING, BlockPropertyTypes.PROPAGULE_STAGE)
+                .setBaseComponentSupplier(blockType -> new BlockSaplingBaseComponentImpl(blockType, MangroveTreeFeature.IDENTIFIER, null, null))
                 .build();
     }
 }

@@ -1,6 +1,8 @@
-package org.allaymc.api.entity.effect;
+package org.allaymc.server.entity.effect;
 
 import lombok.Getter;
+import org.allaymc.api.entity.effect.EffectInstance;
+import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.identifier.Identifier;
 

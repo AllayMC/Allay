@@ -240,7 +240,7 @@ public class Block {
      *
      * @return {@code true} if this block is receiving redstone power, {@code false} otherwise
      */
-    public boolean isReceivingRedstonePower() {
+    public boolean isPowered() {
         return this.getDimension().isPoweredAt(this.position);
     }
 
@@ -250,7 +250,7 @@ public class Block {
      *
      * @return the maximum redstone power level (0-15)
      */
-    public int getRedstonePower() {
+    public int getPower() {
         return this.getDimension().getPowerAt(this.position);
     }
 
@@ -259,7 +259,7 @@ public class Block {
      *
      * @return the strong redstone power level (0-15)
      */
-    public int getStrongRedstonePower() {
+    public int getStrongPower() {
         return this.getDimension().getStrongPowerAt(this.position);
     }
 
@@ -269,7 +269,7 @@ public class Block {
      * @param excludeFaces the faces to exclude from the check
      * @return the strong redstone power level (0-15)
      */
-    public int getStrongRedstonePower(BlockFace... excludeFaces) {
+    public int getStrongPower(BlockFace... excludeFaces) {
         return this.getDimension().getStrongPowerAt(this.position, excludeFaces);
     }
 
@@ -278,7 +278,7 @@ public class Block {
      *
      * @return the weak redstone power level (0-15)
      */
-    public int getWeakRedstonePower() {
+    public int getWeakPower() {
         return this.getDimension().getWeakPowerAt(this.position);
     }
 
@@ -288,7 +288,7 @@ public class Block {
      * @param excludeFaces the faces to exclude from the check
      * @return the weak redstone power level (0-15)
      */
-    public int getWeakRedstonePower(BlockFace... excludeFaces) {
+    public int getWeakPower(BlockFace... excludeFaces) {
         return this.getDimension().getWeakPowerAt(this.position, excludeFaces);
     }
 

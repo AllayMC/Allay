@@ -7,7 +7,6 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.math.position.Position3ic;
 
 import java.time.Duration;
 
@@ -33,7 +32,7 @@ public class BlockRedstoneLampBaseComponentImpl extends BlockBaseComponentImpl {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
 
         // Check if should be lit immediately after placement
-        if (!lit && oldBlock.isReceivingRedstonePower()) {
+        if (!lit && oldBlock.isPowered()) {
             switchToLit(oldBlock);
         }
     }
@@ -42,7 +41,7 @@ public class BlockRedstoneLampBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        var powered = block.isReceivingRedstonePower();
+        var powered = block.isPowered();
 
         if (lit && !powered) {
             // Schedule turn off with delay (prevents flickering)
@@ -56,7 +55,7 @@ public class BlockRedstoneLampBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onScheduledUpdate(Block block) {
         // Only turn off if still not receiving power
-        if (lit && !block.isReceivingRedstonePower()) {
+        if (lit && !block.isPowered()) {
             switchToUnlit(block);
         }
     }

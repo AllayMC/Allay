@@ -101,7 +101,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
                 : BlockFace.UP.offsetPos(pos);
 
         // Check power at both halves and use the maximum
-        var powerAtThis = block.getRedstonePower();
+        var powerAtThis = block.getPower();
         var otherPosition = new Position3i(otherPos, dimension);
         var powerAtOther = block.getDimension().getPowerAt(otherPosition);
         var maxPower = Math.max(powerAtThis, powerAtOther);

@@ -41,7 +41,7 @@ public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        if (oldBlock.isReceivingRedstonePower()) {
+        if (oldBlock.isPowered()) {
             oldBlock.<BlockEntityHead>getBlockEntity().setPlayingAnimation(true);
         }
     }
@@ -57,7 +57,7 @@ public class BlockHeadBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var blockEntity = block.<BlockEntityHead>getBlockEntity();
-        var powered = block.isReceivingRedstonePower();
+        var powered = block.isPowered();
         if (blockEntity.isPlayingAnimation() != powered) {
             blockEntity.setPlayingAnimation(powered);
         }

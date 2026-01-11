@@ -14,6 +14,7 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pdc.PersistentDataTypeRegistry;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.feature.WorldFeature;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
 
@@ -48,6 +49,7 @@ public final class Registries {
     // World
     public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;
     public static SimpleMappedRegistry<String, Function<String, WorldGenerator>> WORLD_GENERATOR_FACTORIES;
+    public static SimpleMappedRegistry<Identifier, WorldFeature> WORLD_FEATURES;
 
     // Creative Item
     public static CreativeItemRegistry CREATIVE_ITEMS;

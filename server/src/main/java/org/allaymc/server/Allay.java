@@ -27,6 +27,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.NBTIO;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.feature.WorldFeature;
 import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
@@ -236,6 +237,11 @@ public final class Allay {
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
         Registries.WORLD_GENERATOR_FACTORIES = SimpleMappedRegistry.create(new WorldGeneratorFactoryRegistryLoader());
+        SimpleMappedRegistry.create(
+                RegistryLoaders.empty(() -> new HashMap<Identifier, WorldFeature>()),
+                r -> Registries.WORLD_FEATURES = r,
+                new WorldFeatureRegistryPopulator()
+        );
 
         // Creative Item
         Registries.CREATIVE_ITEMS = new AllayCreativeItemRegistry();

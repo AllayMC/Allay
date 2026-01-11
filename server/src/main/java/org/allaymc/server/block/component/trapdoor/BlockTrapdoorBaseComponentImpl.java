@@ -82,7 +82,7 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
      * @param block the trapdoor block
      */
     protected void checkRedstonePower(Block block) {
-        var power = block.getRedstonePower();
+        var power = block.getPower();
 
         var shouldBeOpen = power > 0;
         var isCurrentlyOpen = block.getPropertyValue(OPEN_BIT);

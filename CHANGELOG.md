@@ -14,6 +14,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Implemented world feature system and tree saplings:
+  - Added `WorldFeature` interface and `WorldFeatureContext` class for defining world generation features.
+  - Added `WorldFeatures` class and `Registries.WORLD_FEATURES` registry.
+  - Implemented tree saplings that can grow into trees when bonemealed or after random ticks.
+  - Added tree features for all wood types: Oak, Birch, Spruce, Jungle, Acacia, Dark Oak, Cherry, Mangrove, Pale Oak, and their variants (Fancy Oak, Tall Birch, Mega Jungle, Mega Pine, Mega Spruce).
 - Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
 - (API) Added `Entity.setPersistent()` method to control entity persistence.
 - (API) Added redstone power methods to `BlockBaseComponent`:
@@ -61,6 +66,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - `DoorOpenSound` and `DoorCloseSound` -> `DoorSound(blockState, open)`
   - `TrapdoorOpenSound` and `TrapdoorCloseSound` -> `TrapdoorSound(blockState, open)`
   - `FenceGateOpenSound` and `FenceGateCloseSound` -> `FenceGateSound(blockState, open)`
+- (API) Moved `AbstractEffectType` from api module to server module.
 - Merged world tick thread and network thread into a single thread using an event-driven wake-up mechanism. This simplifies
   the threading model while maintaining low packet processing latency through `LockSupport.parkNanos/unpark`.
 
