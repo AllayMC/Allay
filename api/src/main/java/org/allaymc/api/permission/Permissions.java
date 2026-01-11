@@ -23,7 +23,6 @@ public interface Permissions {
     String ABILITY_OPERATOR_COMMAND_QUICK_BAR = "ability.operator_command_quick_bar";
 
     // TODO: input permission
-    // TODO: ui rendering
 
     /* Command */
 
