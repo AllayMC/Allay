@@ -22,6 +22,14 @@ public interface BlockEntityNoteblockBaseComponent extends BlockEntityBaseCompon
     void setPitch(@Range(from = 0, to = 24) int pitch);
 
     /**
+     * Increments the pitch and returns the new value. Wraps around from 24 to 0.
+     *
+     * @return the new pitch value after incrementing
+     */
+    @Range(from = 0, to = 24)
+    int getNextPitch();
+
+    /**
      * Checks if the noteblock is currently powered by redstone.
      *
      * @return {@code true} if powered, {@code false} otherwise

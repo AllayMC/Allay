@@ -57,6 +57,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `EntityShootCrossbowEvent` event fired when shooting crossbow.
   - Added `EntityArrowBaseComponent.getPiercingLevel()` and `setPiercingLevel()` for Piercing enchantment support.
   - Added `ItemBaseComponent.onUseInAirTick()` callback for tick-based item usage logic.
+- (API) Added `Instrument.fromBlockBelow(BlockType<?>)` static method to determine instrument based on block below noteblock.
+- (API) Added `BlockEntityNoteblockBaseComponent.getNextPitch()` method to increment and return pitch.
 
 ### Changed
 
