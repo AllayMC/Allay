@@ -37,6 +37,16 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[FireworkShow]
+description = "Automatically spawn fireworks at designated locations with customizable effects and timed spawning intervals."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/FireworkShow"
+
+[MentionSound]
+description = "Get sound notification when someone mentions you in chat."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/MentionSound"
+
 [ChainMining]
 description = "A chain mining plugin for AllayMC that automatically breaks adjacent blocks of the same type when mining."
 authors = ["daoge_cmd"]
