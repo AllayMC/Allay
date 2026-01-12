@@ -15,6 +15,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Added
 
 - (API) Added method `Player.sendCooldown()`.
+- (API) Added event `ItemDamageEvent` which is called when an item is about to be damaged.
 
 ### Fixed
 

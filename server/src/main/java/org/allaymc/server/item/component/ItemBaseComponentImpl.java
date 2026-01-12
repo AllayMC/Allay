@@ -490,11 +490,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         if (!canBeDamagedThisTime()) {
             return false;
         }
+
         var event = new ItemDamageEvent(thisItemStack, increase);
         if (!event.call()) {
             return false;
         }
-        setDamage(getDamage() + event.getIncrease());
+
+        setDamage(getDamage() + event.getDamage());
         return true;
     }
 

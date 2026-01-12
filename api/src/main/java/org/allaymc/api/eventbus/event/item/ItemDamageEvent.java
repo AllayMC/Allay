@@ -1,6 +1,5 @@
 package org.allaymc.api.eventbus.event.item;
 
-import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.annotation.CallerThread;
@@ -17,12 +16,21 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 @CallerThread(ThreadType.WORLD)
 public class ItemDamageEvent extends Event implements CancellableEvent {
-    protected final ItemStack itemStack;
-    @Setter
-    protected int increase;
 
-    public ItemDamageEvent(ItemStack itemStack, int increase) {
+    /**
+     * The item stack that is about to be damaged.
+     */
+    protected final ItemStack itemStack;
+    /**
+     * The amount of damage to apply to the item stack.
+     * This value can be modified to change how much damage the item will receive.
+     * Setting this to zero will effectively prevent any damage from being applied.
+     */
+    @Setter
+    protected int damage;
+
+    public ItemDamageEvent(ItemStack itemStack, int damage) {
         this.itemStack = itemStack;
-        this.increase = increase;
+        this.damage = damage;
     }
 }
