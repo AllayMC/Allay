@@ -250,6 +250,14 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     void sendFoodExhaustionLevel(float value);
 
     /**
+     * Sends a cooldown notification to the client for the specified category.
+     *
+     * @param category the identifier for the cooldown category
+     * @param duration the length of the cooldown in ticks
+     */
+    void sendCooldown(String category, int duration);
+
+    /**
      * Represents a speed value controlled by a base speed and a multiplier. The actual
      * speed value is the multiplication of the base speed with the multiplier.
      *

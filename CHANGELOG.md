@@ -12,6 +12,14 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.10.4](https://github.com/AllayMC/Allay/compare/0.10.4...HEAD)</small>
 
+### Added
+
+- (API) Added method `Player.sendCooldown()`.
+
+### Fixed
+
+- Fixed a possible NPE in method `EntityPlayerBaseComponent.setCooldown()`.
+
 # 0.10.4 (API 0.21.0) - 2026/1/12
 
 <small>[Compare with 0.10.3](https://github.com/AllayMC/Allay/compare/0.10.3...0.10.4)</small>

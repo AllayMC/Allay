@@ -1990,6 +1990,14 @@ public class AllayPlayer implements Player {
         ));
     }
 
+    @Override
+    public void sendCooldown(String category, int duration) {
+        var packet = new PlayerStartItemCooldownPacket();
+        packet.setItemCategory(category);
+        packet.setCooldownDuration(duration);
+        sendPacket(packet);
+    }
+
     protected void sendAttribute(AttributeData attributeData) {
         var packet = new UpdateAttributesPacket();
         packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());

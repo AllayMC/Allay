@@ -344,9 +344,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * Sets cool down for a specific category.
      *
-     * @param category the category to set
-     * @param duration the cool down tick
-     * @param send     whether send packet to the client
+     * @param category the identifier for the cooldown category
+     * @param duration the length of the cooldown in ticks
+     * @param send     whether send packet to the client if the player is an actual player
      */
     void setCooldown(String category, @Range(from = 0, to = Integer.MAX_VALUE) int duration, boolean send);
 

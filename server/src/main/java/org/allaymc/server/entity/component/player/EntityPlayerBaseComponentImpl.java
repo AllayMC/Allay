@@ -37,7 +37,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.packet.ChangeDimensionPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerStartItemCooldownPacket;
 import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -310,11 +309,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setCooldown(String category, int duration, boolean send) {
         this.cooldowns.put(category, getWorld().getTick() + duration);
-        if (send) {
-            var packet = new PlayerStartItemCooldownPacket();
-            packet.setItemCategory(category);
-            packet.setCooldownDuration(duration);
-            this.controller.sendPacket(packet);
+        if (send && isActualPlayer()) {
+            this.controller.sendCooldown(category, duration);
         }
     }
 
