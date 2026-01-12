@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[ItemNameTag]
+description = "Make item's nametag visible!"
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/ItemNameTag"
+
 [WAILA]
 description = "WAILA (what am I looking at?) for Allay."
 authors = ["daoge_cmd"]
