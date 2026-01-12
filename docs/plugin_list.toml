@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[WAILA]
+description = "WAILA (what am I looking at?) for Allay."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/WAILA"
+
 [FireworkShow]
 description = "Automatically spawn fireworks at designated locations with customizable effects and timed spawning intervals."
 authors = ["daoge_cmd"]
