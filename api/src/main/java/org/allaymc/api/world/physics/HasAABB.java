@@ -12,7 +12,7 @@ public interface HasAABB {
     /**
      * @return the AABB of the object
      */
-    AABBdc getBaseAABB();
+    AABBdc getAABB();
 
     /**
      * @return the offset AABB of the object

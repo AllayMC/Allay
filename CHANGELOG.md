@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Fixed
 
+- (API) Renamed method `HasAABB.getBaseAABB()` back to `HasAABB.getAABB()`.
 - Fixed a possible NPE in method `EntityPlayerBaseComponent.setCooldown()`.
 
 # 0.10.4 (API 0.21.0) - 2026/1/12
