@@ -16,6 +16,9 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added method `Player.sendCooldown()`.
 - (API) Added event `ItemDamageEvent` which is called when an item is about to be damaged.
+- (API) Implemented mace item:
+  - Added sounds `SimpleSound.MACE_SMASH_AIR`, `SimpleSound.MACE_SMASH_GROUND` and `SimpleSound.MACE_SMASH_HEAVY_GROUND`.
+  - Added particle `SimpleParticle.SMASH_ATTACK_GROUND_DUST`.
 
 ### Fixed
 

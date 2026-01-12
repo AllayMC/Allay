@@ -1085,6 +1085,9 @@ public class AllayPlayer implements Player {
             case SimpleSound.CHORUS_FLOWER_GROW -> packet.setSound(SoundEvent.CHORUS_GROW);
             case SimpleSound.END_PORTAL_FRAME_FILLED -> packet.setSound(SoundEvent.BLOCK_END_PORTAL_FRAME_FILL);
             case SimpleSound.END_PORTAL_SPAWN -> packet.setSound(SoundEvent.BLOCK_END_PORTAL_SPAWN);
+            case SimpleSound.MACE_SMASH_AIR -> packet.setSound(SoundEvent.MACE_SMASH_AIR);
+            case SimpleSound.MACE_SMASH_GROUND -> packet.setSound(SoundEvent.MACE_SMASH_GROUND);
+            case SimpleSound.MACE_SMASH_HEAVY_GROUND -> packet.setSound(SoundEvent.MACE_SMASH_HEAVY_GROUND);
             case SimpleSound.PAINTING_PLACE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_PLACE);
@@ -1414,6 +1417,7 @@ public class AllayPlayer implements Player {
             case SimpleParticle.DUST_PLUME -> packet.setType(ParticleType.DUST_PLUME);
             case SimpleParticle.WHITE_SMOKE -> packet.setType(ParticleType.WHITE_SMOKE);
             case SimpleParticle.FIREWORK_CONTRAIL -> packet.setType(ParticleType.FIREWORKS);
+            case SimpleParticle.SMASH_ATTACK_GROUND_DUST -> packet.setType(LevelEvent.PARTICLE_SMASH_ATTACK_GROUND_DUST);
             case CustomParticle pa -> {
                 var pk = new SpawnParticleEffectPacket();
                 pk.setDimensionId(this.controlledEntity.getDimension().getDimensionInfo().dimensionId());

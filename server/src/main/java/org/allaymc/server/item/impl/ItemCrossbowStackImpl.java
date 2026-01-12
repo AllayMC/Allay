@@ -4,6 +4,7 @@ import lombok.experimental.Delegate;
 import org.allaymc.api.component.Component;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemCrossbowBaseComponent;
+import org.allaymc.api.item.component.ItemRepairableComponent;
 import org.allaymc.api.item.interfaces.ItemCrossbowStack;
 import org.allaymc.server.component.ComponentProvider;
 
@@ -13,6 +14,8 @@ public class ItemCrossbowStackImpl extends ItemStackImpl implements ItemCrossbow
 
     @Delegate
     private ItemCrossbowBaseComponent crossbowBaseComponent;
+    @Delegate
+    private ItemRepairableComponent repairableComponent;
 
     public ItemCrossbowStackImpl(ItemStackInitInfo initInfo,
                                  List<ComponentProvider<? extends Component>> componentProviders) {

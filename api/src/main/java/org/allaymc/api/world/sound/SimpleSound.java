@@ -121,6 +121,12 @@ public enum SimpleSound implements Sound {
     FIRE_CHARGE,
     // TOTEM is a sound played when a player uses a totem.
     TOTEM,
+    // MACE_SMASH_AIR is a sound played when a player hit an entity in air using mace
+    MACE_SMASH_AIR,
+    // MACE_SMASH_AIR is a sound played when a player hit an entity on the ground using mace
+    MACE_SMASH_GROUND,
+    // MACE_SMASH_AIR is a sound played when a player hit an entity heavily on the ground using mace
+    MACE_SMASH_HEAVY_GROUND,
 
     /* Entity */
 
