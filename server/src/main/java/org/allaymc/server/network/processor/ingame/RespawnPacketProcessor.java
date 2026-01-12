@@ -24,6 +24,11 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         }
 
         var entity = player.getControlledEntity();
+        if (!entity.canBeSpawned()) {
+            // Wait until the entity can be spawned again
+            return;
+        }
+
         var event = new PlayerRespawnEvent(entity);
         event.setRespawnLocation(entity.validateAndGetSpawnPoint());
         event.call();

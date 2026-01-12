@@ -33,10 +33,13 @@ public enum EntityState {
      */
     DESPAWNED_NEXT_TICK(false, DEAD, ALIVE);
 
+    /**
+     * Whether the entity is spawned.
+     */
     @Getter
     private final boolean spawned;
     /**
-     * The possible previous statuses of the entity. Can be {@code null} if previous state is not exist.
+     * The possible previous statuses of the entity. Can be {@code null} if previous state does not exist.
      */
     @Getter
     private final Set<EntityState> previousStates;
