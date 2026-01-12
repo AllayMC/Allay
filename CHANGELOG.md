@@ -8,16 +8,20 @@ Each release is associated with a specific API version, and any changes to API w
 
 Unless otherwise specified, any version comparison below is the comparison of the server version, not the API version.
 
-# 0.10.4 (API 0.21.0) - Unreleased
+# 0.10.5 (API 0.22.0) - Unreleased
 
-<small>[Compare with 0.10.3](https://github.com/AllayMC/Allay/compare/0.10.3...HEAD)</small>
+<small>[Compare with 0.10.4](https://github.com/AllayMC/Allay/compare/0.10.4...HEAD)</small>
+
+# 0.10.4 (API 0.21.0) - 2026/1/12
+
+<small>[Compare with 0.10.3](https://github.com/AllayMC/Allay/compare/0.10.3...0.10.4)</small>
 
 ### Added
 
 - (API) Implemented world feature system and tree saplings:
   - Added `WorldFeature` interface and `WorldFeatureContext` class for defining world generation features.
   - Added `WorldFeatures` class and `Registries.WORLD_FEATURES` registry.
-  - Implemented tree saplings that can grow into trees when bonemealed or after random ticks.
+  - Implemented tree saplings that can grow into trees when bone mealed or after random ticks.
   - Added tree features for all wood types: Oak, Birch, Spruce, Jungle, Acacia, Dark Oak, Cherry, Mangrove, Pale Oak, and their variants (Fancy Oak, Tall Birch, Mega Jungle, Mega Pine, Mega Spruce).
 - (API) Added `Entity.setPersistent()` method to control entity persistence.
 - (API) Added redstone power methods to `BlockBaseComponent`:
