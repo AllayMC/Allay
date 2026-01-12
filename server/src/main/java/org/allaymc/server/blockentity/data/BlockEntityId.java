@@ -95,5 +95,5 @@ public interface BlockEntityId {
 
     String END_GATEWAY = "EndGateway";
 
-    String TARGET = "Target"; //TODO: check this
+    String TARGET = "Target";
 }

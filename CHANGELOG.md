@@ -19,7 +19,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `WorldFeatures` class and `Registries.WORLD_FEATURES` registry.
   - Implemented tree saplings that can grow into trees when bonemealed or after random ticks.
   - Added tree features for all wood types: Oak, Birch, Spruce, Jungle, Acacia, Dark Oak, Cherry, Mangrove, Pale Oak, and their variants (Fancy Oak, Tall Birch, Mega Jungle, Mega Pine, Mega Spruce).
-- Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
 - (API) Added `Entity.setPersistent()` method to control entity persistence.
 - (API) Added redstone power methods to `BlockBaseComponent`:
   - `getWeakPower(Block, BlockFace)` - gets weak power output from a block.
@@ -59,6 +58,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `ItemBaseComponent.onUseInAirTick()` callback for tick-based item usage logic.
 - (API) Added `Instrument.fromBlockBelow(BlockType<?>)` static method to determine instrument based on block below noteblock.
 - (API) Added `BlockEntityNoteblockBaseComponent.getNextPitch()` method to increment and return pitch.
+- Added `onIdle` callback and `wakeUp()` method to `GameLoop` class for event-driven idle processing.
 
 ### Changed
 
