@@ -11,6 +11,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.item.ItemDamageEvent;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.ItemStackInitInfo;
@@ -489,7 +490,11 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         if (!canBeDamagedThisTime()) {
             return false;
         }
-        setDamage(getDamage() + increase);
+        var event = new ItemDamageEvent(thisItemStack, increase);
+        if (!event.call()) {
+            return false;
+        }
+        setDamage(getDamage() + event.getIncrease());
         return true;
     }
 
