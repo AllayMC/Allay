@@ -129,7 +129,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
             }
-        });
+        }).join();
         updatedEntities.values().forEach(entityAABBTree::update);
     }
 
@@ -145,7 +145,7 @@ public class AllayEntityPhysicsEngine implements EntityPhysicsEngine {
                 return;
             }
             map.put(entity, collidedEntities);
-        });
+        }).join();
         map.forEach((entity, collidedEntities) -> {
             // These two operations is not thread-safe, so simply do them synchronously
             // as the two operations shouldn't be slow

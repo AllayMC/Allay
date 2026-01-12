@@ -20,6 +20,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Renamed method `HasAABB.getBaseAABB()` back to `HasAABB.getAABB()`.
 - Fixed a possible NPE in method `EntityPlayerBaseComponent.setCooldown()`.
+- Fixed a bug where aabb not being updated in the physics engine due to missing `join()` call on parallel forEach.
 
 # 0.10.4 (API 0.21.0) - 2026/1/12
 
