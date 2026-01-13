@@ -688,6 +688,20 @@ class CommandTreeTest {
         }
 
         @Test
+        void testRootExec() {
+            var tree = AllayCommandTree.create(mockCmd);
+            AtomicBoolean rootExecuted = new AtomicBoolean(false);
+
+            tree.getRoot().exec(ctx -> {
+                rootExecuted.set(true);
+                return ctx.success();
+            });
+
+            tree.parse(mockSender, new String[0]);
+            assertTrue(rootExecuted.get());
+        }
+
+        @Test
         void testRootExecNotCalledWithChildren() {
             var tree = AllayCommandTree.create(mockCmd);
             AtomicBoolean rootExecuted = new AtomicBoolean(false);
