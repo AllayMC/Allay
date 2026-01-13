@@ -1,15 +1,24 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
+import org.allaymc.api.container.Container;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author daoge_cmd
@@ -42,9 +51,83 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
             return;
         }
 
-        player.addExperience(this.experienceValue);
+        var remainingExperience = applyMending(player, this.experienceValue);
+        player.addExperience(remainingExperience);
         this.setExperienceValue(0);
         remove();
+    }
+
+    protected int applyMending(EntityPlayer player, int experienceValue) {
+        if (experienceValue <= 0) {
+            return experienceValue;
+        }
+
+        var targets = collectMendingTargets(player);
+        if (targets.isEmpty()) {
+            return experienceValue;
+        }
+
+        var target = targets.get(ThreadLocalRandom.current().nextInt(targets.size()));
+        var item = target.container().getItemStack(target.slot());
+
+        var damage = item.getDamage();
+        var repairAmount = Math.min(damage, experienceValue * 2);
+
+        item.setDamage(damage - repairAmount);
+        target.container().notifySlotChange(target.slot());
+
+        var consumedExperience = (repairAmount + 1) / 2;
+        return experienceValue - consumedExperience;
+    }
+
+    protected List<MendingTarget> collectMendingTargets(EntityPlayer player) {
+        var targets = new ArrayList<MendingTarget>();
+
+        var inventory = player.getContainer(ContainerTypes.INVENTORY);
+        if (inventory != null) {
+            var handSlot = inventory.getHandSlot();
+            var handItem = inventory.getItemStack(handSlot);
+            if (isMendingTarget(handItem)) {
+                targets.add(new MendingTarget(inventory, handSlot));
+            }
+        }
+
+        var offhand = player.getContainer(ContainerTypes.OFFHAND);
+        if (offhand != null) {
+            var offhandItem = offhand.getItemStack(0);
+            if (isMendingTarget(offhandItem)) {
+                targets.add(new MendingTarget(offhand, 0));
+            }
+        }
+
+        var armor = player.getContainer(ContainerTypes.ARMOR);
+        if (armor != null) {
+            var armorItems = armor.getItemStackArray();
+            for (int slot = 0; slot < armorItems.length; slot++) {
+                var armorItem = armor.getItemStack(slot);
+                if (isMendingTarget(armorItem)) {
+                    targets.add(new MendingTarget(armor, slot));
+                }
+            }
+        }
+
+        return targets;
+    }
+
+    protected boolean isMendingTarget(ItemStack itemStack) {
+        if (itemStack == ItemAirStack.AIR_STACK) {
+            return false;
+        }
+        if (!itemStack.getItemType().getItemData().isDamageable()) {
+            return false;
+        }
+        if (itemStack.getDamage() <= 0) {
+            return false;
+        }
+        return itemStack.hasEnchantment(EnchantmentTypes.MENDING);
+    }
+
+    protected record MendingTarget(Container container, int slot) {
     }
 
     protected void moveToNearestPlayer() {
