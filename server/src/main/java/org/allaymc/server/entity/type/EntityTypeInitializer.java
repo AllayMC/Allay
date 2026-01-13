@@ -186,7 +186,8 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.SPLASH_POTION)
                 .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
                 .addComponent(EntitySplashPotionPhysicsComponentImpl::new, EntitySplashPotionPhysicsComponentImpl.class)
-                .addComponent(EntitySplashPotionProjectileComponentImpl::new, EntitySplashPotionProjectileComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityPotionComponentImpl::new, EntityPotionComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
         EntityTypes.ENDER_PEARL = AllayEntityType
@@ -211,6 +212,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityArrowBaseComponentImpl::new, EntityArrowBaseComponentImpl.class)
                 .addComponent(EntityArrowPhysicsComponentImpl::new, EntityArrowPhysicsComponentImpl.class)
                 .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityPotionComponentImpl::new, EntityPotionComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .addComponent(() -> {
                     var component = new EntityLivingComponentImpl() {
@@ -260,6 +262,27 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.FIREWORKS_ROCKET)
                 .addComponent(EntityFireworksRocketPhysicsComponentImpl::new, EntityFireworksRocketPhysicsComponentImpl.class)
                 .addComponent(EntityFireworksRocketBaseComponentImpl::new, EntityFireworksRocketBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initLingeringPotion() {
+        EntityTypes.LINGERING_POTION = AllayEntityType
+                .builder(EntityLingeringPotionImpl.class)
+                .vanillaEntity(EntityId.LINGERING_POTION)
+                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
+                .addComponent(EntityLingeringPotionPhysicsComponentImpl::new, EntityLingeringPotionPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityPotionComponentImpl::new, EntityPotionComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .build();
+    }
+
+    public static void initAreaEffectCloud() {
+        EntityTypes.AREA_EFFECT_CLOUD = AllayEntityType
+                .builder(EntityAreaEffectCloudImpl.class)
+                .vanillaEntity(EntityId.AREA_EFFECT_CLOUD)
+                .addComponent(EntityAreaEffectCloudBaseComponentImpl::new, EntityAreaEffectCloudBaseComponentImpl.class)
+                .addComponent(EntityPotionComponentImpl::new, EntityPotionComponentImpl.class)
                 .build();
     }
 }

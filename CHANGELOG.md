@@ -16,6 +16,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added method `Player.sendCooldown()`.
 - (API) Added event `ItemDamageEvent` which is called when an item is about to be damaged.
+- (API) Implemented lingering potion and area effect cloud:
+  - Added `EntityAreaEffectCloudBaseComponent` interface with radius, duration, and reapplication delay properties.
+  - Added `EntityPotionComponent` interface for entities that hold potion types (splash potion, lingering potion, area effect cloud, arrow).
+  - Removed `getPotionType()` and `setPotionType()` from `EntityArrowBaseComponent`, use `EntityPotionComponent` instead.
 - (API) Implemented mace item:
   - Added sounds `SimpleSound.MACE_SMASH_AIR`, `SimpleSound.MACE_SMASH_GROUND` and `SimpleSound.MACE_SMASH_HEAVY_GROUND`.
   - Added particle `SimpleParticle.SMASH_ATTACK_GROUND_DUST`.
@@ -26,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a possible NPE in method `EntityPlayerBaseComponent.setCooldown()`.
 - Fixed a bug where aabb not being updated in the physics engine due to missing `join()` call on parallel forEach.
 - Fixed a bug where sometimes the player can't respawn.
+- Fixed `PotionType` enum order where `STRONG_SLOWNESS` was incorrectly placed, causing potion effects to be mismatched (e.g., healing potion giving water breathing).
 
 # 0.10.4 (API 0.21.0) - 2026/1/12
 

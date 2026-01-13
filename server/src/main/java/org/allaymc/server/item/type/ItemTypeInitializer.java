@@ -2,6 +2,7 @@ package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.interfaces.EntityLingeringPotion;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityProjectile;
 import org.allaymc.api.entity.interfaces.EntitySplashPotion;
@@ -851,6 +852,22 @@ public final class ItemTypeInitializer {
                     @Override
                     protected EntityProjectile createProjectile(Entity shooter, Vector3d shootPos) {
                         var projectile = (EntitySplashPotion) super.createProjectile(shooter, shootPos);
+                        projectile.setPotionType(PotionType.fromId(thisItemStack.getMeta()));
+                        return projectile;
+                    }
+                }, ItemBottleProjectileComponentImpl.class)
+                .build();
+    }
+
+    public static void initLingeringPotion() {
+        ItemTypes.LINGERING_POTION = AllayItemType
+                .builder(ItemLingeringPotionStackImpl.class)
+                .vanillaItem(ItemId.LINGERING_POTION)
+                .addComponent(ItemPotionComponentImpl::new, ItemPotionComponentImpl.class)
+                .addComponent(() -> new ItemBottleProjectileComponentImpl(EntityId.LINGERING_POTION, 0.5) {
+                    @Override
+                    protected EntityProjectile createProjectile(Entity shooter, Vector3d shootPos) {
+                        var projectile = (EntityLingeringPotion) super.createProjectile(shooter, shootPos);
                         projectile.setPotionType(PotionType.fromId(thisItemStack.getMeta()));
                         return projectile;
                     }

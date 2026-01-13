@@ -47,7 +47,6 @@ public enum PotionType {
 
     SLOWNESS(EffectTypes.SLOWNESS.createInstance(0, 90 * 20)),
     LONG_SLOWNESS(EffectTypes.SLOWNESS.createInstance(0, 4 * 60 * 20)),
-    STRONG_SLOWNESS(EffectTypes.SLOWNESS.createInstance(3, 20 * 20)),
 
     WATER_BREATHING(EffectTypes.WATER_BREATHING.createInstance(0, 3 * 60 * 20)),
     LONG_WATER_BREATHING(EffectTypes.WATER_BREATHING.createInstance(0, 8 * 60 * 20)),
@@ -89,7 +88,9 @@ public enum PotionType {
     ),
 
     SLOW_FALLING(EffectTypes.SLOW_FALLING.createInstance(0, 90 * 20)),
-    LONG_SLOW_FALLING(EffectTypes.SLOW_FALLING.createInstance(0, 4 * 60 * 20));;
+    LONG_SLOW_FALLING(EffectTypes.SLOW_FALLING.createInstance(0, 4 * 60 * 20)),
+
+    STRONG_SLOWNESS(EffectTypes.SLOWNESS.createInstance(3, 20 * 20));
 
     private static final PotionType[] VALUES = values();
 

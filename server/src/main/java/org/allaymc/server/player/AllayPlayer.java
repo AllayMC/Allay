@@ -32,10 +32,7 @@ import org.allaymc.api.dialog.Dialog;
 import org.allaymc.api.dialog.ModelSettings;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.*;
-import org.allaymc.api.entity.component.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.EntityLivingComponent;
-import org.allaymc.api.entity.component.EntityPhysicsComponent;
-import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.*;
 import org.allaymc.api.entity.data.EntityAnimation;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.*;
@@ -617,6 +614,16 @@ public class AllayPlayer implements Player {
             map.put(EntityDataTypes.AIR_SUPPLY_MAX, (short) livingComponent.getAirSupplyMaxTicks());
             map.put(EntityDataTypes.VISIBLE_MOB_EFFECTS, encodeVisibleEffects(livingComponent.getEffects().values()));
         }
+        if (entity instanceof EntityPotionComponent potionComponent) {
+            var potionType = potionComponent.getPotionType();
+            if (potionType != null) {
+                var data = potionType.ordinal() + 1;
+                map.put(EntityDataTypes.AUX_VALUE_DATA, (short) data);
+                if (data > 4) {
+                    map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) (data + 1));
+                }
+            }
+        }
     }
 
     /**
@@ -653,10 +660,6 @@ public class AllayPlayer implements Player {
             }
             case EntityArrow arrow -> {
                 map.setFlag(EntityFlag.CRITICAL, arrow.isCritical());
-                var potionType = arrow.getPotionType();
-                if (potionType != null) {
-                    map.put(EntityDataTypes.CUSTOM_DISPLAY, (byte) (potionType.ordinal() + 1));
-                }
             }
             case EntityFireworksRocket firework -> {
                 var nbt = NbtMap.builder()
@@ -675,6 +678,16 @@ public class AllayPlayer implements Player {
             }
             case EntityEnderCrystal enderCrystal -> {
                 map.setFlag(EntityFlag.SHOW_BOTTOM, enderCrystal.isBaseVisible());
+            }
+            case EntityAreaEffectCloud cloud -> {
+                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_RADIUS, cloud.getRadius());
+                // Set these to invalid values to disable client-sided shrinking of the
+                // cloud since server controls the shrinking
+                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_DURATION, Integer.MAX_VALUE);
+                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_CHANGE_ON_PICKUP, Float.MIN_VALUE);
+                map.put(EntityDataTypes.AREA_EFFECT_CLOUD_CHANGE_RATE, Float.MIN_VALUE);
+                map.put(EntityDataTypes.EFFECT_COLOR, cloud.getPotionType().getColor().getRGB());
+                map.put(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
             }
             default -> {
             }

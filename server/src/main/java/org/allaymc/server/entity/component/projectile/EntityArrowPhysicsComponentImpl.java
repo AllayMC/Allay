@@ -5,6 +5,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.action.ArrowShakeAction;
 import org.allaymc.api.entity.component.EntityArrowBaseComponent;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.component.EntityPotionComponent;
 import org.allaymc.api.entity.component.EntityProjectileComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityLiving;
@@ -26,6 +27,8 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
     @Dependency
     protected EntityArrowBaseComponent arrowBaseComponent;
+    @Dependency
+    protected EntityPotionComponent potionComponent;
     @Dependency
     protected EntityProjectileComponent projectileComponent;
 
@@ -67,7 +70,7 @@ public class EntityArrowPhysicsComponentImpl extends EntityProjectilePhysicsComp
 
         addHitSound(hitPos);
         if (other instanceof EntityLiving living) {
-            var potionType = arrowBaseComponent.getPotionType();
+            var potionType = potionComponent.getPotionType();
             if (potionType != null) {
                 potionType.applyTo(living);
             }
