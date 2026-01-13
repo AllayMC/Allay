@@ -689,6 +689,9 @@ public class AllayPlayer implements Player {
                 map.put(EntityDataTypes.EFFECT_COLOR, cloud.getPotionType().getColor().getRGB());
                 map.put(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
             }
+            case EntityLingeringPotion lingeringPotion -> {
+                map.setFlag(EntityFlag.LINGERING, true);
+            }
             default -> {
             }
         }

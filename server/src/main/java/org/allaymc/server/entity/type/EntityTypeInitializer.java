@@ -190,6 +190,15 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityPotionComponentImpl::new, EntityPotionComponentImpl.class)
                 .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
+        EntityTypes.LINGERING_POTION = AllayEntityType
+                .builder(EntityLingeringPotionImpl.class)
+                .vanillaEntity(EntityId.LINGERING_POTION)
+                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
+                .addComponent(EntityLingeringPotionPhysicsComponentImpl::new, EntityLingeringPotionPhysicsComponentImpl.class)
+                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
+                .addComponent(EntityPotionComponentImpl::new, EntityPotionComponentImpl.class)
+                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
+                .build();
         EntityTypes.ENDER_PEARL = AllayEntityType
                 .builder(EntityEnderPearlImpl.class)
                 .vanillaEntity(EntityId.ENDER_PEARL)
@@ -262,18 +271,6 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(EntityId.FIREWORKS_ROCKET)
                 .addComponent(EntityFireworksRocketPhysicsComponentImpl::new, EntityFireworksRocketPhysicsComponentImpl.class)
                 .addComponent(EntityFireworksRocketBaseComponentImpl::new, EntityFireworksRocketBaseComponentImpl.class)
-                .build();
-    }
-
-    public static void initLingeringPotion() {
-        EntityTypes.LINGERING_POTION = AllayEntityType
-                .builder(EntityLingeringPotionImpl.class)
-                .vanillaEntity(EntityId.LINGERING_POTION)
-                .addComponent(EntityProjectileBaseComponentImpl::new, EntityProjectileBaseComponentImpl.class)
-                .addComponent(EntityLingeringPotionPhysicsComponentImpl::new, EntityLingeringPotionPhysicsComponentImpl.class)
-                .addComponent(EntityProjectileComponentImpl::new, EntityProjectileComponentImpl.class)
-                .addComponent(EntityPotionComponentImpl::new, EntityPotionComponentImpl.class)
-                .addComponent(() -> new EntityAgeComponentImpl(), EntityAgeComponentImpl.class)
                 .build();
     }
 
