@@ -5,6 +5,7 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.world.explosion.WindExplosion;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.api.world.sound.Sound;
@@ -219,50 +220,11 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
     private void applyWindBurstGust(Entity attacker, int level) {
         var radius = WIND_BURST_GUST_RADIUS;
         var strength = WIND_BURST_GUST_BASE_STRENGTH + WIND_BURST_GUST_STRENGTH_PER_LEVEL * level;
-        var minVertical = WIND_BURST_GUST_BASE_VERTICAL + WIND_BURST_GUST_VERTICAL_PER_LEVEL * level;
+        var vertical = WIND_BURST_GUST_BASE_VERTICAL + WIND_BURST_GUST_VERTICAL_PER_LEVEL * level;
 
-        var dimension = attacker.getDimension();
-        var origin = attacker.getLocation();
-        var aabb = new AABBd(
-                origin.x() - radius,
-                origin.y() - radius,
-                origin.z() - radius,
-                origin.x() + radius,
-                origin.y() + radius,
-                origin.z() + radius
-        );
-        var nearbyEntities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
-
-        for (var entity : nearbyEntities) {
-            if (entity == attacker) {
-                continue;
-            }
-
-            if (!(entity instanceof EntityPhysicsComponent physicsComponent)) {
-                continue;
-            }
-
-            var direction = entity.getLocation().sub(origin, new Vector3d());
-            direction.y = 0;
-            if (direction.lengthSquared() <= 0) {
-                continue;
-            }
-
-            direction.normalize().mul(strength);
-            var targetMotion = new Vector3d(physicsComponent.getMotion());
-            targetMotion.x += direction.x();
-            targetMotion.z += direction.z();
-            if (targetMotion.y < minVertical) {
-                targetMotion.y = minVertical;
-            }
-            physicsComponent.setMotion(targetMotion);
-
-            var entityEffectPos = entity.getLocation().add(0, entity.getEyeHeight() * 0.6, 0, new Vector3d());
-            dimension.addParticle(entityEffectPos, SimpleParticle.WIND_EXPLOSION);
-        }
-
-        var attackerEffectPos = origin.add(0, attacker.getEyeHeight() * 0.6, 0, new Vector3d());
-        dimension.addParticle(attackerEffectPos, SimpleParticle.WIND_EXPLOSION);
-        dimension.addSound(origin, SimpleSound.MACE_SMASH_AIR);
+        var explosion = new WindExplosion(radius, strength, vertical);
+        explosion.setShooter(attacker);
+        explosion.setApplySelfKnockback(false);
+        explosion.explode(attacker.getDimension(), attacker.getLocation());
     }
 }
