@@ -13,6 +13,8 @@ import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * Represents a wind charge explosion that only applies knockback
  * without damaging entities or destroying blocks.
@@ -236,12 +238,12 @@ public class WindExplosion {
                     direction.z /= horizontalDistance;
                 } else if (distance > 0) {
                     // Entity is directly above or below, use random horizontal direction
-                    var angle = Math.random() * Math.PI * 2;
+                    var angle = ThreadLocalRandom.current().nextDouble() * Math.PI * 2;
                     direction.x = Math.cos(angle);
                     direction.z = Math.sin(angle);
                 } else {
                     // Entity is at explosion center
-                    direction.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize();
+                    direction.set(ThreadLocalRandom.current().nextDouble() - 0.5, 0, ThreadLocalRandom.current().nextDouble() - 0.5).normalize();
                 }
 
                 var horizontalKb = knockbackStrength * (1.0 - kbResistance);
