@@ -47,6 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where sometimes the player can't respawn.
 - Fixed `PotionType` enum order where `STRONG_SLOWNESS` was incorrectly placed, causing potion effects to be mismatched (e.g., healing potion giving water breathing).
 - Fixed wind burst enchantment max level and applicable type.
+- Fixed 2x2 crafting grid.
 
 # 0.10.4 (API 0.21.0) - 2026/1/12
 

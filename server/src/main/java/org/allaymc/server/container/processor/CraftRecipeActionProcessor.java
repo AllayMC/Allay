@@ -13,7 +13,6 @@ import org.allaymc.api.item.recipe.ShapedRecipe;
 import org.allaymc.api.item.recipe.ShapelessRecipe;
 import org.allaymc.api.item.recipe.SmithingRecipe;
 import org.allaymc.api.item.recipe.SmithingTrimRecipe;
-import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
@@ -55,24 +54,17 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
-        // Check if the player opened a valid container
-        var openedContainers = player.getOpenedContainers();
-        if (openedContainers.size() != 1) {
-            log.warn("Received a CraftRecipeAction with incorrect number ({}) of opened containers!", openedContainers.size());
+        // Check if the player opened a valid recipe container
+        var recipeContainer = findFirstRecipeContainer(player);
+        if (recipeContainer == null) {
+            log.warn("Received a CraftRecipeAction without an opened recipe container!");
             return error();
         }
 
         // Check if the input matches the recipe
-        var openedContainer = openedContainers.toArray(Container[]::new)[0];
-        RecipeInput recipeInput;
-        if (openedContainer instanceof RecipeContainer recipeContainer) {
-            recipeInput = recipeContainer.createRecipeInput();
-            if (!recipe.match(recipeInput)) {
-                log.warn("Mismatched recipe! Recipe identifier: {}", recipe.getIdentifier());
-                return error();
-            }
-        } else {
-            log.warn("Received a CraftRecipeAction with an invalid container type {}!", openedContainer.getContainerType());
+        var recipeInput = recipeContainer.createRecipeInput();
+        if (!recipe.match(recipeInput)) {
+            log.warn("Mismatched recipe! Recipe identifier: {}", recipe.getIdentifier());
             return error();
         }
 
@@ -260,6 +252,15 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                 .filter(action -> action instanceof ConsumeAction)
                 .map(action -> (ConsumeAction) action)
                 .toList();
+    }
+
+    protected RecipeContainer findFirstRecipeContainer(Player player) {
+        for (var container : player.getOpenedContainers()) {
+            if (container instanceof RecipeContainer recipeContainer) {
+                return recipeContainer;
+            }
+        }
+        return null;
     }
 
     @Override
