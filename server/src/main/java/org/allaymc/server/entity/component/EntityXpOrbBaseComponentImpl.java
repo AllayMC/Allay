@@ -82,49 +82,27 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
 
     protected List<MendingTarget> collectMendingTargets(EntityPlayer player) {
         var targets = new ArrayList<MendingTarget>();
-
         var inventory = player.getContainer(ContainerTypes.INVENTORY);
-        if (inventory != null) {
-            var handSlot = inventory.getHandSlot();
-            var handItem = inventory.getItemStack(handSlot);
-            if (isMendingTarget(handItem)) {
-                targets.add(new MendingTarget(inventory, handSlot));
-            }
-        }
-
-        var offhand = player.getContainer(ContainerTypes.OFFHAND);
-        if (offhand != null) {
-            var offhandItem = offhand.getItemStack(0);
-            if (isMendingTarget(offhandItem)) {
-                targets.add(new MendingTarget(offhand, 0));
-            }
-        }
-
+        tryAddMendingTarget(targets, inventory, inventory.getHandSlot());
+        tryAddMendingTarget(targets, player.getContainer(ContainerTypes.OFFHAND), 0);
         var armor = player.getContainer(ContainerTypes.ARMOR);
-        if (armor != null) {
-            var armorItems = armor.getItemStackArray();
-            for (int slot = 0; slot < armorItems.length; slot++) {
-                var armorItem = armor.getItemStack(slot);
-                if (isMendingTarget(armorItem)) {
-                    targets.add(new MendingTarget(armor, slot));
-                }
-            }
+        for (int slot = 0; slot < armor.getItemStackArray().length; slot++) {
+            tryAddMendingTarget(targets, armor, slot);
         }
-
         return targets;
     }
 
-    protected boolean isMendingTarget(ItemStack itemStack) {
-        if (itemStack == ItemAirStack.AIR_STACK) {
-            return false;
+    protected void tryAddMendingTarget(List<MendingTarget> targets, Container container, int slot) {
+        if (container != null && isMendingTarget(container.getItemStack(slot))) {
+            targets.add(new MendingTarget(container, slot));
         }
-        if (!itemStack.getItemType().getItemData().isDamageable()) {
-            return false;
-        }
-        if (itemStack.getDamage() <= 0) {
-            return false;
-        }
-        return itemStack.hasEnchantment(EnchantmentTypes.MENDING);
+    }
+
+    protected boolean isMendingTarget(ItemStack item) {
+        return item != ItemAirStack.AIR_STACK &&
+               item.getItemType().getItemData().isDamageable() &&
+               item.getDamage() > 0 &&
+               item.hasEnchantment(EnchantmentTypes.MENDING);
     }
 
     protected record MendingTarget(Container container, int slot) {
