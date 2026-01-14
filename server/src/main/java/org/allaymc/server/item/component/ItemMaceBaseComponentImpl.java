@@ -23,10 +23,11 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
     private static final float SMASH_TRIGGER_FALL_DISTANCE = 1.5f;
     private static final int SMASH_BLOCKS_HIGH = 3;
     private static final int SMASH_BLOCKS_MID = 5;
-    private static final float SMASH_DAMAGE_HIGH = 3.0f;
-    private static final float SMASH_DAMAGE_MID = 1.5f;
+    private static final float SMASH_DAMAGE_HIGH = 4.0f;
+    private static final float SMASH_DAMAGE_MID = 2.0f;
     private static final float SMASH_DAMAGE_LOW = 1.0f;
     private static final float HEAVY_SMASH_DAMAGE = 16.0f;
+    private static final float DENSITY_DAMAGE_PER_LEVEL = 0.5f;
 
     // AOE knockback constants
     private static final double AOE_HORIZONTAL_RADIUS = 3.0;
@@ -55,6 +56,35 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
+    public float calculateAttackDamage(Entity attacker, Entity victim) {
+        var baseDamage = super.calculateAttackDamage();
+
+        if (attacker instanceof EntityPhysicsComponent physicsComponent) {
+            var fallDistance = physicsComponent.getFallDistance();
+            if (fallDistance > SMASH_TRIGGER_FALL_DISTANCE) {
+                var smashBonus = calculateSmashBonus(fallDistance);
+                var densityBonus = calculateDensityBonus(fallDistance);
+                return baseDamage + smashBonus + densityBonus;
+            }
+        }
+
+        return baseDamage;
+    }
+
+    /**
+     * Calculate the density enchantment bonus damage.
+     * Each level adds 0.5 damage per block fallen.
+     */
+    private float calculateDensityBonus(double fallDistance) {
+        var densityLevel = getEnchantmentLevel(EnchantmentTypes.DENSITY);
+        if (densityLevel <= 0) {
+            return 0;
+        }
+        var blocksFallen = (int) Math.floor(fallDistance);
+        return blocksFallen * densityLevel * DENSITY_DAMAGE_PER_LEVEL;
+    }
+
+    @Override
     public void onAttackEntity(Entity attacker, Entity victim) {
         // Check if attacker has physics component
         if (attacker instanceof EntityPhysicsComponent physicsComponent) {
@@ -62,7 +92,8 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
 
             // Apply smash attack effects if falling
             if (fallDistance > SMASH_TRIGGER_FALL_DISTANCE) {
-                applySmashEffects(attacker, victim, calculateSmashBonus(fallDistance));
+                var totalBonus = calculateSmashBonus(fallDistance) + calculateDensityBonus(fallDistance);
+                applySmashEffects(attacker, victim, totalBonus);
             }
 
             // Reset fall distance and apply recoil
@@ -77,8 +108,8 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
     /**
      * Calculate the smash bonus damage based on fall distance.
      * <p>
-     * The first 3 blocks contribute 3.0 damage each,
-     * the next 5 blocks contribute 1.5 damage each,
+     * The first 3 blocks contribute 4.0 damage each,
+     * the next 5 blocks contribute 2.0 damage each,
      * and any further blocks contribute 1.0 damage each.
      */
     private float calculateSmashBonus(double fallDistance) {

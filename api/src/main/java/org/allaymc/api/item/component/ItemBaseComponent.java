@@ -368,11 +368,42 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
     NbtMap saveNBT();
 
     /**
-     * Calculates the attack damage.
+     * Calculates the base attack damage of this item.
+     * <p>
+     * This method returns the static attack damage value defined in the item's data,
+     * without considering any context-dependent factors such as the attacker's state
+     * or enchantments that depend on combat conditions.
+     * <p>
+     * For most weapons, this method and {@link #calculateAttackDamage(Entity, Entity)}
+     * return the same value. However, for weapons like the Mace that have context-dependent
+     * damage bonuses (e.g., smash damage based on fall distance, Density enchantment),
+     * use the overloaded version with attacker and victim parameters to get the actual
+     * combat damage.
      *
-     * @return the attack damage value
+     * @return the base attack damage value
+     * @see #calculateAttackDamage(Entity, Entity)
      */
     float calculateAttackDamage();
+
+    /**
+     * Calculates the attack damage with attacker and victim context.
+     * <p>
+     * This method allows weapons to calculate damage based on combat context,
+     * such as the attacker's current state. For example, the Mace uses this to
+     * calculate smash damage based on the attacker's fall distance and apply
+     * the Density enchantment bonus.
+     * <p>
+     * The default implementation simply delegates to {@link #calculateAttackDamage()}.
+     * Weapons with context-dependent damage should override this method.
+     *
+     * @param attacker the entity performing the attack
+     * @param victim   the entity being attacked
+     * @return the attack damage value including any context-dependent bonuses
+     * @see #calculateAttackDamage()
+     */
+    default float calculateAttackDamage(Entity attacker, Entity victim) {
+        return calculateAttackDamage();
+    }
 
     /**
      * Checks for a specific enchantment.
