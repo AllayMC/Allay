@@ -39,7 +39,7 @@ public final class EffectTypes {
     public static EffectType VILLAGE_HERO;
     public static EffectType WATER_BREATHING;
     public static EffectType WEAKNESS;
-    public static EffectType WEAVING_OMEN;
+    public static EffectType WEAVING;
     public static EffectType WIND_CHARGED;
     public static EffectType WITHER;
 }

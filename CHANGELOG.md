@@ -28,11 +28,13 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added particles `SimpleParticle.WIND_EXPLOSION` and `SimpleParticle.BREEZE_WIND_EXPLOSION`.
   - Added sounds `SimpleSound.WIND_CHARGE_BURST` and `SimpleSound.BREEZE_WIND_CHARGE_BURST`.
   - `Wind Charged` effect now triggers wind explosion on entity death.
+- (API) Added `PotionType.WIND_CHARGED`, `WEAVING`, `OOZING`, and `INFESTED` for 1.21 tipped arrows and potions.
 - Implemented mending repairs from experience orbs.
 
 ### Changed
 
 - (API) Classes `Explosion` and `FireworkExplosion` are moved from package `org.allaymc.api.world` to package `org.allaymc.api.world.explosion`.
+- (API) Corrected field name `EffectTypes.WEAVING_OMEN` to `EffectTypes.WEAVING`.
 
 ### Fixed
 

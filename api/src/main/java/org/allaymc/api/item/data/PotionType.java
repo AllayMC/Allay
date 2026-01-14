@@ -90,7 +90,12 @@ public enum PotionType {
     SLOW_FALLING(EffectTypes.SLOW_FALLING.createInstance(0, 90 * 20)),
     LONG_SLOW_FALLING(EffectTypes.SLOW_FALLING.createInstance(0, 4 * 60 * 20)),
 
-    STRONG_SLOWNESS(EffectTypes.SLOWNESS.createInstance(3, 20 * 20));
+    STRONG_SLOWNESS(EffectTypes.SLOWNESS.createInstance(3, 20 * 20)),
+
+    WIND_CHARGED(EffectTypes.WIND_CHARGED.createInstance(0, 3 * 60 * 20)),
+    WEAVING(EffectTypes.WEAVING.createInstance(0, 3 * 60 * 20)),
+    OOZING(EffectTypes.OOZING.createInstance(0, 3 * 60 * 20)),
+    INFESTED(EffectTypes.INFESTED.createInstance(0, 3 * 60 * 20));
 
     private static final PotionType[] VALUES = values();
 

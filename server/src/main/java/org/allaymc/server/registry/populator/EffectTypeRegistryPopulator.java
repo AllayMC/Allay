@@ -44,7 +44,7 @@ public class EffectTypeRegistryPopulator implements Runnable {
         EffectTypes.VILLAGE_HERO = new EffectVillageHeroType();
         EffectTypes.WATER_BREATHING = new EffectWaterBreathingType();
         EffectTypes.WEAKNESS = new EffectWeaknessType();
-        EffectTypes.WEAVING_OMEN = new EffectWeavingType();
+        EffectTypes.WEAVING = new EffectWeavingType();
         EffectTypes.WIND_CHARGED = new EffectWindChargedType();
         EffectTypes.WITHER = new EffectWitherType();
     }
