@@ -9,7 +9,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemFireworkRocketBaseComponent;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.FireworkExplosion;
+import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;

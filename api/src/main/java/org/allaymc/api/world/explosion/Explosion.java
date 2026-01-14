@@ -1,4 +1,4 @@
-package org.allaymc.api.world;
+package org.allaymc.api.world.explosion;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.particle.Particle;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;

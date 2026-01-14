@@ -10,8 +10,8 @@ import org.allaymc.api.item.recipe.input.RecipeInput;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.DyeColor;
-import org.allaymc.api.world.FireworkExplosion;
 import org.allaymc.api.world.data.FireworkType;
+import org.allaymc.api.world.explosion.FireworkExplosion;
 
 import java.util.*;
 

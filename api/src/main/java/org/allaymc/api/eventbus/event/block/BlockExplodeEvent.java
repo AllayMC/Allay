@@ -6,7 +6,7 @@ import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.explosion.Explosion;
 
 /**
  * Called when a block (e.g. bed) explode.

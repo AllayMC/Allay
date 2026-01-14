@@ -27,7 +27,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.identifier.Identifier;
-import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.server.item.data.ItemId;
 import org.allaymc.server.utils.JSONUtils;
 import org.cloudburstmc.nbt.NbtMap;

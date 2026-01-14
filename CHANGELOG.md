@@ -25,6 +25,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added particle `SimpleParticle.SMASH_ATTACK_GROUND_DUST`.
 - Implemented mending repairs from experience orbs.
 
+### Changed
+
+- (API) Classes `Explosion` and `FireworkExplosion` are moved from package `org.allaymc.api.world` to package `org.allaymc.api.world.explosion`.
+
 ### Fixed
 
 - (API) Renamed method `HasAABB.getBaseAABB()` back to `HasAABB.getAABB()`.

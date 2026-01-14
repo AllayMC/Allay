@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.component.EntityTntBaseComponent;
 import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
-import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.component.annotation.OnInitFinish;

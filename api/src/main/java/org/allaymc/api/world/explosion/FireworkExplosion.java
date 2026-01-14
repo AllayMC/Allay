@@ -1,4 +1,4 @@
-package org.allaymc.api.world;
+package org.allaymc.api.world.explosion;
 
 import org.allaymc.api.utils.DyeColor;
 import org.allaymc.api.world.data.FireworkType;

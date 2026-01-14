@@ -5,8 +5,8 @@ import lombok.Setter;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.component.ItemFireworkStarBaseComponent;
 import org.allaymc.api.utils.DyeColor;
-import org.allaymc.api.world.FireworkExplosion;
 import org.allaymc.api.world.data.FireworkType;
+import org.allaymc.api.world.explosion.FireworkExplosion;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.awt.*;

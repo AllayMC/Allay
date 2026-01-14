@@ -2,7 +2,7 @@ package org.allaymc.api.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.world.FireworkExplosion;
+import org.allaymc.api.world.explosion.FireworkExplosion;
 
 import java.awt.*;
 

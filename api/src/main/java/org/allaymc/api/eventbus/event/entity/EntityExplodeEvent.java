@@ -6,7 +6,7 @@ import org.allaymc.api.annotation.CallerThread;
 import org.allaymc.api.annotation.ThreadType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.explosion.Explosion;
 
 /**
  * Called when an entity is about to explode. This event is used by some entities like tnt and creeper.

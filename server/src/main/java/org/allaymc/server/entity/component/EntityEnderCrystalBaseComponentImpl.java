@@ -6,7 +6,7 @@ import org.allaymc.api.entity.component.EntityEnderCrystalBaseComponent;
 import org.allaymc.api.entity.component.EntityLivingComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityExplodeEvent;
-import org.allaymc.api.world.Explosion;
+import org.allaymc.api.world.explosion.Explosion;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
