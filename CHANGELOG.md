@@ -32,6 +32,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added `PotionType.WIND_CHARGED`, `WEAVING`, `OOZING`, and `INFESTED` for 1.21 tipped arrows and potions.
 - Implemented Wind Burst enchantment effects for mace attacks.
 - Implemented Density enchantment damage bonus for mace.
+- Implemented Breach enchantment effect for mace armor reduction.
 - Implemented mending repairs from experience orbs.
 
 ### Changed

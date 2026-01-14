@@ -170,7 +170,6 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         applyEffects(damage);
     }
 
-    // TODO: Implement breach enchantment
     protected void applyArmor(DamageContainer damage) {
         if (!damage.canBeReducedByArmor() || containerHolderComponent == null) {
             return;
@@ -202,6 +201,15 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         var totalArmorValue = 0f;
         var totalToughnessValue = 0f;
         var enchantmentProtectionFactor = 0;
+        var breachReduction = 0f;
+
+        if (damage.getAttacker() instanceof ContainerHolder holder && holder.hasContainer(ContainerTypes.INVENTORY)) {
+            var item = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand();
+            var breachLevel = item.getEnchantmentLevel(EnchantmentTypes.BREACH);
+            if (breachLevel > 0) {
+                breachReduction = 0.15f * breachLevel;
+            }
+        }
 
         for (var item : armorContainer.getItemStacks()) {
             if (item == ItemAirStack.AIR_STACK) {
@@ -217,13 +225,27 @@ public class EntityLivingComponentImpl implements EntityLivingComponent {
         // See https://minecraft.wiki/w/Armor#Damage_reduction
         final var v = totalArmorValue;
         final var t = totalToughnessValue;
+        final var breach = breachReduction;
         damage.updateFinalDamage(d -> {
-            if (0 <= d && d <= 1.6f * v + 0.2f * v * t) {
-                return (1f / (6.25f + 50f)) * d * d +
-                       (1f - v / 25f) * d;
-            } else {
-                return (1f - v / 125f) * d;
+            if (d <= 0) {
+                return d;
             }
+
+            float reduced;
+            if (d <= 1.6f * v + 0.2f * v * t) {
+                reduced = (1f / (6.25f + 50f)) * d * d +
+                          (1f - v / 25f) * d;
+            } else {
+                reduced = (1f - v / 125f) * d;
+            }
+
+            if (breach <= 0f) {
+                return reduced;
+            }
+
+            var reduction = (d - reduced) / d;
+            var adjustedReduction = Math.max(0f, reduction - breach);
+            return d * (1f - adjustedReduction);
         });
 
         // See https://minecraft.wiki/w/Armor#Enchantments
