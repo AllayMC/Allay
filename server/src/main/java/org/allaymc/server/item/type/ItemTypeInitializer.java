@@ -835,6 +835,11 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.EXPERIENCE_BOTTLE)
                 .addComponent(() -> new ItemProjectileComponentImpl(EntityId.XP_BOTTLE, 0.6), ItemProjectileComponentImpl.class)
                 .build();
+        ItemTypes.WIND_CHARGE = AllayItemType
+                .builder(ItemWindChargeStackImpl.class)
+                .vanillaItem(ItemId.WIND_CHARGE)
+                .addComponent(() -> new ItemProjectileComponentImpl(EntityId.WIND_CHARGE_PROJECTILE, 1.5), ItemProjectileComponentImpl.class)
+                .build();
     }
 
     public static void initPotion() {

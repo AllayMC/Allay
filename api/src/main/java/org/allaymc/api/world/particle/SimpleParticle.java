@@ -35,5 +35,9 @@ public enum SimpleParticle implements Particle {
     // FIREWORK_CONTRAIL is a particle shown at the location where the firework rocket flew across.
     FIREWORK_CONTRAIL,
     // SMASH_ATTACK_GROUND_DUST is a particle that shows up when a mace smash attack hits the ground.
-    SMASH_ATTACK_GROUND_DUST
+    SMASH_ATTACK_GROUND_DUST,
+    // WIND_EXPLOSION is a particle shown when a player wind charge explodes.
+    WIND_EXPLOSION,
+    // BREEZE_WIND_EXPLOSION is a particle shown when a breeze wind charge explodes.
+    BREEZE_WIND_EXPLOSION
 }

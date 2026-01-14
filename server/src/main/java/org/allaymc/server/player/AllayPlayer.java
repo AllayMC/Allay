@@ -1104,6 +1104,10 @@ public class AllayPlayer implements Player {
             case SimpleSound.MACE_SMASH_AIR -> packet.setSound(SoundEvent.MACE_SMASH_AIR);
             case SimpleSound.MACE_SMASH_GROUND -> packet.setSound(SoundEvent.MACE_SMASH_GROUND);
             case SimpleSound.MACE_SMASH_HEAVY_GROUND -> packet.setSound(SoundEvent.MACE_SMASH_HEAVY_GROUND);
+            case SimpleSound.EXPLOSION -> packet.setSound(SoundEvent.EXPLODE);
+            case SimpleSound.WIND_CHARGE_BURST -> packet.setSound(SoundEvent.WIND_CHARGE_BURST);
+            case SimpleSound.BREEZE_WIND_CHARGE_BURST -> packet.setSound(SoundEvent.WIND_CHARGE_BURST);
+            case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case SimpleSound.PAINTING_PLACE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_ITEMFRAME_PLACE);
@@ -1124,9 +1128,6 @@ public class AllayPlayer implements Player {
                 levelEvent.setPosition(pos.toFloat());
                 sendPacket(levelEvent);
                 return;
-            }
-            case SimpleSound.EXPLOSION -> {
-                packet.setSound(SoundEvent.EXPLODE);
             }
             case SimpleSound.THUNDER -> {
                 packet.setSound(SoundEvent.THUNDER);
@@ -1259,7 +1260,6 @@ public class AllayPlayer implements Player {
                 sendPacket(levelEvent);
                 return;
             }
-            case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case NoteSound so -> {
                 packet.setSound(SoundEvent.NOTE);
                 packet.setExtraData((so.instrument().ordinal() << 8) | so.pitch());
@@ -1434,6 +1434,8 @@ public class AllayPlayer implements Player {
             case SimpleParticle.WHITE_SMOKE -> packet.setType(ParticleType.WHITE_SMOKE);
             case SimpleParticle.FIREWORK_CONTRAIL -> packet.setType(ParticleType.FIREWORKS);
             case SimpleParticle.SMASH_ATTACK_GROUND_DUST -> packet.setType(LevelEvent.PARTICLE_SMASH_ATTACK_GROUND_DUST);
+            case SimpleParticle.WIND_EXPLOSION -> packet.setType(ParticleType.WIND_EXPLOSION);
+            case SimpleParticle.BREEZE_WIND_EXPLOSION -> packet.setType(ParticleType.BREEZE_WIND_EXPLOSION);
             case CustomParticle pa -> {
                 var pk = new SpawnParticleEffectPacket();
                 pk.setDimensionId(this.controlledEntity.getDimension().getDimensionInfo().dimensionId());

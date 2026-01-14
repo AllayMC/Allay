@@ -23,6 +23,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Implemented mace item:
   - Added sounds `SimpleSound.MACE_SMASH_AIR`, `SimpleSound.MACE_SMASH_GROUND` and `SimpleSound.MACE_SMASH_HEAVY_GROUND`.
   - Added particle `SimpleParticle.SMASH_ATTACK_GROUND_DUST`.
+- (API) Implemented wind charge:
+  - Added `WindExplosion` class in `org.allaymc.api.world.explosion` package for wind charge knockback effects.
+  - Added particles `SimpleParticle.WIND_EXPLOSION` and `SimpleParticle.BREEZE_WIND_EXPLOSION`.
+  - Added sounds `SimpleSound.WIND_CHARGE_BURST` and `SimpleSound.BREEZE_WIND_CHARGE_BURST`.
+  - `Wind Charged` effect now triggers wind explosion on entity death.
 - Implemented mending repairs from experience orbs.
 
 ### Changed

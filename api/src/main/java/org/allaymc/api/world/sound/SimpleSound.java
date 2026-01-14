@@ -159,6 +159,10 @@ public enum SimpleSound implements Sound {
     // FIREWORK_FLICKER is a sound played when a firework explodes and should flicker.
     FIREWORK_FLICKER,
     // PAINTING_PLACE is a sound played when a painting is placed.
-    PAINTING_PLACE
+    PAINTING_PLACE,
+    // WIND_CHARGE_BURST is a sound played when a player wind charge explodes.
+    WIND_CHARGE_BURST,
+    // BREEZE_WIND_CHARGE_BURST is a sound played when a breeze wind charge explodes.
+    BREEZE_WIND_CHARGE_BURST
 }
 

@@ -1,6 +1,9 @@
 package org.allaymc.api.entity.interfaces;
 
-import org.allaymc.api.entity.Entity;
-
-public interface EntityWindChargeProjectile extends Entity {
+/**
+ * Represents a wind charge projectile thrown by players.
+ *
+ * @author daoge_cmd
+ */
+public interface EntityWindChargeProjectile extends EntityProjectile {
 }
