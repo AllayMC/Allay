@@ -2,11 +2,15 @@ package org.allaymc.server.item.component;
 
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStackInitInfo;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.world.explosion.WindExplosion;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.api.world.sound.Sound;
 import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 
 /**
@@ -29,6 +33,23 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
     private static final double KNOCKBACK_STRENGTH = 0.35;
     private static final double KNOCKBACK_VERTICAL = 0.60;
 
+    // Wind burst constants (mace enchantment)
+    private static final double WIND_BURST_MIN_FALL_DISTANCE = 1.5;
+    private static final double WIND_BURST_FALL_DISTANCE_CAP = 7.0;
+    private static final double WIND_BURST_MOTION_FALL_THRESHOLD = -0.08;
+    private static final double WIND_BURST_MOTION_FALL_FACTOR = 4.5;
+    private static final double WIND_BURST_MOTION_FALL_CAP = 3.0;
+    private static final double WIND_BURST_BASE_VERTICAL = 0.62;
+    private static final double WIND_BURST_FALL_VERTICAL = 0.11;
+    private static final double WIND_BURST_BASE_FORWARD = 0.06;
+    private static final double WIND_BURST_FORWARD_PER_LEVEL = 0.02;
+    private static final double WIND_BURST_HORIZONTAL_DAMPING = 0.45;
+    private static final double WIND_BURST_GUST_RADIUS = 2.5;
+    private static final double WIND_BURST_GUST_BASE_STRENGTH = 0.45;
+    private static final double WIND_BURST_GUST_STRENGTH_PER_LEVEL = 0.12;
+    private static final double WIND_BURST_GUST_BASE_VERTICAL = 0.35;
+    private static final double WIND_BURST_GUST_VERTICAL_PER_LEVEL = 0.08;
+
     public ItemMaceBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
@@ -45,8 +66,11 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
             }
 
             // Reset fall distance and apply recoil
+            var windBurstApplied = applyWindBurst(attacker, physicsComponent, fallDistance);
             physicsComponent.resetFallDistance();
-            physicsComponent.addMotion(0, 0.05, 0);
+            if (!windBurstApplied) {
+                physicsComponent.addMotion(0, 0.05, 0);
+            }
         }
     }
 
@@ -137,5 +161,86 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
                 physicsComponent.knockback(pos, KNOCKBACK_STRENGTH, KNOCKBACK_VERTICAL);
             }
         }
+    }
+
+    private boolean applyWindBurst(Entity attacker, EntityPhysicsComponent physicsComponent, double fallDistance) {
+        var windBurstLevel = getEnchantmentLevel(EnchantmentTypes.WIND_BURST);
+        if (windBurstLevel <= 0) {
+            return false;
+        }
+
+        if (attacker instanceof EntityPlayer player && (player.isFlying() || player.isGliding())) {
+            return false;
+        }
+
+        if (physicsComponent.isOnGround()) {
+            return false;
+        }
+
+        var motion = physicsComponent.getMotion();
+        var adjustedFallDistance = adjustWindBurstFallDistance(fallDistance, motion);
+        if (adjustedFallDistance < WIND_BURST_MIN_FALL_DISTANCE) {
+            return false;
+        }
+
+        var clampedFallDistance = Math.min(adjustedFallDistance, WIND_BURST_FALL_DISTANCE_CAP);
+        var verticalBoost = WIND_BURST_BASE_VERTICAL
+                + clampedFallDistance * WIND_BURST_FALL_VERTICAL
+                + getWindBurstLevelBonus(windBurstLevel);
+        var forwardBoost = WIND_BURST_BASE_FORWARD + WIND_BURST_FORWARD_PER_LEVEL * windBurstLevel;
+
+        var newMotion = createWindBurstMotion(attacker, motion, forwardBoost, verticalBoost);
+        physicsComponent.setMotion(newMotion);
+
+        spawnWindBurstGust(attacker, windBurstLevel);
+        return true;
+    }
+
+    private double adjustWindBurstFallDistance(double fallDistance, Vector3dc motion) {
+        if (fallDistance >= WIND_BURST_MIN_FALL_DISTANCE) {
+            return fallDistance;
+        }
+
+        if (motion.y() >= WIND_BURST_MOTION_FALL_THRESHOLD) {
+            return fallDistance;
+        }
+
+        var speedBasedFall = Math.min(WIND_BURST_MOTION_FALL_CAP, -motion.y() * WIND_BURST_MOTION_FALL_FACTOR);
+        return Math.max(fallDistance, speedBasedFall);
+    }
+
+    private double getWindBurstLevelBonus(int level) {
+        return switch (level) {
+            case 2 -> 0.45;
+            case 3 -> 1.15;
+            case 4 -> 1.75;
+            default -> 0;
+        };
+    }
+
+    private Vector3d createWindBurstMotion(Entity attacker, Vector3dc currentMotion, double forwardBoost, double verticalBoost) {
+        var yaw = Math.toRadians(attacker.getLocation().yaw());
+        var forward = new Vector3d(-Math.sin(yaw), 0, Math.cos(yaw)).normalize().mul(forwardBoost);
+
+        var motion = new Vector3d(
+                currentMotion.x() * WIND_BURST_HORIZONTAL_DAMPING,
+                0,
+                currentMotion.z() * WIND_BURST_HORIZONTAL_DAMPING
+        );
+        motion.add(forward);
+        motion.y = Math.max(motion.y, verticalBoost);
+        return motion;
+    }
+
+    private void spawnWindBurstGust(Entity attacker, int level) {
+        var radius = WIND_BURST_GUST_RADIUS;
+        var strength = WIND_BURST_GUST_BASE_STRENGTH + WIND_BURST_GUST_STRENGTH_PER_LEVEL * level;
+        var vertical = WIND_BURST_GUST_BASE_VERTICAL + WIND_BURST_GUST_VERTICAL_PER_LEVEL * level;
+
+        var effectPos = attacker.getLocation().add(0, attacker.getEyeHeight() * 0.6, 0, new Vector3d());
+        var explosion = new WindExplosion(radius, strength, vertical, SimpleSound.MACE_SMASH_AIR, SimpleParticle.WIND_EXPLOSION);
+        explosion.setShooter(attacker);
+        explosion.setApplySelfKnockback(false);
+        explosion.explode(attacker.getDimension(), effectPos);
     }
 }
