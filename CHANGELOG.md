@@ -29,6 +29,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added sounds `SimpleSound.WIND_CHARGE_BURST` and `SimpleSound.BREEZE_WIND_CHARGE_BURST`.
   - `Wind Charged` effect now triggers wind explosion on entity death.
 - (API) Added `PotionType.WIND_CHARGED`, `WEAVING`, `OOZING`, and `INFESTED` for 1.21 tipped arrows and potions.
+- Implemented Wind Burst enchantment effects for mace attacks.
 - Implemented mending repairs from experience orbs.
 
 ### Changed

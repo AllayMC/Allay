@@ -5,7 +5,6 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
-import org.allaymc.api.world.explosion.WindExplosion;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.api.world.sound.Sound;
@@ -35,20 +34,19 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
 
     // Wind burst constants (mace enchantment)
     private static final double WIND_BURST_MIN_FALL_DISTANCE = 1.5;
-    private static final double WIND_BURST_FALL_DISTANCE_CAP = 7.0;
+    private static final double WIND_BURST_FALL_DISTANCE_CAP = 7.5;
     private static final double WIND_BURST_MOTION_FALL_THRESHOLD = -0.08;
-    private static final double WIND_BURST_MOTION_FALL_FACTOR = 4.5;
-    private static final double WIND_BURST_MOTION_FALL_CAP = 3.0;
-    private static final double WIND_BURST_BASE_VERTICAL = 0.62;
-    private static final double WIND_BURST_FALL_VERTICAL = 0.11;
-    private static final double WIND_BURST_BASE_FORWARD = 0.06;
+    private static final double WIND_BURST_MOTION_FALL_FACTOR = 4.0;
+    private static final double WIND_BURST_MOTION_FALL_CAP = 2.5;
+    private static final double WIND_BURST_BASE_VERTICAL = 0.72;
+    private static final double WIND_BURST_FALL_VERTICAL = 0.10;
+    private static final double WIND_BURST_BASE_FORWARD = 0.08;
     private static final double WIND_BURST_FORWARD_PER_LEVEL = 0.02;
-    private static final double WIND_BURST_HORIZONTAL_DAMPING = 0.45;
     private static final double WIND_BURST_GUST_RADIUS = 2.5;
-    private static final double WIND_BURST_GUST_BASE_STRENGTH = 0.45;
-    private static final double WIND_BURST_GUST_STRENGTH_PER_LEVEL = 0.12;
-    private static final double WIND_BURST_GUST_BASE_VERTICAL = 0.35;
-    private static final double WIND_BURST_GUST_VERTICAL_PER_LEVEL = 0.08;
+    private static final double WIND_BURST_GUST_BASE_STRENGTH = 0.60;
+    private static final double WIND_BURST_GUST_STRENGTH_PER_LEVEL = 0.15;
+    private static final double WIND_BURST_GUST_BASE_VERTICAL = 0.40;
+    private static final double WIND_BURST_GUST_VERTICAL_PER_LEVEL = 0.10;
 
     public ItemMaceBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
@@ -173,10 +171,6 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
             return false;
         }
 
-        if (physicsComponent.isOnGround()) {
-            return false;
-        }
-
         var motion = physicsComponent.getMotion();
         var adjustedFallDistance = adjustWindBurstFallDistance(fallDistance, motion);
         if (adjustedFallDistance < WIND_BURST_MIN_FALL_DISTANCE) {
@@ -189,10 +183,10 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
                 + getWindBurstLevelBonus(windBurstLevel);
         var forwardBoost = WIND_BURST_BASE_FORWARD + WIND_BURST_FORWARD_PER_LEVEL * windBurstLevel;
 
-        var newMotion = createWindBurstMotion(attacker, motion, forwardBoost, verticalBoost);
+        var newMotion = createWindBurstMotion(attacker, forwardBoost, verticalBoost);
         physicsComponent.setMotion(newMotion);
 
-        spawnWindBurstGust(attacker, windBurstLevel);
+        applyWindBurstGust(attacker, windBurstLevel);
         return true;
     }
 
@@ -211,36 +205,68 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
 
     private double getWindBurstLevelBonus(int level) {
         return switch (level) {
-            case 2 -> 0.45;
-            case 3 -> 1.15;
-            case 4 -> 1.75;
+            case 2 -> 0.55;
+            case 3 -> 1.30;
             default -> 0;
         };
     }
 
-    private Vector3d createWindBurstMotion(Entity attacker, Vector3dc currentMotion, double forwardBoost, double verticalBoost) {
+    private Vector3d createWindBurstMotion(Entity attacker, double forwardBoost, double verticalBoost) {
         var yaw = Math.toRadians(attacker.getLocation().yaw());
-        var forward = new Vector3d(-Math.sin(yaw), 0, Math.cos(yaw)).normalize().mul(forwardBoost);
-
-        var motion = new Vector3d(
-                currentMotion.x() * WIND_BURST_HORIZONTAL_DAMPING,
-                0,
-                currentMotion.z() * WIND_BURST_HORIZONTAL_DAMPING
-        );
-        motion.add(forward);
-        motion.y = Math.max(motion.y, verticalBoost);
-        return motion;
+        var forward = new Vector3d(-Math.sin(yaw), 0, Math.cos(yaw));
+        if (forward.lengthSquared() > 0) {
+            forward.normalize().mul(forwardBoost);
+        }
+        return new Vector3d(forward.x(), verticalBoost, forward.z());
     }
 
-    private void spawnWindBurstGust(Entity attacker, int level) {
+    private void applyWindBurstGust(Entity attacker, int level) {
         var radius = WIND_BURST_GUST_RADIUS;
         var strength = WIND_BURST_GUST_BASE_STRENGTH + WIND_BURST_GUST_STRENGTH_PER_LEVEL * level;
-        var vertical = WIND_BURST_GUST_BASE_VERTICAL + WIND_BURST_GUST_VERTICAL_PER_LEVEL * level;
+        var minVertical = WIND_BURST_GUST_BASE_VERTICAL + WIND_BURST_GUST_VERTICAL_PER_LEVEL * level;
 
-        var effectPos = attacker.getLocation().add(0, attacker.getEyeHeight() * 0.6, 0, new Vector3d());
-        var explosion = new WindExplosion(radius, strength, vertical, SimpleSound.MACE_SMASH_AIR, SimpleParticle.WIND_EXPLOSION);
-        explosion.setShooter(attacker);
-        explosion.setApplySelfKnockback(false);
-        explosion.explode(attacker.getDimension(), effectPos);
+        var dimension = attacker.getDimension();
+        var origin = attacker.getLocation();
+        var aabb = new AABBd(
+                origin.x() - radius,
+                origin.y() - radius,
+                origin.z() - radius,
+                origin.x() + radius,
+                origin.y() + radius,
+                origin.z() + radius
+        );
+        var nearbyEntities = dimension.getEntityManager().getPhysicsService().computeCollidingEntities(aabb);
+
+        for (var entity : nearbyEntities) {
+            if (entity == attacker) {
+                continue;
+            }
+
+            if (!(entity instanceof EntityPhysicsComponent physicsComponent)) {
+                continue;
+            }
+
+            var direction = entity.getLocation().sub(origin, new Vector3d());
+            direction.y = 0;
+            if (direction.lengthSquared() <= 0) {
+                continue;
+            }
+
+            direction.normalize().mul(strength);
+            var targetMotion = new Vector3d(physicsComponent.getMotion());
+            targetMotion.x += direction.x();
+            targetMotion.z += direction.z();
+            if (targetMotion.y < minVertical) {
+                targetMotion.y = minVertical;
+            }
+            physicsComponent.setMotion(targetMotion);
+
+            var entityEffectPos = entity.getLocation().add(0, entity.getEyeHeight() * 0.6, 0, new Vector3d());
+            dimension.addParticle(entityEffectPos, SimpleParticle.WIND_EXPLOSION);
+        }
+
+        var attackerEffectPos = origin.add(0, attacker.getEyeHeight() * 0.6, 0, new Vector3d());
+        dimension.addParticle(attackerEffectPos, SimpleParticle.WIND_EXPLOSION);
+        dimension.addSound(origin, SimpleSound.MACE_SMASH_AIR);
     }
 }
