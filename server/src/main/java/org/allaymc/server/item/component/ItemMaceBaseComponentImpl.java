@@ -204,11 +204,7 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     private double getWindBurstLevelBonus(int level) {
-        return switch (level) {
-            case 2 -> 0.55;
-            case 3 -> 1.30;
-            default -> 0;
-        };
+        return Math.max(0.0, 0.75 * level - 0.95);
     }
 
     private Vector3d createWindBurstMotion(Entity attacker, double forwardBoost, double verticalBoost) {
