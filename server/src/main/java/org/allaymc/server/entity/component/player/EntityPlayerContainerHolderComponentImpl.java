@@ -29,6 +29,8 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 import org.joml.primitives.AABBd;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,6 +45,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     @ComponentObject
     private EntityPlayer thisPlayer;
+
+    private final List<Integer> enchantOptionNetworkIds = new ArrayList<>();
 
     public EntityPlayerContainerHolderComponentImpl() {
         super(
@@ -61,6 +65,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 onEnchantTableContainerInputItemChange(item, new Position3i(blockPos, thisPlayer.getDimension()));
             }
         });
+        enchantTableContainer.addCloseListener(viewer -> clearEnchantOptions());
         addContainer(enchantTableContainer);
 
         // We shouldn't provide the player object directly, because at that time 'thisPlayer' is null
@@ -73,6 +78,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         if (thisPlayer.isActualPlayer()) {
             var packet = new PlayerEnchantOptionsPacket();
+            clearEnchantOptions();
             if (item != ItemAirStack.AIR_STACK) {
                 var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
                 var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
@@ -80,11 +86,20 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                     return;
                 }
 
+                enchantOptionNetworkIds.addAll(enchantOptions.stream().map(Pair::left).toList());
                 packet.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
             }
 
             thisPlayer.getController().sendPacket(packet);
         }
+    }
+
+    private void clearEnchantOptions() {
+        if (enchantOptionNetworkIds.isEmpty()) {
+            return;
+        }
+        EnchantmentOptionGenerator.removeEnchantOptions(enchantOptionNetworkIds);
+        enchantOptionNetworkIds.clear();
     }
 
     @Override
