@@ -5,6 +5,7 @@ import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStackInitInfo;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.explosion.WindExplosion;
 import org.allaymc.api.world.particle.SimpleParticle;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -125,9 +126,7 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
             }
 
             // Apply knockback to the victim
-            var attackerLoc = attacker.getLocation();
-            var attackerPos = new Vector3d(attackerLoc.x(), attackerLoc.y(), attackerLoc.z());
-            victimPhysicsComponent.knockback(attackerPos, KNOCKBACK_STRENGTH, KNOCKBACK_VERTICAL);
+            victimPhysicsComponent.knockback(attacker.getLocation(), KNOCKBACK_STRENGTH, KNOCKBACK_VERTICAL);
         }
 
         // Apply AOE knockback to nearby entities
@@ -209,20 +208,15 @@ public class ItemMaceBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     private Vector3d createWindBurstMotion(Entity attacker, double forwardBoost, double verticalBoost) {
-        var yaw = Math.toRadians(attacker.getLocation().yaw());
-        var forward = new Vector3d(-Math.sin(yaw), 0, Math.cos(yaw));
-        if (forward.lengthSquared() > 0) {
-            forward.normalize().mul(forwardBoost);
-        }
+        var forward = MathUtils.getDirectionVector(attacker.getLocation().yaw(), 0).mul(forwardBoost);
         return new Vector3d(forward.x(), verticalBoost, forward.z());
     }
 
     private void applyWindBurstGust(Entity attacker, int level) {
-        var radius = WIND_BURST_GUST_RADIUS;
         var strength = WIND_BURST_GUST_BASE_STRENGTH + WIND_BURST_GUST_STRENGTH_PER_LEVEL * level;
         var vertical = WIND_BURST_GUST_BASE_VERTICAL + WIND_BURST_GUST_VERTICAL_PER_LEVEL * level;
 
-        var explosion = new WindExplosion(radius, strength, vertical);
+        var explosion = new WindExplosion(WIND_BURST_GUST_RADIUS, strength, vertical);
         explosion.setShooter(attacker);
         explosion.setApplySelfKnockback(false);
         explosion.explode(attacker.getDimension(), attacker.getLocation());
