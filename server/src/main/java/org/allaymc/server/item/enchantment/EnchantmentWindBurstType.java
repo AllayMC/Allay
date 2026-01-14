@@ -1,5 +1,6 @@
 package org.allaymc.server.item.enchantment;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.identifier.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.identifier.Identifier;
  */
 public class EnchantmentWindBurstType extends EnchantmentType {
     public EnchantmentWindBurstType() {
-        super(new Identifier("minecraft:wind_burst"), 38, 4, Rarity.RARE);
+        super(new Identifier("minecraft:wind_burst"), 38, 3, Rarity.RARE, ApplicableType.MACE);
     }
 
     @Override
