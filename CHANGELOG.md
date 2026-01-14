@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added method `Player.sendCooldown()`.
 - (API) Added event `ItemDamageEvent` which is called when an item is about to be damaged.
+- Implemented mending repairs from experience orbs.
 - (API) Implemented lingering potion and area effect cloud:
   - Added `EntityAreaEffectCloudBaseComponent` interface with radius, duration, and reapplication delay properties.
   - Added `EntityPotionComponent` interface for entities that hold potion types (splash potion, lingering potion, area effect cloud, arrow).
