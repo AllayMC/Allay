@@ -2551,7 +2551,7 @@ public class AllayPlayer implements Player {
         // VanillaVersion is the version of the game from which Vanilla features will be used
         packet.setVanillaVersion(ProtocolInfo.FEATURE_VERSION.getMinecraftVersion());
         // ServerEngine(aka.GameVersion) is the version of the game the server is running
-        packet.setServerEngine(AllayAPI.getInstance().getCoreName() + " - " + GitProperties.getBuildVersion());
+        packet.setServerEngine(AllayAPI.getInstance().getCoreName() + " " + GitProperties.getBuildVersion());
         packet.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
         packet.setInventoriesServerAuthoritative(true);
         packet.setServerAuthoritativeBlockBreaking(true);
