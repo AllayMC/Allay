@@ -2548,9 +2548,9 @@ public class AllayPlayer implements Player {
         packet.setLevelId(AllayServer.getSettings().genericSettings().motd());
         packet.setDefaultPlayerPermission(PlayerPermission.valueOf(AllayServer.getSettings().genericSettings().defaultPermission()));
         packet.setServerChunkTickRange(AllayServer.getSettings().worldSettings().tickRadius());
-        // VanillaVersion is the version of the game from which Vanilla features will be used
-        packet.setVanillaVersion(ProtocolInfo.FEATURE_VERSION.getMinecraftVersion());
-        // ServerEngine(aka.GameVersion) is the version of the game the server is running
+        // VanillaVersion is the version of the game from which Vanilla features will be used but * will allow a better compatibility with older client
+        packet.setVanillaVersion("*");
+        // ServerEngine For telemetry purposes send server name and version useful for Mojang's telemetry
         packet.setServerEngine(AllayAPI.getInstance().getCoreName() + " " + GitProperties.getBuildVersion());
         packet.setPremiumWorldTemplateId("00000000-0000-0000-0000-000000000000");
         packet.setInventoriesServerAuthoritative(true);
