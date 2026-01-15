@@ -28,7 +28,6 @@ public final class EnchantmentOptionGenerator {
     // TODO: this should be based on the total number of crafting recipes - if there are ever 100k recipes, this will conflict with regular recipes
     public static final int NETWORK_ID_COUNTER_INITIAL_VALUE = 100000;
 
-    // TODO: possible OOM attack here
     private static final NonBlockingHashMapLong<EnchantOption> ENCHANT_OPTIONS = new NonBlockingHashMapLong<>();
     private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(NETWORK_ID_COUNTER_INITIAL_VALUE);
     private static final int MAX_BOOKSHELF_COUNT = 15;
@@ -69,6 +68,17 @@ public final class EnchantmentOptionGenerator {
 
     public EnchantOption removeEnchantOption(int networkId) {
         return ENCHANT_OPTIONS.remove(networkId);
+    }
+
+    public void removeEnchantOptions(Iterable<Integer> networkIds) {
+        if (networkIds == null) {
+            return;
+        }
+        for (var networkId : networkIds) {
+            if (networkId != null) {
+                ENCHANT_OPTIONS.remove(networkId);
+            }
+        }
     }
 
     private static Pair<Integer, EnchantOption> createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredLapisLazuliCount, int requiredXpLevel) {

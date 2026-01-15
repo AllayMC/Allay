@@ -47,6 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where aabb not being updated in the physics engine due to missing `join()` call on parallel forEach.
 - Fixed a bug where sometimes the player can't respawn.
 - Fixed `PotionType` enum order where `STRONG_SLOWNESS` was incorrectly placed, causing potion effects to be mismatched (e.g., healing potion giving water breathing).
+- Fixed enchant table option cleanup when closing the table to avoid stale cached entries.
 - Fixed wind burst enchantment max level and applicable type.
 - Fixed 2x2 crafting grid.
 
