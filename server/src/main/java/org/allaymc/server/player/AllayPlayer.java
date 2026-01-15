@@ -96,7 +96,6 @@ import org.allaymc.server.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.server.eventbus.event.network.PacketSendEvent;
 import org.allaymc.server.network.NetworkData;
 import org.allaymc.server.network.NetworkHelper;
-import org.allaymc.server.network.ProtocolInfo;
 import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.multiversion.MultiVersionHelper;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
@@ -766,15 +765,66 @@ public class AllayPlayer implements Player {
             return;
         }
 
+        if (player.isActualPlayer()) {
+            viewActualPlayerSkin(player);
+        } else {
+            viewFakePlayerSkin(player);
+        }
+    }
+
+    // Send the skin of an actual player to the client. Actual player is already in the player list,
+    // so we can send player skin packet directly
+    protected void viewActualPlayerSkin(EntityPlayer player) {
+        var trustSkin = AllayServer.getSettings().resourcePackSettings().trustAllSkins();
         var skin = SkinConvertor.toSerializedSkin(player.getSkin());
+
         var packet = new PlayerSkinPacket();
         packet.setUuid(player.getUniqueId());
         packet.setSkin(skin);
         packet.setNewSkinName(skin.getSkinId());
-        // It seems that old skin name is unused
+        // It seems that the old skin name is unused
         packet.setOldSkinName("");
-        packet.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
+        packet.setTrustedSkin(trustSkin);
         sendPacket(packet);
+    }
+
+    // Send the skin of a fake player to the client, since the fake player is not in the player list,
+    // we should send a player list packet to the client first, so that the client won't ignore the
+    // next player skin packet.
+    // the fake player will be removed from the player list immediately client-side after we sent
+    // the skin
+    protected void viewFakePlayerSkin(EntityPlayer player) {
+        var trustSkin = AllayServer.getSettings().resourcePackSettings().trustAllSkins();
+        var skin = SkinConvertor.toSerializedSkin(player.getSkin());
+
+        var entry = new PlayerListPacket.Entry(player.getUniqueId());
+        entry.setEntityId(player.getRuntimeId());
+        entry.setName(player.getUniqueId().toString());
+        entry.setXuid("");
+        entry.setPlatformChatId("");
+        entry.setBuildPlatform(-1);
+        entry.setSkin(skin);
+        entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
+        entry.setColor(Color.WHITE);
+
+        var packet1 = new PlayerListPacket();
+        packet1.setAction(PlayerListPacket.Action.ADD);
+        packet1.getEntries().add(entry);
+        sendPacket(packet1);
+
+        var packet2 = new PlayerSkinPacket();
+        packet2.setUuid(player.getUniqueId());
+        packet2.setSkin(skin);
+        packet2.setNewSkinName(skin.getSkinId());
+        // It seems that the old skin name is unused
+        packet2.setOldSkinName("");
+        packet2.setTrustedSkin(trustSkin);
+        sendPacket(packet2);
+
+        var packet3 = new PlayerListPacket();
+        packet3.setAction(PlayerListPacket.Action.REMOVE);
+        packet3.getEntries().add(new PlayerListPacket.Entry(player.getUniqueId()));
+        sendPacket(packet3);
     }
 
     @Override
@@ -2371,23 +2421,18 @@ public class AllayPlayer implements Player {
         var packet = new PlayerListPacket();
         packet.setAction(add ? PlayerListPacket.Action.ADD : PlayerListPacket.Action.REMOVE);
         for (var player : players) {
-            packet.getEntries().add(buildEntry(player));
+            var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
+            entry.setEntityId(Preconditions.checkNotNull(player.getControlledEntity()).getRuntimeId());
+            entry.setName(player.getOriginName());
+            entry.setXuid(player.getLoginData().getXuid());
+            entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
+            entry.setBuildPlatform(player.getLoginData().getDeviceInfo().device().getId());
+            entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
+            entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
+            entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
+            packet.getEntries().add(entry);
         }
         sendPacket(packet);
-    }
-
-    protected PlayerListPacket.Entry buildEntry(Player player) {
-        var entry = new PlayerListPacket.Entry(player.getLoginData().getUuid());
-        var entity = Preconditions.checkNotNull(player.getControlledEntity());
-        entry.setEntityId(entity.getRuntimeId());
-        entry.setName(player.getOriginName());
-        entry.setXuid(player.getLoginData().getXuid());
-        entry.setPlatformChatId(player.getLoginData().getDeviceInfo().deviceName());
-        entry.setBuildPlatform(player.getLoginData().getDeviceInfo().device().getId());
-        entry.setSkin(SkinConvertor.toSerializedSkin(player.getLoginData().getSkin()));
-        entry.setTrustedSkin(AllayServer.getSettings().resourcePackSettings().trustAllSkins());
-        entry.setColor(new Color(player.getOriginName().hashCode() & 0xFFFFFF));
-        return entry;
     }
 
     @Override

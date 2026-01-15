@@ -12,6 +12,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 <small>[Compare with 0.10.5](https://github.com/AllayMC/Allay/compare/0.10.5...HEAD)</small>
 
+### Fixed
+
+- Fixed a bug where skin can't be set for fake player.
+
 # 0.10.5 (API 0.22.0) - 2026/1/15
 
 <small>[Compare with 0.10.4](https://github.com/AllayMC/Allay/compare/0.10.4...0.10.5)</small>
