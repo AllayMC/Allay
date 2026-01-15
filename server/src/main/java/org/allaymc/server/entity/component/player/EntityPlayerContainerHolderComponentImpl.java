@@ -10,6 +10,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
@@ -46,7 +47,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     @ComponentObject
     private EntityPlayer thisPlayer;
 
-    private final List<Integer> enchantOptionNetworkIds = new ArrayList<>();
+    private final List<Long> enchantOptions;
 
     public EntityPlayerContainerHolderComponentImpl() {
         super(
@@ -57,6 +58,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new EnderChestContainerImpl(),
                 new AnvilContainerImpl()
         );
+        this.enchantOptions = new ArrayList<>();
 
         var enchantTableContainer = new EnchantTableContainerImpl();
         enchantTableContainer.addSlotChangeListener(EnchantTableContainerImpl.INPUT_SLOT, item -> {
@@ -77,8 +79,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         if (thisPlayer.isActualPlayer()) {
-            var packet = new PlayerEnchantOptionsPacket();
             clearEnchantOptions();
+            var packet = new PlayerEnchantOptionsPacket();
             if (item != ItemAirStack.AIR_STACK) {
                 var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
                 var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions.stream().map(Pair::right).toList());
@@ -86,8 +88,10 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                     return;
                 }
 
-                enchantOptionNetworkIds.addAll(enchantOptions.stream().map(Pair::left).toList());
-                packet.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
+                for (var option : enchantOptions) {
+                    packet.getOptions().add(NetworkHelper.toNetwork(option));
+                    this.enchantOptions.add(Long.valueOf(option.left()));
+                }
             }
 
             thisPlayer.getController().sendPacket(packet);
@@ -95,11 +99,10 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     }
 
     private void clearEnchantOptions() {
-        if (enchantOptionNetworkIds.isEmpty()) {
-            return;
+        if (!this.enchantOptions.isEmpty()) {
+            EnchantmentOptionGenerator.removeEnchantOptions(this.enchantOptions);
+            this.enchantOptions.clear();
         }
-        EnchantmentOptionGenerator.removeEnchantOptions(enchantOptionNetworkIds);
-        enchantOptionNetworkIds.clear();
     }
 
     @Override

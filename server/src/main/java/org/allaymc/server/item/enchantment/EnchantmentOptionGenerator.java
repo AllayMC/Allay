@@ -13,6 +13,7 @@ import org.allaymc.server.utils.AllayRandom;
 import org.jctools.maps.NonBlockingHashMapLong;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -70,14 +71,9 @@ public final class EnchantmentOptionGenerator {
         return ENCHANT_OPTIONS.remove(networkId);
     }
 
-    public void removeEnchantOptions(Iterable<Integer> networkIds) {
-        if (networkIds == null) {
-            return;
-        }
-        for (var networkId : networkIds) {
-            if (networkId != null) {
-                ENCHANT_OPTIONS.remove(networkId);
-            }
+    public void removeEnchantOptions(Collection<Long> options) {
+        for (var option : options) {
+            ENCHANT_OPTIONS.remove(option);
         }
     }
 
