@@ -18,6 +18,7 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.AllayNetworkInterface;
+import org.allaymc.server.world.AllayDimension;
 import org.allaymc.server.utils.Utils;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -294,7 +295,12 @@ public class AllayPlayerManager implements PlayerManager {
 
             var entity = player.getControlledEntity();
             server.getMessageChannel().removeReceiver(entity);
-            entity.remove();
+            // Use dimension.removePlayer() instead of entity.remove() to also
+            // remove the player from the dimension's player list
+            var dimension = entity.getDimension();
+            if (dimension != null) {
+                ((AllayDimension) dimension).removePlayer(player);
+            }
             
             this.playerStorage.savePlayerData(player);
             broadcastPlayerListChange(player, false);
