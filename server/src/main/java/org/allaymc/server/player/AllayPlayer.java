@@ -915,11 +915,16 @@ public class AllayPlayer implements Player {
     }
 
     @Override
-    public void viewPlayerEmote(EntityPlayer player, UUID emoteId) {
+    public void viewPlayerEmote(EntityPlayer player, UUID emoteId, boolean silence) {
         var packet = new EmotePacket();
         packet.setRuntimeEntityId(player.getRuntimeId());
         packet.setEmoteId(emoteId.toString());
+        packet.setPlatformId("");
+        packet.setXuid("");
         packet.getFlags().add(EmoteFlag.SERVER_SIDE);
+        if (silence) {
+            packet.getFlags().add(EmoteFlag.MUTE_EMOTE_CHAT);
+        }
         sendPacket(packet);
     }
 

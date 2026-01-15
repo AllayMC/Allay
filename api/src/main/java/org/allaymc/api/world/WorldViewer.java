@@ -124,12 +124,27 @@ public interface WorldViewer extends DebugShapeViewer {
     void viewPlayerSkin(EntityPlayer player);
 
     /**
-     * Views an emote being performed by a player.
+     * Views an emote being performed by a player with the emote message shown in chat.
+     * <p>
+     * This is a convenience method that delegates to {@link #viewPlayerEmote(EntityPlayer, UUID, boolean)}
+     * with silence set to {@code false}.
      *
      * @param player  the player who performed the emote
      * @param emoteId the id of the emote
      */
-    void viewPlayerEmote(EntityPlayer player, UUID emoteId);
+    default void viewPlayerEmote(EntityPlayer player, UUID emoteId) {
+        viewPlayerEmote(player, emoteId, false);
+    }
+
+    /**
+     * Views an emote being performed by a player.
+     *
+     * @param player  the player who performed the emote
+     * @param emoteId the id of the emote
+     * @param silence whether the emote message should be shown in the chat screen. The emote message
+     *                is in the following format: {@literal <player_name> is <emote_name>.}
+     */
+    void viewPlayerEmote(EntityPlayer player, UUID emoteId, boolean silence);
 
     /**
      * Views the game mode of an {@link EntityPlayer}.
