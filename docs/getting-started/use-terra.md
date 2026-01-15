@@ -30,22 +30,45 @@ see the latest build. Download the artifact named `Terra-allay-<version>-shaded.
 ## Edit World Settings
 
 Next, we need to specify the terrain generator for the world as Terra instead of the built-in flat generator. For example,
-if we want to modify the generator of default world, just open `worlds/orld-settings.yml` and modify the following:
+if we want to modify the generator of default world, just open `worlds/world-settings.yml` and modify the following:
 
-```yml linenums="1" hl_lines="6-7"
-worlds:
-  world:
-    storage-type: LEVELDB
-    overworld:
-      generator-type: TERRA
-      generator-preset: pack=overworld;seed=114514
-    nether: null
-    the-end: null
-default-world: world
-```
+=== "Terra 7.0.0+"
 
-To set the pack used in Terra and seed, edit `generator-preset` and fill in the format in the example. Please note that `overworld`
-is Terra's default configuration package, which will be automatically downloaded when the plugin starts.
+    ```yml linenums="1" hl_lines="5-6 8-9 11-12"
+    worlds:
+      world:
+        storage-type: LEVELDB
+        overworld:
+          generator-type: TERRA
+          generator-preset: meta-pack=DEFAULT;seed=114514
+        nether:
+          generator-type: TERRA
+          generator-preset: meta-pack=DEFAULT;seed=114514
+        the-end:
+          generator-type: TERRA
+          generator-preset: meta-pack=DEFAULT;seed=114514
+    # The default world is the world that newly joined players will be in
+    default-world: world
+    ```
+
+    To set the pack used in Terra, edit `generator-preset`. The `DEFAULT` meta-pack is embedded in the plugin.
+
+=== "Terra < 7.0.0"
+
+    ```yml linenums="1" hl_lines="5-6"
+    worlds:
+      world:
+        storage-type: LEVELDB
+        overworld:
+          generator-type: TERRA
+          generator-preset: pack=overworld;seed=1919810
+        nether: null
+        the-end: null
+    default-world: world
+    ```
+
+    To set the pack used in Terra and seed, edit `generator-preset` and fill in the format in the example.
+    Please note that `overworld` is Terra's default configuration pack, which is embedded in the plugin.
 
 You may need to delete the old world files if the world is already generated. In this example, you should delete `worlds/world/db`.
 
