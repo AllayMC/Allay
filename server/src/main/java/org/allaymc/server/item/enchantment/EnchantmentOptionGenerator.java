@@ -13,6 +13,7 @@ import org.allaymc.server.utils.AllayRandom;
 import org.jctools.maps.NonBlockingHashMapLong;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -28,7 +29,6 @@ public final class EnchantmentOptionGenerator {
     // TODO: this should be based on the total number of crafting recipes - if there are ever 100k recipes, this will conflict with regular recipes
     public static final int NETWORK_ID_COUNTER_INITIAL_VALUE = 100000;
 
-    // TODO: possible OOM attack here
     private static final NonBlockingHashMapLong<EnchantOption> ENCHANT_OPTIONS = new NonBlockingHashMapLong<>();
     private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(NETWORK_ID_COUNTER_INITIAL_VALUE);
     private static final int MAX_BOOKSHELF_COUNT = 15;
@@ -69,6 +69,12 @@ public final class EnchantmentOptionGenerator {
 
     public EnchantOption removeEnchantOption(int networkId) {
         return ENCHANT_OPTIONS.remove(networkId);
+    }
+
+    public void removeEnchantOptions(Collection<Long> options) {
+        for (var option : options) {
+            ENCHANT_OPTIONS.remove(option);
+        }
     }
 
     private static Pair<Integer, EnchantOption> createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredLapisLazuliCount, int requiredXpLevel) {

@@ -10,6 +10,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
@@ -29,6 +30,8 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 import org.joml.primitives.AABBd;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -44,6 +47,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     @ComponentObject
     private EntityPlayer thisPlayer;
 
+    private final List<Long> enchantOptions;
+
     public EntityPlayerContainerHolderComponentImpl() {
         super(
                 new PlayerCreatedOutputContainerImpl(),
@@ -53,6 +58,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new EnderChestContainerImpl(),
                 new AnvilContainerImpl()
         );
+        this.enchantOptions = new ArrayList<>();
 
         var enchantTableContainer = new EnchantTableContainerImpl();
         enchantTableContainer.addSlotChangeListener(EnchantTableContainerImpl.INPUT_SLOT, item -> {
@@ -61,6 +67,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 onEnchantTableContainerInputItemChange(item, new Position3i(blockPos, thisPlayer.getDimension()));
             }
         });
+        enchantTableContainer.addCloseListener(viewer -> clearEnchantOptions());
         addContainer(enchantTableContainer);
 
         // We shouldn't provide the player object directly, because at that time 'thisPlayer' is null
@@ -72,6 +79,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         if (thisPlayer.isActualPlayer()) {
+            clearEnchantOptions();
             var packet = new PlayerEnchantOptionsPacket();
             if (item != ItemAirStack.AIR_STACK) {
                 var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
@@ -80,10 +88,20 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                     return;
                 }
 
-                packet.getOptions().addAll(enchantOptions.stream().map(NetworkHelper::toNetwork).toList());
+                for (var option : enchantOptions) {
+                    packet.getOptions().add(NetworkHelper.toNetwork(option));
+                    this.enchantOptions.add(Long.valueOf(option.left()));
+                }
             }
 
             thisPlayer.getController().sendPacket(packet);
+        }
+    }
+
+    private void clearEnchantOptions() {
+        if (!this.enchantOptions.isEmpty()) {
+            EnchantmentOptionGenerator.removeEnchantOptions(this.enchantOptions);
+            this.enchantOptions.clear();
         }
     }
 
