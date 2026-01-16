@@ -139,30 +139,31 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                     .build());
         }
 
-        // minecraft:destructible_by_mining - calculated from BlockStateData.hardness
-        var destroyTime = calculateDestroyTime(blockStateData.hardness());
-        if (destroyTime != null && destroyTime >= 0) {
-            components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
-                    .putFloat("value", destroyTime)
-                    .build());
-        }
-
-        // minecraft:destructible_by_explosion - from BlockStateData.explosionResistance
-        if (blockStateData.explosionResistance() >= 0) {
-            components.putCompound("minecraft:destructible_by_explosion", NbtMap.builder()
-                    .putFloat("explosion_resistance", blockStateData.explosionResistance())
-                    .build());
-        }
-
         // minecraft:transformation
         if (transformation != null) {
             components.putCompound("minecraft:transformation", transformation.toNBT());
         }
 
-        // minecraft:map_color - from BlockStateData.mapColor
-        components.putCompound("minecraft:map_color", NbtMap.builder()
-                .putString("color", String.format("#%06X", blockStateData.mapColor().getRGB() & 0xFFFFFF))
-                .build());
+        // TODO: check if these components are necessary
+//        // minecraft:destructible_by_mining - calculated from BlockStateData.hardness
+//        var destroyTime = calculateDestroyTime(blockStateData.hardness());
+//        if (destroyTime != null && destroyTime >= 0) {
+//            components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
+//                    .putFloat("value", destroyTime)
+//                    .build());
+//        }
+//
+//        // minecraft:destructible_by_explosion - from BlockStateData.explosionResistance
+//        if (blockStateData.explosionResistance() >= 0) {
+//            components.putCompound("minecraft:destructible_by_explosion", NbtMap.builder()
+//                    .putFloat("explosion_resistance", blockStateData.explosionResistance())
+//                    .build());
+//        }
+//
+//        // minecraft:map_color - from BlockStateData.mapColor
+//        components.putCompound("minecraft:map_color", NbtMap.builder()
+//                .putString("color", String.format("#%06X", blockStateData.mapColor().getRGB() & 0xFFFFFF))
+//                .build());
 
         // Custom components
         if (customComponents != null) {

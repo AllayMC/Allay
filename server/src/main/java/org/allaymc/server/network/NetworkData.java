@@ -9,6 +9,7 @@ import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.block.type.CustomBlockDefinitionGenerator;
 import org.allaymc.server.item.recipe.ComplexRecipe;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.registry.InternalRegistries;
@@ -104,7 +105,7 @@ public final class NetworkData {
                             .putString("category", "none")
                             .putString("group", "")
                             .build())
-                    .putInt("molangVersion", blockDefinition.data().getInt("molangVersion", 9))
+                    .putInt("molangVersion", blockDefinition.data().getInt("molangVersion", CustomBlockDefinitionGenerator.MOLANG_VERSION))
                     .putList("properties", NbtType.COMPOUND, blockDefinition.properties())
                     .build();
 
