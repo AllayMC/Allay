@@ -37,6 +37,16 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[AllayNPC]
+description = "NPC plugin for AllayMC."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/AllayNPC"
+
+[ForceCape]
+description = "An allay plugin that force set player's cape."
+authors = ["daoge_cmd"]
+github = "https://github.com/smartcmd/ForceCape"
+
 [ItemNameTag]
 description = "Make item's nametag visible!"
 authors = ["daoge_cmd"]
