@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Fixed
 
+- Fixed a bug where `NpcDialoguePacket` used `RuntimeEntityId` instead of `UniqueEntityId`, causing NPC dialogs to not display for non-actual players (e.g., fake players created by plugins).
 - Fixed a bug where skin can't be set for fake player.
 - Fixed duplicate "Client disconnected" messages during server shutdown caused by players not being removed from the dimension's player list when disconnecting.
 - Fixed method `WorldViewer.viewPlayerEmote` not working.

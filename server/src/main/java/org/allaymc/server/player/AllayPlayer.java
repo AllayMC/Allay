@@ -2576,7 +2576,7 @@ public class AllayPlayer implements Player {
         var packet = new StartGamePacket();
 
         packet.getGamerules().addAll(NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameRules().getGameRules()));
-        packet.setUniqueEntityId(this.controlledEntity.getRuntimeId());
+        packet.setUniqueEntityId(this.controlledEntity.getUniqueId().getLeastSignificantBits());
         packet.setRuntimeEntityId(this.controlledEntity.getRuntimeId());
         packet.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", NetworkHelper.toNetwork(spawnWorld.getWorldData().getGameMode()).ordinal())));
         var loc = this.controlledEntity.getLocation();
@@ -2707,7 +2707,7 @@ public class AllayPlayer implements Player {
         sendPacket(packet1);
 
         var packet2 = new NpcDialoguePacket();
-        packet2.setUniqueEntityId(entity.getRuntimeId());
+        packet2.setUniqueEntityId(entity.getUniqueId().getLeastSignificantBits());
         packet2.setAction(NpcDialoguePacket.Action.OPEN);
         packet2.setDialogue(dialog.getBody());
         packet2.setSceneName("default");
@@ -2733,7 +2733,7 @@ public class AllayPlayer implements Player {
         }
 
         var packet = new NpcDialoguePacket();
-        packet.setUniqueEntityId(this.dialog.right().getRuntimeId());
+        packet.setUniqueEntityId(this.dialog.right().getUniqueId().getLeastSignificantBits());
         packet.setDialogue("");
         packet.setSceneName("");
         packet.setNpcName("");
