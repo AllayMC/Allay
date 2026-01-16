@@ -18,9 +18,19 @@ public enum ThreadType {
      */
     SERVER,
     /**
-     * The ticking thread of a world. Each world has its own ticking thread.
+     * The ticking thread of a world. Each world has its own ticking thread. World tick does some
+     * simple things like updating the time and the weather of the whole world.
      */
     WORLD,
+    /**
+     * The ticking thread of a dimension. Ticks between different dimensions in the same world
+     * are in parallel.
+     * <p>
+     * The world tick always completes before the dimension tick begins, and the world tick waits
+     * for all dimensions in the current world to finish their ticks before proceeding to the next
+     * tick. These two ticks never run concurrently.
+     */
+    DIMENSION,
     /**
      * The light thread which handles sky and block light calculation in a dimension. Each
      * dimension has a number of light threads.
@@ -33,8 +43,7 @@ public enum ThreadType {
     /**
      * The thread in the compute thread pool {@link Server#getComputeThreadPool()} or
      * {@link ForkJoinPool#commonPool()}. Compute threads are used in world generation and
-     * entity physics calculation. Dimension tick is also running on the compute thread
-     * pool if the world has more than one dimension.
+     * entity physics calculation.
      */
     COMPUTE,
     /**
