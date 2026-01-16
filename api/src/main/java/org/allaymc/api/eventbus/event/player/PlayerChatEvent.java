@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
     protected String header;
     protected String message;

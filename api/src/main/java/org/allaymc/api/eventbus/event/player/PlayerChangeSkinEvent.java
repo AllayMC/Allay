@@ -14,7 +14,7 @@ import org.allaymc.api.player.Skin;
  * @author daoge_cmd | Dhaiven
  */
 @Getter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerChangeSkinEvent extends PlayerEvent implements CancellableEvent {
     protected Skin oldSkin;
     @Setter

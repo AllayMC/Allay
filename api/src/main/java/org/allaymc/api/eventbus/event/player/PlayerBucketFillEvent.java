@@ -11,7 +11,7 @@ import org.allaymc.api.item.interfaces.ItemBucketStack;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerBucketFillEvent extends PlayerBucketEvent {
     public PlayerBucketFillEvent(EntityPlayer player, ItemBucketStack bucketStack, PlayerInteractInfo interactInfo) {
         super(player, bucketStack, interactInfo);

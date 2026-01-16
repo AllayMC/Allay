@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class SignTextChangeEvent extends BlockEvent implements CancellableEvent {
     protected String[] text;
     protected EntityPlayer editor;

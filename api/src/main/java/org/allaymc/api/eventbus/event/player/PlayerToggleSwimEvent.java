@@ -11,7 +11,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerToggleSwimEvent extends PlayerEvent {
     protected boolean value;
 

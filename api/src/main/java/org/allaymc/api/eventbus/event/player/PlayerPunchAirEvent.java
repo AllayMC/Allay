@@ -9,7 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerPunchAirEvent extends PlayerEvent {
     public PlayerPunchAirEvent(EntityPlayer player) {
         super(player);

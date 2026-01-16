@@ -13,6 +13,7 @@ import org.allaymc.api.item.type.ItemType;
  * @author daoge_cmd
  */
 @Getter
+@CallerThread(ThreadType.WORLD)
 @CallerThread(ThreadType.DIMENSION)
 public class ContainerItemMoveEvent extends ContainerEvent implements CancellableEvent {
     protected Container source;

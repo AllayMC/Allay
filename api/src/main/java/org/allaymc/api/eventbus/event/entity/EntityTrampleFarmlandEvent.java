@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.COMPUTE)
+@CallerThread(ThreadType.DIMENSION)
 public class EntityTrampleFarmlandEvent extends EntityEvent implements CancellableEvent {
 
     protected Block block;

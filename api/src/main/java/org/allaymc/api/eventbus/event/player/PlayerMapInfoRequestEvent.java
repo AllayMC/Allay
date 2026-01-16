@@ -14,7 +14,7 @@ import org.allaymc.api.item.interfaces.ItemFilledMapStack;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerMapInfoRequestEvent extends PlayerEvent implements CancellableEvent {
     /**
      * The map item that the player requested data for.

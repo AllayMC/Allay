@@ -10,7 +10,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerStartUseItemInAirEvent extends PlayerEvent implements CancellableEvent {
     public PlayerStartUseItemInAirEvent(EntityPlayer player) {
         super(player);

@@ -14,7 +14,7 @@ import org.allaymc.api.container.ContainerViewer;
  */
 @AllArgsConstructor
 @Getter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class ContainerCloseEvent extends ContainerEvent {
     protected ContainerViewer viewer;
     protected Container container;

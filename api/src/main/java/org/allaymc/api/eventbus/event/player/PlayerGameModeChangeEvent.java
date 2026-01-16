@@ -14,7 +14,7 @@ import org.allaymc.api.player.GameMode;
  * @author daoge_cmd | Dhaiven
  */
 @Getter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class PlayerGameModeChangeEvent extends PlayerEvent implements CancellableEvent {
     protected GameMode oldGameMode;
     @Setter

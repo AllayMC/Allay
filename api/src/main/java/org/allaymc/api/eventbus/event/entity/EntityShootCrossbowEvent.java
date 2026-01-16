@@ -15,7 +15,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.DIMENSION)
+@CallerThread(ThreadType.WORLD)
 public class EntityShootCrossbowEvent extends EntityEvent implements CancellableEvent {
     /**
      * The crossbow item used to shoot the projectiles.

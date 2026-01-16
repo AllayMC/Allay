@@ -14,7 +14,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
-- (API) Added a overload to method `WorldViewer.viewPlayerEmote` which accepts a boolean `silence` parameter.
+- (API) Added a new overload to method `WorldViewer.viewPlayerEmote` which accepts a boolean `silence` parameter.
+- (API) Introduced new thread type `ThreadType.DIMENSION` which responses the ticking thread of a dimension.
 
 ### Fixed
 
