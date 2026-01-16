@@ -51,6 +51,14 @@ public final class PacketProcessorHolder {
     // We use lock here because this method won't be called frequently
     // Instead, method getClientState() will be called frequently
     public synchronized boolean setClientState(ClientState clientState, boolean warnIfFailed) {
+        // Already in the target state
+        if (this.clientState == clientState) {
+            if (warnIfFailed) {
+                log.warn("Client state is already in {}", this.clientState);
+            }
+            return false;
+        }
+
         // PreviousState != null means that we should check if the previous state is correct
         if (clientState.getPreviousState() != null && this.clientState != clientState.getPreviousState()) {
             if (warnIfFailed) {

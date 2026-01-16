@@ -23,6 +23,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed a bug where skin can't be set for fake player.
 - Fixed duplicate "Client disconnected" messages during server shutdown caused by players not being removed from the dimension's player list when disconnecting.
 - Fixed method `WorldViewer.viewPlayerEmote` not working.
+- Fixed duplicate player quit messages caused by `DISCONNECTED` state being set multiple times due to missing state check in `PacketProcessorHolder.setClientState()`.
 
 # 0.10.5 (API 0.22.0) - 2026/1/15
 
