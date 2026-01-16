@@ -11,7 +11,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerToggleFlightEvent extends PlayerEvent {
     protected boolean value;
 

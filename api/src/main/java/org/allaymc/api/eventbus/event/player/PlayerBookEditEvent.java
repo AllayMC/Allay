@@ -13,7 +13,7 @@ import org.allaymc.api.item.interfaces.ItemWritableBookStack;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerBookEditEvent extends PlayerEvent implements CancellableEvent {
 
     protected final ItemWritableBookStack book;

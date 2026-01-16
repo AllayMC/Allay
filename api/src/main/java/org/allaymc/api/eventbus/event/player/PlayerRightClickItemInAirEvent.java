@@ -12,7 +12,7 @@ import org.allaymc.api.item.ItemStack;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerRightClickItemInAirEvent extends PlayerEvent implements CancellableEvent {
     public PlayerRightClickItemInAirEvent(EntityPlayer player) {
         super(player);

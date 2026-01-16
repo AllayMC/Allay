@@ -14,7 +14,7 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.ANY)
+@CallerThread(ThreadType.DIMENSION)
 public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
     /**
      * The item used to break the block. Can be {@code null}.

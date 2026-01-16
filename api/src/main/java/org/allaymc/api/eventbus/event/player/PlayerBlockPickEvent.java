@@ -15,7 +15,7 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerBlockPickEvent extends PlayerEvent implements CancellableEvent {
     protected Block clickedBlock;
     @Setter

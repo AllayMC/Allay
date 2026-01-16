@@ -10,7 +10,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class BlockScheduleUpdateEvent extends BlockEvent implements CancellableEvent {
     public BlockScheduleUpdateEvent(Block block) {
         super(block);

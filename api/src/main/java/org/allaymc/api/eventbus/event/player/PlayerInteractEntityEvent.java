@@ -15,7 +15,7 @@ import org.joml.Vector3fc;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerInteractEntityEvent extends PlayerEvent implements CancellableEvent {
 
     /**

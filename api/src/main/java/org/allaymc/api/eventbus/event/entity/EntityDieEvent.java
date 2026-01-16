@@ -9,7 +9,7 @@ import org.allaymc.api.entity.Entity;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class EntityDieEvent extends EntityEvent {
     public EntityDieEvent(Entity entity) {
         super(entity);

@@ -16,7 +16,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerEnchantOptionsRequestEvent extends PlayerEvent implements CancellableEvent {
 
     /**

@@ -14,7 +14,7 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class EntityShootBowEvent extends EntityEvent implements CancellableEvent {
     /**
      * The bow item used to shoot the arrow.

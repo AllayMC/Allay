@@ -12,7 +12,7 @@ import org.allaymc.api.item.recipe.Recipe;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerCraftItemEvent extends PlayerEvent implements CancellableEvent {
     /**
      * The recipe that the player used to craft the item.

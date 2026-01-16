@@ -14,7 +14,7 @@ import org.allaymc.api.math.location.Location3dc;
  * @author daoge_cmd | Dhaiven
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
     protected Location3dc from;
     protected Location3dc to;

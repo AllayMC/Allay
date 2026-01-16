@@ -10,7 +10,7 @@ import org.allaymc.api.entity.effect.EffectInstance;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class EntityEffectRemoveEvent extends EntityEffectEvent {
     public EntityEffectRemoveEvent(Entity entity, EffectInstance effect) {
         super(entity, effect);

@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerUseItemInAirEvent extends PlayerEvent implements CancellableEvent {
 
     /**

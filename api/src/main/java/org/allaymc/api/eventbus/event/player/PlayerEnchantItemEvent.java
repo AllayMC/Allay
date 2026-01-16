@@ -17,7 +17,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerEnchantItemEvent extends PlayerEvent implements CancellableEvent {
 
     protected ItemStack itemStack;

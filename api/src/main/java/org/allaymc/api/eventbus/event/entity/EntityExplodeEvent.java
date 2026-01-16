@@ -18,7 +18,7 @@ import org.allaymc.api.world.explosion.Explosion;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class EntityExplodeEvent extends EntityEvent implements CancellableEvent {
     /**
      * The explosion.

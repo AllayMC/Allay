@@ -15,7 +15,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @AllArgsConstructor
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class BrewingStandStartBrewEvent extends ContainerEvent implements CancellableEvent {
     protected BlockEntityBrewingStand brewingStand;
     @Setter

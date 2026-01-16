@@ -15,7 +15,7 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class LiquidHardenEvent extends BlockEvent implements CancellableEvent {
     /**
      * Represent the liquid that cause the hardening.

@@ -17,7 +17,7 @@ import org.allaymc.api.item.ItemStack;
  */
 @Getter
 @AllArgsConstructor
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class GrindstoneTakeResultEvent extends ContainerEvent implements CancellableEvent {
     protected ContainerViewer viewer;
     protected GrindstoneContainer container;

@@ -11,7 +11,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  *
  * @author daoge_cmd
  */
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class BlockRandomUpdateEvent extends BlockEvent implements CancellableEvent {
     public BlockRandomUpdateEvent(Block block) {
         super(block);

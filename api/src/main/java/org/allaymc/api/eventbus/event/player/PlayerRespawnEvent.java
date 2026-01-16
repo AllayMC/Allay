@@ -14,7 +14,7 @@ import org.allaymc.api.math.location.Location3ic;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerRespawnEvent extends PlayerEvent {
     /**
      * The respawn location of the player.

@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 @Setter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class FireworkExplodeEvent extends EntityEvent implements CancellableEvent {
     /**
      * The force of the explosion. Bigger force would cause bigger damage to the affected entities.

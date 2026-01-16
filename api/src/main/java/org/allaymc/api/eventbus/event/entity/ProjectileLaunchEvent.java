@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class ProjectileLaunchEvent extends EntityEvent implements CancellableEvent {
 
     /**

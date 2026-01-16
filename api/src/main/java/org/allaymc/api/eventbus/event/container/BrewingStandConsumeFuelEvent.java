@@ -15,7 +15,7 @@ import org.allaymc.api.item.ItemStack;
  */
 @Getter
 @AllArgsConstructor
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class BrewingStandConsumeFuelEvent extends ContainerEvent implements CancellableEvent {
     protected BlockEntityBrewingStand brewingStand;
     protected ItemStack fuel;

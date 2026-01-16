@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  * @author daoge_cmd | Dhaiven
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerFoodLevelChangeEvent extends PlayerEvent implements CancellableEvent {
     protected int oldFoodLevel;
     @Setter

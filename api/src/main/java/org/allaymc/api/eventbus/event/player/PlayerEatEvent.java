@@ -13,7 +13,7 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
-@CallerThread(ThreadType.WORLD)
+@CallerThread(ThreadType.DIMENSION)
 public class PlayerEatEvent extends PlayerEvent implements CancellableEvent {
     protected ItemStack edible;
 
