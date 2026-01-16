@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 - (API) Added a new overload to method `WorldViewer.viewPlayerEmote` which accepts a boolean `silence` parameter.
 - (API) Introduced new thread type `ThreadType.DIMENSION` which responses the ticking thread of a dimension.
+- (API) Added events `PlayerPickupItemEvent` and `PlayerPickupArrowEvent` for player picking up item and arrow entities.
 
 ### Fixed
 

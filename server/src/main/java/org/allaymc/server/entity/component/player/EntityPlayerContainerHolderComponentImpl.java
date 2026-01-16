@@ -9,6 +9,8 @@ import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPickupArrowEvent;
+import org.allaymc.api.eventbus.event.player.PlayerPickupItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantOption;
 import org.allaymc.api.item.interfaces.ItemAirStack;
@@ -167,6 +169,12 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 continue;
             }
 
+            var event = new PlayerPickupItemEvent(thisPlayer, entityItem);
+            if (!event.call()) {
+                // Event was cancelled, skip pickup
+                continue;
+            }
+
             var inventory = Objects.requireNonNull(getContainer(ContainerTypes.INVENTORY));
             var slot = inventory.tryAddItem(item);
             if (slot == -1) {
@@ -205,9 +213,16 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 continue;
             }
 
-            var arrow = ItemTypes.ARROW.createItemStack(1);
-            arrow.setPotionType(entityArrow.getPotionType());
-            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrow) != -1) {
+            var arrowItem = ItemTypes.ARROW.createItemStack(1);
+            arrowItem.setPotionType(entityArrow.getPotionType());
+
+            var event = new PlayerPickupArrowEvent(thisPlayer, entityArrow, arrowItem);
+            if (!event.call()) {
+                // Event was cancelled, skip pickup
+                continue;
+            }
+
+            if (thisPlayer.getContainer(ContainerTypes.INVENTORY).tryAddItem(arrowItem) != -1) {
                 entityArrow.applyAction(new PickedUpAction(thisPlayer));
                 entityArrow.remove();
             }
