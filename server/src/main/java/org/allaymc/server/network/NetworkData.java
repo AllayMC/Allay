@@ -10,9 +10,12 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.item.recipe.ComplexRecipe;
+import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
 import org.cloudburstmc.protocol.bedrock.data.TrimMaterial;
 import org.cloudburstmc.protocol.bedrock.data.TrimPattern;
@@ -53,6 +56,7 @@ public final class NetworkData {
 
     public static final Supplier<List<ItemDefinition>> ITEM_DEFINITIONS = Suppliers.memoize(NetworkData::encodeItemDefinitions);
     public static final Supplier<List<BlockDefinition>> BLOCK_DEFINITIONS = Suppliers.memoize(NetworkData::encodeBlockDefinitions);
+    public static final Supplier<List<BlockPropertyData>> CUSTOM_BLOCK_PROPERTIES = Suppliers.memoize(NetworkData::encodeCustomBlockProperties);
     public static final Supplier<List<ExperimentData>> EXPERIMENT_DATA_LIST = Suppliers.memoize(NetworkData::encodeExperimentDataList);
 
     public static final Supplier<ItemComponentPacket> ITEM_REGISTRY_PACKET = Suppliers.memoize(NetworkData::encodeItemRegistryPacket);
@@ -75,6 +79,39 @@ public final class NetworkData {
                 .flatMap(block -> block.getAllStates().stream())
                 .map(blockState -> (BlockDefinition) blockState::blockStateHash)
                 .toList();
+    }
+
+    /**
+     * Encodes custom block property definitions for the StartGamePacket.
+     * This is required for the client to understand custom block components and states.
+     *
+     * @return a list of BlockPropertyData containing custom block definitions
+     */
+    public static List<BlockPropertyData> encodeCustomBlockProperties() {
+        var result = new ArrayList<BlockPropertyData>();
+
+        for (var blockType : Registries.BLOCKS.getContent().values()) {
+            var allayBlockType = (AllayBlockType<?>) blockType;
+            var blockDefinition = allayBlockType.getBlockDefinition();
+
+            if (blockDefinition == org.allaymc.server.block.type.BlockDefinition.DEFAULT) {
+                continue; // Skip vanilla blocks
+            }
+
+            var blockNbt = NbtMap.builder()
+                    .putCompound("components", blockDefinition.data().getCompound("components"))
+                    .putCompound("menu_category", NbtMap.builder()
+                            .putString("category", "none")
+                            .putString("group", "")
+                            .build())
+                    .putInt("molangVersion", blockDefinition.data().getInt("molangVersion", 9))
+                    .putList("properties", NbtType.COMPOUND, blockDefinition.properties())
+                    .build();
+
+            result.add(new BlockPropertyData(blockType.getIdentifier().toString(), blockNbt));
+        }
+
+        return result;
     }
 
     public static List<ExperimentData> encodeExperimentDataList() {

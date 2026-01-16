@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
+import org.allaymc.api.block.component.BlockStateDataComponent;
+import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.BlockTag;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
@@ -52,6 +54,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     private BlockState defaultState;
     private T blockBehavior;
+    private BlockDefinition blockDefinition;
 
     private AllayBlockType(
             Map<String, BlockPropertyType<?>> properties,
@@ -198,6 +201,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         this.identifier,
                         properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
                 ));
+        protected BlockDefinitionGenerator blockDefinitionGenerator = ($1, $2) -> BlockDefinition.DEFAULT;
 
         public Builder(Class<?> clazz) {
             if (clazz == null) {
@@ -298,17 +302,27 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
+        public Builder blockDefinitionGenerator(BlockDefinitionGenerator blockDefinitionGenerator) {
+            this.blockDefinitionGenerator = blockDefinitionGenerator;
+            return this;
+        }
+
         public <T extends BlockBehavior> AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
+
+            if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER)) {
+                components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofDefault());
+            }
+
             var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, defaultStateSupplier);
+            var blockStateDataComponent = (BlockStateDataComponent) components.get(BlockStateDataComponentImpl.IDENTIFIER);
+            var defaultBlockStateData = blockStateDataComponent.getBlockStateData(type.getDefaultState());
+            type.blockDefinition = blockDefinitionGenerator.generate(type, defaultBlockStateData);
 
             var listComponents = new ArrayList<>(components.values());
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER)) {
                 listComponents.add(baseComponentSupplier.apply(type));
-            }
-            if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER)) {
-                listComponents.add(BlockStateDataComponentImpl.ofDefault());
             }
 
             List<ComponentProvider<? extends Component>> componentProviderList = listComponents.stream().map(singleton -> ComponentProvider.of($ -> singleton, singleton.getClass())).collect(Collectors.toList());
