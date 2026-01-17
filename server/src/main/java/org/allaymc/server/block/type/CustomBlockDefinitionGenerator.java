@@ -195,16 +195,16 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         return Box.fromAABB(aabb);
     }
 
-    /**
-     * Calculates destroy time from hardness.
-     * In Bedrock, destroy time is approximately hardness * 1.5 for most blocks.
-     */
-    private Float calculateDestroyTime(float hardness) {
-        if (hardness < 0) {
-            return null; // Unbreakable
-        }
-        return hardness * 1.5f;
-    }
+//    /**
+//     * Calculates destroy time from hardness.
+//     * In Bedrock, destroy time is approximately hardness * 1.5 for most blocks.
+//     */
+//    private Float calculateDestroyTime(float hardness) {
+//        if (hardness < 0) {
+//            return null; // Unbreakable
+//        }
+//        return hardness * 1.5f;
+//    }
 
     /**
      * Builds property definitions from the block type's properties.
@@ -247,16 +247,15 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         return builder.build();
     }
 
-    // ==================== Inner Classes ====================
-
     /**
      * Represents a material instance for a block face.
      *
      * @param texture          the texture name from the resource pack
-     * @param renderMethod     the render method to use
-     * @param faceDimming      whether face dimming is enabled (default true)
-     * @param ambientOcclusion whether ambient occlusion is enabled (default true)
+     * @param renderMethod     the render method to use (default: OPAQUE)
+     * @param faceDimming      whether face dimming is enabled (default: true)
+     * @param ambientOcclusion whether ambient occlusion is enabled (default: true)
      */
+    @Builder
     public record MaterialInstance(
             String texture,
             RenderMethod renderMethod,
@@ -273,10 +272,6 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
             }
         }
 
-        public static MaterialInstanceBuilder builder() {
-            return new MaterialInstanceBuilder();
-        }
-
         public NbtMap toNBT() {
             return NbtMap.builder()
                     .putString("texture", texture)
@@ -284,37 +279,6 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                     .putBoolean("face_dimming", faceDimming)
                     .putBoolean("ambient_occlusion", ambientOcclusion)
                     .build();
-        }
-
-        public static class MaterialInstanceBuilder {
-            private String texture;
-            private RenderMethod renderMethod = RenderMethod.OPAQUE;
-            private boolean faceDimming = true;
-            private boolean ambientOcclusion = true;
-
-            public MaterialInstanceBuilder texture(String texture) {
-                this.texture = texture;
-                return this;
-            }
-
-            public MaterialInstanceBuilder renderMethod(RenderMethod renderMethod) {
-                this.renderMethod = renderMethod;
-                return this;
-            }
-
-            public MaterialInstanceBuilder faceDimming(boolean faceDimming) {
-                this.faceDimming = faceDimming;
-                return this;
-            }
-
-            public MaterialInstanceBuilder ambientOcclusion(boolean ambientOcclusion) {
-                this.ambientOcclusion = ambientOcclusion;
-                return this;
-            }
-
-            public MaterialInstance build() {
-                return new MaterialInstance(texture, renderMethod, faceDimming, ambientOcclusion);
-            }
         }
     }
 
