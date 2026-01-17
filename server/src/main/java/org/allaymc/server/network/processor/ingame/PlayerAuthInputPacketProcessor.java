@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Cool_Loong
+ * @author Cool_Loong | daoge_cmd
  */
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
