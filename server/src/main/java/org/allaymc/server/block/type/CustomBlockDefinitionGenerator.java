@@ -109,22 +109,18 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .putByte("lightLevel", (byte) blockStateData.lightDampening())
                 .build());
 
+        // See https://learn.microsoft.com/en-us/minecraft/creator/reference/content/blockreference/examples/blockcomponents/minecraftblock_friction
         components.putCompound("minecraft:friction", NbtMap.builder()
-                .putFloat("value", 1 - blockStateData.friction())
+                .putFloat("value", Math.clamp(1 - blockStateData.friction(), 0.0f, 0.9f))
                 .build());
 
         // Block breaking is fully server authed, so let just set a extra big value here
         components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
-                .putFloat("value", calculateDestroyTime(blockStateData.hardness()))
+                .putFloat("value", 99999f)
                 .build());
 
-        var mapColor = blockStateData.mapColor();
-        if (mapColor != null) {
-            int rgb = mapColor.getRGB() & 0xFFFFFF;
-            if (rgb == 0) {
-                rgb = 0xFFFFFF;
-            }
-            components.putString("minecraft:map_color", String.format("#%06X", rgb));
+        for (var tag : blockType.getBlockTags()) {
+            components.putCompound("tag:" + tag.name(), NbtMap.EMPTY);
         }
 
         if (transformation != null) {
@@ -195,14 +191,6 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .putString("group", "")
                 .putByte("is_hidden_in_commands", (byte) 0)
                 .build();
-    }
-
-    private float calculateDestroyTime(float hardness) {
-        if (hardness < 0) {
-            return -1.0f;
-        }
-
-        return hardness * 1.5f;
     }
 
     /**
