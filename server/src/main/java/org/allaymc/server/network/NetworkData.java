@@ -101,10 +101,10 @@ public final class NetworkData {
 
             var blockNbt = NbtMap.builder()
                     .putCompound("components", blockDefinition.data().getCompound("components"))
-                    .putCompound("menu_category", NbtMap.builder()
-                            .putString("category", "none")
-                            .putString("group", "")
-                            .build())
+//                    .putCompound("menu_category", NbtMap.builder()
+//                            .putString("category", "none")
+//                            .putString("group", "")
+//                            .build())
                     .putInt("molangVersion", blockDefinition.data().getInt("molangVersion", CustomBlockDefinitionGenerator.MOLANG_VERSION))
                     .putList("properties", NbtType.COMPOUND, blockDefinition.properties())
                     .build();

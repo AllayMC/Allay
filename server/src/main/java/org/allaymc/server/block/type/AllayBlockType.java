@@ -201,7 +201,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         this.identifier,
                         properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
                 ));
-        protected BlockDefinitionGenerator blockDefinitionGenerator = ($1, $2) -> BlockDefinition.DEFAULT;
+        protected BlockDefinitionGenerator blockDefinitionGenerator = $ -> BlockDefinition.DEFAULT;
 
         public Builder(Class<?> clazz) {
             if (clazz == null) {
@@ -332,9 +332,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             }
 
             // Generate block definition after we initialized the block behavior instance
-            var blockStateDataComponent = (BlockStateDataComponent) components.get(BlockStateDataComponentImpl.IDENTIFIER);
-            var defaultBlockStateData = blockStateDataComponent.getBlockStateData(type.getDefaultState());
-            type.blockDefinition = blockDefinitionGenerator.generate(type, defaultBlockStateData);
+            type.blockDefinition = blockDefinitionGenerator.generate(type);
 
             Registries.BLOCKS.register(type.getIdentifier(), type);
             for (var blockState : type.blockStateHashMap.values()) {

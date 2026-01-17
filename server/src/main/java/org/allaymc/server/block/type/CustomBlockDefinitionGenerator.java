@@ -36,6 +36,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
      * The Molang version used for custom blocks.
      */
     public static final int MOLANG_VERSION = 9;
+    private static final String DEFAULT_GEOMETRY = "minecraft:geometry.full_block";
 
     /**
      * The display name shown in the inventory and tooltips.
@@ -67,7 +68,8 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
     protected final Map<String, NbtMap> customComponents;
 
     @Override
-    public BlockDefinition generate(BlockType<?> blockType, BlockStateData blockStateData) {
+    public BlockDefinition generate(BlockType<?> blockType) {
+        var blockStateData = blockType.getDefaultState().getBlockStateData();
         var components = NbtMap.builder();
 
         // minecraft:display_name
@@ -76,17 +78,18 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .build());
 
         // minecraft:geometry
-        if (geometry != null) {
-            components.putCompound("minecraft:geometry", NbtMap.builder()
-                    .putString("identifier", geometry)
-                    .build());
-        }
+        components.putCompound("minecraft:geometry", NbtMap.builder()
+                .putString("identifier", geometry != null ? geometry : DEFAULT_GEOMETRY)
+                .build());
 
         // minecraft:material_instances
-        if (materialInstances != null && !materialInstances.isEmpty()) {
-            var materialsNbt = NbtMap.builder();
-            for (var entry : materialInstances.entrySet()) {
-                materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT());
+        {
+            var materialsNbt = NbtMap.builder()
+                    .putCompound("*", new MaterialInstance("missing_texture", RenderMethod.OPAQUE, true, true).toNBT());
+            if (materialInstances != null) {
+                for (var entry : materialInstances.entrySet()) {
+                    materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT());
+                }
             }
             components.putCompound("minecraft:material_instances", NbtMap.builder()
                     .putCompound("mappings", NbtMap.EMPTY)
@@ -95,16 +98,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         }
 
         // minecraft:collision_box - from BlockStateData.collisionShape
-        var collisionBox = boxFromVoxelShape(blockStateData.collisionShape());
-        if (collisionBox != null) {
-            if (collisionBox.equals(Box.EMPTY)) {
-                components.putCompound("minecraft:collision_box", NbtMap.builder()
-                        .putBoolean("enabled", false)
-                        .build());
-            } else {
-                components.putCompound("minecraft:collision_box", collisionBox.toCollisionBoxNBT());
-            }
-        }
+        components.putCompound("minecraft:collision_box", buildCollisionBoxNBT(blockStateData.collisionShape()));
 
         // minecraft:selection_box - from BlockStateData.shape
         var selectionBox = boxFromVoxelShape(blockStateData.shape());
@@ -139,31 +133,32 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                     .build());
         }
 
+        // TODO: check if destructible_by_mining, destructible_by_explosion and map_color is necessary
+        // since they are fully server authed
+//        // minecraft:destructible_by_mining - calculated from BlockStateData.hardness
+//        components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
+//                .putFloat("value", calculateDestroyTime(blockStateData.hardness()))
+//                .build());
+//
+//        // minecraft:destructible_by_explosion - from BlockStateData.explosionResistance
+//        components.putCompound("minecraft:destructible_by_explosion", NbtMap.builder()
+//                .putInt("explosion_resistance", toExplosionResistance(blockStateData.explosionResistance()))
+//                .build());
+
+        // minecraft:map_color - from BlockStateData.mapColor
+        var mapColor = blockStateData.mapColor();
+        if (mapColor != null) {
+            int rgb = mapColor.getRGB() & 0xFFFFFF;
+            if (rgb == 0) {
+                rgb = 0xFFFFFF;
+            }
+            components.putString("minecraft:map_color", String.format("#%06X", rgb));
+        }
+
         // minecraft:transformation
         if (transformation != null) {
             components.putCompound("minecraft:transformation", transformation.toNBT());
         }
-
-        // TODO: check if these components are necessary
-//        // minecraft:destructible_by_mining - calculated from BlockStateData.hardness
-//        var destroyTime = calculateDestroyTime(blockStateData.hardness());
-//        if (destroyTime != null && destroyTime >= 0) {
-//            components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
-//                    .putFloat("value", destroyTime)
-//                    .build());
-//        }
-//
-//        // minecraft:destructible_by_explosion - from BlockStateData.explosionResistance
-//        if (blockStateData.explosionResistance() >= 0) {
-//            components.putCompound("minecraft:destructible_by_explosion", NbtMap.builder()
-//                    .putFloat("explosion_resistance", blockStateData.explosionResistance())
-//                    .build());
-//        }
-//
-//        // minecraft:map_color - from BlockStateData.mapColor
-//        components.putCompound("minecraft:map_color", NbtMap.builder()
-//                .putString("color", String.format("#%06X", blockStateData.mapColor().getRGB() & 0xFFFFFF))
-//                .build());
 
         // Custom components
         if (customComponents != null) {
@@ -195,15 +190,50 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         return Box.fromAABB(aabb);
     }
 
+    private NbtMap buildCollisionBoxNBT(VoxelShape voxelShape) {
+        if (voxelShape == null || voxelShape.getSolids().isEmpty()) {
+            return NbtMap.builder()
+                    .putBoolean("enabled", false)
+                    .build();
+        }
+
+        var boxes = new ArrayList<NbtMap>();
+        for (var solid : voxelShape.getSolids()) {
+            boxes.add(NbtMap.builder()
+                    .putFloat("minX", (float) (solid.minX() * 16))
+                    .putFloat("minY", (float) (solid.minY() * 16))
+                    .putFloat("minZ", (float) (solid.minZ() * 16))
+                    .putFloat("maxX", (float) (solid.maxX() * 16))
+                    .putFloat("maxY", (float) (solid.maxY() * 16))
+                    .putFloat("maxZ", (float) (solid.maxZ() * 16))
+                    .build());
+        }
+
+        var union = Box.fromAABB(voxelShape.unionAABB());
+        return NbtMap.builder()
+                .putBoolean("enabled", true)
+                .putList("origin", NbtType.FLOAT, List.of(union.origin().x(), union.origin().y(), union.origin().z()))
+                .putList("size", NbtType.FLOAT, List.of(union.size().x(), union.size().y(), union.size().z()))
+                .putList("boxes", NbtType.COMPOUND, boxes)
+                .build();
+    }
+
 //    /**
 //     * Calculates destroy time from hardness.
 //     * In Bedrock, destroy time is approximately hardness * 1.5 for most blocks.
 //     */
-//    private Float calculateDestroyTime(float hardness) {
+//    private float calculateDestroyTime(float hardness) {
 //        if (hardness < 0) {
-//            return null; // Unbreakable
+//            return -1.0f;
 //        }
 //        return hardness * 1.5f;
+//    }
+//
+//    private int toExplosionResistance(float resistance) {
+//        if (resistance < 0) {
+//            return -1;
+//        }
+//        return Math.round(resistance);
 //    }
 
     /**
@@ -273,11 +303,13 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         }
 
         public NbtMap toNBT() {
+            byte packedBools = (byte) (faceDimming ? 0x1 : 0x0);
             return NbtMap.builder()
                     .putString("texture", texture)
                     .putString("render_method", renderMethod.getId())
                     .putBoolean("face_dimming", faceDimming)
                     .putBoolean("ambient_occlusion", ambientOcclusion)
+                    .putByte("packed_bools", packedBools)
                     .build();
         }
     }
