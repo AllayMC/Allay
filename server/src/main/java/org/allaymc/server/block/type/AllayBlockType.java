@@ -52,6 +52,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final byte specialValueBits;
     private final Map<Long, BlockState> specialValueMap;
 
+    /**
+     * Whether this block type is a custom block (not a vanilla block).
+     * Used internally for server-authoritative block breaking.
+     */
+    private final boolean customBlock;
+
     private BlockState defaultState;
     private T blockBehavior;
     private BlockDefinition blockDefinition;
@@ -61,12 +67,14 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             Identifier identifier,
             ItemType<?> blockItemType,
             Set<BlockTag> blockTags,
+            boolean customBlock,
             Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier
     ) {
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
         this.blockTags = blockTags;
         this.blockItemType = blockItemType;
+        this.customBlock = customBlock;
         this.blockStateHashMap = initStates(defaultStateSupplier);
 
         byte specialValueBits = 0;
@@ -317,7 +325,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             }
 
             // Create the block type instance first since we need this to create base component
-            var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, defaultStateSupplier);
+            var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, isCustomBlock, defaultStateSupplier);
             var listComponents = new ArrayList<>(components.values());
             // Create and add the base component
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER)) {

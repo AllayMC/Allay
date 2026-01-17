@@ -21,6 +21,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.NetworkHelper;
@@ -46,7 +47,7 @@ import java.util.Set;
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
-    // Minimum progress (0-1) required to allow client's BLOCK_PREDICT_DESTROY
+    // Minimum progress (0-1) required to allow client's BLOCK_PREDICT_DESTROY for vanilla blocks
     // Similar to Geyser's approach, we're tolerant to account for timing differences
     protected static final float BLOCK_BREAKING_PROGRESS_TOLERANCE = 0.65f;
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
@@ -63,6 +64,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected float currentProgress;
     // Progress added per tick
     protected float progressPerTick;
+    // Whether we must break the block ourselves (for custom blocks)
+    protected boolean serverSideBlockBreaking;
 
     private static boolean isInvalidGameType(Player player) {
         var entity = player.getControlledEntity();
@@ -193,6 +196,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             breakTimeSeconds = 0;
         }
 
+        // Check if this is a custom block - custom blocks require server-side breaking
+        // because their "minecraft:destructible_by_mining" is set to a very large value
+        this.serverSideBlockBreaking = ((AllayBlockType<?>) this.blockToBreak.getBlockType()).isCustomBlock();
+
         // Calculate progress per tick (1.0 = block fully broken)
         // If breakTimeSeconds is 0, it's instant break
         this.progressPerTick = breakTimeSeconds > 0 ? (float) (1.0 / (breakTimeSeconds * 20.0)) : 1.0f;
@@ -219,6 +226,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.blockToBreak = null;
         this.currentProgress = 0;
         this.progressPerTick = 0;
+        this.serverSideBlockBreaking = false;
     }
 
     protected void completeBreak(Player player, int x, int y, int z) {
@@ -228,15 +236,33 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
 
         // Validate progress to prevent cheating (e.g., sending BLOCK_PREDICT_DESTROY too early)
-        // Similar to Geyser's approach, we're tolerant to account for timing differences
-        if (this.currentProgress < BLOCK_BREAKING_PROGRESS_TOLERANCE) {
-            log.debug("Player {} tried to break block too early! Progress: {}, required: {}",
-                    player.getOriginName(), this.currentProgress, BLOCK_BREAKING_PROGRESS_TOLERANCE);
+        // Similar to Geyser's approach:
+        // - Custom blocks require server-side breaking (progress >= 1.0), client won't send BLOCK_PREDICT_DESTROY
+        // - Vanilla blocks can trust client prediction with some tolerance (progress >= 0.65)
+        if (!mayBreak()) {
+            log.debug("Player {} tried to break block too early! Progress: {}, serverSide: {}",
+                    player.getOriginName(), this.currentProgress, this.serverSideBlockBreaking);
             return;
         }
 
         doBlockBreak(player);
         stopBreak(player);
+    }
+
+    /**
+     * Checks if the block may be broken based on current progress.
+     * Similar to Geyser's approach:
+     * - Server-side breaking (custom blocks): requires progress >= 1.0
+     * - Client prediction (vanilla blocks): allows progress >= 0.65 for tolerance
+     */
+    protected boolean mayBreak() {
+        if (this.serverSideBlockBreaking) {
+            // Custom blocks should be broken by server in handleAsync, not here
+            // But if somehow we reach here, require full progress
+            return this.currentProgress >= 1.0f;
+        }
+        // Vanilla blocks: be tolerant to account for timing differences
+        return this.currentProgress >= BLOCK_BREAKING_PROGRESS_TOLERANCE;
     }
 
     protected void doBlockBreak(Player player) {
@@ -369,9 +395,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             updateBreakingProgress(player);
 
             // Check if progress has reached 100% - server authoritative block breaking.
-            // This is necessary for custom blocks because their "minecraft:destructible_by_mining"
-            // is set to a very large value to prevent client-side prediction, so the client will
-            // never send BLOCK_PREDICT_DESTROY. The server must proactively break the block.
+            // For custom blocks: their "minecraft:destructible_by_mining" is set to a very large value,
+            //   so the client will never send BLOCK_PREDICT_DESTROY. Server must proactively break.
+            // For vanilla blocks: client may send BLOCK_PREDICT_DESTROY at ~65% progress (handled in
+            //   completeBreak), but if not received, server will break at 100% as fallback.
             if (this.currentProgress >= 1.0f) {
                 doBlockBreak(player);
                 stopBreak(player);

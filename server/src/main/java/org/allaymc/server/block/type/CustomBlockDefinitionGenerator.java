@@ -116,7 +116,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
         // Block breaking is fully server authed, so let just set a extra big value here
         components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
-                .putFloat("value", 99999f)
+                .putFloat("value", Float.MAX_VALUE)
                 .build());
 
         for (var tag : blockType.getBlockTags()) {
