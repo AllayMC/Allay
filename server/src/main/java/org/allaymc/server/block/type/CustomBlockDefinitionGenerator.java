@@ -277,14 +277,31 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
     /**
      * Render methods for material instances.
+     * <p>
+     * Properties legend: Transparency | Translucency | Backface Culling | Distant Culling
+     * <ul>
+     *   <li>OPAQUE (default) - No | No | Yes | No - Ex: Dirt, Stone, Concrete</li>
+     *   <li>BLEND - Yes | Yes | Yes | No - Ex: Glass, Beacon, Honey Block</li>
+     *   <li>DOUBLE_SIDED - No | No | No | No - Ex: Powder Snow</li>
+     *   <li>ALPHA_TEST - Yes | No | No | Yes - Ex: Ladder, Monster Spawner, Vines</li>
+     *   <li>ALPHA_TEST_SINGLE_SIDED - Yes | No | Yes | Yes - Ex: Doors, Saplings, Trapdoors</li>
+     *   <li>ALPHA_TEST_TO_OPAQUE - Yes | No | No | Yes - Shifts to opaque in the distance</li>
+     *   <li>ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE - Yes | No | Yes | Yes - Shifts to opaque in the distance</li>
+     *   <li>BLEND_TO_OPAQUE - No | No | Yes | No - Shifts to opaque in the distance</li>
+     * </ul>
+     *
+     * @see <a href="https://wiki.bedrock.dev/blocks/blocks-16.html#additional-notes">wiki.bedrock.dev</a>
      */
     @Getter
     public enum RenderMethod {
         OPAQUE("opaque"),
-        DOUBLE_SIDED("double_sided"),
         BLEND("blend"),
+        DOUBLE_SIDED("double_sided"),
         ALPHA_TEST("alpha_test"),
-        ALPHA_TEST_SINGLE_SIDED("alpha_test_single_sided");
+        ALPHA_TEST_SINGLE_SIDED("alpha_test_single_sided"),
+        ALPHA_TEST_TO_OPAQUE("alpha_test_to_opaque"),
+        ALPHA_TEST_SINGLE_SIDED_TO_OPAQUE("alpha_test_single_sided_to_opaque"),
+        BLEND_TO_OPAQUE("blend_to_opaque");
 
         private final String id;
 
