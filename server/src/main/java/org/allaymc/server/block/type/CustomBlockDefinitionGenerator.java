@@ -3,6 +3,7 @@ package org.allaymc.server.block.type;
 import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockStateData;
+import org.allaymc.api.block.data.TintMethod;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockType;
@@ -15,9 +16,11 @@ import org.joml.Vector3fc;
 import org.joml.primitives.AABBdc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,9 +55,9 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
     /**
      * Material instances for rendering the block.
-     * Maps face/material name to MaterialInstance (texture, render method).
+     * Use {@link Materials#builder()} to create.
      */
-    protected final Map<String, MaterialInstance> materialInstances;
+    protected final Materials materials;
 
     /**
      * Transformation applied to the block model.
@@ -79,10 +82,11 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .putString("identifier", geometry != null ? geometry : DEFAULT_GEOMETRY)
                 .build());
 
-        var materialsNbt = NbtMap.builder().putCompound("*", new MaterialInstance("missing_texture", RenderMethod.OPAQUE, true, true).toNBT());
-        if (materialInstances != null) {
-            for (var entry : materialInstances.entrySet()) {
-                materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT());
+        var tintMethod = blockStateData.tintMethod();
+        var materialsNbt = NbtMap.builder().putCompound("*", MaterialInstance.opaque("missing_texture").toNBT(tintMethod));
+        if (materials != null) {
+            for (var entry : materials.entrySet()) {
+                materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT(tintMethod));
             }
         }
         components.putCompound("minecraft:material_instances", NbtMap.builder()
@@ -246,32 +250,462 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
      * @param renderMethod     the render method to use (default: OPAQUE)
      * @param faceDimming      whether face dimming is enabled (default: true)
      * @param ambientOcclusion whether ambient occlusion is enabled (default: true)
+     * @param randomUVRotation whether random UV rotation is enabled (default: false)
+     * @param textureVariation whether texture variation is enabled (default: false)
      */
     @Builder
     public record MaterialInstance(
             String texture,
             RenderMethod renderMethod,
             boolean faceDimming,
-            boolean ambientOcclusion
+            boolean ambientOcclusion,
+            boolean randomUVRotation,
+            boolean textureVariation
     ) {
-        public MaterialInstance(String texture, RenderMethod renderMethod) {
-            this(texture, renderMethod, true, true);
-        }
-
+        /**
+         * Compact constructor with defaults.
+         */
         public MaterialInstance {
             if (renderMethod == null) {
                 renderMethod = RenderMethod.OPAQUE;
             }
         }
 
-        public NbtMap toNBT() {
-            byte packedBools = (byte) (faceDimming ? 0x1 : 0x0);
-            return NbtMap.builder()
+        /**
+         * Creates a material instance with just texture (OPAQUE render method, default settings).
+         *
+         * @param texture the texture name
+         * @return a new MaterialInstance
+         */
+        public static MaterialInstance of(String texture) {
+            return new MaterialInstance(texture, RenderMethod.OPAQUE, true, true, false, false);
+        }
+
+        /**
+         * Creates a material instance with texture and render method.
+         *
+         * @param texture      the texture name
+         * @param renderMethod the render method
+         * @return a new MaterialInstance
+         */
+        public static MaterialInstance of(String texture, RenderMethod renderMethod) {
+            return new MaterialInstance(texture, renderMethod, true, true, false, false);
+        }
+
+        /**
+         * Creates an opaque material instance (most common for solid blocks).
+         *
+         * @param texture the texture name
+         * @return a new MaterialInstance with OPAQUE render method
+         */
+        public static MaterialInstance opaque(String texture) {
+            return of(texture, RenderMethod.OPAQUE);
+        }
+
+        /**
+         * Creates a transparent material instance with alpha testing (for blocks like leaves, ladders).
+         *
+         * @param texture the texture name
+         * @return a new MaterialInstance with ALPHA_TEST render method
+         */
+        public static MaterialInstance alphaTest(String texture) {
+            return of(texture, RenderMethod.ALPHA_TEST);
+        }
+
+        /**
+         * Creates a transparent material instance with alpha testing, single-sided (for blocks like doors, trapdoors).
+         *
+         * @param texture the texture name
+         * @return a new MaterialInstance with ALPHA_TEST_SINGLE_SIDED render method
+         */
+        public static MaterialInstance alphaTestSingleSided(String texture) {
+            return of(texture, RenderMethod.ALPHA_TEST_SINGLE_SIDED);
+        }
+
+        /**
+         * Creates a translucent material instance with blending (for blocks like glass, ice).
+         *
+         * @param texture the texture name
+         * @return a new MaterialInstance with BLEND render method
+         */
+        public static MaterialInstance blend(String texture) {
+            return of(texture, RenderMethod.BLEND);
+        }
+
+        /**
+         * Creates a double-sided material instance (for blocks like powder snow).
+         *
+         * @param texture the texture name
+         * @return a new MaterialInstance with DOUBLE_SIDED render method
+         */
+        public static MaterialInstance doubleSided(String texture) {
+            return of(texture, RenderMethod.DOUBLE_SIDED);
+        }
+
+        /**
+         * Converts to NBT format.
+         *
+         * @param tintMethod the tint method from BlockStateData (can be null)
+         * @return the NBT representation
+         */
+        public NbtMap toNBT(TintMethod tintMethod) {
+            byte packedBools = 0;
+            if (faceDimming) packedBools |= 0x1;
+            if (randomUVRotation) packedBools |= 0x2;
+            if (textureVariation) packedBools |= 0x4;
+
+            var builder = NbtMap.builder()
                     .putString("texture", texture)
                     .putString("render_method", renderMethod.getId())
                     .putBoolean("ambient_occlusion", ambientOcclusion)
-                    .putByte("packed_bools", packedBools)
-                    .build();
+                    .putByte("packed_bools", packedBools);
+
+            if (tintMethod != null && tintMethod != TintMethod.NONE) {
+                builder.putString("tint_method", tintMethod.name().toLowerCase(Locale.ROOT));
+            }
+
+            return builder.build();
+        }
+    }
+
+    /**
+     * Builder for creating material instances with convenient per-face methods.
+     * <p>
+     * Example usage:
+     * <pre>{@code
+     * CustomBlockDefinitionGenerator.builder()
+     *     .materials(Materials.builder()
+     *         .any(RenderMethod.OPAQUE, "my_texture")
+     *         .up(RenderMethod.OPAQUE, "my_texture_top"))
+     *     .build();
+     * }</pre>
+     */
+    public static final class Materials {
+        private final Map<String, MaterialInstance> materials = new HashMap<>();
+
+        private Materials() {}
+
+        /**
+         * Creates a new Materials builder.
+         *
+         * @return a new Materials builder
+         */
+        public static Materials builder() {
+            return new Materials();
+        }
+
+        /**
+         * Sets the material for all faces ("*").
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials any(String texture) {
+            return any(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the material for all faces ("*").
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials any(RenderMethod renderMethod, String texture) {
+            materials.put("*", MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Sets the material for all faces ("*") with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials any(MaterialInstance materialInstance) {
+            materials.put("*", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets the material for the up face.
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials up(String texture) {
+            return up(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the material for the up face.
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials up(RenderMethod renderMethod, String texture) {
+            materials.put("up", MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Sets the material for the up face with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials up(MaterialInstance materialInstance) {
+            materials.put("up", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets the material for the down face.
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials down(String texture) {
+            return down(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the material for the down face.
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials down(RenderMethod renderMethod, String texture) {
+            materials.put("down", MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Sets the material for the down face with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials down(MaterialInstance materialInstance) {
+            materials.put("down", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets the material for the north face.
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials north(String texture) {
+            return north(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the material for the north face.
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials north(RenderMethod renderMethod, String texture) {
+            materials.put("north", MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Sets the material for the north face with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials north(MaterialInstance materialInstance) {
+            materials.put("north", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets the material for the south face.
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials south(String texture) {
+            return south(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the material for the south face.
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials south(RenderMethod renderMethod, String texture) {
+            materials.put("south", MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Sets the material for the south face with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials south(MaterialInstance materialInstance) {
+            materials.put("south", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets the material for the east face.
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials east(String texture) {
+            return east(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the material for the east face.
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials east(RenderMethod renderMethod, String texture) {
+            materials.put("east", MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Sets the material for the east face with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials east(MaterialInstance materialInstance) {
+            materials.put("east", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets the material for the west face.
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials west(String texture) {
+            return west(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the material for the west face.
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials west(RenderMethod renderMethod, String texture) {
+            materials.put("west", MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Sets the material for the west face with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials west(MaterialInstance materialInstance) {
+            materials.put("west", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets the same material for all side faces (north, south, east, west).
+         *
+         * @param texture the texture name
+         * @return this builder
+         */
+        public Materials sides(String texture) {
+            return sides(RenderMethod.OPAQUE, texture);
+        }
+
+        /**
+         * Sets the same material for all side faces (north, south, east, west).
+         *
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials sides(RenderMethod renderMethod, String texture) {
+            var material = MaterialInstance.of(texture, renderMethod);
+            materials.put("north", material);
+            materials.put("south", material);
+            materials.put("east", material);
+            materials.put("west", material);
+            return this;
+        }
+
+        /**
+         * Sets the same material for all side faces (north, south, east, west) with full customization.
+         *
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials sides(MaterialInstance materialInstance) {
+            materials.put("north", materialInstance);
+            materials.put("south", materialInstance);
+            materials.put("east", materialInstance);
+            materials.put("west", materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets material for a custom face/material name.
+         *
+         * @param face             the face or material name
+         * @param materialInstance the material instance
+         * @return this builder
+         */
+        public Materials face(String face, MaterialInstance materialInstance) {
+            materials.put(face, materialInstance);
+            return this;
+        }
+
+        /**
+         * Sets material for a custom face/material name.
+         *
+         * @param face         the face or material name
+         * @param renderMethod the render method
+         * @param texture      the texture name
+         * @return this builder
+         */
+        public Materials face(String face, RenderMethod renderMethod, String texture) {
+            materials.put(face, MaterialInstance.of(texture, renderMethod));
+            return this;
+        }
+
+        /**
+         * Returns the entry set of the materials map.
+         *
+         * @return the entry set
+         */
+        public Set<Map.Entry<String, MaterialInstance>> entrySet() {
+            return materials.entrySet();
+        }
+
+        /**
+         * Checks if this materials map is empty.
+         *
+         * @return true if empty
+         */
+        public boolean isEmpty() {
+            return materials.isEmpty();
         }
     }
 
