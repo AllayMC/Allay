@@ -311,27 +311,30 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
 
+            // Add a default block state data component if missing
             if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER)) {
                 components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofDefault());
             }
 
+            // Create the block type instance first since we need this to create base component
             var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, defaultStateSupplier);
-            var blockStateDataComponent = (BlockStateDataComponent) components.get(BlockStateDataComponentImpl.IDENTIFIER);
-            var defaultBlockStateData = blockStateDataComponent.getBlockStateData(type.getDefaultState());
-            type.blockDefinition = blockDefinitionGenerator.generate(type, defaultBlockStateData);
-
             var listComponents = new ArrayList<>(components.values());
+            // Create and add the base component
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER)) {
                 listComponents.add(baseComponentSupplier.apply(type));
             }
 
             List<ComponentProvider<? extends Component>> componentProviderList = listComponents.stream().map(singleton -> ComponentProvider.of($ -> singleton, singleton.getClass())).collect(Collectors.toList());
-
             try {
                 type.blockBehavior = (T) clazz.getDeclaredConstructor(List.class).newInstance(componentProviderList);
             } catch (Throwable t) {
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }
+
+            // Generate block definition after we initialized the block behavior instance
+            var blockStateDataComponent = (BlockStateDataComponent) components.get(BlockStateDataComponentImpl.IDENTIFIER);
+            var defaultBlockStateData = blockStateDataComponent.getBlockStateData(type.getDefaultState());
+            type.blockDefinition = blockDefinitionGenerator.generate(type, defaultBlockStateData);
 
             Registries.BLOCKS.register(type.getIdentifier(), type);
             for (var blockState : type.blockStateHashMap.values()) {
