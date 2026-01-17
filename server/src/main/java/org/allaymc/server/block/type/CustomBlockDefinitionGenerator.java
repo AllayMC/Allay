@@ -264,7 +264,6 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
             return NbtMap.builder()
                     .putString("texture", texture)
                     .putString("render_method", renderMethod.getId())
-                    .putBoolean("face_dimming", faceDimming)
                     .putBoolean("ambient_occlusion", ambientOcclusion)
                     .putByte("packed_bools", packedBools)
                     .build();

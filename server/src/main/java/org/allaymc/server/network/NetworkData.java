@@ -95,7 +95,8 @@ public final class NetworkData {
             var allayBlockType = (AllayBlockType<?>) blockType;
             var blockDefinition = allayBlockType.getBlockDefinition();
             if (blockDefinition == org.allaymc.server.block.type.BlockDefinition.DEFAULT) {
-                continue; // Skip vanilla blocks
+                // Skip vanilla blocks
+                continue;
             }
 
             result.add(new BlockPropertyData(blockType.getIdentifier().toString(), blockDefinition.data()));
