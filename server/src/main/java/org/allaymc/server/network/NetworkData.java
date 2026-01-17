@@ -94,22 +94,11 @@ public final class NetworkData {
         for (var blockType : Registries.BLOCKS.getContent().values()) {
             var allayBlockType = (AllayBlockType<?>) blockType;
             var blockDefinition = allayBlockType.getBlockDefinition();
-
             if (blockDefinition == org.allaymc.server.block.type.BlockDefinition.DEFAULT) {
                 continue; // Skip vanilla blocks
             }
 
-            var blockNbt = NbtMap.builder()
-                    .putCompound("components", blockDefinition.data().getCompound("components"))
-//                    .putCompound("menu_category", NbtMap.builder()
-//                            .putString("category", "none")
-//                            .putString("group", "")
-//                            .build())
-                    .putInt("molangVersion", blockDefinition.data().getInt("molangVersion", CustomBlockDefinitionGenerator.MOLANG_VERSION))
-                    .putList("properties", NbtType.COMPOUND, blockDefinition.properties())
-                    .build();
-
-            result.add(new BlockPropertyData(blockType.getIdentifier().toString(), blockNbt));
+            result.add(new BlockPropertyData(blockType.getIdentifier().toString(), blockDefinition.data()));
         }
 
         return result;

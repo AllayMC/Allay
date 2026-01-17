@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * CustomBlockDefinitionGenerator is the default implementation of {@link BlockDefinitionGenerator}.
@@ -32,11 +33,9 @@ import java.util.Map;
 @Builder
 public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator {
 
-    /**
-     * The Molang version used for custom blocks.
-     */
-    public static final int MOLANG_VERSION = 9;
+    private static final int MOLANG_VERSION = 9;
     private static final String DEFAULT_GEOMETRY = "minecraft:geometry.full_block";
+    private static final AtomicInteger CUSTOM_BLOCK_ID = new AtomicInteger(10000);
 
     /**
      * The display name shown in the inventory and tooltips.
@@ -72,80 +71,53 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         var blockStateData = blockType.getDefaultState().getBlockStateData();
         var components = NbtMap.builder();
 
-        // minecraft:display_name
         components.putCompound("minecraft:display_name", NbtMap.builder()
                 .putString("value", displayName != null ? displayName : blockType.getIdentifier().toString())
                 .build());
 
-        // minecraft:geometry
         components.putCompound("minecraft:geometry", NbtMap.builder()
                 .putString("identifier", geometry != null ? geometry : DEFAULT_GEOMETRY)
                 .build());
 
-        // minecraft:material_instances
-        {
-            var materialsNbt = NbtMap.builder()
-                    .putCompound("*", new MaterialInstance("missing_texture", RenderMethod.OPAQUE, true, true).toNBT());
-            if (materialInstances != null) {
-                for (var entry : materialInstances.entrySet()) {
-                    materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT());
-                }
+        var materialsNbt = NbtMap.builder().putCompound("*", new MaterialInstance("missing_texture", RenderMethod.OPAQUE, true, true).toNBT());
+        if (materialInstances != null) {
+            for (var entry : materialInstances.entrySet()) {
+                materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT());
             }
-            components.putCompound("minecraft:material_instances", NbtMap.builder()
-                    .putCompound("mappings", NbtMap.EMPTY)
-                    .putCompound("materials", materialsNbt.build())
-                    .build());
         }
+        components.putCompound("minecraft:material_instances", NbtMap.builder()
+                .putCompound("mappings", NbtMap.EMPTY)
+                .putCompound("materials", materialsNbt.build())
+                .build());
 
-        // minecraft:collision_box - from BlockStateData.collisionShape
         components.putCompound("minecraft:collision_box", buildCollisionBoxNBT(blockStateData.collisionShape()));
 
-        // minecraft:selection_box - from BlockStateData.shape
         var selectionBox = boxFromVoxelShape(blockStateData.shape());
-        if (selectionBox != null) {
-            if (selectionBox.equals(Box.EMPTY)) {
-                components.putCompound("minecraft:selection_box", NbtMap.builder()
-                        .putBoolean("enabled", false)
-                        .build());
-            } else {
-                components.putCompound("minecraft:selection_box", selectionBox.toSelectionBoxNBT());
-            }
-        }
-
-        // minecraft:light_emission - from BlockStateData.lightEmission
-        if (blockStateData.lightEmission() > 0) {
-            components.putCompound("minecraft:light_emission", NbtMap.builder()
-                    .putByte("emission", (byte) blockStateData.lightEmission())
+        if (selectionBox.equals(Box.EMPTY)) {
+            components.putCompound("minecraft:selection_box", NbtMap.builder()
+                    .putBoolean("enabled", false)
                     .build());
+        } else {
+            components.putCompound("minecraft:selection_box", selectionBox.toSelectionBoxNBT());
         }
 
-        // minecraft:light_dampening - from BlockStateData.lightDampening
-        if (blockStateData.lightDampening() != 15) {
-            components.putCompound("minecraft:light_dampening", NbtMap.builder()
-                    .putByte("lightLevel", (byte) blockStateData.lightDampening())
-                    .build());
-        }
+        components.putCompound("minecraft:light_emission", NbtMap.builder()
+                .putByte("emission", (byte) blockStateData.lightEmission())
+                .build());
 
-        // minecraft:friction - from BlockStateData.friction
-        if (Math.abs(blockStateData.friction() - 0.4f) > 0.001f) {
-            components.putCompound("minecraft:friction", NbtMap.builder()
-                    .putFloat("value", blockStateData.friction())
-                    .build());
-        }
+        components.putCompound("minecraft:light_dampening", NbtMap.builder()
+                .putByte("lightLevel", (byte) blockStateData.lightDampening())
+                .build());
 
-        // TODO: check if destructible_by_mining, destructible_by_explosion and map_color is necessary
-        // since they are fully server authed
-//        // minecraft:destructible_by_mining - calculated from BlockStateData.hardness
-//        components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
-//                .putFloat("value", calculateDestroyTime(blockStateData.hardness()))
-//                .build());
-//
-//        // minecraft:destructible_by_explosion - from BlockStateData.explosionResistance
-//        components.putCompound("minecraft:destructible_by_explosion", NbtMap.builder()
-//                .putInt("explosion_resistance", toExplosionResistance(blockStateData.explosionResistance()))
-//                .build());
+        components.putCompound("minecraft:friction", NbtMap.builder()
+                .putFloat("value", 1 - blockStateData.friction())
+                .build());
 
-        // minecraft:map_color - from BlockStateData.mapColor
+        // Block breaking is fully server authed, so let just set a extra big value here
+        components.putCompound("minecraft:destructible_by_mining", NbtMap.builder()
+                .putFloat("value", calculateDestroyTime(blockStateData.hardness()))
+                .build());
+
         var mapColor = blockStateData.mapColor();
         if (mapColor != null) {
             int rgb = mapColor.getRGB() & 0xFFFFFF;
@@ -155,26 +127,25 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
             components.putString("minecraft:map_color", String.format("#%06X", rgb));
         }
 
-        // minecraft:transformation
         if (transformation != null) {
             components.putCompound("minecraft:transformation", transformation.toNBT());
         }
 
-        // Custom components
         if (customComponents != null) {
             components.putAll(customComponents);
         }
 
-        // Build block data NBT
         var blockData = NbtMap.builder()
                 .putCompound("components", components.build())
+                // This is required, or the client will crash, although the creative inventory is already server authed xd
+                .putCompound("menu_category", defaultMenuCategory())
+                // Integer block id is also required by the client, let's just send an incremental value to the client
+                .putCompound("vanilla_block_data", NbtMap.builder().putInt("block_id", CUSTOM_BLOCK_ID.getAndIncrement()).build())
+                .putList("properties", NbtType.COMPOUND, buildPropertyDefinitions(blockType))
                 .putInt("molangVersion", MOLANG_VERSION)
                 .build();
 
-        // Build property definitions from BlockPropertyType
-        var properties = buildPropertyDefinitions(blockType);
-
-        return new BlockDefinition(blockData, properties);
+        return new BlockDefinition(blockData);
     }
 
     /**
@@ -218,23 +189,21 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                 .build();
     }
 
-//    /**
-//     * Calculates destroy time from hardness.
-//     * In Bedrock, destroy time is approximately hardness * 1.5 for most blocks.
-//     */
-//    private float calculateDestroyTime(float hardness) {
-//        if (hardness < 0) {
-//            return -1.0f;
-//        }
-//        return hardness * 1.5f;
-//    }
-//
-//    private int toExplosionResistance(float resistance) {
-//        if (resistance < 0) {
-//            return -1;
-//        }
-//        return Math.round(resistance);
-//    }
+    private static NbtMap defaultMenuCategory() {
+        return NbtMap.builder()
+                .putString("category", "construction")
+                .putString("group", "")
+                .putByte("is_hidden_in_commands", (byte) 0)
+                .build();
+    }
+
+    private float calculateDestroyTime(float hardness) {
+        if (hardness < 0) {
+            return -1.0f;
+        }
+
+        return hardness * 1.5f;
+    }
 
     /**
      * Builds property definitions from the block type's properties.

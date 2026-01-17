@@ -8,13 +8,12 @@ import java.util.List;
  * Block definition is used to be sent to the client to let the client know the attributes
  * of the custom block, such as the geometry, materials, collision box, etc.
  *
- * @param data           The NBT data containing block components.
- * @param properties     The block property definitions for states.
+ * @param data the NBT data containing the definition of the block.
  * @author daoge_cmd
  */
-public record BlockDefinition(NbtMap data, List<NbtMap> properties) {
+public record BlockDefinition(NbtMap data) {
     /**
-     * Default definition for vanilla blocks - no components, no properties.
+     * Default definition for vanilla blocks.
      */
-    public static final BlockDefinition DEFAULT = new BlockDefinition(NbtMap.EMPTY, List.of());
+    public static final BlockDefinition DEFAULT = new BlockDefinition(NbtMap.EMPTY);
 }
