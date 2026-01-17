@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public abstract class ItemStackImpl extends ComponentClass implements ItemStack {
+public class ItemStackImpl extends ComponentClass implements ItemStack {
 
     @Getter
     @Delegate

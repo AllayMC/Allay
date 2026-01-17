@@ -2627,8 +2627,10 @@ public class AllayPlayer implements Player {
         packet.setWorldId("");
         packet.setScenarioId("");
         packet.setOwnerId("");
+        packet.getBlockProperties().addAll(NetworkData.CUSTOM_BLOCK_PROPERTIES.get());
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
         MultiVersionHelper.adaptExperimentData(this, packet.getExperiments());
+        MultiVersionHelper.adaptCustomBlockProperties(this, packet.getBlockProperties());
         sendPacket(packet);
     }
 

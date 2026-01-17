@@ -21,6 +21,7 @@ import org.allaymc.api.player.GameMode;
 import org.allaymc.api.player.Player;
 import org.allaymc.api.world.particle.PunchBlockParticle;
 import org.allaymc.api.world.sound.SimpleSound;
+import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.NetworkHelper;
@@ -41,16 +42,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Cool_Loong
+ * @author Cool_Loong | daoge_cmd
  */
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
-    // TODO: Accurate breaking time calculations when player keeping jumping, maybe use BLOCK_BREAKING_DELAY_ENABLED?
-    // The current implementation will work fine in most cases
-    // But it doesn't work out the same breaking time as the client when player keep jumping
-    // It is hard for us to calculate the exact breaking time when player keep jumping
-    protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
+    // Minimum progress (0-1) required to allow client's BLOCK_PREDICT_DESTROY for vanilla blocks
+    // Similar to Geyser's approach, we're tolerant to account for timing differences
+    protected static final float BLOCK_BREAKING_PROGRESS_TOLERANCE = 0.65f;
     protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
     protected static final float PLAYER_NETWORK_OFFSET = 1.62f;
 
@@ -61,10 +60,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected BlockFace faceToBreak;
     protected BlockState blockToBreak;
 
-    // Seconds
-    protected double breakTime;
-    // Ticks
-    protected double stopBreakingTime;
+    // Current breaking progress (0-1), where 1.0 means the block should be broken
+    protected float currentProgress;
+    // Progress added per tick
+    protected float progressPerTick;
+    // Whether we must break the block ourselves (for custom blocks)
+    protected boolean serverSideBlockBreaking;
 
     private static boolean isInvalidGameType(Player player) {
         var entity = player.getControlledEntity();
@@ -84,7 +85,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         ));
     }
 
-    protected void handleBlockAction(Player player, List<PlayerBlockActionData> blockActions, long time) {
+    protected void handleBlockAction(Player player, List<PlayerBlockActionData> blockActions) {
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
             // Check interact distance
@@ -103,7 +104,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                         continue;
                     }
 
-                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace(), time);
+                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
                     // When a player switches to breaking another block halfway through breaking one
@@ -117,7 +118,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     }
 
                     stopBreak(player);
-                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace(), time);
+                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_PREDICT_DESTROY -> {
                     if (isInvalidGameType(player)) {
@@ -142,7 +143,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return this.blockToBreak != null;
     }
 
-    protected void startBreak(Player player, int x, int y, int z, int blockFaceId, long startBreakingTime) {
+    protected void startBreak(Player player, int x, int y, int z, int blockFaceId) {
         var entity = player.getControlledEntity();
         var dimension = entity.getDimension();
         if (this.blockToBreak != null) {
@@ -187,15 +188,24 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             this.blockToBreak.getBlockType().getBlockBehavior().onPunch(block, faceToBreak, entity.getItemInHand(), entity);
         }
 
+        double breakTimeSeconds;
         if (entity.getGameMode() != GameMode.CREATIVE) {
-            this.breakTime = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, entity.getItemInHand(), entity);
+            breakTimeSeconds = this.blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(this.blockToBreak, entity.getItemInHand(), entity);
         } else {
             // Creative mode players can break blocks instantly
-            this.breakTime = 0;
+            breakTimeSeconds = 0;
         }
-        this.stopBreakingTime = startBreakingTime + this.breakTime * 20.0d;
 
-        dimension.addBlockAction(x, y, z, new StartBreakAction(this.breakTime));
+        // Check if this is a custom block - custom blocks require server-side breaking
+        // because their "minecraft:destructible_by_mining" is set to a very large value
+        this.serverSideBlockBreaking = ((AllayBlockType<?>) this.blockToBreak.getBlockType()).isCustomBlock();
+
+        // Calculate progress per tick (1.0 = block fully broken)
+        // If breakTimeSeconds is 0, it's instant break
+        this.progressPerTick = breakTimeSeconds > 0 ? (float) (1.0 / (breakTimeSeconds * 20.0)) : 1.0f;
+        this.currentProgress = this.progressPerTick; // First tick progress
+
+        dimension.addBlockAction(x, y, z, new StartBreakAction(breakTimeSeconds));
         dimension.addParticle(
                 this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
                 new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
@@ -214,8 +224,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         this.breakingPosZ = Integer.MAX_VALUE;
         this.faceToBreak = null;
         this.blockToBreak = null;
-        this.breakTime = 0;
-        this.stopBreakingTime = 0;
+        this.currentProgress = 0;
+        this.progressPerTick = 0;
+        this.serverSideBlockBreaking = false;
     }
 
     protected void completeBreak(Player player, int x, int y, int z) {
@@ -224,28 +235,51 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
-        var entity = player.getControlledEntity();
-        var currentTime = entity.getWorld().getTick();
-        if (Math.abs(currentTime - this.stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
-            var world = entity.getDimension();
-            var itemInHand = entity.getItemInHand();
-            if (world.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, entity)) {
-                itemInHand.onBreakBlock(this.blockToBreak, entity);
-                if (itemInHand.isBroken()) {
-                    entity.clearItemInHand();
-                } else {
-                    entity.notifyItemInHandChange();
-                }
-            } else {
-                // Failed to break the block which may due to the cancellation of BlockBreakEvent, and in
-                // this case we should send the block update to the client to recovery the old block state
-                player.viewBlockUpdate(new Vector3i(this.breakingPosX, this.breakingPosY, this.breakingPosZ), 0, this.blockToBreak);
-            }
-        } else {
-            log.debug("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", this.stopBreakingTime, currentTime);
+        // Validate progress to prevent cheating (e.g., sending BLOCK_PREDICT_DESTROY too early)
+        // Similar to Geyser's approach:
+        // - Custom blocks require server-side breaking (progress >= 1.0), client won't send BLOCK_PREDICT_DESTROY
+        // - Vanilla blocks can trust client prediction with some tolerance (progress >= 0.65)
+        if (!mayBreak()) {
+            log.debug("Player {} tried to break block too early! Progress: {}, serverSide: {}",
+                    player.getOriginName(), this.currentProgress, this.serverSideBlockBreaking);
+            return;
         }
 
+        doBlockBreak(player);
         stopBreak(player);
+    }
+
+    /**
+     * Checks if the block may be broken based on current progress.
+     * Similar to Geyser's approach:
+     * - Server-side breaking (custom blocks): requires progress >= 1.0
+     * - Client prediction (vanilla blocks): allows progress >= 0.65 for tolerance
+     */
+    protected boolean mayBreak() {
+        if (this.serverSideBlockBreaking) {
+            // Custom blocks should be broken by server in handleAsync, not here
+            // But if somehow we reach here, require full progress
+            return this.currentProgress >= 1.0f;
+        }
+        // Vanilla blocks: be tolerant to account for timing differences
+        return this.currentProgress >= BLOCK_BREAKING_PROGRESS_TOLERANCE;
+    }
+
+    protected void doBlockBreak(Player player) {
+        var entity = player.getControlledEntity();
+        var dimension = entity.getDimension();
+        var itemInHand = entity.getItemInHand();
+        if (dimension.breakBlock(this.breakingPosX, this.breakingPosY, this.breakingPosZ, itemInHand, entity)) {
+            itemInHand.onBreakBlock(this.blockToBreak, entity);
+            if (itemInHand.isBroken()) {
+                entity.clearItemInHand();
+            } else {
+                entity.notifyItemInHandChange();
+            }
+        } else {
+            // Failed to break the block (e.g. BlockBreakEvent cancelled), restore block state
+            player.viewBlockUpdate(new Vector3i(this.breakingPosX, this.breakingPosY, this.breakingPosZ), 0, this.blockToBreak);
+        }
     }
 
     protected boolean checkInteractDistance(Player player) {
@@ -258,17 +292,16 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return true;
     }
 
-    protected void updateBreakingTime(Player player, long currentTime) {
+    protected void updateBreakingProgress(Player player) {
         var entity = player.getControlledEntity();
         var newBreakingTime = this.blockToBreak.getBehavior().calculateBreakTime(this.blockToBreak, entity.getItemInHand(), entity);
-        if (this.breakTime == newBreakingTime) {
-            return;
-        }
 
-        // Breaking time has changed, make adjustments
-        var timeLeft = this.stopBreakingTime - currentTime;
-        this.stopBreakingTime = currentTime + timeLeft * (this.breakTime / newBreakingTime);
-        this.breakTime = newBreakingTime;
+        // Recalculate progress per tick based on new breaking time
+        float newProgressPerTick = newBreakingTime > 0 ? (float) (1.0 / (newBreakingTime * 20.0)) : 1.0f;
+
+        // Accumulate progress for this tick
+        this.currentProgress += newProgressPerTick;
+        this.progressPerTick = newProgressPerTick;
     }
 
     protected void handleInputData(Player player, Set<PlayerAuthInputData> inputData) {
@@ -281,7 +314,6 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             switch (input) {
                 case START_SPRINTING -> {
                     if (entity.getFoodLevel() <= 6) {
-                        // TODO: stop client-side sprinting state
                         log.warn("Player {} tried to start sprinting without enough food level", player.getOriginName());
                         return;
                     }
@@ -357,18 +389,34 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             // The pos which the client sends to the server is higher than the actual coordinates (one base offset)
             handleMovement(player, packet.getPosition().sub(0, PLAYER_NETWORK_OFFSET, 0), packet.getRotation());
         }
-        handleBlockAction(player, packet.getPlayerActions(), receiveTime);
+        handleBlockAction(player, packet.getPlayerActions());
         if (isBreakingBlock() && checkInteractDistance(player)) {
-            var dimension = player.getControlledEntity().getDimension();
-            dimension.addParticle(
-                    this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
-                    new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
-            );
-            updateBreakingTime(player, receiveTime);
-            dimension.addBlockAction(
-                    this.breakingPosX, this.breakingPosY, this.breakingPosZ,
-                    new ContinueBreakAction(this.breakTime)
-            );
+            // Update breaking progress
+            updateBreakingProgress(player);
+
+            // Check if progress has reached 100% - server authoritative block breaking.
+            // For custom blocks: their "minecraft:destructible_by_mining" is set to a very large value,
+            //   so the client will never send BLOCK_PREDICT_DESTROY. Server must proactively break.
+            // For vanilla blocks: client may send BLOCK_PREDICT_DESTROY at ~65% progress (handled in
+            //   completeBreak), but if not received, server will break at 100% as fallback.
+            if (this.currentProgress >= 1.0f) {
+                doBlockBreak(player);
+                stopBreak(player);
+            } else {
+                // Still breaking, update particles and send progress to client
+                var entity = player.getControlledEntity();
+                var dimension = entity.getDimension();
+                dimension.addParticle(
+                        this.breakingPosX + 0.5f, this.breakingPosY + 0.5f, this.breakingPosZ + 0.5f,
+                        new PunchBlockParticle(this.blockToBreak, this.faceToBreak)
+                );
+                // Calculate break time in seconds for ContinueBreakAction
+                double breakTimeSeconds = this.progressPerTick > 0 ? 1.0 / (this.progressPerTick * 20.0) : 0;
+                dimension.addBlockAction(
+                        this.breakingPosX, this.breakingPosY, this.breakingPosZ,
+                        new ContinueBreakAction(breakTimeSeconds)
+                );
+            }
         }
         return PacketSignal.UNHANDLED;
     }
