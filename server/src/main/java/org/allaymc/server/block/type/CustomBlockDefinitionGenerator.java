@@ -166,21 +166,26 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
 
         var boxes = new ArrayList<NbtMap>();
         for (var solid : voxelShape.getSolids()) {
+            // Convert from block units (0-1) to pixel units (0-16)
+            // 1.21.130+ boxes format uses coordinates relative to block corner
+            float minX = (float) (solid.minX() * 16);
+            float minY = (float) (solid.minY() * 16);
+            float minZ = (float) (solid.minZ() * 16);
+            float maxX = (float) (solid.maxX() * 16);
+            float maxY = (float) (solid.maxY() * 16);
+            float maxZ = (float) (solid.maxZ() * 16);
             boxes.add(NbtMap.builder()
-                    .putFloat("minX", (float) (solid.minX() * 16))
-                    .putFloat("minY", (float) (solid.minY() * 16))
-                    .putFloat("minZ", (float) (solid.minZ() * 16))
-                    .putFloat("maxX", (float) (solid.maxX() * 16))
-                    .putFloat("maxY", (float) (solid.maxY() * 16))
-                    .putFloat("maxZ", (float) (solid.maxZ() * 16))
+                    .putFloat("minX", minX)
+                    .putFloat("minY", minY)
+                    .putFloat("minZ", minZ)
+                    .putFloat("maxX", maxX)
+                    .putFloat("maxY", maxY)
+                    .putFloat("maxZ", maxZ)
                     .build());
         }
 
-        var union = Box.fromAABB(voxelShape.unionAABB());
         return NbtMap.builder()
                 .putBoolean("enabled", true)
-                .putList("origin", NbtType.FLOAT, List.of(union.origin().x(), union.origin().y(), union.origin().z()))
-                .putList("size", NbtType.FLOAT, List.of(union.size().x(), union.size().y(), union.size().z()))
                 .putList("boxes", NbtType.COMPOUND, boxes)
                 .build();
     }
