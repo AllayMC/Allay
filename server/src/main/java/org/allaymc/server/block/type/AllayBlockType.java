@@ -51,11 +51,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final Map<Integer, BlockState> blockStateHashMap;
     private final byte specialValueBits;
     private final Map<Long, BlockState> specialValueMap;
-
-    /**
-     * Whether this block type is a custom block (not a vanilla block).
-     * Used internally for server-authoritative block breaking.
-     */
     private final boolean customBlock;
 
     private BlockState defaultState;
@@ -202,6 +197,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected ItemType<?> itemType;
         protected ItemType<?> hardItemType;
         protected boolean isCustomBlock = true;
+        protected boolean autoCreateItemType = true;
         protected Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier = BlockBaseComponentImpl::new;
         protected Set<BlockTag> blockTags = Set.of();
         protected Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier = blockStates ->
@@ -315,6 +311,22 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
+        /**
+         * Sets whether to automatically create a block item type if the user hasn't registered one.
+         * <p>
+         * When set to {@code false}, you should pre-register the block item type manually before
+         * building this block type. This allows for custom item type configuration.
+         * <p>
+         * Default is {@code true}.
+         *
+         * @param autoCreateItemType whether to auto-create item type
+         * @return this builder
+         */
+        public Builder autoCreateItemType(boolean autoCreateItemType) {
+            this.autoCreateItemType = autoCreateItemType;
+            return this;
+        }
+
         public <T extends BlockBehavior> AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
@@ -369,6 +381,14 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             }
 
             if (this.itemType == null) {
+                if (!autoCreateItemType) {
+                    // User explicitly disabled auto-creation but didn't register the item type
+                    throw new BlockTypeBuildException(
+                            "autoCreateItemType is set to false but no item type is registered for block " + identifier +
+                            ". Please register the item type before building the block type, or set autoCreateItemType to true."
+                    );
+                }
+
                 // If the corresponding block item is not explicitly registered, automatically register one
                 this.itemType = AllayItemType
                         .builder(ItemBlockImpl.class)
@@ -376,6 +396,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         .build();
                 this.hardItemType = itemType;
             } else {
+                if (!autoCreateItemType) {
+                    // User pre-registered the item type, use it directly without creating "item." prefix version
+                    this.hardItemType = itemType;
+                    return;
+                }
+
                 // If an additional block item has already been registered, add "item." prefix
                 // Allay will pre-register block items with the "item." prefix in the vanilla registry, so let's check again for this ID
                 this.hardItemType = Registries.ITEMS.get(hardItemIdWhenConflict);
