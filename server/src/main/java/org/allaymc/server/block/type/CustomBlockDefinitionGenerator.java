@@ -362,37 +362,6 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                     .putList("size", NbtType.FLOAT, List.of(size.x(), size.y(), size.z()))
                     .build();
         }
-
-        /**
-         * Converts to NBT for minecraft:collision_box component.
-         * Uses origin/size format plus boxes list for 1.21.130+ compatibility.
-         */
-        public NbtMap toCollisionBoxNBT() {
-            // Calculate min/max coordinates for boxes list
-            // origin is already in Bedrock format (X and Z offset by -8)
-            float minX = origin.x() + 8;
-            float minY = origin.y();
-            float minZ = origin.z() + 8;
-            float maxX = minX + size.x();
-            float maxY = minY + size.y();
-            float maxZ = minZ + size.z();
-
-            return NbtMap.builder()
-                    .putBoolean("enabled", true)
-                    .putList("origin", NbtType.FLOAT, List.of(origin.x(), origin.y(), origin.z()))
-                    .putList("size", NbtType.FLOAT, List.of(size.x(), size.y(), size.z()))
-                    .putList("boxes", NbtType.COMPOUND, List.of(
-                            NbtMap.builder()
-                                    .putFloat("minX", minX)
-                                    .putFloat("minY", minY)
-                                    .putFloat("minZ", minZ)
-                                    .putFloat("maxX", maxX)
-                                    .putFloat("maxY", maxY)
-                                    .putFloat("maxZ", maxZ)
-                                    .build()
-                    ))
-                    .build();
-        }
     }
 
     /**
