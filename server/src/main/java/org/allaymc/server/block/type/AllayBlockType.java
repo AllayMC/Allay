@@ -44,6 +44,7 @@ import static org.allaymc.server.component.ComponentProvider.findComponentIdenti
  */
 @Getter
 public final class AllayBlockType<T extends BlockBehavior> implements BlockType<T> {
+
     private final Map<String, BlockPropertyType<?>> properties;
     private final Identifier identifier;
     private final Set<BlockTag> blockTags;
@@ -207,6 +208,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 ));
         protected BlockDefinitionGenerator blockDefinitionGenerator = $ -> BlockDefinition.DEFAULT;
 
+        /**
+         * Creates a new block type builder.
+         *
+         * @param clazz the block behavior interface class
+         * @throws BlockTypeBuildException if clazz is null
+         */
         public Builder(Class<?> clazz) {
             if (clazz == null) {
                 throw new BlockTypeBuildException("Interface class cannot be null!");
@@ -214,15 +221,37 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             this.clazz = clazz;
         }
 
+        /**
+         * Sets the block identifier.
+         *
+         * @param identifier the block identifier
+         * @return this builder
+         */
         public Builder identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
+        /**
+         * Sets the block identifier from a string.
+         *
+         * @param identifier the block identifier string (e.g., "myplugin:my_block")
+         * @return this builder
+         */
         public Builder identifier(String identifier) {
             return identifier(new Identifier(identifier));
         }
 
+        /**
+         * Configures this builder for a vanilla block.
+         * <p>
+         * This method sets up the block state data, block tags, and default state
+         * from the internal registries based on the vanilla block ID.
+         *
+         * @param blockId the vanilla block ID
+         * @return this builder
+         * @throws BlockTypeBuildException if vanilla block data is not found
+         */
         public Builder vanillaBlock(BlockId blockId) {
             this.isCustomBlock = false;
             this.identifier = blockId.getIdentifier();
@@ -241,25 +270,59 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
+        /**
+         * Binds a block entity type to this block.
+         * <p>
+         * Blocks with bound block entities will automatically create and manage
+         * block entity instances when placed in the world.
+         *
+         * @param blockEntityType the block entity type to bind
+         * @return this builder
+         */
         public Builder bindBlockEntity(BlockEntityType<?> blockEntityType) {
             return addComponent(new BlockBlockEntityHolderComponentImpl<>(blockEntityType));
         }
 
+        /**
+         * Sets a custom supplier for determining the default block state.
+         *
+         * @param defaultStateSupplier a function that takes a map of block states and returns the default state
+         * @return this builder
+         */
         public Builder setDefaultStateSupplier(Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier) {
             this.defaultStateSupplier = defaultStateSupplier;
             return this;
         }
 
+        /**
+         * Sets the block properties (e.g., facing direction, powered state).
+         *
+         * @param properties the block properties
+         * @return this builder
+         */
         public Builder setProperties(BlockPropertyType<?>... properties) {
             this.properties = Arrays.stream(properties).collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
+        /**
+         * Sets the block properties from a list.
+         *
+         * @param properties the list of block properties
+         * @return this builder
+         */
         public Builder setProperties(List<BlockPropertyType<?>> properties) {
             this.properties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
+        /**
+         * Sets the block components, replacing any existing components.
+         *
+         * @param components a map of component identifiers to components
+         * @return this builder
+         * @throws BlockTypeBuildException if components is null
+         */
         public Builder setComponents(Map<Identifier, BlockComponent> components) {
             if (components == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
@@ -267,20 +330,44 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
+        /**
+         * Adds multiple components to this block.
+         *
+         * @param components a map of component identifiers to components
+         * @return this builder
+         */
         public Builder addComponents(Map<Identifier, BlockComponent> components) {
             this.components.putAll(components);
             return this;
         }
 
+        /**
+         * Adds a single component to this block.
+         *
+         * @param component the component to add
+         * @return this builder
+         */
         public Builder addComponent(BlockComponent component) {
             this.components.put(findComponentIdentifierInClass(component.getClass()), component);
             return this;
         }
 
+        /**
+         * Sets the block components from a list, replacing any existing components.
+         *
+         * @param components the list of components
+         * @return this builder
+         */
         public Builder setComponents(List<BlockComponent> components) {
             return setComponents(listComponentToMap(components));
         }
 
+        /**
+         * Adds multiple components from a list to this block.
+         *
+         * @param components the list of components to add
+         * @return this builder
+         */
         public Builder addComponents(List<BlockComponent> components) {
             return addComponents(listComponentToMap(components));
         }
@@ -296,16 +383,44 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return map;
         }
 
+        /**
+         * Sets a custom supplier for the base component.
+         * <p>
+         * The base component provides core block functionality. Use this to customize
+         * the base behavior of the block.
+         *
+         * @param baseComponentSupplier a function that creates a base component from a block type
+         * @return this builder
+         */
         public Builder setBaseComponentSupplier(Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier) {
             this.baseComponentSupplier = baseComponentSupplier;
             return this;
         }
 
+        /**
+         * Sets the block tags for this block.
+         * <p>
+         * Block tags are used for grouping blocks and checking block properties
+         * (e.g., "minecraft:logs", "minecraft:planks").
+         *
+         * @param blockTags the collection of block tags
+         * @return this builder
+         */
         public Builder setBlockTags(Collection<BlockTag> blockTags) {
             this.blockTags = new HashSet<>(blockTags);
             return this;
         }
 
+        /**
+         * Sets the block definition generator for custom blocks.
+         * <p>
+         * The generator creates the client-side block definition that is sent to players.
+         * Use {@link CustomBlockDefinitionGenerator} for custom block rendering configuration.
+         *
+         * @param blockDefinitionGenerator the block definition generator
+         * @return this builder
+         * @see CustomBlockDefinitionGenerator
+         */
         public Builder blockDefinitionGenerator(BlockDefinitionGenerator blockDefinitionGenerator) {
             this.blockDefinitionGenerator = blockDefinitionGenerator;
             return this;
@@ -327,6 +442,18 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
+        /**
+         * Builds and registers the block type.
+         * <p>
+         * This method creates the block type, registers it to the block registry,
+         * and registers all block states to the block state palette.
+         *
+         * @param <T> the block behavior type
+         * @return the built and registered block type
+         * @throws NullPointerException    if identifier is not set
+         * @throws BlockTypeBuildException if block type creation fails or if autoCreateItemType
+         *                                 is false and no item type is registered
+         */
         public <T extends BlockBehavior> AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
