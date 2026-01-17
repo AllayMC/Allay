@@ -21,7 +21,7 @@ public class ItemClassGen extends BaseClassGen {
     public static final MethodSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER =
             MethodSpec.methodBuilder("init")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-    public static final Set<String> IGNORED_FILES = Set.of("ItemStackImpl.java", "ItemBlockImpl.java", "package-info.java");
+    public static final Set<String> IGNORED_FILES = Set.of("ItemStackImpl.java", "package-info.java");
 
     public static Map<Pattern, String> MERGED_ITEMS = new LinkedHashMap<>();
 

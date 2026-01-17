@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.block.component.BlockStateDataComponent;
-import org.allaymc.api.block.data.BlockStateData;
 import org.allaymc.api.block.data.BlockTag;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
@@ -27,7 +25,7 @@ import org.allaymc.server.block.component.BlockBlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.data.BlockId;
 import org.allaymc.server.component.ComponentProvider;
-import org.allaymc.server.item.impl.ItemBlockImpl;
+import org.allaymc.server.item.impl.ItemStackImpl;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.utils.BlockAndItemIdMapper;
@@ -518,7 +516,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
                 // If the corresponding block item is not explicitly registered, automatically register one
                 this.itemType = AllayItemType
-                        .builder(ItemBlockImpl.class)
+                        .builder(ItemStackImpl.class)
                         .identifier(itemId)
                         .build();
                 this.hardItemType = itemType;
@@ -534,7 +532,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 this.hardItemType = Registries.ITEMS.get(hardItemIdWhenConflict);
                 if (this.hardItemType == null) {
                     this.hardItemType = AllayItemType
-                            .builder(ItemBlockImpl.class)
+                            .builder(ItemStackImpl.class)
                             .identifier(hardItemIdWhenConflict)
                             .build();
                 }

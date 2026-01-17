@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public abstract class BlockEntityImpl extends ComponentClass implements BlockEntity {
+public class BlockEntityImpl extends ComponentClass implements BlockEntity {
 
     @Delegate
     @Getter
