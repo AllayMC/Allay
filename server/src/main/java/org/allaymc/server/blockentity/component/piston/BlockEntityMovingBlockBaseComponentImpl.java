@@ -16,8 +16,6 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 /**
- * Implementation of moving block block entity component.
- *
  * @author daoge_cmd
  */
 public class BlockEntityMovingBlockBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityMovingBlockBaseComponent {
@@ -40,9 +38,6 @@ public class BlockEntityMovingBlockBaseComponentImpl extends BlockEntityBaseComp
     @Getter
     @Setter
     protected Vector3ic pistonPos = new Vector3i(0, -1, 0);
-    @Getter
-    @Setter
-    @Nullable
     protected NbtMap movingBlockEntityNbt;
     @Getter
     @Setter
@@ -113,7 +108,12 @@ public class BlockEntityMovingBlockBaseComponentImpl extends BlockEntityBaseComp
     }
 
     @Override
-    public boolean sendToClient() {
-        return true;
+    public NbtMap getMovingBlockEntityNBT() {
+        return this.movingBlockEntityNbt;
+    }
+
+    @Override
+    public void setMovingBlockEntityNBT(NbtMap nbt) {
+        this.movingBlockEntityNbt = nbt;
     }
 }

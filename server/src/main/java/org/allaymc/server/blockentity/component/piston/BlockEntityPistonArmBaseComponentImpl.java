@@ -259,7 +259,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
             if (blockEntity instanceof BlockEntityMovingBlock movingBlockEntity) {
                 // Get the original state before removing the moving block
                 var originalState = movingBlockEntity.getMovingBlockState();
-                var movingBlockEntityNbt = movingBlockEntity.getMovingBlockEntityNbt();
+                var movingBlockEntityNbt = movingBlockEntity.getMovingBlockEntityNBT();
 
                 // Setting the block state will automatically remove the old block entity
                 // and create a new one if the original block had a block entity

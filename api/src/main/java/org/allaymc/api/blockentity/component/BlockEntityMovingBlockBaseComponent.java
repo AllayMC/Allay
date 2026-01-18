@@ -2,7 +2,6 @@ package org.allaymc.api.blockentity.component;
 
 import org.allaymc.api.block.type.BlockState;
 import org.cloudburstmc.nbt.NbtMap;
-import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3ic;
 
 /**
@@ -43,17 +42,16 @@ public interface BlockEntityMovingBlockBaseComponent extends BlockEntityBaseComp
     /**
      * Get the NBT data of the block entity being moved, if any.
      *
-     * @return the moving block entity NBT, or null if none
+     * @return the moving block entity NBT, or {#code null} if none
      */
-    @Nullable
-    NbtMap getMovingBlockEntityNbt();
+    NbtMap getMovingBlockEntityNBT();
 
     /**
      * Set the NBT data of the block entity being moved.
      *
-     * @param nbt the block entity NBT
+     * @param nbt the block entity NBT, or {@code null} if there is no block entity
      */
-    void setMovingBlockEntityNbt(@Nullable NbtMap nbt);
+    void setMovingBlockEntityNBT(NbtMap nbt);
 
     /**
      * Check if the block is expanding (moving away from piston) or retracting (moving towards piston).
