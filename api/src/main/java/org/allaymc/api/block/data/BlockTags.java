@@ -117,7 +117,7 @@ public interface BlockTags {
     BlockTag CAN_STICK_BLOCKS = create("minecraft:can_stick_blocks");
 
     // Redstone-related tags
-    BlockTag REDSTONE_COMPONENT = create("minecraft:redstone_component");
+    BlockTag REDSTONE_WIRE_CONNECTS_TO = create("minecraft:redstone_wire_connects_to");
 
     static BlockTag create(String name) {
         var tag = new BlockTag(name);

@@ -323,8 +323,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
      * Based on MC Wiki:
      * - No connections: forms a dot, points all 4 directions
      * - 1 connection: forms a line, points toward AND away from that neighbor
-     * - 2 connections (line or L-shape): points to both connected directions
-     * - 3+ connections (T or + shape): only points if not at a "corner" (perpendicular blocked)
+     * - 2+ connections (line, L, T, or +): points to all connected directions
      */
     protected boolean isPointingTo(Block block, BlockFace face) {
         var dimension = block.getDimension();
@@ -349,24 +348,9 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return face == singleConnection || face == singleConnection.opposite();
         }
 
-        // Two connections
-        if (connectedFaces.size() == 2) {
-            // Check if it's a straight line (opposite directions) or L-shape (adjacent directions)
-            // Both cases: wire points to connected directions
-            return connectedFaces.contains(face);
-        }
-
-        // For T or + shapes (3+ connections):
-        // Wire points to a direction only if connected AND not connected to perpendicular
-        // This prevents "corner" output - e.g., a T-shape pointing North/South/East
-        // won't output to East if it would have to "turn a corner"
-        if (connectedFaces.contains(face)) {
-            BlockFace left = face.rotateYCCW();
-            BlockFace right = face.rotateY();
-            return !connectedFaces.contains(left) && !connectedFaces.contains(right);
-        }
-
-        return false;
+        // 2+ connections (line, L-shape, T-shape, or cross):
+        // Wire points to all connected directions
+        return connectedFaces.contains(face);
     }
 
     /**
@@ -390,8 +374,8 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return face == repeaterFacing || face == repeaterFacing.opposite();
         }
 
-        // Connect to other redstone components
-        if (isRedstoneComponent(neighborState)) {
+        // Connect to other redstone components that wire actively connects to
+        if (shouldWireConnectTo(neighborState)) {
             return true;
         }
 
@@ -419,11 +403,12 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if a block is a redstone component that wire should connect to.
-     * This includes power sources and redstone mechanisms that can be activated by redstone.
+     * Checks if a block is a redstone component that wire should actively connect to.
+     * This includes power sources and redstone mechanisms, but not passive receivers
+     * like redstone lamps, dispensers, or note blocks.
      */
-    protected boolean isRedstoneComponent(BlockState state) {
-        return state.getBlockType().hasBlockTag(BlockTags.REDSTONE_COMPONENT);
+    protected boolean shouldWireConnectTo(BlockState state) {
+        return state.getBlockType().hasBlockTag(BlockTags.REDSTONE_WIRE_CONNECTS_TO);
     }
 
     /**

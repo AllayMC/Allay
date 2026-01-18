@@ -333,7 +333,7 @@
     "minecraft:slime",
     "minecraft:honey_block"
   ],
-  "minecraft:redstone_component": [
+  "minecraft:redstone_wire_connects_to": [
     "minecraft:lever",
     "minecraft:wooden_button",
     "minecraft:stone_button",
@@ -380,13 +380,6 @@
     "minecraft:powered_repeater",
     "minecraft:unpowered_repeater",
     "minecraft:piston",
-    "minecraft:sticky_piston",
-    "minecraft:redstone_lamp",
-    "minecraft:lit_redstone_lamp",
-    "minecraft:tnt",
-    "minecraft:noteblock",
-    "minecraft:dispenser",
-    "minecraft:dropper",
-    "minecraft:hopper"
+    "minecraft:sticky_piston"
   ]
 }
