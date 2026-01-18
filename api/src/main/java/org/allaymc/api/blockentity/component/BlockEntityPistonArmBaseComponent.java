@@ -107,6 +107,20 @@ public interface BlockEntityPistonArmBaseComponent extends BlockEntityBaseCompon
     void startMoving();
 
     /**
+     * Check if the piston is currently powered by redstone.
+     *
+     * @return true if powered
+     */
+    boolean isPowered();
+
+    /**
+     * Set the powered state of the piston.
+     *
+     * @param powered true if powered
+     */
+    void setPowered(boolean powered);
+
+    /**
      * Get the current state of the piston (for NBT).
      * 0 = retracted, 1 = extending, 2 = extended, 3 = retracting
      *

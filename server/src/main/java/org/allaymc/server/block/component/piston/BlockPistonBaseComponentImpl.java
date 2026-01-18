@@ -63,13 +63,16 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             if (pistonArm != null) {
                 pistonArm.setSticky(isSticky());
                 pistonArm.setFacing(getPistonFace(blockState));
-            }
 
-            // Check if we should extend immediately due to redstone power
-            Block block = new Block(dimension, placeBlockPos);
-            if (hasRedstonePower(block)) {
-                // Schedule extension for next tick
-                dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(placeBlockPos, Duration.ofMillis(50));
+                // Check if we should extend immediately due to redstone power
+                Block block = new Block(dimension, placeBlockPos);
+                boolean isPowered = hasRedstonePower(block);
+                pistonArm.setPowered(isPowered);
+
+                if (isPowered) {
+                    // Schedule extension for next tick
+                    dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(placeBlockPos, Duration.ofMillis(50));
+                }
             }
         }
 
@@ -90,15 +93,42 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
         var pos = block.getPosition();
         var blockState = block.getBlockState();
 
-        boolean isPowered = hasRedstonePower(block);
-        boolean isExtended = isExtended(dimension, pos, blockState);
+        // Get piston arm block entity to check animation state
+        var pistonArmBlockEntity = dimension.getBlockEntity(pos);
+        if (!(pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm)) {
+            return;
+        }
 
-        if (isPowered && !isExtended) {
-            // Try to extend
-            extend(block);
-        } else if (!isPowered && isExtended) {
-            // Try to retract
-            retract(block);
+        boolean isPowered = hasRedstonePower(block);
+
+        // PNX pattern: Only allow state changes when:
+        // 1. Animation is complete (state % 2 == 0)
+        // 2. Power state has changed (powered != isPowered)
+        // state 0 = retracted, 1 = extending, 2 = extended, 3 = retracting
+        if (pistonArm.getState() % 2 == 0 && pistonArm.isPowered() != isPowered) {
+            pistonArm.setPowered(isPowered);
+
+            boolean isExtended = isExtended(dimension, pos, blockState);
+
+            if (isPowered && !isExtended) {
+                // Try to extend
+                if (!extend(block)) {
+                    // Extension failed, schedule another check
+                    block.scheduleUpdateInDelay(Duration.ofMillis(50));
+                }
+            } else if (!isPowered && isExtended) {
+                // Try to retract
+                retract(block);
+            }
+            return;
+        }
+
+        // If animation is in progress, or power state hasn't changed but we need to retry
+        // Schedule another check for failed extension attempts
+        if (isPowered && !isExtended(dimension, pos, blockState) && pistonArm.getState() % 2 == 0) {
+            if (!extend(block)) {
+                block.scheduleUpdateInDelay(Duration.ofMillis(50));
+            }
         }
     }
 

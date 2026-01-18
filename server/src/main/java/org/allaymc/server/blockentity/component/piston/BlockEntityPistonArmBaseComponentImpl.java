@@ -39,6 +39,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
     protected static final String TAG_EXTENDING = "Extending";
     protected static final String TAG_ATTACHED_BLOCKS = "AttachedBlocks";
     protected static final String TAG_FACING = "facing";
+    protected static final String TAG_POWERED = "powered";
 
     @ComponentObject
     protected BlockEntityPistonArm thisPistonArm;
@@ -63,6 +64,9 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
     protected byte newState = 1;
     @Getter
     protected boolean finished = true;
+    @Getter
+    @Setter
+    protected boolean powered;
 
     protected List<Vector3ic> attachedBlocks = new ArrayList<>();
     protected Map<Vector3ic, BlockState> attachedBlockStates = new HashMap<>();
@@ -80,6 +84,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
         builder.putFloat(TAG_LAST_PROGRESS, lastProgress);
         builder.putBoolean(TAG_STICKY, sticky);
         builder.putBoolean(TAG_EXTENDING, extending);
+        builder.putBoolean(TAG_POWERED, powered);
         builder.putInt(TAG_FACING, facing.ordinal());
 
         // Save attached blocks as int array (x, y, z, x, y, z, ...)
@@ -103,6 +108,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
         nbt.listenForFloat(TAG_LAST_PROGRESS, value -> lastProgress = value);
         nbt.listenForBoolean(TAG_STICKY, value -> sticky = value);
         nbt.listenForBoolean(TAG_EXTENDING, value -> extending = value);
+        nbt.listenForBoolean(TAG_POWERED, value -> powered = value);
         nbt.listenForInt(TAG_FACING, value -> facing = BlockFace.fromIndex(value));
 
         nbt.listenForList(TAG_ATTACHED_BLOCKS, NbtType.INT, blocks -> {
@@ -283,6 +289,9 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
 
         // Send update to viewers
         sendBlockEntityToViewers();
+
+        // PNX: Schedule a self-check on next tick to ensure correct state
+        dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(position, java.time.Duration.ofMillis(50));
     }
 
     @Override

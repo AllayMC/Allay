@@ -28,6 +28,7 @@ public class PistonPushCalculator {
     private final Dimension dimension;
     private final Vector3ic pistonPos;
     private final BlockFace pushDirection;
+    private final BlockFace moveDirection;
     private final boolean sticky;
     private final boolean extending;
 
@@ -41,7 +42,7 @@ public class PistonPushCalculator {
      *
      * @param dimension     The dimension to operate in
      * @param pistonPos     The position of the piston block
-     * @param pushDirection The direction the piston is pushing
+     * @param pushDirection The direction the piston is pushing (facing direction)
      * @param sticky        Whether the piston is sticky
      * @param extending     Whether the piston is extending or retracting
      */
@@ -55,6 +56,10 @@ public class PistonPushCalculator {
         this.dimension = dimension;
         this.pistonPos = pistonPos;
         this.pushDirection = pushDirection;
+        // moveDirection: direction blocks are moving
+        // - Extending: blocks move away from piston (pushDirection)
+        // - Retracting: blocks move towards piston (pushDirection.opposite())
+        this.moveDirection = extending ? pushDirection : pushDirection.opposite();
         this.sticky = sticky;
         this.extending = extending;
     }
@@ -170,13 +175,13 @@ public class PistonPushCalculator {
         toMove.add(origin);
         originalStates.put(origin, blockState);
 
-        // Check blocks behind this one (blocks that might be pulled along by sticky blocks)
+        // Check blocks behind this one (opposite to move direction, blocks that might be pulled along by sticky blocks)
         int count = 1;
         List<Vector3ic> behindBlocks = new ArrayList<>();
-        BlockFace oppositeDirection = pushDirection.opposite();
+        BlockFace behindDirection = moveDirection.opposite();
 
         while (canStickBlocks(blockState)) {
-            Vector3ic behindPos = oppositeDirection.offsetPos(origin, count);
+            Vector3ic behindPos = behindDirection.offsetPos(origin, count);
 
             BlockState behindState = dimension.getBlockState(behindPos);
 
@@ -212,10 +217,10 @@ public class PistonPushCalculator {
         Collections.reverse(behindBlocks);
         toMove.addAll(behindBlocks);
 
-        // Check blocks in front (in push direction)
+        // Check blocks in front (in move direction)
         int step = 1;
         while (true) {
-            Vector3ic frontPos = pushDirection.offsetPos(origin, step);
+            Vector3ic frontPos = moveDirection.offsetPos(origin, step);
 
             BlockState frontState = dimension.getBlockState(frontPos);
 
