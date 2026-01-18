@@ -162,7 +162,7 @@ public class PistonPushCalculator {
         }
 
         // Check if we've reached the piston itself
-        if (origin.equals(pistonPos)) {
+        if (posEquals(origin, pistonPos)) {
             return true;
         }
 
@@ -192,7 +192,7 @@ public class PistonPushCalculator {
                 }
             }
 
-            if (isAirOrReplaceable(behindState) || !canMoveBlock(behindState, extending) || behindPos.equals(pistonPos)) {
+            if (isAirOrReplaceable(behindState) || !canMoveBlock(behindState, extending) || posEquals(behindPos, pistonPos)) {
                 break;
             }
 
@@ -233,7 +233,7 @@ public class PistonPushCalculator {
             // Check for the piston arm position (when retracting)
             if (!extending) {
                 Vector3ic armPos = pushDirection.offsetPos(pistonPos);
-                if (frontPos.equals(armPos)) {
+                if (posEquals(frontPos, armPos)) {
                     return true;
                 }
             }
@@ -365,6 +365,15 @@ public class PistonPushCalculator {
      */
     private boolean canStickBlocks(BlockState state) {
         return state.getBlockType().hasBlockTag(BlockTags.CAN_STICK_BLOCKS);
+    }
+
+    /**
+     * Check if two positions are equal by comparing coordinates.
+     * This is needed because Vector3i.equals() checks class type,
+     * which fails when comparing Vector3i with Position3i.
+     */
+    private boolean posEquals(Vector3ic a, Vector3ic b) {
+        return a.x() == b.x() && a.y() == b.y() && a.z() == b.z();
     }
 
     /**
