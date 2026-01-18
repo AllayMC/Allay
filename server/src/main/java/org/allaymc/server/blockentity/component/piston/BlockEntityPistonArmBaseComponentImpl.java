@@ -10,7 +10,7 @@ import org.allaymc.api.blockentity.component.BlockEntityPistonArmBaseComponent;
 import org.allaymc.api.blockentity.interfaces.BlockEntityMovingBlock;
 import org.allaymc.api.blockentity.interfaces.BlockEntityPistonArm;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.cloudburstmc.nbt.NbtMap;
@@ -220,8 +220,10 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
             return;
         }
 
-        // Players handle their own client-side movement
-        if (entity instanceof EntityPlayer) {
+        // Only move entities that compute movement server-side
+        // (e.g., players handle their own client-side movement)
+        if (entity instanceof EntityPhysicsComponent physicsComponent &&
+            !physicsComponent.computeMovementServerSide()) {
             return;
         }
 
