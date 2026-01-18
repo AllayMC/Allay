@@ -98,6 +98,10 @@ public enum SimpleSound implements Sound {
     END_PORTAL_FRAME_FILLED,
     // END_PORTAL_SPAWN is a sound when end portal is activated.
     END_PORTAL_SPAWN,
+    // PISTON_PUSH is a sound played when a piston pushes.
+    PISTON_PUSH,
+    // PISTON_PULL is a sound played when a piston pulls.
+    PISTON_PULL,
 
     /* Item */
 

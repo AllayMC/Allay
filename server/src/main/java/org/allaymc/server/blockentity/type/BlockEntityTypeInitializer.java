@@ -8,6 +8,8 @@ import org.allaymc.server.blockentity.component.campfire.BlockEntitySoulCampfire
 import org.allaymc.server.blockentity.component.furnace.BlockEntityBlastFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
+import org.allaymc.server.blockentity.component.piston.BlockEntityMovingBlockBaseComponentImpl;
+import org.allaymc.server.blockentity.component.piston.BlockEntityPistonArmBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
 import org.allaymc.server.blockentity.data.BlockEntityId;
@@ -203,6 +205,22 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityCampfireImpl.class)
                 .name(BlockEntityId.CAMPFIRE)
                 .addComponent(BlockEntitySoulCampfireBaseComponentImpl::new, BlockEntitySoulCampfireBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initPistonArm() {
+        BlockEntityTypes.PISTON_ARM = AllayBlockEntityType
+                .builder(BlockEntityPistonArmImpl.class)
+                .name(BlockEntityId.PISTON_ARM)
+                .addComponent(BlockEntityPistonArmBaseComponentImpl::new, BlockEntityPistonArmBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initMovingBlock() {
+        BlockEntityTypes.MOVING_BLOCK = AllayBlockEntityType
+                .builder(BlockEntityMovingBlockImpl.class)
+                .name(BlockEntityId.MOVING_BLOCK)
+                .addComponent(BlockEntityMovingBlockBaseComponentImpl::new, BlockEntityMovingBlockBaseComponentImpl.class)
                 .build();
     }
 }

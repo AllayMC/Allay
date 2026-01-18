@@ -1295,6 +1295,12 @@ public class AllayPlayer implements Player {
                 sendPacket(levelEvent);
                 return;
             }
+            case SimpleSound.PISTON_PUSH -> {
+                packet.setSound(SoundEvent.PISTON_OUT);
+            }
+            case SimpleSound.PISTON_PULL -> {
+                packet.setSound(SoundEvent.PISTON_IN);
+            }
             case SimpleSound.TOTEM -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_TOTEM_USED);

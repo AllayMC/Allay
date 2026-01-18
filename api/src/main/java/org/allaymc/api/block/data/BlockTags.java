@@ -107,6 +107,15 @@ public interface BlockTags {
 
     BlockTag LEAVES = create("minecraft:leaves");
 
+    // Piston-related tags
+    BlockTag UNPUSHABLE = create("minecraft:unpushable");
+
+    BlockTag UNPULLABLE = create("minecraft:unpullable");
+
+    BlockTag BREAK_WHEN_PUSHED = create("minecraft:break_when_pushed");
+
+    BlockTag CAN_STICK_BLOCKS = create("minecraft:can_stick_blocks");
+
     static BlockTag create(String name) {
         var tag = new BlockTag(name);
         NAME_TO_TAG.put(name, tag);
