@@ -8,12 +8,14 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.blockentity.interfaces.BlockEntityMovingBlock;
 import org.allaymc.api.blockentity.interfaces.BlockEntityPistonArm;
 import org.allaymc.api.eventbus.event.block.BlockPistonEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.time.Duration;
@@ -202,7 +204,14 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             List<Vector3ic> blocksToDestroy,
             Map<Vector3ic, BlockState> originalStates
     ) {
-        // 1. Destroy blocks that should be destroyed
+        // 1. Prepare piston arm block entity state FIRST (sends initial state to client)
+        // This must happen BEFORE MOVING_BLOCK entities are created (PNX preMove)
+        var pistonArmBlockEntity = dimension.getBlockEntity(pistonPos);
+        if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
+            pistonArm.preExtending(blocksToMove, originalStates);
+        }
+
+        // 2. Destroy blocks that should be destroyed
         for (Vector3ic pos : blocksToDestroy) {
             BlockState state = originalStates.get(pos);
             if (state != null) {
@@ -211,13 +220,13 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // 2. Clear the original positions of blocks to move (from back to front)
+        // 3. Clear the original positions of blocks to move (from back to front)
         for (int i = blocksToMove.size() - 1; i >= 0; i--) {
             Vector3ic pos = blocksToMove.get(i);
             dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
         }
 
-        // 3. Place blocks in their new positions (from front to back)
+        // 4. Place blocks in their new positions (from front to back)
         for (int i = 0; i < blocksToMove.size(); i++) {
             Vector3ic oldPos = blocksToMove.get(i);
             Vector3ic newPos = facing.offsetPos(oldPos);
@@ -226,25 +235,32 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             if (state != null) {
                 // Create moving block at new position
                 dimension.setBlockState(newPos, BlockTypes.MOVING_BLOCK.getDefaultState());
-                // TODO: Create MovingBlock block entity to store the original block state
+                // Initialize the MovingBlock block entity with the original block state
+                var movingBlockEntity = dimension.getBlockEntity(newPos);
+                if (movingBlockEntity instanceof BlockEntityMovingBlock movingBlock) {
+                    movingBlock.setMovingBlockState(state);
+                    movingBlock.setPistonPos(new Vector3i(pistonPos));
+                    movingBlock.setExpanding(true); // Extending = expanding away from piston
+                }
             }
         }
 
-        // 4. Create the piston arm at the extended position
+        // 5. Create the piston arm at the extended position
         Vector3ic armPos = facing.offsetPos(pistonPos);
         BlockType<?> armType = isSticky()
                 ? BlockTypes.STICKY_PISTON_ARM_COLLISION
                 : BlockTypes.PISTON_ARM_COLLISION;
+        // The piston arm's facing_direction should match the piston's raw stored value
+        int armFacing = dimension.getBlockState(pistonPos).getPropertyValue(FACING_DIRECTION);
         dimension.setBlockState(armPos, armType.getDefaultState()
-                .setPropertyValue(FACING_DIRECTION, facing.ordinal()));
+                .setPropertyValue(FACING_DIRECTION, armFacing));
 
-        // 5. Update piston arm block entity state
-        var pistonArmBlockEntity = dimension.getBlockEntity(pistonPos);
+        // 6. Start the actual movement (PNX move)
         if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
-            pistonArm.startExtending(blocksToMove, originalStates);
+            pistonArm.startMoving();
         }
 
-        // 6. Schedule animation completion
+        // 7. Schedule animation completion
         dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(pistonPos, ANIMATION_DURATION);
     }
 
@@ -259,7 +275,14 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             List<Vector3ic> blocksToDestroy,
             Map<Vector3ic, BlockState> originalStates
     ) {
-        // 1. Destroy blocks that should be destroyed
+        // 1. Prepare piston arm block entity state FIRST (sends initial state to client)
+        // This must happen BEFORE MOVING_BLOCK entities are created (PNX preMove)
+        var pistonArmBlockEntity = dimension.getBlockEntity(pistonPos);
+        if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
+            pistonArm.preRetracting(blocksToMove, originalStates);
+        }
+
+        // 2. Destroy blocks that should be destroyed
         for (Vector3ic pos : blocksToDestroy) {
             BlockState state = originalStates.get(pos);
             if (state != null) {
@@ -267,35 +290,43 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // 2. For sticky piston, move blocks
+        // 3. For sticky piston, move blocks
         if (isSticky() && !blocksToMove.isEmpty()) {
             // Clear original positions
             for (Vector3ic pos : blocksToMove) {
                 dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
             }
 
-            // Place at new positions (one closer to piston)
+            // Place at new positions (one closer to piston) using MOVING_BLOCK for animation
             BlockFace pullDirection = facing.opposite();
             for (Vector3ic oldPos : blocksToMove) {
                 Vector3ic newPos = pullDirection.offsetPos(oldPos);
                 BlockState state = originalStates.get(oldPos);
                 if (state != null) {
-                    dimension.setBlockState(newPos, state);
+                    // Create moving block at new position for smooth animation
+                    dimension.setBlockState(newPos, BlockTypes.MOVING_BLOCK.getDefaultState());
+                    // Initialize the MovingBlock block entity
+                    var movingBlockEntity = dimension.getBlockEntity(newPos);
+                    if (movingBlockEntity instanceof BlockEntityMovingBlock movingBlock) {
+                        movingBlock.setMovingBlockState(state);
+                        movingBlock.setPistonPos(new Vector3i(pistonPos));
+                        movingBlock.setExpanding(false); // Retracting = not expanding
+                    }
                 }
             }
+        } else {
+            // For non-sticky piston or no blocks to move, just remove the piston arm
+            Vector3ic armPos = facing.offsetPos(pistonPos);
+            dimension.setBlockState(armPos, BlockTypes.AIR.getDefaultState());
         }
 
-        // 3. Remove the piston arm
-        Vector3ic armPos = facing.offsetPos(pistonPos);
-        dimension.setBlockState(armPos, BlockTypes.AIR.getDefaultState());
-
-        // 4. Update piston arm block entity state
-        var pistonArmBlockEntity = dimension.getBlockEntity(pistonPos);
+        // 4. Start the actual movement (PNX move)
+        // Note: Piston arm removal for sticky piston with blocks is handled in finishAnimation()
         if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
-            pistonArm.startRetracting();
+            pistonArm.startMoving();
         }
 
-        // 5. Schedule animation completion
+        // 6. Schedule animation completion
         dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(pistonPos, ANIMATION_DURATION);
     }
 
@@ -323,15 +354,20 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Get the facing direction of the piston.
+     * Get the facing direction of the piston (the direction it pushes towards).
+     * Note: For horizontal pistons, Minecraft stores the opposite direction in the
+     * facing_direction property, so we need to invert it.
      */
     protected BlockFace getPistonFace(BlockState blockState) {
         int facing = blockState.getPropertyValue(FACING_DIRECTION);
-        return BlockFace.fromIndex(facing);
+        BlockFace face = BlockFace.fromIndex(facing);
+        // For horizontal pistons, the stored direction is opposite to the push direction
+        return face.isHorizontal() ? face.opposite() : face;
     }
 
     /**
-     * Calculate the facing direction when placing the piston.
+     * Calculate the facing direction property value when placing the piston.
+     * Note: For horizontal pistons, Minecraft stores the opposite of the push direction.
      */
     protected int getPlacementFacing(Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         var player = placementInfo.player();
@@ -353,8 +389,9 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // Use horizontal facing based on player direction
-        return player.getHorizontalFace().ordinal();
+        // For horizontal pistons, store the opposite direction (this is how Minecraft works)
+        BlockFace horizontalFace = player.getHorizontalFace();
+        return horizontalFace.ordinal();
     }
 
     /**

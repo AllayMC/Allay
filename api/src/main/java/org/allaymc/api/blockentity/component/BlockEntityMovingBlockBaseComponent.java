@@ -54,4 +54,18 @@ public interface BlockEntityMovingBlockBaseComponent extends BlockEntityBaseComp
      * @param nbt the block entity NBT
      */
     void setMovingBlockEntityNbt(@Nullable NbtMap nbt);
+
+    /**
+     * Check if the block is expanding (moving away from piston) or retracting (moving towards piston).
+     *
+     * @return true if expanding, false if retracting
+     */
+    boolean isExpanding();
+
+    /**
+     * Set whether the block is expanding or retracting.
+     *
+     * @param expanding true if expanding, false if retracting
+     */
+    void setExpanding(boolean expanding);
 }

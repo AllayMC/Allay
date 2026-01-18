@@ -125,20 +125,20 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
             return;
         }
 
-        // Update progress
+        // Update progress - PNX style: both progress and lastProgress are updated together
         if (extending) {
-            lastProgress = progress;
             progress = Math.min(1, progress + MOVE_STEP);
+            lastProgress = Math.min(1, lastProgress + MOVE_STEP);
         } else {
-            lastProgress = progress;
             progress = Math.max(0, progress - MOVE_STEP);
+            lastProgress = Math.max(0, lastProgress - MOVE_STEP);
         }
 
         // Move collided entities
         moveCollidedEntities();
 
         // Check if animation is complete
-        if (progress == lastProgress || (extending && progress >= 1) || (!extending && progress <= 0)) {
+        if (progress == lastProgress) {
             finishAnimation();
         }
     }
@@ -291,26 +291,46 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
     }
 
     @Override
-    public void startExtending(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates) {
+    public void preExtending(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates) {
         finished = false;
         extending = true;
+        // PNX preMove: set both to same value initially
         progress = 0;
-        lastProgress = -MOVE_STEP;
+        lastProgress = 0;
         state = newState = 1;
         attachedBlocks = new ArrayList<>(blocksToMove);
         attachedBlockStates = new HashMap<>(originalStates);
 
+        // Send initial state to client with progress = lastProgress = 0
+        // This must be sent BEFORE MOVING_BLOCK entities are created
         sendBlockEntityToViewers();
     }
 
     @Override
-    public void startRetracting() {
+    public void preRetracting(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates) {
         finished = false;
         extending = false;
+        // PNX preMove: set both to same value initially
         progress = 1;
-        lastProgress = 1 + MOVE_STEP;
+        lastProgress = 1;
         state = newState = 3;
+        attachedBlocks = new ArrayList<>(blocksToMove);
+        attachedBlockStates = new HashMap<>(originalStates);
 
+        // Send initial state to client with progress = lastProgress = 1
+        // This must be sent BEFORE MOVING_BLOCK entities are created
         sendBlockEntityToViewers();
+    }
+
+    @Override
+    public void startMoving() {
+        // PNX move: set lastProgress for animation start
+        // This is called AFTER MOVING_BLOCK entities are created
+        if (extending) {
+            lastProgress = -MOVE_STEP;
+        } else {
+            lastProgress = 1 + MOVE_STEP;
+        }
+        // The tick() method will handle the animation from here
     }
 }

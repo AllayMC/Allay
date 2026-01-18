@@ -29,6 +29,7 @@ public class BlockEntityMovingBlockBaseComponentImpl extends BlockEntityBaseComp
     protected static final String TAG_PISTON_POS_X = "pistonPosX";
     protected static final String TAG_PISTON_POS_Y = "pistonPosY";
     protected static final String TAG_PISTON_POS_Z = "pistonPosZ";
+    protected static final String TAG_EXPANDING = "expanding";
 
     @ComponentObject
     protected BlockEntityMovingBlock thisMovingBlock;
@@ -43,6 +44,9 @@ public class BlockEntityMovingBlockBaseComponentImpl extends BlockEntityBaseComp
     @Setter
     @Nullable
     protected NbtMap movingBlockEntityNbt;
+    @Getter
+    @Setter
+    protected boolean expanding = true;
 
     public BlockEntityMovingBlockBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -71,6 +75,7 @@ public class BlockEntityMovingBlockBaseComponentImpl extends BlockEntityBaseComp
         builder.putInt(TAG_PISTON_POS_X, pistonPos.x());
         builder.putInt(TAG_PISTON_POS_Y, pistonPos.y());
         builder.putInt(TAG_PISTON_POS_Z, pistonPos.z());
+        builder.putBoolean(TAG_EXPANDING, expanding);
 
         return builder.build();
     }
@@ -103,6 +108,8 @@ public class BlockEntityMovingBlockBaseComponentImpl extends BlockEntityBaseComp
         var pistonY = nbt.getInt(TAG_PISTON_POS_Y, -1);
         var pistonZ = nbt.getInt(TAG_PISTON_POS_Z, 0);
         pistonPos = new Vector3i(pistonX, pistonY, pistonZ);
+
+        expanding = nbt.getBoolean(TAG_EXPANDING, true);
     }
 
     @Override

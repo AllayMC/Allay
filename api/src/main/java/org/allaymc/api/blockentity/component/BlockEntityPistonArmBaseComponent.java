@@ -83,17 +83,28 @@ public interface BlockEntityPistonArmBaseComponent extends BlockEntityBaseCompon
     List<Vector3ic> getAttachedBlocks();
 
     /**
-     * Start the piston extension animation.
+     * Prepare for extending animation. This sends initial state to client
+     * and must be called BEFORE creating MOVING_BLOCK entities.
      *
      * @param blocksToMove    the blocks to move
      * @param originalStates  the original states of the blocks
      */
-    void startExtending(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates);
+    void preExtending(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates);
 
     /**
-     * Start the piston retraction animation.
+     * Prepare for retracting animation. This sends initial state to client
+     * and must be called BEFORE creating MOVING_BLOCK entities.
+     *
+     * @param blocksToMove   the blocks to move (for sticky piston)
+     * @param originalStates the original states of the blocks
      */
-    void startRetracting();
+    void preRetracting(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates);
+
+    /**
+     * Start the actual movement animation after MOVING_BLOCK entities are created.
+     * This adjusts lastProgress and schedules tick updates.
+     */
+    void startMoving();
 
     /**
      * Get the current state of the piston (for NBT).
