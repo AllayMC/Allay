@@ -35,6 +35,7 @@ import org.allaymc.server.block.component.ice.BlockHardIceBaseComponentImpl;
 import org.allaymc.server.block.component.ice.BlockIceBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockOreBaseComponentImpl;
 import org.allaymc.server.block.component.ore.BlockRedstoneOreBaseComponentImpl;
+import org.allaymc.server.block.component.piston.BlockPistonArmCollisionBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockPistonBaseComponentImpl;
 import org.allaymc.server.block.component.piston.BlockStickyPistonBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
@@ -2312,6 +2313,18 @@ public final class BlockTypeInitializer {
                 .builder(BlockMovingBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOVING_BLOCK)
                 .bindBlockEntity(BlockEntityTypes.MOVING_BLOCK)
+                .build();
+        BlockTypes.PISTON_ARM_COLLISION = AllayBlockType
+                .builder(BlockPistonArmCollisionBehaviorImpl.class)
+                .vanillaBlock(BlockId.PISTON_ARM_COLLISION)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                .setBaseComponentSupplier(BlockPistonArmCollisionBaseComponentImpl::new)
+                .build();
+        BlockTypes.STICKY_PISTON_ARM_COLLISION = AllayBlockType
+                .builder(BlockStickyPistonArmCollisionBehaviorImpl.class)
+                .vanillaBlock(BlockId.STICKY_PISTON_ARM_COLLISION)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                .setBaseComponentSupplier(BlockPistonArmCollisionBaseComponentImpl::new)
                 .build();
     }
 }
