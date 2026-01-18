@@ -2,6 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -322,9 +323,8 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
      * Based on MC Wiki:
      * - No connections: forms a dot, points all 4 directions
      * - 1 connection: forms a line, points toward AND away from that neighbor
-     * - 2 opposite connections: forms a line, points both directions along the line
-     * - 2 adjacent connections (L-shape): only points to connected directions if not perpendicular
-     * - 3+ connections: only points to connected directions if not perpendicular
+     * - 2 connections (line or L-shape): points to both connected directions
+     * - 3+ connections (T or + shape): only points if not at a "corner" (perpendicular blocked)
      */
     protected boolean isPointingTo(Block block, BlockFace face) {
         var dimension = block.getDimension();
@@ -349,20 +349,17 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return face == singleConnection || face == singleConnection.opposite();
         }
 
-        // Two connections: check if it's a straight line (opposite directions)
+        // Two connections
         if (connectedFaces.size() == 2) {
-            for (BlockFace connected : connectedFaces) {
-                if (connectedFaces.contains(connected.opposite())) {
-                    // It's a straight line, points both directions along the axis
-                    return connectedFaces.contains(face);
-                }
-            }
-            // L-shape: fall through to the general case
+            // Check if it's a straight line (opposite directions) or L-shape (adjacent directions)
+            // Both cases: wire points to connected directions
+            return connectedFaces.contains(face);
         }
 
-        // For L, T, or + shapes:
-        // Corner wire doesn't output power - only straight wire does
+        // For T or + shapes (3+ connections):
         // Wire points to a direction only if connected AND not connected to perpendicular
+        // This prevents "corner" output - e.g., a T-shape pointing North/South/East
+        // won't output to East if it would have to "turn a corner"
         if (connectedFaces.contains(face)) {
             BlockFace left = face.rotateYCCW();
             BlockFace right = face.rotateY();
@@ -423,11 +420,10 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
 
     /**
      * Checks if a block is a redstone component that wire should connect to.
+     * This includes power sources and redstone mechanisms that can be activated by redstone.
      */
     protected boolean isRedstoneComponent(BlockState state) {
-        var behavior = state.getBehavior();
-        // Connect to power sources and blocks that can receive power
-        return behavior.isPowerSource();
+        return state.getBlockType().hasBlockTag(BlockTags.REDSTONE_COMPONENT);
     }
 
     /**
