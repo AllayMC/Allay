@@ -251,7 +251,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             maxPower = Math.max(maxPower, signal);
 
             // Check power through solid blocks (only strong power can conduct through)
-            if (face != BlockFace.UP && neighborState.getBlockStateData().isSolid()) {
+            if (neighborState.getBlockStateData().isSolid()) {
                 int powerThroughBlock = getStrongPowerIntoBlock(dimension, neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, powerThroughBlock);
             }
