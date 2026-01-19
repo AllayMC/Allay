@@ -30,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added block tag `BlockTags.REDSTONE_WIRE_CONNECT_TO` for controlling redstone wire connection behavior.
 - (API) Added method `BlockEntityBaseComponent.saveCleanNBT()` to save clean NBT data without position-related information, useful for piston block movement.
 - (API) Added methods `BlockEntityContainerHolderComponent.shouldDropItemOnBreak()` and `setDropItemOnBreak(boolean)` for controlling whether items should drop when the block is broken, useful for pistons moving container blocks.
+- (API) Added method `Dimension.updateAllAround()` for triggering second-order neighbor updates (updates adjacent blocks and each adjacent block's neighbors).
 - Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
 
@@ -45,6 +46,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed observer placement direction - the observing face now correctly points in the direction the player is looking.
 - Fixed lever placement check - now verifies that the attachment surface is a full face instead of just checking if the block is solid.
 - Fixed block replacement order - `onReplace` is now called before `onPlace` to ensure old block entities are removed before new ones are created, preventing block entity type mismatch issues.
+- Fixed piston to trigger second-order neighbor updates after animation completes at both original and target positions.
 
 # 0.10.5 (API 0.22.0) - 2026/1/15
 

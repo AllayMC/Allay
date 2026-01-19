@@ -11,6 +11,7 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityMovingBlock;
 import org.allaymc.api.blockentity.interfaces.BlockEntityPistonArm;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.cloudburstmc.nbt.NbtMap;
@@ -234,7 +235,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
         double dz = diff * entityOffset.z();
 
         var location = entity.getLocation();
-        var newLocation = new org.allaymc.api.math.location.Location3d(
+        var newLocation = new Location3d(
                 location.x() + dx,
                 location.y() + dy,
                 location.z() + dz,
@@ -252,9 +253,17 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
         var dimension = position.dimension();
         var pushDirection = extending ? facing : facing.opposite();
 
+        // Collect positions for second-order neighbor updates
+        var updatePositions = new ArrayList<Vector3ic>();
+
         // Finalize moving blocks
         for (var pos : attachedBlocks) {
             var newPos = pushDirection.offsetPos(pos);
+
+            // Add original position and new position for updates
+            updatePositions.add(pos);
+            updatePositions.add(newPos);
+
             var blockEntity = dimension.getBlockEntity(newPos);
             if (blockEntity instanceof BlockEntityMovingBlock movingBlockEntity) {
                 // Get the original state before removing the moving block
@@ -273,6 +282,11 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
                     dimension.setBlockState(newPos, BlockTypes.AIR.getDefaultState());
                 }
             }
+        }
+
+        // Perform second-order neighbor updates for all affected positions
+        for (var updatePos : updatePositions) {
+            dimension.updateAllAround(updatePos);
         }
 
         // Remove piston arm if retracting

@@ -711,6 +711,29 @@ public interface Dimension extends TaskCreator {
     }
 
     /**
+     * @see #updateAllAround(Vector3ic)
+     */
+    default void updateAllAround(int x, int y, int z) {
+        updateAllAround(new Vector3i(x, y, z));
+    }
+
+    /**
+     * Update the blocks around a block and also around the blocks of those updated blocks (second-order update).
+     * This is used for redstone components like pistons.
+     *
+     * @param pos the pos where the block is in
+     */
+    default void updateAllAround(Vector3ic pos) {
+        // First-order update
+        updateAround(pos);
+        // Second-order update: update around each neighbor, ignoring the face pointing back to pos
+        for (var face : BlockFace.VALUES) {
+            var neighborPos = face.offsetPos(pos);
+            updateAroundIgnoreFace(neighborPos, face.opposite());
+        }
+    }
+
+    /**
      * Update the block which is at the specified face of the specified block.
      *
      * @param x    the x coordinate of the block
