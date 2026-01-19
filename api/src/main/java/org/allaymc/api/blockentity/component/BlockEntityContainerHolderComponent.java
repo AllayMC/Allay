@@ -42,4 +42,21 @@ public interface BlockEntityContainerHolderComponent extends ContainerHolder, Bl
      * @param container the container to set
      */
     void setContainer(Container container);
+
+    /**
+     * Returns whether items should be dropped when the block is broken.
+     *
+     * @return {@code true} if items should be dropped, {@code false} otherwise
+     */
+    boolean shouldDropItemOnBreak();
+
+    /**
+     * Sets whether items should be dropped when the block is broken.
+     * <p>
+     * This is useful for pistons to prevent items from dropping
+     * when moving a container block.
+     *
+     * @param drop {@code true} to drop items, {@code false} to prevent dropping
+     */
+    void setDropItemOnBreak(boolean drop);
 }

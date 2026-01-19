@@ -259,19 +259,18 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
             if (blockEntity instanceof BlockEntityMovingBlock movingBlockEntity) {
                 // Get the original state before removing the moving block
                 var originalState = movingBlockEntity.getMovingBlockState();
-                var movingBlockEntityNbt = movingBlockEntity.getMovingBlockEntityNBT();
+                var movingBlockEntityNBT = movingBlockEntity.getMovingBlockEntityNBT();
 
                 // Setting the block state will automatically remove the old block entity
                 // and create a new one if the original block had a block entity
                 if (originalState != null) {
                     dimension.setBlockState(newPos, originalState);
+                    // Restore block entity if any
+                    if (movingBlockEntityNBT != null) {
+                        dimension.getBlockEntity(newPos).loadNBT(movingBlockEntityNBT);
+                    }
                 } else {
                     dimension.setBlockState(newPos, BlockTypes.AIR.getDefaultState());
-                }
-
-                // Restore block entity if any
-                if (movingBlockEntityNbt != null) {
-                    // TODO: Recreate block entity from NBT
                 }
             }
         }

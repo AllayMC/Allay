@@ -102,7 +102,7 @@ public class BlockBlockEntityHolderComponentImpl<T extends BlockEntity> implemen
     }
 
     @EventHandler
-    protected void onBlockRemove(CBlockOnReplaceEvent event) {
+    protected void onBlockReplace(CBlockOnReplaceEvent event) {
         var pos = event.getCurrentBlock().getPosition();
         var blockEntity = getBlockEntity(pos);
         if (blockEntity == null) {

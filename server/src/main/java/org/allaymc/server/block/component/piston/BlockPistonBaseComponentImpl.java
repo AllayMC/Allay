@@ -8,6 +8,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.interfaces.BlockEntityMovingBlock;
 import org.allaymc.api.blockentity.interfaces.BlockEntityPistonArm;
 import org.allaymc.api.entity.Entity;
@@ -252,13 +253,26 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // 3. Clear the original positions of blocks to move (from back to front)
+        // 3. Save block entity NBT and prevent container items from dropping
+        Map<Vector3ic, org.cloudburstmc.nbt.NbtMap> blockEntityNBTs = new HashMap<>();
+        for (Vector3ic pos : blocksToMove) {
+            var blockEntity = dimension.getBlockEntity(pos);
+            if (blockEntity != null) {
+                blockEntityNBTs.put(pos, blockEntity.saveCleanNBT());
+                // Prevent container items from dropping when the block is moved
+                if (blockEntity instanceof BlockEntityContainerHolderComponent containerHolder) {
+                    containerHolder.setDropItemOnBreak(false);
+                }
+            }
+        }
+
+        // 4. Clear the original positions of blocks to move (from back to front)
         for (int i = blocksToMove.size() - 1; i >= 0; i--) {
             Vector3ic pos = blocksToMove.get(i);
             dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
         }
 
-        // 4. Place blocks in their new positions (from front to back)
+        // 5. Place blocks in their new positions (from front to back)
         for (int i = 0; i < blocksToMove.size(); i++) {
             Vector3ic oldPos = blocksToMove.get(i);
             Vector3ic newPos = facing.offsetPos(oldPos);
@@ -273,11 +287,13 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
                     movingBlock.setMovingBlockState(state);
                     movingBlock.setPistonPos(new Vector3i(pistonPos));
                     movingBlock.setExpanding(true); // Extending = expanding away from piston
+                    // Restore block entity NBT if any
+                    movingBlock.setMovingBlockEntityNBT(blockEntityNBTs.get(oldPos));
                 }
             }
         }
 
-        // 5. Create the piston arm at the extended position
+        // 6. Create the piston arm at the extended position
         Vector3ic armPos = facing.offsetPos(pistonPos);
         BlockType<?> armType = isSticky()
                 ? BlockTypes.STICKY_PISTON_ARM_COLLISION
@@ -324,6 +340,19 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
 
         // 3. For sticky piston, move blocks
         if (isSticky() && !blocksToMove.isEmpty()) {
+            // Save block entity NBT and prevent container items from dropping
+            Map<Vector3ic, org.cloudburstmc.nbt.NbtMap> blockEntityNBTs = new HashMap<>();
+            for (Vector3ic pos : blocksToMove) {
+                var blockEntity = dimension.getBlockEntity(pos);
+                if (blockEntity != null) {
+                    blockEntityNBTs.put(pos, blockEntity.saveCleanNBT());
+                    // Prevent container items from dropping when the block is moved
+                    if (blockEntity instanceof BlockEntityContainerHolderComponent containerHolder) {
+                        containerHolder.setDropItemOnBreak(false);
+                    }
+                }
+            }
+
             // Clear original positions
             for (Vector3ic pos : blocksToMove) {
                 dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
@@ -343,6 +372,8 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
                         movingBlock.setMovingBlockState(state);
                         movingBlock.setPistonPos(new Vector3i(pistonPos));
                         movingBlock.setExpanding(false); // Retracting = not expanding
+                        // Restore block entity NBT if any
+                        movingBlock.setMovingBlockEntityNBT(blockEntityNBTs.get(oldPos));
                     }
                 }
             }

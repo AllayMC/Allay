@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.component;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
@@ -32,9 +33,11 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
 
     @Setter
     protected Container container;
+    protected boolean dropItemOnBreak;
 
     public BlockEntityContainerHolderComponentImpl(Supplier<Container> containerSupplier) {
         this.container = containerSupplier.get();
+        this.dropItemOnBreak = true;
     }
 
     @SuppressWarnings("unchecked")
@@ -72,13 +75,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         event.setSuccess(true);
     }
 
-    protected boolean dropItemWhenBreak() {
-        return true;
-    }
-
     @EventHandler
     protected void onReplace(CBlockOnReplaceEvent event) {
-        if (!dropItemWhenBreak()) {
+        if (!this.dropItemOnBreak) {
             return;
         }
 
@@ -102,5 +101,15 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @Override
     public boolean hasContainer(ContainerType<?> type) {
         return container.getContainerType() == type;
+    }
+
+    @Override
+    public boolean shouldDropItemOnBreak() {
+        return dropItemOnBreak;
+    }
+
+    @Override
+    public void setDropItemOnBreak(boolean drop) {
+        this.dropItemOnBreak = drop;
     }
 }
