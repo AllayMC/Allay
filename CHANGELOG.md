@@ -20,6 +20,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Initial implementation of custom block support:
   - Added `CustomBlockDefinitionGenerator` for generating custom block definitions with support for various components like geometry, materials, collision box, selection box, and transformation.
   - Added `AllayBlockType.Builder.autoCreateItemType(boolean)` option to automatically create the corresponding item type for a custom block.
+- (API) Implemented piston and sticky piston:
+  - Added `BlockPistonEvent` event which is called when a piston extends or retracts, allowing plugins to monitor and cancel piston operations.
+  - Added `BlockEntityPistonArm` and `BlockEntityPistonArmBaseComponent` interfaces for piston arm block entities with properties like facing direction, sticky state, progress, and attached blocks.
+  - Added `BlockEntityMovingBlock` and `BlockEntityMovingBlockBaseComponent` interfaces for moving block entities that handle the visual block movement animation.
+  - Added `BlockEntityTypes.PISTON_ARM` and `BlockEntityTypes.MOVING_BLOCK` block entity types.
+  - Added block tags `BlockTags.UNPUSHABLE`, `BlockTags.UNPULLABLE`, `BlockTags.BREAK_WHEN_PUSHED`, and `BlockTags.CAN_STICK_BLOCKS` to control piston push/pull behavior for different block types.
+  - Added sounds `SimpleSound.PISTON_PUSH` and `SimpleSound.PISTON_PULL`.
+- (API) Added block tag `BlockTags.REDSTONE_WIRE_CONNECT_TO` for controlling redstone wire connection behavior.
+- (API) Added method `BlockEntityBaseComponent.saveCleanNBT()` to save clean NBT data without position-related information, useful for piston block movement.
+- (API) Added methods `BlockEntityContainerHolderComponent.shouldDropItemOnBreak()` and `setDropItemOnBreak(boolean)` for controlling whether items should drop when the block is broken, useful for pistons moving container blocks.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
 
 ### Fixed
@@ -29,6 +39,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed duplicate "Client disconnected" messages during server shutdown caused by players not being removed from the dimension's player list when disconnecting.
 - Fixed method `WorldViewer.viewPlayerEmote` not working.
 - Fixed duplicate player quit messages caused by `DISCONNECTED` state being set multiple times due to missing state check in `PacketProcessorHolder.setClientState()`.
+- Fixed redstone torch incorrectly turning off when receiving weak power through solid blocks from redstone wire.
+- Fixed redstone wire not correctly pointing to all connected directions in L-shape, T-shape, and cross configurations.
+- Fixed observer placement direction - the observing face now correctly points in the direction the player is looking.
+- Fixed lever placement check - now verifies that the attachment surface is a full face instead of just checking if the block is solid.
+- Fixed block replacement order - `onReplace` is now called before `onPlace` to ensure old block entities are removed before new ones are created, preventing block entity type mismatch issues.
 
 # 0.10.5 (API 0.22.0) - 2026/1/15
 

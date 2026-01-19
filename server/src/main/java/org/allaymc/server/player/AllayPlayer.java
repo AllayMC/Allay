@@ -1164,6 +1164,8 @@ public class AllayPlayer implements Player {
             case SimpleSound.EXPLOSION -> packet.setSound(SoundEvent.EXPLODE);
             case SimpleSound.WIND_CHARGE_BURST -> packet.setSound(SoundEvent.WIND_CHARGE_BURST);
             case SimpleSound.BREEZE_WIND_CHARGE_BURST -> packet.setSound(SoundEvent.WIND_CHARGE_BURST);
+            case SimpleSound.PISTON_PUSH -> packet.setSound(SoundEvent.PISTON_OUT);
+            case SimpleSound.PISTON_PULL -> packet.setSound(SoundEvent.PISTON_IN);
             case EquipItemSound so -> packet.setSound(getEquipSound(so.itemType()));
             case SimpleSound.PAINTING_PLACE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();

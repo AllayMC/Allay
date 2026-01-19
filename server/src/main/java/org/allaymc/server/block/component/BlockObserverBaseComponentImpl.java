@@ -138,10 +138,11 @@ public class BlockObserverBaseComponentImpl extends BlockBaseComponentImpl {
         var pitch = player.getLocation().pitch();
 
         // If looking up or down significantly, place vertically
+        // Observer's observing face points in the direction the player is looking
         if (pitch > 45) {
-            return MinecraftFacingDirection.UP; // Looking down, observer faces up
+            return MinecraftFacingDirection.DOWN; // Looking down, observer faces down
         } else if (pitch < -45) {
-            return MinecraftFacingDirection.DOWN; // Looking up, observer faces down
+            return MinecraftFacingDirection.UP; // Looking up, observer faces up
         }
 
         // Horizontal placement based on yaw

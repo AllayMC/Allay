@@ -2,6 +2,7 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -250,7 +251,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             maxPower = Math.max(maxPower, signal);
 
             // Check power through solid blocks (only strong power can conduct through)
-            if (face != BlockFace.UP && neighborState.getBlockStateData().isSolid()) {
+            if (neighborState.getBlockStateData().isSolid()) {
                 int powerThroughBlock = getStrongPowerIntoBlock(dimension, neighborPos, face.opposite());
                 maxPower = Math.max(maxPower, powerThroughBlock);
             }
@@ -322,9 +323,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
      * Based on MC Wiki:
      * - No connections: forms a dot, points all 4 directions
      * - 1 connection: forms a line, points toward AND away from that neighbor
-     * - 2 opposite connections: forms a line, points both directions along the line
-     * - 2 adjacent connections (L-shape): only points to connected directions if not perpendicular
-     * - 3+ connections: only points to connected directions if not perpendicular
+     * - 2+ connections (line, L, T, or +): points to all connected directions
      */
     protected boolean isPointingTo(Block block, BlockFace face) {
         var dimension = block.getDimension();
@@ -349,27 +348,9 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return face == singleConnection || face == singleConnection.opposite();
         }
 
-        // Two connections: check if it's a straight line (opposite directions)
-        if (connectedFaces.size() == 2) {
-            for (BlockFace connected : connectedFaces) {
-                if (connectedFaces.contains(connected.opposite())) {
-                    // It's a straight line, points both directions along the axis
-                    return connectedFaces.contains(face);
-                }
-            }
-            // L-shape: fall through to the general case
-        }
-
-        // For L, T, or + shapes:
-        // Corner wire doesn't output power - only straight wire does
-        // Wire points to a direction only if connected AND not connected to perpendicular
-        if (connectedFaces.contains(face)) {
-            BlockFace left = face.rotateYCCW();
-            BlockFace right = face.rotateY();
-            return !connectedFaces.contains(left) && !connectedFaces.contains(right);
-        }
-
-        return false;
+        // 2+ connections (line, L-shape, T-shape, or cross):
+        // Wire points to all connected directions
+        return connectedFaces.contains(face);
     }
 
     /**
@@ -393,8 +374,8 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
             return face == repeaterFacing || face == repeaterFacing.opposite();
         }
 
-        // Connect to other redstone components
-        if (isRedstoneComponent(neighborState)) {
+        // Connect to other redstone components that wire actively connects to
+        if (shouldWireConnectTo(neighborState)) {
             return true;
         }
 
@@ -422,12 +403,12 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     /**
-     * Checks if a block is a redstone component that wire should connect to.
+     * Checks if a block is a redstone component that wire should actively connect to.
+     * This includes power sources and redstone mechanisms, but not passive receivers
+     * like redstone lamps, dispensers, or note blocks.
      */
-    protected boolean isRedstoneComponent(BlockState state) {
-        var behavior = state.getBehavior();
-        // Connect to power sources and blocks that can receive power
-        return behavior.isPowerSource();
+    protected boolean shouldWireConnectTo(BlockState state) {
+        return state.getBlockType().hasBlockTag(BlockTags.REDSTONE_WIRE_CONNECT_TO);
     }
 
     /**

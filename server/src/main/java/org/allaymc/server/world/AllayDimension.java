@@ -214,8 +214,11 @@ public class AllayDimension implements Dimension {
         var blockPos = new Position3i(x, y, z, this);
         var oldBlock = new Block(oldBlockState, blockPos, layer);
         if (callBlockBehavior) {
-            blockState.getBehavior().onPlace(oldBlock, blockState, placementInfo);
+            // onReplace must be called before onPlace to ensure the old block entity
+            // is removed before the new one is created. This prevents block entity type
+            // mismatch issues (e.g., when a piston replaces MovingBlock with the original block)
             oldBlockState.getBehavior().onReplace(oldBlock, blockState, placementInfo);
+            blockState.getBehavior().onPlace(oldBlock, blockState, placementInfo);
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 

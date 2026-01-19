@@ -53,7 +53,8 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         }
 
         // Trigger updates to propagate power
-        dimension.updateAround(placeBlockPos);
+        TorchFacingDirection facing = blockState.getPropertyValue(TORCH_FACING_DIRECTION);
+        updateSecondOrderNeighbors(dimension, placeBlockPos, facing);
         return true;
     }
 
@@ -94,12 +95,11 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
     public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterReplaced(oldBlock, newBlockState, placementInfo);
 
-        // When removed, update neighbors if was lit
-        if (lit) {
-            oldBlock.getDimension().updateAround(oldBlock.getPosition());
-            // Also update above for upward power
-            oldBlock.getDimension().updateAround(BlockFace.UP.offsetPos(oldBlock.getPosition()));
-        }
+        // When removed, update neighbors
+        var dimension = oldBlock.getDimension();
+        var pos = oldBlock.getPosition();
+        TorchFacingDirection facing = oldBlock.getPropertyValue(TORCH_FACING_DIRECTION);
+        updateSecondOrderNeighbors(dimension, pos, facing);
     }
 
     @Override
@@ -204,6 +204,15 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
             }
 
             BlockState state = dimension.getBlockState(checkPos);
+
+            // Skip redstone wire - wire's "strong power" to a solid block should not
+            // propagate to adjacent blocks and cause torch to turn off.
+            // This matches vanilla behavior where wire charging a block doesn't
+            // indirectly power adjacent blocks for torch detection.
+            if (state.getBlockType() == BlockTypes.REDSTONE_WIRE) {
+                continue;
+            }
+
             Block checkBlock = new Block(state, new Position3i(checkPos, dimension));
 
             // Only strong power can be conducted through solid blocks
@@ -223,9 +232,20 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
 
         dimension.setBlockState(pos.x(), pos.y(), pos.z(), newState);
 
-        // Update neighbors
+        updateSecondOrderNeighbors(dimension, pos, facing);
+    }
+
+    /**
+     * Updates second-order neighbors when torch state changes.
+     * This includes neighbors of the attached block and the block above (which receives strong power).
+     */
+    protected void updateSecondOrderNeighbors(Dimension dimension, Vector3ic pos, TorchFacingDirection facing) {
+        // Update direct neighbors
         dimension.updateAround(pos);
-        // Also update above for upward strong power
+        // Update around the attached block (second-order neighbors)
+        BlockFace attachedFace = getAttachedFace(facing);
+        dimension.updateAround(attachedFace.offsetPos(pos));
+        // Update around the block above (receives strong power from torch)
         dimension.updateAround(BlockFace.UP.offsetPos(pos));
     }
 

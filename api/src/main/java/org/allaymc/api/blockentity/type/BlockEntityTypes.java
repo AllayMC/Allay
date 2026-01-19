@@ -30,4 +30,6 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityTarget> TARGET;
     public static BlockEntityType<BlockEntityCampfire> CAMPFIRE;
     public static BlockEntityType<BlockEntityCampfire> SOUL_CAMPFIRE;
+    public static BlockEntityType<BlockEntityPistonArm> PISTON_ARM;
+    public static BlockEntityType<BlockEntityMovingBlock> MOVING_BLOCK;
 }

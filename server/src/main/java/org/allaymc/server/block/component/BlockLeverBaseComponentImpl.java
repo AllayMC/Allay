@@ -32,11 +32,11 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
             LeverDirection direction = calculateLeverDirection(placementInfo);
             blockState = blockState.setPropertyValue(LEVER_DIRECTION, direction);
 
-            // Verify that the attachment block is solid
+            // Verify that the attachment block has a full surface on the attached face
             BlockFace attachedFace = getAttachedFace(direction);
             Vector3ic attachedPos = attachedFace.offsetPos(placeBlockPos);
             BlockState attachedState = dimension.getBlockState(attachedPos);
-            if (!attachedState.getBlockStateData().isSolid()) {
+            if (!attachedState.getBlockStateData().collisionShape().isFull(attachedFace.opposite())) {
                 return false;
             }
         }
@@ -75,12 +75,12 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        // Check if the attached block is still valid
+        // Check if the attached block still has a full surface
         LeverDirection direction = block.getPropertyValue(LEVER_DIRECTION);
         BlockFace attachedFace = getAttachedFace(direction);
 
         if (face == attachedFace) {
-            if (!neighbor.getBlockStateData().isSolid()) {
+            if (!neighbor.getBlockStateData().collisionShape().isFull(attachedFace.opposite())) {
                 block.breakBlock();
             }
         }

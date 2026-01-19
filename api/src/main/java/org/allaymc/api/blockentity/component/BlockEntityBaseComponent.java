@@ -54,6 +54,16 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent, Persiste
     NbtMap saveNBT();
 
     /**
+     * Saves a clean NBT data of the block entity without position-related information.
+     * <p>
+     * This removes position (x, y, z) and pairing information (pairx, pairz, pairlead)
+     * which is useful for pistons when moving block entities.
+     *
+     * @return The clean NBT data of the block entity
+     */
+    NbtMap saveCleanNBT();
+
+    /**
      * Loads the NBT data into the block entity.
      *
      * @param nbt The NBT data to load
