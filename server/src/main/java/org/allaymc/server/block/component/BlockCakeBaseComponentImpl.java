@@ -8,9 +8,8 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.item.interfaces.ItemCandleStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.sound.SimpleSound;
@@ -47,12 +46,12 @@ public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
         var bites = blockState.getPropertyValue(BlockPropertyTypes.BITE_COUNTER);
 
         // If player is holding a candle and cake is full, let the candle handle placement
-        if (bites == 0 && isCandle(itemStack)) {
+        if (bites == 0 && itemStack instanceof ItemCandleStack) {
             return false;
         }
 
         // Check if player can eat
-        if (!canPlayerEat(player)) {
+        if (!player.canEat()) {
             return false;
         }
 
@@ -93,36 +92,5 @@ public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         // Cake doesn't drop anything when broken
         return Set.of();
-    }
-
-    /**
-     * Check if player can eat (not full hunger or creative mode).
-     */
-    protected boolean canPlayerEat(EntityPlayer player) {
-        return player.canEat();
-    }
-
-    /**
-     * Check if the item is a candle.
-     */
-    protected boolean isCandle(ItemStack itemStack) {
-        var itemType = itemStack.getItemType();
-        return itemType == ItemTypes.CANDLE ||
-                itemType == ItemTypes.WHITE_CANDLE ||
-                itemType == ItemTypes.ORANGE_CANDLE ||
-                itemType == ItemTypes.MAGENTA_CANDLE ||
-                itemType == ItemTypes.LIGHT_BLUE_CANDLE ||
-                itemType == ItemTypes.YELLOW_CANDLE ||
-                itemType == ItemTypes.LIME_CANDLE ||
-                itemType == ItemTypes.PINK_CANDLE ||
-                itemType == ItemTypes.GRAY_CANDLE ||
-                itemType == ItemTypes.LIGHT_GRAY_CANDLE ||
-                itemType == ItemTypes.CYAN_CANDLE ||
-                itemType == ItemTypes.PURPLE_CANDLE ||
-                itemType == ItemTypes.BLUE_CANDLE ||
-                itemType == ItemTypes.BROWN_CANDLE ||
-                itemType == ItemTypes.GREEN_CANDLE ||
-                itemType == ItemTypes.RED_CANDLE ||
-                itemType == ItemTypes.BLACK_CANDLE;
     }
 }

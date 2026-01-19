@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemCandleStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
@@ -48,19 +49,17 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
 
         var clickedBlockPos = placementInfo.clickedBlockPos();
         var clickedBlockState = dimension.getBlockState(clickedBlockPos);
+        var clickedBlockType = clickedBlockState.getBlockType();
 
         // Check if placing on a full cake
-        if (clickedBlockState.getBlockType() == BlockTypes.CAKE) {
+        if (clickedBlockType == BlockTypes.CAKE) {
             var bites = clickedBlockState.getPropertyValue(BlockPropertyTypes.BITE_COUNTER);
             if (bites == 0) {
-                var candleCakeType = candleCakeId.getBlockType();
-                if (candleCakeType != null) {
-                    dimension.setBlockState(
-                            clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(),
-                            candleCakeType.getDefaultState(), placementInfo
-                    );
-                    return true;
-                }
+                dimension.setBlockState(
+                        clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(),
+                        candleCakeId.getBlockType().getDefaultState(), placementInfo
+                );
+                return true;
             }
         }
 
@@ -97,15 +96,25 @@ public class BlockCandleBaseComponentImpl extends BlockBaseComponentImpl {
         var isLit = blockState.getPropertyValue(BlockPropertyTypes.LIT);
 
         // Light with flint and steel
-        if (!isLit && itemStack != null && itemStack.getItemType() == ItemTypes.FLINT_AND_STEEL) {
+        if (!isLit && itemStack.getItemType() == ItemTypes.FLINT_AND_STEEL) {
             dimension.updateBlockProperty(BlockPropertyTypes.LIT, true, pos);
             dimension.addSound(MathUtils.center(pos), SimpleSound.IGNITE);
             itemStack.tryIncreaseDamage(1);
             return true;
         }
 
+        // If holding a candle and current candle count is not full, let's increase the current candle count
+        if (itemStack instanceof ItemCandleStack) {
+            var currentCandles = blockState.getPropertyValue(BlockPropertyTypes.CANDLES);
+            if (currentCandles < MAX_CANDLES) {
+                dimension.updateBlockProperty(BlockPropertyTypes.CANDLES, currentCandles + 1, pos);
+                interactInfo.player().tryConsumeItemInHand();
+                return true;
+            }
+        }
+
         // Extinguish with empty hand or any non-flint-and-steel item
-        if (isLit && (itemStack == null || itemStack.getItemType() != ItemTypes.FLINT_AND_STEEL)) {
+        if (isLit && itemStack.getItemType() != ItemTypes.FLINT_AND_STEEL) {
             dimension.updateBlockProperty(BlockPropertyTypes.LIT, false, pos);
             dimension.addSound(MathUtils.center(pos), SimpleSound.FIRE_EXTINGUISH);
             return true;

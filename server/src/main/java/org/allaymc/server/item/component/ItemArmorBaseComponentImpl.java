@@ -28,7 +28,10 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
 
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        if (interactInfo == null) return false;
+        if (interactInfo == null) {
+            return false;
+        }
+
         equipArmor(interactInfo.player(), thisItemStack);
         return true;
     }

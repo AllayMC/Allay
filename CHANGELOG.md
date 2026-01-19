@@ -30,6 +30,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added block tag `BlockTags.REDSTONE_WIRE_CONNECT_TO` for controlling redstone wire connection behavior.
 - (API) Added method `BlockEntityBaseComponent.saveCleanNBT()` to save clean NBT data without position-related information, useful for piston block movement.
 - (API) Added methods `BlockEntityContainerHolderComponent.shouldDropItemOnBreak()` and `setDropItemOnBreak(boolean)` for controlling whether items should drop when the block is broken, useful for pistons moving container blocks.
+- Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
 
 ### Fixed

@@ -28,15 +28,8 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
         super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
 
         var player = interactInfo.player();
-
         if (player.getGameMode() == GameMode.ADVENTURE) {
             return false;
-        }
-
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            // The durability will always be reduced
-            // no matter if the fire is spawned successfully
-            tryIncreaseDamage(1);
         }
 
         var clickedBlock = interactInfo.getClickedBlock();
@@ -59,6 +52,10 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
                     var fireBlockState = supportBlockState.getBlockType().hasBlockTag(BlockTags.SOUL_FIRE_CONVERTER) ? BlockTypes.SOUL_FIRE.getDefaultState() : BlockTypes.FIRE.getDefaultState();
                     dimension.setBlockState(placeBlockPos, fireBlockState);
                     dimension.addSound(MathUtils.center(placeBlockPos), SimpleSound.IGNITE);
+                    if (player.getGameMode() != GameMode.CREATIVE) {
+                        tryIncreaseDamage(1);
+                    }
+                    return true;
                 }
             }
         } else {
@@ -72,10 +69,16 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
                 );
                 if (event.call()) {
                     dimension.setBlockState(placeBlockPos, BlockTypes.FIRE.getDefaultState());
+                    if (player.getGameMode() != GameMode.CREATIVE) {
+                        tryIncreaseDamage(1);
+                    }
+                    return true;
                 }
             }
         }
 
-        return true;
+        // Return false to pass the call to BlockBehavior::onInteract() method since block types such as candle have flint_and_steel
+        // related logic
+        return false;
     }
 }
