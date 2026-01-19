@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityPairableComponent;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveCleanNBTEvent;
@@ -14,6 +15,10 @@ import org.allaymc.server.component.annotation.Dependency;
  * @author IWareQ
  */
 public class BlockEntityPairableComponentImpl implements BlockEntityPairableComponent {
+
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_pairable_component");
+
     protected static final String TAG_PAIR_LEAD = "allay:pairlead";
     protected static final String TAG_PAIR_X = "pairx";
     protected static final String TAG_PAIR_Z = "pairz";
