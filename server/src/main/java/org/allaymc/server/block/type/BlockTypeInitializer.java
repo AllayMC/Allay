@@ -417,6 +417,7 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.BARREL)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                 .bindBlockEntity(BlockEntityTypes.BARREL)
+                .setBaseComponentSupplier(BlockBarrelBaseComponentImpl::new)
                 .build();
     }
 

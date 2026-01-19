@@ -16,6 +16,8 @@ import org.allaymc.api.world.sound.SimpleSound;
 
 import java.util.Set;
 
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.BITE_COUNTER;
+
 /**
  * Base component for cake block behavior.
  * <p>
@@ -66,6 +68,9 @@ public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.updateBlockProperty(BlockPropertyTypes.BITE_COUNTER, newBites, pos);
         }
 
+        // Update comparators that may be reading this cake
+        dimension.updateComparatorOutputLevel(pos);
+
         // Add food and saturation to player
         player.saturate(FOOD_POINTS_PER_SLICE, SATURATION_PER_SLICE);
 
@@ -92,5 +97,18 @@ public class BlockCakeBaseComponentImpl extends BlockBaseComponentImpl {
     public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
         // Cake doesn't drop anything when broken
         return Set.of();
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        // Signal = (7 - bites) * 2
+        // Full cake (0 bites) = 14, 1 bite = 12, ..., 6 bites = 2
+        int bites = block.getPropertyValue(BITE_COUNTER);
+        return (MAX_BITES + 1 - bites) * 2;
     }
 }

@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
@@ -32,6 +33,21 @@ public class BlockEndPortalFrameBaseComponentImpl extends BlockBaseComponentImpl
         clickedBlockState.updateBlockProperty(END_PORTAL_EYE_BIT, true);
         clickedBlockState.addSound(SimpleSound.END_PORTAL_FRAME_FILLED);
         interactInfo.player().tryConsumeItemInHand();
+
+        // Update comparators that may be reading this end portal frame
+        dimension.updateComparatorOutputLevel(interactInfo.clickedBlockPos());
+
         return true;
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        // Output 15 if eye is placed, 0 otherwise
+        return block.getPropertyValue(END_PORTAL_EYE_BIT) ? 15 : 0;
     }
 }

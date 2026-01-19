@@ -12,4 +12,13 @@ public interface ItemMusicDiscBaseComponent extends ItemBaseComponent {
      * @return the type of the music disc
      */
     DiscType getDiscType();
+
+    /**
+     * Get the comparator signal output for this music disc when placed in a jukebox.
+     *
+     * @return the comparator signal (1-15)
+     */
+    default int getComparatorSignal() {
+        return getDiscType().getComparatorSignal();
+    }
 }

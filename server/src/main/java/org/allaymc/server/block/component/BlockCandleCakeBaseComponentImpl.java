@@ -77,6 +77,9 @@ public class BlockCandleCakeBaseComponentImpl extends BlockBaseComponentImpl {
                 dimension.dropItem(candleItemType.createItemStack(), MathUtils.center(pos));
             }
 
+            // Update comparators that may be reading this cake
+            dimension.updateComparatorOutputLevel(pos);
+
             // Add food and saturation to player
             player.saturate(BlockCakeBaseComponentImpl.FOOD_POINTS_PER_SLICE, BlockCakeBaseComponentImpl.SATURATION_PER_SLICE);
 
@@ -124,5 +127,16 @@ public class BlockCandleCakeBaseComponentImpl extends BlockBaseComponentImpl {
      */
     protected ItemType<?> getCandleItemType() {
         return candleItemId.getItemType();
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        // Candle cake always outputs 14 (same as a full cake)
+        return 14;
     }
 }

@@ -1429,6 +1429,35 @@ public interface Dimension extends TaskCreator {
      */
     int getWeakPowerAt(Vector3ic pos, BlockFace... excludeFaces);
 
+    /**
+     * @see #updateComparatorOutputLevel(int, int, int)
+     */
+    default void updateComparatorOutputLevel(Vector3ic pos) {
+        updateComparatorOutputLevel(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
+     * Updates comparators that may be reading this position's comparator output.
+     * <p>
+     * This method checks horizontal neighbors for redstone diodes (comparators/repeaters)
+     * and updates them. If a neighbor is a solid block, it also checks the block
+     * two blocks away for diodes, since comparators can read through solid blocks.
+     * <p>
+     * This should be called when a block's comparator output changes, such as:
+     * <ul>
+     *   <li>Container contents change</li>
+     *   <li>Item frame item or rotation changes</li>
+     *   <li>Cake is eaten</li>
+     *   <li>Jukebox disc is inserted/removed</li>
+     *   <li>Cauldron water level changes</li>
+     * </ul>
+     *
+     * @param x the x coordinate of the block
+     * @param y the y coordinate of the block
+     * @param z the z coordinate of the block
+     */
+    void updateComparatorOutputLevel(int x, int y, int z);
+
     @Override
     default boolean isValid() {
         return getWorld().isValid();

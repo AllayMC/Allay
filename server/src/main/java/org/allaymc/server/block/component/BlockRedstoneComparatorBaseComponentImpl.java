@@ -177,6 +177,43 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
         return block.getPropertyValue(OUTPUT_SUBTRACT_BIT);
     }
 
+    /**
+     * Calculates the input signal strength from the back of the comparator.
+     * <p>
+     * Unlike repeaters, comparators can read signal from special blocks like:
+     * - Containers (chests, barrels, hoppers, etc.) - signal based on fullness
+     * - Cake - signal based on remaining slices
+     * - Item frames - signal based on item rotation
+     * - Other blocks with comparator input override
+     * <p>
+     * If the input block is a solid block and signal is less than 15,
+     * the comparator will also check the block behind it (through the solid block).
+     */
+    @Override
+    protected int calculateInputStrength(Block block) {
+        int power = super.calculateInputStrength(block);
+        BlockFace inputFace = getInputFace(block);
+        var inputPos = inputFace.offsetPos(block.getPosition());
+        var dimension = block.getDimension();
+        BlockState inputState = dimension.getBlockState(inputPos);
+        Block inputBlock = new Block(inputState, new Position3i(inputPos, dimension));
+
+        // Check if the input block has a comparator input override
+        if (inputState.getBehavior().hasComparatorInputOverride()) {
+            power = inputState.getBehavior().getComparatorInputOverride(inputBlock);
+        } else if (power < MAX_REDSTONE_POWER && inputState.getBlockStateData().isSolid()) {
+            // If signal < 15 and input is a solid block, check the block behind it
+            var behindPos = inputFace.offsetPos(inputPos);
+            BlockState behindState = dimension.getBlockState(behindPos);
+            if (behindState.getBehavior().hasComparatorInputOverride()) {
+                Block behindBlock = new Block(behindState, new Position3i(behindPos, dimension));
+                power = behindState.getBehavior().getComparatorInputOverride(behindBlock);
+            }
+        }
+
+        return power;
+    }
+
     @Override
     protected Duration getDelay(Block block) {
         // Comparator has fixed delay of 1 redstone tick

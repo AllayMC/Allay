@@ -341,4 +341,39 @@ public interface Container {
     default void sendContainerData(int property, int value) {
         getViewers().forEach(($, viewer) -> viewer.viewContainerData(this, property, value));
     }
+
+    /**
+     * Calculates the redstone signal strength for this container based on its contents.
+     * <p>
+     * The formula is: floor(averageFullness * 14) + (hasItems ? 1 : 0)
+     * where averageFullness = sum of (itemCount / maxStackSize) / totalSlots
+     * <p>
+     * This matches vanilla Minecraft behavior for comparator signals.
+     *
+     * @return the redstone signal strength (0-15)
+     */
+    default int calculateComparatorSignal() {
+        ItemStack[] items = getItemStackArray();
+        if (items.length == 0) {
+            return 0;
+        }
+
+        int itemCount = 0;
+        float totalFullness = 0.0f;
+
+        for (ItemStack item : items) {
+            if (item != ItemAirStack.AIR_STACK) {
+                int maxStackSize = item.getItemType().getItemData().maxStackSize();
+                totalFullness += (float) item.getCount() / (float) maxStackSize;
+                itemCount++;
+            }
+        }
+
+        if (itemCount == 0) {
+            return 0;
+        }
+
+        float averageFullness = totalFullness / (float) items.length;
+        return (int) Math.floor(averageFullness * 14.0f) + 1;
+    }
 }

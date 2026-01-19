@@ -56,4 +56,24 @@ public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
             jukebox.stop();
         }
     }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        var jukebox = blockEntityHolderComponent.getBlockEntity(block.getPosition());
+        if (jukebox == null) {
+            return 0;
+        }
+        var disc = jukebox.getMusicDiscItem();
+        if (disc == null) {
+            return 0;
+        }
+        // Return signal based on disc type (1-15)
+        // Each disc type has a unique comparator output
+        return disc.getComparatorSignal();
+    }
 }

@@ -365,4 +365,42 @@ public interface BlockBaseComponent extends BlockComponent {
     default boolean isPowerSource() {
         return false;
     }
+
+    /**
+     * Determines if this block has a custom comparator input override.
+     * <p>
+     * When this returns {@code true}, comparators will use {@link #getComparatorInputOverride(Block)}
+     * to determine the input signal strength instead of reading the normal redstone power level.
+     * <p>
+     * <b>Important:</b> This method indicates whether the block <i>supports</i> comparator input,
+     * not whether the current signal is non-zero. For example:
+     * <ul>
+     *   <li>An empty chest should return {@code true} here (it supports comparator input),
+     *       but return {@code 0} from {@link #getComparatorInputOverride(Block)}</li>
+     *   <li>A stone block should return {@code false} here (it doesn't support comparator input)</li>
+     * </ul>
+     * This distinction matters because when {@code hasComparatorInputOverride()} returns {@code false},
+     * the comparator will read the normal redstone signal from behind, which is different from
+     * reading a zero signal from a supported block.
+     *
+     * @return {@code true} if the block supports comparator input override, {@code false} otherwise
+     * @see #getComparatorInputOverride(Block)
+     */
+    default boolean hasComparatorInputOverride() {
+        return false;
+    }
+
+    /**
+     * Gets the comparator input override signal strength for this block.
+     * <p>
+     * This method is only called when {@link #hasComparatorInputOverride()} returns {@code true}.
+     * The returned signal strength should be between 0 and 15.
+     *
+     * @param block the block to get the signal from
+     * @return the comparator input signal strength (0-15)
+     * @see #hasComparatorInputOverride()
+     */
+    default int getComparatorInputOverride(Block block) {
+        return 0;
+    }
 }

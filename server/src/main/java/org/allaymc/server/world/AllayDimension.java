@@ -32,12 +32,17 @@ import org.allaymc.server.world.manager.AllayChunkManager;
 import org.allaymc.server.world.manager.AllayEntityManager;
 import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.Collections;
 import java.util.Set;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
+import static org.allaymc.api.block.type.BlockTypes.POWERED_COMPARATOR;
+import static org.allaymc.api.block.type.BlockTypes.POWERED_REPEATER;
+import static org.allaymc.api.block.type.BlockTypes.UNPOWERED_COMPARATOR;
+import static org.allaymc.api.block.type.BlockTypes.UNPOWERED_REPEATER;
 
 /**
  * @author daoge_cmd | Cool_Loong
@@ -335,6 +340,55 @@ public class AllayDimension implements Dimension {
             }
         }
         return false;
+    }
+
+    @Override
+    public void updateComparatorOutputLevel(int x, int y, int z) {
+        var sourcePos = new Vector3i(x, y, z);
+        // Check horizontal neighbors for diodes
+        for (BlockFace face : BlockFace.getHorizontalBlockFaces()) {
+            var offset = face.getOffset();
+            int nx = x + offset.x();
+            int ny = y + offset.y();
+            int nz = z + offset.z();
+
+            if (!getChunkManager().isChunkLoaded(nx >> 4, nz >> 4)) {
+                continue;
+            }
+
+            BlockState neighborState = getBlockState(nx, ny, nz);
+            var neighborPos = new Vector3i(nx, ny, nz);
+
+            if (isDiode(neighborState)) {
+                // Direct neighbor is a diode, update it
+                blockUpdateManager.neighborBlockUpdate(neighborPos, sourcePos, face.opposite());
+            } else if (neighborState.getBlockStateData().isSolid()) {
+                // Neighbor is solid, check if there's a diode on the other side
+                int nx2 = nx + offset.x();
+                int nz2 = nz + offset.z();
+
+                if (!getChunkManager().isChunkLoaded(nx2 >> 4, nz2 >> 4)) {
+                    continue;
+                }
+
+                BlockState behindState = getBlockState(nx2, ny, nz2);
+                if (isDiode(behindState)) {
+                    var behindPos = new Vector3i(nx2, ny, nz2);
+                    blockUpdateManager.neighborBlockUpdate(behindPos, neighborPos, face.opposite());
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if a block state is a redstone diode (repeater or comparator).
+     */
+    private boolean isDiode(BlockState state) {
+        var type = state.getBlockType();
+        return type == POWERED_REPEATER ||
+               type == UNPOWERED_REPEATER ||
+               type == POWERED_COMPARATOR ||
+               type == UNPOWERED_COMPARATOR;
     }
 
     @Override

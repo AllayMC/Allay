@@ -125,6 +125,8 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
             this.position.dimension().updateBlockProperty(BlockPropertyTypes.ITEM_FRAME_MAP_BIT, false, this.position);
         }
         sendBlockEntityToViewers();
+        // Update comparators that may be reading this item frame
+        this.position.dimension().updateComparatorOutputLevel(this.position);
     }
 
     @Override
@@ -132,5 +134,7 @@ public class BlockEntityItemFrameBaseComponentImpl extends BlockEntityBaseCompon
         Preconditions.checkArgument(itemRotation >= 0 && itemRotation <= 7, "Item rotation must be between 0 and 7");
         this.itemRotation = itemRotation;
         sendBlockEntityToViewers();
+        // Update comparators that may be reading this item frame
+        this.position.dimension().updateComparatorOutputLevel(this.position);
     }
 }

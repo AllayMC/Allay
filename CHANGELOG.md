@@ -14,6 +14,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Added method `Dimension.updateComparatorOutputLevel()` for updating comparators that may be reading a block's comparator output, including second-level neighbors (comparators behind solid blocks).
+- (API) Added method `Container.calculateComparatorSignal()` for calculating the comparator signal strength based on container contents.
+- (API) Added method `ItemMusicDiscBaseComponent.getComparatorSignal()` for getting the comparator signal output for music discs.
+- (API) Added `comparatorSignal` field to `DiscType` enum for each music disc's comparator output value.
+- Implemented comparator signal reading for various blocks: containers (chest, barrel, hopper, shulker box), item frames, cake, candle cake, jukebox, campfire, and end portal frame.
 - (API) Added a new overload to method `WorldViewer.viewPlayerEmote` which accepts a boolean `silence` parameter.
 - (API) Introduced new thread type `ThreadType.DIMENSION` which responses the ticking thread of a dimension.
 - (API) Added events `PlayerPickupItemEvent` and `PlayerPickupArrowEvent` for player picking up item and arrow entities.

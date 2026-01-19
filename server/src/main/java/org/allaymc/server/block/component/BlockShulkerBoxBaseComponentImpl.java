@@ -56,4 +56,18 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
         if (!container.isEmpty()) return true;
         return !(entity instanceof EntityPlayer player) || player.getGameMode() != GameMode.CREATIVE;
     }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        var shulkerBox = blockEntityHolderComponent.getBlockEntity(block.getPosition());
+        if (shulkerBox == null) {
+            return 0;
+        }
+        return shulkerBox.getContainer().calculateComparatorSignal();
+    }
 }

@@ -9,6 +9,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
+import org.allaymc.api.container.Container;
 import org.allaymc.server.component.annotation.Dependency;
 
 /**
@@ -46,5 +47,21 @@ public class BlockChestBaseComponentImpl extends BlockBaseComponentImpl {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride() {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(Block block) {
+        var chest = blockEntityHolderComponent.getBlockEntity(block.getPosition());
+        if (chest == null) {
+            return 0;
+        }
+        // Use double chest container if paired, otherwise use single container
+        Container container = chest.isPaired() ? chest.getDoubleChestContainer() : chest.getContainer();
+        return container.calculateComparatorSignal();
     }
 }

@@ -134,6 +134,8 @@ public class BlockEntityCampfireBaseComponentImpl extends BlockEntityBaseCompone
         items[slot] = ItemAirStack.AIR_STACK;
         cookTimes[slot] = 0;
         recipes[slot] = null;
+        // Update comparators that may be reading this campfire
+        getDimension().updateComparatorOutputLevel(getPosition());
     }
 
     protected void dropCookedItem(int slot, ItemStack output) {
@@ -146,6 +148,8 @@ public class BlockEntityCampfireBaseComponentImpl extends BlockEntityBaseCompone
         items[slot] = ItemAirStack.AIR_STACK;
         cookTimes[slot] = 0;
         recipes[slot] = null;
+        // Update comparators that may be reading this campfire
+        getDimension().updateComparatorOutputLevel(getPosition());
     }
 
     @EventHandler
@@ -208,6 +212,8 @@ public class BlockEntityCampfireBaseComponentImpl extends BlockEntityBaseCompone
             recipes[slot] = null;
         }
         sendBlockEntityToViewers();
+        // Update comparators that may be reading this campfire
+        getDimension().updateComparatorOutputLevel(getPosition());
     }
 
     @Override

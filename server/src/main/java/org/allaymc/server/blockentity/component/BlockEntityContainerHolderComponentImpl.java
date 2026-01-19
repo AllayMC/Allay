@@ -2,12 +2,14 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.blockentity.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerType;
 import org.allaymc.api.container.interfaces.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.identifier.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
@@ -15,10 +17,12 @@ import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -34,10 +38,23 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @Setter
     protected Container container;
     protected boolean dropItemOnBreak;
+    protected Consumer<ItemStack> comparatorUpdateListener;
 
     public BlockEntityContainerHolderComponentImpl(Supplier<Container> containerSupplier) {
         this.container = containerSupplier.get();
         this.dropItemOnBreak = true;
+    }
+
+    @OnInitFinish
+    public void onInitFinish(BlockEntityInitInfo initInfo) {
+        // Register a listener for all slots to update comparators when container contents change
+        comparatorUpdateListener = itemStack -> {
+            var pos = baseComponent.getPosition();
+            pos.dimension().updateComparatorOutputLevel(pos);
+        };
+        for (int slot = 0; slot < container.getItemStackArray().length; slot++) {
+            container.addSlotChangeListener(slot, comparatorUpdateListener);
+        }
     }
 
     @SuppressWarnings("unchecked")
