@@ -435,14 +435,6 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean isPowerSource() {
-        // Redstone wire is a power source when it has signal
-        // Note: This is checked per-instance, but component doesn't have state
-        // The actual power check happens in getWeakPower/getStrongPower
-        return true;
-    }
-
-    @Override
     public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterReplaced(oldBlock, newBlockState, placementInfo);
 

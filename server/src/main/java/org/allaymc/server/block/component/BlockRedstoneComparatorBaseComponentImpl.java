@@ -3,6 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBlockEntityHolderComponent;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockTags;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
@@ -164,7 +165,7 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
         BlockState sideState = dimension.getBlockState(sidePos);
 
         // Comparator accepts power from any power source on sides (not just diodes)
-        if (!sideState.getBehavior().isPowerSource()) {
+        if (!sideState.getBlockType().hasBlockTag(BlockTags.POWER_SOURCE)) {
             return 0;
         }
 

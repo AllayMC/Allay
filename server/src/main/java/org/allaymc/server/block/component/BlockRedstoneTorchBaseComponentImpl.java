@@ -132,11 +132,6 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         return 0;
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
     /**
      * Checks if the block the torch is attached to is receiving power.
      */

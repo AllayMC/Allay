@@ -367,16 +367,6 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Determines if this block is a redstone power source.
-     * Power sources include levers, buttons, pressure plates, redstone blocks, etc.
-     *
-     * @return {@code true} if the block is a power source, {@code false} otherwise
-     */
-    default boolean isPowerSource() {
-        return false;
-    }
-
-    /**
      * Determines if this block has a custom comparator input override.
      * <p>
      * When this returns {@code true}, comparators will use {@link #getComparatorInputOverride(Block)}

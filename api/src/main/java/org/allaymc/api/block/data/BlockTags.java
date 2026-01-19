@@ -117,6 +117,8 @@ public interface BlockTags {
 
     BlockTag REDSTONE_WIRE_CONNECT_TO = create("minecraft:redstone_wire_connect_to");
 
+    BlockTag POWER_SOURCE = create("minecraft:power_source");
+
     static BlockTag create(String name) {
         var tag = new BlockTag(name);
         NAME_TO_TAG.put(name, tag);

@@ -121,11 +121,6 @@ public class BlockLeverBaseComponentImpl extends BlockBaseComponentImpl {
         return 0;
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
     private LeverDirection calculateLeverDirection(PlayerInteractInfo placementInfo) {
         BlockFace clickedFace = placementInfo.blockFace();
         double yaw = placementInfo.player().getLocation().yaw();

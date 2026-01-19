@@ -105,11 +105,6 @@ public class BlockTrappedChestBaseComponentImpl extends BlockBaseComponentImpl {
         return getWeakPower(block, face);
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
     /**
      * Calculates the redstone signal strength based on the number of viewers.
      * Signal strength is min(15, viewerCount).

@@ -161,9 +161,4 @@ public class BlockDaylightDetectorBaseComponentImpl extends BlockBaseComponentIm
     public int getWeakPower(Block block, BlockFace face) {
         return block.getPropertyValue(REDSTONE_SIGNAL);
     }
-
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
 }

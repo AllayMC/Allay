@@ -139,9 +139,4 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         }
         return 0;
     }
-
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
 }

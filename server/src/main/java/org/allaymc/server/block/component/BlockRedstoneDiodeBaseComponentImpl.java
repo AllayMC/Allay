@@ -147,11 +147,6 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
         return getWeakPower(block, face);
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
     /**
      * Gets the direction the diode is facing (output direction).
      * Note: MINECRAFT_CARDINAL_DIRECTION stores the input direction, so we need opposite.

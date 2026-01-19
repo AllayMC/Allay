@@ -35,11 +35,6 @@ public class BlockTargetBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
-    @Override
     public int getWeakPower(Block block, BlockFace face) {
         return blockEntityHolderComponent.getBlockEntity(block.getPosition()).getActivePower();
     }

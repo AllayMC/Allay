@@ -164,11 +164,6 @@ public class BlockObserverBaseComponentImpl extends BlockBaseComponentImpl {
         return getWeakPower(block, face);
     }
 
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
-
     /**
      * Gets the face that the observer is observing (front face).
      */

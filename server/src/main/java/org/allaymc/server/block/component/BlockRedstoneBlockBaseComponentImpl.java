@@ -20,9 +20,4 @@ public class BlockRedstoneBlockBaseComponentImpl extends BlockBaseComponentImpl 
     public int getWeakPower(Block block, BlockFace face) {
         return MAX_REDSTONE_POWER;
     }
-
-    @Override
-    public boolean isPowerSource() {
-        return true;
-    }
 }

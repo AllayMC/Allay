@@ -40,6 +40,10 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
 
+### Changed
+
+- (API) Replaced `BlockBehavior#isPowerSource()` method with block tag `BlockTags.POWER_SOURCE`.
+
 ### Fixed
 
 - Fixed a bug where `NpcDialoguePacket` used `RuntimeEntityId` instead of `UniqueEntityId`, causing NPC dialogs to not display for non-actual players (e.g., fake players created by plugins).
