@@ -328,6 +328,14 @@ public class AllayDimension implements Dimension {
             Block checkBlock = new Block(state, new Position3i(checkPos, this));
             int weakPower = state.getBehavior().getWeakPower(checkBlock, face.opposite());
             maxPower = Math.max(maxPower, weakPower);
+
+            // Check strong power through solid blocks
+            // A solid block receiving strong power provides weak power to adjacent blocks
+            // Exclude face.opposite() because that's the direction pointing back to pos
+            if (state.getBlockStateData().isSolid()) {
+                int strongPower = this.getStrongPowerAt(checkPos, face.opposite());
+                maxPower = Math.max(maxPower, strongPower);
+            }
         }
 
         return maxPower;

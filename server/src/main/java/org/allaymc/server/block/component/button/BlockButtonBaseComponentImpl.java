@@ -34,7 +34,16 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo != null) {
-            blockState = blockState.setPropertyValue(FACING_DIRECTION, placementInfo.blockFace().ordinal());
+            BlockFace clickedFace = placementInfo.blockFace();
+            blockState = blockState.setPropertyValue(FACING_DIRECTION, clickedFace.ordinal());
+
+            // Verify the attachment block has a full surface on the attached face
+            BlockFace attachedFace = clickedFace.opposite();
+            Vector3ic attachedPos = attachedFace.offsetPos(placeBlockPos);
+            BlockState attachedState = dimension.getBlockState(attachedPos);
+            if (!attachedState.getBlockStateData().collisionShape().isFull(clickedFace)) {
+                return false;
+            }
         }
         return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
     }
@@ -43,12 +52,14 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        // Check if the neighbor is block below
-        if (block.getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) {
+        // Check if the neighbor is the attached block
+        BlockFace buttonFacing = BlockFace.fromIndex(block.getPropertyValue(FACING_DIRECTION));
+        if (buttonFacing == null || face != buttonFacing.opposite()) {
             return;
         }
 
-        if (!neighbor.getBlockStateData().isSolid()) {
+        // Break if the attached block no longer has a full surface
+        if (!neighbor.getBlockStateData().collisionShape().isFull(buttonFacing)) {
             block.breakBlock();
         }
     }

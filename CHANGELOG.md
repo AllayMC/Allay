@@ -36,6 +36,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added method `BlockEntityBaseComponent.saveCleanNBT()` to save clean NBT data without position-related information, useful for piston block movement.
 - (API) Added methods `BlockEntityContainerHolderComponent.shouldDropItemOnBreak()` and `setDropItemOnBreak(boolean)` for controlling whether items should drop when the block is broken, useful for pistons moving container blocks.
 - (API) Added method `Dimension.updateAllAround()` for triggering second-order neighbor updates (updates adjacent blocks and each adjacent block's neighbors).
+- (API) Added method `BlockBaseComponent.onMoved()` callback for blocks to handle being moved by pistons. Observers use this to trigger pulses when pushed.
 - Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
 
@@ -52,6 +53,18 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Fixed lever placement check - now verifies that the attachment surface is a full face instead of just checking if the block is solid.
 - Fixed block replacement order - `onReplace` is now called before `onPlace` to ensure old block entities are removed before new ones are created, preventing block entity type mismatch issues.
 - Fixed piston to trigger second-order neighbor updates after animation completes at both original and target positions.
+- Fixed several observer bugs:
+  - Not responding to short redstone pulses (e.g., from other observers) - implemented proper activation delay and scheduling.
+  - Face-to-face observers not forming oscillators - state changes now notify all neighbors including the observed face.
+  - Oscillator frequency being too fast - corrected activation delay to 4 game ticks (2 redstone ticks) to match MCBE behavior per MCPE-15793.
+- Fixed repeaters/comparators not responding to short input pulses (e.g., from observers) - implemented latching behavior to capture pulses even if input is gone when scheduled update runs.
+- Fixed `Dimension.getWeakPowerAt()` not considering strong power through solid blocks, causing pistons to not extend when powered indirectly.
+- Fixed several blocks not properly checking attachment surface support (now uses collision shape instead of just solid flag):
+  - Item frames
+  - buttons
+  - pressure plates
+  - redstone torch
+  - redstone diodes (repeaters/comparators)
 
 # 0.10.5 (API 0.22.0) - 2026/1/15
 

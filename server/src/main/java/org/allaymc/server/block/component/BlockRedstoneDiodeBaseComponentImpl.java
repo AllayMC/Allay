@@ -36,9 +36,9 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        // Diode requires solid block below
+        // Diode requires a block below with a full top surface (e.g., glass, stone, etc.)
         BlockState below = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
-        if (!below.getBlockStateData().isSolid()) {
+        if (!canSupportRedstoneDiode(below)) {
             return false;
         }
 
@@ -66,8 +66,8 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        // Break if block below is removed
-        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
+        // Break if block below no longer supports the diode
+        if (face == BlockFace.DOWN && !canSupportRedstoneDiode(neighbor.getBlockState())) {
             block.breakBlock();
             return;
         }
@@ -98,8 +98,15 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
 
         if (powered && !shouldBePowered) {
             switchState(block, false);
-        } else if (!powered && shouldBePowered) {
+        } else if (!powered) {
+            // Always switch on if unpowered (latching behavior).
+            // The update was scheduled because input was detected at that time.
+            // This ensures short pulses (like from observers) are captured.
             switchState(block, true);
+            // If input is now gone, schedule another update to turn off
+            if (!shouldBePowered) {
+                scheduleUpdate(block);
+            }
         }
     }
 
@@ -276,4 +283,15 @@ public abstract class BlockRedstoneDiodeBaseComponentImpl extends BlockBaseCompo
      * Switches the diode between powered and unpowered states.
      */
     protected abstract void switchState(Block block, boolean newPowered);
+
+    /**
+     * Checks if a block can support a redstone diode (repeater/comparator).
+     * The block needs to have a full top surface (collision shape covers the entire UP face).
+     *
+     * @param blockState the block state to check
+     * @return true if the block can support a redstone diode
+     */
+    protected boolean canSupportRedstoneDiode(BlockState blockState) {
+        return blockState.getBlockStateData().collisionShape().isFull(BlockFace.UP);
+    }
 }

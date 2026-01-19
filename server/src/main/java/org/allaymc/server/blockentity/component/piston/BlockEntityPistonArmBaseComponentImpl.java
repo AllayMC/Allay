@@ -3,6 +3,7 @@ package org.allaymc.server.blockentity.component.piston;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntityInitInfo;
@@ -12,6 +13,7 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityPistonArm;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.cloudburstmc.nbt.NbtMap;
@@ -278,6 +280,9 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
                     if (movingBlockEntityNBT != null) {
                         dimension.getBlockEntity(newPos).loadNBT(movingBlockEntityNBT);
                     }
+                    // Notify the block that it was moved by a piston
+                    Block movedBlock = new Block(originalState, new Position3i(newPos, dimension));
+                    originalState.getBehavior().onMoved(movedBlock);
                 } else {
                     dimension.setBlockState(newPos, BlockTypes.AIR.getDefaultState());
                 }

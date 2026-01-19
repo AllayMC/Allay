@@ -193,6 +193,16 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
+     * Called when a block is moved by a piston.
+     * This method is invoked after the block has been placed at its new position.
+     *
+     * @param block the block that was moved (at its new position)
+     */
+    @ApiStatus.OverrideOnly
+    default void onMoved(Block block) {
+    }
+
+    /**
      * Retrieves the drops of the block when it is broken.
      *
      * @param block    the block being broken

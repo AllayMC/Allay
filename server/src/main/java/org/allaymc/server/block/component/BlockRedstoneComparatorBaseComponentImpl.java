@@ -88,6 +88,9 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
 
         // Schedule update if output changed
         if (newOutput != currentOutput) {
+            // Store the calculated output for when the scheduled update runs.
+            // This ensures short pulses (like from observers) are captured.
+            getBlockEntity(block).setOutputSignal(newOutput);
             scheduleUpdate(block);
         }
     }
@@ -96,19 +99,29 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
     public void onScheduledUpdate(Block block) {
         int output = calculateOutput(block);
         var blockEntity = getBlockEntity(block);
+        // currentOutput stores the value from when the update was scheduled (set in updateState)
         int currentOutput = blockEntity.getOutputSignal();
         boolean shouldBePowered = output > 0;
 
-        // Update block entity with new output value
-        blockEntity.setOutputSignal(output);
-
         if (powered && !shouldBePowered) {
+            blockEntity.setOutputSignal(output);
             switchState(block, false, output);
-        } else if (!powered && shouldBePowered) {
-            switchState(block, true, output);
+        } else if (!powered) {
+            // Latching behavior: use the higher of new output and stored output.
+            // This ensures short pulses (like from observers) are captured.
+            int effectiveOutput = Math.max(output, currentOutput);
+            if (effectiveOutput > 0) {
+                blockEntity.setOutputSignal(effectiveOutput);
+                switchState(block, true, effectiveOutput);
+                // If input is now gone, schedule another update to turn off
+                if (!shouldBePowered) {
+                    scheduleUpdate(block);
+                }
+            }
         } else if (powered && output != currentOutput) {
             // Only notify neighbors if output VALUE actually changed
             // This prevents infinite update loops when output is stable
+            blockEntity.setOutputSignal(output);
             notifyOutputNeighbors(block);
         }
     }

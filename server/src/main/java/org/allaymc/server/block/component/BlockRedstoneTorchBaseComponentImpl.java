@@ -39,11 +39,11 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
             TorchFacingDirection facing = calculateTorchFacing(placementInfo);
             blockState = blockState.setPropertyValue(TORCH_FACING_DIRECTION, facing);
 
-            // Verify attachment block is solid
+            // Verify attachment block can support the torch
             BlockFace attachedFace = getAttachedFace(facing);
             Vector3ic attachedPos = attachedFace.offsetPos(placeBlockPos);
             BlockState attachedState = dimension.getBlockState(attachedPos);
-            if (!attachedState.getBlockStateData().isSolid()) {
+            if (!canSupportTorch(attachedState, attachedFace)) {
                 return false;
             }
         }
@@ -65,8 +65,8 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         TorchFacingDirection facing = block.getPropertyValue(TORCH_FACING_DIRECTION);
         BlockFace attachedFace = getAttachedFace(facing);
 
-        // Break if attached block is removed
-        if (face == attachedFace && !neighbor.getBlockStateData().isSolid()) {
+        // Break if attached block no longer supports the torch
+        if (face == attachedFace && !canSupportTorch(neighbor.getBlockState(), attachedFace)) {
             block.breakBlock();
             return;
         }
@@ -273,5 +273,25 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
             case NORTH -> BlockFace.NORTH; // Attached to north wall
             case SOUTH -> BlockFace.SOUTH; // Attached to south wall
         };
+    }
+
+    /**
+     * Checks if a block can support a torch on the specified face.
+     * The block needs to have a full surface on the opposite face of attachment.
+     * For top placement (on block below), only center needs to be full (allows fences/walls).
+     * For wall placement, the entire face must be full.
+     *
+     * @param blockState   the block state to check
+     * @param attachedFace the face where the torch attaches (direction from torch to support block)
+     * @return true if the block can support a torch on that face
+     */
+    protected boolean canSupportTorch(BlockState blockState, BlockFace attachedFace) {
+        // The torch attaches to the opposite face of the support block
+        // e.g., if attachedFace is DOWN (torch on top of block), check if UP face is full
+        BlockFace supportFace = attachedFace.opposite();
+        var shape = blockState.getBlockStateData().collisionShape();
+        // For top placement, only center needs to be full (allows fences, walls, etc.)
+        // For wall placement, entire face must be full
+        return supportFace == BlockFace.UP ? shape.isCenterFull(BlockFace.UP) : shape.isFull(supportFace);
     }
 }

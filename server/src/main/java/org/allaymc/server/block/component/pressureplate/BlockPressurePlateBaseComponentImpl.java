@@ -8,7 +8,9 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.world.sound.PressurePlateSound;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
+import org.joml.Vector3ic;
 import org.joml.primitives.AABBd;
 
 import java.time.Duration;
@@ -30,11 +32,21 @@ public class BlockPressurePlateBaseComponentImpl extends BlockBaseComponentImpl 
     }
 
     @Override
+    public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        // Pressure plate requires a block below with a full top surface
+        BlockState below = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
+        if (!below.getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
+            return false;
+        }
+        return dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
+    }
+
+    @Override
     public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
         super.onNeighborUpdate(block, neighbor, face);
 
-        // Break if block below is removed
-        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
+        // Break if block below no longer has a full top surface
+        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().collisionShape().isFull(BlockFace.UP)) {
             block.breakBlock();
         }
     }
