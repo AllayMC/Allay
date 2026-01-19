@@ -2327,4 +2327,223 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockPistonArmCollisionBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initCake() {
+        BlockTypes.CAKE = AllayBlockType
+                .builder(BlockCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.CAKE)
+                .setProperties(BlockPropertyTypes.BITE_COUNTER)
+                .setBaseComponentSupplier(BlockCakeBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initCandles() {
+        BlockTypes.CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.CANDLE_CAKE))
+                .build();
+        BlockTypes.WHITE_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.WHITE_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.WHITE_CANDLE_CAKE))
+                .build();
+        BlockTypes.ORANGE_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.ORANGE_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.ORANGE_CANDLE_CAKE))
+                .build();
+        BlockTypes.MAGENTA_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.MAGENTA_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.MAGENTA_CANDLE_CAKE))
+                .build();
+        BlockTypes.LIGHT_BLUE_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIGHT_BLUE_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.LIGHT_BLUE_CANDLE_CAKE))
+                .build();
+        BlockTypes.YELLOW_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.YELLOW_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.YELLOW_CANDLE_CAKE))
+                .build();
+        BlockTypes.LIME_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIME_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.LIME_CANDLE_CAKE))
+                .build();
+        BlockTypes.PINK_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.PINK_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.PINK_CANDLE_CAKE))
+                .build();
+        BlockTypes.GRAY_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.GRAY_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.GRAY_CANDLE_CAKE))
+                .build();
+        BlockTypes.LIGHT_GRAY_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIGHT_GRAY_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.LIGHT_GRAY_CANDLE_CAKE))
+                .build();
+        BlockTypes.CYAN_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.CYAN_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.CYAN_CANDLE_CAKE))
+                .build();
+        BlockTypes.PURPLE_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.PURPLE_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.PURPLE_CANDLE_CAKE))
+                .build();
+        BlockTypes.BLUE_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.BLUE_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.BLUE_CANDLE_CAKE))
+                .build();
+        BlockTypes.BROWN_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.BROWN_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.BROWN_CANDLE_CAKE))
+                .build();
+        BlockTypes.GREEN_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.GREEN_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.GREEN_CANDLE_CAKE))
+                .build();
+        BlockTypes.RED_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.RED_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.RED_CANDLE_CAKE))
+                .build();
+        BlockTypes.BLACK_CANDLE = AllayBlockType
+                .builder(BlockCandleBehaviorImpl.class)
+                .vanillaBlock(BlockId.BLACK_CANDLE)
+                .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleBaseComponentImpl(blockType, BlockId.BLACK_CANDLE_CAKE))
+                .build();
+    }
+
+    public static void initCandleCakes() {
+        BlockTypes.CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.CANDLE))
+                .build();
+        BlockTypes.WHITE_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.WHITE_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.WHITE_CANDLE))
+                .build();
+        BlockTypes.ORANGE_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.ORANGE_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.ORANGE_CANDLE))
+                .build();
+        BlockTypes.MAGENTA_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.MAGENTA_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.MAGENTA_CANDLE))
+                .build();
+        BlockTypes.LIGHT_BLUE_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIGHT_BLUE_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.LIGHT_BLUE_CANDLE))
+                .build();
+        BlockTypes.YELLOW_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.YELLOW_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.YELLOW_CANDLE))
+                .build();
+        BlockTypes.LIME_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIME_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.LIME_CANDLE))
+                .build();
+        BlockTypes.PINK_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.PINK_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.PINK_CANDLE))
+                .build();
+        BlockTypes.GRAY_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.GRAY_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.GRAY_CANDLE))
+                .build();
+        BlockTypes.LIGHT_GRAY_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.LIGHT_GRAY_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.LIGHT_GRAY_CANDLE))
+                .build();
+        BlockTypes.CYAN_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.CYAN_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.CYAN_CANDLE))
+                .build();
+        BlockTypes.PURPLE_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.PURPLE_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.PURPLE_CANDLE))
+                .build();
+        BlockTypes.BLUE_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.BLUE_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.BLUE_CANDLE))
+                .build();
+        BlockTypes.BROWN_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.BROWN_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.BROWN_CANDLE))
+                .build();
+        BlockTypes.GREEN_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.GREEN_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.GREEN_CANDLE))
+                .build();
+        BlockTypes.RED_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.RED_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.RED_CANDLE))
+                .build();
+        BlockTypes.BLACK_CANDLE_CAKE = AllayBlockType
+                .builder(BlockCandleCakeBehaviorImpl.class)
+                .vanillaBlock(BlockId.BLACK_CANDLE_CAKE)
+                .setProperties(BlockPropertyTypes.LIT)
+                .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.BLACK_CANDLE))
+                .build();
+    }
 }
