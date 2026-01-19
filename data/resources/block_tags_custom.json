@@ -333,7 +333,7 @@
     "minecraft:slime",
     "minecraft:honey_block"
   ],
-  "minecraft:redstone_wire_connects_to": [
+  "minecraft:redstone_wire_connect_to": [
     "minecraft:lever",
     "minecraft:wooden_button",
     "minecraft:stone_button",

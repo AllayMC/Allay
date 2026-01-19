@@ -27,7 +27,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added `BlockEntityTypes.PISTON_ARM` and `BlockEntityTypes.MOVING_BLOCK` block entity types.
   - Added block tags `BlockTags.UNPUSHABLE`, `BlockTags.UNPULLABLE`, `BlockTags.BREAK_WHEN_PUSHED`, and `BlockTags.CAN_STICK_BLOCKS` to control piston push/pull behavior for different block types.
   - Added sounds `SimpleSound.PISTON_PUSH` and `SimpleSound.PISTON_PULL`.
-- (API) Added block tag `BlockTags.REDSTONE_WIRE_CONNECTS_TO` for controlling redstone wire connection behavior.
+- (API) Added block tag `BlockTags.REDSTONE_WIRE_CONNECT_TO` for controlling redstone wire connection behavior.
 - (API) Added method `BlockEntityBaseComponent.saveCleanNBT()` to save clean NBT data without position-related information, useful for piston block movement.
 - (API) Added methods `BlockEntityContainerHolderComponent.shouldDropItemOnBreak()` and `setDropItemOnBreak(boolean)` for controlling whether items should drop when the block is broken, useful for pistons moving container blocks.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.

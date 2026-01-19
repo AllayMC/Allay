@@ -408,7 +408,7 @@ public class BlockRedstoneWireBaseComponentImpl extends BlockBaseComponentImpl {
      * like redstone lamps, dispensers, or note blocks.
      */
     protected boolean shouldWireConnectTo(BlockState state) {
-        return state.getBlockType().hasBlockTag(BlockTags.REDSTONE_WIRE_CONNECTS_TO);
+        return state.getBlockType().hasBlockTag(BlockTags.REDSTONE_WIRE_CONNECT_TO);
     }
 
     /**

@@ -107,7 +107,6 @@ public interface BlockTags {
 
     BlockTag LEAVES = create("minecraft:leaves");
 
-    // Piston-related tags
     BlockTag UNPUSHABLE = create("minecraft:unpushable");
 
     BlockTag UNPULLABLE = create("minecraft:unpullable");
@@ -116,8 +115,7 @@ public interface BlockTags {
 
     BlockTag CAN_STICK_BLOCKS = create("minecraft:can_stick_blocks");
 
-    // Redstone-related tags
-    BlockTag REDSTONE_WIRE_CONNECTS_TO = create("minecraft:redstone_wire_connects_to");
+    BlockTag REDSTONE_WIRE_CONNECT_TO = create("minecraft:redstone_wire_connect_to");
 
     static BlockTag create(String name) {
         var tag = new BlockTag(name);
