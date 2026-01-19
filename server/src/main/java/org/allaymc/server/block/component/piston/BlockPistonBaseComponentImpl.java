@@ -400,7 +400,8 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
         BlockFace pistonFace = getPistonFace(block.getBlockState());
 
         // Check power from all sides except the face the piston is pointing
-        return block.getPower() > 0 || block.getStrongPower(pistonFace) > 0;
+        // Piston should ignore power from the front face (the direction it extends towards)
+        return block.getWeakPower(pistonFace) > 0 || block.getStrongPower(pistonFace) > 0;
     }
 
     /**
