@@ -53,14 +53,8 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
         }
 
         // Trigger updates to propagate power
-        dimension.updateAround(placeBlockPos);
-        // Also update around the attached block (second-order neighbors)
-        // This ensures blocks like redstone dust on top of the attached block get updated
-        if (placementInfo != null) {
-            TorchFacingDirection facing = blockState.getPropertyValue(TORCH_FACING_DIRECTION);
-            BlockFace attachedFace = getAttachedFace(facing);
-            dimension.updateAround(attachedFace.offsetPos(placeBlockPos));
-        }
+        TorchFacingDirection facing = blockState.getPropertyValue(TORCH_FACING_DIRECTION);
+        updateSecondOrderNeighbors(dimension, placeBlockPos, facing);
         return true;
     }
 
@@ -101,16 +95,11 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
     public void afterReplaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterReplaced(oldBlock, newBlockState, placementInfo);
 
-        // When removed, update neighbors if was lit
-        if (lit) {
-            var dimension = oldBlock.getDimension();
-            var pos = oldBlock.getPosition();
-            dimension.updateAround(pos);
-            // Also update around the attached block (second-order neighbors)
-            TorchFacingDirection facing = oldBlock.getPropertyValue(TORCH_FACING_DIRECTION);
-            BlockFace attachedFace = getAttachedFace(facing);
-            dimension.updateAround(attachedFace.offsetPos(pos));
-        }
+        // When removed, update neighbors
+        var dimension = oldBlock.getDimension();
+        var pos = oldBlock.getPosition();
+        TorchFacingDirection facing = oldBlock.getPropertyValue(TORCH_FACING_DIRECTION);
+        updateSecondOrderNeighbors(dimension, pos, facing);
     }
 
     @Override
@@ -243,11 +232,21 @@ public class BlockRedstoneTorchBaseComponentImpl extends BlockBaseComponentImpl 
 
         dimension.setBlockState(pos.x(), pos.y(), pos.z(), newState);
 
-        // Update neighbors
+        updateSecondOrderNeighbors(dimension, pos, facing);
+    }
+
+    /**
+     * Updates second-order neighbors when torch state changes.
+     * This includes neighbors of the attached block and the block above (which receives strong power).
+     */
+    protected void updateSecondOrderNeighbors(Dimension dimension, Vector3ic pos, TorchFacingDirection facing) {
+        // Update direct neighbors
         dimension.updateAround(pos);
-        // Also update around the attached block (second-order neighbors)
+        // Update around the attached block (second-order neighbors)
         BlockFace attachedFace = getAttachedFace(facing);
         dimension.updateAround(attachedFace.offsetPos(pos));
+        // Update around the block above (receives strong power from torch)
+        dimension.updateAround(BlockFace.UP.offsetPos(pos));
     }
 
     protected TorchFacingDirection calculateTorchFacing(PlayerInteractInfo placementInfo) {
