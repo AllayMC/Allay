@@ -104,7 +104,7 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
 
         boolean isPowered = hasRedstonePower(block);
 
-        // PNX pattern: Only allow state changes when:
+        // Only allow state changes when:
         // 1. Animation is complete (state % 2 == 0)
         // 2. Power state has changed (powered != isPowered)
         // state 0 = retracted, 1 = extending, 2 = extended, 3 = retracting
@@ -238,7 +238,7 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             Map<Vector3ic, BlockState> originalStates
     ) {
         // 1. Prepare piston arm block entity state FIRST (sends initial state to client)
-        // This must happen BEFORE MOVING_BLOCK entities are created (PNX preMove)
+        // This must happen BEFORE MOVING_BLOCK entities are created
         var pistonArmBlockEntity = dimension.getBlockEntity(pistonPos);
         if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
             pistonArm.preExtending(blocksToMove, originalStates);
@@ -303,7 +303,7 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.setBlockState(armPos, armType.getDefaultState()
                 .setPropertyValue(FACING_DIRECTION, armFacing));
 
-        // 6. Start the actual movement (PNX move)
+        // 6. Start the actual movement
         if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
             pistonArm.startMoving();
         }
@@ -324,7 +324,7 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             Map<Vector3ic, BlockState> originalStates
     ) {
         // 1. Prepare piston arm block entity state FIRST (sends initial state to client)
-        // This must happen BEFORE MOVING_BLOCK entities are created (PNX preMove)
+        // This must happen BEFORE MOVING_BLOCK entities are created
         var pistonArmBlockEntity = dimension.getBlockEntity(pistonPos);
         if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
             pistonArm.preRetracting(blocksToMove, originalStates);
@@ -383,7 +383,7 @@ public class BlockPistonBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.setBlockState(armPos, BlockTypes.AIR.getDefaultState());
         }
 
-        // 4. Start the actual movement (PNX move)
+        // 4. Start the actual movement
         // Note: Piston arm removal for sticky piston with blocks is handled in finishAnimation()
         if (pistonArmBlockEntity instanceof BlockEntityPistonArm pistonArm) {
             pistonArm.startMoving();

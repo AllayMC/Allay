@@ -131,7 +131,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
             return;
         }
 
-        // Update progress - PNX style: both progress and lastProgress are updated together
+        // Update progress - both progress and lastProgress are updated together
         if (extending) {
             progress = Math.min(1, progress + MOVE_STEP);
             lastProgress = Math.min(1, lastProgress + MOVE_STEP);
@@ -291,7 +291,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
         // Send update to viewers
         sendBlockEntityToViewers();
 
-        // PNX: Schedule a self-check on next tick to ensure correct state
+        // Schedule a self-check on next tick to ensure correct state
         dimension.getBlockUpdateManager().scheduleBlockUpdateInDelay(position, java.time.Duration.ofMillis(50));
     }
 
@@ -304,7 +304,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
     public void preExtending(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates) {
         finished = false;
         extending = true;
-        // PNX preMove: set both to same value initially
+        // Set both to same value initially
         progress = 0;
         lastProgress = 0;
         state = newState = 1;
@@ -320,7 +320,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
     public void preRetracting(List<Vector3ic> blocksToMove, Map<Vector3ic, BlockState> originalStates) {
         finished = false;
         extending = false;
-        // PNX preMove: set both to same value initially
+        // Set both to same value initially
         progress = 1;
         lastProgress = 1;
         state = newState = 3;
@@ -334,7 +334,7 @@ public class BlockEntityPistonArmBaseComponentImpl extends BlockEntityBaseCompon
 
     @Override
     public void startMoving() {
-        // PNX move: set lastProgress for animation start
+        // Set lastProgress for animation start
         // This is called AFTER MOVING_BLOCK entities are created
         if (extending) {
             lastProgress = -MOVE_STEP;
