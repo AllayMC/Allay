@@ -37,6 +37,11 @@ github = "https://github.com/AllayMC/TemplateWorld"
 
 # Other Plugins
 
+[ColoredSlimeBlock]
+description = "A plugin that adds 16 colored slime blocks to the game with bouncing mechanics, fall damage reduction, and piston interactions."
+authors = ["daoge_cmd"]
+github = "https://github.com/AllayMC/ColoredSlimeBlock"
+
 [AllayNPC]
 description = "NPC plugin for AllayMC."
 authors = ["daoge_cmd"]
