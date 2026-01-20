@@ -91,6 +91,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - pressure plates
   - redstone torch
   - redstone diodes (repeaters/comparators)
+- Fixed TNT not responding to redstone signals - TNT now ignites when receiving redstone power.
 
 # 0.10.5 (API 0.22.0) - 2026/1/15
 
