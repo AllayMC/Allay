@@ -27,6 +27,7 @@ public final class ContainerActionProcessorHolder {
         registerProcessor(new MineBlockActionProcessor());
         registerProcessor(new BeaconPaymentActionProcessor());
         registerProcessor(new CraftGrindstoneActionProcessor());
+        registerProcessor(new CraftLoomActionProcessor());
         registerProcessor(new CraftRecipeOptionalActionProcessor());
     }
 

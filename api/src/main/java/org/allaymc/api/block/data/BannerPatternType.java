@@ -2,6 +2,9 @@ package org.allaymc.api.block.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.type.ItemTypes;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +36,6 @@ public enum BannerPatternType {
     HALF_HORIZONTAL_BOTTOM("hhb"),
     HALF_VERTICAL("vh"),
     HALF_VERTICAL_RIGHT("vhr"),
-    ILLAGER("sku"),
     MOJANG("moj"),
     PIGLIN("pig"),
     RHOMBUS("mr"),
@@ -56,7 +58,8 @@ public enum BannerPatternType {
     TRIANGLE_TOP("tt"),
     TRIANGLES_BOTTOM("bts"),
     TRIANGLES_TOP("tts"),
-    FLOW("flw");
+    FLOW("flw"),
+    GUSTER("gus");
 
     private static final Map<String, BannerPatternType> BY_ID = new HashMap<>();
 
@@ -76,5 +79,27 @@ public enum BannerPatternType {
      */
     public static BannerPatternType fromId(String id) {
         return BY_ID.get(id);
+    }
+
+    /**
+     * Gets the required pattern item for this pattern type.
+     * Basic patterns return {@code null}, special patterns return their corresponding pattern item.
+     *
+     * @return the required pattern item, or {@code null} if no item is required
+     */
+    public ItemType<?> getRequiredPatternItem() {
+        return switch (this) {
+            case BRICKS -> ItemTypes.FIELD_MASONED_BANNER_PATTERN;
+            case CREEPER -> ItemTypes.CREEPER_BANNER_PATTERN;
+            case CURLY_BORDER -> ItemTypes.BORDURE_INDENTED_BANNER_PATTERN;
+            case FLOWER -> ItemTypes.FLOWER_BANNER_PATTERN;
+            case MOJANG -> ItemTypes.MOJANG_BANNER_PATTERN;
+            case SKULL -> ItemTypes.SKULL_BANNER_PATTERN;
+            case GLOBE -> ItemTypes.GLOBE_BANNER_PATTERN;
+            case PIGLIN -> ItemTypes.PIGLIN_BANNER_PATTERN;
+            case FLOW -> ItemTypes.FLOW_BANNER_PATTERN;
+            case GUSTER -> ItemTypes.GUSTER_BANNER_PATTERN;
+            default -> null;
+        };
     }
 }

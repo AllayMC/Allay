@@ -1481,6 +1481,15 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initLoom() {
+        BlockTypes.LOOM = AllayBlockType
+                .builder(BlockLoomBehaviorImpl.class)
+                .vanillaBlock(BlockId.LOOM)
+                .setProperties(BlockPropertyTypes.DIRECTION_4)
+                .setBaseComponentSupplier(BlockLoomBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initAnvil() {
         BlockTypes.ANVIL = AllayBlockType
                 .builder(BlockAnvilBehaviorImpl.class)

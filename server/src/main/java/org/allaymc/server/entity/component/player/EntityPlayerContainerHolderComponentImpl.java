@@ -58,7 +58,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new CraftingTableContainerImpl(),
                 new BeaconContainerImpl(),
                 new EnderChestContainerImpl(),
-                new AnvilContainerImpl()
+                new AnvilContainerImpl(),
+                new LoomContainerImpl()
         );
         this.enchantOptions = new ArrayList<>();
 
