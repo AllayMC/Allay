@@ -33,7 +33,6 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added method `Container.calculateComparatorSignal()` for calculating the comparator signal strength based on container contents.
 - (API) Added method `ItemMusicDiscBaseComponent.getComparatorSignal()` for getting the comparator signal output for music discs.
 - (API) Added `comparatorSignal` field to `DiscType` enum for each music disc's comparator output value.
-- Implemented comparator signal reading for various blocks: containers (chest, barrel, hopper, shulker box), item frames, cake, candle cake, jukebox, campfire, and end portal frame.
 - (API) Added a new overload to method `WorldViewer.viewPlayerEmote` which accepts a boolean `silence` parameter.
 - (API) Introduced new thread type `ThreadType.DIMENSION` which responses the ticking thread of a dimension.
 - (API) Added events `PlayerPickupItemEvent` and `PlayerPickupArrowEvent` for player picking up item and arrow entities.
@@ -59,6 +58,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
   - Added sounds `SimpleSound.CAULDRON_FILL_WATER`, `CAULDRON_TAKE_WATER`, `CAULDRON_FILL_LAVA`, `CAULDRON_TAKE_LAVA`, `CAULDRON_FILL_POWDER_SNOW`, `CAULDRON_TAKE_POWDER_SNOW`, `CAULDRON_FILL_POTION`, `CAULDRON_TAKE_POTION`, `CAULDRON_ADD_DYE`, `CAULDRON_DYE_ARMOR`, `CAULDRON_CLEAN_ARMOR`, `CAULDRON_CLEAN_BANNER`, and `CAULDRON_EXPLODE`.
 - (API) Added `ItemDyeableComponent` interface for items that can be dyed with custom colors, such as leather armor.
 - (API) Added leather armor item interfaces: `ItemLeatherBootsStack`, `ItemLeatherChestplateStack`, `ItemLeatherHelmetStack`, `ItemLeatherHorseArmorStack`, and `ItemLeatherLeggingsStack`.
+- Implemented comparator signal reading for various blocks: containers (chest, barrel, hopper, shulker box), item frames, cake, candle cake, jukebox, campfire, and end portal frame.
 - Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
 - 

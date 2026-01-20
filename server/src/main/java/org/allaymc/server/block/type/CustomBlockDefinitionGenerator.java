@@ -69,6 +69,12 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
      */
     protected final Map<String, NbtMap> customComponents;
 
+    /**
+     * List of permutations for conditional component overrides.
+     * Permutations allow changing block appearance/behavior based on block states using Molang conditions.
+     */
+    protected final List<Permutation> permutations;
+
     @Override
     public BlockDefinition generate(BlockType<?> blockType) {
         var blockStateData = blockType.getDefaultState().getBlockStateData();
@@ -135,17 +141,24 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
             components.putAll(customComponents);
         }
 
-        var blockData = NbtMap.builder()
+        var blockDataBuilder = NbtMap.builder()
                 .putCompound("components", components.build())
                 // This is required, or the client will crash, although the creative inventory is already server authed xd
                 .putCompound("menu_category", defaultMenuCategory())
                 // Integer block id is also required by the client, let's just send an incremental value to the client
                 .putCompound("vanilla_block_data", NbtMap.builder().putInt("block_id", CUSTOM_BLOCK_ID.getAndIncrement()).build())
                 .putList("properties", NbtType.COMPOUND, buildPropertyDefinitions(blockType))
-                .putInt("molangVersion", MOLANG_VERSION)
-                .build();
+                .putInt("molangVersion", MOLANG_VERSION);
 
-        return new BlockDefinition(blockData);
+        // Add permutations if present
+        if (permutations != null && !permutations.isEmpty()) {
+            var permutationNbtList = permutations.stream()
+                    .map(p -> p.toNBT(tintMethod))
+                    .toList();
+            blockDataBuilder.putList("permutations", NbtType.COMPOUND, permutationNbtList);
+        }
+
+        return new BlockDefinition(blockDataBuilder.build());
     }
 
     /**
@@ -161,7 +174,7 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
         return Box.fromAABB(aabb);
     }
 
-    private NbtMap buildCollisionBoxNBT(VoxelShape voxelShape) {
+    private static NbtMap buildCollisionBoxNBT(VoxelShape voxelShape) {
         if (voxelShape == null || voxelShape.getSolids().isEmpty()) {
             return NbtMap.builder()
                     .putBoolean("enabled", false)
@@ -848,6 +861,139 @@ public class CustomBlockDefinitionGenerator implements BlockDefinitionGenerator 
                     .putFloat("TY", ty)
                     .putFloat("TZ", tz)
                     .build();
+        }
+    }
+
+    /**
+     * Components that can be overridden in a permutation.
+     * Only non-null fields will be serialized.
+     *
+     * @param geometry        the geometry identifier (optional)
+     * @param materials       material instances for rendering (optional)
+     * @param transformation  transformation applied to the block model (optional)
+     * @param collisionBox    collision box shape (optional)
+     * @param selectionBox    selection box (optional)
+     * @param displayName     display name shown in inventory (optional)
+     * @param lightEmission   light emission level 0-15 (optional)
+     * @param lightDampening  light dampening level 0-15 (optional)
+     */
+    @Builder
+    public record PermutationComponents(
+            String geometry,
+            Materials materials,
+            Transformation transformation,
+            VoxelShape collisionBox,
+            Box selectionBox,
+            @MayContainTrKey String displayName,
+            Integer lightEmission,
+            Integer lightDampening
+    ) {
+        /**
+         * Converts to NBT format, only including non-null fields.
+         *
+         * @param tintMethod the tint method from BlockStateData (can be null)
+         * @return the NBT representation
+         */
+        public NbtMap toNBT(TintMethod tintMethod) {
+            var builder = NbtMap.builder();
+
+            if (displayName != null) {
+                builder.putCompound("minecraft:display_name", NbtMap.builder()
+                        .putString("value", displayName)
+                        .build());
+            }
+
+            if (geometry != null) {
+                builder.putCompound("minecraft:geometry", NbtMap.builder()
+                        .putString("identifier", geometry)
+                        .build());
+            }
+
+            if (materials != null && !materials.isEmpty()) {
+                var materialsNbt = NbtMap.builder();
+                for (var entry : materials.entrySet()) {
+                    materialsNbt.putCompound(entry.getKey(), entry.getValue().toNBT(tintMethod));
+                }
+                builder.putCompound("minecraft:material_instances", NbtMap.builder()
+                        .putCompound("mappings", NbtMap.EMPTY)
+                        .putCompound("materials", materialsNbt.build())
+                        .build());
+            }
+
+            if (collisionBox != null) {
+                builder.putCompound("minecraft:collision_box", buildCollisionBoxNBT(collisionBox));
+            }
+
+            if (selectionBox != null) {
+                if (selectionBox.equals(Box.EMPTY)) {
+                    builder.putCompound("minecraft:selection_box", NbtMap.builder()
+                            .putBoolean("enabled", false)
+                            .build());
+                } else {
+                    builder.putCompound("minecraft:selection_box", selectionBox.toSelectionBoxNBT());
+                }
+            }
+
+            if (lightEmission != null) {
+                builder.putCompound("minecraft:light_emission", NbtMap.builder()
+                        .putByte("emission", lightEmission.byteValue())
+                        .build());
+            }
+
+            if (lightDampening != null) {
+                builder.putCompound("minecraft:light_dampening", NbtMap.builder()
+                        .putByte("lightLevel", lightDampening.byteValue())
+                        .build());
+            }
+
+            if (transformation != null) {
+                builder.putCompound("minecraft:transformation", transformation.toNBT());
+            }
+
+            return builder.build();
+        }
+    }
+
+    /**
+     * Represents a permutation that allows conditional component overrides based on Molang conditions.
+     * Permutations enable custom blocks to change their appearance/behavior based on block states.
+     *
+     * @param condition  Molang condition that determines when this permutation is active (e.g., "q.block_property('facing') == 0")
+     * @param components the components to override when the condition is true
+     * @param blockTags  optional block tags to add when this permutation is active
+     */
+    @Builder
+    public record Permutation(
+            String condition,
+            PermutationComponents components,
+            String[] blockTags
+    ) {
+        /**
+         * Creates a permutation without block tags.
+         *
+         * @param condition  the Molang condition
+         * @param components the components to override
+         */
+        public Permutation(String condition, PermutationComponents components) {
+            this(condition, components, null);
+        }
+
+        /**
+         * Converts to NBT format.
+         *
+         * @param tintMethod the tint method from BlockStateData (can be null)
+         * @return the NBT representation
+         */
+        public NbtMap toNBT(TintMethod tintMethod) {
+            var builder = NbtMap.builder()
+                    .putString("condition", condition)
+                    .putCompound("components", components.toNBT(tintMethod));
+
+            if (blockTags != null && blockTags.length > 0) {
+                builder.putList("blockTags", NbtType.STRING, List.of(blockTags));
+            }
+
+            return builder.build();
         }
     }
 }
