@@ -2,6 +2,7 @@ package org.allaymc.server.item.component;
 
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityWarden;
@@ -85,12 +86,13 @@ public class ItemShieldBaseComponentImpl extends ItemBaseComponentImpl implement
         }
 
         // Check if attacker is an entity holding an axe
-        if (attacker instanceof org.allaymc.api.entity.component.EntityContainerHolderComponent holder) {
+        if (attacker instanceof EntityContainerHolderComponent holder) {
             if (holder.hasContainer(ContainerTypes.INVENTORY)) {
                 var weapon = holder.getContainer(ContainerTypes.INVENTORY).getItemInHand();
                 return weapon instanceof ItemAxeStack;
             }
         }
+
         return false;
     }
 }

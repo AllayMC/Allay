@@ -22,6 +22,14 @@ import org.allaymc.server.container.impl.*;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockEntityTypeInitializer {
+    public static void initBanner() {
+        BlockEntityTypes.BANNER = AllayBlockEntityType
+                .builder(BlockEntityBannerImpl.class)
+                .name(BlockEntityId.BANNER)
+                .addComponent(BlockEntityBannerBaseComponentImpl::new, BlockEntityBannerBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initJukebox() {
         BlockEntityTypes.JUKEBOX = AllayBlockEntityType
                 .builder(BlockEntityJukeboxImpl.class)

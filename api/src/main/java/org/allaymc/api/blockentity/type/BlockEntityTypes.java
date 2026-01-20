@@ -6,6 +6,7 @@ import org.allaymc.api.blockentity.interfaces.*;
  * @author daoge_cmd
  */
 public final class BlockEntityTypes {
+    public static BlockEntityType<BlockEntityBanner> BANNER;
     public static BlockEntityType<BlockEntityBarrel> BARREL;
     public static BlockEntityType<BlockEntityComparator> COMPARATOR;
     public static BlockEntityType<BlockEntityBed> BED;

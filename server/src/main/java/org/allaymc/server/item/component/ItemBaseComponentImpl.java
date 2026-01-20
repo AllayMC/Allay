@@ -385,12 +385,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             return;
         }
 
-        // The position data should be removed
-        var builder = blockEntityNBT.toBuilder();
-        builder.remove("x");
-        builder.remove("y");
-        builder.remove("z");
-        blockEntity.loadNBT(builder.build());
+        blockEntity.loadNBT(this.blockEntityNBT);
     }
 
     protected void tryConsumeItem(EntityPlayer player) {

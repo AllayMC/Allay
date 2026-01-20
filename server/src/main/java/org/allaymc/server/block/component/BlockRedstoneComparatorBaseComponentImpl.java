@@ -89,9 +89,12 @@ public class BlockRedstoneComparatorBaseComponentImpl extends BlockRedstoneDiode
 
         // Schedule update if output changed
         if (newOutput != currentOutput) {
-            // Store the calculated output for when the scheduled update runs.
-            // This ensures short pulses (like from observers) are captured.
-            getBlockEntity(block).setOutputSignal(newOutput);
+            // Only store captured output when turning on (for latching behavior).
+            // When already powered, don't store to preserve the output != currentOutput
+            // check in onScheduledUpdate(), so downstream redstone gets notified.
+            if (!powered) {
+                getBlockEntity(block).setOutputSignal(newOutput);
+            }
             scheduleUpdate(block);
         }
     }

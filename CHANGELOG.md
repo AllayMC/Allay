@@ -14,6 +14,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Implemented banner:
+  - Added `BannerPattern` record class representing a single pattern with color and type.
+  - Added `BannerPatternType` enum with all vanilla banner pattern types (border, bricks, creeper, cross, flower, globe, mojang, piglin, skull, etc.).
+  - Added `BannerType` enum for normal, ominous, and illager banner types.
+  - Added `BlockEntityBanner` interface and `BlockEntityBannerBaseComponent` interface with methods for managing base color, banner type, and patterns.
+  - Added `ItemBannerBaseComponent` interface with methods for banner color, patterns, and type management.
+  - Added `BlockEntityTypes.BANNER` block entity type.
+- (API) Implemented loom:
+  - Added `BannerPatternType.getRequiredPatternItem()` method to get the required pattern item for special patterns.
+  - Added `LoomTakeResultEvent` event fired when a player takes a result from the loom, allowing plugins to cancel or modify the result.
 - (API) Implemented shield:
   - Added `ItemShieldBaseComponent` interface with methods for directional blocking, durability consumption, and shield-disable detection.
   - Added `EntityDamageBlockedEvent` event fired when a player successfully blocks damage with a shield.

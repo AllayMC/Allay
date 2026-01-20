@@ -613,6 +613,12 @@ public interface ItemBaseComponent extends ItemComponent, PersistentDataHolder {
 
     /**
      * Sets the block entity NBT data.
+     * <p>
+     * <b>Important:</b> When saving NBT from a block entity, always use
+     * {@link org.allaymc.api.blockentity.BlockEntity#saveCleanNBT()} instead of
+     * {@link org.allaymc.api.blockentity.BlockEntity#saveNBT()}. The {@code saveCleanNBT()}
+     * method removes position fields (x, y, z) which would otherwise corrupt the
+     * block entity's position when the item is placed at a different location.
      *
      * @param blockEntityNBT the {@link NbtMap}, or {@code null} to clear
      */
