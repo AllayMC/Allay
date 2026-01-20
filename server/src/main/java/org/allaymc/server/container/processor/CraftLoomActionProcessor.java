@@ -7,9 +7,8 @@ import org.allaymc.api.block.data.BannerType;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.eventbus.event.container.LoomTakeResultEvent;
 import org.allaymc.api.item.component.ItemBannerBaseComponent;
-import org.allaymc.server.item.data.ItemId;
+import org.allaymc.api.item.component.ItemDyeComponent;
 import org.allaymc.api.player.Player;
-import org.allaymc.api.utils.DyeColor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftLoomAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -85,12 +84,11 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
         }
 
         // Extract dye color from dye item
-        var dyeItemId = ItemId.fromIdentifier(dyeItem.getItemType().getIdentifier());
-        DyeColor dyeColor = getDyeColorFromItem(dyeItemId);
-        if (dyeColor == null) {
+        if (!(dyeItem instanceof ItemDyeComponent dyeComponent)) {
             log.warn("Invalid dye item in loom: {}", dyeItem.getItemType().getIdentifier());
             return error();
         }
+        var dyeColor = dyeComponent.getDyeColor();
 
         // Get pattern type from action
         var patternId = action.getPatternId();
@@ -135,37 +133,6 @@ public class CraftLoomActionProcessor implements ContainerActionProcessor<CraftL
                 .setItemStack(0, event.getResultItem(), false);
 
         return null;
-    }
-
-    /**
-     * Gets the dye color from a dye item ID.
-     *
-     * @param itemId the item ID
-     * @return the dye color, or null if not a valid dye
-     */
-    private DyeColor getDyeColorFromItem(ItemId itemId) {
-        if (itemId == null) {
-            return null;
-        }
-        return switch (itemId) {
-            case WHITE_DYE -> DyeColor.WHITE;
-            case ORANGE_DYE -> DyeColor.ORANGE;
-            case MAGENTA_DYE -> DyeColor.MAGENTA;
-            case LIGHT_BLUE_DYE -> DyeColor.LIGHT_BLUE;
-            case YELLOW_DYE -> DyeColor.YELLOW;
-            case LIME_DYE -> DyeColor.LIME;
-            case PINK_DYE -> DyeColor.PINK;
-            case GRAY_DYE -> DyeColor.GRAY;
-            case LIGHT_GRAY_DYE -> DyeColor.LIGHT_GRAY;
-            case CYAN_DYE -> DyeColor.CYAN;
-            case PURPLE_DYE -> DyeColor.PURPLE;
-            case BLUE_DYE -> DyeColor.BLUE;
-            case BROWN_DYE -> DyeColor.BROWN;
-            case GREEN_DYE -> DyeColor.GREEN;
-            case RED_DYE -> DyeColor.RED;
-            case BLACK_DYE -> DyeColor.BLACK;
-            default -> null;
-        };
     }
 
     @Override
