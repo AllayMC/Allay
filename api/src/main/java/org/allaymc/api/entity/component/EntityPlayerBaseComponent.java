@@ -67,6 +67,16 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSneaking(boolean sneaking);
 
     /**
+     * Check if the player is blocking with a shield.
+     * <p>
+     * Blocking state is managed automatically based on sneaking state,
+     * whether the player is holding a shield, and shield cooldown.
+     *
+     * @return {@code true} if the player is blocking, {@code false} otherwise.
+     */
+    boolean isBlocking();
+
+    /**
      * Check if the player is swimming.
      *
      * @return {@code true} if the player is swimming, {@code false} otherwise.

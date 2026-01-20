@@ -1,17 +1,22 @@
 package org.allaymc.server.entity.component.player;
 
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityLivingComponent;
+import org.allaymc.api.entity.component.EntityPhysicsComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.damage.DamageType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.action.SimpleEntityAction;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.entity.EntityDamageBlockedEvent;
 import org.allaymc.api.message.I18n;
 import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.container.interfaces.InventoryContainer;
 import org.allaymc.api.container.interfaces.OffhandContainer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.component.ItemShieldBaseComponent;
+import org.allaymc.api.item.interfaces.ItemShieldStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.player.GameMode;
 import org.allaymc.api.server.Server;
@@ -23,6 +28,7 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
 import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
+import org.joml.Vector3d;
 
 import java.util.Collections;
 
@@ -66,7 +72,150 @@ public class EntityPlayerLivingComponentImpl extends EntityLivingComponentImpl {
         if (tryConsumeTotem(damage)) {
             return;
         }
+        // Process shield blocking before applying damage
+        processShieldBlocking(damage);
         super.applyDamage(damage);
+    }
+
+    /**
+     * Finds the active shield in the player's hands.
+     * <p>
+     * Shield can only be active when player is sneaking and holding a shield
+     * in either main hand or off hand. Shield cooldown is also checked.
+     *
+     * @return the active shield stack, or {@code null} if not blocking
+     */
+    private ItemShieldStack findActiveShield() {
+        // Player must be sneaking to block with shield
+        if (!thisPlayer.isSneaking()) {
+            return null;
+        }
+
+        // Check if shield is on cooldown
+        if (!thisPlayer.isCooldownEnd(ItemShieldBaseComponent.SHIELD_COOLDOWN_CATEGORY)) {
+            return null;
+        }
+
+        InventoryContainer inventory = thisPlayer.getContainer(ContainerTypes.INVENTORY);
+        OffhandContainer offhand = thisPlayer.getContainer(ContainerTypes.OFFHAND);
+
+        var handItem = inventory.getItemInHand();
+        var offhandItem = offhand.getOffhand();
+
+        // Check main hand first, then off hand
+        if (handItem instanceof ItemShieldStack shield) {
+            return shield;
+        }
+        if (offhandItem instanceof ItemShieldStack shield) {
+            return shield;
+        }
+
+        return null;
+    }
+
+    /**
+     * Processes shield blocking for the incoming damage.
+     * <p>
+     * If the player successfully blocks, this method will:
+     * <ul>
+     *   <li>Reduce damage to 0 (full block)</li>
+     *   <li>Apply shield durability damage</li>
+     *   <li>Check for axe attack and apply shield cooldown if needed</li>
+     *   <li>Knockback the attacker</li>
+     *   <li>Play shield block sound</li>
+     *   <li>Fire EntityDamageBlockedEvent</li>
+     * </ul>
+     *
+     * @param damage the incoming damage container
+     */
+    private void processShieldBlocking(DamageContainer damage) {
+        var shield = findActiveShield();
+        if (shield == null) {
+            return;
+        }
+
+        // Check if blocking is possible (directional check)
+        if (!shield.tryBlockDamage(thisPlayer, damage)) {
+            return;
+        }
+
+        // Fire event - allows plugins to modify or cancel blocking
+        var event = new EntityDamageBlockedEvent(thisPlayer, damage, shield);
+        if (!event.call()) {
+            return;
+        }
+
+        // Store original damage for durability calculation
+        float originalDamage = damage.getSourceDamage();
+
+        // Block the damage completely
+        damage.setFinalDamage(0);
+        damage.setHasKnockback(false);
+
+        // Apply shield durability damage
+        shield.applyBlockDurability(originalDamage);
+
+        // Notify inventory change (durability update)
+        notifyShieldDurabilityChange(shield);
+
+        // Check if attacker is using axe - disable shield if so
+        if (shield.shouldDisableShield(damage.getAttacker())) {
+            thisPlayer.setCooldown(
+                    ItemShieldBaseComponent.SHIELD_COOLDOWN_CATEGORY,
+                    ItemShieldBaseComponent.SHIELD_DISABLE_COOLDOWN,
+                    true
+            );
+        }
+
+        // Knockback attacker (if enabled in event)
+        if (event.isKnockbackAttacker()) {
+            applyShieldKnockback(damage);
+        }
+
+        // Play sound and animation (if enabled in event)
+        if (event.isPlayAnimation()) {
+            var location = thisPlayer.getLocation();
+            var dimension = location.dimension();
+            if (dimension != null) {
+                dimension.addSound(location, SimpleSound.SHIELD_BLOCK);
+            }
+        }
+    }
+
+    /**
+     * Notifies the inventory system that a shield's durability has changed.
+     *
+     * @param shield the shield item that was damaged
+     */
+    private void notifyShieldDurabilityChange(ItemShieldStack shield) {
+        InventoryContainer inventory = thisPlayer.getContainer(ContainerTypes.INVENTORY);
+        OffhandContainer offhand = thisPlayer.getContainer(ContainerTypes.OFFHAND);
+
+        // Check which slot the shield is in and notify
+        if (inventory.getItemInHand() == shield) {
+            inventory.notifySlotChange(inventory.getHandSlot());
+        } else if (offhand.getOffhand() == shield) {
+            offhand.notifySlotChange(OffhandContainer.OFFHAND_SLOT);
+        }
+    }
+
+    /**
+     * Applies knockback to the attacker when shield blocking is successful.
+     *
+     * @param damage the damage container containing attacker information
+     */
+    private void applyShieldKnockback(DamageContainer damage) {
+        if (!(damage.getAttacker() instanceof Entity attacker)) {
+            return;
+        }
+
+        // Only knockback entities with physics component
+        if (!(attacker instanceof EntityPhysicsComponent physics)) {
+            return;
+        }
+
+        var playerLoc = thisPlayer.getLocation();
+        physics.knockback(playerLoc, 0.5, 0.4, new Vector3d());
     }
 
     private boolean tryConsumeTotem(DamageContainer damage) {

@@ -14,6 +14,11 @@ Unless otherwise specified, any version comparison below is the comparison of th
 
 ### Added
 
+- (API) Implemented shield:
+  - Added `ItemShieldBaseComponent` interface with methods for directional blocking, durability consumption, and shield-disable detection.
+  - Added `EntityDamageBlockedEvent` event fired when a player successfully blocks damage with a shield.
+  - Added `EntityPlayerBaseComponent.isBlocking()` method to check if player is actively blocking.
+  - Added sound `SimpleSound.SHIELD_BLOCK`.
 - (API) Added method `Dimension.updateComparatorOutputLevel()` for updating comparators that may be reading a block's comparator output, including second-level neighbors (comparators behind solid blocks).
 - (API) Added method `Container.calculateComparatorSignal()` for calculating the comparator signal strength based on container contents.
 - (API) Added method `ItemMusicDiscBaseComponent.getComparatorSignal()` for getting the comparator signal output for music discs.

@@ -641,6 +641,7 @@ public class AllayPlayer implements Player {
             case EntityPlayer player -> {
                 map.setFlag(EntityFlag.SPRINTING, player.isSprinting());
                 map.setFlag(EntityFlag.SNEAKING, player.isSneaking());
+                map.setFlag(EntityFlag.BLOCKING, player.isBlocking());
                 map.setFlag(EntityFlag.SWIMMING, player.isSwimming());
                 map.setFlag(EntityFlag.GLIDING, player.isGliding());
                 map.setFlag(EntityFlag.CRAWLING, player.isCrawling());

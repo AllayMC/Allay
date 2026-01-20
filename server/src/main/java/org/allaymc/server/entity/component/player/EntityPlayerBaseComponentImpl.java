@@ -4,12 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.container.ContainerTypes;
 import org.allaymc.api.entity.EntityInitInfo;
 import org.allaymc.api.entity.action.EntityAction;
 import org.allaymc.api.entity.component.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.item.component.ItemShieldBaseComponent;
+import org.allaymc.api.item.interfaces.ItemShieldStack;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
@@ -110,7 +113,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected String scoreTag;
     @Getter
-    protected boolean sprinting, sneaking, swimming, gliding, crawling, flying;
+    protected boolean sprinting, sneaking, swimming, gliding, crawling, flying, blocking;
 
     @Getter
     protected int experienceLevel;
@@ -224,6 +227,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (isAlive()) {
             tickFood();
             tickItemUsingInAir(currentTick);
+            // Update blocking state for edge cases (shield equip/unequip while sneaking, cooldown expiry)
+            updateBlockingFlag();
         }
 
         tickPlayerDataAutoSave();
@@ -638,6 +643,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         if (value) {
             this.startUsingItemInAirTime = time;
         }
+        // Update blocking state immediately when item use changes
+        updateBlockingFlag();
         broadcastState();
     }
 
@@ -729,9 +736,58 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 setSprinting(false);
             }
 
+            // Update blocking state when sneaking changes
+            updateBlockingFlag();
+
             broadcastState();
             new PlayerToggleSneakEvent(thisPlayer, sneaking).call();
         }
+    }
+
+    protected void setBlocking(boolean blocking) {
+        if (this.blocking != blocking) {
+            this.blocking = blocking;
+            broadcastState();
+        }
+    }
+
+    /**
+     * Updates the blocking flag based on the player's current state.
+     * <p>
+     * A player is considered blocking when:
+     * <ul>
+     *   <li>Shield is not on cooldown</li>
+     *   <li>Player is sneaking</li>
+     *   <li>Player is holding a shield in main hand or off hand</li>
+     *   <li>Player is not using an item (e.g., drawing a bow/crossbow)</li>
+     *   <li>Player is not using an item on a block</li>
+     * </ul>
+     */
+    protected void updateBlockingFlag() {
+        boolean shouldBlock = isCooldownEnd(ItemShieldBaseComponent.SHIELD_COOLDOWN_CATEGORY)
+                && this.sneaking
+                && !this.usingItemInAir
+                && !this.usingItemOnBlock
+                && isHoldingShield();
+
+        if (this.blocking != shouldBlock) {
+            setBlocking(shouldBlock);
+        }
+    }
+
+    /**
+     * Checks if the player is holding a shield in either main hand or off hand.
+     *
+     * @return {@code true} if holding a shield, {@code false} otherwise
+     */
+    protected boolean isHoldingShield() {
+        var inventory = thisPlayer.getContainer(ContainerTypes.INVENTORY);
+        var offhand = thisPlayer.getContainer(ContainerTypes.OFFHAND);
+
+        var handItem = inventory.getItemInHand();
+        var offhandItem = offhand.getOffhand();
+
+        return handItem instanceof ItemShieldStack || offhandItem instanceof ItemShieldStack;
     }
 
     @Override
@@ -772,6 +828,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setUsingItemOnBlock(boolean usingItemOnBlock) {
         this.usingItemOnBlock = usingItemOnBlock;
+        // Update blocking state immediately when item use on block changes
+        updateBlockingFlag();
     }
 
     @Override

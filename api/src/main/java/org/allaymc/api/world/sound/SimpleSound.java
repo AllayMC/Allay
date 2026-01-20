@@ -131,6 +131,8 @@ public enum SimpleSound implements Sound {
     MACE_SMASH_GROUND,
     // MACE_SMASH_AIR is a sound played when a player hit an entity heavily on the ground using mace
     MACE_SMASH_HEAVY_GROUND,
+    // SHIELD_BLOCK is a sound played when a shield successfully blocks damage.
+    SHIELD_BLOCK,
 
     /* Entity */
 

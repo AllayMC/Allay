@@ -1024,4 +1024,13 @@ public final class ItemTypeInitializer {
                 .addComponent(() -> new ItemRepairableComponentImpl(ItemId.BREEZE_ROD), ItemRepairableComponentImpl.class)
                 .build();
     }
+
+    public static void initShield() {
+        ItemTypes.SHIELD = AllayItemType
+                .builder(ItemShieldStackImpl.class)
+                .vanillaItem(ItemId.SHIELD)
+                .addComponent(ItemShieldBaseComponentImpl::new, ItemShieldBaseComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.PLANKS), ItemRepairableComponentImpl.class)
+                .build();
+    }
 }
