@@ -1,7 +1,6 @@
 package org.allaymc.server.block.component.banner;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.data.BannerType;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.Block;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -65,9 +64,8 @@ public class BlockWallBannerBaseComponentImpl extends BlockBaseComponentImpl {
         var blockEntity = block.getBlockEntity();
         if (blockEntity instanceof BlockEntityBanner bannerEntity) {
             var item = ItemTypes.BANNER.createItemStack(1, bannerEntity.getBaseColor().ordinalInverted());
-            if (!bannerEntity.getPatterns().isEmpty() || bannerEntity.getBannerType() != BannerType.NORMAL) {
-                item.setBlockEntityNBT(blockEntity.saveCleanNBT());
-            }
+            item.setBannerType(bannerEntity.getBannerType());
+            item.setPatterns(bannerEntity.getPatterns());
             return item;
         }
         return ItemTypes.BANNER.createItemStack(1);
