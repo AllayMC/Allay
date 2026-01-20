@@ -36,6 +36,14 @@ import org.joml.Vector3d;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class ItemTypeInitializer {
+    public static void initBanner() {
+        ItemTypes.BANNER = AllayItemType
+                .builder(ItemBannerStackImpl.class)
+                .vanillaItem(ItemId.BANNER)
+                .addComponent(ItemBannerBaseComponentImpl::new, ItemBannerBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initHoneycomb() {
         ItemTypes.HONEYCOMB = AllayItemType
                 .builder(ItemHoneycombStackImpl.class)

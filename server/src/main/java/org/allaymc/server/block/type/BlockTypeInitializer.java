@@ -41,6 +41,8 @@ import org.allaymc.server.block.component.piston.BlockStickyPistonBaseComponentI
 import org.allaymc.server.block.component.pressureplate.BlockHeavyWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockLightWeightedPressurePlateBaseComponentImpl;
 import org.allaymc.server.block.component.pressureplate.BlockPressurePlateBaseComponentImpl;
+import org.allaymc.server.block.component.banner.BlockStandingBannerBaseComponentImpl;
+import org.allaymc.server.block.component.banner.BlockWallBannerBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
@@ -210,6 +212,23 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.JUKEBOX)
                 .bindBlockEntity(BlockEntityTypes.JUKEBOX)
                 .setBaseComponentSupplier(BlockJukeboxBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initBanner() {
+        BlockTypes.STANDING_BANNER = AllayBlockType
+                .builder(BlockStandingBannerBehaviorImpl.class)
+                .vanillaBlock(BlockId.STANDING_BANNER)
+                .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.BANNER)
+                .setBaseComponentSupplier(BlockStandingBannerBaseComponentImpl::new)
+                .build();
+        BlockTypes.WALL_BANNER = AllayBlockType
+                .builder(BlockWallBannerBehaviorImpl.class)
+                .vanillaBlock(BlockId.WALL_BANNER)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.BANNER)
+                .setBaseComponentSupplier(BlockWallBannerBaseComponentImpl::new)
                 .build();
     }
 

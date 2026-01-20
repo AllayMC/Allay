@@ -1,0 +1,59 @@
+package org.allaymc.server.block.component.banner;
+
+import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.data.BannerType;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.Block;
+import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.blockentity.interfaces.BlockEntityBanner;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
+
+import java.util.Set;
+
+/**
+ * @author daoge_cmd
+ */
+public class BlockStandingBannerBaseComponentImpl extends BlockBaseComponentImpl {
+
+    public BlockStandingBannerBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+        super(blockType);
+    }
+
+    @Override
+    public void onNeighborUpdate(Block block, Block neighbor, BlockFace face) {
+        super.onNeighborUpdate(block, neighbor, face);
+
+        if (face == BlockFace.DOWN && !neighbor.getBlockStateData().isSolid()) {
+            block.breakBlock();
+        }
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(Block block, ItemStack usedItem, Entity entity) {
+        return createBannerDrop(block);
+    }
+
+    @Override
+    public ItemStack getSilkTouchDrop(Block block) {
+        return createBannerDropSingle(block);
+    }
+
+    protected Set<ItemStack> createBannerDrop(Block block) {
+        return Set.of(createBannerDropSingle(block));
+    }
+
+    protected ItemStack createBannerDropSingle(Block block) {
+        var blockEntity = block.getBlockEntity();
+        if (blockEntity instanceof BlockEntityBanner bannerEntity) {
+            var item = ItemTypes.BANNER.createItemStack(1, bannerEntity.getBaseColor().ordinalInverted());
+            if (!bannerEntity.getPatterns().isEmpty() || bannerEntity.getBannerType() != BannerType.NORMAL) {
+                item.setBlockEntityNBT(blockEntity.saveCleanNBT());
+            }
+            return item;
+        }
+        return ItemTypes.BANNER.createItemStack(1);
+    }
+}
