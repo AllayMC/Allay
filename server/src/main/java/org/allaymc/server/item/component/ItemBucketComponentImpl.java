@@ -2,6 +2,7 @@ package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockTags;
+import org.allaymc.api.block.interfaces.BlockCauldronBehavior;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
@@ -60,6 +61,12 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         var player = interactInfo.player();
         var dimension = player.getDimension();
         var clickedBlockState = interactInfo.getClickedBlock();
+
+        // Let cauldron handle bucket interactions itself
+        if (clickedBlockState.getBehavior() instanceof BlockCauldronBehavior) {
+            return;
+        }
+
         if (isEmpty()) {
             if (!(clickedBlockState.getBehavior() instanceof BlockLiquidBehavior)) {
                 return;

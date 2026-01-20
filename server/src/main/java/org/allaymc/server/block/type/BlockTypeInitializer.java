@@ -2575,4 +2575,14 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(blockType -> new BlockCandleCakeBaseComponentImpl(blockType, ItemId.BLACK_CANDLE))
                 .build();
     }
+
+    public static void initCauldron() {
+        BlockTypes.CAULDRON = AllayBlockType
+                .builder(BlockCauldronBehaviorImpl.class)
+                .vanillaBlock(BlockId.CAULDRON)
+                .setProperties(BlockPropertyTypes.CAULDRON_LIQUID, BlockPropertyTypes.FILL_LEVEL)
+                .bindBlockEntity(BlockEntityTypes.CAULDRON)
+                .setBaseComponentSupplier(BlockCauldronBaseComponentImpl::new)
+                .build();
+    }
 }

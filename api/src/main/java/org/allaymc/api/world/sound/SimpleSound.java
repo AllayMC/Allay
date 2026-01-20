@@ -102,6 +102,32 @@ public enum SimpleSound implements Sound {
     PISTON_PUSH,
     // PISTON_PULL is a sound played when a piston pulls.
     PISTON_PULL,
+    // CAULDRON_FILL_WATER is a sound played when a cauldron is filled with water.
+    CAULDRON_FILL_WATER,
+    // CAULDRON_TAKE_WATER is a sound played when water is taken from a cauldron.
+    CAULDRON_TAKE_WATER,
+    // CAULDRON_FILL_LAVA is a sound played when a cauldron is filled with lava.
+    CAULDRON_FILL_LAVA,
+    // CAULDRON_TAKE_LAVA is a sound played when lava is taken from a cauldron.
+    CAULDRON_TAKE_LAVA,
+    // CAULDRON_FILL_POWDER_SNOW is a sound played when a cauldron is filled with powder snow.
+    CAULDRON_FILL_POWDER_SNOW,
+    // CAULDRON_TAKE_POWDER_SNOW is a sound played when powder snow is taken from a cauldron.
+    CAULDRON_TAKE_POWDER_SNOW,
+    // CAULDRON_FILL_POTION is a sound played when a potion is added to a cauldron.
+    CAULDRON_FILL_POTION,
+    // CAULDRON_TAKE_POTION is a sound played when a potion is taken from a cauldron.
+    CAULDRON_TAKE_POTION,
+    // CAULDRON_ADD_DYE is a sound played when dye is added to a cauldron.
+    CAULDRON_ADD_DYE,
+    // CAULDRON_DYE_ARMOR is a sound played when armor is dyed in a cauldron.
+    CAULDRON_DYE_ARMOR,
+    // CAULDRON_CLEAN_ARMOR is a sound played when armor is cleaned in a cauldron.
+    CAULDRON_CLEAN_ARMOR,
+    // CAULDRON_CLEAN_BANNER is a sound played when a banner pattern is removed in a cauldron.
+    CAULDRON_CLEAN_BANNER,
+    // CAULDRON_EXPLODE is a sound played when different potions are mixed in a cauldron, causing it to explode.
+    CAULDRON_EXPLODE,
 
     /* Item */
 

@@ -1291,6 +1291,97 @@ public class AllayPlayer implements Player {
                 sendPacket(levelEvent);
                 return;
             }
+            case SimpleSound.CAULDRON_FILL_WATER -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_FILL_WATER);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_TAKE_WATER -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_TAKE_WATER);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_FILL_LAVA -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_FILL_LAVA);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_TAKE_LAVA -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_TAKE_LAVA);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_FILL_POWDER_SNOW -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_FILL_POWDER_SNOW);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_TAKE_POWDER_SNOW -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_TAKE_POWDER_SNOW);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_FILL_POTION -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_FILL_POTION);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_TAKE_POTION -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_TAKE_POTION);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_ADD_DYE -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_ADD_DYE);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_DYE_ARMOR -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_DYE_ARMOR);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_CLEAN_ARMOR -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_CLEAN_ARMOR);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_CLEAN_BANNER -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_CLEAN_BANNER);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
+            case SimpleSound.CAULDRON_EXPLODE -> {
+                LevelEventPacket levelEvent = new LevelEventPacket();
+                levelEvent.setType(LevelEvent.CAULDRON_EXPLODE);
+                levelEvent.setPosition(pos.toFloat());
+                sendPacket(levelEvent);
+                return;
+            }
             case SimpleSound.FIRE_CHARGE -> {
                 LevelEventPacket levelEvent = new LevelEventPacket();
                 levelEvent.setType(LevelEvent.SOUND_BLAZE_FIREBALL);

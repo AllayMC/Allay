@@ -231,4 +231,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityMovingBlockBaseComponentImpl::new, BlockEntityMovingBlockBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initCauldron() {
+        BlockEntityTypes.CAULDRON = AllayBlockEntityType
+                .builder(BlockEntityCauldronImpl.class)
+                .name(BlockEntityId.CAULDRON)
+                .addComponent(BlockEntityCauldronBaseComponentImpl::new, BlockEntityCauldronBaseComponentImpl.class)
+                .build();
+    }
 }

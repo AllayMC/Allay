@@ -33,4 +33,5 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityCampfire> SOUL_CAMPFIRE;
     public static BlockEntityType<BlockEntityPistonArm> PISTON_ARM;
     public static BlockEntityType<BlockEntityMovingBlock> MOVING_BLOCK;
+    public static BlockEntityType<BlockEntityCauldron> CAULDRON;
 }

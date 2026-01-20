@@ -608,7 +608,7 @@ public final class ItemTypeInitializer {
         ItemTypes.DIAMOND_HELMET = buildHelmet(ItemId.DIAMOND_HELMET, ItemId.DIAMOND);
         ItemTypes.GOLDEN_HELMET = buildHelmet(ItemId.GOLDEN_HELMET, ItemId.GOLD_INGOT);
         ItemTypes.IRON_HELMET = buildHelmet(ItemId.IRON_HELMET, ItemId.IRON_INGOT);
-        ItemTypes.LEATHER_HELMET = buildHelmet(ItemId.LEATHER_HELMET, ItemId.LEATHER);
+        ItemTypes.LEATHER_HELMET = buildLeatherHelmet();
         ItemTypes.NETHERITE_HELMET = buildHelmet(ItemId.NETHERITE_HELMET, ItemId.NETHERITE_INGOT);
         ItemTypes.COPPER_HELMET = buildHelmet(ItemId.COPPER_HELMET, ItemId.COPPER_INGOT);
         ItemTypes.TURTLE_HELMET = AllayItemType
@@ -634,7 +634,7 @@ public final class ItemTypeInitializer {
         ItemTypes.DIAMOND_CHESTPLATE = buildChestplate(ItemId.DIAMOND_CHESTPLATE, ItemId.DIAMOND);
         ItemTypes.GOLDEN_CHESTPLATE = buildChestplate(ItemId.GOLDEN_CHESTPLATE, ItemId.GOLD_INGOT);
         ItemTypes.IRON_CHESTPLATE = buildChestplate(ItemId.IRON_CHESTPLATE, ItemId.IRON_INGOT);
-        ItemTypes.LEATHER_CHESTPLATE = buildChestplate(ItemId.LEATHER_CHESTPLATE, ItemId.LEATHER);
+        ItemTypes.LEATHER_CHESTPLATE = buildLeatherChestplate();
         ItemTypes.NETHERITE_CHESTPLATE = buildChestplate(ItemId.NETHERITE_CHESTPLATE, ItemId.NETHERITE_INGOT);
         ItemTypes.COPPER_CHESTPLATE = buildChestplate(ItemId.COPPER_CHESTPLATE, ItemId.COPPER_INGOT);
         ItemTypes.ELYTRA = AllayItemType
@@ -660,7 +660,7 @@ public final class ItemTypeInitializer {
         ItemTypes.DIAMOND_LEGGINGS = buildLeggings(ItemId.DIAMOND_LEGGINGS, ItemId.DIAMOND);
         ItemTypes.GOLDEN_LEGGINGS = buildLeggings(ItemId.GOLDEN_LEGGINGS, ItemId.GOLD_INGOT);
         ItemTypes.IRON_LEGGINGS = buildLeggings(ItemId.IRON_LEGGINGS, ItemId.IRON_INGOT);
-        ItemTypes.LEATHER_LEGGINGS = buildLeggings(ItemId.LEATHER_LEGGINGS, ItemId.LEATHER);
+        ItemTypes.LEATHER_LEGGINGS = buildLeatherLeggings();
         ItemTypes.NETHERITE_LEGGINGS = buildLeggings(ItemId.NETHERITE_LEGGINGS, ItemId.NETHERITE_INGOT);
         ItemTypes.COPPER_LEGGINGS = buildLeggings(ItemId.COPPER_LEGGINGS, ItemId.COPPER_INGOT);
     }
@@ -680,7 +680,7 @@ public final class ItemTypeInitializer {
         ItemTypes.DIAMOND_BOOTS = buildBoots(ItemId.DIAMOND_BOOTS, ItemId.DIAMOND);
         ItemTypes.GOLDEN_BOOTS = buildBoots(ItemId.GOLDEN_BOOTS, ItemId.GOLD_INGOT);
         ItemTypes.IRON_BOOTS = buildBoots(ItemId.IRON_BOOTS, ItemId.IRON_INGOT);
-        ItemTypes.LEATHER_BOOTS = buildBoots(ItemId.LEATHER_BOOTS, ItemId.LEATHER);
+        ItemTypes.LEATHER_BOOTS = buildLeatherBoots();
         ItemTypes.NETHERITE_BOOTS = buildBoots(ItemId.NETHERITE_BOOTS, ItemId.NETHERITE_INGOT);
         ItemTypes.COPPER_BOOTS = buildBoots(ItemId.COPPER_BOOTS, ItemId.COPPER_INGOT);
     }
@@ -692,6 +692,58 @@ public final class ItemTypeInitializer {
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
                 .addComponent(() -> new ItemRepairableComponentImpl(repairItemId), ItemRepairableComponentImpl.class)
+                .build();
+    }
+
+    private static ItemType<ItemLeatherHelmetStack> buildLeatherHelmet() {
+        return AllayItemType
+                .builder(ItemLeatherHelmetStackImpl.class)
+                .vanillaItem(ItemId.LEATHER_HELMET)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.LEATHER), ItemRepairableComponentImpl.class)
+                .addComponent(ItemDyeableComponentImpl::new, ItemDyeableComponentImpl.class)
+                .build();
+    }
+
+    private static ItemType<ItemLeatherChestplateStack> buildLeatherChestplate() {
+        return AllayItemType
+                .builder(ItemLeatherChestplateStackImpl.class)
+                .vanillaItem(ItemId.LEATHER_CHESTPLATE)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.LEATHER), ItemRepairableComponentImpl.class)
+                .addComponent(ItemDyeableComponentImpl::new, ItemDyeableComponentImpl.class)
+                .build();
+    }
+
+    private static ItemType<ItemLeatherLeggingsStack> buildLeatherLeggings() {
+        return AllayItemType
+                .builder(ItemLeatherLeggingsStackImpl.class)
+                .vanillaItem(ItemId.LEATHER_LEGGINGS)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.LEATHER), ItemRepairableComponentImpl.class)
+                .addComponent(ItemDyeableComponentImpl::new, ItemDyeableComponentImpl.class)
+                .build();
+    }
+
+    private static ItemType<ItemLeatherBootsStack> buildLeatherBoots() {
+        return AllayItemType
+                .builder(ItemLeatherBootsStackImpl.class)
+                .vanillaItem(ItemId.LEATHER_BOOTS)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
+                .addComponent(ItemTrimmableComponentImpl::new, ItemTrimmableComponentImpl.class)
+                .addComponent(() -> new ItemRepairableComponentImpl(ItemId.LEATHER), ItemRepairableComponentImpl.class)
+                .addComponent(ItemDyeableComponentImpl::new, ItemDyeableComponentImpl.class)
+                .build();
+    }
+
+    public static void initLeatherHorseArmor() {
+        ItemTypes.LEATHER_HORSE_ARMOR = AllayItemType
+                .builder(ItemLeatherHorseArmorStackImpl.class)
+                .vanillaItem(ItemId.LEATHER_HORSE_ARMOR)
+                .addComponent(ItemDyeableComponentImpl::new, ItemDyeableComponentImpl.class)
                 .build();
     }
 

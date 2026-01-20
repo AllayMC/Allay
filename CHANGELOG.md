@@ -52,9 +52,16 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - (API) Added methods `BlockEntityContainerHolderComponent.shouldDropItemOnBreak()` and `setDropItemOnBreak(boolean)` for controlling whether items should drop when the block is broken, useful for pistons moving container blocks.
 - (API) Added method `Dimension.updateAllAround()` for triggering second-order neighbor updates (updates adjacent blocks and each adjacent block's neighbors).
 - (API) Added method `BlockBaseComponent.onMoved()` callback for blocks to handle being moved by pistons. Observers use this to trigger pulses when pushed.
+- (API) Implemented cauldron:
+  - Added `BlockEntityCauldron` interface and `BlockEntityCauldronBaseComponent` interface with methods for managing potion type, cauldron potion type (normal/splash/lingering), and custom color.
+  - Added `CauldronPotionType` enum to distinguish between normal, splash, and lingering potions stored in cauldrons.
+  - Added `BlockEntityTypes.CAULDRON` block entity type.
+  - Added sounds `SimpleSound.CAULDRON_FILL_WATER`, `CAULDRON_TAKE_WATER`, `CAULDRON_FILL_LAVA`, `CAULDRON_TAKE_LAVA`, `CAULDRON_FILL_POWDER_SNOW`, `CAULDRON_TAKE_POWDER_SNOW`, `CAULDRON_FILL_POTION`, `CAULDRON_TAKE_POTION`, `CAULDRON_ADD_DYE`, `CAULDRON_DYE_ARMOR`, `CAULDRON_CLEAN_ARMOR`, `CAULDRON_CLEAN_BANNER`, and `CAULDRON_EXPLODE`.
+- (API) Added `ItemDyeableComponent` interface for items that can be dyed with custom colors, such as leather armor.
+- (API) Added leather armor item interfaces: `ItemLeatherBootsStack`, `ItemLeatherChestplateStack`, `ItemLeatherHelmetStack`, `ItemLeatherHorseArmorStack`, and `ItemLeatherLeggingsStack`.
 - Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
-
+- 
 ### Changed
 
 - (API) Replaced `BlockBehavior#isPowerSource()` method with block tag `BlockTags.POWER_SOURCE`.
