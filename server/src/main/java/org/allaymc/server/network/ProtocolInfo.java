@@ -40,7 +40,6 @@ public final class ProtocolInfo {
             Bedrock_v819.CODEC,
             Bedrock_v818.CODEC,
             Bedrock_v800.CODEC,
-            // Preparation for adding support to NetEase client,
             Bedrock_v766.CODEC
     );
 

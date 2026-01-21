@@ -6,9 +6,11 @@ import org.allaymc.api.player.Player;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.network.multiversion.MultiVersion;
 import org.allaymc.server.network.ProtocolInfo;
+import org.allaymc.server.network.netease.v766.Bedrock_v766_NetEase;
 import org.allaymc.server.network.netease.NetEaseCompression;
 import org.allaymc.server.network.processor.ingame.ILoginPacketProcessor;
 import org.allaymc.server.player.AllayPlayer;
+import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.netty.codec.compression.SimpleCompressionStrategy;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -29,6 +31,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
 
     @Override
     @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients are detected via RakNet protocol version 8 and use raw deflate compression")
+    @MultiVersion(version = "1.21.50-NetEase", details = "Packet codec is replaced for NetEase clients")
     public void handle(Player player, RequestNetworkSettingsPacket packet) {
         var allayPlayer = (AllayPlayer) player;
         var protocolVersion = packet.getProtocolVersion();
@@ -56,7 +59,14 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             }
         }
 
-        var codec = ProtocolInfo.findCodec(protocolVersion);
+        // For NetEase clients, use the NetEase-specific codec with different ContainerSlotType IDs
+        BedrockCodec codec;
+        if (netEasePlayer) {
+            codec = findNetEaseCodec(protocolVersion);
+        } else {
+            codec = ProtocolInfo.findCodec(protocolVersion);
+        }
+
         if (codec == null) {
             // Cannot find a suitable codec for the client protocol version, let's check if it's too old or too new
             var loginFailedPacket = new PlayStatusPacket();
@@ -96,5 +106,19 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
     @Override
     public BedrockPacketType getPacketType() {
         return BedrockPacketType.REQUEST_NETWORK_SETTINGS;
+    }
+
+    /**
+     * Find the appropriate NetEase-specific codec for the given protocol version.
+     *
+     * @param protocolVersion the protocol version
+     * @return the NetEase codec, or {@code null} if not found
+     */
+    private static BedrockCodec findNetEaseCodec(int protocolVersion) {
+        if (protocolVersion == Bedrock_v766_NetEase.CODEC.getProtocolVersion()) {
+            return Bedrock_v766_NetEase.CODEC;
+        }
+
+        return null;
     }
 }
