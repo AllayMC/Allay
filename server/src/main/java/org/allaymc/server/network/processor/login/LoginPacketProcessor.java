@@ -51,8 +51,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        // Skip Xbox authentication for NetEase clients
-        if (!isNetEaseClient && !loginData.isAuthed() && AllayServer.getSettings().networkSettings().xboxAuth()) {
+        if (!loginData.isAuthed() && AllayServer.getSettings().networkSettings().xboxAuth()) {
             player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
             return;
         }
