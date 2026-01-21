@@ -281,7 +281,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             }
 
             if (target.getBlockType() == BlockTypes.TNT) {
-                BlockTypes.TNT.getBlockBehavior().prime(target);
+                BlockTypes.TNT.getBlockBehavior().prime(target.getPosition());
             }
         }
     }

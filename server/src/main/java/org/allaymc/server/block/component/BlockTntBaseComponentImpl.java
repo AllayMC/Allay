@@ -14,6 +14,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.entity.component.EntityTntBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
@@ -33,17 +34,16 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         super.onInteract(itemStack, dimension, interactInfo);
 
-        var block = new Block(interactInfo.getClickedBlock().getBlockState(), new Position3i(interactInfo.clickedBlockPos(), dimension));
-
+        var pos = new Position3i(interactInfo.clickedBlockPos(), dimension);
         if (itemStack.getItemType() == ItemTypes.FIRE_CHARGE) {
             itemStack.reduceCount(1);
-            prime(block);
+            prime(pos);
             return true;
         }
 
         if (itemStack.hasEnchantment(EnchantmentTypes.FIRE_ASPECT)) {
             itemStack.tryIncreaseDamage(1);
-            prime(block);
+            prime(pos);
             return true;
         }
 
@@ -54,9 +54,10 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
     public void afterPlaced(Block oldBlock, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterPlaced(oldBlock, newBlockState, placementInfo);
 
+        var pos = oldBlock.getPosition();
         // Check if TNT should be ignited immediately after placement
-        if (oldBlock.isPowered()) {
-            prime(oldBlock);
+        if (oldBlock.getDimension().isPoweredAt(pos)) {
+            prime(pos);
         }
     }
 
@@ -66,14 +67,13 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
 
         // Ignite TNT when receiving redstone power
         if (block.isPowered()) {
-            prime(block);
+            prime(block.getPosition());
         }
     }
 
     @Override
-    public void prime(Block block, int fuse) {
-        var dimension = block.getDimension();
-        var pos = block.getPosition();
+    public void prime(Position3ic pos, int fuse) {
+        var dimension = pos.dimension();
         dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
 
         var angle = ThreadLocalRandom.current().nextFloat() * Math.PI * 2;

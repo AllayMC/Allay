@@ -103,7 +103,7 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called after the block is placed.
      *
-     * @param oldBlock      the block that was replaced
+     * @param oldBlock      the old block that was replaced
      * @param newBlockState the new block that replaced the old block
      * @param placementInfo the player placement information, can be {@code null}
      */

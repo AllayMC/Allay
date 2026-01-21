@@ -401,10 +401,7 @@ public class Explosion {
 
             if (blockType == BlockTypes.TNT) {
                 // Explosion can prime tnt around
-                BlockTypes.TNT.getBlockBehavior().prime(
-                        new Block(block, new Position3i(pos, dimension)),
-                        10 + rand.nextInt(30)
-                );
+                BlockTypes.TNT.getBlockBehavior().prime(new Position3i(pos, dimension), 10 + rand.nextInt(30));
                 continue;
             }
 

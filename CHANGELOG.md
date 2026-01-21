@@ -65,6 +65,7 @@ Unless otherwise specified, any version comparison below is the comparison of th
 ### Changed
 
 - (API) Replaced `BlockBehavior#isPowerSource()` method with block tag `BlockTags.POWER_SOURCE`.
+- (API) Changed `BlockTntBaseComponent.prime(Block block, int fuse)` method signature to `prime(Position3ic pos, int fuse)` for better API consistency.
 
 ### Fixed
 

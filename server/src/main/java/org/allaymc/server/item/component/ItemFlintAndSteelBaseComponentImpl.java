@@ -34,7 +34,7 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
 
         var clickedBlock = interactInfo.getClickedBlock();
         if (clickedBlock.getBlockType() == BlockTypes.TNT) {
-            BlockTypes.TNT.getBlockBehavior().prime(new Block(clickedBlock.getBlockState(), new Position3i(interactInfo.clickedBlockPos(), dimension)));
+            BlockTypes.TNT.getBlockBehavior().prime(new Position3i(interactInfo.clickedBlockPos(), dimension));
             return true;
         }
 
