@@ -26,7 +26,6 @@ plugins:
       enable_creation_date: true
   - gen-files:
       scripts:
-        - docs/gen_plugin_list.py
         - docs/gen_event_list.py
 
 theme:
@@ -129,7 +128,7 @@ nav:
       - Installation: getting-started/installation.md
       - Use Terra: getting-started/use-terra.md
 
-  - Plugin List: plugin_list.md
+  - Plugins: https://hub.allaymc.org/
 
   - Tutorials:
       - Create Your First Plugin: tutorials/create-your-first-plugin.md
