@@ -22,7 +22,7 @@ public class Bedrock_v766_NetEase extends Bedrock_v766 {
 
     public static final BedrockCodec CODEC = Bedrock_v766.CODEC.toBuilder()
             .raknetProtocolVersion(8)
-            .helper(() -> new BedrockCodecHelper_v766(ENTITY_DATA, GAME_RULE_TYPES, ITEM_STACK_REQUEST_TYPES, CONTAINER_SLOT_TYPES_NETEASE, PLAYER_ABILITIES, TEXT_PROCESSING_ORIGINS))
+            .helper(() -> new BedrockCodecHelper_v766_NetEase(ENTITY_DATA, GAME_RULE_TYPES, ITEM_STACK_REQUEST_TYPES, CONTAINER_SLOT_TYPES_NETEASE, PLAYER_ABILITIES, TEXT_PROCESSING_ORIGINS))
             .updateSerializer(PlayerAuthInputPacket.class, PlayerAuthInputSerializer_v766_NetEase.INSTANCE)
             .updateSerializer(TextPacket.class, TextSerializer_v766_NetEase.INSTANCE)
             .build();
