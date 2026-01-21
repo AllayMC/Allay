@@ -221,6 +221,11 @@ public class AllayPlayer implements Player {
     protected Set<HudElement> hiddenHudElements;
     protected boolean shouldSendHudElements;
 
+    // NetEase
+    @Getter
+    @Setter
+    protected boolean netEasePlayer;
+
     public AllayPlayer(BedrockServerSession session) {
         this.session = session;
         this.session.setPacketHandler(new AllayPacketHandler());
@@ -308,7 +313,7 @@ public class AllayPlayer implements Player {
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
         var processor = packetProcessorHolder.getProcessor(packet);
         if (processor == null) {
-            log.warn("Received a sync packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
+            log.debug("Received a sync packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
             return;
         }
         processor.handleSync(this, packet, receiveTime);
@@ -2864,7 +2869,7 @@ public class AllayPlayer implements Player {
 
             var processor = packetProcessorHolder.getProcessor(packet);
             if (processor == null) {
-                log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
+                log.debug("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
                 return PacketSignal.HANDLED;
             }
 

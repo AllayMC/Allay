@@ -161,6 +161,15 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("enable-encoding-protection")
         private boolean enableEncodingProtection = true;
 
+        @Comment("Enable support for NetEase (China) Minecraft clients")
+        @CustomKey("netease-client-support")
+        private boolean neteaseClientSupport = false;
+
+        @Comment("If set to true, only NetEase clients can join the server")
+        @Comment("This option only takes effect when netease-client-support is enabled")
+        @CustomKey("only-allow-netease-client")
+        private boolean onlyAllowNeteaseClient = false;
+
         public enum CompressionAlgorithm {
             ZLIB,
             SNAPPY

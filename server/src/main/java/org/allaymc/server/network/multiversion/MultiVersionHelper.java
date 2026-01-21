@@ -56,7 +56,6 @@ public final class MultiVersionHelper {
         }
 
         packet.setDefinitions(builder.build());
-        packet.setBiomes(null);
         return packet;
     }
 

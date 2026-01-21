@@ -27,12 +27,18 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.ServerSettings;
+import org.allaymc.server.network.multiversion.MultiVersion;
+import org.cloudburstmc.protocol.bedrock.netty.codec.compression.NoopCompression;
 import org.allaymc.server.player.AllayPlayer;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
+import org.cloudburstmc.protocol.bedrock.netty.codec.compression.CompressionCodec;
+import org.cloudburstmc.protocol.bedrock.netty.codec.compression.SimpleCompressionStrategy;
+import org.cloudburstmc.protocol.bedrock.netty.codec.packet.BedrockPacketCodec;
+import org.cloudburstmc.protocol.bedrock.netty.codec.packet.BedrockPacketCodec_v3;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
@@ -108,41 +114,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                 .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : networkSettings.raknetPacketLimit())
                 .option(RakChannelOption.RAK_GLOBAL_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : networkSettings.raknetGlobalPacketLimit())
                 .group(new MultiThreadIoEventLoopGroup(networkThreadNumber, threadFactory, ioHandlerFactory))
-                .childHandler(new BedrockServerInitializer() {
-                    @Override
-                    protected void initSession(BedrockServerSession session) {
-                        if (!networkSettings.enableEncodingProtection()) {
-                            session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
-                        }
-
-                        var ip = AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0];
-                        if (server.getPlayerManager().isIPBanned(ip)) {
-                            session.disconnect(I18n.get().tr(TrKeys.ALLAY_DISCONNECT_BANIP));
-                            return;
-                        }
-
-                        var player = new AllayPlayer(session);
-                        var event = new PlayerConnectEvent(player, "disconnect.disconnected");
-                        if (!event.call()) {
-                            session.disconnect(event.getDisconnectReason());
-                            return;
-                        }
-
-                        var maxLoginTime = AllayServer.getSettings().networkSettings().maxLoginTime();
-                        if (maxLoginTime > 0) {
-                            Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
-                                var status = player.getClientState();
-                                if (status != ClientState.DISCONNECTED && status.ordinal() < ClientState.IN_GAME.ordinal()) {
-                                    log.warn("Session {} didn't log in within {} seconds, disconnecting...", session.getSocketAddress(), maxLoginTime / 20d);
-                                    player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);
-                                }
-                                return true;
-                            }, maxLoginTime);
-                        }
-
-                        log.info(I18n.get().tr(TrKeys.ALLAY_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
-                    }
-                });
+                .childHandler(new AllayServerInitializer());
 
         this.channels.add(bootstrap.bind(address).syncUninterruptibly().channel());
         if (networkSettings.enablev6()) {
@@ -213,6 +185,81 @@ public class AllayNetworkInterface implements NetworkInterface {
     protected void updatePong() {
         for (var channel : channels) {
             channel.config().setOption(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf());
+        }
+    }
+
+    private class AllayServerInitializer extends BedrockServerInitializer {
+
+        private static final int NETEASE_RAKNET_PROTOCOL_VERSION = 8;
+
+        @Override
+        @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients need NOOP compression initially for uncompressed RequestNetworkSettingsPacket")
+        protected void preInitChannel(Channel channel) throws Exception {
+            super.preInitChannel(channel);
+
+            // For NetEase clients (rakVersion 8), use NOOP compression initially because
+            // RequestNetworkSettingsPacket is not compressed. The real compression strategy
+            // will be set in RequestNetworkSettingsPacketProcessor after processing.
+            if (AllayServer.getSettings().networkSettings().neteaseClientSupport()) {
+                int rakVersion = channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION);
+                if (rakVersion == NETEASE_RAKNET_PROTOCOL_VERSION) {
+                    channel.pipeline().replace(
+                            CompressionCodec.NAME,
+                            CompressionCodec.NAME,
+                            new CompressionCodec(new SimpleCompressionStrategy(new NoopCompression()), false)
+                    );
+                }
+            }
+        }
+
+        @Override
+        @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use RakNet version 8 but require v3 packet codec format")
+        protected void initPacketCodec(Channel channel) throws Exception {
+            // NetEase clients use rakVersion 8, but their packet format is the same as
+            // international clients (v3), not the old v2 format that Protocol library
+            // uses for rakVersion 8 by default.
+            if (AllayServer.getSettings().networkSettings().neteaseClientSupport()) {
+                int rakVersion = channel.config().getOption(RakChannelOption.RAK_PROTOCOL_VERSION);
+                if (rakVersion == NETEASE_RAKNET_PROTOCOL_VERSION) {
+                    channel.pipeline().addLast(BedrockPacketCodec.NAME, new BedrockPacketCodec_v3());
+                    return;
+                }
+            }
+            super.initPacketCodec(channel);
+        }
+
+        @Override
+        protected void initSession(BedrockServerSession session) {
+            if (!AllayServer.getSettings().networkSettings().enableEncodingProtection()) {
+                session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
+            }
+
+            var ip = AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0];
+            if (server.getPlayerManager().isIPBanned(ip)) {
+                session.disconnect(I18n.get().tr(TrKeys.ALLAY_DISCONNECT_BANIP));
+                return;
+            }
+
+            var player = new AllayPlayer(session);
+            var event = new PlayerConnectEvent(player, "disconnect.disconnected");
+            if (!event.call()) {
+                session.disconnect(event.getDisconnectReason());
+                return;
+            }
+
+            var maxLoginTime = AllayServer.getSettings().networkSettings().maxLoginTime();
+            if (maxLoginTime > 0) {
+                Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
+                    var status = player.getClientState();
+                    if (status != ClientState.DISCONNECTED && status.ordinal() < ClientState.IN_GAME.ordinal()) {
+                        log.warn("Session {} didn't log in within {} seconds, disconnecting...", session.getSocketAddress(), maxLoginTime / 20d);
+                        player.disconnect(TrKeys.MC_DISCONNECTIONSCREEN_TIMEOUT);
+                    }
+                    return true;
+                }, maxLoginTime);
+            }
+
+            log.info(I18n.get().tr(TrKeys.ALLAY_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
         }
     }
 }

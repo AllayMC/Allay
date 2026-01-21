@@ -74,6 +74,14 @@ public interface LoginData {
      */
     Skin getSkin();
 
+    /**
+     * Gets the NetEase-specific data for this player. This data is only available
+     * when the player is connecting from the NetEase version of Minecraft.
+     *
+     * @return the NetEase data, or {@code null} if the player is not from NetEase client
+     */
+    NetEaseData getNetEaseData();
+
     enum UIProfile {
         CLASSIC,
         POCKET;
@@ -145,5 +153,27 @@ public interface LoginData {
             Device device,
             UIProfile UIProfile
     ) {
+    }
+
+    /**
+     * Contains NetEase-specific player data extracted from the login chain.
+     * <p>
+     * This data is only available when the player is connecting from the
+     * NetEase version of Minecraft.
+     *
+     * @param uid           the NetEase user ID (UID)
+     * @param sessionId     the NetEase session ID
+     * @param platform      the platform information
+     * @param osName        the operating system name
+     * @param env           the environment information
+     * @param engineVersion the engine version
+     * @param patchVersion  the patch version
+     * @param bit           the bit architecture (e.g., {@code "32"} or {@code "64"})
+     *
+     * @author daoge_cmd
+     */
+    record NetEaseData(
+            long uid, String sessionId, String platform, String osName,
+            String env, String engineVersion, String patchVersion, String bit) {
     }
 }
