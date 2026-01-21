@@ -61,7 +61,8 @@ Unless otherwise specified, any version comparison below is the comparison of th
 - Implemented comparator signal reading for various blocks: containers (chest, barrel, hopper, shulker box), item frames, cake, candle cake, jukebox, campfire, and end portal frame.
 - Implement candle, cake and candle cake.
 - Improved server-authorized block breaking logic in `PlayerAuthInputPacketProcessor` for better accuracy and reliability.
-- 
+- Added support for bedrock 1.21.50 (protocol version 766).
+
 ### Changed
 
 - (API) Replaced `BlockBehavior#isPowerSource()` method with block tag `BlockTags.POWER_SOURCE`.

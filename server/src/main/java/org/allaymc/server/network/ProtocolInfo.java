@@ -7,6 +7,7 @@ import org.allaymc.updater.block.BlockStateUpdater_1_21_110;
 import org.allaymc.updater.item.ItemStateUpdater;
 import org.allaymc.updater.item.ItemStateUpdater_1_21_110;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
 import org.cloudburstmc.protocol.bedrock.codec.v800.Bedrock_v800;
 import org.cloudburstmc.protocol.bedrock.codec.v818.Bedrock_v818;
 import org.cloudburstmc.protocol.bedrock.codec.v819.Bedrock_v819;
@@ -38,7 +39,9 @@ public final class ProtocolInfo {
             Bedrock_v827.CODEC,
             Bedrock_v819.CODEC,
             Bedrock_v818.CODEC,
-            Bedrock_v800.CODEC
+            Bedrock_v800.CODEC,
+            // Preparation for adding support to NetEase client,
+            Bedrock_v766.CODEC
     );
 
     /**

@@ -2598,6 +2598,7 @@ public class AllayPlayer implements Player {
      * the player entity's current pos and then spawn it. The nbt will be used in EntityPlayer::loadNBT() later in
      * doFirstSpawn() method instead of here because some packets must be sent after the player fully joined the server.
      */
+    @MultiVersion(version = "1.21.50", details = "ItemRegistryPacket is only sent in 1.21.60+")
     public void spawnEntityPlayer() {
         var server = Server.getInstance();
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
@@ -2649,10 +2650,13 @@ public class AllayPlayer implements Player {
 
         startGame(dimension.getWorld(), playerData, dimension);
 
-        sendPacket(NetworkData.ITEM_REGISTRY_PACKET.get());
+        if (!MultiVersionHelper.is1_21_50(this)) {
+            // ItemRegistryPacket is only sent in 1.21.60+
+            sendPacket(NetworkData.ITEM_REGISTRY_PACKET.get());
+        }
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
-        sendPacket(NetworkData.BIOME_DEFINITION_LIST_PACKET.get());
+        sendPacket(MultiVersionHelper.adaptBiomeDefinitionListPacket(this, NetworkData.BIOME_DEFINITION_LIST_PACKET.get()));
         sendPacket(NetworkData.CRAFTING_DATA_PACKET.get());
         sendPacket(NetworkData.TRIM_DATA_PACKET.get());
     }
@@ -2660,6 +2664,7 @@ public class AllayPlayer implements Player {
     /**
      * Sends {@link StartGamePacket} to the client.
      */
+    @MultiVersion(version = "1.21.50", details = "Item definitions is set to ensure compatibility")
     @MultiVersion(version = "1.21.80 - 1.21.90", details = "AuthoritativeMovementMode is explicitly set to ensure compatibility")
     @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     protected void startGame(World spawnWorld, PlayerData playerData, Dimension dimension) {
@@ -2721,10 +2726,13 @@ public class AllayPlayer implements Player {
         packet.setWorldId("");
         packet.setScenarioId("");
         packet.setOwnerId("");
+        // MultiVersion: 1.21.50 is still using this field
+        packet.getItemDefinitions().addAll(NetworkData.ITEM_DEFINITIONS.get());
         packet.getBlockProperties().addAll(NetworkData.CUSTOM_BLOCK_PROPERTIES.get());
         packet.getExperiments().addAll(NetworkData.EXPERIMENT_DATA_LIST.get());
-        MultiVersionHelper.adaptExperimentData(this, packet.getExperiments());
+        MultiVersionHelper.adaptItemDefinitions(this, packet.getItemDefinitions());
         MultiVersionHelper.adaptCustomBlockProperties(this, packet.getBlockProperties());
+        MultiVersionHelper.adaptExperimentData(this, packet.getExperiments());
         sendPacket(packet);
     }
 
