@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.message.LangCode;
 import org.allaymc.api.player.LoginData;
 import org.allaymc.api.player.Skin;
+import org.allaymc.server.network.multiversion.MultiVersion;
+import org.allaymc.server.network.netease.NetEaseEncryptionUtils;
+import org.cloudburstmc.protocol.bedrock.data.auth.CertificateChainPayload;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.util.ChainValidationResult;
 import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
@@ -18,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -38,20 +42,35 @@ public class AllayLoginData implements LoginData {
     private String gameVersion;
     private Skin skin;
     private String identityPublicKey;
+    private NetEaseData netEaseData;
 
-    /// Decode the given {@link LoginPacket} and return a {@link LoginData}. If there is any error
-    /// during the decoding, {@code null} will be returned.
-    public static AllayLoginData decode(LoginPacket loginPacket) {
+    /**
+     * Decode the given {@link LoginPacket} and return a {@link LoginData}. If there is any error
+     * during the decoding, {@code null} will be returned.
+     *
+     * @param loginPacket     the login packet to decode
+     * @param isNetEaseClient whether the client is a NetEase client
+     * @return the decoded login data, or {@code null} if decoding failed
+     */
+    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use a different public key for login chain validation instead of Mojang's key")
+    public static AllayLoginData decode(LoginPacket loginPacket, boolean isNetEaseClient) {
         var loginData = new AllayLoginData();
         try {
-            loginData.decodeChainData(EncryptionUtils.validatePayload(loginPacket.getAuthPayload()));
+            ChainValidationResult result;
+            if (isNetEaseClient) {
+                // NetEase clients don't have Mojang-signed chains, use NetEase's public key for validation
+                result = NetEaseEncryptionUtils.validateChain((CertificateChainPayload) loginPacket.getAuthPayload());
+            } else {
+                result = EncryptionUtils.validatePayload(loginPacket.getAuthPayload());
+            }
+            loginData.decodeChainData(result, isNetEaseClient);
         } catch (Throwable t) {
             log.warn("Failed to decode chain data!", t);
             return null;
         }
 
         try {
-            loginData.decodeSkinData(loginPacket.getClientJwt());
+            loginData.decodeSkinData(loginPacket.getClientJwt(), isNetEaseClient);
         } catch (Throwable t) {
             log.warn("Failed to decode skin data!", t);
             return null;
@@ -60,7 +79,7 @@ public class AllayLoginData implements LoginData {
         return loginData;
     }
 
-    private void decodeChainData(ChainValidationResult result) {
+    private void decodeChainData(ChainValidationResult result, boolean isNetEaseClient) {
         this.authed = result.signed();
 
         var extraData = result.identityClaims().extraData;
@@ -68,10 +87,38 @@ public class AllayLoginData implements LoginData {
         this.uuid = extraData.identity;
         this.xuid = extraData.xuid;
         this.identityPublicKey = result.identityClaims().identityPublicKey;
+
+        if (isNetEaseClient) {
+            this.netEaseData = extractNetEaseData(result.rawIdentityClaims());
+        }
     }
 
-    private void decodeSkinData(String skinData) {
-        JsonObject skinMap = decodeToken(skinData);
+    private NetEaseData extractNetEaseData(Map<String, Object> rawClaims) {
+        try {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> extraData = (Map<String, Object>) rawClaims.get("extraData");
+            if (extraData == null) {
+                return null;
+            }
+
+            long uid = extraData.containsKey("uid") ? ((Number) extraData.get("uid")).longValue() : 0L;
+            String sessionId = (String) extraData.get("netease_sid");
+            String platform = (String) extraData.get("platform");
+            String osName = (String) extraData.get("os_name");
+            String env = (String) extraData.get("env");
+            String engineVersion = (String) extraData.get("engineVersion");
+            String patchVersion = (String) extraData.get("patchVersion");
+            String bit = (String) extraData.get("bit");
+
+            return new NetEaseData(uid, sessionId, platform, osName, env, engineVersion, patchVersion, bit);
+        } catch (Exception e) {
+            log.debug("Failed to extract NetEase data from login chain", e);
+            return null;
+        }
+    }
+
+    private void decodeSkinData(String skinData, boolean isNetEaseClient) {
+        JsonObject skinMap = decodeToken(skinData, isNetEaseClient);
         if (skinMap.has("DeviceModel") && skinMap.has("DeviceId") &&
             skinMap.has("ClientRandomId") && skinMap.has("DeviceOS") &&
             skinMap.has("GuiScale")) {
@@ -171,12 +218,15 @@ public class AllayLoginData implements LoginData {
         this.skin = skinBuilder.build();
     }
 
-    private JsonObject decodeToken(String token) {
+    @MultiVersion(version = "1.21.50-NetEase", details = "NetEase clients use URL-safe Base64 encoding for skin data")
+    private JsonObject decodeToken(String token, boolean isNetEaseClient) {
         String[] tokenSplit = token.split("\\.");
         if (tokenSplit.length < 2) {
             throw new IllegalArgumentException("Invalid token length");
         }
-        return GSON.fromJson(new String(Base64.getDecoder().decode(tokenSplit[1]), StandardCharsets.UTF_8), JsonObject.class);
+        // NetEase client uses URL-safe Base64 encoding
+        Base64.Decoder decoder = isNetEaseClient ? Base64.getUrlDecoder() : Base64.getDecoder();
+        return GSON.fromJson(new String(decoder.decode(tokenSplit[1]), StandardCharsets.UTF_8), JsonObject.class);
     }
 
     private Skin.ImageData getImage(JsonObject skinMap, String name) {

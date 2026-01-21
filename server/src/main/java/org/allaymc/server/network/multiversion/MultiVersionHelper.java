@@ -15,7 +15,12 @@ import org.cloudburstmc.protocol.bedrock.data.BlockPropertyData;
 import org.cloudburstmc.protocol.bedrock.data.ExperimentData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.*;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor;
+import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 import org.cloudburstmc.protocol.bedrock.packet.BiomeDefinitionListPacket;
+import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,6 +30,58 @@ import java.util.stream.Stream;
  */
 @MultiVersion(version = "*")
 public final class MultiVersionHelper {
+
+    public static CraftingDataPacket adaptCraftingDataPacket(Player player, CraftingDataPacket packet) {
+        if (!is1_21_50(player)) {
+            return packet;
+        }
+
+        // Remove recipes that contain items not available in 1.21.50
+        packet.getCraftingData().removeIf(MultiVersionHelper::containsUnsupportedItem);
+        return packet;
+    }
+
+    private static boolean containsUnsupportedItem(RecipeData recipe) {
+        return switch (recipe) {
+            case ShapedRecipeData shaped ->
+                containsUnsupportedIngredient(shaped.getIngredients()) ||
+                containsUnsupportedOutput(shaped.getResults());
+            case ShapelessRecipeData shapeless ->
+                containsUnsupportedIngredient(shapeless.getIngredients()) ||
+                containsUnsupportedOutput(shapeless.getResults());
+            case SmithingTransformRecipeData smithing ->
+                isUnsupportedIngredient(smithing.getTemplate()) ||
+                isUnsupportedIngredient(smithing.getBase()) ||
+                isUnsupportedIngredient(smithing.getAddition()) ||
+                isUnsupportedOutput(smithing.getResult());
+            case SmithingTrimRecipeData trim ->
+                isUnsupportedIngredient(trim.getTemplate()) ||
+                isUnsupportedIngredient(trim.getBase()) ||
+                isUnsupportedIngredient(trim.getAddition());
+            case FurnaceRecipeData furnace ->
+                isUnsupportedOutput(furnace.getResult());
+            default -> false;
+        };
+    }
+
+    private static boolean containsUnsupportedIngredient(List<ItemDescriptorWithCount> ingredients) {
+        return ingredients.stream().anyMatch(MultiVersionHelper::isUnsupportedIngredient);
+    }
+
+    private static boolean isUnsupportedIngredient(ItemDescriptorWithCount ingredient) {
+        if (ingredient.getDescriptor() instanceof DefaultDescriptor descriptor) {
+            return isItemNotAvailableIn1_21_50(descriptor.getItemId().getIdentifier());
+        }
+        return false;
+    }
+
+    private static boolean containsUnsupportedOutput(List<ItemData> outputs) {
+        return outputs.stream().anyMatch(MultiVersionHelper::isUnsupportedOutput);
+    }
+
+    private static boolean isUnsupportedOutput(ItemData output) {
+        return isItemNotAvailableIn1_21_50(output.getDefinition().getIdentifier());
+    }
 
     public static BiomeDefinitionListPacket adaptBiomeDefinitionListPacket(Player player, BiomeDefinitionListPacket packet) {
         if (!is1_21_50(player)) {
@@ -56,7 +113,6 @@ public final class MultiVersionHelper {
         }
 
         packet.setDefinitions(builder.build());
-        packet.setBiomes(null);
         return packet;
     }
 
@@ -66,37 +122,37 @@ public final class MultiVersionHelper {
         }
 
         // Remove the items that do not exist in 1.21.50
-        definitions.removeIf(def -> {
-            var definition = (SimpleItemDefinition) def;
-            var identifier = definition.getIdentifier();
-            if (!identifier.startsWith(Identifier.DEFAULT_NAMESPACE)){
-                // Skip custom items
-                return false;
-            }
+        definitions.removeIf(def -> isItemNotAvailableIn1_21_50(def.getIdentifier()));
+    }
 
-            if (identifier.contains("lightning_rod") &&
-                !identifier.equals("minecraft:lightning_rod")) {
-                return true;
-            }
+    private static boolean isItemNotAvailableIn1_21_50(String identifier) {
+        if (!identifier.startsWith(Identifier.DEFAULT_NAMESPACE)) {
+            // Skip custom items
+            return false;
+        }
 
-            if (Stream.of("minecraft:bush", "minecraft:firefly_bush").anyMatch(identifier::equals)) {
-                return true;
-            }
+        if (identifier.contains("lightning_rod") &&
+            !identifier.equals("minecraft:lightning_rod")) {
+            return true;
+        }
 
-            // TODO: find out why exclude "wildflowers", "cactus_flower" will crash the client
-            return Stream.of(
-                    // Copper
-                    "copper_bars", "copper_golem", "copper_lantern", "copper_chain",
-                    "copper_helmet", "copper_chestplate", "copper_leggings", "copper_boots",
-                    "copper_sword", "copper_axe", "copper_pickaxe", "copper_shovel", "copper_hoe",
-                    "copper_horse_armor", "copper_torch", "copper_chest", "copper_nugget",
-                    // Misc
-                    "happy_ghast", "dried_ghast", "netherite_horse_armor", "harness", "nautilus_armor",
-                    "nautilus_spawn_egg", "dry_grass", "spear", "_shelf", "iron_chain", "leaf_litter",
-                    "brown_egg", "blue_egg", "camel_husk_spawn_egg", "parched_spawn_egg", "music_disc_tears",
-                    "music_disc_lava_chicken"
-            ).anyMatch(identifier::contains);
-        });
+        if (Stream.of("minecraft:bush", "minecraft:firefly_bush").anyMatch(identifier::equals)) {
+            return true;
+        }
+
+        // TODO: find out why exclude "wildflowers", "cactus_flower" will crash the client
+        return Stream.of(
+                // Copper
+                "copper_bars", "copper_golem", "copper_lantern", "copper_chain",
+                "copper_helmet", "copper_chestplate", "copper_leggings", "copper_boots",
+                "copper_sword", "copper_axe", "copper_pickaxe", "copper_shovel", "copper_hoe",
+                "copper_horse_armor", "copper_torch", "copper_chest", "copper_nugget",
+                // Misc
+                "happy_ghast", "dried_ghast", "netherite_horse_armor", "harness", "nautilus_armor",
+                "nautilus_spawn_egg", "dry_grass", "spear", "_shelf", "iron_chain", "leaf_litter",
+                "brown_egg", "blue_egg", "camel_husk_spawn_egg", "parched_spawn_egg", "music_disc_tears",
+                "music_disc_lava_chicken"
+        ).anyMatch(identifier::contains);
     }
 
     public static void adaptExperimentData(Player player, List<ExperimentData> experiments) {

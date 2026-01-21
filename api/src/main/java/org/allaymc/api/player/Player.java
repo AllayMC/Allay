@@ -41,6 +41,13 @@ public interface Player extends MessageReceiver, WorldViewer, ContainerViewer, B
     LoginData getLoginData();
 
     /**
+     * Check if the player is a NetEase (China) client.
+     *
+     * @return {@code true} if the player is using a NetEase client, {@code false} otherwise
+     */
+    boolean isNetEasePlayer();
+
+    /**
      * Get the origin name of the client.
      * <p>
      * Origin name is the xbox id of a client, which won't be changed unless the client does changes in his xbox account

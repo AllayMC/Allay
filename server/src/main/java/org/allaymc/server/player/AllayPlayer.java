@@ -221,6 +221,11 @@ public class AllayPlayer implements Player {
     protected Set<HudElement> hiddenHudElements;
     protected boolean shouldSendHudElements;
 
+    // NetEase
+    @Getter
+    @Setter
+    protected boolean netEasePlayer;
+
     public AllayPlayer(BedrockServerSession session) {
         this.session = session;
         this.session.setPacketHandler(new AllayPacketHandler());
@@ -308,7 +313,7 @@ public class AllayPlayer implements Player {
     public void handlePacketSync(BedrockPacket packet, long receiveTime) {
         var processor = packetProcessorHolder.getProcessor(packet);
         if (processor == null) {
-            log.warn("Received a sync packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
+            log.debug("Received a sync packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
             return;
         }
         processor.handleSync(this, packet, receiveTime);
@@ -2599,6 +2604,7 @@ public class AllayPlayer implements Player {
      * doFirstSpawn() method instead of here because some packets must be sent after the player fully joined the server.
      */
     @MultiVersion(version = "1.21.50", details = "ItemRegistryPacket is only sent in 1.21.60+")
+    @MultiVersion(version = "*", details = "MultiVersionHelper is used")
     public void spawnEntityPlayer() {
         var server = Server.getInstance();
         var playerManager = (AllayPlayerManager) server.getPlayerManager();
@@ -2657,7 +2663,7 @@ public class AllayPlayer implements Player {
         sendPacket(NetworkData.CREATIVE_CONTENT_PACKET.get());
         sendPacket(NetworkData.AVAILABLE_ENTITY_IDENTIFIERS_PACKET.get());
         sendPacket(MultiVersionHelper.adaptBiomeDefinitionListPacket(this, NetworkData.BIOME_DEFINITION_LIST_PACKET.get()));
-        sendPacket(NetworkData.CRAFTING_DATA_PACKET.get());
+        sendPacket(MultiVersionHelper.adaptCraftingDataPacket(this, NetworkData.CRAFTING_DATA_PACKET.get()));
         sendPacket(NetworkData.TRIM_DATA_PACKET.get());
     }
 
@@ -2864,7 +2870,7 @@ public class AllayPlayer implements Player {
 
             var processor = packetProcessorHolder.getProcessor(packet);
             if (processor == null) {
-                log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
+                log.debug("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, getClientState());
                 return PacketSignal.HANDLED;
             }
 

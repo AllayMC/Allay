@@ -21,7 +21,7 @@ reliable, fast and feature-rich.
 
     Discover the wide range of plugins available for allay.
 
-    [**:octicons-arrow-right-24: Plugins**](plugin_list)
+    [**:octicons-arrow-right-24: Plugins**](https://hub.allaymc.org/)
 
 -   **Write your first plugin**
 
